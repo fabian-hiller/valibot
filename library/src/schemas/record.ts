@@ -1,0 +1,243 @@
+import { type Issue, type Issues, ValiError } from '../error';
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  Input,
+  Output,
+  Pipe,
+} from '../types';
+import { executePipe, getCurrentPath, getErrorAndPipe } from '../utils';
+import { type NumberSchema } from './number';
+import type { RecordKeyAsync } from './recordAsync';
+import { type StringSchema, string } from './string';
+import { type SymbolSchema } from './symbol';
+
+/**
+ * Record path item type.
+ */
+export type RecordPathItem = {
+  schema: 'record';
+  input: Record<string | number | symbol, any>;
+  key: string | number | symbol;
+  value: any;
+};
+
+/**
+ * Record key type.
+ */
+export type RecordKey =
+  | StringSchema<string | number | symbol>
+  | NumberSchema<string | number | symbol>
+  | SymbolSchema<string | number | symbol>;
+
+/**
+ * Record input inference type.
+ */
+export type RecordInput<
+  TRecordKey extends RecordKey | RecordKeyAsync,
+  TRecordValue extends BaseSchema | BaseSchemaAsync
+> = Record<Input<TRecordKey>, Input<TRecordValue>>;
+
+/**
+ * Record output inference type.
+ */
+export type RecordOutput<
+  TRecordKey extends RecordKey | RecordKeyAsync,
+  TRecordValue extends BaseSchema | BaseSchemaAsync
+> = Record<Output<TRecordKey>, Output<TRecordValue>>;
+
+/**
+ * Record schema type.
+ */
+export type RecordSchema<
+  TRecordValue extends BaseSchema,
+  TRecordKey extends RecordKey = StringSchema,
+  TOutput = RecordOutput<TRecordKey, TRecordValue>
+> = BaseSchema<RecordInput<TRecordKey, TRecordValue>, TOutput> & {
+  schema: 'record';
+  record: { key: TRecordKey; value: TRecordValue };
+};
+
+/**
+ * Creates a record schema.
+ *
+ * @param value The value schema.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A record schema.
+ */
+export function record<TRecordValue extends BaseSchema>(
+  value: TRecordValue,
+  pipe?: Pipe<RecordOutput<StringSchema, TRecordValue>>
+): RecordSchema<TRecordValue>;
+
+/**
+ * Creates a record schema.
+ *
+ * @param value The value schema.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A record schema.
+ */
+export function record<TRecordValue extends BaseSchema>(
+  value: TRecordValue,
+  error?: string,
+  pipe?: Pipe<RecordOutput<StringSchema, TRecordValue>>
+): RecordSchema<TRecordValue>;
+
+/**
+ * Creates a record schema.
+ *
+ * @param key The key schema.
+ * @param value The value schema.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A record schema.
+ */
+export function record<
+  TRecordKey extends RecordKey,
+  TRecordValue extends BaseSchema
+>(
+  key: TRecordKey,
+  value: TRecordValue,
+  pipe?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
+): RecordSchema<TRecordValue, TRecordKey>;
+
+/**
+ * Creates a record schema.
+ *
+ * @param key The key schema.
+ * @param value The value schema.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A record schema.
+ */
+export function record<
+  TRecordKey extends RecordKey,
+  TRecordValue extends BaseSchema
+>(
+  key: TRecordKey,
+  value: TRecordValue,
+  error?: string,
+  pipe?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
+): RecordSchema<TRecordValue, TRecordKey>;
+
+export function record<
+  TRecordKey extends RecordKey,
+  TRecordValue extends BaseSchema
+>(
+  arg1: TRecordValue | TRecordKey,
+  arg2?: Pipe<RecordOutput<TRecordKey, TRecordValue>> | string | TRecordValue,
+  arg3?: Pipe<RecordOutput<TRecordKey, TRecordValue>> | string,
+  arg4?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
+): RecordSchema<TRecordValue, TRecordKey> {
+  // Get key, value, error and pipe argument
+  const { key, value, error, pipe } = (
+    typeof arg2 === 'object' && !Array.isArray(arg2)
+      ? { key: arg1, value: arg2, ...getErrorAndPipe(arg3, arg4) }
+      : { key: string(), value: arg1, ...getErrorAndPipe(arg2, arg3 as any) }
+  ) as {
+    key: TRecordKey;
+    value: TRecordValue;
+    error: string | undefined;
+    pipe: Pipe<RecordOutput<TRecordKey, TRecordValue>>;
+  };
+
+  // Create and return record schema
+  return {
+    /**
+     * The schema type.
+     */
+    schema: 'record',
+
+    /**
+     * The record key and value schema.
+     */
+    record: { key, value },
+
+    /**
+     * Whether it's async.
+     */
+    async: false,
+
+    /**
+     * Parses unknown input based on its schema.
+     *
+     * @param input The input to be parsed.
+     * @param info The parse info.
+     *
+     * @returns The parsed output.
+     */
+    parse(input, info) {
+      // Check type of input
+      if (!input || typeof input !== 'object') {
+        throw new ValiError([
+          {
+            reason: 'type',
+            validation: 'record',
+            origin: 'value',
+            message: error || 'Invalid type',
+            input,
+            ...info,
+          },
+        ]);
+      }
+
+      // Create output and issues
+      const output: Record<string | number | symbol, any> = {};
+      const issues: Issue[] = [];
+
+      // Parse each key and value by schema
+      Object.entries(input).forEach(([inputKey, inputValue]) => {
+        // Get current path
+        const path = getCurrentPath(info, {
+          schema: 'record',
+          input,
+          key: inputKey,
+          value: inputValue,
+        });
+
+        // Parse key and get output
+        let outputKey: string | number | symbol | undefined;
+        try {
+          outputKey = key.parse(inputKey, { ...info, origin: 'key', path });
+
+          // Fill issues in case of an error
+        } catch (error) {
+          issues.push(...(error as ValiError).issues);
+        }
+
+        // Parse value and get output
+        let outputValue: [any] | undefined;
+        try {
+          // Note: Value is nested in array, so that also a falsy value further
+          // down can be recognized as valid value
+          outputValue = [value.parse(inputValue, { ...info, path })];
+
+          // Fill issues in case of an error
+        } catch (error) {
+          issues.push(...(error as ValiError).issues);
+        }
+
+        // Set entry if ouput key and value is valid
+        if (outputKey && outputValue) {
+          output[outputKey] = outputValue[0];
+        }
+      });
+
+      // Throw error if there are issues
+      if (issues.length) {
+        throw new ValiError(issues as Issues);
+      }
+
+      // Execute pipe and return output
+      return executePipe(
+        output as RecordOutput<TRecordKey, TRecordValue>,
+        pipe,
+        { ...info, reason: 'record' }
+      );
+    },
+  };
+}

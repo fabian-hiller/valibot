@@ -1,0 +1,55 @@
+{
+  "name": "valibot",
+  "description": "The modular and TypeScript-first schema library",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Fabian Hiller",
+  "homepage": "https://valibot.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabian-hiller/valibot"
+  },
+  "keywords": [
+    "modular",
+    "typescript",
+    "schema",
+    "validation",
+    "parsing",
+    "bundle-size",
+    "type-safe"
+  ],
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "playground": "tsc && node --experimental-specifier-resolution=node dist/source/playground.js",
+    "build": "vite build --mode lib && tsc",
+    "format": "prettier --write .",
+    "format.check": "prettier --check .",
+    "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit",
+    "publish": "npm publish"
+  },
+  "devDependencies": {
+    "@types/eslint": "^8.40.2",
+    "@typescript-eslint/eslint-plugin": "^5.60.0",
+    "@typescript-eslint/parser": "^5.60.0",
+    "eslint": "^8.43.0",
+    "typescript": "^5.1.3",
+    "vite": "^4.3.9",
+    "zod": "^3.21.4"
+  }
+}
