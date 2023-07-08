@@ -47,8 +47,7 @@ export class ValiError extends Error {
   /**
    * Creates a Valibot error with useful information.
    *
-   * @param code The error code.
-   * @param message The error message.
+   * @param issues The error issues.
    */
   constructor(issues: Issues) {
     super(issues[0].message);
