@@ -21,7 +21,9 @@ export type NonNullishSchemaAsync<
  *
  * @returns An async non nullish schema.
  */
-export function nonNullishAsync<TWrappedSchema extends BaseSchema>(
+export function nonNullishAsync<
+  TWrappedSchema extends BaseSchema | BaseSchemaAsync
+>(
   wrapped: TWrappedSchema,
   error?: string
 ): NonNullishSchemaAsync<TWrappedSchema> {

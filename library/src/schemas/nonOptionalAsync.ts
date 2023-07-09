@@ -21,7 +21,9 @@ export type NonOptionalSchemaAsync<
  *
  * @returns An async non optional schema.
  */
-export function nonOptionalAsync<TWrappedSchema extends BaseSchema>(
+export function nonOptionalAsync<
+  TWrappedSchema extends BaseSchema | BaseSchemaAsync
+>(
   wrapped: TWrappedSchema,
   error?: string
 ): NonOptionalSchemaAsync<TWrappedSchema> {
