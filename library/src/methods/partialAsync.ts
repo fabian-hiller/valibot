@@ -4,7 +4,7 @@ import {
   type ObjectSchema,
   type ObjectSchemaAsync,
   type ObjectShapesAsync,
-  optional,
+  optionalAsync,
   type OptionalSchemaAsync,
 } from '../schemas';
 import type { BaseSchema, Pipe } from '../types';
@@ -66,7 +66,7 @@ export function partialAsync<
     Object.entries(schema.object).reduce(
       (object, [key, schema]) => ({
         ...object,
-        [key]: optional(schema as BaseSchema),
+        [key]: optionalAsync(schema as BaseSchema),
       }),
       {}
     ) as Partial<TObjectSchema['object']>,

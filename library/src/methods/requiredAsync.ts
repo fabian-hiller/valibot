@@ -1,5 +1,5 @@
 import {
-  nonOptional,
+  nonOptionalAsync,
   type NonOptionalSchemaAsync,
   objectAsync,
   type ObjectOutput,
@@ -66,7 +66,7 @@ export function requiredAsync<
     Object.entries(schema.object).reduce(
       (object, [key, schema]) => ({
         ...object,
-        [key]: nonOptional(schema as BaseSchema),
+        [key]: nonOptionalAsync(schema as BaseSchema),
       }),
       {}
     ) as Required<TObjectSchema['object']>,
