@@ -13,6 +13,6 @@ export function getErrorAndPipe<TPipe extends Pipe<any>>(
   arg2?: TPipe
 ): { error: string | undefined; pipe: TPipe } {
   const [error, pipe = [] as unknown as TPipe] =
-    typeof arg1 === 'string' ? [arg1, arg2] : [undefined, arg1];
+    !arg1 || typeof arg1 === 'string' ? [arg1, arg2] : [undefined, arg1];
   return { error, pipe };
 }
