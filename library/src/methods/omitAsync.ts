@@ -6,6 +6,7 @@ import {
 } from '../schemas';
 import type { PipeAsync } from '../types';
 import { getErrorAndPipe } from '../utils';
+import type { ObjectKeys } from './omit';
 
 /**
  * Creates an async object schema that contains only the selected keys of an
@@ -19,7 +20,7 @@ import { getErrorAndPipe } from '../utils';
  */
 export function omitAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>,
-  TKeys extends (keyof TObjectSchema['object'])[]
+  TKeys extends ObjectKeys<TObjectSchema>
 >(
   schema: TObjectSchema,
   keys: TKeys,
@@ -39,7 +40,7 @@ export function omitAsync<
  */
 export function omitAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>,
-  TKeys extends (keyof TObjectSchema['object'])[]
+  TKeys extends ObjectKeys<TObjectSchema>
 >(
   schema: TObjectSchema,
   keys: TKeys,
@@ -49,7 +50,7 @@ export function omitAsync<
 
 export function omitAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>,
-  TKeys extends (keyof TObjectSchema['object'])[]
+  TKeys extends ObjectKeys<TObjectSchema>
 >(
   schema: TObjectSchema,
   keys: TKeys,

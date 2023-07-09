@@ -3,7 +3,7 @@ export * from './coerceAsync';
 export * from './keyof';
 export { merge } from './merge';
 export * from './mergeAsync';
-export * from './omit';
+export { omit } from './omit';
 export * from './omitAsync';
 export * from './parse';
 export * from './parseAsync';

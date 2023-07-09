@@ -1,6 +1,18 @@
-import { object, type ObjectOutput, type ObjectSchema } from '../schemas';
+import {
+  object,
+  type ObjectOutput,
+  type ObjectSchema,
+  type ObjectSchemaAsync,
+} from '../schemas';
 import type { Pipe } from '../types';
 import { getErrorAndPipe } from '../utils';
+
+/**
+ * Object keys type.
+ */
+export type ObjectKeys<
+  TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
+> = [keyof TObjectSchema['object'], ...(keyof TObjectSchema['object'])[]];
 
 /**
  * Creates an object schema that contains not the selected keys of an existing
@@ -14,7 +26,7 @@ import { getErrorAndPipe } from '../utils';
  */
 export function omit<
   TObjectSchema extends ObjectSchema<any>,
-  TKeys extends (keyof TObjectSchema['object'])[]
+  TKeys extends ObjectKeys<TObjectSchema>
 >(
   schema: TObjectSchema,
   keys: TKeys,
@@ -34,7 +46,7 @@ export function omit<
  */
 export function omit<
   TObjectSchema extends ObjectSchema<any>,
-  TKeys extends (keyof TObjectSchema['object'])[]
+  TKeys extends ObjectKeys<TObjectSchema>
 >(
   schema: TObjectSchema,
   keys: TKeys,
@@ -44,7 +56,7 @@ export function omit<
 
 export function omit<
   TObjectSchema extends ObjectSchema<any>,
-  TKeys extends (keyof TObjectSchema['object'])[]
+  TKeys extends ObjectKeys<TObjectSchema>
 >(
   schema: TObjectSchema,
   keys: TKeys,
