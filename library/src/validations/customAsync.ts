@@ -9,7 +9,7 @@ import type { ValidateInfo } from '../types';
  *
  * @returns A async validation function.
  */
-export function customAsync<TInput extends string>(
+export function customAsync<TInput>(
   requirement: (input: TInput) => Promise<boolean>,
   error?: string
 ) {

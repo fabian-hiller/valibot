@@ -9,7 +9,7 @@ import type { ValidateInfo } from '../types';
  *
  * @returns A validation function.
  */
-export function custom<TInput extends string>(
+export function custom<TInput>(
   requirement: (input: TInput) => boolean,
   error?: string
 ) {
