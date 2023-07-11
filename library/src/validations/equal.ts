@@ -17,7 +17,7 @@ export function equal<
     if (input !== requirement) {
       throw new ValiError([
         {
-          validation: 'value',
+          validation: 'equal',
           origin: 'value',
           message: error || 'Invalid input',
           input,
