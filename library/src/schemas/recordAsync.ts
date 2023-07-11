@@ -206,7 +206,7 @@ export function recordAsync<
             })(),
           ]);
 
-          // Set entry if ouput key and value is valid
+          // Set entry if output key and value is valid
           if (outputKey && outputValue) {
             output[outputKey] = outputValue[0];
           }

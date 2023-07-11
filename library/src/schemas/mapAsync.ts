@@ -152,7 +152,7 @@ export function mapAsync<
             })(),
           ]);
 
-          // Set entry if ouput key and value is valid
+          // Set entry if output key and value is valid
           if (outputKey && outputValue) {
             output.set(outputKey[0], outputValue[0]);
           }

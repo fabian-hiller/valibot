@@ -221,7 +221,7 @@ export function record<
           issues.push(...(error as ValiError).issues);
         }
 
-        // Set entry if ouput key and value is valid
+        // Set entry if output key and value is valid
         if (outputKey && outputValue) {
           output[outputKey] = outputValue[0];
         }

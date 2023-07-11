@@ -27,7 +27,7 @@ export type MapInput<
 > = Map<Input<TMapKey>, Input<TMapValue>>;
 
 /**
- * Map ouput inference type.
+ * Map output inference type.
  */
 export type MapOutput<
   TMapKey extends BaseSchema | BaseSchemaAsync,
@@ -165,7 +165,7 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
           issues.push(...(error as ValiError).issues);
         }
 
-        // Set entry if ouput key and value is valid
+        // Set entry if output key and value is valid
         if (outputKey && outputValue) {
           output.set(outputKey[0], outputValue[0]);
         }
