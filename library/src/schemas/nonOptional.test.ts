@@ -3,10 +3,10 @@ import { parse } from '../methods';
 import { nonOptional } from './nonOptional';
 import { union } from './union';
 import { string } from './string';
-import { nullType } from './null';
+import { nullType } from './nullType';
 import { number } from './number';
 import { any } from './any';
-import { undefinedType } from './undefined';
+import { undefinedType } from './undefinedType';
 import { optional } from './optional';
 
 describe('nonOptional', () => {

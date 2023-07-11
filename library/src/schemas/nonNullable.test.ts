@@ -3,11 +3,11 @@ import { parse } from '../methods';
 import { nonNullable } from './nonNullable';
 import { union } from './union';
 import { string } from './string';
-import { nullType } from './null';
+import { nullType } from './nullType';
 import { nullable } from './nullable';
 import { number } from './number';
 import { any } from './any';
-import { undefinedType } from './undefined';
+import { undefinedType } from './undefinedType';
 
 describe('nonNullable', () => {
   test('should not pass null', () => {

@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../methods';
 import { nonNullishAsync } from './nonNullishAsync';
-import { nullType } from './null';
+import { nullType } from './nullType';
 import { number } from './number';
 import { any } from './any';
-import { undefinedType } from './undefined';
+import { undefinedType } from './undefinedType';
 import { nullish } from './nullish';
 import { unionAsync } from './unionAsync';
 import { stringAsync } from './stringAsync';

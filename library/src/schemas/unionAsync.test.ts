@@ -3,7 +3,7 @@ import { parseAsync } from '../methods';
 import { unionAsync } from './unionAsync';
 import { string } from './string';
 import { number } from './number';
-import { nullType } from './null';
+import { nullType } from './nullType';
 import { stringAsync } from './stringAsync';
 import { numberAsync } from './numberAsync';
 

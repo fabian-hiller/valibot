@@ -3,7 +3,7 @@ import { parse } from '../methods';
 import { union } from './union';
 import { string } from './string';
 import { number } from './number';
-import { nullType } from './null';
+import { nullType } from './nullType';
 
 describe('union', () => {
   test('should pass only union values', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../methods';
-import { undefinedType } from './undefined';
+import { undefinedType } from './undefinedType';
 
 describe('undefined', () => {
   test('should pass only undefined', () => {

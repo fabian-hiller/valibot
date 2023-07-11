@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../methods';
-import { voidType } from './void';
+import { voidType } from './voidType';
 
 describe('void', () => {
   test('should pass only void', () => {

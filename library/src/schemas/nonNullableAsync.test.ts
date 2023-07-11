@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../methods';
 import { nonNullableAsync } from './nonNullableAsync';
-import { nullType } from './null';
+import { nullType } from './nullType';
 import { nullable } from './nullable';
 import { number } from './number';
 import { any } from './any';
 import { stringAsync } from './stringAsync';
 import { unionAsync } from './unionAsync';
-import { undefinedType } from './undefined';
+import { undefinedType } from './undefinedType';
 
 describe('nonNullableAsync', () => {
   test('should not pass null', async () => {

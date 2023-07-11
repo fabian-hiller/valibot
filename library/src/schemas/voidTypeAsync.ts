@@ -15,7 +15,7 @@ export type VoidSchemaAsync<TOutput = void> = BaseSchemaAsync<void, TOutput> & {
  *
  * @returns An async void schema.
  */
-export function voidAsync(error?: string): VoidSchemaAsync {
+export function voidTypeAsync(error?: string): VoidSchemaAsync {
   return {
     /**
      * The schema type.

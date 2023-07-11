@@ -2,28 +2,25 @@ import { ValiError } from '../error';
 import type { BaseSchemaAsync } from '../types';
 
 /**
- * Undefined schema async type.
+ * Null schema async type.
  */
-export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
-  undefined,
-  TOutput
-> & {
-  schema: 'undefined';
+export type NullSchemaAsync<TOutput = null> = BaseSchemaAsync<null, TOutput> & {
+  schema: 'null';
 };
 
 /**
- * Creates an async undefined schema.
+ * Creates an async null schema.
  *
  * @param error The error message.
  *
- * @returns An async undefined schema.
+ * @returns An async null schema.
  */
-export function undefinedAsync(error?: string): UndefinedSchemaAsync {
+export function nullTypeAsync(error?: string): NullSchemaAsync {
   return {
     /**
      * The schema type.
      */
-    schema: 'undefined',
+    schema: 'null',
 
     /**
      * Whether it's async.
@@ -40,11 +37,11 @@ export function undefinedAsync(error?: string): UndefinedSchemaAsync {
      */
     async parse(input, info) {
       // Check type of input
-      if (typeof input !== 'undefined') {
+      if (input !== null) {
         throw new ValiError([
           {
             reason: 'type',
-            validation: 'undefined',
+            validation: 'null',
             origin: 'value',
             message: error || 'Invalid type',
             input,

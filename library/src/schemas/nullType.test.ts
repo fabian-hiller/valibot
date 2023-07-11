@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../methods';
-import { nullType } from './null';
+import { nullType } from './nullType';
 
-describe('null', () => {
+describe('nullType', () => {
   test('should pass only null', () => {
     const schema = nullType();
     expect(parse(schema, null)).toBeNull();

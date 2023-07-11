@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../methods';
-import { voidAsync } from './voidAsync';
+import { voidTypeAsync } from './voidTypeAsync';
 
-describe('voidAsync', () => {
+describe('voidTypeAsync', () => {
   test('should pass only void', async () => {
-    const schema = voidAsync();
+    const schema = voidTypeAsync();
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     expect(await parseAsync(schema, (() => {})())).toBeUndefined();
     expect(await parseAsync(schema, undefined)).toBeUndefined();
@@ -17,6 +17,8 @@ describe('voidAsync', () => {
 
   test('should throw custom error', async () => {
     const error = 'Value is not void!';
-    await expect(parseAsync(voidAsync(error), 123)).rejects.toThrowError(error);
+    await expect(parseAsync(voidTypeAsync(error), 123)).rejects.toThrowError(
+      error
+    );
   });
 });

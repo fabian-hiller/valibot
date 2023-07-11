@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../methods';
-import { enumType } from './enum';
+import { enumType } from './enumType';
 
-describe('enum', () => {
+describe('enumType', () => {
   test('should pass only enum values', () => {
     const schema = enumType(['value_1', 'value_2']);
     const input1 = 'value_1';

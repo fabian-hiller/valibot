@@ -3,10 +3,10 @@ import { parse } from '../methods';
 import { nonNullish } from './nonNullish';
 import { union } from './union';
 import { string } from './string';
-import { nullType } from './null';
+import { nullType } from './nullType';
 import { number } from './number';
 import { any } from './any';
-import { undefinedType } from './undefined';
+import { undefinedType } from './undefinedType';
 import { nullish } from './nullish';
 
 describe('nonNullish', () => {

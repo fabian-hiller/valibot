@@ -1,6 +1,6 @@
 import { ValiError } from '../error';
 import type { BaseSchemaAsync } from '../types';
-import type { EnumValue } from './enum';
+import type { EnumValue } from './enumType';
 
 /**
  * Enum schema async type.
@@ -21,7 +21,7 @@ export type EnumSchemaAsync<
  *
  * @returns An async enum schema.
  */
-export function enumAsync<TEnumValue extends EnumValue>(
+export function enumTypeAsync<TEnumValue extends EnumValue>(
   enumValue: TEnumValue,
   error?: string
 ): EnumSchemaAsync<TEnumValue> {
