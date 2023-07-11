@@ -1,5 +1,11 @@
 import { type Issue, type Issues, ValiError } from '../error';
-import type { BaseSchema, Input, Output, Pipe } from '../types';
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  Input,
+  Output,
+  Pipe,
+} from '../types';
 import { executePipe, getCurrentPath, getErrorAndPipe } from '../utils';
 
 /**
@@ -13,11 +19,18 @@ export type SetPathItem = {
 };
 
 /**
+ * Set output inference type.
+ */
+export type SetOutput<TSetValue extends BaseSchema | BaseSchemaAsync> = Set<
+  Output<TSetValue>
+>;
+
+/**
  * Set schema type.
  */
 export type SetSchema<
   TSetValue extends BaseSchema,
-  TOutput = Output<TSetValue>
+  TOutput = SetOutput<TSetValue>
 > = BaseSchema<Input<TSetValue>, TOutput> & {
   schema: 'set';
   set: { value: TSetValue };
@@ -33,7 +46,7 @@ export type SetSchema<
  */
 export function set<TSetValue extends BaseSchema>(
   value: TSetValue,
-  pipe?: Pipe<Output<TSetValue>>
+  pipe?: Pipe<SetOutput<TSetValue>>
 ): SetSchema<TSetValue>;
 
 /**
@@ -48,13 +61,13 @@ export function set<TSetValue extends BaseSchema>(
 export function set<TSetValue extends BaseSchema>(
   value: TSetValue,
   error?: string,
-  pipe?: Pipe<Output<TSetValue>>
+  pipe?: Pipe<SetOutput<TSetValue>>
 ): SetSchema<TSetValue>;
 
 export function set<TSetValue extends BaseSchema>(
   value: TSetValue,
-  arg2?: Pipe<Output<TSetValue>> | string,
-  arg3?: Pipe<Output<TSetValue>>
+  arg2?: Pipe<SetOutput<TSetValue>> | string,
+  arg3?: Pipe<SetOutput<TSetValue>>
 ): SetSchema<TSetValue> {
   // Get error and pipe argument
   const { error, pipe } = getErrorAndPipe(arg2, arg3);
@@ -101,7 +114,7 @@ export function set<TSetValue extends BaseSchema>(
 
       // Create index, output and issues
       let index = 0;
-      const output: Set<Output<TSetValue>> = new Set();
+      const output: SetOutput<TSetValue> = new Set();
       const issues: Issue[] = [];
 
       // Parse each value by schema

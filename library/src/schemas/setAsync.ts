@@ -1,19 +1,14 @@
 import { type Issue, type Issues, ValiError } from '../error';
-import type {
-  BaseSchema,
-  BaseSchemaAsync,
-  Input,
-  Output,
-  PipeAsync,
-} from '../types';
+import type { BaseSchema, BaseSchemaAsync, Input, PipeAsync } from '../types';
 import { executePipeAsync, getCurrentPath, getErrorAndPipe } from '../utils';
+import type { SetOutput } from './set';
 
 /**
  * Set schema async type.
  */
 export type SetSchemaAsync<
   TSetValue extends BaseSchema | BaseSchemaAsync,
-  TOutput = Output<TSetValue>
+  TOutput = SetOutput<TSetValue>
 > = BaseSchemaAsync<Input<TSetValue>, TOutput> & {
   schema: 'set';
   set: { value: TSetValue };
@@ -29,7 +24,7 @@ export type SetSchemaAsync<
  */
 export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
   value: TSetValue,
-  pipe?: PipeAsync<Output<TSetValue>>
+  pipe?: PipeAsync<SetOutput<TSetValue>>
 ): SetSchemaAsync<TSetValue>;
 
 /**
@@ -44,13 +39,13 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
 export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
   value: TSetValue,
   error?: string,
-  pipe?: PipeAsync<Output<TSetValue>>
+  pipe?: PipeAsync<SetOutput<TSetValue>>
 ): SetSchemaAsync<TSetValue>;
 
 export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
   value: TSetValue,
-  arg2?: PipeAsync<Output<TSetValue>> | string,
-  arg3?: PipeAsync<Output<TSetValue>>
+  arg2?: PipeAsync<SetOutput<TSetValue>> | string,
+  arg3?: PipeAsync<SetOutput<TSetValue>>
 ): SetSchemaAsync<TSetValue> {
   // Get error and pipe argument
   const { error, pipe } = getErrorAndPipe(arg2, arg3);
@@ -96,7 +91,7 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
       }
 
       // Create index, output and issues
-      const output: Set<Output<TSetValue>> = new Set();
+      const output: SetOutput<TSetValue> = new Set();
       const issues: Issue[] = [];
 
       // Parse each value by schema
