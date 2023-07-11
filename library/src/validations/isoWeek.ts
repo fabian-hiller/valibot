@@ -6,6 +6,10 @@ import type { ValidateInfo } from '../types';
  *
  * Format: yyyy-Www
  *
+ * Hint: The regex used cannot validate the maximum number of weeks based on
+ * the year. For example, "2021W53" is valid even though the year 2021 has only
+ * 52 weeks.
+ *
  * @param error The error message.
  *
  * @returns A validation function.

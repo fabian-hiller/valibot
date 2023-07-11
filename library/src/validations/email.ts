@@ -4,6 +4,8 @@ import type { ValidateInfo } from '../types';
 /**
  * Creates a validation functions that validates a email.
  *
+ * Hint: The regex used is not perfect, but should work for most emails.
+ *
  * @param error The error message.
  *
  * @returns A validation function.

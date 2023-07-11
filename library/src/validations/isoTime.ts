@@ -12,7 +12,7 @@ import type { ValidateInfo } from '../types';
  */
 export function isoTime<TInput extends string>(error?: string) {
   return (input: TInput, info: ValidateInfo) => {
-    if (!/^(1\d|0[1-9]|2[0-3]):[0-5]\d$/.test(input)) {
+    if (!/^(0[1-9]|1\d|2[0-3]):[0-5]\d$/.test(input)) {
       throw new ValiError([
         {
           validation: 'iso_time',
