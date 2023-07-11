@@ -11,7 +11,7 @@ export * from './ipv6';
 export * from './isoDate';
 export * from './isoDateTime';
 export * from './isoTime';
-export * from './isoTimeSeconds';
+export * from './isoTimeSecond';
 export * from './isoTimestamp';
 export * from './isoWeek';
 export * from './length';

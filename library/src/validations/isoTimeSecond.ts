@@ -10,12 +10,12 @@ import type { ValidateInfo } from '../types';
  *
  * @returns A validation function.
  */
-export function isoTimeSeconds<TInput extends string>(error?: string) {
+export function isoTimeSecond<TInput extends string>(error?: string) {
   return (input: TInput, info: ValidateInfo) => {
-    if (!/^(1\d|0[1-9]|2[0-3]):[0-5]\d:[0-5]\d$/.test(input)) {
+    if (!/^(0[1-9]|1\d|2[0-3]):[0-5]\d:[0-5]\d$/.test(input)) {
       throw new ValiError([
         {
-          validation: 'iso_time_seconds',
+          validation: 'iso_time_second',
           origin: 'value',
           message: error || 'Invalid time',
           input,
