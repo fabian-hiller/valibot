@@ -85,7 +85,11 @@ export function objectAsync<TObjectShape extends ObjectShapesAsync>(
      */
     async parse(input, info) {
       // Check type of input
-      if (!input || typeof input !== 'object') {
+      if (
+        !input ||
+        typeof input !== 'object' ||
+        input.toString() !== '[object Object]'
+      ) {
         throw new ValiError([
           {
             reason: 'type',

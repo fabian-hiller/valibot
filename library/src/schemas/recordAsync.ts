@@ -1,22 +1,16 @@
 import { type Issue, type Issues, ValiError } from '../error';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../types';
 import { executePipeAsync, getCurrentPath, getErrorAndPipe } from '../utils';
-import { type NumberSchema } from './number';
-import type { NumberSchemaAsync } from './numberAsync';
 import type { RecordInput, RecordOutput } from './record';
 import { type StringSchema, string } from './string';
 import type { StringSchemaAsync } from './stringAsync';
-import { type SymbolSchema } from './symbol';
 
 /**
  * Record key type.
  */
 export type RecordKeyAsync =
   | StringSchema<string | number | symbol>
-  | StringSchemaAsync<string | number | symbol>
-  | NumberSchema<string | number | symbol>
-  | NumberSchemaAsync<string | number | symbol>
-  | SymbolSchema<string | number | symbol>;
+  | StringSchemaAsync<string | number | symbol>;
 
 /**
  * Record schema async type.
@@ -147,7 +141,11 @@ export function recordAsync<
      */
     async parse(input, info) {
       // Check type of input
-      if (!input || typeof input !== 'object') {
+      if (
+        !input ||
+        typeof input !== 'object' ||
+        input.toString() !== '[object Object]'
+      ) {
         throw new ValiError([
           {
             reason: 'type',
@@ -166,6 +164,7 @@ export function recordAsync<
 
       // Parse each key and value by schema
       await Promise.all(
+        // Note: `Object.entries(...)` converts each key to a string
         Object.entries(input).map(async ([inputKey, inputValue]) => {
           // Get current path
           const path = getCurrentPath(info, {

@@ -7,10 +7,8 @@ import type {
   Pipe,
 } from '../types';
 import { executePipe, getCurrentPath, getErrorAndPipe } from '../utils';
-import { type NumberSchema } from './number';
 import type { RecordKeyAsync } from './recordAsync';
 import { type StringSchema, string } from './string';
-import { type SymbolSchema } from './symbol';
 
 /**
  * Record path item type.
@@ -25,10 +23,7 @@ export type RecordPathItem = {
 /**
  * Record key type.
  */
-export type RecordKey =
-  | StringSchema<string | number | symbol>
-  | NumberSchema<string | number | symbol>
-  | SymbolSchema<string | number | symbol>;
+export type RecordKey = StringSchema<string | number | symbol>;
 
 /**
  * Record input inference type.
@@ -172,7 +167,11 @@ export function record<
      */
     parse(input, info) {
       // Check type of input
-      if (!input || typeof input !== 'object') {
+      if (
+        !input ||
+        typeof input !== 'object' ||
+        input.toString() !== '[object Object]'
+      ) {
         throw new ValiError([
           {
             reason: 'type',
@@ -190,6 +189,7 @@ export function record<
       const issues: Issue[] = [];
 
       // Parse each key and value by schema
+      // Note: `Object.entries(...)` converts each key to a string
       Object.entries(input).forEach(([inputKey, inputValue]) => {
         // Get current path
         const path = getCurrentPath(info, {
