@@ -6,6 +6,9 @@ dist
 build
 server
 
+# Tests
+coverage
+
 # Backups
 backups
 
