@@ -18,9 +18,9 @@ export type RecursiveSchemaAsync<
  *
  * @returns An async recursive schema.
  */
-export function recursiveAsync<TSchemaGetter extends () => BaseSchema>(
-  getter: TSchemaGetter
-): RecursiveSchemaAsync<TSchemaGetter> {
+export function recursiveAsync<
+  TSchemaGetter extends () => BaseSchema | BaseSchemaAsync
+>(getter: TSchemaGetter): RecursiveSchemaAsync<TSchemaGetter> {
   return {
     /**
      * The schema type.
