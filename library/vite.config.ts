@@ -13,6 +13,9 @@ export default defineConfig(() => {
         formats: ['es', 'cjs'],
         fileName: (format) => `index.${format === 'es' ? 'mjs' : 'cjs'}`,
       },
+      rollupOptions: {
+        external: ['vitest'],
+      },
       minify: false,
     },
   };
