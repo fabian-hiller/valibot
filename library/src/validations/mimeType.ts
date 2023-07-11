@@ -10,11 +10,11 @@ import type { ValidateInfo } from '../types';
  * @returns A validation function.
  */
 export function mimeType<TInput extends File>(
-  requirement: string[],
+  requirement: `${string}/${string}`[],
   error?: string
 ) {
   return (input: TInput, info: ValidateInfo) => {
-    if (!requirement.includes(input.type)) {
+    if (!requirement.includes(input.type as `${string}/${string}`)) {
       throw new ValiError([
         {
           validation: 'mime_type',
