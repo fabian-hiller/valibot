@@ -62,12 +62,6 @@ export type Output<TSchema extends BaseSchema | BaseSchemaAsync> = NonNullable<
 >['output'];
 
 /**
- * See {@link Output}
- */
-export type Infer<TSchema extends BaseSchema | BaseSchemaAsync> =
-  Output<TSchema>;
-
-/**
  * Validation and transformation pipe type.
  */
 export type Pipe<TValue> = ((value: TValue, info: ValidateInfo) => TValue)[];
