@@ -1,5 +1,4 @@
 export * from './custom';
-export * from './customAsync';
 export * from './email';
 export * from './emoji';
 export * from './endsWith';
