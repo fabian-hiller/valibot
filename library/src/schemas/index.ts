@@ -1,6 +1,7 @@
 export * from './any';
 export * from './array';
 export * from './bigint';
+export * from './blob';
 export * from './boolean';
 export * from './date';
 export * from './enumType';

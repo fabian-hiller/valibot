@@ -8,6 +8,7 @@ export type IssueReason =
   | 'string'
   | 'number'
   | 'bigint'
+  | 'blob'
   | 'boolean'
   | 'any'
   | 'unknown'
