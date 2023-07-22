@@ -42,6 +42,9 @@
     "vite": "^4.4.6",
     "vite-tsconfig-paths": "^4.2.0"
   },
+  "dependencies": {
+    "clsx": "^2.0.0"
+  },
   "engines": {
     "node": ">=15.0.0"
   }
