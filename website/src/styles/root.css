@@ -1,7 +1,60 @@
-/**
- * Tailwind CSS imports
- * View the full documentation at https://tailwindcss.com
- */
+/* Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Disable tap highlight color */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Disable transitions */
+.disable-transitions,
+.disable-transitions * {
+  transition: none !important;
+}
+
+/* Lexend 400 */
+@font-face {
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/lexend-400.woff2) format('woff2');
+}
+
+/* Lexend Exa 500 */
+@font-face {
+  font-family: 'Lexend Exa';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../fonts/lexend-exa-500.woff) format('woff2');
+}
+
+/* Lexend Exa 600 */
+@font-face {
+  font-family: 'Lexend Exa';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../fonts/lexend-exa-600.woff) format('woff2');
+}
+
+/* Component layer */
+@layer components {
+  .focus-ring {
+    @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-600/50 focus-visible:ring-4 focus-visible:ring-sky-600/10 focus-visible:ring-offset-[3px] focus-visible:ring-offset-white dark:focus-visible:outline-sky-400/50 dark:focus-visible:ring-sky-400/10 dark:focus-visible:ring-offset-gray-900;
+  }
+}
+
+/* Util layer */
+@layer utilities {
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
