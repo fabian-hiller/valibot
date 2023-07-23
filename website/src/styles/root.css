@@ -23,13 +23,21 @@ html {
   src: url(../fonts/lexend-400.woff2) format('woff2');
 }
 
+@font-face {
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../fonts/lexend-500.woff2) format('woff2');
+}
+
 /* Lexend Exa 500 */
 @font-face {
   font-family: 'Lexend Exa';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(../fonts/lexend-exa-500.woff) format('woff2');
+  src: url(../fonts/lexend-exa-500.woff2) format('woff2');
 }
 
 /* Lexend Exa 600 */
@@ -38,7 +46,7 @@ html {
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(../fonts/lexend-exa-600.woff) format('woff2');
+  src: url(../fonts/lexend-exa-600.woff2) format('woff2');
 }
 
 /* Component layer */
