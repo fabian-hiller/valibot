@@ -20,6 +20,7 @@ logs
 *.log
 .cache
 temp
+tmp
 
 # Local env files
 .env*.local
