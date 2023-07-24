@@ -136,11 +136,7 @@ export const Header = component$(() => {
             ? 'delay-75 duration-300'
             : 'invisible opacity-0 duration-75'
         )}
-        onClick$={() =>
-          mainMenuToggle.submit({
-            state: mainMenuOpen.value ? 'closed' : 'opened',
-          })
-        }
+        onClick$={() => mainMenuToggle.submit({ state: 'closed' })}
       />
     </header>
   );
