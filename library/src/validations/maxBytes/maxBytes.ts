@@ -14,8 +14,7 @@ export function maxBytes<TInput extends string>(
   error?: string
 ) {
   return (input: TInput, info: ValidateInfo) => {
-    const bytes = encodeURI(input).replace(/%../g, 'x').length;
-    if (bytes > requirement) {
+    if (encodeURI(input).replace(/%../g, 'x').length > requirement) {
       throw new ValiError([
         {
           validation: 'max_bytes',
