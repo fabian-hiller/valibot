@@ -1,5 +1,6 @@
 export * from './ActionButton';
 export * from './ButtonGroup';
+export * from './DocsLayout';
 export * from './Expandable';
 export * from './Footer';
 export * from './GitHubIconLink';

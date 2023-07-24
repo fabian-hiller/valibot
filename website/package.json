@@ -27,7 +27,9 @@
   "devDependencies": {
     "@builder.io/qwik": "1.1.5",
     "@builder.io/qwik-city": "1.1.5",
+    "@mapbox/rehype-prism": "^0.8.0",
     "@types/eslint": "^8.44.0",
+    "@types/mapbox__rehype-prism": "^0.8.0",
     "@types/node": "^20.4.2",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
     "@typescript-eslint/parser": "^6.1.0",

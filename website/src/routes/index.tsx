@@ -45,7 +45,7 @@ export default component$(() => {
             <div class="absolute -left-[370px] top-[200px] h-[600px] w-[600px] bg-[radial-gradient(theme(colors.sky.600/.08),transparent_70%)] dark:bg-[radial-gradient(theme(colors.sky.400/.08),transparent_70%)] md:-left-[550px] md:top-[100px] md:h-[1000px] md:w-[1000px] lg:top-[200px] xl:-left-[1100px] xl:top-[300px]" />
           </div>
         </div>
-        <h1 class="font-lexend-exa text-xl font-semibold text-slate-900 dark:text-slate-200 md:text-3xl lg:text-4xl xl:text-5xl">
+        <h1 class="font-lexend-exa text-xl font-medium text-slate-900 dark:text-slate-200 md:text-3xl lg:text-4xl xl:text-5xl">
           Validate with Valibot
         </h1>
         <p class="text-center leading-loose md:text-xl md:leading-loose xl:text-2xl xl:leading-loose">

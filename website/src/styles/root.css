@@ -3,50 +3,125 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Disable tap highlight color */
-html {
-  -webkit-tap-highlight-color: transparent;
-}
+/* Base layer */
+@layer base {
+  /* Disable tap highlight color */
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
 
-/* Disable transitions */
-.disable-transitions,
-.disable-transitions * {
-  transition: none !important;
-}
+  /* Disable transitions */
+  .disable-transitions,
+  .disable-transitions * {
+    transition: none !important;
+  }
 
-/* Lexend 400 */
-@font-face {
-  font-family: 'Lexend';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(../fonts/lexend-400.woff2) format('woff2');
-}
+  /* Lexend 400 */
+  @font-face {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../fonts/lexend-400.woff2) format('woff2');
+  }
 
-@font-face {
-  font-family: 'Lexend';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url(../fonts/lexend-500.woff2) format('woff2');
-}
+  /* Lexend 500 */
+  @font-face {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(../fonts/lexend-500.woff2) format('woff2');
+  }
 
-/* Lexend Exa 500 */
-@font-face {
-  font-family: 'Lexend Exa';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url(../fonts/lexend-exa-500.woff2) format('woff2');
-}
+  /* Lexend Exa 500 */
+  @font-face {
+    font-family: 'Lexend Exa';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(../fonts/lexend-exa-500.woff2) format('woff2');
+  }
 
-/* Lexend Exa 600 */
-@font-face {
-  font-family: 'Lexend Exa';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url(../fonts/lexend-exa-600.woff2) format('woff2');
+  /* Typography */
+  article :is(h1, h2, h3, h4) {
+    @apply scroll-mt-24 font-medium leading-normal text-slate-900 dark:text-slate-200 md:scroll-mt-32 md:leading-normal lg:scroll-mt-48 lg:leading-normal;
+  }
+  article h1 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+  article h2 {
+    @apply border-b-2 border-b-slate-200 pb-4 text-xl dark:border-b-slate-800 md:pb-6 md:text-2xl lg:pb-8 lg:text-3xl;
+  }
+  article h3 {
+    @apply text-lg md:text-xl lg:text-2xl;
+  }
+  article h4 {
+    @apply md:text-lg lg:text-xl;
+  }
+  article :is(p, blockquote, ul, ol) {
+    @apply leading-loose md:text-lg md:leading-loose lg:text-xl lg:leading-loose;
+  }
+
+  /* Blockquote */
+  article blockquote p {
+    @apply border-l-4 border-l-yellow-600 pl-6 dark:border-l-yellow-400 lg:pl-8;
+  }
+
+  /* Links */
+  article a {
+    @apply focus-ring rounded-md text-sky-600 underline decoration-slate-400 decoration-dashed underline-offset-[3px] focus-visible:outline-offset-4 focus-visible:ring-offset-[6px] dark:text-sky-400 dark:decoration-slate-600;
+  }
+
+  /* Lists */
+  article :is(ul, ol) {
+    @apply space-y-2;
+  }
+  article :is(ul, ol) :is(ul, ol) {
+    @apply pl-4 pt-2 lg:pl-5;
+  }
+  article ul {
+    @apply list-disc;
+  }
+  article ol {
+    @apply list-decimal;
+  }
+  article :is(ul, ol) li {
+    @apply pl-2.5;
+  }
+
+  /* Code */
+  article pre {
+    @apply overflow-x-auto rounded-2xl border-2 border-slate-200 p-5 leading-relaxed text-slate-700 dark:border-slate-800 dark:text-slate-300 md:text-lg md:leading-relaxed lg:rounded-3xl lg:border-[3px] lg:p-10 lg:text-xl lg:leading-relaxed;
+  }
+  article :not(pre) > code {
+    @apply rounded-lg bg-slate-100 px-2 py-1 text-slate-700 dark:bg-gray-800 dark:text-slate-300;
+  }
+  article p > code {
+    @apply whitespace-nowrap;
+  }
+
+  /* Horizontal spacing */
+  article > :is(h1, h2, h3, h4, p, blockquote) {
+    @apply mx-8 lg:mx-10;
+  }
+  article > :is(ul, ol) {
+    @apply ml-12 mr-8 lg:ml-14 lg:mr-10;
+  }
+  article > pre {
+    @apply mx-3 lg:mx-10 2xl:mx-0;
+  }
+
+  /* Vertical spacing */
+  article > :is(h1, h2, h3, h4, p) + p {
+    @apply mt-7 md:mt-9 lg:mt-11;
+  }
+  article > * + * {
+    @apply mt-10 md:mt-12 lg:mt-14;
+  }
+  article > * + h2 {
+    @apply mt-12 md:mt-14 lg:mt-16;
+  }
 }
 
 /* Component layer */
