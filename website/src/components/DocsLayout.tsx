@@ -66,7 +66,7 @@ export const DocsLayout = component$(() => {
         </div>
 
         {/* Article */}
-        <article>
+        <article class="mdx">
           <Slot />
         </article>
 
