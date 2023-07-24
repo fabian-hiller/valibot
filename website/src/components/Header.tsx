@@ -1,4 +1,10 @@
-import { $, component$, useComputed$, useSignal } from '@builder.io/qwik';
+import {
+  $,
+  component$,
+  useComputed$,
+  useSignal,
+  useTask$,
+} from '@builder.io/qwik';
 import {
   Link,
   globalAction$,
@@ -38,6 +44,18 @@ export const Header = component$(() => {
 
   // Use focus trap for main menu
   useFocusTrap(rootElement, mainMenuOpen);
+
+  // Close main menu when location pathname changes
+  useTask$(({ track }) => {
+    track(() => location.url);
+    if (
+      mainMenuOpen.value &&
+      location.prevUrl &&
+      location.url.pathname !== location.prevUrl.pathname
+    ) {
+      mainMenuToggle.submit({ state: 'closed' });
+    }
+  });
 
   /**
    * Updates the window scrolled state.
