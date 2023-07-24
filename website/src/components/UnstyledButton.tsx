@@ -26,24 +26,28 @@ type UnstyledButtonProps = DefaultButtonProps & {
  * build more complex components on top of it.
  */
 export const UnstyledButton = component$((props: UnstyledButtonProps) => {
-  return (
-    <>
-      {/* Link button */}
-      {props.type === 'link' && (
-        <Link
-          {...props}
-          rel={props.target === '_blank' ? 'noreferrer' : undefined}
-        >
+  if (props.type === 'link') {
+    // External link
+    if (props.target === '_blank') {
+      return (
+        <a {...props} rel="noreferrer">
           <Slot />
-        </Link>
-      )}
+        </a>
+      );
+    }
 
-      {/* Normal button */}
-      {props.type !== 'link' && (
-        <button {...props}>
-          <Slot />
-        </button>
-      )}
-    </>
+    // Internal link
+    return (
+      <Link {...props}>
+        <Slot />
+      </Link>
+    );
+  }
+
+  // Normal button
+  return (
+    <button {...props}>
+      <Slot />
+    </button>
   );
 });
