@@ -10,6 +10,8 @@ import {
 import { Slot, component$, useComputed$ } from '@builder.io/qwik';
 import '../styles/pace.css';
 
+type NavItems = (ContentMenu & { group: string })[];
+
 /**
  * Provides the layout for the documentation pages.
  */
@@ -24,8 +26,11 @@ export const DocsLayout = component$(() => {
   // Compute navigation items
   const navItems = useComputed$(
     () =>
-      content.menu?.items?.reduce<ContentMenu[]>(
-        (list, { items }) => (items ? [...list, ...items] : list),
+      content.menu?.items?.reduce<NavItems>(
+        (list, { text, items }) =>
+          items
+            ? [...list, ...items.map((item) => ({ ...item, group: text }))]
+            : list,
         []
       ) || []
   );
@@ -35,8 +40,9 @@ export const DocsLayout = component$(() => {
     navItems.value.findIndex((item) => item.href === location.url.pathname)
   );
 
-  // Compute previous and next page
+  // Compute previous, current and next page
   const prevPage = useComputed$(() => navItems.value[navIndex.value - 1]);
+  const currentPage = useComputed$(() => navItems.value[navIndex.value]);
   const nextPage = useComputed$(() => navItems.value[navIndex.value + 1]);
 
   return (
@@ -70,33 +76,40 @@ export const DocsLayout = component$(() => {
           <Slot />
         </article>
 
-        <div class="mt-10 flex justify-between px-8 md:mt-12 lg:mt-14 lg:px-10">
-          {/* GitHub buttton */}
-          <IconButton
-            variant="secondary"
-            type="link"
-            href={`${GITHUB_WEBSITE_URL}/src/routes${location.url.pathname}index.mdx`}
-            target="_blank"
-            label="Edit page"
-          >
-            <PenIcon class="h-[18px]" />
-          </IconButton>
+        {currentPage.value?.href && (
+          <div class="mt-10 flex justify-between px-8 md:mt-12 lg:mt-14 lg:px-10">
+            {/* GitHub buttton */}
+            <IconButton
+              variant="secondary"
+              type="link"
+              href={`${GITHUB_WEBSITE_URL}/src/routes${currentPage.value.href.replace(
+                /^(\/.+)\/(.+\/)$/,
+                `$1/(${currentPage.value.group
+                  .toLowerCase()
+                  .replace(/\s/g, '-')})/$2`
+              )}index.mdx`}
+              target="_blank"
+              label="Edit page"
+            >
+              <PenIcon class="h-[18px]" />
+            </IconButton>
 
-          {/* Next page button */}
-          {navIndex.value !== -1 && nextPage.value?.href && (
-            <div class="hidden lg:block">
-              <IconButton
-                variant="secondary"
-                type="link"
-                href={nextPage.value.href}
-                label="Next page"
-                align="right"
-              >
-                <ArrowRightIcon class="h-[18px]" />
-              </IconButton>
-            </div>
-          )}
-        </div>
+            {/* Next page button */}
+            {nextPage.value?.href && (
+              <div class="hidden lg:block">
+                <IconButton
+                  variant="secondary"
+                  type="link"
+                  href={nextPage.value.href}
+                  label="Next page"
+                  align="right"
+                >
+                  <ArrowRightIcon class="h-[18px]" />
+                </IconButton>
+              </div>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );
