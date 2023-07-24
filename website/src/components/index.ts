@@ -1,3 +1,6 @@
+export * from './ActionButton';
+export * from './ButtonGroup';
+export * from './Expandable';
 export * from './Footer';
 export * from './GitHubIconLink';
 export * from './Head';
