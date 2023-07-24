@@ -27,6 +27,13 @@ export const Head = component$(() => {
       <link rel="apple-touch-icon" sizes="180x180" href="/icon-180px.jpg" />
       <link rel="manifest" href="/manifest.json" />
 
+      <script
+        async
+        src="https://umami.valibot.dev/script.js"
+        data-website-id="1fe7c3d9-66cb-43db-bb9c-dd86128e828c"
+        data-domains="valibot.dev"
+      />
+
       {/* Temporary solution until attribute can be rendered dynamically */}
       {theme.value === 'dark' ? (
         <script dangerouslySetInnerHTML="document.documentElement.classList.add('dark')" />
