@@ -192,7 +192,7 @@ export default component$(() => {
                 <>
                   The core function of Valibot is to create a schema. A schema
                   can be compared to a type definition in TypeScript. The big
-                  difference is that TypeScript types are “not executed” and are
+                  difference is that TypeScript types are "not executed" and are
                   more or less a DX feature. A schema on the other hand, apart
                   from the inferred type definition, can also be executed at
                   runtime to guarantee type safety of unknown data.
