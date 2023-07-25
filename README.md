@@ -1,23 +1,22 @@
-# Valibot
-
 ![Valibot Logo](https://github.com/fabian-hiller/valibot/blob/main/valibot.jpg?raw=true)
 
-## Get started
+## 🏃 Get started
 
-Hey 👋 I'm Valibot and I'm here to help you validate your data using schemas. It doesn't matter if you're dealing with incoming data on a server or validating a form directly in your browser. My modular design allows your bundler to remove everything that is not needed. This decreases the bundle size and improves performance. Since I'm fully implemented in TypeScript, you can enjoy maximum type safety with me.
+Hey 👋 I'm Valibot and I'm here to help you validate your data using schemas. It doesn't matter if you're dealing with incoming data on a server or validating a form directly in your browser. My modular design allows your bundler to remove everything that is not needed. This reduces the bundle size and improves performance. Since I'm fully implemented in TypeScript, you can enjoy maximum type safety with me. If you want to learn more about my benefits and differences from other solutions, I recommend you to read my [official announcement](https://www.builder.io/blog/introducing-valibot).
 
-> If you are an author of a library or framework and want to integrate me with an adapter, you can call with Vali. All my friends do that.
+> If you are an author of a library or framework and want to integrate me with an adapter, you can call me Vali.
 
-### Highlights
+### ✨ Highlights
 
 - Fully type safe with static type inference
-- Small bundle size starting at less than 200 bytes
+- Small bundle size starting at less than 300 bytes
 - Validate everything from strings to complex objects
-- Open source and fully tested with 100% coverage
+- Open source and fully tested with 100 % coverage
 - Many transformation and valdiation helpers included
+- Well structured source code without dependencies
 - Minimal, readable and well thought out API
 
-### Installation
+### 🔩 Installation
 
 Add me to your project with a single command via your favorite package manager.
 
@@ -25,23 +24,23 @@ Add me to your project with a single command via your favorite package manager.
 npm install valibot
 ```
 
-### Credits
+### 🙌 Credits
 
 My friend [Fabian](https://github.com/fabian-hiller) created me as part of his bachelor thesis at [Stuttgart Media University](https://www.hdm-stuttgart.de/en/), supervised by Walter Kriha, [Miško Hevery](https://github.com/mhevery) and [Ryan Carniato](https://github.com/ryansolid). My role models also include [Colin McDonnell](https://github.com/colinhacks), who had a big influence on my API design with [Zod](https://github.com/colinhacks/zod).
 
-### License
+### 🗝 License
 
-I am completely free and licensed under the [MIT license](https://github.com/fabian-hiller/valibot/blob/main/LICENSE.md). But if you like, you can reward me with a star on GitHub.
+I am completely free and licensed under the [MIT license](https://github.com/fabian-hiller/valibot/blob/main/LICENSE.md). But if you like, you can feed me with a star on GitHub.
 
-## Main concepts
+## 🧱 Main concepts
 
 Let's not waste time and validate the first data together. 🤖
 
-### Create a schema
+### 🎨 Create a schema
 
 You can create schemas for almost all data types and objects that TypeScript comes with. From primitive values like `number` and `null` to complex objects like `Map` and `Set` as well as special types like `enum`, `tuple` and `union` are all supported.
 
-#### String schema
+#### 📄 String schema
 
 To create a string schema, use the `string` function. For almost all schema functions, you can pass a validation and transformation pipeline in the form of an array as the last optional argument to perform more detailed validations.
 
@@ -65,7 +64,7 @@ const EmailSchema = string('Value is not a string.', [
 
 > Tip: Use the auto-complete feature of your editor to import the individual functions automatically.
 
-#### Object schema
+#### 📂 Object schema
 
 For object schemas you use the `object` function. As first argument you define the structure of your object.
 
@@ -78,7 +77,7 @@ const LoginSchema = object({
 });
 ```
 
-Using various methods, you can make the values of your object optional or merge two objects together, just like in TypeScript.
+Using various functions, you can make the values of your object optional or merge two objects together, just like with types in TypeScript.
 
 ```ts
 import {
@@ -109,13 +108,13 @@ const AccountSchema = merge([
 ]);
 ```
 
-#### More schemas
+#### 🧩 More schemas
 
-My code is well structured and fully commented. Until the official documentation goes live, you can just click through the GitHub repository to create other schemas.
+My code is well structured and fully commented. Until the [official documentation](https://valibot.dev/) is complete, you can just click through the GitHub repository to create other schemas.
 
-### Infer types
+### 🕵️ Infer types
 
-To make your work even easier, you can extract the input and output type of a schema. The input and output will only be different if you use `transform` to transform your data after validation. In most cases, only the output will be of interest to you.
+To make your day even easier, you can extract the input and output type of a schema. The input and output will only be different if you use `transform` to transform the data after validation. In most cases, only the output will be of interest to you.
 
 ```ts
 import { type Output, email, minLength, object, string } from 'valibot';
@@ -128,9 +127,9 @@ const LoginSchema = object({
 type LoginData = Output<typeof LoginSchema>; // { email: string; password: string }
 ```
 
-### Parse data
+### 🏁 Parse data
 
-To check if unknown data matches your schema, you use the `parse` method. Optionally, you can also use `parseSafe` if you don't want errors to be thrown.
+To check if unknown data matches your schema, use the `parse` method. Alternatively, I also support asynchronous validation with `parseAsync` and if you don't want errors to be thrown, you can use `parseSafe` or `parseSafeAsync`.
 
 ```ts
 import { email, endsWith, parse, string } from 'valibot';
@@ -143,8 +142,8 @@ parse(EmailSchema, 'foo'); // throws error
 parse(EmailSchema, 'jane@example.com'); // returns 'jane@example.com'
 ```
 
-## What's next?
+## ⚡️ What's next?
 
 With the release of v0.1, early adopters and content creators can try me out and evaluate me. Until v1 I reserve the right to make major changes to the API. Please create [issues](https://github.com/fabian-hiller/valibot/issues/new) and PRs if you encounter problems or have ideas for improvements.
 
-As part of this project, I will also be releasing detailed documentation over the next few weeks, which will be expanded and improved piece by piece.
+As part of this project, I will also be releasing detailed [documentation](https://valibot.dev/) over the next few weeks, which will be expanded and improved piece by piece.

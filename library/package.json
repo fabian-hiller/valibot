@@ -16,7 +16,8 @@
     "validation",
     "parsing",
     "bundle-size",
-    "type-safe"
+    "type-safe",
+    "runtime"
   ],
   "sideEffects": false,
   "type": "module",
