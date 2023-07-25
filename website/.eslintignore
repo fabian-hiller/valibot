@@ -29,7 +29,7 @@ build
 dist
 tsconfig.tsbuildinfo
 vite.config.ts
-vite.config.mts
+*.cjs
 *.spec.tsx
 *.spec.ts
 .netlify

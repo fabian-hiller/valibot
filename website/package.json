@@ -9,6 +9,7 @@
     "type": "git",
     "url": "https://github.com/fabian-hiller/valibot"
   },
+  "type": "module",
   "scripts": {
     "build": "qwik build",
     "build.client": "vite build",
