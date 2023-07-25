@@ -90,6 +90,26 @@
     @apply pl-2.5;
   }
 
+  /* Table */
+  .mdx .table-wrapper {
+    @apply overflow-x-auto rounded-2xl border-2 border-slate-200 px-5 py-2.5 dark:border-slate-800 lg:rounded-3xl lg:border-[3px] lg:px-10 lg:py-7;
+  }
+  .mdx table {
+    @apply w-full md:text-lg lg:text-xl;
+  }
+  .mdx tbody tr {
+    @apply border-t-[1px] border-t-slate-200 dark:border-t-slate-800 lg:border-t-2;
+  }
+  .mdx th {
+    @apply text-left font-medium text-slate-700 dark:text-slate-300;
+  }
+  .mdx :is(th, td) {
+    @apply whitespace-nowrap py-2.5 lg:py-3;
+  }
+  .mdx :is(th, td) + :is(th, td) {
+    @apply pl-3;
+  }
+
   /* Code */
   .mdx pre {
     @apply overflow-x-auto rounded-2xl border-2 border-slate-200 p-5 leading-relaxed text-slate-700 dark:border-slate-800 dark:text-slate-300 md:text-lg md:leading-relaxed lg:rounded-3xl lg:border-[3px] lg:p-10 lg:text-xl lg:leading-relaxed;
@@ -108,7 +128,7 @@
   .mdx > :is(ul, ol) {
     @apply ml-12 mr-8 lg:ml-14 lg:mr-10;
   }
-  .mdx > pre {
+  .mdx > :is(pre, .table-wrapper) {
     @apply mx-3 lg:mx-10 2xl:mx-0;
   }
 
