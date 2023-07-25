@@ -1,7 +1,24 @@
 ---
 title: Installation
+description: You can add me to your project with a single command via your favorite package manager. Below is the command for npm.
 ---
 
 # Installation
 
-> The content of this page is not yet ready. Check back in a few days.
+You can add me to your project with a single command via your favorite package manager. Below is the command for npm.
+
+```bash
+npm install valibot
+```
+
+After that you can import me into any JavaScript or TypeScript file.
+
+```ts
+// With individual imports
+import { … } from 'valibot';
+
+// With a single import
+import * as v from 'valibot';
+```
+
+> If bundle size is important to you, you should check if your bundler can still split the code if you use a single import.
