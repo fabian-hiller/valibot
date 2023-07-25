@@ -16,9 +16,6 @@ type NavItems = (ContentMenu & { group: string })[];
  * Provides the layout for the documentation pages.
  */
 export const DocsLayout = component$(() => {
-  // Get Directus URL
-  const GITHUB_WEBSITE_URL = import.meta.env.PUBLIC_GITHUB_WEBSITE_URL;
-
   // Use location and content
   const location = useLocation();
   const content = useContent();
@@ -82,7 +79,7 @@ export const DocsLayout = component$(() => {
             <IconButton
               variant="secondary"
               type="link"
-              href={`${GITHUB_WEBSITE_URL}/src/routes${currentPage.value.href.replace(
+              href={`https://github.com/fabian-hiller/valibot/blob/main/website/src/routes${currentPage.value.href.replace(
                 /^(\/.+)\/(.+\/)$/,
                 `$1/(${currentPage.value.group
                   .toLowerCase()

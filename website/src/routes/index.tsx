@@ -162,9 +162,7 @@ export default component$(() => {
                   You don't have to! Valibot is available free of charge and
                   licensed under the{' '}
                   <TextLink
-                    href={`${
-                      import.meta.env.PUBLIC_GITHUB_URL
-                    }/tree/main/LICENSE.md`}
+                    href="https://github.com/fabian-hiller/valibot/blob/main/LICENSE.md"
                     target="_blank"
                     underlined
                     colored
