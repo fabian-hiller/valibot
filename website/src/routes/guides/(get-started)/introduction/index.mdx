@@ -1,7 +1,59 @@
 ---
 title: Introduction
+description: Hello, I am Valibot and I would like to help you validate data easily using a schema. No matter if it is incoming data on a server, a form or even configuration files.
 ---
 
 # Introduction
 
-> The content of this page is not yet ready. Check back in a few days.
+Hello, I am Valibot and I would like to help you validate data easily using a schema. No matter if it is incoming data on a server, a form or even configuration files. I have no dependencies and can run in any JavaScript environment.
+
+> I highly recommend you read the <a href="https://www.builder.io/blog/introducing-valibot" target="_blank" rel="noreferrer">announcement post</a>.
+
+## Highlights
+
+- Fully type safe with static type inference
+- Small bundle size starting at less than 300 bytes
+- Validate everything from strings to complex objects
+- Open source and fully tested with 100 % coverage
+- Many transformation and valdiation helpers included
+- Well structured source code without dependencies
+- Minimal, readable and well thought out API
+
+## Example
+
+First you create a scheme. A schema can be compared to a type definition in TypeScript. The big difference is that TypeScript types are "not executed" and are more or less a DX feature. A schema on the other hand, apart from the inferred type definition, can also be executed at runtime to guarantee type safety of unknown data.
+
+```ts
+import { email, minLength, object, type Output, parse, string } from 'valibot';
+
+// Create login schema with email and password
+const LoginSchema = object({
+  email: string([email()]),
+  password: string([minLength(8)]),
+});
+
+// Infer output TypeScript type of login schema
+type LoginData = Output<typeof LoginSchema>; // { email: string; password: string }
+
+// Throws error for `email` and `password`
+parse(LoginSchema, { email: '', password: '' });
+
+// Returns data as { email: string; password: string }
+parse(LoginSchema, { email: 'jane@example.com', password: '12345678' });
+```
+
+## Comparison
+
+Instead of relying on a few large functions with many methods, my API design and source code is based on many small and independent functions, each with just a single task. This modular design has several advantages.
+
+For example, this allows a bundler to use the import statements to remove code that is not needed. This way, only the code that is actually used gets into your production build. This can reduce the bundle size by up to 98 % compared to <a href="https://zod.dev/" target="_blank" rel="noreferrer">Zod</a>.
+
+Besides the individual bundle size, the overall size of the library is also significantly smaller. This is due to the fact that my source code is simpler in structure, less complicated and optimized for compression.
+
+## Credits
+
+My friend <a href="https://twitter.com/FabianHiller" target="_blank" rel="noreferrer">Fabian</a> created me as part of his bachelor thesis at <a href="https://www.hdm-stuttgart.de/en/" target="_blank" rel="noreferrer">Stuttgart Media University</a>, supervised by Walter Kriha, <a href="https://twitter.com/mhevery" target="_blank" rel="noreferrer">Miško Hevery</a> and <a href="https://twitter.com/RyanCarniato" target="_blank" rel="noreferrer">Ryan Carniato</a>. My role models also include <a href="https://twitter.com/colinhacks" target="_blank" rel="noreferrer">Colin McDonnell</a>, who had a big influence on my API design with <a href="https://zod.dev/" target="_blank" rel="noreferrer">Zod</a>.
+
+## License
+
+I am completely free and licensed under the <a href={`${import.meta.env.PUBLIC_GITHUB_URL}/blob/main/LICENSE.md`} target="\_blank" rel="noreferrer">MIT license</a>. But if you like, you can feed me with a star on <a href={import.meta.env.PUBLIC_GITHUB_URL} target="\_blank" rel="noreferrer">GitHub</a>.
