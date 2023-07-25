@@ -109,6 +109,9 @@
   .mdx :is(th, td) + :is(th, td) {
     @apply pl-3;
   }
+  .mdx table strong {
+    @apply font-normal text-emerald-600 dark:text-emerald-400;
+  }
 
   /* Code */
   .mdx pre {

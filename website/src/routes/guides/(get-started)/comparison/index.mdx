@@ -53,12 +53,13 @@ const LoginSchema = object({
 
 Besides the individual bundle size, my overall size is also significantly smaller. This is due to the fact that my source code is simpler in structure, less complicated and optimized for compression. To be fair, in the following comparison you must take into account that the functionality between the listed libraries is different and this can have a big impact on the final numbers.
 
-| Library  | Minified size | Gzipped size | Compression rate |
-| -------- | ------------- | ------------ | ---------------- |
-| Valibot  | 30.5 kB       | 4.5 kB       | 85.25 %          |
-| io-ts    | 20.5 kB       | 5.2 kB       | 74.63 %          |
-| Runtypes | 30.6 kB       | 7.4 kB       | 75.82 %          |
-| Yup      | 40 kB         | 12.2 kB      | 69.5 %           |
-| Zod      | 57 kB         | 13.1 kB      | 77.02 %          |
-| Ajv      | 119.6 kB      | 35.2 kB      | 70.57 %          |
-| Joi      | 150.5 kB      | 42.8 kB      | 71.56 %          |
+| Library     | Minified size | Gzipped size | Compression rate |
+| ----------- | ------------- | ------------ | ---------------- |
+| Superstruct | 11.5 kB       | 3.4 kB       | 70,43 %          |
+| **Valibot** | **30.5 kB**   | **4.5 kB**   | **85.25 %**      |
+| io-ts       | 20.5 kB       | 5.2 kB       | 74.63 %          |
+| Runtypes    | 30.6 kB       | 7.4 kB       | 75.82 %          |
+| Yup         | 40 kB         | 12.2 kB      | 69.5 %           |
+| Zod         | 57 kB         | 13.1 kB      | 77.02 %          |
+| Ajv         | 119.6 kB      | 35.2 kB      | 70.57 %          |
+| Joi         | 150.5 kB      | 42.8 kB      | 71.56 %          |
