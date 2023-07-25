@@ -4,7 +4,7 @@
 
 - [Introduction](/guides/introduction)
 - [Installation](/guides/installation)
-- [Philosophy](/guides/philosophy)
+- [Use cases](/guides/use-cases)
 - [Comparison](/guides/comparison)
 - [Ecosystem](/guides/ecosystem)
 
