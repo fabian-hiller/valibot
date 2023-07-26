@@ -17,7 +17,7 @@ export * from './length';
 export * from './maxLength';
 export * from './maxRange';
 export * from './maxSize';
-export * from './length';
+export * from './bytes';
 export * from './maxBytes';
 export * from './minBytes';
 export * from './mimeType';
