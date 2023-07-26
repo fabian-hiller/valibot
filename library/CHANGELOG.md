@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.2.1 (July 26, 2023)
 
 - Change order of exports in package.json
 
