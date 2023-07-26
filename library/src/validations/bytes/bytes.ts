@@ -9,7 +9,7 @@ import type { ValidateInfo } from '../../types';
  *
  * @returns A validation function.
  */
-export function bytes<TInput extends string | any[]>(
+export function bytes<TInput extends string>(
   requirement: number,
   error?: string
 ) {
