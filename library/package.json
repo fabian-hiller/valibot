@@ -19,17 +19,17 @@
     "type-safe",
     "runtime"
   ],
-  "sideEffects": false,
   "type": "module",
-  "main": "./dist/index.mjs",
   "types": "./dist/types/index.d.ts",
+  "main": "./dist/index.mjs",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
+      "types": "./dist/types/index.d.ts",
       "require": "./dist/index.cjs",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/index.mjs"
     }
   },
+  "sideEffects": false,
   "files": [
     "dist"
   ],
