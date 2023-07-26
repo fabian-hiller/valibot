@@ -1,6 +1,7 @@
 {
   "name": "valibot",
   "description": "The modular and TypeScript-first schema library",
+  "packageManager": "pnpm@8.6.3",
   "version": "0.0.0",
   "license": "MIT",
   "author": "Fabian Hiller",

@@ -20,30 +20,61 @@
     "runtime"
   ],
   "type": "module",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/index.d.ts",
   "main": "./dist/index.mjs",
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs"
+    },
+    "./error": {
+      "types": "./dist/error.d.ts",
+      "import": "./dist/error.mjs",
+      "require": "./dist/error.cjs"
+    },
+    "./methods": {
+      "types": "./dist/methods.d.ts",
+      "import": "./dist/methods.mjs",
+      "require": "./dist/methods.cjs"
+    },
+    "./schemas": {
+      "types": "./dist/schemas.d.ts",
+      "import": "./dist/schemas.mjs",
+      "require": "./dist/schemas.cjs"
+    },
+    "./transformations": {
+      "types": "./dist/transformations.d.ts",
+      "import": "./dist/transformations.mjs",
+      "require": "./dist/transformations.cjs"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "import": "./dist/utils.mjs",
+      "require": "./dist/utils.cjs"
+    },
+    "./validations": {
+      "types": "./dist/validations.d.ts",
+      "import": "./dist/validations.mjs",
+      "require": "./dist/validations.cjs"
     }
   },
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "*.d.ts"
   ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "playground": "tsc && node --experimental-specifier-resolution=node dist/source/playground.js",
+    "playground": "unbuild --stub && tsc && node --experimental-specifier-resolution=node dist/source/playground.js",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit",
     "format": "prettier --write ./src",
     "format.check": "prettier --check ./src",
-    "build": "vite build --mode lib && tsc",
+    "build": "unbuild && tsc",
     "publish": "npm publish"
   },
   "devDependencies": {
@@ -54,6 +85,7 @@
     "eslint": "^8.43.0",
     "jsdom": "^22.1.0",
     "typescript": "^5.1.3",
+    "unbuild": "^1.2.1",
     "vite": "^4.3.9",
     "vitest": "^0.33.0"
   }
