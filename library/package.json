@@ -20,7 +20,7 @@
     "runtime"
   ],
   "type": "module",
-  "types": "./index.d.cts",
+  "types": "./dist/index.d.ts",
   "main": "./dist/index.cjs",
   "exports": {
     ".": {
