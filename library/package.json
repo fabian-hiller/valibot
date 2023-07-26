@@ -20,48 +20,84 @@
     "runtime"
   ],
   "type": "module",
-  "types": "./dist/index.d.ts",
-  "main": "./dist/index.mjs",
+  "types": "./index.d.cts",
+  "main": "./dist/index.cjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
+      "require": {
+        "types": "./index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import":  {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      }
     },
     "./error": {
-      "types": "./dist/error.d.ts",
-      "import": "./dist/error.mjs",
-      "require": "./dist/error.cjs"
+      "require": {
+        "types": "./error.d.cts",
+        "default": "./dist/error.cjs"
+      },
+      "import":  {
+        "types": "./dist/error.d.ts",
+        "default": "./dist/error.mjs"
+      }
     },
     "./methods": {
-      "types": "./dist/methods.d.ts",
-      "import": "./dist/methods.mjs",
-      "require": "./dist/methods.cjs"
+      "require": {
+        "types": "./methods.d.cts",
+        "default": "./dist/methods.cjs"
+      },
+      "import":  {
+        "types": "./dist/methods.d.ts",
+        "default": "./dist/methods.mjs"
+      }
     },
     "./schemas": {
-      "types": "./dist/schemas.d.ts",
-      "import": "./dist/schemas.mjs",
-      "require": "./dist/schemas.cjs"
+      "require": {
+        "types": "./schemas.d.cts",
+        "default": "./dist/schemas.cjs"
+      },
+      "import":  {
+        "types": "./dist/schemas.d.ts",
+        "default": "./dist/schemas.mjs"
+      }
     },
     "./transformations": {
-      "types": "./dist/transformations.d.ts",
-      "import": "./dist/transformations.mjs",
-      "require": "./dist/transformations.cjs"
+      "require": {
+        "types": "./transformations.d.cts",
+        "default": "./dist/transformations.cjs"
+      },
+      "import":  {
+        "types": "./dist/transformations.d.ts",
+        "default": "./dist/transformations.mjs"
+      }
     },
     "./utils": {
-      "types": "./dist/utils.d.ts",
-      "import": "./dist/utils.mjs",
-      "require": "./dist/utils.cjs"
+      "require": {
+        "types": "./utils.d.cts",
+        "default": "./dist/utils.cjs"
+      },
+      "import":  {
+        "types": "./dist/utils.d.ts",
+        "default": "./dist/utils.mjs"
+      }
     },
     "./validations": {
-      "types": "./dist/validations.d.ts",
-      "import": "./dist/validations.mjs",
-      "require": "./dist/validations.cjs"
+      "require": {
+        "types": "./validations.d.cts",
+        "default": "./dist/validations.cjs"
+      },
+      "import":  {
+        "types": "./dist/validations.d.ts",
+        "default": "./dist/validations.mjs"
+      }
     }
   },
   "sideEffects": false,
   "files": [
     "dist",
+    "*.d.cts",
     "*.d.ts"
   ],
   "publishConfig": {

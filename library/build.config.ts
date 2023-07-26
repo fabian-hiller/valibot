@@ -10,7 +10,7 @@ Object.keys(exportsList).forEach((key) => {
     return;
   }
 
-  const importValue = exportsList[key]['import'];
+  const importValue = exportsList[key]['import']['default'];
   if (key === '.') {
     entries.push({
       input: 'src/index',
@@ -38,5 +38,6 @@ export default defineBuildConfig({
       respectExternal: true,
     },
   },
+  failOnWarn: false,
   externals: ['vitest'],
 });
