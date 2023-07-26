@@ -1,3 +1,4 @@
+export * from './bytes';
 export * from './custom';
 export * from './email';
 export * from './emoji';
@@ -14,11 +15,10 @@ export * from './isoTimeSecond';
 export * from './isoTimestamp';
 export * from './isoWeek';
 export * from './length';
+export * from './maxBytes';
 export * from './maxLength';
 export * from './maxRange';
 export * from './maxSize';
-export * from './bytes';
-export * from './maxBytes';
 export * from './minBytes';
 export * from './mimeType';
 export * from './minLength';

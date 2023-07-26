@@ -52,6 +52,7 @@
 
 ## Validations
 
+- [bytes](/api/bytes)
 - [custom](/api/custom)
 - [email](/api/email)
 - [emoji](/api/emoji)
@@ -68,11 +69,13 @@
 - [isoTimestamp](/api/isoTimestamp)
 - [isoWeek](/api/isoWeek)
 - [length](/api/length)
+- [maxBytes](/api/maxBytes)
 - [maxLength](/api/maxLength)
 - [maxRange](/api/maxRange)
 - [maxSize](/api/maxSize)
 - [mimeType](/api/mimeType)
 - [minLength](/api/minLength)
+- [minBytes](/api/minBytes)
 - [minRange](/api/minRange)
 - [minSize](/api/minSize)
 - [regex](/api/regex)
