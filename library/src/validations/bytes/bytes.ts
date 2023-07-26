@@ -4,20 +4,20 @@ import type { ValidateInfo } from '../../types';
 /**
  * Creates a validation functions that validates the byte length of a string.
  *
- * @param requirement The maximum length in byte.
+ * @param requirement The byte length.
  * @param error The error message.
  *
  * @returns A validation function.
  */
-export function maxBytes<TInput extends string>(
+export function bytes<TInput extends string | any[]>(
   requirement: number,
   error?: string
 ) {
   return (input: TInput, info: ValidateInfo) => {
-    if (new TextEncoder().encode(input).length > requirement) {
+    if (new TextEncoder().encode(input).length !== requirement) {
       throw new ValiError([
         {
-          validation: 'max_bytes',
+          validation: 'bytes',
           origin: 'value',
           message: error || 'Invalid byte length',
           input,
