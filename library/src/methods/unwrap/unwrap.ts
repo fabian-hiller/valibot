@@ -11,6 +11,8 @@ import type {
   NullishSchemaAsync,
   OptionalSchema,
   OptionalSchemaAsync,
+  PassthroughSchema,
+  PassthroughSchemaAsync,
 } from '../../schemas';
 
 /**
@@ -24,6 +26,8 @@ export function unwrap<
   TSchema extends
     | OptionalSchema<any>
     | OptionalSchemaAsync<any>
+    | PassthroughSchema<any>
+    | PassthroughSchemaAsync<any>
     | NullableSchema<any>
     | NullableSchemaAsync<any>
     | NullishSchema<any>

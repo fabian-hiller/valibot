@@ -19,6 +19,7 @@ export * from './nullType';
 export * from './number';
 export * from './object';
 export * from './optional';
+export * from './passthrough';
 export * from './record';
 export * from './recursive';
 export * from './set';
