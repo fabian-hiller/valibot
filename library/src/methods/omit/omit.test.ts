@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../utils/index.ts';
+import { comparable } from '../../comparable.ts';
 import { object, string } from '../../schemas/index.ts';
 import { omit } from '../omit/index.ts';
 import { parse } from '../parse/index.ts';

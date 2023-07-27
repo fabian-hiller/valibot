@@ -2,6 +2,11 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Fix invalid `comparable` import when using Deno
+- Add util functions to exports of library
+
 ## v0.4.0 (July 27, 2023)
 
 - Add `instance` and `instanceAsync` schema
