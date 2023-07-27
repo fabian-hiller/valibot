@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
-import { maxRange, minRange } from '../../validations/index.ts';
+import { maxValue, minValue } from '../../validations/index.ts';
 import { number } from './number.ts';
 
 describe('number', () => {
@@ -20,19 +20,19 @@ describe('number', () => {
   });
 
   test('should execute pipe', () => {
-    const rangeError = 'Invalid range';
+    const valueError = 'Invalid value';
 
-    const schema1 = number([minRange(1), maxRange(3)]);
+    const schema1 = number([minValue(1), maxValue(3)]);
     const input1 = 2;
     const output1 = parse(schema1, input1);
     expect(output1).toBe(input1);
-    expect(() => parse(schema1, 0)).toThrowError(rangeError);
-    expect(() => parse(schema1, 12)).toThrowError(rangeError);
+    expect(() => parse(schema1, 0)).toThrowError(valueError);
+    expect(() => parse(schema1, 12)).toThrowError(valueError);
 
-    const schema2 = number('Error', [maxRange(3)]);
+    const schema2 = number('Error', [maxValue(3)]);
     const input2 = 3;
     const output2 = parse(schema2, input2);
     expect(output2).toBe(input2);
-    expect(() => parse(schema2, 12346789)).toThrowError(rangeError);
+    expect(() => parse(schema2, 12346789)).toThrowError(valueError);
   });
 });

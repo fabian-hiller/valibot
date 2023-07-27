@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
-import { maxRange, minRange } from '../../validations/index.ts';
+import { maxValue, minValue } from '../../validations/index.ts';
 import { dateAsync } from './dateAsync.ts';
 
 describe('dateAsync', () => {
@@ -20,28 +20,28 @@ describe('dateAsync', () => {
   });
 
   test('should execute pipe', async () => {
-    const rangeError = 'Invalid range';
+    const valueError = 'Invalid value';
 
     const schema1 = dateAsync([
-      minRange(new Date(Date.now() - 3600000)),
-      maxRange(new Date(Date.now() + 3600000)),
+      minValue(new Date(Date.now() - 3600000)),
+      maxValue(new Date(Date.now() + 3600000)),
     ]);
     const input1 = new Date();
     const output1 = await parseAsync(schema1, input1);
     expect(output1).toEqual(input1);
     await expect(
       parseAsync(schema1, new Date(Date.now() - 4000000))
-    ).rejects.toThrowError(rangeError);
+    ).rejects.toThrowError(valueError);
     await expect(
       parseAsync(schema1, new Date(Date.now() + 4000000))
-    ).rejects.toThrowError(rangeError);
+    ).rejects.toThrowError(valueError);
 
-    const schema2 = dateAsync('Error', [maxRange(new Date())]);
+    const schema2 = dateAsync('Error', [maxValue(new Date())]);
     const input2 = new Date(Date.now() - 120000);
     const output2 = await parseAsync(schema2, input2);
     expect(output2).toEqual(input2);
     await expect(
       parseAsync(schema2, new Date(Date.now() + 1))
-    ).rejects.toThrowError(rangeError);
+    ).rejects.toThrowError(valueError);
   });
 });

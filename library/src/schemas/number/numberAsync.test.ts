@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
-import { maxRange, minRange } from '../../validations/index.ts';
+import { maxValue, minValue } from '../../validations/index.ts';
 import { numberAsync } from './numberAsync.ts';
 
 describe('numberAsync', () => {
@@ -22,21 +22,21 @@ describe('numberAsync', () => {
   });
 
   test('should execute pipe', async () => {
-    const rangeError = 'Invalid range';
+    const valueError = 'Invalid value';
 
-    const schema1 = numberAsync([minRange(1), maxRange(3)]);
+    const schema1 = numberAsync([minValue(1), maxValue(3)]);
     const input1 = 2;
     const output1 = await parseAsync(schema1, input1);
     expect(output1).toBe(input1);
-    await expect(parseAsync(schema1, 0)).rejects.toThrowError(rangeError);
-    await expect(parseAsync(schema1, 12)).rejects.toThrowError(rangeError);
+    await expect(parseAsync(schema1, 0)).rejects.toThrowError(valueError);
+    await expect(parseAsync(schema1, 12)).rejects.toThrowError(valueError);
 
-    const schema2 = numberAsync('Error', [maxRange(3)]);
+    const schema2 = numberAsync('Error', [maxValue(3)]);
     const input2 = 3;
     const output2 = await parseAsync(schema2, input2);
     expect(output2).toBe(input2);
     await expect(parseAsync(schema2, 12346789)).rejects.toThrowError(
-      rangeError
+      valueError
     );
   });
 });
