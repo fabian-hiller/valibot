@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.3.0 (July 27, 2023)
 
 - Add `bytes`, `minBytes` and `maxBytes` validation (pull request #1)
 - Change build step to tsup and exports in package.json (issue #7)
