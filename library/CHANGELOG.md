@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `instance` and `instanceAsync` schema
+
 ## v0.3.0 (July 27, 2023)
 
 - Add `bytes`, `minBytes` and `maxBytes` validation (pull request #1)

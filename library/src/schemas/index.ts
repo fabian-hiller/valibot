@@ -5,6 +5,7 @@ export * from './blob';
 export * from './boolean';
 export * from './date';
 export * from './enumType';
+export * from './instance';
 export * from './literal';
 export * from './map';
 export * from './nan';

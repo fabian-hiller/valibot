@@ -40,13 +40,6 @@ export function specialAsync<TInput>(
   pipe?: PipeAsync<TInput>
 ): SpecialSchemaAsync<TInput>;
 
-/**
- * Creates a special schema.
- *
- * @param pipe A validation and transformation pipe.
- *
- * @returns A special schema.
- */
 export function specialAsync<TInput>(
   check: (input: unknown) => boolean | Promise<boolean>,
   arg2?: PipeAsync<TInput> | string,

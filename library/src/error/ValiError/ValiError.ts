@@ -19,7 +19,8 @@ export type IssueReason =
   | 'object'
   | 'record'
   | 'set'
-  | 'special';
+  | 'special'
+  | 'instance';
 
 /**
  * Issue type.

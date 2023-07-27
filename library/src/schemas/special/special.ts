@@ -40,13 +40,6 @@ export function special<TInput>(
   pipe?: Pipe<TInput>
 ): SpecialSchema<TInput>;
 
-/**
- * Creates a special schema.
- *
- * @param pipe A validation and transformation pipe.
- *
- * @returns A special schema.
- */
 export function special<TInput>(
   check: (input: unknown) => boolean,
   arg2?: Pipe<TInput> | string,
