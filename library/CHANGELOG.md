@@ -7,6 +7,7 @@ All notable changes to the library will be documented in this file.
 - Fix invalid `comparable` import when using Deno
 - Add util functions to exports of library
 - Rename `minRange` and `maxRange` to `minValue` and `maxValue` (issue #20)
+- Add `value` validation function
 
 ## v0.4.0 (July 27, 2023)
 
