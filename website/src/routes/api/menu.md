@@ -84,6 +84,7 @@
 - [startsWith](/api/startsWith)
 - [url](/api/url)
 - [uuid](/api/uuid)
+- [value](/api/value)
 
 ## Transformations
 
