@@ -1,2 +1,2 @@
-export * from './toCustom';
-export * from './toCustomAsync';
+export * from './toCustom.ts';
+export * from './toCustomAsync.ts';

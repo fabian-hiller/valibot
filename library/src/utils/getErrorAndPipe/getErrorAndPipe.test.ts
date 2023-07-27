@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { getErrorAndPipe } from './getErrorAndPipe';
+import { getErrorAndPipe } from './getErrorAndPipe.ts';
 
 describe('getErrorAndPipe', () => {
   test('should return error and pipe', () => {

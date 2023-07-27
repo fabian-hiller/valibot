@@ -1,2 +1,2 @@
-export * from './union';
-export * from './unionAsync';
+export * from './union.ts';
+export * from './unionAsync.ts';

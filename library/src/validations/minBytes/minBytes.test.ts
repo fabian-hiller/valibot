@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { minBytes } from './minBytes';
+import { minBytes } from './minBytes.ts';
 
 describe('minBytes', () => {
   const info = { reason: 'any' as const };

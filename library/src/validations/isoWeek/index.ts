@@ -1,1 +1,1 @@
-export * from './isoWeek';
+export * from './isoWeek.ts';

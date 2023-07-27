@@ -1,2 +1,2 @@
-export * from './special';
-export * from './specialAsync';
+export * from './special.ts';
+export * from './specialAsync.ts';

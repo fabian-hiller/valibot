@@ -1,2 +1,2 @@
-export * from './parse';
-export * from './parseAsync';
+export * from './parse.ts';
+export * from './parseAsync.ts';

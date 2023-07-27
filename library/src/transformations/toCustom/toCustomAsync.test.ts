@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { toCustomAsync } from './toCustomAsync';
+import { toCustomAsync } from './toCustomAsync.ts';
 
 describe('toCustomAsync', () => {
   test('should transform the custom', async () => {

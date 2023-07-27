@@ -1,2 +1,2 @@
-export * from './omit';
-export * from './omitAsync';
+export * from './omit.ts';
+export * from './omitAsync.ts';

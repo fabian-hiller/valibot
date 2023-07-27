@@ -1,1 +1,1 @@
-export * from './maxLength';
+export * from './maxLength.ts';

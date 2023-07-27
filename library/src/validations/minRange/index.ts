@@ -1,1 +1,1 @@
-export * from './minRange';
+export * from './minRange.ts';

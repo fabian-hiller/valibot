@@ -1,5 +1,5 @@
-import type { ValiError } from '../../error';
-import type { BaseSchema, Output } from '../../types';
+import type { ValiError } from '../../error/index.ts';
+import type { BaseSchema, Output } from '../../types.ts';
 
 /**
  * Parses unknown input based on a schema.

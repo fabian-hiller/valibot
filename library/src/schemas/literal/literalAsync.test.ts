@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { literalAsync } from './literalAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { literalAsync } from './literalAsync.ts';
 
 describe('literalAsync', () => {
   test('should pass only the literal', async () => {

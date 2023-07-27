@@ -1,3 +1,3 @@
-export * from './object';
-export * from './objectAsync';
-export * from './types';
+export * from './object.ts';
+export * from './objectAsync.ts';
+export * from './types.ts';

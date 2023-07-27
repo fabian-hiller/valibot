@@ -5,9 +5,8 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
-    "outDir": "dist/source",
-    "declaration": true,
-    "declarationDir": "dist/types"
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
-  "include": ["src"]
+  "include": ["."]
 }

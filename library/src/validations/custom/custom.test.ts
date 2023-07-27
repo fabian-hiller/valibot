@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { custom } from './custom';
+import { custom } from './custom.ts';
 
 describe('custom', () => {
   const info = { reason: 'any' as const };

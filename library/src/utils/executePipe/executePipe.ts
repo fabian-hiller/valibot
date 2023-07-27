@@ -1,4 +1,4 @@
-import type { Pipe, ValidateInfo } from '../../types';
+import type { Pipe, ValidateInfo } from '../../types.ts';
 
 /**
  * Executes the validation and transformation pipe.

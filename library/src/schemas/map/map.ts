@@ -1,7 +1,11 @@
-import { type Issue, type Issues, ValiError } from '../../error';
-import type { BaseSchema, Output, Pipe } from '../../types';
-import { executePipe, getCurrentPath, getErrorAndPipe } from '../../utils';
-import type { MapInput, MapOutput } from './types';
+import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { BaseSchema, Output, Pipe } from '../../types.ts';
+import {
+  executePipe,
+  getCurrentPath,
+  getErrorAndPipe,
+} from '../../utils/index.ts';
+import type { MapInput, MapOutput } from './types.ts';
 
 /**
  * Map schema type.

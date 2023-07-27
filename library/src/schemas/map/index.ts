@@ -1,3 +1,3 @@
-export * from './map';
-export * from './mapAsync';
-export * from './types';
+export * from './map.ts';
+export * from './mapAsync.ts';
+export * from './types.ts';

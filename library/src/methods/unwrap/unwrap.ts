@@ -11,7 +11,7 @@ import type {
   NullishSchemaAsync,
   OptionalSchema,
   OptionalSchemaAsync,
-} from '../../schemas';
+} from '../../schemas/index.ts';
 
 /**
  * Unwraps the wrapped schema.

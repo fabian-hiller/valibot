@@ -1,2 +1,2 @@
-export * from './date';
-export * from './dateAsync';
+export * from './date.ts';
+export * from './dateAsync.ts';

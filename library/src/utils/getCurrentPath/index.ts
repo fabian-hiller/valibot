@@ -1,1 +1,1 @@
-export * from './getCurrentPath';
+export * from './getCurrentPath.ts';

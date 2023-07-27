@@ -1,4 +1,4 @@
-import type { ValiError } from '../ValiError';
+import type { ValiError } from '../ValiError/index.ts';
 
 /**
  * Flat errors type.

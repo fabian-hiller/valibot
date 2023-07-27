@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { nullType } from './nullType';
+import { parse } from '../../methods/index.ts';
+import { nullType } from './nullType.ts';
 
 describe('nullType', () => {
   test('should pass only null', () => {

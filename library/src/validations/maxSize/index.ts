@@ -1,1 +1,1 @@
-export * from './maxSize';
+export * from './maxSize.ts';

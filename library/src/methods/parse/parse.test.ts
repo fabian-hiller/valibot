@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { number, object, string } from '../../schemas';
-import { parse } from './parse';
+import { number, object, string } from '../../schemas/index.ts';
+import { parse } from './parse.ts';
 
 describe('parse', () => {
   test('should parse schema', () => {

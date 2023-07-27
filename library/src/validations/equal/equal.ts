@@ -1,5 +1,5 @@
-import { ValiError } from '../../error';
-import type { ValidateInfo } from '../../types';
+import { ValiError } from '../../error/index.ts';
+import type { ValidateInfo } from '../../types.ts';
 
 /**
  * Creates a validation function that checks the value for equality.

@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
-import { number, object, string } from '../../schemas';
-import { comparable } from '../../utils';
-import { merge } from '../merge';
-import { parse } from '../parse';
+import { number, object, string } from '../../schemas/index.ts';
+import { comparable } from '../../utils/index.ts';
+import { merge } from '../merge/index.ts';
+import { parse } from '../parse/index.ts';
 
 describe('merge', () => {
   test('should merge object schemas', () => {

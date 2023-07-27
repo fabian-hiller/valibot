@@ -1,7 +1,11 @@
-import { type Issue, type Issues, ValiError } from '../../error';
-import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types';
-import { executePipeAsync, getCurrentPath, getErrorAndPipe } from '../../utils';
-import type { TupleInput, TupleOutput } from './types';
+import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import {
+  executePipeAsync,
+  getCurrentPath,
+  getErrorAndPipe,
+} from '../../utils/index.ts';
+import type { TupleInput, TupleOutput } from './types.ts';
 
 /**
  * Tuple shape async type.

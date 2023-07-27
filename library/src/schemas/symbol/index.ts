@@ -1,2 +1,2 @@
-export * from './symbol';
-export * from './symbolAsync';
+export * from './symbol.ts';
+export * from './symbolAsync.ts';

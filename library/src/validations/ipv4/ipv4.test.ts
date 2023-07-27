@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { ipv4 } from './ipv4';
+import { ipv4 } from './ipv4.ts';
 
 describe('ipv4', () => {
   const info = { reason: 'any' as const };

@@ -1,2 +1,2 @@
-export * from './voidType';
-export * from './voidTypeAsync';
+export * from './voidType.ts';
+export * from './voidTypeAsync.ts';

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { string } from '../string';
-import { nullable } from './nullable';
+import { parse } from '../../methods/index.ts';
+import { string } from '../string/index.ts';
+import { nullable } from './nullable.ts';
 
 describe('nullable', () => {
   test('should pass also null', () => {

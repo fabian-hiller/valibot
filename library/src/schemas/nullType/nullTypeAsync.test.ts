@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { nullTypeAsync } from './nullTypeAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { nullTypeAsync } from './nullTypeAsync.ts';
 
 describe('nullTypeAsync', () => {
   test('should pass only null', async () => {

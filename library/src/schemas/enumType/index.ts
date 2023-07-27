@@ -1,2 +1,2 @@
-export * from './enumType';
-export * from './enumTypeAsync';
+export * from './enumType.ts';
+export * from './enumTypeAsync.ts';

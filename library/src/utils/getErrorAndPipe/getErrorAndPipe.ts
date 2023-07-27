@@ -1,4 +1,4 @@
-import type { Pipe } from '../../types';
+import type { Pipe } from '../../types.ts';
 
 /**
  * Returns error and pipe from dynamic arguments.

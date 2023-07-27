@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { instanceAsync } from './instanceAsync';
-import { maxRange, minRange } from '../../validations';
+import { parseAsync } from '../../methods/index.ts';
+import { maxRange, minRange } from '../../validations/index.ts';
+import { instanceAsync } from './instanceAsync.ts';
 
 describe('instanceAsync', () => {
   test('should pass only valid instances', async () => {

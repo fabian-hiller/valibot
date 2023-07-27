@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { customAsync } from './customAsync';
+import { customAsync } from './customAsync.ts';
 
 describe('customAsync', () => {
   const info = { reason: 'any' as const };

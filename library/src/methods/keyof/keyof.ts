@@ -3,7 +3,7 @@ import {
   type EnumSchema,
   type ObjectSchema,
   type ObjectSchemaAsync,
-} from '../../schemas';
+} from '../../schemas/index.ts';
 
 /**
  * Converts union to intersection types.

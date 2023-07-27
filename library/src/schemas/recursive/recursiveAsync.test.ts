@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { minLength } from '../../validations';
-import { stringAsync } from '../string';
-import { recursiveAsync } from './recursiveAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { minLength } from '../../validations/index.ts';
+import { stringAsync } from '../string/index.ts';
+import { recursiveAsync } from './recursiveAsync.ts';
 
 describe('recursiveAsync', () => {
   test('should pass only getter schema', async () => {

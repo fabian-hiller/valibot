@@ -1,2 +1,2 @@
-export * from './nonNullish';
-export * from './nonNullishAsync';
+export * from './nonNullish.ts';
+export * from './nonNullishAsync.ts';

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { isoTime } from './isoTime';
+import { isoTime } from './isoTime.ts';
 
 describe('isoTime', () => {
   const info = { reason: 'any' as const };

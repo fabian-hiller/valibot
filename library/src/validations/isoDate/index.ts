@@ -1,1 +1,1 @@
-export * from './isoDate';
+export * from './isoDate.ts';

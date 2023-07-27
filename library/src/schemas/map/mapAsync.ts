@@ -1,12 +1,16 @@
-import { type Issue, type Issues, ValiError } from '../../error';
+import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
   Output,
   PipeAsync,
-} from '../../types';
-import { executePipeAsync, getCurrentPath, getErrorAndPipe } from '../../utils';
-import type { MapInput, MapOutput } from './types';
+} from '../../types.ts';
+import {
+  executePipeAsync,
+  getCurrentPath,
+  getErrorAndPipe,
+} from '../../utils/index.ts';
+import type { MapInput, MapOutput } from './types.ts';
 
 /**
  * Map schema async type.

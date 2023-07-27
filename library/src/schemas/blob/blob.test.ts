@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { blob } from './blob';
+import { parse } from '../../methods/index.ts';
+import { blob } from './blob.ts';
 
 describe('blob', () => {
   test('should pass only blobs', () => {

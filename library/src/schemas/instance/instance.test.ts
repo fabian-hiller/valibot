@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { instance } from './instance';
-import { maxRange, minRange } from '../../validations';
+import { parse } from '../../methods/index.ts';
+import { maxRange, minRange } from '../../validations/index.ts';
+import { instance } from './instance.ts';
 
 describe('instance', () => {
   test('should pass only valid instances', () => {

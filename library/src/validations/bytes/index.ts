@@ -1,1 +1,1 @@
-export * from './bytes';
+export * from './bytes.ts';

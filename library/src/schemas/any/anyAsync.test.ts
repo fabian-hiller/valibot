@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { anyAsync } from './anyAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { anyAsync } from './anyAsync.ts';
 
 describe('anyAsync', () => {
   test('should pass any values', async () => {

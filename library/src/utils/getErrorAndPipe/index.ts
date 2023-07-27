@@ -1,1 +1,1 @@
-export * from './getErrorAndPipe';
+export * from './getErrorAndPipe.ts';

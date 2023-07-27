@@ -1,2 +1,2 @@
-export * from './nullType';
-export * from './nullTypeAsync';
+export * from './nullType.ts';
+export * from './nullTypeAsync.ts';

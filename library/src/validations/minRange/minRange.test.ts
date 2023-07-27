@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { minRange } from './minRange';
+import { minRange } from './minRange.ts';
 
 describe('minRange', () => {
   const info = { reason: 'any' as const };

@@ -1,1 +1,1 @@
-export * from './minBytes';
+export * from './minBytes.ts';

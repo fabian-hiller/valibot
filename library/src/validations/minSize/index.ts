@@ -1,1 +1,1 @@
-export * from './minSize';
+export * from './minSize.ts';

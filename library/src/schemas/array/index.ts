@@ -1,2 +1,2 @@
-export * from './array';
-export * from './arrayAsync';
+export * from './array.ts';
+export * from './arrayAsync.ts';

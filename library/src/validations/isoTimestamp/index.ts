@@ -1,1 +1,1 @@
-export * from './isoTimestamp';
+export * from './isoTimestamp.ts';

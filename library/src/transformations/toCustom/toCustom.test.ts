@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { toCustom } from './toCustom';
+import { toCustom } from './toCustom.ts';
 
 describe('toCustom', () => {
   test('should transform the custom', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { includes } from './includes';
+import { includes } from './includes.ts';
 
 describe('includes', () => {
   const info = { reason: 'any' as const };

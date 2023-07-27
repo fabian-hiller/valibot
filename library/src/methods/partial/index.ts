@@ -1,2 +1,2 @@
-export * from './partial';
-export * from './partialAsync';
+export * from './partial.ts';
+export * from './partialAsync.ts';

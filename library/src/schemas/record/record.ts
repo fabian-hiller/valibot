@@ -1,8 +1,12 @@
-import { type Issue, type Issues, ValiError } from '../../error';
-import type { BaseSchema, Pipe } from '../../types';
-import { executePipe, getCurrentPath, getErrorAndPipe } from '../../utils';
-import { type StringSchema, string } from '../string';
-import type { RecordOutput, RecordInput } from './types';
+import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { BaseSchema, Pipe } from '../../types.ts';
+import {
+  executePipe,
+  getCurrentPath,
+  getErrorAndPipe,
+} from '../../utils/index.ts';
+import { type StringSchema, string } from '../string/index.ts';
+import type { RecordOutput, RecordInput } from './types.ts';
 
 /**
  * Record key type.

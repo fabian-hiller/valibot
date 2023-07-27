@@ -1,6 +1,10 @@
-import { type Issue, type Issues, ValiError } from '../../error';
-import type { BaseSchema, Input, Output, Pipe } from '../../types';
-import { executePipe, getCurrentPath, getErrorAndPipe } from '../../utils';
+import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { BaseSchema, Input, Output, Pipe } from '../../types.ts';
+import {
+  executePipe,
+  getCurrentPath,
+  getErrorAndPipe,
+} from '../../utils/index.ts';
 
 /**
  * Array path item type.

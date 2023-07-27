@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { minLength } from '../../validations';
-import { number } from '../number';
-import { string, stringAsync } from '../string';
-import { numberAsync } from '../number';
-import { unionAsync } from '../union';
-import { recordAsync } from './recordAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { minLength } from '../../validations/index.ts';
+import { number } from '../number/index.ts';
+import { string, stringAsync } from '../string/index.ts';
+import { numberAsync } from '../number/index.ts';
+import { unionAsync } from '../union/index.ts';
+import { recordAsync } from './recordAsync.ts';
 
 describe('recordAsync', () => {
   test('should pass only objects', async () => {

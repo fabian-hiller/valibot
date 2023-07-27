@@ -1,4 +1,4 @@
-import type { Issue } from './error';
+import type { Issue } from './error/index.ts';
 import type {
   ArrayPathItem,
   MapPathItem,
@@ -6,7 +6,7 @@ import type {
   RecordPathItem,
   SetPathItem,
   TuplePathItem,
-} from './schemas';
+} from './schemas/index.ts';
 
 /**
  * Parse info type.

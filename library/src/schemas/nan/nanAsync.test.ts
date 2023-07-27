@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { nanAsync } from './nanAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { nanAsync } from './nanAsync.ts';
 
 describe('nanAsync', () => {
   test('should pass only NaN', async () => {

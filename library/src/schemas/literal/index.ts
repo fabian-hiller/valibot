@@ -1,2 +1,2 @@
-export * from './literal';
-export * from './literalAsync';
+export * from './literal.ts';
+export * from './literalAsync.ts';

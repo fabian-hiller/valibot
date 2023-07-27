@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { mapAsync } from '../map';
-import { string } from '../string';
-import { date } from '../date';
-import { number, numberAsync } from '../number';
-import { maxSize, minSize, size } from '../../validations';
+import { parseAsync } from '../../methods/index.ts';
+import { mapAsync } from '../map/index.ts';
+import { string } from '../string/index.ts';
+import { date } from '../date/index.ts';
+import { number, numberAsync } from '../number/index.ts';
+import { maxSize, minSize, size } from '../../validations/index.ts';
 
 describe('mapAsync', () => {
   test('should pass only maps', async () => {

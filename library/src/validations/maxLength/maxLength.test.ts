@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { maxLength } from './maxLength';
+import { maxLength } from './maxLength.ts';
 
 describe('maxLength', () => {
   const info = { reason: 'any' as const };

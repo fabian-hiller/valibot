@@ -1,2 +1,2 @@
-export * from './recursive';
-export * from './recursiveAsync';
+export * from './recursive.ts';
+export * from './recursiveAsync.ts';

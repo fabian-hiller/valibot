@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { maxRange, minRange } from '../../validations';
-import { numberAsync } from './numberAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { maxRange, minRange } from '../../validations/index.ts';
+import { numberAsync } from './numberAsync.ts';
 
 describe('numberAsync', () => {
   test('should pass only numbers', async () => {

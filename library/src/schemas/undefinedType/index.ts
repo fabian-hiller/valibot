@@ -1,2 +1,2 @@
-export * from './undefinedType';
-export * from './undefinedTypeAsync';
+export * from './undefinedType.ts';
+export * from './undefinedTypeAsync.ts';

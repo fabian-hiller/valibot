@@ -1,5 +1,5 @@
-import type { BaseSchema, Pipe } from '../../types';
-import { executePipe } from '../../utils';
+import type { BaseSchema, Pipe } from '../../types.ts';
+import { executePipe } from '../../utils/index.ts';
 
 /**
  * Unknown schema type.

@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { minLength } from '../../validations';
-import { number } from '../number';
-import { string } from '../string';
-import { union } from '../union';
-import { record } from './record';
+import { parse } from '../../methods/index.ts';
+import { minLength } from '../../validations/index.ts';
+import { number } from '../number/index.ts';
+import { string } from '../string/index.ts';
+import { union } from '../union/index.ts';
+import { record } from './record.ts';
 
 describe('record', () => {
   test('should pass only objects', () => {

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { email, maxLength, minLength } from '../../validations';
-import { stringAsync } from './stringAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { email, maxLength, minLength } from '../../validations/index.ts';
+import { stringAsync } from './stringAsync.ts';
 
 describe('stringAsync', () => {
   test('should pass only strings', async () => {

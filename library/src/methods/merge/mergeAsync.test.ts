@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
-import { number, object, objectAsync, string } from '../../schemas';
-import { comparable } from '../../utils';
-import { parseAsync } from '../parse';
-import { mergeAsync } from './mergeAsync';
+import { number, object, objectAsync, string } from '../../schemas/index.ts';
+import { comparable } from '../../utils/index.ts';
+import { parseAsync } from '../parse/index.ts';
+import { mergeAsync } from './mergeAsync.ts';
 
 describe('mergeAsync', () => {
   test('should merge object schemas', async () => {

@@ -1,2 +1,2 @@
-export * from './merge';
-export * from './mergeAsync';
+export * from './merge.ts';
+export * from './mergeAsync.ts';

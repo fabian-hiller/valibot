@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { email, maxLength, minLength } from '../../validations';
-import { string } from './string';
+import { parse } from '../../methods/index.ts';
+import { email, maxLength, minLength } from '../../validations/index.ts';
+import { string } from './string.ts';
 
 describe('string', () => {
   test('should pass only strings', () => {

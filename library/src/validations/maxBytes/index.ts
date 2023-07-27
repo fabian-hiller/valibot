@@ -1,1 +1,1 @@
-export * from './maxBytes';
+export * from './maxBytes.ts';

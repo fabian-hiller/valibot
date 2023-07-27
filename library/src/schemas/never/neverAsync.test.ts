@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { neverAsync } from './neverAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { neverAsync } from './neverAsync.ts';
 
 describe('neverAsync', () => {
   test('should pass no value', async () => {

@@ -1,5 +1,5 @@
-import { type Issue, type Issues, ValiError } from '../../error';
-import type { BaseSchema, Input, Output } from '../../types';
+import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { BaseSchema, Input, Output } from '../../types.ts';
 
 /**
  * Union options type.

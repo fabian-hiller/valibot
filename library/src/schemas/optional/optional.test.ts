@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { string } from '../string';
-import { optional } from './optional';
+import { parse } from '../../methods/index.ts';
+import { string } from '../string/index.ts';
+import { optional } from './optional.ts';
 
 describe('optional', () => {
   test('should pass also undefined', () => {

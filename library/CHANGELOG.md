@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add `instance` and `instanceAsync` schema
+- Refactor library to work with Deno
 
 ## v0.3.0 (July 27, 2023)
 

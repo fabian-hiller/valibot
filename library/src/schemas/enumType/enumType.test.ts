@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { enumType } from './enumType';
+import { parse } from '../../methods/index.ts';
+import { enumType } from './enumType.ts';
 
 describe('enumType', () => {
   test('should pass only enum values', () => {

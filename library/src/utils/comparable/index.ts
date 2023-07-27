@@ -1,1 +1,1 @@
-export * from './comparable';
+export * from './comparable.ts';

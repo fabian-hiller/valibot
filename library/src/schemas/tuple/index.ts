@@ -1,3 +1,3 @@
-export * from './tuple';
-export * from './tupleAsync';
-export * from './types';
+export * from './tuple.ts';
+export * from './tupleAsync.ts';
+export * from './types.ts';

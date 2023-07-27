@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { endsWith } from './endsWith';
+import { endsWith } from './endsWith.ts';
 
 describe('endsWith', () => {
   const info = { reason: 'any' as const };

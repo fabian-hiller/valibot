@@ -1,5 +1,5 @@
-import { ValiError } from '../../error';
-import type { BaseSchema } from '../../types';
+import { ValiError } from '../../error/index.ts';
+import type { BaseSchema } from '../../types.ts';
 
 /**
  * NaN schema type.

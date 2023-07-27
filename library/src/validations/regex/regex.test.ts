@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { regex } from './regex';
+import { regex } from './regex.ts';
 
 describe('regex', () => {
   const info = { reason: 'any' as const };

@@ -1,2 +1,2 @@
-export * from './flatten';
-export * from './ValiError';
+export * from './flatten/index.ts';
+export * from './ValiError/index.ts';

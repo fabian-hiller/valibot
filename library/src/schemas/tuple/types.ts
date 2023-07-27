@@ -1,6 +1,11 @@
-import type { BaseSchema, BaseSchemaAsync, Input, Output } from '../../types';
-import type { TupleShape } from './tuple';
-import type { TupleShapeAsync } from './tupleAsync';
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  Input,
+  Output,
+} from '../../types.ts';
+import type { TupleShape } from './tuple.ts';
+import type { TupleShapeAsync } from './tupleAsync.ts';
 
 /**
  * Tuple path item type.

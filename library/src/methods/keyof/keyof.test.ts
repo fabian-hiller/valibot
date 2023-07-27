@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { enumType, number, object, string } from '../../schemas';
-import { comparable } from '../../utils';
-import { keyof } from './keyof';
+import { enumType, number, object, string } from '../../schemas/index.ts';
+import { comparable } from '../../utils/index.ts';
+import { keyof } from './keyof.ts';
 
 describe('keyof', () => {
   test('should create enum schema', () => {

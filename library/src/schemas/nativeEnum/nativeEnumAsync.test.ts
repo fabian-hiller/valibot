@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { nativeEnumAsync } from './nativeEnumAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { nativeEnumAsync } from './nativeEnumAsync.ts';
 
 enum Direction {
   Left,

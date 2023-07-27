@@ -5,9 +5,9 @@ import {
   type ObjectShape,
   optional,
   type OptionalSchema,
-} from '../../schemas';
-import type { BaseSchema, Pipe } from '../../types';
-import { getErrorAndPipe } from '../../utils';
+} from '../../schemas/index.ts';
+import type { BaseSchema, Pipe } from '../../types.ts';
+import { getErrorAndPipe } from '../../utils/index.ts';
 
 /**
  * Partial object schema type.

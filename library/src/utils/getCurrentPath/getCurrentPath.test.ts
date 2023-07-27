@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { getCurrentPath } from './getCurrentPath';
+import { getCurrentPath } from './getCurrentPath.ts';
 
 describe('getCurrentPath', () => {
   test('should return current path', () => {

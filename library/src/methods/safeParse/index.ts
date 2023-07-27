@@ -1,2 +1,2 @@
-export * from './safeParse';
-export * from './safeParseAsync';
+export * from './safeParse.ts';
+export * from './safeParseAsync.ts';

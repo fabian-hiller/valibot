@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../utils';
-import { object, objectAsync, string } from '../../schemas';
-import { parseAsync } from '../parse';
-import { pickAsync } from './pickAsync';
+import { comparable } from '../../utils/index.ts';
+import { object, objectAsync, string } from '../../schemas/index.ts';
+import { parseAsync } from '../parse/index.ts';
+import { pickAsync } from './pickAsync.ts';
 
 describe('pickAsync', () => {
   test('should pick two object keys', async () => {

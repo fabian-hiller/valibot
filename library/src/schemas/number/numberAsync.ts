@@ -1,6 +1,6 @@
-import { ValiError } from '../../error';
-import type { BaseSchemaAsync, PipeAsync } from '../../types';
-import { executePipeAsync, getErrorAndPipe } from '../../utils';
+import { ValiError } from '../../error/index.ts';
+import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import { executePipeAsync, getErrorAndPipe } from '../../utils/index.ts';
 
 /**
  * Number schema async type.

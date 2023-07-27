@@ -1,2 +1,2 @@
-export * from './pick';
-export * from './pickAsync';
+export * from './pick.ts';
+export * from './pickAsync.ts';

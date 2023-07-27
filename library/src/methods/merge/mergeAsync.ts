@@ -3,10 +3,10 @@ import {
   type ObjectOutput,
   type ObjectSchema,
   type ObjectSchemaAsync,
-} from '../../schemas';
-import type { PipeAsync } from '../../types';
-import { getErrorAndPipe } from '../../utils';
-import type { MergeSchemaObjects } from './types';
+} from '../../schemas/index.ts';
+import type { PipeAsync } from '../../types.ts';
+import { getErrorAndPipe } from '../../utils/index.ts';
+import type { MergeSchemaObjects } from './types.ts';
 
 /**
  * Object schemas type.

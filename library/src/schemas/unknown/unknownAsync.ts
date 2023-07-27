@@ -1,5 +1,5 @@
-import type { BaseSchemaAsync, PipeAsync } from '../../types';
-import { executePipeAsync } from '../../utils';
+import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import { executePipeAsync } from '../../utils/index.ts';
 
 /**
  * Unknown schema async type.

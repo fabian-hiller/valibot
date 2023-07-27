@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { date, number, string } from '../../schemas';
-import { parse } from '../parse';
-import { coerce } from './coerce';
+import { date, number, string } from '../../schemas/index.ts';
+import { parse } from '../parse/index.ts';
+import { coerce } from './coerce.ts';
 
 describe('coerce', () => {
   test('should coerce number to string', () => {

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { maxRange, minRange } from '../../validations';
-import { bigintAsync } from './bigintAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { maxRange, minRange } from '../../validations/index.ts';
+import { bigintAsync } from './bigintAsync.ts';
 
 describe('bigintAsync', () => {
   test('should pass only bigints', async () => {

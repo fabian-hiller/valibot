@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { dateAsync, numberAsync, stringAsync } from '../../schemas';
-import { parseAsync } from '../parse';
-import { coerceAsync } from './coerceAsync';
+import { dateAsync, numberAsync, stringAsync } from '../../schemas/index.ts';
+import { parseAsync } from '../parse/index.ts';
+import { coerceAsync } from './coerceAsync.ts';
 
 describe('coerceAsync', () => {
   test('should coerce number to string', async () => {

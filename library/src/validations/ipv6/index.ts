@@ -1,1 +1,1 @@
-export * from './ipv6';
+export * from './ipv6.ts';

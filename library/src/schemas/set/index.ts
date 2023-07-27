@@ -1,3 +1,3 @@
-export * from './set';
-export * from './setAsync';
-export * from './types';
+export * from './set.ts';
+export * from './setAsync.ts';
+export * from './types.ts';

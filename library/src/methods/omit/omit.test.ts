@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../utils';
-import { object, string } from '../../schemas';
-import { omit } from '../omit';
-import { parse } from '../parse';
+import { comparable } from '../../utils/index.ts';
+import { object, string } from '../../schemas/index.ts';
+import { omit } from '../omit/index.ts';
+import { parse } from '../parse/index.ts';
 
 describe('omit', () => {
   test('should omit two object keys', () => {

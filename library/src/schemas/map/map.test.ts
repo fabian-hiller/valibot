@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { maxSize, minSize, size } from '../../validations';
-import { map } from '../map';
-import { string } from '../string';
-import { date } from '../date';
-import { number } from '../number';
+import { parse } from '../../methods/index.ts';
+import { maxSize, minSize, size } from '../../validations/index.ts';
+import { map } from '../map/index.ts';
+import { string } from '../string/index.ts';
+import { date } from '../date/index.ts';
+import { number } from '../number/index.ts';
 
 describe('map', () => {
   test('should pass only maps', () => {

@@ -1,2 +1,2 @@
-export * from './coerce';
-export * from './coerceAsync';
+export * from './coerce.ts';
+export * from './coerceAsync.ts';

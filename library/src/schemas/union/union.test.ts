@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { string } from '../string';
-import { number } from '../number';
-import { nullType } from '../nullType';
-import { union } from './union';
+import { parse } from '../../methods/index.ts';
+import { string } from '../string/index.ts';
+import { number } from '../number/index.ts';
+import { nullType } from '../nullType/index.ts';
+import { union } from './union.ts';
 
 describe('union', () => {
   test('should pass only union values', () => {

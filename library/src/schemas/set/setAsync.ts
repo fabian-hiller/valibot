@@ -1,7 +1,11 @@
-import { type Issue, type Issues, ValiError } from '../../error';
-import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types';
-import { executePipeAsync, getCurrentPath, getErrorAndPipe } from '../../utils';
-import type { SetInput, SetOutput } from './types';
+import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import {
+  executePipeAsync,
+  getCurrentPath,
+  getErrorAndPipe,
+} from '../../utils/index.ts';
+import type { SetInput, SetOutput } from './types.ts';
 
 /**
  * Set schema async type.

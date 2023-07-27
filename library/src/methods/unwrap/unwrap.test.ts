@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { nonOptional, optional, string } from '../../schemas';
-import { comparable } from '../../utils';
-import { unwrap } from './unwrap';
+import { nonOptional, optional, string } from '../../schemas/index.ts';
+import { comparable } from '../../utils/index.ts';
+import { unwrap } from './unwrap.ts';
 
 describe('unwrap', () => {
   test('should unwrap wrapped schema', () => {

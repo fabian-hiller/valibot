@@ -1,2 +1,2 @@
-export * from './bigint';
-export * from './bigintAsync';
+export * from './bigint.ts';
+export * from './bigintAsync.ts';

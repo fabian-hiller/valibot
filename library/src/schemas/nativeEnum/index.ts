@@ -1,2 +1,2 @@
-export * from './nativeEnum';
-export * from './nativeEnumAsync';
+export * from './nativeEnum.ts';
+export * from './nativeEnumAsync.ts';

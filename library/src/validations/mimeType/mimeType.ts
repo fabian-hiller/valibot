@@ -1,5 +1,5 @@
-import { ValiError } from '../../error';
-import type { ValidateInfo } from '../../types';
+import { ValiError } from '../../error/index.ts';
+import type { ValidateInfo } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates the MIME type of a file.

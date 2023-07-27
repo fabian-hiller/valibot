@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { ValiError } from './ValiError';
+import { ValiError } from './ValiError.ts';
 
 describe('ValiError', () => {
   test('should create error instance', () => {

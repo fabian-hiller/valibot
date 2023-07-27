@@ -1,6 +1,6 @@
-import { ValiError } from '../../error';
-import type { BaseSchemaAsync } from '../../types';
-import type { NativeEnum } from './nativeEnum';
+import { ValiError } from '../../error/index.ts';
+import type { BaseSchemaAsync } from '../../types.ts';
+import type { NativeEnum } from './nativeEnum.ts';
 
 /**
  * Native enum schema async type.

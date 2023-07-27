@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { nan } from './nan';
+import { parse } from '../../methods/index.ts';
+import { nan } from './nan.ts';
 
 describe('nan', () => {
   test('should pass only NaN', () => {

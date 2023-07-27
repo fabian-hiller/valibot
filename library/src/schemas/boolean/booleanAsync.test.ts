@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { booleanAsync } from './booleanAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { booleanAsync } from './booleanAsync.ts';
 
 describe('booleanAsync', () => {
   test('should pass only booleans', async () => {

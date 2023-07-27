@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { ValiError } from '../../error';
-import { number, objectAsync, string } from '../../schemas';
-import { safeParseAsync } from './safeParseAsync';
+import { ValiError } from '../../error/index.ts';
+import { number, objectAsync, string } from '../../schemas/index.ts';
+import { safeParseAsync } from './safeParseAsync.ts';
 
 describe('safeParseAsync', () => {
   test('should return data', async () => {

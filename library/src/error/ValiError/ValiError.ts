@@ -1,4 +1,4 @@
-import type { PathItem } from '../../types';
+import type { PathItem } from '../../types.ts';
 
 /**
  * Issue reason type.

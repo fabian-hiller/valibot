@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { never } from './never';
+import { parse } from '../../methods/index.ts';
+import { never } from './never.ts';
 
 describe('never', () => {
   test('should pass no value', () => {

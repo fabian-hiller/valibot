@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { any } from './any';
+import { parse } from '../../methods/index.ts';
+import { any } from './any.ts';
 
 describe('any', () => {
   test('should pass any values', () => {

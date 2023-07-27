@@ -42,7 +42,7 @@
     "access": "public"
   },
   "scripts": {
-    "playground": "tsc && node --experimental-specifier-resolution=node dist/source/playground.js",
+    "playground": "node ./playground.js",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit",

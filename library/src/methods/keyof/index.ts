@@ -1,1 +1,1 @@
-export * from './keyof';
+export * from './keyof.ts';

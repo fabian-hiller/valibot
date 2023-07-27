@@ -3,10 +3,10 @@ import {
   type ObjectOutput,
   type ObjectSchema,
   type ObjectSchemaAsync,
-} from '../../schemas';
-import type { PipeAsync } from '../../types';
-import { getErrorAndPipe } from '../../utils';
-import type { ObjectKeys } from './types';
+} from '../../schemas/index.ts';
+import type { PipeAsync } from '../../types.ts';
+import { getErrorAndPipe } from '../../utils/index.ts';
+import type { ObjectKeys } from './types.ts';
 
 /**
  * Creates an async object schema that contains only the selected keys of an

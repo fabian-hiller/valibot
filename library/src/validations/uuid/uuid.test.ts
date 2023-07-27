@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { uuid } from './uuid';
+import { uuid } from './uuid.ts';
 
 describe('uuid', () => {
   const info = { reason: 'any' as const };

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { custom } from '../../validations';
-import { special } from './special';
+import { parse } from '../../methods/index.ts';
+import { custom } from '../../validations/index.ts';
+import { special } from './special.ts';
 
 type PixelString = `${number}px`;
 const isPixelString = (input: unknown) =>

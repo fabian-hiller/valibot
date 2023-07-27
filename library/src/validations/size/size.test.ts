@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { size } from './size';
+import { size } from './size.ts';
 
 describe('size', () => {
   const info = { reason: 'any' as const };

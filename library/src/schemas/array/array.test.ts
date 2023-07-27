@@ -1,8 +1,13 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { maxLength, minLength, length, includes } from '../../validations';
-import { number } from '../number';
-import { array } from './array';
+import { parse } from '../../methods/index.ts';
+import {
+  maxLength,
+  minLength,
+  length,
+  includes,
+} from '../../validations/index.ts';
+import { number } from '../number/index.ts';
+import { array } from './array.ts';
 
 describe('array', () => {
   test('should pass only arrays', () => {

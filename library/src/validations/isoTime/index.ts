@@ -1,1 +1,1 @@
-export * from './isoTime';
+export * from './isoTime.ts';

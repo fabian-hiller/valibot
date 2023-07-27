@@ -5,9 +5,9 @@ import {
   type ObjectOutput,
   type ObjectSchema,
   type ObjectShape,
-} from '../../schemas';
-import type { BaseSchema, Pipe } from '../../types';
-import { getErrorAndPipe } from '../../utils';
+} from '../../schemas/index.ts';
+import type { BaseSchema, Pipe } from '../../types.ts';
+import { getErrorAndPipe } from '../../utils/index.ts';
 
 /**
  * Required object schema type.

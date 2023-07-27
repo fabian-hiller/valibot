@@ -1,1 +1,1 @@
-export * from './toTrimmed';
+export * from './toTrimmed.ts';

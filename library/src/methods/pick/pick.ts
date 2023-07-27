@@ -1,6 +1,10 @@
-import { object, type ObjectOutput, type ObjectSchema } from '../../schemas';
-import type { Pipe } from '../../types';
-import { getErrorAndPipe } from '../../utils';
+import {
+  object,
+  type ObjectOutput,
+  type ObjectSchema,
+} from '../../schemas/index.ts';
+import type { Pipe } from '../../types.ts';
+import { getErrorAndPipe } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that contains only the selected keys of an existing

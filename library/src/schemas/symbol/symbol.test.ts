@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { symbol } from './symbol';
+import { parse } from '../../methods/index.ts';
+import { symbol } from './symbol.ts';
 
 describe('symbol', () => {
   test('should pass only symbols', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { ValiError } from '../ValiError';
-import { flatten } from './flatten';
+import { ValiError } from '../ValiError/index.ts';
+import { flatten } from './flatten.ts';
 
 describe('flatten', () => {
   const rootIssue = {

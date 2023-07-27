@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { ipv6 } from './ipv6';
+import { ipv6 } from './ipv6.ts';
 
 describe('ipv6', () => {
   const info = { reason: 'any' as const };

@@ -6,9 +6,9 @@ import {
   type ObjectShapesAsync,
   optionalAsync,
   type OptionalSchemaAsync,
-} from '../../schemas';
-import type { BaseSchema, Pipe } from '../../types';
-import { getErrorAndPipe } from '../../utils';
+} from '../../schemas/index.ts';
+import type { BaseSchema, Pipe } from '../../types.ts';
+import { getErrorAndPipe } from '../../utils/index.ts';
 
 /**
  * Partial object schema type.

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { unknownAsync } from './unknownAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { unknownAsync } from './unknownAsync.ts';
 
 describe('unknownAsync', () => {
   test('should pass unknown values', async () => {

@@ -1,1 +1,1 @@
-export * from './mimeType';
+export * from './mimeType.ts';

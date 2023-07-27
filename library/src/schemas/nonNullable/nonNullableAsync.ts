@@ -1,6 +1,11 @@
-import { ValiError } from '../../error';
-import type { BaseSchema, BaseSchemaAsync, Input, Output } from '../../types';
-import type { NonNullable } from './nonNullable';
+import { ValiError } from '../../error/index.ts';
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  Input,
+  Output,
+} from '../../types.ts';
+import type { NonNullable } from './nonNullable.ts';
 
 /**
  * Non nullable schema async type.

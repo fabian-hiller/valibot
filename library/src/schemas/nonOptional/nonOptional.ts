@@ -1,5 +1,5 @@
-import { ValiError } from '../../error';
-import type { BaseSchema, Input, Output } from '../../types';
+import { ValiError } from '../../error/index.ts';
+import type { BaseSchema, Input, Output } from '../../types.ts';
 
 /**
  * Non optional type.

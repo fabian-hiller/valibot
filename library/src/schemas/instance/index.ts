@@ -1,2 +1,2 @@
-export * from './instance';
-export * from './instanceAsync';
+export * from './instance.ts';
+export * from './instanceAsync.ts';

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import type { PipeAsync } from '../../types';
-import { executePipeAsync } from './executePipeAsync';
+import type { PipeAsync } from '../../types.ts';
+import { executePipeAsync } from './executePipeAsync.ts';
 
 describe('executePipeAsync', () => {
   test('should execute the pipe', async () => {

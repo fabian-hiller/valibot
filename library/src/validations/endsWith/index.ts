@@ -1,1 +1,1 @@
-export * from './endsWith';
+export * from './endsWith.ts';

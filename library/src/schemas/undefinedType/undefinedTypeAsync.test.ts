@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { undefinedTypeAsync } from './undefinedTypeAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { undefinedTypeAsync } from './undefinedTypeAsync.ts';
 
 describe('undefinedTypeAsync', () => {
   test('should pass only undefined', async () => {

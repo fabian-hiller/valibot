@@ -1,2 +1,2 @@
-export * from './required';
-export * from './requiredAsync';
+export * from './required.ts';
+export * from './requiredAsync.ts';

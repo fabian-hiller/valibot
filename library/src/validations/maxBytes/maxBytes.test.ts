@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { maxBytes } from './maxBytes';
+import { maxBytes } from './maxBytes.ts';
 
 describe('maxBytes', () => {
   const info = { reason: 'any' as const };

@@ -1,4 +1,4 @@
-import type { BaseSchema, BaseSchemaAsync, Output } from '../../types';
+import type { BaseSchema, BaseSchemaAsync, Output } from '../../types.ts';
 
 /**
  * Parses unknown input based on a schema.

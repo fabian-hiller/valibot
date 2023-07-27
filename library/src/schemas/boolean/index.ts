@@ -1,2 +1,2 @@
-export * from './boolean';
-export * from './booleanAsync';
+export * from './boolean.ts';
+export * from './booleanAsync.ts';

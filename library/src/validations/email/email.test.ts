@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { email } from './email';
+import { email } from './email.ts';
 
 describe('email', () => {
   const info = { reason: 'any' as const };

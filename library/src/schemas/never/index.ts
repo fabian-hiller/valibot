@@ -1,2 +1,2 @@
-export * from './never';
-export * from './neverAsync';
+export * from './never.ts';
+export * from './neverAsync.ts';

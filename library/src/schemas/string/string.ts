@@ -1,6 +1,6 @@
-import { ValiError } from '../../error';
-import type { BaseSchema, Pipe } from '../../types';
-import { executePipe, getErrorAndPipe } from '../../utils';
+import { ValiError } from '../../error/index.ts';
+import type { BaseSchema, Pipe } from '../../types.ts';
+import { executePipe, getErrorAndPipe } from '../../utils/index.ts';
 
 /**
  * String schema type.

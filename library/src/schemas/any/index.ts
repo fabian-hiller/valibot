@@ -1,2 +1,2 @@
-export * from './any';
-export * from './anyAsync';
+export * from './any.ts';
+export * from './anyAsync.ts';

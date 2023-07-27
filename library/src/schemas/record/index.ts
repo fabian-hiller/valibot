@@ -1,3 +1,3 @@
-export * from './record';
-export * from './recordAsync';
-export * from './types';
+export * from './record.ts';
+export * from './recordAsync.ts';
+export * from './types.ts';

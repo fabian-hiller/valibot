@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods';
-import { union } from '../union';
-import { string } from '../string';
-import { nullType } from '../nullType';
-import { number } from '../number';
-import { any } from '../any';
-import { undefinedType } from '../undefinedType';
-import { nullish } from '../nullish';
-import { nonNullish } from './nonNullish';
+import { parse } from '../../methods/index.ts';
+import { union } from '../union/index.ts';
+import { string } from '../string/index.ts';
+import { nullType } from '../nullType/index.ts';
+import { number } from '../number/index.ts';
+import { any } from '../any/index.ts';
+import { undefinedType } from '../undefinedType/index.ts';
+import { nullish } from '../nullish/index.ts';
+import { nonNullish } from './nonNullish.ts';
 
 describe('nonNullish', () => {
   test('should not pass null or undefined', () => {

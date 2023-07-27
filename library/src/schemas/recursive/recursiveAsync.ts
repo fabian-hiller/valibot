@@ -1,4 +1,9 @@
-import type { BaseSchema, BaseSchemaAsync, Input, Output } from '../../types';
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  Input,
+  Output,
+} from '../../types.ts';
 
 /**
  * Recursive schema async type.

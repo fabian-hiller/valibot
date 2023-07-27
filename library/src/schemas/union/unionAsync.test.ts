@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { string, stringAsync } from '../string';
-import { number, numberAsync } from '../number';
-import { nullType } from '../nullType';
-import { unionAsync } from './unionAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { string, stringAsync } from '../string/index.ts';
+import { number, numberAsync } from '../number/index.ts';
+import { nullType } from '../nullType/index.ts';
+import { unionAsync } from './unionAsync.ts';
 
 describe('unionAsync', () => {
   test('should pass only union values', async () => {

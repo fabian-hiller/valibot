@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { startsWith } from './startsWith';
+import { startsWith } from './startsWith.ts';
 
 describe('startsWith', () => {
   const info = { reason: 'any' as const };

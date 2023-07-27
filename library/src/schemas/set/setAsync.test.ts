@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods';
-import { maxSize, minSize, size } from '../../validations';
-import { string } from '../string';
-import { date } from '../date';
-import { number } from '../number';
-import { setAsync } from './setAsync';
+import { parseAsync } from '../../methods/index.ts';
+import { maxSize, minSize, size } from '../../validations/index.ts';
+import { string } from '../string/index.ts';
+import { date } from '../date/index.ts';
+import { number } from '../number/index.ts';
+import { setAsync } from './setAsync.ts';
 
 describe('setAsync', () => {
   test('should pass only sets', async () => {

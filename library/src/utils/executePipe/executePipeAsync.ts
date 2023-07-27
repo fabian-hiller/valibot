@@ -1,4 +1,4 @@
-import type { PipeAsync, ValidateInfo } from '../../types';
+import type { PipeAsync, ValidateInfo } from '../../types.ts';
 
 /**
  * Executes the async validation and transformation pipe.
