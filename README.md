@@ -129,7 +129,7 @@ type LoginData = Output<typeof LoginSchema>; // { email: string; password: strin
 
 ### 🏁 Parse data
 
-To check if unknown data matches your schema, use the `parse` method. Alternatively, I also support asynchronous validation with `parseAsync` and if you don't want errors to be thrown, you can use `parseSafe` or `parseSafeAsync`.
+To check if unknown data matches your schema, use the `parse` method. Alternatively, I also support asynchronous validation with `parseAsync` and if you don't want errors to be thrown, you can use `safeParse` or `safeParseAsync`.
 
 ```ts
 import { email, endsWith, parse, string } from 'valibot';
