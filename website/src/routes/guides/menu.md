@@ -11,9 +11,9 @@
 ## Main concepts
 
 - [Schemas](/guides/schemas)
-- [Type inference](/guides/type-inference)
 - [Pipelines](/guides/pipelines)
 - [Parse data](/guides/parse-data)
+- [Type inference](/guides/type-inference)
 - [Methods](/guides/methods)
 - [Errors](/guides/errors)
 
