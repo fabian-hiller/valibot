@@ -21,7 +21,7 @@ type Required<TObjectSchema extends ObjectShapesAsync> = {
  * Creates an async object schema consisting of all properties of an existing
  * object schema set to none optional.
  *
- * @param schema The affected scheme.
+ * @param schema The affected schema.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -37,7 +37,7 @@ export function requiredAsync<
  * Creates an async object schema consisting of all properties of an existing
  * object schema set to none optional.
  *
- * @param schema The affected scheme.
+ * @param schema The affected schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
  *

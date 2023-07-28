@@ -1,9 +1,9 @@
 import type { BaseSchema, BaseSchemaAsync, Input } from '../../types.ts';
 
 /**
- * Passes the default value to a scheme in case of an undefined input.
+ * Passes the default value to a schema in case of an undefined input.
  *
- * @param schema The affected scheme.
+ * @param schema The affected schema.
  * @param value The default value.
  *
  * @returns The passed schema.
