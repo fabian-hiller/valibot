@@ -316,7 +316,7 @@ export function transformAsync<
  * Adds an async transformation step to a schema, which is executed at the end
  * of parsing and can change the output type.
  *
- * @param schema The scheme to be used.
+ * @param schema The schema to be used.
  * @param action The transformation action.
  *
  * @returns A transformed schema.

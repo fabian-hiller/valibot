@@ -20,7 +20,7 @@ type Required<TObjectSchema extends ObjectShape> = {
  * Creates an object schema consisting of all properties of an existing object
  * schema set to none optional.
  *
- * @param schema The affected scheme.
+ * @param schema The affected schema.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -34,7 +34,7 @@ export function required<TObjectSchema extends ObjectSchema<any>>(
  * Creates an object schema consisting of all properties of an existing object
  * schema set to none optional.
  *
- * @param schema The affected scheme.
+ * @param schema The affected schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
  *

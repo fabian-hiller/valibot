@@ -1,9 +1,9 @@
 import type { BaseSchema, Input } from '../../types.ts';
 
 /**
- * Coerces the input of a scheme to match the required type.
+ * Coerces the input of a schema to match the required type.
  *
- * @param schema The affected scheme.
+ * @param schema The affected schema.
  * @param action The coerceation action.
  *
  * @returns The passed schema.
