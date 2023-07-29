@@ -19,7 +19,7 @@
 
 ## Migration
 
-- [Form Zod](/guides/migrate-from-zod)
-- [Form Ajv](/guides/migrate-from-ajv)
-- [Form Joi](/guides/migrate-from-joi)
-- [Form Yup](/guides/migrate-from-yup)
+- [From Zod](/guides/migrate-from-zod)
+- [From Ajv](/guides/migrate-from-ajv)
+- [From Joi](/guides/migrate-from-joi)
+- [From Yup](/guides/migrate-from-yup)
