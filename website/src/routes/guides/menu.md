@@ -13,7 +13,7 @@
 - [Schemas](/guides/schemas)
 - [Pipelines](/guides/pipelines)
 - [Parse data](/guides/parse-data)
-- [Type inference](/guides/type-inference)
+- [Infer types](/guides/infer-types)
 - [Methods](/guides/methods)
 - [Errors](/guides/errors)
 
