@@ -12,7 +12,7 @@ Hey 👋 I'm Valibot and I'm here to help you validate your data using schemas. 
 - Small bundle size starting at less than 300 bytes
 - Validate everything from strings to complex objects
 - Open source and fully tested with 100 % coverage
-- Many transformation and valdiation helpers included
+- Many transformation and validation helpers included
 - Well structured source code without dependencies
 - Minimal, readable and well thought out API
 
