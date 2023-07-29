@@ -1,7 +1,67 @@
 ---
 title: Parse data
+description: Now that you've learned how to create a schema, let's look at how you can use it to validate unknown data and make it type-safe.
 ---
+
+import { Link } from '@builder.io/qwik-city';
 
 # Parse data
 
-> The content of this page is not yet ready. Check back in a few days.
+Now that you've learned how to create a schema, let's look at how you can use it to validate unknown data and make it type-safe. I offer 3 different ways for this. Just pick what you think fits your code best.
+
+> Each schema has a `.parse` property. However, this is an internal API and should only be used if you know what you are doing.
+
+## Default way
+
+By default, if you use <Link href="/api/parse">`parse`</Link> or <Link href="/api/parseAsync">`parseAsync`</Link>, an <Link href="/api/ValiError">`ValiError`</Link> is thrown if the input does not match the schema. Therefore you should use a try/catch block to catch the error. If the input matches the schema, it is valid and the output of the schema will be returned typed.
+
+```ts
+import { email, parse, string } from 'valibot';
+
+try {
+  const EmailSchema = string([email()]);
+  const email = parse(EmailSchema, 'jane@example.com');
+
+  // Handle errors if one occurs
+} catch (error) {
+  console.log(error);
+}
+```
+
+## Safe parse
+
+If you want errors to be returned instead of thrown, you can use <Link href="/api/safeParse">`safeParse`</Link> or <Link href="/api/safeParseAsync">`safeParseAsync`</Link>. The returned value then contains the `.success` property, which is `true` if the input is valid or `false` otherwise.
+
+If the input is valid, you can use `.data` to get the output of the schema validation. On the other hand, if the input was invalid, the <Link href="/api/ValiError">`ValiError`</Link>, with details of the issues found, can be accessed via `.error`.
+
+```ts
+import { email, safeParse, string } from 'valibot';
+
+const EmailSchema = string([email()]);
+const result = safeParse(EmailSchema, 'jane@example.com');
+
+if (result.success) {
+  const email = result.data;
+} else {
+  console.log(result.error);
+}
+```
+
+## Type guards
+
+Another way to validate data that can be useful in individual cases is to use a type guard. A type guard is an if-condition which, if `true`, sets the parsed data to the input type of a schema.
+
+If a type guard is used, the <Link href="/api/ValiError">`ValiError`</Link> cannot be accessed. Also, transformations have no effect and unknown keys of an object are not removed. Therefore, this approach is not as safe and powerful as the two previous ways.
+
+> The type guard feature is still under development. For current information, see this [issue](https://github.com/fabian-hiller/valibot/issues/11) and [pull request](https://github.com/fabian-hiller/valibot/pull/13).
+
+```ts
+import { email, is, string } from 'valibot';
+
+const EmailSchema = string([email()]);
+const data: unknown = 'jane@example.com';
+
+if (is(EmailSchema, data)) {
+  const email = data; // string
+}
+```
