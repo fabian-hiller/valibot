@@ -1,8 +1,8 @@
 /**
- * Creates a transformation functions that converts all the alphabetic
+ * Creates a transformation function that converts all the alphabetic
  * characters in a string to lowercase.
  *
- * @returns A transformation functions.
+ * @returns A transformation function.
  */
 export function toLowerCase() {
   return (input: string) => input.toLocaleLowerCase();
