@@ -2,6 +2,14 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `is` method which can be used as a type guard
+
+## v0.6.0 (July 30, 2023)
+
+- Add `toMinValue` and `toMaxValue` transformation
+
 ## v0.5.0 (July 28, 2023)
 
 - Fix invalid `comparable` import when using Deno

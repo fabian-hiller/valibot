@@ -15,7 +15,8 @@ describe('parse', () => {
   test('should throw error', () => {
     expect(() => parse(string(), 123)).toThrowError('Invalid type');
     expect(() => parse(number(), 'hello')).toThrowError('Invalid type');
-    const objectSchema = object({ test: string() });
-    expect(() => parse(objectSchema, {})).toThrowError('Invalid type');
+    expect(() => parse(object({ test: string() }), {})).toThrowError(
+      'Invalid type'
+    );
   });
 });
