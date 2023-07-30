@@ -1,8 +1,8 @@
 /**
- * Creates a transformation functions that removes the leading and trailing
+ * Creates a transformation function that removes the leading and trailing
  * white space and line terminator characters from a string.
  *
- * @returns A transformation functions.
+ * @returns A transformation function.
  */
 export function toTrimmed() {
   return (input: string) => input.trim();

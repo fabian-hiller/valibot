@@ -1,0 +1,51 @@
+---
+title: Infer types
+description: Another cool feature that my schemas allow you to do is to infer the input and output type. This makes your work even easier.
+---
+
+import { Link } from '@builder.io/qwik-city';
+
+# Infer types
+
+Another cool feature that my schemas allow you to do is to infer the input and output type. This makes your work even easier, because you don't have to create the type definition additionally.
+
+## Infer input types
+
+The input type of a schema corresponds to the TypeScript type that the incoming data of a schema must match to be valid. To extract this type you use the utility type <Link href="/api/Input">`Input`</Link> that I provide.
+
+> You are probably interested in input type only in special cases. I recommend you to use the output type in most cases.
+
+```ts
+import { type Input, object, string } from 'valibot';
+
+const LoginSchema = object({
+  email: string(),
+  password: string(),
+});
+
+type LoginInput = Input<typeof LoginSchema>; // { email: string; password: string }
+```
+
+## Infer output types
+
+The output type differs from the input type only if you use <Link href="/api/transform">`transform`</Link> to transform the input of a schema after validation. The output type always corresponds to the return value of the <Link href="/api/parse">`parse`</Link> method. To infer it, you use the utility type <Link href="/api/Output">`Output`</Link>.
+
+```ts
+import { object, type Output, string } from 'valibot';
+import { hashPassword } from '~/utils';
+
+const LoginSchema = transform(
+  object({
+    email: string(),
+    password: transform(string(), hashPassword),
+  }),
+  (input) => {
+    return {
+      ...input,
+      timestamp: new Date().toISOString(),
+    };
+  }
+);
+
+type LoginOutput = Output<typeof LoginSchema>; // { email: string; password: string; timestamp: string }
+```

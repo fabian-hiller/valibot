@@ -91,6 +91,8 @@
 
 - [toCustom](/api/toCustom)
 - [toLowerCase](/api/toLowerCase)
+- [toMaxValue](/api/toMaxValue)
+- [toMinValue](/api/toMinValue)
 - [toTrimmed](/api/toTrimmed)
 - [toTrimmedEnd](/api/toTrimmedEnd)
 - [toTrimmedStart](/api/toTrimmedStart)
