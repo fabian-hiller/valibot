@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `toMinValue` and `toMaxValue` transformation
+
 ## v0.5.0 (July 28, 2023)
 
 - Fix invalid `comparable` import when using Deno

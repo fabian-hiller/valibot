@@ -106,4 +106,10 @@ const NumberSchema = number([(input) => (input > 10 ? input : 10)]);
 
 To make the code of a pipeline more readable, you can use the utility functions I provide for transformations.
 
-Utility functions: <Link href="/api/toCustom">`toCustom`</Link>, <Link href="/api/toCustomAsync">`toCustomAsync`</Link>, <Link href="/api/toLowerCase">`toLowerCase`</Link>, <Link href="/api/toTrimmed">`toTrimmed`</Link>, <Link href="/api/toTrimmedEnd">`toTrimmedEnd`</Link>, <Link href="/api/toTrimmedStart">`toTrimmedStart`</Link>, <Link href="/api/toUpperCase">`toUpperCase`</Link>
+Utility functions: <Link href="/api/toCustom">`toCustom`</Link>, <Link href="/api/toCustomAsync">`toCustomAsync`</Link>, <Link href="/api/toLowerCase">`toLowerCase`</Link>, <Link href="/api/toMaxValue">`toMaxValue`</Link>, <Link href="/api/toMinValue">`toMinValue`</Link>, <Link href="/api/toTrimmed">`toTrimmed`</Link>, <Link href="/api/toTrimmedEnd">`toTrimmedEnd`</Link>, <Link href="/api/toTrimmedStart">`toTrimmedStart`</Link>, <Link href="/api/toUpperCase">`toUpperCase`</Link>
+
+```ts
+import { number, toMinValue } from 'valibot';
+
+const NumberSchema = number([toMinValue(10)]);
+```
