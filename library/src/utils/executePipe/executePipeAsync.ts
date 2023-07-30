@@ -1,3 +1,4 @@
+import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { PipeAsync, ValidateInfo } from '../../types.ts';
 
 /**
@@ -14,8 +15,27 @@ export async function executePipeAsync<TValue>(
   pipe: PipeAsync<TValue>,
   info: ValidateInfo
 ): Promise<TValue> {
-  return pipe.reduce<Promise<TValue>>(
-    async (value, action) => action(await value, info),
-    Promise.resolve(input)
-  );
+  // Create output and issues
+  let output: TValue = input;
+  const issues: Issue[] = [];
+
+  // Execute any action of pipe
+  for (const action of pipe) {
+    try {
+      output = await action(output, info);
+    } catch (error) {
+      issues.push(...(error as ValiError).issues);
+      if (info.abortPipeEarly) {
+        break;
+      }
+    }
+  }
+
+  // Throw error if there are issues
+  if (issues.length) {
+    throw new ValiError(issues as Issues);
+  }
+
+  // Return output of pipe
+  return output;
 }

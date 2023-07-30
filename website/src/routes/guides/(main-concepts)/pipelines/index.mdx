@@ -29,7 +29,7 @@ const EmailSchema = string([toTrimmed(), email(), endsWith('@example.com')]);
 
 Validation functions examine the input and, if the input does not meet a certain condition, throw a <Link href="/api/ValiError">`ValiError`</Link>. If the input is valid, it is returned and, if present, picked up by the next function in the pipeline.
 
-> Currently I break the pipeline immediately as soon as an error is thrown. Maybe this will change or become configurable. Read more in [this issue](https://github.com/fabian-hiller/valibot/issues/18).
+> By default I run a pipeline completely, even if an error is thrown in between, to collect all issues. If you want me to abort the pipeline early after the first error is thrown, you have to set the `abortPipeEarly` option of <Link href="/api/parse">`parse`</Link>, <Link href="/api/parseAsync">`parseAsync`</Link>, <Link href="/api/safeParse">`safeParse`</Link> or <Link href="/api/safeParseAsync">`safeParseAsync`</Link> to `true`.
 
 ### Example
 

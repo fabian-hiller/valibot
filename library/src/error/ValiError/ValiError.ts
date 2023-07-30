@@ -33,6 +33,7 @@ export type Issue = {
   input: any;
   path?: PathItem[];
   issues?: Issues;
+  abortPipeEarly?: boolean;
 };
 
 /**

@@ -11,7 +11,9 @@ import type {
 /**
  * Parse info type.
  */
-export type ParseInfo = Partial<Pick<Issue, 'origin' | 'path'>>;
+export type ParseInfo = Partial<
+  Pick<Issue, 'origin' | 'path' | 'abortPipeEarly'>
+>;
 
 /**
  * Validate info type.
