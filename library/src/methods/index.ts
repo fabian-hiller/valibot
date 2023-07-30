@@ -1,4 +1,5 @@
 export * from './coerce/index.ts';
+export * from './is/index.ts';
 export * from './keyof/index.ts';
 export * from './merge/index.ts';
 export * from './omit/index.ts';

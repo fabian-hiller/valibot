@@ -39,6 +39,7 @@
 ## Methods
 
 - [coerce](/api/coerce)
+- [is](/api/is)
 - [keyof](/api/keyof)
 - [merge](/api/merge)
 - [omit](/api/omit)

@@ -21,9 +21,8 @@ describe('parseAsync', () => {
     await expect(parseAsync(numberAsync(), 'hello')).rejects.toThrowError(
       'Invalid type'
     );
-    const objectSchema = object({ test: string() });
-    await expect(parseAsync(objectSchema, {})).rejects.toThrowError(
-      'Invalid type'
-    );
+    await expect(
+      parseAsync(object({ test: string() }), {})
+    ).rejects.toThrowError('Invalid type');
   });
 });
