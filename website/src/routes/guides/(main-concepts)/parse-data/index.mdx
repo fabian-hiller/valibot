@@ -16,7 +16,7 @@ Now that you've learned how to create a schema, let's look at how you can use it
 By default, if you use <Link href="/api/parse">`parse`</Link> or <Link href="/api/parseAsync">`parseAsync`</Link>, an <Link href="/api/ValiError">`ValiError`</Link> is thrown if the input does not match the schema. Therefore you should use a try/catch block to catch the error. If the input matches the schema, it is valid and the output of the schema will be returned typed.
 
 ```ts
-import { email, parse, string } from 'valibot';
+import { email, parse, string } from 'valibot'; // 0.51 kB
 
 try {
   const EmailSchema = string([email()]);
@@ -35,7 +35,7 @@ If you want errors to be returned instead of thrown, you can use <Link href="/ap
 If the input is valid, you can use `.data` to get the output of the schema validation. On the other hand, if the input was invalid, the <Link href="/api/ValiError">`ValiError`</Link>, with details of the issues found, can be accessed via `.error`.
 
 ```ts
-import { email, safeParse, string } from 'valibot';
+import { email, safeParse, string } from 'valibot'; // 0.54 kB
 
 const EmailSchema = string([email()]);
 const result = safeParse(EmailSchema, 'jane@example.com');
@@ -54,7 +54,7 @@ Another way to validate data that can be useful in individual cases is to use a 
 If a type guard is used, the <Link href="/api/ValiError">`ValiError`</Link> cannot be accessed. Also, transformations have no effect and unknown keys of an object are not removed. Therefore, this approach is not as safe and powerful as the two previous ways. Also, it can currently only be used with syncronous schemas.
 
 ```ts
-import { email, is, string } from 'valibot';
+import { email, is, string } from 'valibot'; // 0.53 kB
 
 const EmailSchema = string([email()]);
 const data: unknown = 'jane@example.com';
@@ -73,7 +73,7 @@ By default, I collect each issue during validation to give you detailed feedback
 If you set `abortEarly` to `true` I immediately abort the validation after finding a first issue. If you just want to know if data matches a schema, but you don't care about the details, this can speed up the performance.
 
 ```ts
-import { object, parse, string } from 'valibot';
+import { object, parse, string } from 'valibot'; // 0.51 kB
 
 try {
   const ProfileSchema = object({
@@ -97,7 +97,7 @@ try {
 If you only set `abortPipeEarly` to `true` I only abort the validation within a pipeline after I found a first issue. For example, if you want to show only the first error of a field when validating a form, you can use this option to speed up the performance of validation.
 
 ```ts
-import { email, endsWith, parse, string } from 'valibot';
+import { email, endsWith, parse, string } from 'valibot'; // 0.56 kB
 
 try {
   const EmailSchema = string([email(), endsWith('@example.com')]);

@@ -16,7 +16,7 @@ My core functionality is to create a schema. A schema can be compared to a type 
 Similar to how types can be defined in TypeScript, my source code allows you to define a schema with various small functions. This applies to primitive values like strings as well as to more complex data sets like objects.
 
 ```ts
-import { object, string } from 'valibot';
+import { object, string } from 'valibot'; // 0.6 kB
 
 // TypeScript
 type LoginForm = {
@@ -36,7 +36,7 @@ const LoginSchema = object({
 In addition, I can help you to perform more detailed validations and transformations with pipelines. Thus, for example, it can be ensured that a string is an email and ends with a certain domain.
 
 ```ts
-import { email, endsWith, string } from 'valibot';
+import { email, endsWith, string } from 'valibot'; // 0.54 kB
 
 const EmailSchema = string([email(), endsWith('@example.com')]);
 ```
@@ -48,7 +48,7 @@ Pipeline are optional and, if needed, are always added in the form of an array a
 If I detect an issue during validation, I throw a <Link href="/api/ValiError">`ValiError`</Link> and add a short error message to each issue. This error message can be overridden via the first optional argument of a schema or validation function.
 
 ```ts
-import { email, minLength, object, string } from 'valibot';
+import { email, minLength, object, string } from 'valibot'; // 0.74 kB
 
 const LoginSchema = object({
   email: string('Your email must be a string.', [
