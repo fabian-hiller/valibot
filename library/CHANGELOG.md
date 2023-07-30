@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.7.0 (July 30, 2023)
 
 - Add `is` method which can be used as a type guard (pull request #13)
 - Throw all validation issues of a pipeline by default (issues #18)
