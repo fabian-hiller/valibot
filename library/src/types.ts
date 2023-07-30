@@ -12,7 +12,7 @@ import type {
  * Parse info type.
  */
 export type ParseInfo = Partial<
-  Pick<Issue, 'origin' | 'path' | 'abortPipeEarly'>
+  Pick<Issue, 'origin' | 'path' | 'abortEarly' | 'abortPipeEarly'>
 >;
 
 /**

@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { minLength } from '../../validations/index.ts';
 import { number } from '../number/index.ts';
@@ -40,6 +41,41 @@ describe('recordAsync', () => {
     const schema2 = recordAsync(string(), stringAsync(), error);
     await expect(parseAsync(schema1, 123)).rejects.toThrowError(error);
     await expect(parseAsync(schema2, new Date())).rejects.toThrowError(error);
+  });
+
+  test('should throw every issue', async () => {
+    const schema = recordAsync(number());
+    const input = { 1: '1', 2: 2, 3: '3' };
+    await expect(parseAsync(schema, input)).rejects.toThrowError();
+    try {
+      await parseAsync(schema, input);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(2);
+    }
+  });
+
+  test('should throw only first issue', async () => {
+    const info = { abortEarly: true };
+
+    const schema1 = recordAsync(number());
+    const input1 = { 1: '1', 2: 2, 3: '3' };
+    await expect(parseAsync(schema1, input1, info)).rejects.toThrowError();
+    try {
+      await parseAsync(schema1, input1, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+      expect((error as ValiError).issues[0].origin).toBe('value');
+    }
+
+    const schema2 = recordAsync(string([minLength(2)]), number());
+    const input2 = { '1': '1', 2: 2, 3: '3' };
+    await expect(parseAsync(schema2, input2, info)).rejects.toThrowError();
+    try {
+      await parseAsync(schema2, input2, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+      expect((error as ValiError).issues[0].origin).toBe('key');
+    }
   });
 
   test('should execute pipe', async () => {

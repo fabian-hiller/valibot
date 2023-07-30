@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
 import { maxSize, minSize, size } from '../../validations/index.ts';
 import { string } from '../string/index.ts';
@@ -35,6 +36,29 @@ describe('set', () => {
     const error = 'Value is not an set!';
     const schema = set(number(), error);
     expect(() => parse(schema, 'test')).toThrowError(error);
+  });
+
+  test('should throw every issue', () => {
+    const schema = set(number());
+    const input = new Set().add('1').add(2).add('3');
+    expect(() => parse(schema, input)).toThrowError();
+    try {
+      parse(schema, input);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(2);
+    }
+  });
+
+  test('should throw only first issue', () => {
+    const schema = set(number());
+    const input = new Set().add('1').add(2).add('3');
+    const info = { abortEarly: true };
+    expect(() => parse(schema, input, info)).toThrowError();
+    try {
+      parse(schema, input, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+    }
   });
 
   test('should execute pipe', () => {

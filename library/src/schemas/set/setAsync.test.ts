@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { maxSize, minSize, size } from '../../validations/index.ts';
 import { string } from '../string/index.ts';
@@ -37,6 +38,29 @@ describe('setAsync', () => {
     const error = 'Value is not an set!';
     const schema = setAsync(number(), error);
     await expect(parseAsync(schema, 'test')).rejects.toThrowError(error);
+  });
+
+  test('should throw every issue', async () => {
+    const schema = setAsync(number());
+    const input = new Set().add('1').add(2).add('3');
+    await expect(parseAsync(schema, input)).rejects.toThrowError();
+    try {
+      await parseAsync(schema, input);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(2);
+    }
+  });
+
+  test('should throw only first issue', async () => {
+    const schema = setAsync(number());
+    const input = new Set().add('1').add(2).add('3');
+    const info = { abortEarly: true };
+    await expect(parseAsync(schema, input, info)).rejects.toThrowError();
+    try {
+      await parseAsync(schema, input, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+    }
   });
 
   test('should execute pipe', async () => {

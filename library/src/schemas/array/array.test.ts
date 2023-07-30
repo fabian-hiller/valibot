@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
 import {
   maxLength,
@@ -34,6 +35,29 @@ describe('array', () => {
     const error = 'Value is not an array!';
     const schema = array(number(), error);
     expect(() => parse(schema, 123)).toThrowError(error);
+  });
+
+  test('should throw every issue', () => {
+    const schema = array(number());
+    const input = ['1', 2, '3'];
+    expect(() => parse(schema, input)).toThrowError();
+    try {
+      parse(schema, input);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(2);
+    }
+  });
+
+  test('should throw only first issue', () => {
+    const schema = array(number());
+    const input = ['1', 2, '3'];
+    const info = { abortEarly: true };
+    expect(() => parse(schema, input, info)).toThrowError();
+    try {
+      parse(schema, input, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+    }
   });
 
   test('should execute pipe', () => {

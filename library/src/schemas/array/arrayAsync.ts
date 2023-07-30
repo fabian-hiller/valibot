@@ -117,8 +117,11 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
               }),
             });
 
-            // Fill issues in case of an error
+            // Throw or fill issues in case of an error
           } catch (error) {
+            if (info?.abortEarly) {
+              throw error;
+            }
             issues.push(...(error as ValiError).issues);
           }
         })

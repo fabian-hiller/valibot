@@ -63,3 +63,50 @@ if (is(EmailSchema, data)) {
   const email = data; // string
 }
 ```
+
+## Abort early
+
+By default, I collect each issue during validation to give you detailed feedback on why the input does not match the schema. If this is not required in your use case, you can control this behavior with `abortEarly` or `abortPipeEarly`.
+
+### Abort validation
+
+If you set `abortEarly` to `true` I immediately abort the validation after finding a first issue. If you just want to know if data matches a schema, but you don't care about the details, this can speed up the performance.
+
+```ts
+import { object, parse, string } from 'valibot';
+
+try {
+  const ProfileSchema = object({
+    name: string(),
+    bio: string(),
+  });
+  const profile = parse(
+    ProfileSchema,
+    { name: 'Jane', bio: '' },
+    { abortEarly: true }
+  );
+
+  // Handle errors if one occurs
+} catch (error) {
+  console.log(error);
+}
+```
+
+### Abort pipeline
+
+If you only set `abortPipeEarly` to `true` I only abort the validation within a pipeline after I found a first issue. For example, if you want to show only the first error of a field when validating a form, you can use this option to speed up the performance of validation.
+
+```ts
+import { email, endsWith, parse, string } from 'valibot';
+
+try {
+  const EmailSchema = string([email(), endsWith('@example.com')]);
+  const email = parse(EmailSchema, 'jane@example.com', {
+    abortPipeEarly: true,
+  });
+
+  // Handle errors if one occurs
+} catch (error) {
+  console.log(error);
+}
+```

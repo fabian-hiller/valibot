@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
 import { minLength } from '../../validations/index.ts';
 import { number } from '../number/index.ts';
@@ -34,6 +35,41 @@ describe('record', () => {
     const schema2 = record(string(), string(), error);
     expect(() => parse(schema1, 123)).toThrowError(error);
     expect(() => parse(schema2, new Date())).toThrowError(error);
+  });
+
+  test('should throw every issue', () => {
+    const schema = record(number());
+    const input = { 1: '1', 2: 2, 3: '3' };
+    expect(() => parse(schema, input)).toThrowError();
+    try {
+      parse(schema, input);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(2);
+    }
+  });
+
+  test('should throw only first issue', () => {
+    const info = { abortEarly: true };
+
+    const schema1 = record(number());
+    const input1 = { 1: '1', 2: 2, 3: '3' };
+    expect(() => parse(schema1, input1, info)).toThrowError();
+    try {
+      parse(schema1, input1, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+      expect((error as ValiError).issues[0].origin).toBe('value');
+    }
+
+    const schema2 = record(string([minLength(2)]), number());
+    const input2 = { '1': '1', 2: 2, 3: '3' };
+    expect(() => parse(schema2, input2, info)).toThrowError();
+    try {
+      parse(schema2, input2, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+      expect((error as ValiError).issues[0].origin).toBe('key');
+    }
   });
 
   test('should execute pipe', () => {

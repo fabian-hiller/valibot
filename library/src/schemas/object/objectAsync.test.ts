@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { number } from '../number/index.ts';
 import { string, stringAsync } from '../string/index.ts';
@@ -20,6 +21,29 @@ describe('objectAsync', () => {
     const error = 'Value is not an object!';
     const schema = objectAsync({}, error);
     await expect(parseAsync(schema, 123)).rejects.toThrowError(error);
+  });
+
+  test('should throw every issue', async () => {
+    const schema = objectAsync({ 1: number(), 2: number(), 3: number() });
+    const input = { 1: '1', 2: 2, 3: '3' };
+    await expect(parseAsync(schema, input)).rejects.toThrowError();
+    try {
+      await parseAsync(schema, input);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(2);
+    }
+  });
+
+  test('should throw only first issue', async () => {
+    const schema = objectAsync({ 1: number(), 2: number(), 3: number() });
+    const input = { 1: '1', 2: 2, 3: '3' };
+    const info = { abortEarly: true };
+    await expect(parseAsync(schema, input, info)).rejects.toThrowError();
+    try {
+      await parseAsync(schema, input, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+    }
   });
 
   test('should execute pipe', async () => {

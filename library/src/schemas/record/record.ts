@@ -176,8 +176,11 @@ export function record<
         try {
           outputKey = key.parse(inputKey, { ...info, origin: 'key', path });
 
-          // Fill issues in case of an error
+          // Throw or fill issues in case of an error
         } catch (error) {
+          if (info?.abortEarly) {
+            throw error;
+          }
           issues.push(...(error as ValiError).issues);
         }
 
@@ -188,8 +191,11 @@ export function record<
           // down can be recognized as valid value
           outputValue = [value.parse(inputValue, { ...info, path })];
 
-          // Fill issues in case of an error
+          // Throw or fill issues in case of an error
         } catch (error) {
+          if (info?.abortEarly) {
+            throw error;
+          }
           issues.push(...(error as ValiError).issues);
         }
 

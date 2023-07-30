@@ -17,7 +17,7 @@ import type {
 export async function parseAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
   schema: TSchema,
   input: unknown,
-  info?: Pick<ParseInfo, 'abortPipeEarly'>
+  info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly'>
 ): Promise<Output<TSchema>> {
   return schema.parse(input, info);
 }

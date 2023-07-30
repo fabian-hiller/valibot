@@ -23,11 +23,13 @@ export async function executePipeAsync<TValue>(
   for (const action of pipe) {
     try {
       output = await action(output, info);
+
+      // Throw or fill issues in case of an error
     } catch (error) {
-      issues.push(...(error as ValiError).issues);
-      if (info.abortPipeEarly) {
-        break;
+      if (info.abortEarly || info.abortPipeEarly) {
+        throw error;
       }
+      issues.push(...(error as ValiError).issues);
     }
   }
 

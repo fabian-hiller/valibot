@@ -20,7 +20,7 @@ export async function safeParseAsync<
 >(
   schema: TSchema,
   input: unknown,
-  info?: Pick<ParseInfo, 'abortPipeEarly'>
+  info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly'>
 ): Promise<
   | { success: true; data: Output<TSchema> }
   | { success: false; error: ValiError }

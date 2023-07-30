@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { maxLength, minLength } from '../../validations/index.ts';
 import { string } from '../string/index.ts';
@@ -39,6 +40,39 @@ describe('tupleAsync', () => {
     await expect(
       parseAsync(tupleAsync([number()], error), null)
     ).rejects.toThrowError(error);
+  });
+
+  test('should throw every issue', async () => {
+    const schema = tupleAsync([string(), string(), string()], number());
+    const input = [1, '2', 3, '4', 5, '6'];
+    await expect(parseAsync(schema, input)).rejects.toThrowError();
+    try {
+      await parseAsync(schema, input);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(4);
+    }
+  });
+
+  test('should throw only first issue', async () => {
+    const info = { abortEarly: true };
+
+    const schema1 = tupleAsync([number(), number(), number()]);
+    const input1 = ['1', 2, '3'];
+    await expect(parseAsync(schema1, input1, info)).rejects.toThrowError();
+    try {
+      await parseAsync(schema1, input1, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+    }
+
+    const schema2 = tupleAsync([string()], number());
+    const input2 = ['hello', 1, '2', 3, '4'];
+    await expect(parseAsync(schema2, input2, info)).rejects.toThrowError();
+    try {
+      await parseAsync(schema2, input2, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+    }
   });
 
   test('should execute pipe', async () => {

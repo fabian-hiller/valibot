@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
 import { maxSize, minSize, size } from '../../validations/index.ts';
 import { map } from '../map/index.ts';
@@ -32,6 +33,39 @@ describe('map', () => {
     const error = 'Value is not an map!';
     const schema = map(number(), string(), error);
     expect(() => parse(schema, new Set())).toThrowError(error);
+  });
+
+  test('should throw every issue', () => {
+    const schema = map(number(), string());
+    const input = new Map().set(1, 1).set(2, '2').set('3', '3');
+    expect(() => parse(schema, input)).toThrowError();
+    try {
+      parse(schema, input);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(2);
+    }
+  });
+
+  test('should throw only first issue', () => {
+    const schema = map(number(), string());
+    const info = { abortEarly: true };
+    const input1 = new Map().set(1, 1).set(2, '2').set('3', '3');
+    expect(() => parse(schema, input1, info)).toThrowError();
+    try {
+      parse(schema, input1, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+      expect((error as ValiError).issues[0].origin).toBe('value');
+    }
+
+    const input2 = new Map().set('1', 1).set(2, '2').set('3', '3');
+    expect(() => parse(schema, input2, info)).toThrowError();
+    try {
+      parse(schema, input2, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+      expect((error as ValiError).issues[0].origin).toBe('key');
+    }
   });
 
   test('should execute pipe', () => {

@@ -139,8 +139,11 @@ export function mapAsync<
                   await key.parse(inputKey, { ...info, origin: 'key', path }),
                 ] as const;
 
-                // Fill issues in case of an error
+                // Throw or fill issues in case of an error
               } catch (error) {
+                if (info?.abortEarly) {
+                  throw error;
+                }
                 issues.push(...(error as ValiError).issues);
               }
             })(),
@@ -154,8 +157,11 @@ export function mapAsync<
                   await value.parse(inputValue, { ...info, path }),
                 ] as const;
 
-                // Fill issues in case of an error
+                // Throw or fill issues in case of an error
               } catch (error) {
+                if (info?.abortEarly) {
+                  throw error;
+                }
                 issues.push(...(error as ValiError).issues);
               }
             })(),

@@ -20,16 +20,18 @@ export function executePipe<TValue>(
   const issues: Issue[] = [];
 
   // Execute any action of pipe
-  for (const action of pipe) {
+  pipe.forEach((action) => {
     try {
       output = action(output, info);
+
+      // Throw or fill issues in case of an error
     } catch (error) {
-      issues.push(...(error as ValiError).issues);
-      if (info.abortPipeEarly) {
-        break;
+      if (info.abortEarly || info.abortPipeEarly) {
+        throw error;
       }
+      issues.push(...(error as ValiError).issues);
     }
-  }
+  });
 
   // Throw error if there are issues
   if (issues.length) {

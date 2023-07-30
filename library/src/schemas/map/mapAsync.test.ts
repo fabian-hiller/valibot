@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { mapAsync } from '../map/index.ts';
 import { string } from '../string/index.ts';
@@ -36,6 +37,39 @@ describe('mapAsync', () => {
     const error = 'Value is not an map!';
     const schema = mapAsync(number(), string(), error);
     await expect(parseAsync(schema, new Set())).rejects.toThrowError(error);
+  });
+
+  test('should throw every issue', async () => {
+    const schema = mapAsync(number(), string());
+    const input = new Map().set(1, 1).set(2, '2').set('3', '3');
+    await expect(parseAsync(schema, input)).rejects.toThrowError();
+    try {
+      await parseAsync(schema, input);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(2);
+    }
+  });
+
+  test('should throw only first issue', async () => {
+    const schema = mapAsync(number(), string());
+    const info = { abortEarly: true };
+    const input1 = new Map().set(1, 1).set(2, '2').set('3', '3');
+    await expect(parseAsync(schema, input1, info)).rejects.toThrowError();
+    try {
+      await parseAsync(schema, input1, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+      expect((error as ValiError).issues[0].origin).toBe('value');
+    }
+
+    const input2 = new Map().set('1', 1).set(2, '2').set('3', '3');
+    await expect(parseAsync(schema, input2, info)).rejects.toThrowError();
+    try {
+      await parseAsync(schema, input2, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+      expect((error as ValiError).issues[0].origin).toBe('key');
+    }
   });
 
   test('should execute pipe', async () => {

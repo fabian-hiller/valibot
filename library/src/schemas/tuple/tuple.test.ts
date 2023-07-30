@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
 import { maxLength, minLength } from '../../validations/index.ts';
 import { string } from '../string/index.ts';
@@ -37,6 +38,39 @@ describe('tuple', () => {
   test('should throw custom error', () => {
     const error = 'Value is not a tuple!';
     expect(() => parse(tuple([number()], error), null)).toThrowError(error);
+  });
+
+  test('should throw every issue', () => {
+    const schema = tuple([string(), string(), string()], number());
+    const input = [1, '2', 3, '4', 5, '6'];
+    expect(() => parse(schema, input)).toThrowError();
+    try {
+      parse(schema, input);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(4);
+    }
+  });
+
+  test('should throw only first issue', () => {
+    const info = { abortEarly: true };
+
+    const schema1 = tuple([number(), number(), number()]);
+    const input1 = ['1', 2, '3'];
+    expect(() => parse(schema1, input1, info)).toThrowError();
+    try {
+      parse(schema1, input1, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+    }
+
+    const schema2 = tuple([string()], number());
+    const input2 = ['hello', 1, '2', 3, '4'];
+    expect(() => parse(schema2, input2, info)).toThrowError();
+    try {
+      parse(schema2, input2, info);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(1);
+    }
   });
 
   test('should execute pipe', () => {
