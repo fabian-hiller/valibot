@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.6.0 (July 30, 2023)
 
 - Add `toMinValue` and `toMaxValue` transformation
 
