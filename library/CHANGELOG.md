@@ -2,11 +2,15 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Fix infered `object` and `record` types (issue #9, #10, #34)
+
 ## v0.7.0 (July 30, 2023)
 
 - Add `is` method which can be used as a type guard (pull request #13)
-- Throw all validation issues of a pipeline by default (issues #18)
-- Add `abortPipeEarly` option to abort pipe on first error (issues #18)
+- Throw all validation issues of a pipeline by default (issue #18)
+- Add `abortPipeEarly` option to abort pipe on first error (issue #18)
 - Add `abortEarly` option to abort on first error
 
 ## v0.6.0 (July 30, 2023)

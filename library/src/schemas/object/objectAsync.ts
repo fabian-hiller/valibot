@@ -10,7 +10,7 @@ import type { ObjectInput, ObjectOutput } from './types.ts';
 /**
  * Object shape async type.
  */
-export type ObjectShapesAsync = Record<
+export type ObjectShapeAsync = Record<
   string,
   BaseSchema<any> | BaseSchemaAsync<any>
 >;
@@ -19,7 +19,7 @@ export type ObjectShapesAsync = Record<
  * Object schema async type.
  */
 export type ObjectSchemaAsync<
-  TObjectShape extends ObjectShapesAsync,
+  TObjectShape extends ObjectShapeAsync,
   TOutput = ObjectOutput<TObjectShape>
 > = BaseSchemaAsync<ObjectInput<TObjectShape>, TOutput> & {
   schema: 'object';
@@ -34,7 +34,7 @@ export type ObjectSchemaAsync<
  *
  * @returns An async object schema.
  */
-export function objectAsync<TObjectShape extends ObjectShapesAsync>(
+export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   object: TObjectShape,
   pipe?: PipeAsync<ObjectOutput<TObjectShape>>
 ): ObjectSchemaAsync<TObjectShape>;
@@ -48,13 +48,13 @@ export function objectAsync<TObjectShape extends ObjectShapesAsync>(
  *
  * @returns An async object schema.
  */
-export function objectAsync<TObjectShape extends ObjectShapesAsync>(
+export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   object: TObjectShape,
   error?: string,
   pipe?: PipeAsync<ObjectOutput<TObjectShape>>
 ): ObjectSchemaAsync<TObjectShape>;
 
-export function objectAsync<TObjectShape extends ObjectShapesAsync>(
+export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   object: TObjectShape,
   arg2?: PipeAsync<ObjectOutput<TObjectShape>> | string,
   arg3?: PipeAsync<ObjectOutput<TObjectShape>>

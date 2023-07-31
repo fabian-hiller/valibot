@@ -3,7 +3,7 @@ import {
   type ObjectOutput,
   type ObjectSchema,
   type ObjectSchemaAsync,
-  type ObjectShapesAsync,
+  type ObjectShapeAsync,
   optionalAsync,
   type OptionalSchemaAsync,
 } from '../../schemas/index.ts';
@@ -13,8 +13,8 @@ import { getErrorAndPipe } from '../../utils/index.ts';
 /**
  * Partial object schema type.
  */
-type Partial<TObjectSchema extends ObjectShapesAsync> = {
-  [TKey in keyof TObjectSchema]: OptionalSchemaAsync<TObjectSchema[TKey]>;
+type Partial<TObjectShape extends ObjectShapeAsync> = {
+  [TKey in keyof TObjectShape]: OptionalSchemaAsync<TObjectShape[TKey]>;
 };
 
 /**
