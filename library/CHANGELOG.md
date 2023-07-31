@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.8.0 (July 31, 2023)
 
 - Fix infered `object` and `record` types (issue #9, #10, #34)
 - Add `strict` and `strictAsync` method to detect unknown object keys
