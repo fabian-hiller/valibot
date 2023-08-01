@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import {
@@ -153,7 +154,7 @@ export function tuple<
             reason: 'type',
             validation: 'tuple',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.tuple"),
             input,
             ...info,
           },

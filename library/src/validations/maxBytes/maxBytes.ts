@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -19,7 +20,7 @@ export function maxBytes<TInput extends string>(
         {
           validation: 'max_bytes',
           origin: 'value',
-          message: error || 'Invalid byte length',
+          message: error || i18next.t('validations.maxBytes'),
           input,
           ...info,
         },

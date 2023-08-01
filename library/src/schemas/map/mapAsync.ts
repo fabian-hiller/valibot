@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type {
   BaseSchema,
@@ -107,7 +108,7 @@ export function mapAsync<
             reason: 'type',
             validation: 'map',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.mapAsync"),
             input,
             ...info,
           },

@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
 
@@ -41,7 +42,7 @@ export function never(error?: string): NeverSchema {
           reason: 'type',
           validation: 'never',
           origin: 'value',
-          message: error || 'Invalid type',
+          message: error || i18next.t("schemas.never"),
           input,
           ...info,
         },

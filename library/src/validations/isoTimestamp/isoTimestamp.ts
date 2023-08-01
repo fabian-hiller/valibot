@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -25,7 +26,7 @@ export function isoTimestamp<TInput extends string>(error?: string) {
         {
           validation: 'iso_timestamp',
           origin: 'value',
-          message: error || 'Invalid timestamp',
+          message: error || i18next.t('validations.isoTimestamp'),
           input,
           ...info,
         },

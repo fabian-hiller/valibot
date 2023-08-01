@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -15,7 +16,7 @@ export function ipv4<TInput extends string>(error?: string) {
         {
           validation: 'ipv4',
           origin: 'value',
-          message: error || 'Invalid IP v4',
+          message: error || i18next.t('validations.ipv4'),
           input,
           ...info,
         },

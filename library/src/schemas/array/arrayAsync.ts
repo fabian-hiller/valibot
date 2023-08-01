@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type {
   BaseSchema,
@@ -92,7 +93,7 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
             reason: 'type',
             validation: 'array',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.arrayAsync"),
             input,
             ...info,
           },

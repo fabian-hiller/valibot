@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -21,7 +22,7 @@ export function email<TInput extends string>(error?: string) {
         {
           validation: 'email',
           origin: 'value',
-          message: error || 'Invalid email',
+          message: error || i18next.t('validations.email'),
           input,
           ...info,
         },

@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, Output, Pipe } from '../../types.ts';
 import {
@@ -93,7 +94,7 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
             reason: 'type',
             validation: 'map',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.map"),
             input,
             ...info,
           },

@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -17,7 +18,7 @@ export function isoTimeSecond<TInput extends string>(error?: string) {
         {
           validation: 'iso_time_second',
           origin: 'value',
-          message: error || 'Invalid time',
+          message: error || i18next.t('validations.isoTimeSecond'),
           input,
           ...info,
         },

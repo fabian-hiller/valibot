@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -19,7 +20,7 @@ export function minBytes<TInput extends string>(
         {
           validation: 'min_bytes',
           origin: 'value',
-          message: error || 'Invalid byte length',
+          message: error || i18next.t('validations.minBytes'),
           input,
           ...info,
         },

@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Input, Output } from '../../types.ts';
 
@@ -61,7 +62,7 @@ export function nonNullish<TWrappedSchema extends BaseSchema>(
             reason: 'type',
             validation: 'non_nullish',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.nonNullish"),
             input,
             ...info,
           },

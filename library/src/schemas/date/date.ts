@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import { executePipe, getErrorAndPipe } from '../../utils/index.ts';
@@ -63,7 +64,7 @@ export function date(
             reason: 'type',
             validation: 'date',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.date"),
             input,
             ...info,
           },

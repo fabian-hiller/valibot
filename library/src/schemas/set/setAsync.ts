@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
@@ -87,7 +88,7 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
             reason: 'type',
             validation: 'set',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.setAsync"),
             input,
             ...info,
           },

@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
@@ -99,7 +100,7 @@ export function objectAsync<TObjectShape extends ObjectShapesAsync>(
             reason: 'type',
             validation: 'object',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.objectAsync"),
             input,
             ...info,
           },

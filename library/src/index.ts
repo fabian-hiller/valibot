@@ -1,3 +1,4 @@
+export * from './i18n';
 export * from './error/index.ts';
 export * from './methods/index.ts';
 export * from './schemas/index.ts';

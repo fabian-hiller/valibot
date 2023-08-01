@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync } from '../../types.ts';
 import type { EnumValue } from './enumType.ts';
@@ -57,7 +58,7 @@ export function enumTypeAsync<TEnumValue extends EnumValue>(
             reason: 'type',
             validation: 'enum',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.enumTypeAsync"),
             input,
             ...info,
           },

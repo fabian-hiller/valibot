@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -25,7 +26,7 @@ export function isoDateTime<TInput extends string>(error?: string) {
         {
           validation: 'iso_date_time',
           origin: 'value',
-          message: error || 'Invalid datetime',
+          message: error || i18next.t('validations.isoDateTime'),
           input,
           ...info,
         },

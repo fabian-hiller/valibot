@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type {
   BaseSchema,
@@ -64,7 +65,7 @@ export function nonOptionalAsync<
             reason: 'type',
             validation: 'non_optional',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.nonOptionalAsync"),
             input,
             ...info,
           },

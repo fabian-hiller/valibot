@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -19,7 +20,7 @@ export function uuid<TInput extends string>(error?: string) {
         {
           validation: 'uuid',
           origin: 'value',
-          message: error || 'Invalid UUID',
+          message: error || i18next.t('validations.uuid'),
           input,
           ...info,
         },

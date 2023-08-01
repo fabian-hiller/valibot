@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import {
@@ -96,7 +97,7 @@ export function object<TObjectShape extends ObjectShape>(
             reason: 'type',
             validation: 'object',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.object"),
             input,
             ...info,
           },

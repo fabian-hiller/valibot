@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -21,7 +22,7 @@ export function isoWeek<TInput extends string>(error?: string) {
         {
           validation: 'iso_week',
           origin: 'value',
-          message: error || 'Invalid week',
+          message: error || i18next.t('validations.isoWeek'),
           input,
           ...info,
         },

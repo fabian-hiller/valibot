@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -29,7 +30,7 @@ export function includes<TInput extends string | TItem[], TItem>(
         {
           validation: 'includes',
           origin: 'value',
-          message: error || 'Invalid content',
+          message: error || i18next.t('validations.includes'),
           input,
           ...info,
         },

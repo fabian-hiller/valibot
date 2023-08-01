@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -19,7 +20,7 @@ export function mimeType<TInput extends File>(
         {
           validation: 'mime_type',
           origin: 'value',
-          message: error || 'Invalid MIME type',
+          message: error || i18next.t('validations.mimeType'),
           input,
           ...info,
         },

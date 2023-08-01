@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
 
@@ -64,7 +65,7 @@ export function nativeEnum<TNativeEnum extends NativeEnum>(
             reason: 'type',
             validation: 'native_enum',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.nativeEnum"),
             input,
             ...info,
           },

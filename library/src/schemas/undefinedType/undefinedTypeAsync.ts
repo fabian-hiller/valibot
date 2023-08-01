@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync } from '../../types.ts';
 
@@ -46,7 +47,7 @@ export function undefinedTypeAsync(error?: string): UndefinedSchemaAsync {
             reason: 'type',
             validation: 'undefined',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.undefinedTypeAsync"),
             input,
             ...info,
           },

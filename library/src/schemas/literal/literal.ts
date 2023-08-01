@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
 
@@ -56,7 +57,7 @@ export function literal<TLiteral extends string | number>(
             reason: 'type',
             validation: 'literal',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.literal"),
             input,
             ...info,
           },

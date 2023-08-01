@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, Input, Output } from '../../types.ts';
 
@@ -83,7 +84,7 @@ export function union<TUnionOptions extends UnionOptions>(
             reason: 'type',
             validation: 'union',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.union"),
             input,
             issues: issues as Issues,
             ...info,

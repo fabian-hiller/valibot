@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -19,7 +20,7 @@ export function maxSize<TInput extends Map<any, any> | Set<any> | Blob>(
         {
           validation: 'max_size',
           origin: 'value',
-          message: error || 'Invalid size',
+          message: error || i18next.t('validations.maxSize'),
           input,
           ...info,
         },

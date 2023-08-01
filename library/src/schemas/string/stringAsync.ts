@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import { executePipeAsync, getErrorAndPipe } from '../../utils/index.ts';
@@ -69,7 +70,7 @@ export function stringAsync(
             reason: 'type',
             validation: 'string',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.stringAsync"),
             input,
             ...info,
           },

@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -19,7 +20,7 @@ export function length<TInput extends string | any[]>(
         {
           validation: 'length',
           origin: 'value',
-          message: error || 'Invalid length',
+          message: error || i18next.t('validations.length'),
           input,
           ...info,
         },

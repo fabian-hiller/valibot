@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type {
   BaseSchema,
@@ -64,7 +65,7 @@ export function nonNullableAsync<
             reason: 'type',
             validation: 'non_nullable',
             origin: 'value',
-            message: error || 'Invalid type',
+            message: error || i18next.t("schemas.nonNullableAsync"),
             input,
             ...info,
           },

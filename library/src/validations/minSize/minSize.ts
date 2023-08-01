@@ -1,3 +1,4 @@
+import { i18next } from '../../i18n.ts';
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
@@ -19,7 +20,7 @@ export function minSize<TInput extends Map<any, any> | Set<any> | Blob>(
         {
           validation: 'min_size',
           origin: 'value',
-          message: error || 'Invalid size',
+          message: error || i18next.t('validations.minSize'),
           input,
           ...info,
         },
