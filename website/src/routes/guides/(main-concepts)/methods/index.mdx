@@ -30,7 +30,7 @@ const stringOutput = parse(StringSchema, 1234); // '1234'
 const NumberSchema = coerce(number(), Number);
 const numberOutput = parse(NumberSchema, '1234'); // 1234
 
-const DateSchema = coerce(date(), Date);
+const DateSchema = coerce(date(), (i) => new Date(i));
 const dateOutput = parse(NumberSchema, '2023-07-31'); // Date
 ```
 
