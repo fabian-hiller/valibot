@@ -12,8 +12,8 @@ import { getErrorAndPipe } from '../../utils/index.ts';
 /**
  * Required object schema type.
  */
-type Required<TObjectSchema extends ObjectShape> = {
-  [TKey in keyof TObjectSchema]: NonOptionalSchema<TObjectSchema[TKey]>;
+type Required<TObjectShape extends ObjectShape> = {
+  [TKey in keyof TObjectShape]: NonOptionalSchema<TObjectShape[TKey]>;
 };
 
 /**
@@ -55,6 +55,7 @@ export function required<TObjectSchema extends ObjectSchema<any>>(
   const { error, pipe } = getErrorAndPipe(arg3, arg4);
 
   // Create and return object schema
+  // @ts-ignore FIXME: Remove line once bug in TS is fixed
   return object(
     Object.entries(schema.object).reduce(
       (object, [key, schema]) => ({
@@ -64,6 +65,7 @@ export function required<TObjectSchema extends ObjectSchema<any>>(
       {}
     ) as Required<TObjectSchema['object']>,
     error,
+    // @ts-ignore FIXME: Remove line once bug in TS is fixed
     pipe
   );
 }

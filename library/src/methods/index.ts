@@ -8,6 +8,7 @@ export * from './partial/index.ts';
 export * from './pick/index.ts';
 export * from './required/index.ts';
 export * from './safeParse/index.ts';
+export * from './strict/index.ts';
 export * from './transform/index.ts';
 export * from './unwrap/index.ts';
 export * from './useDefault/index.ts';

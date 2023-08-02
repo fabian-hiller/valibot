@@ -5,7 +5,7 @@ import {
   type ObjectOutput,
   type ObjectSchema,
   type ObjectSchemaAsync,
-  type ObjectShapesAsync,
+  type ObjectShapeAsync,
 } from '../../schemas/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import { getErrorAndPipe } from '../../utils/index.ts';
@@ -13,8 +13,8 @@ import { getErrorAndPipe } from '../../utils/index.ts';
 /**
  * Required object schema type.
  */
-type Required<TObjectSchema extends ObjectShapesAsync> = {
-  [TKey in keyof TObjectSchema]: NonOptionalSchemaAsync<TObjectSchema[TKey]>;
+type Required<TObjectShape extends ObjectShapeAsync> = {
+  [TKey in keyof TObjectShape]: NonOptionalSchemaAsync<TObjectShape[TKey]>;
 };
 
 /**

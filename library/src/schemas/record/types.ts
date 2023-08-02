@@ -3,6 +3,7 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
+  ResolveObject,
 } from '../../types.ts';
 import type { RecordKey } from './record.ts';
 import type { RecordKeyAsync } from './recordAsync.ts';
@@ -23,7 +24,7 @@ export type RecordPathItem = {
 export type RecordInput<
   TRecordKey extends RecordKey | RecordKeyAsync,
   TRecordValue extends BaseSchema | BaseSchemaAsync
-> = Record<Input<TRecordKey>, Input<TRecordValue>>;
+> = ResolveObject<Record<Input<TRecordKey>, Input<TRecordValue>>>;
 
 /**
  * Record output inference type.
@@ -31,4 +32,4 @@ export type RecordInput<
 export type RecordOutput<
   TRecordKey extends RecordKey | RecordKeyAsync,
   TRecordValue extends BaseSchema | BaseSchemaAsync
-> = Record<Output<TRecordKey>, Output<TRecordValue>>;
+> = ResolveObject<Record<Output<TRecordKey>, Output<TRecordValue>>>;

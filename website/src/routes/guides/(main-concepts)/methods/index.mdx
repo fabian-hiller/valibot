@@ -1,7 +1,87 @@
 ---
 title: Methods
+description: Apart from `parse` and `safeParse` I offer you some more methods to add additional features to your schemas.
 ---
+
+import { Link } from '@builder.io/qwik-city';
 
 # Methods
 
-> The content of this page is not yet ready. Check back in a few days.
+Apart from <Link href="/api/parse">`parse`</Link> and <Link href="/api/safeParse">`safeParse`</Link> I offer you some more methods to add additional features to your schemas. I distinguish in the following between schema and object methods.
+
+## Schema methods
+
+My schema methods either add additional functionality, simplify the handling or help you to use a schema, for example for validation.
+
+Schema methods: <Link href="/api/coerce">`coerce`</Link>, <Link href="/api/coerceAsync">`coerceAsync`</Link>, <Link href="/api/is">`is`</Link>, <Link href="/api/parse">`parse`</Link>, <Link href="/api/parseAsync">`parseAsync`</Link>, <Link href="/api/safeParse">`safeParse`</Link>, <Link href="/api/safeParseAsync">`safeParseAsync`</Link>, <Link href="/api/transform">`transform`</Link>, <Link href="/api/transformAsync">`transformAsync`</Link>, <Link href="/api/unwrap">`unwrap`</Link>, <Link href="/api/useDefault">`useDefault`</Link>
+
+> For more on methods for validation, see the <Link href="/parse-data">pare data</Link> guide.
+
+### Coerce
+
+‎<Link href="/api/coerce">`coerce`</Link> and <Link href="/api/coerceAsync">`coerceAsync`</Link> can be used to transform an input before it is validated. They are therefore perfect for enforcing a specific data type using the built-in data type objects like [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/String), [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number) and [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
+
+```ts
+import { coerce, date, number, parse, string } from 'valibot'; // 0.51 kB
+
+const StringSchema = coerce(string(), String);
+const stringOutput = parse(StringSchema, 1234); // '1234'
+
+const NumberSchema = coerce(number(), Number);
+const numberOutput = parse(NumberSchema, '1234'); // 1234
+
+const DateSchema = coerce(date(), (i) => new Date(i));
+const dateOutput = parse(NumberSchema, '2023-07-31'); // Date
+```
+
+### Transform
+
+‎<Link href="/api/transform">`transform`</Link> and <Link href="/api/transformAsync">`transformAsync`</Link> can be used to transform data after validation. Compared to the transformations you can perform inside <Link href="/guides/pipelines">pipelines</Link>, there are no rules here. So the input type can be completely different from the output type.
+
+```ts
+import { type Input, type Output, parse, string, transform } from 'valibot'; // 0.44 kB
+
+const StringSchema = transform(string(), (input) => input.length);
+
+type StringInput = Input<typeof StringSchema>; // string
+type StringOutput = Output<typeof StringSchema>; // number
+
+const stringOutput = parse(StringSchema, 'hello'); // 5
+```
+
+### Use default
+
+You can use <Link href="/api/useDefault">`useDefault`</Link> to add a default value to your schema that will be used as the input whenever `undefined` is passed.
+
+```ts
+import { parse, string, useDefault } from 'valibot'; // 0.44 kB
+
+const StringSchema = useDefault(string(), 'hello');
+const stringOutput = parse(StringSchema, undefined); // 'hello'
+```
+
+## Object methods
+
+My object methods make it easier for you to work with object schemas. They are strongly oriented towards the functionality of TypeScript.
+
+Object methods: <Link href="/api/keyof">`keyof`</Link>, <Link href="/api/merge">`merge`</Link>, <Link href="/api/mergeAsync">`mergeAsync`</Link>, <Link href="/api/omit">`omit`</Link>, <Link href="/api/omitAsync">`omitAsync`</Link>, <Link href="/api/partial">`partial`</Link>, <Link href="/api/partialAsync">`partialAsync`</Link>, <Link href="/api/pick">`pick`</Link>, <Link href="/api/pickAsync">`pickAsync`</Link>, <Link href="/api/required">`required`</Link>, <Link href="/api/requiredAsync">`requiredAsync`</Link>, <Link href="/api/strict">`strict`</Link>, <Link href="/api/strictAsync">`strictAsync`</Link>
+
+### TypeScript similarities
+
+I offer almost the same options as TypeScript. For example, you can make the values of an object optional with <Link href="/api/partial">`partial`</Link> or make them required with <Link href="/api/required">`required`</Link>. With <Link href="/api/merge">`merge`</Link>, you can join multiple object schemas and with <Link href="/api/pick">`pick`</Link> or <Link href="/api/omit">`omit`</Link>, you can include or exclude certain values of an existing schema.
+
+```ts
+import { number, object, partial, pick, string } from 'valibot'; // 0.76 kB
+
+// TypeScript
+type Object1 = Partial<{ key1: string; key2: number }>;
+
+// Valibot
+const object1 = partial(object({ key1: string(), key2: number() }));
+
+// TypeScript
+type Object2 = Pick<Object1, 'key1'>;
+
+// Valibot
+const object2 = pick(object1, ['key1']);
+```

@@ -12,8 +12,8 @@ import { getErrorAndPipe } from '../../utils/index.ts';
 /**
  * Partial object schema type.
  */
-type Partial<TObjectSchema extends ObjectShape> = {
-  [TKey in keyof TObjectSchema]: OptionalSchema<TObjectSchema[TKey]>;
+type Partial<TObjectShape extends ObjectShape> = {
+  [TKey in keyof TObjectShape]: OptionalSchema<TObjectShape[TKey]>;
 };
 
 /**
@@ -55,6 +55,7 @@ export function partial<TObjectSchema extends ObjectSchema<any>>(
   const { error, pipe } = getErrorAndPipe(arg3, arg4);
 
   // Create and return object schema
+  // @ts-ignore FIXME: Remove line once bug in TS is fixed
   return object(
     Object.entries(schema.object).reduce(
       (object, [key, schema]) => ({
@@ -64,6 +65,7 @@ export function partial<TObjectSchema extends ObjectSchema<any>>(
       {}
     ) as Partial<TObjectSchema['object']>,
     error,
+    // @ts-ignore FIXME: Remove line once bug in TS is fixed
     pipe
   );
 }
