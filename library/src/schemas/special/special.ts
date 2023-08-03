@@ -1,6 +1,10 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe } from '../../utils/index.ts';
+import {
+  executePipe,
+  getErrorAndPipe,
+  getPipeInfo,
+} from '../../utils/index.ts';
 
 /**
  * Special schema type.
@@ -84,7 +88,7 @@ export function special<TInput>(
       }
 
       // Execute pipe and return output
-      return executePipe(input as TInput, pipe, { ...info, reason: 'special' });
+      return executePipe(input as TInput, pipe, getPipeInfo(info, 'special'));
     },
   };
 }

@@ -4,6 +4,7 @@ import {
   executePipe,
   getCurrentPath,
   getErrorAndPipe,
+  getPipeInfo,
 } from '../../utils/index.ts';
 import type { ObjectOutput, ObjectInput } from './types.ts';
 
@@ -131,10 +132,11 @@ export function object<TObjectShape extends ObjectShape>(
       }
 
       // Execute pipe and return output
-      return executePipe(output as ObjectOutput<TObjectShape>, pipe, {
-        ...info,
-        reason: 'object',
-      });
+      return executePipe(
+        output as ObjectOutput<TObjectShape>,
+        pipe,
+        getPipeInfo(info, 'object')
+      );
     },
   };
 }

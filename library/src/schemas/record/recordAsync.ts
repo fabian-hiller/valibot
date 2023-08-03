@@ -4,6 +4,7 @@ import {
   executePipeAsync,
   getCurrentPath,
   getErrorAndPipe,
+  getPipeInfo,
 } from '../../utils/index.ts';
 import {
   type StringSchema,
@@ -239,7 +240,7 @@ export function recordAsync<
       return executePipeAsync(
         output as RecordOutput<TRecordKey, TRecordValue>,
         pipe,
-        { ...info, reason: 'record' }
+        getPipeInfo(info, 'record')
       );
     },
   };
