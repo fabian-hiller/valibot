@@ -2,6 +2,11 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.9.0 (August 04, 2023)
+
+- Add `imei` validation and `isLuhnAlgo` util (pull request #37)
+- Fix `isoDateTime`, `isoTime`, `isoTimeSecond` and `isoTimestamp` validation (pull request #42)
+
 ## v0.8.0 (July 31, 2023)
 
 - Fix infered `object` and `record` types (issue #9, #10, #34)
