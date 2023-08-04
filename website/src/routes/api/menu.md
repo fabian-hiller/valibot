@@ -61,6 +61,7 @@
 - [emoji](/api/emoji)
 - [endsWith](/api/endsWith)
 - [equal](/api/equal)
+- [imei](/api/imei)
 - [includes](/api/includes)
 - [ip](/api/ip)
 - [ipv4](/api/ipv4)
