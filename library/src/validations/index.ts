@@ -4,6 +4,7 @@ export * from './email/index.ts';
 export * from './emoji/index.ts';
 export * from './endsWith/index.ts';
 export * from './equal/index.ts';
+export * from './imei/index.ts';
 export * from './includes/index.ts';
 export * from './ip/index.ts';
 export * from './ipv4/index.ts';
