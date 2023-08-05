@@ -32,3 +32,4 @@ export * from './url/index.ts';
 export * from './uuid/index.ts';
 export * from './value/index.ts';
 export * from './integer/integer.ts';
+export * from './finite/index.ts';
