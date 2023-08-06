@@ -63,6 +63,7 @@
 - [equal](/api/equal)
 - [imei](/api/imei)
 - [includes](/api/includes)
+- [integer](/api/integer)
 - [ip](/api/ip)
 - [ipv4](/api/ipv4)
 - [ipv6](/api/ipv6)

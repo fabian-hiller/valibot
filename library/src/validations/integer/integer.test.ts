@@ -26,7 +26,7 @@ describe('integer', () => {
   });
 
   test('should throw custom error', () => {
-    const error = 'Value is not an integer';
+    const error = 'Value is not an integer!';
     const validate = integer(error);
     expect(() => validate(3.14, info)).toThrowError(error);
   });

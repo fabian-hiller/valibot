@@ -2,7 +2,7 @@ import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
 /**
- * Creates a validation function that validates an integer.
+ * Creates a validation function that validates whether a number is an integer.
  *
  * @param error The error message.
  *
