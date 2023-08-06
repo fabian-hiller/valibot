@@ -15,7 +15,7 @@ export function integer<TInput extends number>(error?: string) {
         {
           validation: 'integer',
           origin: 'value',
-          message: error || 'Invalid number',
+          message: error || 'Invalid integer',
           input,
           ...info,
         },

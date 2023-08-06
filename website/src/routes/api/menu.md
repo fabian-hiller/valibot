@@ -84,6 +84,7 @@
 - [minLength](/api/minLength)
 - [minSize](/api/minSize)
 - [minValue](/api/minValue)
+- [multipleOf](/api/multipleOf)
 - [regex](/api/regex)
 - [safeInteger](/api/safeInteger)
 - [size](/api/size)

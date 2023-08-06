@@ -22,7 +22,7 @@ describe('multipleOf', () => {
   });
 
   test('should throw custom error', () => {
-    const error = 'Value is not a multiple of 3';
+    const error = 'Value is not a multiple of 3!';
     const validate = multipleOf(3, error);
     expect(() => validate(1, info)).toThrowError(error);
   });

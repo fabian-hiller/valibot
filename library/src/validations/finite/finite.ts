@@ -15,7 +15,7 @@ export function finite<TInput extends number>(error?: string) {
         {
           validation: 'finite',
           origin: 'value',
-          message: error || 'Invalid number',
+          message: error || 'Invalid finite number',
           input,
           ...info,
         },

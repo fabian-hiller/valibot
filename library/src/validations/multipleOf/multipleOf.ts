@@ -2,7 +2,7 @@ import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
 /**
- * Creates a validation function that validates a multiple of a number.
+ * Creates a validation function that validates whether a number is a multiple.
  *
  * @param requirement The divisor.
  * @param error The error message.
