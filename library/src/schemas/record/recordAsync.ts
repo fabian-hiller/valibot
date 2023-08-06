@@ -175,57 +175,59 @@ export function recordAsync<
         // Note: `Object.entries(...)` converts each key to a string
         Object.entries(input).map(async ([inputKey, inputValue]) => {
           // Exclude blocked keys to prevent prototype pollutions
-          if (!BLOCKED_KEYS.includes(inputKey)) {
-            // Get current path
-            const path = getCurrentPath(info, {
-              schema: 'record',
-              input,
-              key: inputKey,
-              value: inputValue,
-            });
+          if (BLOCKED_KEYS.includes(inputKey)) {
+            return;
+          }
 
-            const [outputKey, outputValue] = await Promise.all([
-              // Parse key and get output
-              (async () => {
-                try {
-                  return await key.parse(inputKey, {
-                    ...info,
-                    origin: 'key',
-                    path,
-                  });
+          // Get current path
+          const path = getCurrentPath(info, {
+            schema: 'record',
+            input,
+            key: inputKey,
+            value: inputValue,
+          });
 
-                  // Throw or fill issues in case of an error
-                } catch (error) {
-                  if (info?.abortEarly) {
-                    throw error;
-                  }
-                  issues.push(...(error as ValiError).issues);
+          const [outputKey, outputValue] = await Promise.all([
+            // Parse key and get output
+            (async () => {
+              try {
+                return await key.parse(inputKey, {
+                  ...info,
+                  origin: 'key',
+                  path,
+                });
+
+                // Throw or fill issues in case of an error
+              } catch (error) {
+                if (info?.abortEarly) {
+                  throw error;
                 }
-              })(),
+                issues.push(...(error as ValiError).issues);
+              }
+            })(),
 
-              // Parse value and get output
-              (async () => {
-                try {
-                  // Note: Value is nested in array, so that also a falsy value further
-                  // down can be recognized as valid value
-                  return [
-                    await value.parse(inputValue, { ...info, path }),
-                  ] as const;
+            // Parse value and get output
+            (async () => {
+              try {
+                // Note: Value is nested in array, so that also a falsy value further
+                // down can be recognized as valid value
+                return [
+                  await value.parse(inputValue, { ...info, path }),
+                ] as const;
 
-                  // Throw or fill issues in case of an error
-                } catch (error) {
-                  if (info?.abortEarly) {
-                    throw error;
-                  }
-                  issues.push(...(error as ValiError).issues);
+                // Throw or fill issues in case of an error
+              } catch (error) {
+                if (info?.abortEarly) {
+                  throw error;
                 }
-              })(),
-            ]);
+                issues.push(...(error as ValiError).issues);
+              }
+            })(),
+          ]);
 
-            // Set entry if output key and value is valid
-            if (outputKey && outputValue) {
-              output[outputKey] = outputValue[0];
-            }
+          // Set entry if output key and value is valid
+          if (outputKey && outputValue) {
+            output[outputKey] = outputValue[0];
           }
         })
       );
