@@ -108,7 +108,7 @@ export function object<TObjectShape extends ObjectShape>(
       const issues: Issue[] = [];
 
       // Parse schema of each key
-      Object.entries(object).forEach(([key, schema]) => {
+      for (const [key, schema] of Object.entries(object)) {
         try {
           const value = (input as Record<string, unknown>)[key];
           output[key] = schema.parse(value, {
@@ -123,7 +123,7 @@ export function object<TObjectShape extends ObjectShape>(
           }
           issues.push(...(error as ValiError).issues);
         }
-      });
+      }
 
       // Throw error if there are issues
       if (issues.length) {

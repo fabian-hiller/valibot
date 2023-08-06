@@ -20,7 +20,7 @@ export function executePipe<TValue>(
   const issues: Issue[] = [];
 
   // Execute any action of pipe
-  pipe.forEach((action) => {
+  for (const action of pipe) {
     try {
       output = action(output, info);
 
@@ -31,7 +31,7 @@ export function executePipe<TValue>(
       }
       issues.push(...(error as ValiError).issues);
     }
-  });
+  }
 
   // Throw error if there are issues
   if (issues.length) {
