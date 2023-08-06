@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { minLength } from '../../validations/index.ts';
+import { any } from '../any/index.ts';
 import { number } from '../number/index.ts';
 import { string, stringAsync } from '../string/index.ts';
 import { numberAsync } from '../number/index.ts';
@@ -101,5 +102,15 @@ describe('recordAsync', () => {
     expect(output2).toEqual(transformInput());
     expect(output3).toEqual(transformInput());
     expect(output4).toEqual(transformInput());
+  });
+
+  test('should prevent prototype pollution', async () => {
+    const schema = recordAsync(string(), any());
+    const input = JSON.parse('{"__proto__":{"polluted":"yes"}}');
+    expect(input.__proto__.polluted).toBe('yes');
+    expect(({} as any).polluted).toBeUndefined();
+    const output = await parseAsync(schema, input);
+    expect(output.__proto__.polluted).toBeUndefined();
+    expect(output.polluted).toBeUndefined();
   });
 });

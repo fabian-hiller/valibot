@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Fix prototype pollution vulnerability of `record` and `recordAsync` (pull request #67)
+
 ## v0.10.0 (August 05, 2023)
 
 - Add `integer` validation (pull request #62)
