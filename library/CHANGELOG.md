@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.11.0 (August 06, 2023)
 
 - Fix prototype pollution vulnerability of `record` and `recordAsync` (pull request #67)
 - Add `finite`, `safeInteger` and `multipleOf` validation (pull request #64, #65, #66)
