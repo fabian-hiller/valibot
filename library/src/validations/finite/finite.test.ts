@@ -21,7 +21,7 @@ describe('finite', () => {
   });
 
   test('should throw custom error', () => {
-    const error = 'Value is not a finite number';
+    const error = 'Value is not a finite number!';
     const validate = finite(error);
     expect(() => validate(Infinity, info)).toThrowError(error);
   });

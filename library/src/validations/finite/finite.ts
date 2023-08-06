@@ -2,7 +2,7 @@ import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
 
 /**
- * Creates a validation function that validates a finite number.
+ * Creates a validation function that validates whether a number is finite.
  *
  * @param error The error message.
  *
@@ -15,7 +15,7 @@ export function finite<TInput extends number>(error?: string) {
         {
           validation: 'finite',
           origin: 'value',
-          message: error || 'Invalid finite number',
+          message: error || 'Invalid number',
           input,
           ...info,
         },
