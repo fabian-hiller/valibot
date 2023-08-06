@@ -34,3 +34,4 @@ export * from './startsWith/index.ts';
 export * from './url/index.ts';
 export * from './uuid/index.ts';
 export * from './value/index.ts';
+export * from './multipleOf/index.ts';
