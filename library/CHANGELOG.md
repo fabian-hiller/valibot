@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.10.0 (August 05, 2023)
+
+- Add `integer` validation (pull request #62)
+
 ## v0.9.0 (August 04, 2023)
 
 - Add `imei` validation and `isLuhnAlgo` util (pull request #37)
