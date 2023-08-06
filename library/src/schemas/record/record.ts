@@ -163,10 +163,10 @@ export function record<
 
       // Parse each key and value by schema
       // Note: `Object.entries(...)` converts each key to a string
-      Object.entries(input).forEach(([inputKey, inputValue]) => {
+      for (const [inputKey, inputValue] of Object.entries(input)) {
         // Exclude blocked keys to prevent prototype pollutions
         if (BLOCKED_KEYS.includes(inputKey)) {
-          return;
+          continue;
         }
 
         // Get current path
@@ -209,7 +209,7 @@ export function record<
         if (outputKey && outputValue) {
           output[outputKey] = outputValue[0];
         }
-      });
+      }
 
       // Throw error if there are issues
       if (issues.length) {
