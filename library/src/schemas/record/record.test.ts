@@ -6,6 +6,7 @@ import { number } from '../number/index.ts';
 import { string } from '../string/index.ts';
 import { union } from '../union/index.ts';
 import { record } from './record.ts';
+import {any} from "../any";
 
 describe('record', () => {
   test('should pass only objects', () => {
@@ -87,4 +88,14 @@ describe('record', () => {
     expect(output3).toEqual(transformInput());
     expect(output4).toEqual(transformInput());
   });
+
+
+  test("should not be vulnerable to prototype pollution", () => {
+    const schema = record(string(), any());
+    const input = JSON.parse('{"__proto__":{"polluted":"yes"}}');
+    expect(input.__proto__.polluted).toBe("yes");
+    expect(({} as any).polluted).toBeUndefined();
+    const parsed = parse(schema, input);
+    expect((parsed as any).polluted).toBeUndefined();
+  })
 });

@@ -8,6 +8,8 @@ import {
 import { type StringSchema, string } from '../string/index.ts';
 import type { RecordOutput, RecordInput } from './types.ts';
 
+const BLOCKED_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
+
 /**
  * Record key type.
  */
@@ -163,6 +165,13 @@ export function record<
       // Parse each key and value by schema
       // Note: `Object.entries(...)` converts each key to a string
       Object.entries(input).forEach(([inputKey, inputValue]) => {
+
+        // Check if key is blocked
+        if (BLOCKED_KEYS.has(inputKey)) {
+            return;
+        }
+
+
         // Get current path
         const path = getCurrentPath(info, {
           schema: 'record',
