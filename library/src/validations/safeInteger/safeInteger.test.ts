@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest';
-import { safe } from './safe.ts';
+import { safeInteger } from './safeInteger.ts';
 
-describe('safe', () => {
+describe('safeInteger', () => {
   const info = { reason: 'any' as const };
 
   test('should pass only safe integer', () => {
-    const validate = safe();
+    const validate = safeInteger();
     const value1 = 0;
     expect(validate(value1, info)).toBe(value1);
     const value2 = 1;
@@ -26,8 +26,8 @@ describe('safe', () => {
   });
 
   test('should throw custom error', () => {
-    const error = 'Value is not a safe integer';
-    const validate = safe(error);
+    const error = 'Value is not a safe integer!';
+    const validate = safeInteger(error);
     expect(() => validate(Infinity, info)).toThrowError(error);
   });
 });

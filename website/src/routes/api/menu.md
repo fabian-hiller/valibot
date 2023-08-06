@@ -85,6 +85,7 @@
 - [minSize](/api/minSize)
 - [minValue](/api/minValue)
 - [regex](/api/regex)
+- [safeInteger](/api/safeInteger)
 - [size](/api/size)
 - [startsWith](/api/startsWith)
 - [url](/api/url)
