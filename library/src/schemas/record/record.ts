@@ -165,49 +165,47 @@ export function record<
       // Note: `Object.entries(...)` converts each key to a string
       for (const [inputKey, inputValue] of Object.entries(input)) {
         // Exclude blocked keys to prevent prototype pollutions
-        if (BLOCKED_KEYS.includes(inputKey)) {
-          continue;
-        }
+        if (!BLOCKED_KEYS.includes(inputKey)) {
+          // Get current path
+          const path = getCurrentPath(info, {
+            schema: 'record',
+            input,
+            key: inputKey,
+            value: inputValue,
+          });
 
-        // Get current path
-        const path = getCurrentPath(info, {
-          schema: 'record',
-          input,
-          key: inputKey,
-          value: inputValue,
-        });
+          // Parse key and get output
+          let outputKey: string | number | symbol | undefined;
+          try {
+            outputKey = key.parse(inputKey, { ...info, origin: 'key', path });
 
-        // Parse key and get output
-        let outputKey: string | number | symbol | undefined;
-        try {
-          outputKey = key.parse(inputKey, { ...info, origin: 'key', path });
-
-          // Throw or fill issues in case of an error
-        } catch (error) {
-          if (info?.abortEarly) {
-            throw error;
+            // Throw or fill issues in case of an error
+          } catch (error) {
+            if (info?.abortEarly) {
+              throw error;
+            }
+            issues.push(...(error as ValiError).issues);
           }
-          issues.push(...(error as ValiError).issues);
-        }
 
-        // Parse value and get output
-        let outputValue: [any] | undefined;
-        try {
-          // Note: Value is nested in array, so that also a falsy value further
-          // down can be recognized as valid value
-          outputValue = [value.parse(inputValue, { ...info, path })];
+          // Parse value and get output
+          let outputValue: [any] | undefined;
+          try {
+            // Note: Value is nested in array, so that also a falsy value further
+            // down can be recognized as valid value
+            outputValue = [value.parse(inputValue, { ...info, path })];
 
-          // Throw or fill issues in case of an error
-        } catch (error) {
-          if (info?.abortEarly) {
-            throw error;
+            // Throw or fill issues in case of an error
+          } catch (error) {
+            if (info?.abortEarly) {
+              throw error;
+            }
+            issues.push(...(error as ValiError).issues);
           }
-          issues.push(...(error as ValiError).issues);
-        }
 
-        // Set entry if output key and value is valid
-        if (outputKey && outputValue) {
-          output[outputKey] = outputValue[0];
+          // Set entry if output key and value is valid
+          if (outputKey && outputValue) {
+            output[outputKey] = outputValue[0];
+          }
         }
       }
 
