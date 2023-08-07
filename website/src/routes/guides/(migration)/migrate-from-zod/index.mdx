@@ -4,4 +4,95 @@ title: Migrate from Zod
 
 # Migrate from Zod
 
-> The content of this page is not yet ready. Check back in a few days.
+I am heavily based on Zod, you could say it was the inspiration for my own creation. That's why a migration should not require much work, because the naming and behaviour of methods is very similar.
+
+## Setup
+
+First you need to install me. See <Link href="/guides/installation/">Installation instructions</Link>.
+
+## Schema Migration
+
+After this setup you will have to change every **Zod Schema**,
+but you don't have to change all of them just yet.
+
+> **This is a Process, so take your time!** *You can always take a break, and I will still be here, waiting for you.*
+
+Theres usually two ways to write these Schemas with Zod:
+
+### The `z` Object
+
+> Zod makes heavy use of it's `z` object export, which contains every schema type and validation function. This is one of Zod's disadvantages, because modern bundlers can't remove unused functions. Learn more <Link href="/guides/comparison/">here</Link>.
+
+You need to import every Schema and <Link href="/guides/pipelines/">Pipeline</Link> method you are using. Then you can just remove all references of the `z` object, and many of the Schema functions should be compatible.
+
+### Separate imports
+
+If your already using the different Schemas separately, then you only need to additionally import some of the <Link href="/guides/pipelines/">Pipeline</Link> methods. Again, many of the Schemas are compatible.
+
+## Example
+
+Let me explain it to you with an example.
+
+```ts
+import { z } from 'zod'; // 13.1 kB
+
+// login schema with email and password
+const LoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
+type LoginData = z.infer<typeof LoginSchema>;
+
+LoginSchema.parse({ email: '', password: '' });
+
+LoginSchema.parse({ email: 'jane@example.com', password: '12345678' });
+```
+
+This is a typical example of using zod to validate unsafe data. Now lets convert it to Valibot.
+
+1. Import all Types, Schemas and <Link href="/guides/pipelines/">Pipeline</Link> functions that you need.
+
+```ts
+import { type Output, parse, object, string, email, minLength } from 'valibot'; // 0.76 kB
+```
+
+2. Use these Schema and <Link href="/guides/pipelines/">Pipeline</Link> functions to build this data Schema.
+
+> Note that additional validation like <Link href="/api/minLength">`minLength`</Link> and <Link href="/api/email">`email`</Link> are not combined by calling them as functions on the output of the previous Schema, but instead as a <Link href="/guides/pipelines/">Pipeline</Link> which is just an array passed to a Schema.
+
+```ts
+// Create login schema with email and password
+const LoginSchema = object({
+  email: string([email()]),
+  password: string([minLength(8)]),
+});
+```
+
+3. The `infer` type helper can be replaced with the <Link href="/api/Input">`Input`</Link> and <Link href="/api/Output">`Output`</Link> types.
+
+```ts
+// Infer output type of login schema
+type LoginData = Output<typeof LoginSchema>; // { email: string; password: string }
+```
+
+4. To validate unsafe data with the Schema, just call the <Link href="/api/parse">`parse`</Link> or <Link href="/api/safeParse">`safeParse`</Link> function passing in the Schema and data.
+
+```ts
+// Throws error for `email` and `password`
+parse(LoginSchema, { email: '', password: '' });
+
+// Returns data as { email: string; password: string }
+parse(LoginSchema, { email: 'jane@example.com', password: '12345678' });
+```
+
+*That's it! Pretty easy, right?*
+
+## Special Examples / Equivalents
+
+Here are some example usecases, that are used different than in Zod.
+
+| Zod     | Valibot |
+| ----------- | ---------------- |
+| `z.string().default("hello")` | `useDefault(string(), 'hello') ` |
+| `z.string().transform((val) => val.length)` | `transform(string(), (input) => input.length)` |
