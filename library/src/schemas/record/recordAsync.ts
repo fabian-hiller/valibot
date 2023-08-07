@@ -175,7 +175,7 @@ export function recordAsync<
         // Note: `Object.entries(...)` converts each key to a string
         Object.entries(input).map(async ([inputKey, inputValue]) => {
           // Exclude blocked keys to prevent prototype pollutions
-          if (!BLOCKED_KEYS.has(inputKey)) {
+          if (!BLOCKED_KEYS.includes(inputKey)) {
             // Get current path
             const path = getCurrentPath(info, {
               schema: 'record',

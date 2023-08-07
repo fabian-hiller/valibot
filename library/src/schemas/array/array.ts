@@ -108,7 +108,7 @@ export function array<TArrayItem extends BaseSchema>(
       const issues: Issue[] = [];
 
       // Parse schema of each array item
-      input.forEach((value, index) => {
+      for (const [index, value] of input.entries()) {
         try {
           output.push(
             item.parse(value, {
@@ -129,7 +129,7 @@ export function array<TArrayItem extends BaseSchema>(
           }
           issues.push(...(error as ValiError).issues);
         }
-      });
+      }
 
       // Throw error if there are issues
       if (issues.length) {

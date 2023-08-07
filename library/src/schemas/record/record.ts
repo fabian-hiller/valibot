@@ -163,9 +163,9 @@ export function record<
 
       // Parse each key and value by schema
       // Note: `Object.entries(...)` converts each key to a string
-      Object.entries(input).forEach(([inputKey, inputValue]) => {
+      for (const [inputKey, inputValue] of Object.entries(input)) {
         // Exclude blocked keys to prevent prototype pollutions
-        if (!BLOCKED_KEYS.has(inputKey)) {
+        if (!BLOCKED_KEYS.includes(inputKey)) {
           // Get current path
           const path = getCurrentPath(info, {
             schema: 'record',
@@ -207,7 +207,7 @@ export function record<
             output[outputKey] = outputValue[0];
           }
         }
-      });
+      }
 
       // Throw error if there are issues
       if (issues.length) {

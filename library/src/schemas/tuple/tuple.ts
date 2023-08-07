@@ -165,7 +165,7 @@ export function tuple<
       const issues: Issue[] = [];
 
       // Parse schema of each tuple item
-      items.forEach((schema, index) => {
+      for (const [index, schema] of items.entries()) {
         try {
           const value = input[index];
           output[index] = schema.parse(value, {
@@ -185,11 +185,11 @@ export function tuple<
           }
           issues.push(...(error as ValiError).issues);
         }
-      });
+      }
 
       // If necessary parse schema of each rest item
       if (rest) {
-        input.slice(items.length).forEach((value, index) => {
+        for (const [index, value] of input.slice(items.length).entries()) {
           try {
             const tupleIndex = items.length + index;
             output[tupleIndex] = rest.parse(value, {
@@ -209,7 +209,7 @@ export function tuple<
             }
             issues.push(...(error as ValiError).issues);
           }
-        });
+        }
       }
 
       // Throw error if there are issues

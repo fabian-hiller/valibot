@@ -1,1 +1,1 @@
-export const BLOCKED_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
+export const BLOCKED_KEYS = ['__proto__', 'prototype', 'constructor'];
