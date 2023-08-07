@@ -1,34 +1,30 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
-
-/**
- * Enum value type.
- */
-export type EnumValue = Readonly<[string, ...string[]]>;
+import type { Enum } from './types.ts';
 
 /**
  * Enum schema type.
  */
 export type EnumSchema<
-  TEnumValue extends EnumValue,
-  TOutput = TEnumValue[number]
-> = BaseSchema<TEnumValue[number], TOutput> & {
+  TEnum extends Enum,
+  TOutput = TEnum[number]
+> = BaseSchema<TEnum[number], TOutput> & {
   schema: 'enum';
-  enum: TEnumValue;
+  enum: TEnum;
 };
 
 /**
  * Creates a enum schema.
  *
- * @param enum The enum value.
+ * @param enumValue The enum value.
  * @param error The error message.
  *
  * @returns A enum schema.
  */
-export function enumType<TEnumValue extends EnumValue>(
-  enumValue: TEnumValue,
+export function enumType<TOption extends string, TEnum extends Enum<TOption>>(
+  enumValue: TEnum,
   error?: string
-): EnumSchema<TEnumValue> {
+): EnumSchema<TEnum> {
   return {
     /**
      * The schema type.
@@ -69,7 +65,7 @@ export function enumType<TEnumValue extends EnumValue>(
       }
 
       // Return output
-      return input as TEnumValue[number];
+      return input as TEnum[number];
     },
   };
 }

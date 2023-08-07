@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Fix types of `enumType` and `enumTypeAsync` schema (issue #70)
+
 ## v0.11.0 (August 06, 2023)
 
 - Fix prototype pollution vulnerability of `record` and `recordAsync` (pull request #67)

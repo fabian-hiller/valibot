@@ -1,30 +1,30 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync } from '../../types.ts';
-import type { EnumValue } from './enumType.ts';
+import type { Enum } from './types.ts';
 
 /**
  * Enum schema async type.
  */
 export type EnumSchemaAsync<
-  TEnumValue extends EnumValue,
-  TOutput = TEnumValue[number]
-> = BaseSchemaAsync<TEnumValue[number], TOutput> & {
+  TEnum extends Enum,
+  TOutput = TEnum[number]
+> = BaseSchemaAsync<TEnum[number], TOutput> & {
   schema: 'enum';
-  enum: TEnumValue;
+  enum: TEnum;
 };
 
 /**
  * Creates an async enum schema.
  *
- * @param enum The enum value.
+ * @param enumValue The enum value.
  * @param error The error message.
  *
  * @returns An async enum schema.
  */
-export function enumTypeAsync<TEnumValue extends EnumValue>(
-  enumValue: TEnumValue,
-  error?: string
-): EnumSchemaAsync<TEnumValue> {
+export function enumTypeAsync<
+  TOption extends string,
+  TEnum extends Enum<TOption>
+>(enumValue: TEnum, error?: string): EnumSchemaAsync<TEnum> {
   return {
     /**
      * The schema type.
@@ -65,7 +65,7 @@ export function enumTypeAsync<TEnumValue extends EnumValue>(
       }
 
       // Return output
-      return input as TEnumValue[number];
+      return input as TEnum[number];
     },
   };
 }
