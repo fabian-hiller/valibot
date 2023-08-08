@@ -9,7 +9,7 @@ import type { ValidateInfo } from '../../types.ts';
  *
  * @returns A validation function.
  */
-export function mimeType<TInput extends File>(
+export function mimeType<TInput extends Blob>(
   requirement: `${string}/${string}`[],
   error?: string
 ) {
