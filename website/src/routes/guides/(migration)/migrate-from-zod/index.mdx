@@ -24,7 +24,7 @@ Theres usually two ways to write these Schemas with Zod:
 
 ### The `z` Object
 
-> Zod makes heavy use of it's `z` object export, which contains every schema type and validation function. This is one of Zod's disadvantages, because modern bundlers can't remove unused functions. Learn more <Link href="/guides/comparison/">here</Link>.
+> Zod recommends the use of it's `z` object export, which contains every schema class. Modern bundlers can remove (<Link href="https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking">treeshake</Link>) unused functions and objects, but this does not work with JavaScript classes. Zod Schemas and validation chains are build using class methods,  this is one of it's disadvantages compared to me. Learn more <Link href="/guides/comparison/">here</Link>.
 
 You need to import every Schema and <Link href="/guides/pipelines/">Pipeline</Link> method you are using. Then you can just remove all references of the `z` object, and many of the Schema functions should be compatible.
 
