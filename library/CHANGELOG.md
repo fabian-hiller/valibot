@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.12.0 (August 11, 2023)
 
 - Change input type of `mimeType` validation to `Blob`
 - Rename `useDefault` method to `withDefault` (issue #80)
