@@ -12,4 +12,4 @@ export * from './safeParse/index.ts';
 export * from './strict/index.ts';
 export * from './transform/index.ts';
 export * from './unwrap/index.ts';
-export * from './useDefault/index.ts';
+export * from './withDefault/index.ts';

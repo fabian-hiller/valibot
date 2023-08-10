@@ -4,6 +4,8 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Change input type of `mimeType` validation to `Blob`
+- Rename `useDefault` method to `withDefault` (issue #80)
 - Add `brand` method to support branded types (pull request #85)
 
 ## v0.11.1 (August 07, 2023)
