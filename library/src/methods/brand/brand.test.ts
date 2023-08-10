@@ -1,6 +1,6 @@
 import { describe, expect, expectTypeOf, test } from 'vitest';
-import { object, string } from '../index.ts';
-import { parse } from '../../methods/parse/index.ts';
+import { object, string } from '../../schemas/index.ts';
+import { parse } from '../parse/index.ts';
 import type { Output } from '../../types.ts';
 import { brand, type BRAND } from './brand.ts';
 
