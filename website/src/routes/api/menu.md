@@ -51,7 +51,7 @@
 - [strict](/api/strict)
 - [transform](/api/transform)
 - [unwrap](/api/unwrap)
-- [useDefault](/api/useDefault)
+- [withDefault](/api/withDefault)
 
 ## Validations
 

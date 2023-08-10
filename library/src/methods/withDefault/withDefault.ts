@@ -1,14 +1,14 @@
 import type { BaseSchema, BaseSchemaAsync, Input } from '../../types.ts';
 
 /**
- * Passes the default value to a schema in case of an undefined input.
+ * Passes a default value to a schema in case of an undefined input.
  *
  * @param schema The affected schema.
  * @param value The default value.
  *
  * @returns The passed schema.
  */
-export function useDefault<TSchema extends BaseSchema | BaseSchemaAsync>(
+export function withDefault<TSchema extends BaseSchema | BaseSchemaAsync>(
   schema: TSchema,
   value: Input<TSchema>
 ): TSchema {
@@ -28,3 +28,10 @@ export function useDefault<TSchema extends BaseSchema | BaseSchemaAsync>(
     },
   };
 }
+
+/**
+ * See {@link withDefault}
+ *
+ * @deprecated Function has been renamed to `withDefault`.
+ */
+export const useDefault = withDefault;

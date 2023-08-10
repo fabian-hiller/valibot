@@ -13,7 +13,7 @@ Apart from <Link href="/api/parse">`parse`</Link> and <Link href="/api/safeParse
 
 My schema methods either add additional functionality, simplify the handling or help you to use a schema, for example for validation.
 
-Schema methods: <Link href="/api/coerce">`coerce`</Link>, <Link href="/api/coerceAsync">`coerceAsync`</Link>, <Link href="/api/is">`is`</Link>, <Link href="/api/parse">`parse`</Link>, <Link href="/api/parseAsync">`parseAsync`</Link>, <Link href="/api/safeParse">`safeParse`</Link>, <Link href="/api/safeParseAsync">`safeParseAsync`</Link>, <Link href="/api/transform">`transform`</Link>, <Link href="/api/transformAsync">`transformAsync`</Link>, <Link href="/api/unwrap">`unwrap`</Link>, <Link href="/api/useDefault">`useDefault`</Link>
+Schema methods: <Link href="/api/coerce">`coerce`</Link>, <Link href="/api/coerceAsync">`coerceAsync`</Link>, <Link href="/api/is">`is`</Link>, <Link href="/api/parse">`parse`</Link>, <Link href="/api/parseAsync">`parseAsync`</Link>, <Link href="/api/safeParse">`safeParse`</Link>, <Link href="/api/safeParseAsync">`safeParseAsync`</Link>, <Link href="/api/transform">`transform`</Link>, <Link href="/api/transformAsync">`transformAsync`</Link>, <Link href="/api/unwrap">`unwrap`</Link>, <Link href="/api/withDefault">`withDefault`</Link>
 
 > For more on methods for validation, see the <Link href="/parse-data">parse data</Link> guide.
 
@@ -49,14 +49,14 @@ type StringOutput = Output<typeof StringSchema>; // number
 const stringOutput = parse(StringSchema, 'hello'); // 5
 ```
 
-### Use default
+### With default
 
-You can use <Link href="/api/useDefault">`useDefault`</Link> to add a default value to your schema that will be used as the input whenever `undefined` is passed.
+You can use <Link href="/api/withDefault">`withDefault`</Link> to add a default value to your schema that will be used as the input whenever `undefined` is passed.
 
 ```ts
-import { parse, string, useDefault } from 'valibot'; // 0.44 kB
+import { parse, string, withDefault } from 'valibot'; // 0.44 kB
 
-const StringSchema = useDefault(string(), 'hello');
+const StringSchema = withDefault(string(), 'hello');
 const stringOutput = parse(StringSchema, undefined); // 'hello'
 ```
 
