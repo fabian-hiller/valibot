@@ -38,6 +38,7 @@
 
 ## Methods
 
+- [brand](/api/brand)
 - [coerce](/api/coerce)
 - [is](/api/is)
 - [keyof](/api/keyof)

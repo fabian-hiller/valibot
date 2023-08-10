@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `brand` method to support branded types (pull request #85)
+
 ## v0.11.1 (August 07, 2023)
 
 - Fix types of `enumType` and `enumTypeAsync` schema (issue #70)
