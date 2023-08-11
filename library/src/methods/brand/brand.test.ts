@@ -1,7 +1,8 @@
 import { describe, expect, expectTypeOf, test } from 'vitest';
 import { object, string } from '../../schemas/index.ts';
-import { parse } from '../parse/index.ts';
 import type { Output } from '../../types.ts';
+import { parse } from '../parse/index.ts';
+import type { Unbranded } from './brand';
 import { brand, type Brand } from './brand.ts';
 
 describe('brand', () => {
@@ -31,9 +32,51 @@ describe('brand', () => {
 
   test('should allow multiple branding', () => {
     const branded1 = brand(string(), '1');
+    type Branded1 = Output<typeof branded1>;
     const branded2 = brand(branded1, '2');
     type Branded2 = Output<typeof branded2>;
-    expectTypeOf(branded1).not.toEqualTypeOf(branded2);
+
+    expectTypeOf<Branded1>().not.toBeNever();
+    expectTypeOf<Branded2>().not.toBeNever();
+
+    expectTypeOf<Branded2>().toMatchTypeOf<Branded1>();
+    expectTypeOf<Branded1>().not.toMatchTypeOf<Branded2>();
+
     expectTypeOf<Branded2>().toEqualTypeOf<string & Brand<'1'> & Brand<'2'>>();
+    expectTypeOf<Branded2>().toMatchTypeOf<string & Brand<'1'>>();
+  });
+
+  test('should support brand hierarchy', () => {
+    const id = brand(string(), 'Id');
+    type BrandedId = Output<typeof id>;
+    const userId = brand(id, 'UserId');
+    type BrandedUserId = Output<typeof userId>;
+    const postId = brand(id, 'PostId');
+    type BrandedPostId = Output<typeof postId>;
+
+    expectTypeOf<BrandedId>().not.toBeNever();
+    expectTypeOf<BrandedUserId>().not.toBeNever();
+    expectTypeOf<BrandedPostId>().not.toBeNever();
+
+    expectTypeOf<BrandedUserId>().not.toMatchTypeOf<BrandedPostId>();
+    expectTypeOf<BrandedPostId>().not.toMatchTypeOf<BrandedUserId>();
+  });
+
+  test('should support unbranding', () => {
+    expectTypeOf<Unbranded<number & Brand<'1'>>>().toEqualTypeOf<number>();
+    expectTypeOf<Unbranded<string & Brand<'1'>>>().toEqualTypeOf<string>();
+    expectTypeOf<
+      Unbranded<{ foo: 'bar' } & Brand<'1'> & Brand<'2'>>
+    >().toEqualTypeOf<{ foo: 'bar' }>();
+    expectTypeOf<
+      Unbranded<[1, 2, 3] & Brand<'1'> & Brand<'2'> & Brand<'3'>>
+    >().toEqualTypeOf<[1, 2, 3]>();
+
+    // do not change type if there isn't any brands
+    expectTypeOf<Unbranded<unknown>>().toEqualTypeOf<unknown>();
+    expectTypeOf<Unbranded<string>>().toEqualTypeOf<string>();
+    expectTypeOf<Unbranded<number>>().toEqualTypeOf<number>();
+    expectTypeOf<Unbranded<{ foo: 'bar' }>>().toEqualTypeOf<{ foo: 'bar' }>();
+    expectTypeOf<Unbranded<[1, 2, 3]>>().toEqualTypeOf<[1, 2, 3]>();
   });
 });
