@@ -91,6 +91,41 @@ export type Brand<TBrandName extends BrandName> = {
   };
 };
 
+type UnionToIntersection<T> = (
+  T extends never ? never : (arg: T) => never
+) extends (arg: infer U) => never
+  ? U
+  : never;
+
+/**
+ * Extracts all brands from a branded type.
+ *
+ * @example
+ * Brands<string & Brand<'foo'> & Brand<'bar'>> = Brand<'foo'> & Brand<'bar'>
+ */
+export type Brands<BrandedType> = BrandedType extends Brand<any>
+  ? UnionToIntersection<
+      {
+        [N in keyof BrandedType[BrandSymbol]]: N extends
+          | string
+          | symbol
+          | number
+          ? Brand<N>
+          : never;
+      }[keyof BrandedType[BrandSymbol]]
+    >
+  : never;
+
+/**
+ * Removes all brands from a branded type or returns the type if it is not branded.
+ * @example
+ * Unbranded<string & Brand<'foo'> & Brand<'bar'>> = string
+ */
+export type Unbranded<BrandedType> = BrandedType extends infer T &
+  Brands<BrandedType>
+  ? T
+  : BrandedType;
+
 export function brand<TSchema extends AnySchema, TBrandName extends BrandName>(
   schema: TSchema,
   name: TBrandName
