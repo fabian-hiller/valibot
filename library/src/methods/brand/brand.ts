@@ -672,6 +672,20 @@ export function brand<
 /**
  * Brands the output type of a schema.
  *
+ * @example
+ * const IdSchema = brand(string([uuid()]), 'Id');
+ * type Id = Output<typeof IdSchema>;
+ *
+ * const UserId = brand(IdSchema, 'UserId');
+ * type UserId = Output<typeof IdSchema>;
+ *
+ * const PostId = brand(IdSchema, 'PostId');
+ * type PostId = Output<typeof IdSchema>;
+ *
+ * const userId = parse(UserId, '123e4567-e89b-12d3-a456-426614174000');
+ * const postId: PostId = userId; // Type error
+ * const id: Id = userId; // Ok
+ *
  * @param schema The scheme to be branded.
  * @param brand The brand name.
  *
