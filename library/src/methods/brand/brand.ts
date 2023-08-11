@@ -73,7 +73,7 @@ import type {
   Output,
 } from '../../types.ts';
 
-const symbol = Symbol('brand');
+export const symbol = Symbol('brand');
 
 /**
  * Brand name type.
