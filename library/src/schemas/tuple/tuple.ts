@@ -166,10 +166,10 @@ export function tuple<
       const issues: Issue[] = [];
 
       // Parse schema of each tuple item
-      for (const [index, schema] of items.entries()) {
+      for (let index = 0; index < items.length; index++) {
         try {
           const value = input[index];
-          output[index] = schema.parse(value, {
+          output[index] = items[index].parse(value, {
             ...info,
             path: getCurrentPath(info, {
               schema: 'tuple',
@@ -190,15 +190,15 @@ export function tuple<
 
       // If necessary parse schema of each rest item
       if (rest) {
-        for (const [index, value] of input.slice(items.length).entries()) {
+        for (let index = items.length; index < input.length; index++) {
           try {
-            const tupleIndex = items.length + index;
-            output[tupleIndex] = rest.parse(value, {
+            const value = input[index];
+            output[index] = rest.parse(value, {
               ...info,
               path: getCurrentPath(info, {
                 schema: 'tuple',
                 input: input as [any, ...any[]],
-                key: tupleIndex,
+                key: index,
                 value,
               }),
             });

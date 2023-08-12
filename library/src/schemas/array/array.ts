@@ -109,8 +109,9 @@ export function array<TArrayItem extends BaseSchema>(
       const issues: Issue[] = [];
 
       // Parse schema of each array item
-      for (const [index, value] of input.entries()) {
+      for (let index = 0; index < input.length; index++) {
         try {
+          const value = input[index];
           output.push(
             item.parse(value, {
               ...info,

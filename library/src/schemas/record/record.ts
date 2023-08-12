@@ -164,9 +164,15 @@ export function record<
 
       // Parse each key and value by schema
       // Note: `Object.entries(...)` converts each key to a string
-      for (const [inputKey, inputValue] of Object.entries(input)) {
+      for (const inputEntry of Object.entries(input)) {
+        // Get input key
+        const inputKey = inputEntry[0];
+
         // Exclude blocked keys to prevent prototype pollutions
         if (!BLOCKED_KEYS.includes(inputKey)) {
+          // Get input value
+          const inputValue = inputEntry[1];
+
           // Get current path
           const path = getCurrentPath(info, {
             schema: 'record',

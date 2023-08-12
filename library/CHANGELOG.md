@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add `getPipeInfo` util and refactor code for performance reasons (pull request #46)
+- Refactor loops and array destructuring for performance reasons
 
 ## v0.12.0 (August 11, 2023)
 

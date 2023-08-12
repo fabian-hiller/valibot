@@ -60,6 +60,9 @@ export function object<TObjectShape extends ObjectShape>(
   // Get error and pipe argument
   const { error, pipe } = getErrorAndPipe(arg2, arg3);
 
+  // Create cached entries
+  let cachedEntries: [string, BaseSchema<any>][];
+
   // Create and return object schema
   return {
     /**
@@ -104,15 +107,19 @@ export function object<TObjectShape extends ObjectShape>(
         ]);
       }
 
+      // Cache object entries lazy
+      cachedEntries = cachedEntries || Object.entries(object);
+
       // Create output and issues
       const output: Record<string, any> = {};
       const issues: Issue[] = [];
 
       // Parse schema of each key
-      for (const [key, schema] of Object.entries(object)) {
+      for (const objectEntry of cachedEntries) {
         try {
+          const key = objectEntry[0];
           const value = (input as Record<string, unknown>)[key];
-          output[key] = schema.parse(value, {
+          output[key] = objectEntry[1].parse(value, {
             ...info,
             path: getCurrentPath(info, { schema: 'object', input, key, value }),
           });
