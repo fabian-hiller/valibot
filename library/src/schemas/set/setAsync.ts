@@ -2,8 +2,9 @@ import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput } from './types.ts';
@@ -104,15 +105,18 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
         Array.from(input.values()).map(async (inputValue, index) => {
           try {
             output.add(
-              await value.parse(inputValue, {
-                ...info,
-                path: getCurrentPath(info, {
-                  schema: 'set',
-                  input,
-                  key: index,
-                  value: inputValue,
-                }),
-              })
+              await value.parse(
+                inputValue,
+                getPathInfo(
+                  info,
+                  getPath(info?.path, {
+                    schema: 'set',
+                    input,
+                    key: index,
+                    value: inputValue,
+                  })
+                )
+              )
             );
 
             // Throw or fill issues in case of an error

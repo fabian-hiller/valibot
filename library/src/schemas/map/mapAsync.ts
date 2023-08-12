@@ -7,8 +7,9 @@ import type {
 } from '../../types.ts';
 import {
   executePipeAsync,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput } from './types.ts';
@@ -127,7 +128,7 @@ export function mapAsync<
           const inputValue = inputEntry[1];
 
           // Get current path
-          const path = getCurrentPath(info, {
+          const path = getPath(info?.path, {
             schema: 'map',
             input,
             key: inputKey,
@@ -141,7 +142,7 @@ export function mapAsync<
                 // Note: Output key is nested in array, so that also a falsy value
                 // further down can be recognized as valid value
                 return [
-                  await key.parse(inputKey, { ...info, origin: 'key', path }),
+                  await key.parse(inputKey, getPathInfo(info, path, 'key')),
                 ] as const;
 
                 // Throw or fill issues in case of an error
@@ -159,7 +160,7 @@ export function mapAsync<
                 // Note: Output value is nested in array, so that also a falsy value
                 // further down can be recognized as valid value
                 return [
-                  await value.parse(inputValue, { ...info, path }),
+                  await value.parse(inputValue, getPathInfo(info, path)),
                 ] as const;
 
                 // Throw or fill issues in case of an error

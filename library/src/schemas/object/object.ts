@@ -2,8 +2,9 @@ import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 import type { ObjectOutput, ObjectInput } from './types.ts';
@@ -119,10 +120,18 @@ export function object<TObjectShape extends ObjectShape>(
         try {
           const key = objectEntry[0];
           const value = (input as Record<string, unknown>)[key];
-          output[key] = objectEntry[1].parse(value, {
-            ...info,
-            path: getCurrentPath(info, { schema: 'object', input, key, value }),
-          });
+          output[key] = objectEntry[1].parse(
+            value,
+            getPathInfo(
+              info,
+              getPath(info?.path, {
+                schema: 'object',
+                input,
+                key,
+                value,
+              })
+            )
+          );
 
           // Throw or fill issues in case of an error
         } catch (error) {

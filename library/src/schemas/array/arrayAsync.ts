@@ -8,8 +8,9 @@ import type {
 } from '../../types.ts';
 import {
   executePipeAsync,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 
@@ -108,15 +109,18 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
       await Promise.all(
         input.map(async (value, index) => {
           try {
-            output[index] = await item.parse(value, {
-              ...info,
-              path: getCurrentPath(info, {
-                schema: 'array',
-                input: input,
-                key: index,
-                value,
-              }),
-            });
+            output[index] = await item.parse(
+              value,
+              getPathInfo(
+                info,
+                getPath(info?.path, {
+                  schema: 'array',
+                  input: input,
+                  key: index,
+                  value,
+                })
+              )
+            );
 
             // Throw or fill issues in case of an error
           } catch (error) {

@@ -2,8 +2,9 @@ import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput } from './types.ts';
@@ -104,15 +105,18 @@ export function set<TSetValue extends BaseSchema>(
       for (const inputValue of input) {
         try {
           output.add(
-            value.parse(inputValue, {
-              ...info,
-              path: getCurrentPath(info, {
-                schema: 'set',
-                input,
-                key: index++,
-                value: inputValue,
-              }),
-            })
+            value.parse(
+              inputValue,
+              getPathInfo(
+                info,
+                getPath(info?.path, {
+                  schema: 'set',
+                  input,
+                  key: index++,
+                  value: inputValue,
+                })
+              )
+            )
           );
 
           // Throw or fill issues in case of an error

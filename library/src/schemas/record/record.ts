@@ -2,8 +2,9 @@ import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 import { type StringSchema, string } from '../string/index.ts';
@@ -174,7 +175,7 @@ export function record<
           const inputValue = inputEntry[1];
 
           // Get current path
-          const path = getCurrentPath(info, {
+          const path = getPath(info?.path, {
             schema: 'record',
             input,
             key: inputKey,
@@ -184,7 +185,7 @@ export function record<
           // Parse key and get output
           let outputKey: string | number | symbol | undefined;
           try {
-            outputKey = key.parse(inputKey, { ...info, origin: 'key', path });
+            outputKey = key.parse(inputKey, getPathInfo(info, path, 'key'));
 
             // Throw or fill issues in case of an error
           } catch (error) {
@@ -199,7 +200,7 @@ export function record<
           try {
             // Note: Value is nested in array, so that also a falsy value further
             // down can be recognized as valid value
-            outputValue = [value.parse(inputValue, { ...info, path })];
+            outputValue = [value.parse(inputValue, getPathInfo(info, path))];
 
             // Throw or fill issues in case of an error
           } catch (error) {

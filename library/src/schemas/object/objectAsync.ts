@@ -2,8 +2,9 @@ import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput } from './types.ts';
@@ -123,15 +124,18 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
           try {
             const key = objectEntry[0];
             const value = (input as Record<string, unknown>)[key];
-            output[key] = await objectEntry[1].parse(value, {
-              ...info,
-              path: getCurrentPath(info, {
-                schema: 'object',
-                input,
-                key,
-                value,
-              }),
-            });
+            output[key] = await objectEntry[1].parse(
+              value,
+              getPathInfo(
+                info,
+                getPath(info?.path, {
+                  schema: 'object',
+                  input,
+                  key,
+                  value,
+                })
+              )
+            );
 
             // Throw or fill issues in case of an error
           } catch (error) {

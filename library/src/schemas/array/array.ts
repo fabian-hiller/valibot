@@ -2,8 +2,9 @@ import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, Input, Output, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 
@@ -113,15 +114,18 @@ export function array<TArrayItem extends BaseSchema>(
         try {
           const value = input[index];
           output.push(
-            item.parse(value, {
-              ...info,
-              path: getCurrentPath(info, {
-                schema: 'array',
-                input: input,
-                key: index,
-                value,
-              }),
-            })
+            item.parse(
+              value,
+              getPathInfo(
+                info,
+                getPath(info?.path, {
+                  schema: 'array',
+                  input: input,
+                  key: index,
+                  value,
+                })
+              )
+            )
           );
 
           // Throw or fill issues in case of an error
