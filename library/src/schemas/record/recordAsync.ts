@@ -2,8 +2,9 @@ import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 import {
@@ -178,7 +179,7 @@ export function recordAsync<
           // Exclude blocked keys to prevent prototype pollutions
           if (!BLOCKED_KEYS.includes(inputKey)) {
             // Get current path
-            const path = getCurrentPath(info, {
+            const path = getPath(info?.path, {
               schema: 'record',
               input,
               key: inputKey,
@@ -189,11 +190,10 @@ export function recordAsync<
               // Parse key and get output
               (async () => {
                 try {
-                  return await key.parse(inputKey, {
-                    ...info,
-                    origin: 'key',
-                    path,
-                  });
+                  return await key.parse(
+                    inputKey,
+                    getPathInfo(info, path, 'key')
+                  );
 
                   // Throw or fill issues in case of an error
                 } catch (error) {
@@ -210,7 +210,7 @@ export function recordAsync<
                   // Note: Value is nested in array, so that also a falsy value further
                   // down can be recognized as valid value
                   return [
-                    await value.parse(inputValue, { ...info, path }),
+                    await value.parse(inputValue, getPathInfo(info, path)),
                   ] as const;
 
                   // Throw or fill issues in case of an error

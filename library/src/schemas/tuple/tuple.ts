@@ -2,8 +2,9 @@ import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 import type { TupleOutput, TupleInput } from './types.ts';
@@ -169,15 +170,18 @@ export function tuple<
       for (const [index, schema] of items.entries()) {
         try {
           const value = input[index];
-          output[index] = schema.parse(value, {
-            ...info,
-            path: getCurrentPath(info, {
-              schema: 'tuple',
-              input: input as [any, ...any[]],
-              key: index,
-              value,
-            }),
-          });
+          output[index] = schema.parse(
+            value,
+            getPathInfo(
+              info,
+              getPath(info?.path, {
+                schema: 'tuple',
+                input: input as [any, ...any[]],
+                key: index,
+                value,
+              })
+            )
+          );
 
           // Throw or fill issues in case of an error
         } catch (error) {
@@ -193,15 +197,18 @@ export function tuple<
         for (const [index, value] of input.slice(items.length).entries()) {
           try {
             const tupleIndex = items.length + index;
-            output[tupleIndex] = rest.parse(value, {
-              ...info,
-              path: getCurrentPath(info, {
-                schema: 'tuple',
-                input: input as [any, ...any[]],
-                key: tupleIndex,
-                value,
-              }),
-            });
+            output[tupleIndex] = rest.parse(
+              value,
+              getPathInfo(
+                info,
+                getPath(info?.path, {
+                  schema: 'tuple',
+                  input: input as [any, ...any[]],
+                  key: tupleIndex,
+                  value,
+                })
+              )
+            );
 
             // Throw or fill issues in case of an error
           } catch (error) {

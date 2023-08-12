@@ -2,8 +2,9 @@ import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, Output, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput } from './types.ts';
@@ -108,7 +109,7 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
       // Parse each key and value by schema
       for (const [inputKey, inputValue] of input.entries()) {
         // Get current path
-        const path = getCurrentPath(info, {
+        const path = getPath(info?.path, {
           schema: 'map',
           input,
           key: inputKey,
@@ -120,7 +121,7 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
         try {
           // Note: Output key is nested in array, so that also a falsy value
           // further down can be recognized as valid value
-          outputKey = [key.parse(inputKey, { ...info, origin: 'key', path })];
+          outputKey = [key.parse(inputKey, getPathInfo(info, path, 'key'))];
 
           // Throw or fill issues in case of an error
         } catch (error) {
@@ -135,7 +136,7 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
         try {
           // Note: Output value is nested in array, so that also a falsy value
           // further down can be recognized as valid value
-          outputValue = [value.parse(inputValue, { ...info, path })];
+          outputValue = [value.parse(inputValue, getPathInfo(info, path))];
 
           // Throw or fill issues in case of an error
         } catch (error) {

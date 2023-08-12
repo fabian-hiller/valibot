@@ -2,8 +2,9 @@ import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
-  getCurrentPath,
   getErrorAndPipe,
+  getPath,
+  getPathInfo,
   getPipeInfo,
 } from '../../utils/index.ts';
 import type { TupleInput, TupleOutput } from './types.ts';
@@ -174,15 +175,18 @@ export function tupleAsync<
           items.map(async (schema, index) => {
             try {
               const value = input[index];
-              output[index] = await schema.parse(value, {
-                ...info,
-                path: getCurrentPath(info, {
-                  schema: 'tuple',
-                  input: input as [any, ...any[]],
-                  key: index,
-                  value,
-                }),
-              });
+              output[index] = await schema.parse(
+                value,
+                getPathInfo(
+                  info,
+                  getPath(info?.path, {
+                    schema: 'tuple',
+                    input: input as [any, ...any[]],
+                    key: index,
+                    value,
+                  })
+                )
+              );
 
               // Throw or fill issues in case of an error
             } catch (error) {
@@ -200,15 +204,18 @@ export function tupleAsync<
             input.slice(items.length).map(async (value, index) => {
               try {
                 const tupleIndex = items.length + index;
-                output[tupleIndex] = await rest.parse(value, {
-                  ...info,
-                  path: getCurrentPath(info, {
-                    schema: 'tuple',
-                    input: input as [any, ...any[]],
-                    key: tupleIndex,
-                    value,
-                  }),
-                });
+                output[tupleIndex] = await rest.parse(
+                  value,
+                  getPathInfo(
+                    info,
+                    getPath(info?.path, {
+                      schema: 'tuple',
+                      input: input as [any, ...any[]],
+                      key: tupleIndex,
+                      value,
+                    })
+                  )
+                );
 
                 // Throw or fill issues in case of an error
               } catch (error) {

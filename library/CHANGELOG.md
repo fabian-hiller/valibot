@@ -5,6 +5,8 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add `getPipeInfo` util and refactor code for performance reasons (pull request #46)
+- Add `getPathInfo` util and refactor code for performance reasons (pull request #92)
+- Rename `getCurrentPath` util to `getPath` (pull request #92)
 
 ## v0.12.0 (August 11, 2023)
 
