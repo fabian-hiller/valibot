@@ -122,7 +122,11 @@ export function mapAsync<
 
       // Parse each key and value by schema
       await Promise.all(
-        Array.from(input.entries()).map(async ([inputKey, inputValue]) => {
+        Array.from(input.entries()).map(async (inputEntry) => {
+          // Get input key and value
+          const inputKey = inputEntry[0];
+          const inputValue = inputEntry[1];
+
           // Get current path
           const path = getPath(info?.path, {
             schema: 'map',

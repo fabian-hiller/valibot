@@ -107,7 +107,11 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
       const issues: Issue[] = [];
 
       // Parse each key and value by schema
-      for (const [inputKey, inputValue] of input.entries()) {
+      for (const inputEntry of input.entries()) {
+        // Get input key and value
+        const inputKey = inputEntry[0];
+        const inputValue = inputEntry[1];
+
         // Get current path
         const path = getPath(info?.path, {
           schema: 'map',

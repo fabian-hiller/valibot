@@ -175,9 +175,15 @@ export function recordAsync<
       // Parse each key and value by schema
       await Promise.all(
         // Note: `Object.entries(...)` converts each key to a string
-        Object.entries(input).map(async ([inputKey, inputValue]) => {
+        Object.entries(input).map(async (inputEntry) => {
+          // Get input key
+          const inputKey = inputEntry[0];
+
           // Exclude blocked keys to prevent prototype pollutions
           if (!BLOCKED_KEYS.includes(inputKey)) {
+            // Get input value
+            const inputValue = inputEntry[1];
+
             // Get current path
             const path = getPath(info?.path, {
               schema: 'record',
