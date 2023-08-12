@@ -4,6 +4,7 @@ import {
   executePipe,
   getCurrentPath,
   getErrorAndPipe,
+  getPipeInfo,
 } from '../../utils/index.ts';
 import type { TupleOutput, TupleInput } from './types.ts';
 
@@ -218,10 +219,11 @@ export function tuple<
       }
 
       // Execute pipe and return output
-      return executePipe(output as TupleOutput<TTupleItems, TTupleRest>, pipe, {
-        ...info,
-        reason: 'tuple',
-      });
+      return executePipe(
+        output as TupleOutput<TTupleItems, TTupleRest>,
+        pipe,
+        getPipeInfo(info, 'tuple')
+      );
     },
   };
 }

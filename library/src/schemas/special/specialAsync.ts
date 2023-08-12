@@ -1,6 +1,10 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
-import { executePipeAsync, getErrorAndPipe } from '../../utils/index.ts';
+import {
+  executePipeAsync,
+  getErrorAndPipe,
+  getPipeInfo,
+} from '../../utils/index.ts';
 
 /**
  * Special schema async type.
@@ -84,10 +88,11 @@ export function specialAsync<TInput>(
       }
 
       // Execute pipe and return output
-      return executePipeAsync(input as TInput, pipe, {
-        ...info,
-        reason: 'special',
-      });
+      return executePipeAsync(
+        input as TInput,
+        pipe,
+        getPipeInfo(info, 'special')
+      );
     },
   };
 }

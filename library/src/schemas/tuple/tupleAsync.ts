@@ -4,6 +4,7 @@ import {
   executePipeAsync,
   getCurrentPath,
   getErrorAndPipe,
+  getPipeInfo,
 } from '../../utils/index.ts';
 import type { TupleInput, TupleOutput } from './types.ts';
 
@@ -229,10 +230,7 @@ export function tupleAsync<
       return executePipeAsync(
         output as TupleOutput<TTupleItems, TTupleRest>,
         pipe,
-        {
-          ...info,
-          reason: 'tuple',
-        }
+        getPipeInfo(info, 'tuple')
       );
     },
   };

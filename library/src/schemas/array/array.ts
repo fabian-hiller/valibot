@@ -4,6 +4,7 @@ import {
   executePipe,
   getCurrentPath,
   getErrorAndPipe,
+  getPipeInfo,
 } from '../../utils/index.ts';
 
 /**
@@ -137,10 +138,11 @@ export function array<TArrayItem extends BaseSchema>(
       }
 
       // Execute pipe and return output
-      return executePipe(output as Output<TArrayItem>[], pipe, {
-        ...info,
-        reason: 'array',
-      });
+      return executePipe(
+        output as Output<TArrayItem>[],
+        pipe,
+        getPipeInfo(info, 'array')
+      );
     },
   };
 }
