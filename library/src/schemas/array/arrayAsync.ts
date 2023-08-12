@@ -10,6 +10,7 @@ import {
   executePipeAsync,
   getCurrentPath,
   getErrorAndPipe,
+  getPipeInfo,
 } from '../../utils/index.ts';
 
 /**
@@ -133,10 +134,11 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
       }
 
       // Execute pipe and return output
-      return executePipeAsync(output as Output<TArrayItem>[], pipe, {
-        ...info,
-        reason: 'array',
-      });
+      return executePipeAsync(
+        output as Output<TArrayItem>[],
+        pipe,
+        getPipeInfo(info, 'array')
+      );
     },
   };
 }

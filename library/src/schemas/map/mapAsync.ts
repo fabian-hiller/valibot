@@ -9,6 +9,7 @@ import {
   executePipeAsync,
   getCurrentPath,
   getErrorAndPipe,
+  getPipeInfo,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput } from './types.ts';
 
@@ -180,7 +181,7 @@ export function mapAsync<
       }
 
       // Execute pipe and return output
-      return executePipeAsync(output, pipe, { ...info, reason: 'map' });
+      return executePipeAsync(output, pipe, getPipeInfo(info, 'map'));
     },
   };
 }

@@ -1,6 +1,10 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
-import { executePipeAsync, getErrorAndPipe } from '../../utils/index.ts';
+import {
+  executePipeAsync,
+  getErrorAndPipe,
+  getPipeInfo,
+} from '../../utils/index.ts';
 
 /**
  * Number schema async type.
@@ -77,7 +81,7 @@ export function numberAsync(
       }
 
       // Execute pipe and return output
-      return executePipeAsync(input, pipe, { ...info, reason: 'number' });
+      return executePipeAsync(input, pipe, getPipeInfo(info, 'number'));
     },
   };
 }

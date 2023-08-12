@@ -1,6 +1,10 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe } from '../../utils/index.ts';
+import {
+  executePipe,
+  getErrorAndPipe,
+  getPipeInfo,
+} from '../../utils/index.ts';
 
 /**
  * Number schema type.
@@ -71,7 +75,7 @@ export function number(
       }
 
       // Execute pipe and return output
-      return executePipe(input, pipe, { ...info, reason: 'number' });
+      return executePipe(input, pipe, getPipeInfo(info, 'number'));
     },
   };
 }

@@ -4,6 +4,7 @@ import {
   executePipe,
   getCurrentPath,
   getErrorAndPipe,
+  getPipeInfo,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput } from './types.ts';
 
@@ -129,7 +130,7 @@ export function set<TSetValue extends BaseSchema>(
       }
 
       // Execute pipe and return output
-      return executePipe(output, pipe, { ...info, reason: 'set' });
+      return executePipe(output, pipe, getPipeInfo(info, 'set'));
     },
   };
 }

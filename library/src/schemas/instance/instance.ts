@@ -1,6 +1,10 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe } from '../../utils/index.ts';
+import {
+  executePipe,
+  getErrorAndPipe,
+  getPipeInfo,
+} from '../../utils/index.ts';
 
 /**
  * Class enum type.
@@ -95,10 +99,7 @@ export function instance<TClass extends Class>(
       }
 
       // Execute pipe and return output
-      return executePipe(input, pipe, {
-        ...info,
-        reason: 'instance',
-      });
+      return executePipe(input, pipe, getPipeInfo(info, 'instance'));
     },
   };
 }

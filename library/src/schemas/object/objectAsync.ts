@@ -4,6 +4,7 @@ import {
   executePipeAsync,
   getCurrentPath,
   getErrorAndPipe,
+  getPipeInfo,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput } from './types.ts';
 
@@ -141,10 +142,11 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
       }
 
       // Execute pipe and return output
-      return executePipeAsync(output as ObjectOutput<TObjectShape>, pipe, {
-        ...info,
-        reason: 'object',
-      });
+      return executePipeAsync(
+        output as ObjectOutput<TObjectShape>,
+        pipe,
+        getPipeInfo(info, 'object')
+      );
     },
   };
 }

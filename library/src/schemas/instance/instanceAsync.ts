@@ -1,6 +1,10 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
-import { executePipeAsync, getErrorAndPipe } from '../../utils/index.ts';
+import {
+  executePipeAsync,
+  getErrorAndPipe,
+  getPipeInfo,
+} from '../../utils/index.ts';
 import { type Class } from './instance.ts';
 
 /**
@@ -91,10 +95,7 @@ export function instanceAsync<TClass extends Class>(
       }
 
       // Execute pipe and return output
-      return executePipeAsync(input, pipe, {
-        ...info,
-        reason: 'instance',
-      });
+      return executePipeAsync(input, pipe, getPipeInfo(info, 'instance'));
     },
   };
 }
