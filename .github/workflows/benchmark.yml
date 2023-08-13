@@ -1,0 +1,96 @@
+name: Perfomance changes
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Get after commit sha
+        id: after_commit_sha
+        run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+
+      - name: Run Vitest after benchmark
+        run: cd ./library && pnpm bench --run --reporter json --outputFile /tmp/after.json
+
+      - name: Checkout main branche
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Get before commit sha
+        id: before_commit_sha
+        run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+
+      - name: Run Vitest before benchmark
+        run: cd ./library && pnpm bench --run --reporter json --outputFile /tmp/before.json
+
+      - name: Get current job log URL
+        uses: Tiryoh/gha-jobid-action@v0
+        id: job-url
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          job_name: '${{ github.job }}'
+
+      - name: Compare results and format message
+        id: compare
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const { generateMessage } = await import(
+              './library/src/benchmark/compare-and-format.mjs'
+            );
+            const fs = await import('node:fs/promises');
+            const before = JSON.parse(await fs.readFile('/tmp/before.json', 'utf-8'));
+            const after = JSON.parse(await fs.readFile('/tmp/after.json', 'utf-8'));
+
+            return generateMessage(before, after, {
+              beforeSha: '${{steps.before_commit_sha.outputs.sha}}',
+              afterSha: '${{steps.after_commit_sha.outputs.sha}}',
+              beforeBenchStepLink: '${{steps.job-url.outputs.html_url}}#step:11:1',
+              afterBenchStepLink: '${{steps.job-url.outputs.html_url}}#step:8:1',
+              repoLink: '${{github.server_url}}/${{ github.repository }}',
+            });
+
+      - name: Leave sticky comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: Performance changes
+          message: ${{ steps.compare.outputs.result }}
