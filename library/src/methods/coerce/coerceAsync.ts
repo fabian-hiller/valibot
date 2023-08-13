@@ -23,8 +23,8 @@ export function coerceAsync<TSchema extends BaseSchemaAsync>(
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
-      return schema.parse(await action(input), info);
+    async _parse(input, info) {
+      return schema._parse(await action(input), info);
     },
   };
 }

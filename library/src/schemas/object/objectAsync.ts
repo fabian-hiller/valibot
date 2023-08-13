@@ -1,9 +1,12 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
-  getCurrentPath,
   getErrorAndPipe,
+  getIssue,
+  getPath,
+  getPathInfo,
+  getPipeInfo,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput } from './types.ts';
 
@@ -62,6 +65,9 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   // Get error and pipe argument
   const { error, pipe } = getErrorAndPipe(arg2, arg3);
 
+  // Create cached entries
+  let cachedEntries: [string, BaseSchema<any> | BaseSchemaAsync<any>][];
+
   // Create and return async object schema
   return {
     /**
@@ -87,64 +93,89 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Check type of input
       if (
         !input ||
         typeof input !== 'object' ||
         input.toString() !== '[object Object]'
       ) {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'object',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'object',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Create output and issues
+      // Cache object entries lazy
+      cachedEntries = cachedEntries || Object.entries(object);
+
+      // Create issues and output
+      let issues: Issues | undefined;
       const output: Record<string, any> = {};
-      const issues: Issue[] = [];
 
       // Parse schema of each key
       await Promise.all(
-        Object.entries(object).map(async ([key, schema]) => {
-          try {
+        cachedEntries.map(async (objectEntry) => {
+          // If not aborted early, continue execution
+          if (!(info?.abortEarly && issues)) {
+            // Get key and value
+            const key = objectEntry[0];
             const value = (input as Record<string, unknown>)[key];
-            output[key] = await schema.parse(value, {
-              ...info,
-              path: getCurrentPath(info, {
-                schema: 'object',
-                input,
-                key,
-                value,
-              }),
-            });
 
-            // Throw or fill issues in case of an error
-          } catch (error) {
-            if (info?.abortEarly) {
-              throw error;
+            // Get parse result of value
+            const result = await objectEntry[1]._parse(
+              value,
+              getPathInfo(
+                info,
+                getPath(info?.path, {
+                  schema: 'object',
+                  input,
+                  key,
+                  value,
+                })
+              )
+            );
+
+            // If not aborted early, continue execution
+            if (!(info?.abortEarly && issues)) {
+              // If there are issues, capture them
+              if (result.issues) {
+                if (issues) {
+                  for (const issue of result.issues) {
+                    issues.push(issue);
+                  }
+                } else {
+                  issues = result.issues;
+                }
+
+                // If necessary, abort early
+                if (info?.abortEarly) {
+                  throw null;
+                }
+
+                // Otherwise, add value to object
+              } else {
+                output[key] = result.output;
+              }
             }
-            issues.push(...(error as ValiError).issues);
           }
         })
-      );
+      ).catch(() => null);
 
-      // Throw error if there are issues
-      if (issues.length) {
-        throw new ValiError(issues as Issues);
-      }
-
-      // Execute pipe and return output
-      return executePipeAsync(output as ObjectOutput<TObjectShape>, pipe, {
-        ...info,
-        reason: 'object',
-      });
+      // Return issues or pipe result
+      return issues
+        ? { issues }
+        : executePipeAsync(
+            output as ObjectOutput<TObjectShape>,
+            pipe,
+            getPipeInfo(info, 'object')
+          );
     },
   };
 }

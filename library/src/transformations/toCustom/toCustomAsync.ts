@@ -1,3 +1,5 @@
+import type { ParseResult } from '../../types.ts';
+
 /**
  * Creates a async custom transformation function.
  *
@@ -8,5 +10,7 @@
 export function toCustomAsync<TInput>(
   action: (input: TInput) => TInput | Promise<TInput>
 ) {
-  return (input: TInput) => action(input);
+  return async (input: TInput): Promise<ParseResult<TInput>> => ({
+    output: await action(input),
+  });
 }

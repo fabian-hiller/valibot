@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { comparable } from '../../comparable.ts';
 import { object, objectAsync, string } from '../../schemas/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { parseAsync } from '../parse/index.ts';
 import { pickAsync } from './pickAsync.ts';
 
@@ -38,13 +39,13 @@ describe('pickAsync', () => {
       pickAsync(
         object({ key1: string(), key2: string() }),
         ['key1'],
-        [transformInput]
+        [toCustom(transformInput)]
       ),
       input
     );
     const output2 = await parseAsync(
       pickAsync(object({ key1: string(), key2: string() }), ['key1'], 'Error', [
-        transformInput,
+        toCustom(transformInput),
       ]),
       input
     );

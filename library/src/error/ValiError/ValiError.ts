@@ -23,12 +23,17 @@ export type IssueReason =
   | 'instance';
 
 /**
+ * Issue origin type.
+ */
+export type IssueOrigin = 'key' | 'value';
+
+/**
  * Issue type.
  */
 export type Issue = {
   reason: IssueReason;
   validation: string;
-  origin: 'key' | 'value';
+  origin: IssueOrigin;
   message: string;
   input: any;
   path?: PathItem[];

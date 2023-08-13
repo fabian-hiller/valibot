@@ -7,26 +7,26 @@ describe('isoTime', () => {
   test('should pass only ISO times', () => {
     const validate = isoTime();
     const value1 = '19:34';
-    expect(validate(value1, info)).toBe(value1);
+    expect(validate(value1, info)).toEqual({ output: value1 });
     const value2 = '00:00';
-    expect(validate(value2, info)).toBe(value2);
+    expect(validate(value2, info)).toEqual({ output: value2 });
     const value3 = '23:59';
-    expect(validate(value3, info)).toBe(value3);
+    expect(validate(value3, info)).toEqual({ output: value3 });
 
-    expect(() => validate('', info)).toThrowError();
-    expect(() => validate('1:34', info)).toThrowError();
-    expect(() => validate('24:00', info)).toThrowError();
-    expect(() => validate('01:60', info)).toThrowError();
-    expect(() => validate('99:99', info)).toThrowError();
-    expect(() => validate('0:00', info)).toThrowError();
-    expect(() => validate('00:0', info)).toThrowError();
-    expect(() => validate('000:00', info)).toThrowError();
-    expect(() => validate('00:000', info)).toThrowError();
+    expect(validate('', info).issues?.length).toBe(1);
+    expect(validate('1:34', info).issues?.length).toBe(1);
+    expect(validate('24:00', info).issues?.length).toBe(1);
+    expect(validate('01:60', info).issues?.length).toBe(1);
+    expect(validate('99:99', info).issues?.length).toBe(1);
+    expect(validate('0:00', info).issues?.length).toBe(1);
+    expect(validate('00:0', info).issues?.length).toBe(1);
+    expect(validate('000:00', info).issues?.length).toBe(1);
+    expect(validate('00:000', info).issues?.length).toBe(1);
   });
 
-  test('should throw custom error', () => {
+  test('should return custom error message', () => {
     const error = 'Value is not an ISO time!';
     const validate = isoTime(error);
-    expect(() => validate('test', info)).toThrowError(error);
+    expect(validate('test', info).issues?.[0].message).toBe(error);
   });
 });

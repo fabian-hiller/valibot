@@ -7,24 +7,24 @@ describe('isoDate', () => {
   test('should pass only ISO dates', () => {
     const validate = isoDate();
     const value1 = '2023-07-11';
-    expect(validate(value1, info)).toBe(value1);
+    expect(validate(value1, info)).toEqual({ output: value1 });
     const value2 = '0000-01-01';
-    expect(validate(value2, info)).toBe(value2);
+    expect(validate(value2, info)).toEqual({ output: value2 });
     const value3 = '9999-12-31';
-    expect(validate(value3, info)).toBe(value3);
+    expect(validate(value3, info)).toEqual({ output: value3 });
 
-    expect(() => validate('', info)).toThrowError();
-    expect(() => validate('2023-7-11', info)).toThrowError();
-    expect(() => validate('23-07-11', info)).toThrowError();
-    expect(() => validate('0000-00-00', info)).toThrowError();
-    expect(() => validate('2023-13-32', info)).toThrowError();
-    // FIXME: expect(() => validate('2023-06-31', info)).toThrowError();
-    expect(() => validate('12345-01-01', info)).toThrowError();
+    expect(validate('', info).issues?.length).toBe(1);
+    expect(validate('2023-7-11', info).issues?.length).toBe(1);
+    expect(validate('23-07-11', info).issues?.length).toBe(1);
+    expect(validate('0000-00-00', info).issues?.length).toBe(1);
+    expect(validate('2023-13-32', info).issues?.length).toBe(1);
+    // FIXME: expect(validate('2023-06-31', info).issues?.length).toBe(1);
+    expect(validate('12345-01-01', info).issues?.length).toBe(1);
   });
 
-  test('should throw custom error', () => {
+  test('should return custom error message', () => {
     const error = 'Value is not an ISO date!';
     const validate = isoDate(error);
-    expect(() => validate('test', info)).toThrowError(error);
+    expect(validate('test', info).issues?.[0].message).toBe(error);
   });
 });

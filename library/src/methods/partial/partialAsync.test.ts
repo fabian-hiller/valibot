@@ -6,6 +6,7 @@ import {
   optionalAsync,
   string,
 } from '../../schemas/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { parseAsync } from '../parse/index.ts';
 import { partialAsync } from './partialAsync.ts';
 
@@ -38,13 +39,15 @@ describe('partialAsync', () => {
 
   test('should execute pipe', async () => {
     const input = {};
-    const transformInput = () => ({ key1: '1' });
+    const transformInput = (): { key1?: string } => ({ key1: '1' });
     const output1 = await parseAsync(
-      partialAsync(object({ key1: string() }), [transformInput]),
+      partialAsync(object({ key1: string() }), [toCustom(transformInput)]),
       input
     );
     const output2 = await parseAsync(
-      partialAsync(object({ key1: string() }), 'Error', [transformInput]),
+      partialAsync(object({ key1: string() }), 'Error', [
+        toCustom(transformInput),
+      ]),
       input
     );
     expect(output1).toEqual(transformInput());

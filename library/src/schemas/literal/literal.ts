@@ -1,5 +1,5 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Literal schema type.
@@ -48,23 +48,23 @@ export function literal<TLiteral extends string | number>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (input !== literal) {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'literal',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'literal',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Return output
-      return input as TLiteral;
+      // Return input as output
+      return { output: input as TLiteral };
     },
   };
 }

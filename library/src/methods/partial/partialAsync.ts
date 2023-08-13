@@ -7,7 +7,7 @@ import {
   optionalAsync,
   type OptionalSchemaAsync,
 } from '../../schemas/index.ts';
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, PipeAsync } from '../../types.ts';
 import { getErrorAndPipe } from '../../utils/index.ts';
 
 /**
@@ -30,7 +30,7 @@ export function partialAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
 >(
   schema: TObjectSchema,
-  pipe?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>>
+  pipe?: PipeAsync<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Partial<TObjectSchema['object']>>;
 
 /**
@@ -48,20 +48,21 @@ export function partialAsync<
 >(
   schema: TObjectSchema,
   error?: string,
-  pipe?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>>
+  pipe?: PipeAsync<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Partial<TObjectSchema['object']>>;
 
 export function partialAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
 >(
   schema: TObjectSchema,
-  arg3?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>> | string,
-  arg4?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>>
+  arg3?: PipeAsync<ObjectOutput<Partial<TObjectSchema['object']>>> | string,
+  arg4?: PipeAsync<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Partial<TObjectSchema['object']>> {
   // Get error and pipe argument
   const { error, pipe } = getErrorAndPipe(arg3, arg4);
 
   // Create and return object schema
+  // @ts-ignore FIXME: Remove line once bug in TS is fixed
   return objectAsync(
     Object.entries(schema.object).reduce(
       (object, [key, schema]) => ({
@@ -71,6 +72,7 @@ export function partialAsync<
       {}
     ) as Partial<TObjectSchema['object']>,
     error,
+    // @ts-ignore FIXME: Remove line once bug in TS is fixed
     pipe
   );
 }

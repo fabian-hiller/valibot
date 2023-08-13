@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { number } from '../number/index.ts';
 import { string, stringAsync } from '../string/index.ts';
 import { objectAsync } from './objectAsync.ts';
@@ -50,12 +51,14 @@ describe('objectAsync', () => {
     const input = { key1: '1', key2: 1 };
     const transformInput = () => ({ key1: '2', key2: 2 });
     const output1 = await parseAsync(
-      objectAsync({ key1: string(), key2: number() }, [transformInput]),
+      objectAsync({ key1: string(), key2: number() }, [
+        toCustom(transformInput),
+      ]),
       input
     );
     const output2 = await parseAsync(
       objectAsync({ key1: string(), key2: number() }, 'Error', [
-        transformInput,
+        toCustom(transformInput),
       ]),
       input
     );

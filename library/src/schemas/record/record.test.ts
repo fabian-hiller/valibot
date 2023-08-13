@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { minLength } from '../../validations/index.ts';
 import { any } from '../any/index.ts';
 import { number } from '../number/index.ts';
@@ -39,13 +40,22 @@ describe('record', () => {
   });
 
   test('should throw every issue', () => {
-    const schema = record(number());
-    const input = { 1: '1', 2: 2, 3: '3' };
-    expect(() => parse(schema, input)).toThrowError();
+    const schema1 = record(number());
+    const input1 = { 1: '1', 2: 2, 3: '3', 4: '4' };
+    expect(() => parse(schema1, input1)).toThrowError();
     try {
-      parse(schema, input);
+      parse(schema1, input1);
     } catch (error) {
-      expect((error as ValiError).issues.length).toBe(2);
+      expect((error as ValiError).issues.length).toBe(3);
+    }
+
+    const schema2 = record(string([minLength(2)]), number());
+    const input2 = { '1': '1', 2: 2, 3: '3' };
+    expect(() => parse(schema2, input2)).toThrowError();
+    try {
+      parse(schema2, input2);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(5);
     }
   });
 
@@ -75,12 +85,18 @@ describe('record', () => {
 
   test('should execute pipe', () => {
     const input = { key1: 1, key2: 1 };
-    const transformInput = () => ({ key1: 2, key2: 2 });
-    const output1 = parse(record(number(), [transformInput]), input);
-    const output2 = parse(record(string(), number(), [transformInput]), input);
-    const output3 = parse(record(number(), 'Error', [transformInput]), input);
+    const transformInput = (): Record<string, number> => ({ key1: 2, key2: 2 });
+    const output1 = parse(record(number(), [toCustom(transformInput)]), input);
+    const output2 = parse(
+      record(string(), number(), [toCustom(transformInput)]),
+      input
+    );
+    const output3 = parse(
+      record(number(), 'Error', [toCustom(transformInput)]),
+      input
+    );
     const output4 = parse(
-      record(string(), number(), 'Error', [transformInput]),
+      record(string(), number(), 'Error', [toCustom(transformInput)]),
       input
     );
     expect(output1).toEqual(transformInput());

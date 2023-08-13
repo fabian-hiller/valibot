@@ -1,5 +1,5 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Void schema type.
@@ -35,23 +35,23 @@ export function voidType(error?: string): VoidSchema {
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (typeof input !== 'undefined') {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'void',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'void',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Return output
-      return input;
+      // Return input as output
+      return { output: input };
     },
   };
 }

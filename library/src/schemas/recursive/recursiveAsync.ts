@@ -50,8 +50,8 @@ export function recursiveAsync<
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
-      return getter().parse(input, info);
+    async _parse(input, info) {
+      return getter()._parse(input, info);
     },
   };
 }

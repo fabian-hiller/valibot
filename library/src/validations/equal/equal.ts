@@ -1,5 +1,5 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that checks the value for equality.
@@ -13,18 +13,18 @@ export function equal<
   TInput extends string | number | bigint | boolean,
   TRequirement extends TInput
 >(requirement: TRequirement, error?: string) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (input !== requirement) {
-      throw new ValiError([
-        {
-          validation: 'equal',
-          origin: 'value',
-          message: error || 'Invalid input',
-          input,
-          ...info,
-        },
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'equal',
+            message: error || 'Invalid input',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

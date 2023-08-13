@@ -1,15 +1,15 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 export function includes<TInput extends string>(
   requirement: string,
   error?: string
-): (input: TInput, info: ValidateInfo) => TInput;
+): (input: TInput, info: ValidateInfo) => ParseResult<TInput>;
 
 export function includes<TInput extends TItem[], TItem>(
   requirement: TItem,
   error?: string
-): (input: TInput, info: ValidateInfo) => TInput;
+): (input: TInput, info: ValidateInfo) => ParseResult<TInput>;
 
 /**
  * Creates a validation functions that validates the content of a string or array.
@@ -23,18 +23,18 @@ export function includes<TInput extends string | TItem[], TItem>(
   requirement: string | TItem,
   error?: string
 ) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (!input.includes(requirement as any)) {
-      throw new ValiError([
-        {
-          validation: 'includes',
-          origin: 'value',
-          message: error || 'Invalid content',
-          input,
-          ...info,
-        },
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'includes',
+            message: error || 'Invalid content',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

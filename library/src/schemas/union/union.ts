@@ -1,5 +1,6 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Input, Output } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Union options type.
@@ -57,42 +58,48 @@ export function union<TUnionOptions extends UnionOptions>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
-      // Create output and issues
+    _parse(input, info) {
+      // Create issues and output
+      let issues: Issues | undefined;
       let output: [Output<TUnionOptions[number]>] | undefined;
-      const issues: Issue[] = [];
 
       // Parse schema of each option
       for (const schema of union) {
-        try {
+        const result = schema._parse(input, info);
+
+        // If there are issues, capture them
+        if (result.issues) {
+          if (issues) {
+            for (const issue of result.issues) {
+              issues.push(issue);
+            }
+          } else {
+            issues = result.issues;
+          }
+
+          // Otherwise, set output and break loop
+        } else {
           // Note: Output is nested in array, so that also a falsy value
           // further down can be recognized as valid value
-          output = [schema.parse(input, info)];
+          output = [result.output];
           break;
-
-          // Fill issues in case of an error
-        } catch (error) {
-          issues.push(...(error as ValiError).issues);
         }
       }
 
-      // Throw error if every schema failed
-      if (!output) {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'union',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            issues: issues as Issues,
-            ...info,
-          },
-        ]);
-      }
-
-      // Otherwise return parsed output
-      return output[0];
+      // Return input as output or issues
+      return output
+        ? { output: output[0] }
+        : {
+            issues: [
+              getIssue(info, {
+                reason: 'type',
+                validation: 'union',
+                message: error || 'Invalid type',
+                input,
+                issues,
+              }),
+            ],
+          };
     },
   };
 }

@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { comparable } from '../../comparable.ts';
 import { number, object, string } from '../../schemas/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { merge } from '../merge/index.ts';
 import { parse } from '../parse/index.ts';
 
@@ -47,13 +48,13 @@ describe('merge', () => {
     const output1 = parse(
       merge(
         [object({ key1: string() }), object({ key2: number() })],
-        [transformInput]
+        [toCustom(transformInput)]
       ),
       input
     );
     const output2 = parse(
       merge([object({ key1: string() }), object({ key2: number() })], 'Error', [
-        transformInput,
+        toCustom(transformInput),
       ]),
       input
     );

@@ -1,5 +1,5 @@
-import { ValiError } from '../../error/index.ts';
 import type { ObjectSchema } from '../../schemas/object/index.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a strict object schema that throws an error if an input contains
@@ -25,26 +25,23 @@ export function strict<TSchema extends ObjectSchema<any>>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
-      // Get output of object schema
-      const output = schema.parse(input);
-
-      // Check length of input and output keys
-      if (Object.keys(input as object).length !== Object.keys(output).length) {
-        throw new ValiError([
-          {
-            reason: 'object',
-            validation: 'strict',
-            origin: 'value',
-            message: error || 'Invalid keys',
-            input,
-            ...info,
-          },
-        ]);
-      }
-
-      // Return output of object schema
-      return output;
+    _parse(input, info) {
+      const result = schema._parse(input, info);
+      return !result.issues &&
+        // Check length of input and output keys
+        Object.keys(input as object).length !==
+          Object.keys(result.output).length
+        ? {
+            issues: [
+              getIssue(info, {
+                reason: 'object',
+                validation: 'strict',
+                message: error || 'Invalid keys',
+                input,
+              }),
+            ],
+          }
+        : result;
     },
   };
 }

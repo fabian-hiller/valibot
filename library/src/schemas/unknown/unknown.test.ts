@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { unknown } from './unknown.ts';
 
 describe('unknown', () => {
@@ -17,8 +18,8 @@ describe('unknown', () => {
   });
 
   test('should execute pipe', () => {
-    const transformInput = () => 'hello';
-    const output = parse(unknown([transformInput]), 123);
+    const transformInput = (): unknown => 'hello';
+    const output = parse(unknown([toCustom(transformInput)]), 123);
     expect(output).toBe(transformInput());
   });
 });

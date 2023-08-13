@@ -1,9 +1,12 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Output, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getCurrentPath,
   getErrorAndPipe,
+  getIssue,
+  getPath,
+  getPathInfo,
+  getPipeInfo,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput } from './types.ts';
 
@@ -85,78 +88,87 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'map',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'map',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Create output and issues
+      // Create issues and output
+      let issues: Issues | undefined;
       const output: Map<Output<TMapKey>, Output<TMapValue>> = new Map();
-      const issues: Issue[] = [];
 
       // Parse each key and value by schema
-      for (const [inputKey, inputValue] of input.entries()) {
+      for (const inputEntry of input.entries()) {
+        // Get input key and value
+        const inputKey = inputEntry[0];
+        const inputValue = inputEntry[1];
+
         // Get current path
-        const path = getCurrentPath(info, {
+        const path = getPath(info?.path, {
           schema: 'map',
           input,
           key: inputKey,
           value: inputValue,
         });
 
-        // Parse key and get output
-        let outputKey: [any] | undefined;
-        try {
-          // Note: Output key is nested in array, so that also a falsy value
-          // further down can be recognized as valid value
-          outputKey = [key.parse(inputKey, { ...info, origin: 'key', path })];
+        // Get parse result of key
+        const keyResult = key._parse(inputKey, getPathInfo(info, path, 'key'));
 
-          // Throw or fill issues in case of an error
-        } catch (error) {
-          if (info?.abortEarly) {
-            throw error;
+        // If there are issues, capture them
+        if (keyResult.issues) {
+          if (issues) {
+            for (const issue of keyResult.issues) {
+              issues.push(issue);
+            }
+          } else {
+            issues = keyResult.issues;
           }
-          issues.push(...(error as ValiError).issues);
+
+          // If necessary, abort early
+          if (info?.abortEarly) {
+            break;
+          }
         }
 
-        // Parse value and get output
-        let outputValue: [any] | undefined;
-        try {
-          // Note: Output value is nested in array, so that also a falsy value
-          // further down can be recognized as valid value
-          outputValue = [value.parse(inputValue, { ...info, path })];
+        // Get parse result of value
+        const valueResult = value._parse(inputValue, getPathInfo(info, path));
 
-          // Throw or fill issues in case of an error
-        } catch (error) {
-          if (info?.abortEarly) {
-            throw error;
+        // If there are issues, capture them
+        if (valueResult.issues) {
+          if (issues) {
+            for (const issue of valueResult.issues) {
+              issues.push(issue);
+            }
+          } else {
+            issues = valueResult.issues;
           }
-          issues.push(...(error as ValiError).issues);
+
+          // If necessary, abort early
+          if (info?.abortEarly) {
+            break;
+          }
         }
 
-        // Set entry if output key and value is valid
-        if (outputKey && outputValue) {
-          output.set(outputKey[0], outputValue[0]);
+        // Set entry if there are no issues
+        if (!keyResult.issues && !valueResult.issues) {
+          output.set(keyResult.output, valueResult.output);
         }
       }
 
-      // Throw error if there are issues
-      if (issues.length) {
-        throw new ValiError(issues as Issues);
-      }
-
-      // Execute pipe and return output
-      return executePipe(output, pipe, { ...info, reason: 'map' });
+      // Return issues or pipe result
+      return issues
+        ? { issues }
+        : executePipe(output, pipe, getPipeInfo(info, 'map'));
     },
   };
 }

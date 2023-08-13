@@ -4,6 +4,6 @@ import { toTrimmed } from './toTrimmed.ts';
 describe('toTrimmed', () => {
   test('should transform to trimmed', () => {
     const transform = toTrimmed();
-    expect(transform(' test    ')).toBe('test');
+    expect(transform(' test    ')).toEqual({ output: 'test' });
   });
 });

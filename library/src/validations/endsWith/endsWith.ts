@@ -1,5 +1,5 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the end of a string.
@@ -13,18 +13,18 @@ export function endsWith<TInput extends string>(
   requirement: string,
   error?: string
 ) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (!input.endsWith(requirement as any)) {
-      throw new ValiError([
-        {
-          validation: 'ends_with',
-          origin: 'value',
-          message: error || 'Invalid end',
-          input,
-          ...info,
-        },
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'ends_with',
+            message: error || 'Invalid end',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

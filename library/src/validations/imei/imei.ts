@@ -1,6 +1,5 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
-import { isLuhnAlgo } from '../../utils/index.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
+import { getIssue, isLuhnAlgo } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a IMEI.
@@ -12,21 +11,21 @@ import { isLuhnAlgo } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function imei<TInput extends string>(error?: string) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (
       !/^\d{2}[ |/|-]?\d{6}[ |/|-]?\d{6}[ |/|-]?\d$/.test(input) ||
       !isLuhnAlgo(input)
     ) {
-      throw new ValiError([
-        {
-          validation: 'imei',
-          origin: 'value',
-          message: error || 'Invalid IMEI',
-          input,
-          ...info,
-        },
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'imei',
+            message: error || 'Invalid IMEI',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

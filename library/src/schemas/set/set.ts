@@ -1,9 +1,12 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getCurrentPath,
   getErrorAndPipe,
+  getIssue,
+  getPath,
+  getPathInfo,
+  getPipeInfo,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput } from './types.ts';
 
@@ -79,57 +82,66 @@ export function set<TSetValue extends BaseSchema>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (!(input instanceof Set)) {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'set',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'set',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
       // Create index, output and issues
       let index = 0;
+      let issues: Issues | undefined;
       const output: SetOutput<TSetValue> = new Set();
-      const issues: Issue[] = [];
 
       // Parse each value by schema
       for (const inputValue of input) {
-        try {
-          output.add(
-            value.parse(inputValue, {
-              ...info,
-              path: getCurrentPath(info, {
-                schema: 'set',
-                input,
-                key: index++,
-                value: inputValue,
-              }),
+        const result = value._parse(
+          inputValue,
+          getPathInfo(
+            info,
+            getPath(info?.path, {
+              schema: 'set',
+              input,
+              key: index++,
+              value: inputValue,
             })
-          );
+          )
+        );
 
-          // Throw or fill issues in case of an error
-        } catch (error) {
-          if (info?.abortEarly) {
-            throw error;
+        // If there are issues, capture them
+        if (result.issues) {
+          if (issues) {
+            for (const issue of result.issues) {
+              issues.push(issue);
+            }
+          } else {
+            issues = result.issues;
           }
-          issues.push(...(error as ValiError).issues);
+
+          // If necessary, abort early
+          if (info?.abortEarly) {
+            break;
+          }
+
+          // Otherwise, add item to set
+        } else {
+          output.add(result.output);
         }
       }
 
-      // Throw error if there are issues
-      if (issues.length) {
-        throw new ValiError(issues as Issues);
-      }
-
-      // Execute pipe and return output
-      return executePipe(output, pipe, { ...info, reason: 'set' });
+      // Return issues or pipe result
+      return issues
+        ? { issues }
+        : executePipe(output, pipe, getPipeInfo(info, 'set'));
     },
   };
 }

@@ -1,3 +1,4 @@
+import { ValiError } from '../../error/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
@@ -19,5 +20,9 @@ export async function parseAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
   input: unknown,
   info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly'>
 ): Promise<Output<TSchema>> {
-  return schema.parse(input, info);
+  const result = await schema._parse(input, info);
+  if (result.issues) {
+    throw new ValiError(result.issues);
+  }
+  return result.output;
 }

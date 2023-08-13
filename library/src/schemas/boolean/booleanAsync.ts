@@ -1,6 +1,10 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
-import { executePipeAsync, getErrorAndPipe } from '../../utils/index.ts';
+import {
+  executePipeAsync,
+  getErrorAndPipe,
+  getIssue,
+  getPipeInfo,
+} from '../../utils/index.ts';
 
 /**
  * Boolean schema async type.
@@ -61,23 +65,23 @@ export function booleanAsync(
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'boolean') {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'boolean',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'boolean',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Execute pipe and return output
-      return executePipeAsync(input, pipe, { ...info, reason: 'boolean' });
+      // Execute pipe and return result
+      return executePipeAsync(input, pipe, getPipeInfo(info, 'boolean'));
     },
   };
 }

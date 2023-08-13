@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { number } from '../number/index.ts';
 import { string } from '../string/index.ts';
 import { object } from './object.ts';
@@ -50,11 +51,13 @@ describe('object', () => {
     const input = { key1: '1', key2: 1 };
     const transformInput = () => ({ key1: '2', key2: 2 });
     const output1 = parse(
-      object({ key1: string(), key2: number() }, [transformInput]),
+      object({ key1: string(), key2: number() }, [toCustom(transformInput)]),
       input
     );
     const output2 = parse(
-      object({ key1: string(), key2: number() }, 'Error', [transformInput]),
+      object({ key1: string(), key2: number() }, 'Error', [
+        toCustom(transformInput),
+      ]),
       input
     );
     expect(output1).toEqual(transformInput());

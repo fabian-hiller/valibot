@@ -6,13 +6,13 @@ describe('custom', () => {
 
   test('should validate by custom function', () => {
     const validate = custom<number>((input) => input > 0);
-    expect(validate(1, info)).toBe(1);
-    expect(() => validate(-1, info)).toThrowError();
+    expect(validate(1, info)).toEqual({ output: 1 });
+    expect(validate(-1, info).issues?.length).toBe(1);
   });
 
-  test('should throw custom error', () => {
+  test('should return custom error message', () => {
     const error = 'Value is not greater than 1!';
     const validate = custom<number>((input) => input > 0, error);
-    expect(() => validate(-1, info)).toThrowError(error);
+    expect(validate(-1, info).issues?.[0].message).toBe(error);
   });
 });

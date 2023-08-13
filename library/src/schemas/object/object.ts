@@ -1,9 +1,12 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getCurrentPath,
   getErrorAndPipe,
+  getIssue,
+  getPath,
+  getPathInfo,
+  getPipeInfo,
 } from '../../utils/index.ts';
 import type { ObjectOutput, ObjectInput } from './types.ts';
 
@@ -59,6 +62,9 @@ export function object<TObjectShape extends ObjectShape>(
   // Get error and pipe argument
   const { error, pipe } = getErrorAndPipe(arg2, arg3);
 
+  // Create cached entries
+  let cachedEntries: [string, BaseSchema<any>][];
+
   // Create and return object schema
   return {
     /**
@@ -84,57 +90,81 @@ export function object<TObjectShape extends ObjectShape>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (
         !input ||
         typeof input !== 'object' ||
         input.toString() !== '[object Object]'
       ) {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'object',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'object',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Create output and issues
+      // Cache object entries lazy
+      cachedEntries = cachedEntries || Object.entries(object);
+
+      // Create issues and output
+      let issues: Issues | undefined;
       const output: Record<string, any> = {};
-      const issues: Issue[] = [];
 
       // Parse schema of each key
-      for (const [key, schema] of Object.entries(object)) {
-        try {
-          const value = (input as Record<string, unknown>)[key];
-          output[key] = schema.parse(value, {
-            ...info,
-            path: getCurrentPath(info, { schema: 'object', input, key, value }),
-          });
+      for (const objectEntry of cachedEntries) {
+        // Get key and value
+        const key = objectEntry[0];
+        const value = (input as Record<string, unknown>)[key];
 
-          // Throw or fill issues in case of an error
-        } catch (error) {
-          if (info?.abortEarly) {
-            throw error;
+        // Get parse result of value
+        const result = objectEntry[1]._parse(
+          value,
+          getPathInfo(
+            info,
+            getPath(info?.path, {
+              schema: 'object',
+              input,
+              key,
+              value,
+            })
+          )
+        );
+
+        // If there are issues, capture them
+        if (result.issues) {
+          if (issues) {
+            for (const issue of result.issues) {
+              issues.push(issue);
+            }
+          } else {
+            issues = result.issues;
           }
-          issues.push(...(error as ValiError).issues);
+
+          // If necessary, abort early
+          if (info?.abortEarly) {
+            break;
+          }
+
+          // Otherwise, add value to object
+        } else {
+          output[key] = result.output;
         }
       }
 
-      // Throw error if there are issues
-      if (issues.length) {
-        throw new ValiError(issues as Issues);
-      }
-
-      // Execute pipe and return output
-      return executePipe(output as ObjectOutput<TObjectShape>, pipe, {
-        ...info,
-        reason: 'object',
-      });
+      // Return issues or pipe result
+      return issues
+        ? { issues }
+        : executePipe(
+            output as ObjectOutput<TObjectShape>,
+            pipe,
+            getPipeInfo(info, 'object')
+          );
     },
   };
 }
