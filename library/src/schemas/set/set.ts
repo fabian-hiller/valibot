@@ -3,6 +3,7 @@ import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
+  getIssue,
   getPath,
   getPathInfo,
   getPipeInfo,
@@ -85,14 +86,12 @@ export function set<TSetValue extends BaseSchema>(
       // Check type of input
       if (!(input instanceof Set)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'set',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

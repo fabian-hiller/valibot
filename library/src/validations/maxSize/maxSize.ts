@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the size of a map, set or blob.
@@ -16,13 +17,11 @@ export function maxSize<TInput extends Map<any, any> | Set<any> | Blob>(
   return (input: TInput, info: ValidateInfo) => {
     if (input.size > requirement) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'max_size',
-          origin: 'value',
           message: error || 'Invalid size',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

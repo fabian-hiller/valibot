@@ -3,6 +3,7 @@ import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
+  getIssue,
   getPath,
   getPathInfo,
   getPipeInfo,
@@ -85,14 +86,12 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
       // Check type of input
       if (!(input instanceof Set)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'set',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

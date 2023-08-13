@@ -3,6 +3,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
+  getIssue,
   getPipeInfo,
 } from '../../utils/index.ts';
 
@@ -69,14 +70,12 @@ export function booleanAsync(
       // Check type of input
       if (typeof input !== 'boolean') {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'boolean',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

@@ -3,6 +3,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
+  getIssue,
   getPipeInfo,
 } from '../../utils/index.ts';
 
@@ -66,14 +67,12 @@ export function blobAsync(
       // Check type of input
       if (!(input instanceof Blob)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'blob',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

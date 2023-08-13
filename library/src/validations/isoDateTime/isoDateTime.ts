@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a datetime.
@@ -22,13 +23,11 @@ export function isoDateTime<TInput extends string>(error?: string) {
       )
     ) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'iso_date_time',
-          origin: 'value',
           message: error || 'Invalid datetime',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

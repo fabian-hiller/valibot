@@ -3,6 +3,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
+  getIssue,
   getPipeInfo,
 } from '../../utils/index.ts';
 
@@ -66,14 +67,12 @@ export function dateAsync(
       // Check type of input
       if (!(input instanceof Date)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'date',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

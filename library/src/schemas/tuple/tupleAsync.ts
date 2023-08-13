@@ -3,6 +3,7 @@ import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
+  getIssue,
   getPath,
   getPathInfo,
   getPipeInfo,
@@ -154,14 +155,12 @@ export function tupleAsync<
         (rest && items.length > input.length)
       ) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'tuple',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

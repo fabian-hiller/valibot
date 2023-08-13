@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates whether a number is an integer.
@@ -12,13 +13,11 @@ export function integer<TInput extends number>(error?: string) {
   return (input: TInput, info: ValidateInfo) => {
     if (!Number.isInteger(input)) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'integer',
-          origin: 'value',
           message: error || 'Invalid integer',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

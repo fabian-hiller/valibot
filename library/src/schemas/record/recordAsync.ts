@@ -3,6 +3,7 @@ import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
+  getIssue,
   getPath,
   getPathInfo,
   getPipeInfo,
@@ -157,14 +158,12 @@ export function recordAsync<
         input.toString() !== '[object Object]'
       ) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'record',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

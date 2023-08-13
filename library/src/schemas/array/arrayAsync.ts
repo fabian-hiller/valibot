@@ -9,6 +9,7 @@ import type {
 import {
   executePipeAsync,
   getErrorAndPipe,
+  getIssue,
   getPath,
   getPathInfo,
   getPipeInfo,
@@ -90,14 +91,12 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
       // Check type of input
       if (!Array.isArray(input)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'array',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

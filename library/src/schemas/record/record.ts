@@ -3,6 +3,7 @@ import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
+  getIssue,
   getPath,
   getPathInfo,
   getPipeInfo,
@@ -148,14 +149,12 @@ export function record<
         input.toString() !== '[object Object]'
       ) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'record',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

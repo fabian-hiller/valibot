@@ -1,6 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
-import { isLuhnAlgo } from '../../utils/index.ts';
+import { getIssue, isLuhnAlgo } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a IMEI.
@@ -18,13 +18,11 @@ export function imei<TInput extends string>(error?: string) {
       !isLuhnAlgo(input)
     ) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'imei',
-          origin: 'value',
           message: error || 'Invalid IMEI',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

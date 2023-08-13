@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Input, Output } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Non optional type.
@@ -57,14 +58,12 @@ export function nonOptional<TWrappedSchema extends BaseSchema>(
       // Allow `undefined` values not to pass
       if (input === undefined) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'non_optional',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

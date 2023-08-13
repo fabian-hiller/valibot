@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the byte length of a string.
@@ -16,13 +17,11 @@ export function maxBytes<TInput extends string>(
   return (input: TInput, info: ValidateInfo) => {
     if (new TextEncoder().encode(input).length > requirement) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'max_bytes',
-          origin: 'value',
           message: error || 'Invalid byte length',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

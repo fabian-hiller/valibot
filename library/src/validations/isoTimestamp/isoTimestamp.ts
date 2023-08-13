@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a timestamp.
@@ -22,13 +23,11 @@ export function isoTimestamp<TInput extends string>(error?: string) {
       )
     ) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'iso_timestamp',
-          origin: 'value',
           message: error || 'Invalid timestamp',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

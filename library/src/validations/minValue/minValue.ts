@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the value of a string, number or date.
@@ -16,13 +17,12 @@ export function minValue<
   return (input: TInput, info: ValidateInfo) => {
     if (input < requirement) {
       throw new ValiError([
-        {
+        getIssue(info, {
+          reason: info.reason,
           validation: 'min_value',
-          origin: 'value',
           message: error || 'Invalid value',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

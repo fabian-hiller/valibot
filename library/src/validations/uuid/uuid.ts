@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a UUID.
@@ -16,13 +17,11 @@ export function uuid<TInput extends string>(error?: string) {
       )
     ) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'uuid',
-          origin: 'value',
           message: error || 'Invalid UUID',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

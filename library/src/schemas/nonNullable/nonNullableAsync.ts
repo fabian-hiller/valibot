@@ -5,6 +5,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 import type { NonNullable } from './nonNullable.ts';
 
 /**
@@ -60,14 +61,12 @@ export function nonNullableAsync<
       // Allow `null` values not to pass
       if (input === null) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'non_nullable',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

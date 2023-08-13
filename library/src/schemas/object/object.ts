@@ -3,6 +3,7 @@ import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
+  getIssue,
   getPath,
   getPathInfo,
   getPipeInfo,
@@ -97,14 +98,12 @@ export function object<TObjectShape extends ObjectShape>(
         input.toString() !== '[object Object]'
       ) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'object',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

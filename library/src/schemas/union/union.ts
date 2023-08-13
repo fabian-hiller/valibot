@@ -1,5 +1,6 @@
 import { type Issue, type Issues, ValiError } from '../../error/index.ts';
 import type { BaseSchema, Input, Output } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Union options type.
@@ -79,15 +80,13 @@ export function union<TUnionOptions extends UnionOptions>(
       // Throw error if every schema failed
       if (!output) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'union',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
             issues: issues as Issues,
-            ...info,
-          },
+          }),
         ]);
       }
 
