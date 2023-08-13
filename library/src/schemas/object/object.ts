@@ -59,6 +59,9 @@ export function object<TObjectShape extends ObjectShape>(
   // Get error and pipe argument
   const { error, pipe } = getErrorAndPipe(arg2, arg3);
 
+  // Cache object keys for better .parse() performance
+  const objectKeys = Object.keys(object);
+
   // Create and return object schema
   return {
     /**
@@ -108,7 +111,8 @@ export function object<TObjectShape extends ObjectShape>(
       const issues: Issue[] = [];
 
       // Parse schema of each key
-      Object.entries(object).forEach(([key, schema]) => {
+      objectKeys.forEach((key) => {
+        const schema = object[key];
         try {
           const value = (input as Record<string, unknown>)[key];
           output[key] = schema.parse(value, {

@@ -62,6 +62,9 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   // Get error and pipe argument
   const { error, pipe } = getErrorAndPipe(arg2, arg3);
 
+  // Cache object keys for better .parse() performance
+  const objectKeys = Object.keys(object);
+
   // Create and return async object schema
   return {
     /**
@@ -112,7 +115,8 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
 
       // Parse schema of each key
       await Promise.all(
-        Object.entries(object).map(async ([key, schema]) => {
+        objectKeys.map(async (key) => {
+          const schema = object[key];
           try {
             const value = (input as Record<string, unknown>)[key];
             output[key] = await schema.parse(value, {
