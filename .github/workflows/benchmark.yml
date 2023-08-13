@@ -49,7 +49,7 @@ jobs:
       - name: Run Vitest after benchmark
         run: cd ./library && pnpm bench --run --reporter json --outputFile /tmp/after.json
 
-      - name: Checkout main branche
+      - name: Checkout main branch
         uses: actions/checkout@v3
         with:
           ref: main
