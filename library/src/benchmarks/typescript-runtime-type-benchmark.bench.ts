@@ -57,7 +57,7 @@ describe('sort', () => {
     );
   });
 
-  describe('abortPipeEarly', () => {
+  bench('abortPipeEarly', () => {
     parse(
       dataType,
       {
