@@ -24,7 +24,7 @@ export function generateMessage(before, after, config) {
   const beforeRefLink = `${config.repoLink}/commit/${config.beforeSha}`;
   const afterRefLink = `${config.repoLink}/commit/${config.afterSha}`;
 
-  return `Measured performance chages between [${config.beforeSha}](${beforeRefLink}) and [${config.afterSha}](${afterRefLink}).
+  return `Measured performance changes between [${config.beforeSha}](${beforeRefLink}) and [${config.afterSha}](${afterRefLink}).
 <details>
 <summary>Show table</summary>
 
