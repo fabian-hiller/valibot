@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Native enum type.
@@ -60,14 +61,12 @@ export function nativeEnum<TNativeEnum extends NativeEnum>(
       // Check type of input
       if (!Object.values(nativeEnum).includes(input as any)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'native_enum',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Input, Output } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Non nullable type.
@@ -57,14 +58,12 @@ export function nonNullable<TWrappedSchema extends BaseSchema>(
       // Allow `null` values not to pass
       if (input === null) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'non_nullable',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Undefined schema async type.
@@ -42,14 +43,12 @@ export function undefinedTypeAsync(error?: string): UndefinedSchemaAsync {
       // Check type of input
       if (typeof input !== 'undefined') {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'undefined',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

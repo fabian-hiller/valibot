@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that checks the value for equality.
@@ -16,13 +17,11 @@ export function equal<
   return (input: TInput, info: ValidateInfo) => {
     if (input !== requirement) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'equal',
-          origin: 'value',
           message: error || 'Invalid input',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

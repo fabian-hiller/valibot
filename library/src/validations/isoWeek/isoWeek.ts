@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a week.
@@ -18,13 +19,11 @@ export function isoWeek<TInput extends string>(error?: string) {
   return (input: TInput, info: ValidateInfo) => {
     if (!/^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$/.test(input)) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'iso_week',
-          origin: 'value',
           message: error || 'Invalid week',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

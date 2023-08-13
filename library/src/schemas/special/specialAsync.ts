@@ -3,6 +3,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
+  getIssue,
   getPipeInfo,
 } from '../../utils/index.ts';
 
@@ -76,14 +77,12 @@ export function specialAsync<TInput>(
       // Check type of input
       if (!(await check(input))) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'special',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

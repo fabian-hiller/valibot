@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates whether a number is a multiple.
@@ -16,13 +17,11 @@ export function multipleOf<TInput extends number>(
   return (input: TInput, info: ValidateInfo) => {
     if (input % requirement !== 0) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'multipleOf',
-          origin: 'value',
           message: error || 'Invalid multiple',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

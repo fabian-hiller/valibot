@@ -3,6 +3,7 @@ import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
+  getIssue,
   getPipeInfo,
 } from '../../utils/index.ts';
 
@@ -63,14 +64,12 @@ export function date(
       // Check type of input
       if (!(input instanceof Date)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'date',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

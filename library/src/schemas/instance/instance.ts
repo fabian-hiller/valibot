@@ -3,6 +3,7 @@ import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
+  getIssue,
   getPipeInfo,
 } from '../../utils/index.ts';
 
@@ -87,14 +88,12 @@ export function instance<TClass extends Class>(
       // Check type of input
       if (!(input instanceof of)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'instance',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

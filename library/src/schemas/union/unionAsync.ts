@@ -5,6 +5,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Union options async type.
@@ -84,15 +85,13 @@ export function unionAsync<TUnionOptions extends UnionOptionsAsync>(
       // Throw error if every schema failed
       if (!output) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'union',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
             issues: issues as Issues,
-            ...info,
-          },
+          }),
         ]);
       }
 

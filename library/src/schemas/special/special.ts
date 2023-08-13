@@ -3,6 +3,7 @@ import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
+  getIssue,
   getPipeInfo,
 } from '../../utils/index.ts';
 
@@ -76,14 +77,12 @@ export function special<TInput>(
       // Check type of input
       if (!check(input)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'special',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

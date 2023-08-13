@@ -3,6 +3,7 @@ import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
+  getIssue,
   getPath,
   getPathInfo,
   getPipeInfo,
@@ -151,14 +152,12 @@ export function tuple<
         (rest && items.length > input.length)
       ) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'tuple',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

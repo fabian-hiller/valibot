@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 import type { Enum } from './types.ts';
 
 /**
@@ -53,14 +54,12 @@ export function enumType<TOption extends string, TEnum extends Enum<TOption>>(
       // Check type of input
       if (!enumValue.includes(input as any)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'enum',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

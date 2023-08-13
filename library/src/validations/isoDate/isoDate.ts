@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a date.
@@ -18,13 +19,11 @@ export function isoDate<TInput extends string>(error?: string) {
   return (input: TInput, info: ValidateInfo) => {
     if (!/^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])$/.test(input)) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'iso_date',
-          origin: 'value',
           message: error || 'Invalid date',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

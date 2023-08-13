@@ -3,6 +3,7 @@ import type { BaseSchema, Input, Output, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
+  getIssue,
   getPath,
   getPathInfo,
   getPipeInfo,
@@ -94,14 +95,12 @@ export function array<TArrayItem extends BaseSchema>(
       // Check type of input
       if (!Array.isArray(input)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'array',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

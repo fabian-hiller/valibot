@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Never schema async type.
@@ -37,14 +38,12 @@ export function neverAsync(error?: string): NeverSchemaAsync {
      */
     async parse(input, info) {
       throw new ValiError([
-        {
+        getIssue(info, {
           reason: 'type',
           validation: 'never',
-          origin: 'value',
           message: error || 'Invalid type',
           input,
-          ...info,
-        },
+        }),
       ]);
     },
   };

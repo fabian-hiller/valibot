@@ -3,6 +3,7 @@ import type { BaseSchema, Output, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
+  getIssue,
   getPath,
   getPathInfo,
   getPipeInfo,
@@ -91,14 +92,12 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
       // Check type of input
       if (!(input instanceof Map)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'map',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

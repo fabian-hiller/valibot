@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a async custom validation function.
@@ -16,13 +17,11 @@ export function customAsync<TInput>(
   return async (input: TInput, info: ValidateInfo) => {
     if (!(await requirement(input))) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'custom',
-          origin: 'value',
           message: error || 'Invalid input',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

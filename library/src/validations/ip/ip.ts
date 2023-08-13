@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a IP v4 or v6 address.
@@ -17,13 +18,11 @@ export function ip<TInput extends string>(error?: string) {
       )
     ) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'ip',
-          origin: 'value',
           message: error || 'Invalid IP',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

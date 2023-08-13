@@ -3,6 +3,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
+  getIssue,
   getPipeInfo,
 } from '../../utils/index.ts';
 
@@ -69,14 +70,12 @@ export function bigintAsync(
       // Check type of input
       if (typeof input !== 'bigint') {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'bigint',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

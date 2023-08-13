@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a email.
@@ -18,13 +19,11 @@ export function email<TInput extends string>(error?: string) {
       )
     ) {
       throw new ValiError([
-        {
+        getIssue(info, {
           validation: 'email',
-          origin: 'value',
           message: error || 'Invalid email',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

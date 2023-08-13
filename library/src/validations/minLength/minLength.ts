@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the length of a string or array.
@@ -16,13 +17,12 @@ export function minLength<TInput extends string | any[]>(
   return (input: TInput, info: ValidateInfo) => {
     if (input.length < requirement) {
       throw new ValiError([
-        {
+        getIssue(info, {
+          reason: info.reason,
           validation: 'min_length',
-          origin: 'value',
           message: error || 'Invalid length',
           input,
-          ...info,
-        },
+        }),
       ]);
     }
     return input;

@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * NaN schema type.
@@ -39,14 +40,12 @@ export function nan(error?: string): NanSchema {
       // Check type of input
       if (!Number.isNaN(input)) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'nan',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

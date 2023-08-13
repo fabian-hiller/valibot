@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Null schema type.
@@ -39,14 +40,12 @@ export function nullType(error?: string): NullSchema {
       // Check type of input
       if (input !== null) {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'null',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 

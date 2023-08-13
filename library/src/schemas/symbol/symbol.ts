@@ -1,5 +1,6 @@
 import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Symbol schema type.
@@ -39,14 +40,12 @@ export function symbol(error?: string): SymbolSchema {
       // Check type of input
       if (typeof input !== 'symbol') {
         throw new ValiError([
-          {
+          getIssue(info, {
             reason: 'type',
             validation: 'symbol',
-            origin: 'value',
             message: error || 'Invalid type',
             input,
-            ...info,
-          },
+          }),
         ]);
       }
 
