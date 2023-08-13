@@ -1,4 +1,4 @@
-import type { ValiError } from '../../error/index.ts';
+import { type Issues, ValiError } from '../../error/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
@@ -23,17 +23,21 @@ export async function safeParseAsync<
   info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly'>
 ): Promise<
   | { success: true; data: Output<TSchema> }
-  | { success: false; error: ValiError }
+  | {
+      success: false;
+      /**
+       * @deprecated Please use `.issues` instead.
+       */
+      error: ValiError;
+      issues: Issues;
+    }
 > {
-  try {
-    return {
-      success: true,
-      data: await schema.parse(input, info),
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: error as ValiError,
-    };
-  }
+  const result = await schema._parse(input, info);
+  return result.issues
+    ? {
+        success: false,
+        error: new ValiError(result.issues),
+        issues: result.issues,
+      }
+    : { success: true, data: result.output };
 }

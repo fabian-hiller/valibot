@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { getErrorAndPipe } from './getErrorAndPipe.ts';
+import { toCustom } from '../../transformations/index.ts';
 
 describe('getErrorAndPipe', () => {
   test('should return error and pipe', () => {
@@ -19,7 +20,13 @@ describe('getErrorAndPipe', () => {
       error: 'Error',
       pipe: [],
     });
-    expect(getErrorAndPipe(undefined, [() => 1, () => 2]).pipe.length).toBe(2);
-    expect(getErrorAndPipe('Error', [() => 1, () => 2]).pipe.length).toBe(2);
+    expect(
+      getErrorAndPipe(undefined, [toCustom(() => 1), toCustom(() => 2)]).pipe
+        .length
+    ).toBe(2);
+    expect(
+      getErrorAndPipe('Error', [toCustom(() => 1), toCustom(() => 2)]).pipe
+        .length
+    ).toBe(2);
   });
 });

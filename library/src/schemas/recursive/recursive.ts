@@ -45,8 +45,8 @@ export function recursive<TSchemaGetter extends () => BaseSchema>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
-      return getter().parse(input, info);
+    _parse(input, info) {
+      return getter()._parse(input, info);
     },
   };
 }

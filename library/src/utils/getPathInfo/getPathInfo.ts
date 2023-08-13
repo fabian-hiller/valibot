@@ -14,7 +14,7 @@ export function getPathInfo(
   path: PathItem[],
   origin: IssueOrigin = 'value'
 ): ParseInfo {
-  // Hint: The path info is deliberately not constructed with the spread
+  // Note: The path info is deliberately not constructed with the spread
   // operator for performance reasons
   return {
     origin,

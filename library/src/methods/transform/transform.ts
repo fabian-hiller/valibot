@@ -224,8 +224,9 @@ export function transform<TSchema extends BaseSchema, TOutput>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
-      return action(schema.parse(input, info));
+    _parse(input, info) {
+      const result = schema._parse(input, info);
+      return result.issues ? result : { output: action(result.output) };
     },
   };
 }

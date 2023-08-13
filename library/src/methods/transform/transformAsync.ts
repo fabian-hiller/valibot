@@ -364,8 +364,9 @@ export function transformAsync<
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
-      return action(await schema.parse(input, info));
+    async _parse(input, info) {
+      const result = await schema._parse(input, info);
+      return result.issues ? result : { output: await action(result.output) };
     },
   };
 }

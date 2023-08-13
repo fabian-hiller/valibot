@@ -1,5 +1,4 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -12,20 +11,22 @@ import { getIssue } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function email<TInput extends string>(error?: string) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (
       !/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i.test(
         input
       )
     ) {
-      throw new ValiError([
-        getIssue(info, {
-          validation: 'email',
-          message: error || 'Invalid email',
-          input,
-        }),
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'email',
+            message: error || 'Invalid email',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

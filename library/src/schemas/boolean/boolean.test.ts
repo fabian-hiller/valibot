@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { boolean } from './boolean.ts';
 
 describe('boolean', () => {
@@ -23,9 +24,9 @@ describe('boolean', () => {
 
   test('should execute pipe', () => {
     const transformInput = () => false;
-    const output1 = parse(boolean([transformInput]), true);
+    const output1 = parse(boolean([toCustom(transformInput)]), true);
     expect(output1).toBe(transformInput());
-    const output2 = parse(boolean('Error', [transformInput]), true);
+    const output2 = parse(boolean('Error', [toCustom(transformInput)]), true);
     expect(output2).toBe(transformInput());
   });
 });

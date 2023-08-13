@@ -1,4 +1,3 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Input, Output } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
@@ -54,21 +53,23 @@ export function nonNullish<TWrappedSchema extends BaseSchema>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Allow `null` and `undefined` values not to pass
       if (input === null || input === undefined) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'non_nullish',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'non_nullish',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Parse wrapped schema and return output
-      return wrapped.parse(input, info);
+      // Return result of wrapped schema
+      return wrapped._parse(input, info);
     },
   };
 }

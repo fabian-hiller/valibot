@@ -7,6 +7,7 @@ import {
   optionalAsync,
   string,
 } from '../../schemas/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { parseAsync } from '../parse/index.ts';
 import { requiredAsync } from './requiredAsync.ts';
 
@@ -42,11 +43,13 @@ describe('requiredAsync', () => {
     const input = { key1: '1' };
     const transformInput = () => ({ key1: '2' });
     const output1 = await parseAsync(
-      requiredAsync(object({ key1: string() }), [transformInput]),
+      requiredAsync(object({ key1: string() }), [toCustom(transformInput)]),
       input
     );
     const output2 = await parseAsync(
-      requiredAsync(object({ key1: string() }), 'Error', [transformInput]),
+      requiredAsync(object({ key1: string() }), 'Error', [
+        toCustom(transformInput),
+      ]),
       input
     );
     expect(output1).toEqual(transformInput());

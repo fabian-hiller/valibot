@@ -1,4 +1,4 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Input, Output, Pipe } from '../../types.ts';
 import {
   executePipe,
@@ -91,62 +91,70 @@ export function array<TArrayItem extends BaseSchema>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'array',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'array',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Create output and issues
+      // Create issues and output
+      let issues: Issues | undefined;
       const output: any[] = [];
-      const issues: Issue[] = [];
 
       // Parse schema of each array item
       for (let index = 0; index < input.length; index++) {
-        try {
-          const value = input[index];
-          output.push(
-            item.parse(
+        const value = input[index];
+        const result = item._parse(
+          value,
+          getPathInfo(
+            info,
+            getPath(info?.path, {
+              schema: 'array',
+              input: input,
+              key: index,
               value,
-              getPathInfo(
-                info,
-                getPath(info?.path, {
-                  schema: 'array',
-                  input: input,
-                  key: index,
-                  value,
-                })
-              )
-            )
-          );
+            })
+          )
+        );
 
-          // Throw or fill issues in case of an error
-        } catch (error) {
-          if (info?.abortEarly) {
-            throw error;
+        // If there are issues, capture them
+        if (result.issues) {
+          if (issues) {
+            for (const issue of result.issues) {
+              issues.push(issue);
+            }
+          } else {
+            issues = result.issues;
           }
-          issues.push(...(error as ValiError).issues);
+
+          // If necessary, abort early
+          if (info?.abortEarly) {
+            break;
+          }
+
+          // Otherwise, add item to array
+        } else {
+          output.push(result.output);
         }
       }
 
-      // Throw error if there are issues
-      if (issues.length) {
-        throw new ValiError(issues as Issues);
-      }
-
-      // Execute pipe and return output
-      return executePipe(
-        output as Output<TArrayItem>[],
-        pipe,
-        getPipeInfo(info, 'array')
-      );
+      // Return issues or pipe result
+      return issues
+        ? { issues }
+        : executePipe(
+            output as Output<TArrayItem>[],
+            pipe,
+            getPipeInfo(info, 'array')
+          );
     },
   };
 }

@@ -13,10 +13,5 @@ export function is<TSchema extends BaseSchema>(
   schema: TSchema,
   input: unknown
 ): input is Input<TSchema> {
-  try {
-    schema.parse(input, { abortEarly: true });
-    return true;
-  } catch (error) {
-    return false;
-  }
+  return !schema._parse(input, { abortEarly: true }).issues;
 }

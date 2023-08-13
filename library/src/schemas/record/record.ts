@@ -1,4 +1,4 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
@@ -141,26 +141,28 @@ export function record<
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (
         !input ||
         typeof input !== 'object' ||
         input.toString() !== '[object Object]'
       ) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'record',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'record',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Create output and issues
+      // Create issues and output
+      let issues: Issues | undefined;
       const output: Record<string | number | symbol, any> = {};
-      const issues: Issue[] = [];
 
       // Parse each key and value by schema
       // Note: `Object.entries(...)` converts each key to a string
@@ -181,52 +183,62 @@ export function record<
             value: inputValue,
           });
 
-          // Parse key and get output
-          let outputKey: string | number | symbol | undefined;
-          try {
-            outputKey = key.parse(inputKey, getPathInfo(info, path, 'key'));
+          // Get parse result of key
+          const keyResult = key._parse(
+            inputKey,
+            getPathInfo(info, path, 'key')
+          );
 
-            // Throw or fill issues in case of an error
-          } catch (error) {
-            if (info?.abortEarly) {
-              throw error;
+          // If there are issues, capture them
+          if (keyResult.issues) {
+            if (issues) {
+              for (const issue of keyResult.issues) {
+                issues.push(issue);
+              }
+            } else {
+              issues = keyResult.issues;
             }
-            issues.push(...(error as ValiError).issues);
+
+            // If necessary, abort early
+            if (info?.abortEarly) {
+              break;
+            }
           }
 
-          // Parse value and get output
-          let outputValue: [any] | undefined;
-          try {
-            // Note: Value is nested in array, so that also a falsy value further
-            // down can be recognized as valid value
-            outputValue = [value.parse(inputValue, getPathInfo(info, path))];
+          // Get parse result of value
+          const valueResult = value._parse(inputValue, getPathInfo(info, path));
 
-            // Throw or fill issues in case of an error
-          } catch (error) {
-            if (info?.abortEarly) {
-              throw error;
+          // If there are issues, capture them
+          if (valueResult.issues) {
+            if (issues) {
+              for (const issue of valueResult.issues) {
+                issues.push(issue);
+              }
+            } else {
+              issues = valueResult.issues;
             }
-            issues.push(...(error as ValiError).issues);
+
+            // If necessary, abort early
+            if (info?.abortEarly) {
+              break;
+            }
           }
 
-          // Set entry if output key and value is valid
-          if (outputKey && outputValue) {
-            output[outputKey] = outputValue[0];
+          // Set entry if there are no issues
+          if (!keyResult.issues && !valueResult.issues) {
+            output[keyResult.output] = valueResult.output;
           }
         }
       }
 
-      // Throw error if there are issues
-      if (issues.length) {
-        throw new ValiError(issues as Issues);
-      }
-
-      // Execute pipe and return output
-      return executePipe(
-        output as RecordOutput<TRecordKey, TRecordValue>,
-        pipe,
-        getPipeInfo(info, 'record')
-      );
+      // Return issues or pipe result
+      return issues
+        ? { issues }
+        : executePipe(
+            output as RecordOutput<TRecordKey, TRecordValue>,
+            pipe,
+            getPipeInfo(info, 'record')
+          );
     },
   };
 }

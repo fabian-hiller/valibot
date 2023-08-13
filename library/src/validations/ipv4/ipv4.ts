@@ -1,5 +1,4 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -10,16 +9,18 @@ import { getIssue } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function ipv4<TInput extends string>(error?: string) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (!/^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/.test(input)) {
-      throw new ValiError([
-        getIssue(info, {
-          validation: 'ipv4',
-          message: error || 'Invalid IP v4',
-          input,
-        }),
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'ipv4',
+            message: error || 'Invalid IP v4',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

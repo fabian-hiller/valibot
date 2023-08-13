@@ -1,5 +1,4 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -14,16 +13,18 @@ export function regex<TInput extends string>(
   requirement: RegExp,
   error?: string
 ) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (!requirement.test(input)) {
-      throw new ValiError([
-        getIssue(info, {
-          validation: 'regex',
-          message: error || 'Invalid regex',
-          input,
-        }),
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'regex',
+            message: error || 'Invalid regex',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

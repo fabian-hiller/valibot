@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { minLength } from '../../validations/index.ts';
 import { any } from '../any/index.ts';
 import { number } from '../number/index.ts';
@@ -45,13 +46,22 @@ describe('recordAsync', () => {
   });
 
   test('should throw every issue', async () => {
-    const schema = recordAsync(number());
-    const input = { 1: '1', 2: 2, 3: '3' };
-    await expect(parseAsync(schema, input)).rejects.toThrowError();
+    const schema1 = recordAsync(number());
+    const input1 = { 1: '1', 2: 2, 3: '3', 4: '4' };
+    await expect(parseAsync(schema1, input1)).rejects.toThrowError();
     try {
-      await parseAsync(schema, input);
+      await parseAsync(schema1, input1);
     } catch (error) {
-      expect((error as ValiError).issues.length).toBe(2);
+      expect((error as ValiError).issues.length).toBe(3);
+    }
+
+    const schema2 = recordAsync(string([minLength(2)]), number());
+    const input2 = { '1': '1', 2: 2, 3: '3' };
+    await expect(parseAsync(schema2, input2)).rejects.toThrowError();
+    try {
+      await parseAsync(schema2, input2);
+    } catch (error) {
+      expect((error as ValiError).issues.length).toBe(5);
     }
   });
 
@@ -81,21 +91,21 @@ describe('recordAsync', () => {
 
   test('should execute pipe', async () => {
     const input = { key1: 1, key2: 1 };
-    const transformInput = () => ({ key1: 2, key2: 2 });
+    const transformInput = (): Record<string, number> => ({ key1: 2, key2: 2 });
     const output1 = await parseAsync(
-      recordAsync(number(), [transformInput]),
+      recordAsync(number(), [toCustom(transformInput)]),
       input
     );
     const output2 = await parseAsync(
-      recordAsync(string(), number(), [transformInput]),
+      recordAsync(string(), number(), [toCustom(transformInput)]),
       input
     );
     const output3 = await parseAsync(
-      recordAsync(number(), 'Error', [transformInput]),
+      recordAsync(number(), 'Error', [toCustom(transformInput)]),
       input
     );
     const output4 = await parseAsync(
-      recordAsync(string(), number(), 'Error', [transformInput]),
+      recordAsync(string(), number(), 'Error', [toCustom(transformInput)]),
       input
     );
     expect(output1).toEqual(transformInput());

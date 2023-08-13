@@ -1,4 +1,4 @@
-import type { Pipe } from '../../types.ts';
+import type { Pipe, PipeAsync } from '../../types.ts';
 
 /**
  * Returns error and pipe from dynamic arguments.
@@ -8,7 +8,7 @@ import type { Pipe } from '../../types.ts';
  *
  * @returns The error and pipe.
  */
-export function getErrorAndPipe<TPipe extends Pipe<any>>(
+export function getErrorAndPipe<TPipe extends Pipe<any> | PipeAsync<any>>(
   arg1?: string | TPipe,
   arg2?: TPipe
 ): { error: string | undefined; pipe: TPipe } {

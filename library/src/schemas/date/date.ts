@@ -1,4 +1,3 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
@@ -60,20 +59,22 @@ export function date(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (!(input instanceof Date)) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'date',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'date',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Execute pipe and return output
+      // Execute pipe and return result
       return executePipe(input, pipe, getPipeInfo(info, 'date'));
     },
   };

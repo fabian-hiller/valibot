@@ -9,7 +9,7 @@ import type { PathItem } from '../../types.ts';
  * @returns The current path.
  */
 export function getPath(prevPath: PathItem[] | undefined, pathItem: PathItem) {
-  // Hint: Array is copied with for loop instead of spread operator for
+  // Note: Array is copied with for loop instead of spread operator for
   // performance reasons
   const path: PathItem[] = [];
   if (prevPath) {

@@ -19,4 +19,9 @@ describe('transformAsync', () => {
     const output = await parseAsync(schema, input);
     expect(output).toEqual({ ...input, key2: 'test' });
   });
+
+  test('should return issues', async () => {
+    const schema = transformAsync(string(), (output) => output.length);
+    await expect(parseAsync(schema, 123)).rejects.toThrowError();
+  });
 });

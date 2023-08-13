@@ -1,5 +1,4 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -10,20 +9,22 @@ import { getIssue } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function uuid<TInput extends string>(error?: string) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (
       !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
         input
       )
     ) {
-      throw new ValiError([
-        getIssue(info, {
-          validation: 'uuid',
-          message: error || 'Invalid UUID',
-          input,
-        }),
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'uuid',
+            message: error || 'Invalid UUID',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

@@ -50,14 +50,14 @@ export function nullishAsync<
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Allow `null` or `undefined` values to pass
       if (input === null || input === undefined) {
-        return input;
+        return { output: input };
       }
 
-      // Parse wrapped schema and return output
-      return wrapped.parse(input, info);
+      // Return result of wrapped schema
+      return wrapped._parse(input, info);
     },
   };
 }

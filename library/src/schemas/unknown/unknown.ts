@@ -35,7 +35,7 @@ export function unknown(pipe: Pipe<unknown> = []): UnknownSchema {
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       return executePipe(input, pipe, getPipeInfo(info, 'unknown'));
     },
   };

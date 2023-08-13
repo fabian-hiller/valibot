@@ -19,4 +19,9 @@ describe('transform', () => {
     const output = parse(schema, input);
     expect(output).toEqual({ ...input, key2: 'test' });
   });
+
+  test('should return issues', () => {
+    const schema = transform(string(), (output) => output.length);
+    expect(() => parse(schema, 123)).toThrowError();
+  });
 });

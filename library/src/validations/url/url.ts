@@ -1,5 +1,4 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -13,18 +12,20 @@ import { getIssue } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function url<TInput extends string>(error?: string) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     try {
       new URL(input);
-      return input;
+      return { output: input };
     } catch (_) {
-      throw new ValiError([
-        getIssue(info, {
-          validation: 'url',
-          message: error || 'Invalid URL',
-          input,
-        }),
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'url',
+            message: error || 'Invalid URL',
+            input,
+          }),
+        ],
+      };
     }
   };
 }

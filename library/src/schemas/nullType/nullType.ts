@@ -1,4 +1,3 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchema } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
@@ -36,21 +35,23 @@ export function nullType(error?: string): NullSchema {
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (input !== null) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'null',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'null',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Return output
-      return input;
+      // Return input as output
+      return { output: input };
     },
   };
 }

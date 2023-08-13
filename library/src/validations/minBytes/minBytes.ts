@@ -1,5 +1,4 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -14,16 +13,18 @@ export function minBytes<TInput extends string>(
   requirement: number,
   error?: string
 ) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (new TextEncoder().encode(input).length < requirement) {
-      throw new ValiError([
-        getIssue(info, {
-          validation: 'min_bytes',
-          message: error || 'Invalid byte length',
-          input,
-        }),
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'min_bytes',
+            message: error || 'Invalid byte length',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

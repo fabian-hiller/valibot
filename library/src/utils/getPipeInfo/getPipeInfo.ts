@@ -13,7 +13,7 @@ export function getPipeInfo(
   info: ParseInfo | undefined,
   reason: IssueReason
 ): ValidateInfo {
-  // Hint: The pipe info is deliberately not constructed with the spread
+  // Note: The pipe info is deliberately not constructed with the spread
   // operator for performance reasons
   return {
     origin: info?.origin,

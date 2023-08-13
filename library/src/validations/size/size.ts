@@ -1,5 +1,4 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -14,16 +13,18 @@ export function size<TInput extends Map<any, any> | Set<any> | Blob>(
   requirement: number,
   error?: string
 ) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (input.size !== requirement) {
-      throw new ValiError([
-        getIssue(info, {
-          validation: 'size',
-          message: error || 'Invalid size',
-          input,
-        }),
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'size',
+            message: error || 'Invalid size',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

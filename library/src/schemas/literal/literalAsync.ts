@@ -1,4 +1,3 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
@@ -49,21 +48,23 @@ export function literalAsync<TLiteral extends string | number>(
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Check type of input
       if (input !== literal) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'literal',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'literal',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Return output
-      return input as TLiteral;
+      // Return input as output
+      return { output: input as TLiteral };
     },
   };
 }

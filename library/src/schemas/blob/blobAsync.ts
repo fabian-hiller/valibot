@@ -1,4 +1,3 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
@@ -63,20 +62,22 @@ export function blobAsync(
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Blob)) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'blob',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'blob',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Execute pipe and return output
+      // Execute pipe and return result
       return executePipeAsync(input, pipe, getPipeInfo(info, 'blob'));
     },
   };

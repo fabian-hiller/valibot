@@ -23,8 +23,8 @@ export function coerce<TSchema extends BaseSchema>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
-      return schema.parse(action(input), info);
+    _parse(input, info) {
+      return schema._parse(action(input), info);
     },
   };
 }

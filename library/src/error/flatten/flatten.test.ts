@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { ValiError } from '../ValiError/index.ts';
+import { type Issues, ValiError } from '../ValiError/index.ts';
 import { flatten } from './flatten.ts';
 
 describe('flatten', () => {
@@ -28,32 +28,50 @@ describe('flatten', () => {
   };
 
   test('should flatten only root error', () => {
-    const error = new ValiError([rootIssue]);
-    const flatError = flatten(error);
-    expect(flatError).toEqual({
+    const issues: Issues = [rootIssue];
+    const flatError = {
       root: [rootIssue.message],
       nested: {},
-    });
+    };
+
+    const error = new ValiError(issues);
+    const output1 = flatten(error);
+    expect(output1).toEqual(flatError);
+
+    const output2 = flatten(issues);
+    expect(output2).toEqual(flatError);
   });
 
   test('should flatten only nested error', () => {
-    const error = new ValiError([nestedIssue]);
-    const flatError = flatten(error);
-    expect(flatError).toEqual({
+    const issues: Issues = [nestedIssue];
+    const flatError = {
       nested: {
         test: [nestedIssue.message],
       },
-    });
+    };
+
+    const error = new ValiError(issues);
+    const output1 = flatten(error);
+    expect(output1).toEqual(flatError);
+
+    const output2 = flatten(issues);
+    expect(output2).toEqual(flatError);
   });
 
   test('should flatten root and nested error', () => {
-    const error = new ValiError([rootIssue, nestedIssue]);
-    const flatError = flatten(error);
-    expect(flatError).toEqual({
+    const issues: Issues = [rootIssue, nestedIssue];
+    const flatError = {
       root: [rootIssue.message],
       nested: {
         test: [nestedIssue.message],
       },
-    });
+    };
+
+    const error = new ValiError(issues);
+    const output1 = flatten(error);
+    expect(output1).toEqual(flatError);
+
+    const output2 = flatten(issues);
+    expect(output2).toEqual(flatError);
   });
 });

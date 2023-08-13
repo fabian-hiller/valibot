@@ -4,11 +4,14 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
-- Refactor loops and array destructuring for performance reasons
-- Add `getPipeInfo` util and refactor code for performance reasons (pull request #46)
-- Add `getPathInfo` util and refactor code for performance reasons (pull request #92)
-- Add `getIssue` util and refactor code for performance reasons (pull request #93)
+> Note: The library has been revised and refactored. There is a migration guide in the [release notes](https://github.com/fabian-hiller/valibot/releases/tag/vX.X.X).
+
+- Add `getPipeInfo`, `getPathInfo` and `getIssue` util (pull request #46, #92, #93)
+- Expand `flatten` so that issues are also accepted as first argument
+- Change return type of `safeParse` and `safeParseAsync` method
+- Change error handling and refactor library to improve performance
 - Rename `getCurrentPath` util to `getPath` (pull request #92)
+- Rename `.parse` to `._parse` to mark it as internal API
 
 ## v0.12.0 (August 11, 2023)
 

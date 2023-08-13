@@ -1,4 +1,4 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
@@ -144,32 +144,71 @@ export function tuple<
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (
         !Array.isArray(input) ||
         (!rest && items.length !== input.length) ||
         (rest && items.length > input.length)
       ) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'tuple',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'tuple',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Create output and issues
+      // Create issues and output
+      let issues: Issues | undefined;
       const output: any[] = [];
-      const issues: Issue[] = [];
 
       // Parse schema of each tuple item
       for (let index = 0; index < items.length; index++) {
-        try {
+        const value = input[index];
+        const result = items[index]._parse(
+          value,
+          getPathInfo(
+            info,
+            getPath(info?.path, {
+              schema: 'tuple',
+              input: input as [any, ...any[]],
+              key: index,
+              value,
+            })
+          )
+        );
+
+        // If there are issues, capture them
+        if (result.issues) {
+          if (issues) {
+            for (const issue of result.issues) {
+              issues.push(issue);
+            }
+          } else {
+            issues = result.issues;
+          }
+
+          // If necessary, abort early
+          if (info?.abortEarly) {
+            break;
+          }
+
+          // Otherwise, add item to tuple
+        } else {
+          output[index] = result.output;
+        }
+      }
+
+      // If necessary parse schema of each rest item
+      if (rest) {
+        for (let index = items.length; index < input.length; index++) {
           const value = input[index];
-          output[index] = items[index].parse(
+          const result = rest._parse(
             value,
             getPathInfo(
               info,
@@ -182,54 +221,36 @@ export function tuple<
             )
           );
 
-          // Throw or fill issues in case of an error
-        } catch (error) {
-          if (info?.abortEarly) {
-            throw error;
-          }
-          issues.push(...(error as ValiError).issues);
-        }
-      }
-
-      // If necessary parse schema of each rest item
-      if (rest) {
-        for (let index = items.length; index < input.length; index++) {
-          try {
-            const value = input[index];
-            output[index] = rest.parse(
-              value,
-              getPathInfo(
-                info,
-                getPath(info?.path, {
-                  schema: 'tuple',
-                  input: input as [any, ...any[]],
-                  key: index,
-                  value,
-                })
-              )
-            );
-
-            // Throw or fill issues in case of an error
-          } catch (error) {
-            if (info?.abortEarly) {
-              throw error;
+          // If there are issues, capture them
+          if (result.issues) {
+            if (issues) {
+              for (const issue of result.issues) {
+                issues.push(issue);
+              }
+            } else {
+              issues = result.issues;
             }
-            issues.push(...(error as ValiError).issues);
+
+            // If necessary, abort early
+            if (info?.abortEarly) {
+              break;
+            }
+
+            // Otherwise, add item to tuple
+          } else {
+            output[index] = result.output;
           }
         }
       }
 
-      // Throw error if there are issues
-      if (issues.length) {
-        throw new ValiError(issues as Issues);
-      }
-
-      // Execute pipe and return output
-      return executePipe(
-        output as TupleOutput<TTupleItems, TTupleRest>,
-        pipe,
-        getPipeInfo(info, 'tuple')
-      );
+      // Return issues or pipe result
+      return issues
+        ? { issues }
+        : executePipe(
+            output as TupleOutput<TTupleItems, TTupleRest>,
+            pipe,
+            getPipeInfo(info, 'tuple')
+          );
     },
   };
 }

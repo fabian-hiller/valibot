@@ -1,4 +1,4 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
@@ -82,59 +82,73 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Set)) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'set',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'set',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
       // Create index, output and issues
+      let issues: Issues | undefined;
       const output: SetOutput<TSetValue> = new Set();
-      const issues: Issue[] = [];
 
       // Parse each value by schema
       await Promise.all(
         Array.from(input.values()).map(async (inputValue, index) => {
-          try {
-            output.add(
-              await value.parse(
-                inputValue,
-                getPathInfo(
-                  info,
-                  getPath(info?.path, {
-                    schema: 'set',
-                    input,
-                    key: index,
-                    value: inputValue,
-                  })
-                )
+          // If not aborted early, continue execution
+          if (!(info?.abortEarly && issues)) {
+            const result = await value._parse(
+              inputValue,
+              getPathInfo(
+                info,
+                getPath(info?.path, {
+                  schema: 'set',
+                  input,
+                  key: index,
+                  value: inputValue,
+                })
               )
             );
 
-            // Throw or fill issues in case of an error
-          } catch (error) {
-            if (info?.abortEarly) {
-              throw error;
+            // If not aborted early, continue execution
+            if (!(info?.abortEarly && issues)) {
+              // If there are issues, capture them
+              if (result.issues) {
+                if (issues) {
+                  for (const issue of result.issues) {
+                    issues.push(issue);
+                  }
+                } else {
+                  issues = result.issues;
+                }
+
+                // If necessary, abort early
+                if (info?.abortEarly) {
+                  throw null;
+                }
+
+                // Otherwise, add item to set
+              } else {
+                output.add(result.output);
+              }
             }
-            issues.push(...(error as ValiError).issues);
           }
         })
-      );
+      ).catch(() => null);
 
-      // Throw error if there are issues
-      if (issues.length) {
-        throw new ValiError(issues as Issues);
-      }
-
-      // Execute pipe and return output
-      return executePipeAsync(output, pipe, getPipeInfo(info, 'set'));
+      // Return issues or pipe result
+      return issues
+        ? { issues }
+        : executePipeAsync(output, pipe, getPipeInfo(info, 'set'));
     },
   };
 }

@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { comparable } from '../../comparable.ts';
 import { nonOptional, object, optional, string } from '../../schemas/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { parse } from '../parse/index.ts';
 import { required } from './required.ts';
 
@@ -33,11 +34,11 @@ describe('required', () => {
     const input = { key1: '1' };
     const transformInput = () => ({ key1: '2' });
     const output1 = parse(
-      required(object({ key1: string() }), [transformInput]),
+      required(object({ key1: string() }), [toCustom(transformInput)]),
       input
     );
     const output2 = parse(
-      required(object({ key1: string() }), 'Error', [transformInput]),
+      required(object({ key1: string() }), 'Error', [toCustom(transformInput)]),
       input
     );
     expect(output1).toEqual(transformInput());

@@ -45,14 +45,14 @@ export function optional<TWrappedSchema extends BaseSchema>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Allow `undefined` values to pass
       if (input === undefined) {
-        return input;
+        return { output: input };
       }
 
-      // Parse wrapped schema and return output
-      return wrapped.parse(input, info);
+      // Return result of wrapped schema
+      return wrapped._parse(input, info);
     },
   };
 }

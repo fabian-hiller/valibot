@@ -1,4 +1,3 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 import type { Enum } from './types.ts';
@@ -50,21 +49,23 @@ export function enumTypeAsync<
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Check type of input
       if (!enumValue.includes(input as any)) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'enum',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'enum',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Return output
-      return input as TEnum[number];
+      // Return inpot as output
+      return { output: input as TEnum[number] };
     },
   };
 }

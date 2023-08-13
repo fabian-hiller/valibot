@@ -1,4 +1,4 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
@@ -147,34 +147,37 @@ export function tupleAsync<
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Check type of input
       if (
         !Array.isArray(input) ||
         (!rest && items.length !== input.length) ||
         (rest && items.length > input.length)
       ) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'tuple',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'tuple',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Create output and issues
+      // Create issues and output
+      let issues: Issues | undefined;
       const output: any[] = [];
-      const issues: Issue[] = [];
 
       await Promise.all([
         // Parse schema of each tuple item
         Promise.all(
           items.map(async (schema, index) => {
-            try {
+            // If not aborted early, continue execution
+            if (!(info?.abortEarly && issues)) {
               const value = input[index];
-              output[index] = await schema.parse(
+              const result = await schema._parse(
                 value,
                 getPathInfo(
                   info,
@@ -187,12 +190,28 @@ export function tupleAsync<
                 )
               );
 
-              // Throw or fill issues in case of an error
-            } catch (error) {
-              if (info?.abortEarly) {
-                throw error;
+              // If not aborted early, continue execution
+              if (!(info?.abortEarly && issues)) {
+                // If there are issues, capture them
+                if (result.issues) {
+                  if (issues) {
+                    for (const issue of result.issues) {
+                      issues.push(issue);
+                    }
+                  } else {
+                    issues = result.issues;
+                  }
+
+                  // If necessary, abort early
+                  if (info?.abortEarly) {
+                    throw null;
+                  }
+
+                  // Otherwise, add item to tuple
+                } else {
+                  output[index] = result.output;
+                }
               }
-              issues.push(...(error as ValiError).issues);
             }
           })
         ),
@@ -201,9 +220,10 @@ export function tupleAsync<
         rest &&
           Promise.all(
             input.slice(items.length).map(async (value, index) => {
-              try {
+              // If not aborted early, continue execution
+              if (!(info?.abortEarly && issues)) {
                 const tupleIndex = items.length + index;
-                output[tupleIndex] = await rest.parse(
+                const result = await rest._parse(
                   value,
                   getPathInfo(
                     info,
@@ -216,28 +236,41 @@ export function tupleAsync<
                   )
                 );
 
-                // Throw or fill issues in case of an error
-              } catch (error) {
-                if (info?.abortEarly) {
-                  throw error;
+                // If not aborted early, continue execution
+                if (!(info?.abortEarly && issues)) {
+                  // If there are issues, capture them
+                  if (result.issues) {
+                    if (issues) {
+                      for (const issue of result.issues) {
+                        issues.push(issue);
+                      }
+                    } else {
+                      issues = result.issues;
+                    }
+
+                    // If necessary, abort early
+                    if (info?.abortEarly) {
+                      throw null;
+                    }
+
+                    // Otherwise, add item to tuple
+                  } else {
+                    output[tupleIndex] = result.output;
+                  }
                 }
-                issues.push(...(error as ValiError).issues);
               }
             })
           ),
-      ]);
+      ]).catch(() => null);
 
-      // Throw error if there are issues
-      if (issues.length) {
-        throw new ValiError(issues as Issues);
-      }
-
-      // Execute pipe and return output
-      return executePipeAsync(
-        output as TupleOutput<TTupleItems, TTupleRest>,
-        pipe,
-        getPipeInfo(info, 'tuple')
-      );
+      // Return issues or pipe result
+      return issues
+        ? { issues }
+        : executePipeAsync(
+            output as TupleOutput<TTupleItems, TTupleRest>,
+            pipe,
+            getPipeInfo(info, 'tuple')
+          );
     },
   };
 }

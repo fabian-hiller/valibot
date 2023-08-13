@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { comparable } from '../../comparable.ts';
 import { object, string } from '../../schemas/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { omit } from '../omit/index.ts';
 import { parse } from '../parse/index.ts';
 
@@ -34,13 +35,13 @@ describe('omit', () => {
       omit(
         object({ key1: string(), key2: string() }),
         ['key1'],
-        [transformInput]
+        [toCustom(transformInput)]
       ),
       input
     );
     const output2 = parse(
       omit(object({ key1: string(), key2: string() }), ['key1'], 'Error', [
-        transformInput,
+        toCustom(transformInput),
       ]),
       input
     );

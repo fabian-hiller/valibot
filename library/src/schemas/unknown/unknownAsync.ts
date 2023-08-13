@@ -40,7 +40,7 @@ export function unknownAsync(
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       return executePipeAsync(input, pipe, getPipeInfo(info, 'unknown'));
     },
   };

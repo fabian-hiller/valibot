@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { comparable } from '../../comparable.ts';
 import { number, object, objectAsync, string } from '../../schemas/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { parseAsync } from '../parse/index.ts';
 import { mergeAsync } from './mergeAsync.ts';
 
@@ -47,7 +48,7 @@ describe('mergeAsync', () => {
     const output1 = await parseAsync(
       mergeAsync(
         [objectAsync({ key1: string() }), object({ key2: number() })],
-        [transformInput]
+        [toCustom(transformInput)]
       ),
       input
     );
@@ -55,7 +56,7 @@ describe('mergeAsync', () => {
       mergeAsync(
         [objectAsync({ key1: string() }), object({ key2: number() })],
         'Error',
-        [transformInput]
+        [toCustom(transformInput)]
       ),
       input
     );

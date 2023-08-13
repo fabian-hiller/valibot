@@ -23,8 +23,8 @@ export function withDefault<TSchema extends BaseSchema | BaseSchemaAsync>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
-      return schema.parse(input === undefined ? value : input, info);
+    _parse(input, info) {
+      return schema._parse(input === undefined ? value : input, info);
     },
   };
 }

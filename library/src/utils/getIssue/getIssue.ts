@@ -32,7 +32,7 @@ export function getIssue(
   issue: Pick<Issue, 'validation' | 'message' | 'input' | 'issues'> &
     Partial<Pick<Issue, 'reason'>>
 ): Issue {
-  // Hint: The issue is deliberately not constructed with the spread operator
+  // Note: The issue is deliberately not constructed with the spread operator
   // for performance reasons
   return {
     reason: (info?.reason || issue.reason) as IssueReason,

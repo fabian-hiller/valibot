@@ -1,4 +1,4 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
@@ -150,26 +150,28 @@ export function recordAsync<
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Check type of input
       if (
         !input ||
         typeof input !== 'object' ||
         input.toString() !== '[object Object]'
       ) {
-        throw new ValiError([
-          getIssue(info, {
-            reason: 'type',
-            validation: 'record',
-            message: error || 'Invalid type',
-            input,
-          }),
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'record',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Create output and issues
+      // Create issues and output
+      let issues: Issues | undefined;
       const output: Record<string | number | symbol, any> = {};
-      const issues: Issue[] = [];
 
       // Parse each key and value by schema
       await Promise.all(
@@ -191,62 +193,62 @@ export function recordAsync<
               value: inputValue,
             });
 
-            const [outputKey, outputValue] = await Promise.all([
-              // Parse key and get output
-              (async () => {
-                try {
-                  return await key.parse(
-                    inputKey,
-                    getPathInfo(info, path, 'key')
+            // Get parse result of key and value
+            const [keyResult, valueResult] = await Promise.all(
+              [
+                { schema: key, input: inputKey, origin: 'key' as const },
+                { schema: value, input: inputValue },
+              ].map(async ({ schema, input, origin }) => {
+                // If not aborted early, continue execution
+                if (!(info?.abortEarly && issues)) {
+                  // Get parse result of input
+                  const result = await schema._parse(
+                    input,
+                    getPathInfo(info, path, origin)
                   );
 
-                  // Throw or fill issues in case of an error
-                } catch (error) {
-                  if (info?.abortEarly) {
-                    throw error;
+                  // If not aborted early, continue execution
+                  if (!(info?.abortEarly && issues)) {
+                    // If there are issues, capture them
+                    if (result.issues) {
+                      if (issues) {
+                        for (const issue of result.issues) {
+                          issues.push(issue);
+                        }
+                      } else {
+                        issues = result.issues;
+                      }
+
+                      // If necessary, abort early
+                      if (info?.abortEarly) {
+                        throw null;
+                      }
+
+                      // Otherwise, return parse result
+                    } else {
+                      return result;
+                    }
                   }
-                  issues.push(...(error as ValiError).issues);
                 }
-              })(),
+              })
+            ).catch(() => []);
 
-              // Parse value and get output
-              (async () => {
-                try {
-                  // Note: Value is nested in array, so that also a falsy value further
-                  // down can be recognized as valid value
-                  return [
-                    await value.parse(inputValue, getPathInfo(info, path)),
-                  ] as const;
-
-                  // Throw or fill issues in case of an error
-                } catch (error) {
-                  if (info?.abortEarly) {
-                    throw error;
-                  }
-                  issues.push(...(error as ValiError).issues);
-                }
-              })(),
-            ]);
-
-            // Set entry if output key and value is valid
-            if (outputKey && outputValue) {
-              output[outputKey] = outputValue[0];
+            // Set entry if there are no issues
+            if (keyResult && valueResult) {
+              output[keyResult.output] = valueResult.output;
             }
           }
         })
       );
 
-      // Throw error if there are issues
-      if (issues.length) {
-        throw new ValiError(issues as Issues);
-      }
-
-      // Execute pipe and return output
-      return executePipeAsync(
-        output as RecordOutput<TRecordKey, TRecordValue>,
-        pipe,
-        getPipeInfo(info, 'record')
-      );
+      // Return issues or pipe result
+      return issues
+        ? { issues }
+        : executePipeAsync(
+            output as RecordOutput<TRecordKey, TRecordValue>,
+            pipe,
+            getPipeInfo(info, 'record')
+          );
     },
   };
 }

@@ -1,3 +1,5 @@
+import type { ParseResult } from '../../types.ts';
+
 /**
  * Creates a transformation function that sets a string, number or date to a
  * maximum value.
@@ -10,5 +12,7 @@ export function toMaxValue<
   TInput extends string | number | bigint | Date,
   TRequirement extends TInput
 >(requirement: TRequirement) {
-  return (input: TInput) => (input > requirement ? requirement : input);
+  return (input: TInput): ParseResult<TInput> => ({
+    output: input > requirement ? requirement : input,
+  });
 }

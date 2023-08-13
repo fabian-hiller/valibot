@@ -1,5 +1,4 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -12,16 +11,18 @@ import { getIssue } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function isoTime<TInput extends string>(error?: string) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (!/^(0[0-9]|1\d|2[0-3]):[0-5]\d$/.test(input)) {
-      throw new ValiError([
-        getIssue(info, {
-          validation: 'iso_time',
-          message: error || 'Invalid time',
-          input,
-        }),
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'iso_time',
+            message: error || 'Invalid time',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }
