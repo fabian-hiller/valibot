@@ -40,4 +40,32 @@ describe('fallbackAsync', () => {
     expect(result.success).toBeFalsy()
     expect((result as any).issues).toEqual(issues)
   });
+
+  test('nested fallback', async () => {
+    let issues: any
+    const fallbackValue = { text: 'hello world', data: 5 }
+    const schema = fallbackAsync(objectAsync({
+      text: fallbackAsync(stringAsync([minLength(6)]), fallbackValue.text, (dataIssues) => { issues = dataIssues }),
+      data: numberAsync(),
+    }), fallbackValue,(dataIssues) => { issues = dataIssues });
+
+    {
+      const data = { data: 2 }
+      const output = parseAsync(schema, data);
+      expect(output).toEqual({ ...data, text: fallbackValue.text });
+
+      expect(issues).lengthOf.above(0);
+      expect(issues).toHaveLength(1);
+      //expect(issues).toEqual([  ]);
+    }
+
+    issues = []
+    {
+      const output = parseAsync(schema, {});
+      expect(output).toEqual(fallbackValue);
+
+      expect(issues).lengthOf.above(0);
+      expect(issues).toHaveLength(1);
+    }
+  });
 });

@@ -34,11 +34,11 @@ export function fallback<TSchema extends BaseSchema>(
     _parse(input, info) {
 			const result = schema._parse(input, info);
 			if (!result.issues) {
-				return result.output as Output<TSchema>;
+				return result;
 			}
 
 			(logger ?? console.error)(result.issues);
-			return value;
+			return { output: value };
     },
   };
 }
