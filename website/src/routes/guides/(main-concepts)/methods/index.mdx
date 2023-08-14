@@ -71,13 +71,13 @@ const StringSchema = fallback(string([minLength(10)]), 'hello valibot')
 const stringOutput = parse(StringSchema, 'hello'); // 'hello valibot'
 ```
 
-If you want to know when and what went wrong while validation, the <Link href="/api/fallback">`fallback`</Link> method has a additional but optional parameter.
+If you want to know when and what went wrong while validation, the <Link href="/api/fallback">`fallback`</Link> method has an additional but optional parameter.
 
 ```ts
 logger?: (err: Issues) => void
 ```
 
-Thanks to this callback it is possible to collect all of these warnings. Here's an easy example:
+Thanks to this callback it is possible to collect all of these warnings. Here's an easy example.
 
 ```ts
 import { parse, fallback, object, string, number, minLength } from 'valibot'; // 0.44 kB ?
@@ -93,7 +93,7 @@ const schema = fallback(object({
 }), fallbackValue, collect);
 
 const data = { data: 2 }
-parse(schema, data); // { text: 'hello valibot', data: 2 }
+parse(schema, data); // { text: 'hello valibot', data: 5 }
 console.log(warnings)
 /* [
     {
