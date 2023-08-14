@@ -1,11 +1,12 @@
 import type { BaseSchema } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
+import type { Primitive } from './types.ts';
 
 /**
  * Literal schema type.
  */
 export type LiteralSchema<
-  TLiteralValue extends string | number,
+  TLiteralValue extends Primitive,
   TOutput = TLiteralValue
 > = BaseSchema<TLiteralValue, TOutput> & {
   schema: 'literal';
@@ -20,7 +21,7 @@ export type LiteralSchema<
  *
  * @returns A literal schema.
  */
-export function literal<TLiteral extends string | number>(
+export function literal<TLiteral extends Primitive>(
   literal: TLiteral,
   error?: string
 ): LiteralSchema<TLiteral> {

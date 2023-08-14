@@ -17,6 +17,26 @@ describe('literal', () => {
     expect(() => parse(schema1, {})).toThrowError();
   });
 
+  test('should pass for every primitive values', () => {
+    const TEST = Symbol('test');
+
+    const numberSchema = literal(1);
+    const stringSchema = literal('string');
+    const booleanSchema = literal(true);
+    const symbolSchema = literal(TEST);
+    const bigIntSchema = literal(2n);
+    const nullSchema = literal(null);
+    const undefinedSchema = literal(undefined);
+
+    expect(parse(numberSchema, 1)).toBe(1);
+    expect(parse(stringSchema, 'string')).toBe('string');
+    expect(parse(booleanSchema, true)).toBe(true);
+    expect(parse(symbolSchema, TEST)).toBe(TEST);
+    expect(parse(bigIntSchema, 2n)).toBe(2n);
+    expect(parse(nullSchema, null)).toBe(null);
+    expect(parse(undefinedSchema, undefined)).toBe(undefined);
+  });
+
   test('should throw custom error', () => {
     const error = 'Value is not the literal!';
     expect(() => parse(literal('value_1', error), 'test')).toThrowError(error);

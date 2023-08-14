@@ -17,6 +17,28 @@ describe('literalAsync', () => {
     await expect(parseAsync(schema1, {})).rejects.toThrowError();
   });
 
+  test('should pass for every primitive values', async () => {
+    const TEST = Symbol('test');
+
+    const numberSchema = literalAsync(1);
+    const stringSchema = literalAsync('string');
+    const booleanSchema = literalAsync(true);
+    const symbolSchema = literalAsync(TEST);
+    const bigIntSchema = literalAsync(2n);
+    const nullSchema = literalAsync(null);
+    const undefinedSchema = literalAsync(undefined);
+
+    await expect(parseAsync(numberSchema, 1)).resolves.toBe(1);
+    await expect(parseAsync(stringSchema, 'string')).resolves.toBe('string');
+    await expect(parseAsync(booleanSchema, true)).resolves.toBe(true);
+    await expect(parseAsync(symbolSchema, TEST)).resolves.toBe(TEST);
+    await expect(parseAsync(bigIntSchema, 2n)).resolves.toBe(2n);
+    await expect(parseAsync(nullSchema, null)).resolves.toBe(null);
+    await expect(parseAsync(undefinedSchema, undefined)).resolves.toBe(
+      undefined
+    );
+  });
+
   test('should throw custom error', async () => {
     const error = 'Value is not the literal!';
     await expect(
