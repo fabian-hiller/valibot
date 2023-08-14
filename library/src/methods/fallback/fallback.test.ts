@@ -42,36 +42,36 @@ describe('fallback', () => {
   });
 
   test('nested fallback', () => {
-    let issues: any
+    let warnings: any
     const fallbackValue = { text: 'hello world', data: 5 }
     const schema = fallback(object({
-      text: fallback(string([minLength(6)]), fallbackValue.text, (dataIssues) => { issues = dataIssues }),
+      text: fallback(string([minLength(6)]), fallbackValue.text, (dataIssues) => { warnings = dataIssues }),
       data: number(),
-    }), fallbackValue,(dataIssues) => { issues = dataIssues });
+    }), fallbackValue,(dataIssues) => { warnings = dataIssues });
 
     {
       const data = { data: 2 }
       const output = parse(schema, data);
       expect(output).toEqual({ ...data, text: fallbackValue.text });
 
-      expect(issues).lengthOf.above(0);
-      expect(issues).toHaveLength(1);
+      expect(warnings).lengthOf.above(0);
+      expect(warnings).toHaveLength(1);
       //expect(issues).toEqual([  ]);
     }
 
-    issues = []
+    warnings = []
     {
       const output = parse(schema, {});
       expect(output).toEqual(fallbackValue);
 
-      expect(issues).lengthOf.above(0);
-      expect(issues).toHaveLength(1);
+      expect(warnings).lengthOf.above(0);
+      expect(warnings).toHaveLength(1);
     }
   });
 
   test('collect warnings', () => {
-    const issues: Issue[] = []
-    const collect = (newIssues: Issues) => newIssues.forEach(value => issues.push(value)) 
+    const warnings: Issue[] = []
+    const collect = (issues: Issues) => issues.forEach(value => warnings.push(value)) 
 
     const fallbackValue = { text: 'hello world', data: 5 }
     const schema = fallback(object({
@@ -83,13 +83,16 @@ describe('fallback', () => {
       const data = { data: 2 }
       const output = parse(schema, data);
       expect(output).toEqual({ ...data, text: fallbackValue.text });
+      console.log(warnings)
+      console.log(warnings[0].path)
     }
 
     {
       const output = parse(schema, {});
       expect(output).toEqual(fallbackValue);
+      console.log(warnings)
     }
 
-    expect(issues).toHaveLength(3);
+    expect(warnings).toHaveLength(3);
   });
 });
