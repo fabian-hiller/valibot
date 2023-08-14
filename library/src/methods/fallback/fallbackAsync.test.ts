@@ -1,7 +1,7 @@
 import { describe, test, expect, expectTypeOf  } from 'vitest';
 import { objectAsync, stringAsync, numberAsync } from '../../schemas/index.ts';
 import { minLength } from '../../validations/index.ts';
-import { parseAsync, safeParseAsync } from '../../index.ts';
+import { Issue, Issues, parseAsync, safeParseAsync } from '../../index.ts';
 import { fallbackAsync } from './fallbackAsync.ts';
 
 describe('fallbackAsync', () => {
@@ -51,7 +51,7 @@ describe('fallbackAsync', () => {
 
     {
       const data = { data: 2 }
-      const output = parseAsync(schema, data);
+      const output = await parseAsync(schema, data);
       expect(output).toEqual({ ...data, text: fallbackValue.text });
 
       expect(issues).lengthOf.above(0);
@@ -61,11 +61,35 @@ describe('fallbackAsync', () => {
 
     issues = []
     {
-      const output = parseAsync(schema, {});
+      const output = await parseAsync(schema, {});
       expect(output).toEqual(fallbackValue);
 
       expect(issues).lengthOf.above(0);
       expect(issues).toHaveLength(1);
     }
+  });
+
+  test('collect warnings', async () => {
+    const issues: Issue[] = []
+    const collect = (newIssues: Issues) => newIssues.forEach(value => issues.push(value)) 
+
+    const fallbackValue = { text: 'hello world', data: 5 }
+    const schema = fallbackAsync(objectAsync({
+      text: fallbackAsync(stringAsync([minLength(6)]), fallbackValue.text, collect),
+      data: numberAsync(),
+    }), fallbackValue, collect);
+
+    {
+      const data = { data: 2 }
+      const output = await parseAsync(schema, data);
+      expect(output).toEqual({ ...data, text: fallbackValue.text });
+    }
+
+    {
+      const output = await parseAsync(schema, {});
+      expect(output).toEqual(fallbackValue);
+    }
+
+    expect(issues).toHaveLength(3);
   });
 });

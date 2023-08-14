@@ -1,7 +1,7 @@
 import { describe, test, expect, expectTypeOf  } from 'vitest';
 import { object, string, number } from '../../schemas/index.ts';
 import { minLength } from '../../validations/index.ts';
-import { parse, safeParse } from '../../index.ts';
+import { Issue, Issues, parse, safeParse } from '../../index.ts';
 import { fallback } from './fallback.ts';
 
 describe('fallback', () => {
@@ -67,5 +67,29 @@ describe('fallback', () => {
       expect(issues).lengthOf.above(0);
       expect(issues).toHaveLength(1);
     }
+  });
+
+  test('collect warnings', () => {
+    const issues: Issue[] = []
+    const collect = (newIssues: Issues) => newIssues.forEach(value => issues.push(value)) 
+
+    const fallbackValue = { text: 'hello world', data: 5 }
+    const schema = fallback(object({
+      text: fallback(string([minLength(6)]), fallbackValue.text, collect),
+      data: number(),
+    }), fallbackValue, collect);
+
+    {
+      const data = { data: 2 }
+      const output = parse(schema, data);
+      expect(output).toEqual({ ...data, text: fallbackValue.text });
+    }
+
+    {
+      const output = parse(schema, {});
+      expect(output).toEqual(fallbackValue);
+    }
+
+    expect(issues).toHaveLength(3);
   });
 });
