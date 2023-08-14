@@ -7,22 +7,22 @@ describe('finite', () => {
   test('should pass only a finite number', () => {
     const validate = finite();
     const value1 = 0;
-    expect(validate(value1, info)).toBe(value1);
+    expect(validate(value1, info)).toEqual({ output: value1 });
     const value2 = 1;
-    expect(validate(value2, info)).toBe(value2);
+    expect(validate(value2, info)).toEqual({ output: value2 });
     const value3 = -1;
-    expect(validate(value3, info)).toBe(value3);
+    expect(validate(value3, info)).toEqual({ output: value3 });
     const value4 = 3.14;
-    expect(validate(value4, info)).toBe(value4);
+    expect(validate(value4, info)).toEqual({ output: value4 });
 
-    expect(() => validate(NaN, info)).toThrowError();
-    expect(() => validate(Infinity, info)).toThrowError();
-    expect(() => validate(-Infinity, info)).toThrowError();
+    expect(validate(NaN, info).issues?.length).toBe(1);
+    expect(validate(Infinity, info).issues?.length).toBe(1);
+    expect(validate(-Infinity, info).issues?.length).toBe(1);
   });
 
-  test('should throw custom error', () => {
+  test('should return custom error message', () => {
     const error = 'Value is not a finite number!';
     const validate = finite(error);
-    expect(() => validate(Infinity, info)).toThrowError(error);
+    expect(validate(Infinity, info).issues?.[0].message).toBe(error);
   });
 });

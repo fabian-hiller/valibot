@@ -5,6 +5,8 @@ import type {
   ArraySchemaAsync,
   BigintSchema,
   BigintSchemaAsync,
+  BlobSchema,
+  BlobSchemaAsync,
   BooleanSchema,
   BooleanSchemaAsync,
   DateSchema,
@@ -45,6 +47,8 @@ import type {
   RecursiveSchemaAsync,
   SetSchema,
   SetSchemaAsync,
+  SpecialSchema,
+  SpecialSchemaAsync,
   StringSchema,
   StringSchemaAsync,
   SymbolSchema,
@@ -98,6 +102,14 @@ export function transformAsync<
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
 ): BooleanSchemaAsync<TOutput>;
+
+export function transformAsync<
+  TSchema extends BlobSchema | BlobSchemaAsync,
+  TOutput
+>(
+  schema: TSchema,
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+): BlobSchemaAsync<TOutput>;
 
 export function transformAsync<
   TSchema extends DateSchema | DateSchemaAsync,
@@ -253,6 +265,14 @@ export function transformAsync<
 ): SetSchemaAsync<TSchema['set']['value'], TOutput>;
 
 export function transformAsync<
+  TSchema extends SpecialSchema<any> | SpecialSchemaAsync<any>,
+  TOutput
+>(
+  schema: TSchema,
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+): SpecialSchemaAsync<Input<TSchema>, TOutput>;
+
+export function transformAsync<
   TSchema extends StringSchema | StringSchemaAsync,
   TOutput
 >(
@@ -344,8 +364,9 @@ export function transformAsync<
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
-      return action(await schema.parse(input, info));
+    async _parse(input, info) {
+      const result = await schema._parse(input, info);
+      return result.issues ? result : { output: await action(result.output) };
     },
   };
 }

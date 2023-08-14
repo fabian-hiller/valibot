@@ -2,9 +2,11 @@ import type {
   AnySchema,
   ArraySchema,
   BigintSchema,
+  BlobSchema,
   BooleanSchema,
   DateSchema,
   EnumSchema,
+  InstanceSchema,
   LiteralSchema,
   MapSchema,
   NanSchema,
@@ -22,6 +24,7 @@ import type {
   RecordSchema,
   RecursiveSchema,
   SetSchema,
+  SpecialSchema,
   StringSchema,
   SymbolSchema,
   TupleSchema,
@@ -52,6 +55,11 @@ export function transform<TSchema extends BooleanSchema, TOutput>(
   action: (value: Output<TSchema>) => TOutput
 ): BooleanSchema<TOutput>;
 
+export function transform<TSchema extends BlobSchema, TOutput>(
+  schema: TSchema,
+  action: (value: Output<TSchema>) => TOutput
+): BlobSchema<TOutput>;
+
 export function transform<TSchema extends DateSchema, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput
@@ -61,6 +69,11 @@ export function transform<TSchema extends EnumSchema<any>, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput
 ): EnumSchema<TSchema['enum'], TOutput>;
+
+export function transform<TSchema extends InstanceSchema<any>, TOutput>(
+  schema: TSchema,
+  action: (value: Output<TSchema>) => TOutput
+): InstanceSchema<TSchema['class'], TOutput>;
 
 export function transform<TSchema extends LiteralSchema<any>, TOutput>(
   schema: TSchema,
@@ -147,6 +160,11 @@ export function transform<TSchema extends SetSchema<any>, TOutput>(
   action: (value: Output<TSchema>) => TOutput
 ): SetSchema<TSchema['set']['value'], TOutput>;
 
+export function transform<TSchema extends SpecialSchema<any>, TOutput>(
+  schema: TSchema,
+  action: (value: Output<TSchema>) => TOutput
+): SpecialSchema<Input<TSchema>, TOutput>;
+
 export function transform<TSchema extends StringSchema, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput
@@ -206,8 +224,9 @@ export function transform<TSchema extends BaseSchema, TOutput>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
-      return action(schema.parse(input, info));
+    _parse(input, info) {
+      const result = schema._parse(input, info);
+      return result.issues ? result : { output: action(result.output) };
     },
   };
 }

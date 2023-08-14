@@ -1,4 +1,4 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
+import type { Issues } from '../../error/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
@@ -8,8 +8,11 @@ import type {
 } from '../../types.ts';
 import {
   executePipeAsync,
-  getCurrentPath,
   getErrorAndPipe,
+  getIssue,
+  getPath,
+  getPathInfo,
+  getPipeInfo,
 } from '../../utils/index.ts';
 
 /**
@@ -84,59 +87,78 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'array',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'array',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Create output and issues
+      // Create issues and output
+      let issues: Issues | undefined;
       const output: any[] = [];
-      const issues: Issue[] = [];
 
       // Parse schema of each array item
       await Promise.all(
-        input.map(async (value, index) => {
-          try {
-            output[index] = await item.parse(value, {
-              ...info,
-              path: getCurrentPath(info, {
-                schema: 'array',
-                input: input,
-                key: index,
-                value,
-              }),
-            });
+        input.map(async (value, key) => {
+          // If not aborted early, continue execution
+          if (!(info?.abortEarly && issues)) {
+            // Parse schema of array item
+            const result = await item._parse(
+              value,
+              getPathInfo(
+                info,
+                getPath(info?.path, {
+                  schema: 'array',
+                  input: input,
+                  key,
+                  value,
+                })
+              )
+            );
 
-            // Throw or fill issues in case of an error
-          } catch (error) {
-            if (info?.abortEarly) {
-              throw error;
+            // If not aborted early, continue execution
+            if (!(info?.abortEarly && issues)) {
+              // If there are issues, capture them
+              if (result.issues) {
+                if (issues) {
+                  for (const issue of result.issues) {
+                    issues.push(issue);
+                  }
+                } else {
+                  issues = result.issues;
+                }
+
+                // If necessary, abort early
+                if (info?.abortEarly) {
+                  throw null;
+                }
+
+                // Otherwise, add item to array
+              } else {
+                output[key] = result.output;
+              }
             }
-            issues.push(...(error as ValiError).issues);
           }
         })
-      );
+      ).catch(() => null);
 
-      // Throw error if there are issues
-      if (issues.length) {
-        throw new ValiError(issues as Issues);
-      }
-
-      // Execute pipe and return output
-      return executePipeAsync(output as Output<TArrayItem>[], pipe, {
-        ...info,
-        reason: 'array',
-      });
+      // Return issues or pipe result
+      return issues
+        ? { issues }
+        : executePipeAsync(
+            output as Output<TArrayItem>[],
+            pipe,
+            getPipeInfo(info, 'array')
+          );
     },
   };
 }

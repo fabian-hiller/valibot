@@ -1,5 +1,5 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the start of a string.
@@ -13,18 +13,18 @@ export function startsWith<TInput extends string>(
   requirement: string,
   error?: string
 ) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (!input.startsWith(requirement as any)) {
-      throw new ValiError([
-        {
-          validation: 'starts_with',
-          origin: 'value',
-          message: error || 'Invalid start',
-          input,
-          ...info,
-        },
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'starts_with',
+            message: error || 'Invalid start',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

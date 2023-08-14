@@ -1,6 +1,10 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe } from '../../utils/index.ts';
+import {
+  executePipe,
+  getErrorAndPipe,
+  getIssue,
+  getPipeInfo,
+} from '../../utils/index.ts';
 
 /**
  * Special schema type.
@@ -68,23 +72,23 @@ export function special<TInput>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (!check(input)) {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'special',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'special',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Execute pipe and return output
-      return executePipe(input as TInput, pipe, { ...info, reason: 'special' });
+      // Execute pipe and return result
+      return executePipe(input as TInput, pipe, getPipeInfo(info, 'special'));
     },
   };
 }

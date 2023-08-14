@@ -1,5 +1,5 @@
-import { ValiError } from '../../error/index.ts';
-import type { ValidateInfo } from '../../types.ts';
+import type { ParseResult, ValidateInfo } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a emoji.
@@ -9,18 +9,18 @@ import type { ValidateInfo } from '../../types.ts';
  * @returns A validation function.
  */
 export function emoji<TInput extends string>(error?: string) {
-  return (input: TInput, info: ValidateInfo) => {
+  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
     if (!/^(\p{Extended_Pictographic}|\p{Emoji_Component})+$/u.test(input)) {
-      throw new ValiError([
-        {
-          validation: 'emoji',
-          origin: 'value',
-          message: error || 'Invalid emoji',
-          input,
-          ...info,
-        },
-      ]);
+      return {
+        issues: [
+          getIssue(info, {
+            validation: 'emoji',
+            message: error || 'Invalid emoji',
+            input,
+          }),
+        ],
+      };
     }
-    return input;
+    return { output: input };
   };
 }

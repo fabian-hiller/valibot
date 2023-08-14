@@ -1,5 +1,5 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchemaAsync } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * NaN schema async type.
@@ -38,23 +38,23 @@ export function nanAsync(error?: string): NanSchemaAsync {
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Check type of input
       if (!Number.isNaN(input)) {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'nan',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'nan',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Return output
-      return input as number;
+      // Return input as output
+      return { output: input as number };
     },
   };
 }

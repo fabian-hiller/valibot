@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { blobAsync } from './blobAsync.ts';
 
 describe('blobAsync', () => {
@@ -20,7 +21,10 @@ describe('blobAsync', () => {
 
   test('should execute pipe', async () => {
     const value = new Blob(['123']);
-    const output = await parseAsync(blobAsync([() => value]), new Blob());
+    const output = await parseAsync(
+      blobAsync([toCustom(() => value)]),
+      new Blob()
+    );
     expect(output).toBe(value);
   });
 });

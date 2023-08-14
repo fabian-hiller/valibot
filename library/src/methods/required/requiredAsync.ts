@@ -7,7 +7,7 @@ import {
   type ObjectSchemaAsync,
   type ObjectShapeAsync,
 } from '../../schemas/index.ts';
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, PipeAsync } from '../../types.ts';
 import { getErrorAndPipe } from '../../utils/index.ts';
 
 /**
@@ -30,7 +30,7 @@ export function requiredAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
 >(
   schema: TObjectSchema,
-  pipe?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>>
+  pipe?: PipeAsync<ObjectOutput<Required<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Required<TObjectSchema['object']>>;
 
 /**
@@ -48,20 +48,21 @@ export function requiredAsync<
 >(
   schema: TObjectSchema,
   error?: string,
-  pipe?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>>
+  pipe?: PipeAsync<ObjectOutput<Required<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Required<TObjectSchema['object']>>;
 
 export function requiredAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
 >(
   schema: TObjectSchema,
-  arg3?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>> | string,
-  arg4?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>>
+  arg3?: PipeAsync<ObjectOutput<Required<TObjectSchema['object']>>> | string,
+  arg4?: PipeAsync<ObjectOutput<Required<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Required<TObjectSchema['object']>> {
   // Get error and pipe argument
   const { error, pipe } = getErrorAndPipe(arg3, arg4);
 
   // Create and return object schema
+  // @ts-ignore FIXME: Remove line once bug in TS is fixed
   return objectAsync(
     Object.entries(schema.object).reduce(
       (object, [key, schema]) => ({
@@ -71,6 +72,7 @@ export function requiredAsync<
       {}
     ) as Required<TObjectSchema['object']>,
     error,
+    // @ts-ignore FIXME: Remove line once bug in TS is fixed
     pipe
   );
 }

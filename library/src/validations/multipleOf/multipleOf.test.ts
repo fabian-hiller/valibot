@@ -7,23 +7,23 @@ describe('multipleOf', () => {
   test('should pass only multiples', () => {
     const validate = multipleOf(5);
     const value1 = 5;
-    expect(validate(value1, info)).toBe(value1);
+    expect(validate(value1, info)).toEqual({ output: value1 });
     const value2 = 10;
-    expect(validate(value2, info)).toBe(value2);
+    expect(validate(value2, info)).toEqual({ output: value2 });
     const value3 = 15;
-    expect(validate(value3, info)).toBe(value3);
+    expect(validate(value3, info)).toEqual({ output: value3 });
     const value4 = -20;
-    expect(validate(value4, info)).toBe(value4);
+    expect(validate(value4, info)).toEqual({ output: value4 });
 
-    expect(() => validate(3, info)).toThrowError();
-    expect(() => validate(7, info)).toThrowError();
-    expect(() => validate(11, info)).toThrowError();
-    expect(() => validate(-14, info)).toThrowError();
+    expect(validate(3, info).issues?.length).toBe(1);
+    expect(validate(7, info).issues?.length).toBe(1);
+    expect(validate(11, info).issues?.length).toBe(1);
+    expect(validate(-14, info).issues?.length).toBe(1);
   });
 
-  test('should throw custom error', () => {
+  test('should return custom error message', () => {
     const error = 'Value is not a multiple of 3!';
     const validate = multipleOf(3, error);
-    expect(() => validate(1, info)).toThrowError(error);
+    expect(validate(1, info).issues?.[0].message).toBe(error);
   });
 });

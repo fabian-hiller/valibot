@@ -1,6 +1,10 @@
-import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe } from '../../utils/index.ts';
+import {
+  executePipe,
+  getErrorAndPipe,
+  getIssue,
+  getPipeInfo,
+} from '../../utils/index.ts';
 
 /**
  * Number schema type.
@@ -55,23 +59,23 @@ export function number(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (typeof input !== 'number') {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'number',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'number',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Execute pipe and return output
-      return executePipe(input, pipe, { ...info, reason: 'number' });
+      // Execute pipe and return result
+      return executePipe(input, pipe, getPipeInfo(info, 'number'));
     },
   };
 }

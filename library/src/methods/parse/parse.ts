@@ -1,3 +1,4 @@
+import { ValiError } from '../../error/index.ts';
 import type { BaseSchema, Output, ParseInfo } from '../../types.ts';
 
 /**
@@ -14,5 +15,9 @@ export function parse<TSchema extends BaseSchema>(
   input: unknown,
   info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly'>
 ): Output<TSchema> {
-  return schema.parse(input, info);
+  const result = schema._parse(input, info);
+  if (result.issues) {
+    throw new ValiError(result.issues);
+  }
+  return result.output;
 }

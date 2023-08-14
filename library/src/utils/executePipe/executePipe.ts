@@ -1,5 +1,5 @@
-import { type Issue, type Issues, ValiError } from '../../error/index.ts';
-import type { Pipe, ValidateInfo } from '../../types.ts';
+import type { Issues } from '../../error/index.ts';
+import type { ParseResult, Pipe, ValidateInfo } from '../../types.ts';
 
 /**
  * Executes the validation and transformation pipe.
@@ -14,30 +14,36 @@ export function executePipe<TValue>(
   input: TValue,
   pipe: Pipe<TValue>,
   info: ValidateInfo
-): TValue {
-  // Create output and issues
+): ParseResult<TValue> {
+  // Create issues and output
+  let issues: Issues | undefined;
   let output: TValue = input;
-  const issues: Issue[] = [];
 
   // Execute any action of pipe
   for (const action of pipe) {
-    try {
-      output = action(output, info);
+    const result = action(output, info);
 
-      // Throw or fill issues in case of an error
-    } catch (error) {
-      if (info.abortEarly || info.abortPipeEarly) {
-        throw error;
+    // If there are issues, capture them
+    if (result.issues) {
+      if (issues) {
+        for (const issue of result.issues) {
+          issues.push(issue);
+        }
+      } else {
+        issues = result.issues;
       }
-      issues.push(...(error as ValiError).issues);
+
+      // If necessary, abort early
+      if (info.abortEarly || info.abortPipeEarly) {
+        break;
+      }
+
+      // Otherwise, overwrite output
+    } else {
+      output = result.output;
     }
   }
 
-  // Throw error if there are issues
-  if (issues.length) {
-    throw new ValiError(issues as Issues);
-  }
-
-  // Return output of pipe
-  return output;
+  // Return pipe result
+  return issues ? { issues } : { output };
 }

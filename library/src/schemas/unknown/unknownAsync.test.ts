@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { unknownAsync } from './unknownAsync.ts';
 
 describe('unknownAsync', () => {
@@ -17,8 +18,11 @@ describe('unknownAsync', () => {
   });
 
   test('should execute pipe', async () => {
-    const transformInput = () => 'hello';
-    const output = await parseAsync(unknownAsync([transformInput]), 123);
+    const transformInput = (): unknown => 'hello';
+    const output = await parseAsync(
+      unknownAsync([toCustom(transformInput)]),
+      123
+    );
     expect(output).toBe(transformInput());
   });
 });

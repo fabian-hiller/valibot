@@ -45,14 +45,14 @@ export function nullable<TWrappedSchema extends BaseSchema>(
      *
      * @returns The parsed output.
      */
-    parse(input, info) {
+    _parse(input, info) {
       // Allow `null` values to pass
       if (input === null) {
-        return input;
+        return { output: input };
       }
 
-      // Parse wrapped schema and return output
-      return wrapped.parse(input, info);
+      // Return result of wrapped schema
+      return wrapped._parse(input, info);
     },
   };
 }

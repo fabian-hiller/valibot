@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
+import { toCustom } from '../../transformations/index.ts';
 import { booleanAsync } from './booleanAsync.ts';
 
 describe('booleanAsync', () => {
@@ -25,10 +26,13 @@ describe('booleanAsync', () => {
 
   test('should execute pipe', async () => {
     const transformInput = () => false;
-    const output1 = await parseAsync(booleanAsync([transformInput]), true);
+    const output1 = await parseAsync(
+      booleanAsync([toCustom(transformInput)]),
+      true
+    );
     expect(output1).toBe(transformInput());
     const output2 = await parseAsync(
-      booleanAsync('Error', [transformInput]),
+      booleanAsync('Error', [toCustom(transformInput)]),
       true
     );
     expect(output2).toBe(transformInput());

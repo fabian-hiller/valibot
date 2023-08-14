@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import { object, string } from '../../schemas/index.ts';
 import { parse } from '../parse/index.ts';
-import { useDefault } from './useDefault.ts';
+import { withDefault } from './withDefault.ts';
 
-describe('useDefault', () => {
+describe('withDefault', () => {
   test('should use default value', () => {
-    const schema1 = useDefault(string(), 'test');
+    const schema1 = withDefault(string(), 'test');
     const output1 = parse(schema1, undefined);
     expect(output1).toBe('test');
     const input1 = 'hello';

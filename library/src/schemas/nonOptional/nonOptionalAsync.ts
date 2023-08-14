@@ -1,10 +1,10 @@
-import { ValiError } from '../../error/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
   Input,
   Output,
 } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 import type { NonOptional } from './nonOptional.ts';
 
 /**
@@ -56,23 +56,23 @@ export function nonOptionalAsync<
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Allow `undefined` values not to pass
       if (input === undefined) {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'non_optional',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'non_optional',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Parse wrapped schema and return output
-      return wrapped.parse(input, info);
+      // Return result of wrapped schema
+      return wrapped._parse(input, info);
     },
   };
 }

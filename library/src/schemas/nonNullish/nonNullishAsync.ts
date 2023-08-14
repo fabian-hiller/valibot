@@ -1,10 +1,10 @@
-import { ValiError } from '../../error/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
   Input,
   Output,
 } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 import type { NonNullish } from './nonNullish.ts';
 
 /**
@@ -56,23 +56,23 @@ export function nonNullishAsync<
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
+    async _parse(input, info) {
       // Allow `null` and `undefined` values not to pass
       if (input === null || input === undefined) {
-        throw new ValiError([
-          {
-            reason: 'type',
-            validation: 'non_nullish',
-            origin: 'value',
-            message: error || 'Invalid type',
-            input,
-            ...info,
-          },
-        ]);
+        return {
+          issues: [
+            getIssue(info, {
+              reason: 'type',
+              validation: 'non_nullish',
+              message: error || 'Invalid type',
+              input,
+            }),
+          ],
+        };
       }
 
-      // Parse wrapped schema and return output
-      return wrapped.parse(input, info);
+      // Return result of wrapped schema
+      return wrapped._parse(input, info);
     },
   };
 }

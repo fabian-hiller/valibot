@@ -1,6 +1,5 @@
-import { ValiError } from '../../error/index.ts';
 import type { ObjectSchemaAsync } from '../../schemas/object/index.ts';
-import type { Output } from '../../types.ts';
+import { getIssue } from '../../utils/index.ts';
 
 /**
  * Creates a strict async object schema that throws an error if an input
@@ -26,26 +25,23 @@ export function strictAsync<TSchema extends ObjectSchemaAsync<any>>(
      *
      * @returns The parsed output.
      */
-    async parse(input, info) {
-      // Get output of object schema
-      const output: Output<TSchema> = await schema.parse(input);
-
-      // Check length of input and output keys
-      if (Object.keys(input as object).length !== Object.keys(output).length) {
-        throw new ValiError([
-          {
-            reason: 'object',
-            validation: 'strict',
-            origin: 'value',
-            message: error || 'Invalid keys',
-            input,
-            ...info,
-          },
-        ]);
-      }
-
-      // Return output of object schema
-      return output;
+    async _parse(input, info) {
+      const result = await schema._parse(input, info);
+      return !result.issues &&
+        // Check length of input and output keys
+        Object.keys(input as object).length !==
+          Object.keys(result.output).length
+        ? {
+            issues: [
+              getIssue(info, {
+                reason: 'object',
+                validation: 'strict',
+                message: error || 'Invalid keys',
+                input,
+              }),
+            ],
+          }
+        : result;
     },
   };
 }

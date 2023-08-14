@@ -7,23 +7,23 @@ describe('emoji', () => {
   test('should pass only emojis', () => {
     const validate = emoji();
     const value1 = '😀';
-    expect(validate(value1, info)).toBe(value1);
+    expect(validate(value1, info)).toEqual({ output: value1 });
     const value2 = '👋🏼';
-    expect(validate(value2, info)).toBe(value2);
+    expect(validate(value2, info)).toEqual({ output: value2 });
     const value3 = '😀👋🏼';
-    expect(validate(value3, info)).toBe(value3);
+    expect(validate(value3, info)).toEqual({ output: value3 });
     const value4 = '✔️';
-    expect(validate(value4, info)).toBe(value4);
+    expect(validate(value4, info)).toEqual({ output: value4 });
 
-    expect(() => validate('emoji', info)).toThrowError();
-    expect(() => validate('e😀', info)).toThrowError();
-    expect(() => validate('👋🏼 ', info)).toThrowError();
-    expect(() => validate('😀 👋🏼', info)).toThrowError();
+    expect(validate('emoji', info).issues?.length).toBe(1);
+    expect(validate('e😀', info).issues?.length).toBe(1);
+    expect(validate('👋🏼 ', info).issues?.length).toBe(1);
+    expect(validate('😀 👋🏼', info).issues?.length).toBe(1);
   });
 
-  test('should throw custom error', () => {
+  test('should return custom error message', () => {
     const error = 'Value is not an emoji!';
     const validate = emoji(error);
-    expect(() => validate('test', info)).toThrowError(error);
+    expect(validate('test', info).issues?.[0].message).toBe(error);
   });
 });
