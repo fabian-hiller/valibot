@@ -13,3 +13,4 @@ export * from './strict/index.ts';
 export * from './transform/index.ts';
 export * from './unwrap/index.ts';
 export * from './withDefault/index.ts';
+export * from './getDefault/index.ts';

@@ -1,5 +1,5 @@
 import type { Issues } from '../../error/index.ts';
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, Pipe } from '../../types.ts'
 import {
   executePipe,
   getErrorAndPipe,
@@ -166,5 +166,17 @@ export function object<TObjectShape extends ObjectShape>(
             getPipeInfo(info, 'object')
           );
     },
+
+    _getDefault() {
+      cachedEntries = cachedEntries || Object.entries(object);
+      
+      const output: Record<string, any> = {};
+      for (const [key, schema] of cachedEntries) {
+        output[key] = schema._getDefault?.();
+      }
+      
+      // Return output
+      return output as any;
+    }
   };
 }

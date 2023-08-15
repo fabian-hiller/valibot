@@ -45,6 +45,7 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
   async: false;
   _parse(input: unknown, info?: ParseInfo): ParseResult<TOutput>;
   types?: { input: TInput; output: TOutput };
+  _getDefault?(): TInput | undefined;
 };
 
 /**
@@ -54,6 +55,7 @@ export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
   async: true;
   _parse(input: unknown, info?: ParseInfo): Promise<ParseResult<TOutput>>;
   types?: { input: TInput; output: TOutput };
+  _getDefault?(): TInput | undefined;
 };
 
 /**

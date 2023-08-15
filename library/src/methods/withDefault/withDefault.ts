@@ -30,6 +30,10 @@ export function withDefault<TSchema extends BaseSchema | BaseSchemaAsync>(
     _parse(input, info) {
       return schema._parse(input === undefined ? getDefault() : input, info);
     },
+
+    _getDefault() {
+      return getDefault();
+    },
   };
 }
 
