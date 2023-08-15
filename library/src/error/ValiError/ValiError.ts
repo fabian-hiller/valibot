@@ -1,4 +1,4 @@
-import type { PathItem } from '../../types.ts';
+import type { LazyPath } from '../../utils/index.ts';
 
 /**
  * Issue reason type.
@@ -36,7 +36,7 @@ export type Issue = {
   origin: IssueOrigin;
   message: string;
   input: any;
-  path?: PathItem[];
+  path?: LazyPath;
   issues?: Issues;
   abortEarly?: boolean;
   abortPipeEarly?: boolean;

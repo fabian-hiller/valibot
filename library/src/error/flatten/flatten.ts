@@ -30,7 +30,7 @@ export function flatten(arg1: ValiError | Issues) {
   return (Array.isArray(arg1) ? arg1 : arg1.issues).reduce<FlatErrors>(
     (flatErrors, issue) => {
       if (issue.path) {
-        const path = issue.path.map(({ key }) => key).join('.');
+        const path = issue.path.evaluatedPath.map(({ key }) => key).join('.');
         flatErrors.nested[path] = [
           ...(flatErrors.nested[path] || []),
           issue.message,

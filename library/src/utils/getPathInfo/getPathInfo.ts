@@ -1,5 +1,6 @@
 import type { IssueOrigin } from '../../error/index.ts';
-import type { ParseInfo, PathItem } from '../../types.ts';
+import type { ParseInfo } from '../../types.ts';
+import type { LazyPath } from '../getPath/getPath.ts';
 
 /**
  * Returns the parse info of a path.
@@ -11,7 +12,7 @@ import type { ParseInfo, PathItem } from '../../types.ts';
  */
 export function getPathInfo(
   info: ParseInfo | undefined,
-  path: PathItem[],
+  path: LazyPath,
   origin: IssueOrigin = 'value'
 ): ParseInfo {
   // Note: The path info is deliberately not constructed with the spread
