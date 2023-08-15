@@ -1,7 +1,8 @@
 ﻿import { describe, expect, test } from 'vitest'
-import { number, object, record, string } from '../../schemas/index.ts'
+import { number, object, record, recursive, string } from '../../schemas/index.ts'
 import { withDefault } from '../withDefault/index.ts'
 import { getDefault } from './getDefault.ts'
+import { minLength } from '../../validations'
 
 describe('getDefault', () => {
   test('should get default value for simple schema', () => {
@@ -22,6 +23,12 @@ describe('getDefault', () => {
     const schema2 = object({ test: withDefault(string(), 'test') });
     const output3 = getDefault(schema2);
     expect(output3).toStrictEqual({ test: 'test' });
+  });
+  
+  test('should work with recursive schemas', () => {
+    const schema = recursive(() => withDefault(string([minLength(3)]), 'test'));
+    const output = getDefault(schema);
+    expect(output).toBe('test');
   });
 
   test('should work with extra properties', () => {
