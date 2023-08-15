@@ -3,7 +3,6 @@ import {
   executePipeAsync,
   getErrorAndPipe,
   getIssue,
-  getPipeInfo,
 } from '../../utils/index.ts';
 
 /**
@@ -81,7 +80,7 @@ export function bigintAsync(
       }
 
       // Execute pipe and return result
-      return executePipeAsync(input, pipe, getPipeInfo(info, 'bigint'));
+      return executePipeAsync(input, pipe, info, 'bigint');
     },
   };
 }

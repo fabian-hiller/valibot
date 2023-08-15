@@ -6,7 +6,6 @@ import {
   getIssue,
   getPath,
   getPathInfo,
-  getPipeInfo,
 } from '../../utils/index.ts';
 import {
   type StringSchema,
@@ -247,7 +246,8 @@ export function recordAsync<
         : executePipeAsync(
             output as RecordOutput<TRecordKey, TRecordValue>,
             pipe,
-            getPipeInfo(info, 'record')
+            info,
+            'record'
           );
     },
   };

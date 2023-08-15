@@ -3,7 +3,6 @@ import {
   executePipeAsync,
   getErrorAndPipe,
   getIssue,
-  getPipeInfo,
 } from '../../utils/index.ts';
 
 /**
@@ -81,7 +80,7 @@ export function stringAsync(
       }
 
       // Execute pipe and return result
-      return executePipeAsync(input, pipe, getPipeInfo(info, 'string'));
+      return executePipeAsync(input, pipe, info, 'string');
     },
   };
 }

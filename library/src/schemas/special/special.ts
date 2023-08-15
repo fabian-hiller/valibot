@@ -1,10 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import {
-  executePipe,
-  getErrorAndPipe,
-  getIssue,
-  getPipeInfo,
-} from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
 
 /**
  * Special schema type.
@@ -88,7 +83,7 @@ export function special<TInput>(
       }
 
       // Execute pipe and return result
-      return executePipe(input as TInput, pipe, getPipeInfo(info, 'special'));
+      return executePipe(input as TInput, pipe, info, 'special');
     },
   };
 }

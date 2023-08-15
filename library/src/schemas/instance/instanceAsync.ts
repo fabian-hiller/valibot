@@ -3,7 +3,6 @@ import {
   executePipeAsync,
   getErrorAndPipe,
   getIssue,
-  getPipeInfo,
 } from '../../utils/index.ts';
 import { type Class } from './instance.ts';
 
@@ -95,7 +94,7 @@ export function instanceAsync<TClass extends Class>(
       }
 
       // Execute pipe and return result
-      return executePipeAsync(input, pipe, getPipeInfo(info, 'instance'));
+      return executePipeAsync(input, pipe, info, 'instance');
     },
   };
 }

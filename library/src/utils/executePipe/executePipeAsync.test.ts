@@ -13,22 +13,23 @@ describe('executePipeAsync', () => {
       toCustomAsync(async (input) => input * 2),
       toCustom((input) => input - 1),
     ];
-    const result = await executePipeAsync<number>(1, pipe, info);
+    const result = await executePipeAsync<number>(1, pipe, info, 'number');
     expect(result.output).toBe(3);
   });
 
   test('should return every issue', async () => {
     const pipe: PipeAsync<number> = [minValue(5), minValue(10), minValue(15)];
-    expect((await executePipeAsync<number>(0, pipe, info)).issues?.length).toBe(
-      3
-    );
+    expect(
+      (await executePipeAsync<number>(0, pipe, info, 'number')).issues?.length
+    ).toBe(3);
   });
 
   test('should return only first issue', async () => {
     const pipe: PipeAsync<number> = [minValue(5), minValue(10), minValue(15)];
     const infoWithAbort = { ...info, abortPipeEarly: true };
     expect(
-      (await executePipeAsync<number>(0, pipe, infoWithAbort)).issues?.length
+      (await executePipeAsync<number>(0, pipe, infoWithAbort, 'number')).issues
+        ?.length
     ).toBe(1);
   });
 });

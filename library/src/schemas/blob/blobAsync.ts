@@ -3,7 +3,6 @@ import {
   executePipeAsync,
   getErrorAndPipe,
   getIssue,
-  getPipeInfo,
 } from '../../utils/index.ts';
 
 /**
@@ -78,7 +77,7 @@ export function blobAsync(
       }
 
       // Execute pipe and return result
-      return executePipeAsync(input, pipe, getPipeInfo(info, 'blob'));
+      return executePipeAsync(input, pipe, info, 'blob');
     },
   };
 }

@@ -6,7 +6,6 @@ import {
   getIssue,
   getPath,
   getPathInfo,
-  getPipeInfo,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput } from './types.ts';
 
@@ -166,9 +165,7 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
       }
 
       // Return issues or pipe result
-      return issues
-        ? { issues }
-        : executePipe(output, pipe, getPipeInfo(info, 'map'));
+      return issues ? { issues } : executePipe(output, pipe, info, 'map');
     },
   };
 }

@@ -12,7 +12,6 @@ import {
   getIssue,
   getPath,
   getPathInfo,
-  getPipeInfo,
 } from '../../utils/index.ts';
 
 /**
@@ -154,11 +153,7 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
       // Return issues or pipe result
       return issues
         ? { issues }
-        : executePipeAsync(
-            output as Output<TArrayItem>[],
-            pipe,
-            getPipeInfo(info, 'array')
-          );
+        : executePipeAsync(output as Output<TArrayItem>[], pipe, info, 'array');
     },
   };
 }

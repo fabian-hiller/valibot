@@ -6,7 +6,6 @@ import {
   getIssue,
   getPath,
   getPathInfo,
-  getPipeInfo,
 } from '../../utils/index.ts';
 import type { TupleInput, TupleOutput } from './types.ts';
 
@@ -269,7 +268,8 @@ export function tupleAsync<
         : executePipeAsync(
             output as TupleOutput<TTupleItems, TTupleRest>,
             pipe,
-            getPipeInfo(info, 'tuple')
+            info,
+            'tuple'
           );
     },
   };
