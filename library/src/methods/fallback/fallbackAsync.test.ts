@@ -1,4 +1,4 @@
-import { describe, test, expect, expectTypeOf  } from 'vitest';
+import { describe, test, expect, expectTypeOf } from 'vitest';
 import { objectAsync, stringAsync, numberAsync } from '../../schemas/index.ts';
 import { minLength } from '../../validations/index.ts';
 import { Issue, Issues, parseAsync, safeParseAsync } from '../../index.ts';
@@ -9,7 +9,7 @@ describe('fallbackAsync', () => {
     const schema = fallbackAsync(stringAsync(), 'world');
     const output = await parseAsync(schema, 'hello');
     expect(output).toBe('hello');
-    expectTypeOf(output).toEqualTypeOf<string>()
+    expectTypeOf(output).toEqualTypeOf<string>();
   });
 
   test('should succeed to parseAsync but return fallback value', async () => {
@@ -24,33 +24,47 @@ describe('fallbackAsync', () => {
       data: numberAsync(),
     });
 
-    let issues: any
-    const fallbackValue = { text: 'hello world', data: 5 }
-    const schema = fallbackAsync(objectSchema, fallbackValue, (dataIssues) => { issues = dataIssues });
+    let issues: any;
+    const fallbackValue = { text: 'hello world', data: 5 };
+    const schema = fallbackAsync(objectSchema, fallbackValue, (dataIssues) => {
+      issues = dataIssues;
+    });
 
-    const data = { text: 'hello' }
+    const data = { text: 'hello' };
     const output = await parseAsync(schema, data);
-    expectTypeOf(output).toEqualTypeOf<{ text: string, data: number }>()
+    expectTypeOf(output).toEqualTypeOf<{ text: string; data: number }>();
     expect(output).toEqual(fallbackValue);
 
     expect(issues).lengthOf.above(0);
     //expect(issues).toEqual([  ]);
 
-    const result = await safeParseAsync(objectSchema, data)
-    expect(result.success).toBeFalsy()
-    expect((result as any).issues).toEqual(issues)
+    const result = await safeParseAsync(objectSchema, data);
+    expect(result.success).toBeFalsy();
+    expect((result as any).issues).toEqual(issues);
   });
 
   test('nested fallback', async () => {
-    let issues: any
-    const fallbackValue = { text: 'hello world', data: 5 }
-    const schema = fallbackAsync(objectAsync({
-      text: fallbackAsync(stringAsync([minLength(6)]), fallbackValue.text, (dataIssues) => { issues = dataIssues }),
-      data: numberAsync(),
-    }), fallbackValue,(dataIssues) => { issues = dataIssues });
+    let issues: any;
+    const fallbackValue = { text: 'hello world', data: 5 };
+    const schema = fallbackAsync(
+      objectAsync({
+        text: fallbackAsync(
+          stringAsync([minLength(6)]),
+          fallbackValue.text,
+          (dataIssues) => {
+            issues = dataIssues;
+          }
+        ),
+        data: numberAsync(),
+      }),
+      fallbackValue,
+      (dataIssues) => {
+        issues = dataIssues;
+      }
+    );
 
     {
-      const data = { data: 2 }
+      const data = { data: 2 };
       const output = await parseAsync(schema, data);
       expect(output).toEqual({ ...data, text: fallbackValue.text });
 
@@ -59,7 +73,7 @@ describe('fallbackAsync', () => {
       //expect(issues).toEqual([  ]);
     }
 
-    issues = []
+    issues = [];
     {
       const output = await parseAsync(schema, {});
       expect(output).toEqual(fallbackValue);
@@ -70,17 +84,26 @@ describe('fallbackAsync', () => {
   });
 
   test('collect warnings', async () => {
-    const issues: Issue[] = []
-    const collect = (newIssues: Issues) => newIssues.forEach(value => issues.push(value)) 
+    const issues: Issue[] = [];
+    const collect = (newIssues: Issues) =>
+      newIssues.forEach((value) => issues.push(value));
 
-    const fallbackValue = { text: 'hello world', data: 5 }
-    const schema = fallbackAsync(objectAsync({
-      text: fallbackAsync(stringAsync([minLength(6)]), fallbackValue.text, collect),
-      data: numberAsync(),
-    }), fallbackValue, collect);
+    const fallbackValue = { text: 'hello world', data: 5 };
+    const schema = fallbackAsync(
+      objectAsync({
+        text: fallbackAsync(
+          stringAsync([minLength(6)]),
+          fallbackValue.text,
+          collect
+        ),
+        data: numberAsync(),
+      }),
+      fallbackValue,
+      collect
+    );
 
     {
-      const data = { data: 2 }
+      const data = { data: 2 };
       const output = await parseAsync(schema, data);
       expect(output).toEqual({ ...data, text: fallbackValue.text });
     }

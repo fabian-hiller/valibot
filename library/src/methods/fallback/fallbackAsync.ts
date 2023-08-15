@@ -1,7 +1,4 @@
-import type {
-    BaseSchemaAsync,
-    Output,
-} from '../../types.ts';
+import type { BaseSchemaAsync, Output } from '../../types.ts';
 import { type Issues } from '../../error/index.ts';
 
 /**
@@ -20,7 +17,7 @@ export function fallbackAsync<TSchema extends BaseSchemaAsync>(
 ): TSchema {
   return {
     ...schema,
-    
+
     /**
      * Parses the input based on its schema.
      * Tests the result for issues and prints them,
@@ -32,13 +29,13 @@ export function fallbackAsync<TSchema extends BaseSchemaAsync>(
      * @returns The parsed output or if validation failed the fallback value.
      */
     async _parse(input, info) {
-			const result = await schema._parse(input, info);
-			if (!result.issues) {
-				return result;
-			}
+      const result = await schema._parse(input, info);
+      if (!result.issues) {
+        return result;
+      }
 
-			(logger ?? console.error)(result.issues);
-			return { output: value };
+      (logger ?? console.error)(result.issues);
+      return { output: value };
     },
   };
 }

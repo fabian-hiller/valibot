@@ -1,4 +1,4 @@
-import { describe, test, expect, expectTypeOf  } from 'vitest';
+import { describe, test, expect, expectTypeOf } from 'vitest';
 import { object, string, number } from '../../schemas/index.ts';
 import { minLength } from '../../validations/index.ts';
 import { Issue, Issues, parse, safeParse } from '../../index.ts';
@@ -9,7 +9,7 @@ describe('fallback', () => {
     const schema = fallback(string(), 'world');
     const output = parse(schema, 'hello');
     expect(output).toBe('hello');
-    expectTypeOf(output).toEqualTypeOf<string>()
+    expectTypeOf(output).toEqualTypeOf<string>();
   });
 
   test('should succeed to parse but return fallback value', () => {
@@ -24,33 +24,47 @@ describe('fallback', () => {
       data: number(),
     });
 
-    let issues: any
-    const fallbackValue = { text: 'hello world', data: 5 }
-    const schema = fallback(objectSchema, fallbackValue, (dataIssues) => { issues = dataIssues });
+    let issues: any;
+    const fallbackValue = { text: 'hello world', data: 5 };
+    const schema = fallback(objectSchema, fallbackValue, (dataIssues) => {
+      issues = dataIssues;
+    });
 
-    const data = { text: 'hello' }
+    const data = { text: 'hello' };
     const output = parse(schema, data);
-    expectTypeOf(output).toEqualTypeOf<{ text: string, data: number }>()
+    expectTypeOf(output).toEqualTypeOf<{ text: string; data: number }>();
     expect(output).toEqual(fallbackValue);
 
     expect(issues).lengthOf.above(0);
     //expect(issues).toEqual([  ]);
 
-    const result = safeParse(objectSchema, data)
-    expect(result.success).toBeFalsy()
-    expect((result as any).issues).toEqual(issues)
+    const result = safeParse(objectSchema, data);
+    expect(result.success).toBeFalsy();
+    expect((result as any).issues).toEqual(issues);
   });
 
   test('nested fallback', () => {
-    let warnings: any
-    const fallbackValue = { text: 'hello world', data: 5 }
-    const schema = fallback(object({
-      text: fallback(string([minLength(6)]), fallbackValue.text, (dataIssues) => { warnings = dataIssues }),
-      data: number(),
-    }), fallbackValue,(dataIssues) => { warnings = dataIssues });
+    let warnings: any;
+    const fallbackValue = { text: 'hello world', data: 5 };
+    const schema = fallback(
+      object({
+        text: fallback(
+          string([minLength(6)]),
+          fallbackValue.text,
+          (dataIssues) => {
+            warnings = dataIssues;
+          }
+        ),
+        data: number(),
+      }),
+      fallbackValue,
+      (dataIssues) => {
+        warnings = dataIssues;
+      }
+    );
 
     {
-      const data = { data: 2 }
+      const data = { data: 2 };
       const output = parse(schema, data);
       expect(output).toEqual({ ...data, text: fallbackValue.text });
 
@@ -59,7 +73,7 @@ describe('fallback', () => {
       //expect(issues).toEqual([  ]);
     }
 
-    warnings = []
+    warnings = [];
     {
       const output = parse(schema, {});
       expect(output).toEqual(fallbackValue);
@@ -70,27 +84,32 @@ describe('fallback', () => {
   });
 
   test('collect warnings', () => {
-    const warnings: Issue[] = []
-    const collect = (issues: Issues) => issues.forEach(value => warnings.push(value)) 
+    const warnings: Issue[] = [];
+    const collect = (issues: Issues) =>
+      issues.forEach((value) => warnings.push(value));
 
-    const fallbackValue = { text: 'hello world', data: 5 }
-    const schema = fallback(object({
-      text: fallback(string([minLength(6)]), fallbackValue.text, collect),
-      data: number(),
-    }), fallbackValue, collect);
+    const fallbackValue = { text: 'hello world', data: 5 };
+    const schema = fallback(
+      object({
+        text: fallback(string([minLength(6)]), fallbackValue.text, collect),
+        data: number(),
+      }),
+      fallbackValue,
+      collect
+    );
 
     {
-      const data = { data: 2 }
+      const data = { data: 2 };
       const output = parse(schema, data);
       expect(output).toEqual({ ...data, text: fallbackValue.text });
-      console.log(warnings)
-      console.log(warnings[0].path)
+      console.log(warnings);
+      console.log(warnings[0].path);
     }
 
     {
       const output = parse(schema, {});
       expect(output).toEqual(fallbackValue);
-      console.log(warnings)
+      console.log(warnings);
     }
 
     expect(warnings).toHaveLength(3);

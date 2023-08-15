@@ -1,7 +1,4 @@
-import type {
-    BaseSchema,
-    Output,
-} from '../../types.ts';
+import type { BaseSchema, Output } from '../../types.ts';
 import { type Issues } from '../../error/index.ts';
 
 /**
@@ -32,13 +29,13 @@ export function fallback<TSchema extends BaseSchema>(
      * @returns The parsed output or if validation failed the fallback value.
      */
     _parse(input, info) {
-			const result = schema._parse(input, info);
-			if (!result.issues) {
-				return result;
-			}
+      const result = schema._parse(input, info);
+      if (!result.issues) {
+        return result;
+      }
 
-			(logger ?? console.error)(result.issues);
-			return { output: value };
+      (logger ?? console.error)(result.issues);
+      return { output: value };
     },
   };
 }
