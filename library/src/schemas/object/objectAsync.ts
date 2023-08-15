@@ -94,11 +94,7 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
      */
     async _parse(input, info) {
       // Check type of input
-      if (
-        !input ||
-        typeof input !== 'object' ||
-        input.toString() !== '[object Object]'
-      ) {
+      if (input?.constructor !== Object) {
         return {
           issues: [
             getIssue(info, {
