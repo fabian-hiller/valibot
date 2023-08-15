@@ -8,7 +8,7 @@
  * @returns Default values .
  */
 export function getDefault<TSchema extends BaseSchema | BaseSchemaAsync>(
-	schema: TSchema,
+  schema: TSchema
 ): TSchema {
-	return schema._getDefault?.();
+  return schema._getDefault?.();
 }

@@ -1,6 +1,7 @@
 import type { BaseSchema, BaseSchemaAsync, Input } from '../../types.ts';
 
-type GetDefault<TSchema extends BaseSchema | BaseSchemaAsync> = () => Input<TSchema>;
+type GetDefault<TSchema extends BaseSchema | BaseSchemaAsync> =
+  () => Input<TSchema>;
 
 /**
  * Passes a default value to a schema in case of an undefined input.
@@ -14,8 +15,9 @@ export function withDefault<TSchema extends BaseSchema | BaseSchemaAsync>(
   schema: TSchema,
   value: (() => Input<TSchema>) | Input<TSchema>
 ): TSchema {
-  const getDefault: GetDefault<TSchema> = typeof value === 'function' ? value : () => value;
-  
+  const getDefault: GetDefault<TSchema> =
+    typeof value === 'function' ? value : () => value;
+
   return {
     ...schema,
 
