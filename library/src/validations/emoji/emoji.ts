@@ -1,4 +1,4 @@
-import type { ParseResult, ValidateInfo } from '../../types.ts';
+import type { _ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -9,7 +9,7 @@ import { getIssue } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function emoji<TInput extends string>(error?: string) {
-  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
+  return (input: TInput, info: ValidateInfo): _ParseResult<TInput> => {
     if (!/^(\p{Extended_Pictographic}|\p{Emoji_Component})+$/u.test(input)) {
       return {
         issues: [

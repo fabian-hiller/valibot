@@ -1,5 +1,5 @@
 import type { Issues } from '../../error/index.ts';
-import type { ParseResult, Pipe, ValidateInfo } from '../../types.ts';
+import type { _ParseResult, Pipe, ValidateInfo } from '../../types.ts';
 
 /**
  * Executes the validation and transformation pipe.
@@ -14,7 +14,7 @@ export function executePipe<TValue>(
   input: TValue,
   pipe: Pipe<TValue>,
   info: ValidateInfo
-): ParseResult<TValue> {
+): _ParseResult<TValue> {
   // Create issues and output
   let issues: Issues | undefined;
   let output: TValue = input;
