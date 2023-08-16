@@ -1,10 +1,6 @@
-import { type Issues, ValiError } from '../../error/index.ts';
-import type {
-  BaseSchema,
-  BaseSchemaAsync,
-  Output,
-  ParseInfo,
-} from '../../types.ts';
+import { ValiError } from '../../error/index.ts';
+import type { BaseSchema, BaseSchemaAsync, ParseInfo } from '../../types.ts';
+import type { SafeParseResult } from './types.ts';
 
 /**
  * Parses unknown input based on a schema.
@@ -21,17 +17,7 @@ export async function safeParseAsync<
   schema: TSchema,
   input: unknown,
   info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly'>
-): Promise<
-  | { success: true; data: Output<TSchema> }
-  | {
-      success: false;
-      /**
-       * @deprecated Please use `.issues` instead.
-       */
-      error: ValiError;
-      issues: Issues;
-    }
-> {
+): Promise<SafeParseResult<TSchema>> {
   const result = await schema._parse(input, info);
   return result.issues
     ? {
