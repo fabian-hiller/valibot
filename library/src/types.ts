@@ -44,7 +44,7 @@ export type _ParseResult<TOutput> =
 export type BaseSchema<TInput = any, TOutput = TInput> = {
   async: false;
   _parse(input: unknown, info?: ParseInfo): _ParseResult<TOutput>;
-  types?: { input: TInput; output: TOutput };
+  _types?: { input: TInput; output: TOutput };
 };
 
 /**
@@ -53,21 +53,21 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
 export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
   async: true;
   _parse(input: unknown, info?: ParseInfo): Promise<_ParseResult<TOutput>>;
-  types?: { input: TInput; output: TOutput };
+  _types?: { input: TInput; output: TOutput };
 };
 
 /**
  * Input inference type.
  */
 export type Input<TSchema extends BaseSchema | BaseSchemaAsync> = NonNullable<
-  TSchema['types']
+  TSchema['_types']
 >['input'];
 
 /**
  * Output inference type.
  */
 export type Output<TSchema extends BaseSchema | BaseSchemaAsync> = NonNullable<
-  TSchema['types']
+  TSchema['_types']
 >['output'];
 
 /**

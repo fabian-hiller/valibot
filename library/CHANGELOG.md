@@ -10,8 +10,8 @@ All notable changes to the library will be documented in this file.
 - Expand `flatten` so that issues are also accepted as first argument
 - Change return type of `safeParse` and `safeParseAsync` method
 - Change error handling and refactor library to improve performance
+- Rename `.parse` to `._parse` and `.types` to `._types` to mark it as internal API
 - Rename `getCurrentPath` util to `getPath` (pull request #92)
-- Rename `.parse` to `._parse` to mark it as internal API
 
 ## v0.12.0 (August 11, 2023)
 
