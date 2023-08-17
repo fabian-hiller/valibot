@@ -5,7 +5,14 @@ import type { BaseSchema, BaseSchemaAsync, Output } from '../../types.ts';
  * Safe parse result type.
  */
 export type SafeParseResult<TSchema extends BaseSchema | BaseSchemaAsync> =
-  | { success: true; data: Output<TSchema> }
+  | {
+      success: true;
+      /**
+       * @deprecated Please use `.output` instead.
+       */
+      data: Output<TSchema>;
+      output: Output<TSchema>;
+    }
   | {
       success: false;
       /**

@@ -25,5 +25,9 @@ export async function safeParseAsync<
         error: new ValiError(result.issues),
         issues: result.issues,
       }
-    : { success: true, data: result.output };
+    : {
+        success: true,
+        data: result.output,
+        output: result.output,
+      };
 }

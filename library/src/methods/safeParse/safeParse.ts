@@ -23,5 +23,9 @@ export function safeParse<TSchema extends BaseSchema>(
         error: new ValiError(result.issues),
         issues: result.issues,
       }
-    : { success: true, data: result.output };
+    : {
+        success: true,
+        data: result.output,
+        output: result.output,
+      };
 }
