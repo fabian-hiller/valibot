@@ -1,5 +1,9 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import {
+  executePipe,
+  getErrorAndPipe,
+  getLeafIssue,
+} from '../../utils/index.ts';
 
 /**
  * Special schema type.
@@ -72,7 +76,7 @@ export function special<TInput>(
       if (!check(input)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'special',
               message: error || 'Invalid type',

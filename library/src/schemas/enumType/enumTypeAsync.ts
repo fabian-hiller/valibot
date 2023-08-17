@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 import type { Enum } from './types.ts';
 
 /**
@@ -54,7 +54,7 @@ export function enumTypeAsync<
       if (!enumValue.includes(input as any)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'enum',
               message: error || 'Invalid type',

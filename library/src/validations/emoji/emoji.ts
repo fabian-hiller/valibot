@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a emoji.
@@ -13,11 +13,14 @@ export function emoji<TInput extends string>(error?: string) {
     if (!/^(\p{Extended_Pictographic}|\p{Emoji_Component})+$/u.test(input)) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'emoji',
-            message: error || 'Invalid emoji',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'emoji',
+              message: error || 'Invalid emoji',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

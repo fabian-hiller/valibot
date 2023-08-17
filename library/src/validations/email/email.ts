@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a email.
@@ -19,11 +19,14 @@ export function email<TInput extends string>(error?: string) {
     ) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'email',
-            message: error || 'Invalid email',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'email',
+              message: error || 'Invalid email',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

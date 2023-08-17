@@ -9,9 +9,8 @@ import type {
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
+  getLeafIssue,
+  getNestedIssue,
 } from '../../utils/index.ts';
 
 /**
@@ -91,7 +90,7 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
       if (!Array.isArray(input)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'array',
               message: error || 'Invalid type',
@@ -111,29 +110,20 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
           // If not aborted early, continue execution
           if (!(info?.abortEarly && issues)) {
             // Parse schema of array item
-            const result = await item._parse(
-              value,
-              getPathInfo(
-                info,
-                getPath(info?.path, {
-                  schema: 'array',
-                  input: input,
-                  key,
-                  value,
-                })
-              )
-            );
+            const result = await item._parse(value, info);
 
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
               // If there are issues, capture them
               if (result.issues) {
+                const nestedIssue = getNestedIssue({
+                  path: `${key}`,
+                  issues: result.issues,
+                });
                 if (issues) {
-                  for (const issue of result.issues) {
-                    issues.push(issue);
-                  }
+                  issues.push(nestedIssue);
                 } else {
-                  issues = result.issues;
+                  issues = [nestedIssue];
                 }
 
                 // If necessary, abort early

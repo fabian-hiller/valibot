@@ -1,5 +1,9 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import {
+  executePipe,
+  getErrorAndPipe,
+  getLeafIssue,
+} from '../../utils/index.ts';
 
 /**
  * String schema type.
@@ -59,7 +63,7 @@ export function string(
       if (typeof input !== 'string') {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'string',
               message: error || 'Invalid type',

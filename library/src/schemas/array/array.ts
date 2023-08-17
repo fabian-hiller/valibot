@@ -3,9 +3,8 @@ import type { BaseSchema, Input, Output, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
+  getLeafIssue,
+  getNestedIssue,
 } from '../../utils/index.ts';
 
 /**
@@ -95,7 +94,7 @@ export function array<TArrayItem extends BaseSchema>(
       if (!Array.isArray(input)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'array',
               message: error || 'Invalid type',
@@ -112,27 +111,18 @@ export function array<TArrayItem extends BaseSchema>(
       // Parse schema of each array item
       for (let index = 0; index < input.length; index++) {
         const value = input[index];
-        const result = item._parse(
-          value,
-          getPathInfo(
-            info,
-            getPath(info?.path, {
-              schema: 'array',
-              input: input,
-              key: index,
-              value,
-            })
-          )
-        );
+        const result = item._parse(value, info);
 
         // If there are issues, capture them
         if (result.issues) {
+          const nestedIssue = getNestedIssue({
+            path: `${index}`,
+            issues: result.issues,
+          });
           if (issues) {
-            for (const issue of result.issues) {
-              issues.push(issue);
-            }
+            issues.push(nestedIssue);
           } else {
-            issues = result.issues;
+            issues = [nestedIssue];
           }
 
           // If necessary, abort early

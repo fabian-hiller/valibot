@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that checks the value for equality.
@@ -17,11 +17,14 @@ export function equal<
     if (input !== requirement) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'equal',
-            message: error || 'Invalid input',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'equal',
+              message: error || 'Invalid input',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

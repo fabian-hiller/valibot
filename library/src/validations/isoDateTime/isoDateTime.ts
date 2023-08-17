@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a datetime.
@@ -23,11 +23,14 @@ export function isoDateTime<TInput extends string>(error?: string) {
     ) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'iso_date_time',
-            message: error || 'Invalid datetime',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'iso_date_time',
+              message: error || 'Invalid datetime',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

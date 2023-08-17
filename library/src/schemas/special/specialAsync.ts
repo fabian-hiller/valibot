@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getLeafIssue,
 } from '../../utils/index.ts';
 
 /**
@@ -76,7 +76,7 @@ export function specialAsync<TInput>(
       if (!(await check(input))) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'special',
               message: error || 'Invalid type',

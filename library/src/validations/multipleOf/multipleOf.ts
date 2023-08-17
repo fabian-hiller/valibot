@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates whether a number is a multiple.
@@ -17,11 +17,14 @@ export function multipleOf<TInput extends number>(
     if (input % requirement !== 0) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'multipleOf',
-            message: error || 'Invalid multiple',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'multipleOf',
+              message: error || 'Invalid multiple',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

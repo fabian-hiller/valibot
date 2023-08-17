@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates whether a number is finite.
@@ -13,11 +13,14 @@ export function finite<TInput extends number>(error?: string) {
     if (!Number.isFinite(input)) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'finite',
-            message: error || 'Invalid finite number',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'finite',
+              message: error || 'Invalid finite number',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

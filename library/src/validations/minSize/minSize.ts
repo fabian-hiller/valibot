@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the size of a map, set or blob.
@@ -17,11 +17,14 @@ export function minSize<TInput extends Map<any, any> | Set<any> | Blob>(
     if (input.size < requirement) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'min_size',
-            message: error || 'Invalid size',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'min_size',
+              message: error || 'Invalid size',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

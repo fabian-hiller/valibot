@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Void schema type.
@@ -40,7 +40,7 @@ export function voidType(error?: string): VoidSchema {
       if (typeof input !== 'undefined') {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'void',
               message: error || 'Invalid type',

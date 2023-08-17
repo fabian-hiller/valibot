@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue, isLuhnAlgo } from '../../utils/index.ts';
+import { getLeafIssue, isLuhnAlgo } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a IMEI.
@@ -18,11 +18,14 @@ export function imei<TInput extends string>(error?: string) {
     ) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'imei',
-            message: error || 'Invalid IMEI',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'imei',
+              message: error || 'Invalid IMEI',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Null schema async type.
@@ -40,7 +40,7 @@ export function nullTypeAsync(error?: string): NullSchemaAsync {
       if (input !== null) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'null',
               message: error || 'Invalid type',

@@ -3,9 +3,8 @@ import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
+  getLeafIssue,
+  getNestedIssue,
 } from '../../utils/index.ts';
 import type { TupleOutput, TupleInput } from './types.ts';
 
@@ -152,7 +151,7 @@ export function tuple<
       ) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'tuple',
               message: error || 'Invalid type',
@@ -169,27 +168,18 @@ export function tuple<
       // Parse schema of each tuple item
       for (let index = 0; index < items.length; index++) {
         const value = input[index];
-        const result = items[index]._parse(
-          value,
-          getPathInfo(
-            info,
-            getPath(info?.path, {
-              schema: 'tuple',
-              input: input as [any, ...any[]],
-              key: index,
-              value,
-            })
-          )
-        );
+        const result = items[index]._parse(value, info);
 
         // If there are issues, capture them
         if (result.issues) {
+          const nestedIssue = getNestedIssue({
+            path: `${index}`,
+            issues: result.issues,
+          });
           if (issues) {
-            for (const issue of result.issues) {
-              issues.push(issue);
-            }
+            issues.push(nestedIssue);
           } else {
-            issues = result.issues;
+            issues = [nestedIssue];
           }
 
           // If necessary, abort early
@@ -207,27 +197,18 @@ export function tuple<
       if (rest) {
         for (let index = items.length; index < input.length; index++) {
           const value = input[index];
-          const result = rest._parse(
-            value,
-            getPathInfo(
-              info,
-              getPath(info?.path, {
-                schema: 'tuple',
-                input: input as [any, ...any[]],
-                key: index,
-                value,
-              })
-            )
-          );
+          const result = rest._parse(value, info);
 
           // If there are issues, capture them
           if (result.issues) {
+            const nestedIssue = getNestedIssue({
+              path: `${index}`,
+              issues: result.issues,
+            });
             if (issues) {
-              for (const issue of result.issues) {
-                issues.push(issue);
-              }
+              issues.push(nestedIssue);
             } else {
-              issues = result.issues;
+              issues = [nestedIssue];
             }
 
             // If necessary, abort early

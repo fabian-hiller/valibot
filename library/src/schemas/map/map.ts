@@ -3,9 +3,8 @@ import type { BaseSchema, Output, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
+  getLeafIssue,
+  getNestedIssue,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput } from './types.ts';
 
@@ -92,7 +91,7 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
       if (!(input instanceof Map)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'map',
               message: error || 'Invalid type',
@@ -112,25 +111,20 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
         const inputKey = inputEntry[0];
         const inputValue = inputEntry[1];
 
-        // Get current path
-        const path = getPath(info?.path, {
-          schema: 'map',
-          input,
-          key: inputKey,
-          value: inputValue,
-        });
-
         // Get parse result of key
-        const keyResult = key._parse(inputKey, getPathInfo(info, path, 'key'));
+        const keyResult = key._parse(inputKey, info);
 
         // If there are issues, capture them
         if (keyResult.issues) {
+          const nestedIssue = getNestedIssue({
+            path: inputKey,
+            origin: 'key',
+            issues: keyResult.issues,
+          });
           if (issues) {
-            for (const issue of keyResult.issues) {
-              issues.push(issue);
-            }
+            issues.push(nestedIssue);
           } else {
-            issues = keyResult.issues;
+            issues = [nestedIssue];
           }
 
           // If necessary, abort early
@@ -140,16 +134,18 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
         }
 
         // Get parse result of value
-        const valueResult = value._parse(inputValue, getPathInfo(info, path));
+        const valueResult = value._parse(inputValue, info);
 
         // If there are issues, capture them
         if (valueResult.issues) {
+          const nestedIssue = getNestedIssue({
+            path: inputValue,
+            issues: valueResult.issues,
+          });
           if (issues) {
-            for (const issue of valueResult.issues) {
-              issues.push(issue);
-            }
+            issues.push(nestedIssue);
           } else {
-            issues = valueResult.issues;
+            issues = [nestedIssue];
           }
 
           // If necessary, abort early

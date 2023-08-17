@@ -3,9 +3,8 @@ import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
+  getLeafIssue,
+  getNestedIssue,
 } from '../../utils/index.ts';
 import {
   type StringSchema,
@@ -158,7 +157,7 @@ export function recordAsync<
       ) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'record',
               message: error || 'Invalid type',
@@ -184,14 +183,6 @@ export function recordAsync<
             // Get input value
             const inputValue = inputEntry[1];
 
-            // Get current path
-            const path = getPath(info?.path, {
-              schema: 'record',
-              input,
-              key: inputKey,
-              value: inputValue,
-            });
-
             // Get parse result of key and value
             const [keyResult, valueResult] = await Promise.all(
               [
@@ -201,21 +192,21 @@ export function recordAsync<
                 // If not aborted early, continue execution
                 if (!(info?.abortEarly && issues)) {
                   // Get parse result of input
-                  const result = await schema._parse(
-                    input,
-                    getPathInfo(info, path, origin)
-                  );
+                  const result = await schema._parse(input, info);
 
                   // If not aborted early, continue execution
                   if (!(info?.abortEarly && issues)) {
                     // If there are issues, capture them
                     if (result.issues) {
+                      const nestedIssue = getNestedIssue({
+                        path: inputKey,
+                        origin,
+                        issues: result.issues,
+                      });
                       if (issues) {
-                        for (const issue of result.issues) {
-                          issues.push(issue);
-                        }
+                        issues.push(nestedIssue);
                       } else {
-                        issues = result.issues;
+                        issues = [nestedIssue];
                       }
 
                       // If necessary, abort early

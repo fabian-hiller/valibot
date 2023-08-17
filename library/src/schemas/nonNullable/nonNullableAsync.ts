@@ -4,7 +4,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 import type { NonNullable } from './nonNullable.ts';
 
 /**
@@ -61,7 +61,7 @@ export function nonNullableAsync<
       if (input === null) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'non_nullable',
               message: error || 'Invalid type',

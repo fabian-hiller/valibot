@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a IP v6 address.
@@ -17,11 +17,14 @@ export function ipv6<TInput extends string>(error?: string) {
     ) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'ipv6',
-            message: error || 'Invalid IP v6',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'ipv6',
+              message: error || 'Invalid IP v6',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

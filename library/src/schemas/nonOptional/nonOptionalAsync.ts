@@ -4,7 +4,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 import type { NonOptional } from './nonOptional.ts';
 
 /**
@@ -61,7 +61,7 @@ export function nonOptionalAsync<
       if (input === undefined) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'non_optional',
               message: error || 'Invalid type',

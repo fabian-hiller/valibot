@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a timestamp.
@@ -23,11 +23,14 @@ export function isoTimestamp<TInput extends string>(error?: string) {
     ) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'iso_timestamp',
-            message: error || 'Invalid timestamp',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'iso_timestamp',
+              message: error || 'Invalid timestamp',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

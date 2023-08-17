@@ -4,6 +4,7 @@ import { ValiError } from './ValiError.ts';
 describe('ValiError', () => {
   test('should create error instance', () => {
     const issue = {
+      type: 'leaf' as const,
       reason: 'type' as const,
       validation: 'string',
       origin: 'value' as const,

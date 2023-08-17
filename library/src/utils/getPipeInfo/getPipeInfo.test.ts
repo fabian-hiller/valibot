@@ -4,8 +4,8 @@ import { getPipeInfo } from './getPipeInfo.ts';
 describe('getPipeInfo', () => {
   test('should return pipe info', () => {
     expect(getPipeInfo(undefined, 'number')).toEqual({ reason: 'number' });
-    expect(getPipeInfo({ origin: 'value' }, 'string')).toEqual({
-      origin: 'value',
+    expect(getPipeInfo({ abortEarly: true }, 'string')).toEqual({
+      abortEarly: true,
       reason: 'string',
     });
   });

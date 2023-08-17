@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the MIME type of a file.
@@ -17,11 +17,14 @@ export function mimeType<TInput extends Blob>(
     if (!requirement.includes(input.type as `${string}/${string}`)) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'mime_type',
-            message: error || 'Invalid MIME type',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'mime_type',
+              message: error || 'Invalid MIME type',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

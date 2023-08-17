@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the byte length of a string.
@@ -17,11 +17,14 @@ export function maxBytes<TInput extends string>(
     if (new TextEncoder().encode(input).length > requirement) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'max_bytes',
-            message: error || 'Invalid byte length',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'max_bytes',
+              message: error || 'Invalid byte length',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

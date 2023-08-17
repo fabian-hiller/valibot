@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Undefined schema async type.
@@ -43,7 +43,7 @@ export function undefinedTypeAsync(error?: string): UndefinedSchemaAsync {
       if (typeof input !== 'undefined') {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'undefined',
               message: error || 'Invalid type',

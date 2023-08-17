@@ -4,6 +4,7 @@ import { string } from '../string/index.ts';
 import { number } from '../number/index.ts';
 import { nullType } from '../nullType/index.ts';
 import { union } from './union.ts';
+import { UnionIssue } from '../../error/index.ts';
 
 describe('union', () => {
   test('should pass only union values', () => {
@@ -18,6 +19,14 @@ describe('union', () => {
     const output3 = parse(schema, input3);
     expect(output3).toBe(input3);
     expect(() => parse(schema, 123n)).toThrowError();
+    try {
+      parse(schema, 123n);
+    } catch (e: any) {
+      expect(e.issues.length).toBe(1);
+      expect((e.issues[0] as UnionIssue).message).toBe('Invalid type');
+      expect((e.issues[0] as UnionIssue).validation).toBe('union');
+      expect((e.issues[0] as UnionIssue).issues.length).toBe(3);
+    }
     expect(() => parse(schema, undefined)).toThrowError();
     expect(() => parse(schema, {})).toThrowError();
     expect(() => parse(schema, [])).toThrowError();

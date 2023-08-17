@@ -3,9 +3,8 @@ import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
+  getLeafIssue,
+  getNestedIssue,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput } from './types.ts';
 
@@ -97,7 +96,7 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
       if (input?.constructor !== Object) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'object',
               message: error || 'Invalid type',
@@ -124,29 +123,21 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
             const value = (input as Record<string, unknown>)[key];
 
             // Get parse result of value
-            const result = await objectEntry[1]._parse(
-              value,
-              getPathInfo(
-                info,
-                getPath(info?.path, {
-                  schema: 'object',
-                  input,
-                  key,
-                  value,
-                })
-              )
-            );
+            const result = await objectEntry[1]._parse(value, info);
 
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
               // If there are issues, capture them
               if (result.issues) {
+                const nestedIssue = getNestedIssue({
+                  path: key,
+                  issues: result.issues,
+                });
+
                 if (issues) {
-                  for (const issue of result.issues) {
-                    issues.push(issue);
-                  }
+                  issues.push(nestedIssue);
                 } else {
-                  issues = result.issues;
+                  issues = [nestedIssue];
                 }
 
                 // If necessary, abort early

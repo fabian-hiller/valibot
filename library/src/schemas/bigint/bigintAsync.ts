@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getLeafIssue,
 } from '../../utils/index.ts';
 
 /**
@@ -69,7 +69,7 @@ export function bigintAsync(
       if (typeof input !== 'bigint') {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'bigint',
               message: error || 'Invalid type',

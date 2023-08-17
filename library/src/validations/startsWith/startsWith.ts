@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the start of a string.
@@ -17,11 +17,14 @@ export function startsWith<TInput extends string>(
     if (!input.startsWith(requirement as any)) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'starts_with',
-            message: error || 'Invalid start',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'starts_with',
+              message: error || 'Invalid start',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

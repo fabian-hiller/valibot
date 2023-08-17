@@ -1,5 +1,9 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import {
+  executePipe,
+  getErrorAndPipe,
+  getLeafIssue,
+} from '../../utils/index.ts';
 
 /**
  * Boolean schema type.
@@ -59,7 +63,7 @@ export function boolean(
       if (typeof input !== 'boolean') {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'boolean',
               message: error || 'Invalid type',

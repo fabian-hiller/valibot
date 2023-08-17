@@ -3,9 +3,8 @@ import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
+  getLeafIssue,
+  getNestedIssue,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput } from './types.ts';
 
@@ -86,7 +85,7 @@ export function set<TSetValue extends BaseSchema>(
       if (!(input instanceof Set)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'set',
               message: error || 'Invalid type',
@@ -103,27 +102,18 @@ export function set<TSetValue extends BaseSchema>(
 
       // Parse each value by schema
       for (const inputValue of input) {
-        const result = value._parse(
-          inputValue,
-          getPathInfo(
-            info,
-            getPath(info?.path, {
-              schema: 'set',
-              input,
-              key: index++,
-              value: inputValue,
-            })
-          )
-        );
+        const result = value._parse(inputValue, info);
 
         // If there are issues, capture them
         if (result.issues) {
+          const nestedIssue = getNestedIssue({
+            path: `${index}`,
+            issues: result.issues,
+          });
           if (issues) {
-            for (const issue of result.issues) {
-              issues.push(issue);
-            }
+            issues.push(nestedIssue);
           } else {
-            issues = result.issues;
+            issues = [nestedIssue];
           }
 
           // If necessary, abort early
@@ -135,6 +125,7 @@ export function set<TSetValue extends BaseSchema>(
         } else {
           output.add(result.output);
         }
+        index++;
       }
 
       // Return issues or pipe result

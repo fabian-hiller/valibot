@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a URL.
@@ -19,11 +19,14 @@ export function url<TInput extends string>(error?: string) {
     } catch (_) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'url',
-            message: error || 'Invalid URL',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'url',
+              message: error || 'Invalid URL',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

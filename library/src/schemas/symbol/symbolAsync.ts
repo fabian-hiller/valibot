@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Symbol schema async type.
@@ -43,7 +43,7 @@ export function symbolAsync(error?: string): SymbolSchemaAsync {
       if (typeof input !== 'symbol') {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'symbol',
               message: error || 'Invalid type',

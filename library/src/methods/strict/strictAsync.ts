@@ -1,5 +1,5 @@
 import type { ObjectSchemaAsync } from '../../schemas/object/index.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a strict async object schema that throws an error if an input
@@ -33,7 +33,7 @@ export function strictAsync<TSchema extends ObjectSchemaAsync<any>>(
           Object.keys(result.output).length
         ? {
             issues: [
-              getIssue(info, {
+              getLeafIssue({
                 reason: 'object',
                 validation: 'strict',
                 message: error || 'Invalid keys',

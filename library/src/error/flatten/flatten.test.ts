@@ -1,29 +1,34 @@
 import { describe, expect, test } from 'vitest';
-import { type Issues, ValiError } from '../ValiError/index.ts';
+import {
+  type Issues,
+  ValiError,
+  type LeafIssue,
+  type NestedIssue,
+} from '../ValiError/index.ts';
 import { flatten } from './flatten.ts';
-import { LazyPath } from '../../utils/index.ts';
 
 describe('flatten', () => {
-  const rootIssue = {
+  const rootIssue: LeafIssue = {
+    type: 'leaf',
     reason: 'type' as const,
     validation: 'string',
-    origin: 'value' as const,
     message: 'Invalid type',
     input: 1,
   };
 
-  const nestedIssue = {
-    reason: 'type' as const,
-    validation: 'string',
+  const nestedIssue: NestedIssue = {
+    type: 'nested',
     origin: 'value' as const,
-    message: 'Invalid type',
-    input: { test: 1 },
-    path: new LazyPath(undefined, {
-      schema: 'object' as const,
-      input: { test: 1 },
-      key: 'test',
-      value: 1,
-    }),
+    path: 'test',
+    issues: [
+      {
+        type: 'leaf',
+        reason: 'type' as const,
+        validation: 'string',
+        message: 'Invalid type',
+        input: 1,
+      },
+    ],
   };
 
   test('should flatten only root error', () => {
@@ -45,7 +50,7 @@ describe('flatten', () => {
     const issues: Issues = [nestedIssue];
     const flatError = {
       nested: {
-        test: [nestedIssue.message],
+        test: [(nestedIssue.issues[0] as LeafIssue).message],
       },
     };
 
@@ -62,7 +67,7 @@ describe('flatten', () => {
     const flatError = {
       root: [rootIssue.message],
       nested: {
-        test: [nestedIssue.message],
+        test: [(nestedIssue.issues[0] as LeafIssue).message],
       },
     };
 

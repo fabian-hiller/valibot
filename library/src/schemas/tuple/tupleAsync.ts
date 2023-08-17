@@ -3,9 +3,8 @@ import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
+  getLeafIssue,
+  getNestedIssue,
 } from '../../utils/index.ts';
 import type { TupleInput, TupleOutput } from './types.ts';
 
@@ -155,7 +154,7 @@ export function tupleAsync<
       ) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'tuple',
               message: error || 'Invalid type',
@@ -176,29 +175,20 @@ export function tupleAsync<
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
               const value = input[index];
-              const result = await schema._parse(
-                value,
-                getPathInfo(
-                  info,
-                  getPath(info?.path, {
-                    schema: 'tuple',
-                    input: input as [any, ...any[]],
-                    key: index,
-                    value,
-                  })
-                )
-              );
+              const result = await schema._parse(value, info);
 
               // If not aborted early, continue execution
               if (!(info?.abortEarly && issues)) {
                 // If there are issues, capture them
                 if (result.issues) {
+                  const nestedIssue = getNestedIssue({
+                    path: `${index}`,
+                    issues: result.issues,
+                  });
                   if (issues) {
-                    for (const issue of result.issues) {
-                      issues.push(issue);
-                    }
+                    issues.push(nestedIssue);
                   } else {
-                    issues = result.issues;
+                    issues = [nestedIssue];
                   }
 
                   // If necessary, abort early
@@ -222,29 +212,20 @@ export function tupleAsync<
               // If not aborted early, continue execution
               if (!(info?.abortEarly && issues)) {
                 const tupleIndex = items.length + index;
-                const result = await rest._parse(
-                  value,
-                  getPathInfo(
-                    info,
-                    getPath(info?.path, {
-                      schema: 'tuple',
-                      input: input as [any, ...any[]],
-                      key: tupleIndex,
-                      value,
-                    })
-                  )
-                );
+                const result = await rest._parse(value, info);
 
                 // If not aborted early, continue execution
                 if (!(info?.abortEarly && issues)) {
                   // If there are issues, capture them
                   if (result.issues) {
+                    const nestedIssue = getNestedIssue({
+                      path: `${tupleIndex}`,
+                      issues: result.issues,
+                    });
                     if (issues) {
-                      for (const issue of result.issues) {
-                        issues.push(issue);
-                      }
+                      issues.push(nestedIssue);
                     } else {
-                      issues = result.issues;
+                      issues = [nestedIssue];
                     }
 
                     // If necessary, abort early

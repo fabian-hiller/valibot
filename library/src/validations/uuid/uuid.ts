@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a UUID.
@@ -17,11 +17,15 @@ export function uuid<TInput extends string>(error?: string) {
     ) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'uuid',
-            message: error || 'Invalid UUID',
-            input,
-          }),
+          getLeafIssue(
+            {
+              reason: info.reason,
+              validation: 'uuid',
+              message: error || 'Invalid UUID',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

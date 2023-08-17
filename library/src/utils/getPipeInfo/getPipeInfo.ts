@@ -16,8 +16,6 @@ export function getPipeInfo(
   // Note: The pipe info is deliberately not constructed with the spread
   // operator for performance reasons
   return {
-    origin: info?.origin,
-    path: info?.path,
     abortEarly: info?.abortEarly,
     abortPipeEarly: info?.abortPipeEarly,
     reason,

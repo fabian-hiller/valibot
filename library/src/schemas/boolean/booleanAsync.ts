@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getLeafIssue,
 } from '../../utils/index.ts';
 
 /**
@@ -69,7 +69,7 @@ export function booleanAsync(
       if (typeof input !== 'boolean') {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'boolean',
               message: error || 'Invalid type',

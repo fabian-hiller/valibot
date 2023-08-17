@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getLeafIssue,
 } from '../../utils/index.ts';
 
 /**
@@ -66,7 +66,7 @@ export function dateAsync(
       if (!(input instanceof Date)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'date',
               message: error || 'Invalid type',

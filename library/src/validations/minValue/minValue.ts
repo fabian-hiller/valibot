@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the value of a string, number or date.
@@ -17,11 +17,14 @@ export function minValue<
     if (input < requirement) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'min_value',
-            message: error || 'Invalid value',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'min_value',
+              message: error || 'Invalid value',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

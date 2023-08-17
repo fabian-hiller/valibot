@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 export function includes<TInput extends string>(
   requirement: string,
@@ -27,11 +27,14 @@ export function includes<TInput extends string | TItem[], TItem>(
     if (!input.includes(requirement as any)) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'includes',
-            message: error || 'Invalid content',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'includes',
+              message: error || 'Invalid content',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

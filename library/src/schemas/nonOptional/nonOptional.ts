@@ -1,5 +1,5 @@
 import type { BaseSchema, Input, Output } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Non optional type.
@@ -58,7 +58,7 @@ export function nonOptional<TWrappedSchema extends BaseSchema>(
       if (input === undefined) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'non_optional',
               message: error || 'Invalid type',

@@ -1,4 +1,4 @@
-import type { Issue, Issues } from './error/index.ts';
+import type { Issue, Issues, LeafIssue } from './error/index.ts';
 import type {
   ArrayPathItem,
   MapPathItem,
@@ -11,14 +11,15 @@ import type {
 /**
  * Parse info type.
  */
-export type ParseInfo = Partial<
-  Pick<Issue, 'origin' | 'path' | 'abortEarly' | 'abortPipeEarly'>
->;
+export type ParseInfo = {
+  abortEarly?: boolean;
+  abortPipeEarly?: boolean;
+};
 
 /**
  * Validate info type.
  */
-export type ValidateInfo = ParseInfo & Pick<Issue, 'reason'>;
+export type ValidateInfo = ParseInfo & Pick<LeafIssue, 'reason'>;
 
 /**
  * Path item type.

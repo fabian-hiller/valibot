@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getLeafIssue,
 } from '../../utils/index.ts';
 import { type Class } from './instance.ts';
 
@@ -83,7 +83,7 @@ export function instanceAsync<TClass extends Class>(
       if (!(input instanceof of)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'instance',
               message: error || 'Invalid type',

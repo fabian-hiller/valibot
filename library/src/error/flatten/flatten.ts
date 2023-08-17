@@ -26,20 +26,35 @@ export function flatten(error: ValiError): FlatErrors;
  */
 export function flatten(issues: Issues): FlatErrors;
 
-export function flatten(arg1: ValiError | Issues) {
-  return (Array.isArray(arg1) ? arg1 : arg1.issues).reduce<FlatErrors>(
-    (flatErrors, issue) => {
-      if (issue.path) {
-        const path = issue.path.evaluatedPath.map(({ key }) => key).join('.');
-        flatErrors.nested[path] = [
-          ...(flatErrors.nested[path] || []),
-          issue.message,
-        ];
-      } else {
-        flatErrors.root = [...(flatErrors.root || []), issue.message];
+export function flatten(issueContainer: Issues | ValiError): FlatErrors {
+  const issues = Array.isArray(issueContainer)
+    ? issueContainer
+    : issueContainer.issues;
+  const flatErrors: FlatErrors = { nested: {} };
+  function flattenRecursive(issues: Issues, path: string) {
+    for (const issue of issues) {
+      if (issue.type === 'leaf') {
+        if (path === '') {
+          if (!flatErrors.root) {
+            flatErrors.root = [issue.message];
+          } else {
+            flatErrors.root.push(issue.message);
+          }
+        } else {
+          if (!flatErrors.nested[path]) {
+            flatErrors.nested[path] = [issue.message];
+          } else {
+            flatErrors.nested[path]!.push(issue.message);
+          }
+        }
+      } else if (issue.type === 'nested') {
+        const newPath = path === '' ? issue.path : `${path}.${issue.path}`;
+        flattenRecursive(issue.issues, newPath);
+      } else if (issue.type === 'union') {
+        flattenRecursive(issue.issues, path);
       }
-      return flatErrors;
-    },
-    { nested: {} }
-  );
+    }
+  }
+  flattenRecursive(issues, '');
+  return flatErrors;
 }

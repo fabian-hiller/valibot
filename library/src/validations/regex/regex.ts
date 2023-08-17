@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a string with a regex.
@@ -17,11 +17,14 @@ export function regex<TInput extends string>(
     if (!requirement.test(input)) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'regex',
-            message: error || 'Invalid regex',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'regex',
+              message: error || 'Invalid regex',
+              input,
+            },
+            info
+          ),
         ],
       };
     }

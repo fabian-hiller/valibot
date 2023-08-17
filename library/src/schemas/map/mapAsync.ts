@@ -8,9 +8,8 @@ import type {
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
+  getLeafIssue,
+  getNestedIssue,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput } from './types.ts';
 
@@ -106,7 +105,7 @@ export function mapAsync<
       if (!(input instanceof Map)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'map',
               message: error || 'Invalid type',
@@ -127,14 +126,6 @@ export function mapAsync<
           const inputKey = inputEntry[0];
           const inputValue = inputEntry[1];
 
-          // Get current path
-          const path = getPath(info?.path, {
-            schema: 'map',
-            input,
-            key: inputKey,
-            value: inputValue,
-          });
-
           // Get parse result of key and value
           const [keyResult, valueResult] = await Promise.all(
             [
@@ -144,21 +135,21 @@ export function mapAsync<
               // If not aborted early, continue execution
               if (!(info?.abortEarly && issues)) {
                 // Get parse result of input
-                const result = await schema._parse(
-                  input,
-                  getPathInfo(info, path, origin)
-                );
+                const result = await schema._parse(input, info);
 
                 // If not aborted early, continue execution
                 if (!(info?.abortEarly && issues)) {
                   // If there are issues, capture them
                   if (result.issues) {
+                    const nestedIssue = getNestedIssue({
+                      path: inputKey,
+                      origin,
+                      issues: result.issues,
+                    });
                     if (issues) {
-                      for (const issue of result.issues) {
-                        issues.push(issue);
-                      }
+                      issues.push(nestedIssue);
                     } else {
-                      issues = result.issues;
+                      issues = [nestedIssue];
                     }
 
                     // If necessary, abort early

@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Literal schema type.
@@ -53,7 +53,7 @@ export function literal<TLiteral extends string | number>(
       if (input !== literal) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'literal',
               message: error || 'Invalid type',

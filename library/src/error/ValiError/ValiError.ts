@@ -1,5 +1,3 @@
-import type { LazyPath } from '../../utils/index.ts';
-
 /**
  * Issue reason type.
  */
@@ -30,17 +28,30 @@ export type IssueOrigin = 'key' | 'value';
 /**
  * Issue type.
  */
-export type Issue = {
+export type LeafIssue = {
+  type: 'leaf';
   reason: IssueReason;
   validation: string;
-  origin: IssueOrigin;
   message: string;
   input: any;
-  path?: LazyPath;
-  issues?: Issues;
-  abortEarly?: boolean;
-  abortPipeEarly?: boolean;
 };
+
+export type NestedIssue = {
+  type: 'nested';
+  path: string;
+  origin: IssueOrigin;
+  issues: Issues;
+};
+
+export type UnionIssue = {
+  type: 'union';
+  reason: 'union';
+  validation: 'union';
+  message: string;
+  issues: Issues;
+};
+
+export type Issue = LeafIssue | NestedIssue | UnionIssue;
 
 /**
  * Issues type.
@@ -59,8 +70,19 @@ export class ValiError extends Error {
    * @param issues The error issues.
    */
   constructor(issues: Issues) {
-    super(issues[0].message);
-    this.name = 'ValiError';
+    super();
     this.issues = issues;
+    this.message = this._getFirstLeafIssue()?.message ?? 'Unknown error';
+    this.name = 'ValiError';
+  }
+
+  private _getFirstLeafIssue(): LeafIssue {
+    const dfs = [...this.issues];
+    while (!('message' in dfs[0])) {
+      const head = dfs.shift()! as NestedIssue | UnionIssue;
+      dfs.unshift(...(head.issues ?? []));
+    }
+
+    return dfs[0] as LeafIssue;
   }
 }

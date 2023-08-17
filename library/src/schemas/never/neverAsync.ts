@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Never schema async type.
@@ -35,10 +35,10 @@ export function neverAsync(error?: string): NeverSchemaAsync {
      *
      * @returns The parsed output.
      */
-    async _parse(input, info) {
+    async _parse(input) {
       return {
         issues: [
-          getIssue(info, {
+          getLeafIssue({
             reason: 'type',
             validation: 'never',
             message: error || 'Invalid type',

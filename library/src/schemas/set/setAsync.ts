@@ -3,9 +3,8 @@ import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
+  getLeafIssue,
+  getNestedIssue,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput } from './types.ts';
 
@@ -86,7 +85,7 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
       if (!(input instanceof Set)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'set',
               message: error || 'Invalid type',
@@ -105,29 +104,20 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
         Array.from(input.values()).map(async (inputValue, index) => {
           // If not aborted early, continue execution
           if (!(info?.abortEarly && issues)) {
-            const result = await value._parse(
-              inputValue,
-              getPathInfo(
-                info,
-                getPath(info?.path, {
-                  schema: 'set',
-                  input,
-                  key: index,
-                  value: inputValue,
-                })
-              )
-            );
+            const result = await value._parse(inputValue, info);
 
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
               // If there are issues, capture them
               if (result.issues) {
+                const nestedIssue = getNestedIssue({
+                  path: `${index}`,
+                  issues: result.issues,
+                });
                 if (issues) {
-                  for (const issue of result.issues) {
-                    issues.push(issue);
-                  }
+                  issues.push(nestedIssue);
                 } else {
-                  issues = result.issues;
+                  issues = [nestedIssue];
                 }
 
                 // If necessary, abort early

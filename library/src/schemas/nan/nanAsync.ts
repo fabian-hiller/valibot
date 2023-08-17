@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * NaN schema async type.
@@ -43,7 +43,7 @@ export function nanAsync(error?: string): NanSchemaAsync {
       if (!Number.isNaN(input)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'nan',
               message: error || 'Invalid type',

@@ -3,9 +3,8 @@ import type { BaseSchema, Pipe } from '../../types.ts';
 import {
   executePipe,
   getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
+  getLeafIssue,
+  getNestedIssue,
 } from '../../utils/index.ts';
 import type { ObjectOutput, ObjectInput } from './types.ts';
 
@@ -94,7 +93,7 @@ export function object<TObjectShape extends ObjectShape>(
       if (input?.constructor !== Object) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'object',
               message: error || 'Invalid type',
@@ -129,27 +128,18 @@ export function object<TObjectShape extends ObjectShape>(
         const parser = cachedEntries[i + 1] as BaseSchema<any>['_parse'];
 
         // Get parse result of value
-        const result = parser(
-          value,
-          getPathInfo(
-            info,
-            getPath(info?.path, {
-              schema: 'object',
-              input,
-              key,
-              value,
-            })
-          )
-        );
+        const result = parser(value, info);
 
         // If there are issues, capture them
         if (result.issues) {
+          const nestedIssue = getNestedIssue({
+            path: key,
+            issues: result.issues,
+          });
           if (issues) {
-            for (const issue of result.issues) {
-              issues.push(issue);
-            }
+            issues.push(nestedIssue);
           } else {
-            issues = result.issues;
+            issues = [nestedIssue];
           }
 
           // If necessary, abort early

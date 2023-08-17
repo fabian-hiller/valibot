@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Native enum type.
@@ -61,7 +61,7 @@ export function nativeEnum<TNativeEnum extends NativeEnum>(
       if (!Object.values(nativeEnum).includes(input as any)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'native_enum',
               message: error || 'Invalid type',

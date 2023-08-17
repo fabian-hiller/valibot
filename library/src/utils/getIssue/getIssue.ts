@@ -1,48 +1,52 @@
-import type { Issue, IssueReason } from '../../error/index.ts';
-import type { ParseInfo, ValidateInfo } from '../../types.ts';
+import type { LeafIssue, NestedIssue, UnionIssue } from '../../error/index.ts';
+import type { ValidateInfo } from '../../types.ts';
 
-/**
- * Returns the final issue data.
- *
- * @param info The parse info.
- * @param issue The issue data.
- *
- * @returns The issue data.
- */
-export function getIssue(
-  info: ParseInfo | undefined,
-  issue: Pick<Issue, 'reason' | 'validation' | 'message' | 'input' | 'issues'>
-): Issue;
-
-/**
- * Returns the final issue data.
- *
- * @param info The validate info.
- * @param issue The issue data.
- *
- * @returns The issue data.
- */
-export function getIssue(
-  info: ValidateInfo,
-  issue: Pick<Issue, 'validation' | 'message' | 'input' | 'issues'>
-): Issue;
-
-export function getIssue(
-  info: (ParseInfo & Partial<Pick<Issue, 'reason'>>) | undefined,
-  issue: Pick<Issue, 'validation' | 'message' | 'input' | 'issues'> &
-    Partial<Pick<Issue, 'reason'>>
-): Issue {
+export function getLeafIssue(
+  issue: {
+    validation: LeafIssue['validation'];
+    message: LeafIssue['message'];
+    input: LeafIssue['input'];
+    reason?: LeafIssue['reason'];
+  },
+  validateInfo?: ValidateInfo
+): LeafIssue {
   // Note: The issue is deliberately not constructed with the spread operator
   // for performance reasons
   return {
-    reason: (info?.reason || issue.reason) as IssueReason,
+    type: 'leaf',
     validation: issue.validation,
-    origin: info?.origin || 'value',
     message: issue.message,
     input: issue.input,
-    path: info?.path,
+    reason: validateInfo?.reason ?? issue.reason ?? 'type',
+  };
+}
+
+export function getNestedIssue(issue: {
+  path: NestedIssue['path'];
+  origin?: NestedIssue['origin'];
+  issues: NestedIssue['issues'];
+}): NestedIssue {
+  // Note: The issue is deliberately not constructed with the spread operator
+  // for performance reasons
+  return {
+    type: 'nested',
+    path: issue.path,
+    origin: issue.origin ?? 'value',
     issues: issue.issues,
-    abortEarly: info?.abortEarly,
-    abortPipeEarly: info?.abortPipeEarly,
+  };
+}
+
+export function getUnionIssue(issue: {
+  message: UnionIssue['message'];
+  issues: UnionIssue['issues'];
+}): UnionIssue {
+  // Note: The issue is deliberately not constructed with the spread operator
+  // for performance reasons
+  return {
+    type: 'union',
+    reason: 'union',
+    validation: 'union',
+    message: issue.message,
+    issues: issue.issues,
   };
 }

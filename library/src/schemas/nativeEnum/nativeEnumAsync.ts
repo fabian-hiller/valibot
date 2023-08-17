@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 import type { NativeEnum } from './nativeEnum.ts';
 
 /**
@@ -54,7 +54,7 @@ export function nativeEnumAsync<TNativeEnum extends NativeEnum>(
       if (!Object.values(nativeEnum).includes(input as any)) {
         return {
           issues: [
-            getIssue(info, {
+            getLeafIssue({
               reason: 'type',
               validation: 'native_enum',
               message: error || 'Invalid type',

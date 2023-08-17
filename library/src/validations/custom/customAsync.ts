@@ -1,5 +1,5 @@
 import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getLeafIssue } from '../../utils/index.ts';
 
 /**
  * Creates a async custom validation function.
@@ -20,11 +20,14 @@ export function customAsync<TInput>(
     if (!(await requirement(input))) {
       return {
         issues: [
-          getIssue(info, {
-            validation: 'custom',
-            message: error || 'Invalid input',
-            input,
-          }),
+          getLeafIssue(
+            {
+              validation: 'custom',
+              message: error || 'Invalid input',
+              input,
+            },
+            info
+          ),
         ],
       };
     }
