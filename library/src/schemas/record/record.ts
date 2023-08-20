@@ -192,9 +192,7 @@ export function record<
           // If there are issues, capture them
           if (keyResult.issues) {
             if (issues) {
-              for (const issue of keyResult.issues) {
-                issues.push(issue);
-              }
+              issues.push(...keyResult.issues);
             } else {
               issues = keyResult.issues;
             }
@@ -211,9 +209,7 @@ export function record<
           // If there are issues, capture them
           if (valueResult.issues) {
             if (issues) {
-              for (const issue of valueResult.issues) {
-                issues.push(issue);
-              }
+              issues.push(...valueResult.issues);
             } else {
               issues = valueResult.issues;
             }

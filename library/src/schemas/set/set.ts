@@ -120,9 +120,7 @@ export function set<TSetValue extends BaseSchema>(
         // If there are issues, capture them
         if (result.issues) {
           if (issues) {
-            for (const issue of result.issues) {
-              issues.push(issue);
-            }
+            issues.push(...result.issues);
           } else {
             issues = result.issues;
           }
