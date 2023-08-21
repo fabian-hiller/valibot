@@ -4,39 +4,38 @@ import { literalAsync } from './literalAsync.ts';
 
 describe('literalAsync', () => {
   test('should pass only the literal', async () => {
-    const schema1 = literalAsync('value_1');
     const input1 = 'value_1';
+    const schema1 = literalAsync(input1);
     const output1 = await parseAsync(schema1, input1);
     expect(output1).toBe(input1);
-    const schema2 = literalAsync(123);
-    const input2 = 123;
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toBe(input2);
     await expect(parseAsync(schema1, 123)).rejects.toThrowError();
+    await expect(parseAsync(schema1, false)).rejects.toThrowError();
     await expect(parseAsync(schema1, 'value_2')).rejects.toThrowError();
     await expect(parseAsync(schema1, {})).rejects.toThrowError();
-  });
 
-  test('should pass for every primitive values', async () => {
-    const TEST = Symbol('test');
+    const input2 = 123;
+    const schema2 = literalAsync(input2);
+    const output2 = await parseAsync(schema2, input2);
+    expect(output2).toBe(input2);
+    await expect(parseAsync(schema2, 1234)).rejects.toThrowError();
+    await expect(parseAsync(schema2, 'test')).rejects.toThrowError();
+    await expect(parseAsync(schema2, {})).rejects.toThrowError();
 
-    const numberSchema = literalAsync(1);
-    const stringSchema = literalAsync('string');
-    const booleanSchema = literalAsync(true);
-    const symbolSchema = literalAsync(TEST);
-    const bigIntSchema = literalAsync(2n);
-    const nullSchema = literalAsync(null);
-    const undefinedSchema = literalAsync(undefined);
+    const input3 = 123n;
+    const schema3 = literalAsync(input3);
+    const output3 = await parseAsync(schema3, input3);
+    expect(output3).toBe(input3);
+    await expect(parseAsync(schema3, 1234n)).rejects.toThrowError();
+    await expect(parseAsync(schema3, true)).rejects.toThrowError();
+    await expect(parseAsync(schema3, {})).rejects.toThrowError();
 
-    await expect(parseAsync(numberSchema, 1)).resolves.toBe(1);
-    await expect(parseAsync(stringSchema, 'string')).resolves.toBe('string');
-    await expect(parseAsync(booleanSchema, true)).resolves.toBe(true);
-    await expect(parseAsync(symbolSchema, TEST)).resolves.toBe(TEST);
-    await expect(parseAsync(bigIntSchema, 2n)).resolves.toBe(2n);
-    await expect(parseAsync(nullSchema, null)).resolves.toBe(null);
-    await expect(parseAsync(undefinedSchema, undefined)).resolves.toBe(
-      undefined
-    );
+    const input4 = false;
+    const schema4 = literalAsync(input4);
+    const output4 = await parseAsync(schema4, input4);
+    expect(output4).toBe(input4);
+    await expect(parseAsync(schema4, true)).rejects.toThrowError();
+    await expect(parseAsync(schema4, 'test')).rejects.toThrowError();
+    await expect(parseAsync(schema4, {})).rejects.toThrowError();
   });
 
   test('should throw custom error', async () => {

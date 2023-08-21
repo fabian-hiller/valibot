@@ -1,11 +1,4 @@
 /**
- * Javascript primitive value type
+ * Literal type.
  */
-export type Primitive =
-  | number
-  | string
-  | boolean
-  | symbol
-  | bigint
-  | null
-  | undefined;
+export type Literal = number | string | boolean | symbol | bigint;

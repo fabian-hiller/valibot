@@ -4,37 +4,38 @@ import { literal } from './literal.ts';
 
 describe('literal', () => {
   test('should pass only the literal', () => {
-    const schema1 = literal('value_1');
     const input1 = 'value_1';
+    const schema1 = literal(input1);
     const output1 = parse(schema1, input1);
     expect(output1).toBe(input1);
-    const schema2 = literal(123);
-    const input2 = 123;
-    const output2 = parse(schema2, input2);
-    expect(output2).toBe(input2);
     expect(() => parse(schema1, 123)).toThrowError();
+    expect(() => parse(schema1, false)).toThrowError();
     expect(() => parse(schema1, 'value_2')).toThrowError();
     expect(() => parse(schema1, {})).toThrowError();
-  });
 
-  test('should pass for every primitive values', () => {
-    const TEST = Symbol('test');
+    const input2 = 123;
+    const schema2 = literal(input2);
+    const output2 = parse(schema2, input2);
+    expect(output2).toBe(input2);
+    expect(() => parse(schema2, 1234)).toThrowError();
+    expect(() => parse(schema2, 'test')).toThrowError();
+    expect(() => parse(schema2, {})).toThrowError();
 
-    const numberSchema = literal(1);
-    const stringSchema = literal('string');
-    const booleanSchema = literal(true);
-    const symbolSchema = literal(TEST);
-    const bigIntSchema = literal(2n);
-    const nullSchema = literal(null);
-    const undefinedSchema = literal(undefined);
+    const input3 = 123n;
+    const schema3 = literal(input3);
+    const output3 = parse(schema3, input3);
+    expect(output3).toBe(input3);
+    expect(() => parse(schema3, 1234n)).toThrowError();
+    expect(() => parse(schema3, true)).toThrowError();
+    expect(() => parse(schema3, {})).toThrowError();
 
-    expect(parse(numberSchema, 1)).toBe(1);
-    expect(parse(stringSchema, 'string')).toBe('string');
-    expect(parse(booleanSchema, true)).toBe(true);
-    expect(parse(symbolSchema, TEST)).toBe(TEST);
-    expect(parse(bigIntSchema, 2n)).toBe(2n);
-    expect(parse(nullSchema, null)).toBe(null);
-    expect(parse(undefinedSchema, undefined)).toBe(undefined);
+    const input4 = false;
+    const schema4 = literal(input4);
+    const output4 = parse(schema4, input4);
+    expect(output4).toBe(input4);
+    expect(() => parse(schema4, true)).toThrowError();
+    expect(() => parse(schema4, 'test')).toThrowError();
+    expect(() => parse(schema4, {})).toThrowError();
   });
 
   test('should throw custom error', () => {
