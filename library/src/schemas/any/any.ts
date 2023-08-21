@@ -1,5 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getPipeInfo } from '../../utils/index.ts';
+import { executePipe } from '../../utils/index.ts';
 
 /**
  * Any schema type.
@@ -36,7 +36,7 @@ export function any(pipe: Pipe<any> = []): AnySchema {
      * @returns The parsed output.
      */
     _parse(input, info) {
-      return executePipe(input, pipe, getPipeInfo(info, 'any'));
+      return executePipe(input, pipe, info, 'any');
     },
   };
 }

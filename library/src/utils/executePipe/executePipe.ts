@@ -1,5 +1,7 @@
-import type { Issues } from '../../error/index.ts';
-import type { _ParseResult, Pipe, ValidateInfo } from '../../types.ts';
+import type { IssueReason, Issues } from '../../error/index.ts';
+import type { _ParseResult, ParseInfo, Pipe, PipeInfo } from '../../types.ts';
+import { getIssue } from '../getIssue/index.ts';
+import { getPipeInfo } from '../getPipeInfo/index.ts';
 
 /**
  * Executes the validation and transformation pipe.
@@ -12,29 +14,35 @@ import type { _ParseResult, Pipe, ValidateInfo } from '../../types.ts';
  */
 export function executePipe<TValue>(
   input: TValue,
-  pipe: Pipe<TValue>,
-  info: ValidateInfo
+  pipe: Pipe<TValue> | undefined,
+  parseInfo: ParseInfo | undefined,
+  reason: IssueReason
 ): _ParseResult<TValue> {
-  // Create issues and output
+  // If pipe is empty, return input as output
+  if (!pipe || !pipe.length) {
+    return { output: input };
+  }
+
+  // Create pipe info, issues and output
+  let pipeInfo: PipeInfo | undefined;
   let issues: Issues | undefined;
   let output: TValue = input;
 
   // Execute any action of pipe
   for (const action of pipe) {
-    const result = action(output, info);
+    const result = action(output);
 
-    // If there are issues, capture them
-    if (result.issues) {
-      if (issues) {
-        for (const issue of result.issues) {
-          issues.push(issue);
-        }
-      } else {
-        issues = result.issues;
-      }
+    // If there is a issue, capture it
+    if (result.issue) {
+      // Cache pipe info lazy
+      pipeInfo = pipeInfo || getPipeInfo(parseInfo, reason);
+
+      // Create issue and add it to issues
+      const issue = getIssue(pipeInfo, result.issue);
+      issues ? issues.push(issue) : (issues = [issue]);
 
       // If necessary, abort early
-      if (info.abortEarly || info.abortPipeEarly) {
+      if (pipeInfo.abortEarly || pipeInfo.abortPipeEarly) {
         break;
       }
 
@@ -44,6 +52,6 @@ export function executePipe<TValue>(
     }
   }
 
-  // Return pipe result
+  // Return pipe issues or output
   return issues ? { issues } : { output };
 }

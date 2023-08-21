@@ -6,7 +6,6 @@ import {
   getIssue,
   getPath,
   getPathInfo,
-  getPipeInfo,
 } from '../../utils/index.ts';
 import { type StringSchema, string } from '../string/index.ts';
 import type { RecordOutput, RecordInput } from './types.ts';
@@ -233,7 +232,8 @@ export function record<
         : executePipe(
             output as RecordOutput<TRecordKey, TRecordValue>,
             pipe,
-            getPipeInfo(info, 'record')
+            info,
+            'record'
           );
     },
   };

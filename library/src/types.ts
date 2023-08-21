@@ -16,11 +16,6 @@ export type ParseInfo = Partial<
 >;
 
 /**
- * Validate info type.
- */
-export type ValidateInfo = ParseInfo & Pick<Issue, 'reason'>;
-
-/**
  * Path item type.
  */
 export type PathItem =
@@ -71,20 +66,31 @@ export type Output<TSchema extends BaseSchema | BaseSchemaAsync> = NonNullable<
 >['output'];
 
 /**
+ * Pipe info type.
+ */
+export type PipeInfo = ParseInfo & Pick<Issue, 'reason'>;
+
+/**
+ * Pipe result type.
+ */
+export type PipeResult<TOutput> =
+  | { output: TOutput; issue?: undefined }
+  | {
+      output?: undefined;
+      issue: Pick<Issue, 'validation' | 'message' | 'input'>;
+    };
+
+/**
  * Validation and transformation pipe type.
  */
-export type Pipe<TValue> = ((
-  value: TValue,
-  info: ValidateInfo
-) => _ParseResult<TValue>)[];
+export type Pipe<TValue> = ((value: TValue) => PipeResult<TValue>)[];
 
 /**
  * Async validation and transformation pipe type.
  */
 export type PipeAsync<TValue> = ((
-  value: TValue,
-  info: ValidateInfo
-) => _ParseResult<TValue> | Promise<_ParseResult<TValue>>)[];
+  value: TValue
+) => PipeResult<TValue> | Promise<PipeResult<TValue>>)[];
 
 /**
  * Resolve type.

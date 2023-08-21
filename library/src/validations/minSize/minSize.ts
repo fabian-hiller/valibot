@@ -1,5 +1,4 @@
-import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import type { PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates the size of a map, set or blob.
@@ -13,16 +12,14 @@ export function minSize<TInput extends Map<any, any> | Set<any> | Blob>(
   requirement: number,
   error?: string
 ) {
-  return (input: TInput, info: ValidateInfo): _ParseResult<TInput> => {
+  return (input: TInput): PipeResult<TInput> => {
     if (input.size < requirement) {
       return {
-        issues: [
-          getIssue(info, {
-            validation: 'min_size',
-            message: error || 'Invalid size',
-            input,
-          }),
-        ],
+        issue: {
+          validation: 'min_size',
+          message: error || 'Invalid size',
+          input,
+        },
       };
     }
     return { output: input };

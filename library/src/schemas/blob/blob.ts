@@ -1,10 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import {
-  executePipe,
-  getErrorAndPipe,
-  getIssue,
-  getPipeInfo,
-} from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
 
 /**
  * Blob schema type.
@@ -75,7 +70,7 @@ export function blob(
       }
 
       // Execute pipe and return result
-      return executePipe(input, pipe, getPipeInfo(info, 'blob'));
+      return executePipe(input, pipe, info, 'blob');
     },
   };
 }

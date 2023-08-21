@@ -1,5 +1,4 @@
-import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import type { PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates the value of a string, number or date.
@@ -13,16 +12,14 @@ export function maxValue<
   TInput extends string | number | bigint | Date,
   TRequirement extends TInput
 >(requirement: TRequirement, error?: string) {
-  return (input: TInput, info: ValidateInfo): _ParseResult<TInput> => {
+  return (input: TInput): PipeResult<TInput> => {
     if (input > requirement) {
       return {
-        issues: [
-          getIssue(info, {
-            validation: 'max_value',
-            message: error || 'Invalid value',
-            input,
-          }),
-        ],
+        issue: {
+          validation: 'max_value',
+          message: error || 'Invalid value',
+          input,
+        },
       };
     }
     return { output: input };

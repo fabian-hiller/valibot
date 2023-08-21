@@ -4,16 +4,11 @@ import { toCustom } from '../../transformations/index.ts';
 
 describe('getErrorAndPipe', () => {
   test('should return error and pipe', () => {
-    expect(getErrorAndPipe(undefined, undefined)).toEqual({
-      error: undefined,
-      pipe: [],
-    });
+    expect(getErrorAndPipe(undefined, undefined)).toEqual({});
     expect(getErrorAndPipe('Error', undefined)).toEqual({
       error: 'Error',
-      pipe: [],
     });
     expect(getErrorAndPipe(undefined, [])).toEqual({
-      error: undefined,
       pipe: [],
     });
     expect(getErrorAndPipe('Error', [])).toEqual({
@@ -22,11 +17,11 @@ describe('getErrorAndPipe', () => {
     });
     expect(
       getErrorAndPipe(undefined, [toCustom(() => 1), toCustom(() => 2)]).pipe
-        .length
+        ?.length
     ).toBe(2);
     expect(
       getErrorAndPipe('Error', [toCustom(() => 1), toCustom(() => 2)]).pipe
-        .length
+        ?.length
     ).toBe(2);
   });
 });

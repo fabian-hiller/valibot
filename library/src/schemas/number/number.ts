@@ -1,10 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import {
-  executePipe,
-  getErrorAndPipe,
-  getIssue,
-  getPipeInfo,
-} from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
 
 /**
  * Number schema type.
@@ -75,7 +70,7 @@ export function number(
       }
 
       // Execute pipe and return result
-      return executePipe(input, pipe, getPipeInfo(info, 'number'));
+      return executePipe(input, pipe, info, 'number');
     },
   };
 }

@@ -1,15 +1,14 @@
-import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import type { PipeResult } from '../../types.ts';
 
 export function includes<TInput extends string>(
   requirement: string,
   error?: string
-): (input: TInput, info: ValidateInfo) => _ParseResult<TInput>;
+): (input: TInput) => PipeResult<TInput>;
 
 export function includes<TInput extends TItem[], TItem>(
   requirement: TItem,
   error?: string
-): (input: TInput, info: ValidateInfo) => _ParseResult<TInput>;
+): (input: TInput) => PipeResult<TInput>;
 
 /**
  * Creates a validation functions that validates the content of a string or array.
@@ -23,16 +22,14 @@ export function includes<TInput extends string | TItem[], TItem>(
   requirement: string | TItem,
   error?: string
 ) {
-  return (input: TInput, info: ValidateInfo): _ParseResult<TInput> => {
+  return (input: TInput): PipeResult<TInput> => {
     if (!input.includes(requirement as any)) {
       return {
-        issues: [
-          getIssue(info, {
-            validation: 'includes',
-            message: error || 'Invalid content',
-            input,
-          }),
-        ],
+        issue: {
+          validation: 'includes',
+          message: error || 'Invalid content',
+          input,
+        },
       };
     }
     return { output: input };

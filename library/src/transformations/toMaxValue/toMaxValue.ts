@@ -1,4 +1,4 @@
-import type { _ParseResult } from '../../types.ts';
+import type { PipeResult } from '../../types.ts';
 
 /**
  * Creates a transformation function that sets a string, number or date to a
@@ -12,7 +12,7 @@ export function toMaxValue<
   TInput extends string | number | bigint | Date,
   TRequirement extends TInput
 >(requirement: TRequirement) {
-  return (input: TInput): _ParseResult<TInput> => ({
+  return (input: TInput): PipeResult<TInput> => ({
     output: input > requirement ? requirement : input,
   });
 }

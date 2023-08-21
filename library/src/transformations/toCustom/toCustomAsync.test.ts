@@ -4,8 +4,8 @@ import { toCustomAsync } from './toCustomAsync.ts';
 describe('toCustomAsync', () => {
   test('should transform the custom', async () => {
     const transform1 = toCustomAsync<string>(async (input) => input.trim());
-    expect(await transform1(' test ')).toEqual({ output: 'test' });
+    expect((await transform1(' test ')).output).toBe('test');
     const transform2 = toCustomAsync<number>(async (input) => input + 1);
-    expect(await transform2(1)).toEqual({ output: 2 });
+    expect((await transform2(1)).output).toBe(2);
   });
 });

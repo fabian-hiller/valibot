@@ -1,5 +1,5 @@
 import type { Issue, IssueReason } from '../../error/index.ts';
-import type { ParseInfo, ValidateInfo } from '../../types.ts';
+import type { ParseInfo, PipeInfo } from '../../types.ts';
 
 /**
  * Returns the final issue data.
@@ -17,13 +17,13 @@ export function getIssue(
 /**
  * Returns the final issue data.
  *
- * @param info The validate info.
+ * @param info The pipe info.
  * @param issue The issue data.
  *
  * @returns The issue data.
  */
 export function getIssue(
-  info: ValidateInfo,
+  info: PipeInfo,
   issue: Pick<Issue, 'validation' | 'message' | 'input' | 'issues'>
 ): Issue;
 

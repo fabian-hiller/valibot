@@ -1,5 +1,4 @@
-import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import type { PipeResult } from '../../types.ts';
 
 /**
  * Creates a async custom validation function.
@@ -13,19 +12,14 @@ export function customAsync<TInput>(
   requirement: (input: TInput) => Promise<boolean>,
   error?: string
 ) {
-  return async (
-    input: TInput,
-    info: ValidateInfo
-  ): Promise<_ParseResult<TInput>> => {
+  return async (input: TInput): Promise<PipeResult<TInput>> => {
     if (!(await requirement(input))) {
       return {
-        issues: [
-          getIssue(info, {
-            validation: 'custom',
-            message: error || 'Invalid input',
-            input,
-          }),
-        ],
+        issue: {
+          validation: 'custom',
+          message: error || 'Invalid input',
+          input,
+        },
       };
     }
     return { output: input };

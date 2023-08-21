@@ -1,5 +1,4 @@
-import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import type { PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates the end of a string.
@@ -13,16 +12,14 @@ export function endsWith<TInput extends string>(
   requirement: string,
   error?: string
 ) {
-  return (input: TInput, info: ValidateInfo): _ParseResult<TInput> => {
+  return (input: TInput): PipeResult<TInput> => {
     if (!input.endsWith(requirement as any)) {
       return {
-        issues: [
-          getIssue(info, {
-            validation: 'ends_with',
-            message: error || 'Invalid end',
-            input,
-          }),
-        ],
+        issue: {
+          validation: 'ends_with',
+          message: error || 'Invalid end',
+          input,
+        },
       };
     }
     return { output: input };

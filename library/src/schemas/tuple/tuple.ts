@@ -6,7 +6,6 @@ import {
   getIssue,
   getPath,
   getPathInfo,
-  getPipeInfo,
 } from '../../utils/index.ts';
 import type { TupleOutput, TupleInput } from './types.ts';
 
@@ -249,7 +248,8 @@ export function tuple<
         : executePipe(
             output as TupleOutput<TTupleItems, TTupleRest>,
             pipe,
-            getPipeInfo(info, 'tuple')
+            info,
+            'tuple'
           );
     },
   };

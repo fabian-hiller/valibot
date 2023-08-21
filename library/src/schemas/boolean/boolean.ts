@@ -1,10 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import {
-  executePipe,
-  getErrorAndPipe,
-  getIssue,
-  getPipeInfo,
-} from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
 
 /**
  * Boolean schema type.
@@ -75,7 +70,7 @@ export function boolean(
       }
 
       // Execute pipe and return result
-      return executePipe(input, pipe, getPipeInfo(info, 'boolean'));
+      return executePipe(input, pipe, info, 'boolean');
     },
   };
 }

@@ -1,5 +1,4 @@
-import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import type { PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates a URL.
@@ -12,19 +11,17 @@ import { getIssue } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function url<TInput extends string>(error?: string) {
-  return (input: TInput, info: ValidateInfo): _ParseResult<TInput> => {
+  return (input: TInput): PipeResult<TInput> => {
     try {
       new URL(input);
       return { output: input };
     } catch (_) {
       return {
-        issues: [
-          getIssue(info, {
-            validation: 'url',
-            message: error || 'Invalid URL',
-            input,
-          }),
-        ],
+        issue: {
+          validation: 'url',
+          message: error || 'Invalid URL',
+          input,
+        },
       };
     }
   };

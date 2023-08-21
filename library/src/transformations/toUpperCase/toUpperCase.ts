@@ -1,4 +1,4 @@
-import type { _ParseResult } from '../../types.ts';
+import type { PipeResult } from '../../types.ts';
 
 /**
  * Creates a transformation function that converts all the alphabetic
@@ -7,7 +7,7 @@ import type { _ParseResult } from '../../types.ts';
  * @returns A transformation function.
  */
 export function toUpperCase() {
-  return (input: string): _ParseResult<string> => ({
+  return (input: string): PipeResult<string> => ({
     output: input.toUpperCase(),
   });
 }

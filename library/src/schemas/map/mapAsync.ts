@@ -11,7 +11,6 @@ import {
   getIssue,
   getPath,
   getPathInfo,
-  getPipeInfo,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput } from './types.ts';
 
@@ -184,9 +183,7 @@ export function mapAsync<
       );
 
       // Return issues or pipe result
-      return issues
-        ? { issues }
-        : executePipeAsync(output, pipe, getPipeInfo(info, 'map'));
+      return issues ? { issues } : executePipeAsync(input, pipe, info, 'map');
     },
   };
 }

@@ -1,5 +1,4 @@
-import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import type { PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates a email.
@@ -11,20 +10,18 @@ import { getIssue } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function email<TInput extends string>(error?: string) {
-  return (input: TInput, info: ValidateInfo): _ParseResult<TInput> => {
+  return (input: TInput): PipeResult<TInput> => {
     if (
       !/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i.test(
         input
       )
     ) {
       return {
-        issues: [
-          getIssue(info, {
-            validation: 'email',
-            message: error || 'Invalid email',
-            input,
-          }),
-        ],
+        issue: {
+          validation: 'email',
+          message: error || 'Invalid email',
+          input,
+        },
       };
     }
     return { output: input };

@@ -6,7 +6,6 @@ import {
   getIssue,
   getPath,
   getPathInfo,
-  getPipeInfo,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput } from './types.ts';
 
@@ -146,9 +145,7 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
       ).catch(() => null);
 
       // Return issues or pipe result
-      return issues
-        ? { issues }
-        : executePipeAsync(output, pipe, getPipeInfo(info, 'set'));
+      return issues ? { issues } : executePipeAsync(input, pipe, info, 'set');
     },
   };
 }

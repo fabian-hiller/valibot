@@ -1,5 +1,5 @@
 import type { IssueReason } from '../../error/index.ts';
-import type { ParseInfo, ValidateInfo } from '../../types.ts';
+import type { ParseInfo, PipeInfo } from '../../types.ts';
 
 /**
  * Returns the pipe info.
@@ -12,7 +12,7 @@ import type { ParseInfo, ValidateInfo } from '../../types.ts';
 export function getPipeInfo(
   info: ParseInfo | undefined,
   reason: IssueReason
-): ValidateInfo {
+): PipeInfo {
   // Note: The pipe info is deliberately not constructed with the spread
   // operator for performance reasons
   return {

@@ -1,5 +1,4 @@
-import type { _ParseResult, ValidateInfo } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import type { PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation function that validates whether a number is a multiple.
@@ -13,16 +12,14 @@ export function multipleOf<TInput extends number>(
   requirement: number,
   error?: string
 ) {
-  return (input: TInput, info: ValidateInfo): _ParseResult<TInput> => {
+  return (input: TInput): PipeResult<TInput> => {
     if (input % requirement !== 0) {
       return {
-        issues: [
-          getIssue(info, {
-            validation: 'multipleOf',
-            message: error || 'Invalid multiple',
-            input,
-          }),
-        ],
+        issue: {
+          validation: 'multipleOf',
+          message: error || 'Invalid multiple',
+          input,
+        },
       };
     }
     return { output: input };

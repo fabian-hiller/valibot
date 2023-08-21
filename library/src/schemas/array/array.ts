@@ -6,7 +6,6 @@ import {
   getIssue,
   getPath,
   getPathInfo,
-  getPipeInfo,
 } from '../../utils/index.ts';
 
 /**
@@ -150,11 +149,7 @@ export function array<TArrayItem extends BaseSchema>(
       // Return issues or pipe result
       return issues
         ? { issues }
-        : executePipe(
-            output as Output<TArrayItem>[],
-            pipe,
-            getPipeInfo(info, 'array')
-          );
+        : executePipe(output as Output<TArrayItem>[], pipe, info, 'array');
     },
   };
 }

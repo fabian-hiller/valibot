@@ -1,4 +1,4 @@
-import type { _ParseResult } from '../../types.ts';
+import type { PipeResult } from '../../types.ts';
 
 /**
  * Creates a transformation function that removes the leading white space and
@@ -7,7 +7,7 @@ import type { _ParseResult } from '../../types.ts';
  * @returns A transformation function.
  */
 export function toTrimmedStart() {
-  return (input: string): _ParseResult<string> => ({
+  return (input: string): PipeResult<string> => ({
     output: input.trimStart(),
   });
 }

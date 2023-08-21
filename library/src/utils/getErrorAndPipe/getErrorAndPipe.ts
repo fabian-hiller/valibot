@@ -11,8 +11,8 @@ import type { Pipe, PipeAsync } from '../../types.ts';
 export function getErrorAndPipe<TPipe extends Pipe<any> | PipeAsync<any>>(
   arg1?: string | TPipe,
   arg2?: TPipe
-): { error: string | undefined; pipe: TPipe } {
-  const [error, pipe = [] as unknown as TPipe] =
-    !arg1 || typeof arg1 === 'string' ? [arg1, arg2] : [undefined, arg1];
-  return { error, pipe };
+): { error?: string; pipe?: TPipe } {
+  return !arg1 || typeof arg1 === 'string'
+    ? { error: arg1, pipe: arg2 }
+    : { pipe: arg1 };
 }
