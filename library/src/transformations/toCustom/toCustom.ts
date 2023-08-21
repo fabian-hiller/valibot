@@ -1,4 +1,4 @@
-import type { ParseResult } from '../../types.ts';
+import type { _ParseResult } from '../../types.ts';
 
 /**
  * Creates a custom transformation function.
@@ -8,5 +8,5 @@ import type { ParseResult } from '../../types.ts';
  * @returns A transformation function.
  */
 export function toCustom<TInput>(action: (input: TInput) => TInput) {
-  return (input: TInput): ParseResult<TInput> => ({ output: action(input) });
+  return (input: TInput): _ParseResult<TInput> => ({ output: action(input) });
 }

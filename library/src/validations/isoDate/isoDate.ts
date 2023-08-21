@@ -1,4 +1,4 @@
-import type { ParseResult, ValidateInfo } from '../../types.ts';
+import type { _ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -15,7 +15,7 @@ import { getIssue } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function isoDate<TInput extends string>(error?: string) {
-  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
+  return (input: TInput, info: ValidateInfo): _ParseResult<TInput> => {
     if (!/^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])$/.test(input)) {
       return {
         issues: [

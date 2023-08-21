@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { ValiError } from '../../error/index.ts';
 import { number, object, string } from '../../schemas/index.ts';
 import { safeParse } from './safeParse.ts';
 
@@ -9,16 +8,19 @@ describe('safeParse', () => {
     expect(output1).toEqual({
       success: true,
       data: 'hello',
+      output: 'hello',
     });
     const output2 = safeParse(number(), 123);
     expect(output2).toEqual({
       success: true,
       data: 123,
+      output: 123,
     });
     const output3 = safeParse(object({ test: string() }), { test: 'hello' });
     expect(output3).toEqual({
       success: true,
       data: { test: 'hello' },
+      output: { test: 'hello' },
     });
   });
 
@@ -26,20 +28,20 @@ describe('safeParse', () => {
     const output1 = safeParse(string(), 123);
     expect(output1.success).toBe(false);
     if (!output1.success) {
-      expect(output1.error).toBeInstanceOf(ValiError);
-      expect(output1.error.message).toBe('Invalid type');
+      expect(output1.issues).toBeTruthy();
+      expect(output1.issues[0].message).toBe('Invalid type');
     }
     const output2 = safeParse(number(), 'hello');
     expect(output2.success).toBe(false);
     if (!output2.success) {
-      expect(output2.error).toBeInstanceOf(ValiError);
-      expect(output2.error.message).toBe('Invalid type');
+      expect(output2.issues).toBeTruthy();
+      expect(output2.issues[0].message).toBe('Invalid type');
     }
     const output3 = safeParse(object({ test: string() }), {});
     expect(output3.success).toBe(false);
     if (!output3.success) {
-      expect(output3.error).toBeInstanceOf(ValiError);
-      expect(output3.error.message).toBe('Invalid type');
+      expect(output3.issues).toBeTruthy();
+      expect(output3.issues[0].message).toBe('Invalid type');
     }
   });
 });

@@ -1,4 +1,4 @@
-import type { ParseResult, ValidateInfo } from '../../types.ts';
+import type { _ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -13,7 +13,7 @@ export function mimeType<TInput extends Blob>(
   requirement: `${string}/${string}`[],
   error?: string
 ) {
-  return (input: TInput, info: ValidateInfo): ParseResult<TInput> => {
+  return (input: TInput, info: ValidateInfo): _ParseResult<TInput> => {
     if (!requirement.includes(input.type as `${string}/${string}`)) {
       return {
         issues: [

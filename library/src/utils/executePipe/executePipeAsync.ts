@@ -1,5 +1,5 @@
 import type { Issues } from '../../error/index.ts';
-import type { ParseResult, PipeAsync, ValidateInfo } from '../../types.ts';
+import type { _ParseResult, PipeAsync, ValidateInfo } from '../../types.ts';
 
 /**
  * Executes the async validation and transformation pipe.
@@ -14,7 +14,7 @@ export async function executePipeAsync<TValue>(
   input: TValue,
   pipe: PipeAsync<TValue>,
   info: ValidateInfo
-): Promise<ParseResult<TValue>> {
+): Promise<_ParseResult<TValue>> {
   // Create issues and output
   let output: TValue = input;
   let issues: Issues | undefined;

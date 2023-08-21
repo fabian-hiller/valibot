@@ -34,7 +34,7 @@ export type PathItem =
 /**
  * Parse result type.
  */
-export type ParseResult<TOutput> =
+export type _ParseResult<TOutput> =
   | { output: TOutput; issues?: undefined }
   | { output?: undefined; issues: Issues };
 
@@ -43,8 +43,8 @@ export type ParseResult<TOutput> =
  */
 export type BaseSchema<TInput = any, TOutput = TInput> = {
   async: false;
-  _parse(input: unknown, info?: ParseInfo): ParseResult<TOutput>;
-  types?: { input: TInput; output: TOutput };
+  _parse(input: unknown, info?: ParseInfo): _ParseResult<TOutput>;
+  _types?: { input: TInput; output: TOutput };
 };
 
 /**
@@ -52,22 +52,22 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
  */
 export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
   async: true;
-  _parse(input: unknown, info?: ParseInfo): Promise<ParseResult<TOutput>>;
-  types?: { input: TInput; output: TOutput };
+  _parse(input: unknown, info?: ParseInfo): Promise<_ParseResult<TOutput>>;
+  _types?: { input: TInput; output: TOutput };
 };
 
 /**
  * Input inference type.
  */
 export type Input<TSchema extends BaseSchema | BaseSchemaAsync> = NonNullable<
-  TSchema['types']
+  TSchema['_types']
 >['input'];
 
 /**
  * Output inference type.
  */
 export type Output<TSchema extends BaseSchema | BaseSchemaAsync> = NonNullable<
-  TSchema['types']
+  TSchema['_types']
 >['output'];
 
 /**
@@ -76,7 +76,7 @@ export type Output<TSchema extends BaseSchema | BaseSchemaAsync> = NonNullable<
 export type Pipe<TValue> = ((
   value: TValue,
   info: ValidateInfo
-) => ParseResult<TValue>)[];
+) => _ParseResult<TValue>)[];
 
 /**
  * Async validation and transformation pipe type.
@@ -84,7 +84,7 @@ export type Pipe<TValue> = ((
 export type PipeAsync<TValue> = ((
   value: TValue,
   info: ValidateInfo
-) => ParseResult<TValue> | Promise<ParseResult<TValue>>)[];
+) => _ParseResult<TValue> | Promise<_ParseResult<TValue>>)[];
 
 /**
  * Resolve type.

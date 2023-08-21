@@ -1,4 +1,4 @@
-import type { ParseResult } from '../../types.ts';
+import type { _ParseResult } from '../../types.ts';
 
 /**
  * Creates a transformation function that sets a string, number or date to a
@@ -12,7 +12,7 @@ export function toMinValue<
   TInput extends string | number | bigint | Date,
   TRequirement extends TInput
 >(requirement: TRequirement) {
-  return (input: TInput): ParseResult<TInput> => ({
+  return (input: TInput): _ParseResult<TInput> => ({
     output: input < requirement ? requirement : input,
   });
 }

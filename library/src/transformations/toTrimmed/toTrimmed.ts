@@ -1,4 +1,4 @@
-import type { ParseResult } from '../../types.ts';
+import type { _ParseResult } from '../../types.ts';
 
 /**
  * Creates a transformation function that removes the leading and trailing
@@ -7,5 +7,5 @@ import type { ParseResult } from '../../types.ts';
  * @returns A transformation function.
  */
 export function toTrimmed() {
-  return (input: string): ParseResult<string> => ({ output: input.trim() });
+  return (input: string): _ParseResult<string> => ({ output: input.trim() });
 }

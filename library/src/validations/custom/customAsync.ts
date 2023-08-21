@@ -1,4 +1,4 @@
-import type { ParseResult, ValidateInfo } from '../../types.ts';
+import type { _ParseResult, ValidateInfo } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
 
 /**
@@ -16,7 +16,7 @@ export function customAsync<TInput>(
   return async (
     input: TInput,
     info: ValidateInfo
-  ): Promise<ParseResult<TInput>> => {
+  ): Promise<_ParseResult<TInput>> => {
     if (!(await requirement(input))) {
       return {
         issues: [

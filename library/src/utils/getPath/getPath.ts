@@ -3,6 +3,9 @@ import type { PathItem } from '../../types.ts';
 /**
  * Returns the current path.
  *
+ * TODO: Prüfen ob es wirklich erforderlich ist einen neuen Array zu erstellen.
+ * TODO: Prüfen ob for loop nur wegen Profiler schneller als spread war
+ *
  * @param info The parse info.
  * @param key The current key.
  *
