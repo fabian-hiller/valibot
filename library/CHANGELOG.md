@@ -8,6 +8,7 @@ All notable changes to the library will be documented in this file.
 
 - Add `getPipeInfo`, `getPathInfo` and `getIssue` util (pull request #46, #92, #93)
 - Add support for `boolean`, `bigint` and `symbol` to `literal` (pull request #102)
+- Add `fallback` and `fallbackAsync` method (pull request #103)
 - Expand `flatten` so that issues are also accepted as first argument
 - Change return type of `safeParse` and `safeParseAsync` method
 - Change error handling and refactor library to improve performance

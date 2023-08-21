@@ -60,6 +60,17 @@ const StringSchema = withDefault(string(), 'hello');
 const stringOutput = parse(StringSchema, undefined); // 'hello'
 ```
 
+### Fallback
+
+If an issue occurs while validating your schema, you can catch it with <Link href="/api/fallback">`fallback`</Link> to return a predefined value instead.
+
+```ts
+import { parse, fallback, string } from 'valibot'; // 0.44 kB
+
+const StringSchema = fallback(string(), 'hello');
+const stringOutput = parse(StringSchema, 123); // 'hello'
+```
+
 ## Object methods
 
 My object methods make it easier for you to work with object schemas. They are strongly oriented towards the functionality of TypeScript.
