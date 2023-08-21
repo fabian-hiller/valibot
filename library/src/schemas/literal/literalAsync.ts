@@ -1,15 +1,16 @@
 import type { BaseSchemaAsync } from '../../types.ts';
 import { getIssue } from '../../utils/index.ts';
+import type { Literal } from './types.ts';
 
 /**
  * Literal schema async type.
  */
 export type LiteralSchemaAsync<
-  TLiteralValue extends string | number,
-  TOutput = TLiteralValue
-> = BaseSchemaAsync<TLiteralValue, TOutput> & {
+  TLiteral extends Literal,
+  TOutput = TLiteral
+> = BaseSchemaAsync<TLiteral, TOutput> & {
   schema: 'literal';
-  literal: TLiteralValue;
+  literal: TLiteral;
 };
 
 /**
@@ -20,7 +21,7 @@ export type LiteralSchemaAsync<
  *
  * @returns An async literal schema.
  */
-export function literalAsync<TLiteral extends string | number>(
+export function literalAsync<TLiteral extends Literal>(
   literal: TLiteral,
   error?: string
 ): LiteralSchemaAsync<TLiteral> {
