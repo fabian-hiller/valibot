@@ -10,7 +10,7 @@ import type { BaseSchema, BaseSchemaAsync, Input } from '../../types.ts';
  */
 export function withDefault<TSchema extends BaseSchema | BaseSchemaAsync>(
   schema: TSchema,
-  value: Input<TSchema>
+  value: Input<TSchema> | (() => Input<TSchema>)
 ): TSchema {
   return {
     ...schema,
@@ -24,7 +24,14 @@ export function withDefault<TSchema extends BaseSchema | BaseSchemaAsync>(
      * @returns The parsed output.
      */
     _parse(input, info) {
-      return schema._parse(input === undefined ? value : input, info);
+      return schema._parse(
+        input === undefined
+          ? typeof value === 'function'
+            ? (value as () => Input<TSchema>)()
+            : value
+          : input,
+        info
+      );
     },
   };
 }
