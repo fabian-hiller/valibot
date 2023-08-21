@@ -62,59 +62,13 @@ const stringOutput = parse(StringSchema, undefined); // 'hello'
 
 ### Fallback
 
-You can use <Link href="/api/fallback">`fallback`</Link> to catch validation issues and instead return a fallback value as output.
+If an issue occurs while validating your schema, you can catch it with <Link href="/api/fallback">`fallback`</Link> to return a predefined value instead.
 
 ```ts
-import { parse, fallback, string, minLength } from 'valibot'; // 0.44 kB ?
+import { parse, fallback, string } from 'valibot'; // 0.44 kB
 
-const StringSchema = fallback(string([minLength(10)]), 'hello valibot')
-const stringOutput = parse(StringSchema, 'hello'); // 'hello valibot'
-```
-
-If you want to know when and what went wrong while validation, the <Link href="/api/fallback">`fallback`</Link> method has an additional but optional parameter.
-
-```ts
-logger?: (err: Issues) => void
-```
-
-Thanks to this callback it is possible to collect all of these warnings. Here's an easy example.
-
-```ts
-import { parse, fallback, object, string, number, minLength } from 'valibot'; // 0.44 kB ?
-import type { Issue, Issues } from 'valibot';
-
-const warnings: Issue[] = []
-const collect = (issues: Issues) => issues.forEach(value => warnings.push(value)) 
-
-const fallbackValue = { text: 'hello valibot', data: 5 }
-const schema = fallback(object({
-    text: fallback(string([minLength(10)]), fallbackValue.text, collect),
-    data: number(),
-}), fallbackValue, collect);
-
-const data = { data: 2 }
-parse(schema, data); // { text: 'hello valibot', data: 5 }
-console.log(warnings)
-/* [
-    {
-        reason: 'type',
-        validation: 'string',
-        origin: 'value',
-        message: 'Invalid type',
-        input: undefined,
-        path: [
-            {
-                schema: 'object',
-                input: { data: 2 },
-                key: 'text',
-                value: undefined
-            }
-        ]
-    }
-] */
-
-parse(schema, {}); // { text: 'hello valibot', data: 2 }
-console.log(warnings.length) // 3
+const StringSchema = fallback(string(), 'hello');
+const stringOutput = parse(StringSchema, 123); // 'hello'
 ```
 
 ## Object methods

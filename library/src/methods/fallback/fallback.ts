@@ -1,41 +1,41 @@
 import type { BaseSchema, Output } from '../../types.ts';
-import { type Issues } from '../../error/index.ts';
+import type { FallbackInfo } from './types.ts';
 
 /**
  * Returns a fallback value when validating the passed schema failed.
  *
- * @param schema The scheme to catch validation failures from.
+ * @param schema The schema to catch.
  * @param value The fallback value.
- * @param logger A callback that receives the caught issues. Default: console.error
  *
  * @returns The passed schema.
  */
 export function fallback<TSchema extends BaseSchema>(
   schema: TSchema,
-  value: Output<TSchema>,
-  logger?: (err: Issues) => void
+  value: Output<TSchema> | ((info: FallbackInfo) => Output<TSchema>)
 ): TSchema {
   return {
     ...schema,
 
     /**
-     * Parses the input based on its schema.
-     * Tests the result for issues and prints them,
-     * with either console.error or the passed logger callback.
+     * Parses unknown input based on its schema.
      *
      * @param input The input to be parsed.
      * @param info The parse info.
      *
-     * @returns The parsed output or if validation failed the fallback value.
+     * @returns The parsed output.
      */
     _parse(input, info) {
       const result = schema._parse(input, info);
-      if (!result.issues) {
-        return result;
-      }
-
-      (logger ?? console.error)(result.issues);
-      return { output: value };
+      return {
+        output: result.issues
+          ? typeof value === 'function'
+            ? (value as (info: FallbackInfo) => Output<TSchema>)({
+                input,
+                issues: result.issues,
+              })
+            : value
+          : result.output,
+      };
     },
   };
 }

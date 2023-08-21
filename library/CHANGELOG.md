@@ -7,6 +7,7 @@ All notable changes to the library will be documented in this file.
 > Note: The library has been revised and refactored. There is a migration guide in the [release notes](https://github.com/fabian-hiller/valibot/releases/tag/vX.X.X).
 
 - Add `getPipeInfo`, `getPathInfo` and `getIssue` util (pull request #46, #92, #93)
+- Add `fallback` and `fallbackAsync` method (pull request #103)
 - Expand `flatten` so that issues are also accepted as first argument
 - Change return type of `safeParse` and `safeParseAsync` method
 - Change error handling and refactor library to improve performance
