@@ -8,6 +8,7 @@ All notable changes to the library will be documented in this file.
 
 - Add `getPipeInfo`, `getPathInfo` and `getIssue` util (pull request #46, #92, #93)
 - Add `fallback` and `fallbackAsync` method (pull request #103)
+- Add `excludes` validation as negation of `includes`
 - Add support for `boolean`, `bigint` and `symbol` to `literal` schema (pull request #102)
 - Add support for dynamic values to `withDefault` method
 - Expand `flatten` method so that issues are also accepted as first argument
