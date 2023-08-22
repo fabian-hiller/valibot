@@ -7,7 +7,7 @@ import {
   type OptionalSchema,
 } from '../../schemas/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { getErrorAndPipe } from '../../utils/index.ts';
+import { getDefaultArgs } from '../../utils/index.ts';
 
 /**
  * Partial object schema type.
@@ -52,7 +52,7 @@ export function partial<TObjectSchema extends ObjectSchema<any>>(
   arg4?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchema<Partial<TObjectSchema['object']>> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg3, arg4);
+  const [error, pipe] = getDefaultArgs(arg3, arg4);
 
   // Create and return object schema
   // @ts-ignore FIXME: Remove line once bug in TS is fixed

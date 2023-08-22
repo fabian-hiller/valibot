@@ -7,7 +7,7 @@ import type {
 } from '../../types.ts';
 import {
   executePipeAsync,
-  getErrorAndPipe,
+  getDefaultArgs,
   getIssues,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput, MapPathItem } from './types.ts';
@@ -72,7 +72,7 @@ export function mapAsync<
   arg4?: PipeAsync<MapOutput<TMapKey, TMapValue>>
 ): MapSchemaAsync<TMapKey, TMapValue> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg3, arg4);
+  const [error, pipe] = getDefaultArgs(arg3, arg4);
 
   // Create and return async map schema
   return {

@@ -1,8 +1,9 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
-import { type StringSchema, string } from '../string/index.ts';
+import { executePipe, getIssues } from '../../utils/index.ts';
+import type { StringSchema } from '../string/index.ts';
 import type { RecordOutput, RecordInput, RecordPathItem } from './types.ts';
+import { getRecordArgs } from './utils/index.ts';
 import { BLOCKED_KEYS } from './values.ts';
 
 /**
@@ -98,16 +99,11 @@ export function record<
   arg4?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchema<TRecordValue, TRecordKey> {
   // Get key, value, error and pipe argument
-  const { key, value, error, pipe } = (
-    typeof arg2 === 'object' && !Array.isArray(arg2)
-      ? { key: arg1, value: arg2, ...getErrorAndPipe(arg3, arg4) }
-      : { key: string(), value: arg1, ...getErrorAndPipe(arg2, arg3 as any) }
-  ) as {
-    key: TRecordKey;
-    value: TRecordValue;
-    error: string | undefined;
-    pipe: Pipe<RecordOutput<TRecordKey, TRecordValue>>;
-  };
+  const [key, value, error, pipe] = getRecordArgs<
+    TRecordKey,
+    TRecordValue,
+    Pipe<RecordOutput<TRecordKey, TRecordValue>>
+  >(arg1, arg2, arg3, arg4);
 
   // Create and return record schema
   return {

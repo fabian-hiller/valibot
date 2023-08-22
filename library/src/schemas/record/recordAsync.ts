@@ -1,16 +1,9 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
-import {
-  executePipeAsync,
-  getErrorAndPipe,
-  getIssues,
-} from '../../utils/index.ts';
-import {
-  type StringSchema,
-  string,
-  type StringSchemaAsync,
-} from '../string/index.ts';
+import { executePipeAsync, getIssues } from '../../utils/index.ts';
+import type { StringSchema, StringSchemaAsync } from '../string/index.ts';
 import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';
+import { getRecordArgs } from './utils/index.ts';
 import { BLOCKED_KEYS } from './values.ts';
 
 /**
@@ -111,16 +104,11 @@ export function recordAsync<
   arg4?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchemaAsync<TRecordValue, TRecordKey> {
   // Get key, value, error and pipe argument
-  const { key, value, error, pipe } = (
-    typeof arg2 === 'object' && !Array.isArray(arg2)
-      ? { key: arg1, value: arg2, ...getErrorAndPipe(arg3, arg4) }
-      : { key: string(), value: arg1, ...getErrorAndPipe(arg2, arg3 as any) }
-  ) as {
-    key: TRecordKey;
-    value: TRecordValue;
-    error: string | undefined;
-    pipe: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>;
-  };
+  const [key, value, error, pipe] = getRecordArgs<
+    TRecordKey,
+    TRecordValue,
+    PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
+  >(arg1, arg2, arg3, arg4);
 
   // Create and return async record schema
   return {

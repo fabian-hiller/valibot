@@ -4,7 +4,7 @@ import {
   type ObjectSchema,
 } from '../../schemas/index.ts';
 import type { Pipe } from '../../types.ts';
-import { getErrorAndPipe } from '../../utils/index.ts';
+import { getDefaultArgs } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that contains only the selected keys of an existing
@@ -58,7 +58,7 @@ export function pick<
   arg4?: Pipe<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchema<Pick<TObjectSchema['object'], TKeys[number]>> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg3, arg4);
+  const [error, pipe] = getDefaultArgs(arg3, arg4);
 
   // Create and return object schema
   return object(

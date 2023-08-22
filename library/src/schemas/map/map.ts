@@ -1,6 +1,6 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Output, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
+import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 
 /**
@@ -54,7 +54,7 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
   arg4?: Pipe<MapOutput<TMapKey, TMapValue>>
 ): MapSchema<TMapKey, TMapValue> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg3, arg4);
+  const [error, pipe] = getDefaultArgs(arg3, arg4);
 
   // Create and return map schema
   return {

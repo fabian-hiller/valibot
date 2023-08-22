@@ -1,5 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
+import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 
 /**
  * Special schema type.
@@ -45,7 +45,7 @@ export function special<TInput>(
   arg3?: Pipe<TInput>
 ): SpecialSchema<TInput> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg2, arg3);
+  const [error, pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {

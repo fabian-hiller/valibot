@@ -2,7 +2,7 @@ import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
-  getErrorAndPipe,
+  getDefaultArgs,
   getIssues,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
@@ -60,7 +60,7 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   arg3?: PipeAsync<ObjectOutput<TObjectShape>>
 ): ObjectSchemaAsync<TObjectShape> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg2, arg3);
+  const [error, pipe] = getDefaultArgs(arg2, arg3);
 
   // Create cached entries
   let cachedEntries: [string, BaseSchema<any> | BaseSchemaAsync<any>][];

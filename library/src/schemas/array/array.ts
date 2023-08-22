@@ -1,6 +1,6 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Input, Output, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
+import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 import type { ArrayPathItem } from './types.ts';
 
 /**
@@ -48,7 +48,7 @@ export function array<TArrayItem extends BaseSchema>(
   arg3?: Pipe<Output<TArrayItem>[]>
 ): ArraySchema<TArrayItem> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg2, arg3);
+  const [error, pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return array schema
   return {

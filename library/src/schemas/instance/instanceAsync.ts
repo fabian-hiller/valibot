@@ -1,7 +1,7 @@
 import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
-  getErrorAndPipe,
+  getDefaultArgs,
   getIssues,
 } from '../../utils/index.ts';
 import { type Class } from './instance.ts';
@@ -51,7 +51,7 @@ export function instanceAsync<TClass extends Class>(
   arg3?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg2, arg3);
+  const [error, pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {

@@ -1,7 +1,7 @@
 import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
-  getErrorAndPipe,
+  getDefaultArgs,
   getIssues,
 } from '../../utils/index.ts';
 
@@ -39,7 +39,7 @@ export function blobAsync(
   arg2?: PipeAsync<Blob>
 ): BlobSchemaAsync {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return async blob schema
   return {

@@ -1,6 +1,6 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
+import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 import type { SetInput, SetOutput, SetPathItem } from './types.ts';
 
 /**
@@ -48,7 +48,7 @@ export function set<TSetValue extends BaseSchema>(
   arg3?: Pipe<SetOutput<TSetValue>>
 ): SetSchema<TSetValue> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg2, arg3);
+  const [error, pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return set schema
   return {

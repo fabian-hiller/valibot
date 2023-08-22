@@ -1,7 +1,8 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
+import { executePipe, getIssues } from '../../utils/index.ts';
 import type { TupleOutput, TupleInput, TuplePathItem } from './types.ts';
+import { getTupleArgs } from './utils/index.ts';
 
 /**
  * Tuple shape type.
@@ -28,13 +29,10 @@ export type TupleSchema<
  *
  * @returns A tuple schema.
  */
-export function tuple<
-  TTupleItems extends TupleShape,
-  TTupleRest extends BaseSchema | undefined = undefined
->(
+export function tuple<TTupleItems extends TupleShape>(
   items: TTupleItems,
-  pipe?: Pipe<TupleOutput<TTupleItems, TTupleRest>>
-): TupleSchema<TTupleItems, TTupleRest>;
+  pipe?: Pipe<TupleOutput<TTupleItems, undefined>>
+): TupleSchema<TTupleItems>;
 
 /**
  * Creates a tuple schema.
@@ -45,14 +43,11 @@ export function tuple<
  *
  * @returns A tuple schema.
  */
-export function tuple<
-  TTupleItems extends TupleShape,
-  TTupleRest extends BaseSchema | undefined = undefined
->(
+export function tuple<TTupleItems extends TupleShape>(
   items: TTupleItems,
   error?: string,
-  pipe?: Pipe<TupleOutput<TTupleItems, TTupleRest>>
-): TupleSchema<TTupleItems, TTupleRest>;
+  pipe?: Pipe<TupleOutput<TTupleItems, undefined>>
+): TupleSchema<TTupleItems>;
 
 /**
  * Creates a tuple schema.
@@ -65,7 +60,7 @@ export function tuple<
  */
 export function tuple<
   TTupleItems extends TupleShape,
-  TTupleRest extends BaseSchema | undefined = undefined
+  TTupleRest extends BaseSchema
 >(
   items: TTupleItems,
   rest: TTupleRest,
@@ -84,7 +79,7 @@ export function tuple<
  */
 export function tuple<
   TTupleItems extends TupleShape,
-  TTupleRest extends BaseSchema | undefined = undefined
+  TTupleRest extends BaseSchema
 >(
   items: TTupleItems,
   rest: TTupleRest,
@@ -94,7 +89,7 @@ export function tuple<
 
 export function tuple<
   TTupleItems extends TupleShape,
-  TTupleRest extends BaseSchema | undefined = undefined
+  TTupleRest extends BaseSchema
 >(
   items: TTupleItems,
   arg2?: Pipe<TupleOutput<TTupleItems, TTupleRest>> | string | TTupleRest,
@@ -102,15 +97,10 @@ export function tuple<
   arg4?: Pipe<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchema<TTupleItems, TTupleRest> {
   // Get rest, error and pipe argument
-  const { rest, error, pipe } = (
-    typeof arg2 === 'object' && !Array.isArray(arg2)
-      ? { rest: arg2, ...getErrorAndPipe(arg3, arg4) }
-      : getErrorAndPipe(arg2, arg3 as any)
-  ) as {
-    rest: TTupleRest;
-    error: string | undefined;
-    pipe: Pipe<TupleOutput<TTupleItems, TTupleRest>>;
-  };
+  const [rest, error, pipe] = getTupleArgs<
+    TTupleRest,
+    Pipe<TupleOutput<TTupleItems, TTupleRest>>
+  >(arg2, arg3, arg4);
 
   // Create and return tuple schema
   return {

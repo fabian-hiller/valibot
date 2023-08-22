@@ -1,11 +1,8 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
-import {
-  executePipeAsync,
-  getErrorAndPipe,
-  getIssues,
-} from '../../utils/index.ts';
+import { executePipeAsync, getIssues } from '../../utils/index.ts';
 import type { TupleInput, TupleOutput, TuplePathItem } from './types.ts';
+import { getTupleArgs } from './utils/index.ts';
 
 /**
  * Tuple shape async type.
@@ -35,13 +32,10 @@ export type TupleSchemaAsync<
  *
  * @returns An async tuple schema.
  */
-export function tupleAsync<
-  TTupleItems extends TupleShapeAsync,
-  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
->(
+export function tupleAsync<TTupleItems extends TupleShapeAsync>(
   items: TTupleItems,
-  pipe?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
-): TupleSchemaAsync<TTupleItems, TTupleRest>;
+  pipe?: PipeAsync<TupleOutput<TTupleItems, undefined>>
+): TupleSchemaAsync<TTupleItems>;
 
 /**
  * Creates an async tuple schema.
@@ -52,14 +46,11 @@ export function tupleAsync<
  *
  * @returns An async tuple schema.
  */
-export function tupleAsync<
-  TTupleItems extends TupleShapeAsync,
-  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
->(
+export function tupleAsync<TTupleItems extends TupleShapeAsync>(
   items: TTupleItems,
   error?: string,
-  pipe?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
-): TupleSchemaAsync<TTupleItems, TTupleRest>;
+  pipe?: PipeAsync<TupleOutput<TTupleItems, undefined>>
+): TupleSchemaAsync<TTupleItems>;
 
 /**
  * Creates an async tuple schema.
@@ -72,7 +63,7 @@ export function tupleAsync<
  */
 export function tupleAsync<
   TTupleItems extends TupleShapeAsync,
-  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
   items: TTupleItems,
   rest: TTupleRest,
@@ -91,7 +82,7 @@ export function tupleAsync<
  */
 export function tupleAsync<
   TTupleItems extends TupleShapeAsync,
-  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
   items: TTupleItems,
   rest: TTupleRest,
@@ -101,7 +92,7 @@ export function tupleAsync<
 
 export function tupleAsync<
   TTupleItems extends TupleShapeAsync,
-  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
   items: TTupleItems,
   arg2?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>> | string | TTupleRest,
@@ -109,15 +100,10 @@ export function tupleAsync<
   arg4?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchemaAsync<TTupleItems, TTupleRest> {
   // Get rest, error and pipe argument
-  const { rest, error, pipe } = (
-    typeof arg2 === 'object' && !Array.isArray(arg2)
-      ? { rest: arg2, ...getErrorAndPipe(arg3, arg4) }
-      : getErrorAndPipe(arg2, arg3 as any)
-  ) as {
-    rest: TTupleRest;
-    error: string | undefined;
-    pipe: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>;
-  };
+  const [rest, error, pipe] = getTupleArgs<
+    TTupleRest,
+    PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
+  >(arg2, arg3, arg4);
 
   // Create and return async tuple schema
   return {

@@ -5,7 +5,7 @@ import {
   type ObjectSchemaAsync,
 } from '../../schemas/index.ts';
 import type { PipeAsync } from '../../types.ts';
-import { getErrorAndPipe } from '../../utils/index.ts';
+import { getDefaultArgs } from '../../utils/index.ts';
 
 /**
  * Creates an async object schema that contains only the selected keys of an
@@ -59,7 +59,7 @@ export function pickAsync<
   arg4?: PipeAsync<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchemaAsync<Pick<TObjectSchema['object'], TKeys[number]>> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg3, arg4);
+  const [error, pipe] = getDefaultArgs(arg3, arg4);
 
   // Create and return object schema
   return objectAsync(

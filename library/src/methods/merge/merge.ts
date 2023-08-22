@@ -4,7 +4,7 @@ import {
   type ObjectSchema,
 } from '../../schemas/index.ts';
 import type { Pipe } from '../../types.ts';
-import { getErrorAndPipe } from '../../utils/index.ts';
+import { getDefaultArgs } from '../../utils/index.ts';
 import type { MergeSchemaObjects } from './types.ts';
 
 /**
@@ -52,7 +52,7 @@ export function merge<TObjectSchemas extends ObjectSchemas>(
   arg3?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
 ): ObjectSchema<MergeSchemaObjects<TObjectSchemas>> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg2, arg3);
+  const [error, pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return object schema
   return object(

@@ -1,6 +1,6 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
+import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
 
 /**
@@ -53,7 +53,7 @@ export function object<TObjectShape extends ObjectShape>(
   arg3?: Pipe<ObjectOutput<TObjectShape>>
 ): ObjectSchema<TObjectShape> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg2, arg3);
+  const [error, pipe] = getDefaultArgs(arg2, arg3);
 
   // Create cached entries
   let cachedEntries: [string, BaseSchema<any>][];

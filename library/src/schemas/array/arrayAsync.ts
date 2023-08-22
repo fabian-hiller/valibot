@@ -8,7 +8,7 @@ import type {
 } from '../../types.ts';
 import {
   executePipeAsync,
-  getErrorAndPipe,
+  getDefaultArgs,
   getIssues,
 } from '../../utils/index.ts';
 import type { ArrayPathItem } from './types.ts';
@@ -58,7 +58,7 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
   arg3?: PipeAsync<Output<TArrayItem>[]>
 ): ArraySchemaAsync<TArrayItem> {
   // Get error and pipe argument
-  const { error, pipe } = getErrorAndPipe(arg2, arg3);
+  const [error, pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return async array schema
   return {
