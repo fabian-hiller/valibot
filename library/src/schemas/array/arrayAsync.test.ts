@@ -8,6 +8,8 @@ import {
   includes,
 } from '../../validations/index.ts';
 import { number, numberAsync } from '../number/index.ts';
+import { object } from '../object/index.ts';
+import { string } from '../string/index.ts';
 import { arrayAsync } from './arrayAsync.ts';
 
 describe('array', () => {
@@ -58,6 +60,38 @@ describe('array', () => {
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
+  });
+
+  test('should return issue path', async () => {
+    const schema1 = arrayAsync(number());
+    const input1 = [1, 2, '3', 4];
+    const result1 = await schema1._parse(input1);
+    expect(result1.issues?.[0].path).toEqual([
+      {
+        schema: 'array',
+        input: input1,
+        key: 2,
+        value: input1[2],
+      },
+    ]);
+
+    const schema2 = arrayAsync(object({ key: string() }));
+    const input2 = [{ key: '1' }, { key: 2 }, { key: '3' }];
+    const result2 = await schema2._parse(input2);
+    expect(result2.issues?.[0].path).toEqual([
+      {
+        schema: 'array',
+        input: input2,
+        key: 1,
+        value: input2[1],
+      },
+      {
+        schema: 'object',
+        input: input2[1],
+        key: 'key',
+        value: input2[1].key,
+      },
+    ]);
   });
 
   test('should execute pipe', async () => {

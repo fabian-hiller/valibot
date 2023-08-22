@@ -4,10 +4,8 @@ import {
   executePipeAsync,
   getErrorAndPipe,
   getIssue,
-  getPath,
-  getPathInfo,
 } from '../../utils/index.ts';
-import type { TupleInput, TupleOutput } from './types.ts';
+import type { TupleInput, TupleOutput, TuplePathItem } from './types.ts';
 
 /**
  * Tuple shape async type.
@@ -172,32 +170,34 @@ export function tupleAsync<
       await Promise.all([
         // Parse schema of each tuple item
         Promise.all(
-          items.map(async (schema, index) => {
+          items.map(async (schema, key) => {
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
-              const value = input[index];
-              const result = await schema._parse(
-                value,
-                getPathInfo(
-                  info,
-                  getPath(info?.path, {
-                    schema: 'tuple',
-                    input: input as [any, ...any[]],
-                    key: index,
-                    value,
-                  })
-                )
-              );
+              const value = input[key];
+              const result = await schema._parse(value, info);
 
               // If not aborted early, continue execution
               if (!(info?.abortEarly && issues)) {
                 // If there are issues, capture them
                 if (result.issues) {
-                  if (issues) {
-                    for (const issue of result.issues) {
-                      issues.push(issue);
+                  // Create tuple path item
+                  const pathItem: TuplePathItem = {
+                    schema: 'tuple',
+                    input: input as [any, ...any[]],
+                    key,
+                    value,
+                  };
+
+                  // Add modified result issues to issues
+                  for (const issue of result.issues) {
+                    if (issue.path) {
+                      issue.path.unshift(pathItem);
+                    } else {
+                      issue.path = [pathItem];
                     }
-                  } else {
+                    issues?.push(issue);
+                  }
+                  if (!issues) {
                     issues = result.issues;
                   }
 
@@ -208,7 +208,7 @@ export function tupleAsync<
 
                   // Otherwise, add item to tuple
                 } else {
-                  output[index] = result.output;
+                  output[key] = result.output;
                 }
               }
             }
@@ -221,29 +221,31 @@ export function tupleAsync<
             input.slice(items.length).map(async (value, index) => {
               // If not aborted early, continue execution
               if (!(info?.abortEarly && issues)) {
-                const tupleIndex = items.length + index;
-                const result = await rest._parse(
-                  value,
-                  getPathInfo(
-                    info,
-                    getPath(info?.path, {
-                      schema: 'tuple',
-                      input: input as [any, ...any[]],
-                      key: tupleIndex,
-                      value,
-                    })
-                  )
-                );
+                const key = items.length + index;
+                const result = await rest._parse(value, info);
 
                 // If not aborted early, continue execution
                 if (!(info?.abortEarly && issues)) {
                   // If there are issues, capture them
                   if (result.issues) {
-                    if (issues) {
-                      for (const issue of result.issues) {
-                        issues.push(issue);
+                    // Create tuple path item
+                    const pathItem: TuplePathItem = {
+                      schema: 'tuple',
+                      input: input as [any, ...any[]],
+                      key,
+                      value,
+                    };
+
+                    // Add modified result issues to issues
+                    for (const issue of result.issues) {
+                      if (issue.path) {
+                        issue.path.unshift(pathItem);
+                      } else {
+                        issue.path = [pathItem];
                       }
-                    } else {
+                      issues?.push(issue);
+                    }
+                    if (!issues) {
                       issues = result.issues;
                     }
 
@@ -254,7 +256,7 @@ export function tupleAsync<
 
                     // Otherwise, add item to tuple
                   } else {
-                    output[tupleIndex] = result.output;
+                    output[key] = result.output;
                   }
                 }
               }

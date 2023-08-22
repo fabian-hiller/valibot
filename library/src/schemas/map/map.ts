@@ -1,13 +1,7 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Output, Pipe } from '../../types.ts';
-import {
-  executePipe,
-  getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
-} from '../../utils/index.ts';
-import type { MapInput, MapOutput } from './types.ts';
+import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 
 /**
  * Map schema type.
@@ -107,29 +101,37 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
       const output: Map<Output<TMapKey>, Output<TMapValue>> = new Map();
 
       // Parse each key and value by schema
-      for (const inputEntry of input.entries()) {
-        // Get input key and value
-        const inputKey = inputEntry[0];
-        const inputValue = inputEntry[1];
-
-        // Get current path
-        const path = getPath(info?.path, {
-          schema: 'map',
-          input,
-          key: inputKey,
-          value: inputValue,
-        });
+      for (const [inputKey, inputValue] of input.entries()) {
+        // Create path item variable
+        let pathItem: MapPathItem | undefined;
 
         // Get parse result of key
-        const keyResult = key._parse(inputKey, getPathInfo(info, path, 'key'));
+        const keyResult = key._parse(inputKey, {
+          origin: 'key',
+          abortEarly: info?.abortEarly,
+          abortPipeEarly: info?.abortPipeEarly,
+        });
 
         // If there are issues, capture them
         if (keyResult.issues) {
-          if (issues) {
-            for (const issue of keyResult.issues) {
-              issues.push(issue);
+          // Create map path item
+          pathItem = {
+            schema: 'map',
+            input,
+            key: inputKey,
+            value: inputValue,
+          };
+
+          // Add modified result issues to issues
+          for (const issue of keyResult.issues) {
+            if (issue.path) {
+              issue.path.unshift(pathItem);
+            } else {
+              issue.path = [pathItem];
             }
-          } else {
+            issues?.push(issue);
+          }
+          if (!issues) {
             issues = keyResult.issues;
           }
 
@@ -140,15 +142,28 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
         }
 
         // Get parse result of value
-        const valueResult = value._parse(inputValue, getPathInfo(info, path));
+        const valueResult = value._parse(inputValue, info);
 
         // If there are issues, capture them
         if (valueResult.issues) {
-          if (issues) {
-            for (const issue of valueResult.issues) {
-              issues.push(issue);
+          // Create map path item
+          pathItem = pathItem || {
+            schema: 'map',
+            input,
+            key: inputKey,
+            value: inputValue,
+          };
+
+          // Add modified result issues to issues
+          for (const issue of valueResult.issues) {
+            if (issue.path) {
+              issue.path.unshift(pathItem);
+            } else {
+              issue.path = [pathItem];
             }
-          } else {
+            issues?.push(issue);
+          }
+          if (!issues) {
             issues = valueResult.issues;
           }
 

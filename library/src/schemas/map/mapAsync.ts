@@ -9,10 +9,8 @@ import {
   executePipeAsync,
   getErrorAndPipe,
   getIssue,
-  getPath,
-  getPathInfo,
 } from '../../utils/index.ts';
-import type { MapInput, MapOutput } from './types.ts';
+import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 
 /**
  * Map schema async type.
@@ -122,42 +120,49 @@ export function mapAsync<
 
       // Parse each key and value by schema
       await Promise.all(
-        Array.from(input.entries()).map(async (inputEntry) => {
-          // Get input key and value
-          const inputKey = inputEntry[0];
-          const inputValue = inputEntry[1];
-
-          // Get current path
-          const path = getPath(info?.path, {
-            schema: 'map',
-            input,
-            key: inputKey,
-            value: inputValue,
-          });
+        Array.from(input.entries()).map(async ([inputKey, inputValue]) => {
+          // Create path item variable
+          let pathItem: MapPathItem | undefined;
 
           // Get parse result of key and value
           const [keyResult, valueResult] = await Promise.all(
-            [
-              { schema: key, input: inputKey, origin: 'key' as const },
-              { schema: value, input: inputValue },
-            ].map(async ({ schema, input, origin }) => {
+            (
+              [
+                { schema: key, value: inputKey, origin: 'key' },
+                { schema: value, value: inputValue, origin: 'value' },
+              ] as const
+            ).map(async ({ schema, value, origin }) => {
               // If not aborted early, continue execution
               if (!(info?.abortEarly && issues)) {
-                // Get parse result of input
-                const result = await schema._parse(
-                  input,
-                  getPathInfo(info, path, origin)
-                );
+                // Get parse result of value
+                const result = await schema._parse(value, {
+                  origin,
+                  abortEarly: info?.abortEarly,
+                  abortPipeEarly: info?.abortPipeEarly,
+                });
 
                 // If not aborted early, continue execution
                 if (!(info?.abortEarly && issues)) {
                   // If there are issues, capture them
                   if (result.issues) {
-                    if (issues) {
-                      for (const issue of result.issues) {
-                        issues.push(issue);
+                    // Create map path item
+                    pathItem = pathItem || {
+                      schema: 'map',
+                      input,
+                      key: inputKey,
+                      value: inputValue,
+                    };
+
+                    // Add modified result issues to issues
+                    for (const issue of result.issues) {
+                      if (issue.path) {
+                        issue.path.unshift(pathItem);
+                      } else {
+                        issue.path = [pathItem];
                       }
-                    } else {
+                      issues?.push(issue);
+                    }
+                    if (!issues) {
                       issues = result.issues;
                     }
 

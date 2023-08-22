@@ -2,9 +2,10 @@ import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { maxLength, minLength } from '../../validations/index.ts';
-import { string } from '../string/index.ts';
-import { number, numberAsync } from '../number/index.ts';
 import { booleanAsync } from '../boolean/index.ts';
+import { number, numberAsync } from '../number/index.ts';
+import { object } from '../object/index.ts';
+import { string } from '../string/index.ts';
 import { tupleAsync } from './tupleAsync.ts';
 
 describe('tupleAsync', () => {
@@ -73,6 +74,68 @@ describe('tupleAsync', () => {
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
+  });
+
+  test('should return issue path', async () => {
+    const schema1 = tupleAsync([number(), string(), number()]);
+    const input1 = [1, 2, 3];
+    const result1 = await schema1._parse(input1);
+    expect(result1.issues?.[0].path).toEqual([
+      {
+        schema: 'tuple',
+        input: input1,
+        key: 1,
+        value: input1[1],
+      },
+    ]);
+
+    const schema2 = tupleAsync([number(), object({ key: string() })]);
+    const input2 = [123, { key: 123 }] as const;
+    const result2 = await schema2._parse(input2);
+    expect(result2.issues?.[0].path).toEqual([
+      {
+        schema: 'tuple',
+        input: input2,
+        key: 1,
+        value: input2[1],
+      },
+      {
+        schema: 'object',
+        input: input2[1],
+        key: 'key',
+        value: input2[1].key,
+      },
+    ]);
+
+    const schema3 = tupleAsync([number(), number()], string());
+    const input3 = [1, 2, 'test', 123, 'abc'];
+    const result3 = await schema3._parse(input3);
+    expect(result3.issues?.[0].path).toEqual([
+      {
+        schema: 'tuple',
+        input: input3,
+        key: 3,
+        value: input3[3],
+      },
+    ]);
+
+    const schema4 = tupleAsync([number(), number()], object({ key: string() }));
+    const input4 = [1, 2, { key: 123 }] as const;
+    const result4 = await schema4._parse(input4);
+    expect(result4.issues?.[0].path).toEqual([
+      {
+        schema: 'tuple',
+        input: input4,
+        key: 2,
+        value: input4[2],
+      },
+      {
+        schema: 'object',
+        input: input4[2],
+        key: 'key',
+        value: input4[2].key,
+      },
+    ]);
   });
 
   test('should execute pipe', async () => {

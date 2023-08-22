@@ -1,22 +1,7 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Input, Output, Pipe } from '../../types.ts';
-import {
-  executePipe,
-  getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
-} from '../../utils/index.ts';
-
-/**
- * Array path item type.
- */
-export type ArrayPathItem = {
-  schema: 'array';
-  input: any[];
-  key: number;
-  value: any;
-};
+import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import type { ArrayPathItem } from './types.ts';
 
 /**
  * Array schema type.
@@ -110,28 +95,30 @@ export function array<TArrayItem extends BaseSchema>(
       const output: any[] = [];
 
       // Parse schema of each array item
-      for (let index = 0; index < input.length; index++) {
-        const value = input[index];
-        const result = item._parse(
-          value,
-          getPathInfo(
-            info,
-            getPath(info?.path, {
-              schema: 'array',
-              input: input,
-              key: index,
-              value,
-            })
-          )
-        );
+      for (let key = 0; key < input.length; key++) {
+        const value = input[key];
+        const result = item._parse(value, info);
 
         // If there are issues, capture them
         if (result.issues) {
-          if (issues) {
-            for (const issue of result.issues) {
-              issues.push(issue);
+          // Create array path item
+          const pathItem: ArrayPathItem = {
+            schema: 'array',
+            input,
+            key,
+            value,
+          };
+
+          // Add modified result issues to issues
+          for (const issue of result.issues) {
+            if (issue.path) {
+              issue.path.unshift(pathItem);
+            } else {
+              issue.path = [pathItem];
             }
-          } else {
+            issues?.push(issue);
+          }
+          if (!issues) {
             issues = result.issues;
           }
 

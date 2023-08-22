@@ -4,10 +4,8 @@ import {
   executePipeAsync,
   getErrorAndPipe,
   getIssue,
-  getPath,
-  getPathInfo,
 } from '../../utils/index.ts';
-import type { ObjectInput, ObjectOutput } from './types.ts';
+import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 
 /**
  * Object shape async type.
@@ -116,36 +114,37 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
 
       // Parse schema of each key
       await Promise.all(
-        cachedEntries.map(async (objectEntry) => {
+        cachedEntries.map(async ([key, schema]) => {
           // If not aborted early, continue execution
           if (!(info?.abortEarly && issues)) {
-            // Get key and value
-            const key = objectEntry[0];
+            // Get value by key
             const value = (input as Record<string, unknown>)[key];
 
             // Get parse result of value
-            const result = await objectEntry[1]._parse(
-              value,
-              getPathInfo(
-                info,
-                getPath(info?.path, {
-                  schema: 'object',
-                  input,
-                  key,
-                  value,
-                })
-              )
-            );
+            const result = await schema._parse(value, info);
 
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
               // If there are issues, capture them
               if (result.issues) {
-                if (issues) {
-                  for (const issue of result.issues) {
-                    issues.push(issue);
+                // Create object path item
+                const pathItem: ObjectPathItem = {
+                  schema: 'object',
+                  input,
+                  key,
+                  value,
+                };
+
+                // Add modified result issues to issues
+                for (const issue of result.issues) {
+                  if (issue.path) {
+                    issue.path.unshift(pathItem);
+                  } else {
+                    issue.path = [pathItem];
                   }
-                } else {
+                  issues?.push(issue);
+                }
+                if (!issues) {
                   issues = result.issues;
                 }
 

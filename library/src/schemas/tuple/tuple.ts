@@ -1,13 +1,7 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import {
-  executePipe,
-  getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
-} from '../../utils/index.ts';
-import type { TupleOutput, TupleInput } from './types.ts';
+import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import type { TupleOutput, TupleInput, TuplePathItem } from './types.ts';
 
 /**
  * Tuple shape type.
@@ -167,28 +161,30 @@ export function tuple<
       const output: any[] = [];
 
       // Parse schema of each tuple item
-      for (let index = 0; index < items.length; index++) {
-        const value = input[index];
-        const result = items[index]._parse(
-          value,
-          getPathInfo(
-            info,
-            getPath(info?.path, {
-              schema: 'tuple',
-              input: input as [any, ...any[]],
-              key: index,
-              value,
-            })
-          )
-        );
+      for (let key = 0; key < items.length; key++) {
+        const value = input[key];
+        const result = items[key]._parse(value, info);
 
         // If there are issues, capture them
         if (result.issues) {
-          if (issues) {
-            for (const issue of result.issues) {
-              issues.push(issue);
+          // Create tuple path item
+          const pathItem: TuplePathItem = {
+            schema: 'tuple',
+            input: input as [any, ...any[]],
+            key,
+            value,
+          };
+
+          // Add modified result issues to issues
+          for (const issue of result.issues) {
+            if (issue.path) {
+              issue.path.unshift(pathItem);
+            } else {
+              issue.path = [pathItem];
             }
-          } else {
+            issues?.push(issue);
+          }
+          if (!issues) {
             issues = result.issues;
           }
 
@@ -199,34 +195,36 @@ export function tuple<
 
           // Otherwise, add item to tuple
         } else {
-          output[index] = result.output;
+          output[key] = result.output;
         }
       }
 
       // If necessary parse schema of each rest item
       if (rest) {
-        for (let index = items.length; index < input.length; index++) {
-          const value = input[index];
-          const result = rest._parse(
-            value,
-            getPathInfo(
-              info,
-              getPath(info?.path, {
-                schema: 'tuple',
-                input: input as [any, ...any[]],
-                key: index,
-                value,
-              })
-            )
-          );
+        for (let key = items.length; key < input.length; key++) {
+          const value = input[key];
+          const result = rest._parse(value, info);
 
           // If there are issues, capture them
           if (result.issues) {
-            if (issues) {
-              for (const issue of result.issues) {
-                issues.push(issue);
+            // Create tuple path item
+            const pathItem: TuplePathItem = {
+              schema: 'tuple',
+              input: input as [any, ...any[]],
+              key,
+              value,
+            };
+
+            // Add modified result issues to issues
+            for (const issue of result.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                issue.path = [pathItem];
               }
-            } else {
+              issues?.push(issue);
+            }
+            if (!issues) {
               issues = result.issues;
             }
 
@@ -237,7 +235,7 @@ export function tuple<
 
             // Otherwise, add item to tuple
           } else {
-            output[index] = result.output;
+            output[key] = result.output;
           }
         }
       }

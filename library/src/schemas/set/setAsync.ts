@@ -4,10 +4,8 @@ import {
   executePipeAsync,
   getErrorAndPipe,
   getIssue,
-  getPath,
-  getPathInfo,
 } from '../../utils/index.ts';
-import type { SetInput, SetOutput } from './types.ts';
+import type { SetInput, SetOutput, SetPathItem } from './types.ts';
 
 /**
  * Set schema async type.
@@ -102,31 +100,34 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
 
       // Parse each value by schema
       await Promise.all(
-        Array.from(input.values()).map(async (inputValue, index) => {
+        Array.from(input.values()).map(async (inputValue, key) => {
           // If not aborted early, continue execution
           if (!(info?.abortEarly && issues)) {
-            const result = await value._parse(
-              inputValue,
-              getPathInfo(
-                info,
-                getPath(info?.path, {
-                  schema: 'set',
-                  input,
-                  key: index,
-                  value: inputValue,
-                })
-              )
-            );
+            // Get parse result of input value
+            const result = await value._parse(inputValue, info);
 
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
               // If there are issues, capture them
               if (result.issues) {
-                if (issues) {
-                  for (const issue of result.issues) {
-                    issues.push(issue);
+                // Create set path item
+                const pathItem: SetPathItem = {
+                  schema: 'set',
+                  input,
+                  key,
+                  value: inputValue,
+                };
+
+                // Add modified result issues to issues
+                for (const issue of result.issues) {
+                  if (issue.path) {
+                    issue.path.unshift(pathItem);
+                  } else {
+                    issue.path = [pathItem];
                   }
-                } else {
+                  issues?.push(issue);
+                }
+                if (!issues) {
                   issues = result.issues;
                 }
 

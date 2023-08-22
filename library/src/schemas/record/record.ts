@@ -1,14 +1,8 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import {
-  executePipe,
-  getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
-} from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
 import { type StringSchema, string } from '../string/index.ts';
-import type { RecordOutput, RecordInput } from './types.ts';
+import type { RecordOutput, RecordInput, RecordPathItem } from './types.ts';
 import { BLOCKED_KEYS } from './values.ts';
 
 /**
@@ -161,36 +155,35 @@ export function record<
 
       // Parse each key and value by schema
       // Note: `Object.entries(...)` converts each key to a string
-      for (const inputEntry of Object.entries(input)) {
-        // Get input key
-        const inputKey = inputEntry[0];
-
+      for (const [inputKey, inputValue] of Object.entries(input)) {
         // Exclude blocked keys to prevent prototype pollutions
         if (!BLOCKED_KEYS.includes(inputKey)) {
-          // Get input value
-          const inputValue = inputEntry[1];
-
-          // Get current path
-          const path = getPath(info?.path, {
-            schema: 'record',
-            input,
-            key: inputKey,
-            value: inputValue,
-          });
+          // Create path item variable
+          let pathItem: RecordPathItem | undefined;
 
           // Get parse result of key
-          const keyResult = key._parse(
-            inputKey,
-            getPathInfo(info, path, 'key')
-          );
+          const keyResult = key._parse(inputKey, {
+            origin: 'key',
+            abortEarly: info?.abortEarly,
+            abortPipeEarly: info?.abortPipeEarly,
+          });
 
           // If there are issues, capture them
           if (keyResult.issues) {
-            if (issues) {
-              for (const issue of keyResult.issues) {
-                issues.push(issue);
-              }
-            } else {
+            // Create record path item
+            pathItem = {
+              schema: 'record',
+              input,
+              key: inputKey,
+              value: inputValue,
+            };
+
+            // Add modified result issues to issues
+            for (const issue of keyResult.issues) {
+              issue.path = [pathItem];
+              issues?.push(issue);
+            }
+            if (!issues) {
               issues = keyResult.issues;
             }
 
@@ -201,15 +194,28 @@ export function record<
           }
 
           // Get parse result of value
-          const valueResult = value._parse(inputValue, getPathInfo(info, path));
+          const valueResult = value._parse(inputValue, info);
 
           // If there are issues, capture them
           if (valueResult.issues) {
-            if (issues) {
-              for (const issue of valueResult.issues) {
-                issues.push(issue);
+            // Create record path item
+            pathItem = pathItem || {
+              schema: 'record',
+              input,
+              key: inputKey,
+              value: inputValue,
+            };
+
+            // Add modified result issues to issues
+            for (const issue of valueResult.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                issue.path = [pathItem];
               }
-            } else {
+              issues?.push(issue);
+            }
+            if (!issues) {
               issues = valueResult.issues;
             }
 

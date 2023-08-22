@@ -2,10 +2,11 @@ import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
 import { maxSize, minSize, size } from '../../validations/index.ts';
-import { map } from '../map/index.ts';
-import { string } from '../string/index.ts';
 import { date } from '../date/index.ts';
+import { map } from '../map/index.ts';
 import { number } from '../number/index.ts';
+import { object } from '../object/index.ts';
+import { string } from '../string/index.ts';
 
 describe('map', () => {
   test('should pass only maps', () => {
@@ -66,6 +67,65 @@ describe('map', () => {
       expect((error as ValiError).issues.length).toBe(1);
       expect((error as ValiError).issues[0].origin).toBe('key');
     }
+  });
+
+  test('should return issue path', () => {
+    const schema1 = map(string(), number());
+    const input1 = new Map().set('A', 1).set('B', 2).set('C', '3');
+    const result1 = schema1._parse(input1);
+    expect(result1.issues?.[0].path).toEqual([
+      {
+        schema: 'map',
+        input: input1,
+        key: 'C',
+        value: input1.get('C'),
+      },
+    ]);
+
+    const schema2 = map(string(), object({ key: string() }));
+    const input2 = new Map()
+      .set('A', { key: '1' })
+      .set('B', { key: 2 })
+      .set('C', { key: '3' });
+    const result2 = schema2._parse(input2);
+    expect(result2.issues?.[0].origin).toBe('value');
+    expect(result2.issues?.[0].path).toEqual([
+      {
+        schema: 'map',
+        input: input2,
+        key: 'B',
+        value: input2.get('B'),
+      },
+      {
+        schema: 'object',
+        input: input2.get('B'),
+        key: 'key',
+        value: input2.get('B').key,
+      },
+    ]);
+
+    const schema3 = map(object({ key: string() }), string());
+    const errorKey = { key: 2 };
+    const input3 = new Map()
+      .set({ key: '1' }, 'A')
+      .set(errorKey, 'B')
+      .set({ key: '3' }, 'C');
+    const result3 = schema3._parse(input3);
+    expect(result3.issues?.[0].origin).toBe('key');
+    expect(result3.issues?.[0].path).toEqual([
+      {
+        schema: 'map',
+        input: input3,
+        key: errorKey,
+        value: input3.get(errorKey),
+      },
+      {
+        schema: 'object',
+        input: errorKey,
+        key: 'key',
+        value: errorKey.key,
+      },
+    ]);
   });
 
   test('should execute pipe', () => {

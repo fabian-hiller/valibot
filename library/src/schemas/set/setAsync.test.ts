@@ -2,9 +2,10 @@ import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { maxSize, minSize, size } from '../../validations/index.ts';
-import { string } from '../string/index.ts';
 import { date } from '../date/index.ts';
 import { number } from '../number/index.ts';
+import { object } from '../object/index.ts';
+import { string } from '../string/index.ts';
 import { setAsync } from './setAsync.ts';
 
 describe('setAsync', () => {
@@ -61,6 +62,38 @@ describe('setAsync', () => {
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
+  });
+
+  test('should return issue path', async () => {
+    const schema1 = setAsync(number());
+    const input1 = new Set().add(1).add('2').add(3);
+    const result1 = await schema1._parse(input1);
+    expect(result1.issues?.[0].path).toEqual([
+      {
+        schema: 'set',
+        input: input1,
+        key: 1,
+        value: '2',
+      },
+    ]);
+
+    const schema2 = setAsync(object({ key: string() }));
+    const input2 = new Set().add({ key: 'hello' }).add({ key: 123 });
+    const result2 = await schema2._parse(input2);
+    expect(result2.issues?.[0].path).toEqual([
+      {
+        schema: 'set',
+        input: input2,
+        key: 1,
+        value: { key: 123 },
+      },
+      {
+        schema: 'object',
+        input: { key: 123 },
+        key: 'key',
+        value: 123,
+      },
+    ]);
   });
 
   test('should execute pipe', async () => {

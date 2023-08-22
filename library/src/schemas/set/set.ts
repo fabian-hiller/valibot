@@ -1,13 +1,7 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import {
-  executePipe,
-  getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
-} from '../../utils/index.ts';
-import type { SetInput, SetOutput } from './types.ts';
+import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import type { SetInput, SetOutput, SetPathItem } from './types.ts';
 
 /**
  * Set schema type.
@@ -96,33 +90,36 @@ export function set<TSetValue extends BaseSchema>(
         };
       }
 
-      // Create index, output and issues
-      let index = 0;
+      // Create key, output and issues
+      let key = 0;
       let issues: Issues | undefined;
       const output: SetOutput<TSetValue> = new Set();
 
       // Parse each value by schema
       for (const inputValue of input) {
-        const result = value._parse(
-          inputValue,
-          getPathInfo(
-            info,
-            getPath(info?.path, {
-              schema: 'set',
-              input,
-              key: index++,
-              value: inputValue,
-            })
-          )
-        );
+        // Get parse result of input value
+        const result = value._parse(inputValue, info);
 
         // If there are issues, capture them
         if (result.issues) {
-          if (issues) {
-            for (const issue of result.issues) {
-              issues.push(issue);
+          // Create set path item
+          const pathItem: SetPathItem = {
+            schema: 'set',
+            input,
+            key,
+            value: inputValue,
+          };
+
+          // Add modified result issues to issues
+          for (const issue of result.issues) {
+            if (issue.path) {
+              issue.path.unshift(pathItem);
+            } else {
+              issue.path = [pathItem];
             }
-          } else {
+            issues?.push(issue);
+          }
+          if (!issues) {
             issues = result.issues;
           }
 
@@ -135,6 +132,9 @@ export function set<TSetValue extends BaseSchema>(
         } else {
           output.add(result.output);
         }
+
+        // Increment key
+        key++;
       }
 
       // Return issues or pipe result

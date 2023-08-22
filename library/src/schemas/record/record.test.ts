@@ -2,9 +2,10 @@ import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
 import { toCustom } from '../../transformations/index.ts';
-import { minLength } from '../../validations/index.ts';
+import { maxLength, minLength } from '../../validations/index.ts';
 import { any } from '../any/index.ts';
 import { number } from '../number/index.ts';
+import { object } from '../object/index.ts';
 import { string } from '../string/index.ts';
 import { union } from '../union/index.ts';
 import { record } from './record.ts';
@@ -81,6 +82,52 @@ describe('record', () => {
       expect((error as ValiError).issues.length).toBe(1);
       expect((error as ValiError).issues[0].origin).toBe('key');
     }
+  });
+
+  test('should return issue path', () => {
+    const schema1 = record(number());
+    const input1 = { a: 1, b: '2', c: 3 };
+    const result1 = schema1._parse(input1);
+    expect(result1.issues?.[0].path).toEqual([
+      {
+        schema: 'record',
+        input: input1,
+        key: 'b',
+        value: input1.b,
+      },
+    ]);
+
+    const schema2 = record(object({ key: string() }));
+    const input2 = { a: { key: 'test' }, b: { key: 123 } };
+    const result2 = schema2._parse(input2);
+    expect(result2.issues?.[0].origin).toBe('value');
+    expect(result2.issues?.[0].path).toEqual([
+      {
+        schema: 'record',
+        input: input2,
+        key: 'b',
+        value: input2.b,
+      },
+      {
+        schema: 'object',
+        input: input2.b,
+        key: 'key',
+        value: input2.b.key,
+      },
+    ]);
+
+    const schema3 = record(string([maxLength(1)]), number());
+    const input3 = { a: 1, bb: 2, c: 3 };
+    const result3 = schema3._parse(input3);
+    expect(result3.issues?.[0].origin).toBe('key');
+    expect(result3.issues?.[0].path).toEqual([
+      {
+        schema: 'record',
+        input: input3,
+        key: 'bb',
+        value: input3.bb,
+      },
+    ]);
   });
 
   test('should execute pipe', () => {

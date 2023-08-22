@@ -47,6 +47,38 @@ describe('object', () => {
     }
   });
 
+  test('should return issue path', () => {
+    const schema1 = object({ key: number() });
+    const input1 = { key: '123' };
+    const result1 = schema1._parse(input1);
+    expect(result1.issues?.[0].path).toEqual([
+      {
+        schema: 'object',
+        input: input1,
+        key: 'key',
+        value: input1.key,
+      },
+    ]);
+
+    const schema2 = object({ nested: object({ key: string() }) });
+    const input2 = { nested: { key: 123 } };
+    const result2 = schema2._parse(input2);
+    expect(result2.issues?.[0].path).toEqual([
+      {
+        schema: 'object',
+        input: input2,
+        key: 'nested',
+        value: input2.nested,
+      },
+      {
+        schema: 'object',
+        input: input2.nested,
+        key: 'key',
+        value: input2.nested.key,
+      },
+    ]);
+  });
+
   test('should execute pipe', () => {
     const input = { key1: '1', key2: 1 };
     const transformInput = () => ({ key1: '2', key2: 2 });

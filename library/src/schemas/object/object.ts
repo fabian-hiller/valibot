@@ -1,13 +1,7 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import {
-  executePipe,
-  getErrorAndPipe,
-  getIssue,
-  getPath,
-  getPathInfo,
-} from '../../utils/index.ts';
-import type { ObjectOutput, ObjectInput } from './types.ts';
+import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
 
 /**
  * Object shape type.
@@ -112,32 +106,33 @@ export function object<TObjectShape extends ObjectShape>(
       const output: Record<string, any> = {};
 
       // Parse schema of each key
-      for (const objectEntry of cachedEntries) {
-        // Get key and value
-        const key = objectEntry[0];
+      for (const [key, schema] of cachedEntries) {
+        // Get value by key
         const value = (input as Record<string, unknown>)[key];
 
         // Get parse result of value
-        const result = objectEntry[1]._parse(
-          value,
-          getPathInfo(
-            info,
-            getPath(info?.path, {
-              schema: 'object',
-              input,
-              key,
-              value,
-            })
-          )
-        );
+        const result = schema._parse(value, info);
 
         // If there are issues, capture them
         if (result.issues) {
-          if (issues) {
-            for (const issue of result.issues) {
-              issues.push(issue);
+          // Create object path item
+          const pathItem: ObjectPathItem = {
+            schema: 'object',
+            input,
+            key,
+            value,
+          };
+
+          // Add modified result issues to issues
+          for (const issue of result.issues) {
+            if (issue.path) {
+              issue.path.unshift(pathItem);
+            } else {
+              issue.path = [pathItem];
             }
-          } else {
+            issues?.push(issue);
+          }
+          if (!issues) {
             issues = result.issues;
           }
 
