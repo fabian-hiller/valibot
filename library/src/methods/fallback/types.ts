@@ -1,4 +1,4 @@
-import type { Issues } from '../../error/index.ts';
+import type { Issues } from '../../types.ts';
 
 /**
  * Fallback info type.

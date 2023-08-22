@@ -1,5 +1,9 @@
-import type { Issues } from '../../error/index.ts';
-import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  Issues,
+  PipeAsync,
+} from '../../types.ts';
 import { executePipeAsync, getIssues } from '../../utils/index.ts';
 import type { StringSchema, StringSchemaAsync } from '../string/index.ts';
 import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';

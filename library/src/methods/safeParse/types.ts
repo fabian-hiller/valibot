@@ -1,5 +1,10 @@
-import type { Issues, ValiError } from '../../error/index.ts';
-import type { BaseSchema, BaseSchemaAsync, Output } from '../../types.ts';
+import type { ValiError } from '../../error/index.ts';
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  Issues,
+  Output,
+} from '../../types.ts';
 
 /**
  * Safe parse result type.

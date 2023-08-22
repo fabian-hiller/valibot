@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { type Issues, ValiError } from '../ValiError/index.ts';
+import type { Issues } from '../../types.ts';
+import { ValiError } from '../ValiError/index.ts';
 import { flatten } from './flatten.ts';
 
 describe('flatten', () => {

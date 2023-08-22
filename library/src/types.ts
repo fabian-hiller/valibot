@@ -1,4 +1,3 @@
-import type { Issue, Issues } from './error/index.ts';
 import type {
   ArrayPathItem,
   MapPathItem,
@@ -7,6 +6,53 @@ import type {
   SetPathItem,
   TuplePathItem,
 } from './schemas/index.ts';
+
+/**
+ * Issue reason type.
+ */
+export type IssueReason =
+  | 'type'
+  | 'string'
+  | 'number'
+  | 'bigint'
+  | 'blob'
+  | 'boolean'
+  | 'any'
+  | 'unknown'
+  | 'date'
+  | 'array'
+  | 'tuple'
+  | 'map'
+  | 'object'
+  | 'record'
+  | 'set'
+  | 'special'
+  | 'instance';
+
+/**
+ * Issue origin type.
+ */
+export type IssueOrigin = 'key' | 'value';
+
+/**
+ * Issue type.
+ */
+export type Issue = {
+  reason: IssueReason;
+  validation: string;
+  origin: IssueOrigin;
+  message: string;
+  input: any;
+  path?: PathItem[];
+  issues?: Issues;
+  abortEarly?: boolean;
+  abortPipeEarly?: boolean;
+};
+
+/**
+ * Issues type.
+ */
+export type Issues = [Issue, ...Issue[]];
 
 /**
  * Parse info type.

@@ -1,5 +1,4 @@
-import type { Issues } from '../../error/index.ts';
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, Issues, Pipe } from '../../types.ts';
 import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
 

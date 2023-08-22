@@ -1,4 +1,5 @@
-import type { Issues, ValiError } from '../ValiError/index.ts';
+import type { Issues } from '../../types.ts';
+import type { ValiError } from '../ValiError/index.ts';
 
 /**
  * Flat errors type.

@@ -1,5 +1,9 @@
-import type { Issues } from '../../error/index.ts';
-import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  Issues,
+  PipeAsync,
+} from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,

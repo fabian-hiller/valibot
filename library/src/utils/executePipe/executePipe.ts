@@ -1,5 +1,11 @@
-import type { IssueReason, Issues } from '../../error/index.ts';
-import type { _ParseResult, ParseInfo, Pipe, PipeInfo } from '../../types.ts';
+import type {
+  _ParseResult,
+  IssueReason,
+  Issues,
+  ParseInfo,
+  Pipe,
+  PipeInfo,
+} from '../../types.ts';
 import { getIssue, getPipeInfo } from './utils/index.ts';
 
 /**

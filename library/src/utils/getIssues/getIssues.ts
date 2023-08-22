@@ -1,5 +1,4 @@
-import type { IssueReason, Issues } from '../../error/index.ts';
-import type { ParseInfo } from '../../types.ts';
+import type { IssueReason, Issues, ParseInfo } from '../../types.ts';
 
 /**
  * Returns the final issue data.

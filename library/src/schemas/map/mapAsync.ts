@@ -1,7 +1,7 @@
-import type { Issues } from '../../error/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  Issues,
   Output,
   PipeAsync,
 } from '../../types.ts';

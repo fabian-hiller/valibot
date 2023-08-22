@@ -1,5 +1,4 @@
-import type { Issues } from '../../error/index.ts';
-import type { BaseSchema, Input, Output } from '../../types.ts';
+import type { BaseSchema, Input, Issues, Output } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
 /**

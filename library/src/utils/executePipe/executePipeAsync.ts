@@ -1,6 +1,7 @@
-import type { IssueReason, Issues } from '../../error/index.ts';
 import type {
   _ParseResult,
+  IssueReason,
+  Issues,
   ParseInfo,
   PipeAsync,
   PipeInfo,
