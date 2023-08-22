@@ -8,7 +8,7 @@ import type {
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getIssues,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 
@@ -102,16 +102,7 @@ export function mapAsync<
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'map',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(info, 'type', 'map', error || 'Invalid type', input);
       }
 
       // Create issues and output

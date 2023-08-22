@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getIssues,
 } from '../../utils/index.ts';
 
 /**
@@ -67,16 +67,13 @@ export function numberAsync(
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'number') {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'number',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'number',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Execute pipe and return result

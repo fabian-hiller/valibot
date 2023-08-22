@@ -1,5 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 
 /**
  * Class enum type.
@@ -81,16 +81,13 @@ export function instance<TClass extends Class>(
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof of)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'instance',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'instance',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Execute pipe and return result

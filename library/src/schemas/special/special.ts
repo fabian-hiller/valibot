@@ -1,5 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 
 /**
  * Special schema type.
@@ -70,16 +70,13 @@ export function special<TInput>(
     _parse(input, info) {
       // Check type of input
       if (!check(input)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'special',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'special',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Execute pipe and return result

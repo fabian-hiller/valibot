@@ -1,7 +1,6 @@
 import type { IssueReason, Issues } from '../../error/index.ts';
 import type { _ParseResult, ParseInfo, Pipe, PipeInfo } from '../../types.ts';
-import { getIssue } from '../getIssue/index.ts';
-import { getPipeInfo } from '../getPipeInfo/index.ts';
+import { getIssue, getPipeInfo } from './utils/index.ts';
 
 /**
  * Executes the validation and transformation pipe.

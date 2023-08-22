@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getIssues,
 } from '../../utils/index.ts';
 
 /**
@@ -64,16 +64,7 @@ export function dateAsync(
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Date)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'date',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(info, 'type', 'date', error || 'Invalid type', input);
       }
 
       // Execute pipe and return result

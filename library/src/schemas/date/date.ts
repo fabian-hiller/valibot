@@ -1,5 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 
 /**
  * Date schema type.
@@ -57,16 +57,7 @@ export function date(
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Date)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'date',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(info, 'type', 'date', error || 'Invalid type', input);
       }
 
       // Execute pipe and return result

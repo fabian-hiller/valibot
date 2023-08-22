@@ -9,7 +9,7 @@ import type {
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getIssues,
 } from '../../utils/index.ts';
 import type { ArrayPathItem } from './types.ts';
 
@@ -88,16 +88,7 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
     async _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'array',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(info, 'type', 'array', error || 'Invalid type', input);
       }
 
       // Create issues and output

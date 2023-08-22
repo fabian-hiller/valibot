@@ -1,6 +1,6 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 import type { TupleOutput, TupleInput, TuplePathItem } from './types.ts';
 
 /**
@@ -144,16 +144,7 @@ export function tuple<
         (!rest && items.length !== input.length) ||
         (rest && items.length > input.length)
       ) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'tuple',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(info, 'type', 'tuple', error || 'Invalid type', input);
       }
 
       // Create issues and output

@@ -3,7 +3,7 @@ import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getIssues,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput, SetPathItem } from './types.ts';
 
@@ -82,16 +82,7 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Set)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'set',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(info, 'type', 'set', error || 'Invalid type', input);
       }
 
       // Create index, output and issues

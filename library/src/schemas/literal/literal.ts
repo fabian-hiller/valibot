@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getIssues } from '../../utils/index.ts';
 import type { Literal } from './types.ts';
 
 /**
@@ -52,16 +52,13 @@ export function literal<TLiteral extends Literal>(
     _parse(input, info) {
       // Check type of input
       if (input !== literal) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'literal',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'literal',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Return input as output

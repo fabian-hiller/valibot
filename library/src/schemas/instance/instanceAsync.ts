@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getIssues,
 } from '../../utils/index.ts';
 import { type Class } from './instance.ts';
 
@@ -81,16 +81,13 @@ export function instanceAsync<TClass extends Class>(
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof of)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'instance',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'instance',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Execute pipe and return result

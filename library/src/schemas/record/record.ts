@@ -1,6 +1,6 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 import { type StringSchema, string } from '../string/index.ts';
 import type { RecordOutput, RecordInput, RecordPathItem } from './types.ts';
 import { BLOCKED_KEYS } from './values.ts';
@@ -137,16 +137,13 @@ export function record<
     _parse(input, info) {
       // Check type of input
       if (!input || input.constructor !== Object) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'record',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'record',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Create issues and output

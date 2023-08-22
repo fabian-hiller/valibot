@@ -4,7 +4,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getIssues } from '../../utils/index.ts';
 import type { NonOptional } from './nonOptional.ts';
 
 /**
@@ -59,16 +59,13 @@ export function nonOptionalAsync<
     async _parse(input, info) {
       // Allow `undefined` values not to pass
       if (input === undefined) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'non_optional',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'non_optional',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Return result of wrapped schema

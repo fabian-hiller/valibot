@@ -1,5 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 
 /**
  * String schema type.
@@ -57,16 +57,13 @@ export function string(
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'string') {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'string',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'string',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Execute pipe and return result

@@ -1,6 +1,6 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 import type { SetInput, SetOutput, SetPathItem } from './types.ts';
 
 /**
@@ -78,16 +78,7 @@ export function set<TSetValue extends BaseSchema>(
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Set)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'set',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(info, 'type', 'set', error || 'Invalid type', input);
       }
 
       // Create key, output and issues

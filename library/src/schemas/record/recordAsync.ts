@@ -3,7 +3,7 @@ import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getIssues,
 } from '../../utils/index.ts';
 import {
   type StringSchema,
@@ -150,16 +150,13 @@ export function recordAsync<
     async _parse(input, info) {
       // Check type of input
       if (!input || input.constructor !== Object) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'record',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'record',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Create issues and output

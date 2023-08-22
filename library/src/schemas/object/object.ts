@@ -1,6 +1,6 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
 
 /**
@@ -86,16 +86,13 @@ export function object<TObjectShape extends ObjectShape>(
     _parse(input, info) {
       // Check type of input
       if (!input || input.constructor !== Object) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'object',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'object',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Cache object entries lazy

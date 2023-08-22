@@ -1,5 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 
 /**
  * Blob schema type.
@@ -57,16 +57,7 @@ export function blob(
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Blob)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'blob',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(info, 'type', 'blob', error || 'Invalid type', input);
       }
 
       // Execute pipe and return result

@@ -3,7 +3,7 @@ import type { BaseSchema, BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getErrorAndPipe,
-  getIssue,
+  getIssues,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 
@@ -93,16 +93,13 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
     async _parse(input, info) {
       // Check type of input
       if (!input || input.constructor !== Object) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'object',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'object',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Cache object entries lazy

@@ -5,8 +5,7 @@ import type {
   PipeAsync,
   PipeInfo,
 } from '../../types.ts';
-import { getIssue } from '../getIssue/index.ts';
-import { getPipeInfo } from '../getPipeInfo/index.ts';
+import { getIssue, getPipeInfo } from './utils/index.ts';
 
 /**
  * Executes the async validation and transformation pipe.

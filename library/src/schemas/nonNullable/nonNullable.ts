@@ -1,5 +1,5 @@
 import type { BaseSchema, Input, Output } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getIssues } from '../../utils/index.ts';
 
 /**
  * Non nullable type.
@@ -56,16 +56,13 @@ export function nonNullable<TWrappedSchema extends BaseSchema>(
     _parse(input, info) {
       // Allow `null` values not to pass
       if (input === null) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'non_nullable',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'non_nullable',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Return result of wrapped schema

@@ -1,5 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 
 /**
  * Bigint schema type.
@@ -57,16 +57,13 @@ export function bigint(
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'bigint') {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'bigint',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'bigint',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Execute pipe and return result

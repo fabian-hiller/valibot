@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getIssues } from '../../utils/index.ts';
 
 /**
  * Undefined schema type.
@@ -41,16 +41,13 @@ export function undefinedType(error?: string): UndefinedSchema {
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'undefined') {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'undefined',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'undefined',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Return input as output

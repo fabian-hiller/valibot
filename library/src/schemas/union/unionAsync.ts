@@ -5,7 +5,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getIssues } from '../../utils/index.ts';
 
 /**
  * Union options async type.
@@ -94,17 +94,14 @@ export function unionAsync<TUnionOptions extends UnionOptionsAsync>(
       // Return input as output or issues
       return output
         ? { output: output[0] }
-        : {
-            issues: [
-              getIssue(info, {
-                reason: 'type',
-                validation: 'union',
-                message: error || 'Invalid type',
-                input,
-                issues,
-              }),
-            ],
-          };
+        : getIssues(
+            info,
+            'type',
+            'union',
+            error || 'Invalid type',
+            input,
+            issues
+          );
     },
   };
 }

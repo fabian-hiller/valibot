@@ -1,6 +1,6 @@
 import type { Issues } from '../../error/index.ts';
 import type { BaseSchema, Input, Output, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 import type { ArrayPathItem } from './types.ts';
 
 /**
@@ -78,16 +78,7 @@ export function array<TArrayItem extends BaseSchema>(
     _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'array',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(info, 'type', 'array', error || 'Invalid type', input);
       }
 
       // Create issues and output

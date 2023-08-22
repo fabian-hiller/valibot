@@ -4,7 +4,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getIssues } from '../../utils/index.ts';
 import type { NonNullish } from './nonNullish.ts';
 
 /**
@@ -59,16 +59,13 @@ export function nonNullishAsync<
     async _parse(input, info) {
       // Allow `null` and `undefined` values not to pass
       if (input === null || input === undefined) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'non_nullish',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'non_nullish',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Return result of wrapped schema

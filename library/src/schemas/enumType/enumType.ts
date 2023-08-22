@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssue } from '../../utils/index.ts';
+import { getIssues } from '../../utils/index.ts';
 import type { Enum } from './types.ts';
 
 /**
@@ -52,16 +52,7 @@ export function enumType<TOption extends string, TEnum extends Enum<TOption>>(
     _parse(input, info) {
       // Check type of input
       if (!enumValue.includes(input as any)) {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'enum',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(info, 'type', 'enum', error || 'Invalid type', input);
       }
 
       // Return inpot as output

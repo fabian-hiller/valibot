@@ -1,5 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getErrorAndPipe, getIssue } from '../../utils/index.ts';
+import { executePipe, getErrorAndPipe, getIssues } from '../../utils/index.ts';
 
 /**
  * Number schema type.
@@ -57,16 +57,13 @@ export function number(
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'number') {
-        return {
-          issues: [
-            getIssue(info, {
-              reason: 'type',
-              validation: 'number',
-              message: error || 'Invalid type',
-              input,
-            }),
-          ],
-        };
+        return getIssues(
+          info,
+          'type',
+          'number',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Execute pipe and return result
