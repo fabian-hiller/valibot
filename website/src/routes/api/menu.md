@@ -122,6 +122,7 @@
 - [customAsync](/api/customAsync)
 - [dateAsync](/api/dateAsync)
 - [enumTypeAsync](/api/enumTypeAsync)
+- [fallbackAsync](/api/fallbackAsync)
 - [instanceAsync](/api/instanceAsync)
 - [literalAsync](/api/literalAsync)
 - [mapAsync](/api/mapAsync)

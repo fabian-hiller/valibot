@@ -16,7 +16,7 @@ The input type of a schema corresponds to the TypeScript type that the incoming 
 > You are probably interested in input type only in special cases. I recommend you to use the output type in most cases.
 
 ```ts
-import { type Input, object, string } from 'valibot'; // 0.59 kB
+import { type Input, object, string } from 'valibot'; // 0.63 kB
 
 const LoginSchema = object({
   email: string(),
@@ -31,7 +31,7 @@ type LoginInput = Input<typeof LoginSchema>; // { email: string; password: strin
 The output type differs from the input type only if you use <Link href="/api/transform">`transform`</Link> to transform the input of a schema after validation. The output type always corresponds to the return value of the <Link href="/api/parse">`parse`</Link> method. To infer it, you use the utility type <Link href="/api/Output">`Output`</Link>.
 
 ```ts
-import { object, type Output, string, transform } from 'valibot'; // 0.63 kB
+import { object, type Output, string, transform } from 'valibot'; // 0.67 kB
 import { hashPassword } from '~/utils';
 
 const LoginSchema = transform(

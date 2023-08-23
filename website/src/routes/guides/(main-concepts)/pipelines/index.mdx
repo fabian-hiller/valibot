@@ -20,14 +20,14 @@ In simple words, a pipeline is an array of functions that synchronously passes t
 For example, the pipeline feature can be used to trim a string and make sure that it is an email that ends with a specific domain.
 
 ```ts
-import { email, endsWith, string, toTrimmed } from 'valibot'; // 0.57 kB
+import { email, endsWith, string, toTrimmed } from 'valibot'; // 0.6 kB
 
 const EmailSchema = string([toTrimmed(), email(), endsWith('@example.com')]);
 ```
 
 ## Validations
 
-Validation functions examine the input and, if the input does not meet a certain condition, throw a <Link href="/api/ValiError">`ValiError`</Link>. If the input is valid, it is returned and, if present, picked up by the next function in the pipeline.
+Validation functions examine the input and, if the input does not meet a certain condition, return an issue. If the input is valid, it is returned as the output and, if present, picked up by the next function in the pipeline.
 
 > By default I run a pipeline completely, even if an error is thrown in between, to collect all issues. If you want me to abort the pipeline early after the first error is thrown, you have to set the `abortPipeEarly` option of <Link href="/api/parse">`parse`</Link>, <Link href="/api/parseAsync">`parseAsync`</Link>, <Link href="/api/safeParse">`safeParse`</Link> or <Link href="/api/safeParseAsync">`safeParseAsync`</Link> to `true`. Learn more <Link href="/guides/parse-data/#abort-early">here</Link>.
 
@@ -36,22 +36,20 @@ Validation functions examine the input and, if the input does not meet a certain
 For example, a validation function that controls the length of a string might look like the following.
 
 ```ts
-import { string, ValiError } from 'valibot'; // 0.4 kB
+import { string } from 'valibot'; // 0.44 kB
 
 const StringSchema = string([
-  (input, info) => {
+  (input) => {
     if (input.length > 10) {
-      throw new ValiError([
-        {
+      return {
+        issue: {
           validation: 'custom',
-          origin: 'value',
           message: 'Invalid length',
           input,
-          ...info,
         },
-      ]);
+      };
     }
-    return input;
+    return { output: input };
   },
 ]);
 ```
@@ -65,7 +63,7 @@ Utility functions: <Link href="/api/bytes">`bytes`</Link>, <Link href="/api/cust
 Some of these utility functions can be used in the pipeline of different schema functions. For example, <Link href="/api/minValue">`minValue`</Link> can be used in the pipeline of <Link href="/api/string">`string`</Link>, <Link href="/api/number">`number`</Link>, <Link href="/api/bigint">`bigint`</Link> und <Link href="/api/date">`date`</Link>.
 
 ```ts
-import { bigint, date, minValue, number, string } from 'valibot'; // 0.55 kB
+import { bigint, date, minValue, number, string } from 'valibot'; // 0.58 kB
 
 const StringSchema = string([minValue('2023-07-29')]);
 const NumberSchema = number([minValue(1234)]);
@@ -78,7 +76,7 @@ const DateSchema = date([minValue(new Date())]);
 For custom validations <Link href="/api/custom">`custom`</Link> or <Link href="/api/customAsync">`customAsync`</Link> can be used. If the function passed as the first argument returns a falsy value, an error is thrown. Otherwise the input is considered valid.
 
 ```ts
-import { customAsync, stringAsync } from 'valibot'; // 0.45 kB
+import { customAsync, stringAsync } from 'valibot'; // 0.5 kB
 import { isAvailableUsername } from '~/api';
 
 const UsernameSchema = stringAsync([
@@ -97,9 +95,9 @@ Transformation functions allow to change the value of an input, but not the data
 A transformation function that enforces a minimum value of a number could look like the following.
 
 ```ts
-import { number } from 'valibot'; // 0.4 kB
+import { number } from 'valibot'; // 0.44 kB
 
-const NumberSchema = number([(input) => (input > 10 ? input : 10)]);
+const NumberSchema = number([(input) => ({ output: input > 10 ? input : 10 })]);
 ```
 
 ### Utility functions
@@ -109,7 +107,7 @@ To make the code of a pipeline more readable, you can use the utility functions 
 Utility functions: <Link href="/api/toCustom">`toCustom`</Link>, <Link href="/api/toCustomAsync">`toCustomAsync`</Link>, <Link href="/api/toLowerCase">`toLowerCase`</Link>, <Link href="/api/toMaxValue">`toMaxValue`</Link>, <Link href="/api/toMinValue">`toMinValue`</Link>, <Link href="/api/toTrimmed">`toTrimmed`</Link>, <Link href="/api/toTrimmedEnd">`toTrimmedEnd`</Link>, <Link href="/api/toTrimmedStart">`toTrimmedStart`</Link>, <Link href="/api/toUpperCase">`toUpperCase`</Link>
 
 ```ts
-import { number, toMinValue } from 'valibot'; // 0.42 kB
+import { number, toMinValue } from 'valibot'; // 0.47 kB
 
 const NumberSchema = number([toMinValue(10)]);
 ```
