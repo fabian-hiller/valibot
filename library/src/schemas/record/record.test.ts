@@ -19,7 +19,6 @@ describe('record', () => {
     expect(() => parse(schema1, { test: 'hello' })).toThrowError();
     expect(() => parse(schema1, 'test')).toThrowError();
     expect(() => parse(schema1, 123)).toThrowError();
-    expect(() => parse(schema1, new Map().set('key1', '1'))).toThrowError();
 
     const schema2 = record(string([minLength(3)]), union([string(), number()]));
     const input2 = { 1234: 1234, test: 'hello' };
@@ -29,15 +28,12 @@ describe('record', () => {
     expect(() => parse(schema2, { test: null })).toThrowError();
     expect(() => parse(schema2, 'test')).toThrowError();
     expect(() => parse(schema2, 123)).toThrowError();
-    expect(() => parse(schema2, new Set())).toThrowError();
   });
 
   test('should throw custom error', () => {
     const error = 'Value is not an object!';
-    const schema1 = record(string(), error);
-    const schema2 = record(string(), string(), error);
-    expect(() => parse(schema1, 123)).toThrowError(error);
-    expect(() => parse(schema2, new Date())).toThrowError(error);
+    const schema = record(string(), error);
+    expect(() => parse(schema, 123)).toThrowError(error);
   });
 
   test('should throw every issue', () => {

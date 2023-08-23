@@ -19,9 +19,6 @@ describe('recordAsync', () => {
     await expect(parseAsync(schema1, { test: 'hello' })).rejects.toThrowError();
     await expect(parseAsync(schema1, 'test')).rejects.toThrowError();
     await expect(parseAsync(schema1, 123)).rejects.toThrowError();
-    await expect(
-      parseAsync(schema1, new Map().set('key1', '1'))
-    ).rejects.toThrowError();
 
     const schema2 = recordAsync(
       stringAsync([minLength(3)]),
@@ -34,15 +31,12 @@ describe('recordAsync', () => {
     await expect(parseAsync(schema2, { test: null })).rejects.toThrowError();
     await expect(parseAsync(schema2, 'test')).rejects.toThrowError();
     await expect(parseAsync(schema2, 123)).rejects.toThrowError();
-    await expect(parseAsync(schema2, new Set())).rejects.toThrowError();
   });
 
   test('should throw custom error', async () => {
     const error = 'Value is not an object!';
-    const schema1 = recordAsync(string(), error);
-    const schema2 = recordAsync(string(), stringAsync(), error);
-    await expect(parseAsync(schema1, 123)).rejects.toThrowError(error);
-    await expect(parseAsync(schema2, new Date())).rejects.toThrowError(error);
+    const schema = recordAsync(string(), error);
+    await expect(parseAsync(schema, 123)).rejects.toThrowError(error);
   });
 
   test('should throw every issue', async () => {

@@ -131,7 +131,7 @@ export function record<
      */
     _parse(input, info) {
       // Check type of input
-      if (!input || input.constructor !== Object) {
+      if (!input || typeof input !== 'object') {
         return getIssues(
           info,
           'type',
