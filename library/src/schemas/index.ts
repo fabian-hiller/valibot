@@ -6,6 +6,7 @@ export * from './boolean/index.ts';
 export * from './date/index.ts';
 export * from './enumType/index.ts';
 export * from './instance/index.ts';
+export * from './intersection/index.ts';
 export * from './literal/index.ts';
 export * from './map/index.ts';
 export * from './nan/index.ts';
