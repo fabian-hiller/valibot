@@ -2,10 +2,11 @@ import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
 import { string } from '../string/index.ts';
 import { number } from '../number/index.ts';
-import { nullType } from '../nullType/index.ts';
 import { intersection } from './intersection.ts';
 import { literal } from '../literal/index.ts';
 import { object } from '../object/index.ts';
+import { record } from '../record/index.ts';
+import { unknown } from '../unknown/index.ts';
 
 describe('intersection', () => {
   test('should pass only intersection values', () => {
@@ -36,6 +37,22 @@ describe('intersection', () => {
 
     expect(() => parse(schema, { foo: 'test' })).toThrowError();
     expect(() => parse(schema, { bar: 'test' })).toThrowError();
+  });
+
+  test('should pass specific example mention on issue #113', () => {
+    const schema = intersection([
+      object({
+        name: string(),
+      }),
+      record(string(), unknown()),
+    ]);
+
+    const input = { name: 'test' };
+    const output = parse(schema, input);
+    expect(output).toEqual(input);
+
+    expect(() => parse(schema, { foo: 'test' })).toThrowError();
+    expect(() => parse(schema, {})).toThrowError();
   });
 
   test('should throw custom error', () => {
