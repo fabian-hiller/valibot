@@ -1,0 +1,56 @@
+---
+title: cuid2
+---
+
+import { Link } from '@builder.io/qwik-city';
+
+# cuid2
+
+> The content of this page is not yet ready. Until then just use the
+> [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/cuid2/cuid2.ts).
+
+You can use `cuid2()` to parse [cuid2](https://github.com/paralleldrive/cuid2#cuid2)s.
+
+## Usage
+
+```ts
+import { parse, string, cuid2 } from "valibot"
+
+const Cuid2Schema = string([ cuid2() ])
+
+function doSomethingWithCuid2(cuid2: string) {
+	const parsedCuid2 = parse(Cuid2Schema, cuid2)
+
+	// do something with `parsedCuid2`
+}
+```
+
+### Check Length
+
+By default it does not validate the length of the given cuid2 (24 by default). To rectify this, you can use my other
+utlity functions like <Link href="/api/length">`length`</Link>.
+
+```ts
+import { string, cuid2, length } from "valibot"
+
+const Cuid2Schema = string([ length(24), cuid2() ])
+```
+
+Or if you cuid2s can be a range of lengths, you can use <Link href="/api/minLength">`minLength`</Link> and
+<Link href="/api/maxLength">`maxLength`</Link>.
+
+```ts
+import { string, minLength, maxLength, cuid2 } from "valibot"
+
+const Cuid2Schema = string([ minLength(2), maxLength(32), cuid2() ])
+```
+
+### Custom error message
+
+Just like my other utility functions, you can provide a custom error message by passing string to the first argument.
+
+```ts
+import { string, cuid2 } from "valibot"
+
+const Cuid2Schema = string([ cuid2("That's not a cuid2!") ])
+```
