@@ -1,15 +1,14 @@
-import {
-  objectAsync,
-  type ObjectOutput,
-  type ObjectSchema,
-  type ObjectSchemaAsync,
-  type ObjectShapeAsync,
-  optionalAsync,
-  type OptionalSchemaAsync,
+import type {
+  ObjectOutput,
+  ObjectSchema,
+  ObjectSchemaAsync,
+  ObjectShapeAsync,
+  OptionalSchemaAsync,
 } from '../../schemas/index.ts';
-import type { BaseSchema, PipeAsync } from '../../types.ts';
+import { objectAsync, optionalAsync } from '../../schemas/index.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 
+import type { BaseSchema, FString, PipeAsync } from '../../types.ts';
 /**
  * Partial object schema type.
  */
@@ -47,7 +46,7 @@ export function partialAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
 >(
   schema: TObjectSchema,
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Partial<TObjectSchema['object']>>;
 
@@ -55,7 +54,7 @@ export function partialAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
 >(
   schema: TObjectSchema,
-  arg3?: PipeAsync<ObjectOutput<Partial<TObjectSchema['object']>>> | string,
+  arg3?: PipeAsync<ObjectOutput<Partial<TObjectSchema['object']>>> | FString,
   arg4?: PipeAsync<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Partial<TObjectSchema['object']>> {
   // Get error and pipe argument

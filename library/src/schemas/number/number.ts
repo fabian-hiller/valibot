@@ -1,6 +1,6 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
 import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString, Pipe } from '../../types.ts';
 /**
  * Number schema type.
  */
@@ -25,10 +25,10 @@ export function number(pipe?: Pipe<number>): NumberSchema;
  *
  * @returns A number schema.
  */
-export function number(error?: string, pipe?: Pipe<number>): NumberSchema;
+export function number(error?: FString, pipe?: Pipe<number>): NumberSchema;
 
 export function number(
-  arg1?: string | Pipe<number>,
+  arg1?: FString | Pipe<number>,
   arg2?: Pipe<number>
 ): NumberSchema {
   // Get error and pipe argument

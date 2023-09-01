@@ -1,11 +1,12 @@
+import { getDefaultArgs } from '../../../../utils/index.ts';
+
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  FString,
   Pipe,
   PipeAsync,
 } from '../../../../types.ts';
-import { getDefaultArgs } from '../../../../utils/index.ts';
-
 /**
  * Returns rest, error and pipe from dynamic arguments.
  *
@@ -19,10 +20,10 @@ export function getTupleArgs<
   TRest extends BaseSchema | BaseSchemaAsync | undefined,
   TPipe extends Pipe<any> | PipeAsync<any>
 >(
-  arg1: TPipe | string | TRest | undefined,
-  arg2: TPipe | string | undefined,
+  arg1: TPipe | FString | TRest | undefined,
+  arg2: TPipe | FString | undefined,
   arg3: TPipe | undefined
-): [TRest, string | undefined, TPipe | undefined] {
+): [TRest, FString | undefined, TPipe | undefined] {
   if (typeof arg1 === 'object' && !Array.isArray(arg1)) {
     const [error, pipe] = getDefaultArgs(arg2, arg3);
     return [arg1, error, pipe];

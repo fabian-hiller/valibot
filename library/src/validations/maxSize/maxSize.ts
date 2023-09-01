@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates the size of a map, set or blob.
@@ -10,7 +10,7 @@ import type { PipeResult } from '../../types.ts';
  */
 export function maxSize<TInput extends Map<any, any> | Set<any> | Blob>(
   requirement: number,
-  error?: string
+  error?: FString
 ) {
   return (input: TInput): PipeResult<TInput> => {
     if (input.size > requirement) {

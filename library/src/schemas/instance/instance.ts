@@ -1,6 +1,6 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
 import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString, Pipe } from '../../types.ts';
 /**
  * Class enum type.
  */
@@ -41,13 +41,13 @@ export function instance<TClass extends Class>(
  */
 export function instance<TClass extends Class>(
   of: TClass,
-  error?: string,
+  error?: FString,
   pipe?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass>;
 
 export function instance<TClass extends Class>(
   of: TClass,
-  arg2?: Pipe<InstanceType<TClass>> | string,
+  arg2?: Pipe<InstanceType<TClass>> | FString,
   arg3?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass> {
   // Get error and pipe argument

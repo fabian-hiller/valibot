@@ -1,6 +1,6 @@
-import type { BaseSchema } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString } from '../../types.ts';
 /**
  * Native enum type.
  */
@@ -30,7 +30,7 @@ export type NativeEnumSchema<
  */
 export function nativeEnum<TNativeEnum extends NativeEnum>(
   nativeEnum: TNativeEnum,
-  error?: string
+  error?: FString
 ): NativeEnumSchema<TNativeEnum> {
   return {
     /**

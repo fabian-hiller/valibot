@@ -1,10 +1,12 @@
+import { getIssues } from '../../utils/index.ts';
+
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  FString,
   Input,
   Output,
 } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
 import type { NonNullable } from './nonNullable.ts';
 
 /**
@@ -30,7 +32,7 @@ export function nonNullableAsync<
   TWrappedSchema extends BaseSchema | BaseSchemaAsync
 >(
   wrapped: TWrappedSchema,
-  error?: string
+  error?: FString
 ): NonNullableSchemaAsync<TWrappedSchema> {
   return {
     /**

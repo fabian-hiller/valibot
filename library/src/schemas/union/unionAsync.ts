@@ -1,12 +1,13 @@
+import { getIssues } from '../../utils/index.ts';
+
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  FString,
   Input,
   Issues,
   Output,
 } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
-
 /**
  * Union options async type.
  */
@@ -37,7 +38,7 @@ export type UnionSchemaAsync<
  */
 export function unionAsync<TUnionOptions extends UnionOptionsAsync>(
   union: TUnionOptions,
-  error?: string
+  error?: FString
 ): UnionSchemaAsync<TUnionOptions> {
   return {
     /**

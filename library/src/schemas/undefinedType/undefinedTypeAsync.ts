@@ -1,6 +1,6 @@
-import type { BaseSchemaAsync } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchemaAsync, FString } from '../../types.ts';
 /**
  * Undefined schema async type.
  */
@@ -18,7 +18,7 @@ export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
  *
  * @returns An async undefined schema.
  */
-export function undefinedTypeAsync(error?: string): UndefinedSchemaAsync {
+export function undefinedTypeAsync(error?: FString): UndefinedSchemaAsync {
   return {
     /**
      * The schema type.

@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates the end of a string.
@@ -10,7 +10,7 @@ import type { PipeResult } from '../../types.ts';
  */
 export function endsWith<TInput extends string>(
   requirement: string,
-  error?: string
+  error?: FString
 ) {
   return (input: TInput): PipeResult<TInput> => {
     if (!input.endsWith(requirement as any)) {

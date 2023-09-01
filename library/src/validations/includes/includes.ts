@@ -1,13 +1,13 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 export function includes<TInput extends string>(
   requirement: string,
-  error?: string
+  error?: FString
 ): (input: TInput) => PipeResult<TInput>;
 
 export function includes<TInput extends TItem[], TItem>(
   requirement: TItem,
-  error?: string
+  error?: FString
 ): (input: TInput) => PipeResult<TInput>;
 
 /**
@@ -20,7 +20,7 @@ export function includes<TInput extends TItem[], TItem>(
  */
 export function includes<TInput extends string | TItem[], TItem>(
   requirement: string | TItem,
-  error?: string
+  error?: FString
 ) {
   return (input: TInput): PipeResult<TInput> => {
     if (!input.includes(requirement as any)) {

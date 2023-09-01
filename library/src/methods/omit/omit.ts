@@ -1,10 +1,8 @@
-import {
-  object,
-  type ObjectOutput,
-  type ObjectSchema,
-} from '../../schemas/index.ts';
-import type { Pipe } from '../../types.ts';
+import type { ObjectOutput, ObjectSchema } from '../../schemas/index.ts';
+import { object } from '../../schemas/index.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
+
+import type { FString, Pipe } from '../../types.ts';
 import type { ObjectKeys } from './types.ts';
 
 /**
@@ -43,7 +41,7 @@ export function omit<
 >(
   schema: TObjectSchema,
   keys: TKeys,
-  error?: string,
+  error?: FString,
   pipe?: Pipe<ObjectOutput<Omit<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchema<Omit<TObjectSchema['object'], TKeys[number]>>;
 
@@ -55,7 +53,7 @@ export function omit<
   keys: TKeys,
   arg3?:
     | Pipe<ObjectOutput<Omit<TObjectSchema['object'], TKeys[number]>>>
-    | string,
+    | FString,
   arg4?: Pipe<ObjectOutput<Omit<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchema<Omit<TObjectSchema['object'], TKeys[number]>> {
   // Get error and pipe argument

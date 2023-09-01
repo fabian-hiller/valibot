@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates a emoji.
@@ -7,7 +7,7 @@ import type { PipeResult } from '../../types.ts';
  *
  * @returns A validation function.
  */
-export function emoji<TInput extends string>(error?: string) {
+export function emoji<TInput extends string>(error?: FString) {
   return (input: TInput): PipeResult<TInput> => {
     if (!/^(\p{Extended_Pictographic}|\p{Emoji_Component})+$/u.test(input)) {
       return {

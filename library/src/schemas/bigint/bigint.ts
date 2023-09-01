@@ -1,6 +1,6 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
 import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString, Pipe } from '../../types.ts';
 /**
  * Bigint schema type.
  */
@@ -25,10 +25,10 @@ export function bigint(pipe?: Pipe<bigint>): BigintSchema;
  *
  * @returns A bigint schema.
  */
-export function bigint(error?: string, pipe?: Pipe<bigint>): BigintSchema;
+export function bigint(error?: FString, pipe?: Pipe<bigint>): BigintSchema;
 
 export function bigint(
-  arg1?: string | Pipe<bigint>,
+  arg1?: FString | Pipe<bigint>,
   arg2?: Pipe<bigint>
 ): BigintSchema {
   // Get error and pipe argument

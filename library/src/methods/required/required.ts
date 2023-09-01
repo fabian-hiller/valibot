@@ -1,14 +1,13 @@
-import {
-  nonOptional,
-  type NonOptionalSchema,
-  object,
-  type ObjectOutput,
-  type ObjectSchema,
-  type ObjectShape,
+import type {
+  NonOptionalSchema,
+  ObjectOutput,
+  ObjectSchema,
+  ObjectShape,
 } from '../../schemas/index.ts';
-import type { BaseSchema, Pipe } from '../../types.ts';
+import { nonOptional, object } from '../../schemas/index.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 
+import type { BaseSchema, FString, Pipe } from '../../types.ts';
 /**
  * Required object schema type.
  */
@@ -42,13 +41,13 @@ export function required<TObjectSchema extends ObjectSchema<any>>(
  */
 export function required<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,
-  error?: string,
+  error?: FString,
   pipe?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>>
 ): ObjectSchema<Required<TObjectSchema['object']>>;
 
 export function required<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,
-  arg3?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>> | string,
+  arg3?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>> | FString,
   arg4?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>>
 ): ObjectSchema<Required<TObjectSchema['object']>> {
   // Get error and pipe argument

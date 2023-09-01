@@ -1,6 +1,6 @@
-import type { BaseSchema } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString } from '../../types.ts';
 /**
  * NaN schema type.
  */
@@ -15,7 +15,7 @@ export type NanSchema<TOutput = number> = BaseSchema<number, TOutput> & {
  *
  * @returns A NaN schema.
  */
-export function nan(error?: string): NanSchema {
+export function nan(error?: FString): NanSchema {
   return {
     /**
      * The schema type.

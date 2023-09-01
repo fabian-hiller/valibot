@@ -1,8 +1,8 @@
-import type { BaseSchema, Issues, Pipe } from '../../types.ts';
 import { executePipe, getIssues } from '../../utils/index.ts';
-import type { TupleOutput, TupleInput, TuplePathItem } from './types.ts';
 import { getTupleArgs } from './utils/index.ts';
 
+import type { BaseSchema, FString, Issues, Pipe } from '../../types.ts';
+import type { TupleOutput, TupleInput, TuplePathItem } from './types.ts';
 /**
  * Tuple shape type.
  */
@@ -44,7 +44,7 @@ export function tuple<TTupleItems extends TupleShape>(
  */
 export function tuple<TTupleItems extends TupleShape>(
   items: TTupleItems,
-  error?: string,
+  error?: FString,
   pipe?: Pipe<TupleOutput<TTupleItems, undefined>>
 ): TupleSchema<TTupleItems>;
 
@@ -82,7 +82,7 @@ export function tuple<
 >(
   items: TTupleItems,
   rest: TTupleRest,
-  error?: string,
+  error?: FString,
   pipe?: Pipe<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchema<TTupleItems, TTupleRest>;
 
@@ -91,8 +91,8 @@ export function tuple<
   TTupleRest extends BaseSchema
 >(
   items: TTupleItems,
-  arg2?: Pipe<TupleOutput<TTupleItems, TTupleRest>> | string | TTupleRest,
-  arg3?: Pipe<TupleOutput<TTupleItems, TTupleRest>> | string,
+  arg2?: Pipe<TupleOutput<TTupleItems, TTupleRest>> | FString | TTupleRest,
+  arg3?: Pipe<TupleOutput<TTupleItems, TTupleRest>> | FString,
   arg4?: Pipe<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchema<TTupleItems, TTupleRest> {
   // Get rest, error and pipe argument

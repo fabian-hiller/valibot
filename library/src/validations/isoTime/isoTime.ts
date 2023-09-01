@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates a time.
@@ -9,7 +9,7 @@ import type { PipeResult } from '../../types.ts';
  *
  * @returns A validation function.
  */
-export function isoTime<TInput extends string>(error?: string) {
+export function isoTime<TInput extends string>(error?: FString) {
   return (input: TInput): PipeResult<TInput> => {
     if (!/^(0[0-9]|1\d|2[0-3]):[0-5]\d$/.test(input)) {
       return {

@@ -1,6 +1,6 @@
-import type { BaseSchemaAsync } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchemaAsync, FString } from '../../types.ts';
 /**
  * Null schema async type.
  */
@@ -15,7 +15,7 @@ export type NullSchemaAsync<TOutput = null> = BaseSchemaAsync<null, TOutput> & {
  *
  * @returns An async null schema.
  */
-export function nullTypeAsync(error?: string): NullSchemaAsync {
+export function nullTypeAsync(error?: FString): NullSchemaAsync {
   return {
     /**
      * The schema type.

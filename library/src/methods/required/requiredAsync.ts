@@ -1,15 +1,14 @@
-import {
-  nonOptionalAsync,
-  type NonOptionalSchemaAsync,
-  objectAsync,
-  type ObjectOutput,
-  type ObjectSchema,
-  type ObjectSchemaAsync,
-  type ObjectShapeAsync,
-} from '../../schemas/index.ts';
-import type { BaseSchema, PipeAsync } from '../../types.ts';
+import { nonOptionalAsync, objectAsync } from '../../schemas/index.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 
+import type {
+  NonOptionalSchemaAsync,
+  ObjectOutput,
+  ObjectSchema,
+  ObjectSchemaAsync,
+  ObjectShapeAsync,
+} from '../../schemas/index.ts';
+import type { BaseSchema, FString, PipeAsync } from '../../types.ts';
 /**
  * Required object schema type.
  */
@@ -47,7 +46,7 @@ export function requiredAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
 >(
   schema: TObjectSchema,
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<ObjectOutput<Required<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Required<TObjectSchema['object']>>;
 
@@ -55,7 +54,7 @@ export function requiredAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
 >(
   schema: TObjectSchema,
-  arg3?: PipeAsync<ObjectOutput<Required<TObjectSchema['object']>>> | string,
+  arg3?: PipeAsync<ObjectOutput<Required<TObjectSchema['object']>>> | FString,
   arg4?: PipeAsync<ObjectOutput<Required<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Required<TObjectSchema['object']>> {
   // Get error and pipe argument

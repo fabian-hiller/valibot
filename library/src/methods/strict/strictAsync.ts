@@ -1,6 +1,7 @@
-import type { ObjectSchemaAsync } from '../../schemas/object/index.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { FString } from '../../types.ts';
+import type { ObjectSchemaAsync } from '../../schemas/object/index.ts';
 /**
  * Creates a strict async object schema that throws an error if an input
  * contains unknown keys.
@@ -12,7 +13,7 @@ import { getIssues } from '../../utils/index.ts';
  */
 export function strictAsync<TSchema extends ObjectSchemaAsync<any>>(
   schema: TSchema,
-  error?: string
+  error?: FString
 ): TSchema {
   return {
     ...schema,

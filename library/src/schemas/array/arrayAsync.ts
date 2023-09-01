@@ -1,16 +1,18 @@
-import type {
-  BaseSchema,
-  BaseSchemaAsync,
-  Input,
-  Issues,
-  Output,
-  PipeAsync,
-} from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
   getIssues,
 } from '../../utils/index.ts';
+
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  FString,
+  Input,
+  Issues,
+  Output,
+  PipeAsync,
+} from '../../types.ts';
 import type { ArrayPathItem } from './types.ts';
 
 /**
@@ -48,13 +50,13 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
  */
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
   item: TArrayItem,
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<Output<TArrayItem>[]>
 ): ArraySchemaAsync<TArrayItem>;
 
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
   item: TArrayItem,
-  arg2?: string | PipeAsync<Output<TArrayItem>[]>,
+  arg2?: FString | PipeAsync<Output<TArrayItem>[]>,
   arg3?: PipeAsync<Output<TArrayItem>[]>
 ): ArraySchemaAsync<TArrayItem> {
   // Get error and pipe argument

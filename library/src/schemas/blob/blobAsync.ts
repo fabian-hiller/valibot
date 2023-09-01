@@ -1,10 +1,10 @@
-import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
   getIssues,
 } from '../../utils/index.ts';
 
+import type { BaseSchemaAsync, FString, PipeAsync } from '../../types.ts';
 /**
  * Blob schema async type.
  */
@@ -30,12 +30,12 @@ export function blobAsync(pipe?: PipeAsync<Blob>): BlobSchemaAsync;
  * @returns An async blob schema.
  */
 export function blobAsync(
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<Blob>
 ): BlobSchemaAsync;
 
 export function blobAsync(
-  arg1?: string | PipeAsync<Blob>,
+  arg1?: FString | PipeAsync<Blob>,
   arg2?: PipeAsync<Blob>
 ): BlobSchemaAsync {
   // Get error and pipe argument

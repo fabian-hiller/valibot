@@ -1,11 +1,8 @@
-import {
-  object,
-  type ObjectOutput,
-  type ObjectSchema,
-} from '../../schemas/index.ts';
-import type { Pipe } from '../../types.ts';
+import type { ObjectOutput, ObjectSchema } from '../../schemas/index.ts';
+import { object } from '../../schemas/index.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 
+import type { FString, Pipe } from '../../types.ts';
 /**
  * Creates an object schema that contains only the selected keys of an existing
  * schema.
@@ -42,7 +39,7 @@ export function pick<
 >(
   schema: TObjectSchema,
   keys: TKeys,
-  error?: string,
+  error?: FString,
   pipe?: Pipe<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchema<Pick<TObjectSchema['object'], TKeys[number]>>;
 
@@ -54,7 +51,7 @@ export function pick<
   keys: TKeys,
   arg3?:
     | Pipe<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
-    | string,
+    | FString,
   arg4?: Pipe<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchema<Pick<TObjectSchema['object'], TKeys[number]>> {
   // Get error and pipe argument

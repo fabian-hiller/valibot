@@ -1,11 +1,12 @@
-import {
-  objectAsync,
-  type ObjectOutput,
-  type ObjectSchema,
-  type ObjectSchemaAsync,
+import type {
+  ObjectOutput,
+  ObjectSchema,
+  ObjectSchemaAsync,
 } from '../../schemas/index.ts';
-import type { PipeAsync } from '../../types.ts';
+import { objectAsync } from '../../schemas/index.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
+
+import type { FString, PipeAsync } from '../../types.ts';
 import type { ObjectKeys } from './types.ts';
 
 /**
@@ -44,7 +45,7 @@ export function omitAsync<
 >(
   schema: TObjectSchema,
   keys: TKeys,
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<ObjectOutput<Omit<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchemaAsync<Omit<TObjectSchema['object'], TKeys[number]>>;
 
@@ -56,7 +57,7 @@ export function omitAsync<
   keys: TKeys,
   arg3?:
     | PipeAsync<ObjectOutput<Omit<TObjectSchema['object'], TKeys[number]>>>
-    | string,
+    | FString,
   arg4?: PipeAsync<ObjectOutput<Omit<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchemaAsync<Omit<TObjectSchema['object'], TKeys[number]>> {
   // Get error and pipe argument

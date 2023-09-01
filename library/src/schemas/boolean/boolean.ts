@@ -1,6 +1,6 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
 import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString, Pipe } from '../../types.ts';
 /**
  * Boolean schema type.
  */
@@ -25,10 +25,10 @@ export function boolean(pipe?: Pipe<boolean>): BooleanSchema;
  *
  * @returns A boolean schema.
  */
-export function boolean(error?: string, pipe?: Pipe<boolean>): BooleanSchema;
+export function boolean(error?: FString, pipe?: Pipe<boolean>): BooleanSchema;
 
 export function boolean(
-  arg1?: string | Pipe<boolean>,
+  arg1?: FString | Pipe<boolean>,
   arg2?: Pipe<boolean>
 ): BooleanSchema {
   // Get error and pipe argument

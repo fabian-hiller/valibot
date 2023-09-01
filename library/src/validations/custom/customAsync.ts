@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a async custom validation function.
@@ -10,7 +10,7 @@ import type { PipeResult } from '../../types.ts';
  */
 export function customAsync<TInput>(
   requirement: (input: TInput) => Promise<boolean>,
-  error?: string
+  error?: FString
 ) {
   return async (input: TInput): Promise<PipeResult<TInput>> => {
     if (!(await requirement(input))) {

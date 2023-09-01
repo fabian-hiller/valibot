@@ -1,6 +1,6 @@
-import type { BaseSchemaAsync } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchemaAsync, FString } from '../../types.ts';
 /**
  * Never schema async type.
  */
@@ -15,7 +15,7 @@ export type NeverSchemaAsync = BaseSchemaAsync<never> & {
  *
  * @returns An async never schema.
  */
-export function neverAsync(error?: string): NeverSchemaAsync {
+export function neverAsync(error?: FString): NeverSchemaAsync {
   return {
     /**
      * The schema type.

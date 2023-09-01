@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates a URL.
@@ -10,7 +10,7 @@ import type { PipeResult } from '../../types.ts';
  *
  * @returns A validation function.
  */
-export function url<TInput extends string>(error?: string) {
+export function url<TInput extends string>(error?: FString) {
   return (input: TInput): PipeResult<TInput> => {
     try {
       new URL(input);

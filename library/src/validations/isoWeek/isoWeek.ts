@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates a week.
@@ -13,7 +13,7 @@ import type { PipeResult } from '../../types.ts';
  *
  * @returns A validation function.
  */
-export function isoWeek<TInput extends string>(error?: string) {
+export function isoWeek<TInput extends string>(error?: FString) {
   return (input: TInput): PipeResult<TInput> => {
     if (!/^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$/.test(input)) {
       return {

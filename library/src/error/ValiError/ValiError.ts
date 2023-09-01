@@ -12,7 +12,8 @@ export class ValiError extends Error {
    * @param issues The error issues.
    */
   constructor(issues: Issues) {
-    super(issues[0].message);
+    const msg = issues[0].message;
+    super(msg instanceof Function ? msg() : msg);
     this.name = 'ValiError';
     this.issues = issues;
   }

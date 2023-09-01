@@ -1,10 +1,10 @@
-import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
   getIssues,
 } from '../../utils/index.ts';
 
+import type { BaseSchemaAsync, FString, PipeAsync } from '../../types.ts';
 /**
  * Date schema async type.
  */
@@ -30,12 +30,12 @@ export function dateAsync(pipe?: PipeAsync<Date>): DateSchemaAsync;
  * @returns An async date schema.
  */
 export function dateAsync(
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<Date>
 ): DateSchemaAsync;
 
 export function dateAsync(
-  arg1?: string | PipeAsync<Date>,
+  arg1?: FString | PipeAsync<Date>,
   arg2?: PipeAsync<Date>
 ): DateSchemaAsync {
   // Get error and pipe argument

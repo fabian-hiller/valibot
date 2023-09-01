@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates the value of a string or number.
@@ -11,7 +11,7 @@ import type { PipeResult } from '../../types.ts';
 export function value<
   TInput extends string | number | bigint,
   TRequirement extends TInput
->(requirement: TRequirement, error?: string) {
+>(requirement: TRequirement, error?: FString) {
   return (input: TInput): PipeResult<TInput> => {
     if (input !== requirement) {
       return {

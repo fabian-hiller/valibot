@@ -1,10 +1,8 @@
-import {
-  object,
-  type ObjectOutput,
-  type ObjectSchema,
-} from '../../schemas/index.ts';
-import type { Pipe } from '../../types.ts';
+import type { ObjectOutput, ObjectSchema } from '../../schemas/index.ts';
+import { object } from '../../schemas/index.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
+
+import type { FString, Pipe } from '../../types.ts';
 import type { MergeSchemaObjects } from './types.ts';
 
 /**
@@ -42,13 +40,13 @@ export function merge<TObjectSchemas extends ObjectSchemas>(
  */
 export function merge<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
-  error?: string,
+  error?: FString,
   pipe?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
 ): ObjectSchema<MergeSchemaObjects<TObjectSchemas>>;
 
 export function merge<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
-  arg2?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>> | string,
+  arg2?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>> | FString,
   arg3?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
 ): ObjectSchema<MergeSchemaObjects<TObjectSchemas>> {
   // Get error and pipe argument

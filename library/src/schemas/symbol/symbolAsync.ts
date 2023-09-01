@@ -1,6 +1,6 @@
-import type { BaseSchemaAsync } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchemaAsync, FString } from '../../types.ts';
 /**
  * Symbol schema async type.
  */
@@ -18,7 +18,7 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
  *
  * @returns An async symbol schema.
  */
-export function symbolAsync(error?: string): SymbolSchemaAsync {
+export function symbolAsync(error?: FString): SymbolSchemaAsync {
   return {
     /**
      * The schema type.

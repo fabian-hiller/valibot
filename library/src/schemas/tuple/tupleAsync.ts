@@ -1,13 +1,14 @@
+import { executePipeAsync, getIssues } from '../../utils/index.ts';
+import { getTupleArgs } from './utils/index.ts';
+
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  FString,
   Issues,
   PipeAsync,
 } from '../../types.ts';
-import { executePipeAsync, getIssues } from '../../utils/index.ts';
 import type { TupleInput, TupleOutput, TuplePathItem } from './types.ts';
-import { getTupleArgs } from './utils/index.ts';
-
 /**
  * Tuple shape async type.
  */
@@ -52,7 +53,7 @@ export function tupleAsync<TTupleItems extends TupleShapeAsync>(
  */
 export function tupleAsync<TTupleItems extends TupleShapeAsync>(
   items: TTupleItems,
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<TupleOutput<TTupleItems, undefined>>
 ): TupleSchemaAsync<TTupleItems>;
 
@@ -90,7 +91,7 @@ export function tupleAsync<
 >(
   items: TTupleItems,
   rest: TTupleRest,
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchemaAsync<TTupleItems, TTupleRest>;
 
@@ -99,8 +100,8 @@ export function tupleAsync<
   TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
   items: TTupleItems,
-  arg2?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>> | string | TTupleRest,
-  arg3?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>> | string,
+  arg2?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>> | FString | TTupleRest,
+  arg3?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>> | FString,
   arg4?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchemaAsync<TTupleItems, TTupleRest> {
   // Get rest, error and pipe argument

@@ -1,10 +1,10 @@
-import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
   getIssues,
 } from '../../utils/index.ts';
 
+import type { BaseSchemaAsync, FString, PipeAsync } from '../../types.ts';
 /**
  * Number schema async type.
  */
@@ -33,12 +33,12 @@ export function numberAsync(pipe?: PipeAsync<number>): NumberSchemaAsync;
  * @returns An async number schema.
  */
 export function numberAsync(
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<number>
 ): NumberSchemaAsync;
 
 export function numberAsync(
-  arg1?: string | PipeAsync<number>,
+  arg1?: FString | PipeAsync<number>,
   arg2?: PipeAsync<number>
 ): NumberSchemaAsync {
   // Get error and pipe argument

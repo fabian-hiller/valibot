@@ -1,14 +1,13 @@
-import {
-  object,
-  type ObjectOutput,
-  type ObjectSchema,
-  type ObjectShape,
-  optional,
-  type OptionalSchema,
+import type {
+  ObjectOutput,
+  ObjectSchema,
+  ObjectShape,
+  OptionalSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, Pipe } from '../../types.ts';
+import { object, optional } from '../../schemas/index.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 
+import type { BaseSchema, FString, Pipe } from '../../types.ts';
 /**
  * Partial object schema type.
  */
@@ -42,13 +41,13 @@ export function partial<TObjectSchema extends ObjectSchema<any>>(
  */
 export function partial<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,
-  error?: string,
+  error?: FString,
   pipe?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchema<Partial<TObjectSchema['object']>>;
 
 export function partial<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,
-  arg3?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>> | string,
+  arg3?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>> | FString,
   arg4?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchema<Partial<TObjectSchema['object']>> {
   // Get error and pipe argument

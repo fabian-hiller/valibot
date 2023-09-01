@@ -1,10 +1,10 @@
-import type { BaseSchema, Issues, Pipe } from '../../types.ts';
 import { executePipe, getIssues } from '../../utils/index.ts';
-import type { StringSchema } from '../string/index.ts';
-import type { RecordOutput, RecordInput, RecordPathItem } from './types.ts';
 import { getRecordArgs } from './utils/index.ts';
 import { BLOCKED_KEYS } from './values.ts';
 
+import type { BaseSchema, FString, Issues, Pipe } from '../../types.ts';
+import type { StringSchema } from '../string/index.ts';
+import type { RecordOutput, RecordInput, RecordPathItem } from './types.ts';
 /**
  * Record key type.
  */
@@ -46,7 +46,7 @@ export function record<TRecordValue extends BaseSchema>(
  */
 export function record<TRecordValue extends BaseSchema>(
   value: TRecordValue,
-  error?: string,
+  error?: FString,
   pipe?: Pipe<RecordOutput<StringSchema, TRecordValue>>
 ): RecordSchema<TRecordValue>;
 
@@ -84,7 +84,7 @@ export function record<
 >(
   key: TRecordKey,
   value: TRecordValue,
-  error?: string,
+  error?: FString,
   pipe?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchema<TRecordValue, TRecordKey>;
 
@@ -93,8 +93,8 @@ export function record<
   TRecordValue extends BaseSchema
 >(
   arg1: TRecordValue | TRecordKey,
-  arg2?: Pipe<RecordOutput<TRecordKey, TRecordValue>> | string | TRecordValue,
-  arg3?: Pipe<RecordOutput<TRecordKey, TRecordValue>> | string,
+  arg2?: Pipe<RecordOutput<TRecordKey, TRecordValue>> | FString | TRecordValue,
+  arg3?: Pipe<RecordOutput<TRecordKey, TRecordValue>> | FString,
   arg4?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchema<TRecordValue, TRecordKey> {
   // Get key, value, error and pipe argument

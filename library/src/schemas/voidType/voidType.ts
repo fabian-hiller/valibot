@@ -1,6 +1,6 @@
-import type { BaseSchema } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString } from '../../types.ts';
 /**
  * Void schema type.
  */
@@ -15,7 +15,7 @@ export type VoidSchema<TOutput = void> = BaseSchema<void, TOutput> & {
  *
  * @returns A void schema.
  */
-export function voidType(error?: string): VoidSchema {
+export function voidType(error?: FString): VoidSchema {
   return {
     /**
      * The schema type.

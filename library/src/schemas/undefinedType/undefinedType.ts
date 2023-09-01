@@ -1,6 +1,6 @@
-import type { BaseSchema } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString } from '../../types.ts';
 /**
  * Undefined schema type.
  */
@@ -18,7 +18,7 @@ export type UndefinedSchema<TOutput = undefined> = BaseSchema<
  *
  * @returns A undefined schema.
  */
-export function undefinedType(error?: string): UndefinedSchema {
+export function undefinedType(error?: FString): UndefinedSchema {
   return {
     /**
      * The schema type.

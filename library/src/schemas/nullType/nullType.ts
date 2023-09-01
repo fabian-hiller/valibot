@@ -1,6 +1,6 @@
-import type { BaseSchema } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString } from '../../types.ts';
 /**
  * Null schema type.
  */
@@ -15,7 +15,7 @@ export type NullSchema<TOutput = null> = BaseSchema<null, TOutput> & {
  *
  * @returns A null schema.
  */
-export function nullType(error?: string): NullSchema {
+export function nullType(error?: FString): NullSchema {
   return {
     /**
      * The schema type.

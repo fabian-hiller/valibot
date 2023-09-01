@@ -30,14 +30,18 @@ export function flatten(issues: Issues): FlatErrors;
 export function flatten(arg1: ValiError | Issues) {
   return (Array.isArray(arg1) ? arg1 : arg1.issues).reduce<FlatErrors>(
     (flatErrors, issue) => {
+      const msg = issue.message;
       if (issue.path) {
         const path = issue.path.map(({ key }) => key).join('.');
         flatErrors.nested[path] = [
           ...(flatErrors.nested[path] || []),
-          issue.message,
+          msg instanceof Function ? msg() : msg,
         ];
       } else {
-        flatErrors.root = [...(flatErrors.root || []), issue.message];
+        flatErrors.root = [
+          ...(flatErrors.root || []),
+          msg instanceof Function ? msg() : msg,
+        ];
       }
       return flatErrors;
     },

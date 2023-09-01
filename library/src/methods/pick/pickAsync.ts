@@ -1,12 +1,12 @@
-import {
-  objectAsync,
-  type ObjectOutput,
-  type ObjectSchema,
-  type ObjectSchemaAsync,
+import type {
+  ObjectOutput,
+  ObjectSchema,
+  ObjectSchemaAsync,
 } from '../../schemas/index.ts';
-import type { PipeAsync } from '../../types.ts';
+import { objectAsync } from '../../schemas/index.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 
+import type { FString, PipeAsync } from '../../types.ts';
 /**
  * Creates an async object schema that contains only the selected keys of an
  * existing schema.
@@ -43,7 +43,7 @@ export function pickAsync<
 >(
   schema: TObjectSchema,
   keys: TKeys,
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchemaAsync<Pick<TObjectSchema['object'], TKeys[number]>>;
 
@@ -55,7 +55,7 @@ export function pickAsync<
   keys: TKeys,
   arg3?:
     | PipeAsync<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
-    | string,
+    | FString,
   arg4?: PipeAsync<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchemaAsync<Pick<TObjectSchema['object'], TKeys[number]>> {
   // Get error and pipe argument

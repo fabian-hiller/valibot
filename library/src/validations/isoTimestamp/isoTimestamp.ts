@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates a timestamp.
@@ -13,7 +13,7 @@ import type { PipeResult } from '../../types.ts';
  *
  * @returns A validation function.
  */
-export function isoTimestamp<TInput extends string>(error?: string) {
+export function isoTimestamp<TInput extends string>(error?: FString) {
   return (input: TInput): PipeResult<TInput> => {
     if (
       !/^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])T(0[0-9]|1\d|2[0-3]):[0-5]\d:[0-5]\d\.\d{3}Z$/.test(

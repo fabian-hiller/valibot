@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates the byte length of a string.
@@ -10,7 +10,7 @@ import type { PipeResult } from '../../types.ts';
  */
 export function maxBytes<TInput extends string>(
   requirement: number,
-  error?: string
+  error?: FString
 ) {
   return (input: TInput): PipeResult<TInput> => {
     if (new TextEncoder().encode(input).length > requirement) {

@@ -1,6 +1,6 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
 import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString, Pipe } from '../../types.ts';
 /**
  * Special schema type.
  */
@@ -35,13 +35,13 @@ export function special<TInput>(
  */
 export function special<TInput>(
   check: (input: unknown) => boolean,
-  error?: string,
+  error?: FString,
   pipe?: Pipe<TInput>
 ): SpecialSchema<TInput>;
 
 export function special<TInput>(
   check: (input: unknown) => boolean,
-  arg2?: Pipe<TInput> | string,
+  arg2?: Pipe<TInput> | FString,
   arg3?: Pipe<TInput>
 ): SpecialSchema<TInput> {
   // Get error and pipe argument

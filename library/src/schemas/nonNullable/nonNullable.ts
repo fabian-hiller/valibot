@@ -1,6 +1,6 @@
-import type { BaseSchema, Input, Output } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString, Input, Output } from '../../types.ts';
 /**
  * Non nullable type.
  */
@@ -27,7 +27,7 @@ export type NonNullableSchema<
  */
 export function nonNullable<TWrappedSchema extends BaseSchema>(
   wrapped: TWrappedSchema,
-  error?: string
+  error?: FString
 ): NonNullableSchema<TWrappedSchema> {
   return {
     /**

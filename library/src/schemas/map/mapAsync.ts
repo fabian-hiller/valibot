@@ -1,15 +1,17 @@
-import type {
-  BaseSchema,
-  BaseSchemaAsync,
-  Issues,
-  Output,
-  PipeAsync,
-} from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
   getIssues,
 } from '../../utils/index.ts';
+
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  FString,
+  Issues,
+  Output,
+  PipeAsync,
+} from '../../types.ts';
 import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 
 /**
@@ -58,7 +60,7 @@ export function mapAsync<
 >(
   key: TMapKey,
   value: TMapValue,
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<MapOutput<TMapKey, TMapValue>>
 ): MapSchemaAsync<TMapKey, TMapValue>;
 
@@ -68,7 +70,7 @@ export function mapAsync<
 >(
   key: TMapKey,
   value: TMapValue,
-  arg3?: PipeAsync<MapOutput<TMapKey, TMapValue>> | string,
+  arg3?: PipeAsync<MapOutput<TMapKey, TMapValue>> | FString,
   arg4?: PipeAsync<MapOutput<TMapKey, TMapValue>>
 ): MapSchemaAsync<TMapKey, TMapValue> {
   // Get error and pipe argument

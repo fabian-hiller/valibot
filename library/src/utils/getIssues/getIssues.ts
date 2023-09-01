@@ -1,4 +1,4 @@
-import type { IssueReason, Issues, ParseInfo } from '../../types.ts';
+import type { FString, IssueReason, Issues, ParseInfo } from '../../types.ts';
 
 /**
  * Returns the final issue data.
@@ -12,7 +12,7 @@ export function getIssues(
   info: ParseInfo | undefined,
   reason: IssueReason,
   validation: string,
-  message: string,
+  message: FString,
   input: unknown,
   issues?: Issues
 ): { issues: Issues } {

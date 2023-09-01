@@ -1,11 +1,13 @@
+import { getDefaultArgs } from '../../../../utils/index.ts';
+import { string } from '../../../string/index.ts';
+
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  FString,
   Pipe,
   PipeAsync,
 } from '../../../../types.ts';
-import { getDefaultArgs } from '../../../../utils/index.ts';
-import { string } from '../../../string/index.ts';
 import type { RecordKey } from '../../record.ts';
 import type { RecordKeyAsync } from '../../recordAsync.ts';
 
@@ -25,10 +27,10 @@ export function getRecordArgs<
   TPipe extends Pipe<any> | PipeAsync<any>
 >(
   arg1: TRecordValue | TRecordKey,
-  arg2: TPipe | string | TRecordValue | undefined,
-  arg3: TPipe | string | undefined,
+  arg2: TPipe | FString | TRecordValue | undefined,
+  arg3: TPipe | FString | undefined,
   arg4: TPipe | undefined
-): [TRecordKey, TRecordValue, string | undefined, TPipe | undefined] {
+): [TRecordKey, TRecordValue, FString | undefined, TPipe | undefined] {
   if (typeof arg2 === 'object' && !Array.isArray(arg2)) {
     const [error, pipe] = getDefaultArgs(arg3, arg4);
     return [arg1 as TRecordKey, arg2, error, pipe];

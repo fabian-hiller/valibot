@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates the length of a string or array.
@@ -10,7 +10,7 @@ import type { PipeResult } from '../../types.ts';
  */
 export function minLength<TInput extends string | any[]>(
   requirement: number,
-  error?: string
+  error?: FString
 ) {
   return (input: TInput): PipeResult<TInput> => {
     if (input.length < requirement) {

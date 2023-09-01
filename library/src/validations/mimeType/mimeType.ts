@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation functions that validates the MIME type of a file.
@@ -10,7 +10,7 @@ import type { PipeResult } from '../../types.ts';
  */
 export function mimeType<TInput extends Blob>(
   requirement: `${string}/${string}`[],
-  error?: string
+  error?: FString
 ) {
   return (input: TInput): PipeResult<TInput> => {
     if (!requirement.includes(input.type as `${string}/${string}`)) {

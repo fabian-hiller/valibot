@@ -1,5 +1,6 @@
-import type { BaseSchemaAsync } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
+
+import type { BaseSchemaAsync, FString } from '../../types.ts';
 import type { Literal } from './types.ts';
 
 /**
@@ -23,7 +24,7 @@ export type LiteralSchemaAsync<
  */
 export function literalAsync<TLiteral extends Literal>(
   literal: TLiteral,
-  error?: string
+  error?: FString
 ): LiteralSchemaAsync<TLiteral> {
   return {
     /**

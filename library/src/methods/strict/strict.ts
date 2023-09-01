@@ -1,6 +1,7 @@
-import type { ObjectSchema } from '../../schemas/object/index.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { FString } from '../../types.ts';
+import type { ObjectSchema } from '../../schemas/object/index.ts';
 /**
  * Creates a strict object schema that throws an error if an input contains
  * unknown keys.
@@ -12,7 +13,7 @@ import { getIssues } from '../../utils/index.ts';
  */
 export function strict<TSchema extends ObjectSchema<any>>(
   schema: TSchema,
-  error?: string
+  error?: FString
 ): TSchema {
   return {
     ...schema,

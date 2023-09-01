@@ -1,6 +1,12 @@
-import type { BaseSchema, Input, Issues, Output } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type {
+  BaseSchema,
+  FString,
+  Input,
+  Issues,
+  Output,
+} from '../../types.ts';
 /**
  * Union options type.
  */
@@ -31,7 +37,7 @@ export type UnionSchema<
  */
 export function union<TUnionOptions extends UnionOptions>(
   union: TUnionOptions,
-  error?: string
+  error?: FString
 ): UnionSchema<TUnionOptions> {
   return {
     /**

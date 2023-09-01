@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation function that validates whether a number is finite.
@@ -7,7 +7,7 @@ import type { PipeResult } from '../../types.ts';
  *
  * @returns A validation function.
  */
-export function finite<TInput extends number>(error?: string) {
+export function finite<TInput extends number>(error?: FString) {
   return (input: TInput): PipeResult<TInput> => {
     if (!Number.isFinite(input)) {
       return {

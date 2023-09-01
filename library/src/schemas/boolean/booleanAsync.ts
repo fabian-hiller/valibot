@@ -1,10 +1,10 @@
-import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
   getIssues,
 } from '../../utils/index.ts';
 
+import type { BaseSchemaAsync, FString, PipeAsync } from '../../types.ts';
 /**
  * Boolean schema async type.
  */
@@ -33,12 +33,12 @@ export function booleanAsync(pipe?: PipeAsync<boolean>): BooleanSchemaAsync;
  * @returns An async boolean schema.
  */
 export function booleanAsync(
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<boolean>
 ): BooleanSchemaAsync;
 
 export function booleanAsync(
-  arg1?: string | PipeAsync<boolean>,
+  arg1?: FString | PipeAsync<boolean>,
   arg2?: PipeAsync<boolean>
 ): BooleanSchemaAsync {
   // Get error and pipe argument

@@ -1,5 +1,6 @@
-import type { BaseSchemaAsync } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
+
+import type { BaseSchemaAsync, FString } from '../../types.ts';
 import type { NativeEnum } from './nativeEnum.ts';
 
 /**
@@ -23,7 +24,7 @@ export type NativeEnumSchemaAsync<
  */
 export function nativeEnumAsync<TNativeEnum extends NativeEnum>(
   nativeEnum: TNativeEnum,
-  error?: string
+  error?: FString
 ): NativeEnumSchemaAsync<TNativeEnum> {
   return {
     /**

@@ -1,6 +1,6 @@
-import type { BaseSchemaAsync } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchemaAsync, FString } from '../../types.ts';
 /**
  * NaN schema async type.
  */
@@ -18,7 +18,7 @@ export type NanSchemaAsync<TOutput = number> = BaseSchemaAsync<
  *
  * @returns An async NaN schema.
  */
-export function nanAsync(error?: string): NanSchemaAsync {
+export function nanAsync(error?: FString): NanSchemaAsync {
   return {
     /**
      * The schema type.

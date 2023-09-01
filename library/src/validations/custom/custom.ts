@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a custom validation function.
@@ -10,7 +10,7 @@ import type { PipeResult } from '../../types.ts';
  */
 export function custom<TInput>(
   requirement: (input: TInput) => boolean,
-  error?: string
+  error?: FString
 ) {
   return (input: TInput): PipeResult<TInput> => {
     if (!requirement(input)) {

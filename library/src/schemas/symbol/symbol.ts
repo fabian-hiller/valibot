@@ -1,6 +1,6 @@
-import type { BaseSchema } from '../../types.ts';
 import { getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString } from '../../types.ts';
 /**
  * Symbol schema type.
  */
@@ -15,7 +15,7 @@ export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
  *
  * @returns A symbol schema.
  */
-export function symbol(error?: string): SymbolSchema {
+export function symbol(error?: FString): SymbolSchema {
   return {
     /**
      * The schema type.

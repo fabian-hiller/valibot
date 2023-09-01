@@ -1,6 +1,6 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
 import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 
+import type { BaseSchema, FString, Pipe } from '../../types.ts';
 /**
  * Blob schema type.
  */
@@ -25,10 +25,10 @@ export function blob(pipe?: Pipe<Blob>): BlobSchema;
  *
  * @returns A blob schema.
  */
-export function blob(error?: string, pipe?: Pipe<Blob>): BlobSchema;
+export function blob(error?: FString, pipe?: Pipe<Blob>): BlobSchema;
 
 export function blob(
-  arg1?: string | Pipe<Blob>,
+  arg1?: FString | Pipe<Blob>,
   arg2?: Pipe<Blob>
 ): BlobSchema {
   // Get error and pipe argument

@@ -41,7 +41,7 @@ export type Issue = {
   reason: IssueReason;
   validation: string;
   origin: IssueOrigin;
-  message: string;
+  message: FString;
   input: any;
   path?: PathItem[];
   issues?: Issues;
@@ -153,3 +153,5 @@ type Resolve<T> = T;
  * the final type in the preview instead of the utility types used.
  */
 export type ResolveObject<T> = Resolve<{ [k in keyof T]: T[k] }>;
+
+export type FString = string | (() => string);

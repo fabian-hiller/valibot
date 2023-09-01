@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { FString, PipeResult } from '../../types.ts';
 
 /**
  * Creates a validation function that checks the value for equality.
@@ -11,7 +11,7 @@ import type { PipeResult } from '../../types.ts';
 export function equal<
   TInput extends string | number | bigint | boolean,
   TRequirement extends TInput
->(requirement: TRequirement, error?: string) {
+>(requirement: TRequirement, error?: FString) {
   return (input: TInput): PipeResult<TInput> => {
     if (input !== requirement) {
       return {

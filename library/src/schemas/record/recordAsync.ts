@@ -1,15 +1,16 @@
-import type {
-  BaseSchema,
-  BaseSchemaAsync,
-  Issues,
-  PipeAsync,
-} from '../../types.ts';
 import { executePipeAsync, getIssues } from '../../utils/index.ts';
-import type { StringSchema, StringSchemaAsync } from '../string/index.ts';
-import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';
 import { getRecordArgs } from './utils/index.ts';
 import { BLOCKED_KEYS } from './values.ts';
 
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  FString,
+  Issues,
+  PipeAsync,
+} from '../../types.ts';
+import type { StringSchema, StringSchemaAsync } from '../string/index.ts';
+import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';
 /**
  * Record key type.
  */
@@ -53,7 +54,7 @@ export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
  */
 export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
   value: TRecordValue,
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<RecordOutput<StringSchema, TRecordValue>>
 ): RecordSchemaAsync<TRecordValue>;
 
@@ -91,7 +92,7 @@ export function recordAsync<
 >(
   key: TRecordKey,
   value: TRecordValue,
-  error?: string,
+  error?: FString,
   pipe?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchemaAsync<TRecordValue, TRecordKey>;
 
@@ -102,9 +103,9 @@ export function recordAsync<
   arg1: TRecordValue | TRecordKey,
   arg2?:
     | PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-    | string
+    | FString
     | TRecordValue,
-  arg3?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>> | string,
+  arg3?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>> | FString,
   arg4?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchemaAsync<TRecordValue, TRecordKey> {
   // Get key, value, error and pipe argument

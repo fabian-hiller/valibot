@@ -1,4 +1,4 @@
-import type { Pipe, PipeAsync } from '../../types.ts';
+import type { FString, Pipe, PipeAsync } from '../../types.ts';
 
 /**
  * Returns error and pipe from dynamic arguments.
@@ -9,8 +9,8 @@ import type { Pipe, PipeAsync } from '../../types.ts';
  * @returns The default arguments.
  */
 export function getDefaultArgs<TPipe extends Pipe<any> | PipeAsync<any>>(
-  arg1: string | TPipe | undefined,
+  arg1: FString | TPipe | undefined,
   arg2: TPipe | undefined
-): [string | undefined, TPipe | undefined] {
-  return !arg1 || typeof arg1 === 'string' ? [arg1, arg2] : [undefined, arg1];
+): [FString | undefined, TPipe | undefined] {
+  return Array.isArray(arg1) ? [undefined, arg1] : [arg1, arg2];
 }
