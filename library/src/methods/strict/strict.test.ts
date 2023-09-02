@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import {number, object, optional, string} from '../../schemas/index.ts';
+import { number, object, optional, string } from '../../schemas/index.ts';
 import { parse } from '../parse/index.ts';
 import { strict } from './strict.ts';
 

@@ -5,6 +5,7 @@ import { toCustom } from '../../transformations/index.ts';
 import { number } from '../number/index.ts';
 import { string } from '../string/index.ts';
 import { object } from './object.ts';
+import { optional } from '../optional';
 
 describe('object', () => {
   test('should pass only objects', () => {
@@ -94,5 +95,13 @@ describe('object', () => {
     );
     expect(output1).toEqual(transformInput());
     expect(output2).toEqual(transformInput());
+  });
+
+  test('should not assign optional properties when value is undefined', () => {
+    const schema = object({ key1: string(), key2: optional(number()) });
+    const input = { key1: 'test' };
+    const result = parse(schema, input);
+    const outputEntries = Object.entries(result);
+    expect(outputEntries.length).toEqual(1);
   });
 });

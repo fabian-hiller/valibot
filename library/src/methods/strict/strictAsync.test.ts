@@ -1,5 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import {number, objectAsync, optionalAsync, string} from '../../schemas/index.ts';
+import {
+  number,
+  objectAsync,
+  optionalAsync,
+  string,
+} from '../../schemas/index.ts';
 import { parseAsync } from '../parse/index.ts';
 import { strictAsync } from './strictAsync.ts';
 
@@ -19,7 +24,9 @@ describe('strict', () => {
   });
 
   test('should not fail on optional properties', async () => {
-    const schema = strictAsync(objectAsync({ key1: string(), key2: optionalAsync(number()) }));
+    const schema = strictAsync(
+      objectAsync({ key1: string(), key2: optionalAsync(number()) })
+    );
 
     const input1 = { key1: 'test' };
     const output1 = await parseAsync(schema, input1);

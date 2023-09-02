@@ -1,7 +1,7 @@
 import type { BaseSchema, Issues, Pipe } from '../../types.ts';
 import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
 import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
-import {isOptional} from "../optional";
+import { isOptional } from '../optional';
 
 /**
  * Object shape type.

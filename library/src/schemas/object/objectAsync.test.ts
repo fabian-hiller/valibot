@@ -5,6 +5,7 @@ import { toCustom } from '../../transformations/index.ts';
 import { number } from '../number/index.ts';
 import { string, stringAsync } from '../string/index.ts';
 import { objectAsync } from './objectAsync.ts';
+import { optionalAsync } from '../optional';
 
 describe('objectAsync', () => {
   test('should pass only objects', async () => {
@@ -96,5 +97,16 @@ describe('objectAsync', () => {
     );
     expect(output1).toEqual(transformInput());
     expect(output2).toEqual(transformInput());
+  });
+
+  test('should not assign optional properties when value is undefined', async () => {
+    const schema = objectAsync({
+      key1: string(),
+      key2: optionalAsync(number()),
+    });
+    const input = { key1: 'test' };
+    const result = await parseAsync(schema, input);
+    const outputEntries = Object.entries(result);
+    expect(outputEntries.length).toEqual(1);
   });
 });

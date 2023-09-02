@@ -12,7 +12,7 @@ export type OptionalSchema<
 };
 
 export function isOptional(schema: BaseSchema): schema is OptionalSchema<any> {
-  return ((schema as unknown as { schema: string }).schema === 'optional');
+  return (schema as unknown as { schema: string }).schema === 'optional';
 }
 
 /**
