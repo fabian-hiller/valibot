@@ -16,6 +16,10 @@ export type OptionalSchemaAsync<
   wrapped: TWrappedSchema;
 };
 
+export function isOptionalAsync(schema: BaseSchema | BaseSchemaAsync): schema is OptionalSchemaAsync<any> {
+  return ((schema as unknown as { schema: string }).schema === 'optional');
+}
+
 /**
  * Creates an async optional schema.
  *
