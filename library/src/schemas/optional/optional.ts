@@ -11,6 +11,10 @@ export type OptionalSchema<
   wrapped: TWrappedSchema;
 };
 
+export function isOptional(schema: BaseSchema): schema is OptionalSchema<any> {
+  return ((schema as unknown as { schema: string }).schema === 'optional');
+}
+
 /**
  * Creates a optional schema.
  *
