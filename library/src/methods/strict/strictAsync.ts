@@ -27,12 +27,18 @@ export function strictAsync<TSchema extends ObjectSchemaAsync<any>>(
      */
     async _parse(input, info) {
       const result = await schema._parse(input, info);
-      return !result.issues &&
-        // Check length of input and output keys
-        Object.keys(input as object).length !==
-          Object.keys(result.output).length
-        ? getIssues(info, 'object', 'strict', error || 'Invalid keys', input)
-        : result;
+      if (result.issues) {
+        return result;
+      }
+
+      const schemaKeys = Object.keys(schema.object);
+      const outputKeys = Object.keys(result.output);
+      const extraKeys = outputKeys.filter(k => !schemaKeys.includes(k));
+      if (extraKeys.length > 0) {
+        return getIssues(info, 'object', 'strict', error || `Invalid keys: ${extraKeys.join(', ')}`, input);
+      }
+
+      return result;
     },
   };
 }
