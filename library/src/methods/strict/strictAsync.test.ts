@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { number, objectAsync, string } from '../../schemas/index.ts';
+import {number, objectAsync, string} from '../../schemas/index.ts';
 import { parseAsync } from '../parse/index.ts';
 import { strictAsync } from './strictAsync.ts';
 
@@ -15,5 +15,13 @@ describe('strict', () => {
     await expect(parseAsync(schema, input2)).rejects.toThrowError('Invalid keys: key3');
     const input3 = { key1: 'test', key2: 123, key3: 'unknown', key4: 123 };
     await expect(parseAsync(schema, input3)).rejects.toThrowError('Invalid keys: key3, key4');
+  });
+
+  test('should return original issues', async () => {
+    const schema = strictAsync(objectAsync({ key1: string(), key2: number() }));
+    const input = { key1: 'test', key2: 'test' };
+    const result = await schema._parse(input);
+    expect(result.issues).toBeDefined();
+    expect(result.issues).toHaveLength(1);
   });
 });

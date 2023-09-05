@@ -16,4 +16,12 @@ describe('strict', () => {
     const input3 = { key1: 'test', key2: 123, key3: 'unknown', key4: 123 };
     expect(() => parse(schema, input3)).toThrowError('Invalid keys: key3, key4');
   });
+
+  test('should return original issues', () => {
+    const schema = strict(object({ key1: string(), key2: number() }));
+    const input = { key1: 'test', key2: 'test' };
+    const result = schema._parse(input);
+    expect(result.issues).toBeDefined();
+    expect(result.issues).toHaveLength(1);
+  });
 });
