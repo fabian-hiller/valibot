@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
-import { parseAsync } from '../../methods/index.ts';
+import { parseAsync} from '../../methods/index.ts';
 import { toCustom } from '../../transformations/index.ts';
 import { number } from '../number/index.ts';
 import { string, stringAsync } from '../string/index.ts';
@@ -96,5 +96,12 @@ describe('objectAsync', () => {
     );
     expect(output1).toEqual(transformInput());
     expect(output2).toEqual(transformInput());
+  });
+
+  test('should allow additional properties', async () => {
+    const schema = objectAsync({ key1: string(), key2: number() });
+    const input = { key1: 'test', key2: 123, key3: true };
+    const output = await parseAsync(schema, input);
+    expect(output).toEqual(input);
   });
 });

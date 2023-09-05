@@ -95,4 +95,11 @@ describe('object', () => {
     expect(output1).toEqual(transformInput());
     expect(output2).toEqual(transformInput());
   });
+
+  test('should allow additional properties', () => {
+    const schema = object({ key1: string(), key2: number() });
+    const input = { key1: 'test', key2: 123, key3: true };
+    const output = parse(schema, input);
+    expect(output).toEqual(input);
+  });
 });
