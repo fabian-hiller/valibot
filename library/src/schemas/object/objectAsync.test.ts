@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
-import { parseAsync} from '../../methods/index.ts';
+import { parseAsync } from '../../methods/index.ts';
 import { toCustom } from '../../transformations/index.ts';
 import { number } from '../number/index.ts';
 import { string, stringAsync } from '../string/index.ts';

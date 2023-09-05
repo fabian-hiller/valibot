@@ -33,9 +33,15 @@ export function strictAsync<TSchema extends ObjectSchemaAsync<any>>(
 
       const schemaKeys = Object.keys(schema.object);
       const outputKeys = Object.keys(result.output);
-      const extraKeys = outputKeys.filter(k => !schemaKeys.includes(k));
+      const extraKeys = outputKeys.filter((k) => !schemaKeys.includes(k));
       if (extraKeys.length > 0) {
-        return getIssues(info, 'object', 'strict', error || `Invalid keys: ${extraKeys.join(', ')}`, input);
+        return getIssues(
+          info,
+          'object',
+          'strict',
+          error || `Invalid keys: ${extraKeys.join(', ')}`,
+          input
+        );
       }
 
       return result;

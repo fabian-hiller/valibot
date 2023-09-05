@@ -14,7 +14,9 @@ describe('strict', () => {
     const input2 = { key1: 'test', key2: 123, key3: 'unknown' };
     expect(() => parse(schema, input2)).toThrowError('Invalid keys: key3');
     const input3 = { key1: 'test', key2: 123, key3: 'unknown', key4: 123 };
-    expect(() => parse(schema, input3)).toThrowError('Invalid keys: key3, key4');
+    expect(() => parse(schema, input3)).toThrowError(
+      'Invalid keys: key3, key4'
+    );
   });
 
   test('should return original issues', () => {

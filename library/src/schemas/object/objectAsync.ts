@@ -163,7 +163,9 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
         })
       ).catch(() => null);
 
-      const extraInputKeys = Object.keys(input).filter(k => !cachedEntries.map(e => e[0]).includes(k));
+      const extraInputKeys = Object.keys(input).filter(
+        (k) => !cachedEntries.map((e) => e[0]).includes(k)
+      );
       for (const key of extraInputKeys) {
         const value = (input as Record<string, unknown>)[key];
         output[key] = value;
