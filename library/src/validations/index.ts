@@ -1,4 +1,5 @@
 export * from './bytes/index.ts';
+export * from './cuid2/index.ts';
 export * from './custom/index.ts';
 export * from './email/index.ts';
 export * from './emoji/index.ts';
@@ -36,4 +37,3 @@ export * from './startsWith/index.ts';
 export * from './url/index.ts';
 export * from './uuid/index.ts';
 export * from './value/index.ts';
-export * from './cuid2/index.ts';

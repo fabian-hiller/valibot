@@ -9,11 +9,7 @@ import type { PipeResult } from '../../types.ts';
  */
 export function cuid2<TInput extends string>(error?: string) {
   return (input: TInput): PipeResult<TInput> => {
-    if (
-      !/^[a-z][a-z\d]*$/.test(
-        input
-      )
-    ) {
+    if (!/^[a-z][a-z0-9]*$/.test(input)) {
       return {
         issue: {
           validation: 'cuid2',
