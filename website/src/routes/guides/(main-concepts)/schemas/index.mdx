@@ -57,7 +57,7 @@ const LoginSchema = object({
   ]),
   password: string('Your password must be a string.', [
     minLength(1, 'Please enter your password.'),
-    minLength(8, 'You password must have 8 characters or more.'),
+    minLength(8, 'Your password must have 8 characters or more.'),
   ]),
 });
 ```
