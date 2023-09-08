@@ -57,6 +57,7 @@
 ## Validations
 
 - [bytes](/api/bytes)
+- [cuid2](/api/cuid2)
 - [custom](/api/custom)
 - [email](/api/email)
 - [emoji](/api/emoji)
