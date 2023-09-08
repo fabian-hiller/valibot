@@ -13,6 +13,8 @@ import type {
   DateSchemaAsync,
   EnumSchema,
   EnumSchemaAsync,
+  InstanceSchema,
+  InstanceSchemaAsync,
   LiteralSchema,
   LiteralSchemaAsync,
   MapSchema,
@@ -126,6 +128,14 @@ export function transformAsync<
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
 ): EnumSchemaAsync<TSchema['enum'], TOutput>;
+
+export function transformAsync<
+  TSchema extends InstanceSchema<any> | InstanceSchemaAsync<any>,
+  TOutput
+>(
+  schema: TSchema,
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+): InstanceSchemaAsync<TSchema['class'], TOutput>;
 
 export function transformAsync<
   TSchema extends LiteralSchema<any> | LiteralSchemaAsync<any>,
