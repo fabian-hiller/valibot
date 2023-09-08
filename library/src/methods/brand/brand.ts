@@ -75,8 +75,6 @@ import type {
 
 export const BrandSymbol = Symbol('brand');
 
-export type BrandSymbol = typeof BrandSymbol;
-
 /**
  * Brand name type.
  */

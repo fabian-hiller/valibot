@@ -12,13 +12,13 @@ type UnionToIntersection<T> = (
 export type Brands<BrandedType> = BrandedType extends Brand<any>
   ? UnionToIntersection<
       {
-        [N in keyof BrandedType[BrandSymbol]]: N extends
+        [N in keyof BrandedType[typeof BrandSymbol]]: N extends
           | string
           | symbol
           | number
           ? Brand<N>
           : never;
-      }[keyof BrandedType[BrandSymbol]]
+      }[keyof BrandedType[typeof BrandSymbol]]
     >
   : never;
 
