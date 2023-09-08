@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Fix bug in `strict` and `strictAsync` method for optional keys (issue #131)
+
 ## v0.13.1 (August 23, 2023)
 
 - Change object type check in `object` and `record` schema
