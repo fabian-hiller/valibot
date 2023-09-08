@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add `cuid2` validation (pull request #130)
+- Add `InstanceSchemaAsync` overload to `transformAsync` method (pull request #138)
 - Fix bug in `strict` and `strictAsync` method for optional keys (issue #131)
 
 ## v0.13.1 (August 23, 2023)
