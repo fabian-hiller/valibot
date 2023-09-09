@@ -28,7 +28,7 @@ export function strictAsync<TSchema extends ObjectSchemaAsync<any>>(
     async _parse(input, info) {
       const result = await schema._parse(input, info);
       return !result.issues &&
-        Object.keys(input as object).some((key) => !(key in result.output))
+        Object.keys(input as object).some((key) => !(key in schema.object))
         ? getIssues(info, 'object', 'strict', error || 'Invalid keys', input)
         : result;
     },

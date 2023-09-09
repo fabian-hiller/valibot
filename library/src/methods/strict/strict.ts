@@ -28,7 +28,7 @@ export function strict<TSchema extends ObjectSchema<any>>(
     _parse(input, info) {
       const result = schema._parse(input, info);
       return !result.issues &&
-        Object.keys(input as object).some((key) => !(key in result.output))
+        Object.keys(input as object).some((key) => !(key in schema.object))
         ? getIssues(info, 'object', 'strict', error || 'Invalid keys', input)
         : result;
     },
