@@ -4,23 +4,32 @@ import type { BaseSchema, Input, Output } from '../../types.ts';
  * Optional schema type.
  */
 export type OptionalSchema<
-  TWrappedSchema extends BaseSchema,
-  TOutput = Output<TWrappedSchema> | undefined
-> = BaseSchema<Input<TWrappedSchema> | undefined, TOutput> & {
+  TWrapped extends BaseSchema,
+  TDefault extends Input<TWrapped> | undefined = undefined,
+  TOutput = TDefault extends undefined
+    ? Output<TWrapped> | undefined
+    : Output<TWrapped>
+> = BaseSchema<Input<TWrapped> | undefined, TOutput> & {
   schema: 'optional';
-  wrapped: TWrappedSchema;
+  wrapped: TWrapped;
+  get default(): TDefault;
 };
 
 /**
  * Creates a optional schema.
  *
  * @param wrapped The wrapped schema.
+ * @param default_ The default value.
  *
  * @returns A optional schema.
  */
-export function optional<TWrappedSchema extends BaseSchema>(
-  wrapped: TWrappedSchema
-): OptionalSchema<TWrappedSchema> {
+export function optional<
+  TWrapped extends BaseSchema,
+  TDefault extends Input<TWrapped> | undefined = undefined
+>(
+  wrapped: TWrapped,
+  default_?: TDefault | (() => TDefault)
+): OptionalSchema<TWrapped, TDefault> {
   return {
     /**
      * The schema type.
@@ -31,6 +40,15 @@ export function optional<TWrappedSchema extends BaseSchema>(
      * The wrapped schema.
      */
     wrapped,
+
+    /**
+     * The default value.
+     */
+    get default() {
+      return typeof default_ === 'function'
+        ? (default_ as () => TDefault)()
+        : (default_ as TDefault);
+    },
 
     /**
      * Whether it's async.
@@ -46,13 +64,16 @@ export function optional<TWrappedSchema extends BaseSchema>(
      * @returns The parsed output.
      */
     _parse(input, info) {
-      // Allow `undefined` values to pass
-      if (input === undefined) {
-        return { output: input };
+      // Get default or input value
+      const value = input === undefined ? this.default : input;
+
+      // Allow `undefined` value to pass
+      if (value === undefined) {
+        return { output: value };
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(input, info);
+      return wrapped._parse(value, info);
     },
   };
 }

@@ -9,23 +9,38 @@ import type {
  * Nullish schema async type.
  */
 export type NullishSchemaAsync<
-  TWrappedSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput = Output<TWrappedSchema> | null | undefined
-> = BaseSchemaAsync<Input<TWrappedSchema> | null | undefined, TOutput> & {
+  TWrapped extends BaseSchema | BaseSchemaAsync,
+  TDefault extends
+    | Input<TWrapped>
+    | undefined
+    | Promise<Input<TWrapped> | undefined> = undefined,
+  TOutput = Awaited<TDefault> extends undefined
+    ? Output<TWrapped> | null | undefined
+    : Output<TWrapped>
+> = BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> & {
   schema: 'nullish';
-  wrapped: TWrappedSchema;
+  wrapped: TWrapped;
+  get default(): TDefault;
 };
 
 /**
  * Creates an async nullish schema.
  *
  * @param wrapped The wrapped schema.
+ * @param default_ The default value.
  *
  * @returns An async nullish schema.
  */
 export function nullishAsync<
-  TWrappedSchema extends BaseSchema | BaseSchemaAsync
->(wrapped: TWrappedSchema): NullishSchemaAsync<TWrappedSchema> {
+  TWrapped extends BaseSchema | BaseSchemaAsync,
+  TDefault extends
+    | Input<TWrapped>
+    | undefined
+    | Promise<Input<TWrapped> | undefined> = undefined
+>(
+  wrapped: TWrapped,
+  default_?: TDefault | (() => TDefault)
+): NullishSchemaAsync<TWrapped, TDefault> {
   return {
     /**
      * The schema type.
@@ -36,6 +51,15 @@ export function nullishAsync<
      * The wrapped schema.
      */
     wrapped,
+
+    /**
+     * The default value.
+     */
+    get default() {
+      return typeof default_ === 'function'
+        ? (default_ as () => TDefault)()
+        : (default_ as TDefault);
+    },
 
     /**
      * Whether it's async.
@@ -51,13 +75,22 @@ export function nullishAsync<
      * @returns The parsed output.
      */
     async _parse(input, info) {
-      // Allow `null` or `undefined` values to pass
-      if (input === null || input === undefined) {
-        return { output: input };
+      // Get default or input value
+      let default_: Awaited<TDefault>;
+      const value =
+        (input === null || input === undefined) &&
+        (default_ = await this.default) &&
+        default_ !== undefined
+          ? default_
+          : input;
+
+      // Allow `null` or `undefined` value to pass
+      if (value === null || value === undefined) {
+        return { output: value };
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(input, info);
+      return wrapped._parse(value, info);
     },
   };
 }

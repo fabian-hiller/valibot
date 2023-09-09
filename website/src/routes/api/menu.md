@@ -54,7 +54,6 @@
 - [strip](/api/strip)
 - [transform](/api/transform)
 - [unwrap](/api/unwrap)
-- [withDefault](/api/withDefault)
 
 ## Validations
 

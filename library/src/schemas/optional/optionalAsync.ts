@@ -9,23 +9,38 @@ import type {
  * Optional schema async type.
  */
 export type OptionalSchemaAsync<
-  TWrappedSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput = Output<TWrappedSchema> | undefined
-> = BaseSchemaAsync<Input<TWrappedSchema> | undefined, TOutput> & {
+  TWrapped extends BaseSchema | BaseSchemaAsync,
+  TDefault extends
+    | Input<TWrapped>
+    | undefined
+    | Promise<Input<TWrapped> | undefined> = undefined,
+  TOutput = Awaited<TDefault> extends undefined
+    ? Output<TWrapped> | undefined
+    : Output<TWrapped>
+> = BaseSchemaAsync<Input<TWrapped> | undefined, TOutput> & {
   schema: 'optional';
-  wrapped: TWrappedSchema;
+  wrapped: TWrapped;
+  get default(): TDefault;
 };
 
 /**
  * Creates an async optional schema.
  *
  * @param wrapped The wrapped schema.
+ * @param default_ The default value.
  *
  * @returns An async optional schema.
  */
 export function optionalAsync<
-  TWrappedSchema extends BaseSchema | BaseSchemaAsync
->(wrapped: TWrappedSchema): OptionalSchemaAsync<TWrappedSchema> {
+  TWrapped extends BaseSchema | BaseSchemaAsync,
+  TDefault extends
+    | Input<TWrapped>
+    | undefined
+    | Promise<Input<TWrapped> | undefined> = undefined
+>(
+  wrapped: TWrapped,
+  default_?: TDefault | (() => TDefault)
+): OptionalSchemaAsync<TWrapped, TDefault> {
   return {
     /**
      * The schema type.
@@ -36,6 +51,15 @@ export function optionalAsync<
      * The wrapped schema.
      */
     wrapped,
+
+    /**
+     * The default value.
+     */
+    get default() {
+      return typeof default_ === 'function'
+        ? (default_ as () => TDefault)()
+        : (default_ as TDefault);
+    },
 
     /**
      * Whether it's async.
@@ -51,13 +75,16 @@ export function optionalAsync<
      * @returns The parsed output.
      */
     async _parse(input, info) {
-      // Allow `undefined` values to pass
-      if (input === undefined) {
-        return { output: input };
+      // Get default or input value
+      const value = input === undefined ? await this.default : input;
+
+      // Allow `undefined` value to pass
+      if (value === undefined) {
+        return { output: value };
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(input, info);
+      return wrapped._parse(value, info);
     },
   };
 }

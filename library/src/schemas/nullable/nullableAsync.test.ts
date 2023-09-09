@@ -10,9 +10,23 @@ describe('nullableAsync', () => {
     const output = await parseAsync(schema, input);
     expect(output).toBe(input);
     expect(await parseAsync(schema, null)).toBeNull();
+
     await expect(parseAsync(schema, 123)).rejects.toThrowError();
     await expect(parseAsync(schema, false)).rejects.toThrowError();
     await expect(parseAsync(schema, undefined)).rejects.toThrowError();
     await expect(parseAsync(schema, {})).rejects.toThrowError();
+  });
+
+  test('should use default if required', async () => {
+    const default_ = 'default';
+    const input = 'test';
+
+    const schema1 = nullableAsync(string(), default_);
+    expect(await parseAsync(schema1, input)).toBe(input);
+    expect(await parseAsync(schema1, null)).toBe(default_);
+
+    const schema2 = nullableAsync(string(), () => default_);
+    expect(await parseAsync(schema2, input)).toBe(input);
+    expect(await parseAsync(schema2, null)).toBe(default_);
   });
 });

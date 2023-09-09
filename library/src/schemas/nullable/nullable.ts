@@ -4,23 +4,32 @@ import type { BaseSchema, Input, Output } from '../../types.ts';
  * Nullable schema type.
  */
 export type NullableSchema<
-  TWrappedSchema extends BaseSchema,
-  TOutput = Output<TWrappedSchema> | null
-> = BaseSchema<Input<TWrappedSchema> | null, TOutput> & {
+  TWrapped extends BaseSchema,
+  TDefault extends Input<TWrapped> | undefined = undefined,
+  TOutput = TDefault extends undefined
+    ? Output<TWrapped> | null
+    : Output<TWrapped>
+> = BaseSchema<Input<TWrapped> | null, TOutput> & {
   schema: 'nullable';
-  wrapped: TWrappedSchema;
+  wrapped: TWrapped;
+  get default(): TDefault;
 };
 
 /**
  * Creates a nullable schema.
  *
  * @param wrapped The wrapped schema.
+ * @param default_ The default value.
  *
  * @returns A nullable schema.
  */
-export function nullable<TWrappedSchema extends BaseSchema>(
-  wrapped: TWrappedSchema
-): NullableSchema<TWrappedSchema> {
+export function nullable<
+  TWrapped extends BaseSchema,
+  TDefault extends Input<TWrapped> | undefined = undefined
+>(
+  wrapped: TWrapped,
+  default_?: TDefault | (() => TDefault)
+): NullableSchema<TWrapped, TDefault> {
   return {
     /**
      * The schema type.
@@ -31,6 +40,15 @@ export function nullable<TWrappedSchema extends BaseSchema>(
      * The wrapped schema.
      */
     wrapped,
+
+    /**
+     * The default value.
+     */
+    get default() {
+      return typeof default_ === 'function'
+        ? (default_ as () => TDefault)()
+        : (default_ as TDefault);
+    },
 
     /**
      * Whether it's async.
@@ -46,13 +64,20 @@ export function nullable<TWrappedSchema extends BaseSchema>(
      * @returns The parsed output.
      */
     _parse(input, info) {
-      // Allow `null` values to pass
-      if (input === null) {
-        return { output: input };
+      // Get default or input value
+      let default_: TDefault;
+      const value =
+        input === null && (default_ = this.default) && default_ !== undefined
+          ? default_
+          : input;
+
+      // Allow `null` value to pass
+      if (value === null) {
+        return { output: value };
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(input, info);
+      return wrapped._parse(value, info);
     },
   };
 }

@@ -10,11 +10,11 @@ export type NonOptional<T> = T extends undefined ? never : T;
  * Non optional schema type.
  */
 export type NonOptionalSchema<
-  TWrappedSchema extends BaseSchema,
-  TOutput = NonOptional<Output<TWrappedSchema>>
-> = BaseSchema<NonOptional<Input<TWrappedSchema>>, TOutput> & {
+  TWrapped extends BaseSchema,
+  TOutput = NonOptional<Output<TWrapped>>
+> = BaseSchema<NonOptional<Input<TWrapped>>, TOutput> & {
   schema: 'non_optional';
-  wrapped: TWrappedSchema;
+  wrapped: TWrapped;
 };
 
 /**
@@ -25,10 +25,10 @@ export type NonOptionalSchema<
  *
  * @returns A non optional schema.
  */
-export function nonOptional<TWrappedSchema extends BaseSchema>(
-  wrapped: TWrappedSchema,
+export function nonOptional<TWrapped extends BaseSchema>(
+  wrapped: TWrapped,
   error?: string
-): NonOptionalSchema<TWrappedSchema> {
+): NonOptionalSchema<TWrapped> {
   return {
     /**
      * The schema type.

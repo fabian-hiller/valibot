@@ -5,6 +5,8 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add support for enums as key of `record` and `recordAsync` schema (issue #134)
+- Add support for default values to `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema (issue #96, #118)
+- Deprecate `withDefault` method in favor of `optional` schema
 
 ## v0.14.0 (September 08, 2023)
 
