@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add support for enums as key of `record` and `recordAsync` schema (issue #134)
+
 ## v0.14.0 (September 08, 2023)
 
 - Add `cuid2` validation (pull request #130)

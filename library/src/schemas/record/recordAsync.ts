@@ -5,6 +5,11 @@ import type {
   PipeAsync,
 } from '../../types.ts';
 import { executePipeAsync, getIssues } from '../../utils/index.ts';
+import type { EnumSchema, EnumSchemaAsync } from '../enumType/index.ts';
+import type {
+  NativeEnumSchema,
+  NativeEnumSchemaAsync,
+} from '../nativeEnum/index.ts';
 import type { StringSchema, StringSchemaAsync } from '../string/index.ts';
 import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';
 import { getRecordArgs } from './utils/index.ts';
@@ -14,6 +19,10 @@ import { BLOCKED_KEYS } from './values.ts';
  * Record key type.
  */
 export type RecordKeyAsync =
+  | EnumSchema<any, string | number | symbol>
+  | EnumSchemaAsync<any, string | number | symbol>
+  | NativeEnumSchema<any, string | number | symbol>
+  | NativeEnumSchemaAsync<any, string | number | symbol>
   | StringSchema<string | number | symbol>
   | StringSchemaAsync<string | number | symbol>;
 

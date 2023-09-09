@@ -1,5 +1,7 @@
 import type { BaseSchema, Issues, Pipe } from '../../types.ts';
 import { executePipe, getIssues } from '../../utils/index.ts';
+import type { EnumSchema } from '../enumType/index.ts';
+import type { NativeEnumSchema } from '../nativeEnum/index.ts';
 import type { StringSchema } from '../string/index.ts';
 import type { RecordOutput, RecordInput, RecordPathItem } from './types.ts';
 import { getRecordArgs } from './utils/index.ts';
@@ -8,7 +10,10 @@ import { BLOCKED_KEYS } from './values.ts';
 /**
  * Record key type.
  */
-export type RecordKey = StringSchema<string | number | symbol>;
+export type RecordKey =
+  | EnumSchema<any, string | number | symbol>
+  | NativeEnumSchema<any, string | number | symbol>
+  | StringSchema<string | number | symbol>;
 
 /**
  * Record schema type.
