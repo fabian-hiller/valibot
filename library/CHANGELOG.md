@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.14.0 (September 08, 2023)
 
 - Add `cuid2` validation (pull request #130)
 - Add `passthrough`, `passthroughAsync`, `strip` and `stripAsync` method
