@@ -40,6 +40,8 @@
 
 - [brand](/api/brand)
 - [coerce](/api/coerce)
+- [fallback](/api/fallback)
+- [getDefault](/api/getDefault)
 - [is](/api/is)
 - [keyof](/api/keyof)
 - [merge](/api/merge)
