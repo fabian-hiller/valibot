@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `ulid` validation (pull request #151)
+
 ## v0.15.0 (September 10, 2023)
 
 - Add possibility to define path of pipeline issue (issue #5)

@@ -34,6 +34,7 @@ export * from './regex/index.ts';
 export * from './safeInteger/index.ts';
 export * from './size/index.ts';
 export * from './startsWith/index.ts';
+export * from './ulid/index.ts';
 export * from './url/index.ts';
 export * from './uuid/index.ts';
 export * from './value/index.ts';
