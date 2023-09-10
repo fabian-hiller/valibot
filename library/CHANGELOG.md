@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.15.0 (September 10, 2023)
 
 - Add possibility to define path of pipeline issue (issue #5)
 - Add `getDefault` method to get default value of schema (issue #105)
