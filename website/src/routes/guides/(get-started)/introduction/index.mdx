@@ -3,6 +3,8 @@ title: Introduction
 description: Hello, I am Valibot and I would like to help you validate data easily using a schema. No matter if it is incoming data on a server, a form or even configuration files.
 ---
 
+import { Link } from '@builder.io/qwik-city';
+
 # Introduction
 
 Hello, I am Valibot and I would like to help you validate data easily using a schema. No matter if it is incoming data on a server, a form or even configuration files. I have no dependencies and can run in any JavaScript environment.
@@ -41,6 +43,8 @@ parse(LoginSchema, { email: '', password: '' });
 // Returns data as { email: string; password: string }
 parse(LoginSchema, { email: 'jane@example.com', password: '12345678' });
 ```
+
+Apart from <Link href="/api/parse">`parse`</Link> I also offer a non-exception-based API with <Link href="/api/safeParse">`safeParse`</Link> and a type guard function with <Link href="/api/is">`is`</Link>. You can find more about it <Link href="/guides/parse-data">here</Link>.
 
 ## Comparison
 
