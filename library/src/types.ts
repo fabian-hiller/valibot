@@ -120,10 +120,13 @@ export type PipeInfo = ParseInfo & Pick<Issue, 'reason'>;
  * Pipe result type.
  */
 export type PipeResult<TOutput> =
-  | { output: TOutput; issue?: undefined }
+  | {
+      output: TOutput;
+      issue?: undefined;
+    }
   | {
       output?: undefined;
-      issue: Pick<Issue, 'validation' | 'message' | 'input'>;
+      issue: Pick<Issue, 'validation' | 'message' | 'input' | 'path'>;
     };
 
 /**

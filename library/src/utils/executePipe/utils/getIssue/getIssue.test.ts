@@ -25,6 +25,7 @@ describe('getIssue', () => {
       validation: 'validation',
       message: 'message',
       input: 'input',
+      path: [],
     };
     const issue2 = getIssue(pipeInfo2, valiInfo2);
     expect(issue2).toEqual({

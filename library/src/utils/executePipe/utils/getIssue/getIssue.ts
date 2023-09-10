@@ -10,7 +10,7 @@ import type { Issue, PipeInfo } from '../../../../types.ts';
  */
 export function getIssue(
   info: PipeInfo,
-  issue: Pick<Issue, 'validation' | 'message' | 'input'>
+  issue: Pick<Issue, 'validation' | 'message' | 'input' | 'path'>
 ): Issue {
   // Note: The issue is deliberately not constructed with the spread operator
   // for performance reasons
@@ -20,6 +20,7 @@ export function getIssue(
     origin: info?.origin || 'value',
     message: issue.message,
     input: issue.input,
+    path: issue.path,
     abortEarly: info?.abortEarly,
     abortPipeEarly: info?.abortPipeEarly,
   };
