@@ -1,9 +1,7 @@
 import type { PipeResult } from '../../types';
 
 /**
- * Creates a validation functions that validates a ULID.
- *
- * @link https://github.com/ulid/spec
+ * Creates a validation functions that validates a [ULID](https://github.com/ulid/spec).
  *
  * @param error The error message.
  *
@@ -11,7 +9,7 @@ import type { PipeResult } from '../../types';
  */
 export function ulid<TInput extends string>(error?: string) {
   return (input: TInput): PipeResult<TInput> => {
-    if (!/^[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}$/i.test(input)) {
+    if (!/^[0-9A-HJKMNPQ-TV-Z]{26}$/i.test(input)) {
       return {
         issue: {
           validation: 'ulid',

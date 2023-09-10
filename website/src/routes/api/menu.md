@@ -95,6 +95,7 @@
 - [safeInteger](/api/safeInteger)
 - [size](/api/size)
 - [startsWith](/api/startsWith)
+- [ulid](/api/ulid)
 - [url](/api/url)
 - [uuid](/api/uuid)
 - [value](/api/value)
