@@ -12,6 +12,7 @@ describe('number', () => {
     expect(() => parse(schema, 123n)).toThrowError();
     expect(() => parse(schema, '123')).toThrowError();
     expect(() => parse(schema, {})).toThrowError();
+    expect(() => parse(schema, NaN)).toThrowError();
   });
 
   test('should throw custom error', () => {
