@@ -66,7 +66,7 @@ export function numberAsync(
      */
     async _parse(input, info) {
       // Check type of input
-      if (typeof input !== 'number') {
+      if (typeof input !== 'number' || Number.isNaN(input)) {
         return getIssues(
           info,
           'type',

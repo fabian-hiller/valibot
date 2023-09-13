@@ -12,6 +12,7 @@ describe('numberAsync', () => {
     await expect(parseAsync(schema, 123n)).rejects.toThrowError();
     await expect(parseAsync(schema, '123')).rejects.toThrowError();
     await expect(parseAsync(schema, {})).rejects.toThrowError();
+    await expect(parseAsync(schema, NaN)).rejects.toThrowError();
   });
 
   test('should throw custom error', async () => {
