@@ -1,54 +1,60 @@
----
-name: 🐛 Bug Report
-about: Report a problem or bug in Valibot
-title: "[Bug]: "
-labels: bug
-assignees: 
----
+name: 🐞 Bug
+description: File a bug/issue
+title: "[BUG] <title>"
+labels: ["Bug", "Needs Triage"]
+assignees: fabian-hiller
+body:
+- type: checkboxes
+  attributes:
+    label: Is there an existing issue for this?
+    description: Please search to see if an issue already exists for the bug you encountered.
+    options:
+    - label: I have searched the existing issues
+      required: true
+- type: textarea
+  attributes:
+    label: Current Behavior
+    description: A concise description of what you're experiencing.
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: Expected Behavior
+    description: A concise description of what you expected to happen.
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: Steps To Reproduce
+    description: Steps to reproduce the behavior.
+    placeholder: |
+      1. Go to ...
+      1. click on...
+      1. scroll down...
+      1. See error...
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: Environment
+    description: |
+      examples:
+        - **OS**: Ubuntu 20.04
+        - **Node**: 13.14.0
+        - **npm**: 7.6.3
+    value: |
+        - OS:
+        - Node:
+        - npm:
+    render: markdown
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: Anything else?
+    description: |
+      Links? References? Anything that will give us more context about the issue you are encountering!
 
-## 🐛 Bug Report
-
-### Description
-
-<!-- Please provide a detailed description of the issue you are facing. -->
-
-### Expected Behavior
-
-<!-- Explain what you expected to happen. -->
-
-### Current Behavior
-
-<!-- Explain what is currently happening. -->
-
-### Steps to Reproduce
-
-<!-- List the steps required to reproduce the issue, if applicable.
-
-1. Step 1
-2. Step 2
-3. ... -->
-
-### Screenshots
-
-<!-- If applicable, add screenshots to help explain the issue. -->
-
-### Environment
-
-- Valibot Version: [e.g., v1.0.0]
-- Operating System: [e.g., Windows 10, macOS Big Sur, Ubuntu 20.04]
-- Python Version: [e.g., 3.8.5]
-
-### Additional Information
-
-<!-- Add any other relevant information here, such as error messages or logs. -->
-
----
-
-## 🗨️ Discussion
-
-<!-- Feel free to discuss the bug report with the community in the comments section below. -->
-
-<!--
-Remember to search existing bug reports before creating a new one to avoid duplicates.
-Please follow the bug report template as closely as possible for effective issue tracking and resolution.
--->
+      Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in.
+  validations:
+    required: false
