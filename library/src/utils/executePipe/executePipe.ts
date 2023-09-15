@@ -38,13 +38,16 @@ export function executePipe<TValue>(
     const result = action(output);
 
     // If there is a issue, capture it
-    if (result.issue) {
+    if (result.issue || result.issues) {
       // Cache pipe info lazy
       pipeInfo = pipeInfo || getPipeInfo(parseInfo, reason);
 
-      // Create issue and add it to issues
-      const issue = getIssue(pipeInfo, result.issue);
-      issues ? issues.push(issue) : (issues = [issue]);
+      const resultIssues = result.issue ? [result.issue] : result.issues;
+      for (const resultIssue of resultIssues) {
+        // Create issue and add it to issues
+        const issue = getIssue(pipeInfo, resultIssue);
+        issues ? issues.push(issue) : (issues = [issue]);
+      }
 
       // If necessary, abort early
       if (pipeInfo.abortEarly || pipeInfo.abortPipeEarly) {

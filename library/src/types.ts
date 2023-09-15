@@ -123,10 +123,17 @@ export type PipeResult<TOutput> =
   | {
       output: TOutput;
       issue?: undefined;
+      issues?: undefined;
     }
   | {
       output?: undefined;
       issue: Pick<Issue, 'validation' | 'message' | 'input' | 'path'>;
+      issues?: undefined;
+    }
+  | {
+      output?: undefined;
+      issue?: undefined;
+      issues: Pick<Issue, 'validation' | 'message' | 'input' | 'path'>[];
     };
 
 /**
