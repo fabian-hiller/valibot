@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssues, getOutput } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Symbol schema type.
@@ -38,7 +38,7 @@ export function symbol(error?: string): SymbolSchema {
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'symbol') {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'symbol',

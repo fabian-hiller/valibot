@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssues, getOutput } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * NaN schema type.
@@ -38,7 +38,13 @@ export function nan(error?: string): NanSchema {
     _parse(input, info) {
       // Check type of input
       if (!Number.isNaN(input)) {
-        return getIssues(info, 'type', 'nan', error || 'Invalid type', input);
+        return getSchemaIssues(
+          info,
+          'type',
+          'nan',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Return input as output

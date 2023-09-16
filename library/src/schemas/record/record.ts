@@ -1,5 +1,5 @@
 import type { BaseSchema, Issues, Pipe } from '../../types.ts';
-import { executePipe, getIssues } from '../../utils/index.ts';
+import { executePipe, getSchemaIssues } from '../../utils/index.ts';
 import type { EnumSchema } from '../enumType/index.ts';
 import type { NativeEnumSchema } from '../nativeEnum/index.ts';
 import type { StringSchema } from '../string/index.ts';
@@ -137,7 +137,7 @@ export function record<
     _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'record',

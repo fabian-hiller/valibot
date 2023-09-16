@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssues, getOutput } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Native enum type.
@@ -59,7 +59,7 @@ export function nativeEnum<TNativeEnum extends NativeEnum>(
     _parse(input, info) {
       // Check type of input
       if (!Object.values(nativeEnum).includes(input as any)) {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'native_enum',

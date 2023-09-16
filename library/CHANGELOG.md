@@ -8,6 +8,7 @@ All notable changes to the library will be documented in this file.
 - Add `ulid` validation (pull request #151)
 - Fix type check in `number` and `numberAsync` schema (issue #157)
 - Change `PipeResult` type to allow multiple issues (issue #161)
+- Rename `getIssues` util to `getSchemaIssues`
 
 ## v0.15.0 (September 10, 2023)
 

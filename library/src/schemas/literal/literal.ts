@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssues, getOutput } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 import type { Literal } from './types.ts';
 
 /**
@@ -52,7 +52,7 @@ export function literal<TLiteral extends Literal>(
     _parse(input, info) {
       // Check type of input
       if (input !== literal) {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'literal',

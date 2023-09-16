@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest';
 import type { Issue } from '../../types.ts';
-import { getIssues } from './getIssues.ts';
+import { getSchemaIssues } from './getSchemaIssues.ts';
 
-describe('getIssues', () => {
-  test('should return issue object', () => {
+describe('getSchemaIssues', () => {
+  test('should return results with issues', () => {
     const info1 = {
       reason: 'any' as const,
       validation: 'validation',
@@ -11,7 +11,7 @@ describe('getIssues', () => {
       message: 'message',
       input: 'input',
     };
-    const issue1 = getIssues(
+    const issue1 = getSchemaIssues(
       {},
       info1.reason,
       info1.validation,
@@ -40,7 +40,7 @@ describe('getIssues', () => {
       abortEarly: true,
       abortPipeEarly: false,
     };
-    const issue2 = getIssues(
+    const issue2 = getSchemaIssues(
       {
         origin: info2.origin,
         abortEarly: info2.abortEarly,

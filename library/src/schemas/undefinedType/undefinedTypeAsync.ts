@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssues, getOutput } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Undefined schema async type.
@@ -41,7 +41,7 @@ export function undefinedTypeAsync(error?: string): UndefinedSchemaAsync {
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'undefined') {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'undefined',

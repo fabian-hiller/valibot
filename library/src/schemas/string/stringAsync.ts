@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
-  getIssues,
+  getSchemaIssues,
 } from '../../utils/index.ts';
 
 /**
@@ -67,7 +67,7 @@ export function stringAsync(
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'string') {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'string',

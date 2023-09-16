@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
-  getIssues,
+  getSchemaIssues,
 } from '../../utils/index.ts';
 
 /**
@@ -64,7 +64,13 @@ export function blobAsync(
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Blob)) {
-        return getIssues(info, 'type', 'blob', error || 'Invalid type', input);
+        return getSchemaIssues(
+          info,
+          'type',
+          'blob',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Execute pipe and return result

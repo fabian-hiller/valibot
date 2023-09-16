@@ -7,7 +7,7 @@ import type {
 import {
   executePipeAsync,
   getDefaultArgs,
-  getIssues,
+  getSchemaIssues,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 
@@ -97,7 +97,7 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'object',
