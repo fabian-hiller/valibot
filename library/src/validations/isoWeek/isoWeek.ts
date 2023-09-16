@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a week.
@@ -15,16 +15,8 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function isoWeek<TInput extends string>(error?: string) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (!/^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$/.test(input)) {
-      return {
-        issue: {
-          validation: 'iso_week',
-          message: error || 'Invalid week',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    !/^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$/.test(input)
+      ? getPipeIssues('iso_week', error || 'Invalid week', input)
+      : getOutput(input);
 }

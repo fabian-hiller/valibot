@@ -13,15 +13,15 @@ describe('emoji', () => {
     const value4 = '✔️';
     expect(validate(value4).output).toBe(value4);
 
-    expect(validate('emoji').issue).toBeTruthy();
-    expect(validate('e😀').issue).toBeTruthy();
-    expect(validate('👋🏼 ').issue).toBeTruthy();
-    expect(validate('😀 👋🏼').issue).toBeTruthy();
+    expect(validate('emoji').issues).toBeTruthy();
+    expect(validate('e😀').issues).toBeTruthy();
+    expect(validate('👋🏼 ').issues).toBeTruthy();
+    expect(validate('😀 👋🏼').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an emoji!';
     const validate = emoji(error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

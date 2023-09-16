@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a string with a regex.
@@ -13,16 +13,8 @@ export function regex<TInput extends string>(
   requirement: RegExp,
   error?: string
 ) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (!requirement.test(input)) {
-      return {
-        issue: {
-          validation: 'regex',
-          message: error || 'Invalid regex',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    !requirement.test(input)
+      ? getPipeIssues('regex', error || 'Invalid regex', input)
+      : getOutput(input);
 }

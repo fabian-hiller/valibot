@@ -15,17 +15,17 @@ describe('integer', () => {
     const value5 = Number.MIN_SAFE_INTEGER;
     expect(validate(value5).output).toBe(value5);
 
-    expect(validate(5.5).issue).toBeTruthy();
-    expect(validate(0.000001).issue).toBeTruthy();
-    expect(validate(-3.14).issue).toBeTruthy();
-    expect(validate(NaN).issue).toBeTruthy();
-    expect(validate(Infinity).issue).toBeTruthy();
-    expect(validate(-Infinity).issue).toBeTruthy();
+    expect(validate(5.5).issues).toBeTruthy();
+    expect(validate(0.000001).issues).toBeTruthy();
+    expect(validate(-3.14).issues).toBeTruthy();
+    expect(validate(NaN).issues).toBeTruthy();
+    expect(validate(Infinity).issues).toBeTruthy();
+    expect(validate(-Infinity).issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an integer!';
     const validate = integer(error);
-    expect(validate(3.14).issue?.message).toBe(error);
+    expect(validate(3.14).issues?.[0].message).toBe(error);
   });
 });

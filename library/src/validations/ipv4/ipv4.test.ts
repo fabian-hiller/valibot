@@ -13,18 +13,18 @@ describe('ipv4', () => {
     const value4 = '255.255.255.255';
     expect(validate(value4).output).toBe(value4);
 
-    expect(validate('').issue).toBeTruthy();
-    expect(validate('1').issue).toBeTruthy();
-    expect(validate('-1.0.0.0').issue).toBeTruthy();
-    expect(validate('0..0.0.0').issue).toBeTruthy();
-    expect(validate('1234.0.0.0').issue).toBeTruthy();
-    expect(validate('256.256.256.256').issue).toBeTruthy();
-    expect(validate('1.2.3').issue).toBeTruthy();
+    expect(validate('').issues).toBeTruthy();
+    expect(validate('1').issues).toBeTruthy();
+    expect(validate('-1.0.0.0').issues).toBeTruthy();
+    expect(validate('0..0.0.0').issues).toBeTruthy();
+    expect(validate('1234.0.0.0').issues).toBeTruthy();
+    expect(validate('256.256.256.256').issues).toBeTruthy();
+    expect(validate('1.2.3').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an IP v4!';
     const validate = ipv4(error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

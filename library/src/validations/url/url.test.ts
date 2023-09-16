@@ -15,15 +15,15 @@ describe('url', () => {
     const value5 = 'ftp://example.com';
     expect(validate(value5).output).toBe(value5);
 
-    expect(validate('').issue).toBeTruthy();
-    expect(validate('example.com').issue).toBeTruthy();
-    expect(validate('//example.com').issue).toBeTruthy();
-    expect(validate('www.example.com').issue).toBeTruthy();
+    expect(validate('').issues).toBeTruthy();
+    expect(validate('example.com').issues).toBeTruthy();
+    expect(validate('//example.com').issues).toBeTruthy();
+    expect(validate('www.example.com').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an URL!';
     const validate = url(error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

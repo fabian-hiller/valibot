@@ -15,25 +15,29 @@ describe('uuid', () => {
     const value5 = '1ae102c2-202f-11ee-acec-2eb5a363657c';
     expect(validate(value5).output).toBe(value5);
 
-    expect(validate('').issue).toBeTruthy();
-    expect(validate('pae102c2-202f-11ee-acec-2eb5a363657c').issue).toBeTruthy();
-    expect(validate('ae102c2-202f-11ee-acec-2eb5a363657c').issue).toBeTruthy();
+    expect(validate('').issues).toBeTruthy();
     expect(
-      validate('1ae102c22-202f-11ee-acec-2eb5a363657c').issue
+      validate('pae102c2-202f-11ee-acec-2eb5a363657c').issues
     ).toBeTruthy();
-    expect(validate('1ae102c2-202-11ee-acec-2eb5a363657c').issue).toBeTruthy();
+    expect(validate('ae102c2-202f-11ee-acec-2eb5a363657c').issues).toBeTruthy();
     expect(
-      validate('1ae102c2-202f-11ee2-acec-2eb5a363657c').issue
+      validate('1ae102c22-202f-11ee-acec-2eb5a363657c').issues
+    ).toBeTruthy();
+    expect(validate('1ae102c2-202-11ee-acec-2eb5a363657c').issues).toBeTruthy();
+    expect(
+      validate('1ae102c2-202f-11ee2-acec-2eb5a363657c').issues
     ).toBeTruthy();
     expect(
-      validate('1ae102c2-202f-11ee-ac2ec-2eb5a363657c').issue
+      validate('1ae102c2-202f-11ee-ac2ec-2eb5a363657c').issues
     ).toBeTruthy();
-    expect(validate('1ae102c2-202f-11ee-ac2ec-eb5a363657c').issue).toBeTruthy();
+    expect(
+      validate('1ae102c2-202f-11ee-ac2ec-eb5a363657c').issues
+    ).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an UUID!';
     const validate = uuid(error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a async custom validation function.
@@ -13,16 +13,8 @@ export function customAsync<TInput>(
   requirement: (input: TInput) => Promise<boolean>,
   error?: string
 ) {
-  return async (input: TInput): Promise<PipeResult<TInput>> => {
-    if (!(await requirement(input))) {
-      return {
-        issue: {
-          validation: 'custom',
-          message: error || 'Invalid input',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return async (input: TInput): Promise<PipeResult<TInput>> =>
+    !(await requirement(input))
+      ? getPipeIssues('custom', error || 'Invalid input', input)
+      : getOutput(input);
 }

@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput, isLuhnAlgo } from '../../utils/index.ts';
+import { getOutput, getPipeIssues, isLuhnAlgo } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a IMEI.
@@ -11,19 +11,9 @@ import { getOutput, isLuhnAlgo } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function imei<TInput extends string>(error?: string) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (
-      !/^\d{2}[ |/|-]?\d{6}[ |/|-]?\d{6}[ |/|-]?\d$/.test(input) ||
-      !isLuhnAlgo(input)
-    ) {
-      return {
-        issue: {
-          validation: 'imei',
-          message: error || 'Invalid IMEI',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    !/^\d{2}[ |/|-]?\d{6}[ |/|-]?\d{6}[ |/|-]?\d$/.test(input) ||
+    !isLuhnAlgo(input)
+      ? getPipeIssues('imei', error || 'Invalid IMEI', input)
+      : getOutput(input);
 }

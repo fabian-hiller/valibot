@@ -24,19 +24,19 @@ describe('imei', () => {
     const value9 = '45-006636-663450-5';
     expect(validate(value9).output).toBe(value9);
 
-    expect(validate('').issue).toBeTruthy();
-    expect(validate('AA-BBBBBB-CCCCCC-D').issue).toBeTruthy();
-    expect(validate('53649845919125').issue).toBeTruthy();
-    expect(validate('536498459191225').issue).toBeTruthy();
-    expect(validate('5364984591912260').issue).toBeTruthy();
-    expect(validate('45_006636_663450_5').issue).toBeTruthy();
-    expect(validate('45  006636 663450 5').issue).toBeTruthy();
-    expect(validate('45- 006636-663450-5').issue).toBeTruthy();
+    expect(validate('').issues).toBeTruthy();
+    expect(validate('AA-BBBBBB-CCCCCC-D').issues).toBeTruthy();
+    expect(validate('53649845919125').issues).toBeTruthy();
+    expect(validate('536498459191225').issues).toBeTruthy();
+    expect(validate('5364984591912260').issues).toBeTruthy();
+    expect(validate('45_006636_663450_5').issues).toBeTruthy();
+    expect(validate('45  006636 663450 5').issues).toBeTruthy();
+    expect(validate('45- 006636-663450-5').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an IMEI!';
     const validate = imei(error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

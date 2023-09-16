@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a [cuid2](https://github.com/paralleldrive/cuid2#cuid2).
@@ -9,16 +9,8 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function cuid2<TInput extends string>(error?: string) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (!/^[a-z][a-z0-9]*$/.test(input)) {
-      return {
-        issue: {
-          validation: 'cuid2',
-          message: error || 'Invalid cuid2',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    !/^[a-z][a-z0-9]*$/.test(input)
+      ? getPipeIssues('cuid2', error || 'Invalid cuid2', input)
+      : getOutput(input);
 }

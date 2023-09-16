@@ -13,14 +13,14 @@ describe('finite', () => {
     const value4 = 3.14;
     expect(validate(value4).output).toBe(value4);
 
-    expect(validate(NaN).issue).toBeTruthy();
-    expect(validate(Infinity).issue).toBeTruthy();
-    expect(validate(-Infinity).issue).toBeTruthy();
+    expect(validate(NaN).issues).toBeTruthy();
+    expect(validate(Infinity).issues).toBeTruthy();
+    expect(validate(-Infinity).issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not a finite number!';
     const validate = finite(error);
-    expect(validate(Infinity).issue?.message).toBe(error);
+    expect(validate(Infinity).issues?.[0].message).toBe(error);
   });
 });

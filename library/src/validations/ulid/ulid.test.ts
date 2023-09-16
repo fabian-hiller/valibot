@@ -18,18 +18,18 @@ describe('ulid', () => {
     const value6 = value5.toLowerCase();
     expect(validate(value6).output).toBe(value6);
 
-    expect(validate('').issue).toBeTruthy();
-    expect(validate('01H9YWG755E7ZPXKPE57GQWHC').issue).toBeTruthy();
-    expect(validate('01H9YWG755E7ZPXKPE57GQWHCYA').issue).toBeTruthy();
-    expect(validate('01H9YWG755E7ZPXKPE57GQWHCI').issue).toBeTruthy();
-    expect(validate('01H9YWG755E7ZPXKPE57GQWHCL').issue).toBeTruthy();
-    expect(validate('01H9YWG755E7ZPXKPE57GQWHCO').issue).toBeTruthy();
-    expect(validate('01H9YWG755E7ZPXKPE57GQWHCU').issue).toBeTruthy();
+    expect(validate('').issues).toBeTruthy();
+    expect(validate('01H9YWG755E7ZPXKPE57GQWHC').issues).toBeTruthy();
+    expect(validate('01H9YWG755E7ZPXKPE57GQWHCYA').issues).toBeTruthy();
+    expect(validate('01H9YWG755E7ZPXKPE57GQWHCI').issues).toBeTruthy();
+    expect(validate('01H9YWG755E7ZPXKPE57GQWHCL').issues).toBeTruthy();
+    expect(validate('01H9YWG755E7ZPXKPE57GQWHCO').issues).toBeTruthy();
+    expect(validate('01H9YWG755E7ZPXKPE57GQWHCU').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an ULID!';
     const validate = ulid(error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

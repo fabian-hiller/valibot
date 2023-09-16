@@ -12,13 +12,13 @@ describe('minBytes', () => {
     const value3 = 'あい'; // in UTF-8, 'あい' is 6 bytes
     expect(validate(value3).output).toBe(value3);
 
-    expect(validate('12').issue).toBeTruthy();
-    expect(validate('あ').issue).toBeTruthy();
+    expect(validate('12').issues).toBeTruthy();
+    expect(validate('あ').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value byte length is lesser than "3"!';
     const validate = minBytes(3, error);
-    expect(validate('ab').issue?.message).toBe(error);
+    expect(validate('ab').issues?.[0].message).toBe(error);
   });
 });

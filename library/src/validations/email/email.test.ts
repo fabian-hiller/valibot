@@ -31,27 +31,27 @@ describe('email', () => {
     const value13 = 'email@subdomain.subdomain.example.de';
     expect(validate(value13).output).toBe(value13);
 
-    expect(validate('plainaddress').issue).toBeTruthy();
-    expect(validate('#@%^%#$@#$@#.com').issue).toBeTruthy();
-    expect(validate('@example.com').issue).toBeTruthy();
-    expect(validate('Joe Smith <email@example.com>').issue).toBeTruthy();
-    expect(validate('email.example.com').issue).toBeTruthy();
-    expect(validate('email@example@example.com').issue).toBeTruthy();
-    expect(validate('.email@example.com').issue).toBeTruthy();
-    expect(validate('email.@example.com').issue).toBeTruthy();
-    expect(validate('email..email@example.com').issue).toBeTruthy();
-    // FIXME: expect(validate('あいうえお@example.com').issue).toBeTruthy();
-    expect(validate('email@example.com (Joe Smith)').issue).toBeTruthy();
-    expect(validate('email@example').issue).toBeTruthy();
-    // FIXME: expect(validate('email@-example.com').issue).toBeTruthy();
-    // FIXME: expect(validate('email@111.222.333.44444').issue).toBeTruthy();
-    expect(validate('email@example..com').issue).toBeTruthy();
-    expect(validate('Abc..123@example.com').issue).toBeTruthy();
+    expect(validate('plainaddress').issues).toBeTruthy();
+    expect(validate('#@%^%#$@#$@#.com').issues).toBeTruthy();
+    expect(validate('@example.com').issues).toBeTruthy();
+    expect(validate('Joe Smith <email@example.com>').issues).toBeTruthy();
+    expect(validate('email.example.com').issues).toBeTruthy();
+    expect(validate('email@example@example.com').issues).toBeTruthy();
+    expect(validate('.email@example.com').issues).toBeTruthy();
+    expect(validate('email.@example.com').issues).toBeTruthy();
+    expect(validate('email..email@example.com').issues).toBeTruthy();
+    // FIXME: expect(validate('あいうえお@example.com').issues).toBeTruthy();
+    expect(validate('email@example.com (Joe Smith)').issues).toBeTruthy();
+    expect(validate('email@example').issues).toBeTruthy();
+    // FIXME: expect(validate('email@-example.com').issues).toBeTruthy();
+    // FIXME: expect(validate('email@111.222.333.44444').issues).toBeTruthy();
+    expect(validate('email@example..com').issues).toBeTruthy();
+    expect(validate('Abc..123@example.com').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an email!';
     const validate = email(error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

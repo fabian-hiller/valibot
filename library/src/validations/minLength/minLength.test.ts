@@ -12,15 +12,15 @@ describe('minLength', () => {
     const value3 = [1, 2, 3];
     expect(validate(value3).output).toBe(value3);
 
-    expect(validate('').issue).toBeTruthy();
-    expect(validate('12').issue).toBeTruthy();
-    expect(validate([]).issue).toBeTruthy();
-    expect(validate([1, 2]).issue).toBeTruthy();
+    expect(validate('').issues).toBeTruthy();
+    expect(validate('12').issues).toBeTruthy();
+    expect(validate([]).issues).toBeTruthy();
+    expect(validate([1, 2]).issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value length is less than "3"!';
     const validate = minLength(3, error);
-    expect(validate('1').issue?.message).toBe(error);
+    expect(validate('1').issues?.[0].message).toBe(error);
   });
 });

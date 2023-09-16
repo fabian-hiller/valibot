@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the size of a map, set or blob.
@@ -13,16 +13,8 @@ export function maxSize<TInput extends Map<any, any> | Set<any> | Blob>(
   requirement: number,
   error?: string
 ) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (input.size > requirement) {
-      return {
-        issue: {
-          validation: 'max_size',
-          message: error || 'Invalid size',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    input.size > requirement
+      ? getPipeIssues('max_size', error || 'Invalid size', input)
+      : getOutput(input);
 }

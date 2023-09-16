@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a date.
@@ -15,16 +15,8 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function isoDate<TInput extends string>(error?: string) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (!/^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])$/.test(input)) {
-      return {
-        issue: {
-          validation: 'iso_date',
-          message: error || 'Invalid date',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    !/^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])$/.test(input)
+      ? getPipeIssues('iso_date', error || 'Invalid date', input)
+      : getOutput(input);
 }
