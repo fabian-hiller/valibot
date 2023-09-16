@@ -9,6 +9,7 @@ import type {
 import {
   executePipeAsync,
   getDefaultArgs,
+  getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
 import type { ArrayPathItem } from './types.ts';
@@ -150,7 +151,7 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
 
       // Return issues or pipe result
       return issues
-        ? { issues }
+        ? getIssues(issues)
         : executePipeAsync(output as Output<TArrayItem>[], pipe, info, 'array');
     },
   };

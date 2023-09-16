@@ -1,5 +1,5 @@
 import type { BaseSchema, Issues, Pipe } from '../../types.ts';
-import { executePipe, getSchemaIssues } from '../../utils/index.ts';
+import { executePipe, getIssues, getSchemaIssues } from '../../utils/index.ts';
 import type { EnumSchema } from '../enumType/index.ts';
 import type { NativeEnumSchema } from '../nativeEnum/index.ts';
 import type { StringSchema } from '../string/index.ts';
@@ -231,7 +231,7 @@ export function record<
 
       // Return issues or pipe result
       return issues
-        ? { issues }
+        ? getIssues(issues)
         : executePipe(
             output as RecordOutput<TRecordKey, TRecordValue>,
             pipe,

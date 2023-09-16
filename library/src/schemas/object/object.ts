@@ -2,6 +2,7 @@ import type { BaseSchema, Issues, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
+  getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
 import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
@@ -149,7 +150,7 @@ export function object<TObjectShape extends ObjectShape>(
 
       // Return issues or pipe result
       return issues
-        ? { issues }
+        ? getIssues(issues)
         : executePipe(
             output as ObjectOutput<TObjectShape>,
             pipe,

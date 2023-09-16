@@ -7,6 +7,7 @@ import type {
 import {
   executePipeAsync,
   getDefaultArgs,
+  getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
@@ -165,7 +166,7 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
 
       // Return issues or pipe result
       return issues
-        ? { issues }
+        ? getIssues(issues)
         : executePipeAsync(
             output as ObjectOutput<TObjectShape>,
             pipe,

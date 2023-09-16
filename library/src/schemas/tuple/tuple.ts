@@ -1,5 +1,5 @@
 import type { BaseSchema, Issues, Pipe } from '../../types.ts';
-import { executePipe, getSchemaIssues } from '../../utils/index.ts';
+import { executePipe, getIssues, getSchemaIssues } from '../../utils/index.ts';
 import type { TupleOutput, TupleInput, TuplePathItem } from './types.ts';
 import { getTupleArgs } from './utils/index.ts';
 
@@ -228,7 +228,7 @@ export function tuple<
 
       // Return issues or pipe result
       return issues
-        ? { issues }
+        ? getIssues(issues)
         : executePipe(
             output as TupleOutput<TTupleItems, TTupleRest>,
             pipe,

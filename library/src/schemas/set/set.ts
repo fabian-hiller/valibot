@@ -2,6 +2,7 @@ import type { BaseSchema, Issues, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
+  getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput, SetPathItem } from './types.ts';
@@ -138,7 +139,9 @@ export function set<TSetValue extends BaseSchema>(
       }
 
       // Return issues or pipe result
-      return issues ? { issues } : executePipe(output, pipe, info, 'set');
+      return issues
+        ? getIssues(issues)
+        : executePipe(output, pipe, info, 'set');
     },
   };
 }

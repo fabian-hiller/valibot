@@ -8,6 +8,7 @@ import type {
 import {
   executePipeAsync,
   getDefaultArgs,
+  getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput, MapPathItem } from './types.ts';
@@ -185,7 +186,9 @@ export function mapAsync<
       );
 
       // Return issues or pipe result
-      return issues ? { issues } : executePipeAsync(input, pipe, info, 'map');
+      return issues
+        ? getIssues(issues)
+        : executePipeAsync(input, pipe, info, 'map');
     },
   };
 }
