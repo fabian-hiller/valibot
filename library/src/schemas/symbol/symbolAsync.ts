@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Symbol schema async type.
@@ -51,7 +51,7 @@ export function symbolAsync(error?: string): SymbolSchemaAsync {
       }
 
       // Return input as output
-      return { output: input };
+      return getOutput(input);
     },
   };
 }

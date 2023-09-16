@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Undefined schema type.
@@ -51,7 +51,7 @@ export function undefinedType(error?: string): UndefinedSchema {
       }
 
       // Return input as output
-      return { output: input };
+      return getOutput(input);
     },
   };
 }

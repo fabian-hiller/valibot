@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 export function excludes<TInput extends string>(
   requirement: string,
@@ -32,6 +33,6 @@ export function excludes<TInput extends string | TItem[], TItem>(
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

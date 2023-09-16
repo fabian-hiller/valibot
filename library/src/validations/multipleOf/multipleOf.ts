@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates whether a number is a multiple.
@@ -22,6 +23,6 @@ export function multipleOf<TInput extends number>(
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

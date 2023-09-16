@@ -1,4 +1,5 @@
 import type { ObjectSchema } from '../../schemas/object/index.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that passes unknown keys.
@@ -24,7 +25,7 @@ export function passthrough<TSchema extends ObjectSchema<any>>(
     _parse(input, info) {
       const result = schema._parse(input, info);
       return !result.issues
-        ? { output: { ...(input as object), ...result.output } }
+        ? getOutput({ ...(input as object), ...result.output })
         : result;
     },
   };

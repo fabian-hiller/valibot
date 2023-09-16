@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 import type { Enum } from './types.ts';
 
 /**
@@ -56,7 +56,7 @@ export function enumTypeAsync<
       }
 
       // Return inpot as output
-      return { output: input as TEnum[number] };
+      return getOutput(input as TEnum[number]);
     },
   };
 }

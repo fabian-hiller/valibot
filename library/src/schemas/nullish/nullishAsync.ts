@@ -4,6 +4,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Nullish schema async type.
@@ -86,7 +87,7 @@ export function nullishAsync<
 
       // Allow `null` or `undefined` value to pass
       if (value === null || value === undefined) {
-        return { output: value };
+        return getOutput(value);
       }
 
       // Return result of wrapped schema

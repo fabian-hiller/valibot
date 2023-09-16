@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the size of a map, set or blob.
@@ -22,6 +23,6 @@ export function minSize<TInput extends Map<any, any> | Set<any> | Blob>(
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

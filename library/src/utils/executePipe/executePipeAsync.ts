@@ -6,6 +6,7 @@ import type {
   PipeAsync,
   PipeInfo,
 } from '../../types.ts';
+import { getOutput } from '../getOutput/getOutput.ts';
 import { getIssue, getPipeInfo } from './utils/index.ts';
 
 /**
@@ -25,7 +26,7 @@ export async function executePipeAsync<TValue>(
 ): Promise<_ParseResult<TValue>> {
   // If pipe is empty, return input as output
   if (!pipe || !pipe.length) {
-    return { output: input };
+    return getOutput(input);
   }
 
   // Create pipe info, issues and output
@@ -58,5 +59,5 @@ export async function executePipeAsync<TValue>(
   }
 
   // Return pipe issues or output
-  return issues ? { issues } : { output };
+  return issues ? { issues } : getOutput(output);
 }

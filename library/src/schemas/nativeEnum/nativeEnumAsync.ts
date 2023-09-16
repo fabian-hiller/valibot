@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 import type { NativeEnum } from './nativeEnum.ts';
 
 /**
@@ -62,7 +62,7 @@ export function nativeEnumAsync<TNativeEnum extends NativeEnum>(
       }
 
       // Return input as output
-      return { output: input as TNativeEnum[keyof TNativeEnum] };
+      return getOutput(input as TNativeEnum[keyof TNativeEnum]);
     },
   };
 }

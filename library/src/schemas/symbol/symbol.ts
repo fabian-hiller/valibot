@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Symbol schema type.
@@ -48,7 +48,7 @@ export function symbol(error?: string): SymbolSchema {
       }
 
       // Return input as output
-      return { output: input };
+      return getOutput(input);
     },
   };
 }

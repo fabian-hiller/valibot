@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types';
+import { getOutput } from '../../utils';
 
 /**
  * Creates a validation functions that validates a [ULID](https://github.com/ulid/spec).
@@ -18,6 +19,6 @@ export function ulid<TInput extends string>(error?: string) {
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

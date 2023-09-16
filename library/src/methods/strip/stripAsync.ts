@@ -1,4 +1,5 @@
 import type { ObjectSchemaAsync } from '../../schemas/object/index.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that strips unknown keys.
@@ -44,7 +45,7 @@ export function stripAsync<TSchema extends ObjectSchemaAsync<any>>(
       }
 
       // Return stripped output
-      return { output };
+      return getOutput(output);
     },
   };
 }

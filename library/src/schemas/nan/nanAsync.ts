@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * NaN schema async type.
@@ -45,7 +45,7 @@ export function nanAsync(error?: string): NanSchemaAsync {
       }
 
       // Return input as output
-      return { output: input as number };
+      return getOutput(input as number);
     },
   };
 }

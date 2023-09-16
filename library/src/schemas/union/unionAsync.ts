@@ -5,7 +5,7 @@ import type {
   Issues,
   Output,
 } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Union options async type.
@@ -93,7 +93,7 @@ export function unionAsync<TUnionOptions extends UnionOptionsAsync>(
 
       // Return input as output or issues
       return output
-        ? { output: output[0] }
+        ? getOutput(output[0])
         : getIssues(
             info,
             'type',

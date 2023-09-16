@@ -34,6 +34,7 @@ import type {
   VoidSchema,
 } from '../../schemas/index.ts';
 import type { BaseSchema, Input, Output } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 export function transform<TSchema extends AnySchema, TOutput>(
   schema: TSchema,
@@ -226,7 +227,7 @@ export function transform<TSchema extends BaseSchema, TOutput>(
      */
     _parse(input, info) {
       const result = schema._parse(input, info);
-      return result.issues ? result : { output: action(result.output) };
+      return result.issues ? result : getOutput(action(result.output));
     },
   };
 }

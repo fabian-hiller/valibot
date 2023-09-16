@@ -1,4 +1,5 @@
 import type { ObjectSchema } from '../../schemas/object/index.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that strips unknown keys.
@@ -44,7 +45,7 @@ export function strip<TSchema extends ObjectSchema<any>>(
       }
 
       // Return stripped output
-      return { output };
+      return getOutput(output);
     },
   };
 }

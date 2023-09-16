@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a IP v6 address.
@@ -22,6 +23,6 @@ export function ipv6<TInput extends string>(error?: string) {
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

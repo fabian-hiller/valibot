@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a async custom validation function.
@@ -22,6 +23,6 @@ export function customAsync<TInput>(
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

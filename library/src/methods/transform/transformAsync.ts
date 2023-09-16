@@ -72,6 +72,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 export function transformAsync<
   TSchema extends AnySchema | AnySchemaAsync,
@@ -376,7 +377,7 @@ export function transformAsync<
      */
     async _parse(input, info) {
       const result = await schema._parse(input, info);
-      return result.issues ? result : { output: await action(result.output) };
+      return result.issues ? result : getOutput(await action(result.output));
     },
   };
 }

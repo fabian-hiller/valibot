@@ -1,4 +1,5 @@
 import type { BaseSchema, Input, Output } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Optional schema type.
@@ -69,7 +70,7 @@ export function optional<
 
       // Allow `undefined` value to pass
       if (value === undefined) {
-        return { output: value };
+        return getOutput(value);
       }
 
       // Return result of wrapped schema

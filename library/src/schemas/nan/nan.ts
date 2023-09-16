@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * NaN schema type.
@@ -42,7 +42,7 @@ export function nan(error?: string): NanSchema {
       }
 
       // Return input as output
-      return { output: input as number };
+      return getOutput(input as number);
     },
   };
 }

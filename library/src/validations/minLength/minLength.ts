@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the length of a string or array.
@@ -22,6 +23,6 @@ export function minLength<TInput extends string | any[]>(
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

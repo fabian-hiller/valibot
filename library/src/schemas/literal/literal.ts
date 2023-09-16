@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 import type { Literal } from './types.ts';
 
 /**
@@ -62,7 +62,7 @@ export function literal<TLiteral extends Literal>(
       }
 
       // Return input as output
-      return { output: input as TLiteral };
+      return getOutput(input as TLiteral);
     },
   };
 }

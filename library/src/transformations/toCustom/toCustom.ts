@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a custom transformation function.
@@ -8,5 +9,5 @@ import type { PipeResult } from '../../types.ts';
  * @returns A transformation function.
  */
 export function toCustom<TInput>(action: (input: TInput) => TInput) {
-  return (input: TInput): PipeResult<TInput> => ({ output: action(input) });
+  return (input: TInput): PipeResult<TInput> => getOutput(action(input));
 }

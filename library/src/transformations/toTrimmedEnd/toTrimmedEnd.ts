@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a transformation function that removes the trailing white space and
@@ -7,5 +8,5 @@ import type { PipeResult } from '../../types.ts';
  * @returns A transformation function.
  */
 export function toTrimmedEnd() {
-  return (input: string): PipeResult<string> => ({ output: input.trimEnd() });
+  return (input: string): PipeResult<string> => getOutput(input.trimEnd());
 }

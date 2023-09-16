@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a URL.
@@ -14,7 +15,7 @@ export function url<TInput extends string>(error?: string) {
   return (input: TInput): PipeResult<TInput> => {
     try {
       new URL(input);
-      return { output: input };
+      return getOutput(input);
     } catch (_) {
       return {
         issue: {

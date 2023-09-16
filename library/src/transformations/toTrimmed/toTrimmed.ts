@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a transformation function that removes the leading and trailing
@@ -7,5 +8,5 @@ import type { PipeResult } from '../../types.ts';
  * @returns A transformation function.
  */
 export function toTrimmed() {
-  return (input: string): PipeResult<string> => ({ output: input.trim() });
+  return (input: string): PipeResult<string> => getOutput(input.trim());
 }

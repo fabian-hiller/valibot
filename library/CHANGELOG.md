@@ -4,6 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `getOutput` util and refactor code
 - Add `ulid` validation (pull request #151)
 - Fix type check in `number` and `numberAsync` schema (issue #157)
 

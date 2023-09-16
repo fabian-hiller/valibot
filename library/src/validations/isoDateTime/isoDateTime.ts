@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a datetime.
@@ -28,6 +29,6 @@ export function isoDateTime<TInput extends string>(error?: string) {
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }
