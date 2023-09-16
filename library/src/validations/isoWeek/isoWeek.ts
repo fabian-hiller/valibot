@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a week.
@@ -24,6 +25,6 @@ export function isoWeek<TInput extends string>(error?: string) {
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

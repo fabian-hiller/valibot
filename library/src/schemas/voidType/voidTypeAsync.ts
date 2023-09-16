@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Void schema async type.
@@ -42,7 +42,7 @@ export function voidTypeAsync(error?: string): VoidSchemaAsync {
       }
 
       // Return input as output
-      return { output: input };
+      return getOutput(input);
     },
   };
 }

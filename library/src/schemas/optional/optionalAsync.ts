@@ -4,6 +4,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Optional schema async type.
@@ -80,7 +81,7 @@ export function optionalAsync<
 
       // Allow `undefined` value to pass
       if (value === undefined) {
-        return { output: value };
+        return getOutput(value);
       }
 
       // Return result of wrapped schema

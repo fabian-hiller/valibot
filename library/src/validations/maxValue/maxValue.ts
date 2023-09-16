@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the value of a string, number or date.
@@ -22,7 +23,7 @@ export function maxValue<
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }
 

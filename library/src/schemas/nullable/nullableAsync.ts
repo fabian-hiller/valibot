@@ -4,6 +4,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Nullable schema async type.
@@ -86,7 +87,7 @@ export function nullableAsync<
 
       // Allow `null` value to pass
       if (value === null) {
-        return { output: value };
+        return getOutput(value);
       }
 
       // Return result of wrapped schema

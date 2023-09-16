@@ -1,4 +1,5 @@
 import type { BaseSchema, Input, Output } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Nullable schema type.
@@ -73,7 +74,7 @@ export function nullable<
 
       // Allow `null` value to pass
       if (value === null) {
-        return { output: value };
+        return getOutput(value);
       }
 
       // Return result of wrapped schema

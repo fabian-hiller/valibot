@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Native enum type.
@@ -69,7 +69,7 @@ export function nativeEnum<TNativeEnum extends NativeEnum>(
       }
 
       // Return input as output
-      return { output: input as TNativeEnum[keyof TNativeEnum] };
+      return getOutput(input as TNativeEnum[keyof TNativeEnum]);
     },
   };
 }

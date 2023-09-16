@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the MIME type of a file.
@@ -22,6 +23,6 @@ export function mimeType<TInput extends Blob>(
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

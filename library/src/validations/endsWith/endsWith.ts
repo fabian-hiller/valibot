@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the end of a string.
@@ -22,6 +23,6 @@ export function endsWith<TInput extends string>(
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

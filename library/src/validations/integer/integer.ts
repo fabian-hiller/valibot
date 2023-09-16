@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates whether a number is an integer.
@@ -18,6 +19,6 @@ export function integer<TInput extends number>(error?: string) {
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

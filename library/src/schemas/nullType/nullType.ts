@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Null schema type.
@@ -42,7 +42,7 @@ export function nullType(error?: string): NullSchema {
       }
 
       // Return input as output
-      return { output: input };
+      return getOutput(input);
     },
   };
 }

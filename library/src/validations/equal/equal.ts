@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that checks the value for equality.
@@ -22,6 +23,6 @@ export function equal<
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }

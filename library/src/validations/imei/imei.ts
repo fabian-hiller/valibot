@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { isLuhnAlgo } from '../../utils/index.ts';
+import { getOutput, isLuhnAlgo } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a IMEI.
@@ -24,6 +24,6 @@ export function imei<TInput extends string>(error?: string) {
         },
       };
     }
-    return { output: input };
+    return getOutput(input);
   };
 }
