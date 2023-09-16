@@ -26,7 +26,7 @@ export function executePipe<TValue>(
   reason: IssueReason
 ): _ParseResult<TValue> {
   // If pipe is empty, return input as output
-  if (!pipe || !pipe.length) {
+  if (parseInfo?.skipPipes || !pipe || !pipe.length) {
     return getOutput(input);
   }
 

@@ -18,7 +18,7 @@ import type {
 export async function parseAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
   schema: TSchema,
   input: unknown,
-  info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly'>
+  info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly' | 'skipPipes'>
 ): Promise<Output<TSchema>> {
   const result = await schema._parse(input, info);
   if (result.issues) {

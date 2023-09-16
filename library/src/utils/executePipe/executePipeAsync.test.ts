@@ -32,4 +32,12 @@ describe('executePipeAsync', () => {
         ?.length
     ).toBe(1);
   });
+
+  test('should skip the pipeline', async () => {
+    const infoWithSkip = { ...info, skipPipes: true };
+    const pipe: PipeAsync<number> = [minValue(5)];
+    expect(
+      (await executePipeAsync<number>(0, pipe, infoWithSkip, 'number')).output
+    ).toBe(0);
+  });
 });

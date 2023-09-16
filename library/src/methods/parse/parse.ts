@@ -13,7 +13,7 @@ import type { BaseSchema, Output, ParseInfo } from '../../types.ts';
 export function parse<TSchema extends BaseSchema>(
   schema: TSchema,
   input: unknown,
-  info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly'>
+  info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly' | 'skipPipes'>
 ): Output<TSchema> {
   const result = schema._parse(input, info);
   if (result.issues) {
