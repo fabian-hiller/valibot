@@ -2,6 +2,7 @@ import type { BaseSchema, Issues, Output, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
+  getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput, MapPathItem } from './types.ts';
@@ -180,7 +181,9 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
       }
 
       // Return issues or pipe result
-      return issues ? { issues } : executePipe(output, pipe, info, 'map');
+      return issues
+        ? getIssues(issues)
+        : executePipe(output, pipe, info, 'map');
     },
   };
 }

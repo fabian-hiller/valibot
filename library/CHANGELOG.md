@@ -4,11 +4,11 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
-- Add `getOutput` and `getPipeIssues` util and refactor code
 - Add `ulid` validation (pull request #151)
+- Add `getIssues`, `getOutput` and `getPipeIssues` util and refactor code
 - Fix type check in `number` and `numberAsync` schema (issue #157)
 - Change `PipeResult` type to allow multiple issues (issue #161)
-- Rename `getIssues` util to `getSchemaIssues`
+- Rename previous `getIssues` util to `getSchemaIssues`
 
 ## v0.15.0 (September 10, 2023)
 

@@ -6,6 +6,7 @@ import type {
   Pipe,
   PipeInfo,
 } from '../../types.ts';
+import { getIssues } from '../getIssues/getIssues.ts';
 import { getOutput } from '../getOutput/getOutput.ts';
 import { getIssue, getPipeInfo } from './utils/index.ts';
 
@@ -61,5 +62,5 @@ export function executePipe<TValue>(
   }
 
   // Return pipe issues or output
-  return issues ? { issues } : getOutput(output);
+  return issues ? getIssues(issues) : getOutput(output);
 }

@@ -4,7 +4,11 @@ import type {
   Issues,
   PipeAsync,
 } from '../../types.ts';
-import { executePipeAsync, getSchemaIssues } from '../../utils/index.ts';
+import {
+  executePipeAsync,
+  getIssues,
+  getSchemaIssues,
+} from '../../utils/index.ts';
 import type { EnumSchema, EnumSchemaAsync } from '../enumType/index.ts';
 import type {
   NativeEnumSchema,
@@ -239,7 +243,7 @@ export function recordAsync<
 
       // Return issues or pipe result
       return issues
-        ? { issues }
+        ? getIssues(issues)
         : executePipeAsync(
             output as RecordOutput<TRecordKey, TRecordValue>,
             pipe,

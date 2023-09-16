@@ -2,6 +2,7 @@ import type { BaseSchema, Input, Issues, Output, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
+  getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
 import type { ArrayPathItem } from './types.ts';
@@ -135,7 +136,7 @@ export function array<TArrayItem extends BaseSchema>(
 
       // Return issues or pipe result
       return issues
-        ? { issues }
+        ? getIssues(issues)
         : executePipe(output as Output<TArrayItem>[], pipe, info, 'array');
     },
   };

@@ -1,4 +1,5 @@
 import type { Issue } from '../../types.ts';
+import { getIssues } from '../getIssues/getIssues.ts';
 
 /**
  * Returns the pipeline result object with issues.
@@ -14,5 +15,5 @@ export function getPipeIssues(
   message: string,
   input: unknown
 ): { issues: Pick<Issue, 'validation' | 'message' | 'input' | 'path'>[] } {
-  return { issues: [{ validation, message, input }] };
+  return getIssues([{ validation, message, input }]);
 }

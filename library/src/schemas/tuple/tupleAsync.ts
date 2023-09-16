@@ -4,7 +4,11 @@ import type {
   Issues,
   PipeAsync,
 } from '../../types.ts';
-import { executePipeAsync, getSchemaIssues } from '../../utils/index.ts';
+import {
+  executePipeAsync,
+  getIssues,
+  getSchemaIssues,
+} from '../../utils/index.ts';
 import type { TupleInput, TupleOutput, TuplePathItem } from './types.ts';
 import { getTupleArgs } from './utils/index.ts';
 
@@ -253,7 +257,7 @@ export function tupleAsync<
 
       // Return issues or pipe result
       return issues
-        ? { issues }
+        ? getIssues(issues)
         : executePipeAsync(
             output as TupleOutput<TTupleItems, TTupleRest>,
             pipe,
