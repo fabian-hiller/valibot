@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.16.0 (September 16, 2023)
 
 - Add `ulid` validation (pull request #151)
 - Add `getIssues`, `getOutput` and `getPipeIssues` util and refactor code
