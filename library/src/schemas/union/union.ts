@@ -1,5 +1,5 @@
 import type { BaseSchema, Input, Issues, Output } from '../../types.ts';
-import { getIssues, getOutput } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Union options type.
@@ -88,7 +88,7 @@ export function union<TUnionOptions extends UnionOptions>(
       // Return input as output or issues
       return output
         ? getOutput(output[0])
-        : getIssues(
+        : getSchemaIssues(
             info,
             'type',
             'union',

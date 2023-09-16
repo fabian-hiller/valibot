@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
-  getIssues,
+  getSchemaIssues,
 } from '../../utils/index.ts';
 
 /**
@@ -67,7 +67,7 @@ export function numberAsync(
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'number' || Number.isNaN(input)) {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'number',

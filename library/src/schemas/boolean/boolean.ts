@@ -1,5 +1,9 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
+import {
+  executePipe,
+  getDefaultArgs,
+  getSchemaIssues,
+} from '../../utils/index.ts';
 
 /**
  * Boolean schema type.
@@ -57,7 +61,7 @@ export function boolean(
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'boolean') {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'boolean',

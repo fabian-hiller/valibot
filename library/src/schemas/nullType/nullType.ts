@@ -1,5 +1,5 @@
 import type { BaseSchema } from '../../types.ts';
-import { getIssues, getOutput } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Null schema type.
@@ -38,7 +38,13 @@ export function nullType(error?: string): NullSchema {
     _parse(input, info) {
       // Check type of input
       if (input !== null) {
-        return getIssues(info, 'type', 'null', error || 'Invalid type', input);
+        return getSchemaIssues(
+          info,
+          'type',
+          'null',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Return input as output

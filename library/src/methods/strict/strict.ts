@@ -1,5 +1,5 @@
 import type { ObjectSchema } from '../../schemas/object/index.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getSchemaIssues } from '../../utils/index.ts';
 
 /**
  * Creates a strict object schema that throws an error if an input contains
@@ -29,7 +29,13 @@ export function strict<TSchema extends ObjectSchema<any>>(
       const result = schema._parse(input, info);
       return !result.issues &&
         Object.keys(input as object).some((key) => !(key in schema.object))
-        ? getIssues(info, 'object', 'strict', error || 'Invalid keys', input)
+        ? getSchemaIssues(
+            info,
+            'object',
+            'strict',
+            error || 'Invalid keys',
+            input
+          )
         : result;
     },
   };

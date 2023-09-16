@@ -1,5 +1,9 @@
 import type { BaseSchema, Pipe } from '../../types.ts';
-import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
+import {
+  executePipe,
+  getDefaultArgs,
+  getSchemaIssues,
+} from '../../utils/index.ts';
 
 /**
  * Special schema type.
@@ -70,7 +74,7 @@ export function special<TInput>(
     _parse(input, info) {
       // Check type of input
       if (!check(input)) {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'special',

@@ -4,7 +4,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getSchemaIssues } from '../../utils/index.ts';
 import type { NonOptional } from './nonOptional.ts';
 
 /**
@@ -57,7 +57,7 @@ export function nonOptionalAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
     async _parse(input, info) {
       // Allow `undefined` values not to pass
       if (input === undefined) {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'non_optional',

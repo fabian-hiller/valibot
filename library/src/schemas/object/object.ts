@@ -1,5 +1,9 @@
 import type { BaseSchema, Issues, Pipe } from '../../types.ts';
-import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
+import {
+  executePipe,
+  getDefaultArgs,
+  getSchemaIssues,
+} from '../../utils/index.ts';
 import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
 
 /**
@@ -85,7 +89,7 @@ export function object<TObjectShape extends ObjectShape>(
     _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'object',

@@ -4,7 +4,7 @@ import type {
   Issues,
   PipeAsync,
 } from '../../types.ts';
-import { executePipeAsync, getIssues } from '../../utils/index.ts';
+import { executePipeAsync, getSchemaIssues } from '../../utils/index.ts';
 import type { EnumSchema, EnumSchemaAsync } from '../enumType/index.ts';
 import type {
   NativeEnumSchema,
@@ -151,7 +151,7 @@ export function recordAsync<
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'record',

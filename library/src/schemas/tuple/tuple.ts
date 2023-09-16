@@ -1,5 +1,5 @@
 import type { BaseSchema, Issues, Pipe } from '../../types.ts';
-import { executePipe, getIssues } from '../../utils/index.ts';
+import { executePipe, getSchemaIssues } from '../../utils/index.ts';
 import type { TupleOutput, TupleInput, TuplePathItem } from './types.ts';
 import { getTupleArgs } from './utils/index.ts';
 
@@ -133,7 +133,13 @@ export function tuple<
         (!rest && items.length !== input.length) ||
         (rest && items.length > input.length)
       ) {
-        return getIssues(info, 'type', 'tuple', error || 'Invalid type', input);
+        return getSchemaIssues(
+          info,
+          'type',
+          'tuple',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Create issues and output

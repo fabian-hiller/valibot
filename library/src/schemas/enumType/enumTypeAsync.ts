@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssues, getOutput } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 import type { Enum } from './types.ts';
 
 /**
@@ -52,7 +52,13 @@ export function enumTypeAsync<
     async _parse(input, info) {
       // Check type of input
       if (!enumValue.includes(input as any)) {
-        return getIssues(info, 'type', 'enum', error || 'Invalid type', input);
+        return getSchemaIssues(
+          info,
+          'type',
+          'enum',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Return inpot as output

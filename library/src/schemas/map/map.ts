@@ -1,5 +1,9 @@
 import type { BaseSchema, Issues, Output, Pipe } from '../../types.ts';
-import { executePipe, getDefaultArgs, getIssues } from '../../utils/index.ts';
+import {
+  executePipe,
+  getDefaultArgs,
+  getSchemaIssues,
+} from '../../utils/index.ts';
 import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 
 /**
@@ -83,7 +87,13 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {
-        return getIssues(info, 'type', 'map', error || 'Invalid type', input);
+        return getSchemaIssues(
+          info,
+          'type',
+          'map',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Create issues and output

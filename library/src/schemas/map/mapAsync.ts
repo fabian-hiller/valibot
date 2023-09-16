@@ -8,7 +8,7 @@ import type {
 import {
   executePipeAsync,
   getDefaultArgs,
-  getIssues,
+  getSchemaIssues,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 
@@ -102,7 +102,13 @@ export function mapAsync<
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {
-        return getIssues(info, 'type', 'map', error || 'Invalid type', input);
+        return getSchemaIssues(
+          info,
+          'type',
+          'map',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Create issues and output

@@ -2,7 +2,7 @@ import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
-  getIssues,
+  getSchemaIssues,
 } from '../../utils/index.ts';
 
 /**
@@ -74,7 +74,7 @@ export function specialAsync<TInput>(
     async _parse(input, info) {
       // Check type of input
       if (!(await check(input))) {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'special',

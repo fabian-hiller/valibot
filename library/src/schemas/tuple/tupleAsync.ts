@@ -4,7 +4,7 @@ import type {
   Issues,
   PipeAsync,
 } from '../../types.ts';
-import { executePipeAsync, getIssues } from '../../utils/index.ts';
+import { executePipeAsync, getSchemaIssues } from '../../utils/index.ts';
 import type { TupleInput, TupleOutput, TuplePathItem } from './types.ts';
 import { getTupleArgs } from './utils/index.ts';
 
@@ -141,7 +141,13 @@ export function tupleAsync<
         (!rest && items.length !== input.length) ||
         (rest && items.length > input.length)
       ) {
-        return getIssues(info, 'type', 'tuple', error || 'Invalid type', input);
+        return getSchemaIssues(
+          info,
+          'type',
+          'tuple',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Create issues and output

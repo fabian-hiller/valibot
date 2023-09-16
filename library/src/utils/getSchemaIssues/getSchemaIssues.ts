@@ -1,14 +1,18 @@
 import type { IssueReason, Issues, ParseInfo } from '../../types.ts';
 
 /**
- * Returns the final issue data.
+ * Returns the schema result object with issues.
  *
  * @param info The parse info.
- * @param issue The issue data.
+ * @param reason The issue reason.
+ * @param validation The validation name.
+ * @param message The error message.
+ * @param input The input value.
+ * @param issues The sub issues.
  *
- * @returns The issue data.
+ * @returns The schema result object.
  */
-export function getIssues(
+export function getSchemaIssues(
   info: ParseInfo | undefined,
   reason: IssueReason,
   validation: string,

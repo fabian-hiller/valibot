@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssues, getOutput } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 import type { NativeEnum } from './nativeEnum.ts';
 
 /**
@@ -52,7 +52,7 @@ export function nativeEnumAsync<TNativeEnum extends NativeEnum>(
     async _parse(input, info) {
       // Check type of input
       if (!Object.values(nativeEnum).includes(input as any)) {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'native_enum',

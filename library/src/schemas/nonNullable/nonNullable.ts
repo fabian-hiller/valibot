@@ -1,5 +1,5 @@
 import type { BaseSchema, Input, Output } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import { getSchemaIssues } from '../../utils/index.ts';
 
 /**
  * Non nullable type.
@@ -56,7 +56,7 @@ export function nonNullable<TWrapped extends BaseSchema>(
     _parse(input, info) {
       // Allow `null` values not to pass
       if (input === null) {
-        return getIssues(
+        return getSchemaIssues(
           info,
           'type',
           'non_nullable',

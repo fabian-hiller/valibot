@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync } from '../../types.ts';
-import { getIssues, getOutput } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Void schema async type.
@@ -38,7 +38,13 @@ export function voidTypeAsync(error?: string): VoidSchemaAsync {
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'undefined') {
-        return getIssues(info, 'type', 'void', error || 'Invalid type', input);
+        return getSchemaIssues(
+          info,
+          'type',
+          'void',
+          error || 'Invalid type',
+          input
+        );
       }
 
       // Return input as output
