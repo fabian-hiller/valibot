@@ -11,16 +11,16 @@ describe('isoWeek', () => {
     const value3 = '9999-W53';
     expect(validate(value3).output).toBe(value3);
 
-    expect(validate('').issue).toBeTruthy();
-    expect(validate('123-W12').issue).toBeTruthy();
-    expect(validate('0000-W00').issue).toBeTruthy();
-    expect(validate('9999-W54').issue).toBeTruthy();
-    // FIXME: expect(validate('2021W53').issue).toBeTruthy();
+    expect(validate('').issues).toBeTruthy();
+    expect(validate('123-W12').issues).toBeTruthy();
+    expect(validate('0000-W00').issues).toBeTruthy();
+    expect(validate('9999-W54').issues).toBeTruthy();
+    // FIXME: expect(validate('2021W53').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an ISO week!';
     const validate = isoWeek(error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

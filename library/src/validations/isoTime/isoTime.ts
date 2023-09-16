@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a time.
@@ -11,16 +11,8 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function isoTime<TInput extends string>(error?: string) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (!/^(0[0-9]|1\d|2[0-3]):[0-5]\d$/.test(input)) {
-      return {
-        issue: {
-          validation: 'iso_time',
-          message: error || 'Invalid time',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    !/^(0[0-9]|1\d|2[0-3]):[0-5]\d$/.test(input)
+      ? getPipeIssues('iso_time', error || 'Invalid time', input)
+      : getOutput(input);
 }

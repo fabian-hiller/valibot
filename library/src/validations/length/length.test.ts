@@ -9,16 +9,16 @@ describe('length', () => {
     const value2 = [1, 2, 3];
     expect(validate(value2).output).toBe(value2);
 
-    expect(validate('').issue).toBeTruthy();
-    expect(validate('12').issue).toBeTruthy();
-    expect(validate('1234').issue).toBeTruthy();
-    expect(validate([1, 2]).issue).toBeTruthy();
-    expect(validate([1, 2, 3, 4]).issue).toBeTruthy();
+    expect(validate('').issues).toBeTruthy();
+    expect(validate('12').issues).toBeTruthy();
+    expect(validate('1234').issues).toBeTruthy();
+    expect(validate([1, 2]).issues).toBeTruthy();
+    expect(validate([1, 2, 3, 4]).issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value length is not "10"!';
     const validate = length(10, error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

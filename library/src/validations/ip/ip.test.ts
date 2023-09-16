@@ -21,22 +21,22 @@ describe('ip', () => {
     const value8 = '2001:db8:85a3:8d3:1319:8a2e:370:7348';
     expect(validate(value8).output).toBe(value8);
 
-    expect(validate('').issue).toBeTruthy();
-    expect(validate('1').issue).toBeTruthy();
-    expect(validate('-1.0.0.0').issue).toBeTruthy();
-    expect(validate('0..0.0.0').issue).toBeTruthy();
-    expect(validate('1234.0.0.0').issue).toBeTruthy();
-    expect(validate('256.256.256.256').issue).toBeTruthy();
-    expect(validate('1.2.3').issue).toBeTruthy();
-    expect(validate('0.0.0.0.0').issue).toBeTruthy();
+    expect(validate('').issues).toBeTruthy();
+    expect(validate('1').issues).toBeTruthy();
+    expect(validate('-1.0.0.0').issues).toBeTruthy();
+    expect(validate('0..0.0.0').issues).toBeTruthy();
+    expect(validate('1234.0.0.0').issues).toBeTruthy();
+    expect(validate('256.256.256.256').issues).toBeTruthy();
+    expect(validate('1.2.3').issues).toBeTruthy();
+    expect(validate('0.0.0.0.0').issues).toBeTruthy();
     expect(
-      validate('test:test:test:test:test:test:test:test').issue
+      validate('test:test:test:test:test:test:test:test').issues
     ).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an IP v4 or v6!';
     const validate = ip(error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

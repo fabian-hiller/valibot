@@ -14,15 +14,15 @@ describe('minSize', () => {
     const value4 = value3.add(3);
     expect(validate(value4).output).toBe(value4);
 
-    expect(validate(new Map()).issue).toBeTruthy();
-    expect(validate(new Set()).issue).toBeTruthy();
-    expect(validate(new Set().add(1)).issue).toBeTruthy();
+    expect(validate(new Map()).issues).toBeTruthy();
+    expect(validate(new Set()).issues).toBeTruthy();
+    expect(validate(new Set().add(1)).issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value size is less than "2"!';
     const value = new Set().add(1);
     const validate = minSize(2, error);
-    expect(validate(value).issue?.message).toBe(error);
+    expect(validate(value).issues?.[0].message).toBe(error);
   });
 });

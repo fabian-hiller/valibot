@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the value of a string, number or date.
@@ -13,18 +13,10 @@ export function minValue<
   TInput extends string | number | bigint | Date,
   TRequirement extends TInput
 >(requirement: TRequirement, error?: string) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (input < requirement) {
-      return {
-        issue: {
-          validation: 'min_value',
-          message: error || 'Invalid value',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    input < requirement
+      ? getPipeIssues('min_value', error || 'Invalid value', input)
+      : getOutput(input);
 }
 
 /**

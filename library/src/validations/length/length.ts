@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the length of a string or array.
@@ -13,16 +13,8 @@ export function length<TInput extends string | any[]>(
   requirement: number,
   error?: string
 ) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (input.length !== requirement) {
-      return {
-        issue: {
-          validation: 'length',
-          message: error || 'Invalid length',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    input.length !== requirement
+      ? getPipeIssues('length', error || 'Invalid length', input)
+      : getOutput(input);
 }

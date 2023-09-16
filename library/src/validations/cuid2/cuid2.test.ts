@@ -16,15 +16,15 @@ describe('cuid2', () => {
     const value5 = 'pbe6zw7wikj83vv5knjk1wx8';
     expect(validate(value5).output).toBe(value5);
 
-    expect(validate('').issue).toBeTruthy();
-    expect(validate('w#@%^').issue).toBeTruthy();
-    expect(validate('o2dyrcKf0vbqhftBcx8ex7r8').issue).toBeTruthy();
-    expect(validate('1vx6pa5rqog2tqdztxaa0xgw').issue).toBeTruthy();
+    expect(validate('').issues).toBeTruthy();
+    expect(validate('w#@%^').issues).toBeTruthy();
+    expect(validate('o2dyrcKf0vbqhftBcx8ex7r8').issues).toBeTruthy();
+    expect(validate('1vx6pa5rqog2tqdztxaa0xgw').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an cuid2!';
     const validate = cuid2(error);
-    expect(validate('').issue?.message).toBe(error);
+    expect(validate('').issues?.[0].message).toBe(error);
   });
 });

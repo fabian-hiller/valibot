@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the MIME type of a file.
@@ -13,16 +13,8 @@ export function mimeType<TInput extends Blob>(
   requirement: `${string}/${string}`[],
   error?: string
 ) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (!requirement.includes(input.type as `${string}/${string}`)) {
-      return {
-        issue: {
-          validation: 'mime_type',
-          message: error || 'Invalid MIME type',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    !requirement.includes(input.type as `${string}/${string}`)
+      ? getPipeIssues('mime_type', error || 'Invalid MIME type', input)
+      : getOutput(input);
 }

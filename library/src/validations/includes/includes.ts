@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 export function includes<TInput extends string>(
   requirement: string,
@@ -23,16 +23,8 @@ export function includes<TInput extends string | TItem[], TItem>(
   requirement: string | TItem,
   error?: string
 ) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (!input.includes(requirement as any)) {
-      return {
-        issue: {
-          validation: 'includes',
-          message: error || 'Invalid content',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    !input.includes(requirement as any)
+      ? getPipeIssues('includes', error || 'Invalid content', input)
+      : getOutput(input);
 }

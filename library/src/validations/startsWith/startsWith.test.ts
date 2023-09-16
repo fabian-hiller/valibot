@@ -9,14 +9,14 @@ describe('startsWith', () => {
     const value2 = 'abc123';
     expect(validate(value2).output).toBe(value2);
 
-    expect(validate(' ').issue).toBeTruthy();
-    expect(validate(' abc').issue).toBeTruthy();
-    expect(validate('1abc').issue).toBeTruthy();
+    expect(validate(' ').issues).toBeTruthy();
+    expect(validate(' abc').issues).toBeTruthy();
+    expect(validate('1abc').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value does not start with "abc"!';
     const validate = startsWith('abc', error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates whether a number is a safe integer.
@@ -9,16 +9,8 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function safeInteger<TInput extends number>(error?: string) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (!Number.isSafeInteger(input)) {
-      return {
-        issue: {
-          validation: 'safe_integer',
-          message: error || 'Invalid safe integer',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    !Number.isSafeInteger(input)
+      ? getPipeIssues('safe_integer', error || 'Invalid safe integer', input)
+      : getOutput(input);
 }

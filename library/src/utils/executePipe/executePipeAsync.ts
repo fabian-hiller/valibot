@@ -38,14 +38,16 @@ export async function executePipeAsync<TValue>(
   for (const action of pipe) {
     const result = await action(output);
 
-    // If there is a issue, capture it
-    if (result.issue) {
+    // If there are issues, capture them
+    if (result.issues) {
       // Cache pipe info lazy
       pipeInfo = pipeInfo || getPipeInfo(parseInfo, reason);
 
-      // Create issue and add it to issues
-      const issue = getIssue(pipeInfo, result.issue);
-      issues ? issues.push(issue) : (issues = [issue]);
+      // Create each issue and add it to issues
+      for (const issueInfo of result.issues) {
+        const issue = getIssue(pipeInfo, issueInfo);
+        issues ? issues.push(issue) : (issues = [issue]);
+      }
 
       // If necessary, abort early
       if (pipeInfo.abortEarly || pipeInfo.abortPipeEarly) {

@@ -14,15 +14,15 @@ describe('maxSize', () => {
     const value4 = new Set().add(1).add(2).add(3);
     expect(validate(value4).output).toBe(value4);
 
-    expect(validate(value2.set(4, 4)).issue).toBeTruthy();
-    expect(validate(value4.add(4)).issue).toBeTruthy();
-    expect(validate(value4.add(5)).issue).toBeTruthy();
+    expect(validate(value2.set(4, 4)).issues).toBeTruthy();
+    expect(validate(value4.add(4)).issues).toBeTruthy();
+    expect(validate(value4.add(5)).issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value size is greater than "2"!';
     const value = new Set().add(1).add(2).add(3);
     const validate = maxSize(2, error);
-    expect(validate(value).issue?.message).toBe(error);
+    expect(validate(value).issues?.[0].message).toBe(error);
   });
 });

@@ -11,18 +11,18 @@ describe('isoDate', () => {
     const value3 = '9999-12-31';
     expect(validate(value3).output).toBe(value3);
 
-    expect(validate('').issue).toBeTruthy();
-    expect(validate('2023-7-11').issue).toBeTruthy();
-    expect(validate('23-07-11').issue).toBeTruthy();
-    expect(validate('0000-00-00').issue).toBeTruthy();
-    expect(validate('2023-13-32').issue).toBeTruthy();
-    // FIXME: expect(validate('2023-06-31').issue).toBeTruthy();
-    expect(validate('12345-01-01').issue).toBeTruthy();
+    expect(validate('').issues).toBeTruthy();
+    expect(validate('2023-7-11').issues).toBeTruthy();
+    expect(validate('23-07-11').issues).toBeTruthy();
+    expect(validate('0000-00-00').issues).toBeTruthy();
+    expect(validate('2023-13-32').issues).toBeTruthy();
+    // FIXME: expect(validate('2023-06-31').issues).toBeTruthy();
+    expect(validate('12345-01-01').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an ISO date!';
     const validate = isoDate(error);
-    expect(validate('test').issue?.message).toBe(error);
+    expect(validate('test').issues?.[0].message).toBe(error);
   });
 });

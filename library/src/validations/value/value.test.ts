@@ -11,17 +11,17 @@ describe('value', () => {
     const value2 = 'test';
     expect(validate2(value2).output).toBe(value2);
 
-    expect(validate1(2).issue).toBeTruthy();
+    expect(validate1(2).issues).toBeTruthy();
 
-    expect(validate1(2).issue).toBeTruthy();
-    expect(validate1(4).issue).toBeTruthy();
-    expect(validate2('tes').issue).toBeTruthy();
-    expect(validate2('testx').issue).toBeTruthy();
+    expect(validate1(2).issues).toBeTruthy();
+    expect(validate1(4).issues).toBeTruthy();
+    expect(validate2('tes').issues).toBeTruthy();
+    expect(validate2('testx').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not "10"!';
     const validate = value(10, error);
-    expect(validate(123).issue?.message).toBe(error);
+    expect(validate(123).issues?.[0].message).toBe(error);
   });
 });

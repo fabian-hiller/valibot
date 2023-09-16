@@ -10,15 +10,15 @@ describe('size', () => {
     const value2 = new Set().add(1).add(2);
     expect(validate(value2).output).toBe(value2);
 
-    expect(validate(new Map()).issue).toBeTruthy();
-    expect(validate(new Set().add(1)).issue).toBeTruthy();
-    expect(validate(new Set().add(1).add(2).add(3)).issue).toBeTruthy();
+    expect(validate(new Map()).issues).toBeTruthy();
+    expect(validate(new Set().add(1)).issues).toBeTruthy();
+    expect(validate(new Set().add(1).add(2).add(3)).issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value size is not "2"!';
     const value = new Set().add(1);
     const validate = size(2, error);
-    expect(validate(value).issue?.message).toBe(error);
+    expect(validate(value).issues?.[0].message).toBe(error);
   });
 });

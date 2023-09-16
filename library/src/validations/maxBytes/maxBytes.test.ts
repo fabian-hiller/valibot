@@ -12,13 +12,13 @@ describe('maxBytes', () => {
     const value3 = 'あ'; // in UTF-8, 'あ' is 3 bytes
     expect(validate(value3).output).toBe(value3);
 
-    expect(validate('1234').issue).toBeTruthy();
-    expect(validate('あいう').issue).toBeTruthy();
+    expect(validate('1234').issues).toBeTruthy();
+    expect(validate('あいう').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value byte length is greater than "3"!';
     const validate = maxBytes(3, error);
-    expect(validate('あいう').issue?.message).toBe(error);
+    expect(validate('あいう').issues?.[0].message).toBe(error);
   });
 });

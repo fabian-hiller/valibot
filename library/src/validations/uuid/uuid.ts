@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates a UUID.
@@ -9,20 +9,10 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function uuid<TInput extends string>(error?: string) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (
-      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-        input
-      )
-    ) {
-      return {
-        issue: {
-          validation: 'uuid',
-          message: error || 'Invalid UUID',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      input
+    )
+      ? getPipeIssues('uuid', error || 'Invalid UUID', input)
+      : getOutput(input);
 }

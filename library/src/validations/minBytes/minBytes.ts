@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the byte length of a string.
@@ -13,16 +13,8 @@ export function minBytes<TInput extends string>(
   requirement: number,
   error?: string
 ) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (new TextEncoder().encode(input).length < requirement) {
-      return {
-        issue: {
-          validation: 'min_bytes',
-          message: error || 'Invalid byte length',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    new TextEncoder().encode(input).length < requirement
+      ? getPipeIssues('min_bytes', error || 'Invalid byte length', input)
+      : getOutput(input);
 }

@@ -15,17 +15,17 @@ describe('safeInteger', () => {
     const value5 = Number.MIN_SAFE_INTEGER;
     expect(validate(value5).output).toBe(value5);
 
-    expect(validate(Number.MAX_SAFE_INTEGER + 1).issue).toBeTruthy();
-    expect(validate(Number.MIN_SAFE_INTEGER - 1).issue).toBeTruthy();
-    expect(validate(3.14).issue).toBeTruthy();
-    expect(validate(NaN).issue).toBeTruthy();
-    expect(validate(Infinity).issue).toBeTruthy();
-    expect(validate(-Infinity).issue).toBeTruthy();
+    expect(validate(Number.MAX_SAFE_INTEGER + 1).issues).toBeTruthy();
+    expect(validate(Number.MIN_SAFE_INTEGER - 1).issues).toBeTruthy();
+    expect(validate(3.14).issues).toBeTruthy();
+    expect(validate(NaN).issues).toBeTruthy();
+    expect(validate(Infinity).issues).toBeTruthy();
+    expect(validate(-Infinity).issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not a safe integer!';
     const validate = safeInteger(error);
-    expect(validate(Infinity).issue?.message).toBe(error);
+    expect(validate(Infinity).issues?.[0].message).toBe(error);
   });
 });

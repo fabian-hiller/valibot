@@ -1,5 +1,5 @@
 import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation functions that validates the value of a string or number.
@@ -13,16 +13,8 @@ export function value<
   TInput extends string | number | bigint,
   TRequirement extends TInput
 >(requirement: TRequirement, error?: string) {
-  return (input: TInput): PipeResult<TInput> => {
-    if (input !== requirement) {
-      return {
-        issue: {
-          validation: 'value',
-          message: error || 'Invalid value',
-          input,
-        },
-      };
-    }
-    return getOutput(input);
-  };
+  return (input: TInput): PipeResult<TInput> =>
+    input !== requirement
+      ? getPipeIssues('value', error || 'Invalid value', input)
+      : getOutput(input);
 }

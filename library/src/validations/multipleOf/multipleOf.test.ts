@@ -13,15 +13,15 @@ describe('multipleOf', () => {
     const value4 = -20;
     expect(validate(value4).output).toBe(value4);
 
-    expect(validate(3).issue).toBeTruthy();
-    expect(validate(7).issue).toBeTruthy();
-    expect(validate(11).issue).toBeTruthy();
-    expect(validate(-14).issue).toBeTruthy();
+    expect(validate(3).issues).toBeTruthy();
+    expect(validate(7).issues).toBeTruthy();
+    expect(validate(11).issues).toBeTruthy();
+    expect(validate(-14).issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not a multiple of 3!';
     const validate = multipleOf(3, error);
-    expect(validate(1).issue?.message).toBe(error);
+    expect(validate(1).issues?.[0].message).toBe(error);
   });
 });

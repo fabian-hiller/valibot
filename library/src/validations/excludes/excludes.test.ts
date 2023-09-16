@@ -15,15 +15,15 @@ describe('excludes', () => {
     const value5 = 'aBc';
     expect(validate(value5).output).toBe(value5);
 
-    expect(validate('abc').issue).toBeTruthy();
-    expect(validate('abcdefg').issue).toBeTruthy();
-    expect(validate('123abc').issue).toBeTruthy();
-    expect(validate('abcabc').issue).toBeTruthy();
+    expect(validate('abc').issues).toBeTruthy();
+    expect(validate('abcdefg').issues).toBeTruthy();
+    expect(validate('123abc').issues).toBeTruthy();
+    expect(validate('abcabc').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value does not exclude "abc"!';
     const validate = excludes('abc', error);
-    expect(validate('abc').issue?.message).toBe(error);
+    expect(validate('abc').issues?.[0].message).toBe(error);
   });
 });
