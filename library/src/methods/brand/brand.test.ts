@@ -3,7 +3,6 @@ import { object, string } from '../../schemas/index.ts';
 import type { Output } from '../../types.ts';
 import { parse } from '../parse/index.ts';
 import { brand, type Brand } from './brand.ts';
-import type { Unbranded } from './types.ts';
 
 describe('brand', () => {
   test('should not affect parse', () => {
@@ -60,23 +59,5 @@ describe('brand', () => {
 
     expectTypeOf<BrandedUserId>().not.toMatchTypeOf<BrandedPostId>();
     expectTypeOf<BrandedPostId>().not.toMatchTypeOf<BrandedUserId>();
-  });
-
-  test('should support unbranding', () => {
-    expectTypeOf<Unbranded<number & Brand<'1'>>>().toEqualTypeOf<number>();
-    expectTypeOf<Unbranded<string & Brand<'1'>>>().toEqualTypeOf<string>();
-    expectTypeOf<
-      Unbranded<{ foo: 'bar' } & Brand<'1'> & Brand<'2'>>
-    >().toEqualTypeOf<{ foo: 'bar' }>();
-    expectTypeOf<
-      Unbranded<[1, 2, 3] & Brand<'1'> & Brand<'2'> & Brand<'3'>>
-    >().toEqualTypeOf<[1, 2, 3]>();
-
-    // do not change type if there isn't any brands
-    expectTypeOf<Unbranded<unknown>>().toEqualTypeOf<unknown>();
-    expectTypeOf<Unbranded<string>>().toEqualTypeOf<string>();
-    expectTypeOf<Unbranded<number>>().toEqualTypeOf<number>();
-    expectTypeOf<Unbranded<{ foo: 'bar' }>>().toEqualTypeOf<{ foo: 'bar' }>();
-    expectTypeOf<Unbranded<[1, 2, 3]>>().toEqualTypeOf<[1, 2, 3]>();
   });
 });

@@ -84,9 +84,7 @@ type BrandName = string | number | symbol;
  * Brand type.
  */
 export type Brand<TBrandName extends BrandName> = {
-  [BrandSymbol]: {
-    [N in TBrandName]: N;
-  };
+  [BrandSymbol]: { [TValue in TBrandName]: TValue };
 };
 
 export function brand<TSchema extends AnySchema, TBrandName extends BrandName>(
