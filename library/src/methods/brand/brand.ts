@@ -73,7 +73,7 @@ import type {
   Output,
 } from '../../types.ts';
 
-const symbol = Symbol('brand');
+export const BrandSymbol = Symbol('brand');
 
 /**
  * Brand name type.
@@ -84,7 +84,7 @@ type BrandName = string | number | symbol;
  * Brand type.
  */
 export type Brand<TBrandName extends BrandName> = {
-  [symbol]: TBrandName;
+  [BrandSymbol]: { [TValue in TBrandName]: TValue };
 };
 
 export function brand<TSchema extends AnySchema, TBrandName extends BrandName>(
