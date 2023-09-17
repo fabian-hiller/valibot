@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { number, object, string } from '../../schemas/index.ts';
+import { minLength } from '../../validations/index.ts';
 import { is } from './is.ts';
 
 describe('is', () => {
@@ -16,5 +17,9 @@ describe('is', () => {
     expect(is(string(), 123)).toBe(false);
     expect(is(number(), 'hello')).toBe(false);
     expect(is(object({ test: string() }), {})).toBe(false);
+  });
+
+  test('should skip pipelines', () => {
+    expect(is(string([minLength(1)]), '')).toBe(true);
   });
 });
