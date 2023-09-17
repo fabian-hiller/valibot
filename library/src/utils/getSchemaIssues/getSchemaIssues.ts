@@ -33,6 +33,7 @@ export function getSchemaIssues(
         issues,
         abortEarly: info?.abortEarly,
         abortPipeEarly: info?.abortPipeEarly,
+        skipPipe: info?.skipPipe,
       },
     ],
   };

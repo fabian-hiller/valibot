@@ -19,5 +19,6 @@ export function getPipeInfo(
     origin: info?.origin,
     abortEarly: info?.abortEarly,
     abortPipeEarly: info?.abortPipeEarly,
+    skipPipe: info?.skipPipe,
   };
 }

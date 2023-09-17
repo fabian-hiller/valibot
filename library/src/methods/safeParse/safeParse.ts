@@ -14,7 +14,7 @@ import type { SafeParseResult } from './types.ts';
 export function safeParse<TSchema extends BaseSchema>(
   schema: TSchema,
   input: unknown,
-  info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly'>
+  info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly' | 'skipPipe'>
 ): SafeParseResult<TSchema> {
   const result = schema._parse(input, info);
   return result.issues
