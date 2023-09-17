@@ -1,4 +1,4 @@
-import type { BaseSchema } from '../../types.ts';
+import type { BaseSchema, ErrorMessage } from '../../types.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 import type { Literal } from './types.ts';
 
@@ -23,7 +23,7 @@ export type LiteralSchema<
  */
 export function literal<TLiteral extends Literal>(
   literal: TLiteral,
-  error?: string
+  error?: ErrorMessage
 ): LiteralSchema<TLiteral> {
   return {
     /**

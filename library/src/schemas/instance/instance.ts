@@ -1,4 +1,4 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -45,13 +45,13 @@ export function instance<TClass extends Class>(
  */
 export function instance<TClass extends Class>(
   of: TClass,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass>;
 
 export function instance<TClass extends Class>(
   of: TClass,
-  arg2?: Pipe<InstanceType<TClass>> | string,
+  arg2?: Pipe<InstanceType<TClass>> | ErrorMessage,
   arg3?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass> {
   // Get error and pipe argument

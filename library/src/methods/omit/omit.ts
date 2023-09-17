@@ -3,7 +3,7 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { Pipe } from '../../types.ts';
+import type { ErrorMessage, Pipe } from '../../types.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 import type { ObjectKeys } from './types.ts';
 
@@ -43,7 +43,7 @@ export function omit<
 >(
   schema: TObjectSchema,
   keys: TKeys,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<Omit<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchema<Omit<TObjectSchema['object'], TKeys[number]>>;
 
@@ -55,7 +55,7 @@ export function omit<
   keys: TKeys,
   arg3?:
     | Pipe<ObjectOutput<Omit<TObjectSchema['object'], TKeys[number]>>>
-    | string,
+    | ErrorMessage,
   arg4?: Pipe<ObjectOutput<Omit<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchema<Omit<TObjectSchema['object'], TKeys[number]>> {
   // Get error and pipe argument

@@ -1,14 +1,14 @@
-import type { PipeResult } from '../../types.ts';
+import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 export function includes<TInput extends string>(
   requirement: string,
-  error?: string
+  error?: ErrorMessage
 ): (input: TInput) => PipeResult<TInput>;
 
 export function includes<TInput extends TItem[], TItem>(
   requirement: TItem,
-  error?: string
+  error?: ErrorMessage
 ): (input: TInput) => PipeResult<TInput>;
 
 /**
@@ -21,7 +21,7 @@ export function includes<TInput extends TItem[], TItem>(
  */
 export function includes<TInput extends string | TItem[], TItem>(
   requirement: string | TItem,
-  error?: string
+  error?: ErrorMessage
 ) {
   return (input: TInput): PipeResult<TInput> =>
     !input.includes(requirement as any)

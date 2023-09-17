@@ -3,7 +3,7 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { Pipe } from '../../types.ts';
+import type { ErrorMessage, Pipe } from '../../types.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 
 /**
@@ -42,7 +42,7 @@ export function pick<
 >(
   schema: TObjectSchema,
   keys: TKeys,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchema<Pick<TObjectSchema['object'], TKeys[number]>>;
 
@@ -54,7 +54,7 @@ export function pick<
   keys: TKeys,
   arg3?:
     | Pipe<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
-    | string,
+    | ErrorMessage,
   arg4?: Pipe<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchema<Pick<TObjectSchema['object'], TKeys[number]>> {
   // Get error and pipe argument

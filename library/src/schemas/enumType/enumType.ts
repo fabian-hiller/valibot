@@ -1,4 +1,4 @@
-import type { BaseSchema } from '../../types.ts';
+import type { BaseSchema, ErrorMessage } from '../../types.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 import type { Enum } from './types.ts';
 
@@ -23,7 +23,7 @@ export type EnumSchema<
  */
 export function enumType<TOption extends string, TEnum extends Enum<TOption>>(
   enumValue: TEnum,
-  error?: string
+  error?: ErrorMessage
 ): EnumSchema<TEnum> {
   return {
     /**

@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  ErrorMessage,
   Input,
   Output,
 } from '../../types.ts';
@@ -28,7 +29,7 @@ export type NonOptionalSchemaAsync<
  */
 export function nonOptionalAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
   wrapped: TWrapped,
-  error?: string
+  error?: ErrorMessage
 ): NonOptionalSchemaAsync<TWrapped> {
   return {
     /**

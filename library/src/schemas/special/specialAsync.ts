@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -39,13 +39,13 @@ export function specialAsync<TInput>(
  */
 export function specialAsync<TInput>(
   check: (input: unknown) => boolean | Promise<boolean>,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<TInput>
 ): SpecialSchemaAsync<TInput>;
 
 export function specialAsync<TInput>(
   check: (input: unknown) => boolean | Promise<boolean>,
-  arg2?: PipeAsync<TInput> | string,
+  arg2?: PipeAsync<TInput> | ErrorMessage,
   arg3?: PipeAsync<TInput>
 ): SpecialSchemaAsync<TInput> {
   // Get error and pipe argument

@@ -1,4 +1,4 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -29,10 +29,10 @@ export function string(pipe?: Pipe<string>): StringSchema;
  *
  * @returns A string schema.
  */
-export function string(error?: string, pipe?: Pipe<string>): StringSchema;
+export function string(error?: ErrorMessage, pipe?: Pipe<string>): StringSchema;
 
 export function string(
-  arg1?: string | Pipe<string>,
+  arg1?: ErrorMessage | Pipe<string>,
   arg2?: Pipe<string>
 ): StringSchema {
   // Get error and pipe argument

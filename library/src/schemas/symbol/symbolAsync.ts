@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync } from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage } from '../../types.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
@@ -18,7 +18,7 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
  *
  * @returns An async symbol schema.
  */
-export function symbolAsync(error?: string): SymbolSchemaAsync {
+export function symbolAsync(error?: ErrorMessage): SymbolSchemaAsync {
   return {
     /**
      * The schema type.

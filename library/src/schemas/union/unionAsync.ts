@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  ErrorMessage,
   Input,
   Issues,
   Output,
@@ -37,7 +38,7 @@ export type UnionSchemaAsync<
  */
 export function unionAsync<TUnionOptions extends UnionOptionsAsync>(
   union: TUnionOptions,
-  error?: string
+  error?: ErrorMessage
 ): UnionSchemaAsync<TUnionOptions> {
   return {
     /**

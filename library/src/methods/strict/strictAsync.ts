@@ -1,4 +1,5 @@
 import type { ObjectSchemaAsync } from '../../schemas/object/index.ts';
+import type { ErrorMessage } from '../../types.ts';
 import { getSchemaIssues } from '../../utils/index.ts';
 
 /**
@@ -12,7 +13,7 @@ import { getSchemaIssues } from '../../utils/index.ts';
  */
 export function strictAsync<TSchema extends ObjectSchemaAsync<any>>(
   schema: TSchema,
-  error?: string
+  error?: ErrorMessage
 ): TSchema {
   return {
     ...schema,

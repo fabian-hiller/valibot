@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync } from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage } from '../../types.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 import type { Enum } from './types.ts';
 
@@ -24,7 +24,7 @@ export type EnumSchemaAsync<
 export function enumTypeAsync<
   TOption extends string,
   TEnum extends Enum<TOption>
->(enumValue: TEnum, error?: string): EnumSchemaAsync<TEnum> {
+>(enumValue: TEnum, error?: ErrorMessage): EnumSchemaAsync<TEnum> {
   return {
     /**
      * The schema type.

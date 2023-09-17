@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
@@ -10,7 +10,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  *
  * @returns A validation function.
  */
-export function email<TInput extends string>(error?: string) {
+export function email<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
     !/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i.test(
       input

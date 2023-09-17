@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
@@ -8,7 +8,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  *
  * @returns A validation function.
  */
-export function emoji<TInput extends string>(error?: string) {
+export function emoji<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
     !/^(\p{Extended_Pictographic}|\p{Emoji_Component})+$/u.test(input)
       ? getPipeIssues('emoji', error || 'Invalid emoji', input)

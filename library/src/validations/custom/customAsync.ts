@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
@@ -11,7 +11,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function customAsync<TInput>(
   requirement: (input: TInput) => Promise<boolean>,
-  error?: string
+  error?: ErrorMessage
 ) {
   return async (input: TInput): Promise<PipeResult<TInput>> =>
     !(await requirement(input))

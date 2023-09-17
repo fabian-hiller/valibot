@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
@@ -11,7 +11,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function regex<TInput extends string>(
   requirement: RegExp,
-  error?: string
+  error?: ErrorMessage
 ) {
   return (input: TInput): PipeResult<TInput> =>
     !requirement.test(input)

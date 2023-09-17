@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync } from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage } from '../../types.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 import type { Literal } from './types.ts';
 
@@ -23,7 +23,7 @@ export type LiteralSchemaAsync<
  */
 export function literalAsync<TLiteral extends Literal>(
   literal: TLiteral,
-  error?: string
+  error?: ErrorMessage
 ): LiteralSchemaAsync<TLiteral> {
   return {
     /**

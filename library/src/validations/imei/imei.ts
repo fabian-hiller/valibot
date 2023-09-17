@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues, isLuhnAlgo } from '../../utils/index.ts';
 
 /**
@@ -10,7 +10,7 @@ import { getOutput, getPipeIssues, isLuhnAlgo } from '../../utils/index.ts';
  *
  * @returns A validation function.
  */
-export function imei<TInput extends string>(error?: string) {
+export function imei<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
     !/^\d{2}[ |/|-]?\d{6}[ |/|-]?\d{6}[ |/|-]?\d$/.test(input) ||
     !isLuhnAlgo(input)

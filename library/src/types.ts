@@ -113,6 +113,11 @@ export type Output<TSchema extends BaseSchema | BaseSchemaAsync> = NonNullable<
 >['output'];
 
 /**
+ * Error message type.
+ */
+export type ErrorMessage = string | (() => string);
+
+/**
  * Pipe info type.
  */
 export type PipeInfo = ParseInfo & Pick<Issue, 'reason'>;

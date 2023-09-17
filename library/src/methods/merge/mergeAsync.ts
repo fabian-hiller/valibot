@@ -4,7 +4,7 @@ import {
   type ObjectSchema,
   type ObjectSchemaAsync,
 } from '../../schemas/index.ts';
-import type { PipeAsync } from '../../types.ts';
+import type { ErrorMessage, PipeAsync } from '../../types.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 import type { MergeSchemaObjects } from './types.ts';
 
@@ -43,13 +43,15 @@ export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
  */
 export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
 ): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>>;
 
 export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
-  arg2?: PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>> | string,
+  arg2?:
+    | PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
+    | ErrorMessage,
   arg3?: PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
 ): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>> {
   // Get error and pipe argument

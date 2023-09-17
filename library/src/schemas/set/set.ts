@@ -1,4 +1,4 @@
-import type { BaseSchema, Issues, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -42,13 +42,13 @@ export function set<TSetValue extends BaseSchema>(
  */
 export function set<TSetValue extends BaseSchema>(
   value: TSetValue,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<SetOutput<TSetValue>>
 ): SetSchema<TSetValue>;
 
 export function set<TSetValue extends BaseSchema>(
   value: TSetValue,
-  arg2?: Pipe<SetOutput<TSetValue>> | string,
+  arg2?: Pipe<SetOutput<TSetValue>> | ErrorMessage,
   arg3?: Pipe<SetOutput<TSetValue>>
 ): SetSchema<TSetValue> {
   // Get error and pipe argument

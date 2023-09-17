@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
@@ -10,7 +10,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  *
  * @returns A validation function.
  */
-export function isoTimeSecond<TInput extends string>(error?: string) {
+export function isoTimeSecond<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
     !/^(0[0-9]|1\d|2[0-3]):[0-5]\d:[0-5]\d$/.test(input)
       ? getPipeIssues('iso_time_second', error || 'Invalid time', input)

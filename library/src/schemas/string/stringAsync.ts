@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -33,12 +33,12 @@ export function stringAsync(pipe?: PipeAsync<string>): StringSchemaAsync;
  * @returns An async string schema.
  */
 export function stringAsync(
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<string>
 ): StringSchemaAsync;
 
 export function stringAsync(
-  arg1?: string | PipeAsync<string>,
+  arg1?: ErrorMessage | PipeAsync<string>,
   arg2?: PipeAsync<string>
 ): StringSchemaAsync {
   // Get error and pipe argument

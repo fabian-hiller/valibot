@@ -1,4 +1,4 @@
-import type { BaseSchema, Input, Output } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Input, Output } from '../../types.ts';
 import { getSchemaIssues } from '../../utils/index.ts';
 
 /**
@@ -27,7 +27,7 @@ export type NonNullishSchema<
  */
 export function nonNullish<TWrapped extends BaseSchema>(
   wrapped: TWrapped,
-  error?: string
+  error?: ErrorMessage
 ): NonNullishSchema<TWrapped> {
   return {
     /**

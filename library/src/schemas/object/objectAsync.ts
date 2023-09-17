@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  ErrorMessage,
   Issues,
   PipeAsync,
 } from '../../types.ts';
@@ -55,13 +56,13 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
  */
 export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   object: TObjectShape,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<ObjectOutput<TObjectShape>>
 ): ObjectSchemaAsync<TObjectShape>;
 
 export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   object: TObjectShape,
-  arg2?: PipeAsync<ObjectOutput<TObjectShape>> | string,
+  arg2?: PipeAsync<ObjectOutput<TObjectShape>> | ErrorMessage,
   arg3?: PipeAsync<ObjectOutput<TObjectShape>>
 ): ObjectSchemaAsync<TObjectShape> {
   // Get error and pipe argument

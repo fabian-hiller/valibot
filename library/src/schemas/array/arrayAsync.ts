@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  ErrorMessage,
   Input,
   Issues,
   Output,
@@ -49,13 +50,13 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
  */
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
   item: TArrayItem,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<Output<TArrayItem>[]>
 ): ArraySchemaAsync<TArrayItem>;
 
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
   item: TArrayItem,
-  arg2?: string | PipeAsync<Output<TArrayItem>[]>,
+  arg2?: ErrorMessage | PipeAsync<Output<TArrayItem>[]>,
   arg3?: PipeAsync<Output<TArrayItem>[]>
 ): ArraySchemaAsync<TArrayItem> {
   // Get error and pipe argument

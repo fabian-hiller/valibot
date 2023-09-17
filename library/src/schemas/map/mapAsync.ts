@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  ErrorMessage,
   Issues,
   Output,
   PipeAsync,
@@ -59,7 +60,7 @@ export function mapAsync<
 >(
   key: TMapKey,
   value: TMapValue,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<MapOutput<TMapKey, TMapValue>>
 ): MapSchemaAsync<TMapKey, TMapValue>;
 
@@ -69,7 +70,7 @@ export function mapAsync<
 >(
   key: TMapKey,
   value: TMapValue,
-  arg3?: PipeAsync<MapOutput<TMapKey, TMapValue>> | string,
+  arg3?: PipeAsync<MapOutput<TMapKey, TMapValue>> | ErrorMessage,
   arg4?: PipeAsync<MapOutput<TMapKey, TMapValue>>
 ): MapSchemaAsync<TMapKey, TMapValue> {
   // Get error and pipe argument

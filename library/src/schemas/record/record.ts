@@ -1,4 +1,4 @@
-import type { BaseSchema, Issues, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
 import { executePipe, getIssues, getSchemaIssues } from '../../utils/index.ts';
 import type { EnumSchema } from '../enumType/index.ts';
 import type { NativeEnumSchema } from '../nativeEnum/index.ts';
@@ -51,7 +51,7 @@ export function record<TRecordValue extends BaseSchema>(
  */
 export function record<TRecordValue extends BaseSchema>(
   value: TRecordValue,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<RecordOutput<StringSchema, TRecordValue>>
 ): RecordSchema<TRecordValue>;
 
@@ -89,7 +89,7 @@ export function record<
 >(
   key: TRecordKey,
   value: TRecordValue,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchema<TRecordValue, TRecordKey>;
 
@@ -98,8 +98,11 @@ export function record<
   TRecordValue extends BaseSchema
 >(
   arg1: TRecordValue | TRecordKey,
-  arg2?: Pipe<RecordOutput<TRecordKey, TRecordValue>> | string | TRecordValue,
-  arg3?: Pipe<RecordOutput<TRecordKey, TRecordValue>> | string,
+  arg2?:
+    | Pipe<RecordOutput<TRecordKey, TRecordValue>>
+    | ErrorMessage
+    | TRecordValue,
+  arg3?: Pipe<RecordOutput<TRecordKey, TRecordValue>> | ErrorMessage,
   arg4?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchema<TRecordValue, TRecordKey> {
   // Get key, value, error and pipe argument

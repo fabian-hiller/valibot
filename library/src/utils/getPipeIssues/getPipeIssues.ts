@@ -1,4 +1,5 @@
-import type { Issue } from '../../types.ts';
+import type { ErrorMessage, Issue } from '../../types.ts';
+import { getErrorMessage } from '../getErrorMessage/index.ts';
 import { getIssues } from '../getIssues/getIssues.ts';
 
 /**
@@ -12,8 +13,14 @@ import { getIssues } from '../getIssues/getIssues.ts';
  */
 export function getPipeIssues(
   validation: string,
-  message: string,
+  error: ErrorMessage,
   input: unknown
 ): { issues: Pick<Issue, 'validation' | 'message' | 'input' | 'path'>[] } {
-  return getIssues([{ validation, message, input }]);
+  return getIssues([
+    {
+      validation,
+      message: getErrorMessage(error),
+      input,
+    },
+  ]);
 }

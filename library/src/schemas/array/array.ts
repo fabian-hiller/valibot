@@ -1,4 +1,11 @@
-import type { BaseSchema, Input, Issues, Output, Pipe } from '../../types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Input,
+  Issues,
+  Output,
+  Pipe,
+} from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -42,13 +49,13 @@ export function array<TArrayItem extends BaseSchema>(
  */
 export function array<TArrayItem extends BaseSchema>(
   item: TArrayItem,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<Output<TArrayItem>[]>
 ): ArraySchema<TArrayItem>;
 
 export function array<TArrayItem extends BaseSchema>(
   item: TArrayItem,
-  arg2?: string | Pipe<Output<TArrayItem>[]>,
+  arg2?: ErrorMessage | Pipe<Output<TArrayItem>[]>,
   arg3?: Pipe<Output<TArrayItem>[]>
 ): ArraySchema<TArrayItem> {
   // Get error and pipe argument

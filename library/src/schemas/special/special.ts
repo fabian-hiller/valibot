@@ -1,4 +1,4 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -39,13 +39,13 @@ export function special<TInput>(
  */
 export function special<TInput>(
   check: (input: unknown) => boolean,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<TInput>
 ): SpecialSchema<TInput>;
 
 export function special<TInput>(
   check: (input: unknown) => boolean,
-  arg2?: Pipe<TInput> | string,
+  arg2?: Pipe<TInput> | ErrorMessage,
   arg3?: Pipe<TInput>
 ): SpecialSchema<TInput> {
   // Get error and pipe argument

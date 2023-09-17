@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -30,12 +30,12 @@ export function blobAsync(pipe?: PipeAsync<Blob>): BlobSchemaAsync;
  * @returns An async blob schema.
  */
 export function blobAsync(
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<Blob>
 ): BlobSchemaAsync;
 
 export function blobAsync(
-  arg1?: string | PipeAsync<Blob>,
+  arg1?: ErrorMessage | PipeAsync<Blob>,
   arg2?: PipeAsync<Blob>
 ): BlobSchemaAsync {
   // Get error and pipe argument

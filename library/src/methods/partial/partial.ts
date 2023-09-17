@@ -6,7 +6,7 @@ import {
   optional,
   type OptionalSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 
 /**
@@ -42,13 +42,13 @@ export function partial<TObjectSchema extends ObjectSchema<any>>(
  */
 export function partial<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchema<Partial<TObjectSchema['object']>>;
 
 export function partial<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,
-  arg3?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>> | string,
+  arg3?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>> | ErrorMessage,
   arg4?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchema<Partial<TObjectSchema['object']>> {
   // Get error and pipe argument

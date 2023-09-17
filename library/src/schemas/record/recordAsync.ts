@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  ErrorMessage,
   Issues,
   PipeAsync,
 } from '../../types.ts';
@@ -66,7 +67,7 @@ export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
  */
 export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
   value: TRecordValue,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<RecordOutput<StringSchema, TRecordValue>>
 ): RecordSchemaAsync<TRecordValue>;
 
@@ -104,7 +105,7 @@ export function recordAsync<
 >(
   key: TRecordKey,
   value: TRecordValue,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchemaAsync<TRecordValue, TRecordKey>;
 
@@ -115,9 +116,9 @@ export function recordAsync<
   arg1: TRecordValue | TRecordKey,
   arg2?:
     | PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-    | string
+    | ErrorMessage
     | TRecordValue,
-  arg3?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>> | string,
+  arg3?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>> | ErrorMessage,
   arg4?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchemaAsync<TRecordValue, TRecordKey> {
   // Get key, value, error and pipe argument

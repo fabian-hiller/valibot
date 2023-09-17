@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
@@ -12,7 +12,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 export function minValue<
   TInput extends string | number | bigint | Date,
   TRequirement extends TInput
->(requirement: TRequirement, error?: string) {
+>(requirement: TRequirement, error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
     input < requirement
       ? getPipeIssues('min_value', error || 'Invalid value', input)

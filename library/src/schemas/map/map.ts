@@ -1,4 +1,10 @@
-import type { BaseSchema, Issues, Output, Pipe } from '../../types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Issues,
+  Output,
+  Pipe,
+} from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -47,14 +53,14 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
 export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
   key: TMapKey,
   value: TMapValue,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<MapOutput<TMapKey, TMapValue>>
 ): MapSchema<TMapKey, TMapValue>;
 
 export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
   key: TMapKey,
   value: TMapValue,
-  arg3?: Pipe<MapOutput<TMapKey, TMapValue>> | string,
+  arg3?: Pipe<MapOutput<TMapKey, TMapValue>> | ErrorMessage,
   arg4?: Pipe<MapOutput<TMapKey, TMapValue>>
 ): MapSchema<TMapKey, TMapValue> {
   // Get error and pipe argument

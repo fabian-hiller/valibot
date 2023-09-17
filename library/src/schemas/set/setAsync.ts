@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  ErrorMessage,
   Issues,
   PipeAsync,
 } from '../../types.ts';
@@ -47,13 +48,13 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
  */
 export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
   value: TSetValue,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<SetOutput<TSetValue>>
 ): SetSchemaAsync<TSetValue>;
 
 export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
   value: TSetValue,
-  arg2?: PipeAsync<SetOutput<TSetValue>> | string,
+  arg2?: PipeAsync<SetOutput<TSetValue>> | ErrorMessage,
   arg3?: PipeAsync<SetOutput<TSetValue>>
 ): SetSchemaAsync<TSetValue> {
   // Get error and pipe argument

@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync } from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage } from '../../types.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
@@ -15,7 +15,7 @@ export type VoidSchemaAsync<TOutput = void> = BaseSchemaAsync<void, TOutput> & {
  *
  * @returns An async void schema.
  */
-export function voidTypeAsync(error?: string): VoidSchemaAsync {
+export function voidTypeAsync(error?: ErrorMessage): VoidSchemaAsync {
   return {
     /**
      * The schema type.

@@ -1,4 +1,4 @@
-import type { BaseSchema, Issues, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -47,13 +47,13 @@ export function object<TObjectShape extends ObjectShape>(
  */
 export function object<TObjectShape extends ObjectShape>(
   object: TObjectShape,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<TObjectShape>>
 ): ObjectSchema<TObjectShape>;
 
 export function object<TObjectShape extends ObjectShape>(
   object: TObjectShape,
-  arg2?: Pipe<ObjectOutput<TObjectShape>> | string,
+  arg2?: Pipe<ObjectOutput<TObjectShape>> | ErrorMessage,
   arg3?: Pipe<ObjectOutput<TObjectShape>>
 ): ObjectSchema<TObjectShape> {
   // Get error and pipe argument

@@ -1,4 +1,10 @@
-import type { IssueReason, Issues, ParseInfo } from '../../types.ts';
+import type {
+  ErrorMessage,
+  IssueReason,
+  Issues,
+  ParseInfo,
+} from '../../types.ts';
+import { getErrorMessage } from '../getErrorMessage/getErrorMessage.ts';
 
 /**
  * Returns the schema result object with issues.
@@ -16,7 +22,7 @@ export function getSchemaIssues(
   info: ParseInfo | undefined,
   reason: IssueReason,
   validation: string,
-  message: string,
+  error: ErrorMessage,
   input: unknown,
   issues?: Issues
 ): { issues: Issues } {
@@ -28,7 +34,7 @@ export function getSchemaIssues(
         reason,
         validation,
         origin: info?.origin || 'value',
-        message,
+        message: getErrorMessage(error),
         input,
         issues,
         abortEarly: info?.abortEarly,

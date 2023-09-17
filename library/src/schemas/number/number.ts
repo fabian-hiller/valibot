@@ -1,4 +1,4 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -29,10 +29,10 @@ export function number(pipe?: Pipe<number>): NumberSchema;
  *
  * @returns A number schema.
  */
-export function number(error?: string, pipe?: Pipe<number>): NumberSchema;
+export function number(error?: ErrorMessage, pipe?: Pipe<number>): NumberSchema;
 
 export function number(
-  arg1?: string | Pipe<number>,
+  arg1?: ErrorMessage | Pipe<number>,
   arg2?: Pipe<number>
 ): NumberSchema {
   // Get error and pipe argument

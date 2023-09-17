@@ -1,4 +1,4 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -29,10 +29,10 @@ export function date(pipe?: Pipe<Date>): DateSchema;
  *
  * @returns A date schema.
  */
-export function date(error?: string, pipe?: Pipe<Date>): DateSchema;
+export function date(error?: ErrorMessage, pipe?: Pipe<Date>): DateSchema;
 
 export function date(
-  arg1?: string | Pipe<Date>,
+  arg1?: ErrorMessage | Pipe<Date>,
   arg2?: Pipe<Date>
 ): DateSchema {
   // Get error and pipe argument

@@ -1,4 +1,4 @@
-import type { PipeResult } from '../../types.ts';
+import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
@@ -8,7 +8,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  *
  * @returns A validation function.
  */
-export function ipv4<TInput extends string>(error?: string) {
+export function ipv4<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
     !/^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/.test(input)
       ? getPipeIssues('ipv4', error || 'Invalid IP v4', input)

@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -41,13 +41,13 @@ export function instanceAsync<TClass extends Class>(
  */
 export function instanceAsync<TClass extends Class>(
   of: TClass,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass>;
 
 export function instanceAsync<TClass extends Class>(
   of: TClass,
-  arg2?: PipeAsync<InstanceType<TClass>> | string,
+  arg2?: PipeAsync<InstanceType<TClass>> | ErrorMessage,
   arg3?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass> {
   // Get error and pipe argument

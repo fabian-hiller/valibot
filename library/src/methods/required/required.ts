@@ -6,7 +6,7 @@ import {
   type ObjectSchema,
   type ObjectShape,
 } from '../../schemas/index.ts';
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 
 /**
@@ -42,13 +42,13 @@ export function required<TObjectSchema extends ObjectSchema<any>>(
  */
 export function required<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>>
 ): ObjectSchema<Required<TObjectSchema['object']>>;
 
 export function required<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,
-  arg3?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>> | string,
+  arg3?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>> | ErrorMessage,
   arg4?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>>
 ): ObjectSchema<Required<TObjectSchema['object']>> {
   // Get error and pipe argument

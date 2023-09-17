@@ -3,7 +3,7 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { Pipe } from '../../types.ts';
+import type { ErrorMessage, Pipe } from '../../types.ts';
 import { getDefaultArgs } from '../../utils/index.ts';
 import type { MergeSchemaObjects } from './types.ts';
 
@@ -42,13 +42,13 @@ export function merge<TObjectSchemas extends ObjectSchemas>(
  */
 export function merge<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
-  error?: string,
+  error?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
 ): ObjectSchema<MergeSchemaObjects<TObjectSchemas>>;
 
 export function merge<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
-  arg2?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>> | string,
+  arg2?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>> | ErrorMessage,
   arg3?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
 ): ObjectSchema<MergeSchemaObjects<TObjectSchemas>> {
   // Get error and pipe argument

@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -33,12 +33,12 @@ export function bigintAsync(pipe?: PipeAsync<bigint>): BigintSchemaAsync;
  * @returns An async bigint schema.
  */
 export function bigintAsync(
-  error?: string,
+  error?: ErrorMessage,
   pipe?: PipeAsync<bigint>
 ): BigintSchemaAsync;
 
 export function bigintAsync(
-  arg1?: string | PipeAsync<bigint>,
+  arg1?: ErrorMessage | PipeAsync<bigint>,
   arg2?: PipeAsync<bigint>
 ): BigintSchemaAsync {
   // Get error and pipe argument

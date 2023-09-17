@@ -1,4 +1,4 @@
-import type { BaseSchema } from '../../types.ts';
+import type { BaseSchema, ErrorMessage } from '../../types.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
@@ -30,7 +30,7 @@ export type NativeEnumSchema<
  */
 export function nativeEnum<TNativeEnum extends NativeEnum>(
   nativeEnum: TNativeEnum,
-  error?: string
+  error?: ErrorMessage
 ): NativeEnumSchema<TNativeEnum> {
   return {
     /**
