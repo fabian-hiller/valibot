@@ -4,6 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add support for multiple branding of a value (pull request #88)
 - Add `skipPipe` option to skip execution of pipeline (pull request #164)
 
 ## v0.16.0 (September 16, 2023)
