@@ -137,6 +137,7 @@ export function mapAsync<
                   origin,
                   abortEarly: info?.abortEarly,
                   abortPipeEarly: info?.abortPipeEarly,
+                  skipPipe: info?.skipPipe,
                 });
 
                 // If not aborted early, continue execution

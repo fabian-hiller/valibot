@@ -64,9 +64,9 @@ if (is(EmailSchema, data)) {
 }
 ```
 
-## Abort early
+## Configuration
 
-By default, I collect each issue during validation to give you detailed feedback on why the input does not match the schema. If this is not required in your use case, you can control this behavior with `abortEarly` or `abortPipeEarly`.
+By default, I collect each issue during validation to give you detailed feedback on why the input does not match the schema. If this is not required in your use case, you can control this behavior with `abortEarly`, `abortPipeEarly` and `skipPipe`.
 
 ### Abort validation
 
@@ -104,6 +104,23 @@ try {
   const email = parse(EmailSchema, 'jane@example.com', {
     abortPipeEarly: true,
   });
+
+  // Handle errors if one occurs
+} catch (error) {
+  console.log(error);
+}
+```
+
+### Skip pipeline
+
+If you set `skipPipe` to `true` I skip every pipeline of a schema. This can be useful for forms, for example, to check only the data types of initial values and not the other details that are validated in the pipelines.
+
+```ts
+import { email, endsWith, parse, string } from 'valibot'; // 0.66 kB
+
+try {
+  const EmailSchema = string([email(), endsWith('@example.com')]);
+  const email = parse(EmailSchema, '', { skipPipe: true });
 
   // Handle errors if one occurs
 } catch (error) {

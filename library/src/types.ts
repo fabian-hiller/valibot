@@ -47,6 +47,7 @@ export type Issue = {
   issues?: Issues;
   abortEarly?: boolean;
   abortPipeEarly?: boolean;
+  skipPipe?: boolean;
 };
 
 /**
@@ -58,10 +59,8 @@ export type Issues = [Issue, ...Issue[]];
  * Parse info type.
  */
 export type ParseInfo = Partial<
-  Pick<Issue, 'origin' | 'abortEarly' | 'abortPipeEarly'>
-> & {
-  skipPipes?: boolean;
-};
+  Pick<Issue, 'origin' | 'abortEarly' | 'abortPipeEarly' | 'skipPipe'>
+>;
 
 /**
  * Path item type.

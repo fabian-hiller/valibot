@@ -34,7 +34,7 @@ describe('executePipeAsync', () => {
   });
 
   test('should skip the pipeline', async () => {
-    const infoWithSkip = { ...info, skipPipes: true };
+    const infoWithSkip = { ...info, skipPipe: true };
     const pipe: PipeAsync<number> = [minValue(5)];
     expect(
       (await executePipeAsync<number>(0, pipe, infoWithSkip, 'number')).output

@@ -26,7 +26,7 @@ export async function executePipeAsync<TValue>(
   reason: IssueReason
 ): Promise<_ParseResult<TValue>> {
   // If pipe is empty, return input as output
-  if (parseInfo?.skipPipes || !pipe || !pipe.length) {
+  if (!pipe || !pipe.length || parseInfo?.skipPipe) {
     return getOutput(input);
   }
 

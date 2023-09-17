@@ -163,6 +163,7 @@ export function record<
             origin: 'key',
             abortEarly: info?.abortEarly,
             abortPipeEarly: info?.abortPipeEarly,
+            skipPipe: info?.skipPipe,
           });
 
           // If there are issues, capture them

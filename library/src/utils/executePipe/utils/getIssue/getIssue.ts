@@ -23,5 +23,6 @@ export function getIssue(
     path: issue.path,
     abortEarly: info?.abortEarly,
     abortPipeEarly: info?.abortPipeEarly,
+    skipPipe: info?.skipPipe,
   };
 }

@@ -31,7 +31,7 @@ describe('executePipe', () => {
   });
 
   test('should skip the pipeline', () => {
-    const infoWithSkip = { ...info, skipPipes: true };
+    const infoWithSkip = { ...info, skipPipe: true };
     const pipe: Pipe<number> = [minValue(5)];
     expect(executePipe<number>(0, pipe, infoWithSkip, 'number').output).toBe(0);
   });
