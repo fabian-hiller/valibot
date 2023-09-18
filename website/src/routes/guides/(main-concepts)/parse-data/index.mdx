@@ -51,7 +51,7 @@ if (result.success) {
 
 Another way to validate data that can be useful in individual cases is to use a type guard. A type guard is an if-condition which, if `true`, sets the parsed data to the input type of a schema.
 
-If a type guard is used, the issues of the validation cannot be accessed. Also, pipelines are skipped, transformations have no effect and unknown keys of an object are not removed. Therefore, this approach is not as safe and powerful as the two previous ways. Also, it can currently only be used with syncronous schemas.
+If a type guard is used, the issues of the validation cannot be accessed. Also, transformations have no effect and unknown keys of an object are not removed. Therefore, this approach is not as safe and powerful as the two previous ways. Also, it can currently only be used with syncronous schemas.
 
 ```ts
 import { email, is, string } from 'valibot'; // 0.55 kB

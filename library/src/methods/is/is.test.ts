@@ -19,7 +19,8 @@ describe('is', () => {
     expect(is(object({ test: string() }), {})).toBe(false);
   });
 
-  test('should skip pipelines', () => {
-    expect(is(string([minLength(1)]), '')).toBe(true);
+  test('should accept parsing options', () => {
+    expect(is(string([minLength(1)]), '', { skipPipe: true })).toBe(true);
+    expect(is(string([minLength(1)]), '', { skipPipe: false })).toBe(false);
   });
 });
