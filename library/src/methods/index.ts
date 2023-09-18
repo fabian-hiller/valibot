@@ -2,6 +2,7 @@ export * from './brand/index.ts';
 export * from './coerce/index.ts';
 export * from './fallback/index.ts';
 export * from './getDefault/index.ts';
+export * from './getDefaults/index.ts';
 export * from './is/index.ts';
 export * from './keyof/index.ts';
 export * from './merge/index.ts';
