@@ -16,8 +16,16 @@ export function fallbackAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
 ): TSchema {
   return {
     ...schema,
-    fallback:
-      typeof value === 'function' ? (value as () => Output<TSchema>)() : value,
+
+    /**
+     * The fallback value
+     */
+    get fallback() {
+      return typeof value === 'function'
+        ? (value as () => Output<TSchema>)()
+        : value;
+    },
+
     /**
      * Parses unknown input based on its schema.
      *
