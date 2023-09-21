@@ -27,4 +27,9 @@ describe('fallbackAsync', () => {
     const output3 = await parseAsync(schema3, input2);
     expect(output3).toEqual(input2);
   });
+
+  test('should have fallback property', () => {
+    expect(schema1.fallback).toEqual('test');
+    expect(schema2.fallback).toEqual('test');
+  });
 });
