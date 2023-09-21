@@ -16,7 +16,8 @@ export function fallback<TSchema extends BaseSchema>(
 ): TSchema {
   return {
     ...schema,
-
+    fallback:
+      typeof value === 'function' ? (value as () => Output<TSchema>)() : value,
     /**
      * Parses unknown input based on its schema.
      *
