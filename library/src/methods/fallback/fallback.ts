@@ -12,7 +12,7 @@ import type { FallbackInfo } from './types.ts';
  */
 export function fallback<TSchema extends BaseSchema>(
   schema: TSchema,
-  value: Output<TSchema> | ((info: FallbackInfo) => Output<TSchema>)
+  value: Output<TSchema> | ((info?: FallbackInfo) => Output<TSchema>)
 ): TSchema {
   return {
     ...schema,
