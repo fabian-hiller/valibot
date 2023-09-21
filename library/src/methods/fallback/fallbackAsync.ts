@@ -12,11 +12,12 @@ import type { FallbackInfo } from './types.ts';
  */
 export function fallbackAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
   schema: TSchema,
-  value: Output<TSchema> | ((info: FallbackInfo) => Output<TSchema>)
+  value: Output<TSchema> | ((info?: FallbackInfo) => Output<TSchema>)
 ): TSchema {
   return {
     ...schema,
-
+    fallback:
+      typeof value === 'function' ? (value as () => Output<TSchema>)() : value,
     /**
      * Parses unknown input based on its schema.
      *
