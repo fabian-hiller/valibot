@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { getPipeIssues } from './getPipeIssues';
+import { getPipeIssues } from './getPipeIssues.ts';
 
 describe('getPipeIssues', () => {
   test('should return results with issues', () => {
