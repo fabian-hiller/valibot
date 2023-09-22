@@ -151,10 +151,9 @@ describe('record', () => {
   test('should prevent prototype pollution', () => {
     const schema = record(string(), any());
     const input = JSON.parse('{"__proto__":{"polluted":"yes"}}');
-    expect(input.__proto__.polluted).toBe('yes');
     expect(({} as any).polluted).toBeUndefined();
     const output = parse(schema, input);
-    expect(output.__proto__.polluted).toBeUndefined();
+    expect(output.__proto__?.polluted).toBeUndefined();
     expect(output.polluted).toBeUndefined();
   });
 

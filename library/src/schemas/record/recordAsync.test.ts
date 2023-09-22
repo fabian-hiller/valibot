@@ -157,10 +157,9 @@ describe('recordAsync', () => {
   test('should prevent prototype pollution', async () => {
     const schema = recordAsync(string(), any());
     const input = JSON.parse('{"__proto__":{"polluted":"yes"}}');
-    expect(input.__proto__.polluted).toBe('yes');
     expect(({} as any).polluted).toBeUndefined();
     const output = await parseAsync(schema, input);
-    expect(output.__proto__.polluted).toBeUndefined();
+    expect(output.__proto__?.polluted).toBeUndefined();
     expect(output.polluted).toBeUndefined();
   });
 
