@@ -14,8 +14,8 @@ describe('email', () => {
     expect(validate(value4).output).toBe(value4);
     // const value5 = 'email@123.123.123.123';
     // expect(validate(value5).output).toBe(value5);
-    // const value6 = '“email”@example.com';
-    // expect(validate(value6).output).toBe(value6);
+    const value6 = '“email”@example.com';
+    expect(validate(value6).output).toBe(value6);
     const value7 = '1234567890@example.com';
     expect(validate(value7).output).toBe(value7);
     const value8 = 'email@example-one.com';
