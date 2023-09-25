@@ -4,7 +4,7 @@
 
 Hello, I am Valibot and I would like to help you validate data easily using a schema. No matter if it is incoming data on a server, a form or even configuration files. I have no dependencies and can run in any JavaScript environment.
 
-> I highly recommend you read the [announcement post](https://www.builder.io/blog/introducing-valibot).
+> I highly recommend you read the [announcement post](https://www.builder.io/blog/introducing-valibot), and if you are a nerd like me, the [bachelor's thesis](https://valibot.dev/thesis.pdf) I am based on.
 
 ## Highlights
 
