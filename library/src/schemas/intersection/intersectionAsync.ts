@@ -1,11 +1,7 @@
-import type {
-  BaseSchema,
-  BaseSchemaAsync,
-  Input,
-  Issues,
-  Output,
-} from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import type { BaseSchema, BaseSchemaAsync, Issues } from '../../types.ts';
+import { getIssues, getOutput, getSchemaIssues } from '../../utils/index.ts';
+import type { IntersectionInput, IntersectionOutput } from './types.ts';
+import { mergeOutputs } from './utils/index.ts';
 
 /**
  * Intersection options async type.
@@ -16,44 +12,13 @@ export type IntersectionOptionsAsync = [
   ...(BaseSchema[] | BaseSchemaAsync[])
 ];
 
-type AsyncIntersectionOutput<
-  TIntersectionOptions extends IntersectionOptionsAsync
-> = TIntersectionOptions extends [
-  BaseSchema<any, infer TOutput>,
-  ...infer TRest
-]
-  ? TRest extends IntersectionOptionsAsync
-    ? TOutput & AsyncIntersectionOutput<TRest>
-    : TRest extends [BaseSchema<any, infer TOutput2>]
-    ? TOutput & TOutput2
-    : TRest extends [BaseSchemaAsync<any, infer TOutput2>]
-    ? TOutput & TOutput2
-    : never
-  : TIntersectionOptions extends [
-      BaseSchemaAsync<any, infer TOutput>,
-      ...infer TRest
-    ]
-  ? TRest extends IntersectionOptionsAsync
-    ? TOutput & AsyncIntersectionOutput<TRest>
-    : TRest extends [BaseSchema<any, infer TOutput2>]
-    ? TOutput & TOutput2
-    : TRest extends [BaseSchemaAsync<any, infer TOutput2>]
-    ? TOutput & TOutput2
-    : never
-  : never;
-
 /**
  * Intersection schema async type.
  */
 export type IntersectionSchemaAsync<
   TIntersectionOptions extends IntersectionOptionsAsync,
-  TOutput = Output<
-    BaseSchemaAsync<AsyncIntersectionOutput<TIntersectionOptions>>
-  >
-> = BaseSchemaAsync<
-  Input<BaseSchemaAsync<AsyncIntersectionOutput<TIntersectionOptions>>>,
-  TOutput
-> & {
+  TOutput = IntersectionOutput<TIntersectionOptions>
+> = BaseSchemaAsync<IntersectionInput<TIntersectionOptions>, TOutput> & {
   schema: 'intersection';
   intersection: TIntersectionOptions;
 };
@@ -97,45 +62,76 @@ export function intersectionAsync<
      * @returns The parsed output.
      */
     async _parse(input, info) {
-      // Create issues and output
+      // Create issues and outputs
       let issues: Issues | undefined;
-      let output: [Output<TIntersectionOptions[number]>] | undefined;
+      let outputs: [any, ...any] | undefined;
 
       // Parse schema of each option
-      for (const schema of intersection) {
-        const result = await schema._parse(input, info);
+      await Promise.all(
+        intersection.map(async (schema) => {
+          // If not aborted early, continue execution
+          if (!(info?.abortEarly && issues)) {
+            const result = await schema._parse(input, info);
 
-        // If there are issues, set output and break loop
-        if (result.issues) {
-          issues = result.issues;
-          break;
-        } else {
-          if (output) {
-            output.push(result.output);
-          } else {
-            output = [result.output];
+            // If not aborted early, continue execution
+            if (!(info?.abortEarly && issues)) {
+              // If there are issues, capture them
+              if (result.issues) {
+                if (issues) {
+                  for (const issue of result.issues) {
+                    issues.push(issue);
+                  }
+                } else {
+                  issues = result.issues;
+                }
+
+                // If necessary, abort early
+                if (info?.abortEarly) {
+                  throw null;
+                }
+
+                // Otherwise, add output to list
+              } else {
+                if (outputs) {
+                  outputs.push(result.output);
+                } else {
+                  outputs = [result.output];
+                }
+              }
+            }
           }
-        }
+        })
+      ).catch(() => null);
+
+      // If there are issues, return them
+      if (issues) {
+        return getIssues(issues);
       }
 
-      // Return input as output or issues
-      return !issues && output
-        ? {
-            output: output.reduce((acc, value) => {
-              if (typeof value === 'object') {
-                return { ...acc, ...value };
-              }
-              return value;
-            }) as AsyncIntersectionOutput<TIntersectionOptions>,
-          }
-        : getIssues(
+      // Create output
+      let output = outputs![0];
+
+      // Merge outputs into one output
+      for (let index = 1; index < outputs!.length; index++) {
+        const result = mergeOutputs(output, outputs![index]);
+
+        // If outputs can't be merged, return issues
+        if (result.invalid) {
+          return getSchemaIssues(
             info,
             'type',
             'intersection',
             error || 'Invalid type',
-            input,
-            issues
+            input
           );
+        }
+
+        // Otherwise, set merged output
+        output = result.output;
+      }
+
+      // Return merged output
+      return getOutput(output);
     },
   };
 }

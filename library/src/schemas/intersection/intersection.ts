@@ -1,5 +1,7 @@
-import type { BaseSchema, Input, Issues, Output } from '../../types.ts';
-import { getIssues } from '../../utils/index.ts';
+import type { BaseSchema, Issues } from '../../types.ts';
+import { getIssues, getOutput, getSchemaIssues } from '../../utils/index.ts';
+import type { IntersectionInput, IntersectionOutput } from './types.ts';
+import { mergeOutputs } from './utils/index.ts';
 
 /**
  * Intersection options type.
@@ -10,25 +12,13 @@ export type IntersectionOptions = [
   ...BaseSchema<any>[]
 ];
 
-type IntersectionOutput<TIntersectionOptions extends IntersectionOptions> =
-  TIntersectionOptions extends [BaseSchema<any, infer TOutput>, ...infer TRest]
-    ? TRest extends IntersectionOptions
-      ? TOutput & IntersectionOutput<TRest>
-      : TRest extends [BaseSchema<any, infer TOutput2>]
-      ? TOutput & TOutput2
-      : never
-    : never;
-
 /**
  * Intersection schema type.
  */
 export type IntersectionSchema<
   TIntersectionOptions extends IntersectionOptions,
-  TOutput = Output<BaseSchema<IntersectionOutput<TIntersectionOptions>>>
-> = BaseSchema<
-  Input<BaseSchema<IntersectionOutput<TIntersectionOptions>>>,
-  TOutput
-> & {
+  TOutput = IntersectionOutput<TIntersectionOptions>
+> = BaseSchema<IntersectionInput<TIntersectionOptions>, TOutput> & {
   schema: 'intersection';
   intersection: TIntersectionOptions;
 };
@@ -70,45 +60,68 @@ export function intersection<TIntersectionOptions extends IntersectionOptions>(
      * @returns The parsed output.
      */
     _parse(input, info) {
-      // Create issues and output
+      // Create issues and outputs
       let issues: Issues | undefined;
-      let output: [Output<IntersectionOptions[number]>] | undefined;
+      let outputs: [any, ...any] | undefined;
 
       // Parse schema of each option
       for (const schema of intersection) {
         const result = schema._parse(input, info);
 
-        // If there are issues, set output and break loop
+        // If there are issues, capture them
         if (result.issues) {
-          issues = result.issues;
-          break;
-        } else {
-          if (output) {
-            output.push(result.output);
+          if (issues) {
+            for (const issue of result.issues) {
+              issues.push(issue);
+            }
           } else {
-            output = [result.output];
+            issues = result.issues;
+          }
+
+          // If necessary, abort early
+          if (info?.abortEarly) {
+            break;
+          }
+
+          // Otherwise, add output to list
+        } else {
+          if (outputs) {
+            outputs.push(result.output);
+          } else {
+            outputs = [result.output];
           }
         }
       }
 
-      // Return input as output or issues
-      return !issues && output
-        ? {
-            output: output.reduce((acc, value) => {
-              if (typeof value === 'object') {
-                return { ...acc, ...value };
-              }
-              return value;
-            }) as IntersectionOutput<TIntersectionOptions>,
-          }
-        : getIssues(
+      // If there are issues, return them
+      if (issues) {
+        return getIssues(issues);
+      }
+
+      // Create output
+      let output = outputs![0];
+
+      // Merge outputs into one output
+      for (let index = 1; index < outputs!.length; index++) {
+        const result = mergeOutputs(output, outputs![index]);
+
+        // If outputs can't be merged, return issues
+        if (result.invalid) {
+          return getSchemaIssues(
             info,
             'type',
             'intersection',
             error || 'Invalid type',
-            input,
-            issues
+            input
           );
+        }
+
+        // Otherwise, set merged output
+        output = result.output;
+      }
+
+      // Return merged output
+      return getOutput(output);
     },
   };
 }

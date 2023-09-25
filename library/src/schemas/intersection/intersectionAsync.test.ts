@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods/index.ts';
+import { parseAsync, transform } from '../../methods/index.ts';
 import { string, stringAsync } from '../string/index.ts';
-import { number, numberAsync } from '../number/index.ts';
 import { intersectionAsync } from './intersectionAsync.ts';
 import { literalAsync } from '../literal/index.ts';
 import { objectAsync } from '../object/index.ts';
@@ -40,7 +39,13 @@ describe('intersectionAsync', () => {
   test('should throw custom error', async () => {
     const error = 'Value is not in intersection!';
     await expect(
-      parseAsync(intersectionAsync([string(), numberAsync()], error), null)
+      parseAsync(
+        intersectionAsync(
+          [string(), transform(string(), (input) => input.length)],
+          error
+        ),
+        'test'
+      )
     ).rejects.toThrowError(error);
   });
 });

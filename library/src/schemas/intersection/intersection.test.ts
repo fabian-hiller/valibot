@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
+import { parse, transform } from '../../methods/index.ts';
 import { string } from '../string/index.ts';
-import { number } from '../number/index.ts';
 import { intersection } from './intersection.ts';
 import { literal } from '../literal/index.ts';
 import { object } from '../object/index.ts';
@@ -58,7 +57,13 @@ describe('intersection', () => {
   test('should throw custom error', () => {
     const error = 'Value is not in intersection!';
     expect(() =>
-      parse(intersection([string(), number()], error), null)
+      parse(
+        intersection(
+          [string(), transform(string(), (input) => input.length)],
+          error
+        ),
+        'test'
+      )
     ).toThrowError(error);
   });
 });

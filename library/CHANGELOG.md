@@ -4,6 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `intersection` and `intersectionAsync` schema (pull request #117)
 - Change `RecordSchema` and `RecordSchemaAsync` type
 - Fix `RecordInput` and `RecordOutput` type (pull request #184)
 
