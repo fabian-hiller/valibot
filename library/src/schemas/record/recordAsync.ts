@@ -35,8 +35,8 @@ export type RecordKeyAsync =
  * Record schema async type.
  */
 export type RecordSchemaAsync<
+  TRecordKey extends RecordKeyAsync,
   TRecordValue extends BaseSchema | BaseSchemaAsync,
-  TRecordKey extends RecordKeyAsync = StringSchema,
   TOutput = RecordOutput<TRecordKey, TRecordValue>
 > = BaseSchemaAsync<RecordInput<TRecordKey, TRecordValue>, TOutput> & {
   schema: 'record';
@@ -54,7 +54,7 @@ export type RecordSchemaAsync<
 export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
   value: TRecordValue,
   pipe?: PipeAsync<RecordOutput<StringSchema, TRecordValue>>
-): RecordSchemaAsync<TRecordValue>;
+): RecordSchemaAsync<StringSchema, TRecordValue>;
 
 /**
  * Creates an async record schema.
@@ -69,7 +69,7 @@ export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
   value: TRecordValue,
   error?: ErrorMessage,
   pipe?: PipeAsync<RecordOutput<StringSchema, TRecordValue>>
-): RecordSchemaAsync<TRecordValue>;
+): RecordSchemaAsync<StringSchema, TRecordValue>;
 
 /**
  * Creates an async record schema.
@@ -87,7 +87,7 @@ export function recordAsync<
   key: TRecordKey,
   value: TRecordValue,
   pipe?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchemaAsync<TRecordValue, TRecordKey>;
+): RecordSchemaAsync<TRecordKey, TRecordValue>;
 
 /**
  * Creates an async record schema.
@@ -107,7 +107,7 @@ export function recordAsync<
   value: TRecordValue,
   error?: ErrorMessage,
   pipe?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchemaAsync<TRecordValue, TRecordKey>;
+): RecordSchemaAsync<TRecordKey, TRecordValue>;
 
 export function recordAsync<
   TRecordKey extends RecordKeyAsync,
@@ -120,7 +120,7 @@ export function recordAsync<
     | TRecordValue,
   arg3?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>> | ErrorMessage,
   arg4?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchemaAsync<TRecordValue, TRecordKey> {
+): RecordSchemaAsync<TRecordKey, TRecordValue> {
   // Get key, value, error and pipe argument
   const [key, value, error, pipe] = getRecordArgs<
     TRecordKey,

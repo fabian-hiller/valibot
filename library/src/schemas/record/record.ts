@@ -19,8 +19,8 @@ export type RecordKey =
  * Record schema type.
  */
 export type RecordSchema<
+  TRecordKey extends RecordKey,
   TRecordValue extends BaseSchema,
-  TRecordKey extends RecordKey = StringSchema,
   TOutput = RecordOutput<TRecordKey, TRecordValue>
 > = BaseSchema<RecordInput<TRecordKey, TRecordValue>, TOutput> & {
   schema: 'record';
@@ -38,7 +38,7 @@ export type RecordSchema<
 export function record<TRecordValue extends BaseSchema>(
   value: TRecordValue,
   pipe?: Pipe<RecordOutput<StringSchema, TRecordValue>>
-): RecordSchema<TRecordValue>;
+): RecordSchema<StringSchema, TRecordValue>;
 
 /**
  * Creates a record schema.
@@ -53,7 +53,7 @@ export function record<TRecordValue extends BaseSchema>(
   value: TRecordValue,
   error?: ErrorMessage,
   pipe?: Pipe<RecordOutput<StringSchema, TRecordValue>>
-): RecordSchema<TRecordValue>;
+): RecordSchema<StringSchema, TRecordValue>;
 
 /**
  * Creates a record schema.
@@ -71,7 +71,7 @@ export function record<
   key: TRecordKey,
   value: TRecordValue,
   pipe?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchema<TRecordValue, TRecordKey>;
+): RecordSchema<TRecordKey, TRecordValue>;
 
 /**
  * Creates a record schema.
@@ -91,7 +91,7 @@ export function record<
   value: TRecordValue,
   error?: ErrorMessage,
   pipe?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchema<TRecordValue, TRecordKey>;
+): RecordSchema<TRecordKey, TRecordValue>;
 
 export function record<
   TRecordKey extends RecordKey,
@@ -104,7 +104,7 @@ export function record<
     | TRecordValue,
   arg3?: Pipe<RecordOutput<TRecordKey, TRecordValue>> | ErrorMessage,
   arg4?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchema<TRecordValue, TRecordKey> {
+): RecordSchema<TRecordKey, TRecordValue> {
   // Get key, value, error and pipe argument
   const [key, value, error, pipe] = getRecordArgs<
     TRecordKey,

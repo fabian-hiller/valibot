@@ -2,6 +2,11 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Change `RecordSchema` and `RecordSchemaAsync` type
+- Fix `RecordInput` and `RecordOutput` type (pull request #184)
+
 ## v0.17.1 (September 25, 2023)
 
 - Fix missing file extensions for Deno (pull request #178, #181)
