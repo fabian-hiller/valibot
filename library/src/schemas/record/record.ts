@@ -21,10 +21,10 @@ export type RecordKey =
 export type RecordSchema<
   TRecordValue extends BaseSchema,
   TRecordKey extends RecordKey = StringSchema,
-  TOutput = RecordOutput<TRecordKey, TRecordValue>
+  TOutput = Partial<RecordOutput<TRecordKey, TRecordValue>>
 > = BaseSchema<RecordInput<TRecordKey, TRecordValue>, TOutput> & {
   schema: 'record';
-  record: { key: TRecordKey; value: TRecordValue };
+  record: { key?: TRecordKey; value: TRecordValue };
 };
 
 /**
