@@ -215,10 +215,11 @@ export default component$(() => {
                 <>
                   The functionality of Valibot is very similar to Zod. The
                   biggest difference is the modular design of our API and the
-                  ability to reduce the bundle size to a minimum through code
-                  splitting. Depending on the schema, Valibot can reduce the
-                  bundle size up to 98% compared to Zod. Especially for
-                  client-side validation of forms, this can be a big advantage.
+                  ability to reduce the bundle size to a minimum through tree
+                  shaking and code splitting. Depending on the schema, Valibot
+                  can reduce the bundle size up to 98% compared to Zod.
+                  Especially for client-side validation of forms, this can be a
+                  big advantage.
                 </>
               ),
             },
