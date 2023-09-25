@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.17.1 (September 25, 2023)
+
+- Fix missing file extensions for Deno (pull request #178, #181)
+
 ## v0.17.0 (September 17, 2023)
 
 - Add support for multiple branding of a value (pull request #88)
