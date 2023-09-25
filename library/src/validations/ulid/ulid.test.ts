@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { ulid } from './ulid';
+import { ulid } from './ulid.ts';
 
 describe('ulid', () => {
   test('should pass only ULIDs', () => {
