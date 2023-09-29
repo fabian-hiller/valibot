@@ -37,7 +37,7 @@ export function mergeOutputs(
         for (let index = 0; index < output1.length; index++) {
           const result = mergeOutputs(output1[index], output2[index]);
 
-          // If result if invalid, return it
+          // If result is invalid, return it
           if (result.invalid) {
             return result;
           }
@@ -58,18 +58,18 @@ export function mergeOutputs(
     if (
       output1 &&
       output2 &&
-      typeof output1 === 'object' &&
-      typeof output2 === 'object'
+      output1.constructor === Object &&
+      output2.constructor === Object
     ) {
       // Shallow merge both objects
       const object = { ...output1, ...output2 };
 
       // Deeply merge object items
-      for (const key in output2) {
-        if (key in output1 && key in output2) {
+      for (const key in output1) {
+        if (key in output2) {
           const result = mergeOutputs(output1[key], output2[key]);
 
-          // If result if invalid, return it
+          // If result is invalid, return it
           if (result.invalid) {
             return result;
           }

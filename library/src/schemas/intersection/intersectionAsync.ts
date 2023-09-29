@@ -111,7 +111,7 @@ export function intersectionAsync<
       // Create output
       let output = outputs![0];
 
-      // Merge outputs into one output
+      // Merge outputs into one final output
       for (let index = 1; index < outputs!.length; index++) {
         const result = mergeOutputs(output, outputs![index]);
 
