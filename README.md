@@ -39,7 +39,7 @@ parse(LoginSchema, { email: '', password: '' });
 parse(LoginSchema, { email: 'jane@example.com', password: '12345678' });
 ```
 
-Apart from `parse` I also offer a non-exception-based API with `safeParse` and a type guard function with `is`. You can find more about it [here](https://valibot.dev/guides/parse-data/).
+Apart from `parse` I also offer a non-exception-based API with `safeParse` and a type guard function with `is`. You can read more about it [here](https://valibot.dev/guides/parse-data/).
 
 ## Comparison
 
