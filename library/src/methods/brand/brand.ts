@@ -15,6 +15,8 @@ import type {
   EnumSchemaAsync,
   InstanceSchema,
   InstanceSchemaAsync,
+  IntersectionSchema,
+  IntersectionSchemaAsync,
   LiteralSchema,
   LiteralSchemaAsync,
   MapSchema,
@@ -208,6 +210,27 @@ export function brand<
   schema: TSchema,
   name: TBrandName
 ): InstanceSchemaAsync<TSchema['class'], Output<TSchema> & Brand<TBrandName>>;
+
+export function brand<
+  TSchema extends IntersectionSchema<any>,
+  TBrandName extends BrandName
+>(
+  schema: TSchema,
+  name: TBrandName
+): IntersectionSchema<
+  TSchema['intersection'],
+  Output<TSchema> & Brand<TBrandName>
+>;
+export function brand<
+  TSchema extends IntersectionSchemaAsync<any>,
+  TBrandName extends BrandName
+>(
+  schema: TSchema,
+  name: TBrandName
+): IntersectionSchemaAsync<
+  TSchema['intersection'],
+  Output<TSchema> & Brand<TBrandName>
+>;
 
 export function brand<
   TSchema extends LiteralSchema<any>,
