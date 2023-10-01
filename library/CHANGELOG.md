@@ -2,11 +2,11 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.18.0 (September 30, 2023)
 
 - Add `intersection` and `intersectionAsync` schema (pull request #117)
-- Change `RecordSchema` and `RecordSchemaAsync` type
 - Fix `RecordInput` and `RecordOutput` type (pull request #184)
+- Change `RecordSchema` and `RecordSchemaAsync` type
 - Change `flatten` function and improve types
 
 ## v0.17.1 (September 25, 2023)
