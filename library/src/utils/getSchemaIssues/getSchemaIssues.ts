@@ -12,7 +12,7 @@ import { getErrorMessage } from '../getErrorMessage/getErrorMessage.ts';
  * @param info The parse info.
  * @param reason The issue reason.
  * @param validation The validation name.
- * @param message The error message.
+ * @param error The error message.
  * @param input The input value.
  * @param issues The sub issues.
  *

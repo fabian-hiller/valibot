@@ -6,7 +6,7 @@ import { getIssues } from '../getIssues/getIssues.ts';
  * Returns the pipeline result object with issues.
  *
  * @param validation The validation name.
- * @param message The error message.
+ * @param error The error message.
  * @param input The input value.
  *
  * @returns The pipeline result object.
