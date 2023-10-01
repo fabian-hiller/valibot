@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Change `RecordSchema` and `RecordSchemaAsync` type
 - Fix `RecordInput` and `RecordOutput` type (pull request #184)
+- Change `flatten` function and improve types
 
 ## v0.17.1 (September 25, 2023)
 
@@ -52,7 +53,7 @@ All notable changes to the library will be documented in this file.
 - Add `excludes` validation as negation of `includes`
 - Add support for more primitives to `literal` schema (pull request #102)
 - Add support for dynamic values to `withDefault` method
-- Change `flatten` method so that issues are also accepted as argument
+- Change `flatten` function so that issues are also accepted as argument
 - Change return type of `safeParse` and `safeParseAsync` method
 - Change error handling and refactor library to improve performance
 - Rename `.parse` to `._parse` and `.types` to `._types` to mark it as internal
