@@ -92,7 +92,7 @@ export function unionAsync<TUnionOptions extends UnionOptionsAsync>(
         }
       }
 
-      // Return input as output or issues
+      // Return output or issues
       return output
         ? getOutput(output[0])
         : getSchemaIssues(

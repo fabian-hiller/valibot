@@ -7,6 +7,7 @@ import type {
   DateSchema,
   EnumSchema,
   InstanceSchema,
+  IntersectionSchema,
   LiteralSchema,
   MapSchema,
   NanSchema,
@@ -75,6 +76,11 @@ export function transform<TSchema extends InstanceSchema<any>, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput
 ): InstanceSchema<TSchema['class'], TOutput>;
+
+export function transform<TSchema extends IntersectionSchema<any>, TOutput>(
+  schema: TSchema,
+  action: (value: Output<TSchema>) => TOutput
+): IntersectionSchema<TSchema['intersection'], TOutput>;
 
 export function transform<TSchema extends LiteralSchema<any>, TOutput>(
   schema: TSchema,

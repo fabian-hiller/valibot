@@ -15,6 +15,8 @@ import type {
   EnumSchemaAsync,
   InstanceSchema,
   InstanceSchemaAsync,
+  IntersectionSchema,
+  IntersectionSchemaAsync,
   LiteralSchema,
   LiteralSchemaAsync,
   MapSchema,
@@ -137,6 +139,14 @@ export function transformAsync<
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
 ): InstanceSchemaAsync<TSchema['class'], TOutput>;
+
+export function transformAsync<
+  TSchema extends IntersectionSchema<any> | IntersectionSchemaAsync<any>,
+  TOutput
+>(
+  schema: TSchema,
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+): IntersectionSchemaAsync<TSchema['intersection'], TOutput>;
 
 export function transformAsync<
   TSchema extends LiteralSchema<any> | LiteralSchemaAsync<any>,
