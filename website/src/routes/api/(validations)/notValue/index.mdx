@@ -1,0 +1,23 @@
+---
+title: notValue
+---
+
+# notValue
+
+Verify tat a value is different from the given value.
+
+## Failing Example
+
+```ts
+const schema = z.string([notValue('foo')]);
+const result = schema.safeParse('foo'); // Error
+```
+
+## Passing Example
+
+```ts
+const schema = z.string([notValue('foo')]);
+const result = schema.safeParse('bar'); // Succeeds
+```
+
+> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/notValue/notValue.ts).

@@ -92,6 +92,7 @@
 - [minSize](/api/minSize)
 - [minValue](/api/minValue)
 - [multipleOf](/api/multipleOf)
+- [notValue](/api/notValue)
 - [regex](/api/regex)
 - [safeInteger](/api/safeInteger)
 - [size](/api/size)
