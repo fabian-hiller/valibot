@@ -127,15 +127,15 @@ export function transform<TSchema extends NullSchema, TOutput>(
   action: (value: Output<TSchema>) => TOutput
 ): NullSchema<TOutput>;
 
-export function transform<TSchema extends NullableSchema<any>, TOutput>(
+export function transform<TSchema extends NullableSchema<any, any>, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput
-): NullableSchema<TSchema['wrapped'], TOutput>;
+): NullableSchema<TSchema['wrapped'], TSchema['default'], TOutput>;
 
-export function transform<TSchema extends NullishSchema<any>, TOutput>(
+export function transform<TSchema extends NullishSchema<any, any>, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput
-): NullishSchema<TSchema['wrapped'], TOutput>;
+): NullishSchema<TSchema['wrapped'], TSchema['default'], TOutput>;
 
 export function transform<TSchema extends NumberSchema, TOutput>(
   schema: TSchema,
@@ -147,10 +147,10 @@ export function transform<TSchema extends ObjectSchema<any>, TOutput>(
   action: (value: Output<TSchema>) => TOutput
 ): ObjectSchema<TSchema['object'], TOutput>;
 
-export function transform<TSchema extends OptionalSchema<any>, TOutput>(
+export function transform<TSchema extends OptionalSchema<any, any>, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput
-): OptionalSchema<TSchema['wrapped'], TOutput>;
+): OptionalSchema<TSchema['wrapped'], TSchema['default'], TOutput>;
 
 export function transform<TSchema extends RecordSchema<any, any>, TOutput>(
   schema: TSchema,

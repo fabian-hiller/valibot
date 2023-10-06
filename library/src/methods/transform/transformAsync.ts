@@ -218,20 +218,20 @@ export function transformAsync<
 ): NullSchemaAsync<TOutput>;
 
 export function transformAsync<
-  TSchema extends NullableSchema<any> | NullableSchemaAsync<any>,
+  TSchema extends NullableSchema<any, any> | NullableSchemaAsync<any, any>,
   TOutput
 >(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
-): NullableSchemaAsync<TSchema['wrapped'], TOutput>;
+): NullableSchemaAsync<TSchema['wrapped'], TSchema['default'], TOutput>;
 
 export function transformAsync<
-  TSchema extends NullishSchema<any> | NullishSchemaAsync<any>,
+  TSchema extends NullishSchema<any, any> | NullishSchemaAsync<any, any>,
   TOutput
 >(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
-): NullishSchemaAsync<TSchema['wrapped'], TOutput>;
+): NullishSchemaAsync<TSchema['wrapped'], TSchema['default'], TOutput>;
 
 export function transformAsync<
   TSchema extends NumberSchema | NumberSchemaAsync,
@@ -250,12 +250,12 @@ export function transformAsync<
 ): ObjectSchemaAsync<TSchema['object'], TOutput>;
 
 export function transformAsync<
-  TSchema extends OptionalSchema<any> | OptionalSchemaAsync<any>,
+  TSchema extends OptionalSchema<any, any> | OptionalSchemaAsync<any, any>,
   TOutput
 >(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
-): OptionalSchemaAsync<TSchema['wrapped'], TOutput>;
+): OptionalSchemaAsync<TSchema['wrapped'], TSchema['default'], TOutput>;
 
 export function transformAsync<
   TSchema extends RecordSchema<any, any> | RecordSchemaAsync<any, any>,

@@ -22,12 +22,12 @@ import type {
  */
 export function unwrap<
   TSchema extends
-    | OptionalSchema<any>
-    | OptionalSchemaAsync<any>
-    | NullableSchema<any>
-    | NullableSchemaAsync<any>
-    | NullishSchema<any>
-    | NullishSchemaAsync<any>
+    | OptionalSchema<any, any>
+    | OptionalSchemaAsync<any, any>
+    | NullableSchema<any, any>
+    | NullableSchemaAsync<any, any>
+    | NullishSchema<any, any>
+    | NullishSchemaAsync<any, any>
     | NonOptionalSchema<any>
     | NonOptionalSchemaAsync<any>
     | NonNullableSchema<any>
