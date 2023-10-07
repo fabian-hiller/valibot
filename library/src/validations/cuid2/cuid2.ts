@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates a [cuid2](https://github.com/paralleldrive/cuid2#cuid2).
+ * Creates a validation function that validates a [cuid2](https://github.com/paralleldrive/cuid2#cuid2).
  *
  * @param error The error message.
  *

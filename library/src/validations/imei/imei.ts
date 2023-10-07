@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues, isLuhnAlgo } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates a IMEI.
+ * Creates a validation function that validates a IMEI.
  *
  * Format: AA-BBBBBB-CCCCCC-D
  *
