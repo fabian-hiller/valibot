@@ -35,7 +35,7 @@ module.exports = {
     'regexp/prefer-regexp-exec': 'error', // enforce that RegExp#exec is used instead of String#match if no global flag is provided, as exec is faster
     'unicorn/better-regex': 'error', // auto-optimize regexps
     'unicorn/prefer-regexp-test': 'error', // RegExp#test is fastest
-    'unicorn/prefer-string-replace-all': 'error', // String#replaceAll avoids the need for resetting lastIndex when using cached global regex
+    // 'unicorn/prefer-string-replace-all': 'warn', // String#replaceAll avoids the need for resetting lastIndex when using cached global regex
     'unicorn/prefer-string-starts-ends-with': 'error', // RegExp#startsWith and RegExp#endsWith are faster
   },
 };

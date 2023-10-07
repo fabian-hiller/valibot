@@ -10,7 +10,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function cuid2<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    !/^[a-z][a-z0-9]*$/.test(input)
+    !/^[a-z][\da-z]*$/u.test(input)
       ? getPipeIssues('cuid2', error || 'Invalid cuid2', input)
       : getOutput(input);
 }

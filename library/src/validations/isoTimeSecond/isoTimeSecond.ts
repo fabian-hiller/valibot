@@ -12,7 +12,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function isoTimeSecond<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    !/^(0[0-9]|1\d|2[0-3]):[0-5]\d:[0-5]\d$/.test(input)
+    !/^(?:0\d|1\d|2[0-3])(?::[0-5]\d){2}$/u.test(input)
       ? getPipeIssues('iso_time_second', error || 'Invalid time', input)
       : getOutput(input);
 }

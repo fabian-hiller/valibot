@@ -10,9 +10,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function uuid<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-      input
-    )
+    // eslint-disable-next-line security/detect-unsafe-regex -- false positive according to https://devina.io/redos-checker
+    !/^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/iu.test(input)
       ? getPipeIssues('uuid', error || 'Invalid UUID', input)
       : getOutput(input);
 }

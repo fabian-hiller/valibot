@@ -5,7 +5,7 @@ import { specialAsync } from './specialAsync.ts';
 
 type PixelString = `${number}px`;
 const isPixelString = (input: unknown) =>
-  typeof input === 'string' && /^\d+px$/.test(input);
+  typeof input === 'string' && /^\d+px$/u.test(input);
 
 describe('specialAsync', () => {
   test('should pass only pixel strings', async () => {

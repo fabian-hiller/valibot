@@ -10,7 +10,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function email<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    !/^[\w+-]+(?:\.[\w+-]+)*@[A-Z0-9]+(?:(?:\.|-)[A-Z0-9]+)*\.[A-Z]{2,}$/i.test(
+    // eslint-disable-next-line security/detect-unsafe-regex -- false positive according to https://devina.io/redos-checker
+    !/^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/iu.test(
       input
     )
       ? getPipeIssues('email', error || 'Invalid email', input)

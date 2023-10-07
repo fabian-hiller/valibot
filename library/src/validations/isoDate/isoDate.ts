@@ -16,7 +16,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function isoDate<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    !/^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])$/.test(input)
+    !/^\d{4}-(?:0[1-9]|1[0-2])-(?:[12]\d|0[1-9]|3[01])$/u.test(input)
       ? getPipeIssues('iso_date', error || 'Invalid date', input)
       : getOutput(input);
 }
