@@ -43,6 +43,7 @@ describe('email', () => {
     expect(validate('email@example.com (Joe Smith)').issues).toBeTruthy();
     expect(validate('email@example').issues).toBeTruthy();
     expect(validate('email@-example.com').issues).toBeTruthy();
+    expect(validate('email@example-.com').issues).toBeTruthy();
     expect(validate('email@111.222.333.44444').issues).toBeTruthy();
     expect(validate('email@example..com').issues).toBeTruthy();
     expect(validate('Abc..123@example.com').issues).toBeTruthy();
