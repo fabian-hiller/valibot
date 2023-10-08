@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `notBytes`, `notLength`, `notSize` and `notValue` validation function (pull request #194)
+
 ## v0.18.0 (September 30, 2023)
 
 - Add `intersection` and `intersectionAsync` schema (pull request #117)

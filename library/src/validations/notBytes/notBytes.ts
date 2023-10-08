@@ -2,19 +2,19 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation function that validates the length of a string or array.
+ * Creates a validation function that validates the byte length of a string.
  *
- * @param requirement The maximum length.
+ * @param requirement The byte length.
  * @param error The error message.
  *
  * @returns A validation function.
  */
-export function maxLength<TInput extends string | any[]>(
+export function notBytes<TInput extends string>(
   requirement: number,
   error?: ErrorMessage
 ) {
   return (input: TInput): PipeResult<TInput> =>
-    input.length > requirement
-      ? getPipeIssues('max_length', error || 'Invalid length', input)
+    new TextEncoder().encode(input).length === requirement
+      ? getPipeIssues('not_bytes', error || 'Invalid byte length', input)
       : getOutput(input);
 }
