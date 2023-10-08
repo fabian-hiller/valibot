@@ -304,15 +304,15 @@ export function brand<
   Output<TSchema> & Brand<TBrandName>
 >;
 
-export function brand<TSchema extends NeverSchema>(
-  schema: TSchema,
-  action: (value: Output<TSchema>) => never
-): NeverSchema;
+export function brand<
+  TSchema extends NeverSchema,
+  TBrandName extends BrandName
+>(schema: TSchema, name: TBrandName): NeverSchema;
 
-export function brand<TSchema extends NeverSchemaAsync>(
-  schema: TSchema,
-  action: (value: Output<TSchema>) => never
-): NeverSchemaAsync;
+export function brand<
+  TSchema extends NeverSchemaAsync,
+  TBrandName extends BrandName
+>(schema: TSchema, name: TBrandName): NeverSchemaAsync;
 
 export function brand<
   TSchema extends NonNullableSchema<any>,

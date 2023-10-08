@@ -11,23 +11,26 @@ import type {
  * Issue reason type.
  */
 export type IssueReason =
-  | 'type'
-  | 'string'
-  | 'number'
+  | 'any'
+  | 'array'
   | 'bigint'
   | 'blob'
   | 'boolean'
-  | 'any'
-  | 'unknown'
   | 'date'
-  | 'array'
-  | 'tuple'
+  | 'function'
+  | 'instance'
   | 'map'
+  | 'number'
   | 'object'
   | 'record'
   | 'set'
   | 'special'
-  | 'instance';
+  | 'string'
+  | 'symbol'
+  | 'tuple'
+  | 'undefined'
+  | 'unknown'
+  | 'type';
 
 /**
  * Issue origin type.
