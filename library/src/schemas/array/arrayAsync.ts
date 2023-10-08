@@ -51,10 +51,10 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
 ): ArraySchemaAsync<TArrayItem>;
 
 /**
- *
- * @param item
- * @param arg2
- * @param arg3
+ * @param item The item schema.
+ * @param arg2 A validation and transformation pipe, or an error message.
+ * @param arg3 A validation and transformation pipe.
+ * @returns An async array schema.
  */
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
   item: TArrayItem,

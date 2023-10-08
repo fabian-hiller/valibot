@@ -48,10 +48,10 @@ export function requiredAsync<
 ): ObjectSchemaAsync<Required<TObjectSchema['object']>>;
 
 /**
- *
- * @param schema
- * @param arg3
- * @param arg4
+ * @param schema The affected schema.
+ * @param arg3 A validation and transformation pipe, or an error message.
+ * @param arg4 A validation and transformation pipe.
+ * @returns An async object schema.
  */
 export function requiredAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>

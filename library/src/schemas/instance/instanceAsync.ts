@@ -42,10 +42,10 @@ export function instanceAsync<TClass extends Class>(
 ): InstanceSchemaAsync<TClass>;
 
 /**
- *
- * @param of
- * @param arg2
- * @param arg3
+ * @param of The class of the instance.
+ * @param arg2 A validation and transformation pipe, or an error message.
+ * @param arg3 A validation and transformation pipe.
+ * @returns An async instance schema.
  */
 export function instanceAsync<TClass extends Class>(
   of: TClass,

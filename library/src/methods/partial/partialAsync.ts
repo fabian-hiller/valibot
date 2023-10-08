@@ -49,9 +49,10 @@ export function partialAsync<
 
 /**
  *
- * @param schema
- * @param arg3
- * @param arg4
+ * @param schema The affected schema.
+ * @param arg3 A validation and transformation pipe, or an error message.
+ * @param arg4 A validation and transformation pipe.
+ * @returns An async object schema.
  */
 export function partialAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>

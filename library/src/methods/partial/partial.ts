@@ -44,9 +44,10 @@ export function partial<TObjectSchema extends ObjectSchema<any>>(
 
 /**
  *
- * @param schema
- * @param arg3
- * @param arg4
+ * @param schema The affected schema.
+ * @param arg3 A validation and transformation pipe, or an error message.
+ * @param arg4 A validation and transformation pipe.
+ * @returns An object schema.
  */
 export function partial<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,

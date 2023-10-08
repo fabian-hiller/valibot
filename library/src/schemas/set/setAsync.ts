@@ -49,10 +49,10 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
 ): SetSchemaAsync<TSetValue>;
 
 /**
- *
- * @param value
- * @param arg2
- * @param arg3
+ * @param value The value schema.
+ * @param arg2 A validation and transformation pipe, or an error message.
+ * @param arg3 A validation and transformation pipe.
+ * @returns An async set schema.
  */
 export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
   value: TSetValue,

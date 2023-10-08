@@ -102,11 +102,11 @@ export function recordAsync<
 ): RecordSchemaAsync<TRecordKey, TRecordValue>;
 
 /**
- *
- * @param arg1
- * @param arg2
- * @param arg3
- * @param arg4
+ * @param arg1 The value or key schema.
+ * @param arg2 A validation and transformation pipe, or an error message, or the value schema.
+ * @param arg3 A validation and transformation pipe, or an error message.
+ * @param arg4 A validation and transformation pipe.
+ * @returns An async record schema.
  */
 export function recordAsync<
   TRecordKey extends RecordKeyAsync,

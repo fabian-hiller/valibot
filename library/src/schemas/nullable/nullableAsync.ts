@@ -53,6 +53,7 @@ export function nullableAsync<
 
     /**
      * The default value.
+     * @returns The default value.
      */
     get default() {
       return typeof default_ === 'function'

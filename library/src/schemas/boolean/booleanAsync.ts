@@ -34,9 +34,9 @@ export function booleanAsync(
 ): BooleanSchemaAsync;
 
 /**
- *
- * @param arg1
- * @param arg2
+ * @param arg1 A validation and transformation pipe, or an error message.
+ * @param arg2 A validation and transformation pipe.
+ * @returns An async boolean schema.
  */
 export function booleanAsync(
   arg1?: ErrorMessage | PipeAsync<boolean>,

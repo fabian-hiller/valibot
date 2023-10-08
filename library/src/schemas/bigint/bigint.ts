@@ -28,9 +28,9 @@ export function bigint(pipe?: Pipe<bigint>): BigintSchema;
 export function bigint(error?: ErrorMessage, pipe?: Pipe<bigint>): BigintSchema;
 
 /**
- *
- * @param arg1
- * @param arg2
+ * @param arg1 A validation and transformation pipe, or an error message.
+ * @param arg2 A validation and transformation pipe.
+ * @returns A bigint schema.
  */
 export function bigint(
   arg1?: ErrorMessage | Pipe<bigint>,

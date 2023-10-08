@@ -31,9 +31,9 @@ export function blobAsync(
 ): BlobSchemaAsync;
 
 /**
- *
- * @param arg1
- * @param arg2
+ * @param arg1 A validation and transformation pipe, or an error message.
+ * @param arg2 A validation and transformation pipe.
+ * @returns An async blob schema.
  */
 export function blobAsync(
   arg1?: ErrorMessage | PipeAsync<Blob>,

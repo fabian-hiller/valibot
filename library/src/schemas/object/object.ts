@@ -48,10 +48,10 @@ export function object<TObjectShape extends ObjectShape>(
 ): ObjectSchema<TObjectShape>;
 
 /**
- *
- * @param object
- * @param arg2
- * @param arg3
+ * @param object The object schema.
+ * @param arg2 A validation and transformation pipe, or an error message.
+ * @param arg3 A validation and transformation pipe.
+ * @returns An object schema.
  */
 export function object<TObjectShape extends ObjectShape>(
   object: TObjectShape,

@@ -46,10 +46,10 @@ export function instance<TClass extends Class>(
 ): InstanceSchema<TClass>;
 
 /**
- *
- * @param of
- * @param arg2
- * @param arg3
+ * @param of The class of the instance.
+ * @param arg2 A validation and transformation pipe, or an error message.
+ * @param arg3 A validation and transformation pipe.
+ * @returns An instance schema.
  */
 export function instance<TClass extends Class>(
   of: TClass,

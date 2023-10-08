@@ -34,9 +34,9 @@ export function numberAsync(
 ): NumberSchemaAsync;
 
 /**
- *
- * @param arg1
- * @param arg2
+ * @param arg1 A validation and transformation pipe, or an error message.
+ * @param arg2 A validation and transformation pipe.
+ * @returns An async number schema.
  */
 export function numberAsync(
   arg1?: ErrorMessage | PipeAsync<number>,

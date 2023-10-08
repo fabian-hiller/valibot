@@ -92,11 +92,11 @@ export function tupleAsync<
 ): TupleSchemaAsync<TTupleItems, TTupleRest>;
 
 /**
- *
- * @param items
- * @param arg2
- * @param arg3
- * @param arg4
+ * @param items The items schema.
+ * @param arg2 A validation and transformation pipe, or an error message, or the rest schema.
+ * @param arg3 A validation and transformation pipe, or an error message.
+ * @param arg4 A validation and transformation pipe.
+ * @returns An async tuple schema.
  */
 export function tupleAsync<
   TTupleItems extends TupleShapeAsync,

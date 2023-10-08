@@ -143,7 +143,8 @@ export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
 
 /**
  *
- * @param arg1
+ * @param arg1 A Vali error or issues.
+ * @returns Flat errors.
  */
 export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
   arg1: ValiError | Issues

@@ -61,11 +61,11 @@ export function mapAsync<
 ): MapSchemaAsync<TMapKey, TMapValue>;
 
 /**
- *
- * @param key
- * @param value
- * @param arg3
- * @param arg4
+ * @param key The key schema.
+ * @param value The value schema.
+ * @param arg3 A validation and transformation pipe, or an error message.
+ * @param arg4 A validation and transformation pipe.
+ * @returns An async map schema.
  */
 export function mapAsync<
   TMapKey extends BaseSchema | BaseSchemaAsync,

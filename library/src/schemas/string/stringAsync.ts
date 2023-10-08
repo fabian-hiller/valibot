@@ -34,9 +34,9 @@ export function stringAsync(
 ): StringSchemaAsync;
 
 /**
- *
- * @param arg1
- * @param arg2
+ * @param arg1 A validation and transformation pipe, or an error message.
+ * @param arg2 A validation and transformation pipe.
+ * @returns An async string schema.
  */
 export function stringAsync(
   arg1?: ErrorMessage | PipeAsync<string>,

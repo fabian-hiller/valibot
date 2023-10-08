@@ -31,9 +31,9 @@ export function boolean(
 ): BooleanSchema;
 
 /**
- *
- * @param arg1
- * @param arg2
+ * @param arg1 A validation and transformation pipe, or an error message.
+ * @param arg2 A validation and transformation pipe.
+ * @returns A boolean schema.
  */
 export function boolean(
   arg1?: ErrorMessage | Pipe<boolean>,

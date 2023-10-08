@@ -28,9 +28,9 @@ export function date(pipe?: Pipe<Date>): DateSchema;
 export function date(error?: ErrorMessage, pipe?: Pipe<Date>): DateSchema;
 
 /**
- *
- * @param arg1
- * @param arg2
+ * @param arg1 A validation and transformation pipe, or an error message.
+ * @param arg2 A validation and transformation pipe.
+ * @returns A date schema.
  */
 export function date(
   arg1?: ErrorMessage | Pipe<Date>,

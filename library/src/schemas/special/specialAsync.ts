@@ -31,7 +31,7 @@ export function specialAsync<TInput>(
  * @param check The type check function.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- * @returns A special schema.
+ * @returns An async special schema.
  */
 export function specialAsync<TInput>(
   check: (input: unknown) => boolean | Promise<boolean>,
@@ -40,10 +40,10 @@ export function specialAsync<TInput>(
 ): SpecialSchemaAsync<TInput>;
 
 /**
- *
- * @param check
- * @param arg2
- * @param arg3
+ * @param check The type check function.
+ * @param arg2 A validation and transformation pipe, or an error message.
+ * @param arg3 A validation and transformation pipe.
+ * @returns An async special schema.
  */
 export function specialAsync<TInput>(
   check: (input: unknown) => boolean | Promise<boolean>,

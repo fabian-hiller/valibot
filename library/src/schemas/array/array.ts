@@ -50,10 +50,10 @@ export function array<TArrayItem extends BaseSchema>(
 ): ArraySchema<TArrayItem>;
 
 /**
- *
- * @param item
- * @param arg2
- * @param arg3
+ * @param item The item schema.
+ * @param arg2 A validation and transformation pipe, or an error message.
+ * @param arg3 A validation and transformation pipe.
+ * @returns A array schema.
  */
 export function array<TArrayItem extends BaseSchema>(
   item: TArrayItem,

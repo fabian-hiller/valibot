@@ -43,10 +43,10 @@ export function merge<TObjectSchemas extends ObjectSchemas>(
 ): ObjectSchema<MergeSchemaObjects<TObjectSchemas>>;
 
 /**
- *
- * @param schemas
- * @param arg2
- * @param arg3
+ * @param schemas The schemas to be merged.
+ * @param arg2 A validation and transformation pipe, or an error message.
+ * @param arg3 A validation and transformation pipe.
+ * @returns An object schema.
  */
 export function merge<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
