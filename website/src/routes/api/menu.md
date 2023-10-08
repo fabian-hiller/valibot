@@ -66,7 +66,6 @@
 - [email](/api/email)
 - [emoji](/api/emoji)
 - [endsWith](/api/endsWith)
-- [equal](/api/equal)
 - [excludes](/api/excludes)
 - [finite](/api/finite)
 - [imei](/api/imei)
