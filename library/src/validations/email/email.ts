@@ -10,9 +10,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function email<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    !/^[\w+-]+(?:\.[\w+-]+)*@[A-Z0-9]+(?:(?:\.|-)[A-Z0-9]+)*\.[A-Z]{2,}$/i.test(
-      input
-    )
+    !/^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/i.test(input)
       ? getPipeIssues('email', error || 'Invalid email', input)
       : getOutput(input);
 }
