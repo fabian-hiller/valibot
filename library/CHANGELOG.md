@@ -2,12 +2,12 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.19.0 (October 08, 2023)
 
 - Add `notBytes`, `notLength`, `notSize` and `notValue` validation function (pull request #194)
 - Add support for unions as key of `record` and `recordAsync` schema (issue #201)
 - Add support for pipeline validation to `transform` and `transformAsync` (issue #197)
-- Change regex of `email` validation (pull request #180)
+- Change regex of `email` validation to improve performance and security (pull request #180)
 - Change `object` and `objectAsync` schema to exclude non-existing keys (issue #199)
 - Fix types at `brand`, `transform` and `unwrap` method (issue #195)
 - Deprecate `equal` validation function in favor of `value` (issue #192)
