@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates the size of a map, set or blob.
+ * Creates a validation function that validates the size of a map, set or blob.
  *
  * @param requirement The minimum size.
  * @param error The error message.

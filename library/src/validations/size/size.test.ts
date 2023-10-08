@@ -17,8 +17,7 @@ describe('size', () => {
 
   test('should return custom error message', () => {
     const error = 'Value size is not "2"!';
-    const value = new Set().add(1);
     const validate = size(2, error);
-    expect(validate(value).issues?.[0].message).toBe(error);
+    expect(validate(new Set().add(1)).issues?.[0].message).toBe(error);
   });
 });

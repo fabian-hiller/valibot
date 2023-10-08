@@ -12,7 +12,7 @@ export function excludes<TInput extends TItem[], TItem>(
 ): (input: TInput) => PipeResult<TInput>;
 
 /**
- * Creates a validation functions that validates the content of a string or array.
+ * Creates a validation function that validates the content of a string or array.
  *
  * @param requirement The content to be excluded.
  * @param error The error message.

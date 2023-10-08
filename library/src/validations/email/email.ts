@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates a email.
+ * Creates a validation function that validates an email.
  *
  * @param error The error message.
  *

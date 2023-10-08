@@ -4,6 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `notBytes`, `notLength`, `notSize` and `notValue` validation function (pull request #194)
 - Change regex of `email` validation (pull request #180)
 - Fix types at `brand`, `transform` and `unwrap` method (issue #195)
 
