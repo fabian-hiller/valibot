@@ -1,9 +1,5 @@
 import type { PipeItem } from '../types';
 
-// register  a validator function by it's name , it's validation function and the type of the schema it validates
-// you can register many validators for the same schema type
-// e.g. register('number', min) // min is the function to register and the name of the function is extracted to register it
-
 type Validator<Args extends unknown[], T> = (...args: Args) => PipeItem<T>;
 type RegistryItem = (...args: unknown[]) => unknown;
 
