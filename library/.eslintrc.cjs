@@ -4,6 +4,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:jsdoc/recommended-typescript-error'
   ],
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'import'],
