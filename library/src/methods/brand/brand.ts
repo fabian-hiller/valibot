@@ -385,36 +385,52 @@ export function brand<
 ): NullSchemaAsync<Output<TSchema> & Brand<TBrandName>>;
 
 export function brand<
-  TSchema extends NullableSchema<any>,
+  TSchema extends NullableSchema<any, any>,
   TBrandName extends BrandName
 >(
   schema: TSchema,
   name: TBrandName
-): NullableSchema<TSchema['wrapped'], Output<TSchema> & Brand<TBrandName>>;
+): NullableSchema<
+  TSchema['wrapped'],
+  TSchema['default'],
+  Output<TSchema> & Brand<TBrandName>
+>;
 
 export function brand<
-  TSchema extends NullableSchemaAsync<any>,
+  TSchema extends NullableSchemaAsync<any, any>,
   TBrandName extends BrandName
 >(
   schema: TSchema,
   name: TBrandName
-): NullableSchemaAsync<TSchema['wrapped'], Output<TSchema> & Brand<TBrandName>>;
+): NullableSchemaAsync<
+  TSchema['wrapped'],
+  TSchema['default'],
+  Output<TSchema> & Brand<TBrandName>
+>;
 
 export function brand<
-  TSchema extends NullishSchema<any>,
+  TSchema extends NullishSchema<any, any>,
   TBrandName extends BrandName
 >(
   schema: TSchema,
   name: TBrandName
-): NullishSchema<TSchema['wrapped'], Output<TSchema> & Brand<TBrandName>>;
+): NullishSchema<
+  TSchema['wrapped'],
+  TSchema['default'],
+  Output<TSchema> & Brand<TBrandName>
+>;
 
 export function brand<
-  TSchema extends NullishSchemaAsync<any>,
+  TSchema extends NullishSchemaAsync<any, any>,
   TBrandName extends BrandName
 >(
   schema: TSchema,
   name: TBrandName
-): NullishSchemaAsync<TSchema['wrapped'], Output<TSchema> & Brand<TBrandName>>;
+): NullishSchemaAsync<
+  TSchema['wrapped'],
+  TSchema['default'],
+  Output<TSchema> & Brand<TBrandName>
+>;
 
 export function brand<
   TSchema extends NumberSchema,
@@ -449,20 +465,28 @@ export function brand<
 ): ObjectSchemaAsync<TSchema['object'], Output<TSchema> & Brand<TBrandName>>;
 
 export function brand<
-  TSchema extends OptionalSchema<any>,
+  TSchema extends OptionalSchema<any, any>,
   TBrandName extends BrandName
 >(
   schema: TSchema,
   name: TBrandName
-): OptionalSchema<TSchema['wrapped'], Output<TSchema> & Brand<TBrandName>>;
+): OptionalSchema<
+  TSchema['wrapped'],
+  TSchema['default'],
+  Output<TSchema> & Brand<TBrandName>
+>;
 
 export function brand<
-  TSchema extends OptionalSchemaAsync<any>,
+  TSchema extends OptionalSchemaAsync<any, any>,
   TBrandName extends BrandName
 >(
   schema: TSchema,
   name: TBrandName
-): OptionalSchemaAsync<TSchema['wrapped'], Output<TSchema> & Brand<TBrandName>>;
+): OptionalSchemaAsync<
+  TSchema['wrapped'],
+  TSchema['default'],
+  Output<TSchema> & Brand<TBrandName>
+>;
 
 export function brand<
   TSchema extends RecordSchema<any, any>,
