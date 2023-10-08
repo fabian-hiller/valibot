@@ -87,6 +87,7 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
   async: false;
   _parse(input: unknown, info?: ParseInfo): _ParseResult<TOutput>;
   _types?: { input: TInput; output: TOutput };
+  _pipe?: Pipe<TInput>;
 };
 
 /**
@@ -135,17 +136,20 @@ export type PipeResult<TOutput> =
       issues: Pick<Issue, 'validation' | 'message' | 'input' | 'path'>[];
     };
 
+export type PipeItem<TValue> = (value: TValue) => PipeResult<TValue>;
+export type PipeItemAsync<TValue> = (
+  value: TValue
+) => PipeResult<TValue> | Promise<PipeResult<TValue>>;
+
 /**
  * Validation and transformation pipe type.
  */
-export type Pipe<TValue> = ((value: TValue) => PipeResult<TValue>)[];
+export type Pipe<TValue> = PipeItem<TValue>[];
 
 /**
  * Async validation and transformation pipe type.
  */
-export type PipeAsync<TValue> = ((
-  value: TValue
-) => PipeResult<TValue> | Promise<PipeResult<TValue>>)[];
+export type PipeAsync<TValue> = PipeItemAsync<TValue>[];
 
 /**
  * Resolve type.

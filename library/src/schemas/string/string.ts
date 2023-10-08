@@ -1,3 +1,4 @@
+import { mixinsOf } from '../../registry/registry.ts';
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import {
   executePipe,
@@ -5,12 +6,20 @@ import {
   getSchemaIssues,
 } from '../../utils/index.ts';
 
+type SchemaValidators<TRegistry, TThis> = {
+  [K in keyof TRegistry]: (
+    ...args: Parameters<Extract<TRegistry[K], (...args: any) => any>>
+  ) => TThis;
+};
+
 /**
  * String schema type.
  */
-export type StringSchema<TOutput = string> = BaseSchema<string, TOutput> & {
+export interface StringSchema<TOutput = string>
+  extends BaseSchema<string, TOutput>,
+    SchemaValidators<StringRegistry, StringSchema<TOutput>> {
   schema: 'string';
-};
+}
 
 /**
  * Creates a string schema.
@@ -45,6 +54,8 @@ export function string(
      */
     schema: 'string',
 
+    _pipe: pipe,
+
     /**
      * Whether it's async.
      */
@@ -71,7 +82,11 @@ export function string(
       }
 
       // Execute pipe and return result
-      return executePipe(input, pipe, info, 'string');
+      return executePipe(input, this._pipe, info, 'string');
     },
+    ...(mixinsOf('string') as SchemaValidators<
+      StringRegistry,
+      StringSchema<string>
+    >),
   };
 }

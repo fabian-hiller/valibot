@@ -1,5 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { email } from './email.ts';
+import { string } from '../../schemas/string/index.ts';
+import { parse } from '../../methods/index.ts';
 
 describe('email', () => {
   test('should pass only emails', () => {
@@ -53,5 +55,16 @@ describe('email', () => {
     const error = 'Value is not an email!';
     const validate = email(error);
     expect(validate('test').issues?.[0].message).toBe(error);
+  });
+
+  test('should thow error when not registered', () => {
+    expect(() => string().email()).toThrowError();
+  });
+
+  test('should parse an email when registered', async () => {
+    await import('./registry.ts');
+    const schema = string().email();
+    expect(parse(schema, 'email@example.com')).toBe('email@example.com');
+    expect(() => parse(schema, 'email@example..com')).toThrowError();
   });
 });
