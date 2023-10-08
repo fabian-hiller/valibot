@@ -13,9 +13,7 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
 
 /**
  * Creates an async symbol schema.
- *
  * @param error The error message.
- *
  * @returns An async symbol schema.
  */
 export function symbolAsync(error?: ErrorMessage): SymbolSchemaAsync {
@@ -32,10 +30,8 @@ export function symbolAsync(error?: ErrorMessage): SymbolSchemaAsync {
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

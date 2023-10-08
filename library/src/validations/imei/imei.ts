@@ -5,9 +5,7 @@ import { getOutput, getPipeIssues, isLuhnAlgo } from '../../utils/index.ts';
  * Creates a validation function that validates an IMEI.
  *
  * Format: AA-BBBBBB-CCCCCC-D
- *
  * @param error The error message.
- *
  * @returns A validation function.
  */
 export function imei<TInput extends string>(error?: ErrorMessage) {

@@ -20,10 +20,8 @@ export type SetSchema<
 
 /**
  * Creates a set schema.
- *
  * @param value The value schema.
  * @param pipe A validation and transformation pipe.
- *
  * @returns A set schema.
  */
 export function set<TSetValue extends BaseSchema>(
@@ -33,11 +31,9 @@ export function set<TSetValue extends BaseSchema>(
 
 /**
  * Creates a set schema.
- *
  * @param value The value schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns A set schema.
  */
 export function set<TSetValue extends BaseSchema>(
@@ -46,6 +42,12 @@ export function set<TSetValue extends BaseSchema>(
   pipe?: Pipe<SetOutput<TSetValue>>
 ): SetSchema<TSetValue>;
 
+/**
+ *
+ * @param value
+ * @param arg2
+ * @param arg3
+ */
 export function set<TSetValue extends BaseSchema>(
   value: TSetValue,
   arg2?: Pipe<SetOutput<TSetValue>> | ErrorMessage,
@@ -73,10 +75,8 @@ export function set<TSetValue extends BaseSchema>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

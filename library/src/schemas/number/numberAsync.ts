@@ -17,19 +17,15 @@ export type NumberSchemaAsync<TOutput = number> = BaseSchemaAsync<
 
 /**
  * Creates an async number schema.
- *
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async number schema.
  */
 export function numberAsync(pipe?: PipeAsync<number>): NumberSchemaAsync;
 
 /**
  * Creates an async number schema.
- *
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async number schema.
  */
 export function numberAsync(
@@ -37,6 +33,11 @@ export function numberAsync(
   pipe?: PipeAsync<number>
 ): NumberSchemaAsync;
 
+/**
+ *
+ * @param arg1
+ * @param arg2
+ */
 export function numberAsync(
   arg1?: ErrorMessage | PipeAsync<number>,
   arg2?: PipeAsync<number>
@@ -58,10 +59,8 @@ export function numberAsync(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

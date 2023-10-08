@@ -12,11 +12,11 @@ import { getIssue, getPipeInfo } from './utils/index.ts';
 
 /**
  * Executes the async validation and transformation pipe.
- *
  * @param input The input value.
  * @param pipe The pipe to be executed.
  * @param info The validation info.
- *
+ * @param parseInfo
+ * @param reason
  * @returns The output value.
  */
 export async function executePipeAsync<TValue>(

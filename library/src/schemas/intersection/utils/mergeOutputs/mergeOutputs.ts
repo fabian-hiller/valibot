@@ -2,10 +2,8 @@ import { getOutput } from '../../../../utils/index.ts';
 
 /**
  * Merges two outputs into one single output.
- *
  * @param output1 First output.
  * @param output2 Second output.
- *
  * @returns The merged output.
  */
 export function mergeOutputs(

@@ -18,10 +18,8 @@ export type OptionalSchema<
 
 /**
  * Creates a optional schema.
- *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
- *
  * @returns A optional schema.
  */
 export function optional<
@@ -58,10 +56,8 @@ export function optional<
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

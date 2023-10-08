@@ -13,9 +13,7 @@ export type NanSchemaAsync<TOutput = number> = BaseSchemaAsync<
 
 /**
  * Creates an async NaN schema.
- *
  * @param error The error message.
- *
  * @returns An async NaN schema.
  */
 export function nanAsync(error?: ErrorMessage): NanSchemaAsync {
@@ -32,10 +30,8 @@ export function nanAsync(error?: ErrorMessage): NanSchemaAsync {
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

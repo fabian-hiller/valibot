@@ -19,10 +19,8 @@ export type NonOptionalSchema<
 
 /**
  * Creates a non optional schema.
- *
  * @param wrapped The wrapped schema.
  * @param error The error message.
- *
  * @returns A non optional schema.
  */
 export function nonOptional<TWrapped extends BaseSchema>(
@@ -47,10 +45,8 @@ export function nonOptional<TWrapped extends BaseSchema>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

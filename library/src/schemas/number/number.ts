@@ -14,23 +14,24 @@ export type NumberSchema<TOutput = number> = BaseSchema<number, TOutput> & {
 
 /**
  * Creates a number schema.
- *
  * @param pipe A validation and transformation pipe.
- *
  * @returns A number schema.
  */
 export function number(pipe?: Pipe<number>): NumberSchema;
 
 /**
  * Creates a number schema.
- *
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns A number schema.
  */
 export function number(error?: ErrorMessage, pipe?: Pipe<number>): NumberSchema;
 
+/**
+ *
+ * @param arg1
+ * @param arg2
+ */
 export function number(
   arg1?: ErrorMessage | Pipe<number>,
   arg2?: Pipe<number>
@@ -52,10 +53,8 @@ export function number(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

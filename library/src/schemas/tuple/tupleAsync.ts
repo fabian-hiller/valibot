@@ -35,10 +35,8 @@ export type TupleSchemaAsync<
 
 /**
  * Creates an async tuple schema.
- *
  * @param items The items schema.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async tuple schema.
  */
 export function tupleAsync<TTupleItems extends TupleShapeAsync>(
@@ -48,11 +46,9 @@ export function tupleAsync<TTupleItems extends TupleShapeAsync>(
 
 /**
  * Creates an async tuple schema.
- *
  * @param items The items schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async tuple schema.
  */
 export function tupleAsync<TTupleItems extends TupleShapeAsync>(
@@ -63,11 +59,9 @@ export function tupleAsync<TTupleItems extends TupleShapeAsync>(
 
 /**
  * Creates an async tuple schema.
- *
  * @param items The items schema.
  * @param rest The rest schema.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async tuple schema.
  */
 export function tupleAsync<
@@ -81,12 +75,10 @@ export function tupleAsync<
 
 /**
  * Creates an async tuple schema.
- *
  * @param items The items schema.
  * @param rest The rest schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async tuple schema.
  */
 export function tupleAsync<
@@ -99,6 +91,13 @@ export function tupleAsync<
   pipe?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchemaAsync<TTupleItems, TTupleRest>;
 
+/**
+ *
+ * @param items
+ * @param arg2
+ * @param arg3
+ * @param arg4
+ */
 export function tupleAsync<
   TTupleItems extends TupleShapeAsync,
   TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
@@ -136,10 +135,8 @@ export function tupleAsync<
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

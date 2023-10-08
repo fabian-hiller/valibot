@@ -13,10 +13,8 @@ export function includes<TInput extends TItem[], TItem>(
 
 /**
  * Creates a validation function that validates the content of a string or array.
- *
  * @param requirement The content to be included.
  * @param error The error message.
- *
  * @returns A validation function.
  */
 export function includes<TInput extends string | TItem[], TItem>(

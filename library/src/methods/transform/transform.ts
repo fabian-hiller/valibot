@@ -210,10 +210,8 @@ export function transform<TSchema extends VoidSchema, TOutput>(
 /**
  * Adds a transformation step to a schema, which is executed at the end of
  * parsing and can change the output type.
- *
  * @param schema The schema to be used.
  * @param action The transformation action.
- *
  * @returns A transformed schema.
  */
 export function transform<TSchema extends BaseSchema, TOutput>(
@@ -225,10 +223,8 @@ export function transform<TSchema extends BaseSchema, TOutput>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

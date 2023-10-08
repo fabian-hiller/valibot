@@ -14,23 +14,24 @@ export type StringSchema<TOutput = string> = BaseSchema<string, TOutput> & {
 
 /**
  * Creates a string schema.
- *
  * @param pipe A validation and transformation pipe.
- *
  * @returns A string schema.
  */
 export function string(pipe?: Pipe<string>): StringSchema;
 
 /**
  * Creates a string schema.
- *
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns A string schema.
  */
 export function string(error?: ErrorMessage, pipe?: Pipe<string>): StringSchema;
 
+/**
+ *
+ * @param arg1
+ * @param arg2
+ */
 export function string(
   arg1?: ErrorMessage | Pipe<string>,
   arg2?: Pipe<string>
@@ -52,10 +53,8 @@ export function string(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

@@ -15,10 +15,8 @@ export type NativeEnumSchemaAsync<
 
 /**
  * Creates an async enum schema.
- *
  * @param nativeEnum The native enum value.
  * @param error The error message.
- *
  * @returns An async enum schema.
  */
 export function nativeEnumAsync<TNativeEnum extends NativeEnum>(
@@ -43,10 +41,8 @@ export function nativeEnumAsync<TNativeEnum extends NativeEnum>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

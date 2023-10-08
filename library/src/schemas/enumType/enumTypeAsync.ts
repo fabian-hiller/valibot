@@ -15,10 +15,8 @@ export type EnumSchemaAsync<
 
 /**
  * Creates an async enum schema.
- *
  * @param enumValue The enum value.
  * @param error The error message.
- *
  * @returns An async enum schema.
  */
 export function enumTypeAsync<
@@ -43,10 +41,8 @@ export function enumTypeAsync<
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

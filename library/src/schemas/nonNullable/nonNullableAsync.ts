@@ -21,10 +21,8 @@ export type NonNullableSchemaAsync<
 
 /**
  * Creates an async non nullable schema.
- *
  * @param wrapped The wrapped schema.
  * @param error The error message.
- *
  * @returns An async non nullable schema.
  */
 export function nonNullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
@@ -49,10 +47,8 @@ export function nonNullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

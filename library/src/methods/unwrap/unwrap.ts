@@ -15,9 +15,7 @@ import type {
 
 /**
  * Unwraps the wrapped schema.
- *
  * @param schema The schema to be unwrapped.
- *
  * @returns The unwrapped schema.
  */
 export function unwrap<

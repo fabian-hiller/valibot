@@ -2,10 +2,8 @@ import type { IssueReason, ParseInfo, PipeInfo } from '../../../../types.ts';
 
 /**
  * Returns the pipe info.
- *
  * @param info The parse info.
  * @param reason The issue reason.
- *
  * @returns The pipe info.
  */
 export function getPipeInfo(

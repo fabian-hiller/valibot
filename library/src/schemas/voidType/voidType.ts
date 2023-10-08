@@ -10,9 +10,7 @@ export type VoidSchema<TOutput = void> = BaseSchema<void, TOutput> & {
 
 /**
  * Creates a void schema.
- *
  * @param error The error message.
- *
  * @returns A void schema.
  */
 export function voidType(error?: ErrorMessage): VoidSchema {
@@ -29,10 +27,8 @@ export function voidType(error?: ErrorMessage): VoidSchema {
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

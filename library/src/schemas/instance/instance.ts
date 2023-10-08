@@ -23,10 +23,8 @@ export type InstanceSchema<
 
 /**
  * Creates an instance schema.
- *
  * @param of The class of the instance.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An instance schema.
  */
 export function instance<TClass extends Class>(
@@ -36,11 +34,9 @@ export function instance<TClass extends Class>(
 
 /**
  * Creates an instance schema.
- *
  * @param of The class of the instance.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An instance schema.
  */
 export function instance<TClass extends Class>(
@@ -49,6 +45,12 @@ export function instance<TClass extends Class>(
   pipe?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass>;
 
+/**
+ *
+ * @param of
+ * @param arg2
+ * @param arg3
+ */
 export function instance<TClass extends Class>(
   of: TClass,
   arg2?: Pipe<InstanceType<TClass>> | ErrorMessage,
@@ -76,10 +78,8 @@ export function instance<TClass extends Class>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

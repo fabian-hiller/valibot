@@ -3,10 +3,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates the start of a string.
- *
  * @param requirement The start string.
  * @param error The error message.
- *
  * @returns A validation function.
  */
 export function startsWith<TInput extends string>(

@@ -28,11 +28,9 @@ export type MapSchemaAsync<
 
 /**
  * Creates an async map schema.
- *
  * @param key The key schema.
  * @param value The value schema.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async map schema.
  */
 export function mapAsync<
@@ -46,12 +44,10 @@ export function mapAsync<
 
 /**
  * Creates an async map schema.
- *
  * @param key The key schema.
  * @param value The value schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async map schema.
  */
 export function mapAsync<
@@ -64,6 +60,13 @@ export function mapAsync<
   pipe?: PipeAsync<MapOutput<TMapKey, TMapValue>>
 ): MapSchemaAsync<TMapKey, TMapValue>;
 
+/**
+ *
+ * @param key
+ * @param value
+ * @param arg3
+ * @param arg4
+ */
 export function mapAsync<
   TMapKey extends BaseSchema | BaseSchemaAsync,
   TMapValue extends BaseSchema | BaseSchemaAsync
@@ -95,10 +98,8 @@ export function mapAsync<
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

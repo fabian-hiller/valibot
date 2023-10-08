@@ -3,10 +3,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a async custom validation function.
- *
  * @param requirement The async validation function.
  * @param error The error message.
- *
  * @returns A async validation function.
  */
 export function customAsync<TInput>(

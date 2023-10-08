@@ -125,9 +125,7 @@ export type FlatErrors<TSchema extends BaseSchema | BaseSchemaAsync = any> = {
 
 /**
  * Flatten the error messages of a Vali error.
- *
  * @param error A Vali error.
- *
  * @returns Flat errors.
  */
 export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
@@ -136,15 +134,17 @@ export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
 
 /**
  * Flatten the error messages of issues.
- *
  * @param issues The issues.
- *
  * @returns Flat errors.
  */
 export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
   issues: Issues
 ): FlatErrors<TSchema>;
 
+/**
+ *
+ * @param arg1
+ */
 export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
   arg1: ValiError | Issues
 ): FlatErrors<TSchema> {

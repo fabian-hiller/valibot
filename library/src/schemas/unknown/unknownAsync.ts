@@ -13,9 +13,7 @@ export type UnknownSchemaAsync<TOutput = unknown> = BaseSchemaAsync<
 
 /**
  * Creates an async unknown schema.
- *
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async unknown schema.
  */
 export function unknownAsync(
@@ -34,10 +32,8 @@ export function unknownAsync(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

@@ -1,8 +1,6 @@
 /**
  * Checks whether a string with numbers corresponds to the luhn algorithm.
- *
  * @param input The input to be checked.
- *
  * @returns Whether input is valid.
  */
 export function isLuhnAlgo(input: string) {

@@ -3,9 +3,7 @@ import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that passes unknown keys.
- *
  * @param schema A object schema.
- *
  * @returns A object schema.
  */
 export function passthroughAsync<TSchema extends ObjectSchemaAsync<any>>(
@@ -16,10 +14,8 @@ export function passthroughAsync<TSchema extends ObjectSchemaAsync<any>>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

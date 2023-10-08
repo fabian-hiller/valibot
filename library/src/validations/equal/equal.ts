@@ -3,12 +3,9 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that checks the value for equality.
- *
  * @deprecated Function has been renamed to `value`.
- *
  * @param requirement The required value.
  * @param error The error message.
- *
  * @returns A validation function.
  */
 export function equal<

@@ -3,10 +3,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates the MIME type of a file.
- *
  * @param requirement The MIME types.
  * @param error The error message.
- *
  * @returns A validation function.
  */
 export function mimeType<TInput extends Blob>(

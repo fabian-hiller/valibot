@@ -34,10 +34,8 @@ export type ObjectSchemaAsync<
 
 /**
  * Creates an async object schema.
- *
  * @param object The object schema.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async object schema.
  */
 export function objectAsync<TObjectShape extends ObjectShapeAsync>(
@@ -47,11 +45,9 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
 
 /**
  * Creates an async object schema.
- *
  * @param object The object schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async object schema.
  */
 export function objectAsync<TObjectShape extends ObjectShapeAsync>(
@@ -60,6 +56,12 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   pipe?: PipeAsync<ObjectOutput<TObjectShape>>
 ): ObjectSchemaAsync<TObjectShape>;
 
+/**
+ *
+ * @param object
+ * @param arg2
+ * @param arg3
+ */
 export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   object: TObjectShape,
   arg2?: PipeAsync<ObjectOutput<TObjectShape>> | ErrorMessage,
@@ -90,10 +92,8 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

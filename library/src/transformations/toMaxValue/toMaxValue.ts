@@ -3,9 +3,7 @@ import type { PipeResult } from '../../types.ts';
 /**
  * Creates a transformation function that sets a string, number or date to a
  * maximum value.
- *
  * @param requirement The maximum value.
- *
  * @returns A transformation function.
  */
 export function toMaxValue<

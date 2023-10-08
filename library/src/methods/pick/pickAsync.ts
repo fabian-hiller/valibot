@@ -10,11 +10,9 @@ import { getDefaultArgs } from '../../utils/index.ts';
 /**
  * Creates an async object schema that contains only the selected keys of an
  * existing schema.
- *
  * @param schema The schema to pick from.
  * @param keys The selected keys
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async object schema.
  */
 export function pickAsync<
@@ -29,12 +27,10 @@ export function pickAsync<
 /**
  * Creates an async object schema that contains only the selected keys of an
  * existing schema.
- *
  * @param schema The schema to pick from.
  * @param keys The selected keys
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async object schema.
  */
 export function pickAsync<
@@ -47,6 +43,13 @@ export function pickAsync<
   pipe?: PipeAsync<ObjectOutput<Pick<TObjectSchema['object'], TKeys[number]>>>
 ): ObjectSchemaAsync<Pick<TObjectSchema['object'], TKeys[number]>>;
 
+/**
+ *
+ * @param schema
+ * @param keys
+ * @param arg3
+ * @param arg4
+ */
 export function pickAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>,
   TKeys extends (keyof TObjectSchema['object'])[]

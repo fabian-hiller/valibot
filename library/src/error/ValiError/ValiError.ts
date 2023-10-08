@@ -8,7 +8,6 @@ export class ValiError extends Error {
 
   /**
    * Creates a Valibot error with useful information.
-   *
    * @param issues The error issues.
    */
   constructor(issues: Issues) {

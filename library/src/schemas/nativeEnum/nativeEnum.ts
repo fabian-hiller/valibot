@@ -22,10 +22,8 @@ export type NativeEnumSchema<
 
 /**
  * Creates a enum schema.
- *
  * @param nativeEnum The native enum value.
  * @param error The error message.
- *
  * @returns A enum schema.
  */
 export function nativeEnum<TNativeEnum extends NativeEnum>(
@@ -50,10 +48,8 @@ export function nativeEnum<TNativeEnum extends NativeEnum>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

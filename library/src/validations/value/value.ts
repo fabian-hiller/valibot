@@ -3,10 +3,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates the value of a string or number.
- *
  * @param requirement The value.
  * @param error The error message.
- *
  * @returns A validation function.
  */
 export function value<

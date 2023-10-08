@@ -20,10 +20,8 @@ type Required<TObjectShape extends ObjectShapeAsync> = {
 /**
  * Creates an async object schema consisting of all properties of an existing
  * object schema set to none optional.
- *
  * @param schema The affected schema.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async object schema.
  */
 export function requiredAsync<
@@ -36,11 +34,9 @@ export function requiredAsync<
 /**
  * Creates an async object schema consisting of all properties of an existing
  * object schema set to none optional.
- *
  * @param schema The affected schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async object schema.
  */
 export function requiredAsync<
@@ -51,6 +47,12 @@ export function requiredAsync<
   pipe?: PipeAsync<ObjectOutput<Required<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Required<TObjectSchema['object']>>;
 
+/**
+ *
+ * @param schema
+ * @param arg3
+ * @param arg4
+ */
 export function requiredAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
 >(

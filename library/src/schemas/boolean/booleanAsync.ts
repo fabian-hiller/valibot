@@ -17,19 +17,15 @@ export type BooleanSchemaAsync<TOutput = boolean> = BaseSchemaAsync<
 
 /**
  * Creates an async boolean schema.
- *
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async boolean schema.
  */
 export function booleanAsync(pipe?: PipeAsync<boolean>): BooleanSchemaAsync;
 
 /**
  * Creates an async boolean schema.
- *
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async boolean schema.
  */
 export function booleanAsync(
@@ -37,6 +33,11 @@ export function booleanAsync(
   pipe?: PipeAsync<boolean>
 ): BooleanSchemaAsync;
 
+/**
+ *
+ * @param arg1
+ * @param arg2
+ */
 export function booleanAsync(
   arg1?: ErrorMessage | PipeAsync<boolean>,
   arg2?: PipeAsync<boolean>
@@ -58,10 +59,8 @@ export function booleanAsync(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

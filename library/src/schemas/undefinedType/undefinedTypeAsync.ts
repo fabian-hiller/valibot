@@ -13,9 +13,7 @@ export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
 
 /**
  * Creates an async undefined schema.
- *
  * @param error The error message.
- *
  * @returns An async undefined schema.
  */
 export function undefinedTypeAsync(error?: ErrorMessage): UndefinedSchemaAsync {
@@ -32,10 +30,8 @@ export function undefinedTypeAsync(error?: ErrorMessage): UndefinedSchemaAsync {
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

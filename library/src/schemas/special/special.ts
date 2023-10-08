@@ -17,10 +17,8 @@ export type SpecialSchema<TInput, TOutput = TInput> = BaseSchema<
 
 /**
  * Creates a special schema.
- *
  * @param check The type check function.
  * @param pipe A validation and transformation pipe.
- *
  * @returns A special schema.
  */
 export function special<TInput>(
@@ -30,11 +28,9 @@ export function special<TInput>(
 
 /**
  * Creates a special schema.
- *
  * @param check The type check function.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns A special schema.
  */
 export function special<TInput>(
@@ -43,6 +39,12 @@ export function special<TInput>(
   pipe?: Pipe<TInput>
 ): SpecialSchema<TInput>;
 
+/**
+ *
+ * @param check
+ * @param arg2
+ * @param arg3
+ */
 export function special<TInput>(
   check: (input: unknown) => boolean,
   arg2?: Pipe<TInput> | ErrorMessage,
@@ -65,10 +67,8 @@ export function special<TInput>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

@@ -26,10 +26,8 @@ export type NullishSchemaAsync<
 
 /**
  * Creates an async nullish schema.
- *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
- *
  * @returns An async nullish schema.
  */
 export function nullishAsync<
@@ -69,10 +67,8 @@ export function nullishAsync<
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

@@ -19,10 +19,8 @@ export type NonNullableSchema<
 
 /**
  * Creates a non nullable schema.
- *
  * @param wrapped The wrapped schema.
  * @param error The error message.
- *
  * @returns A non nullable schema.
  */
 export function nonNullable<TWrapped extends BaseSchema>(
@@ -47,10 +45,8 @@ export function nonNullable<TWrapped extends BaseSchema>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

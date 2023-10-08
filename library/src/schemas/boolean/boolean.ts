@@ -14,19 +14,15 @@ export type BooleanSchema<TOutput = boolean> = BaseSchema<boolean, TOutput> & {
 
 /**
  * Creates a boolean schema.
- *
  * @param pipe A validation and transformation pipe.
- *
  * @returns A boolean schema.
  */
 export function boolean(pipe?: Pipe<boolean>): BooleanSchema;
 
 /**
  * Creates a boolean schema.
- *
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns A boolean schema.
  */
 export function boolean(
@@ -34,6 +30,11 @@ export function boolean(
   pipe?: Pipe<boolean>
 ): BooleanSchema;
 
+/**
+ *
+ * @param arg1
+ * @param arg2
+ */
 export function boolean(
   arg1?: ErrorMessage | Pipe<boolean>,
   arg2?: Pipe<boolean>
@@ -55,10 +56,8 @@ export function boolean(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

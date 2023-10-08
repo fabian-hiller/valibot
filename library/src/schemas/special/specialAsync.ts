@@ -17,10 +17,8 @@ export type SpecialSchemaAsync<TInput, TOutput = TInput> = BaseSchemaAsync<
 
 /**
  * Creates an async special schema.
- *
  * @param check The type check function.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An async special schema.
  */
 export function specialAsync<TInput>(
@@ -30,11 +28,9 @@ export function specialAsync<TInput>(
 
 /**
  * Creates a special schema.
- *
  * @param check The type check function.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns A special schema.
  */
 export function specialAsync<TInput>(
@@ -43,6 +39,12 @@ export function specialAsync<TInput>(
   pipe?: PipeAsync<TInput>
 ): SpecialSchemaAsync<TInput>;
 
+/**
+ *
+ * @param check
+ * @param arg2
+ * @param arg3
+ */
 export function specialAsync<TInput>(
   check: (input: unknown) => boolean | Promise<boolean>,
   arg2?: PipeAsync<TInput> | ErrorMessage,
@@ -65,10 +67,8 @@ export function specialAsync<TInput>(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

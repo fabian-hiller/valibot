@@ -14,23 +14,24 @@ export type BlobSchema<TOutput = Blob> = BaseSchema<Blob, TOutput> & {
 
 /**
  * Creates a blob schema.
- *
  * @param pipe A validation and transformation pipe.
- *
  * @returns A blob schema.
  */
 export function blob(pipe?: Pipe<Blob>): BlobSchema;
 
 /**
  * Creates a blob schema.
- *
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns A blob schema.
  */
 export function blob(error?: ErrorMessage, pipe?: Pipe<Blob>): BlobSchema;
 
+/**
+ *
+ * @param arg1
+ * @param arg2
+ */
 export function blob(
   arg1?: ErrorMessage | Pipe<Blob>,
   arg2?: Pipe<Blob>
@@ -52,10 +53,8 @@ export function blob(
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     _parse(input, info) {

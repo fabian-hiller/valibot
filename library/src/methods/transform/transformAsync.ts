@@ -356,10 +356,8 @@ export function transformAsync<
 /**
  * Adds an async transformation step to a schema, which is executed at the end
  * of parsing and can change the output type.
- *
  * @param schema The schema to be used.
  * @param action The transformation action.
- *
  * @returns A transformed schema.
  */
 export function transformAsync<
@@ -379,10 +377,8 @@ export function transformAsync<
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

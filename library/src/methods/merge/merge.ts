@@ -19,10 +19,8 @@ type ObjectSchemas = [
 /**
  * Merges multiple object schemas into a single one. Subsequent object schemas
  * overwrite the previous ones.
- *
  * @param schemas The schemas to be merged.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An object schema.
  */
 export function merge<TObjectSchemas extends ObjectSchemas>(
@@ -33,11 +31,9 @@ export function merge<TObjectSchemas extends ObjectSchemas>(
 /**
  * Merges multiple object schemas into a single one. Subsequent object schemas
  * overwrite the previous ones.
- *
  * @param schemas The schemas to be merged.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
- *
  * @returns An object schema.
  */
 export function merge<TObjectSchemas extends ObjectSchemas>(
@@ -46,6 +42,12 @@ export function merge<TObjectSchemas extends ObjectSchemas>(
   pipe?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
 ): ObjectSchema<MergeSchemaObjects<TObjectSchemas>>;
 
+/**
+ *
+ * @param schemas
+ * @param arg2
+ * @param arg3
+ */
 export function merge<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
   arg2?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>> | ErrorMessage,

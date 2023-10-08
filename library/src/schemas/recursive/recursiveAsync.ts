@@ -18,9 +18,7 @@ export type RecursiveSchemaAsync<
 
 /**
  * Creates an async recursive schema.
- *
  * @param getter The schema getter.
- *
  * @returns An async recursive schema.
  */
 export function recursiveAsync<
@@ -44,10 +42,8 @@ export function recursiveAsync<
 
     /**
      * Parses unknown input based on its schema.
-     *
      * @param input The input to be parsed.
      * @param info The parse info.
-     *
      * @returns The parsed output.
      */
     async _parse(input, info) {
