@@ -7,6 +7,7 @@ All notable changes to the library will be documented in this file.
 - Add `notBytes`, `notLength`, `notSize` and `notValue` validation function (pull request #194)
 - Add support for unions as key of `record` and `recordAsync` schema (issue #201)
 - Change regex of `email` validation (pull request #180)
+- Change `object` and `objectAsync` schema to exclude non-existing keys (issue #199)
 - Fix types at `brand`, `transform` and `unwrap` method (issue #195)
 - Deprecate `equal` validation function in favor of `value` (issue #192)
 

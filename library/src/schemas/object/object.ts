@@ -143,7 +143,7 @@ export function object<TObjectShape extends ObjectShape>(
           }
 
           // Otherwise, add value to object
-        } else {
+        } else if (result.output !== undefined || key in input) {
           output[key] = result.output;
         }
       }
