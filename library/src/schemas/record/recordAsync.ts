@@ -43,43 +43,17 @@ export type RecordSchemaAsync<
   record: { key: TRecordKey; value: TRecordValue };
 };
 
-/**
- * Creates an async record schema.
- *
- * @param value The value schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async record schema.
- */
 export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
   value: TRecordValue,
   pipe?: PipeAsync<RecordOutput<StringSchema, TRecordValue>>
 ): RecordSchemaAsync<StringSchema, TRecordValue>;
 
-/**
- * Creates an async record schema.
- *
- * @param value The value schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async record schema.
- */
 export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
   value: TRecordValue,
   error?: ErrorMessage,
   pipe?: PipeAsync<RecordOutput<StringSchema, TRecordValue>>
 ): RecordSchemaAsync<StringSchema, TRecordValue>;
 
-/**
- * Creates an async record schema.
- *
- * @param key The key schema.
- * @param value The value schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async record schema.
- */
 export function recordAsync<
   TRecordKey extends RecordKeyAsync,
   TRecordValue extends BaseSchema | BaseSchemaAsync
@@ -89,16 +63,6 @@ export function recordAsync<
   pipe?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchemaAsync<TRecordKey, TRecordValue>;
 
-/**
- * Creates an async record schema.
- *
- * @param key The key schema.
- * @param value The value schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async record schema.
- */
 export function recordAsync<
   TRecordKey extends RecordKeyAsync,
   TRecordValue extends BaseSchema | BaseSchemaAsync
@@ -110,6 +74,8 @@ export function recordAsync<
 ): RecordSchemaAsync<TRecordKey, TRecordValue>;
 
 /**
+ * Creates an async record schema.
+ *
  * @param arg1 The value or key schema.
  * @param arg2 A validation and transformation pipe, or an error message, or the value schema.
  * @param arg3 A validation and transformation pipe, or an error message.

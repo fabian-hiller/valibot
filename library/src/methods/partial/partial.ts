@@ -16,30 +16,11 @@ type Partial<TObjectShape extends ObjectShape> = {
   [TKey in keyof TObjectShape]: OptionalSchema<TObjectShape[TKey]>;
 };
 
-/**
- * Creates an object schema consisting of all properties of an existing object
- * schema set to optional.
- *
- * @param schema The affected schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An object schema.
- */
 export function partial<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,
   pipe?: Pipe<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchema<Partial<TObjectSchema['object']>>;
 
-/**
- * Creates an object schema consisting of all properties of an existing object
- * schema set to optional.
- *
- * @param schema The affected schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An object schema.
- */
 export function partial<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,
   error?: ErrorMessage,
@@ -47,6 +28,8 @@ export function partial<TObjectSchema extends ObjectSchema<any>>(
 ): ObjectSchema<Partial<TObjectSchema['object']>>;
 
 /**
+ * Creates an object schema consisting of all properties of an existing object
+ * schema set to optional.
  *
  * @param schema The affected schema.
  * @param arg3 A validation and transformation pipe, or an error message.

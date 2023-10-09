@@ -12,26 +12,13 @@ export type DateSchema<TOutput = Date> = BaseSchema<Date, TOutput> & {
   schema: 'date';
 };
 
-/**
- * Creates a date schema.
- *
- * @param pipe A validation and transformation pipe.
- *
- * @returns A date schema.
- */
 export function date(pipe?: Pipe<Date>): DateSchema;
 
-/**
- * Creates a date schema.
- *
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A date schema.
- */
 export function date(error?: ErrorMessage, pipe?: Pipe<Date>): DateSchema;
 
 /**
+ * Creates a date schema.
+ *
  * @param arg1 A validation and transformation pipe, or an error message.
  * @param arg2 A validation and transformation pipe.
  *

@@ -17,30 +17,11 @@ type ObjectSchemas = [
   ...(ObjectSchema<any> | ObjectSchemaAsync<any>)[]
 ];
 
-/**
- * Merges multiple async object schemas into a single one. Subsequent object
- * schemas overwrite the previous ones.
- *
- * @param schemas The schemas to be merged.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async object schema.
- */
 export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
   pipe?: PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
 ): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>>;
 
-/**
- * Merges multiple async object schemas into a single one. Subsequent object
- * schemas overwrite the previous ones.
- *
- * @param schemas The schemas to be merged.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async object schema.
- */
 export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
   error?: ErrorMessage,
@@ -48,6 +29,8 @@ export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
 ): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>>;
 
 /**
+ * Merges multiple async object schemas into a single one. Subsequent object
+ * schemas overwrite the previous ones.
  *
  * @param schemas The schemas to be merged.
  * @param arg2 A validation and transformation pipe, or an error message.

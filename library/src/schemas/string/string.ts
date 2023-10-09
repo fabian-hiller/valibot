@@ -12,26 +12,13 @@ export type StringSchema<TOutput = string> = BaseSchema<string, TOutput> & {
   schema: 'string';
 };
 
-/**
- * Creates a string schema.
- *
- * @param pipe A validation and transformation pipe.
- *
- * @returns A string schema.
- */
 export function string(pipe?: Pipe<string>): StringSchema;
 
-/**
- * Creates a string schema.
- *
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A string schema.
- */
 export function string(error?: ErrorMessage, pipe?: Pipe<string>): StringSchema;
 
 /**
+ * Creates a string schema.
+ *
  * @param arg1 A validation and transformation pipe, or an error message.
  * @param arg2 A validation and transformation pipe.
  *

@@ -25,31 +25,12 @@ export type MapSchema<
   map: { key: TMapKey; value: TMapValue };
 };
 
-/**
- * Creates a map schema.
- *
- * @param key The key schema.
- * @param value The value schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A map schema.
- */
 export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
   key: TMapKey,
   value: TMapValue,
   pipe?: Pipe<MapOutput<TMapKey, TMapValue>>
 ): MapSchema<TMapKey, TMapValue>;
 
-/**
- * Creates a map schema.
- *
- * @param key The key schema.
- * @param value The value schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A map schema.
- */
 export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
   key: TMapKey,
   value: TMapValue,
@@ -58,6 +39,8 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
 ): MapSchema<TMapKey, TMapValue>;
 
 /**
+ * Creates a map schema.
+ *
  * @param key The key schema.
  * @param value The value schema.
  * @param arg3 A validation and transformation pipe, or an error message.

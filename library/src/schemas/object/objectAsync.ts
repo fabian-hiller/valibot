@@ -32,28 +32,11 @@ export type ObjectSchemaAsync<
   object: TObjectShape;
 };
 
-/**
- * Creates an async object schema.
- *
- * @param object The object schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async object schema.
- */
 export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   object: TObjectShape,
   pipe?: PipeAsync<ObjectOutput<TObjectShape>>
 ): ObjectSchemaAsync<TObjectShape>;
 
-/**
- * Creates an async object schema.
- *
- * @param object The object schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async object schema.
- */
 export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   object: TObjectShape,
   error?: ErrorMessage,
@@ -61,6 +44,8 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
 ): ObjectSchemaAsync<TObjectShape>;
 
 /**
+ * Creates an async object schema.
+ *
  * @param object The object schema.
  * @param arg2 A validation and transformation pipe, or an error message.
  * @param arg3 A validation and transformation pipe.

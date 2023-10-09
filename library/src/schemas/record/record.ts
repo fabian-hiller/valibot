@@ -27,43 +27,17 @@ export type RecordSchema<
   record: { key: TRecordKey; value: TRecordValue };
 };
 
-/**
- * Creates a record schema.
- *
- * @param value The value schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A record schema.
- */
 export function record<TRecordValue extends BaseSchema>(
   value: TRecordValue,
   pipe?: Pipe<RecordOutput<StringSchema, TRecordValue>>
 ): RecordSchema<StringSchema, TRecordValue>;
 
-/**
- * Creates a record schema.
- *
- * @param value The value schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A record schema.
- */
 export function record<TRecordValue extends BaseSchema>(
   value: TRecordValue,
   error?: ErrorMessage,
   pipe?: Pipe<RecordOutput<StringSchema, TRecordValue>>
 ): RecordSchema<StringSchema, TRecordValue>;
 
-/**
- * Creates a record schema.
- *
- * @param key The key schema.
- * @param value The value schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A record schema.
- */
 export function record<
   TRecordKey extends RecordKey,
   TRecordValue extends BaseSchema
@@ -73,16 +47,6 @@ export function record<
   pipe?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchema<TRecordKey, TRecordValue>;
 
-/**
- * Creates a record schema.
- *
- * @param key The key schema.
- * @param value The value schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A record schema.
- */
 export function record<
   TRecordKey extends RecordKey,
   TRecordValue extends BaseSchema
@@ -94,6 +58,8 @@ export function record<
 ): RecordSchema<TRecordKey, TRecordValue>;
 
 /**
+ * Creates a record schema.
+ *
  * @param arg1 The value or key schema.
  * @param arg2 A validation and transformation pipe, or an error message, or the value schema.
  * @param arg3 A validation and transformation pipe, or an error message.

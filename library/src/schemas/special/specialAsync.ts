@@ -15,28 +15,11 @@ export type SpecialSchemaAsync<TInput, TOutput = TInput> = BaseSchemaAsync<
   schema: 'special';
 };
 
-/**
- * Creates an async special schema.
- *
- * @param check The type check function.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async special schema.
- */
 export function specialAsync<TInput>(
   check: (input: unknown) => boolean | Promise<boolean>,
   pipe?: PipeAsync<TInput>
 ): SpecialSchemaAsync<TInput>;
 
-/**
- * Creates a special schema.
- *
- * @param check The type check function.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async special schema.
- */
 export function specialAsync<TInput>(
   check: (input: unknown) => boolean | Promise<boolean>,
   error?: ErrorMessage,
@@ -44,6 +27,8 @@ export function specialAsync<TInput>(
 ): SpecialSchemaAsync<TInput>;
 
 /**
+ * Creates a special schema.
+ *
  * @param check The type check function.
  * @param arg2 A validation and transformation pipe, or an error message.
  * @param arg3 A validation and transformation pipe.

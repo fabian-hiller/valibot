@@ -23,28 +23,11 @@ export type ObjectSchema<
   object: TObjectShape;
 };
 
-/**
- * Creates an object schema.
- *
- * @param object The object schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An object schema.
- */
 export function object<TObjectShape extends ObjectShape>(
   object: TObjectShape,
   pipe?: Pipe<ObjectOutput<TObjectShape>>
 ): ObjectSchema<TObjectShape>;
 
-/**
- * Creates an object schema.
- *
- * @param object The object schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An object schema.
- */
 export function object<TObjectShape extends ObjectShape>(
   object: TObjectShape,
   error?: ErrorMessage,
@@ -52,6 +35,8 @@ export function object<TObjectShape extends ObjectShape>(
 ): ObjectSchema<TObjectShape>;
 
 /**
+ * Creates an object schema.
+ *
  * @param object The object schema.
  * @param arg2 A validation and transformation pipe, or an error message.
  * @param arg3 A validation and transformation pipe.

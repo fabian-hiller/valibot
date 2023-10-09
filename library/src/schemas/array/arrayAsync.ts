@@ -26,28 +26,11 @@ export type ArraySchemaAsync<
   array: { item: TArrayItem };
 };
 
-/**
- * Creates an async array schema.
- *
- * @param item The item schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async array schema.
- */
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
   item: TArrayItem,
   pipe?: PipeAsync<Output<TArrayItem>[]>
 ): ArraySchemaAsync<TArrayItem>;
 
-/**
- * Creates an async array schema.
- *
- * @param item The item schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async array schema.
- */
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
   item: TArrayItem,
   error?: ErrorMessage,
@@ -55,6 +38,8 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
 ): ArraySchemaAsync<TArrayItem>;
 
 /**
+ * Creates an async array schema.
+ *
  * @param item The item schema.
  * @param arg2 A validation and transformation pipe, or an error message.
  * @param arg3 A validation and transformation pipe.

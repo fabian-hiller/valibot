@@ -15,28 +15,11 @@ export type SpecialSchema<TInput, TOutput = TInput> = BaseSchema<
   schema: 'special';
 };
 
-/**
- * Creates a special schema.
- *
- * @param check The type check function.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A special schema.
- */
 export function special<TInput>(
   check: (input: unknown) => boolean,
   pipe?: Pipe<TInput>
 ): SpecialSchema<TInput>;
 
-/**
- * Creates a special schema.
- *
- * @param check The type check function.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A special schema.
- */
 export function special<TInput>(
   check: (input: unknown) => boolean,
   error?: ErrorMessage,
@@ -44,6 +27,8 @@ export function special<TInput>(
 ): SpecialSchema<TInput>;
 
 /**
+ * Creates a special schema.
+ *
  * @param check The type check function.
  * @param arg2 A validation and transformation pipe, or an error message.
  * @param arg3 A validation and transformation pipe.

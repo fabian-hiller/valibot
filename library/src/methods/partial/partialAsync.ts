@@ -17,15 +17,6 @@ type Partial<TObjectShape extends ObjectShapeAsync> = {
   [TKey in keyof TObjectShape]: OptionalSchemaAsync<TObjectShape[TKey]>;
 };
 
-/**
- * Creates an async object schema consisting of all properties of an existing
- * object schema set to optional.
- *
- * @param schema The affected schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async object schema.
- */
 export function partialAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
 >(
@@ -33,16 +24,6 @@ export function partialAsync<
   pipe?: PipeAsync<ObjectOutput<Partial<TObjectSchema['object']>>>
 ): ObjectSchemaAsync<Partial<TObjectSchema['object']>>;
 
-/**
- * Creates an async object schema consisting of all properties of an existing
- * object schema set to optional.
- *
- * @param schema The affected schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async object schema.
- */
 export function partialAsync<
   TObjectSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>
 >(
@@ -52,6 +33,8 @@ export function partialAsync<
 ): ObjectSchemaAsync<Partial<TObjectSchema['object']>>;
 
 /**
+ * Creates an async object schema consisting of all properties of an existing
+ * object schema set to optional.
  *
  * @param schema The affected schema.
  * @param arg3 A validation and transformation pipe, or an error message.

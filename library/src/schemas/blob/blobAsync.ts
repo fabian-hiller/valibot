@@ -12,29 +12,16 @@ export type BlobSchemaAsync<TOutput = Blob> = BaseSchemaAsync<Blob, TOutput> & {
   schema: 'blob';
 };
 
-/**
- * Creates an async blob schema.
- *
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async blob schema.
- */
 export function blobAsync(pipe?: PipeAsync<Blob>): BlobSchemaAsync;
 
-/**
- * Creates an async blob schema.
- *
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async blob schema.
- */
 export function blobAsync(
   error?: ErrorMessage,
   pipe?: PipeAsync<Blob>
 ): BlobSchemaAsync;
 
 /**
+ * Creates an async blob schema.
+ *
  * @param arg1 A validation and transformation pipe, or an error message.
  * @param arg2 A validation and transformation pipe.
  *

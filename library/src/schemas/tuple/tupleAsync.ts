@@ -33,43 +33,17 @@ export type TupleSchemaAsync<
   tuple: { items: TTupleItems; rest: TTupleRest };
 };
 
-/**
- * Creates an async tuple schema.
- *
- * @param items The items schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async tuple schema.
- */
 export function tupleAsync<TTupleItems extends TupleShapeAsync>(
   items: TTupleItems,
   pipe?: PipeAsync<TupleOutput<TTupleItems, undefined>>
 ): TupleSchemaAsync<TTupleItems>;
 
-/**
- * Creates an async tuple schema.
- *
- * @param items The items schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async tuple schema.
- */
 export function tupleAsync<TTupleItems extends TupleShapeAsync>(
   items: TTupleItems,
   error?: ErrorMessage,
   pipe?: PipeAsync<TupleOutput<TTupleItems, undefined>>
 ): TupleSchemaAsync<TTupleItems>;
 
-/**
- * Creates an async tuple schema.
- *
- * @param items The items schema.
- * @param rest The rest schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async tuple schema.
- */
 export function tupleAsync<
   TTupleItems extends TupleShapeAsync,
   TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
@@ -79,16 +53,6 @@ export function tupleAsync<
   pipe?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchemaAsync<TTupleItems, TTupleRest>;
 
-/**
- * Creates an async tuple schema.
- *
- * @param items The items schema.
- * @param rest The rest schema.
- * @param error The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async tuple schema.
- */
 export function tupleAsync<
   TTupleItems extends TupleShapeAsync,
   TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
@@ -100,6 +64,8 @@ export function tupleAsync<
 ): TupleSchemaAsync<TTupleItems, TTupleRest>;
 
 /**
+ * Creates an async tuple schema.
+ *
  * @param items The items schema.
  * @param arg2 A validation and transformation pipe, or an error message, or the rest schema.
  * @param arg3 A validation and transformation pipe, or an error message.
