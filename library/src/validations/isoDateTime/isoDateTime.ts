@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates a datetime.
+ * Creates a validation function that validates an datetime.
  *
  * Format: yyyy-mm-ddThh:mm
  *

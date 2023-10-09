@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates the MIME type of a file.
+ * Creates a validation function that validates the MIME type of a file.
  *
  * @param requirement The MIME types.
  * @param error The error message.

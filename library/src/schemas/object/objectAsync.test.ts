@@ -3,6 +3,7 @@ import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { toCustom } from '../../transformations/index.ts';
 import { number } from '../number/index.ts';
+import { optional } from '../optional/index.ts';
 import { string, stringAsync } from '../string/index.ts';
 import { objectAsync } from './objectAsync.ts';
 import { maxValue } from '../../validations/index.ts';
@@ -19,6 +20,14 @@ describe('objectAsync', () => {
     await expect(parseAsync(schema, 123)).rejects.toThrowError();
     await expect(parseAsync(schema, {})).rejects.toThrowError();
     await expect(parseAsync(schema, new Map())).rejects.toThrowError();
+  });
+
+  test('should exclude non-existing keys', async () => {
+    const schema = objectAsync({ key: optional(string()) });
+    const output1 = await parseAsync(schema, { key: undefined });
+    expect('key' in output1).toBe(true);
+    const output2 = await parseAsync(schema, {});
+    expect('key' in output2).toBe(false);
   });
 
   test('should throw custom error', async () => {

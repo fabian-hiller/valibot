@@ -18,6 +18,7 @@ import type {
   NativeEnumSchemaAsync,
 } from '../nativeEnum/index.ts';
 import type { StringSchema, StringSchemaAsync } from '../string/index.ts';
+import type { UnionSchema, UnionSchemaAsync } from '../union/index.ts';
 import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';
 import { getRecordArgs } from './utils/index.ts';
 import { BLOCKED_KEYS } from './values.ts';
@@ -31,7 +32,9 @@ export type RecordKeyAsync =
   | NativeEnumSchema<any, string | number | symbol>
   | NativeEnumSchemaAsync<any, string | number | symbol>
   | StringSchema<string | number | symbol>
-  | StringSchemaAsync<string | number | symbol>;
+  | StringSchemaAsync<string | number | symbol>
+  | UnionSchema<any, string | number | symbol>
+  | UnionSchemaAsync<any, string | number | symbol>;
 
 /**
  * Record schema async type.

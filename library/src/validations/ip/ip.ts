@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates a IP v4 or v6 address.
+ * Creates a validation function that validates an IP v4 or v6 address.
  *
  * @param error The error message.
  *

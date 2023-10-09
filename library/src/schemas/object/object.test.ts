@@ -3,6 +3,7 @@ import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
 import { toCustom } from '../../transformations/index.ts';
 import { number } from '../number/index.ts';
+import { optional } from '../optional/index.ts';
 import { string } from '../string/index.ts';
 import { object } from './object.ts';
 import { literal } from '../literal/literal.ts';
@@ -19,6 +20,14 @@ describe('object', () => {
     expect(() => parse(schema, 123)).toThrowError();
     expect(() => parse(schema, {})).toThrowError();
     expect(() => parse(schema, new Map())).toThrowError();
+  });
+
+  test('should exclude non-existing keys', () => {
+    const schema = object({ key: optional(string()) });
+    const output1 = parse(schema, { key: undefined });
+    expect('key' in output1).toBe(true);
+    const output2 = parse(schema, {});
+    expect('key' in output2).toBe(false);
   });
 
   test('should throw custom error', () => {

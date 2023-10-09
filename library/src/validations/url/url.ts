@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates a URL.
+ * Creates a validation function that validates a URL.
  *
  * Hint: The value is passed to the URL constructor to check if it is valid.
  * This check is not perfect. For example, values like "abc:1234" are accepted.

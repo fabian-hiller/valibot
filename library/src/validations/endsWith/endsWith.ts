@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates the end of a string.
+ * Creates a validation function that validates the end of a string.
  *
  * @param requirement The end string.
  * @param error The error message.

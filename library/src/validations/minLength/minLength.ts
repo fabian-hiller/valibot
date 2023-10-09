@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates the length of a string or array.
+ * Creates a validation function that validates the length of a string or array.
  *
  * @param requirement The minimum length.
  * @param error The error message.

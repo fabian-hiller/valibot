@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates the value of a string, number or date.
+ * Creates a validation function that validates the value of a string, number or date.
  *
  * @param requirement The minimum value.
  * @param error The error message.

@@ -14,6 +14,7 @@ import {
 import type { EnumSchema } from '../enumType/index.ts';
 import type { NativeEnumSchema } from '../nativeEnum/index.ts';
 import type { StringSchema } from '../string/index.ts';
+import type { UnionSchema } from '../union/index.ts';
 import type { RecordOutput, RecordInput, RecordPathItem } from './types.ts';
 import { getRecordArgs } from './utils/index.ts';
 import { BLOCKED_KEYS } from './values.ts';
@@ -24,7 +25,8 @@ import { BLOCKED_KEYS } from './values.ts';
 export type RecordKey =
   | EnumSchema<any, string | number | symbol>
   | NativeEnumSchema<any, string | number | symbol>
-  | StringSchema<string | number | symbol>;
+  | StringSchema<string | number | symbol>
+  | UnionSchema<any, string | number | symbol>;
 
 /**
  * Record schema type.

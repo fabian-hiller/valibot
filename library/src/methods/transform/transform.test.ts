@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { object, string } from '../../schemas/index.ts';
+import { maxValue, minValue } from '../../validations/index.ts';
 import { parse } from '../parse/index.ts';
 import { transform } from './transform.ts';
 
@@ -23,5 +24,17 @@ describe('transform', () => {
   test('should return issues', () => {
     const schema = transform(string(), (output) => output.length);
     expect(() => parse(schema, 123)).toThrowError();
+  });
+
+  test('should execute pipe', () => {
+    const schema = transform(string(), (output) => output.length, [
+      minValue(1),
+      maxValue(5),
+    ]);
+    const input = 'hello';
+    const output = parse(schema, input);
+    expect(output).toBe(input.length);
+    expect(() => parse(schema, '')).toThrowError();
+    expect(() => parse(schema, '123456')).toThrowError();
   });
 });

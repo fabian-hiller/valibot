@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates the byte length of a string.
+ * Creates a validation function that validates the byte length of a string.
  *
  * @param requirement The byte length.
  * @param error The error message.

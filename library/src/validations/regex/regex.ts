@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation functions that validates a string with a regex.
+ * Creates a validation function that validates a string with a regex.
  *
  * @param requirement The regex pattern.
  * @param error The error message.
