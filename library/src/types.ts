@@ -89,10 +89,10 @@ export type SchemaMeta =
     }
   | {
       schema: 'literal';
-      value: string | number | bigint | boolean | symbol;
+      literal: string | number | bigint | boolean | symbol;
     }
   | {
-      schema: 'any' | 'array' | 'record' | 'set' | 'special';
+      schema: 'any' | 'array' | 'map' | 'record' | 'set' | 'special';
       checks: PipeMeta[];
     }
   | {
@@ -102,12 +102,6 @@ export type SchemaMeta =
   | {
       schema: 'tuple';
       entries: SchemaMeta[];
-      checks: PipeMeta[];
-    }
-  | {
-      schema: 'map';
-      key: SchemaMeta;
-      value: SchemaMeta;
       checks: PipeMeta[];
     }
   | {
