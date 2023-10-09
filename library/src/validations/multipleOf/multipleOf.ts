@@ -9,12 +9,21 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  *
  * @returns A validation function.
  */
-export function multipleOf<TInput extends number>(
-  requirement: number,
-  error?: ErrorMessage
-) {
-  return (input: TInput): PipeResult<TInput> =>
-    input % requirement !== 0
-      ? getPipeIssues('multiple_of', error || 'Invalid multiple', input)
-      : getOutput(input);
+export function multipleOf<
+  TInput extends number,
+  const TRequirement extends number
+>(requirement: TRequirement, error?: ErrorMessage) {
+  const kind = 'multiple_of' as const;
+  const message = error ?? ('Invalid multiple' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      input % requirement !== 0
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

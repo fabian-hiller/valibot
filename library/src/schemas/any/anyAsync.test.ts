@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
 import { toCustom } from '../../transformations/index.ts';
+import { maxLength } from '../../validations/index.ts';
 import { anyAsync } from './anyAsync.ts';
 
 describe('anyAsync', () => {
@@ -21,5 +22,15 @@ describe('anyAsync', () => {
     const transformInput = () => 'hello';
     const output = await parseAsync(anyAsync([toCustom(transformInput)]), 123);
     expect(output).toBe(transformInput());
+  });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const schema1 = anyAsync([toCustom(String), maxLength(5)]);
+    expect(schema1.checks).toStrictEqual([
+      { kind: 'max_length', requirement: 5, message: 'Invalid length' },
+    ]);
+
+    const schema2 = anyAsync();
+    expect(schema2.checks).toStrictEqual([]);
   });
 });

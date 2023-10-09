@@ -9,10 +9,19 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function uuid<TInput extends string>(error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-      input
-    )
-      ? getPipeIssues('uuid', error || 'Invalid UUID', input)
-      : getOutput(input);
+  const kind = 'uuid' as const;
+  const requirement =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const message = error ?? ('Invalid UUID' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !requirement.test(input)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

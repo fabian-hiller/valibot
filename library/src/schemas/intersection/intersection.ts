@@ -1,5 +1,10 @@
-import type { BaseSchema, Issues } from '../../types.ts';
-import { getIssues, getOutput, getSchemaIssues } from '../../utils/index.ts';
+import type { BaseSchema, Issues, SchemaMeta } from '../../types.ts';
+import {
+  getEntries,
+  getIssues,
+  getOutput,
+  getSchemaIssues,
+} from '../../utils/index.ts';
 import type { IntersectionInput, IntersectionOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
 
@@ -21,6 +26,7 @@ export type IntersectionSchema<
 > = BaseSchema<IntersectionInput<TIntersectionOptions>, TOutput> & {
   schema: 'intersection';
   intersection: TIntersectionOptions;
+  entries: SchemaMeta[];
 };
 
 /**
@@ -50,6 +56,8 @@ export function intersection<TIntersectionOptions extends IntersectionOptions>(
      * Whether it's async.
      */
     async: false,
+
+    entries: getEntries(intersection),
 
     /**
      * Parses unknown input based on its schema.

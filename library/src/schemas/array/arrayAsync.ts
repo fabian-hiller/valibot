@@ -6,9 +6,11 @@ import type {
   Issues,
   Output,
   PipeAsync,
+  PipeMeta,
 } from '../../types.ts';
 import {
   executePipeAsync,
+  getChecks,
   getDefaultArgs,
   getIssues,
   getSchemaIssues,
@@ -24,6 +26,7 @@ export type ArraySchemaAsync<
 > = BaseSchemaAsync<Input<TArrayItem>[], TOutput> & {
   schema: 'array';
   array: { item: TArrayItem };
+  checks: PipeMeta[];
 };
 
 /**
@@ -78,6 +81,12 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
      * Whether it's async.
      */
     async: true,
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe ?? []),
 
     /**
      * Parses unknown input based on its schema.

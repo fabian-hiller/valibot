@@ -1,6 +1,13 @@
-import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Issues,
+  Pipe,
+  PipeMeta,
+} from '../../types.ts';
 import {
   executePipe,
+  getChecks,
   getDefaultArgs,
   getIssues,
   getSchemaIssues,
@@ -16,6 +23,7 @@ export type SetSchema<
 > = BaseSchema<SetInput<TSetValue>, TOutput> & {
   schema: 'set';
   set: { value: TSetValue };
+  checks: PipeMeta[];
 };
 
 /**
@@ -70,6 +78,12 @@ export function set<TSetValue extends BaseSchema>(
      * Whether it's async.
      */
     async: false,
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

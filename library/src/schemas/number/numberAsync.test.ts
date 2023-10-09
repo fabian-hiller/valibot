@@ -40,4 +40,14 @@ describe('numberAsync', () => {
       valueError
     );
   });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const schema1 = numberAsync([maxValue(5, `custom`)]);
+    expect(schema1.checks).toStrictEqual([
+      { kind: 'max_value', requirement: 5, message: 'custom' },
+    ]);
+
+    const schema2 = numberAsync();
+    expect(schema2.checks).toStrictEqual([]);
+  });
 });

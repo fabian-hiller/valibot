@@ -4,9 +4,11 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
+  PipeMeta,
 } from '../../types.ts';
 import {
   executePipeAsync,
+  getChecks,
   getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
@@ -41,6 +43,7 @@ export type RecordSchemaAsync<
 > = BaseSchemaAsync<RecordInput<TRecordKey, TRecordValue>, TOutput> & {
   schema: 'record';
   record: { key: TRecordKey; value: TRecordValue };
+  checks: PipeMeta[];
 };
 
 /**
@@ -144,6 +147,12 @@ export function recordAsync<
      * Whether it's async.
      */
     async: true,
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

@@ -19,12 +19,22 @@ export function includes<TInput extends TItem[], TItem>(
  *
  * @returns A validation function.
  */
-export function includes<TInput extends string | TItem[], TItem>(
-  requirement: string | TItem,
-  error?: ErrorMessage
-) {
-  return (input: TInput): PipeResult<TInput> =>
-    !input.includes(requirement as any)
-      ? getPipeIssues('includes', error || 'Invalid content', input)
-      : getOutput(input);
+export function includes<
+  TInput extends string | TItem[],
+  TItem,
+  const TRequirement extends string | TItem
+>(requirement: TRequirement, error?: ErrorMessage) {
+  const kind = 'includes' as const;
+  const message = error ?? ('Invalid content' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !input.includes(requirement as any)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

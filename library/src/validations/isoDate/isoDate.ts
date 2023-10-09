@@ -15,8 +15,18 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function isoDate<TInput extends string>(error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    !/^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])$/.test(input)
-      ? getPipeIssues('iso_date', error || 'Invalid date', input)
-      : getOutput(input);
+  const kind = 'iso_date' as const;
+  const requirement = /^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])$/;
+  const message = error ?? ('Invalid date' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !requirement.test(input)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

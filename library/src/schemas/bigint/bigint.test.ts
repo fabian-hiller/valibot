@@ -35,4 +35,14 @@ describe('bigint', () => {
     expect(output2).toEqual(input2);
     expect(() => parse(schema2, 12346789n)).toThrowError(valueError);
   });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const schema1 = bigint([maxValue(500n)]);
+    expect(schema1.checks).toStrictEqual([
+      { kind: 'max_value', requirement: 500n, message: 'Invalid value' },
+    ]);
+
+    const schema2 = bigint();
+    expect(schema2.checks).toStrictEqual([]);
+  });
 });

@@ -1,4 +1,10 @@
-import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  PipeAsync,
+  PipeMeta,
+} from '../../types.ts';
+import { getChecks } from '../../utils/getChecks/getChecks.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -10,6 +16,7 @@ import {
  */
 export type BlobSchemaAsync<TOutput = Blob> = BaseSchemaAsync<Blob, TOutput> & {
   schema: 'blob';
+  checks: PipeMeta[];
 };
 
 /**
@@ -52,6 +59,12 @@ export function blobAsync(
      * Whether it's async.
      */
     async: true,
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

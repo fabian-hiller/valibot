@@ -4,9 +4,13 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
+  PipeMeta,
+  SchemaMeta,
 } from '../../types.ts';
+import { getChecks } from '../../utils/getChecks/getChecks.ts';
 import {
   executePipeAsync,
+  getEntries,
   getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
@@ -31,6 +35,8 @@ export type TupleSchemaAsync<
 > = BaseSchemaAsync<TupleInput<TTupleItems, TTupleRest>, TOutput> & {
   schema: 'tuple';
   tuple: { items: TTupleItems; rest: TTupleRest };
+  entries: SchemaMeta[];
+  checks: PipeMeta[];
 };
 
 /**
@@ -133,6 +139,14 @@ export function tupleAsync<
      * Whether it's async.
      */
     async: true,
+
+    entries: getEntries(items),
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

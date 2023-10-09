@@ -3,6 +3,7 @@ import { parse } from '../../methods/index.ts';
 import { string } from '../string/index.ts';
 import { number } from '../number/index.ts';
 import { nullType } from '../nullType/index.ts';
+import { maxLength } from '../../validations/index.ts';
 import { union } from './union.ts';
 
 describe('union', () => {
@@ -28,5 +29,18 @@ describe('union', () => {
     expect(() => parse(union([string(), number()], error), null)).toThrowError(
       error
     );
+  });
+
+  test(`should expose an array of entry SchemaMeta`, () => {
+    const schema1 = union([string([maxLength(4)]), number()]);
+    expect(schema1.entries).toStrictEqual([
+      {
+        schema: 'string',
+        checks: [
+          { kind: 'max_length', requirement: 4, message: 'Invalid length' },
+        ],
+      },
+      { schema: 'number', checks: [] },
+    ]);
   });
 });

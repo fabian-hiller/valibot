@@ -157,4 +157,33 @@ describe('tuple', () => {
       lengthError
     );
   });
+
+  test(`should expose an array of entry SchemaMeta`, () => {
+    const schema1 = tuple([string([maxLength(5)]), string([minLength(10)])]);
+    expect(schema1.entries).toStrictEqual([
+      {
+        schema: 'string',
+        checks: [
+          { kind: 'max_length', requirement: 5, message: 'Invalid length' },
+        ],
+      },
+      {
+        schema: 'string',
+        checks: [
+          { kind: 'min_length', requirement: 10, message: 'Invalid length' },
+        ],
+      },
+    ]);
+  });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const schema1 = tuple([string()], [minLength(2), maxLength(3)]);
+    expect(schema1.checks).toStrictEqual([
+      { kind: 'min_length', requirement: 2, message: 'Invalid length' },
+      { kind: 'max_length', requirement: 3, message: 'Invalid length' },
+    ]);
+
+    const schema2 = tuple([string()]);
+    expect(schema2.checks).toStrictEqual([]);
+  });
 });

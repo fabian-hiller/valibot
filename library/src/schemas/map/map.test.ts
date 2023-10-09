@@ -147,4 +147,14 @@ describe('map', () => {
     );
     expect(() => parse(schema2, new Map().set(1, '1'))).toThrowError(sizeError);
   });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const schema1 = map(number(), string(), [size(1)]);
+    expect(schema1.checks).toStrictEqual([
+      { kind: 'size', requirement: 1, message: 'Invalid size' },
+    ]);
+
+    const schema2 = map(number(), string());
+    expect(schema2.checks).toStrictEqual([]);
+  });
 });

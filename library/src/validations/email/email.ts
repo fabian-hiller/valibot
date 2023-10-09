@@ -9,10 +9,19 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function email<TInput extends string>(error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    !/^[\w+-]+(?:\.[\w+-]+)*@[A-Z0-9]+(?:(?:\.|-)[A-Z0-9]+)*\.[A-Z]{2,}$/i.test(
-      input
-    )
-      ? getPipeIssues('email', error || 'Invalid email', input)
-      : getOutput(input);
+  const kind = 'email' as const;
+  const requirement =
+    /^[\w+-]+(?:\.[\w+-]+)*@[A-Z0-9]+(?:(?:\.|-)[A-Z0-9]+)*\.[A-Z]{2,}$/i;
+  const message = error ?? ('Invalid email' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !requirement.test(input)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

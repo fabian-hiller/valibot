@@ -9,8 +9,18 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function ulid<TInput extends string>(error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    !/^[0-9A-HJKMNPQ-TV-Z]{26}$/i.test(input)
-      ? getPipeIssues('ulid', error || 'Invalid ULID', input)
-      : getOutput(input);
+  const kind = `ulid` as const;
+  const requirement = /^[0-9A-HJKMNPQ-TV-Z]{26}$/i;
+  const message = error ?? ('Invalid ULID' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !requirement.test(input)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

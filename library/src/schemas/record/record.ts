@@ -1,5 +1,16 @@
-import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
-import { executePipe, getIssues, getSchemaIssues } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Issues,
+  Pipe,
+  PipeMeta,
+} from '../../types.ts';
+import {
+  executePipe,
+  getChecks,
+  getIssues,
+  getSchemaIssues,
+} from '../../utils/index.ts';
 import type { EnumSchema } from '../enumType/index.ts';
 import type { NativeEnumSchema } from '../nativeEnum/index.ts';
 import type { StringSchema } from '../string/index.ts';
@@ -25,6 +36,7 @@ export type RecordSchema<
 > = BaseSchema<RecordInput<TRecordKey, TRecordValue>, TOutput> & {
   schema: 'record';
   record: { key: TRecordKey; value: TRecordValue };
+  checks: PipeMeta[];
 };
 
 /**
@@ -128,6 +140,12 @@ export function record<
      * Whether it's async.
      */
     async: false,
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

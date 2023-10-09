@@ -9,8 +9,18 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function cuid2<TInput extends string>(error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    !/^[a-z][a-z0-9]*$/.test(input)
-      ? getPipeIssues('cuid2', error || 'Invalid cuid2', input)
-      : getOutput(input);
+  const kind = 'cuid2' as const;
+  const requirement = /^[a-z][a-z0-9]*$/;
+  const message = error ?? ('Invalid cuid2' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !requirement.test(input)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

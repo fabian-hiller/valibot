@@ -11,9 +11,18 @@ import { getOutput, getPipeIssues, isLuhnAlgo } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function imei<TInput extends string>(error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    !/^\d{2}[ |/|-]?\d{6}[ |/|-]?\d{6}[ |/|-]?\d$/.test(input) ||
-    !isLuhnAlgo(input)
-      ? getPipeIssues('imei', error || 'Invalid IMEI', input)
-      : getOutput(input);
+  const kind = 'imei' as const;
+  const requirement = /^\d{2}[ |/|-]?\d{6}[ |/|-]?\d{6}[ |/|-]?\d$/;
+  const message = error ?? ('Invalid IMEI' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !requirement.test(input) || !isLuhnAlgo(input)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

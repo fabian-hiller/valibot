@@ -11,12 +11,21 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function maxValue<
   TInput extends string | number | bigint | Date,
-  TRequirement extends TInput
+  const TRequirement extends TInput
 >(requirement: TRequirement, error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    input > requirement
-      ? getPipeIssues('max_value', error || 'Invalid value', input)
-      : getOutput(input);
+  const kind = 'max_value' as const;
+  const message = error ?? ('Invalid value' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      input > requirement
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }
 
 /**

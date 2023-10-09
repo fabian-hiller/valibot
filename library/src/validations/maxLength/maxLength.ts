@@ -9,12 +9,21 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  *
  * @returns A validation function.
  */
-export function maxLength<TInput extends string | any[]>(
-  requirement: number,
-  error?: ErrorMessage
-) {
-  return (input: TInput): PipeResult<TInput> =>
-    input.length > requirement
-      ? getPipeIssues('max_length', error || 'Invalid length', input)
-      : getOutput(input);
+export function maxLength<
+  TInput extends string | any[],
+  const TRequirement extends number
+>(requirement: TRequirement, error?: ErrorMessage) {
+  const kind = 'max_length' as const;
+  const message = error ?? ('Invalid length' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      input.length > requirement
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

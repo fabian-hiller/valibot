@@ -1,6 +1,7 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe, PipeMeta } from '../../types.ts';
 import {
   executePipe,
+  getChecks,
   getDefaultArgs,
   getSchemaIssues,
 } from '../../utils/index.ts';
@@ -13,6 +14,7 @@ export type SpecialSchema<TInput, TOutput = TInput> = BaseSchema<
   TOutput
 > & {
   schema: 'special';
+  checks: PipeMeta[];
 };
 
 /**
@@ -62,6 +64,12 @@ export function special<TInput>(
      * Whether it's async.
      */
     async: false,
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

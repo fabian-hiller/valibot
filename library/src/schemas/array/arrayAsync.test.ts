@@ -114,4 +114,14 @@ describe('array', () => {
     await expect(parseAsync(schema2, [1, 2])).rejects.toThrowError(lengthError);
     await expect(parseAsync(schema2, [1])).rejects.toThrowError(contentError);
   });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const schema1 = arrayAsync(string(), [maxLength(5)]);
+    expect(schema1.checks).toStrictEqual([
+      { kind: 'max_length', requirement: 5, message: 'Invalid length' },
+    ]);
+
+    const schema2 = arrayAsync(string());
+    expect(schema2.checks).toStrictEqual([]);
+  });
 });

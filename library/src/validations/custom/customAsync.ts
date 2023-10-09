@@ -13,8 +13,17 @@ export function customAsync<TInput>(
   requirement: (input: TInput) => Promise<boolean>,
   error?: ErrorMessage
 ) {
-  return async (input: TInput): Promise<PipeResult<TInput>> =>
-    !(await requirement(input))
-      ? getPipeIssues('custom', error || 'Invalid input', input)
-      : getOutput(input);
+  const kind = 'custom' as const;
+  const message = error ?? ('Invalid input' as const);
+  return Object.assign(
+    async (input: TInput): Promise<PipeResult<TInput>> =>
+      !(await requirement(input))
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

@@ -5,6 +5,9 @@ import { toCustom } from '../../transformations/index.ts';
 import { number } from '../number/index.ts';
 import { string, stringAsync } from '../string/index.ts';
 import { objectAsync } from './objectAsync.ts';
+import { maxValue } from '../../validations/index.ts';
+import { literal } from '../literal/literal.ts';
+import { union } from '../union/union.ts';
 
 describe('objectAsync', () => {
   test('should pass only objects', async () => {
@@ -96,5 +99,48 @@ describe('objectAsync', () => {
     );
     expect(output1).toEqual(transformInput());
     expect(output2).toEqual(transformInput());
+  });
+
+  test(`should expose an array of entry SchemaMeta`, () => {
+    const schema1 = objectAsync({
+      simple: string(),
+      validated: number([maxValue(5)]),
+      nested: objectAsync({
+        foo: literal(`foo`),
+        bar: union([literal(`baz`), literal(`qux`)]),
+      }),
+    });
+    expect(schema1.entries).toStrictEqual([
+      ['simple', { schema: 'string', checks: [] }],
+      [
+        'validated',
+        {
+          schema: 'number',
+          checks: [
+            { kind: 'max_value', requirement: 5, message: 'Invalid value' },
+          ],
+        },
+      ],
+      [
+        'nested',
+        {
+          schema: 'object',
+          checks: [],
+          entries: [
+            ['foo', { schema: 'literal', literal: 'foo' }],
+            [
+              'bar',
+              {
+                schema: 'union',
+                entries: [
+                  { schema: 'literal', literal: 'baz' },
+                  { schema: 'literal', literal: 'qux' },
+                ],
+              },
+            ],
+          ],
+        },
+      ],
+    ]);
   });
 });

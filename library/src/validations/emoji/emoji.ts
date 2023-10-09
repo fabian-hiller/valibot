@@ -9,8 +9,18 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function emoji<TInput extends string>(error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    !/^(\p{Extended_Pictographic}|\p{Emoji_Component})+$/u.test(input)
-      ? getPipeIssues('emoji', error || 'Invalid emoji', input)
-      : getOutput(input);
+  const kind = 'emoji' as const;
+  const requirement = /^(\p{Extended_Pictographic}|\p{Emoji_Component})+$/u;
+  const message = error ?? ('Invalid emoji' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !requirement.test(input)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

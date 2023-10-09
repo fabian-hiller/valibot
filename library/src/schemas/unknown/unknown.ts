@@ -1,4 +1,5 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, Pipe, PipeMeta } from '../../types.ts';
+import { getChecks } from '../../utils/getChecks/getChecks.ts';
 import { executePipe } from '../../utils/index.ts';
 
 /**
@@ -6,6 +7,7 @@ import { executePipe } from '../../utils/index.ts';
  */
 export type UnknownSchema<TOutput = unknown> = BaseSchema<unknown, TOutput> & {
   schema: 'unknown';
+  checks: PipeMeta[];
 };
 
 /**
@@ -26,6 +28,12 @@ export function unknown(pipe: Pipe<unknown> = []): UnknownSchema {
      * Whether it's async.
      */
     async: false,
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

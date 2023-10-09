@@ -80,10 +80,43 @@ export type _ParseResult<TOutput> =
   | { output: TOutput; issues?: undefined }
   | { output?: undefined; issues: Issues };
 
+export type SchemaMeta =
+  | {
+      schema: string;
+    }
+  | {
+      schema: 'literal';
+      value: string | number | bigint | boolean | symbol;
+    }
+  | {
+      schema: 'any' | 'array' | 'record' | 'set' | 'special';
+      checks: PipeMeta[];
+    }
+  | {
+      schema: 'intersection' | 'union';
+      entries: SchemaMeta[];
+    }
+  | {
+      schema: 'tuple';
+      entries: SchemaMeta[];
+      checks: PipeMeta[];
+    }
+  | {
+      schema: 'map';
+      key: SchemaMeta;
+      value: SchemaMeta;
+      checks: PipeMeta[];
+    }
+  | {
+      schema: 'object';
+      entries: [key: PropertyKey, value: SchemaMeta][];
+      checks: PipeMeta[];
+    };
+
 /**
  * Base schema type.
  */
-export type BaseSchema<TInput = any, TOutput = TInput> = {
+export type BaseSchema<TInput = any, TOutput = TInput> = SchemaMeta & {
   async: false;
   _parse(input: unknown, info?: ParseInfo): _ParseResult<TOutput>;
   _types?: { input: TInput; output: TOutput };
@@ -92,7 +125,7 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
 /**
  * Base schema async type.
  */
-export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
+export type BaseSchemaAsync<TInput = any, TOutput = TInput> = SchemaMeta & {
   async: true;
   _parse(input: unknown, info?: ParseInfo): Promise<_ParseResult<TOutput>>;
   _types?: { input: TInput; output: TOutput };
@@ -135,17 +168,35 @@ export type PipeResult<TOutput> =
       issues: Pick<Issue, 'validation' | 'message' | 'input' | 'path'>[];
     };
 
+export type PipeMeta<
+  TKind extends string = string,
+  TRequirement = unknown
+> = Readonly<{
+  kind: TKind;
+  message: ErrorMessage;
+  requirement?: TRequirement;
+}>;
+
 /**
  * Validation and transformation pipe type.
  */
-export type Pipe<TValue> = ((value: TValue) => PipeResult<TValue>)[];
+export type Pipe<TValue> = [
+  ...(
+    | (((value: TValue) => PipeResult<TValue>) & PipeMeta)
+    | ((value: TValue) => PipeResult<TValue>)
+  )[]
+];
 
 /**
  * Async validation and transformation pipe type.
  */
-export type PipeAsync<TValue> = ((
-  value: TValue
-) => PipeResult<TValue> | Promise<PipeResult<TValue>>)[];
+export type PipeAsync<TValue> = [
+  ...(
+    | (((value: TValue) => PipeResult<TValue> | Promise<PipeResult<TValue>>) &
+        PipeMeta)
+    | ((value: TValue) => PipeResult<TValue> | Promise<PipeResult<TValue>>)
+  )[]
+];
 
 /**
  * Resolve type.

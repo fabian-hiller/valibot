@@ -39,4 +39,14 @@ describe('bigintAsync', () => {
       valueError
     );
   });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const schema1 = bigintAsync([maxValue(500n)]);
+    expect(schema1.checks).toStrictEqual([
+      { kind: 'max_value', requirement: 500n, message: 'Invalid value' },
+    ]);
+
+    const schema2 = bigintAsync();
+    expect(schema2.checks).toStrictEqual([]);
+  });
 });

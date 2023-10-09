@@ -9,12 +9,21 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  *
  * @returns A validation function.
  */
-export function mimeType<TInput extends Blob>(
-  requirement: `${string}/${string}`[],
-  error?: ErrorMessage
-) {
-  return (input: TInput): PipeResult<TInput> =>
-    !requirement.includes(input.type as `${string}/${string}`)
-      ? getPipeIssues('mime_type', error || 'Invalid MIME type', input)
-      : getOutput(input);
+export function mimeType<
+  TInput extends Blob,
+  const TRequirement extends `${string}/${string}`[]
+>(requirement: TRequirement, error?: ErrorMessage) {
+  const kind = 'mime_type' as const;
+  const message = error ?? ('Invalid MIME type' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !requirement.includes(input.type as `${string}/${string}`)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

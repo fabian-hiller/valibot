@@ -9,12 +9,21 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  *
  * @returns A validation function.
  */
-export function endsWith<TInput extends string>(
-  requirement: string,
-  error?: ErrorMessage
-) {
-  return (input: TInput): PipeResult<TInput> =>
-    !input.endsWith(requirement as any)
-      ? getPipeIssues('ends_with', error || 'Invalid end', input)
-      : getOutput(input);
+export function endsWith<
+  TInput extends string,
+  const TRequirement extends string
+>(requirement: TRequirement, error?: ErrorMessage) {
+  const kind = 'ends_with' as const;
+  const message = error ?? ('Invalid end' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !input.endsWith(requirement as any)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

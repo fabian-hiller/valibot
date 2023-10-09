@@ -4,10 +4,14 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
+  PipeMeta,
+  SchemaMeta,
 } from '../../types.ts';
 import {
   executePipeAsync,
+  getChecks,
   getDefaultArgs,
+  getEntries,
   getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
@@ -30,6 +34,8 @@ export type ObjectSchemaAsync<
 > = BaseSchemaAsync<ObjectInput<TObjectShape>, TOutput> & {
   schema: 'object';
   object: TObjectShape;
+  entries: [key: PropertyKey, value: SchemaMeta][];
+  checks: PipeMeta[];
 };
 
 /**
@@ -87,6 +93,14 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
      * Whether it's async.
      */
     async: true,
+
+    entries: getEntries(object),
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

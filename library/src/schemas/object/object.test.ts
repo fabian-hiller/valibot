@@ -5,6 +5,9 @@ import { toCustom } from '../../transformations/index.ts';
 import { number } from '../number/index.ts';
 import { string } from '../string/index.ts';
 import { object } from './object.ts';
+import { literal } from '../literal/literal.ts';
+import { union } from '../union/union.ts';
+import { maxValue } from '../../validations/index.ts';
 
 describe('object', () => {
   test('should pass only objects', () => {
@@ -94,5 +97,48 @@ describe('object', () => {
     );
     expect(output1).toEqual(transformInput());
     expect(output2).toEqual(transformInput());
+  });
+
+  test(`should expose an array of entry SchemaMeta`, () => {
+    const schema1 = object({
+      simple: string(),
+      validated: number([maxValue(5)]),
+      nested: object({
+        foo: literal(`foo`),
+        bar: union([literal(`baz`), literal(`qux`)]),
+      }),
+    });
+    expect(schema1.entries).toStrictEqual([
+      ['simple', { schema: 'string', checks: [] }],
+      [
+        'validated',
+        {
+          schema: 'number',
+          checks: [
+            { kind: 'max_value', requirement: 5, message: 'Invalid value' },
+          ],
+        },
+      ],
+      [
+        'nested',
+        {
+          schema: 'object',
+          checks: [],
+          entries: [
+            ['foo', { schema: 'literal', literal: 'foo' }],
+            [
+              'bar',
+              {
+                schema: 'union',
+                entries: [
+                  { schema: 'literal', literal: 'baz' },
+                  { schema: 'literal', literal: 'qux' },
+                ],
+              },
+            ],
+          ],
+        },
+      ],
+    ]);
   });
 });

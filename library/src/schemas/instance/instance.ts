@@ -1,4 +1,5 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe, PipeMeta } from '../../types.ts';
+import { getChecks } from '../../utils/getChecks/getChecks.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -19,6 +20,7 @@ export type InstanceSchema<
 > = BaseSchema<InstanceType<TClass>, TOutput> & {
   schema: 'instance';
   class: TClass;
+  checks: PipeMeta[];
 };
 
 /**
@@ -73,6 +75,12 @@ export function instance<TClass extends Class>(
      * Whether it's async.
      */
     async: false,
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

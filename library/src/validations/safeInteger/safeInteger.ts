@@ -9,8 +9,18 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function safeInteger<TInput extends number>(error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    !Number.isSafeInteger(input)
-      ? getPipeIssues('safe_integer', error || 'Invalid safe integer', input)
-      : getOutput(input);
+  const kind = 'safe_integer' as const;
+  const requirement = Number.isSafeInteger;
+  const message = error ?? ('Invalid safe integer' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !requirement(input)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

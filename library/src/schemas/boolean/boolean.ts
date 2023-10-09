@@ -1,4 +1,5 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe, PipeMeta } from '../../types.ts';
+import { getChecks } from '../../utils/getChecks/getChecks.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -10,6 +11,7 @@ import {
  */
 export type BooleanSchema<TOutput = boolean> = BaseSchema<boolean, TOutput> & {
   schema: 'boolean';
+  checks: PipeMeta[];
 };
 
 /**
@@ -52,6 +54,12 @@ export function boolean(
      * Whether it's async.
      */
     async: false,
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

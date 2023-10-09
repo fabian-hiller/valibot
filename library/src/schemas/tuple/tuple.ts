@@ -1,5 +1,18 @@
-import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
-import { executePipe, getIssues, getSchemaIssues } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Issues,
+  Pipe,
+  PipeMeta,
+  SchemaMeta,
+} from '../../types.ts';
+import { getChecks } from '../../utils/getChecks/getChecks.ts';
+import {
+  executePipe,
+  getEntries,
+  getIssues,
+  getSchemaIssues,
+} from '../../utils/index.ts';
 import type { TupleOutput, TupleInput, TuplePathItem } from './types.ts';
 import { getTupleArgs } from './utils/index.ts';
 
@@ -18,6 +31,8 @@ export type TupleSchema<
 > = BaseSchema<TupleInput<TTupleItems, TTupleRest>, TOutput> & {
   schema: 'tuple';
   tuple: { items: TTupleItems; rest: TTupleRest };
+  entries: SchemaMeta[];
+  checks: PipeMeta[];
 };
 
 /**
@@ -117,6 +132,14 @@ export function tuple<
      * Whether it's async.
      */
     async: false,
+
+    entries: getEntries(items),
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

@@ -121,4 +121,14 @@ describe('setAsync', () => {
       sizeError
     );
   });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const schema1 = setAsync(number(), [size(1)]);
+    expect(schema1.checks).toStrictEqual([
+      { kind: 'size', requirement: 1, message: 'Invalid size' },
+    ]);
+
+    const schema2 = setAsync(number());
+    expect(schema2.checks).toStrictEqual([]);
+  });
 });

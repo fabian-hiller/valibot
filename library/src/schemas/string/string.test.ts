@@ -22,6 +22,7 @@ describe('string', () => {
   test('should execute pipe', () => {
     const lengthError = 'Invalid length';
     const schema1 = string([minLength(1), maxLength(3)]);
+    schema1.checks; //?
     const input1 = '12';
     const output1 = parse(schema1, input1);
     expect(output1).toBe(input1);
@@ -34,5 +35,16 @@ describe('string', () => {
     const output2 = parse(schema2, input2);
     expect(output2).toBe(input2);
     expect(() => parse(schema2, 'jane@example')).toThrowError(emailError);
+  });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const schema1 = string([minLength(2), maxLength(3)]);
+    expect(schema1.checks).toStrictEqual([
+      { kind: 'min_length', requirement: 2, message: 'Invalid length' },
+      { kind: 'max_length', requirement: 3, message: 'Invalid length' },
+    ]);
+
+    const schema2 = string();
+    expect(schema2.checks).toStrictEqual([]);
   });
 });

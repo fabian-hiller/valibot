@@ -13,8 +13,17 @@ export function regex<TInput extends string>(
   requirement: RegExp,
   error?: ErrorMessage
 ) {
-  return (input: TInput): PipeResult<TInput> =>
-    !requirement.test(input)
-      ? getPipeIssues('regex', error || 'Invalid regex', input)
-      : getOutput(input);
+  const kind = 'regex' as const;
+  const message = error ?? ('Invalid regex' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !requirement.test(input)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

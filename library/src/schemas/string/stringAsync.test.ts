@@ -39,4 +39,15 @@ describe('stringAsync', () => {
       emailError
     );
   });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const schema1 = stringAsync([minLength(2), maxLength(3)]);
+    expect(schema1.checks).toStrictEqual([
+      { kind: 'min_length', requirement: 2, message: 'Invalid length' },
+      { kind: 'max_length', requirement: 3, message: 'Invalid length' },
+    ]);
+
+    const schema2 = stringAsync();
+    expect(schema2.checks).toStrictEqual([]);
+  });
 });

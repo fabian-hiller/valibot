@@ -3,6 +3,7 @@ import { parseAsync } from '../../methods/index.ts';
 import { string, stringAsync } from '../string/index.ts';
 import { number, numberAsync } from '../number/index.ts';
 import { nullType } from '../nullType/index.ts';
+import { maxLength } from '../../validations/index.ts';
 import { unionAsync } from './unionAsync.ts';
 
 describe('unionAsync', () => {
@@ -32,5 +33,18 @@ describe('unionAsync', () => {
     await expect(
       parseAsync(unionAsync([string(), numberAsync()], error), null)
     ).rejects.toThrowError(error);
+  });
+
+  test(`should expose an array of entry SchemaMeta`, () => {
+    const schema1 = unionAsync([string([maxLength(4)]), number()]);
+    expect(schema1.entries).toStrictEqual([
+      {
+        schema: 'string',
+        checks: [
+          { kind: 'max_length', requirement: 4, message: 'Invalid length' },
+        ],
+      },
+      { schema: 'number', checks: [] },
+    ]);
   });
 });

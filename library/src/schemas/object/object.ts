@@ -1,7 +1,16 @@
-import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Issues,
+  Pipe,
+  PipeMeta,
+  SchemaMeta,
+} from '../../types.ts';
 import {
   executePipe,
+  getChecks,
   getDefaultArgs,
+  getEntries,
   getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
@@ -21,6 +30,8 @@ export type ObjectSchema<
 > = BaseSchema<ObjectInput<TObjectShape>, TOutput> & {
   schema: 'object';
   object: TObjectShape;
+  entries: [key: PropertyKey, value: SchemaMeta][];
+  checks: PipeMeta[];
 };
 
 /**
@@ -78,6 +89,14 @@ export function object<TObjectShape extends ObjectShape>(
      * Whether it's async.
      */
     async: false,
+
+    entries: getEntries(object),
+
+    /**
+     * Validation checks that will be applied to
+     * the Object.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

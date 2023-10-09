@@ -45,4 +45,19 @@ describe('instance', () => {
       valueError
     );
   });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const requirement = new Date(Date.now() + 3600000);
+    const schema1 = instance(Date, [maxValue(requirement)]);
+    expect(schema1.checks).toStrictEqual([
+      {
+        kind: 'max_value',
+        requirement,
+        message: 'Invalid value',
+      },
+    ]);
+
+    const schema2 = instance(Date);
+    expect(schema2.checks).toStrictEqual([]);
+  });
 });

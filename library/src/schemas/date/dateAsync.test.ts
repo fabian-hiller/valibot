@@ -44,4 +44,19 @@ describe('dateAsync', () => {
       parseAsync(schema2, new Date(Date.now() + 1))
     ).rejects.toThrowError(valueError);
   });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const requirement = new Date(Date.now() + 3600000);
+    const schema1 = dateAsync([maxValue(requirement)]);
+    expect(schema1.checks).toStrictEqual([
+      {
+        kind: 'max_value',
+        requirement,
+        message: 'Invalid value',
+      },
+    ]);
+
+    const schema2 = dateAsync();
+    expect(schema2.checks).toStrictEqual([]);
+  });
 });

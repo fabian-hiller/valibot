@@ -113,4 +113,14 @@ describe('set', () => {
     );
     expect(() => parse(schema2, new Set().add('1'))).toThrowError(sizeError);
   });
+
+  test(`should expose an array of applied validation checks`, () => {
+    const schema1 = set(number(), [size(1)]);
+    expect(schema1.checks).toStrictEqual([
+      { kind: 'size', requirement: 1, message: 'Invalid size' },
+    ]);
+
+    const schema2 = set(number());
+    expect(schema2.checks).toStrictEqual([]);
+  });
 });

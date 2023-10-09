@@ -13,8 +13,17 @@ export function equal<
   TInput extends string | number | bigint | boolean,
   TRequirement extends TInput
 >(requirement: TRequirement, error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    input !== requirement
-      ? getPipeIssues('equal', error || 'Invalid input', input)
-      : getOutput(input);
+  const kind = 'equal' as const;
+  const message = error ?? ('Invalid input' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      input !== requirement
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

@@ -4,9 +4,11 @@ import type {
   Issues,
   Output,
   Pipe,
+  PipeMeta,
 } from '../../types.ts';
 import {
   executePipe,
+  getChecks,
   getDefaultArgs,
   getIssues,
   getSchemaIssues,
@@ -23,6 +25,7 @@ export type MapSchema<
 > = BaseSchema<MapInput<TMapKey, TMapValue>, TOutput> & {
   schema: 'map';
   map: { key: TMapKey; value: TMapValue };
+  checks: PipeMeta[];
 };
 
 /**
@@ -82,6 +85,12 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
      * Whether it's async.
      */
     async: false,
+
+    /**
+     * Validation checks that will be applied to
+     * the Map object.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

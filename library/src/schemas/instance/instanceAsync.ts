@@ -1,4 +1,10 @@
-import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  PipeAsync,
+  PipeMeta,
+} from '../../types.ts';
+import { getChecks } from '../../utils/getChecks/getChecks.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -15,6 +21,7 @@ export type InstanceSchemaAsync<
 > = BaseSchemaAsync<InstanceType<TClass>, TOutput> & {
   schema: 'instance';
   class: TClass;
+  checks: PipeMeta[];
 };
 
 /**
@@ -69,6 +76,12 @@ export function instanceAsync<TClass extends Class>(
      * Whether it's async.
      */
     async: true,
+
+    /**
+     * Validation checks that will be run against
+     * the input value.
+     */
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

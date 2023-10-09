@@ -11,8 +11,18 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function isoTimeSecond<TInput extends string>(error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    !/^(0[0-9]|1\d|2[0-3]):[0-5]\d:[0-5]\d$/.test(input)
-      ? getPipeIssues('iso_time_second', error || 'Invalid time', input)
-      : getOutput(input);
+  const kind = 'iso_time_second' as const;
+  const requirement = /^(0[0-9]|1\d|2[0-3]):[0-5]\d:[0-5]\d$/;
+  const message = error ?? ('Invalid time' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      !requirement.test(input)
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }
