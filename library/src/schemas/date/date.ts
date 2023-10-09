@@ -14,15 +14,19 @@ export type DateSchema<TOutput = Date> = BaseSchema<Date, TOutput> & {
 
 /**
  * Creates a date schema.
+ *
  * @param pipe A validation and transformation pipe.
+ *
  * @returns A date schema.
  */
 export function date(pipe?: Pipe<Date>): DateSchema;
 
 /**
  * Creates a date schema.
+ *
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns A date schema.
  */
 export function date(error?: ErrorMessage, pipe?: Pipe<Date>): DateSchema;
@@ -30,6 +34,7 @@ export function date(error?: ErrorMessage, pipe?: Pipe<Date>): DateSchema;
 /**
  * @param arg1 A validation and transformation pipe, or an error message.
  * @param arg2 A validation and transformation pipe.
+ *
  * @returns A date schema.
  */
 export function date(
@@ -53,8 +58,10 @@ export function date(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

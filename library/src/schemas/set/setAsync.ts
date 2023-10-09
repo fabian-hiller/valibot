@@ -26,8 +26,10 @@ export type SetSchemaAsync<
 
 /**
  * Creates an async set schema.
+ *
  * @param value The value schema.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async set schema.
  */
 export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
@@ -37,9 +39,11 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
 
 /**
  * Creates an async set schema.
+ *
  * @param value The value schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async set schema.
  */
 export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
@@ -52,6 +56,7 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
  * @param value The value schema.
  * @param arg2 A validation and transformation pipe, or an error message.
  * @param arg3 A validation and transformation pipe.
+ *
  * @returns An async set schema.
  */
 export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
@@ -81,8 +86,10 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

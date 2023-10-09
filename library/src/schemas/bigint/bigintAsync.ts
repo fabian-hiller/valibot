@@ -17,15 +17,19 @@ export type BigintSchemaAsync<TOutput = bigint> = BaseSchemaAsync<
 
 /**
  * Creates an async bigint schema.
+ *
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async bigint schema.
  */
 export function bigintAsync(pipe?: PipeAsync<bigint>): BigintSchemaAsync;
 
 /**
  * Creates an async bigint schema.
+ *
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async bigint schema.
  */
 export function bigintAsync(
@@ -36,6 +40,7 @@ export function bigintAsync(
 /**
  * @param arg1 A validation and transformation pipe, or an error message.
  * @param arg2 A validation and transformation pipe.
+ *
  * @returns An async bigint schema.
  */
 export function bigintAsync(
@@ -59,8 +64,10 @@ export function bigintAsync(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

@@ -25,8 +25,10 @@ export type IntersectionSchema<
 
 /**
  * Creates an intersection schema.
+ *
  * @param intersection The intersection schema.
  * @param error The error message.
+ *
  * @returns An intersection schema.
  */
 export function intersection<TIntersectionOptions extends IntersectionOptions>(
@@ -51,8 +53,10 @@ export function intersection<TIntersectionOptions extends IntersectionOptions>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

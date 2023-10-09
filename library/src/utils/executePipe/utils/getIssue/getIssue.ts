@@ -2,8 +2,10 @@ import type { Issue, PipeInfo } from '../../../../types.ts';
 
 /**
  * Returns the final issue data.
+ *
  * @param info The pipe info.
  * @param issue The issue data.
+ *
  * @returns The issue data.
  */
 export function getIssue(

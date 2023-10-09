@@ -15,5 +15,9 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
     'no-duplicate-imports': 'off',
     'import/extensions': ['error', 'always'],
+    'jsdoc/tag-lines': ['error', 'any', {
+      'startLines': 1,
+    }],
+    'jsdoc/sort-tags': ['error', { 'linesBetween': 1, "tagSequence": [{ "tags": ["param"] }, { "tags": ["returns"] }] }]
   },
 };

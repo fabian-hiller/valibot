@@ -28,8 +28,10 @@ export type ArraySchemaAsync<
 
 /**
  * Creates an async array schema.
+ *
  * @param item The item schema.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async array schema.
  */
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
@@ -39,9 +41,11 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
 
 /**
  * Creates an async array schema.
+ *
  * @param item The item schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async array schema.
  */
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
@@ -54,6 +58,7 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
  * @param item The item schema.
  * @param arg2 A validation and transformation pipe, or an error message.
  * @param arg3 A validation and transformation pipe.
+ *
  * @returns An async array schema.
  */
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
@@ -83,8 +88,10 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

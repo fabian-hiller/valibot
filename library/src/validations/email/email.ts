@@ -3,7 +3,9 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates an email.
+ *
  * @param error The error message.
+ *
  * @returns A validation function.
  */
 export function email<TInput extends string>(error?: ErrorMessage) {

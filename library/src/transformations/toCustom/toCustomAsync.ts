@@ -2,7 +2,9 @@ import type { PipeResult } from '../../types.ts';
 
 /**
  * Creates a async custom transformation function.
+ *
  * @param action The transform action.
+ *
  * @returns A async transformation function.
  */
 export function toCustomAsync<TInput>(

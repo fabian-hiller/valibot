@@ -10,7 +10,9 @@ export type NeverSchema = BaseSchema<never> & {
 
 /**
  * Creates a never schema.
+ *
  * @param error The error message.
+ *
  * @returns A never schema.
  */
 export function never(error?: ErrorMessage): NeverSchema {
@@ -27,8 +29,10 @@ export function never(error?: ErrorMessage): NeverSchema {
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

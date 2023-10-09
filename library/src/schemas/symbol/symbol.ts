@@ -10,7 +10,9 @@ export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
 
 /**
  * Creates a symbol schema.
+ *
  * @param error The error message.
+ *
  * @returns A symbol schema.
  */
 export function symbol(error?: ErrorMessage): SymbolSchema {
@@ -27,8 +29,10 @@ export function symbol(error?: ErrorMessage): SymbolSchema {
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

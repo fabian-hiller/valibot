@@ -679,8 +679,10 @@ export function brand<
 
 /**
  * Brands the output type of a schema.
+ *
  * @param schema The schema to be branded.
  * @param name The branded name.
+ *
  * @returns The branded schema.
  */
 export function brand<

@@ -29,8 +29,10 @@ export type UnionSchema<
 
 /**
  * Creates a union schema.
+ *
  * @param union The union schema.
  * @param error The error message.
+ *
  * @returns A union schema.
  */
 export function union<TUnionOptions extends UnionOptions>(
@@ -55,8 +57,10 @@ export function union<TUnionOptions extends UnionOptions>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

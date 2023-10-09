@@ -2,7 +2,9 @@ import { expect } from 'vitest';
 
 /**
  * Prepares an object so that it can be compared to another with `.toEqual`.
+ *
  * @param value The object to prepare.
+ *
  * @returns The comparable object.
  */
 export function comparable(value: any): any {

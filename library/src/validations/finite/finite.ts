@@ -3,7 +3,9 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates whether a number is finite.
+ *
  * @param error The error message.
+ *
  * @returns A validation function.
  */
 export function finite<TInput extends number>(error?: ErrorMessage) {

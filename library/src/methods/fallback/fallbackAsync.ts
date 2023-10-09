@@ -4,8 +4,10 @@ import type { FallbackInfo } from './types.ts';
 
 /**
  * Returns a fallback value when validating the passed schema failed.
+ *
  * @param schema The schema to catch.
  * @param value The fallback value.
+ *
  * @returns The passed schema.
  */
 export function fallbackAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
@@ -17,8 +19,10 @@ export function fallbackAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

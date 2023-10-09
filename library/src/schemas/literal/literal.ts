@@ -15,8 +15,10 @@ export type LiteralSchema<
 
 /**
  * Creates a literal schema.
+ *
  * @param literal The literal value.
  * @param error The error message.
+ *
  * @returns A literal schema.
  */
 export function literal<TLiteral extends Literal>(
@@ -41,8 +43,10 @@ export function literal<TLiteral extends Literal>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

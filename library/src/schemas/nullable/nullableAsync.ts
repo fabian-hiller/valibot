@@ -26,8 +26,10 @@ export type NullableSchemaAsync<
 
 /**
  * Creates an async nullable schema.
+ *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
+ *
  * @returns An async nullable schema.
  */
 export function nullableAsync<
@@ -53,6 +55,7 @@ export function nullableAsync<
 
     /**
      * The default value.
+     *
      * @returns The default value.
      */
     get default() {
@@ -68,8 +71,10 @@ export function nullableAsync<
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

@@ -19,8 +19,10 @@ export type NonNullishSchema<
 
 /**
  * Creates a non nullish schema.
+ *
  * @param wrapped The wrapped schema.
  * @param error The error message.
+ *
  * @returns A non nullish schema.
  */
 export function nonNullish<TWrapped extends BaseSchema>(
@@ -45,8 +47,10 @@ export function nonNullish<TWrapped extends BaseSchema>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

@@ -9,7 +9,9 @@ import type {
 
 /**
  * Returns the default value of the schema.
+ *
  * @param schema The schema to get the default value from.
+ *
  * @returns The default value.
  */
 export function getDefault<

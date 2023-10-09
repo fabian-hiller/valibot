@@ -30,7 +30,9 @@ type TupleOrNever<T> = T extends [string, ...string[]] ? T : never;
 
 /**
  * Creates a enum schema of object keys.
+ *
  * @param schema The object schema.
+ *
  * @returns A enum schema.
  */
 export function keyof<

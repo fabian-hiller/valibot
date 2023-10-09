@@ -25,8 +25,10 @@ export type ObjectSchema<
 
 /**
  * Creates an object schema.
+ *
  * @param object The object schema.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An object schema.
  */
 export function object<TObjectShape extends ObjectShape>(
@@ -36,9 +38,11 @@ export function object<TObjectShape extends ObjectShape>(
 
 /**
  * Creates an object schema.
+ *
  * @param object The object schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An object schema.
  */
 export function object<TObjectShape extends ObjectShape>(
@@ -51,6 +55,7 @@ export function object<TObjectShape extends ObjectShape>(
  * @param object The object schema.
  * @param arg2 A validation and transformation pipe, or an error message.
  * @param arg3 A validation and transformation pipe.
+ *
  * @returns An object schema.
  */
 export function object<TObjectShape extends ObjectShape>(
@@ -83,8 +88,10 @@ export function object<TObjectShape extends ObjectShape>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

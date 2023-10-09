@@ -3,8 +3,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates the length of a string or array.
+ *
  * @param requirement The length.
  * @param error The error message.
+ *
  * @returns A validation function.
  */
 export function notLength<TInput extends string | any[]>(

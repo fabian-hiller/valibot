@@ -3,7 +3,9 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates an emoji.
+ *
  * @param error The error message.
+ *
  * @returns A validation function.
  */
 export function emoji<TInput extends string>(error?: ErrorMessage) {

@@ -3,8 +3,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates the value of a string, number or date.
+ *
  * @param requirement The minimum value.
  * @param error The error message.
+ *
  * @returns A validation function.
  */
 export function minValue<
@@ -19,6 +21,7 @@ export function minValue<
 
 /**
  * See {@link minValue}
+ *
  * @deprecated Function has been renamed to `minValue`.
  */
 export const minRange = minValue;

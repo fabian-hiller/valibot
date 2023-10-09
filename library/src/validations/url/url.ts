@@ -6,7 +6,9 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  *
  * Hint: The value is passed to the URL constructor to check if it is valid.
  * This check is not perfect. For example, values like "abc:1234" are accepted.
+ *
  * @param error The error message.
+ *
  * @returns A validation function.
  */
 export function url<TInput extends string>(error?: ErrorMessage) {

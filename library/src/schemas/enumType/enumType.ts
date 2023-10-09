@@ -15,8 +15,10 @@ export type EnumSchema<
 
 /**
  * Creates a enum schema.
+ *
  * @param enumValue The enum value.
  * @param error The error message.
+ *
  * @returns A enum schema.
  */
 export function enumType<TOption extends string, TEnum extends Enum<TOption>>(
@@ -41,8 +43,10 @@ export function enumType<TOption extends string, TEnum extends Enum<TOption>>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

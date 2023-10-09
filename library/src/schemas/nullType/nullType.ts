@@ -10,7 +10,9 @@ export type NullSchema<TOutput = null> = BaseSchema<null, TOutput> & {
 
 /**
  * Creates a null schema.
+ *
  * @param error The error message.
+ *
  * @returns A null schema.
  */
 export function nullType(error?: ErrorMessage): NullSchema {
@@ -27,8 +29,10 @@ export function nullType(error?: ErrorMessage): NullSchema {
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

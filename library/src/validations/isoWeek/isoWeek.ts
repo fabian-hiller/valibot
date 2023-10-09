@@ -9,7 +9,9 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * Hint: The regex used cannot validate the maximum number of weeks based on
  * the year. For example, "2021W53" is valid even though the year 2021 has only
  * 52 weeks.
+ *
  * @param error The error message.
+ *
  * @returns A validation function.
  */
 export function isoWeek<TInput extends string>(error?: ErrorMessage) {

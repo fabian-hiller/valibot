@@ -3,8 +3,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates the value of a string, number or date.
+ *
  * @param requirement The maximum value.
  * @param error The error message.
+ *
  * @returns A validation function.
  */
 export function maxValue<
@@ -19,6 +21,7 @@ export function maxValue<
 
 /**
  * See {@link maxValue}
+ *
  * @deprecated Function has been renamed to `maxValue`.
  */
 export const maxRange = maxValue;

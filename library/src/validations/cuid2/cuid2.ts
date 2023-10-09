@@ -3,7 +3,9 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
  * Creates a validation function that validates a [cuid2](https://github.com/paralleldrive/cuid2#cuid2).
+ *
  * @param error The error message.
+ *
  * @returns A validation function.
  */
 export function cuid2<TInput extends string>(error?: ErrorMessage) {

@@ -30,8 +30,10 @@ export type UnionSchemaAsync<
 
 /**
  * Creates an async union schema.
+ *
  * @param union The union schema.
  * @param error The error message.
+ *
  * @returns An async union schema.
  */
 export function unionAsync<TUnionOptions extends UnionOptionsAsync>(
@@ -56,8 +58,10 @@ export function unionAsync<TUnionOptions extends UnionOptionsAsync>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

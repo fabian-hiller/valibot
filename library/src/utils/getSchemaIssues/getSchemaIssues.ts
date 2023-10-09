@@ -8,12 +8,14 @@ import { getErrorMessage } from '../getErrorMessage/getErrorMessage.ts';
 
 /**
  * Returns the schema result object with issues.
+ *
  * @param info The parse info.
  * @param reason The issue reason.
  * @param validation The validation name.
  * @param error The error message.
  * @param input The input value.
  * @param issues The sub issues.
+ *
  * @returns The schema result object.
  */
 export function getSchemaIssues(

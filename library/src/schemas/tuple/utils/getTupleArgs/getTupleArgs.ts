@@ -9,9 +9,11 @@ import { getDefaultArgs } from '../../../../utils/index.ts';
 
 /**
  * Returns rest, error and pipe from dynamic arguments.
+ *
  * @param arg1 First argument.
  * @param arg2 Second argument.
  * @param arg3 Third argument.
+ *
  * @returns The tuple arguments.
  */
 export function getTupleArgs<

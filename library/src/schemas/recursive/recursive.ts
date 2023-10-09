@@ -13,7 +13,9 @@ export type RecursiveSchema<
 
 /**
  * Creates a recursive schema.
+ *
  * @param getter The schema getter.
+ *
  * @returns A recursive schema.
  */
 export function recursive<TSchemaGetter extends () => BaseSchema>(
@@ -37,8 +39,10 @@ export function recursive<TSchemaGetter extends () => BaseSchema>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

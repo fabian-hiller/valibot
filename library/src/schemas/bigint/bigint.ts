@@ -14,15 +14,19 @@ export type BigintSchema<TOutput = bigint> = BaseSchema<bigint, TOutput> & {
 
 /**
  * Creates a bigint schema.
+ *
  * @param pipe A validation and transformation pipe.
+ *
  * @returns A bigint schema.
  */
 export function bigint(pipe?: Pipe<bigint>): BigintSchema;
 
 /**
  * Creates a bigint schema.
+ *
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns A bigint schema.
  */
 export function bigint(error?: ErrorMessage, pipe?: Pipe<bigint>): BigintSchema;
@@ -30,6 +34,7 @@ export function bigint(error?: ErrorMessage, pipe?: Pipe<bigint>): BigintSchema;
 /**
  * @param arg1 A validation and transformation pipe, or an error message.
  * @param arg2 A validation and transformation pipe.
+ *
  * @returns A bigint schema.
  */
 export function bigint(
@@ -53,8 +58,10 @@ export function bigint(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

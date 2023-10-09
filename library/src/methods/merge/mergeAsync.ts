@@ -20,8 +20,10 @@ type ObjectSchemas = [
 /**
  * Merges multiple async object schemas into a single one. Subsequent object
  * schemas overwrite the previous ones.
+ *
  * @param schemas The schemas to be merged.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async object schema.
  */
 export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
@@ -32,9 +34,11 @@ export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
 /**
  * Merges multiple async object schemas into a single one. Subsequent object
  * schemas overwrite the previous ones.
+ *
  * @param schemas The schemas to be merged.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async object schema.
  */
 export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
@@ -48,6 +52,7 @@ export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
  * @param schemas The schemas to be merged.
  * @param arg2 A validation and transformation pipe, or an error message.
  * @param arg3 A validation and transformation pipe.
+ *
  * @returns An async object schema.
  */
 export function mergeAsync<TObjectSchemas extends ObjectSchemas>(

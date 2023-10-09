@@ -13,7 +13,9 @@ export type UndefinedSchema<TOutput = undefined> = BaseSchema<
 
 /**
  * Creates a undefined schema.
+ *
  * @param error The error message.
+ *
  * @returns A undefined schema.
  */
 export function undefinedType(error?: ErrorMessage): UndefinedSchema {
@@ -30,8 +32,10 @@ export function undefinedType(error?: ErrorMessage): UndefinedSchema {
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

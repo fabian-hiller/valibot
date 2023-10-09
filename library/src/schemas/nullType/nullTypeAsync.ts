@@ -10,7 +10,9 @@ export type NullSchemaAsync<TOutput = null> = BaseSchemaAsync<null, TOutput> & {
 
 /**
  * Creates an async null schema.
+ *
  * @param error The error message.
+ *
  * @returns An async null schema.
  */
 export function nullTypeAsync(error?: ErrorMessage): NullSchemaAsync {
@@ -27,8 +29,10 @@ export function nullTypeAsync(error?: ErrorMessage): NullSchemaAsync {
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

@@ -9,9 +9,11 @@ import { getDefaultArgs } from '../../utils/index.ts';
 /**
  * Creates an object schema that contains only the selected keys of an existing
  * schema.
+ *
  * @param schema The schema to pick from.
  * @param keys The selected keys
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An object schema.
  */
 export function pick<
@@ -26,10 +28,12 @@ export function pick<
 /**
  * Creates an object schema that contains only the selected keys of an existing
  * schema.
+ *
  * @param schema The schema to pick from.
  * @param keys The selected keys
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An object schema.
  */
 export function pick<
@@ -48,6 +52,7 @@ export function pick<
  * @param keys The selected keys
  * @param arg3 A validation and transformation pipe, or an error message.
  * @param arg4 A validation and transformation pipe.
+ *
  * @returns An object schema.
  */
 export function pick<

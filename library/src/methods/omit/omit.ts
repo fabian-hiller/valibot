@@ -10,9 +10,11 @@ import type { ObjectKeys } from './types.ts';
 /**
  * Creates an object schema that contains not the selected keys of an existing
  * schema.
+ *
  * @param schema The schema to omit from.
  * @param keys The selected keys
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An object schema.
  */
 export function omit<
@@ -27,10 +29,12 @@ export function omit<
 /**
  * Creates an object schema that contains not the selected keys of an existing
  * schema.
+ *
  * @param schema The schema to omit from.
  * @param keys The selected keys
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An object schema.
  */
 export function omit<
@@ -49,6 +53,7 @@ export function omit<
  * @param keys The selected keys
  * @param arg3 A validation and transformation pipe, or an error message.
  * @param arg4 A validation and transformation pipe.
+ *
  * @returns An object schema.
  */
 export function omit<

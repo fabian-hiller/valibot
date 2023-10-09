@@ -22,8 +22,10 @@ export type TupleSchema<
 
 /**
  * Creates a tuple schema.
+ *
  * @param items The items schema.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns A tuple schema.
  */
 export function tuple<TTupleItems extends TupleShape>(
@@ -33,9 +35,11 @@ export function tuple<TTupleItems extends TupleShape>(
 
 /**
  * Creates a tuple schema.
+ *
  * @param items The items schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns A tuple schema.
  */
 export function tuple<TTupleItems extends TupleShape>(
@@ -46,9 +50,11 @@ export function tuple<TTupleItems extends TupleShape>(
 
 /**
  * Creates a tuple schema.
+ *
  * @param items The items schema.
  * @param rest The rest schema.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns A tuple schema.
  */
 export function tuple<
@@ -62,10 +68,12 @@ export function tuple<
 
 /**
  * Creates a tuple schema.
+ *
  * @param items The items schema.
  * @param rest The rest schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns A tuple schema.
  */
 export function tuple<
@@ -84,6 +92,7 @@ export function tuple<
  * @param arg2 A validation and transformation pipe, or an error message, or the rest schema.
  * @param arg3 A validation and transformation pipe, or an error message.
  * @param arg4 A validation and transformation pipe.
+ *
  * @returns A tuple schema.
  */
 export function tuple<
@@ -120,8 +129,10 @@ export function tuple<
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

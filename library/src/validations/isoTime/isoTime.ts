@@ -5,7 +5,9 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * Creates a validation function that validates a time.
  *
  * Format: hh:mm
+ *
  * @param error The error message.
+ *
  * @returns A validation function.
  */
 export function isoTime<TInput extends string>(error?: ErrorMessage) {

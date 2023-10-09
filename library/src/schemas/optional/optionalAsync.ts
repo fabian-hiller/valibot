@@ -26,8 +26,10 @@ export type OptionalSchemaAsync<
 
 /**
  * Creates an async optional schema.
+ *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
+ *
  * @returns An async optional schema.
  */
 export function optionalAsync<
@@ -53,6 +55,7 @@ export function optionalAsync<
 
     /**
      * The default value.
+     *
      * @returns The default value.
      */
     get default() {
@@ -68,8 +71,10 @@ export function optionalAsync<
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

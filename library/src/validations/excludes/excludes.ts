@@ -13,8 +13,10 @@ export function excludes<TInput extends TItem[], TItem>(
 
 /**
  * Creates a validation function that validates the content of a string or array.
+ *
  * @param requirement The content to be excluded.
  * @param error The error message.
+ *
  * @returns A validation function.
  */
 export function excludes<TInput extends string | TItem[], TItem>(

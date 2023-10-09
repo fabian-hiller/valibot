@@ -27,8 +27,10 @@ export type ArraySchema<
 
 /**
  * Creates a array schema.
+ *
  * @param item The item schema.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns A array schema.
  */
 export function array<TArrayItem extends BaseSchema>(
@@ -38,9 +40,11 @@ export function array<TArrayItem extends BaseSchema>(
 
 /**
  * Creates a array schema.
+ *
  * @param item The item schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns A array schema.
  */
 export function array<TArrayItem extends BaseSchema>(
@@ -53,6 +57,7 @@ export function array<TArrayItem extends BaseSchema>(
  * @param item The item schema.
  * @param arg2 A validation and transformation pipe, or an error message.
  * @param arg3 A validation and transformation pipe.
+ *
  * @returns A array schema.
  */
 export function array<TArrayItem extends BaseSchema>(
@@ -82,8 +87,10 @@ export function array<TArrayItem extends BaseSchema>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

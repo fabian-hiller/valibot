@@ -18,8 +18,10 @@ export type NullishSchema<
 
 /**
  * Creates a nullish schema.
+ *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
+ *
  * @returns A nullish schema.
  */
 export function nullish<
@@ -42,6 +44,7 @@ export function nullish<
 
     /**
      * The default value.
+     *
      * @returns The default value.
      */
     get default() {
@@ -57,8 +60,10 @@ export function nullish<
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

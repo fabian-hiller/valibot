@@ -3,7 +3,9 @@ import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that strips unknown keys.
+ *
  * @param schema A object schema.
+ *
  * @returns A object schema.
  */
 export function strip<TSchema extends ObjectSchema<any>>(
@@ -18,8 +20,10 @@ export function strip<TSchema extends ObjectSchema<any>>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

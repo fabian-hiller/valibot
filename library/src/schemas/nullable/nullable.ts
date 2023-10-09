@@ -18,8 +18,10 @@ export type NullableSchema<
 
 /**
  * Creates a nullable schema.
+ *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
+ *
  * @returns A nullable schema.
  */
 export function nullable<
@@ -42,6 +44,7 @@ export function nullable<
 
     /**
      * The default value.
+     *
      * @returns The default value.
      */
     get default() {
@@ -57,8 +60,10 @@ export function nullable<
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

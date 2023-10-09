@@ -19,8 +19,10 @@ export type InstanceSchemaAsync<
 
 /**
  * Creates an async instance schema.
+ *
  * @param of The class of the instance.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async instance schema.
  */
 export function instanceAsync<TClass extends Class>(
@@ -30,9 +32,11 @@ export function instanceAsync<TClass extends Class>(
 
 /**
  * Creates an async instance schema.
+ *
  * @param of The class of the instance.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async instance schema.
  */
 export function instanceAsync<TClass extends Class>(
@@ -45,6 +49,7 @@ export function instanceAsync<TClass extends Class>(
  * @param of The class of the instance.
  * @param arg2 A validation and transformation pipe, or an error message.
  * @param arg3 A validation and transformation pipe.
+ *
  * @returns An async instance schema.
  */
 export function instanceAsync<TClass extends Class>(
@@ -74,8 +79,10 @@ export function instanceAsync<TClass extends Class>(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

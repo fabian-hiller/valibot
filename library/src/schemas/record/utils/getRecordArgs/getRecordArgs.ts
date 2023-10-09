@@ -12,10 +12,12 @@ import type { RecordKeyAsync } from '../../recordAsync.ts';
 
 /**
  * Returns key, value, error and pipe from dynamic arguments.
+ *
  * @param arg1 First argument.
  * @param arg2 Second argument.
  * @param arg3 Third argument.
  * @param arg4 Fourth argument.
+ *
  * @returns The record arguments.
  */
 export function getRecordArgs<

@@ -45,8 +45,10 @@ export type RecordSchemaAsync<
 
 /**
  * Creates an async record schema.
+ *
  * @param value The value schema.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async record schema.
  */
 export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
@@ -56,9 +58,11 @@ export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
 
 /**
  * Creates an async record schema.
+ *
  * @param value The value schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async record schema.
  */
 export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
@@ -69,9 +73,11 @@ export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
 
 /**
  * Creates an async record schema.
+ *
  * @param key The key schema.
  * @param value The value schema.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async record schema.
  */
 export function recordAsync<
@@ -85,10 +91,12 @@ export function recordAsync<
 
 /**
  * Creates an async record schema.
+ *
  * @param key The key schema.
  * @param value The value schema.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async record schema.
  */
 export function recordAsync<
@@ -106,6 +114,7 @@ export function recordAsync<
  * @param arg2 A validation and transformation pipe, or an error message, or the value schema.
  * @param arg3 A validation and transformation pipe, or an error message.
  * @param arg4 A validation and transformation pipe.
+ *
  * @returns An async record schema.
  */
 export function recordAsync<
@@ -146,8 +155,10 @@ export function recordAsync<
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

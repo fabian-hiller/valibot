@@ -10,7 +10,9 @@ export type UnknownSchema<TOutput = unknown> = BaseSchema<unknown, TOutput> & {
 
 /**
  * Creates a unknown schema.
+ *
  * @param pipe A validation and transformation pipe.
+ *
  * @returns A unknown schema.
  */
 export function unknown(pipe: Pipe<unknown> = []): UnknownSchema {
@@ -27,8 +29,10 @@ export function unknown(pipe: Pipe<unknown> = []): UnknownSchema {
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     _parse(input, info) {

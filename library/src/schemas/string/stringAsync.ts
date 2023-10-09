@@ -17,15 +17,19 @@ export type StringSchemaAsync<TOutput = string> = BaseSchemaAsync<
 
 /**
  * Creates an async string schema.
+ *
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async string schema.
  */
 export function stringAsync(pipe?: PipeAsync<string>): StringSchemaAsync;
 
 /**
  * Creates an async string schema.
+ *
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async string schema.
  */
 export function stringAsync(
@@ -36,6 +40,7 @@ export function stringAsync(
 /**
  * @param arg1 A validation and transformation pipe, or an error message.
  * @param arg2 A validation and transformation pipe.
+ *
  * @returns An async string schema.
  */
 export function stringAsync(
@@ -59,8 +64,10 @@ export function stringAsync(
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {

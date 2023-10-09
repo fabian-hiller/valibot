@@ -10,7 +10,9 @@ export type AnySchemaAsync<TOutput = any> = BaseSchemaAsync<any, TOutput> & {
 
 /**
  * Creates an async any schema.
+ *
  * @param pipe A validation and transformation pipe.
+ *
  * @returns An async any schema.
  */
 export function anyAsync(pipe: PipeAsync<any> = []): AnySchemaAsync {
@@ -27,8 +29,10 @@ export function anyAsync(pipe: PipeAsync<any> = []): AnySchemaAsync {
 
     /**
      * Parses unknown input based on its schema.
+     *
      * @param input The input to be parsed.
      * @param info The parse info.
+     *
      * @returns The parsed output.
      */
     async _parse(input, info) {
