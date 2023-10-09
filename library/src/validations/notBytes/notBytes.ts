@@ -9,12 +9,21 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  *
  * @returns A validation function.
  */
-export function notBytes<TInput extends string>(
-  requirement: number,
-  error?: ErrorMessage
-) {
-  return (input: TInput): PipeResult<TInput> =>
-    new TextEncoder().encode(input).length === requirement
-      ? getPipeIssues('not_bytes', error || 'Invalid byte length', input)
-      : getOutput(input);
+export function notBytes<
+  TInput extends string,
+  const TRequirement extends number
+>(requirement: TRequirement, error?: ErrorMessage) {
+  const kind = 'not_bytes' as const;
+  const message = error ?? ('Invalid byte length' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      new TextEncoder().encode(input).length === requirement
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }

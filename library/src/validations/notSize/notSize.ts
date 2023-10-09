@@ -9,12 +9,21 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  *
  * @returns A validation function.
  */
-export function notSize<TInput extends Map<any, any> | Set<any> | Blob>(
-  requirement: number,
-  error?: ErrorMessage
-) {
-  return (input: TInput): PipeResult<TInput> =>
-    input.size === requirement
-      ? getPipeIssues('not_size', error || 'Invalid size', input)
-      : getOutput(input);
+export function notSize<
+  TInput extends Map<any, any> | Set<any> | Blob,
+  const TRequirement extends number
+>(requirement: TRequirement, error?: ErrorMessage) {
+  const kind = 'not_size' as const;
+  const message = error ?? ('Invalid size' as const);
+  return Object.assign(
+    (input: TInput): PipeResult<TInput> =>
+      input.size === requirement
+        ? getPipeIssues(kind, message, input)
+        : getOutput(input),
+    {
+      kind,
+      requirement,
+      message,
+    }
+  );
 }
