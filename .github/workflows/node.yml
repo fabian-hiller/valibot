@@ -42,5 +42,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run Vitest
-        run: cd ./library && pnpm test
+      - name: Run linter in website
+        working-directory: website
+        run: pnpm lint
+
+      - name: Run formatter in website
+        working-directory: website
+        run: pnpm format.check
+
+      - name: Run linter in library
+        working-directory: library
+        run: pnpm lint
+
+      - name: Run Vitest in library
+        working-directory: library
+        run: pnpm test
