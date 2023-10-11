@@ -89,9 +89,9 @@ Transformation functions allow to change the value of an input, but not the data
 A transformation function that enforces a minimum value of a number could look like the following.
 
 ```ts
-import { number } from 'valibot'; // 0.44 kB
+import { getOutput, number } from 'valibot'; // 0.44 kB
 
-const NumberSchema = number([(input) => ({ output: input > 10 ? input : 10 })]);
+const NumberSchema = number([(input) => getOutput(input > 10 ? input : 10)]);
 ```
 
 ### Utility functions
