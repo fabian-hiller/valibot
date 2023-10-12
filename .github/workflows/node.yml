@@ -6,7 +6,8 @@ on:
   pull_request:
 
 jobs:
-  test:
+  install:
+    name: Checkout and Install
     runs-on: ubuntu-latest
 
     steps:
@@ -42,18 +43,38 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run linter in website
+  lint_website:
+    name: Run linter in website
+    needs: install
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: pnpm lint
         working-directory: website
-        run: pnpm lint
 
-      - name: Run formatter in website
+  format_website:
+    name: Run formatter in website
+    needs: install
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: pnpm format.check
         working-directory: website
-        run: pnpm format.check
 
-      - name: Run linter in library
-        working-directory: library
-        run: pnpm lint
+  lint_library:
+    name: Run linter in library
+    needs: install
+    runs-on: ubuntu-latest
 
-      - name: Run Vitest in library
+    steps:
+      - run: pnpm lint
         working-directory: library
-        run: pnpm test
+
+  test_library:
+    name: Run Vitest in library
+    needs: install
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: pnpm test
+        working-directory: library
