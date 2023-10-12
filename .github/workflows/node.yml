@@ -64,7 +64,19 @@ jobs:
         run: pnpm lint
         working-directory: library
 
-      - run: pnpm lint
+  format_library:
+    name: Run formatter in library
+    needs: install
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup pnpm cache
+        uses: ./.github/actions/setup-pnpm-cache
+
+      - name: Run format check
+        run: pnpm format.check
         working-directory: library
 
   test_library:
