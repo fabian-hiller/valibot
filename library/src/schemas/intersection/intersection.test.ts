@@ -7,7 +7,6 @@ import { record } from '../record/index.ts';
 import { string } from '../string/index.ts';
 import { unknown } from '../unknown/index.ts';
 import { intersection, type IntersectionOptions } from './intersection.ts';
-import { maxLength } from '../../validations/index.ts';
 
 describe('intersection', () => {
   test('should pass only intersection values', () => {
@@ -76,18 +75,5 @@ describe('intersection', () => {
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
-  });
-
-  test(`should expose an array of entry SchemaMeta`, () => {
-    const schema1 = intersection([string([maxLength(4)]), literal('test')]);
-    expect(schema1.entries).toStrictEqual([
-      {
-        schema: 'string',
-        checks: [
-          { kind: 'max_length', requirement: 4, message: 'Invalid length' },
-        ],
-      },
-      { schema: 'literal', literal: 'test' },
-    ]);
   });
 });

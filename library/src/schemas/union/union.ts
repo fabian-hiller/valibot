@@ -4,9 +4,8 @@ import type {
   Input,
   Issues,
   Output,
-  SchemaMeta,
 } from '../../types.ts';
-import { getSchemaIssues, getOutput, getEntries } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Union options type.
@@ -26,7 +25,6 @@ export type UnionSchema<
 > = BaseSchema<Input<TUnionOptions[number]>, TOutput> & {
   schema: 'union';
   union: TUnionOptions;
-  entries: SchemaMeta[];
 };
 
 /**
@@ -56,8 +54,6 @@ export function union<TUnionOptions extends UnionOptions>(
      * Whether it's async.
      */
     async: false,
-
-    entries: getEntries(union),
 
     /**
      * Parses unknown input based on its schema.

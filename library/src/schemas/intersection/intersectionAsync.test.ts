@@ -10,7 +10,6 @@ import {
   intersectionAsync,
   type IntersectionOptionsAsync,
 } from './intersectionAsync.ts';
-import { maxLength } from '../../validations/index.ts';
 
 describe('intersectionAsync', () => {
   test('should pass only intersectionAsync values', async () => {
@@ -79,21 +78,5 @@ describe('intersectionAsync', () => {
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
-  });
-
-  test(`should expose an array of entry SchemaMeta`, () => {
-    const schema1 = intersectionAsync([
-      string([maxLength(4)]),
-      literal('test'),
-    ]);
-    expect(schema1.entries).toStrictEqual([
-      {
-        schema: 'string',
-        checks: [
-          { kind: 'max_length', requirement: 4, message: 'Invalid length' },
-        ],
-      },
-      { schema: 'literal', literal: 'test' },
-    ]);
   });
 });

@@ -83,37 +83,10 @@ export type _ParseResult<TOutput> =
   | { output: TOutput; issues?: undefined }
   | { output?: undefined; issues: Issues };
 
-export type SchemaMeta =
-  | {
-      schema: string;
-    }
-  | {
-      schema: 'literal';
-      literal: string | number | bigint | boolean | symbol;
-    }
-  | {
-      schema: 'any' | 'array' | 'map' | 'record' | 'set' | 'special';
-      checks: PipeMeta[];
-    }
-  | {
-      schema: 'intersection' | 'union';
-      entries: SchemaMeta[];
-    }
-  | {
-      schema: 'tuple';
-      entries: SchemaMeta[];
-      checks: PipeMeta[];
-    }
-  | {
-      schema: 'object';
-      entries: [key: PropertyKey, value: SchemaMeta][];
-      checks: PipeMeta[];
-    };
-
 /**
  * Base schema type.
  */
-export type BaseSchema<TInput = any, TOutput = TInput> = SchemaMeta & {
+export type BaseSchema<TInput = any, TOutput = TInput> = {
   async: false;
   _parse(input: unknown, info?: ParseInfo): _ParseResult<TOutput>;
   _types?: { input: TInput; output: TOutput };
@@ -122,7 +95,7 @@ export type BaseSchema<TInput = any, TOutput = TInput> = SchemaMeta & {
 /**
  * Base schema async type.
  */
-export type BaseSchemaAsync<TInput = any, TOutput = TInput> = SchemaMeta & {
+export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
   async: true;
   _parse(input: unknown, info?: ParseInfo): Promise<_ParseResult<TOutput>>;
   _types?: { input: TInput; output: TOutput };

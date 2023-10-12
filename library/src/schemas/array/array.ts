@@ -85,7 +85,7 @@ export function array<TArrayItem extends BaseSchema>(
      * Validation checks that will be run against
      * the input value.
      */
-    checks: getChecks(pipe ?? []),
+    checks: getChecks(pipe),
 
     /**
      * Parses unknown input based on its schema.

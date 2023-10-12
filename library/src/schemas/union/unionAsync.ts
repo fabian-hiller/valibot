@@ -5,9 +5,8 @@ import type {
   Input,
   Issues,
   Output,
-  SchemaMeta,
 } from '../../types.ts';
-import { getSchemaIssues, getOutput, getEntries } from '../../utils/index.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
  * Union options async type.
@@ -27,7 +26,6 @@ export type UnionSchemaAsync<
 > = BaseSchemaAsync<Input<TUnionOptions[number]>, TOutput> & {
   schema: 'union';
   union: TUnionOptions;
-  entries: SchemaMeta[];
 };
 
 /**
@@ -57,8 +55,6 @@ export function unionAsync<TUnionOptions extends UnionOptionsAsync>(
      * Whether it's async.
      */
     async: true,
-
-    entries: getEntries(union),
 
     /**
      * Parses unknown input based on its schema.
