@@ -15,7 +15,6 @@ runs:
       uses: actions/setup-node@v3
       with:
         node-version: 16
-        cache: "pnpm"
 
     - name: Get pnpm store directory
       id: pnpm-cache
@@ -30,3 +29,7 @@ runs:
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      shell: "bash"
+      run: pnpm install

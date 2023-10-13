@@ -13,11 +13,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup pnpm cache
-        uses: ./.github/actions/setup-pnpm-cache
-
-      - name: Install dependencies
-        run: pnpm install
+      - name: PNPM Install With Cache
+        uses: ./.github/actions/pnpm-install-with-cache
 
   lint_website:
     name: Run linter in website
@@ -27,8 +24,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup pnpm cache
-        uses: ./.github/actions/setup-pnpm-cache
+      - name: PNPM Install With Cache
+        uses: ./.github/actions/pnpm-install-with-cache
 
       - name: Run lint check
         run: pnpm lint
@@ -42,8 +39,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup pnpm cache
-        uses: ./.github/actions/setup-pnpm-cache
+      - name: PNPM Install With Cache
+        uses: ./.github/actions/pnpm-install-with-cache
 
       - name: Run format check
         run: pnpm format.check
@@ -57,8 +54,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup pnpm cache
-        uses: ./.github/actions/setup-pnpm-cache
+      - name: PNPM Install With Cache
+        uses: ./.github/actions/pnpm-install-with-cache
 
       - name: Run lint check
         run: pnpm lint
@@ -72,8 +69,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup pnpm cache
-        uses: ./.github/actions/setup-pnpm-cache
+      - name: PNPM Install With Cache
+        uses: ./.github/actions/pnpm-install-with-cache
 
       - name: Run format check
         run: pnpm format.check
@@ -87,8 +84,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup pnpm cache
-        uses: ./.github/actions/setup-pnpm-cache
+      - name: PNPM Install With Cache
+        uses: ./.github/actions/pnpm-install-with-cache
 
       - name: Run Vitest
         run: pnpm test
