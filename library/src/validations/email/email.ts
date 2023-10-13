@@ -12,7 +12,7 @@ export function email<TInput extends string>(error?: ErrorMessage) {
   const kind = 'email' as const;
   const requirement =
     /^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/i;
-  const message = error ?? ('Invalid email' as const);
+  const message = error ?? 'Invalid email';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !requirement.test(input)

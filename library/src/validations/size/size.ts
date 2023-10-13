@@ -14,7 +14,7 @@ export function size<
   const TRequirement extends number
 >(requirement: TRequirement, error?: ErrorMessage) {
   const kind = `size` as const;
-  const message = error ?? ('Invalid size' as const);
+  const message = error ?? 'Invalid size';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       input.size !== requirement

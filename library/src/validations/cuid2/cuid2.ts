@@ -11,7 +11,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 export function cuid2<TInput extends string>(error?: ErrorMessage) {
   const kind = 'cuid2' as const;
   const requirement = /^[a-z][a-z0-9]*$/;
-  const message = error ?? ('Invalid cuid2' as const);
+  const message = error ?? 'Invalid cuid2';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !requirement.test(input)

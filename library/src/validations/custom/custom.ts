@@ -14,7 +14,7 @@ export function custom<TInput>(
   error?: ErrorMessage
 ) {
   const kind = 'custom' as const;
-  const message = error ?? ('Invalid input' as const);
+  const message = error ?? 'Invalid input';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !requirement(input)

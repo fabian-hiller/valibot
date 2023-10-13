@@ -25,7 +25,7 @@ export function includes<
   const TRequirement extends string | TItem
 >(requirement: TRequirement, error?: ErrorMessage) {
   const kind = 'includes' as const;
-  const message = error ?? ('Invalid content' as const);
+  const message = error ?? 'Invalid content';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !input.includes(requirement as any)

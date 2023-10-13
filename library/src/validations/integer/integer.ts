@@ -10,7 +10,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function integer<TInput extends number>(error?: ErrorMessage) {
   const kind = 'integer' as const;
-  const message = error ?? ('Invalid integer' as const);
+  const message = error ?? 'Invalid integer';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !Number.isInteger(input)

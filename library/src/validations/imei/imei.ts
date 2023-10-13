@@ -13,7 +13,7 @@ import { getOutput, getPipeIssues, isLuhnAlgo } from '../../utils/index.ts';
 export function imei<TInput extends string>(error?: ErrorMessage) {
   const kind = 'imei' as const;
   const requirement = /^\d{2}[ |/|-]?\d{6}[ |/|-]?\d{6}[ |/|-]?\d$/;
-  const message = error ?? ('Invalid IMEI' as const);
+  const message = error ?? 'Invalid IMEI';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !requirement.test(input) || !isLuhnAlgo(input)

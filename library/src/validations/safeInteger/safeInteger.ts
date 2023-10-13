@@ -11,7 +11,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 export function safeInteger<TInput extends number>(error?: ErrorMessage) {
   const kind = 'safe_integer' as const;
   const requirement = Number.isSafeInteger;
-  const message = error ?? ('Invalid safe integer' as const);
+  const message = error ?? 'Invalid safe integer';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !requirement(input)

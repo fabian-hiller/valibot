@@ -14,7 +14,7 @@ export function bytes<TInput extends string, const TRequirement extends number>(
   error?: ErrorMessage
 ) {
   const kind = 'bytes' as const;
-  const message = error ?? ('Invalid byte length' as const);
+  const message = error ?? 'Invalid byte length';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       new TextEncoder().encode(input).length !== requirement

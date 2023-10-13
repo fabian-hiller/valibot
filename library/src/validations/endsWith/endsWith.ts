@@ -14,7 +14,7 @@ export function endsWith<
   const TRequirement extends string
 >(requirement: TRequirement, error?: ErrorMessage) {
   const kind = 'ends_with' as const;
-  const message = error ?? ('Invalid end' as const);
+  const message = error ?? 'Invalid end';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !input.endsWith(requirement as any)

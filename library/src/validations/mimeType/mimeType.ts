@@ -14,7 +14,7 @@ export function mimeType<
   const TRequirement extends `${string}/${string}`[]
 >(requirement: TRequirement, error?: ErrorMessage) {
   const kind = 'mime_type' as const;
-  const message = error ?? ('Invalid MIME type' as const);
+  const message = error ?? 'Invalid MIME type';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !requirement.includes(input.type as `${string}/${string}`)

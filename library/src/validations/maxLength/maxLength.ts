@@ -14,7 +14,7 @@ export function maxLength<
   const TRequirement extends number
 >(requirement: TRequirement, error?: ErrorMessage) {
   const kind = 'max_length' as const;
-  const message = error ?? ('Invalid length' as const);
+  const message = error ?? 'Invalid length';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       input.length > requirement

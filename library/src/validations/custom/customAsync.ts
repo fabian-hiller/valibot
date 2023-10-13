@@ -14,7 +14,7 @@ export function customAsync<TInput>(
   error?: ErrorMessage
 ) {
   const kind = 'custom' as const;
-  const message = error ?? ('Invalid input' as const);
+  const message = error ?? 'Invalid input';
   return Object.assign(
     async (input: TInput): Promise<PipeResult<TInput>> =>
       !(await requirement(input))

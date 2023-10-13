@@ -14,7 +14,7 @@ export function value<
   const TRequirement extends TInput
 >(requirement: TRequirement, error?: ErrorMessage) {
   const kind = 'value' as const;
-  const message = error ?? ('Invalid value' as const);
+  const message = error ?? 'Invalid value';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       input !== requirement

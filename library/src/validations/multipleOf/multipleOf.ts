@@ -14,7 +14,7 @@ export function multipleOf<
   const TRequirement extends number
 >(requirement: TRequirement, error?: ErrorMessage) {
   const kind = 'multiple_of' as const;
-  const message = error ?? ('Invalid multiple' as const);
+  const message = error ?? 'Invalid multiple';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       input % requirement !== 0

@@ -12,7 +12,7 @@ export function uuid<TInput extends string>(error?: ErrorMessage) {
   const kind = 'uuid' as const;
   const requirement =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  const message = error ?? ('Invalid UUID' as const);
+  const message = error ?? 'Invalid UUID';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !requirement.test(input)

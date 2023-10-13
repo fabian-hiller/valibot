@@ -14,7 +14,7 @@ export function regex<TInput extends string>(
   error?: ErrorMessage
 ) {
   const kind = 'regex' as const;
-  const message = error ?? ('Invalid regex' as const);
+  const message = error ?? 'Invalid regex';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !requirement.test(input)

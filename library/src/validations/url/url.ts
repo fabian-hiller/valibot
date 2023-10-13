@@ -13,7 +13,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function url<TInput extends string>(error?: ErrorMessage) {
   const kind = 'url' as const;
-  const message = error ?? ('Invalid URL' as const);
+  const message = error ?? 'Invalid URL';
   return Object.assign(
     (input: TInput): PipeResult<TInput> => {
       try {

@@ -17,7 +17,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 export function isoDate<TInput extends string>(error?: ErrorMessage) {
   const kind = 'iso_date' as const;
   const requirement = /^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])$/;
-  const message = error ?? ('Invalid date' as const);
+  const message = error ?? 'Invalid date';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !requirement.test(input)

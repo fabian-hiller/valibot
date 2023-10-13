@@ -11,7 +11,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 export function emoji<TInput extends string>(error?: ErrorMessage) {
   const kind = 'emoji' as const;
   const requirement = /^(\p{Extended_Pictographic}|\p{Emoji_Component})+$/u;
-  const message = error ?? ('Invalid emoji' as const);
+  const message = error ?? 'Invalid emoji';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !requirement.test(input)

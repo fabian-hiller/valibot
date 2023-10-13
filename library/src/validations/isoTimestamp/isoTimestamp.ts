@@ -18,7 +18,7 @@ export function isoTimestamp<TInput extends string>(error?: ErrorMessage) {
   const kind = 'iso_timestamp' as const;
   const requirement =
     /^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])T(0[0-9]|1\d|2[0-3]):[0-5]\d:[0-5]\d\.\d{3}Z$/;
-  const message = error ?? ('Invalid timestamp' as const);
+  const message = error ?? 'Invalid timestamp';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !requirement.test(input)

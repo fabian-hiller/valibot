@@ -14,7 +14,7 @@ export function startsWith<
   const TRequirement extends string
 >(requirement: TRequirement, error?: ErrorMessage) {
   const kind = `starts_with` as const;
-  const message = error ?? ('Invalid start' as const);
+  const message = error ?? 'Invalid start';
   return Object.assign(
     (input: TInput): PipeResult<TInput> =>
       !input.startsWith(requirement as any)
