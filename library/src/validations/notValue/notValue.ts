@@ -13,17 +13,14 @@ export function notValue<
   TInput extends string | number | bigint,
   const TRequirement extends TInput
 >(requirement: TRequirement, error?: ErrorMessage) {
-  const kind = 'not_value' as const;
-  const message = error ?? 'Invalid value';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      input === requirement
-        ? getPipeIssues(kind, message, input)
-        : getOutput(input),
-    {
-      kind,
-      requirement,
-      message,
-    }
-  );
+  return {
+    kind: 'not_value' as const,
+    message: error ?? 'Invalid value',
+    requirement,
+    _parse(input: TInput): PipeResult<TInput> {
+      return input === requirement
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }

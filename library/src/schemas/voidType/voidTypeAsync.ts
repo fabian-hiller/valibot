@@ -5,7 +5,7 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
  * Void schema async type.
  */
 export type VoidSchemaAsync<TOutput = void> = BaseSchemaAsync<void, TOutput> & {
-  schema: 'void';
+  kind: 'void';
 };
 
 /**
@@ -17,24 +17,8 @@ export type VoidSchemaAsync<TOutput = void> = BaseSchemaAsync<void, TOutput> & {
  */
 export function voidTypeAsync(error?: ErrorMessage): VoidSchemaAsync {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'void',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'void',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'undefined') {

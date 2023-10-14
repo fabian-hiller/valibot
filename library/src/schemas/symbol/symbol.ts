@@ -5,7 +5,7 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
  * Symbol schema type.
  */
 export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
-  schema: 'symbol';
+  kind: 'symbol';
 };
 
 /**
@@ -17,24 +17,8 @@ export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
  */
 export function symbol(error?: ErrorMessage): SymbolSchema {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'symbol',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'symbol',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'symbol') {

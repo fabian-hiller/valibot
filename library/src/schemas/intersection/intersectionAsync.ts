@@ -19,7 +19,10 @@ export type IntersectionSchemaAsync<
   TIntersectionOptions extends IntersectionOptionsAsync,
   TOutput = IntersectionOutput<TIntersectionOptions>
 > = BaseSchemaAsync<IntersectionInput<TIntersectionOptions>, TOutput> & {
-  schema: 'intersection';
+  kind: 'intersection';
+  /**
+   * The intersection schema.
+   */
   intersection: TIntersectionOptions;
 };
 
@@ -38,29 +41,9 @@ export function intersectionAsync<
   error?: string
 ): IntersectionSchemaAsync<TIntersectionOptions> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'intersection',
-
-    /**
-     * The intersection schema.
-     */
-    intersection,
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'intersection',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    intersection,
     async _parse(input, info) {
       // Create issues and outputs
       let issues: Issues | undefined;

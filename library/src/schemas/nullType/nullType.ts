@@ -5,7 +5,7 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
  * Null schema type.
  */
 export type NullSchema<TOutput = null> = BaseSchema<null, TOutput> & {
-  schema: 'null';
+  kind: 'null';
 };
 
 /**
@@ -17,24 +17,8 @@ export type NullSchema<TOutput = null> = BaseSchema<null, TOutput> & {
  */
 export function nullType(error?: ErrorMessage): NullSchema {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'null',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'null',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Check type of input
       if (input !== null) {

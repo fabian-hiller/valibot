@@ -22,7 +22,6 @@ describe('string', () => {
   test('should execute pipe', () => {
     const lengthError = 'Invalid length';
     const schema1 = string([minLength(1), maxLength(3)]);
-    schema1.checks; //?
     const input1 = '12';
     const output1 = parse(schema1, input1);
     expect(output1).toBe(input1);

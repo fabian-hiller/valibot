@@ -9,7 +9,10 @@ export type NativeEnumSchemaAsync<
   TNativeEnum extends NativeEnum,
   TOutput = TNativeEnum[keyof TNativeEnum]
 > = BaseSchemaAsync<TNativeEnum[keyof TNativeEnum], TOutput> & {
-  schema: 'native_enum';
+  kind: 'native_enum';
+  /**
+   * The native enum value.
+   */
   nativeEnum: TNativeEnum;
 };
 
@@ -26,29 +29,9 @@ export function nativeEnumAsync<TNativeEnum extends NativeEnum>(
   error?: ErrorMessage
 ): NativeEnumSchemaAsync<TNativeEnum> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'native_enum',
-
-    /**
-     * The native enum value.
-     */
-    nativeEnum,
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'native_enum',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    nativeEnum,
     async _parse(input, info) {
       // Check type of input
       if (!Object.values(nativeEnum).includes(input as any)) {

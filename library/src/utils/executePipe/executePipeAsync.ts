@@ -37,7 +37,7 @@ export async function executePipeAsync<TValue>(
 
   // Execute any action of pipe
   for (const action of pipe) {
-    const result = await action(output);
+    const result = await action._parse(output);
 
     // If there are issues, capture them
     if (result.issues) {

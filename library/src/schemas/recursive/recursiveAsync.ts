@@ -12,7 +12,10 @@ export type RecursiveSchemaAsync<
   TSchemaGetter extends () => BaseSchema | BaseSchemaAsync,
   TOutput = Output<ReturnType<TSchemaGetter>>
 > = BaseSchemaAsync<Input<ReturnType<TSchemaGetter>>, TOutput> & {
-  schema: 'recursive';
+  kind: 'recursive';
+  /**
+   * The schema getter.
+   */
   getter: TSchemaGetter;
 };
 
@@ -27,29 +30,9 @@ export function recursiveAsync<
   TSchemaGetter extends () => BaseSchema | BaseSchemaAsync
 >(getter: TSchemaGetter): RecursiveSchemaAsync<TSchemaGetter> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'recursive',
-
-    /**
-     * The schema getter.
-     */
-    getter,
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'recursive',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    getter,
     async _parse(input, info) {
       return getter()._parse(input, info);
     },

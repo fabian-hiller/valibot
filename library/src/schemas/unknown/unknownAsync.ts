@@ -9,7 +9,11 @@ export type UnknownSchemaAsync<TOutput = unknown> = BaseSchemaAsync<
   unknown,
   TOutput
 > & {
-  schema: 'unknown';
+  kind: 'unknown';
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -24,30 +28,9 @@ export function unknownAsync(
   pipe: PipeAsync<unknown> = []
 ): UnknownSchemaAsync {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'unknown',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'unknown',
     async: true,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       return executePipeAsync(input, pipe, info, 'unknown');
     },

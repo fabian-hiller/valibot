@@ -23,8 +23,15 @@ export type MapSchema<
   TMapValue extends BaseSchema,
   TOutput = MapOutput<TMapKey, TMapValue>
 > = BaseSchema<MapInput<TMapKey, TMapValue>, TOutput> & {
-  schema: 'map';
+  kind: 'map';
+  /**
+   * The map key and value schema.
+   */
   map: { key: TMapKey; value: TMapValue };
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -71,35 +78,10 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
 
   // Create and return map schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'map',
-
-    /**
-     * The map key and value schema.
-     */
-    map: { key, value },
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'map',
     async: false,
-
-    /**
-     * Validation checks that will be applied to
-     * the Map object.
-     */
+    map: { key, value },
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {

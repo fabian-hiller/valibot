@@ -87,7 +87,22 @@ export type _ParseResult<TOutput> =
  * Base schema type.
  */
 export type BaseSchema<TInput = any, TOutput = TInput> = {
+  /**
+   * The schema type.
+   */
+  kind: string;
+  /**
+   * Whether it's async.
+   */
   async: false;
+  /**
+   * Parses unknown input based on its schema.
+   *
+   * @param input The input to be parsed.
+   * @param info The parse info.
+   *
+   * @returns The parsed output.
+   */
   _parse(input: unknown, info?: ParseInfo): _ParseResult<TOutput>;
   _types?: { input: TInput; output: TOutput };
 };
@@ -96,7 +111,22 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
  * Base schema async type.
  */
 export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
+  /**
+   * The schema type.
+   */
+  kind: string;
+  /**
+   * Whether it's async.
+   */
   async: true;
+  /**
+   * Parses unknown input based on its schema.
+   *
+   * @param input The input to be parsed.
+   * @param info The parse info.
+   *
+   * @returns The parsed output.
+   */
   _parse(input: unknown, info?: ParseInfo): Promise<_ParseResult<TOutput>>;
   _types?: { input: TInput; output: TOutput };
 };
@@ -140,32 +170,70 @@ export type PipeResult<TOutput> =
 
 export type PipeMeta<
   TKind extends string = string,
+  TMessage extends ErrorMessage = ErrorMessage,
   TRequirement = unknown
 > = Readonly<{
   kind: TKind;
-  message: ErrorMessage;
+  message: TMessage;
   requirement?: TRequirement;
 }>;
+
+export type Validation<
+  TValue,
+  TKind extends string = string,
+  TMessage extends ErrorMessage = ErrorMessage,
+  TRequirement = unknown
+> = TRequirement extends unknown
+  ? {
+      kind: TKind;
+      message: TMessage;
+      _parse(value: TValue): PipeResult<TValue>;
+    }
+  : {
+      kind: TKind;
+      message: TMessage;
+      requirement: TRequirement;
+      _parse(value: TValue): PipeResult<TValue>;
+    };
+
+export type ValidationAsync<
+  TValue,
+  TKind extends string = string,
+  TMessage extends ErrorMessage = ErrorMessage,
+  TRequirement = unknown
+> = TRequirement extends unknown
+  ? {
+      kind: TKind;
+      message: TMessage;
+      _parse(value: TValue): PipeResult<TValue> | Promise<PipeResult<TValue>>;
+    }
+  : {
+      kind: TKind;
+      message: TMessage;
+      requirement: TRequirement;
+      _parse(value: TValue): PipeResult<TValue> | Promise<PipeResult<TValue>>;
+    };
+
+export type Transform<TValue> = {
+  kind: string;
+  _parse(value: TValue): PipeResult<TValue>;
+};
+
+export type TransformAsync<TValue> = {
+  kind: string;
+  _parse(value: TValue): Promise<PipeResult<TValue>> | PipeResult<TValue>;
+};
 
 /**
  * Validation and transformation pipe type.
  */
-export type Pipe<TValue> = [
-  ...(
-    | (((value: TValue) => PipeResult<TValue>) & PipeMeta)
-    | ((value: TValue) => PipeResult<TValue>)
-  )[]
-];
+export type Pipe<TValue> = [...(Validation<TValue> | Transform<TValue>)[]];
 
 /**
  * Async validation and transformation pipe type.
  */
 export type PipeAsync<TValue> = [
-  ...(
-    | (((value: TValue) => PipeResult<TValue> | Promise<PipeResult<TValue>>) &
-        PipeMeta)
-    | ((value: TValue) => PipeResult<TValue> | Promise<PipeResult<TValue>>)
-  )[]
+  ...(ValidationAsync<TValue> | TransformAsync<TValue>)[]
 ];
 
 /**

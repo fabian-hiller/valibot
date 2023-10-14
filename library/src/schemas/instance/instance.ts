@@ -18,8 +18,15 @@ export type InstanceSchema<
   TClass extends Class,
   TOutput = InstanceType<TClass>
 > = BaseSchema<InstanceType<TClass>, TOutput> & {
-  schema: 'instance';
+  kind: 'instance';
+  /**
+   * The class of the instance.
+   */
   class: TClass;
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -61,35 +68,10 @@ export function instance<TClass extends Class>(
 
   // Create and return string schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'instance',
-
-    /**
-     * The class of the instance.
-     */
-    class: of,
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'instance',
     async: false,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
+    class: of,
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof of)) {

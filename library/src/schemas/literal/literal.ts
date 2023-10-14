@@ -9,7 +9,10 @@ export type LiteralSchema<
   TLiteral extends Literal,
   TOutput = TLiteral
 > = BaseSchema<TLiteral, TOutput> & {
-  schema: 'literal';
+  kind: 'literal';
+  /**
+   * The literal value.
+   */
   literal: TLiteral;
 };
 
@@ -26,29 +29,9 @@ export function literal<TLiteral extends Literal>(
   error?: ErrorMessage
 ): LiteralSchema<TLiteral> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'literal',
-
-    /**
-     * The literal value.
-     */
-    literal,
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'literal',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    literal,
     _parse(input, info) {
       // Check type of input
       if (input !== literal) {

@@ -13,6 +13,10 @@ export function toMaxValue<
   TInput extends string | number | bigint | Date,
   TRequirement extends TInput
 >(requirement: TRequirement) {
-  return (input: TInput): PipeResult<TInput> =>
-    getOutput(input > requirement ? requirement : input);
+  return {
+    kind: 'to_max_value' as const,
+    _parse(input: TInput): PipeResult<TInput> {
+      return getOutput(input > requirement ? requirement : input);
+    },
+  };
 }

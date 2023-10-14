@@ -18,7 +18,11 @@ export type NumberSchemaAsync<TOutput = number> = BaseSchemaAsync<
   number,
   TOutput
 > & {
-  schema: 'number';
+  kind: 'number';
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -53,30 +57,9 @@ export function numberAsync(
 
   // Create and return async number schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'number',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'number',
     async: true,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'number' || Number.isNaN(input)) {

@@ -36,8 +36,15 @@ export type RecordSchema<
   TRecordValue extends BaseSchema,
   TOutput = RecordOutput<TRecordKey, TRecordValue>
 > = BaseSchema<RecordInput<TRecordKey, TRecordValue>, TOutput> & {
-  schema: 'record';
+  kind: 'record';
+  /**
+   * The record key and value schema.
+   */
   record: { key: TRecordKey; value: TRecordValue };
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -128,35 +135,10 @@ export function record<
 
   // Create and return record schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'record',
-
-    /**
-     * The record key and value schema.
-     */
-    record: { key, value },
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'record',
     async: false,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
+    record: { key, value },
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {

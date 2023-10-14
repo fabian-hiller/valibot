@@ -31,8 +31,15 @@ export type TupleSchemaAsync<
   TTupleRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
   TOutput = TupleOutput<TTupleItems, TTupleRest>
 > = BaseSchemaAsync<TupleInput<TTupleItems, TTupleRest>, TOutput> & {
-  schema: 'tuple';
+  kind: 'tuple';
+  /**
+   * The tuple items and rest schema.
+   */
   tuple: { items: TTupleItems; rest: TTupleRest };
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -122,35 +129,10 @@ export function tupleAsync<
 
   // Create and return async tuple schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'tuple',
-
-    /**
-     * The tuple items and rest schema.
-     */
-    tuple: { items, rest },
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'tuple',
     async: true,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
+    tuple: { items, rest },
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Check type of input
       if (

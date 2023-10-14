@@ -15,18 +15,14 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function isoWeek<TInput extends string>(error?: ErrorMessage) {
-  const kind = 'iso_week' as const;
-  const requirement = /^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$/;
-  const message = error ?? 'Invalid week';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      !requirement.test(input)
-        ? getPipeIssues(kind, message, input)
-        : getOutput(input),
-    {
-      kind,
-      requirement,
-      message,
-    }
-  );
+  return {
+    kind: 'iso_week' as const,
+    message: error ?? 'Invalid week',
+    requirement: /^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$/,
+    _parse(input: TInput): PipeResult<TInput> {
+      return !this.requirement.test(input)
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }

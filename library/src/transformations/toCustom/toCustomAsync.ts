@@ -11,6 +11,10 @@ import { getOutput } from '../../utils/index.ts';
 export function toCustomAsync<TInput>(
   action: (input: TInput) => TInput | Promise<TInput>
 ) {
-  return async (input: TInput): Promise<PipeResult<TInput>> =>
-    getOutput(await action(input));
+  return {
+    kind: 'to_custom_async' as const,
+    async _parse(input: TInput): Promise<PipeResult<TInput>> {
+      return getOutput(await action(input));
+    },
+  };
 }

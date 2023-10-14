@@ -13,17 +13,14 @@ export function startsWith<
   TInput extends string,
   const TRequirement extends string
 >(requirement: TRequirement, error?: ErrorMessage) {
-  const kind = `starts_with` as const;
-  const message = error ?? 'Invalid start';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      !input.startsWith(requirement as any)
-        ? getPipeIssues(kind, message, input)
-        : getOutput(input),
-    {
-      kind,
-      requirement,
-      message,
-    }
-  );
+  return {
+    kind: `starts_with` as const,
+    message: error ?? 'Invalid start',
+    requirement,
+    _parse(input: TInput): PipeResult<TInput> {
+      return !input.startsWith(requirement as any)
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }

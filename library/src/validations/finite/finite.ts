@@ -9,16 +9,13 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function finite<TInput extends number>(error?: ErrorMessage) {
-  const kind = 'finite' as const;
-  const message = error ?? 'Invalid finite number';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      !Number.isFinite(input)
-        ? getPipeIssues(kind, message, input)
-        : getOutput(input),
-    {
-      kind,
-      message,
-    }
-  );
+  return {
+    kind: 'finite' as const,
+    message: error ?? 'Invalid finite number',
+    _parse(input: TInput): PipeResult<TInput> {
+      return !Number.isFinite(input)
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }

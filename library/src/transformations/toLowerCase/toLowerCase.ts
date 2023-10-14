@@ -8,6 +8,10 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A transformation function.
  */
 export function toLowerCase() {
-  return (input: string): PipeResult<string> =>
-    getOutput(input.toLocaleLowerCase());
+  return {
+    kind: 'to_lower_case' as const,
+    _parse(input: string): PipeResult<string> {
+      return getOutput(input.toLocaleLowerCase());
+    },
+  };
 }

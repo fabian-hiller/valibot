@@ -11,8 +11,14 @@ export type OptionalSchema<
     ? Output<TWrapped> | undefined
     : Output<TWrapped>
 > = BaseSchema<Input<TWrapped> | undefined, TOutput> & {
-  schema: 'optional';
+  kind: 'optional';
+  /**
+   * The wrapped schema.
+   */
   wrapped: TWrapped;
+  /**
+   * The default value.
+   */
   get default(): TDefault;
 };
 
@@ -32,38 +38,14 @@ export function optional<
   default_?: TDefault | (() => TDefault)
 ): OptionalSchema<TWrapped, TDefault> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'optional',
-
-    /**
-     * The wrapped schema.
-     */
+    kind: 'optional',
+    async: false,
     wrapped,
-
-    /**
-     * The default value.
-     */
     get default() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);
     },
-
-    /**
-     * Whether it's async.
-     */
-    async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Get default or input value
       const value = input === undefined ? this.default : input;

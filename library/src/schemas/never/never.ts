@@ -5,7 +5,7 @@ import { getSchemaIssues } from '../../utils/index.ts';
  * Never schema type.
  */
 export type NeverSchema = BaseSchema<never> & {
-  schema: 'never';
+  kind: 'never';
 };
 
 /**
@@ -17,24 +17,8 @@ export type NeverSchema = BaseSchema<never> & {
  */
 export function never(error?: ErrorMessage): NeverSchema {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'never',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'never',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       return getSchemaIssues(
         info,

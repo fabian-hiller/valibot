@@ -13,17 +13,14 @@ export function custom<TInput>(
   requirement: (input: TInput) => boolean,
   error?: ErrorMessage
 ) {
-  const kind = 'custom' as const;
-  const message = error ?? 'Invalid input';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      !requirement(input)
-        ? getPipeIssues(kind, message, input)
-        : getOutput(input),
-    {
-      kind,
-      requirement,
-      message,
-    }
-  );
+  return {
+    kind: 'custom' as const,
+    message: error ?? 'Invalid input',
+    requirement,
+    _parse(input: TInput): PipeResult<TInput> {
+      return !requirement(input)
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }

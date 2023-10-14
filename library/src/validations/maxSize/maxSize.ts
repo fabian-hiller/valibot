@@ -13,17 +13,14 @@ export function maxSize<
   TInput extends Map<any, any> | Set<any> | Blob,
   const TRequirement extends number
 >(requirement: TRequirement, error?: ErrorMessage) {
-  const type = 'max_size' as const;
-  const message = error ?? 'Invalid size';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      input.size > requirement
-        ? getPipeIssues(type, message, input)
-        : getOutput(input),
-    {
-      type,
-      requirement,
-      message,
-    }
-  );
+  return {
+    kind: 'max_size' as const,
+    message: error ?? 'Invalid size',
+    requirement,
+    _parse(input: TInput): PipeResult<TInput> {
+      return input.size > requirement
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }

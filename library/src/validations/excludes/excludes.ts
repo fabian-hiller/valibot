@@ -1,15 +1,15 @@
-import type { ErrorMessage, PipeResult } from '../../types.ts';
+import type { ErrorMessage, PipeResult, Validation } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 export function excludes<TInput extends string>(
   requirement: string,
   error?: ErrorMessage
-): (input: TInput) => PipeResult<TInput>;
+): Validation<TInput>;
 
 export function excludes<TInput extends TItem[], TItem>(
   requirement: TItem,
   error?: ErrorMessage
-): (input: TInput) => PipeResult<TInput>;
+): Validation<TInput>;
 
 /**
  * Creates a validation function that validates the content of a string or array.
@@ -24,17 +24,14 @@ export function excludes<
   TItem,
   const TRequirement extends string | TItem
 >(requirement: TRequirement, error?: ErrorMessage) {
-  const kind = 'excludes' as const;
-  const message = error ?? 'Invalid content';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      input.includes(requirement as any)
-        ? getPipeIssues(kind, message, input)
-        : getOutput(input),
-    {
-      kind,
-      requirement,
-      message,
-    }
-  );
+  return {
+    kind: 'excludes' as const,
+    message: error ?? 'Invalid content',
+    requirement,
+    _parse(input: TInput): PipeResult<TInput> {
+      return input.includes(requirement as any)
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }

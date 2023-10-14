@@ -26,8 +26,15 @@ export type ObjectSchema<
   TObjectShape extends ObjectShape,
   TOutput = ObjectOutput<TObjectShape>
 > = BaseSchema<ObjectInput<TObjectShape>, TOutput> & {
-  schema: 'object';
+  kind: 'object';
+  /**
+   * The object schema.
+   */
   object: TObjectShape;
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -72,35 +79,10 @@ export function object<TObjectShape extends ObjectShape>(
 
   // Create and return object schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'object',
-
-    /**
-     * The object schema.
-     */
-    object,
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'object',
     async: false,
-
-    /**
-     * Validation checks that will be applied to
-     * the Object.
-     */
+    object,
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {

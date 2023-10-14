@@ -24,8 +24,15 @@ export type ArraySchemaAsync<
   TArrayItem extends BaseSchema | BaseSchemaAsync,
   TOutput = Output<TArrayItem>[]
 > = BaseSchemaAsync<Input<TArrayItem>[], TOutput> & {
-  schema: 'array';
+  kind: 'array';
+  /**
+   * The array item schema.
+   */
   array: { item: TArrayItem };
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -67,35 +74,10 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
 
   // Create and return async array schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'array',
-
-    /**
-     * The array item schema.
-     */
-    array: { item },
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'array',
     async: true,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
-    checks: getChecks(pipe ?? []),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    array: { item },
+    checks: getChecks(pipe),
     async _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {

@@ -37,7 +37,7 @@ export function executePipe<TValue>(
 
   // Execute any action of pipe
   for (const action of pipe) {
-    const result = action(output);
+    const result = action._parse(output);
 
     // If there are issues, capture them
     if (result.issues) {

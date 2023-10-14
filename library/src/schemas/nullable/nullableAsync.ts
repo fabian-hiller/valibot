@@ -19,8 +19,14 @@ export type NullableSchemaAsync<
     ? Output<TWrapped> | null
     : Output<TWrapped>
 > = BaseSchemaAsync<Input<TWrapped> | null, TOutput> & {
-  schema: 'nullable';
+  kind: 'nullable';
+  /**
+   * The wrapped schema.
+   */
   wrapped: TWrapped;
+  /**
+   * The default value.
+   */
   get default(): TDefault;
 };
 
@@ -43,38 +49,14 @@ export function nullableAsync<
   default_?: TDefault | (() => TDefault)
 ): NullableSchemaAsync<TWrapped, TDefault> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'nullable',
-
-    /**
-     * The wrapped schema.
-     */
+    kind: 'nullable',
+    async: true,
     wrapped,
-
-    /**
-     * The default value.
-     */
     get default() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);
     },
-
-    /**
-     * Whether it's async.
-     */
-    async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Get default or input value
       let default_: Awaited<TDefault>;

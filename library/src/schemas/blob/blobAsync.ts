@@ -15,7 +15,11 @@ import {
  * Blob schema async type.
  */
 export type BlobSchemaAsync<TOutput = Blob> = BaseSchemaAsync<Blob, TOutput> & {
-  schema: 'blob';
+  kind: 'blob';
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -50,30 +54,9 @@ export function blobAsync(
 
   // Create and return async blob schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'blob',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'blob',
     async: true,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Blob)) {

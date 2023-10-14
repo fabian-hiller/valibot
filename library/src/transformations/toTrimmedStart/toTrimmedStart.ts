@@ -8,5 +8,10 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A transformation function.
  */
 export function toTrimmedStart() {
-  return (input: string): PipeResult<string> => getOutput(input.trimStart());
+  return {
+    kind: 'to_trimmed_start' as const,
+    _parse(input: string): PipeResult<string> {
+      return getOutput(input.trimStart());
+    },
+  };
 }

@@ -5,7 +5,11 @@ import { executePipeAsync, getChecks } from '../../utils/index.ts';
  * Any schema type.
  */
 export type AnySchemaAsync<TOutput = any> = BaseSchemaAsync<any, TOutput> & {
-  schema: 'any';
+  kind: 'any';
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -18,30 +22,9 @@ export type AnySchemaAsync<TOutput = any> = BaseSchemaAsync<any, TOutput> & {
  */
 export function anyAsync(pipe: PipeAsync<any> = []): AnySchemaAsync {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'any',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'any',
     async: true,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       return executePipeAsync(input, pipe, info, 'any');
     },

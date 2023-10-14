@@ -13,7 +13,10 @@ export type NonOptionalSchema<
   TWrapped extends BaseSchema,
   TOutput = NonOptional<Output<TWrapped>>
 > = BaseSchema<NonOptional<Input<TWrapped>>, TOutput> & {
-  schema: 'non_optional';
+  kind: 'non_optional';
+  /**
+   * The wrapped schema.
+   */
   wrapped: TWrapped;
 };
 
@@ -30,29 +33,9 @@ export function nonOptional<TWrapped extends BaseSchema>(
   error?: ErrorMessage
 ): NonOptionalSchema<TWrapped> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'non_optional',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped,
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'non_optional',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
     _parse(input, info) {
       // Allow `undefined` values not to pass
       if (input === undefined) {

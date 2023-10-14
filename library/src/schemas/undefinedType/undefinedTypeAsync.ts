@@ -8,7 +8,7 @@ export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
   undefined,
   TOutput
 > & {
-  schema: 'undefined';
+  kind: 'undefined';
 };
 
 /**
@@ -20,24 +20,8 @@ export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
  */
 export function undefinedTypeAsync(error?: ErrorMessage): UndefinedSchemaAsync {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'undefined',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'undefined',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'undefined') {

@@ -23,7 +23,10 @@ export type UnionSchema<
   TUnionOptions extends UnionOptions,
   TOutput = Output<TUnionOptions[number]>
 > = BaseSchema<Input<TUnionOptions[number]>, TOutput> & {
-  schema: 'union';
+  kind: 'union';
+  /**
+   * The union schema.
+   */
   union: TUnionOptions;
 };
 
@@ -40,29 +43,9 @@ export function union<TUnionOptions extends UnionOptions>(
   error?: ErrorMessage
 ): UnionSchema<TUnionOptions> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'union',
-
-    /**
-     * The union schema.
-     */
-    union,
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'union',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    union,
     _parse(input, info) {
       // Create issues and output
       let issues: Issues | undefined;

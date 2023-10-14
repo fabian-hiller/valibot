@@ -9,5 +9,10 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A transformation function.
  */
 export function toCustom<TInput>(action: (input: TInput) => TInput) {
-  return (input: TInput): PipeResult<TInput> => getOutput(action(input));
+  return {
+    kind: 'to_custom' as const,
+    _parse(input: TInput): PipeResult<TInput> {
+      return getOutput(action(input));
+    },
+  };
 }

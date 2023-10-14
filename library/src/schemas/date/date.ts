@@ -10,7 +10,11 @@ import {
  * Date schema type.
  */
 export type DateSchema<TOutput = Date> = BaseSchema<Date, TOutput> & {
-  schema: 'date';
+  kind: 'date';
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -42,30 +46,9 @@ export function date(
 
   // Create and return date schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'date',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'date',
     async: false,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Date)) {

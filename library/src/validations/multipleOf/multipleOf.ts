@@ -13,17 +13,14 @@ export function multipleOf<
   TInput extends number,
   const TRequirement extends number
 >(requirement: TRequirement, error?: ErrorMessage) {
-  const kind = 'multiple_of' as const;
-  const message = error ?? 'Invalid multiple';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      input % requirement !== 0
-        ? getPipeIssues(kind, message, input)
-        : getOutput(input),
-    {
-      kind,
-      requirement,
-      message,
-    }
-  );
+  return {
+    kind: 'multiple_of' as const,
+    message: error ?? 'Invalid multiple',
+    requirement,
+    _parse(input: TInput): PipeResult<TInput> {
+      return input % requirement !== 0
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }

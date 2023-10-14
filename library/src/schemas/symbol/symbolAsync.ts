@@ -8,7 +8,7 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
   symbol,
   TOutput
 > & {
-  schema: 'symbol';
+  kind: 'symbol';
 };
 
 /**
@@ -20,24 +20,8 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
  */
 export function symbolAsync(error?: ErrorMessage): SymbolSchemaAsync {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'symbol',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'symbol',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'symbol') {

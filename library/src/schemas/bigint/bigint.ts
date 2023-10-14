@@ -10,7 +10,11 @@ import {
  * Bigint schema type.
  */
 export type BigintSchema<TOutput = bigint> = BaseSchema<bigint, TOutput> & {
-  schema: 'bigint';
+  kind: 'bigint';
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -42,30 +46,9 @@ export function bigint(
 
   // Create and return bigint schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'bigint',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'bigint',
     async: false,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
-    checks: getChecks(pipe ?? []),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    checks: getChecks(pipe),
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'bigint') {

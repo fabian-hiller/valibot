@@ -22,8 +22,15 @@ export type SetSchemaAsync<
   TSetValue extends BaseSchema | BaseSchemaAsync,
   TOutput = SetOutput<TSetValue>
 > = BaseSchemaAsync<SetInput<TSetValue>, TOutput> & {
-  schema: 'set';
+  kind: 'set';
+  /**
+   * The set value schema.
+   */
   set: { value: TSetValue };
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -65,35 +72,10 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
 
   // Create and return async set schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'set',
-
-    /**
-     * The set value schema.
-     */
-    set: { value },
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'set',
     async: true,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
+    set: { value },
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Set)) {

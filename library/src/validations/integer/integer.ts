@@ -9,16 +9,13 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function integer<TInput extends number>(error?: ErrorMessage) {
-  const kind = 'integer' as const;
-  const message = error ?? 'Invalid integer';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      !Number.isInteger(input)
-        ? getPipeIssues(kind, message, input)
-        : getOutput(input),
-    {
-      kind,
-      message,
-    }
-  );
+  return {
+    kind: 'integer' as const,
+    message: error ?? 'Invalid integer',
+    _parse(input: TInput): PipeResult<TInput> {
+      return !Number.isInteger(input)
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }

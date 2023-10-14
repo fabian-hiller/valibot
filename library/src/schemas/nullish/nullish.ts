@@ -11,8 +11,14 @@ export type NullishSchema<
     ? Output<TWrapped> | null | undefined
     : Output<TWrapped>
 > = BaseSchema<Input<TWrapped> | null | undefined, TOutput> & {
-  schema: 'nullish';
+  kind: 'nullish';
+  /**
+   * The wrapped schema.
+   */
   wrapped: TWrapped;
+  /**
+   * The default value.
+   */
   get default(): TDefault;
 };
 
@@ -32,38 +38,14 @@ export function nullish<
   default_?: TDefault | (() => TDefault)
 ): NullishSchema<TWrapped, TDefault> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'nullish',
-
-    /**
-     * The wrapped schema.
-     */
+    kind: 'nullish',
+    async: false,
     wrapped,
-
-    /**
-     * The default value.
-     */
     get default() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);
     },
-
-    /**
-     * Whether it's async.
-     */
-    async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Get default or input value
       let default_: TDefault;

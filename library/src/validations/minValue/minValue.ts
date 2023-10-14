@@ -13,19 +13,16 @@ export function minValue<
   TInput extends string | number | bigint | Date,
   const TRequirement extends TInput
 >(requirement: TRequirement, error?: ErrorMessage) {
-  const kind = 'min_value' as const;
-  const message = error ?? 'Invalid value';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      input < requirement
-        ? getPipeIssues(kind, message, input)
-        : getOutput(input),
-    {
-      kind,
-      requirement,
-      message,
-    }
-  );
+  return {
+    kind: 'min_value' as const,
+    message: error ?? 'Invalid value',
+    requirement,
+    _parse(input: TInput): PipeResult<TInput> {
+      return input < requirement
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }
 
 /**

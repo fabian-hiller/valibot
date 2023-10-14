@@ -10,7 +10,11 @@ import {
  * Boolean schema type.
  */
 export type BooleanSchema<TOutput = boolean> = BaseSchema<boolean, TOutput> & {
-  schema: 'boolean';
+  kind: 'boolean';
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -45,30 +49,9 @@ export function boolean(
 
   // Create and return boolean schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'boolean',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'boolean',
     async: false,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'boolean') {

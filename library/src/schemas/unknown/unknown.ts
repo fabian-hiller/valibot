@@ -6,7 +6,11 @@ import { executePipe } from '../../utils/index.ts';
  * Unknown schema type.
  */
 export type UnknownSchema<TOutput = unknown> = BaseSchema<unknown, TOutput> & {
-  schema: 'unknown';
+  kind: 'unknown';
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -19,30 +23,9 @@ export type UnknownSchema<TOutput = unknown> = BaseSchema<unknown, TOutput> & {
  */
 export function unknown(pipe: Pipe<unknown> = []): UnknownSchema {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'unknown',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'unknown',
     async: false,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       return executePipe(input, pipe, info, 'unknown');
     },

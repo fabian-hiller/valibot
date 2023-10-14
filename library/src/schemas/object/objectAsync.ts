@@ -30,8 +30,15 @@ export type ObjectSchemaAsync<
   TObjectShape extends ObjectShapeAsync,
   TOutput = ObjectOutput<TObjectShape>
 > = BaseSchemaAsync<ObjectInput<TObjectShape>, TOutput> & {
-  schema: 'object';
+  kind: 'object';
+  /**
+   * The object schema.
+   */
   object: TObjectShape;
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -76,35 +83,10 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
 
   // Create and return async object schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'object',
-
-    /**
-     * The object schema.
-     */
-    object,
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'object',
     async: true,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
+    object,
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {

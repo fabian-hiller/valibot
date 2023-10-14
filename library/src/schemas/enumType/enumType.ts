@@ -9,7 +9,10 @@ export type EnumSchema<
   TEnum extends Enum,
   TOutput = TEnum[number]
 > = BaseSchema<TEnum[number], TOutput> & {
-  schema: 'enum';
+  kind: 'enum';
+  /**
+   * The enum value.
+   */
   enum: TEnum;
 };
 
@@ -26,29 +29,9 @@ export function enumType<TOption extends string, TEnum extends Enum<TOption>>(
   error?: ErrorMessage
 ): EnumSchema<TEnum> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'enum',
-
-    /**
-     * The enum value.
-     */
-    enum: enumValue,
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'enum',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    enum: enumValue,
     _parse(input, info) {
       // Check type of input
       if (!enumValue.includes(input as any)) {

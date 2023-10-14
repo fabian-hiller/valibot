@@ -13,17 +13,14 @@ export function maxBytes<
   TInput extends string,
   const TRequirement extends number
 >(requirement: TRequirement, error?: ErrorMessage) {
-  const kind = 'max_bytes' as const;
-  const message = error ?? 'Invalid byte length';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      new TextEncoder().encode(input).length > requirement
-        ? getPipeIssues(kind, message, input)
-        : getOutput(input),
-    {
-      kind,
-      requirement,
-      message,
-    }
-  );
+  return {
+    kind: 'max_bytes' as const,
+    message: error ?? 'Invalid byte length',
+    requirement,
+    _parse(input: TInput): PipeResult<TInput> {
+      return new TextEncoder().encode(input).length > requirement
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }

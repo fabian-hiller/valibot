@@ -1,11 +1,9 @@
 import type { Pipe, PipeAsync, PipeMeta } from '../../types';
 
 const hasPipeMeta = (val: unknown): val is PipeMeta =>
-  typeof val === `function` && `kind` in val && `message` in val;
+  typeof val === `object` && val !== null && `kind` in val && `message` in val;
 
-export const getChecks = <const TPipe extends Pipe<any> | PipeAsync<any>>(
-  pipe?: TPipe
-) =>
+export const getChecks = (pipe?: Pipe<any> | PipeAsync<any>) =>
   Array.isArray(pipe)
     ? pipe.reduce<PipeMeta[]>((arr, item) => {
         if (hasPipeMeta(item)) {

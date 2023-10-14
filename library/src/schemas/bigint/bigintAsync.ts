@@ -18,7 +18,11 @@ export type BigintSchemaAsync<TOutput = bigint> = BaseSchemaAsync<
   bigint,
   TOutput
 > & {
-  schema: 'bigint';
+  kind: 'bigint';
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -53,30 +57,9 @@ export function bigintAsync(
 
   // Create and return async bigint schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'bigint',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'bigint',
     async: true,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
-    checks: getChecks(pipe ?? []),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    checks: getChecks(pipe),
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'bigint') {

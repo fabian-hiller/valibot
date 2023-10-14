@@ -13,7 +13,7 @@ export type SpecialSchema<TInput, TOutput = TInput> = BaseSchema<
   TInput,
   TOutput
 > & {
-  schema: 'special';
+  kind: 'special';
   checks: PipeMeta[];
 };
 
@@ -55,30 +55,9 @@ export function special<TInput>(
 
   // Create and return string schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'special',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'special',
     async: false,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Check type of input
       if (!check(input)) {

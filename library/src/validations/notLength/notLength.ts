@@ -13,17 +13,14 @@ export function notLength<
   TInput extends string | any[],
   const TRequirement extends number
 >(requirement: TRequirement, error?: ErrorMessage) {
-  const kind = 'not_length' as const;
-  const message = error ?? 'Invalid length';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> =>
-      input.length === requirement
-        ? getPipeIssues(kind, message, input)
-        : getOutput(input),
-    {
-      kind,
-      requirement,
-      message,
-    }
-  );
+  return {
+    kind: 'not_length' as const,
+    message: error ?? 'Invalid length',
+    requirement,
+    _parse(input: TInput): PipeResult<TInput> {
+      return input.length === requirement
+        ? getPipeIssues(this.kind, this.message, input)
+        : getOutput(input);
+    },
+  };
 }

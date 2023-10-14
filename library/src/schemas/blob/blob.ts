@@ -10,7 +10,11 @@ import {
  * Blob schema type.
  */
 export type BlobSchema<TOutput = Blob> = BaseSchema<Blob, TOutput> & {
-  schema: 'blob';
+  kind: 'blob';
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -42,30 +46,9 @@ export function blob(
 
   // Create and return blob schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'blob',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'blob',
     async: false,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Blob)) {

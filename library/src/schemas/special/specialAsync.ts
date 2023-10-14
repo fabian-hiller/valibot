@@ -18,7 +18,11 @@ export type SpecialSchemaAsync<TInput, TOutput = TInput> = BaseSchemaAsync<
   TInput,
   TOutput
 > & {
-  schema: 'special';
+  kind: 'special';
+  /**
+   * Validation checks that will be run against
+   * the input value.
+   */
   checks: PipeMeta[];
 };
 
@@ -60,30 +64,9 @@ export function specialAsync<TInput>(
 
   // Create and return string schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'special',
-
-    /**
-     * Whether it's async.
-     */
+    kind: 'special',
     async: true,
-
-    /**
-     * Validation checks that will be run against
-     * the input value.
-     */
     checks: getChecks(pipe),
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Check type of input
       if (!(await check(input))) {

@@ -12,20 +12,16 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * @returns A validation function.
  */
 export function url<TInput extends string>(error?: ErrorMessage) {
-  const kind = 'url' as const;
-  const message = error ?? 'Invalid URL';
-  return Object.assign(
-    (input: TInput): PipeResult<TInput> => {
+  return {
+    kind: 'url' as const,
+    message: error ?? 'Invalid URL',
+    _parse(input: TInput): PipeResult<TInput> {
       try {
         new URL(input);
         return getOutput(input);
       } catch {
-        return getPipeIssues(kind, message, input);
+        return getPipeIssues(this.kind, this.message, input);
       }
     },
-    {
-      kind,
-      message,
-    }
-  );
+  };
 }
