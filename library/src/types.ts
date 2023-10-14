@@ -102,6 +102,8 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
    * @param info The parse info.
    *
    * @returns The parsed output.
+   *
+   * @internal
    */
   _parse(input: unknown, info?: ParseInfo): _ParseResult<TOutput>;
   _types?: { input: TInput; output: TOutput };
@@ -126,6 +128,8 @@ export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
    * @param info The parse info.
    *
    * @returns The parsed output.
+   *
+   * @internal
    */
   _parse(input: unknown, info?: ParseInfo): Promise<_ParseResult<TOutput>>;
   _types?: { input: TInput; output: TOutput };
@@ -185,14 +189,21 @@ export type Validation<
   TRequirement = unknown
 > = TRequirement extends unknown
   ? {
+      /* The validation type */
       kind: TKind;
+      /* The validation error message */
       message: TMessage;
+      /* @internal */
       _parse(value: TValue): PipeResult<TValue>;
     }
   : {
+      /* The validation type */
       kind: TKind;
+      /* The validation error message */
       message: TMessage;
+      /* The requirement value to compare against */
       requirement: TRequirement;
+      /* @internal */
       _parse(value: TValue): PipeResult<TValue>;
     };
 
@@ -203,24 +214,35 @@ export type ValidationAsync<
   TRequirement = unknown
 > = TRequirement extends unknown
   ? {
+      /* The validation type */
       kind: TKind;
+      /* The validation error message */
       message: TMessage;
+      /* @internal */
       _parse(value: TValue): PipeResult<TValue> | Promise<PipeResult<TValue>>;
     }
   : {
+      /* The validation type */
       kind: TKind;
+      /* The validation error message */
       message: TMessage;
+      /* The requirement value to compare against */
       requirement: TRequirement;
+      /* @internal */
       _parse(value: TValue): PipeResult<TValue> | Promise<PipeResult<TValue>>;
     };
 
 export type Transform<TValue> = {
+  /* The transformation type */
   kind: string;
+  /* @internal */
   _parse(value: TValue): PipeResult<TValue>;
 };
 
 export type TransformAsync<TValue> = {
+  /* The transformation type */
   kind: string;
+  /* @internal */
   _parse(value: TValue): Promise<PipeResult<TValue>> | PipeResult<TValue>;
 };
 
