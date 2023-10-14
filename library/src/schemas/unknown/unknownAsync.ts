@@ -1,5 +1,4 @@
-import type { BaseSchemaAsync, PipeAsync, PipeMeta } from '../../types.ts';
-import { getChecks } from '../../utils/getChecks/getChecks.ts';
+import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
 import { executePipeAsync } from '../../utils/index.ts';
 
 /**
@@ -11,10 +10,9 @@ export type UnknownSchemaAsync<TOutput = unknown> = BaseSchemaAsync<
 > & {
   kind: 'unknown';
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: PipeAsync<unknown>;
 };
 
 /**
@@ -30,7 +28,7 @@ export function unknownAsync(
   return {
     kind: 'unknown',
     async: true,
-    checks: getChecks(pipe),
+    pipe,
     async _parse(input, info) {
       return executePipeAsync(input, pipe, info, 'unknown');
     },

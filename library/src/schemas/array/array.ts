@@ -5,9 +5,7 @@ import type {
   Issues,
   Output,
   Pipe,
-  PipeMeta,
 } from '../../types.ts';
-import { getChecks } from '../../utils/getChecks/getChecks.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -32,7 +30,7 @@ export type ArraySchema<
    * Validation checks that will be run against
    * the input value.
    */
-  checks: PipeMeta[];
+  pipe: Pipe<Output<TArrayItem>[]>;
 };
 
 /**
@@ -69,14 +67,14 @@ export function array<TArrayItem extends BaseSchema>(
   arg3?: Pipe<Output<TArrayItem>[]>
 ): ArraySchema<TArrayItem> {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  const [error, pipe = []] = getDefaultArgs(arg2, arg3);
 
   // Create and return array schema
   return {
     kind: 'array',
     async: false,
     array: { item },
-    checks: getChecks(pipe),
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {

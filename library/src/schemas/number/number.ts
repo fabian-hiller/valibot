@@ -1,5 +1,4 @@
-import type { BaseSchema, ErrorMessage, Pipe, PipeMeta } from '../../types.ts';
-import { getChecks } from '../../utils/getChecks/getChecks.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -12,10 +11,9 @@ import {
 export type NumberSchema<TOutput = number> = BaseSchema<number, TOutput> & {
   kind: 'number';
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: Pipe<number>;
 };
 
 /**
@@ -42,13 +40,13 @@ export function number(
   arg2?: Pipe<number>
 ): NumberSchema {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
 
   // Create and return number schema
   return {
     kind: 'number',
     async: false,
-    checks: getChecks(pipe),
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'number' || Number.isNaN(input)) {

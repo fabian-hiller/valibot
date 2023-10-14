@@ -1,13 +1,6 @@
-import type {
-  BaseSchema,
-  ErrorMessage,
-  Issues,
-  Pipe,
-  PipeMeta,
-} from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getChecks,
   getDefaultArgs,
   getIssues,
   getSchemaIssues,
@@ -32,10 +25,9 @@ export type ObjectSchema<
    */
   object: TObjectShape;
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: Pipe<ObjectOutput<TObjectShape>>;
 };
 
 /**
@@ -72,7 +64,7 @@ export function object<TObjectShape extends ObjectShape>(
   arg3?: Pipe<ObjectOutput<TObjectShape>>
 ): ObjectSchema<TObjectShape> {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  const [error, pipe = []] = getDefaultArgs(arg2, arg3);
 
   // Create cached entries
   let cachedEntries: [string, BaseSchema<any>][];
@@ -82,7 +74,7 @@ export function object<TObjectShape extends ObjectShape>(
     kind: 'object',
     async: false,
     object,
-    checks: getChecks(pipe),
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {

@@ -24,13 +24,18 @@ describe('any', () => {
     expect(output).toBe(transformInput());
   });
 
-  test(`should expose an array of applied validation checks`, () => {
+  test(`should expose a pipe of transforms and validations`, () => {
     const schema1 = any([toCustom(String), maxLength(5)]);
-    expect(schema1.checks).toStrictEqual([
-      { kind: 'max_length', requirement: 5, message: 'Invalid length' },
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({ kind: 'to_custom' }),
+      expect.objectContaining({
+        kind: 'max_length',
+        requirement: 5,
+        message: 'Invalid length',
+      }),
     ]);
 
     const schema2 = any();
-    expect(schema2.checks).toStrictEqual([]);
+    expect(schema2.pipe).toStrictEqual([]);
   });
 });

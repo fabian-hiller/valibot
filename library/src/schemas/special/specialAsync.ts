@@ -1,12 +1,6 @@
-import type {
-  BaseSchemaAsync,
-  ErrorMessage,
-  PipeAsync,
-  PipeMeta,
-} from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
-  getChecks,
   getDefaultArgs,
   getSchemaIssues,
 } from '../../utils/index.ts';
@@ -20,10 +14,9 @@ export type SpecialSchemaAsync<TInput, TOutput = TInput> = BaseSchemaAsync<
 > & {
   kind: 'special';
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: PipeAsync<TInput>;
 };
 
 /**
@@ -60,13 +53,13 @@ export function specialAsync<TInput>(
   arg3?: PipeAsync<TInput>
 ): SpecialSchemaAsync<TInput> {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  const [error, pipe = []] = getDefaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
     kind: 'special',
     async: true,
-    checks: getChecks(pipe),
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (!(await check(input))) {

@@ -1,5 +1,5 @@
-import type { BaseSchemaAsync, PipeAsync, PipeMeta } from '../../types.ts';
-import { executePipeAsync, getChecks } from '../../utils/index.ts';
+import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import { executePipeAsync } from '../../utils/index.ts';
 
 /**
  * Any schema type.
@@ -7,10 +7,9 @@ import { executePipeAsync, getChecks } from '../../utils/index.ts';
 export type AnySchemaAsync<TOutput = any> = BaseSchemaAsync<any, TOutput> & {
   kind: 'any';
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: PipeAsync<any>;
 };
 
 /**
@@ -24,7 +23,7 @@ export function anyAsync(pipe: PipeAsync<any> = []): AnySchemaAsync {
   return {
     kind: 'any',
     async: true,
-    checks: getChecks(pipe),
+    pipe,
     async _parse(input, info) {
       return executePipeAsync(input, pipe, info, 'any');
     },

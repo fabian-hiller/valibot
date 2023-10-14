@@ -1,5 +1,4 @@
-import type { BaseSchema, ErrorMessage, Pipe, PipeMeta } from '../../types.ts';
-import { getChecks } from '../../utils/getChecks/getChecks.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -11,7 +10,10 @@ import {
  */
 export type StringSchema<TOutput = string> = BaseSchema<string, TOutput> & {
   kind: 'string';
-  checks: PipeMeta[];
+  /**
+   * Validation and transformation pipe.
+   */
+  pipe: Pipe<string>;
 };
 
 /**
@@ -38,13 +40,13 @@ export function string(
   arg2?: Pipe<string>
 ): StringSchema {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
 
   // Create and return string schema
   return {
     kind: 'string',
     async: false,
-    checks: getChecks(pipe),
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'string') {

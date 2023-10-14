@@ -45,18 +45,18 @@ describe('date', () => {
     );
   });
 
-  test(`should expose an array of applied validation checks`, () => {
+  test(`should expose a pipe of transforms and validations`, () => {
     const requirement = new Date(Date.now() + 3600000);
     const schema1 = date([maxValue(requirement)]);
-    expect(schema1.checks).toStrictEqual([
-      {
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
         kind: 'max_value',
         requirement,
         message: 'Invalid value',
-      },
+      }),
     ]);
 
     const schema2 = date();
-    expect(schema2.checks).toStrictEqual([]);
+    expect(schema2.pipe).toStrictEqual([]);
   });
 });

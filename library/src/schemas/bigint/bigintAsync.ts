@@ -1,10 +1,4 @@
-import type {
-  BaseSchemaAsync,
-  ErrorMessage,
-  PipeAsync,
-  PipeMeta,
-} from '../../types.ts';
-import { getChecks } from '../../utils/getChecks/getChecks.ts';
+import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -20,10 +14,9 @@ export type BigintSchemaAsync<TOutput = bigint> = BaseSchemaAsync<
 > & {
   kind: 'bigint';
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: PipeAsync<bigint>;
 };
 
 /**
@@ -53,13 +46,13 @@ export function bigintAsync(
   arg2?: PipeAsync<bigint>
 ): BigintSchemaAsync {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
 
   // Create and return async bigint schema
   return {
     kind: 'bigint',
     async: true,
-    checks: getChecks(pipe),
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'bigint') {

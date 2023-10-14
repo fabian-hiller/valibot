@@ -1,5 +1,5 @@
-import type { BaseSchema, Pipe, PipeMeta } from '../../types.ts';
-import { executePipe, getChecks } from '../../utils/index.ts';
+import type { BaseSchema, Pipe } from '../../types.ts';
+import { executePipe } from '../../utils/index.ts';
 
 /**
  * Any schema type.
@@ -7,10 +7,9 @@ import { executePipe, getChecks } from '../../utils/index.ts';
 export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
   kind: 'any';
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: Pipe<any>;
 };
 
 /**
@@ -24,7 +23,7 @@ export function any(pipe: Pipe<any> = []): AnySchema {
   return {
     kind: 'any',
     async: false,
-    checks: getChecks(pipe),
+    pipe,
 
     _parse(input, info) {
       return executePipe(input, pipe, info, 'any');

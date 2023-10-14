@@ -1,11 +1,4 @@
-import type {
-  BaseSchema,
-  ErrorMessage,
-  Issues,
-  Pipe,
-  PipeMeta,
-} from '../../types.ts';
-import { getChecks } from '../../utils/getChecks/getChecks.ts';
+import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
 import { executePipe, getIssues, getSchemaIssues } from '../../utils/index.ts';
 import type { TupleOutput, TupleInput, TuplePathItem } from './types.ts';
 import { getTupleArgs } from './utils/index.ts';
@@ -29,10 +22,9 @@ export type TupleSchema<
    */
   tuple: { items: TTupleItems; rest: TTupleRest };
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: Pipe<TupleOutput<TTupleItems, TTupleRest>>;
 };
 
 /**
@@ -111,7 +103,7 @@ export function tuple<
   arg4?: Pipe<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchema<TTupleItems, TTupleRest> {
   // Get rest, error and pipe argument
-  const [rest, error, pipe] = getTupleArgs<
+  const [rest, error, pipe = []] = getTupleArgs<
     TTupleRest,
     Pipe<TupleOutput<TTupleItems, TTupleRest>>
   >(arg2, arg3, arg4);
@@ -121,7 +113,7 @@ export function tuple<
     kind: 'tuple',
     async: false,
     tuple: { items, rest },
-    checks: getChecks(pipe),
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (

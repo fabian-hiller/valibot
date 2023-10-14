@@ -37,13 +37,17 @@ describe('number', () => {
     expect(() => parse(schema2, 12346789)).toThrowError(valueError);
   });
 
-  test(`should expose an array of applied validation checks`, () => {
+  test(`should expose a pipe of transforms and validations`, () => {
     const schema1 = number([maxValue(5, `custom`)]);
-    expect(schema1.checks).toStrictEqual([
-      { kind: 'max_value', requirement: 5, message: 'custom' },
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        kind: 'max_value',
+        requirement: 5,
+        message: 'custom',
+      }),
     ]);
 
     const schema2 = number();
-    expect(schema2.checks).toStrictEqual([]);
+    expect(schema2.pipe).toStrictEqual([]);
   });
 });

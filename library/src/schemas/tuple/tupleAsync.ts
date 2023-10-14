@@ -4,9 +4,7 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
-  PipeMeta,
 } from '../../types.ts';
-import { getChecks } from '../../utils/getChecks/getChecks.ts';
 import {
   executePipeAsync,
   getIssues,
@@ -37,10 +35,9 @@ export type TupleSchemaAsync<
    */
   tuple: { items: TTupleItems; rest: TTupleRest };
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>;
 };
 
 /**
@@ -122,7 +119,7 @@ export function tupleAsync<
   arg4?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchemaAsync<TTupleItems, TTupleRest> {
   // Get rest, error and pipe argument
-  const [rest, error, pipe] = getTupleArgs<
+  const [rest, error, pipe = []] = getTupleArgs<
     TTupleRest,
     PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
   >(arg2, arg3, arg4);
@@ -132,7 +129,7 @@ export function tupleAsync<
     kind: 'tuple',
     async: true,
     tuple: { items, rest },
-    checks: getChecks(pipe),
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (

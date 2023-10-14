@@ -1,7 +1,6 @@
-import type { BaseSchema, ErrorMessage, Pipe, PipeMeta } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getChecks,
   getDefaultArgs,
   getSchemaIssues,
 } from '../../utils/index.ts';
@@ -14,7 +13,10 @@ export type SpecialSchema<TInput, TOutput = TInput> = BaseSchema<
   TOutput
 > & {
   kind: 'special';
-  checks: PipeMeta[];
+  /**
+   * Validation and transformation pipe.
+   */
+  pipe: Pipe<TInput>;
 };
 
 /**
@@ -51,13 +53,13 @@ export function special<TInput>(
   arg3?: Pipe<TInput>
 ): SpecialSchema<TInput> {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  const [error, pipe = []] = getDefaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
     kind: 'special',
     async: false,
-    checks: getChecks(pipe),
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (!check(input)) {

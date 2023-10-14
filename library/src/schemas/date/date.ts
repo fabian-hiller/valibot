@@ -1,5 +1,4 @@
-import type { BaseSchema, ErrorMessage, Pipe, PipeMeta } from '../../types.ts';
-import { getChecks } from '../../utils/getChecks/getChecks.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -12,10 +11,9 @@ import {
 export type DateSchema<TOutput = Date> = BaseSchema<Date, TOutput> & {
   kind: 'date';
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: Pipe<Date>;
 };
 
 /**
@@ -42,13 +40,13 @@ export function date(
   arg2?: Pipe<Date>
 ): DateSchema {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
 
   // Create and return date schema
   return {
     kind: 'date',
     async: false,
-    checks: getChecks(pipe),
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Date)) {

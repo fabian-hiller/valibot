@@ -4,7 +4,7 @@ import type {
   PipeAsync,
   PipeMeta,
 } from '../../types.ts';
-import { getChecks } from '../../utils/getChecks/getChecks.ts';
+import { getChecks } from '../../mockSchema/utils/getChecks.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -20,10 +20,9 @@ export type NumberSchemaAsync<TOutput = number> = BaseSchemaAsync<
 > & {
   kind: 'number';
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: PipeAsync<number>;
 };
 
 /**
@@ -53,13 +52,13 @@ export function numberAsync(
   arg2?: PipeAsync<number>
 ): NumberSchemaAsync {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
 
   // Create and return async number schema
   return {
     kind: 'number',
     async: true,
-    checks: getChecks(pipe),
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'number' || Number.isNaN(input)) {

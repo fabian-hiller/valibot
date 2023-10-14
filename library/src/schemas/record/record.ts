@@ -1,16 +1,5 @@
-import type {
-  BaseSchema,
-  ErrorMessage,
-  Issues,
-  Pipe,
-  PipeMeta,
-} from '../../types.ts';
-import {
-  executePipe,
-  getChecks,
-  getIssues,
-  getSchemaIssues,
-} from '../../utils/index.ts';
+import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
+import { executePipe, getIssues, getSchemaIssues } from '../../utils/index.ts';
 import type { EnumSchema } from '../enumType/index.ts';
 import type { NativeEnumSchema } from '../nativeEnum/index.ts';
 import type { StringSchema } from '../string/index.ts';
@@ -42,10 +31,9 @@ export type RecordSchema<
    */
   record: { key: TRecordKey; value: TRecordValue };
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: Pipe<RecordOutput<StringSchema, TRecordValue>>;
 };
 
 /**
@@ -127,7 +115,7 @@ export function record<
   arg4?: Pipe<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchema<TRecordKey, TRecordValue> {
   // Get key, value, error and pipe argument
-  const [key, value, error, pipe] = getRecordArgs<
+  const [key, value, error, pipe = []] = getRecordArgs<
     TRecordKey,
     TRecordValue,
     Pipe<RecordOutput<TRecordKey, TRecordValue>>
@@ -138,7 +126,7 @@ export function record<
     kind: 'record',
     async: false,
     record: { key, value },
-    checks: getChecks(pipe),
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {

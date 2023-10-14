@@ -40,13 +40,17 @@ describe('bigintAsync', () => {
     );
   });
 
-  test(`should expose an array of applied validation checks`, () => {
+  test(`should expose a pipe of transforms and validations`, () => {
     const schema1 = bigintAsync([maxValue(500n)]);
-    expect(schema1.checks).toStrictEqual([
-      { kind: 'max_value', requirement: 500n, message: 'Invalid value' },
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        kind: 'max_value',
+        requirement: 500n,
+        message: 'Invalid value',
+      }),
     ]);
 
     const schema2 = bigintAsync();
-    expect(schema2.checks).toStrictEqual([]);
+    expect(schema2.pipe).toStrictEqual([]);
   });
 });

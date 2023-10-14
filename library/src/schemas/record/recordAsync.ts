@@ -4,11 +4,9 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
-  PipeMeta,
 } from '../../types.ts';
 import {
   executePipeAsync,
-  getChecks,
   getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
@@ -50,10 +48,9 @@ export type RecordSchemaAsync<
    */
   record: { key: TRecordKey; value: TRecordValue };
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>;
 };
 
 /**
@@ -135,7 +132,7 @@ export function recordAsync<
   arg4?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
 ): RecordSchemaAsync<TRecordKey, TRecordValue> {
   // Get key, value, error and pipe argument
-  const [key, value, error, pipe] = getRecordArgs<
+  const [key, value, error, pipe = []] = getRecordArgs<
     TRecordKey,
     TRecordValue,
     PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
@@ -146,7 +143,7 @@ export function recordAsync<
     kind: 'record',
     async: true,
     record: { key, value },
-    checks: getChecks(pipe),
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {

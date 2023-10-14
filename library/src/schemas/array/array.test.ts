@@ -113,13 +113,17 @@ describe('array', () => {
     expect(() => parse(schema2, [1])).toThrowError(contentError);
   });
 
-  test(`should expose an array of applied validation checks`, () => {
+  test(`should expose a pipe of transforms and validations`, () => {
     const schema1 = array(string(), [maxLength(5)]);
-    expect(schema1.checks).toStrictEqual([
-      { kind: 'max_length', requirement: 5, message: 'Invalid length' },
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        kind: 'max_length',
+        requirement: 5,
+        message: 'Invalid length',
+      }),
     ]);
 
     const schema2 = array(string());
-    expect(schema2.checks).toStrictEqual([]);
+    expect(schema2.pipe).toStrictEqual([]);
   });
 });

@@ -4,11 +4,9 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
-  PipeMeta,
 } from '../../types.ts';
 import {
   executePipeAsync,
-  getChecks,
   getDefaultArgs,
   getIssues,
   getSchemaIssues,
@@ -36,10 +34,9 @@ export type ObjectSchemaAsync<
    */
   object: TObjectShape;
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: PipeAsync<ObjectOutput<TObjectShape>>;
 };
 
 /**
@@ -76,7 +73,7 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   arg3?: PipeAsync<ObjectOutput<TObjectShape>>
 ): ObjectSchemaAsync<TObjectShape> {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  const [error, pipe = []] = getDefaultArgs(arg2, arg3);
 
   // Create cached entries
   let cachedEntries: [string, BaseSchema<any> | BaseSchemaAsync<any>][];
@@ -86,7 +83,7 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
     kind: 'object',
     async: true,
     object,
-    checks: getChecks(pipe),
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {

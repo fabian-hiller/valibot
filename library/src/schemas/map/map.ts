@@ -4,11 +4,9 @@ import type {
   Issues,
   Output,
   Pipe,
-  PipeMeta,
 } from '../../types.ts';
 import {
   executePipe,
-  getChecks,
   getDefaultArgs,
   getIssues,
   getSchemaIssues,
@@ -29,10 +27,9 @@ export type MapSchema<
    */
   map: { key: TMapKey; value: TMapValue };
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: Pipe<MapOutput<TMapKey, TMapValue>>;
 };
 
 /**
@@ -74,14 +71,14 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
   arg4?: Pipe<MapOutput<TMapKey, TMapValue>>
 ): MapSchema<TMapKey, TMapValue> {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg3, arg4);
+  const [error, pipe = []] = getDefaultArgs(arg3, arg4);
 
   // Create and return map schema
   return {
     kind: 'map',
     async: false,
     map: { key, value },
-    checks: getChecks(pipe),
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {

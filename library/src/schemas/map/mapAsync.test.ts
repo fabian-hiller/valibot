@@ -161,13 +161,17 @@ describe('mapAsync', () => {
     ).rejects.toThrowError(sizeError);
   });
 
-  test(`should expose an array of applied validation checks`, () => {
+  test(`should expose a pipe of transforms and validations`, () => {
     const schema1 = mapAsync(number(), string(), [size(1)]);
-    expect(schema1.checks).toStrictEqual([
-      { kind: 'size', requirement: 1, message: 'Invalid size' },
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        kind: 'size',
+        requirement: 1,
+        message: 'Invalid size',
+      }),
     ]);
 
     const schema2 = mapAsync(number(), string());
-    expect(schema2.checks).toStrictEqual([]);
+    expect(schema2.pipe).toStrictEqual([]);
   });
 });

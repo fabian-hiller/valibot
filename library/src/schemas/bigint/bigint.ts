@@ -1,5 +1,4 @@
-import type { BaseSchema, ErrorMessage, Pipe, PipeMeta } from '../../types.ts';
-import { getChecks } from '../../utils/getChecks/getChecks.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -12,10 +11,9 @@ import {
 export type BigintSchema<TOutput = bigint> = BaseSchema<bigint, TOutput> & {
   kind: 'bigint';
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: Pipe<bigint>;
 };
 
 /**
@@ -42,13 +40,13 @@ export function bigint(
   arg2?: Pipe<bigint>
 ): BigintSchema {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
 
   // Create and return bigint schema
   return {
     kind: 'bigint',
     async: false,
-    checks: getChecks(pipe),
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'bigint') {

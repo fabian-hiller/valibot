@@ -1,10 +1,4 @@
-import type {
-  BaseSchemaAsync,
-  ErrorMessage,
-  PipeAsync,
-  PipeMeta,
-} from '../../types.ts';
-import { getChecks } from '../../utils/getChecks/getChecks.ts';
+import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -17,10 +11,9 @@ import {
 export type DateSchemaAsync<TOutput = Date> = BaseSchemaAsync<Date, TOutput> & {
   kind: 'date';
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: PipeAsync<Date>;
 };
 
 /**
@@ -50,13 +43,13 @@ export function dateAsync(
   arg2?: PipeAsync<Date>
 ): DateSchemaAsync {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
 
   // Create and return async date schema
   return {
     kind: 'date',
     async: true,
-    checks: getChecks(pipe),
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Date)) {

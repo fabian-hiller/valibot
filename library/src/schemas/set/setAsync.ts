@@ -4,11 +4,9 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
-  PipeMeta,
 } from '../../types.ts';
 import {
   executePipeAsync,
-  getChecks,
   getDefaultArgs,
   getIssues,
   getSchemaIssues,
@@ -28,10 +26,9 @@ export type SetSchemaAsync<
    */
   set: { value: TSetValue };
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * Validation and transformation pipe.
    */
-  checks: PipeMeta[];
+  pipe: PipeAsync<SetOutput<TSetValue>>;
 };
 
 /**
@@ -68,14 +65,14 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
   arg3?: PipeAsync<SetOutput<TSetValue>>
 ): SetSchemaAsync<TSetValue> {
   // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  const [error, pipe = []] = getDefaultArgs(arg2, arg3);
 
   // Create and return async set schema
   return {
     kind: 'set',
     async: true,
     set: { value },
-    checks: getChecks(pipe),
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Set)) {
