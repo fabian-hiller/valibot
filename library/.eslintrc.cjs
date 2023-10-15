@@ -8,7 +8,7 @@ module.exports = {
     'plugin:security/recommended',
   ],
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'import', 'redos-detector'],
+  plugins: ['@typescript-eslint', 'import', 'redos-detector', 'unicorn'],
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
@@ -35,5 +35,9 @@ module.exports = {
     // regexp perf
     'regexp/require-unicode-regexp': 'error', // /u flag is faster and enables regexp strict mode
     'regexp/prefer-regexp-exec': 'error', // enforce that RegExp#exec is used instead of String#match if no global flag is provided, as exec is faster
+    'unicorn/better-regex': 'error', // auto-optimize regexps
+    'unicorn/prefer-regexp-test': 'error', // RegExp#test is fastest
+    'unicorn/prefer-string-replace-all': 'warn', // String#replaceAll avoids the need for resetting lastIndex when using cached global regex
+    'unicorn/prefer-string-starts-ends-with': 'error', // RegExp#startsWith and RegExp#endsWith are faster
   },
 };

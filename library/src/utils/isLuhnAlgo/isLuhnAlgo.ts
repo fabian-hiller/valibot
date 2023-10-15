@@ -7,7 +7,7 @@
  */
 export function isLuhnAlgo(input: string) {
   // Remove any non-digit chars
-  const number = input.replace(/\D/gu, '');
+  const number = input.replaceAll(/\D/gu, '');
 
   // Create necessary variables
   let length = number.length;
