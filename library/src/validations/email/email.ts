@@ -10,7 +10,6 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function email<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    // eslint-disable-next-line security/detect-unsafe-regex -- false positive according to https://devina.io/redos-checker
     !/^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/iu.test(
       input
     )

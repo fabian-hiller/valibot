@@ -6,7 +6,8 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "allowImportingTsExtensions": true,
-    "noEmit": true
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["."]
 }
