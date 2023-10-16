@@ -1,4 +1,4 @@
-name: Node.js CI
+name: CI
 
 on:
   push:
@@ -7,72 +7,72 @@ on:
 
 jobs:
   install:
-    name: Checkout and Install
+    name: Install packages
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: PNPM Install With Cache
-        uses: ./.github/actions/pnpm-install-with-cache
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
 
   lint_website:
-    name: Run linter in website
+    name: Run ESLint in website
     needs: install
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: PNPM Install With Cache
-        uses: ./.github/actions/pnpm-install-with-cache
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
 
-      - name: Run lint check
+      - name: ESLint check
         run: pnpm lint
         working-directory: website
 
   format_website:
-    name: Run formatter in website
+    name: Run Prettier in website
     needs: install
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: PNPM Install With Cache
-        uses: ./.github/actions/pnpm-install-with-cache
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
 
-      - name: Run format check
+      - name: Prettier check
         run: pnpm format.check
         working-directory: website
 
   lint_library:
-    name: Run linter in library
+    name: Run ESLint in library
     needs: install
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: PNPM Install With Cache
-        uses: ./.github/actions/pnpm-install-with-cache
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
 
-      - name: Run lint check
+      - name: ESLint check
         run: pnpm lint
         working-directory: library
 
   format_library:
-    name: Run formatter in library
+    name: Run Prettier in library
     needs: install
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: PNPM Install With Cache
-        uses: ./.github/actions/pnpm-install-with-cache
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
 
-      - name: Run format check
+      - name: Prettier check
         run: pnpm format.check
         working-directory: library
 
@@ -84,9 +84,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: PNPM Install With Cache
-        uses: ./.github/actions/pnpm-install-with-cache
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
 
-      - name: Run Vitest
+      - name: Vitest tests
         run: pnpm test
         working-directory: library
