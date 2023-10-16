@@ -9,84 +9,73 @@ jobs:
   install:
     name: Install packages
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup pnpm
         uses: ./.github/actions/pnpm
 
-  lint_website:
-    name: Run ESLint in website
-    needs: install
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup pnpm
-        uses: ./.github/actions/pnpm
-
-      - name: ESLint check
-        run: pnpm lint
-        working-directory: website
-
-  format_website:
-    name: Run Prettier in website
-    needs: install
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup pnpm
-        uses: ./.github/actions/pnpm
-
-      - name: Prettier check
-        run: pnpm format.check
-        working-directory: website
-
-  lint_library:
-    name: Run ESLint in library
-    needs: install
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup pnpm
-        uses: ./.github/actions/pnpm
-
-      - name: ESLint check
-        run: pnpm lint
-        working-directory: library
-
-  format_library:
+  library_prettier:
     name: Run Prettier in library
     needs: install
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup pnpm
         uses: ./.github/actions/pnpm
-
       - name: Prettier check
         run: pnpm format.check
         working-directory: library
 
-  test_library:
-    name: Run Vitest in library
+  library_eslint:
+    name: Run ESLint in library
     needs: install
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup pnpm
         uses: ./.github/actions/pnpm
+      - name: ESLint check
+        run: pnpm lint
+        working-directory: library
 
+  library_vitest:
+    name: Run Vitest in library
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
       - name: Vitest tests
         run: pnpm test
         working-directory: library
+
+  website_prettier:
+    name: Run Prettier in website
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
+      - name: Prettier check
+        run: pnpm format.check
+        working-directory: website
+
+  website_eslint:
+    name: Run ESLint in website
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
+      - name: ESLint check
+        run: pnpm lint
+        working-directory: website
