@@ -14,6 +14,11 @@ describe('dateAsync', () => {
     await expect(parseAsync(schema, {})).rejects.toThrowError();
   });
 
+  test('should pass only valid dates', async () => {
+    const error = "Date is invalid!";
+    await expect(parseAsync(dateAsync(error), new Date("Not a date"))).rejects.toThrowError(error);
+  });
+
   test('should throw custom error', async () => {
     const error = 'Value is not a date!';
     await expect(parseAsync(dateAsync(error), 123)).rejects.toThrowError(error);

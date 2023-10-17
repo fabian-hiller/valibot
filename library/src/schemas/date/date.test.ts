@@ -14,6 +14,11 @@ describe('date', () => {
     expect(() => parse(schema, {})).toThrowError();
   });
 
+  test('should pass only valid dates', () => {
+    const error = "Date is invalid!";
+    expect(() => parse(date(error), new Date("Not a date"))).toThrowError(error);
+  });
+
   test('should throw custom error', () => {
     const error = 'Value is not a date!';
     expect(() => parse(date(error), 123)).toThrowError(error);
