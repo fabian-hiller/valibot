@@ -172,40 +172,21 @@ export type PipeResult<TOutput> =
       issues: Pick<Issue, 'validation' | 'message' | 'input' | 'path'>[];
     };
 
-export type PipeMeta<
-  TKind extends string = string,
-  TMessage extends ErrorMessage = ErrorMessage,
-  TRequirement = unknown
-> = Readonly<{
-  kind: TKind;
-  message: TMessage;
-  requirement?: TRequirement;
-}>;
-
 export type Validation<
   TValue,
   TKind extends string = string,
   TMessage extends ErrorMessage = ErrorMessage,
   TRequirement = unknown
-> = TRequirement extends unknown
-  ? {
-      /* The validation type */
-      kind: TKind;
-      /* The validation error message */
-      message: TMessage;
-      /* @internal */
-      _parse(value: TValue): PipeResult<TValue>;
-    }
-  : {
-      /* The validation type */
-      kind: TKind;
-      /* The validation error message */
-      message: TMessage;
-      /* The requirement value to compare against */
-      requirement: TRequirement;
-      /* @internal */
-      _parse(value: TValue): PipeResult<TValue>;
-    };
+> = {
+  /* The validation type */
+  kind: TKind;
+  /* The validation error message */
+  message: TMessage;
+  /* The requirement value to compare against (Optional) */
+  requirement?: TRequirement;
+  /* @internal */
+  _parse(value: TValue): PipeResult<TValue>;
+};
 
 export type ValidationAsync<
   TValue,

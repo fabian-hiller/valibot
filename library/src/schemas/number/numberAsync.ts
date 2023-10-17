@@ -1,10 +1,4 @@
-import type {
-  BaseSchemaAsync,
-  ErrorMessage,
-  PipeAsync,
-  PipeMeta,
-} from '../../types.ts';
-import { getChecks } from '../../mockSchema/utils/getChecks.ts';
+import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
