@@ -11,12 +11,10 @@ describe('dateAsync', () => {
     expect(output).toEqual(input);
     await expect(parseAsync(schema, 2023)).rejects.toThrowError();
     await expect(parseAsync(schema, '2023-07-10')).rejects.toThrowError();
+    await expect(
+      parseAsync(schema, new Date('Invalid Date'))
+    ).rejects.toThrowError();
     await expect(parseAsync(schema, {})).rejects.toThrowError();
-  });
-
-  test('should pass only valid dates', async () => {
-    const error = "Date is invalid!";
-    await expect(parseAsync(dateAsync(error), new Date("Not a date"))).rejects.toThrowError(error);
   });
 
   test('should throw custom error', async () => {

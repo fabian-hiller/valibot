@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Fix type check in `date` and `dateAsync` for invalid dates (pull request #214)
+
 ## v0.19.0 (October 08, 2023)
 
 - Add `notBytes`, `notLength`, `notSize` and `notValue` validation function (pull request #194)
