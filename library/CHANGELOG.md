@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Add `getRestAndDefaultArgs` utility function
 - Add new `rest` argument to `object` and `objectAsync` schema
+- Add `PartialObjectEntries` and `PartialObjectEntriesAsync` type (issue #217)
 - Fix type check in `date` and `dateAsync` for invalid dates (pull request #214)
 - Improve security of regular expressions (pull request #202)
 - Change `ObjectSchema` and `ObjectSchemaAsync` type

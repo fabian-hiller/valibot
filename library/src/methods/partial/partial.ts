@@ -10,9 +10,9 @@ import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 
 /**
- * Partial object schema type.
+ * Partial object entries type.
  */
-type Partial<TObjectEntries extends ObjectEntries> = {
+export type PartialObjectEntries<TObjectEntries extends ObjectEntries> = {
   [TKey in keyof TObjectEntries]: OptionalSchema<TObjectEntries[TKey]>;
 };
 
@@ -28,9 +28,12 @@ type Partial<TObjectEntries extends ObjectEntries> = {
 export function partial<TObjectSchema extends ObjectSchema<any, any>>(
   schema: TObjectSchema,
   pipe?: Pipe<
-    ObjectOutput<Partial<TObjectSchema['object']['entries']>, undefined>
+    ObjectOutput<
+      PartialObjectEntries<TObjectSchema['object']['entries']>,
+      undefined
+    >
   >
-): ObjectSchema<Partial<TObjectSchema['object']['entries']>>;
+): ObjectSchema<PartialObjectEntries<TObjectSchema['object']['entries']>>;
 
 /**
  * Creates an object schema consisting of all properties of an existing object
@@ -46,9 +49,12 @@ export function partial<TObjectSchema extends ObjectSchema<any, any>>(
   schema: TObjectSchema,
   error?: ErrorMessage,
   pipe?: Pipe<
-    ObjectOutput<Partial<TObjectSchema['object']['entries']>, undefined>
+    ObjectOutput<
+      PartialObjectEntries<TObjectSchema['object']['entries']>,
+      undefined
+    >
   >
-): ObjectSchema<Partial<TObjectSchema['object']['entries']>>;
+): ObjectSchema<PartialObjectEntries<TObjectSchema['object']['entries']>>;
 
 /**
  * Creates an object schema consisting of all properties of an existing object
@@ -67,9 +73,15 @@ export function partial<
   schema: TObjectSchema,
   rest: TObjectRest,
   pipe?: Pipe<
-    ObjectOutput<Partial<TObjectSchema['object']['entries']>, TObjectRest>
+    ObjectOutput<
+      PartialObjectEntries<TObjectSchema['object']['entries']>,
+      TObjectRest
+    >
   >
-): ObjectSchema<Partial<TObjectSchema['object']['entries']>, TObjectRest>;
+): ObjectSchema<
+  PartialObjectEntries<TObjectSchema['object']['entries']>,
+  TObjectRest
+>;
 
 /**
  * Creates an object schema consisting of all properties of an existing object
@@ -90,9 +102,15 @@ export function partial<
   rest: TObjectRest,
   error?: ErrorMessage,
   pipe?: Pipe<
-    ObjectOutput<Partial<TObjectSchema['object']['entries']>, TObjectRest>
+    ObjectOutput<
+      PartialObjectEntries<TObjectSchema['object']['entries']>,
+      TObjectRest
+    >
   >
-): ObjectSchema<Partial<TObjectSchema['object']['entries']>, TObjectRest>;
+): ObjectSchema<
+  PartialObjectEntries<TObjectSchema['object']['entries']>,
+  TObjectRest
+>;
 
 export function partial<
   TObjectSchema extends ObjectSchema<any, any>,
@@ -101,23 +119,40 @@ export function partial<
   schema: TObjectSchema,
   arg2?:
     | Pipe<
-        ObjectOutput<Partial<TObjectSchema['object']['entries']>, TObjectRest>
+        ObjectOutput<
+          PartialObjectEntries<TObjectSchema['object']['entries']>,
+          TObjectRest
+        >
       >
     | ErrorMessage
     | TObjectRest,
   arg3?:
     | Pipe<
-        ObjectOutput<Partial<TObjectSchema['object']['entries']>, TObjectRest>
+        ObjectOutput<
+          PartialObjectEntries<TObjectSchema['object']['entries']>,
+          TObjectRest
+        >
       >
     | ErrorMessage,
   arg4?: Pipe<
-    ObjectOutput<Partial<TObjectSchema['object']['entries']>, TObjectRest>
+    ObjectOutput<
+      PartialObjectEntries<TObjectSchema['object']['entries']>,
+      TObjectRest
+    >
   >
-): ObjectSchema<Partial<TObjectSchema['object']['entries']>, TObjectRest> {
+): ObjectSchema<
+  PartialObjectEntries<TObjectSchema['object']['entries']>,
+  TObjectRest
+> {
   // Get rest, error and pipe argument
   const [rest, error, pipe] = getRestAndDefaultArgs<
     TObjectRest,
-    Pipe<ObjectOutput<Partial<TObjectSchema['object']['entries']>, TObjectRest>>
+    Pipe<
+      ObjectOutput<
+        PartialObjectEntries<TObjectSchema['object']['entries']>,
+        TObjectRest
+      >
+    >
   >(arg2, arg3, arg4);
 
   // Create and return object schema
@@ -128,7 +163,7 @@ export function partial<
         [key]: optional(schema as BaseSchema),
       }),
       {}
-    ) as Partial<TObjectSchema['object']['entries']>,
+    ) as PartialObjectEntries<TObjectSchema['object']['entries']>,
     rest,
     error,
     pipe
