@@ -263,13 +263,17 @@ export function transformAsync<
 ): NumberSchemaAsync<TOutput>;
 
 export function transformAsync<
-  TSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>,
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   TOutput
 >(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
   pipe?: PipeAsync<TOutput>
-): ObjectSchemaAsync<TSchema['object'], TOutput>;
+): ObjectSchemaAsync<
+  TSchema['object']['entries'],
+  TSchema['object']['rest'],
+  TOutput
+>;
 
 export function transformAsync<
   TSchema extends OptionalSchema<any, any> | OptionalSchemaAsync<any, any>,

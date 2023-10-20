@@ -3,20 +3,20 @@ import type {
   ArraySchemaAsync,
   MapSchema,
   MapSchemaAsync,
+  ObjectEntries,
+  ObjectEntriesAsync,
   ObjectSchema,
   ObjectSchemaAsync,
-  ObjectShape,
-  ObjectShapeAsync,
   RecordSchema,
   RecordSchemaAsync,
   RecursiveSchema,
   RecursiveSchemaAsync,
   SetSchema,
   SetSchemaAsync,
+  TupleItems,
+  TupleItemsAsync,
   TupleSchema,
   TupleSchemaAsync,
-  TupleShape,
-  TupleShapeAsync,
   UnionOptions,
   UnionOptionsAsync,
   UnionSchema,
@@ -42,9 +42,9 @@ type DotPath<TKey, TSchema extends BaseSchema | BaseSchemaAsync> = TKey extends
 /**
  * Object path type.
  */
-type ObjectPath<TObjectShape extends ObjectShape | ObjectShapeAsync> = {
-  [TKey in keyof TObjectShape]: DotPath<TKey, TObjectShape[TKey]>;
-}[keyof TObjectShape];
+type ObjectPath<TObjectEntries extends ObjectEntries | ObjectEntriesAsync> = {
+  [TKey in keyof TObjectEntries]: DotPath<TKey, TObjectEntries[TKey]>;
+}[keyof TObjectEntries];
 
 /**
  * Tuple key type.
@@ -54,9 +54,9 @@ type TupleKey<T extends any[]> = Exclude<keyof T, keyof any[]>;
 /**
  * Tuple path type.
  */
-type TuplePath<TTupleShape extends TupleShape | TupleShapeAsync> = {
-  [TKey in TupleKey<TTupleShape>]: DotPath<TKey, TTupleShape[TKey & number]>;
-}[TupleKey<TTupleShape>];
+type TuplePath<TTupleItems extends TupleItems | TupleItemsAsync> = {
+  [TKey in TupleKey<TTupleItems>]: DotPath<TKey, TTupleItems[TKey & number]>;
+}[TupleKey<TTupleItems>];
 
 /**
  * Nested path type.
@@ -75,12 +75,12 @@ type NestedPath<TSchema extends BaseSchema | BaseSchemaAsync> =
         | MapSchemaAsync<infer TMapKey, infer TMapValue>
     ? DotPath<Input<TMapKey>, TMapValue>
     : // Object
-    TSchema extends ObjectSchema<infer TObjectShape extends ObjectShape>
-    ? ObjectPath<TObjectShape>
-    : TSchema extends ObjectSchemaAsync<
-        infer TObjectShape extends ObjectShapeAsync
-      >
-    ? ObjectPath<TObjectShape>
+    TSchema extends
+        | ObjectSchema<infer TObjectEntries, infer TObjectRest>
+        | ObjectSchemaAsync<infer TObjectEntries, infer TObjectRest>
+    ? TObjectRest extends BaseSchema | BaseSchemaAsync
+      ? ObjectPath<TObjectEntries> | DotPath<string, TObjectRest>
+      : ObjectPath<TObjectEntries>
     : // Record
     TSchema extends
         | RecordSchema<infer TRecordKey, infer TRecordValue>
@@ -100,11 +100,11 @@ type NestedPath<TSchema extends BaseSchema | BaseSchemaAsync> =
     ? DotPath<number, TSetValue>
     : // Tuple
     TSchema extends
-        | TupleSchema<infer TTupleShape, infer TTupleRest>
-        | TupleSchemaAsync<infer TTupleShape, infer TTupleRest>
-    ? TTupleRest extends BaseSchema
-      ? TuplePath<TTupleShape> | DotPath<number, TTupleRest>
-      : TuplePath<TTupleShape>
+        | TupleSchema<infer TTupleItems, infer TTupleRest>
+        | TupleSchemaAsync<infer TTupleItems, infer TTupleRest>
+    ? TTupleRest extends BaseSchema | BaseSchemaAsync
+      ? TuplePath<TTupleItems> | DotPath<number, TTupleRest>
+      : TuplePath<TTupleItems>
     : // Union
     TSchema extends UnionSchema<infer TUnionOptions extends UnionOptions>
     ? NestedPath<TUnionOptions[number]>

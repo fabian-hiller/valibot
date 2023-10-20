@@ -3,6 +3,7 @@ import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
 import { maxLength, minLength } from '../../validations/index.ts';
 import { boolean } from '../boolean/index.ts';
+import { never } from '../never/index.ts';
 import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
 import { string } from '../string/index.ts';
@@ -14,26 +15,35 @@ describe('tuple', () => {
     const input1 = [1, 'test'];
     const output1 = parse(schema1, input1);
     expect(output1).toEqual(input1);
+    const input2 = [1, 'test', null];
+    const output2 = parse(schema1, input2);
+    expect(output2).toEqual([1, 'test']);
     expect(() => parse(schema1, [])).toThrowError();
     expect(() => parse(schema1, [1])).toThrowError();
     expect(() => parse(schema1, [1, 2])).toThrowError();
-    expect(() => parse(schema1, [1, 'test', null])).toThrowError();
     expect(() => parse(schema1, 123)).toThrowError();
     expect(() => parse(schema1, null)).toThrowError();
     expect(() => parse(schema1, {})).toThrowError();
 
     const schema2 = tuple([string()], number());
-    const input2 = ['test'];
-    const output2 = parse(schema2, input2);
-    expect(output2).toEqual(input2);
-    const input3 = ['test', 1];
+    const input3 = ['test'];
     const output3 = parse(schema2, input3);
     expect(output3).toEqual(input3);
-    const input4 = ['test', 1, 2];
+    const input4 = ['test', 1];
     const output4 = parse(schema2, input4);
     expect(output4).toEqual(input4);
+    const input5 = ['test', 1, 2];
+    const output5 = parse(schema2, input5);
+    expect(output5).toEqual(input5);
     expect(() => parse(schema2, ['test', 'test'])).toThrowError();
     expect(() => parse(schema2, [1, 2])).toThrowError();
+
+    const schema3 = tuple([string()], never());
+    const input6 = ['test'];
+    const output6 = parse(schema3, input6);
+    expect(output6).toEqual(input6);
+    expect(() => parse(schema2, ['test', 'test'])).toThrowError();
+    expect(() => parse(schema2, ['test', null])).toThrowError();
   });
 
   test('should throw custom error', () => {

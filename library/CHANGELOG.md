@@ -4,7 +4,14 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `getRestAndDefaultArgs` utility function
+- Add new `rest` argument to `object` and `objectAsync` schema
 - Fix type check in `date` and `dateAsync` for invalid dates (pull request #214)
+- Change `ObjectSchema` and `ObjectSchemaAsync` type
+- Change type check in `tuple` and `tupleAsync` to be less strict
+- Rename `ObjectShape` and `ObjectShapeAsync` types to `ObjectEntries` and `ObjectEntriesAsync`
+- Rename `TupleShape` and `TupleShapeAsync` types to `TupleItems` and `TupleItemsAsync`
+- Deprecate `passthrough`, `strict` and `strip` method in favor of `object` schema with `rest` argument
 
 ## v0.19.0 (October 08, 2023)
 
