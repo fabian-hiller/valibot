@@ -162,11 +162,15 @@ export function transform<TSchema extends NumberSchema, TOutput>(
   pipe?: Pipe<TOutput>
 ): NumberSchema<TOutput>;
 
-export function transform<TSchema extends ObjectSchema<any>, TOutput>(
+export function transform<TSchema extends ObjectSchema<any, any>, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput,
   pipe?: Pipe<TOutput>
-): ObjectSchema<TSchema['object'], TOutput>;
+): ObjectSchema<
+  TSchema['object']['entries'],
+  TSchema['object']['rest'],
+  TOutput
+>;
 
 export function transform<TSchema extends OptionalSchema<any, any>, TOutput>(
   schema: TSchema,

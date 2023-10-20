@@ -1,8 +1,8 @@
 import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
 import {
   executePipe,
-  getDefaultArgs,
   getIssues,
+  getRestAndDefaultArgs,
   getSchemaIssues,
 } from '../../utils/index.ts';
 import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
@@ -10,61 +10,110 @@ import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
 /**
  * Object shape type.
  */
-export type ObjectShape = Record<string, BaseSchema<any>>;
+export type ObjectEntries = Record<string, BaseSchema<any>>;
 
 /**
  * Object schema type.
  */
 export type ObjectSchema<
-  TObjectShape extends ObjectShape,
-  TOutput = ObjectOutput<TObjectShape>
-> = BaseSchema<ObjectInput<TObjectShape>, TOutput> & {
+  TObjectEntries extends ObjectEntries,
+  TObjectRest extends BaseSchema | undefined = undefined,
+  TOutput = ObjectOutput<TObjectEntries, TObjectRest>
+> = BaseSchema<ObjectInput<TObjectEntries, TObjectRest>, TOutput> & {
   kind: 'object';
   /**
-   * The object schema.
+   * The object entries and rest schema.
    */
-  object: TObjectShape;
+  object: { entries: TObjectEntries; rest: TObjectRest };
   /**
    * Validation and transformation pipe.
    */
-  pipe: Pipe<ObjectOutput<TObjectShape>>;
+  pipe: Pipe<ObjectOutput<TObjectEntries, TObjectRest>>;
 };
 
 /**
  * Creates an object schema.
  *
- * @param object The object schema.
+ * @param entries The object entries.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
-export function object<TObjectShape extends ObjectShape>(
-  object: TObjectShape,
-  pipe?: Pipe<ObjectOutput<TObjectShape>>
-): ObjectSchema<TObjectShape>;
+export function object<TObjectEntries extends ObjectEntries>(
+  entries: TObjectEntries,
+  pipe?: Pipe<ObjectOutput<TObjectEntries, undefined>>
+): ObjectSchema<TObjectEntries>;
 
 /**
  * Creates an object schema.
  *
- * @param object The object schema.
+ * @param entries The object entries.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
-export function object<TObjectShape extends ObjectShape>(
-  object: TObjectShape,
+export function object<TObjectEntries extends ObjectEntries>(
+  entries: TObjectEntries,
   error?: ErrorMessage,
-  pipe?: Pipe<ObjectOutput<TObjectShape>>
-): ObjectSchema<TObjectShape>;
+  pipe?: Pipe<ObjectOutput<TObjectEntries, undefined>>
+): ObjectSchema<TObjectEntries>;
 
-export function object<TObjectShape extends ObjectShape>(
-  object: TObjectShape,
-  arg2?: Pipe<ObjectOutput<TObjectShape>> | ErrorMessage,
-  arg3?: Pipe<ObjectOutput<TObjectShape>>
-): ObjectSchema<TObjectShape> {
-  // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg2, arg3);
+/**
+ * Creates an object schema.
+ *
+ * @param entries The object entries.
+ * @param rest The object rest.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An object schema.
+ */
+export function object<
+  TObjectEntries extends ObjectEntries,
+  TObjectRest extends BaseSchema | undefined
+>(
+  entries: TObjectEntries,
+  rest: TObjectRest,
+  pipe?: Pipe<ObjectOutput<TObjectEntries, TObjectRest>>
+): ObjectSchema<TObjectEntries, TObjectRest>;
+
+/**
+ * Creates an object schema.
+ *
+ * @param entries The object entries.
+ * @param rest The object rest.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An object schema.
+ */
+export function object<
+  TObjectEntries extends ObjectEntries,
+  TObjectRest extends BaseSchema | undefined
+>(
+  entries: TObjectEntries,
+  rest: TObjectRest,
+  error?: ErrorMessage,
+  pipe?: Pipe<ObjectOutput<TObjectEntries, TObjectRest>>
+): ObjectSchema<TObjectEntries, TObjectRest>;
+
+export function object<
+  TObjectEntries extends ObjectEntries,
+  TObjectRest extends BaseSchema | undefined = undefined
+>(
+  entries: TObjectEntries,
+  arg2?:
+    | Pipe<ObjectOutput<TObjectEntries, TObjectRest>>
+    | ErrorMessage
+    | TObjectRest,
+  arg3?: Pipe<ObjectOutput<TObjectEntries, TObjectRest>> | ErrorMessage,
+  arg4?: Pipe<ObjectOutput<TObjectEntries, TObjectRest>>
+): ObjectSchema<TObjectEntries, TObjectRest> {
+  // Get rest, error and pipe argument
+  const [rest, error, pipe = []] = getRestAndDefaultArgs<
+    TObjectRest,
+    Pipe<ObjectOutput<TObjectEntries, TObjectRest>>
+  >(arg2, arg3, arg4);
 
   // Create cached entries
   let cachedEntries: [string, BaseSchema<any>][];
@@ -73,7 +122,7 @@ export function object<TObjectShape extends ObjectShape>(
   return {
     kind: 'object',
     async: false,
-    object,
+    object: { entries, rest },
     pipe,
     _parse(input, info) {
       // Check type of input
@@ -88,7 +137,7 @@ export function object<TObjectShape extends ObjectShape>(
       }
 
       // Cache object entries lazy
-      cachedEntries = cachedEntries || Object.entries(object);
+      cachedEntries = cachedEntries || Object.entries(entries);
 
       // Create issues and output
       let issues: Issues | undefined;
@@ -96,10 +145,7 @@ export function object<TObjectShape extends ObjectShape>(
 
       // Parse schema of each key
       for (const [key, schema] of cachedEntries) {
-        // Get value by key
         const value = (input as Record<string, unknown>)[key];
-
-        // Get parse result of value
         const result = schema._parse(value, info);
 
         // If there are issues, capture them
@@ -136,11 +182,54 @@ export function object<TObjectShape extends ObjectShape>(
         }
       }
 
+      // If necessary parse schema of each rest entry
+      if (rest && !(info?.abortEarly && issues)) {
+        for (const key in input) {
+          if (!(key in entries)) {
+            const value = (input as Record<string, unknown>)[key];
+            const result = rest._parse(value, info);
+
+            // If there are issues, capture them
+            if (result.issues) {
+              // Create object path item
+              const pathItem: ObjectPathItem = {
+                schema: 'object',
+                input,
+                key,
+                value,
+              };
+
+              // Add modified result issues to issues
+              for (const issue of result.issues) {
+                if (issue.path) {
+                  issue.path.unshift(pathItem);
+                } else {
+                  issue.path = [pathItem];
+                }
+                issues?.push(issue);
+              }
+              if (!issues) {
+                issues = result.issues;
+              }
+
+              // If necessary, abort early
+              if (info?.abortEarly) {
+                break;
+              }
+
+              // Otherwise, add value to object
+            } else {
+              output[key] = result.output;
+            }
+          }
+        }
+      }
+
       // Return issues or pipe result
       return issues
         ? getIssues(issues)
         : executePipe(
-            output as ObjectOutput<TObjectShape>,
+            output as ObjectOutput<TObjectEntries, TObjectRest>,
             pipe,
             info,
             'object'

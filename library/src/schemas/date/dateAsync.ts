@@ -52,7 +52,7 @@ export function dateAsync(
     pipe,
     async _parse(input, info) {
       // Check type of input
-      if (!(input instanceof Date)) {
+      if (!(input instanceof Date) || isNaN(input.getTime())) {
         return getSchemaIssues(
           info,
           'type',

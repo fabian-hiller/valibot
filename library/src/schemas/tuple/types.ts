@@ -4,8 +4,8 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
-import type { TupleShape } from './tuple.ts';
-import type { TupleShapeAsync } from './tupleAsync.ts';
+import type { TupleItems } from './tuple.ts';
+import type { TupleItemsAsync } from './tupleAsync.ts';
 
 /**
  * Tuple path item type.
@@ -21,7 +21,7 @@ export type TuplePathItem = {
  * Tuple input inference type.
  */
 export type TupleInput<
-  TTupleItems extends TupleShape | TupleShapeAsync,
+  TTupleItems extends TupleItems | TupleItemsAsync,
   TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
 > = TTupleRest extends BaseSchema | BaseSchemaAsync
   ? [
@@ -38,7 +38,7 @@ export type TupleInput<
  * Tuple with rest output inference type.
  */
 export type TupleOutput<
-  TTupleItems extends TupleShape | TupleShapeAsync,
+  TTupleItems extends TupleItems | TupleItemsAsync,
   TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
 > = TTupleRest extends BaseSchema | BaseSchemaAsync
   ? [

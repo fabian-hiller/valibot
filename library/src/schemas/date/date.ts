@@ -49,7 +49,7 @@ export function date(
     pipe,
     _parse(input, info) {
       // Check type of input
-      if (!(input instanceof Date)) {
+      if (!(input instanceof Date) || isNaN(input.getTime())) {
         return getSchemaIssues(
           info,
           'type',

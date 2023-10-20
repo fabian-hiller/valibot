@@ -7,16 +7,16 @@ import type {
 } from '../../types.ts';
 import {
   executePipeAsync,
-  getDefaultArgs,
   getIssues,
+  getRestAndDefaultArgs,
   getSchemaIssues,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 
 /**
- * Object shape async type.
+ * Object entries async type.
  */
-export type ObjectShapeAsync = Record<
+export type ObjectEntriesAsync = Record<
   string,
   BaseSchema<any> | BaseSchemaAsync<any>
 >;
@@ -25,55 +25,104 @@ export type ObjectShapeAsync = Record<
  * Object schema async type.
  */
 export type ObjectSchemaAsync<
-  TObjectShape extends ObjectShapeAsync,
-  TOutput = ObjectOutput<TObjectShape>
-> = BaseSchemaAsync<ObjectInput<TObjectShape>, TOutput> & {
+  TObjectEntries extends ObjectEntriesAsync,
+  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
+  TOutput = ObjectOutput<TObjectEntries, TObjectRest>
+> = BaseSchemaAsync<ObjectInput<TObjectEntries, TObjectRest>, TOutput> & {
   kind: 'object';
   /**
-   * The object schema.
+   * The object entries and rest schema.
    */
-  object: TObjectShape;
+  object: { entries: TObjectEntries; rest: TObjectRest };
   /**
    * Validation and transformation pipe.
    */
-  pipe: PipeAsync<ObjectOutput<TObjectShape>>;
+  pipe: PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>;
 };
 
 /**
  * Creates an async object schema.
  *
- * @param object The object schema.
+ * @param entries The object entries.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
  */
-export function objectAsync<TObjectShape extends ObjectShapeAsync>(
-  object: TObjectShape,
-  pipe?: PipeAsync<ObjectOutput<TObjectShape>>
-): ObjectSchemaAsync<TObjectShape>;
+export function objectAsync<TObjectEntries extends ObjectEntriesAsync>(
+  entries: TObjectEntries,
+  pipe?: PipeAsync<ObjectOutput<TObjectEntries, undefined>>
+): ObjectSchemaAsync<TObjectEntries>;
 
 /**
  * Creates an async object schema.
  *
- * @param object The object schema.
+ * @param entries The object entries.
  * @param error The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
  */
-export function objectAsync<TObjectShape extends ObjectShapeAsync>(
-  object: TObjectShape,
+export function objectAsync<TObjectEntries extends ObjectEntriesAsync>(
+  entries: TObjectEntries,
   error?: ErrorMessage,
-  pipe?: PipeAsync<ObjectOutput<TObjectShape>>
-): ObjectSchemaAsync<TObjectShape>;
+  pipe?: PipeAsync<ObjectOutput<TObjectEntries, undefined>>
+): ObjectSchemaAsync<TObjectEntries>;
 
-export function objectAsync<TObjectShape extends ObjectShapeAsync>(
-  object: TObjectShape,
-  arg2?: PipeAsync<ObjectOutput<TObjectShape>> | ErrorMessage,
-  arg3?: PipeAsync<ObjectOutput<TObjectShape>>
-): ObjectSchemaAsync<TObjectShape> {
-  // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg2, arg3);
+/**
+ * Creates an async object schema.
+ *
+ * @param entries The object entries.
+ * @param rest The object rest.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async object schema.
+ */
+export function objectAsync<
+  TObjectEntries extends ObjectEntriesAsync,
+  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+>(
+  entries: TObjectEntries,
+  rest: TObjectRest,
+  pipe?: PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>
+): ObjectSchemaAsync<TObjectEntries, TObjectRest>;
+
+/**
+ * Creates an async object schema.
+ *
+ * @param entries The object entries.
+ * @param rest The object rest.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async object schema.
+ */
+export function objectAsync<
+  TObjectEntries extends ObjectEntriesAsync,
+  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+>(
+  entries: TObjectEntries,
+  rest: TObjectRest,
+  error?: ErrorMessage,
+  pipe?: PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>
+): ObjectSchemaAsync<TObjectEntries, TObjectRest>;
+
+export function objectAsync<
+  TObjectEntries extends ObjectEntriesAsync,
+  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+>(
+  entries: TObjectEntries,
+  arg2?:
+    | PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>
+    | ErrorMessage
+    | TObjectRest,
+  arg3?: PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>> | ErrorMessage,
+  arg4?: PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>
+): ObjectSchemaAsync<TObjectEntries, TObjectRest> {
+  // Get rest, error and pipe argument
+  const [rest, error, pipe = []] = getRestAndDefaultArgs<
+    TObjectRest,
+    PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>
+  >(arg2, arg3, arg4);
 
   // Create cached entries
   let cachedEntries: [string, BaseSchema<any> | BaseSchemaAsync<any>][];
@@ -82,7 +131,7 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
   return {
     kind: 'object',
     async: true,
-    object,
+    object: { entries, rest },
     pipe,
     async _parse(input, info) {
       // Check type of input
@@ -97,67 +146,118 @@ export function objectAsync<TObjectShape extends ObjectShapeAsync>(
       }
 
       // Cache object entries lazy
-      cachedEntries = cachedEntries || Object.entries(object);
+      cachedEntries = cachedEntries || Object.entries(entries);
 
       // Create issues and output
       let issues: Issues | undefined;
       const output: Record<string, any> = {};
 
       // Parse schema of each key
-      await Promise.all(
-        cachedEntries.map(async ([key, schema]) => {
-          // If not aborted early, continue execution
-          if (!(info?.abortEarly && issues)) {
-            // Get value by key
-            const value = (input as Record<string, unknown>)[key];
-
-            // Get parse result of value
-            const result = await schema._parse(value, info);
-
+      await Promise.all([
+        Promise.all(
+          cachedEntries.map(async ([key, schema]) => {
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
-              // If there are issues, capture them
-              if (result.issues) {
-                // Create object path item
-                const pathItem: ObjectPathItem = {
-                  schema: 'object',
-                  input,
-                  key,
-                  value,
-                };
+              // Get value by key
+              const value = (input as Record<string, unknown>)[key];
 
-                // Add modified result issues to issues
-                for (const issue of result.issues) {
-                  if (issue.path) {
-                    issue.path.unshift(pathItem);
-                  } else {
-                    issue.path = [pathItem];
+              // Get parse result of value
+              const result = await schema._parse(value, info);
+
+              // If not aborted early, continue execution
+              if (!(info?.abortEarly && issues)) {
+                // If there are issues, capture them
+                if (result.issues) {
+                  // Create object path item
+                  const pathItem: ObjectPathItem = {
+                    schema: 'object',
+                    input,
+                    key,
+                    value,
+                  };
+
+                  // Add modified result issues to issues
+                  for (const issue of result.issues) {
+                    if (issue.path) {
+                      issue.path.unshift(pathItem);
+                    } else {
+                      issue.path = [pathItem];
+                    }
+                    issues?.push(issue);
                   }
-                  issues?.push(issue);
-                }
-                if (!issues) {
-                  issues = result.issues;
-                }
+                  if (!issues) {
+                    issues = result.issues;
+                  }
 
-                // If necessary, abort early
-                if (info?.abortEarly) {
-                  throw null;
-                }
+                  // If necessary, abort early
+                  if (info?.abortEarly) {
+                    throw null;
+                  }
 
-                // Otherwise, add value to object
-              } else if (result.output !== undefined || key in input) {
-                output[key] = result.output;
+                  // Otherwise, add value to object
+                } else if (result.output !== undefined || key in input) {
+                  output[key] = result.output;
+                }
               }
             }
-          }
-        })
-      ).catch(() => null);
+          })
+        ),
+
+        rest &&
+          Promise.all(
+            Object.entries(input).map(async ([key, value]) => {
+              // If not aborted early, continue execution
+              if (!(info?.abortEarly && issues)) {
+                if (!(key in entries)) {
+                  // Get parse result of value
+                  const result = await rest._parse(value, info);
+
+                  // If not aborted early, continue execution
+                  if (!(info?.abortEarly && issues)) {
+                    // If there are issues, capture them
+                    if (result.issues) {
+                      // Create object path item
+                      const pathItem: ObjectPathItem = {
+                        schema: 'object',
+                        input,
+                        key,
+                        value,
+                      };
+
+                      // Add modified result issues to issues
+                      for (const issue of result.issues) {
+                        if (issue.path) {
+                          issue.path.unshift(pathItem);
+                        } else {
+                          issue.path = [pathItem];
+                        }
+                        issues?.push(issue);
+                      }
+                      if (!issues) {
+                        issues = result.issues;
+                      }
+
+                      // If necessary, abort early
+                      if (info?.abortEarly) {
+                        throw null;
+                      }
+
+                      // Otherwise, add value to object
+                    } else {
+                      output[key] = result.output;
+                    }
+                  }
+                }
+              }
+            })
+          ),
+      ]).catch(() => null);
 
       // Return issues or pipe result
       return issues
         ? getIssues(issues)
         : executePipeAsync(
-            output as ObjectOutput<TObjectShape>,
+            output as ObjectOutput<TObjectEntries, TObjectRest>,
             pipe,
             info,
             'object'

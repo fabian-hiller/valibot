@@ -55,7 +55,7 @@ export function numberAsync(
     pipe,
     async _parse(input, info) {
       // Check type of input
-      if (typeof input !== 'number' || Number.isNaN(input)) {
+      if (typeof input !== 'number' || isNaN(input)) {
         return getSchemaIssues(
           info,
           'type',

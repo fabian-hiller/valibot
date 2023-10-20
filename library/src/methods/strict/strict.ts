@@ -1,4 +1,7 @@
-import type { ObjectSchema } from '../../schemas/object/index.ts';
+import type {
+  ObjectEntries,
+  ObjectSchema,
+} from '../../schemas/object/index.ts';
 import type { ErrorMessage } from '../../types.ts';
 import { getSchemaIssues } from '../../utils/index.ts';
 
@@ -6,15 +9,16 @@ import { getSchemaIssues } from '../../utils/index.ts';
  * Creates a strict object schema that throws an error if an input contains
  * unknown keys.
  *
+ * @deprecated Use `object` with `rest` argument instead.
+ *
  * @param schema A object schema.
  * @param error The error message.
  *
  * @returns A strict object schema.
  */
-export function strict<TSchema extends ObjectSchema<any>>(
-  schema: TSchema,
-  error?: ErrorMessage
-): TSchema {
+export function strict<
+  TObjectSchema extends ObjectSchema<ObjectEntries, undefined>
+>(schema: TObjectSchema, error?: ErrorMessage): TObjectSchema {
   return {
     ...schema,
 
@@ -29,7 +33,9 @@ export function strict<TSchema extends ObjectSchema<any>>(
     _parse(input, info) {
       const result = schema._parse(input, info);
       return !result.issues &&
-        Object.keys(input as object).some((key) => !(key in schema.object))
+        Object.keys(input as object).some(
+          (key) => !(key in schema.object.entries)
+        )
         ? getSchemaIssues(
             info,
             'object',

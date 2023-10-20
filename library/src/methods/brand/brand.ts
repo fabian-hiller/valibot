@@ -449,20 +449,28 @@ export function brand<
 ): NumberSchemaAsync<Output<TSchema> & Brand<TBrandName>>;
 
 export function brand<
-  TSchema extends ObjectSchema<any>,
+  TSchema extends ObjectSchema<any, any>,
   TBrandName extends BrandName
 >(
   schema: TSchema,
   name: TBrandName
-): ObjectSchema<TSchema['object'], Output<TSchema> & Brand<TBrandName>>;
+): ObjectSchema<
+  TSchema['object']['entries'],
+  TSchema['object']['rest'],
+  Output<TSchema> & Brand<TBrandName>
+>;
 
 export function brand<
-  TSchema extends ObjectSchemaAsync<any>,
+  TSchema extends ObjectSchemaAsync<any, any>,
   TBrandName extends BrandName
 >(
   schema: TSchema,
   name: TBrandName
-): ObjectSchemaAsync<TSchema['object'], Output<TSchema> & Brand<TBrandName>>;
+): ObjectSchemaAsync<
+  TSchema['object']['entries'],
+  TSchema['object']['rest'],
+  Output<TSchema> & Brand<TBrandName>
+>;
 
 export function brand<
   TSchema extends OptionalSchema<any, any>,
