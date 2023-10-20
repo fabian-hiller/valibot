@@ -2,7 +2,7 @@ import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation function that validates an email.
+ * Creates a validation function that validates a email.
  *
  * @param error The error message.
  *
@@ -10,7 +10,9 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function email<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    !/^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/i.test(input)
+    !/^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/iu.test(
+      input
+    )
       ? getPipeIssues('email', error || 'Invalid email', input)
       : getOutput(input);
 }

@@ -7,6 +7,7 @@ All notable changes to the library will be documented in this file.
 - Add `getRestAndDefaultArgs` utility function
 - Add new `rest` argument to `object` and `objectAsync` schema
 - Fix type check in `date` and `dateAsync` for invalid dates (pull request #214)
+- Improve security of regular expressions (pull request #202)
 - Change `ObjectSchema` and `ObjectSchemaAsync` type
 - Change type check in `tuple` and `tupleAsync` to be less strict
 - Rename `ObjectShape` and `ObjectShapeAsync` types to `ObjectEntries` and `ObjectEntriesAsync`
