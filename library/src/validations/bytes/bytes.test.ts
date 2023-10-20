@@ -4,6 +4,7 @@ import { bytes } from './bytes.ts';
 describe('bytes', () => {
   test('should pass only valid byte lengths', () => {
     const validate = bytes(3);
+
     const value1 = '123';
     expect(validate(value1).output).toBe(value1);
     const value2 = 'あ'; // in UTF-8, 'あ' is 3 bytes

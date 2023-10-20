@@ -4,17 +4,16 @@ import { value } from './value.ts';
 describe('value', () => {
   test('should pass only valid values', () => {
     const validate1 = value(3);
+
     const value1 = 3;
     expect(validate1(value1).output).toBe(value1);
+    expect(validate1(2).issues).toBeTruthy();
+    expect(validate1(2).issues).toBeTruthy();
+    expect(validate1(4).issues).toBeTruthy();
 
     const validate2 = value('test');
     const value2 = 'test';
     expect(validate2(value2).output).toBe(value2);
-
-    expect(validate1(2).issues).toBeTruthy();
-
-    expect(validate1(2).issues).toBeTruthy();
-    expect(validate1(4).issues).toBeTruthy();
     expect(validate2('tes').issues).toBeTruthy();
     expect(validate2('testx').issues).toBeTruthy();
   });

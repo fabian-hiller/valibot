@@ -4,9 +4,25 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
-- Change regex of `email` validation (pull request #180)
-- Fix types at `brand`, `transform` and `unwrap` method (issue #195)
+- Add `getRestAndDefaultArgs` utility function
+- Add new `rest` argument to `object` and `objectAsync` schema
+- Fix type check in `date` and `dateAsync` for invalid dates (pull request #214)
 - Improve security of regular expressions (pull request #202)
+- Change `ObjectSchema` and `ObjectSchemaAsync` type
+- Change type check in `tuple` and `tupleAsync` to be less strict
+- Rename `ObjectShape` and `ObjectShapeAsync` types to `ObjectEntries` and `ObjectEntriesAsync`
+- Rename `TupleShape` and `TupleShapeAsync` types to `TupleItems` and `TupleItemsAsync`
+- Deprecate `passthrough`, `strict` and `strip` method in favor of `object` schema with `rest` argument
+
+## v0.19.0 (October 08, 2023)
+
+- Add `notBytes`, `notLength`, `notSize` and `notValue` validation function (pull request #194)
+- Add support for unions as key of `record` and `recordAsync` schema (issue #201)
+- Add support for pipeline validation to `transform` and `transformAsync` (issue #197)
+- Change regex of `email` validation to improve performance and security (pull request #180)
+- Change `object` and `objectAsync` schema to exclude non-existing keys (issue #199)
+- Fix types at `brand`, `transform` and `unwrap` method (issue #195)
+- Deprecate `equal` validation function in favor of `value` (issue #192)
 
 ## v0.18.0 (September 30, 2023)
 

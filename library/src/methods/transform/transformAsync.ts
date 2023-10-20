@@ -73,15 +73,17 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
+  PipeAsync,
 } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import { executePipeAsync } from '../../utils/index.ts';
 
 export function transformAsync<
   TSchema extends AnySchema | AnySchemaAsync,
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): AnySchemaAsync<TOutput>;
 
 export function transformAsync<
@@ -89,7 +91,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): ArraySchemaAsync<TSchema['array']['item'], TOutput>;
 
 export function transformAsync<
@@ -97,7 +100,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): BigintSchemaAsync<TOutput>;
 
 export function transformAsync<
@@ -105,7 +109,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): BooleanSchemaAsync<TOutput>;
 
 export function transformAsync<
@@ -113,7 +118,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): BlobSchemaAsync<TOutput>;
 
 export function transformAsync<
@@ -121,7 +127,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): DateSchemaAsync<TOutput>;
 
 export function transformAsync<
@@ -129,7 +136,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): EnumSchemaAsync<TSchema['enum'], TOutput>;
 
 export function transformAsync<
@@ -137,7 +145,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): InstanceSchemaAsync<TSchema['class'], TOutput>;
 
 export function transformAsync<
@@ -145,7 +154,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): IntersectionSchemaAsync<TSchema['intersection'], TOutput>;
 
 export function transformAsync<
@@ -153,7 +163,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): LiteralSchemaAsync<TSchema['literal'], TOutput>;
 
 export function transformAsync<
@@ -161,7 +172,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): MapSchemaAsync<TSchema['map']['key'], TSchema['map']['value'], TOutput>;
 
 export function transformAsync<
@@ -169,7 +181,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): NanSchemaAsync<TOutput>;
 
 export function transformAsync<
@@ -177,7 +190,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): NativeEnumSchemaAsync<TSchema['nativeEnum'], TOutput>;
 
 export function transformAsync<TSchema extends NeverSchema | NeverSchemaAsync>(
@@ -190,7 +204,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): NonNullableSchemaAsync<TSchema['wrapped'], TOutput>;
 
 export function transformAsync<
@@ -198,7 +213,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): NonNullishSchemaAsync<TSchema['wrapped'], TOutput>;
 
 export function transformAsync<
@@ -206,7 +222,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): NonOptionalSchemaAsync<TSchema['wrapped'], TOutput>;
 
 export function transformAsync<
@@ -214,7 +231,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): NullSchemaAsync<TOutput>;
 
 export function transformAsync<
@@ -222,7 +240,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): NullableSchemaAsync<TSchema['wrapped'], TSchema['default'], TOutput>;
 
 export function transformAsync<
@@ -230,7 +249,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): NullishSchemaAsync<TSchema['wrapped'], TSchema['default'], TOutput>;
 
 export function transformAsync<
@@ -238,23 +258,30 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): NumberSchemaAsync<TOutput>;
 
 export function transformAsync<
-  TSchema extends ObjectSchema<any> | ObjectSchemaAsync<any>,
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
-): ObjectSchemaAsync<TSchema['object'], TOutput>;
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
+): ObjectSchemaAsync<
+  TSchema['object']['entries'],
+  TSchema['object']['rest'],
+  TOutput
+>;
 
 export function transformAsync<
   TSchema extends OptionalSchema<any, any> | OptionalSchemaAsync<any, any>,
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): OptionalSchemaAsync<TSchema['wrapped'], TSchema['default'], TOutput>;
 
 export function transformAsync<
@@ -262,7 +289,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): RecordSchemaAsync<
   TSchema['record']['key'],
   TSchema['record']['value'],
@@ -274,7 +302,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): RecursiveSchemaAsync<TSchema['getter'], TOutput>;
 
 export function transformAsync<
@@ -282,7 +311,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): SetSchemaAsync<TSchema['set']['value'], TOutput>;
 
 export function transformAsync<
@@ -290,7 +320,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): SpecialSchemaAsync<Input<TSchema>, TOutput>;
 
 export function transformAsync<
@@ -298,7 +329,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): StringSchemaAsync<TOutput>;
 
 export function transformAsync<
@@ -306,7 +338,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): SymbolSchemaAsync<TOutput>;
 
 export function transformAsync<
@@ -314,7 +347,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): TupleSchemaAsync<
   TSchema['tuple']['items'],
   TSchema['tuple']['rest'],
@@ -326,7 +360,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): UndefinedSchemaAsync<TOutput>;
 
 export function transformAsync<
@@ -334,7 +369,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): UnionSchemaAsync<TSchema['union'], TOutput>;
 
 export function transformAsync<
@@ -342,7 +378,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): UnknownSchemaAsync<TOutput>;
 
 export function transformAsync<
@@ -350,7 +387,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): VoidSchemaAsync<TOutput>;
 
 /**
@@ -359,6 +397,7 @@ export function transformAsync<
  *
  * @param schema The schema to be used.
  * @param action The transformation action.
+ * @param pipe A validation pipe.
  *
  * @returns A transformed schema.
  */
@@ -367,7 +406,8 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>
+  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  pipe?: PipeAsync<TOutput>
 ): BaseSchemaAsync<Input<TSchema>, TOutput> {
   return {
     ...schema,
@@ -386,8 +426,19 @@ export function transformAsync<
      * @returns The parsed output.
      */
     async _parse(input, info) {
+      // Parse input with schema
       const result = await schema._parse(input, info);
-      return result.issues ? result : getOutput(await action(result.output));
+
+      // If there are issues, return them
+      if (result.issues) {
+        return result;
+      }
+
+      // Otherwise, transform output
+      const output = await action(result.output);
+
+      // And return pipe result
+      return executePipeAsync(output, pipe, info, typeof output);
     },
   };
 }

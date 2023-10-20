@@ -3,6 +3,7 @@ import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { maxLength, minLength } from '../../validations/index.ts';
 import { booleanAsync } from '../boolean/index.ts';
+import { never } from '../never/index.ts';
 import { number, numberAsync } from '../number/index.ts';
 import { object } from '../object/index.ts';
 import { string } from '../string/index.ts';
@@ -10,30 +11,39 @@ import { tupleAsync } from './tupleAsync.ts';
 
 describe('tupleAsync', () => {
   test('should pass only tuples', async () => {
-    const schema1 = tupleAsync([numberAsync(), string()]);
+    const schema1 = tupleAsync([number(), string()]);
     const input1 = [1, 'test'];
     const output1 = await parseAsync(schema1, input1);
     expect(output1).toEqual(input1);
+    const input2 = [1, 'test', null];
+    const output2 = await parseAsync(schema1, input2);
+    expect(output2).toEqual([1, 'test']);
     await expect(parseAsync(schema1, [])).rejects.toThrowError();
     await expect(parseAsync(schema1, [1])).rejects.toThrowError();
     await expect(parseAsync(schema1, [1, 2])).rejects.toThrowError();
-    await expect(parseAsync(schema1, [1, 'test', null])).rejects.toThrowError();
     await expect(parseAsync(schema1, 123)).rejects.toThrowError();
     await expect(parseAsync(schema1, null)).rejects.toThrowError();
     await expect(parseAsync(schema1, {})).rejects.toThrowError();
 
-    const schema2 = tupleAsync([string()], number());
-    const input2 = ['test'];
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toEqual(input2);
-    const input3 = ['test', 1];
+    const schema2 = tupleAsync([string()], numberAsync());
+    const input3 = ['test'];
     const output3 = await parseAsync(schema2, input3);
     expect(output3).toEqual(input3);
-    const input4 = ['test', 1, 2];
+    const input4 = ['test', 1];
     const output4 = await parseAsync(schema2, input4);
     expect(output4).toEqual(input4);
+    const input5 = ['test', 1, 2];
+    const output5 = await parseAsync(schema2, input5);
+    expect(output5).toEqual(input5);
     await expect(parseAsync(schema2, ['test', 'test'])).rejects.toThrowError();
     await expect(parseAsync(schema2, [1, 2])).rejects.toThrowError();
+
+    const schema3 = tupleAsync([string()], never());
+    const input6 = ['test'];
+    const output6 = await parseAsync(schema3, input6);
+    expect(output6).toEqual(input6);
+    await expect(parseAsync(schema2, ['test', 'test'])).rejects.toThrowError();
+    await expect(parseAsync(schema2, ['test', null])).rejects.toThrowError();
   });
 
   test('should throw custom error', async () => {

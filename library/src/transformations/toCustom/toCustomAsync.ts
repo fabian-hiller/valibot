@@ -1,4 +1,5 @@
 import type { PipeResult } from '../../types.ts';
+import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates a async custom transformation function.
@@ -10,7 +11,6 @@ import type { PipeResult } from '../../types.ts';
 export function toCustomAsync<TInput>(
   action: (input: TInput) => TInput | Promise<TInput>
 ) {
-  return async (input: TInput): Promise<PipeResult<TInput>> => ({
-    output: await action(input),
-  });
+  return async (input: TInput): Promise<PipeResult<TInput>> =>
+    getOutput(await action(input));
 }

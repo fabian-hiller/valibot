@@ -4,8 +4,8 @@ import type {
   ErrorMessage,
   Pipe,
   PipeAsync,
-} from '../../../../types.ts';
-import { getDefaultArgs } from '../../../../utils/index.ts';
+} from '../../types.ts';
+import { getDefaultArgs } from '../getDefaultArgs/index.ts';
 
 /**
  * Returns rest, error and pipe from dynamic arguments.
@@ -16,7 +16,7 @@ import { getDefaultArgs } from '../../../../utils/index.ts';
  *
  * @returns The tuple arguments.
  */
-export function getTupleArgs<
+export function getRestAndDefaultArgs<
   TRest extends BaseSchema | BaseSchemaAsync | undefined,
   TPipe extends Pipe<any> | PipeAsync<any>
 >(
@@ -24,9 +24,9 @@ export function getTupleArgs<
   arg2: TPipe | ErrorMessage | undefined,
   arg3: TPipe | undefined
 ): [TRest, ErrorMessage | undefined, TPipe | undefined] {
-  if (typeof arg1 === 'object' && !Array.isArray(arg1)) {
+  if (!arg1 || (typeof arg1 === 'object' && !Array.isArray(arg1))) {
     const [error, pipe] = getDefaultArgs(arg2, arg3);
-    return [arg1, error, pipe];
+    return [arg1 as TRest, error, pipe];
   }
   const [error, pipe] = getDefaultArgs<TPipe>(
     arg1 as TPipe | ErrorMessage | undefined,

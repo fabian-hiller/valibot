@@ -11,6 +11,9 @@ describe('dateAsync', () => {
     expect(output).toEqual(input);
     await expect(parseAsync(schema, 2023)).rejects.toThrowError();
     await expect(parseAsync(schema, '2023-07-10')).rejects.toThrowError();
+    await expect(
+      parseAsync(schema, new Date('Invalid Date'))
+    ).rejects.toThrowError();
     await expect(parseAsync(schema, {})).rejects.toThrowError();
   });
 

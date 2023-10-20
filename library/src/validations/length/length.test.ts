@@ -4,6 +4,7 @@ import { length } from './length.ts';
 describe('length', () => {
   test('should pass only valid lengths', () => {
     const validate = length(3);
+
     const value1 = '123';
     expect(validate(value1).output).toBe(value1);
     const value2 = [1, 2, 3];
