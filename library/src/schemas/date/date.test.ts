@@ -11,6 +11,7 @@ describe('date', () => {
     expect(output).toEqual(input);
     expect(() => parse(schema, 2023)).toThrowError();
     expect(() => parse(schema, '2023-07-10')).toThrowError();
+    expect(() => parse(schema, new Date('Invalid Date'))).toThrowError();
     expect(() => parse(schema, {})).toThrowError();
   });
 
