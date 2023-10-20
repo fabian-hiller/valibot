@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Change regex of `email` validation (pull request #180)
 - Fix types at `brand`, `transform` and `unwrap` method (issue #195)
+- Improve security of regular expressions (pull request #202)
 
 ## v0.18.0 (September 30, 2023)
 
