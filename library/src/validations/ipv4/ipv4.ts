@@ -1,3 +1,4 @@
+import { IPV4_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
@@ -10,8 +11,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function ipv4<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    // eslint-disable-next-line redos-detector/no-unsafe-regex -- false positive
-    !/^(?:(?:25[0-5]|(?:2[0-4]|1\d|[1-9])?\d)\.?\b){4}$/u.test(input)
+    !IPV4_REGEX.test(input)
       ? getPipeIssues('ipv4', error || 'Invalid IP v4', input)
       : getOutput(input);
 }
