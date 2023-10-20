@@ -26,7 +26,7 @@ describe('mergeAsync', () => {
       objectAsync({ key: string() }),
       object({ key: number() }),
     ]);
-    expect(schema.object.key).toEqual(comparable(number()));
+    expect(schema.object.entries.key).toEqual(comparable(number()));
     const input = { key: 123 };
     const output = await parseAsync(schema, input);
     expect(output).toEqual(input);

@@ -1,16 +1,21 @@
-import type { ObjectSchemaAsync } from '../../schemas/object/index.ts';
+import type {
+  ObjectEntriesAsync,
+  ObjectSchemaAsync,
+} from '../../schemas/object/index.ts';
 import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that passes unknown keys.
  *
+ * @deprecated Use `objectAsync` with `rest` argument instead.
+ *
  * @param schema A object schema.
  *
  * @returns A object schema.
  */
-export function passthroughAsync<TSchema extends ObjectSchemaAsync<any>>(
-  schema: TSchema
-): TSchema {
+export function passthroughAsync<
+  TSchema extends ObjectSchemaAsync<ObjectEntriesAsync, undefined>
+>(schema: TSchema): TSchema {
   return {
     ...schema,
 

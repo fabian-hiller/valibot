@@ -1,16 +1,21 @@
-import type { ObjectSchema } from '../../schemas/object/index.ts';
+import type {
+  ObjectEntries,
+  ObjectSchema,
+} from '../../schemas/object/index.ts';
 import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that passes unknown keys.
  *
+ * @deprecated Use `object` with `rest` argument instead.
+ *
  * @param schema A object schema.
  *
  * @returns A object schema.
  */
-export function passthrough<TSchema extends ObjectSchema<any>>(
-  schema: TSchema
-): TSchema {
+export function passthrough<
+  TObjectSchema extends ObjectSchema<ObjectEntries, undefined>
+>(schema: TObjectSchema): TObjectSchema {
   return {
     ...schema,
 
