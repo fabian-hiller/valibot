@@ -1,7 +1,7 @@
 /**
  * Non-digit regex.
  */
-const NON_DIGIT_REGEX = /\D/u;
+const NON_DIGIT_REGEX = /\D/gu;
 
 /**
  * Checks whether a string with numbers corresponds to the luhn algorithm.
