@@ -2,6 +2,116 @@
 title: string
 ---
 
+import { Property } from '~/components';
+import { Link } from '@builder.io/qwik-city';
+
 # string
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/string/string.ts).
+Schema that parses the input to string.
+
+```ts
+const schema = string(errorMessage, pipe);
+```
+
+## Parameter
+
+- `errorMessage` <Property type='string'/> = 'Invalid type'
+- `pipe` <Property type={{ type: 'custom', name: 'Pipe<string>' }}/> = []
+
+## Return
+
+- `schema` <Property type={{ type: 'custom', name: 'StringSchema' }}/>
+
+## Examples
+
+```ts
+const schema = string();
+parse(schema, 'string'); // returns 'string'
+parse(schema, 123); // throw ValiError 'Invalid Type'
+
+const schemaWithCustomErrMsg = string('custom error message');
+parse(schemaWithCustomErrMsg, 123); // throw ValiError 'custom error message'
+
+string([maxLength(5)]);
+string([minLength(5)]);
+string([length(5)]);
+string([email()]);
+string([url()]);
+string([emoji()]);
+string([uuid()]);
+string([cuid2()]);
+string([ulid()]);
+string([regex(regex)]);
+string([includes(string)]);
+string([startsWith(string)]);
+string([endsWith(string)]);
+string([datetime()]);
+string([ip()]);
+```
+
+## Methods
+
+- <Link href="/api/brand">`brand`</Link>
+- <Link href="/api/coerce">`coerce`</Link>
+- <Link href="/api/coerceAsync">`coerceAsync`</Link>
+- <Link href="/api/fallback">`fallback`</Link>
+- <Link href="/api/fallbackAsync">`fallbackAsync`</Link>
+- <Link href="/api/getDefault">`getDefault`</Link>
+- <Link href="/api/is">`is`</Link>
+- <Link href="/api/parse">`parse`</Link>
+- <Link href="/api/parseAsync">`parseAsync`</Link>
+- <Link href="/api/safeParse">`safeParse`</Link>
+- <Link href="/api/safeParseAsync">`safeParseAsync`</Link>
+- <Link href="/api/transform">`transform`</Link>
+- <Link href="/api/transformAsync">`transformAsync`</Link>
+- <Link href="/api/unwrap">`unwrap`</Link>
+
+## Transformations
+
+- <Link href="/api/toCustom">`toCustom`</Link>
+- <Link href="/api/toCustomAsync">`toCustomAsync`</Link>
+- <Link href="/api/toLowerCase">`toLowerCase`</Link>
+- <Link href="/api/toMaxValue">`toMaxValue`</Link>
+- <Link href="/api/toMinValue">`toMinValue`</Link>
+- <Link href="/api/toTrimmed">`toTrimmed`</Link>
+- <Link href="/api/toTrimmedEnd">`toTrimmedEnd`</Link>
+- <Link href="/api/toTrimmedStart">`toTrimmedStart`</Link>
+- <Link href="/api/toUpperCase">`toUpperCase`</Link>
+
+## Validations
+
+- <Link href="/api/bytes">`bytes`</Link>
+- <Link href="/api/cuid2">`cuid2`</Link>
+- <Link href="/api/custom">`custom`</Link>
+- <Link href="/api/customAsync">`customAsync`</Link>
+- <Link href="/api/email">`email`</Link>
+- <Link href="/api/emoji">`emoji`</Link>
+- <Link href="/api/endsWith">`endsWith`</Link>
+- <Link href="/api/equal">`equal`</Link>
+- <Link href="/api/excludes">`excludes`</Link>
+- <Link href="/api/imei">`imei`</Link>
+- <Link href="/api/includes">`includes`</Link>
+- <Link href="/api/ip">`ip`</Link>
+- <Link href="/api/ipv4">`ipv4`</Link>
+- <Link href="/api/isoDate">`isoDate`</Link>
+- <Link href="/api/isoDateTime">`isoDateTime`</Link>
+- <Link href="/api/isoTime">`isoTime`</Link>
+- <Link href="/api/isoTimeSecond">`isoTimeSecond`</Link>
+- <Link href="/api/isoTimestamp">`isoTimestamp`</Link>
+- <Link href="/api/isoWeek">`isoWeek`</Link>
+- <Link href="/api/length">`length`</Link>
+- <Link href="/api/maxBytes">`maxBytes`</Link>
+- <Link href="/api/maxLength">`maxLength`</Link>
+- <Link href="/api/maxValue">`maxValue`</Link>
+- <Link href="/api/minBytes">`minBytes`</Link>
+- <Link href="/api/minLength">`minLength`</Link>
+- <Link href="/api/minValue">`minValue`</Link>
+- <Link href="/api/notBytes">`notBytes`</Link>
+- <Link href="/api/notLength">`notLength`</Link>
+- <Link href="/api/notValue">`notValue`</Link>
+- <Link href="/api/regex">`regex`</Link>
+- <Link href="/api/startsWith">`startsWith`</Link>
+- <Link href="/api/ulid">`ulid`</Link>
+- <Link href="/api/url">`url`</Link>
+- <Link href="/api/uuid">`uuid`</Link>
+- <Link href="/api/value">`value`</Link>
