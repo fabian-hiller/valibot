@@ -16,3 +16,4 @@ export * from './SystemIcon';
 export * from './TextLink';
 export * from './ThemeToggle';
 export * from './UnstyledButton';
+export * from './Property';
