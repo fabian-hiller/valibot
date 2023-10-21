@@ -17,7 +17,7 @@ describe('coerceAsync', () => {
   test('should coerce number to date', async () => {
     const time = 1688902224413;
     const output = await parseAsync(
-      coerceAsync(dateAsync(), (input) => new Date(input as any)),
+      coerceAsync(dateAsync(), (input) => new Date(input as number)),
       time
     );
     expect(output).toBeInstanceOf(Date);
