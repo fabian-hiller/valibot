@@ -22,8 +22,9 @@ export const IMEI_REGEX = /^\d{2}(?:[ /|-]?\d{6}){2}[ /|-]?\d$/u;
 /**
  * [IPv4](https://en.wikipedia.org/wiki/IPv4) regex.
  */
-// eslint-disable-next-line redos-detector/no-unsafe-regex -- false positive
-export const IPV4_REGEX = /^(?:(?:25[0-5]|(?:2[0-4]|1\d|[1-9])?\d)\.?\b){4}$/u;
+export const IPV4_REGEX =
+  // eslint-disable-next-line redos-detector/no-unsafe-regex -- false positive
+  /^(?:(?:[1-9]|1\d|2[0-4])?\d|25[0-5])(?:\.(?:(?:[1-9]|1\d|2[0-4])?\d|25[0-5])){3}$/u;
 
 /**
  * [IPv6](https://en.wikipedia.org/wiki/IPv6) regex.
