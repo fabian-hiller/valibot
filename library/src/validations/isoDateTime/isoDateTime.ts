@@ -1,3 +1,4 @@
+import { ISO_DATE_TIME_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
@@ -16,9 +17,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function isoDateTime<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    !/^\d{4}-(?:0[1-9]|1[0-2])-(?:[12]\d|0[1-9]|3[01])T(?:0\d|1\d|2[0-3]):[0-5]\d$/u.test(
-      input
-    )
+    !ISO_DATE_TIME_REGEX.test(input)
       ? getPipeIssues('iso_date_time', error || 'Invalid datetime', input)
       : getOutput(input);
 }

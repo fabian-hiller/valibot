@@ -1,3 +1,4 @@
+import { ULID_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
@@ -10,7 +11,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function ulid<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    !/^[\da-hjkmnp-tv-z]{26}$/iu.test(input)
+    !ULID_REGEX.test(input)
       ? getPipeIssues('ulid', error || 'Invalid ULID', input)
       : getOutput(input);
 }

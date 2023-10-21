@@ -1,3 +1,4 @@
+import { CUID2_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
@@ -10,7 +11,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function cuid2<TInput extends string>(error?: ErrorMessage) {
   return (input: TInput): PipeResult<TInput> =>
-    !/^[a-z][\da-z]*$/u.test(input)
+    !CUID2_REGEX.test(input)
       ? getPipeIssues('cuid2', error || 'Invalid cuid2', input)
       : getOutput(input);
 }
