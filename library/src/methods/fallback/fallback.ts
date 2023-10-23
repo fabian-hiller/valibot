@@ -10,12 +10,24 @@ import type { FallbackInfo } from './types.ts';
  *
  * @returns The passed schema.
  */
-export function fallback<TSchema extends BaseSchema>(
+export function fallback<
+  TSchema extends BaseSchema,
+  TFallback extends Output<TSchema>
+>(
   schema: TSchema,
-  value: Output<TSchema> | ((info: FallbackInfo) => Output<TSchema>)
-): TSchema {
+  fallback_: TFallback | ((info?: FallbackInfo) => TFallback)
+): TSchema & { getFallback: (info?: FallbackInfo) => TFallback } {
   return {
     ...schema,
+
+    /**
+     * Returns the default value.
+     */
+    getFallback(info) {
+      return typeof fallback_ === 'function'
+        ? (fallback_ as (info?: FallbackInfo) => TFallback)(info)
+        : (fallback_ as TFallback);
+    },
 
     /**
      * Parses unknown input based on its schema.
@@ -29,12 +41,7 @@ export function fallback<TSchema extends BaseSchema>(
       const result = schema._parse(input, info);
       return getOutput(
         result.issues
-          ? typeof value === 'function'
-            ? (value as (info: FallbackInfo) => Output<TSchema>)({
-                input,
-                issues: result.issues,
-              })
-            : value
+          ? this.getFallback({ input, issues: result.issues })
           : result.output
       );
     },
