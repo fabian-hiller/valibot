@@ -8,7 +8,7 @@ import {
 import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
 
 /**
- * Object shape type.
+ * Object entries type.
  */
 export type ObjectEntries = Record<string, BaseSchema<any>>;
 
