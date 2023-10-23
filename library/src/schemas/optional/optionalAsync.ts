@@ -21,7 +21,7 @@ export type OptionalSchemaAsync<
 > = BaseSchemaAsync<Input<TWrapped> | undefined, TOutput> & {
   schema: 'optional';
   wrapped: TWrapped;
-  get default(): TDefault;
+  getDefault(): TDefault;
 };
 
 /**
@@ -54,9 +54,9 @@ export function optionalAsync<
     wrapped,
 
     /**
-     * The default value.
+     * Returns the default value.
      */
-    get default() {
+    getDefault() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);
@@ -77,7 +77,7 @@ export function optionalAsync<
      */
     async _parse(input, info) {
       // Get default or input value
-      const value = input === undefined ? await this.default : input;
+      const value = input === undefined ? await this.getDefault() : input;
 
       // Allow `undefined` value to pass
       if (value === undefined) {

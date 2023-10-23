@@ -148,13 +148,13 @@ export function transform<TSchema extends NullableSchema<any, any>, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput,
   pipe?: Pipe<TOutput>
-): NullableSchema<TSchema['wrapped'], TSchema['default'], TOutput>;
+): NullableSchema<TSchema['wrapped'], TSchema['getDefault'], TOutput>;
 
 export function transform<TSchema extends NullishSchema<any, any>, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput,
   pipe?: Pipe<TOutput>
-): NullishSchema<TSchema['wrapped'], TSchema['default'], TOutput>;
+): NullishSchema<TSchema['wrapped'], TSchema['getDefault'], TOutput>;
 
 export function transform<TSchema extends NumberSchema, TOutput>(
   schema: TSchema,
@@ -176,7 +176,7 @@ export function transform<TSchema extends OptionalSchema<any, any>, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput,
   pipe?: Pipe<TOutput>
-): OptionalSchema<TSchema['wrapped'], TSchema['default'], TOutput>;
+): OptionalSchema<TSchema['wrapped'], TSchema['getDefault'], TOutput>;
 
 export function transform<TSchema extends RecordSchema<any, any>, TOutput>(
   schema: TSchema,

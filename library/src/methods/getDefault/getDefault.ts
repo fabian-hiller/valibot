@@ -22,6 +22,6 @@ export function getDefault<
     | NullableSchemaAsync<any, any>
     | NullishSchema<any, any>
     | NullishSchemaAsync<any, any>
->(schema: TSchema): TSchema['default'] {
-  return schema.default;
+>(schema: TSchema): TSchema['getDefault'] {
+  return schema.getDefault();
 }

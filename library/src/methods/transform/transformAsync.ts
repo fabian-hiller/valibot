@@ -242,7 +242,7 @@ export function transformAsync<
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
   pipe?: PipeAsync<TOutput>
-): NullableSchemaAsync<TSchema['wrapped'], TSchema['default'], TOutput>;
+): NullableSchemaAsync<TSchema['wrapped'], TSchema['getDefault'], TOutput>;
 
 export function transformAsync<
   TSchema extends NullishSchema<any, any> | NullishSchemaAsync<any, any>,
@@ -251,7 +251,7 @@ export function transformAsync<
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
   pipe?: PipeAsync<TOutput>
-): NullishSchemaAsync<TSchema['wrapped'], TSchema['default'], TOutput>;
+): NullishSchemaAsync<TSchema['wrapped'], TSchema['getDefault'], TOutput>;
 
 export function transformAsync<
   TSchema extends NumberSchema | NumberSchemaAsync,
@@ -282,7 +282,7 @@ export function transformAsync<
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
   pipe?: PipeAsync<TOutput>
-): OptionalSchemaAsync<TSchema['wrapped'], TSchema['default'], TOutput>;
+): OptionalSchemaAsync<TSchema['wrapped'], TSchema['getDefault'], TOutput>;
 
 export function transformAsync<
   TSchema extends RecordSchema<any, any> | RecordSchemaAsync<any, any>,

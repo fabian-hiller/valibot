@@ -392,7 +392,7 @@ export function brand<
   name: TBrandName
 ): NullableSchema<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 
@@ -404,7 +404,7 @@ export function brand<
   name: TBrandName
 ): NullableSchemaAsync<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 
@@ -416,7 +416,7 @@ export function brand<
   name: TBrandName
 ): NullishSchema<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 
@@ -428,7 +428,7 @@ export function brand<
   name: TBrandName
 ): NullishSchemaAsync<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 
@@ -480,7 +480,7 @@ export function brand<
   name: TBrandName
 ): OptionalSchema<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 
@@ -492,7 +492,7 @@ export function brand<
   name: TBrandName
 ): OptionalSchemaAsync<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 

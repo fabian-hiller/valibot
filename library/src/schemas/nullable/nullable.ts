@@ -13,7 +13,7 @@ export type NullableSchema<
 > = BaseSchema<Input<TWrapped> | null, TOutput> & {
   schema: 'nullable';
   wrapped: TWrapped;
-  get default(): TDefault;
+  getDefault(): TDefault;
 };
 
 /**
@@ -43,9 +43,9 @@ export function nullable<
     wrapped,
 
     /**
-     * The default value.
+     * Returns the default value.
      */
-    get default() {
+    getDefault() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);
@@ -68,7 +68,9 @@ export function nullable<
       // Get default or input value
       let default_: TDefault;
       const value =
-        input === null && (default_ = this.default) && default_ !== undefined
+        input === null &&
+        (default_ = this.getDefault()) &&
+        default_ !== undefined
           ? default_
           : input;
 

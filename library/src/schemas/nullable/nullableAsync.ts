@@ -21,7 +21,7 @@ export type NullableSchemaAsync<
 > = BaseSchemaAsync<Input<TWrapped> | null, TOutput> & {
   schema: 'nullable';
   wrapped: TWrapped;
-  get default(): TDefault;
+  getDefault(): TDefault;
 };
 
 /**
@@ -54,9 +54,9 @@ export function nullableAsync<
     wrapped,
 
     /**
-     * The default value.
+     * Returns the default value.
      */
-    get default() {
+    getDefault() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);
@@ -80,7 +80,7 @@ export function nullableAsync<
       let default_: Awaited<TDefault>;
       const value =
         input === null &&
-        (default_ = await this.default) &&
+        (default_ = await this.getDefault()) &&
         default_ !== undefined
           ? default_
           : input;

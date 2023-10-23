@@ -13,7 +13,7 @@ export type NullishSchema<
 > = BaseSchema<Input<TWrapped> | null | undefined, TOutput> & {
   schema: 'nullish';
   wrapped: TWrapped;
-  get default(): TDefault;
+  getDefault(): TDefault;
 };
 
 /**
@@ -43,9 +43,9 @@ export function nullish<
     wrapped,
 
     /**
-     * The default value.
+     * Returns the default value.
      */
-    get default() {
+    getDefault() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);
@@ -69,7 +69,7 @@ export function nullish<
       let default_: TDefault;
       const value =
         (input === null || input === undefined) &&
-        (default_ = this.default) &&
+        (default_ = this.getDefault()) &&
         default_ !== undefined
           ? default_
           : input;
