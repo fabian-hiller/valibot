@@ -18,7 +18,7 @@ import type { TupleInput, TupleOutput, TuplePathItem } from './types.ts';
  */
 export type TupleItemsAsync = [
   BaseSchema | BaseSchemaAsync,
-  ...(BaseSchema[] | BaseSchemaAsync[])
+  ...(BaseSchema | BaseSchemaAsync)[]
 ];
 
 /**

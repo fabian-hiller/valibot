@@ -87,6 +87,7 @@ export type _ParseResult<TOutput> =
  * Base schema type.
  */
 export type BaseSchema<TInput = any, TOutput = TInput> = {
+  schema: string;
   async: false;
   _parse(input: unknown, info?: ParseInfo): _ParseResult<TOutput>;
   _types?: { input: TInput; output: TOutput };
@@ -96,6 +97,7 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
  * Base schema async type.
  */
 export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
+  schema: string;
   async: true;
   _parse(input: unknown, info?: ParseInfo): Promise<_ParseResult<TOutput>>;
   _types?: { input: TInput; output: TOutput };
