@@ -1,4 +1,3 @@
-import type { NullishSchemaAsync } from '../../../dist';
 import type {
   OptionalSchema,
   NullableSchema,
@@ -11,6 +10,7 @@ import type {
   ObjectSchemaAsync,
   ObjectEntriesAsync,
   TupleSchemaAsync,
+  NullishSchemaAsync,
 } from '../../schemas/index.ts';
 import type { BaseSchema, BaseSchemaAsync } from '../../types.ts';
 
