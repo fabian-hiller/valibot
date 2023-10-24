@@ -1,7 +1,10 @@
 import type {
   NullableSchema,
+  NullableSchemaAsync,
   NullishSchema,
+  NullishSchemaAsync,
   OptionalSchema,
+  OptionalSchemaAsync,
 } from '../../schemas/index.ts';
 
 /**
@@ -11,11 +14,14 @@ import type {
  *
  * @returns The default value.
  */
-export function getDefault<
+export async function getDefaultAsync<
   TSchema extends
     | OptionalSchema<any, any>
+    | OptionalSchemaAsync<any, any>
     | NullableSchema<any, any>
+    | NullableSchemaAsync<any, any>
     | NullishSchema<any, any>
->(schema: TSchema): ReturnType<TSchema['getDefault']> {
+    | NullishSchemaAsync<any, any>
+>(schema: TSchema): Promise<ReturnType<TSchema['getDefault']>> {
   return schema.getDefault();
 }

@@ -134,6 +134,7 @@
 - [discriminatedUnionAsync](/api/discriminatedUnionAsync)
 - [enumTypeAsync](/api/enumTypeAsync)
 - [fallbackAsync](/api/fallbackAsync)
+- [getDefaultAsync](/api/getDefaultAsync)
 - [instanceAsync](/api/instanceAsync)
 - [intersectionAsync](/api/intersectionAsync)
 - [literalAsync](/api/literalAsync)

@@ -10,12 +10,14 @@ All notable changes to the library will be documented in this file.
 - Add `getFallback` property to schema in `fallback` method (pull request #177)
 - Add `PartialObjectEntries` and `PartialObjectEntriesAsync` type (issue #217)
 - Add export for any validation regex (pull request #219)
+- Add `getDefaultAsync` method
 - Fix type check in `date` and `dateAsync` for invalid dates (pull request #214)
 - Improve security of regular expressions (pull request #202)
 - Improve `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema
 - Change `ObjectSchema` and `ObjectSchemaAsync` type
 - Change type check in `tuple` and `tupleAsync` to be less strict
 - Change return type of `action` argument in `coerce` and `coerceAsync` to `unknown`
+- Change type of `getDefault` method
 - Rename `default` property of `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema to `getDefault`
 - Rename `ObjectShape` and `ObjectShapeAsync` types to `ObjectEntries` and `ObjectEntriesAsync`
 - Rename `TupleShape` and `TupleShapeAsync` types to `TupleItems` and `TupleItemsAsync`
