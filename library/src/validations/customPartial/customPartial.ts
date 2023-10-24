@@ -12,7 +12,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.js';
 export function customPartial<TInput, TKeys extends keyof TInput>(
   requiredFields: TKeys[],
   requirement: (input: Pick<TInput, TKeys>) => boolean,
-  error?: ErrorMessage,
+  error?: ErrorMessage
   // TODO: path
 ) {
   const pipe = (input: TInput): PipeResult<TInput> =>
@@ -20,6 +20,6 @@ export function customPartial<TInput, TKeys extends keyof TInput>(
       ? getPipeIssues('customPartial', error || 'Invalid input', input)
       : getOutput(input);
 
-  pipe.partial = requiredFields
-  return pipe
+  pipe.partial = requiredFields;
+  return pipe;
 }
