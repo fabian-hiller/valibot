@@ -12,6 +12,7 @@ All notable changes to the library will be documented in this file.
 - Add export for any validation regex (pull request #219)
 - Fix type check in `date` and `dateAsync` for invalid dates (pull request #214)
 - Improve security of regular expressions (pull request #202)
+- Improve `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema
 - Change `ObjectSchema` and `ObjectSchemaAsync` type
 - Change type check in `tuple` and `tupleAsync` to be less strict
 - Change return type of `action` argument in `coerce` and `coerceAsync` to `unknown`

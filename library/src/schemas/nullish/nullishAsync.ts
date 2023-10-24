@@ -13,15 +13,16 @@ export type NullishSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TDefault extends
     | Input<TWrapped>
+    | null
     | undefined
-    | Promise<Input<TWrapped> | undefined> = undefined,
-  TOutput = Awaited<TDefault> extends undefined
+    | Promise<Input<TWrapped> | null | undefined> = undefined,
+  TOutput = Awaited<TDefault> extends undefined | null
     ? Output<TWrapped> | null | undefined
     : Output<TWrapped>
 > = BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> & {
   schema: 'nullish';
   wrapped: TWrapped;
-  getDefault(): TDefault;
+  getDefault(): Promise<TDefault>;
 };
 
 /**
@@ -37,7 +38,7 @@ export function nullishAsync<
   TDefault extends
     | Input<TWrapped>
     | undefined
-    | Promise<Input<TWrapped> | undefined> = undefined
+    | Promise<Input<TWrapped> | null | undefined> = undefined
 >(
   wrapped: TWrapped,
   default_?: TDefault | (() => TDefault)
@@ -56,7 +57,7 @@ export function nullishAsync<
     /**
      * Retutns the default value.
      */
-    getDefault() {
+    async getDefault() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);

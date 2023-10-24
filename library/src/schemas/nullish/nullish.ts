@@ -6,8 +6,8 @@ import { getOutput } from '../../utils/index.ts';
  */
 export type NullishSchema<
   TWrapped extends BaseSchema,
-  TDefault extends Input<TWrapped> | undefined = undefined,
-  TOutput = TDefault extends undefined
+  TDefault extends Input<TWrapped> | null | undefined = undefined,
+  TOutput = TDefault extends undefined | null
     ? Output<TWrapped> | null | undefined
     : Output<TWrapped>
 > = BaseSchema<Input<TWrapped> | null | undefined, TOutput> & {
@@ -26,7 +26,7 @@ export type NullishSchema<
  */
 export function nullish<
   TWrapped extends BaseSchema,
-  TDefault extends Input<TWrapped> | undefined = undefined
+  TDefault extends Input<TWrapped> | null | undefined = undefined
 >(
   wrapped: TWrapped,
   default_?: TDefault | (() => TDefault)
