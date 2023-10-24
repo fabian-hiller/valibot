@@ -21,7 +21,7 @@ export function fallback<
     ...schema,
 
     /**
-     * Returns the default value.
+     * Returns the fallback value.
      */
     getFallback(info) {
       return typeof fallback_ === 'function'
