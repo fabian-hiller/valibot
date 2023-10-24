@@ -141,7 +141,7 @@ export type PipeResult<TOutput> =
 /**
  * Validation and transformation pipe type.
  */
-export type Pipe<TValue> = ((value: TValue) => PipeResult<TValue>)[];
+export type Pipe<TValue> = (((value: TValue) => PipeResult<TValue>) & { partial?: string[] })[];
 
 /**
  * Async validation and transformation pipe type.

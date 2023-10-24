@@ -155,6 +155,9 @@ export function object<
       let issues: Issues | undefined;
       const output: Record<string, any> = {};
 
+      const partialPipes = pipe?.filter(p => p.partial != null)
+      const validFields: string[] = []
+
       // Parse schema of each key
       for (const [key, schema] of cachedEntries) {
         const value = (input as Record<string, unknown>)[key];
@@ -191,6 +194,40 @@ export function object<
           // Otherwise, add value to object
         } else if (result.output !== undefined || key in input) {
           output[key] = result.output;
+          validFields.push(key)
+        }
+
+        // TODO: Better logic to no do checks twich
+        const pipesToRun = partialPipes?.filter(p => p.partial!.every(requiredField => validFields.includes(requiredField)))
+        const pipeResult = executePipe(output as ObjectOutput<TObjectEntries, TObjectRest>, pipesToRun, info, 'object')
+
+        if (pipeResult.issues) {
+           // Create object path item
+           const pathItem: ObjectPathItem = {
+            schema: 'object',
+            input,
+            // TODO: Custom key from pipe
+            key,
+            value,
+          };
+
+          // Add modified result issues to issues
+          for (const issue of pipeResult.issues) {
+            if (issue.path) {
+              issue.path.unshift(pathItem);
+            } else {
+              issue.path = [pathItem];
+            }
+            issues?.push(issue);
+          }
+          if (!issues) {
+            issues = result.issues;
+          }
+
+          // If necessary, abort early
+          if (info?.abortEarly) {
+            break;
+          }
         }
       }
 
