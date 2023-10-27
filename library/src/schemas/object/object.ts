@@ -10,7 +10,7 @@ import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
 /**
  * Object entries type.
  */
-export type ObjectEntries = Record<string, BaseSchema<any>>;
+export type ObjectEntries = Record<string, BaseSchema>;
 
 /**
  * Object schema type.
@@ -109,7 +109,7 @@ export function object<
   >(arg2, arg3, arg4);
 
   // Create cached entries
-  let cachedEntries: [string, BaseSchema<any>][];
+  let cachedEntries: [string, BaseSchema][];
 
   // Create and return object schema
   return {

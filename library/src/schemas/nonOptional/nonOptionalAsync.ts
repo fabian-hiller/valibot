@@ -12,11 +12,11 @@ import type { NonOptional } from './nonOptional.ts';
  * Non optional schema async type.
  */
 export type NonOptionalSchemaAsync<
-  TWrapped extends BaseSchema | BaseSchemaAsync,
-  TOutput = NonOptional<Output<TWrapped>>
-> = BaseSchemaAsync<NonOptional<Input<TWrapped>>, TOutput> & {
+  TSchema extends BaseSchema | BaseSchemaAsync,
+  TOutput = NonOptional<Output<TSchema>>
+> = BaseSchemaAsync<NonOptional<Input<TSchema>>, TOutput> & {
   schema: 'non_optional';
-  wrapped: TWrapped;
+  wrapped: TSchema;
 };
 
 /**
@@ -27,10 +27,10 @@ export type NonOptionalSchemaAsync<
  *
  * @returns An async non optional schema.
  */
-export function nonOptionalAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
-  wrapped: TWrapped,
+export function nonOptionalAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
+  wrapped: TSchema,
   error?: ErrorMessage
-): NonOptionalSchemaAsync<TWrapped> {
+): NonOptionalSchemaAsync<TSchema> {
   return {
     /**
      * The schema type.

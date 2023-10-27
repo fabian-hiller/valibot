@@ -12,25 +12,25 @@ import type { NonNullable } from './nonNullable.ts';
  * Non nullable schema async type.
  */
 export type NonNullableSchemaAsync<
-  TWrapped extends BaseSchema | BaseSchemaAsync,
-  TOutput = NonNullable<Output<TWrapped>>
-> = BaseSchemaAsync<NonNullable<Input<TWrapped>>, TOutput> & {
+  TSchema extends BaseSchema | BaseSchemaAsync,
+  TOutput = NonNullable<Output<TSchema>>
+> = BaseSchemaAsync<NonNullable<Input<TSchema>>, TOutput> & {
   schema: 'non_nullable';
-  wrapped: TWrapped;
+  wrapped: TSchema;
 };
 
 /**
  * Creates an async non nullable schema.
  *
- * @param wrapped The wrapped schema.
+ * @param schema The wrapped schema.
  * @param error The error message.
  *
  * @returns An async non nullable schema.
  */
-export function nonNullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
-  wrapped: TWrapped,
+export function nonNullableAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
+  schema: TSchema,
   error?: ErrorMessage
-): NonNullableSchemaAsync<TWrapped> {
+): NonNullableSchemaAsync<TSchema> {
   return {
     /**
      * The schema type.
@@ -40,7 +40,7 @@ export function nonNullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
     /**
      * The wrapped schema.
      */
-    wrapped,
+    wrapped: schema,
 
     /**
      * Whether it's async.
@@ -68,7 +68,7 @@ export function nonNullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(input, info);
+      return schema._parse(input, info);
     },
   };
 }

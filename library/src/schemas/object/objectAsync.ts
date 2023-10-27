@@ -16,10 +16,7 @@ import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 /**
  * Object entries async type.
  */
-export type ObjectEntriesAsync = Record<
-  string,
-  BaseSchema<any> | BaseSchemaAsync<any>
->;
+export type ObjectEntriesAsync = Record<string, BaseSchema | BaseSchemaAsync>;
 
 /**
  * Object schema async type.
@@ -118,7 +115,7 @@ export function objectAsync<
   >(arg2, arg3, arg4);
 
   // Create cached entries
-  let cachedEntries: [string, BaseSchema<any> | BaseSchemaAsync<any>][];
+  let cachedEntries: [string, BaseSchema | BaseSchemaAsync][];
 
   // Create and return async object schema
   return {

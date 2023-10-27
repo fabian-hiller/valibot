@@ -10,11 +10,7 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 /**
  * Union options type.
  */
-export type UnionOptions = [
-  BaseSchema<any>,
-  BaseSchema<any>,
-  ...BaseSchema<any>[]
-];
+export type UnionOptions = [BaseSchema, BaseSchema, ...BaseSchema[]];
 
 /**
  * Union schema type.

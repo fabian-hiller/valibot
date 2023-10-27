@@ -5,32 +5,32 @@ import { getOutput } from '../../utils/index.ts';
  * Nullish schema type.
  */
 export type NullishSchema<
-  TWrapped extends BaseSchema,
-  TDefault extends Input<TWrapped> | null | undefined = undefined,
+  TSchema extends BaseSchema,
+  TDefault extends Input<TSchema> | null | undefined = undefined,
   TOutput = TDefault extends undefined | null
-    ? Output<TWrapped> | null | undefined
-    : Output<TWrapped>
-> = BaseSchema<Input<TWrapped> | null | undefined, TOutput> & {
+    ? Output<TSchema> | null | undefined
+    : Output<TSchema>
+> = BaseSchema<Input<TSchema> | null | undefined, TOutput> & {
   schema: 'nullish';
-  wrapped: TWrapped;
-  getDefault(): TDefault;
+  wrapped: TSchema;
+  getDefault: () => TDefault;
 };
 
 /**
  * Creates a nullish schema.
  *
- * @param wrapped The wrapped schema.
- * @param default_ The default value.
+ * @param schema The wrapped schema.
+ * @param value The default value.
  *
  * @returns A nullish schema.
  */
 export function nullish<
-  TWrapped extends BaseSchema,
-  TDefault extends Input<TWrapped> | null | undefined = undefined
+  TSchema extends BaseSchema,
+  TDefault extends Input<TSchema> | null | undefined = undefined
 >(
-  wrapped: TWrapped,
-  default_?: TDefault | (() => TDefault)
-): NullishSchema<TWrapped, TDefault> {
+  schema: TSchema,
+  value?: TDefault | (() => TDefault)
+): NullishSchema<TSchema, TDefault> {
   return {
     /**
      * The schema type.
@@ -40,15 +40,15 @@ export function nullish<
     /**
      * The wrapped schema.
      */
-    wrapped,
+    wrapped: schema,
 
     /**
      * Returns the default value.
      */
     getDefault() {
-      return typeof default_ === 'function'
-        ? (default_ as () => TDefault)()
-        : (default_ as TDefault);
+      return typeof value === 'function'
+        ? (value as () => TDefault)()
+        : (value as TDefault);
     },
 
     /**
@@ -80,7 +80,7 @@ export function nullish<
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(value, info);
+      return schema._parse(value, info);
     },
   };
 }
