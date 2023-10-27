@@ -10,7 +10,7 @@ All notable changes to the library will be documented in this file.
 - Add `getFallback` property to schema in `fallback` method (pull request #177)
 - Add `PartialObjectEntries` and `PartialObjectEntriesAsync` type (issue #217)
 - Add export for any validation regex (pull request #219)
-- Add `getDefaultAsync`, `getDefaults` and `getDefaultsAsync` method (issue #155)
+- Add `getDefaultAsync`, `getDefaults` and `getDefaultsAsync`, `getFallback`, `getFallbackAsync`, `getFallbacks`, `getFallbacksAsync` method (issue #155)
 - Fix type check in `date` and `dateAsync` for invalid dates (pull request #214)
 - Improve security of regular expressions (pull request #202)
 - Improve `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema
