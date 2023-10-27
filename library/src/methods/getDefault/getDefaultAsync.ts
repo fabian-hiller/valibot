@@ -1,11 +1,13 @@
-import type {
-  NullableSchema,
-  NullableSchemaAsync,
-  NullishSchema,
-  NullishSchemaAsync,
-  OptionalSchema,
-  OptionalSchemaAsync,
-} from '../../schemas/index.ts';
+import type { BaseSchemaAsync, Output } from '../../types.ts';
+import type { SchemaWithMaybeDefault } from './getDefault.ts';
+import type { DefaultValue } from './types.ts';
+
+/**
+ * Schema with maybe default async type.
+ */
+export type SchemaWithMaybeDefaultAsync<
+  TSchema extends BaseSchemaAsync = BaseSchemaAsync
+> = TSchema & { getDefault?: () => Promise<Output<TSchema>> };
 
 /**
  * Returns the default value of the schema.
@@ -15,13 +17,7 @@ import type {
  * @returns The default value.
  */
 export async function getDefaultAsync<
-  TSchema extends
-    | OptionalSchema<any, any>
-    | OptionalSchemaAsync<any, any>
-    | NullableSchema<any, any>
-    | NullableSchemaAsync<any, any>
-    | NullishSchema<any, any>
-    | NullishSchemaAsync<any, any>
->(schema: TSchema): Promise<ReturnType<TSchema['getDefault']>> {
-  return schema.getDefault();
+  TSchema extends SchemaWithMaybeDefault | SchemaWithMaybeDefaultAsync
+>(schema: TSchema): Promise<DefaultValue<TSchema>> {
+  return schema.getDefault?.();
 }

@@ -1,8 +1,19 @@
 import { describe, expect, test } from 'vitest';
-import { nullable, nullish, optional, string } from '../../schemas/index.ts';
+import {
+  nullable,
+  nullish,
+  object,
+  optional,
+  string,
+} from '../../schemas/index.ts';
 import { getDefault } from './getDefault.ts';
 
 describe('getDefault', () => {
+  test('should return undefined', () => {
+    expect(getDefault(string())).toBeUndefined();
+    expect(getDefault(object({}))).toBeUndefined();
+  });
+
   test('should return optional default', () => {
     expect(getDefault(optional(string()))).toBeUndefined();
     expect(getDefault(optional(string(), undefined))).toBeUndefined();

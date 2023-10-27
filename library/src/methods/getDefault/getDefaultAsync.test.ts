@@ -2,12 +2,18 @@ import { describe, expect, test } from 'vitest';
 import {
   nullableAsync,
   nullishAsync,
+  objectAsync,
   optionalAsync,
   string,
 } from '../../schemas/index.ts';
 import { getDefaultAsync } from './getDefaultAsync.ts';
 
 describe('getDefaultAsync', () => {
+  test('should return undefined', async () => {
+    expect(await getDefaultAsync(string())).toBeUndefined();
+    expect(await getDefaultAsync(objectAsync({}))).toBeUndefined();
+  });
+
   test('should return optional default', async () => {
     expect(await getDefaultAsync(optionalAsync(string()))).toBeUndefined();
     expect(

@@ -1,8 +1,11 @@
-import type {
-  NullableSchema,
-  NullishSchema,
-  OptionalSchema,
-} from '../../schemas/index.ts';
+import type { BaseSchema, Output } from '../../types.ts';
+import type { DefaultValue } from './types.ts';
+
+/**
+ * Schema with maybe default type.
+ */
+export type SchemaWithMaybeDefault<TSchema extends BaseSchema = BaseSchema> =
+  TSchema & { getDefault?: () => Output<TSchema> };
 
 /**
  * Returns the default value of the schema.
@@ -11,11 +14,8 @@ import type {
  *
  * @returns The default value.
  */
-export function getDefault<
-  TSchema extends
-    | OptionalSchema<any, any>
-    | NullableSchema<any, any>
-    | NullishSchema<any, any>
->(schema: TSchema): ReturnType<TSchema['getDefault']> {
-  return schema.getDefault();
+export function getDefault<TSchema extends SchemaWithMaybeDefault>(
+  schema: TSchema
+): DefaultValue<TSchema> {
+  return schema.getDefault?.();
 }
