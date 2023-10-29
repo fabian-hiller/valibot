@@ -24,14 +24,16 @@ export type SetSchemaAsync<
   set: { value: TSetValue };
 };
 
+/**
+ * Creates an async set schema.
+ *
+ * @param value The value schema.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async set schema.
+ */
 export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
   value: TSetValue,
-  pipe?: PipeAsync<SetOutput<TSetValue>>
-): SetSchemaAsync<TSetValue>;
-
-export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
-  value: TSetValue,
-  error?: ErrorMessage,
   pipe?: PipeAsync<SetOutput<TSetValue>>
 ): SetSchemaAsync<TSetValue>;
 
@@ -39,11 +41,17 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
  * Creates an async set schema.
  *
  * @param value The value schema.
- * @param arg2 A validation and transformation pipe, or an error message.
- * @param arg3 A validation and transformation pipe.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An async set schema.
  */
+export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
+  value: TSetValue,
+  error?: ErrorMessage,
+  pipe?: PipeAsync<SetOutput<TSetValue>>
+): SetSchemaAsync<TSetValue>;
+
 export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
   value: TSetValue,
   arg2?: PipeAsync<SetOutput<TSetValue>> | ErrorMessage,

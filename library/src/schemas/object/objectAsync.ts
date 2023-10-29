@@ -43,12 +43,6 @@ export function objectAsync<TObjectEntries extends ObjectEntriesAsync>(
   pipe?: PipeAsync<ObjectOutput<TObjectEntries, undefined>>
 ): ObjectSchemaAsync<TObjectEntries>;
 
-export function objectAsync<TObjectEntries extends ObjectEntriesAsync>(
-  object: TObjectEntries,
-  error?: ErrorMessage,
-  pipe?: PipeAsync<ObjectOutput<TObjectEntries, undefined>>
-): ObjectSchemaAsync<TObjectEntries>;
-
 /**
  * Creates an async object schema.
  *

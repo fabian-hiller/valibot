@@ -21,14 +21,16 @@ export type InstanceSchema<
   class: TClass;
 };
 
+/**
+ * Creates an instance schema.
+ *
+ * @param of The class of the instance.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An instance schema.
+ */
 export function instance<TClass extends Class>(
   of: TClass,
-  pipe?: Pipe<InstanceType<TClass>>
-): InstanceSchema<TClass>;
-
-export function instance<TClass extends Class>(
-  of: TClass,
-  error?: ErrorMessage,
   pipe?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass>;
 
@@ -36,11 +38,17 @@ export function instance<TClass extends Class>(
  * Creates an instance schema.
  *
  * @param of The class of the instance.
- * @param arg2 A validation and transformation pipe, or an error message.
- * @param arg3 A validation and transformation pipe.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An instance schema.
  */
+export function instance<TClass extends Class>(
+  of: TClass,
+  error?: ErrorMessage,
+  pipe?: Pipe<InstanceType<TClass>>
+): InstanceSchema<TClass>;
+
 export function instance<TClass extends Class>(
   of: TClass,
   arg2?: Pipe<InstanceType<TClass>> | ErrorMessage,

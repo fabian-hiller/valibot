@@ -12,18 +12,25 @@ export type NumberSchema<TOutput = number> = BaseSchema<number, TOutput> & {
   schema: 'number';
 };
 
+/**
+ * Creates a number schema.
+ *
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A number schema.
+ */
 export function number(pipe?: Pipe<number>): NumberSchema;
-
-export function number(error?: ErrorMessage, pipe?: Pipe<number>): NumberSchema;
 
 /**
  * Creates a number schema.
  *
- * @param arg1 A validation and transformation pipe, or an error message.
- * @param arg2 A validation and transformation pipe.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns A number schema.
  */
+export function number(error?: ErrorMessage, pipe?: Pipe<number>): NumberSchema;
+
 export function number(
   arg1?: ErrorMessage | Pipe<number>,
   arg2?: Pipe<number>

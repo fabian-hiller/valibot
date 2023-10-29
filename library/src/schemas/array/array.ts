@@ -25,14 +25,16 @@ export type ArraySchema<
   array: { item: TArrayItem };
 };
 
+/**
+ * Creates a array schema.
+ *
+ * @param item The item schema.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A array schema.
+ */
 export function array<TArrayItem extends BaseSchema>(
   item: TArrayItem,
-  pipe?: Pipe<Output<TArrayItem>[]>
-): ArraySchema<TArrayItem>;
-
-export function array<TArrayItem extends BaseSchema>(
-  item: TArrayItem,
-  error?: ErrorMessage,
   pipe?: Pipe<Output<TArrayItem>[]>
 ): ArraySchema<TArrayItem>;
 
@@ -40,11 +42,17 @@ export function array<TArrayItem extends BaseSchema>(
  * Creates a array schema.
  *
  * @param item The item schema.
- * @param arg2 A validation and transformation pipe, or an error message.
- * @param arg3 A validation and transformation pipe.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns A array schema.
  */
+export function array<TArrayItem extends BaseSchema>(
+  item: TArrayItem,
+  error?: ErrorMessage,
+  pipe?: Pipe<Output<TArrayItem>[]>
+): ArraySchema<TArrayItem>;
+
 export function array<TArrayItem extends BaseSchema>(
   item: TArrayItem,
   arg2?: ErrorMessage | Pipe<Output<TArrayItem>[]>,

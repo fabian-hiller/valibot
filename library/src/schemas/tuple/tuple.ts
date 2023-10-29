@@ -52,6 +52,15 @@ export function tuple<TTupleItems extends TupleItems>(
   pipe?: Pipe<TupleOutput<TTupleItems, undefined>>
 ): TupleSchema<TTupleItems>;
 
+/**
+ * Creates a tuple schema.
+ *
+ * @param items The items schema.
+ * @param rest The rest schema.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A tuple schema.
+ */
 export function tuple<
   TTupleItems extends TupleItems,
   TTupleRest extends BaseSchema | undefined
@@ -61,6 +70,16 @@ export function tuple<
   pipe?: Pipe<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchema<TTupleItems, TTupleRest>;
 
+/**
+ * Creates a tuple schema.
+ *
+ * @param items The items schema.
+ * @param rest The rest schema.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A tuple schema.
+ */
 export function tuple<
   TTupleItems extends TupleItems,
   TTupleRest extends BaseSchema | undefined
@@ -71,16 +90,6 @@ export function tuple<
   pipe?: Pipe<TupleOutput<TTupleItems, TTupleRest>>
 ): TupleSchema<TTupleItems, TTupleRest>;
 
-/**
- * Creates a tuple schema.
- *
- * @param items The items schema.
- * @param arg2 A validation and transformation pipe, or an error message, or the rest schema.
- * @param arg3 A validation and transformation pipe, or an error message.
- * @param arg4 A validation and transformation pipe.
- *
- * @returns A tuple schema.
- */
 export function tuple<
   TTupleItems extends TupleItems,
   TTupleRest extends BaseSchema | undefined = undefined

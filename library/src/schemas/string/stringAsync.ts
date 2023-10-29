@@ -15,21 +15,28 @@ export type StringSchemaAsync<TOutput = string> = BaseSchemaAsync<
   schema: 'string';
 };
 
+/**
+ * Creates an async string schema.
+ *
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async string schema.
+ */
 export function stringAsync(pipe?: PipeAsync<string>): StringSchemaAsync;
 
+/**
+ * Creates an async string schema.
+ *
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async string schema.
+ */
 export function stringAsync(
   error?: ErrorMessage,
   pipe?: PipeAsync<string>
 ): StringSchemaAsync;
 
-/**
- * Creates an async string schema.
- *
- * @param arg1 A validation and transformation pipe, or an error message.
- * @param arg2 A validation and transformation pipe.
- *
- * @returns An async string schema.
- */
 export function stringAsync(
   arg1?: ErrorMessage | PipeAsync<string>,
   arg2?: PipeAsync<string>

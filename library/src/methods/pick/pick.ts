@@ -6,6 +6,16 @@ import {
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 
+/**
+ * Creates an object schema that contains only the selected keys of an existing
+ * schema.
+ *
+ * @param schema The schema to pick from.
+ * @param keys The selected keys
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An object schema.
+ */
 export function pick<
   TObjectSchema extends ObjectSchema<any, any>,
   TKeys extends (keyof TObjectSchema['object']['entries'])[]
@@ -20,6 +30,17 @@ export function pick<
   >
 ): ObjectSchema<Pick<TObjectSchema['object']['entries'], TKeys[number]>>;
 
+/**
+ * Creates an object schema that contains only the selected keys of an existing
+ * schema.
+ *
+ * @param schema The schema to pick from.
+ * @param keys The selected keys
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An object schema.
+ */
 export function pick<
   TObjectSchema extends ObjectSchema<any, any>,
   TKeys extends (keyof TObjectSchema['object']['entries'])[]
@@ -97,18 +118,6 @@ export function pick<
   TObjectRest
 >;
 
-/**
- * Creates an object schema that contains only the selected keys of an existing
- * schema.
- *
- * @param schema The schema to pick from.
- * @param keys The selected keys
- * @param arg3 A validation and transformation pipe, or the error message, or the object rest.
- * @param arg4 A validation and transformation pipe, or the error message.
- * @param arg5 A validation and transformation pipe.
- *
- * @returns An object schema.
- */
 export function pick<
   TObjectSchema extends ObjectSchema<any, any>,
   TKeys extends (keyof TObjectSchema['object']['entries'])[],

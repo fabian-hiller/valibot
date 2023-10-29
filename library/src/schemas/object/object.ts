@@ -37,12 +37,6 @@ export function object<TObjectEntries extends ObjectEntries>(
   pipe?: Pipe<ObjectOutput<TObjectEntries, undefined>>
 ): ObjectSchema<TObjectEntries>;
 
-export function object<TObjectEntries extends ObjectEntries>(
-  object: TObjectEntries,
-  error?: ErrorMessage,
-  pipe?: Pipe<ObjectOutput<TObjectEntries, undefined>>
-): ObjectSchema<TObjectEntries>;
-
 /**
  * Creates an object schema.
  *
@@ -96,14 +90,6 @@ export function object<
   pipe?: Pipe<ObjectOutput<TObjectEntries, TObjectRest>>
 ): ObjectSchema<TObjectEntries, TObjectRest>;
 
-/**
- * @param entries The object entries.
- * @param arg2 A validation and transformation pipe, or the error message, or the object rest.
- * @param arg3 A validation and transformation pipe, or the error message.
- * @param arg4 A validation and transformation pipe.
- *
- * @returns An object schema.
- */
 export function object<
   TObjectEntries extends ObjectEntries,
   TObjectRest extends BaseSchema | undefined = undefined

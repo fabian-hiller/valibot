@@ -26,14 +26,16 @@ export type ArraySchemaAsync<
   array: { item: TArrayItem };
 };
 
+/**
+ * Creates an async array schema.
+ *
+ * @param item The item schema.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async array schema.
+ */
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
   item: TArrayItem,
-  pipe?: PipeAsync<Output<TArrayItem>[]>
-): ArraySchemaAsync<TArrayItem>;
-
-export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
-  item: TArrayItem,
-  error?: ErrorMessage,
   pipe?: PipeAsync<Output<TArrayItem>[]>
 ): ArraySchemaAsync<TArrayItem>;
 
@@ -41,11 +43,17 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
  * Creates an async array schema.
  *
  * @param item The item schema.
- * @param arg2 A validation and transformation pipe, or an error message.
- * @param arg3 A validation and transformation pipe.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An async array schema.
  */
+export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
+  item: TArrayItem,
+  error?: ErrorMessage,
+  pipe?: PipeAsync<Output<TArrayItem>[]>
+): ArraySchemaAsync<TArrayItem>;
+
 export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
   item: TArrayItem,
   arg2?: ErrorMessage | PipeAsync<Output<TArrayItem>[]>,

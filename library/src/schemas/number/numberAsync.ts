@@ -15,21 +15,28 @@ export type NumberSchemaAsync<TOutput = number> = BaseSchemaAsync<
   schema: 'number';
 };
 
+/**
+ * Creates an async number schema.
+ *
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async number schema.
+ */
 export function numberAsync(pipe?: PipeAsync<number>): NumberSchemaAsync;
 
+/**
+ * Creates an async number schema.
+ *
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async number schema.
+ */
 export function numberAsync(
   error?: ErrorMessage,
   pipe?: PipeAsync<number>
 ): NumberSchemaAsync;
 
-/**
- * Creates an async number schema.
- *
- * @param arg1 A validation and transformation pipe, or an error message.
- * @param arg2 A validation and transformation pipe.
- *
- * @returns An async number schema.
- */
 export function numberAsync(
   arg1?: ErrorMessage | PipeAsync<number>,
   arg2?: PipeAsync<number>

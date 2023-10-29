@@ -12,21 +12,28 @@ export type DateSchemaAsync<TOutput = Date> = BaseSchemaAsync<Date, TOutput> & {
   schema: 'date';
 };
 
+/**
+ * Creates an async date schema.
+ *
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async date schema.
+ */
 export function dateAsync(pipe?: PipeAsync<Date>): DateSchemaAsync;
 
+/**
+ * Creates an async date schema.
+ *
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async date schema.
+ */
 export function dateAsync(
   error?: ErrorMessage,
   pipe?: PipeAsync<Date>
 ): DateSchemaAsync;
 
-/**
- * Creates an async date schema.
- *
- * @param arg1 A validation and transformation pipe, or an error message.
- * @param arg2 A validation and transformation pipe.
- *
- * @returns An async date schema.
- */
 export function dateAsync(
   arg1?: ErrorMessage | PipeAsync<Date>,
   arg2?: PipeAsync<Date>

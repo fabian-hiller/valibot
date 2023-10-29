@@ -12,18 +12,25 @@ export type BlobSchema<TOutput = Blob> = BaseSchema<Blob, TOutput> & {
   schema: 'blob';
 };
 
+/**
+ * Creates a blob schema.
+ *
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A blob schema.
+ */
 export function blob(pipe?: Pipe<Blob>): BlobSchema;
-
-export function blob(error?: ErrorMessage, pipe?: Pipe<Blob>): BlobSchema;
 
 /**
  * Creates a blob schema.
  *
- * @param arg1 A validation and transformation pipe, or an error message.
- * @param arg2 A validation and transformation pipe.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns A blob schema.
  */
+export function blob(error?: ErrorMessage, pipe?: Pipe<Blob>): BlobSchema;
+
 export function blob(
   arg1?: ErrorMessage | Pipe<Blob>,
   arg2?: Pipe<Blob>

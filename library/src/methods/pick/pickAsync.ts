@@ -12,6 +12,16 @@ import type {
 } from '../../types.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 
+/**
+ * Creates an async object schema that contains only the selected keys of an
+ * existing schema.
+ *
+ * @param schema The schema to pick from.
+ * @param keys The selected keys
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async object schema.
+ */
 export function pickAsync<
   TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   TKeys extends (keyof TObjectSchema['object']['entries'])[]
@@ -26,6 +36,17 @@ export function pickAsync<
   >
 ): ObjectSchemaAsync<Pick<TObjectSchema['object']['entries'], TKeys[number]>>;
 
+/**
+ * Creates an async object schema that contains only the selected keys of an
+ * existing schema.
+ *
+ * @param schema The schema to pick from.
+ * @param keys The selected keys
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async object schema.
+ */
 export function pickAsync<
   TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   TKeys extends (keyof TObjectSchema['object']['entries'])[]
@@ -103,18 +124,6 @@ export function pickAsync<
   TObjectRest
 >;
 
-/**
- * Creates an async object schema that contains only the selected keys of an
- * existing schema.
- *
- * @param schema The schema to pick from.
- * @param keys The selected keys
- * @param arg3 A validation and transformation pipe, or the error message, or the object rest.
- * @param arg4 A validation and transformation pipe, or the error message.
- * @param arg5 A validation and transformation pipe.
- *
- * @returns An async object schema.
- */
 export function pickAsync<
   TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   TKeys extends (keyof TObjectSchema['object']['entries'])[],

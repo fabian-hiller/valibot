@@ -86,17 +86,6 @@ export function merge<
   pipe?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>>
 ): ObjectSchema<MergeSchemaObjects<TObjectSchemas>, TObjectRest>;
 
-/**
- * Merges the entries of multiple object schemas. Subsequent object entries
- * overwrite the previous ones.
- *
- * @param schemas The schemas to be merged.
- * @param arg2 A validation and transformation pipe, or the error message, or the object rest.
- * @param arg3 A validation and transformation pipe, or the error message.
- * @param arg4 A validation and transformation pipe.
- *
- * @returns An object schema.
- */
 export function merge<
   TObjectSchemas extends ObjectSchemas,
   TObjectRest extends BaseSchema | undefined = undefined

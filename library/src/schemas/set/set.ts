@@ -18,14 +18,16 @@ export type SetSchema<
   set: { value: TSetValue };
 };
 
+/**
+ * Creates a set schema.
+ *
+ * @param value The value schema.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A set schema.
+ */
 export function set<TSetValue extends BaseSchema>(
   value: TSetValue,
-  pipe?: Pipe<SetOutput<TSetValue>>
-): SetSchema<TSetValue>;
-
-export function set<TSetValue extends BaseSchema>(
-  value: TSetValue,
-  error?: ErrorMessage,
   pipe?: Pipe<SetOutput<TSetValue>>
 ): SetSchema<TSetValue>;
 
@@ -33,11 +35,17 @@ export function set<TSetValue extends BaseSchema>(
  * Creates a set schema.
  *
  * @param value The value schema.
- * @param arg2 A validation and transformation pipe, or an error message.
- * @param arg3 A validation and transformation pipe.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns A set schema.
  */
+export function set<TSetValue extends BaseSchema>(
+  value: TSetValue,
+  error?: ErrorMessage,
+  pipe?: Pipe<SetOutput<TSetValue>>
+): SetSchema<TSetValue>;
+
 export function set<TSetValue extends BaseSchema>(
   value: TSetValue,
   arg2?: Pipe<SetOutput<TSetValue>> | ErrorMessage,

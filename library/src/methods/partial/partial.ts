@@ -35,17 +35,6 @@ export function partial<TObjectSchema extends ObjectSchema<any, any>>(
   >
 ): ObjectSchema<PartialObjectEntries<TObjectSchema['object']['entries']>>;
 
-export function partial<TObjectSchema extends ObjectSchema<any, any>>(
-  schema: TObjectSchema,
-  error?: ErrorMessage,
-  pipe?: Pipe<
-    ObjectOutput<
-      PartialObjectEntries<TObjectSchema['object']['entries']>,
-      undefined
-    >
-  >
-): ObjectSchema<PartialObjectEntries<TObjectSchema['object']['entries']>>;
-
 /**
  * Creates an object schema consisting of all properties of an existing object
  * schema set to optional.
@@ -123,17 +112,6 @@ export function partial<
   TObjectRest
 >;
 
-/**
- * Creates an object schema consisting of all properties of an existing object
- * schema set to optional.
- *
- * @param schema The affected schema.
- * @param arg2 A validation and transformation pipe, or the error message, or the object rest.
- * @param arg3 A validation and transformation pipe, or an error message.
- * @param arg4 A validation and transformation pipe.
- *
- * @returns An object schema.
- */
 export function partial<
   TObjectSchema extends ObjectSchema<any, any>,
   TObjectRest extends BaseSchema | undefined = undefined

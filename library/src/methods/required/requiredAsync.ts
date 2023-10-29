@@ -22,6 +22,15 @@ type Required<TObjectEntries extends ObjectEntriesAsync> = {
   [TKey in keyof TObjectEntries]: NonOptionalSchemaAsync<TObjectEntries[TKey]>;
 };
 
+/**
+ * Creates an async object schema consisting of all properties of an existing
+ * object schema set to none optional.
+ *
+ * @param schema The affected schema.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async object schema.
+ */
 export function requiredAsync<
   TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
@@ -31,6 +40,16 @@ export function requiredAsync<
   >
 ): ObjectSchemaAsync<Required<TObjectSchema['object']['entries']>>;
 
+/**
+ * Creates an async object schema consisting of all properties of an existing
+ * object schema set to none optional.
+ *
+ * @param schema The affected schema.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async object schema.
+ */
 export function requiredAsync<
   TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
@@ -85,17 +104,6 @@ export function requiredAsync<
   >
 ): ObjectSchemaAsync<Required<TObjectSchema['object']['entries']>, TObjectRest>;
 
-/**
- * Creates an async object schema consisting of all properties of an existing
- * object schema set to none optional.
- *
- * @param schema The affected schema.
- * @param arg2 A validation and transformation pipe, or the error message, or the object rest.
- * @param arg3 A validation and transformation pipe, or the error message.
- * @param arg4 A validation and transformation pipe.
- *
- * @returns An async object schema.
- */
 export function requiredAsync<
   TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   TObjectRest extends BaseSchema | BaseSchemaAsync | undefined = undefined

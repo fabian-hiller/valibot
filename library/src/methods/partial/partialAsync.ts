@@ -24,6 +24,15 @@ export type PartialObjectEntriesAsync<
   [TKey in keyof TObjectEntries]: OptionalSchemaAsync<TObjectEntries[TKey]>;
 };
 
+/**
+ * Creates an async object schema consisting of all properties of an existing
+ * object schema set to optional.
+ *
+ * @param schema The affected schema.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async object schema.
+ */
 export function partialAsync<
   TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
@@ -38,6 +47,16 @@ export function partialAsync<
   PartialObjectEntriesAsync<TObjectSchema['object']['entries']>
 >;
 
+/**
+ * Creates an async object schema consisting of all properties of an existing
+ * object schema set to optional.
+ *
+ * @param schema The affected schema.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async object schema.
+ */
 export function partialAsync<
   TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
@@ -109,17 +128,6 @@ export function partialAsync<
   TObjectRest
 >;
 
-/**
- * Creates an async object schema consisting of all properties of an existing
- * object schema set to optional.
- *
- * @param schema The affected schema.
- * @param arg2 A validation and transformation pipe, or the error message, or the object rest.
- * @param arg3 A validation and transformation pipe, or the error message.
- * @param arg4 A validation and transformation pipe.
- *
- * @returns An async object schema.
- */
 export function partialAsync<
   TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   TObjectRest extends BaseSchema | undefined = undefined

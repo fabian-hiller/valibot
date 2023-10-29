@@ -17,14 +17,16 @@ export type InstanceSchemaAsync<
   class: TClass;
 };
 
+/**
+ * Creates an async instance schema.
+ *
+ * @param of The class of the instance.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async instance schema.
+ */
 export function instanceAsync<TClass extends Class>(
   of: TClass,
-  pipe?: PipeAsync<InstanceType<TClass>>
-): InstanceSchemaAsync<TClass>;
-
-export function instanceAsync<TClass extends Class>(
-  of: TClass,
-  error?: ErrorMessage,
   pipe?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass>;
 
@@ -32,11 +34,17 @@ export function instanceAsync<TClass extends Class>(
  * Creates an async instance schema.
  *
  * @param of The class of the instance.
- * @param arg2 A validation and transformation pipe, or an error message.
- * @param arg3 A validation and transformation pipe.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An async instance schema.
  */
+export function instanceAsync<TClass extends Class>(
+  of: TClass,
+  error?: ErrorMessage,
+  pipe?: PipeAsync<InstanceType<TClass>>
+): InstanceSchemaAsync<TClass>;
+
 export function instanceAsync<TClass extends Class>(
   of: TClass,
   arg2?: PipeAsync<InstanceType<TClass>> | ErrorMessage,
