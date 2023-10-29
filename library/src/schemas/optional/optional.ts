@@ -5,32 +5,32 @@ import { getOutput } from '../../utils/index.ts';
  * Optional schema type.
  */
 export type OptionalSchema<
-  TWrapped extends BaseSchema,
-  TDefault extends Input<TWrapped> | undefined = undefined,
+  TSchema extends BaseSchema,
+  TDefault extends Input<TSchema> | undefined = undefined,
   TOutput = TDefault extends undefined
-    ? Output<TWrapped> | undefined
-    : Output<TWrapped>
-> = BaseSchema<Input<TWrapped> | undefined, TOutput> & {
+    ? Output<TSchema> | undefined
+    : Output<TSchema>
+> = BaseSchema<Input<TSchema> | undefined, TOutput> & {
   schema: 'optional';
-  wrapped: TWrapped;
-  get default(): TDefault;
+  wrapped: TSchema;
+  getDefault: () => TDefault;
 };
 
 /**
  * Creates a optional schema.
  *
- * @param wrapped The wrapped schema.
- * @param default_ The default value.
+ * @param schema The wrapped schema.
+ * @param value The default value.
  *
  * @returns A optional schema.
  */
 export function optional<
-  TWrapped extends BaseSchema,
-  TDefault extends Input<TWrapped> | undefined = undefined
+  TSchema extends BaseSchema,
+  TDefault extends Input<TSchema> | undefined = undefined
 >(
-  wrapped: TWrapped,
-  default_?: TDefault | (() => TDefault)
-): OptionalSchema<TWrapped, TDefault> {
+  schema: TSchema,
+  value?: TDefault | (() => TDefault)
+): OptionalSchema<TSchema, TDefault> {
   return {
     /**
      * The schema type.
@@ -40,17 +40,15 @@ export function optional<
     /**
      * The wrapped schema.
      */
-    wrapped,
+    wrapped: schema,
 
     /**
-     * The default value.
-     *
-     * @returns The default value.
+     * Returns the default value.
      */
-    get default() {
-      return typeof default_ === 'function'
-        ? (default_ as () => TDefault)()
-        : (default_ as TDefault);
+    getDefault() {
+      return typeof value === 'function'
+        ? (value as () => TDefault)()
+        : (value as TDefault);
     },
 
     /**
@@ -68,7 +66,7 @@ export function optional<
      */
     _parse(input, info) {
       // Get default or input value
-      const value = input === undefined ? this.default : input;
+      const value = input === undefined ? this.getDefault() : input;
 
       // Allow `undefined` value to pass
       if (value === undefined) {
@@ -76,7 +74,7 @@ export function optional<
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(value, info);
+      return schema._parse(value, info);
     },
   };
 }

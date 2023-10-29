@@ -1,6 +1,12 @@
-import type { Input, Output, ResolveObject } from '../../types.ts';
-import type { ObjectShape } from './object.ts';
-import type { ObjectShapeAsync } from './objectAsync.ts';
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  Input,
+  Output,
+  ResolveObject,
+} from '../../types.ts';
+import type { ObjectEntries } from './object.ts';
+import type { ObjectEntriesAsync } from './objectAsync.ts';
 
 /**
  * Object path item type.
@@ -38,19 +44,37 @@ type WithQuestionMarks<TObject extends object> = Pick<
 /**
  * Object input inference type.
  */
-export type ObjectInput<TObjectShape extends ObjectShape | ObjectShapeAsync> =
-  ResolveObject<
-    WithQuestionMarks<{
-      [TKey in keyof TObjectShape]: Input<TObjectShape[TKey]>;
-    }>
-  >;
+export type ObjectInput<
+  TObjectEntries extends ObjectEntries | ObjectEntriesAsync,
+  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+> = TObjectRest extends BaseSchema | BaseSchemaAsync
+  ? ResolveObject<
+      WithQuestionMarks<{
+        [TKey in keyof TObjectEntries]: Input<TObjectEntries[TKey]>;
+      }>
+    > &
+      Record<string, Input<TObjectRest>>
+  : ResolveObject<
+      WithQuestionMarks<{
+        [TKey in keyof TObjectEntries]: Input<TObjectEntries[TKey]>;
+      }>
+    >;
 
 /**
  * Object output inference type.
  */
-export type ObjectOutput<TObjectShape extends ObjectShape | ObjectShapeAsync> =
-  ResolveObject<
-    WithQuestionMarks<{
-      [TKey in keyof TObjectShape]: Output<TObjectShape[TKey]>;
-    }>
-  >;
+export type ObjectOutput<
+  TObjectEntries extends ObjectEntries | ObjectEntriesAsync,
+  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+> = TObjectRest extends BaseSchema | BaseSchemaAsync
+  ? ResolveObject<
+      WithQuestionMarks<{
+        [TKey in keyof TObjectEntries]: Output<TObjectEntries[TKey]>;
+      }>
+    > &
+      Record<string, Output<TObjectRest>>
+  : ResolveObject<
+      WithQuestionMarks<{
+        [TKey in keyof TObjectEntries]: Output<TObjectEntries[TKey]>;
+      }>
+    >;

@@ -6,11 +6,7 @@ import { mergeOutputs } from './utils/index.ts';
 /**
  * Intersection options type.
  */
-export type IntersectionOptions = [
-  BaseSchema<any>,
-  BaseSchema<any>,
-  ...BaseSchema<any>[]
-];
+export type IntersectionOptions = [BaseSchema, BaseSchema, ...BaseSchema[]];
 
 /**
  * Intersection schema type.

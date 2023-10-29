@@ -4,8 +4,32 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `getRestAndDefaultArgs` utility function
+- Add new `rest` argument to `object` and `objectAsync` schema
+- Add `discriminatedUnion` and `discriminatedUnionAsync` schema (issue #90, #216)
+- Add `getFallback` property to schema in `fallback` method (pull request #177)
+- Add `PartialObjectEntries` and `PartialObjectEntriesAsync` type (issue #217)
+- Add export for any validation regex (pull request #219)
+- Add `getDefaultAsync`, `getDefaults` and `getDefaultsAsync`, `getFallback`, `getFallbackAsync`, `getFallbacks`, `getFallbacksAsync` method (issue #155)
+- Fix type check in `date` and `dateAsync` for invalid dates (pull request #214)
+- Improve security of regular expressions (pull request #202)
+- Improve `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema
+- Change `ObjectSchema` and `ObjectSchemaAsync` type
+- Change type check in `tuple` and `tupleAsync` to be less strict
+- Change return type of `action` argument in `coerce` and `coerceAsync` to `unknown`
+- Change type of `getDefault` method
+- Rename `default` property of `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema to `getDefault`
+- Rename `ObjectShape` and `ObjectShapeAsync` types to `ObjectEntries` and `ObjectEntriesAsync`
+- Rename `TupleShape` and `TupleShapeAsync` types to `TupleItems` and `TupleItemsAsync`
+- Deprecate `passthrough`, `strict` and `strip` method in favor of `object` schema with `rest` argument
+
+## v0.19.0 (October 08, 2023)
+
 - Add `notBytes`, `notLength`, `notSize` and `notValue` validation function (pull request #194)
-- Change regex of `email` validation (pull request #180)
+- Add support for unions as key of `record` and `recordAsync` schema (issue #201)
+- Add support for pipeline validation to `transform` and `transformAsync` (issue #197)
+- Change regex of `email` validation to improve performance and security (pull request #180)
+- Change `object` and `objectAsync` schema to exclude non-existing keys (issue #199)
 - Fix types at `brand`, `transform` and `unwrap` method (issue #195)
 - Deprecate `equal` validation function in favor of `value` (issue #192)
 

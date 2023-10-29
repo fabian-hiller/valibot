@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest';
-import { objectAsync, string, stringAsync } from '../../schemas/index.ts';
+import { objectAsync, stringAsync } from '../../schemas/index.ts';
 import { parseAsync } from '../parse/index.ts';
 import { fallbackAsync } from './fallbackAsync.ts';
 
 describe('fallbackAsync', () => {
   const schema1 = fallbackAsync(stringAsync(), 'test');
-  const schema2 = fallbackAsync(string(), () => 'test');
+  const schema2 = fallbackAsync(stringAsync(), () => 'test');
   const schema3 = objectAsync({ key1: schema1, key2: schema2 });
 
   test('should use default value', async () => {

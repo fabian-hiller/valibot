@@ -1,16 +1,21 @@
-import type { ObjectSchemaAsync } from '../../schemas/object/index.ts';
+import type {
+  ObjectEntriesAsync,
+  ObjectSchemaAsync,
+} from '../../schemas/object/index.ts';
 import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that strips unknown keys.
  *
+ * @deprecated Use `objectAsync` without `rest` argument instead.
+ *
  * @param schema A object schema.
  *
  * @returns A object schema.
  */
-export function stripAsync<TSchema extends ObjectSchemaAsync<any>>(
-  schema: TSchema
-): TSchema {
+export function stripAsync<
+  TObjectSchema extends ObjectSchemaAsync<ObjectEntriesAsync, undefined>
+>(schema: TObjectSchema): TObjectSchema {
   // Create cached keys
   let cachedKeys: string[];
 
@@ -36,7 +41,7 @@ export function stripAsync<TSchema extends ObjectSchemaAsync<any>>(
       }
 
       // Cache object keys lazy
-      cachedKeys = cachedKeys || Object.keys(schema.object);
+      cachedKeys = cachedKeys || Object.keys(schema.object.entries);
 
       // Strip unknown keys
       const output: Record<string, any> = {};

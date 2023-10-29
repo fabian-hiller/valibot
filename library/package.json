@@ -1,7 +1,7 @@
 {
   "name": "valibot",
   "description": "The modular and TypeScript-first schema library",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "license": "MIT",
   "author": "Fabian Hiller",
   "homepage": "https://valibot.dev",
@@ -59,6 +59,9 @@
     "eslint": "^8.43.0",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-jsdoc": "^46.8.2",
+    "eslint-plugin-redos-detector": "^2.1.1",
+    "eslint-plugin-regexp": "^1.15.0",
+    "eslint-plugin-security": "^1.7.1",
     "jsdom": "^22.1.0",
     "tsup": "^7.1.0",
     "typescript": "^5.1.3",

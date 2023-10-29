@@ -304,15 +304,15 @@ export function brand<
   Output<TSchema> & Brand<TBrandName>
 >;
 
-export function brand<TSchema extends NeverSchema>(
-  schema: TSchema,
-  action: (value: Output<TSchema>) => never
-): NeverSchema;
+export function brand<
+  TSchema extends NeverSchema,
+  TBrandName extends BrandName
+>(schema: TSchema, name: TBrandName): NeverSchema;
 
-export function brand<TSchema extends NeverSchemaAsync>(
-  schema: TSchema,
-  action: (value: Output<TSchema>) => never
-): NeverSchemaAsync;
+export function brand<
+  TSchema extends NeverSchemaAsync,
+  TBrandName extends BrandName
+>(schema: TSchema, name: TBrandName): NeverSchemaAsync;
 
 export function brand<
   TSchema extends NonNullableSchema<any>,
@@ -392,7 +392,7 @@ export function brand<
   name: TBrandName
 ): NullableSchema<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 
@@ -404,7 +404,7 @@ export function brand<
   name: TBrandName
 ): NullableSchemaAsync<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 
@@ -416,7 +416,7 @@ export function brand<
   name: TBrandName
 ): NullishSchema<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 
@@ -428,7 +428,7 @@ export function brand<
   name: TBrandName
 ): NullishSchemaAsync<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 
@@ -449,20 +449,28 @@ export function brand<
 ): NumberSchemaAsync<Output<TSchema> & Brand<TBrandName>>;
 
 export function brand<
-  TSchema extends ObjectSchema<any>,
+  TSchema extends ObjectSchema<any, any>,
   TBrandName extends BrandName
 >(
   schema: TSchema,
   name: TBrandName
-): ObjectSchema<TSchema['object'], Output<TSchema> & Brand<TBrandName>>;
+): ObjectSchema<
+  TSchema['object']['entries'],
+  TSchema['object']['rest'],
+  Output<TSchema> & Brand<TBrandName>
+>;
 
 export function brand<
-  TSchema extends ObjectSchemaAsync<any>,
+  TSchema extends ObjectSchemaAsync<any, any>,
   TBrandName extends BrandName
 >(
   schema: TSchema,
   name: TBrandName
-): ObjectSchemaAsync<TSchema['object'], Output<TSchema> & Brand<TBrandName>>;
+): ObjectSchemaAsync<
+  TSchema['object']['entries'],
+  TSchema['object']['rest'],
+  Output<TSchema> & Brand<TBrandName>
+>;
 
 export function brand<
   TSchema extends OptionalSchema<any, any>,
@@ -472,7 +480,7 @@ export function brand<
   name: TBrandName
 ): OptionalSchema<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 
@@ -484,7 +492,7 @@ export function brand<
   name: TBrandName
 ): OptionalSchemaAsync<
   TSchema['wrapped'],
-  TSchema['default'],
+  TSchema['getDefault'],
   Output<TSchema> & Brand<TBrandName>
 >;
 

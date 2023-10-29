@@ -10,6 +10,7 @@ import type {
   NativeEnumSchema,
   NativeEnumSchemaAsync,
 } from '../nativeEnum/index.ts';
+import type { UnionSchema } from '../union/index.ts';
 import type { RecordKey } from './record.ts';
 import type { RecordKeyAsync } from './recordAsync.ts';
 
@@ -24,13 +25,14 @@ export type RecordPathItem = {
 };
 
 /**
- * Any enum schema type.
+ * Partial key schema type.
  */
-type AnyEnumSchema =
+type PartialKeySchema =
   | EnumSchema<any>
   | EnumSchemaAsync<any>
   | NativeEnumSchema<any>
-  | NativeEnumSchemaAsync<any>;
+  | NativeEnumSchemaAsync<any>
+  | UnionSchema<any>;
 
 /**
  * Record input inference type.
@@ -39,7 +41,7 @@ export type RecordInput<
   TRecordKey extends RecordKey | RecordKeyAsync,
   TRecordValue extends BaseSchema | BaseSchemaAsync
 > = ResolveObject<
-  TRecordKey extends AnyEnumSchema
+  TRecordKey extends PartialKeySchema
     ? Partial<Record<Input<TRecordKey>, Input<TRecordValue>>>
     : Record<Input<TRecordKey>, Input<TRecordValue>>
 >;
@@ -51,7 +53,7 @@ export type RecordOutput<
   TRecordKey extends RecordKey | RecordKeyAsync,
   TRecordValue extends BaseSchema | BaseSchemaAsync
 > = ResolveObject<
-  TRecordKey extends AnyEnumSchema
+  TRecordKey extends PartialKeySchema
     ? Partial<Record<Output<TRecordKey>, Output<TRecordValue>>>
     : Record<Output<TRecordKey>, Output<TRecordValue>>
 >;

@@ -1,4 +1,9 @@
 /**
+ * Non-digit regex.
+ */
+const NON_DIGIT_REGEX = /\D/gu;
+
+/**
  * Checks whether a string with numbers corresponds to the luhn algorithm.
  *
  * @param input The input to be checked.
@@ -7,7 +12,7 @@
  */
 export function isLuhnAlgo(input: string) {
   // Remove any non-digit chars
-  const number = input.replace(/\D/g, '');
+  const number = input.replaceAll(NON_DIGIT_REGEX, '');
 
   // Create necessary variables
   let length = number.length;
