@@ -37,6 +37,16 @@ import type {
 import type { BaseSchema, Input, Output, Pipe } from '../../types.ts';
 import { executePipe } from '../../utils/index.ts';
 
+/**
+ * Adds a transformation step to a schema, which is executed at the end of
+ * parsing and can change the output type.
+ *
+ * @param schema The schema to be used.
+ * @param action The transformation action.
+ * @param pipe A validation pipe.
+ *
+ * @returns A transformed schema.
+ */
 export function transform<TSchema extends AnySchema, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput,
@@ -244,16 +254,6 @@ export function transform<TSchema extends VoidSchema, TOutput>(
   pipe?: Pipe<TOutput>
 ): VoidSchema<TOutput>;
 
-/**
- * Adds a transformation step to a schema, which is executed at the end of
- * parsing and can change the output type.
- *
- * @param schema The schema to be used.
- * @param action The transformation action.
- * @param pipe A validation pipe.
- *
- * @returns A transformed schema.
- */
 export function transform<TSchema extends BaseSchema, TOutput>(
   schema: TSchema,
   action: (value: Output<TSchema>) => TOutput,

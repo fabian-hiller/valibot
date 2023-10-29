@@ -89,6 +89,14 @@ export type Brand<TBrandName extends BrandName> = {
   [BrandSymbol]: { [TValue in TBrandName]: TValue };
 };
 
+/**
+ * Brands the output type of a schema.
+ *
+ * @param schema The schema to be branded.
+ * @param name The branded name.
+ *
+ * @returns The branded schema.
+ */
 export function brand<TSchema extends AnySchema, TBrandName extends BrandName>(
   schema: TSchema,
   name: TBrandName
@@ -685,14 +693,6 @@ export function brand<
   name: TBrandName
 ): VoidSchemaAsync<Output<TSchema> & Brand<TBrandName>>;
 
-/**
- * Brands the output type of a schema.
- *
- * @param schema The schema to be branded.
- * @param name The branded name.
- *
- * @returns The branded schema.
- */
 export function brand<
   TSchema extends BaseSchema | BaseSchemaAsync,
   TBrandName extends BrandName
