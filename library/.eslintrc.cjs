@@ -46,7 +46,7 @@ module.exports = {
     'jsdoc/tag-lines': ['error', 'any', {
       'startLines': 1,
     }],
-    'jsdoc/sort-tags': ['error', { 'linesBetween': 1, "tagSequence": [{ "tags": ["param"] }, { "tags": ["returns"] }] }],
+    'jsdoc/sort-tags': ['error', { 'linesBetween': 1, "tagSequence": [{ "tags": ["deprecated"] }, { "tags": ["param"] }, { "tags": ["returns"] }] }],
 
     // Security
     'security/detect-object-injection': 'off', // Too many false positives

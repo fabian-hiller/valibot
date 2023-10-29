@@ -109,8 +109,9 @@ export function pickAsync<
  *
  * @param schema The schema to pick from.
  * @param keys The selected keys
- * @param arg3 A validation and transformation pipe, or an error message.
- * @param arg4 A validation and transformation pipe.
+ * @param arg3 A validation and transformation pipe, or the error message, or the object rest.
+ * @param arg4 A validation and transformation pipe, or the error message.
+ * @param arg5 A validation and transformation pipe.
  *
  * @returns An async object schema.
  */

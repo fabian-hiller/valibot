@@ -56,6 +56,8 @@ export function nullishAsync<
 
     /**
      * Retutns the default value.
+     *
+     * @returns The default value.
      */
     async getDefault() {
       return typeof value === 'function'

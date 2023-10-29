@@ -44,6 +44,8 @@ export function nullish<
 
     /**
      * Returns the default value.
+     *
+     * @returns The default value.
      */
     getDefault() {
       return typeof value === 'function'

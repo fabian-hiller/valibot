@@ -30,6 +30,10 @@ export function fallbackAsync<
 
     /**
      * Returns the default value.
+     *
+     * @param info The fallback info.
+     *
+     * @returns The default value.
      */
     async getFallback(info) {
       return typeof value === 'function'

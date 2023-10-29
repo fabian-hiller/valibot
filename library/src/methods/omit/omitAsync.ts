@@ -104,6 +104,18 @@ export function omitAsync<
   TObjectRest
 >;
 
+/**
+ * Creates an async object schema that contains only the selected keys of an
+ * existing schema.
+ *
+ * @param schema The schema to omit from.
+ * @param keys The selected keys
+ * @param arg3 A validation and transformation pipe, or the error message, or the object rest.
+ * @param arg4 A validation and transformation pipe, or an error message.
+ * @param arg5 A validation and transformation pipe.
+ *
+ * @returns An async object schema.
+ */
 export function omitAsync<
   TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   TKeys extends ObjectKeys<TObjectSchema>,

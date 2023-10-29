@@ -36,19 +36,13 @@ export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
   pipe?: PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, undefined>>
 ): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>>;
 
-export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
-  schemas: TObjectSchemas,
-  error?: ErrorMessage,
-  pipe?: PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, undefined>>
-): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>>;
-
 /**
  * Merges the entries of multiple async object schemas. Subsequent object
  * entries overwrite the previous ones.
  *
  * @param schemas The schemas to be merged.
- * @param arg2 A validation and transformation pipe, or an error message.
- * @param arg3 A validation and transformation pipe.
+ * @param error The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
  */
@@ -102,6 +96,17 @@ export function mergeAsync<
   >
 ): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>, TObjectRest>;
 
+/**
+ * Merges the entries of multiple async object schemas. Subsequent object
+ * entries overwrite the previous ones.
+ *
+ * @param schemas The schemas to be merged.
+ * @param arg2 A validation and transformation pipe, or the error message, or the object rest.
+ * @param arg3 A validation and transformation pipe, or the error message.
+ * @param arg4 A validation and transformation pipe.
+ *
+ * @returns An async object schema.
+ */
 export function mergeAsync<
   TObjectSchemas extends ObjectSchemas,
   TObjectRest extends BaseSchema | BaseSchemaAsync | undefined = undefined

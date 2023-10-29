@@ -102,6 +102,16 @@ export function objectAsync<
   pipe?: PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>
 ): ObjectSchemaAsync<TObjectEntries, TObjectRest>;
 
+/**
+ * Creates an async object schema.
+ *
+ * @param entries The object entries.
+ * @param arg2 A validation and transformation pipe, or the error message, or the object rest.
+ * @param arg3 A validation and transformation pipe, or the error message.
+ * @param arg4 A validation and transformation pipe.
+ *
+ * @returns An async object schema.
+ */
 export function objectAsync<
   TObjectEntries extends ObjectEntriesAsync,
   TObjectRest extends BaseSchema | BaseSchemaAsync | undefined = undefined

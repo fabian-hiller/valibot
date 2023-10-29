@@ -55,6 +55,8 @@ export function optionalAsync<
 
     /**
      * Returns the default value.
+     *
+     * @returns The default value.
      */
     async getDefault() {
       return typeof default_ === 'function'

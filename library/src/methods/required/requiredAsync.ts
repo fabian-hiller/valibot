@@ -90,7 +90,8 @@ export function requiredAsync<
  * object schema set to none optional.
  *
  * @param schema The affected schema.
- * @param arg3 A validation and transformation pipe, or an error message.
+ * @param arg2 A validation and transformation pipe, or the error message, or the object rest.
+ * @param arg3 A validation and transformation pipe, or the error message.
  * @param arg4 A validation and transformation pipe.
  *
  * @returns An async object schema.
