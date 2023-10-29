@@ -10,7 +10,11 @@ import { Link } from '@builder.io/qwik-city';
 Creates a string schema.
 
 ```ts
-const schema = string(errorMessage, pipe);
+// String schema with pipe
+const schema = string(pipe);
+
+// String schema with message and pipe
+const schema = string(message, pipe);
 ```
 
 ## Parameter
