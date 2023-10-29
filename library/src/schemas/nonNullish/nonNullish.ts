@@ -10,25 +10,25 @@ export type NonNullish<T> = T extends null | undefined ? never : T;
  * Non nullish schema type.
  */
 export type NonNullishSchema<
-  TSchema extends BaseSchema,
-  TOutput = NonNullish<Output<TSchema>>
-> = BaseSchema<NonNullish<Input<TSchema>>, TOutput> & {
+  TWrapped extends BaseSchema,
+  TOutput = NonNullish<Output<TWrapped>>
+> = BaseSchema<NonNullish<Input<TWrapped>>, TOutput> & {
   schema: 'non_nullish';
-  wrapped: TSchema;
+  wrapped: TWrapped;
 };
 
 /**
  * Creates a non nullish schema.
  *
- * @param schema The wrapped schema.
+ * @param wrapped The wrapped schema.
  * @param error The error message.
  *
  * @returns A non nullish schema.
  */
-export function nonNullish<TSchema extends BaseSchema>(
-  schema: TSchema,
+export function nonNullish<TWrapped extends BaseSchema>(
+  wrapped: TWrapped,
   error?: ErrorMessage
-): NonNullishSchema<TSchema> {
+): NonNullishSchema<TWrapped> {
   return {
     /**
      * The schema type.
@@ -38,7 +38,7 @@ export function nonNullish<TSchema extends BaseSchema>(
     /**
      * The wrapped schema.
      */
-    wrapped: schema,
+    wrapped,
 
     /**
      * Whether it's async.
@@ -66,7 +66,7 @@ export function nonNullish<TSchema extends BaseSchema>(
       }
 
       // Return result of wrapped schema
-      return schema._parse(input, info);
+      return wrapped._parse(input, info);
     },
   };
 }

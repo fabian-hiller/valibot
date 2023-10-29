@@ -5,32 +5,32 @@ import { getOutput } from '../../utils/index.ts';
  * Nullable schema type.
  */
 export type NullableSchema<
-  TSchema extends BaseSchema,
-  TDefault extends Input<TSchema> | undefined = undefined,
-  TOutput = TDefault extends Input<TSchema>
-    ? Output<TSchema>
-    : Output<TSchema> | null
-> = BaseSchema<Input<TSchema> | null, TOutput> & {
+  TWrapped extends BaseSchema,
+  TDefault extends Input<TWrapped> | undefined = undefined,
+  TOutput = TDefault extends Input<TWrapped>
+    ? Output<TWrapped>
+    : Output<TWrapped> | null
+> = BaseSchema<Input<TWrapped> | null, TOutput> & {
   schema: 'nullable';
-  wrapped: TSchema;
+  wrapped: TWrapped;
   getDefault: () => TDefault;
 };
 
 /**
  * Creates a nullable schema.
  *
- * @param schema The wrapped schema.
- * @param value The default value.
+ * @param wrapped The wrapped schema.
+ * @param default_ The default value.
  *
  * @returns A nullable schema.
  */
 export function nullable<
-  TSchema extends BaseSchema,
-  TDefault extends Input<TSchema> | undefined = undefined
+  TWrapped extends BaseSchema,
+  TDefault extends Input<TWrapped> | undefined = undefined
 >(
-  schema: TSchema,
-  value?: TDefault | (() => TDefault)
-): NullableSchema<TSchema, TDefault> {
+  wrapped: TWrapped,
+  default_?: TDefault | (() => TDefault)
+): NullableSchema<TWrapped, TDefault> {
   return {
     /**
      * The schema type.
@@ -40,15 +40,15 @@ export function nullable<
     /**
      * The wrapped schema.
      */
-    wrapped: schema,
+    wrapped,
 
     /**
      * Returns the default value.
      */
     getDefault() {
-      return typeof value === 'function'
-        ? (value as () => TDefault)()
-        : (value as TDefault);
+      return typeof default_ === 'function'
+        ? (default_ as () => TDefault)()
+        : (default_ as TDefault);
     },
 
     /**
@@ -75,7 +75,7 @@ export function nullable<
       }
 
       // Otherwise, return result of wrapped schema
-      return schema._parse(input, info);
+      return wrapped._parse(input, info);
     },
   };
 }

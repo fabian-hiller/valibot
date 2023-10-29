@@ -14,7 +14,7 @@ export type SchemaWithFallback<
  * Returns a fallback value when validating the passed schema failed.
  *
  * @param schema The schema to catch.
- * @param value The fallback value.
+ * @param fallback The fallback value.
  *
  * @returns The passed schema.
  */
@@ -23,7 +23,7 @@ export function fallback<
   TFallback extends Output<TSchema>
 >(
   schema: TSchema,
-  value: TFallback | ((info?: FallbackInfo) => TFallback)
+  fallback: TFallback | ((info?: FallbackInfo) => TFallback)
 ): SchemaWithFallback<TSchema, TFallback> {
   return {
     ...schema,
@@ -32,9 +32,9 @@ export function fallback<
      * Returns the fallback value.
      */
     getFallback(info) {
-      return typeof value === 'function'
-        ? (value as (info?: FallbackInfo) => TFallback)(info)
-        : (value as TFallback);
+      return typeof fallback === 'function'
+        ? (fallback as (info?: FallbackInfo) => TFallback)(info)
+        : (fallback as TFallback);
     },
 
     /**

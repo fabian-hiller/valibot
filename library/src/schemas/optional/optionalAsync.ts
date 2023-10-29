@@ -10,17 +10,17 @@ import { getOutput } from '../../utils/index.ts';
  * Optional schema async type.
  */
 export type OptionalSchemaAsync<
-  TSchema extends BaseSchema | BaseSchemaAsync,
+  TWrapped extends BaseSchema | BaseSchemaAsync,
   TDefault extends
-    | Input<TSchema>
+    | Input<TWrapped>
     | undefined
-    | Promise<Input<TSchema> | undefined> = undefined,
-  TOutput = Awaited<TDefault> extends Input<TSchema>
-    ? Output<TSchema>
-    : Output<TSchema> | undefined
-> = BaseSchemaAsync<Input<TSchema> | undefined, TOutput> & {
+    | Promise<Input<TWrapped> | undefined> = undefined,
+  TOutput = Awaited<TDefault> extends Input<TWrapped>
+    ? Output<TWrapped>
+    : Output<TWrapped> | undefined
+> = BaseSchemaAsync<Input<TWrapped> | undefined, TOutput> & {
   schema: 'optional';
-  wrapped: TSchema;
+  wrapped: TWrapped;
   getDefault: () => Promise<TDefault>;
 };
 
@@ -33,15 +33,15 @@ export type OptionalSchemaAsync<
  * @returns An async optional schema.
  */
 export function optionalAsync<
-  TSchema extends BaseSchema | BaseSchemaAsync,
+  TWrapped extends BaseSchema | BaseSchemaAsync,
   TDefault extends
-    | Input<TSchema>
+    | Input<TWrapped>
     | undefined
-    | Promise<Input<TSchema> | undefined> = undefined
+    | Promise<Input<TWrapped> | undefined> = undefined
 >(
-  wrapped: TSchema,
+  wrapped: TWrapped,
   default_?: TDefault | (() => TDefault)
-): OptionalSchemaAsync<TSchema, TDefault> {
+): OptionalSchemaAsync<TWrapped, TDefault> {
   return {
     /**
      * The schema type.

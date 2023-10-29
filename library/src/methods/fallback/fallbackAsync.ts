@@ -14,7 +14,7 @@ export type SchemaWithFallbackAsync<
  * Returns a fallback value when validating the passed schema failed.
  *
  * @param schema The schema to catch.
- * @param value The fallback value.
+ * @param fallback The fallback value.
  *
  * @returns The passed schema.
  */
@@ -23,7 +23,9 @@ export function fallbackAsync<
   TFallback extends Output<TSchema>
 >(
   schema: TSchema,
-  value: TFallback | ((info?: FallbackInfo) => TFallback | Promise<TFallback>)
+  fallback:
+    | TFallback
+    | ((info?: FallbackInfo) => TFallback | Promise<TFallback>)
 ): SchemaWithFallbackAsync<TSchema, TFallback> {
   return {
     ...schema,
@@ -32,11 +34,11 @@ export function fallbackAsync<
      * Returns the default value.
      */
     async getFallback(info) {
-      return typeof value === 'function'
+      return typeof fallback === 'function'
         ? await (
-            value as (info?: FallbackInfo) => TFallback | Promise<TFallback>
+            fallback as (info?: FallbackInfo) => TFallback | Promise<TFallback>
           )(info)
-        : (value as TFallback);
+        : (fallback as TFallback);
     },
 
     /**

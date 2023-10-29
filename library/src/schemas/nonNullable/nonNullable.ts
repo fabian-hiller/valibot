@@ -10,25 +10,25 @@ export type NonNullable<T> = T extends null ? never : T;
  * Non nullable schema type.
  */
 export type NonNullableSchema<
-  TSchema extends BaseSchema,
-  TOutput = NonNullable<Output<TSchema>>
-> = BaseSchema<NonNullable<Input<TSchema>>, TOutput> & {
+  TWrapped extends BaseSchema,
+  TOutput = NonNullable<Output<TWrapped>>
+> = BaseSchema<NonNullable<Input<TWrapped>>, TOutput> & {
   schema: 'non_nullable';
-  wrapped: TSchema;
+  wrapped: TWrapped;
 };
 
 /**
  * Creates a non nullable schema.
  *
- * @param schema The wrapped schema.
+ * @param wrapped The wrapped schema.
  * @param error The error message.
  *
  * @returns A non nullable schema.
  */
-export function nonNullable<TSchema extends BaseSchema>(
-  schema: TSchema,
+export function nonNullable<TWrapped extends BaseSchema>(
+  wrapped: TWrapped,
   error?: ErrorMessage
-): NonNullableSchema<TSchema> {
+): NonNullableSchema<TWrapped> {
   return {
     /**
      * The schema type.
@@ -38,7 +38,7 @@ export function nonNullable<TSchema extends BaseSchema>(
     /**
      * The wrapped schema.
      */
-    wrapped: schema,
+    wrapped,
 
     /**
      * Whether it's async.
@@ -66,7 +66,7 @@ export function nonNullable<TSchema extends BaseSchema>(
       }
 
       // Return result of wrapped schema
-      return schema._parse(input, info);
+      return wrapped._parse(input, info);
     },
   };
 }

@@ -5,32 +5,32 @@ import { getOutput } from '../../utils/index.ts';
  * Optional schema type.
  */
 export type OptionalSchema<
-  TSchema extends BaseSchema,
-  TDefault extends Input<TSchema> | undefined = undefined,
-  TOutput = TDefault extends Input<TSchema>
-    ? Output<TSchema>
-    : Output<TSchema> | undefined
-> = BaseSchema<Input<TSchema> | undefined, TOutput> & {
+  TWrapped extends BaseSchema,
+  TDefault extends Input<TWrapped> | undefined = undefined,
+  TOutput = TDefault extends Input<TWrapped>
+    ? Output<TWrapped>
+    : Output<TWrapped> | undefined
+> = BaseSchema<Input<TWrapped> | undefined, TOutput> & {
   schema: 'optional';
-  wrapped: TSchema;
+  wrapped: TWrapped;
   getDefault: () => TDefault;
 };
 
 /**
  * Creates a optional schema.
  *
- * @param schema The wrapped schema.
- * @param value The default value.
+ * @param wrapped The wrapped schema.
+ * @param default_ The default value.
  *
  * @returns A optional schema.
  */
 export function optional<
-  TSchema extends BaseSchema,
-  TDefault extends Input<TSchema> | undefined = undefined
+  TWrapped extends BaseSchema,
+  TDefault extends Input<TWrapped> | undefined = undefined
 >(
-  schema: TSchema,
-  value?: TDefault | (() => TDefault)
-): OptionalSchema<TSchema, TDefault> {
+  wrapped: TWrapped,
+  default_?: TDefault | (() => TDefault)
+): OptionalSchema<TWrapped, TDefault> {
   return {
     /**
      * The schema type.
@@ -40,15 +40,15 @@ export function optional<
     /**
      * The wrapped schema.
      */
-    wrapped: schema,
+    wrapped,
 
     /**
      * Returns the default value.
      */
     getDefault() {
-      return typeof value === 'function'
-        ? (value as () => TDefault)()
-        : (value as TDefault);
+      return typeof default_ === 'function'
+        ? (default_ as () => TDefault)()
+        : (default_ as TDefault);
     },
 
     /**
@@ -75,7 +75,7 @@ export function optional<
       }
 
       // Otherwise, return result of wrapped schema
-      return schema._parse(input, info);
+      return wrapped._parse(input, info);
     },
   };
 }
