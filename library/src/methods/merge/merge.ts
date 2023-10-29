@@ -31,8 +31,8 @@ export function merge<TObjectSchemas extends ObjectSchemas>(
 ): ObjectSchema<MergeSchemaObjects<TObjectSchemas>>;
 
 /**
- * Merges the entries of multiple async object schemas. Subsequent object
- * entries overwrite the previous ones.
+ * Merges the entries of multiple object schemas. Subsequent object entries
+ * overwrite the previous ones.
  *
  * @param schemas The schemas to be merged.
  * @param error The error message.

@@ -123,20 +123,28 @@ export type FlatErrors<TSchema extends BaseSchema | BaseSchemaAsync = any> = {
   nested: Partial<Record<NestedPath<TSchema>, [string, ...string[]]>>;
 };
 
+/**
+ * Flatten the error messages of a Vali error.
+ *
+ * @param error A Vali error.
+ *
+ * @returns Flat errors.
+ */
 export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
   error: ValiError
 ): FlatErrors<TSchema>;
 
+/**
+ * Flatten the error messages of a Vali error.
+ *
+ * @param issues The issues.
+ *
+ * @returns Flat errors.
+ */
 export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
   issues: Issues
 ): FlatErrors<TSchema>;
 
-/**
- *
- * @param arg1 A Vali error or issues.
- *
- * @returns Flat errors.
- */
 export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
   arg1: ValiError | Issues
 ): FlatErrors<TSchema> {
