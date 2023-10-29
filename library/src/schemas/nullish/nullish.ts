@@ -6,10 +6,10 @@ import { getOutput } from '../../utils/index.ts';
  */
 export type NullishSchema<
   TSchema extends BaseSchema,
-  TDefault extends Input<TSchema> | null | undefined = undefined,
-  TOutput = TDefault extends undefined | null
-    ? Output<TSchema> | null | undefined
-    : Output<TSchema>
+  TDefault extends Input<TSchema> | undefined = undefined,
+  TOutput = TDefault extends Input<TSchema>
+    ? Output<TSchema>
+    : Output<TSchema> | null | undefined
 > = BaseSchema<Input<TSchema> | null | undefined, TOutput> & {
   schema: 'nullish';
   wrapped: TSchema;
@@ -26,7 +26,7 @@ export type NullishSchema<
  */
 export function nullish<
   TSchema extends BaseSchema,
-  TDefault extends Input<TSchema> | null | undefined = undefined
+  TDefault extends Input<TSchema> | undefined = undefined
 >(
   schema: TSchema,
   value?: TDefault | (() => TDefault)
@@ -65,22 +65,17 @@ export function nullish<
      * @returns The parsed output.
      */
     _parse(input, info) {
-      // Get default or input value
-      let default_: TDefault;
-      const value =
-        (input === null || input === undefined) &&
-        (default_ = this.getDefault()) &&
-        default_ !== undefined
-          ? default_
-          : input;
-
-      // Allow `null` or `undefined` value to pass
-      if (value === null || value === undefined) {
-        return getOutput(value);
+      // Allow `null` or `undefined` to pass or override it with default value
+      if (input === null || input === undefined) {
+        const override = this.getDefault();
+        if (override === undefined) {
+          return getOutput(input);
+        }
+        input = override;
       }
 
-      // Return result of wrapped schema
-      return schema._parse(value, info);
+      // Otherwise, return result of wrapped schema
+      return schema._parse(input, info);
     },
   };
 }

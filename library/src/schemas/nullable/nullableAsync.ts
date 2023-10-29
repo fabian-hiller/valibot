@@ -13,12 +13,11 @@ export type NullableSchemaAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
   TDefault extends
     | Input<TSchema>
-    | null
     | undefined
-    | Promise<Input<TSchema> | null | undefined> = undefined,
-  TOutput = Awaited<TDefault> extends undefined | null
-    ? Output<TSchema> | null
-    : Output<TSchema>
+    | Promise<Input<TSchema> | undefined> = undefined,
+  TOutput = Awaited<TDefault> extends Input<TSchema>
+    ? Output<TSchema>
+    : Output<TSchema> | null
 > = BaseSchemaAsync<Input<TSchema> | null, TOutput> & {
   schema: 'nullable';
   wrapped: TSchema;
@@ -37,9 +36,8 @@ export function nullableAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
   TDefault extends
     | Input<TSchema>
-    | null
     | undefined
-    | Promise<Input<TSchema> | null | undefined> = undefined
+    | Promise<Input<TSchema> | undefined> = undefined
 >(
   schema: TSchema,
   value?: TDefault | (() => TDefault)
@@ -78,22 +76,17 @@ export function nullableAsync<
      * @returns The parsed output.
      */
     async _parse(input, info) {
-      // Get default or input value
-      let default_: Awaited<TDefault>;
-      const value =
-        input === null &&
-        (default_ = await this.getDefault()) &&
-        default_ !== undefined
-          ? default_
-          : input;
-
-      // Allow `null` value to pass
-      if (value === null) {
-        return getOutput(value);
+      // Allow `null` to pass or override it with default value
+      if (input === null) {
+        const override = await this.getDefault();
+        if (override === undefined) {
+          return getOutput(input);
+        }
+        input = override;
       }
 
       // Return result of wrapped schema
-      return schema._parse(value, info);
+      return schema._parse(input, info);
     },
   };
 }

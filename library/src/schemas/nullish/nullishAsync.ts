@@ -13,12 +13,11 @@ export type NullishSchemaAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
   TDefault extends
     | Input<TSchema>
-    | null
     | undefined
-    | Promise<Input<TSchema> | null | undefined> = undefined,
-  TOutput = Awaited<TDefault> extends undefined | null
-    ? Output<TSchema> | null | undefined
-    : Output<TSchema>
+    | Promise<Input<TSchema> | undefined> = undefined,
+  TOutput = Awaited<TDefault> extends Input<TSchema>
+    ? Output<TSchema>
+    : Output<TSchema> | null | undefined
 > = BaseSchemaAsync<Input<TSchema> | null | undefined, TOutput> & {
   schema: 'nullish';
   wrapped: TSchema;
@@ -38,7 +37,7 @@ export function nullishAsync<
   TDefault extends
     | Input<TSchema>
     | undefined
-    | Promise<Input<TSchema> | null | undefined> = undefined
+    | Promise<Input<TSchema> | undefined> = undefined
 >(
   schema: TSchema,
   value?: TDefault | (() => TDefault)
@@ -77,22 +76,17 @@ export function nullishAsync<
      * @returns The parsed output.
      */
     async _parse(input, info) {
-      // Get default or input value
-      let default_: Awaited<TDefault>;
-      const value =
-        (input === null || input === undefined) &&
-        (default_ = await this.getDefault()) &&
-        default_ !== undefined
-          ? default_
-          : input;
-
-      // Allow `null` or `undefined` value to pass
-      if (value === null || value === undefined) {
-        return getOutput(value);
+      // Allow `null` or `undefined` to pass or override it with default value
+      if (input === null || input === undefined) {
+        const override = await this.getDefault();
+        if (override === undefined) {
+          return getOutput(input);
+        }
+        input = override;
       }
 
       // Return result of wrapped schema
-      return schema._parse(value, info);
+      return schema._parse(input, info);
     },
   };
 }

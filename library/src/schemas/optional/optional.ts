@@ -7,9 +7,9 @@ import { getOutput } from '../../utils/index.ts';
 export type OptionalSchema<
   TSchema extends BaseSchema,
   TDefault extends Input<TSchema> | undefined = undefined,
-  TOutput = TDefault extends undefined
-    ? Output<TSchema> | undefined
-    : Output<TSchema>
+  TOutput = TDefault extends Input<TSchema>
+    ? Output<TSchema>
+    : Output<TSchema> | undefined
 > = BaseSchema<Input<TSchema> | undefined, TOutput> & {
   schema: 'optional';
   wrapped: TSchema;
@@ -65,16 +65,17 @@ export function optional<
      * @returns The parsed output.
      */
     _parse(input, info) {
-      // Get default or input value
-      const value = input === undefined ? this.getDefault() : input;
-
-      // Allow `undefined` value to pass
-      if (value === undefined) {
-        return getOutput(value);
+      // Allow `undefined` to pass or override it with default value
+      if (input === undefined) {
+        const override = this.getDefault();
+        if (override === undefined) {
+          return getOutput(input);
+        }
+        input = override;
       }
 
-      // Return result of wrapped schema
-      return schema._parse(value, info);
+      // Otherwise, return result of wrapped schema
+      return schema._parse(input, info);
     },
   };
 }
