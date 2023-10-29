@@ -35,8 +35,10 @@ export function required<TObjectSchema extends ObjectSchema<any, any>>(
 export function required<TObjectSchema extends ObjectSchema<any>>(
   schema: TObjectSchema,
   error?: ErrorMessage,
-  pipe?: Pipe<ObjectOutput<Required<TObjectSchema['object']>>>
-): ObjectSchema<Required<TObjectSchema['object']>>;
+  pipe?: Pipe<
+    ObjectOutput<Required<TObjectSchema['object']['entries']>, undefined>
+  >
+): ObjectSchema<Required<TObjectSchema['object']['entries']>>;
 
 /**
  * Creates an object schema consisting of all properties of an existing object

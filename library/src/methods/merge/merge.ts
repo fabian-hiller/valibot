@@ -33,7 +33,7 @@ export function merge<TObjectSchemas extends ObjectSchemas>(
 export function merge<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
   error?: ErrorMessage,
-  pipe?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
+  pipe?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, undefined>>
 ): ObjectSchema<MergeSchemaObjects<TObjectSchemas>>;
 
 /**

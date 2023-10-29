@@ -37,11 +37,11 @@ export function object<TObjectEntries extends ObjectEntries>(
   pipe?: Pipe<ObjectOutput<TObjectEntries, undefined>>
 ): ObjectSchema<TObjectEntries>;
 
-export function object<TObjectShape extends ObjectShape>(
-  object: TObjectShape,
+export function object<TObjectEntries extends ObjectEntries>(
+  object: TObjectEntries,
   error?: ErrorMessage,
-  pipe?: Pipe<ObjectOutput<TObjectShape>>
-): ObjectSchema<TObjectShape>;
+  pipe?: Pipe<ObjectOutput<TObjectEntries, undefined>>
+): ObjectSchema<TObjectEntries>;
 
 /**
  * Creates an object schema.

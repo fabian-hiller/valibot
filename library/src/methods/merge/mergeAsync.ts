@@ -39,7 +39,7 @@ export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
 export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
   schemas: TObjectSchemas,
   error?: ErrorMessage,
-  pipe?: PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>>>
+  pipe?: PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, undefined>>
 ): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>>;
 
 /**
