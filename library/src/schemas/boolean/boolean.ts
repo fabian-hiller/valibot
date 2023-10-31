@@ -9,11 +9,11 @@ import {
  * Boolean schema type.
  */
 export type BooleanSchema<TOutput = boolean> = BaseSchema<boolean, TOutput> & {
-  kind: 'boolean';
+  type: 'boolean';
   /**
    * Validation and transformation pipe.
    */
-  pipe: Pipe<boolean>;
+  pipe?: Pipe<boolean>;
 };
 
 /**
@@ -43,11 +43,11 @@ export function boolean(
   arg2?: Pipe<boolean>
 ): BooleanSchema {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return boolean schema
   return {
-    kind: 'boolean',
+    type: 'boolean',
     async: false,
     pipe,
     _parse(input, info) {

@@ -8,7 +8,7 @@ export type UnknownSchemaAsync<TOutput = unknown> = BaseSchemaAsync<
   unknown,
   TOutput
 > & {
-  kind: 'unknown';
+  type: 'unknown';
   /**
    * Validation and transformation pipe.
    */
@@ -26,7 +26,7 @@ export function unknownAsync(
   pipe: PipeAsync<unknown> = []
 ): UnknownSchemaAsync {
   return {
-    kind: 'unknown',
+    type: 'unknown',
     async: true,
     pipe,
     async _parse(input, info) {

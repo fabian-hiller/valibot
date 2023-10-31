@@ -10,11 +10,11 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function integer<TInput extends number>(error?: ErrorMessage) {
   return {
-    kind: 'integer' as const,
+    type: 'integer' as const,
     message: error ?? 'Invalid integer',
     _parse(input: TInput): PipeResult<TInput> {
       return !Number.isInteger(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

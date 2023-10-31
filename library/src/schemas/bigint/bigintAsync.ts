@@ -12,11 +12,11 @@ export type BigintSchemaAsync<TOutput = bigint> = BaseSchemaAsync<
   bigint,
   TOutput
 > & {
-  kind: 'bigint';
+  type: 'bigint';
   /**
    * Validation and transformation pipe.
    */
-  pipe: PipeAsync<bigint>;
+  pipe?: PipeAsync<bigint>;
 };
 
 /**
@@ -46,11 +46,11 @@ export function bigintAsync(
   arg2?: PipeAsync<bigint>
 ): BigintSchemaAsync {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return async bigint schema
   return {
-    kind: 'bigint',
+    type: 'bigint',
     async: true,
     pipe,
     async _parse(input, info) {

@@ -16,28 +16,29 @@ import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 /**
  * Object entries async type.
  */
-export type ObjectEntriesAsync = Record<
-  string,
-  BaseSchema<any> | BaseSchemaAsync<any>
->;
+export type ObjectEntriesAsync = Record<string, BaseSchema | BaseSchemaAsync>;
 
 /**
  * Object schema async type.
  */
 export type ObjectSchemaAsync<
-  TObjectEntries extends ObjectEntriesAsync,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
-  TOutput = ObjectOutput<TObjectEntries, TObjectRest>
-> = BaseSchemaAsync<ObjectInput<TObjectEntries, TObjectRest>, TOutput> & {
-  kind: 'object';
+  TEntries extends ObjectEntriesAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
+  TOutput = ObjectOutput<TEntries, TRest>
+> = BaseSchemaAsync<ObjectInput<TEntries, TRest>, TOutput> & {
+  type: 'object';
   /**
-   * The object entries and rest schema.
+   * The entries schema.
    */
-  object: { entries: TObjectEntries; rest: TObjectRest };
+  entries: TEntries;
+  /**
+   * The rest schema.
+   */
+  rest: TRest;
   /**
    * Validation and transformation pipe.
    */
-  pipe: PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>;
+  pipe?: PipeAsync<ObjectOutput<TEntries, TRest>>;
 };
 
 /**
@@ -48,10 +49,10 @@ export type ObjectSchemaAsync<
  *
  * @returns An async object schema.
  */
-export function objectAsync<TObjectEntries extends ObjectEntriesAsync>(
-  entries: TObjectEntries,
-  pipe?: PipeAsync<ObjectOutput<TObjectEntries, undefined>>
-): ObjectSchemaAsync<TObjectEntries>;
+export function objectAsync<TEntries extends ObjectEntriesAsync>(
+  entries: TEntries,
+  pipe?: PipeAsync<ObjectOutput<TEntries, undefined>>
+): ObjectSchemaAsync<TEntries>;
 
 /**
  * Creates an async object schema.
@@ -62,11 +63,11 @@ export function objectAsync<TObjectEntries extends ObjectEntriesAsync>(
  *
  * @returns An async object schema.
  */
-export function objectAsync<TObjectEntries extends ObjectEntriesAsync>(
-  entries: TObjectEntries,
+export function objectAsync<TEntries extends ObjectEntriesAsync>(
+  entries: TEntries,
   error?: ErrorMessage,
-  pipe?: PipeAsync<ObjectOutput<TObjectEntries, undefined>>
-): ObjectSchemaAsync<TObjectEntries>;
+  pipe?: PipeAsync<ObjectOutput<TEntries, undefined>>
+): ObjectSchemaAsync<TEntries>;
 
 /**
  * Creates an async object schema.
@@ -78,13 +79,13 @@ export function objectAsync<TObjectEntries extends ObjectEntriesAsync>(
  * @returns An async object schema.
  */
 export function objectAsync<
-  TObjectEntries extends ObjectEntriesAsync,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+  TEntries extends ObjectEntriesAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
-  entries: TObjectEntries,
-  rest: TObjectRest,
-  pipe?: PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>
-): ObjectSchemaAsync<TObjectEntries, TObjectRest>;
+  entries: TEntries,
+  rest: TRest,
+  pipe?: PipeAsync<ObjectOutput<TEntries, TRest>>
+): ObjectSchemaAsync<TEntries, TRest>;
 
 /**
  * Creates an async object schema.
@@ -97,41 +98,39 @@ export function objectAsync<
  * @returns An async object schema.
  */
 export function objectAsync<
-  TObjectEntries extends ObjectEntriesAsync,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+  TEntries extends ObjectEntriesAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
-  entries: TObjectEntries,
-  rest: TObjectRest,
+  entries: TEntries,
+  rest: TRest,
   error?: ErrorMessage,
-  pipe?: PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>
-): ObjectSchemaAsync<TObjectEntries, TObjectRest>;
+  pipe?: PipeAsync<ObjectOutput<TEntries, TRest>>
+): ObjectSchemaAsync<TEntries, TRest>;
 
 export function objectAsync<
-  TObjectEntries extends ObjectEntriesAsync,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TEntries extends ObjectEntriesAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
 >(
-  entries: TObjectEntries,
-  arg2?:
-    | PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>
-    | ErrorMessage
-    | TObjectRest,
-  arg3?: PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>> | ErrorMessage,
-  arg4?: PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>
-): ObjectSchemaAsync<TObjectEntries, TObjectRest> {
+  entries: TEntries,
+  arg2?: PipeAsync<ObjectOutput<TEntries, TRest>> | ErrorMessage | TRest,
+  arg3?: PipeAsync<ObjectOutput<TEntries, TRest>> | ErrorMessage,
+  arg4?: PipeAsync<ObjectOutput<TEntries, TRest>>
+): ObjectSchemaAsync<TEntries, TRest> {
   // Get rest, error and pipe argument
-  const [rest, error, pipe = []] = getRestAndDefaultArgs<
-    TObjectRest,
-    PipeAsync<ObjectOutput<TObjectEntries, TObjectRest>>
+  const [rest, error, pipe] = getRestAndDefaultArgs<
+    TRest,
+    PipeAsync<ObjectOutput<TEntries, TRest>>
   >(arg2, arg3, arg4);
 
   // Create cached entries
-  let cachedEntries: [string, BaseSchema<any> | BaseSchemaAsync<any>][];
+  let cachedEntries: [string, BaseSchema | BaseSchemaAsync][];
 
   // Create and return async object schema
   return {
-    kind: 'object',
+    type: 'object',
     async: true,
-    object: { entries, rest },
+    entries,
+    rest,
     pipe,
     async _parse(input, info) {
       // Check type of input
@@ -170,7 +169,7 @@ export function objectAsync<
                 if (result.issues) {
                   // Create object path item
                   const pathItem: ObjectPathItem = {
-                    schema: 'object',
+                    type: 'object',
                     input,
                     key,
                     value,
@@ -218,7 +217,7 @@ export function objectAsync<
                     if (result.issues) {
                       // Create object path item
                       const pathItem: ObjectPathItem = {
-                        schema: 'object',
+                        type: 'object',
                         input,
                         key,
                         value,
@@ -257,7 +256,7 @@ export function objectAsync<
       return issues
         ? getIssues(issues)
         : executePipeAsync(
-            output as ObjectOutput<TObjectEntries, TObjectRest>,
+            output as ObjectOutput<TEntries, TRest>,
             pipe,
             info,
             'object'

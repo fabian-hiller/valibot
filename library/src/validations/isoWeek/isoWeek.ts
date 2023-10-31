@@ -1,3 +1,4 @@
+import { ISO_WEEK_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
@@ -16,12 +17,12 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function isoWeek<TInput extends string>(error?: ErrorMessage) {
   return {
-    kind: 'iso_week' as const,
+    type: 'iso_week' as const,
     message: error ?? 'Invalid week',
-    requirement: /^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$/,
+    requirement: ISO_WEEK_REGEX,
     _parse(input: TInput): PipeResult<TInput> {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

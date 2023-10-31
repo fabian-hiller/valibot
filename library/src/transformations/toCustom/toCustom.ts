@@ -10,7 +10,7 @@ import { getOutput } from '../../utils/index.ts';
  */
 export function toCustom<TInput>(action: (input: TInput) => TInput) {
   return {
-    kind: 'to_custom' as const,
+    type: 'to_custom' as const,
     _parse(input: TInput): PipeResult<TInput> {
       return getOutput(action(input));
     },

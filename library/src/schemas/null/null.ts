@@ -1,0 +1,45 @@
+import type { BaseSchema, ErrorMessage } from '../../types.ts';
+import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+
+/**
+ * Null schema type.
+ */
+export type NullSchema<TOutput = null> = BaseSchema<null, TOutput> & {
+  type: 'null';
+};
+
+/**
+ * Creates a null schema.
+ *
+ * @param error The error message.
+ *
+ * @returns A null schema.
+ */
+export function null_(error?: ErrorMessage): NullSchema {
+  return {
+    type: 'null',
+    async: false,
+    _parse(input, info) {
+      // Check type of input
+      if (input !== null) {
+        return getSchemaIssues(
+          info,
+          'type',
+          'null',
+          error || 'Invalid type',
+          input
+        );
+      }
+
+      // Return input as output
+      return getOutput(input);
+    },
+  };
+}
+
+/**
+ * See {@link null_}
+ *
+ * @deprecated Use `null_` instead.
+ */
+export const nullType = null_;

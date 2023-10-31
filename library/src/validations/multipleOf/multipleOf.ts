@@ -14,12 +14,12 @@ export function multipleOf<
   const TRequirement extends number
 >(requirement: TRequirement, error?: ErrorMessage) {
   return {
-    kind: 'multiple_of' as const,
+    type: 'multiple_of' as const,
     message: error ?? 'Invalid multiple',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return input % requirement !== 0
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

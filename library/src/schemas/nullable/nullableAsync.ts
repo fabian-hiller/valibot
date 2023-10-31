@@ -15,19 +15,19 @@ export type NullableSchemaAsync<
     | Input<TWrapped>
     | undefined
     | Promise<Input<TWrapped> | undefined> = undefined,
-  TOutput = Awaited<TDefault> extends undefined
-    ? Output<TWrapped> | null
-    : Output<TWrapped>
+  TOutput = Awaited<TDefault> extends Input<TWrapped>
+    ? Output<TWrapped>
+    : Output<TWrapped> | null
 > = BaseSchemaAsync<Input<TWrapped> | null, TOutput> & {
-  kind: 'nullable';
+  type: 'nullable';
   /**
    * The wrapped schema.
    */
   wrapped: TWrapped;
   /**
-   * The default value.
+   * Returns the default value.
    */
-  get default(): TDefault;
+  getDefault: () => Promise<TDefault>;
 };
 
 /**
@@ -49,31 +49,26 @@ export function nullableAsync<
   default_?: TDefault | (() => TDefault)
 ): NullableSchemaAsync<TWrapped, TDefault> {
   return {
-    kind: 'nullable',
+    type: 'nullable',
     async: true,
     wrapped,
-    get default() {
+    async getDefault() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);
     },
     async _parse(input, info) {
-      // Get default or input value
-      let default_: Awaited<TDefault>;
-      const value =
-        input === null &&
-        (default_ = await this.default) &&
-        default_ !== undefined
-          ? default_
-          : input;
-
-      // Allow `null` value to pass
-      if (value === null) {
-        return getOutput(value);
+      // Allow `null` to pass or override it with default value
+      if (input === null) {
+        const override = await this.getDefault();
+        if (override === undefined) {
+          return getOutput(input);
+        }
+        input = override;
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(value, info);
+      return wrapped._parse(input, info);
     },
   };
 }

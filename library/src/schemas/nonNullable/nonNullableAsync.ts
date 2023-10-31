@@ -15,7 +15,7 @@ export type NonNullableSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TOutput = NonNullable<Output<TWrapped>>
 > = BaseSchemaAsync<NonNullable<Input<TWrapped>>, TOutput> & {
-  kind: 'non_nullable';
+  type: 'non_nullable';
   /**
    * The wrapped schema.
    */
@@ -35,7 +35,7 @@ export function nonNullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
   error?: ErrorMessage
 ): NonNullableSchemaAsync<TWrapped> {
   return {
-    kind: 'non_nullable',
+    type: 'non_nullable',
     async: true,
     wrapped,
     async _parse(input, info) {

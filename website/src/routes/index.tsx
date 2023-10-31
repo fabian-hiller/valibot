@@ -33,7 +33,15 @@ export const useFaqToggle = routeAction$(
 export default component$(() => {
   // Use FAQ toggle and compute its index
   const faqToggle = useFaqToggle();
-  const faqIndex = useComputed$(() => faqToggle.value?.index || 0);
+  const faqIndex = useComputed$(
+    () =>
+      +(
+        (faqToggle.isRunning
+          ? // Optimistic UI
+            faqToggle.formData?.get('index')
+          : faqToggle.value?.index) || 0
+      )
+  );
 
   return (
     <main class="flex flex-1 flex-col items-center space-y-24 py-24 md:space-y-36 md:py-36 xl:space-y-52 xl:py-52">

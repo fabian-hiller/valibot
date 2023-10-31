@@ -10,11 +10,11 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function safeInteger<TInput extends number>(error?: ErrorMessage) {
   return {
-    kind: 'safe_integer' as const,
+    type: 'safe_integer' as const,
     message: error ?? 'Invalid safe integer',
     _parse(input: TInput): PipeResult<TInput> {
       return !Number.isSafeInteger(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

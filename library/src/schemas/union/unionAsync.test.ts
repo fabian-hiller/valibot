@@ -2,12 +2,12 @@ import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
 import { string, stringAsync } from '../string/index.ts';
 import { number, numberAsync } from '../number/index.ts';
-import { nullType } from '../nullType/index.ts';
+import { null_ } from '../null/index.ts';
 import { unionAsync } from './unionAsync.ts';
 
 describe('unionAsync', () => {
   test('should pass only union values', async () => {
-    const schema = unionAsync([stringAsync(), number(), nullType()]);
+    const schema = unionAsync([stringAsync(), number(), null_()]);
 
     const input1 = 'test';
     const output1 = await parseAsync(schema, input1);

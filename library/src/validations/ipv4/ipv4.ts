@@ -1,3 +1,4 @@
+import { IPV4_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
@@ -10,12 +11,12 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function ipv4<TInput extends string>(error?: ErrorMessage) {
   return {
-    kind: 'ipv4' as const,
+    type: 'ipv4' as const,
     message: error ?? 'Invalid IP v4',
-    requirement: /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/,
+    requirement: IPV4_REGEX,
     _parse(input: TInput): PipeResult<TInput> {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

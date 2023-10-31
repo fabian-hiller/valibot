@@ -27,9 +27,9 @@ describe('any', () => {
   test(`should expose a pipe of transforms and validations`, () => {
     const schema1 = any([toCustom(String), maxLength(5)]);
     expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({ kind: 'to_custom' }),
+      expect.objectContaining({ type: 'to_custom' }),
       expect.objectContaining({
-        kind: 'max_length',
+        type: 'max_length',
         requirement: 5,
         message: 'Invalid length',
       }),

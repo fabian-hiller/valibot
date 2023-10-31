@@ -25,12 +25,12 @@ export function excludes<
   const TRequirement extends string | TItem
 >(requirement: TRequirement, error?: ErrorMessage) {
   return {
-    kind: 'excludes' as const,
+    type: 'excludes' as const,
     message: error ?? 'Invalid content',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return input.includes(requirement as any)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

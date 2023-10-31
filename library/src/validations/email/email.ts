@@ -1,8 +1,9 @@
+import { EMAIL_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation function that validates an email.
+ * Creates a validation function that validates a email.
  *
  * @param error The error message.
  *
@@ -10,13 +11,12 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function email<TInput extends string>(error?: ErrorMessage) {
   return {
-    kind: 'email' as const,
+    type: 'email' as const,
     message: error ?? 'Invalid email',
-    requirement:
-      /^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/i,
+    requirement: EMAIL_REGEX,
     _parse(input: TInput): PipeResult<TInput> {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

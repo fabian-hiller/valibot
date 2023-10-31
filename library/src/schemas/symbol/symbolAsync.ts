@@ -8,7 +8,7 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
   symbol,
   TOutput
 > & {
-  kind: 'symbol';
+  type: 'symbol';
 };
 
 /**
@@ -20,7 +20,7 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
  */
 export function symbolAsync(error?: ErrorMessage): SymbolSchemaAsync {
   return {
-    kind: 'symbol',
+    type: 'symbol',
     async: true,
     async _parse(input, info) {
       // Check type of input

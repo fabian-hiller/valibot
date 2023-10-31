@@ -9,11 +9,11 @@ import {
  * Bigint schema type.
  */
 export type BigintSchema<TOutput = bigint> = BaseSchema<bigint, TOutput> & {
-  kind: 'bigint';
+  type: 'bigint';
   /**
    * Validation and transformation pipe.
    */
-  pipe: Pipe<bigint>;
+  pipe?: Pipe<bigint>;
 };
 
 /**
@@ -40,11 +40,11 @@ export function bigint(
   arg2?: Pipe<bigint>
 ): BigintSchema {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return bigint schema
   return {
-    kind: 'bigint',
+    type: 'bigint',
     async: false,
     pipe,
     _parse(input, info) {

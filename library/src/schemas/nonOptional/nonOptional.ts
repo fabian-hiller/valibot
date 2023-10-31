@@ -13,7 +13,7 @@ export type NonOptionalSchema<
   TWrapped extends BaseSchema,
   TOutput = NonOptional<Output<TWrapped>>
 > = BaseSchema<NonOptional<Input<TWrapped>>, TOutput> & {
-  kind: 'non_optional';
+  type: 'non_optional';
   /**
    * The wrapped schema.
    */
@@ -33,7 +33,7 @@ export function nonOptional<TWrapped extends BaseSchema>(
   error?: ErrorMessage
 ): NonOptionalSchema<TWrapped> {
   return {
-    kind: 'non_optional',
+    type: 'non_optional',
     async: false,
     wrapped,
     _parse(input, info) {

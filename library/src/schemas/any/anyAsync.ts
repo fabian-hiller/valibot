@@ -5,7 +5,7 @@ import { executePipeAsync } from '../../utils/index.ts';
  * Any schema type.
  */
 export type AnySchemaAsync<TOutput = any> = BaseSchemaAsync<any, TOutput> & {
-  kind: 'any';
+  type: 'any';
   /**
    * Validation and transformation pipe.
    */
@@ -21,7 +21,7 @@ export type AnySchemaAsync<TOutput = any> = BaseSchemaAsync<any, TOutput> & {
  */
 export function anyAsync(pipe: PipeAsync<any> = []): AnySchemaAsync {
   return {
-    kind: 'any',
+    type: 'any',
     async: true,
     pipe,
     async _parse(input, info) {

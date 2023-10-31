@@ -68,7 +68,7 @@ describe('array', () => {
     const result1 = schema1._parse(input1);
     expect(result1.issues?.[0].path).toEqual([
       {
-        schema: 'array',
+        type: 'array',
         input: input1,
         key: 2,
         value: input1[2],
@@ -80,13 +80,13 @@ describe('array', () => {
     const result2 = schema2._parse(input2);
     expect(result2.issues?.[0].path).toEqual([
       {
-        schema: 'array',
+        type: 'array',
         input: input2,
         key: 1,
         value: input2[1],
       },
       {
-        schema: 'object',
+        type: 'object',
         input: input2[1],
         key: 'key',
         value: input2[1].key,
@@ -117,13 +117,13 @@ describe('array', () => {
     const schema1 = array(string(), [maxLength(5)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({
-        kind: 'max_length',
+        type: 'max_length',
         requirement: 5,
         message: 'Invalid length',
       }),
     ]);
 
     const schema2 = array(string());
-    expect(schema2.pipe).toStrictEqual([]);
+    expect(schema2.pipe).toBeUndefined();
   });
 });

@@ -8,27 +8,31 @@ import {
 import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
 
 /**
- * Object shape type.
+ * Object entries type.
  */
-export type ObjectEntries = Record<string, BaseSchema<any>>;
+export type ObjectEntries = Record<string, BaseSchema>;
 
 /**
  * Object schema type.
  */
 export type ObjectSchema<
-  TObjectEntries extends ObjectEntries,
-  TObjectRest extends BaseSchema | undefined = undefined,
-  TOutput = ObjectOutput<TObjectEntries, TObjectRest>
-> = BaseSchema<ObjectInput<TObjectEntries, TObjectRest>, TOutput> & {
-  kind: 'object';
+  TEntries extends ObjectEntries,
+  TRest extends BaseSchema | undefined = undefined,
+  TOutput = ObjectOutput<TEntries, TRest>
+> = BaseSchema<ObjectInput<TEntries, TRest>, TOutput> & {
+  type: 'object';
   /**
-   * The object entries and rest schema.
+   * The entries schema.
    */
-  object: { entries: TObjectEntries; rest: TObjectRest };
+  entries: TEntries;
+  /**
+   * The rest schema.
+   */
+  rest: TRest;
   /**
    * Validation and transformation pipe.
    */
-  pipe: Pipe<ObjectOutput<TObjectEntries, TObjectRest>>;
+  pipe?: Pipe<ObjectOutput<TEntries, TRest>>;
 };
 
 /**
@@ -39,10 +43,10 @@ export type ObjectSchema<
  *
  * @returns An object schema.
  */
-export function object<TObjectEntries extends ObjectEntries>(
-  entries: TObjectEntries,
-  pipe?: Pipe<ObjectOutput<TObjectEntries, undefined>>
-): ObjectSchema<TObjectEntries>;
+export function object<TEntries extends ObjectEntries>(
+  entries: TEntries,
+  pipe?: Pipe<ObjectOutput<TEntries, undefined>>
+): ObjectSchema<TEntries>;
 
 /**
  * Creates an object schema.
@@ -53,11 +57,11 @@ export function object<TObjectEntries extends ObjectEntries>(
  *
  * @returns An object schema.
  */
-export function object<TObjectEntries extends ObjectEntries>(
-  entries: TObjectEntries,
+export function object<TEntries extends ObjectEntries>(
+  entries: TEntries,
   error?: ErrorMessage,
-  pipe?: Pipe<ObjectOutput<TObjectEntries, undefined>>
-): ObjectSchema<TObjectEntries>;
+  pipe?: Pipe<ObjectOutput<TEntries, undefined>>
+): ObjectSchema<TEntries>;
 
 /**
  * Creates an object schema.
@@ -69,13 +73,13 @@ export function object<TObjectEntries extends ObjectEntries>(
  * @returns An object schema.
  */
 export function object<
-  TObjectEntries extends ObjectEntries,
-  TObjectRest extends BaseSchema | undefined
+  TEntries extends ObjectEntries,
+  TRest extends BaseSchema | undefined
 >(
-  entries: TObjectEntries,
-  rest: TObjectRest,
-  pipe?: Pipe<ObjectOutput<TObjectEntries, TObjectRest>>
-): ObjectSchema<TObjectEntries, TObjectRest>;
+  entries: TEntries,
+  rest: TRest,
+  pipe?: Pipe<ObjectOutput<TEntries, TRest>>
+): ObjectSchema<TEntries, TRest>;
 
 /**
  * Creates an object schema.
@@ -88,41 +92,39 @@ export function object<
  * @returns An object schema.
  */
 export function object<
-  TObjectEntries extends ObjectEntries,
-  TObjectRest extends BaseSchema | undefined
+  TEntries extends ObjectEntries,
+  TRest extends BaseSchema | undefined
 >(
-  entries: TObjectEntries,
-  rest: TObjectRest,
+  entries: TEntries,
+  rest: TRest,
   error?: ErrorMessage,
-  pipe?: Pipe<ObjectOutput<TObjectEntries, TObjectRest>>
-): ObjectSchema<TObjectEntries, TObjectRest>;
+  pipe?: Pipe<ObjectOutput<TEntries, TRest>>
+): ObjectSchema<TEntries, TRest>;
 
 export function object<
-  TObjectEntries extends ObjectEntries,
-  TObjectRest extends BaseSchema | undefined = undefined
+  TEntries extends ObjectEntries,
+  TRest extends BaseSchema | undefined = undefined
 >(
-  entries: TObjectEntries,
-  arg2?:
-    | Pipe<ObjectOutput<TObjectEntries, TObjectRest>>
-    | ErrorMessage
-    | TObjectRest,
-  arg3?: Pipe<ObjectOutput<TObjectEntries, TObjectRest>> | ErrorMessage,
-  arg4?: Pipe<ObjectOutput<TObjectEntries, TObjectRest>>
-): ObjectSchema<TObjectEntries, TObjectRest> {
+  entries: TEntries,
+  arg2?: Pipe<ObjectOutput<TEntries, TRest>> | ErrorMessage | TRest,
+  arg3?: Pipe<ObjectOutput<TEntries, TRest>> | ErrorMessage,
+  arg4?: Pipe<ObjectOutput<TEntries, TRest>>
+): ObjectSchema<TEntries, TRest> {
   // Get rest, error and pipe argument
-  const [rest, error, pipe = []] = getRestAndDefaultArgs<
-    TObjectRest,
-    Pipe<ObjectOutput<TObjectEntries, TObjectRest>>
+  const [rest, error, pipe] = getRestAndDefaultArgs<
+    TRest,
+    Pipe<ObjectOutput<TEntries, TRest>>
   >(arg2, arg3, arg4);
 
   // Create cached entries
-  let cachedEntries: [string, BaseSchema<any>][];
+  let cachedEntries: [string, BaseSchema][];
 
   // Create and return object schema
   return {
-    kind: 'object',
+    type: 'object',
     async: false,
-    object: { entries, rest },
+    entries,
+    rest,
     pipe,
     _parse(input, info) {
       // Check type of input
@@ -152,7 +154,7 @@ export function object<
         if (result.issues) {
           // Create object path item
           const pathItem: ObjectPathItem = {
-            schema: 'object',
+            type: 'object',
             input,
             key,
             value,
@@ -193,7 +195,7 @@ export function object<
             if (result.issues) {
               // Create object path item
               const pathItem: ObjectPathItem = {
-                schema: 'object',
+                type: 'object',
                 input,
                 key,
                 value,
@@ -229,7 +231,7 @@ export function object<
       return issues
         ? getIssues(issues)
         : executePipe(
-            output as ObjectOutput<TObjectEntries, TObjectRest>,
+            output as ObjectOutput<TEntries, TRest>,
             pipe,
             info,
             'object'

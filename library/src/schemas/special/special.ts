@@ -12,7 +12,7 @@ export type SpecialSchema<TInput, TOutput = TInput> = BaseSchema<
   TInput,
   TOutput
 > & {
-  kind: 'special';
+  type: 'special';
   /**
    * Validation and transformation pipe.
    */
@@ -57,7 +57,7 @@ export function special<TInput>(
 
   // Create and return string schema
   return {
-    kind: 'special',
+    type: 'special',
     async: false,
     pipe,
     _parse(input, info) {

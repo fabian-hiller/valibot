@@ -12,7 +12,7 @@ export type SpecialSchemaAsync<TInput, TOutput = TInput> = BaseSchemaAsync<
   TInput,
   TOutput
 > & {
-  kind: 'special';
+  type: 'special';
   /**
    * Validation and transformation pipe.
    */
@@ -57,7 +57,7 @@ export function specialAsync<TInput>(
 
   // Create and return string schema
   return {
-    kind: 'special',
+    type: 'special',
     async: true,
     pipe,
     async _parse(input, info) {

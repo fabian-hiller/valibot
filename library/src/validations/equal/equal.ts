@@ -16,12 +16,12 @@ export function equal<
   TRequirement extends TInput
 >(requirement: TRequirement, error?: ErrorMessage) {
   return {
-    kind: 'equal' as const,
+    type: 'equal' as const,
     message: error ?? 'Invalid input',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return input !== requirement
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

@@ -9,7 +9,7 @@ export type LiteralSchemaAsync<
   TLiteral extends Literal,
   TOutput = TLiteral
 > = BaseSchemaAsync<TLiteral, TOutput> & {
-  kind: 'literal';
+  type: 'literal';
   /**
    * The literal value.
    */
@@ -29,7 +29,7 @@ export function literalAsync<TLiteral extends Literal>(
   error?: ErrorMessage
 ): LiteralSchemaAsync<TLiteral> {
   return {
-    kind: 'literal',
+    type: 'literal',
     async: true,
     literal,
     async _parse(input, info) {

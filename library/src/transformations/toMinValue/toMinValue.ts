@@ -14,7 +14,7 @@ export function toMinValue<
   TRequirement extends TInput
 >(requirement: TRequirement) {
   return {
-    kind: 'to_min_value' as const,
+    type: 'to_min_value' as const,
     _parse(input: TInput): PipeResult<TInput> {
       return getOutput(input < requirement ? requirement : input);
     },

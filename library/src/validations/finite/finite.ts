@@ -10,11 +10,11 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function finite<TInput extends number>(error?: ErrorMessage) {
   return {
-    kind: 'finite' as const,
+    type: 'finite' as const,
     message: error ?? 'Invalid finite number',
     _parse(input: TInput): PipeResult<TInput> {
       return !Number.isFinite(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

@@ -9,11 +9,11 @@ import {
  * Date schema type.
  */
 export type DateSchema<TOutput = Date> = BaseSchema<Date, TOutput> & {
-  kind: 'date';
+  type: 'date';
   /**
    * Validation and transformation pipe.
    */
-  pipe: Pipe<Date>;
+  pipe?: Pipe<Date>;
 };
 
 /**
@@ -40,11 +40,11 @@ export function date(
   arg2?: Pipe<Date>
 ): DateSchema {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return date schema
   return {
-    kind: 'date',
+    type: 'date',
     async: false,
     pipe,
     _parse(input, info) {

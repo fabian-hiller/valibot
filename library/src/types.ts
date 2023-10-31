@@ -90,7 +90,7 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
   /**
    * The schema type.
    */
-  kind: string;
+  type: string;
   /**
    * Whether it's async.
    */
@@ -116,7 +116,7 @@ export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
   /**
    * The schema type.
    */
-  kind: string;
+  type: string;
   /**
    * Whether it's async.
    */
@@ -174,12 +174,12 @@ export type PipeResult<TOutput> =
 
 export type Validation<
   TValue,
-  TKind extends string = string,
+  TType extends string = string,
   TMessage extends ErrorMessage = ErrorMessage,
   TRequirement = unknown
 > = {
   /* The validation type */
-  kind: TKind;
+  type: TType;
   /* The validation error message */
   message: TMessage;
   /* The requirement value to compare against (Optional) */
@@ -190,13 +190,13 @@ export type Validation<
 
 export type ValidationAsync<
   TValue,
-  TKind extends string = string,
+  TType extends string = string,
   TMessage extends ErrorMessage = ErrorMessage,
   TRequirement = unknown
 > = TRequirement extends unknown
   ? {
       /* The validation type */
-      kind: TKind;
+      type: TType;
       /* The validation error message */
       message: TMessage;
       /* @internal */
@@ -204,7 +204,7 @@ export type ValidationAsync<
     }
   : {
       /* The validation type */
-      kind: TKind;
+      type: TType;
       /* The validation error message */
       message: TMessage;
       /* The requirement value to compare against */
@@ -215,14 +215,14 @@ export type ValidationAsync<
 
 export type Transform<TValue> = {
   /* The transformation type */
-  kind: string;
+  type: string;
   /* @internal */
   _parse(value: TValue): PipeResult<TValue>;
 };
 
 export type TransformAsync<TValue> = {
   /* The transformation type */
-  kind: string;
+  type: string;
   /* @internal */
   _parse(value: TValue): Promise<PipeResult<TValue>> | PipeResult<TValue>;
 };

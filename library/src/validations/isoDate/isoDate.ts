@@ -1,8 +1,9 @@
+import { ISO_DATE_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
 /**
- * Creates a validation function that validates an date.
+ * Creates a validation function that validates a date.
  *
  * Format: yyyy-mm-dd
  *
@@ -16,12 +17,12 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function isoDate<TInput extends string>(error?: ErrorMessage) {
   return {
-    kind: 'iso_date' as const,
+    type: 'iso_date' as const,
     message: error ?? 'Invalid date',
-    requirement: /^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])$/,
+    requirement: ISO_DATE_REGEX,
     _parse(input: TInput): PipeResult<TInput> {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

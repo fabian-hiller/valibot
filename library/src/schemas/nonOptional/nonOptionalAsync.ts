@@ -15,7 +15,7 @@ export type NonOptionalSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TOutput = NonOptional<Output<TWrapped>>
 > = BaseSchemaAsync<NonOptional<Input<TWrapped>>, TOutput> & {
-  kind: 'non_optional';
+  type: 'non_optional';
   /**
    * The wrapped schema.
    */
@@ -35,7 +35,7 @@ export function nonOptionalAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
   error?: ErrorMessage
 ): NonOptionalSchemaAsync<TWrapped> {
   return {
-    kind: 'non_optional',
+    type: 'non_optional',
     async: true,
     wrapped,
     async _parse(input, info) {

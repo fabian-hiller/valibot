@@ -9,7 +9,7 @@ import { getOutput } from '../../utils/index.ts';
  */
 export function toTrimmedStart() {
   return {
-    kind: 'to_trimmed_start' as const,
+    type: 'to_trimmed_start' as const,
     _parse(input: string): PipeResult<string> {
       return getOutput(input.trimStart());
     },

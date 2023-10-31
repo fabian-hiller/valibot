@@ -12,11 +12,11 @@ export type NumberSchemaAsync<TOutput = number> = BaseSchemaAsync<
   number,
   TOutput
 > & {
-  kind: 'number';
+  type: 'number';
   /**
    * Validation and transformation pipe.
    */
-  pipe: PipeAsync<number>;
+  pipe?: PipeAsync<number>;
 };
 
 /**
@@ -46,11 +46,11 @@ export function numberAsync(
   arg2?: PipeAsync<number>
 ): NumberSchemaAsync {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return async number schema
   return {
-    kind: 'number',
+    type: 'number',
     async: true,
     pipe,
     async _parse(input, info) {

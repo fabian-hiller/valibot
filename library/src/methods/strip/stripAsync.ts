@@ -14,8 +14,8 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A object schema.
  */
 export function stripAsync<
-  TObjectSchema extends ObjectSchemaAsync<ObjectEntriesAsync, undefined>
->(schema: TObjectSchema): TObjectSchema {
+  TSchema extends ObjectSchemaAsync<ObjectEntriesAsync, undefined>
+>(schema: TSchema): TSchema {
   // Create cached keys
   let cachedKeys: string[];
 
@@ -41,7 +41,7 @@ export function stripAsync<
       }
 
       // Cache object keys lazy
-      cachedKeys = cachedKeys || Object.keys(schema.object.entries);
+      cachedKeys = cachedKeys || Object.keys(schema.entries);
 
       // Strip unknown keys
       const output: Record<string, any> = {};

@@ -9,11 +9,11 @@ import {
  * Blob schema async type.
  */
 export type BlobSchemaAsync<TOutput = Blob> = BaseSchemaAsync<Blob, TOutput> & {
-  kind: 'blob';
+  type: 'blob';
   /**
    * Validation and transformation pipe.
    */
-  pipe: PipeAsync<Blob>;
+  pipe?: PipeAsync<Blob>;
 };
 
 /**
@@ -43,11 +43,11 @@ export function blobAsync(
   arg2?: PipeAsync<Blob>
 ): BlobSchemaAsync {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return async blob schema
   return {
-    kind: 'blob',
+    type: 'blob',
     async: true,
     pipe,
     async _parse(input, info) {

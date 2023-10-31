@@ -1,3 +1,4 @@
+import { EMOJI_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
@@ -10,12 +11,12 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function emoji<TInput extends string>(error?: ErrorMessage) {
   return {
-    kind: 'emoji' as const,
+    type: 'emoji' as const,
     message: error ?? 'Invalid emoji',
-    requirement: /^(\p{Extended_Pictographic}|\p{Emoji_Component})+$/u,
+    requirement: EMOJI_REGEX,
     _parse(input: TInput): PipeResult<TInput> {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

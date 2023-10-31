@@ -14,12 +14,12 @@ export function endsWith<
   const TRequirement extends string
 >(requirement: TRequirement, error?: ErrorMessage) {
   return {
-    kind: 'ends_with' as const,
+    type: 'ends_with' as const,
     message: error ?? 'Invalid end',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return !input.endsWith(requirement as any)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

@@ -14,12 +14,12 @@ export function length<
   const TRequirement extends number
 >(requirement: TRequirement, error?: ErrorMessage) {
   return {
-    kind: 'length' as const,
+    type: 'length' as const,
     message: error ?? 'Invalid length',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return input.length !== requirement
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

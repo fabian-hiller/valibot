@@ -1,8 +1,9 @@
+import { IMEI_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues, isLuhnAlgo } from '../../utils/index.ts';
 
 /**
- * Creates a validation function that validates an IMEI.
+ * Creates a validation function that validates an [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity).
  *
  * Format: AA-BBBBBB-CCCCCC-D
  *
@@ -12,12 +13,12 @@ import { getOutput, getPipeIssues, isLuhnAlgo } from '../../utils/index.ts';
  */
 export function imei<TInput extends string>(error?: ErrorMessage) {
   return {
-    kind: 'imei' as const,
+    type: 'imei' as const,
     message: error ?? 'Invalid IMEI',
-    requirement: /^\d{2}[ |/|-]?\d{6}[ |/|-]?\d{6}[ |/|-]?\d$/,
+    requirement: IMEI_REGEX,
     _parse(input: TInput): PipeResult<TInput> {
       return !this.requirement.test(input) || !isLuhnAlgo(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

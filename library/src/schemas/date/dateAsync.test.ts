@@ -53,13 +53,13 @@ describe('dateAsync', () => {
     const schema1 = dateAsync([maxValue(requirement)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({
-        kind: 'max_value',
+        type: 'max_value',
         requirement,
         message: 'Invalid value',
       }),
     ]);
 
     const schema2 = dateAsync();
-    expect(schema2.pipe).toStrictEqual([]);
+    expect(schema2.pipe).toBeUndefined();
   });
 });

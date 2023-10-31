@@ -9,7 +9,7 @@ export type LiteralSchema<
   TLiteral extends Literal,
   TOutput = TLiteral
 > = BaseSchema<TLiteral, TOutput> & {
-  kind: 'literal';
+  type: 'literal';
   /**
    * The literal value.
    */
@@ -29,7 +29,7 @@ export function literal<TLiteral extends Literal>(
   error?: ErrorMessage
 ): LiteralSchema<TLiteral> {
   return {
-    kind: 'literal',
+    type: 'literal',
     async: false,
     literal,
     _parse(input, info) {

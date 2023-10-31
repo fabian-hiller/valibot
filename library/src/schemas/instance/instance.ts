@@ -17,7 +17,7 @@ export type InstanceSchema<
   TClass extends Class,
   TOutput = InstanceType<TClass>
 > = BaseSchema<InstanceType<TClass>, TOutput> & {
-  kind: 'instance';
+  type: 'instance';
   /**
    * The class of the instance.
    */
@@ -25,7 +25,7 @@ export type InstanceSchema<
   /**
    * Validation and transformation pipe.
    */
-  pipe: Pipe<InstanceType<TClass>>;
+  pipe?: Pipe<InstanceType<TClass>>;
 };
 
 /**
@@ -62,11 +62,11 @@ export function instance<TClass extends Class>(
   arg3?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass> {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg2, arg3);
+  const [error, pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
-    kind: 'instance',
+    type: 'instance',
     async: false,
     class: of,
     pipe,

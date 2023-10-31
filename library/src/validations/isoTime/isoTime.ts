@@ -1,3 +1,4 @@
+import { ISO_TIME_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
@@ -12,12 +13,12 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function isoTime<TInput extends string>(error?: ErrorMessage) {
   return {
-    kind: 'iso_time' as const,
+    type: 'iso_time' as const,
     message: error ?? 'Invalid time',
-    requirement: /^(0[0-9]|1\d|2[0-3]):[0-5]\d$/,
+    requirement: ISO_TIME_REGEX,
     _parse(input: TInput): PipeResult<TInput> {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

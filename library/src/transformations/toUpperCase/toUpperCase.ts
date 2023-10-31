@@ -9,7 +9,7 @@ import { getOutput } from '../../utils/index.ts';
  */
 export function toUpperCase() {
   return {
-    kind: 'to_uppper_case' as const,
+    type: 'to_uppper_case' as const,
     _parse(input: string): PipeResult<string> {
       return getOutput(input.toUpperCase());
     },

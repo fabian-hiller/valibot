@@ -9,11 +9,11 @@ import {
  * String schema type.
  */
 export type StringSchema<TOutput = string> = BaseSchema<string, TOutput> & {
-  kind: 'string';
+  type: 'string';
   /**
    * Validation and transformation pipe.
    */
-  pipe: Pipe<string>;
+  pipe?: Pipe<string>;
 };
 
 /**
@@ -40,11 +40,11 @@ export function string(
   arg2?: Pipe<string>
 ): StringSchema {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return string schema
   return {
-    kind: 'string',
+    type: 'string',
     async: false,
     pipe,
     _parse(input, info) {

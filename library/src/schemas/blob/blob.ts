@@ -9,11 +9,11 @@ import {
  * Blob schema type.
  */
 export type BlobSchema<TOutput = Blob> = BaseSchema<Blob, TOutput> & {
-  kind: 'blob';
+  type: 'blob';
   /**
    * Validation and transformation pipe.
    */
-  pipe: Pipe<Blob>;
+  pipe?: Pipe<Blob>;
 };
 
 /**
@@ -40,11 +40,11 @@ export function blob(
   arg2?: Pipe<Blob>
 ): BlobSchema {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return blob schema
   return {
-    kind: 'blob',
+    type: 'blob',
     async: false,
     pipe,
     _parse(input, info) {

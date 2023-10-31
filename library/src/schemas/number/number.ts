@@ -9,11 +9,11 @@ import {
  * Number schema type.
  */
 export type NumberSchema<TOutput = number> = BaseSchema<number, TOutput> & {
-  kind: 'number';
+  type: 'number';
   /**
    * Validation and transformation pipe.
    */
-  pipe: Pipe<number>;
+  pipe?: Pipe<number>;
 };
 
 /**
@@ -40,11 +40,11 @@ export function number(
   arg2?: Pipe<number>
 ): NumberSchema {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return number schema
   return {
-    kind: 'number',
+    type: 'number',
     async: false,
     pipe,
     _parse(input, info) {

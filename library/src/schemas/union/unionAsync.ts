@@ -21,39 +21,39 @@ export type UnionOptionsAsync = [
  * Union schema async type.
  */
 export type UnionSchemaAsync<
-  TUnionOptions extends UnionOptionsAsync,
-  TOutput = Output<TUnionOptions[number]>
-> = BaseSchemaAsync<Input<TUnionOptions[number]>, TOutput> & {
-  kind: 'union';
+  TOptions extends UnionOptionsAsync,
+  TOutput = Output<TOptions[number]>
+> = BaseSchemaAsync<Input<TOptions[number]>, TOutput> & {
+  type: 'union';
   /**
-   * The union schema.
+   * The union options.
    */
-  union: TUnionOptions;
+  options: TOptions;
 };
 
 /**
  * Creates an async union schema.
  *
- * @param union The union schema.
+ * @param union The union options.
  * @param error The error message.
  *
  * @returns An async union schema.
  */
-export function unionAsync<TUnionOptions extends UnionOptionsAsync>(
-  union: TUnionOptions,
+export function unionAsync<TOptions extends UnionOptionsAsync>(
+  options: TOptions,
   error?: ErrorMessage
-): UnionSchemaAsync<TUnionOptions> {
+): UnionSchemaAsync<TOptions> {
   return {
-    kind: 'union',
+    type: 'union',
     async: true,
-    union,
+    options,
     async _parse(input, info) {
       // Create issues and output
       let issues: Issues | undefined;
-      let output: [Output<TUnionOptions[number]>] | undefined;
+      let output: [Output<TOptions[number]>] | undefined;
 
       // Parse schema of each option
-      for (const schema of union) {
+      for (const schema of options) {
         const result = await schema._parse(input, info);
 
         // If there are issues, capture them

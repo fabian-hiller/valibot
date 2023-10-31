@@ -14,12 +14,12 @@ export function startsWith<
   const TRequirement extends string
 >(requirement: TRequirement, error?: ErrorMessage) {
   return {
-    kind: `starts_with` as const,
+    type: `starts_with` as const,
     message: error ?? 'Invalid start',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return !input.startsWith(requirement as any)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

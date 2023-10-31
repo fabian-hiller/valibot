@@ -16,9 +16,10 @@ import { getSchemaIssues } from '../../utils/index.ts';
  *
  * @returns A strict object schema.
  */
-export function strict<
-  TObjectSchema extends ObjectSchema<ObjectEntries, undefined>
->(schema: TObjectSchema, error?: ErrorMessage): TObjectSchema {
+export function strict<TSchema extends ObjectSchema<ObjectEntries, undefined>>(
+  schema: TSchema,
+  error?: ErrorMessage
+): TSchema {
   return {
     ...schema,
 
@@ -33,9 +34,7 @@ export function strict<
     _parse(input, info) {
       const result = schema._parse(input, info);
       return !result.issues &&
-        Object.keys(input as object).some(
-          (key) => !(key in schema.object.entries)
-        )
+        Object.keys(input as object).some((key) => !(key in schema.entries))
         ? getSchemaIssues(
             info,
             'object',

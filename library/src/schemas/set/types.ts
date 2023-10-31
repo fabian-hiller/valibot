@@ -9,7 +9,7 @@ import type {
  * Set path item type.
  */
 export type SetPathItem = {
-  schema: 'set';
+  type: 'set';
   input: Set<any>;
   key: number;
   value: any;
@@ -18,13 +18,13 @@ export type SetPathItem = {
 /**
  * Set output inference type.
  */
-export type SetInput<TSetValue extends BaseSchema | BaseSchemaAsync> = Set<
-  Input<TSetValue>
+export type SetInput<TValue extends BaseSchema | BaseSchemaAsync> = Set<
+  Input<TValue>
 >;
 
 /**
  * Set output inference type.
  */
-export type SetOutput<TSetValue extends BaseSchema | BaseSchemaAsync> = Set<
-  Output<TSetValue>
+export type SetOutput<TValue extends BaseSchema | BaseSchemaAsync> = Set<
+  Output<TValue>
 >;

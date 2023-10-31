@@ -51,13 +51,13 @@ describe('instance', () => {
     const schema1 = instance(Date, [maxValue(requirement)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({
-        kind: 'max_value',
+        type: 'max_value',
         requirement,
         message: 'Invalid value',
       }),
     ]);
 
     const schema2 = instance(Date);
-    expect(schema2.pipe).toStrictEqual([]);
+    expect(schema2.pipe).toBeUndefined();
   });
 });

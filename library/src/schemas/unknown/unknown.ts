@@ -5,7 +5,7 @@ import { executePipe } from '../../utils/index.ts';
  * Unknown schema type.
  */
 export type UnknownSchema<TOutput = unknown> = BaseSchema<unknown, TOutput> & {
-  kind: 'unknown';
+  type: 'unknown';
   /**
    * Validation and transformation pipe.
    */
@@ -21,7 +21,7 @@ export type UnknownSchema<TOutput = unknown> = BaseSchema<unknown, TOutput> & {
  */
 export function unknown(pipe: Pipe<unknown> = []): UnknownSchema {
   return {
-    kind: 'unknown',
+    type: 'unknown',
     async: false,
     pipe,
     _parse(input, info) {

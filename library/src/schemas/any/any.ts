@@ -5,7 +5,7 @@ import { executePipe } from '../../utils/index.ts';
  * Any schema type.
  */
 export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
-  kind: 'any';
+  type: 'any';
   /**
    * Validation and transformation pipe.
    */
@@ -21,7 +21,7 @@ export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
  */
 export function any(pipe: Pipe<any> = []): AnySchema {
   return {
-    kind: 'any',
+    type: 'any',
     async: false,
     pipe,
 

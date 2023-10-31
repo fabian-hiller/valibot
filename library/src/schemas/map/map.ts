@@ -17,19 +17,23 @@ import type { MapInput, MapOutput, MapPathItem } from './types.ts';
  * Map schema type.
  */
 export type MapSchema<
-  TMapKey extends BaseSchema,
-  TMapValue extends BaseSchema,
-  TOutput = MapOutput<TMapKey, TMapValue>
-> = BaseSchema<MapInput<TMapKey, TMapValue>, TOutput> & {
-  kind: 'map';
+  TKey extends BaseSchema,
+  TValue extends BaseSchema,
+  TOutput = MapOutput<TKey, TValue>
+> = BaseSchema<MapInput<TKey, TValue>, TOutput> & {
+  type: 'map';
   /**
-   * The map key and value schema.
+   * The key schema.
    */
-  map: { key: TMapKey; value: TMapValue };
+  key: TKey;
+  /**
+   * The value schema.
+   */
+  value: TValue;
   /**
    * Validation and transformation pipe.
    */
-  pipe: Pipe<MapOutput<TMapKey, TMapValue>>;
+  pipe?: Pipe<MapOutput<TKey, TValue>>;
 };
 
 /**
@@ -41,11 +45,11 @@ export type MapSchema<
  *
  * @returns A map schema.
  */
-export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
-  key: TMapKey,
-  value: TMapValue,
-  pipe?: Pipe<MapOutput<TMapKey, TMapValue>>
-): MapSchema<TMapKey, TMapValue>;
+export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
+  key: TKey,
+  value: TValue,
+  pipe?: Pipe<MapOutput<TKey, TValue>>
+): MapSchema<TKey, TValue>;
 
 /**
  * Creates a map schema.
@@ -57,27 +61,28 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
  *
  * @returns A map schema.
  */
-export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
-  key: TMapKey,
-  value: TMapValue,
+export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
+  key: TKey,
+  value: TValue,
   error?: ErrorMessage,
-  pipe?: Pipe<MapOutput<TMapKey, TMapValue>>
-): MapSchema<TMapKey, TMapValue>;
+  pipe?: Pipe<MapOutput<TKey, TValue>>
+): MapSchema<TKey, TValue>;
 
-export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
-  key: TMapKey,
-  value: TMapValue,
-  arg3?: Pipe<MapOutput<TMapKey, TMapValue>> | ErrorMessage,
-  arg4?: Pipe<MapOutput<TMapKey, TMapValue>>
-): MapSchema<TMapKey, TMapValue> {
+export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
+  key: TKey,
+  value: TValue,
+  arg3?: Pipe<MapOutput<TKey, TValue>> | ErrorMessage,
+  arg4?: Pipe<MapOutput<TKey, TValue>>
+): MapSchema<TKey, TValue> {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg3, arg4);
+  const [error, pipe] = getDefaultArgs(arg3, arg4);
 
   // Create and return map schema
   return {
-    kind: 'map',
+    type: 'map',
     async: false,
-    map: { key, value },
+    key,
+    value,
     pipe,
     _parse(input, info) {
       // Check type of input
@@ -93,7 +98,7 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
 
       // Create issues and output
       let issues: Issues | undefined;
-      const output: Map<Output<TMapKey>, Output<TMapValue>> = new Map();
+      const output: Map<Output<TKey>, Output<TValue>> = new Map();
 
       // Parse each key and value by schema
       for (const [inputKey, inputValue] of input.entries()) {
@@ -112,7 +117,7 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
         if (keyResult.issues) {
           // Create map path item
           pathItem = {
-            schema: 'map',
+            type: 'map',
             input,
             key: inputKey,
             value: inputValue,
@@ -144,7 +149,7 @@ export function map<TMapKey extends BaseSchema, TMapValue extends BaseSchema>(
         if (valueResult.issues) {
           // Create map path item
           pathItem = pathItem || {
-            schema: 'map',
+            type: 'map',
             input,
             key: inputKey,
             value: inputValue,

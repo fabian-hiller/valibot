@@ -9,11 +9,11 @@ import {
  * Date schema async type.
  */
 export type DateSchemaAsync<TOutput = Date> = BaseSchemaAsync<Date, TOutput> & {
-  kind: 'date';
+  type: 'date';
   /**
    * Validation and transformation pipe.
    */
-  pipe: PipeAsync<Date>;
+  pipe?: PipeAsync<Date>;
 };
 
 /**
@@ -43,11 +43,11 @@ export function dateAsync(
   arg2?: PipeAsync<Date>
 ): DateSchemaAsync {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return async date schema
   return {
-    kind: 'date',
+    type: 'date',
     async: true,
     pipe,
     async _parse(input, info) {

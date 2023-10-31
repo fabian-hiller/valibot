@@ -12,7 +12,7 @@ import type { ObjectEntriesAsync } from './objectAsync.ts';
  * Object path item type.
  */
 export type ObjectPathItem = {
-  schema: 'object';
+  type: 'object';
   input: Record<string, any>;
   key: string;
   value: any;
@@ -45,18 +45,18 @@ type WithQuestionMarks<TObject extends object> = Pick<
  * Object input inference type.
  */
 export type ObjectInput<
-  TObjectEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
-> = TObjectRest extends BaseSchema | BaseSchemaAsync
+  TEntries extends ObjectEntries | ObjectEntriesAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
+> = TRest extends BaseSchema | BaseSchemaAsync
   ? ResolveObject<
       WithQuestionMarks<{
-        [TKey in keyof TObjectEntries]: Input<TObjectEntries[TKey]>;
+        [TKey in keyof TEntries]: Input<TEntries[TKey]>;
       }>
     > &
-      Record<string, Input<TObjectRest>>
+      Record<string, Input<TRest>>
   : ResolveObject<
       WithQuestionMarks<{
-        [TKey in keyof TObjectEntries]: Input<TObjectEntries[TKey]>;
+        [TKey in keyof TEntries]: Input<TEntries[TKey]>;
       }>
     >;
 
@@ -64,17 +64,17 @@ export type ObjectInput<
  * Object output inference type.
  */
 export type ObjectOutput<
-  TObjectEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
-> = TObjectRest extends BaseSchema | BaseSchemaAsync
+  TEntries extends ObjectEntries | ObjectEntriesAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
+> = TRest extends BaseSchema | BaseSchemaAsync
   ? ResolveObject<
       WithQuestionMarks<{
-        [TKey in keyof TObjectEntries]: Output<TObjectEntries[TKey]>;
+        [TKey in keyof TEntries]: Output<TEntries[TKey]>;
       }>
     > &
-      Record<string, Output<TObjectRest>>
+      Record<string, Output<TRest>>
   : ResolveObject<
       WithQuestionMarks<{
-        [TKey in keyof TObjectEntries]: Output<TObjectEntries[TKey]>;
+        [TKey in keyof TEntries]: Output<TEntries[TKey]>;
       }>
     >;

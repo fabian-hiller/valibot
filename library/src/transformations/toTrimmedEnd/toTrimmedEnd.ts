@@ -9,7 +9,7 @@ import { getOutput } from '../../utils/index.ts';
  */
 export function toTrimmedEnd() {
   return {
-    kind: 'to_trimmed_end' as const,
+    type: 'to_trimmed_end' as const,
     _parse(input: string): PipeResult<string> {
       return getOutput(input.trimEnd());
     },

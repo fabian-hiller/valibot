@@ -14,12 +14,12 @@ export function custom<TInput>(
   error?: ErrorMessage
 ) {
   return {
-    kind: 'custom' as const,
+    type: 'custom' as const,
     message: error ?? 'Invalid input',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return !requirement(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

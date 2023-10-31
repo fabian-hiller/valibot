@@ -14,12 +14,12 @@ export function bytes<TInput extends string, const TRequirement extends number>(
   error?: ErrorMessage
 ) {
   return {
-    kind: 'bytes' as const,
+    type: 'bytes' as const,
     message: error ?? 'Invalid byte length',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return new TextEncoder().encode(input).length !== requirement
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

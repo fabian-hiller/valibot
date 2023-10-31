@@ -12,11 +12,11 @@ export type StringSchemaAsync<TOutput = string> = BaseSchemaAsync<
   string,
   TOutput
 > & {
-  kind: 'string';
+  type: 'string';
   /**
    * Validation and transformation pipe.
    */
-  pipe: PipeAsync<string>;
+  pipe?: PipeAsync<string>;
 };
 
 /**
@@ -46,11 +46,11 @@ export function stringAsync(
   arg2?: PipeAsync<string>
 ): StringSchemaAsync {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return async string schema
   return {
-    kind: 'string',
+    type: 'string',
     async: true,
     pipe,
     async _parse(input, info) {

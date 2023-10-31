@@ -14,12 +14,12 @@ export function regex<TInput extends string>(
   error?: ErrorMessage
 ) {
   return {
-    kind: 'regex' as const,
+    type: 'regex' as const,
     message: error ?? 'Invalid regex',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return !requirement.test(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

@@ -8,7 +8,7 @@ export type NanSchemaAsync<TOutput = number> = BaseSchemaAsync<
   number,
   TOutput
 > & {
-  kind: 'nan';
+  type: 'nan';
 };
 
 /**
@@ -20,7 +20,7 @@ export type NanSchemaAsync<TOutput = number> = BaseSchemaAsync<
  */
 export function nanAsync(error?: ErrorMessage): NanSchemaAsync {
   return {
-    kind: 'nan',
+    type: 'nan',
     async: true,
     async _parse(input, info) {
       // Check type of input

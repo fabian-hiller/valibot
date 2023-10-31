@@ -3,7 +3,7 @@ import { regex } from './regex.ts';
 
 describe('regex', () => {
   test('should pass only valid strings', () => {
-    const validate = regex(/^ID-\d{3}$/);
+    const validate = regex(/^ID-\d{3}$/u);
     expect(validate._parse('ID-000').output).toBe('ID-000');
     expect(validate._parse('ID-123').output).toBe('ID-123');
     expect(validate._parse('123').issues).toBeTruthy();
@@ -13,7 +13,7 @@ describe('regex', () => {
 
   test('should return custom error message', () => {
     const error = 'Value does not match the regex!';
-    const validate = regex(/^ID-\d{3}$/, error);
+    const validate = regex(/^ID-\d{3}$/u, error);
     expect(validate._parse('test').issues?.[0].message).toBe(error);
   });
 });

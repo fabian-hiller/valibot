@@ -12,7 +12,7 @@ export function toCustomAsync<TInput>(
   action: (input: TInput) => TInput | Promise<TInput>
 ) {
   return {
-    kind: 'to_custom_async' as const,
+    type: 'to_custom_async' as const,
     async _parse(input: TInput): Promise<PipeResult<TInput>> {
       return getOutput(await action(input));
     },

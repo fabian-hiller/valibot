@@ -15,7 +15,7 @@ export type NonNullishSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TOutput = NonNullish<Output<TWrapped>>
 > = BaseSchemaAsync<NonNullish<Input<TWrapped>>, TOutput> & {
-  kind: 'non_nullish';
+  type: 'non_nullish';
   /**
    * The wrapped schema.
    */
@@ -35,7 +35,7 @@ export function nonNullishAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
   error?: ErrorMessage
 ): NonNullishSchemaAsync<TWrapped> {
   return {
-    kind: 'non_nullish',
+    type: 'non_nullish',
     async: true,
     wrapped,
     async _parse(input, info) {

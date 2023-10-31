@@ -40,18 +40,18 @@ describe('string', () => {
     const schema1 = string([minLength(2), maxLength(3)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({
-        kind: 'min_length',
+        type: 'min_length',
         requirement: 2,
         message: 'Invalid length',
       }),
       expect.objectContaining({
-        kind: 'max_length',
+        type: 'max_length',
         requirement: 3,
         message: 'Invalid length',
       }),
     ]);
 
     const schema2 = string();
-    expect(schema2.pipe).toStrictEqual([]);
+    expect(schema2.pipe).toBeUndefined();
   });
 });

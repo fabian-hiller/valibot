@@ -38,8 +38,11 @@ export const Header = component$(() => {
 
   // Use main menu toggle and compute open state
   const mainMenuToggle = useMainMenuToggle();
-  const mainMenuOpen = useComputed$(
-    () => mainMenuToggle.value?.state === 'opened'
+  const mainMenuOpen = useComputed$(() =>
+    mainMenuToggle.isRunning
+      ? // Optimistic UI
+        mainMenuToggle.formData?.get('state') === 'opened'
+      : mainMenuToggle.value?.state === 'opened'
   );
 
   // Use focus trap for main menu

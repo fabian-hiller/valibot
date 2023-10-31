@@ -14,12 +14,12 @@ export function customAsync<TInput>(
   error?: ErrorMessage
 ) {
   return {
-    kind: 'custom' as const,
+    type: 'custom' as const,
     message: error ?? 'Invalid input',
     requirement,
     async _parse(input: TInput): Promise<PipeResult<TInput>> {
       return !(await requirement(input))
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

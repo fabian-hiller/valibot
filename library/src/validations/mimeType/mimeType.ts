@@ -14,12 +14,12 @@ export function mimeType<
   const TRequirement extends `${string}/${string}`[]
 >(requirement: TRequirement, error?: ErrorMessage) {
   return {
-    kind: 'mime_type' as const,
+    type: 'mime_type' as const,
     message: error ?? 'Invalid MIME type',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return !requirement.includes(input.type as `${string}/${string}`)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

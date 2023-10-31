@@ -16,19 +16,23 @@ export type TupleItems = [BaseSchema, ...BaseSchema[]];
  * Tuple schema type.
  */
 export type TupleSchema<
-  TTupleItems extends TupleItems,
-  TTupleRest extends BaseSchema | undefined = undefined,
-  TOutput = TupleOutput<TTupleItems, TTupleRest>
-> = BaseSchema<TupleInput<TTupleItems, TTupleRest>, TOutput> & {
-  kind: 'tuple';
+  TItems extends TupleItems,
+  TRest extends BaseSchema | undefined = undefined,
+  TOutput = TupleOutput<TItems, TRest>
+> = BaseSchema<TupleInput<TItems, TRest>, TOutput> & {
+  type: 'tuple';
   /**
-   * The tuple items and rest schema.
+   * The items schema.
    */
-  tuple: { items: TTupleItems; rest: TTupleRest };
+  items: TItems;
+  /**
+   * The rest schema.
+   */
+  rest: TRest;
   /**
    * Validation and transformation pipe.
    */
-  pipe: Pipe<TupleOutput<TTupleItems, TTupleRest>>;
+  pipe?: Pipe<TupleOutput<TItems, TRest>>;
 };
 
 /**
@@ -39,10 +43,10 @@ export type TupleSchema<
  *
  * @returns A tuple schema.
  */
-export function tuple<TTupleItems extends TupleItems>(
-  items: TTupleItems,
-  pipe?: Pipe<TupleOutput<TTupleItems, undefined>>
-): TupleSchema<TTupleItems>;
+export function tuple<TItems extends TupleItems>(
+  items: TItems,
+  pipe?: Pipe<TupleOutput<TItems, undefined>>
+): TupleSchema<TItems>;
 
 /**
  * Creates a tuple schema.
@@ -53,11 +57,11 @@ export function tuple<TTupleItems extends TupleItems>(
  *
  * @returns A tuple schema.
  */
-export function tuple<TTupleItems extends TupleItems>(
-  items: TTupleItems,
+export function tuple<TItems extends TupleItems>(
+  items: TItems,
   error?: ErrorMessage,
-  pipe?: Pipe<TupleOutput<TTupleItems, undefined>>
-): TupleSchema<TTupleItems>;
+  pipe?: Pipe<TupleOutput<TItems, undefined>>
+): TupleSchema<TItems>;
 
 /**
  * Creates a tuple schema.
@@ -69,13 +73,13 @@ export function tuple<TTupleItems extends TupleItems>(
  * @returns A tuple schema.
  */
 export function tuple<
-  TTupleItems extends TupleItems,
-  TTupleRest extends BaseSchema | undefined
+  TItems extends TupleItems,
+  TRest extends BaseSchema | undefined
 >(
-  items: TTupleItems,
-  rest: TTupleRest,
-  pipe?: Pipe<TupleOutput<TTupleItems, TTupleRest>>
-): TupleSchema<TTupleItems, TTupleRest>;
+  items: TItems,
+  rest: TRest,
+  pipe?: Pipe<TupleOutput<TItems, TRest>>
+): TupleSchema<TItems, TRest>;
 
 /**
  * Creates a tuple schema.
@@ -88,35 +92,36 @@ export function tuple<
  * @returns A tuple schema.
  */
 export function tuple<
-  TTupleItems extends TupleItems,
-  TTupleRest extends BaseSchema | undefined
+  TItems extends TupleItems,
+  TRest extends BaseSchema | undefined
 >(
-  items: TTupleItems,
-  rest: TTupleRest,
+  items: TItems,
+  rest: TRest,
   error?: ErrorMessage,
-  pipe?: Pipe<TupleOutput<TTupleItems, TTupleRest>>
-): TupleSchema<TTupleItems, TTupleRest>;
+  pipe?: Pipe<TupleOutput<TItems, TRest>>
+): TupleSchema<TItems, TRest>;
 
 export function tuple<
-  TTupleItems extends TupleItems,
-  TTupleRest extends BaseSchema | undefined = undefined
+  TItems extends TupleItems,
+  TRest extends BaseSchema | undefined = undefined
 >(
-  items: TTupleItems,
-  arg2?: Pipe<TupleOutput<TTupleItems, TTupleRest>> | ErrorMessage | TTupleRest,
-  arg3?: Pipe<TupleOutput<TTupleItems, TTupleRest>> | ErrorMessage,
-  arg4?: Pipe<TupleOutput<TTupleItems, TTupleRest>>
-): TupleSchema<TTupleItems, TTupleRest> {
+  items: TItems,
+  arg2?: Pipe<TupleOutput<TItems, TRest>> | ErrorMessage | TRest,
+  arg3?: Pipe<TupleOutput<TItems, TRest>> | ErrorMessage,
+  arg4?: Pipe<TupleOutput<TItems, TRest>>
+): TupleSchema<TItems, TRest> {
   // Get rest, error and pipe argument
-  const [rest, error, pipe = []] = getRestAndDefaultArgs<
-    TTupleRest,
-    Pipe<TupleOutput<TTupleItems, TTupleRest>>
+  const [rest, error, pipe] = getRestAndDefaultArgs<
+    TRest,
+    Pipe<TupleOutput<TItems, TRest>>
   >(arg2, arg3, arg4);
 
   // Create and return tuple schema
   return {
-    kind: 'tuple',
+    type: 'tuple',
     async: false,
-    tuple: { items, rest },
+    items,
+    rest,
     pipe,
     _parse(input, info) {
       // Check type of input
@@ -143,7 +148,7 @@ export function tuple<
         if (result.issues) {
           // Create tuple path item
           const pathItem: TuplePathItem = {
-            schema: 'tuple',
+            type: 'tuple',
             input: input as [any, ...any[]],
             key,
             value,
@@ -183,7 +188,7 @@ export function tuple<
           if (result.issues) {
             // Create tuple path item
             const pathItem: TuplePathItem = {
-              schema: 'tuple',
+              type: 'tuple',
               input: input as [any, ...any[]],
               key,
               value,
@@ -218,7 +223,7 @@ export function tuple<
       return issues
         ? getIssues(issues)
         : executePipe(
-            output as TupleOutput<TTupleItems, TTupleRest>,
+            output as TupleOutput<TItems, TRest>,
             pipe,
             info,
             'tuple'

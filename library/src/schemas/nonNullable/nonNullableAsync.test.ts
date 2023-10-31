@@ -1,18 +1,18 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
-import { nullType } from '../nullType/index.ts';
+import { null_ } from '../null/index.ts';
 import { nullable } from '../nullable/index.ts';
 import { number } from '../number/index.ts';
 import { any } from '../any/index.ts';
 import { stringAsync } from '../string/index.ts';
 import { unionAsync } from '../union/index.ts';
-import { undefinedType } from '../undefinedType/index.ts';
+import { undefined_ } from '../undefined/index.ts';
 import { nonNullableAsync } from './nonNullableAsync.ts';
 
 describe('nonNullableAsync', () => {
   test('should not pass null', async () => {
     const schema1 = nonNullableAsync(
-      unionAsync([stringAsync(), nullType(), undefinedType()])
+      unionAsync([stringAsync(), null_(), undefined_()])
     );
     const input1 = 'test';
     const output1 = await parseAsync(schema1, input1);

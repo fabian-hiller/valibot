@@ -12,11 +12,11 @@ export type BooleanSchemaAsync<TOutput = boolean> = BaseSchemaAsync<
   boolean,
   TOutput
 > & {
-  kind: 'boolean';
+  type: 'boolean';
   /**
    * Validation and transformation pipe.
    */
-  pipe: PipeAsync<boolean>;
+  pipe?: PipeAsync<boolean>;
 };
 
 /**
@@ -46,11 +46,11 @@ export function booleanAsync(
   arg2?: PipeAsync<boolean>
 ): BooleanSchemaAsync {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg1, arg2);
+  const [error, pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return async boolean schema
   return {
-    kind: 'boolean',
+    type: 'boolean',
     async: true,
     pipe,
     async _parse(input, info) {

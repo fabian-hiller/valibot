@@ -1,3 +1,4 @@
+import { ISO_TIMESTAMP_REGEX } from '../../regex.ts';
 import type { ErrorMessage, PipeResult } from '../../types.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
@@ -16,13 +17,12 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  */
 export function isoTimestamp<TInput extends string>(error?: ErrorMessage) {
   return {
-    kind: 'iso_timestamp' as const,
+    type: 'iso_timestamp' as const,
     message: error ?? 'Invalid timestamp',
-    requirement:
-      /^\d{4}-(0[1-9]|1[0-2])-([12]\d|0[1-9]|3[01])T(0[0-9]|1\d|2[0-3]):[0-5]\d:[0-5]\d\.\d{3}Z$/,
+    requirement: ISO_TIMESTAMP_REGEX,
     _parse(input: TInput): PipeResult<TInput> {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

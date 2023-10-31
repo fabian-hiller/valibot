@@ -7,19 +7,16 @@ import { getOutput } from '../../utils/index.ts';
 export type NullishSchema<
   TWrapped extends BaseSchema,
   TDefault extends Input<TWrapped> | undefined = undefined,
-  TOutput = TDefault extends undefined
-    ? Output<TWrapped> | null | undefined
-    : Output<TWrapped>
+  TOutput = TDefault extends Input<TWrapped>
+    ? Output<TWrapped>
+    : Output<TWrapped> | null | undefined
 > = BaseSchema<Input<TWrapped> | null | undefined, TOutput> & {
-  kind: 'nullish';
-  /**
-   * The wrapped schema.
-   */
+  type: 'nullish';
   wrapped: TWrapped;
   /**
-   * The default value.
+   * Returns the default value.
    */
-  get default(): TDefault;
+  getDefault: () => TDefault;
 };
 
 /**
@@ -38,31 +35,26 @@ export function nullish<
   default_?: TDefault | (() => TDefault)
 ): NullishSchema<TWrapped, TDefault> {
   return {
-    kind: 'nullish',
+    type: 'nullish',
     async: false,
     wrapped,
-    get default() {
+    getDefault() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);
     },
     _parse(input, info) {
-      // Get default or input value
-      let default_: TDefault;
-      const value =
-        (input === null || input === undefined) &&
-        (default_ = this.default) &&
-        default_ !== undefined
-          ? default_
-          : input;
-
-      // Allow `null` or `undefined` value to pass
-      if (value === null || value === undefined) {
-        return getOutput(value);
+      // Allow `null` or `undefined` to pass or override it with default value
+      if (input === null || input === undefined) {
+        const override = this.getDefault();
+        if (override === undefined) {
+          return getOutput(input);
+        }
+        input = override;
       }
 
-      // Return result of wrapped schema
-      return wrapped._parse(value, info);
+      // Otherwise, return result of wrapped schema
+      return wrapped._parse(input, info);
     },
   };
 }

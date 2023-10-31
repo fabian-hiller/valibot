@@ -14,12 +14,12 @@ export function maxValue<
   const TRequirement extends TInput
 >(requirement: TRequirement, error?: ErrorMessage) {
   return {
-    kind: 'max_value' as const,
+    type: 'max_value' as const,
     message: error ?? 'Invalid value',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return input > requirement
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };

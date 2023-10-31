@@ -14,7 +14,7 @@ export function toMaxValue<
   TRequirement extends TInput
 >(requirement: TRequirement) {
   return {
-    kind: 'to_max_value' as const,
+    type: 'to_max_value' as const,
     _parse(input: TInput): PipeResult<TInput> {
       return getOutput(input > requirement ? requirement : input);
     },

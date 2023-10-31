@@ -13,7 +13,7 @@ export type InstanceSchemaAsync<
   TClass extends Class,
   TOutput = InstanceType<TClass>
 > = BaseSchemaAsync<InstanceType<TClass>, TOutput> & {
-  kind: 'instance';
+  type: 'instance';
   /**
    * The class of the instance.
    */
@@ -21,7 +21,7 @@ export type InstanceSchemaAsync<
   /**
    * Validation and transformation pipe.
    */
-  pipe: PipeAsync<InstanceType<TClass>>;
+  pipe?: PipeAsync<InstanceType<TClass>>;
 };
 
 /**
@@ -58,11 +58,11 @@ export function instanceAsync<TClass extends Class>(
   arg3?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass> {
   // Get error and pipe argument
-  const [error, pipe = []] = getDefaultArgs(arg2, arg3);
+  const [error, pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
-    kind: 'instance',
+    type: 'instance',
     async: true,
     class: of,
     pipe,

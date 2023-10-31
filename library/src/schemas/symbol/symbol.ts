@@ -5,7 +5,7 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
  * Symbol schema type.
  */
 export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
-  kind: 'symbol';
+  type: 'symbol';
 };
 
 /**
@@ -17,7 +17,7 @@ export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
  */
 export function symbol(error?: ErrorMessage): SymbolSchema {
   return {
-    kind: 'symbol',
+    type: 'symbol',
     async: false,
     _parse(input, info) {
       // Check type of input

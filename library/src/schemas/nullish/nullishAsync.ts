@@ -15,19 +15,19 @@ export type NullishSchemaAsync<
     | Input<TWrapped>
     | undefined
     | Promise<Input<TWrapped> | undefined> = undefined,
-  TOutput = Awaited<TDefault> extends undefined
-    ? Output<TWrapped> | null | undefined
-    : Output<TWrapped>
+  TOutput = Awaited<TDefault> extends Input<TWrapped>
+    ? Output<TWrapped>
+    : Output<TWrapped> | null | undefined
 > = BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> & {
-  kind: 'nullish';
+  type: 'nullish';
   /**
    * The wrapped schema.
    */
   wrapped: TWrapped;
   /**
-   * The default value.
+   * Retutns the default value.
    */
-  get default(): TDefault;
+  getDefault: () => Promise<TDefault>;
 };
 
 /**
@@ -49,31 +49,26 @@ export function nullishAsync<
   default_?: TDefault | (() => TDefault)
 ): NullishSchemaAsync<TWrapped, TDefault> {
   return {
-    kind: 'nullish',
+    type: 'nullish',
     async: true,
     wrapped,
-    get default() {
+    async getDefault() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);
     },
     async _parse(input, info) {
-      // Get default or input value
-      let default_: Awaited<TDefault>;
-      const value =
-        (input === null || input === undefined) &&
-        (default_ = await this.default) &&
-        default_ !== undefined
-          ? default_
-          : input;
-
-      // Allow `null` or `undefined` value to pass
-      if (value === null || value === undefined) {
-        return getOutput(value);
+      // Allow `null` or `undefined` to pass or override it with default value
+      if (input === null || input === undefined) {
+        const override = await this.getDefault();
+        if (override === undefined) {
+          return getOutput(input);
+        }
+        input = override;
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(value, info);
+      return wrapped._parse(input, info);
     },
   };
 }

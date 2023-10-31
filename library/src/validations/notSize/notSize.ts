@@ -14,12 +14,12 @@ export function notSize<
   const TRequirement extends number
 >(requirement: TRequirement, error?: ErrorMessage) {
   return {
-    kind: 'not_size' as const,
+    type: 'not_size' as const,
     message: error ?? 'Invalid size',
     requirement,
     _parse(input: TInput): PipeResult<TInput> {
       return input.size === requirement
-        ? getPipeIssues(this.kind, this.message, input)
+        ? getPipeIssues(this.type, this.message, input)
         : getOutput(input);
     },
   };
