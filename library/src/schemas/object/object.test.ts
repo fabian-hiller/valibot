@@ -90,7 +90,7 @@ describe('object', () => {
     const result1 = schema1._parse(input1);
     expect(result1.issues?.[0].path).toEqual([
       {
-        schema: 'object',
+        type: 'object',
         input: input1,
         key: 'key',
         value: input1.key,
@@ -102,13 +102,13 @@ describe('object', () => {
     const result2 = schema2._parse(input2);
     expect(result2.issues?.[0].path).toEqual([
       {
-        schema: 'object',
+        type: 'object',
         input: input2,
         key: 'nested',
         value: input2.nested,
       },
       {
-        schema: 'object',
+        type: 'object',
         input: input2.nested,
         key: 'key',
         value: input2.nested.key,
@@ -120,7 +120,7 @@ describe('object', () => {
     const result3 = schema3._parse(input3);
     expect(result3.issues?.[0].path).toEqual([
       {
-        schema: 'object',
+        type: 'object',
         input: input3,
         key: 'key2',
         value: input3.key2,
@@ -132,13 +132,13 @@ describe('object', () => {
     const result4 = schema4._parse(input4);
     expect(result4.issues?.[0].path).toEqual([
       {
-        schema: 'object',
+        type: 'object',
         input: input4,
         key: 'nested',
         value: input4.nested,
       },
       {
-        schema: 'object',
+        type: 'object',
         input: input4.nested,
         key: 'key',
         value: input4.nested.key,

@@ -12,7 +12,7 @@ export type BigintSchemaAsync<TOutput = bigint> = BaseSchemaAsync<
   bigint,
   TOutput
 > & {
-  schema: 'bigint';
+  type: 'bigint';
 };
 
 /**
@@ -49,7 +49,7 @@ export function bigintAsync(
     /**
      * The schema type.
      */
-    schema: 'bigint',
+    type: 'bigint',
 
     /**
      * Whether it's async.

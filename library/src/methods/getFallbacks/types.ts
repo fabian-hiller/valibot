@@ -37,14 +37,12 @@ export type FallbackValues<
   | SchemaWithFallback<BaseSchema, infer TFallback>
   | SchemaWithFallbackAsync<BaseSchemaAsync, infer TFallback>
   ? TFallback
-  : TSchema extends ObjectSchema<infer TObjectEntries extends ObjectEntries>
-  ? { [TKey in keyof TObjectEntries]: FallbackValues<TObjectEntries[TKey]> }
-  : TSchema extends ObjectSchemaAsync<
-      infer TObjectEntries extends ObjectEntriesAsync
-    >
-  ? { [TKey in keyof TObjectEntries]: FallbackValues<TObjectEntries[TKey]> }
-  : TSchema extends TupleSchema<infer TTupleItems>
-  ? { [TKey in keyof TTupleItems]: FallbackValues<TTupleItems[TKey]> }
-  : TSchema extends TupleSchemaAsync<infer TTupleItems>
-  ? { [TKey in keyof TTupleItems]: FallbackValues<TTupleItems[TKey]> }
+  : TSchema extends ObjectSchema<infer TEntries extends ObjectEntries>
+  ? { [TKey in keyof TEntries]: FallbackValues<TEntries[TKey]> }
+  : TSchema extends ObjectSchemaAsync<infer TEntries extends ObjectEntriesAsync>
+  ? { [TKey in keyof TEntries]: FallbackValues<TEntries[TKey]> }
+  : TSchema extends TupleSchema<infer TItems>
+  ? { [TKey in keyof TItems]: FallbackValues<TItems[TKey]> }
+  : TSchema extends TupleSchemaAsync<infer TItems>
+  ? { [TKey in keyof TItems]: FallbackValues<TItems[TKey]> }
   : undefined;

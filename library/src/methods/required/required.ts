@@ -12,8 +12,8 @@ import { getRestAndDefaultArgs } from '../../utils/index.ts';
 /**
  * Required object schema type.
  */
-type Required<TObjectEntries extends ObjectEntries> = {
-  [TKey in keyof TObjectEntries]: NonOptionalSchema<TObjectEntries[TKey]>;
+type Required<TEntries extends ObjectEntries> = {
+  [TKey in keyof TEntries]: NonOptionalSchema<TEntries[TKey]>;
 };
 
 /**
@@ -25,12 +25,10 @@ type Required<TObjectEntries extends ObjectEntries> = {
  *
  * @returns An object schema.
  */
-export function required<TObjectSchema extends ObjectSchema<any, any>>(
-  schema: TObjectSchema,
-  pipe?: Pipe<
-    ObjectOutput<Required<TObjectSchema['object']['entries']>, undefined>
-  >
-): ObjectSchema<Required<TObjectSchema['object']['entries']>>;
+export function required<TSchema extends ObjectSchema<any, any>>(
+  schema: TSchema,
+  pipe?: Pipe<ObjectOutput<Required<TSchema['entries']>, undefined>>
+): ObjectSchema<Required<TSchema['entries']>>;
 
 /**
  * Creates an object schema consisting of all properties of an existing object
@@ -42,13 +40,11 @@ export function required<TObjectSchema extends ObjectSchema<any, any>>(
  *
  * @returns An object schema.
  */
-export function required<TObjectSchema extends ObjectSchema<any, any>>(
-  schema: TObjectSchema,
+export function required<TSchema extends ObjectSchema<any, any>>(
+  schema: TSchema,
   error?: ErrorMessage,
-  pipe?: Pipe<
-    ObjectOutput<Required<TObjectSchema['object']['entries']>, undefined>
-  >
-): ObjectSchema<Required<TObjectSchema['object']['entries']>>;
+  pipe?: Pipe<ObjectOutput<Required<TSchema['entries']>, undefined>>
+): ObjectSchema<Required<TSchema['entries']>>;
 
 /**
  * Creates an object schema consisting of all properties of an existing object
@@ -61,15 +57,13 @@ export function required<TObjectSchema extends ObjectSchema<any, any>>(
  * @returns An object schema.
  */
 export function required<
-  TObjectSchema extends ObjectSchema<any, any>,
-  TObjectRest extends BaseSchema | undefined
+  TSchema extends ObjectSchema<any, any>,
+  TRest extends BaseSchema | undefined
 >(
-  schema: TObjectSchema,
-  rest: TObjectRest,
-  pipe?: Pipe<
-    ObjectOutput<Required<TObjectSchema['object']['entries']>, TObjectRest>
-  >
-): ObjectSchema<Required<TObjectSchema['object']['entries']>, TObjectRest>;
+  schema: TSchema,
+  rest: TRest,
+  pipe?: Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
+): ObjectSchema<Required<TSchema['entries']>, TRest>;
 
 /**
  * Creates an object schema consisting of all properties of an existing object
@@ -83,54 +77,42 @@ export function required<
  * @returns An object schema.
  */
 export function required<
-  TObjectSchema extends ObjectSchema<any, any>,
-  TObjectRest extends BaseSchema | undefined
+  TSchema extends ObjectSchema<any, any>,
+  TRest extends BaseSchema | undefined
 >(
-  schema: TObjectSchema,
-  rest: TObjectRest,
+  schema: TSchema,
+  rest: TRest,
   error?: ErrorMessage,
-  pipe?: Pipe<
-    ObjectOutput<Required<TObjectSchema['object']['entries']>, TObjectRest>
-  >
-): ObjectSchema<Required<TObjectSchema['object']['entries']>, TObjectRest>;
+  pipe?: Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
+): ObjectSchema<Required<TSchema['entries']>, TRest>;
 
 export function required<
-  TObjectSchema extends ObjectSchema<any, any>,
-  TObjectRest extends BaseSchema | undefined = undefined
+  TSchema extends ObjectSchema<any, any>,
+  TRest extends BaseSchema | undefined = undefined
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   arg2?:
-    | Pipe<
-        ObjectOutput<Required<TObjectSchema['object']['entries']>, TObjectRest>
-      >
+    | Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
     | ErrorMessage
-    | TObjectRest,
-  arg3?:
-    | Pipe<
-        ObjectOutput<Required<TObjectSchema['object']['entries']>, TObjectRest>
-      >
-    | ErrorMessage,
-  arg4?: Pipe<
-    ObjectOutput<Required<TObjectSchema['object']['entries']>, TObjectRest>
-  >
-): ObjectSchema<Required<TObjectSchema['object']['entries']>, TObjectRest> {
+    | TRest,
+  arg3?: Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>> | ErrorMessage,
+  arg4?: Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
+): ObjectSchema<Required<TSchema['entries']>, TRest> {
   // Get rest, error and pipe argument
   const [rest, error, pipe] = getRestAndDefaultArgs<
-    TObjectRest,
-    Pipe<
-      ObjectOutput<Required<TObjectSchema['object']['entries']>, TObjectRest>
-    >
+    TRest,
+    Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
   >(arg2, arg3, arg4);
 
   // Create and return object schema
   return object(
-    Object.entries(schema.object.entries).reduce(
+    Object.entries(schema.entries).reduce(
       (entries, [key, schema]) => ({
         ...entries,
         [key]: nonOptional(schema as BaseSchema),
       }),
       {}
-    ) as Required<TObjectSchema['object']['entries']>,
+    ) as Required<TSchema['entries']>,
     rest,
     error,
     pipe

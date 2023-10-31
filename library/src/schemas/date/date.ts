@@ -9,7 +9,7 @@ import {
  * Date schema type.
  */
 export type DateSchema<TOutput = Date> = BaseSchema<Date, TOutput> & {
-  schema: 'date';
+  type: 'date';
 };
 
 /**
@@ -43,7 +43,7 @@ export function date(
     /**
      * The schema type.
      */
-    schema: 'date',
+    type: 'date',
 
     /**
      * Whether it's async.

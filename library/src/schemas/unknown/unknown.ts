@@ -5,7 +5,7 @@ import { executePipe } from '../../utils/index.ts';
  * Unknown schema type.
  */
 export type UnknownSchema<TOutput = unknown> = BaseSchema<unknown, TOutput> & {
-  schema: 'unknown';
+  type: 'unknown';
 };
 
 /**
@@ -20,7 +20,7 @@ export function unknown(pipe: Pipe<unknown> = []): UnknownSchema {
     /**
      * The schema type.
      */
-    schema: 'unknown',
+    type: 'unknown',
 
     /**
      * Whether it's async.

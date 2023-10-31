@@ -47,19 +47,19 @@ export async function getFallbacksAsync<
     fallbacks = await schema.getFallback();
 
     // Otherwise, check if schema is of kind object or tuple
-  } else if ('schema' in schema) {
-    if (schema.schema === 'object') {
+  } else if ('type' in schema) {
+    if (schema.type === 'object') {
       fallbacks = {};
       await Promise.all(
-        Object.entries(schema.object.entries).map(async ([key, schema]) => {
+        Object.entries(schema.entries).map(async ([key, schema]) => {
           fallbacks[key] = await getFallbacksAsync(schema);
         })
       );
 
       // If it is a tuple schema, set array with fallback value of each item
-    } else if (schema.schema === 'tuple') {
+    } else if (schema.type === 'tuple') {
       fallbacks = await Promise.all(
-        schema.tuple.items.map((schema) => getFallbacksAsync(schema))
+        schema.items.map((schema) => getFallbacksAsync(schema))
       );
     }
   }

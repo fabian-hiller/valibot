@@ -11,7 +11,7 @@ export type OptionalSchema<
     ? Output<TWrapped>
     : Output<TWrapped> | undefined
 > = BaseSchema<Input<TWrapped> | undefined, TOutput> & {
-  schema: 'optional';
+  type: 'optional';
   wrapped: TWrapped;
   getDefault: () => TDefault;
 };
@@ -35,7 +35,7 @@ export function optional<
     /**
      * The schema type.
      */
-    schema: 'optional',
+    type: 'optional',
 
     /**
      * The wrapped schema.

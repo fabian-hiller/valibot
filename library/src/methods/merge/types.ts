@@ -1,36 +1,26 @@
 import type { ObjectSchema, ObjectSchemaAsync } from '../../schemas/index.ts';
 
 /**
- * Merges schema objects types.
+ * Merges objects types.
  */
-export type MergeSchemaObjects<
-  TObjectSchemas extends (
-    | ObjectSchema<any, any>
-    | ObjectSchemaAsync<any, any>
-  )[]
-> = TObjectSchemas extends [infer TFirstObjectSchema]
-  ? TFirstObjectSchema extends
-      | ObjectSchema<any, any>
-      | ObjectSchemaAsync<any, any>
-    ? TFirstObjectSchema['object']['entries']
+export type MergeObjects<
+  TSchemas extends (ObjectSchema<any, any> | ObjectSchemaAsync<any, any>)[]
+> = TSchemas extends [infer TFirstSchema]
+  ? TFirstSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+    ? TFirstSchema['entries']
     : never
-  : TObjectSchemas extends [
-      infer TFirstObjectSchema,
-      ...infer TRestObjectSchemas
-    ]
-  ? TFirstObjectSchema extends
-      | ObjectSchema<any, any>
-      | ObjectSchemaAsync<any, any>
-    ? TRestObjectSchemas extends (
+  : TSchemas extends [infer TFirstSchema, ...infer TRestSchemas]
+  ? TFirstSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+    ? TRestSchemas extends (
         | ObjectSchema<any, any>
         | ObjectSchemaAsync<any, any>
       )[]
       ? {
           [TKey in Exclude<
-            keyof TFirstObjectSchema['object']['entries'],
-            keyof MergeSchemaObjects<TRestObjectSchemas>
-          >]: TFirstObjectSchema['object']['entries'][TKey];
-        } & MergeSchemaObjects<TRestObjectSchemas>
+            keyof TFirstSchema['entries'],
+            keyof MergeObjects<TRestSchemas>
+          >]: TFirstSchema['entries'][TKey];
+        } & MergeObjects<TRestSchemas>
       : never
     : never
   : never;

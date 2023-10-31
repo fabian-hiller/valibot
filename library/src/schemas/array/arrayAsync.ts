@@ -19,11 +19,11 @@ import type { ArrayPathItem } from './types.ts';
  * Array schema async type.
  */
 export type ArraySchemaAsync<
-  TArrayItem extends BaseSchema | BaseSchemaAsync,
-  TOutput = Output<TArrayItem>[]
-> = BaseSchemaAsync<Input<TArrayItem>[], TOutput> & {
-  schema: 'array';
-  array: { item: TArrayItem };
+  TItem extends BaseSchema | BaseSchemaAsync,
+  TOutput = Output<TItem>[]
+> = BaseSchemaAsync<Input<TItem>[], TOutput> & {
+  type: 'array';
+  item: TItem;
 };
 
 /**
@@ -34,10 +34,10 @@ export type ArraySchemaAsync<
  *
  * @returns An async array schema.
  */
-export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
-  item: TArrayItem,
-  pipe?: PipeAsync<Output<TArrayItem>[]>
-): ArraySchemaAsync<TArrayItem>;
+export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
+  item: TItem,
+  pipe?: PipeAsync<Output<TItem>[]>
+): ArraySchemaAsync<TItem>;
 
 /**
  * Creates an async array schema.
@@ -48,17 +48,17 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
  *
  * @returns An async array schema.
  */
-export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
-  item: TArrayItem,
+export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
+  item: TItem,
   error?: ErrorMessage,
-  pipe?: PipeAsync<Output<TArrayItem>[]>
-): ArraySchemaAsync<TArrayItem>;
+  pipe?: PipeAsync<Output<TItem>[]>
+): ArraySchemaAsync<TItem>;
 
-export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
-  item: TArrayItem,
-  arg2?: ErrorMessage | PipeAsync<Output<TArrayItem>[]>,
-  arg3?: PipeAsync<Output<TArrayItem>[]>
-): ArraySchemaAsync<TArrayItem> {
+export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
+  item: TItem,
+  arg2?: ErrorMessage | PipeAsync<Output<TItem>[]>,
+  arg3?: PipeAsync<Output<TItem>[]>
+): ArraySchemaAsync<TItem> {
   // Get error and pipe argument
   const [error, pipe] = getDefaultArgs(arg2, arg3);
 
@@ -67,12 +67,12 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
     /**
      * The schema type.
      */
-    schema: 'array',
+    type: 'array',
 
     /**
-     * The array item schema.
+     * The item schema.
      */
-    array: { item },
+    item,
 
     /**
      * Whether it's async.
@@ -117,7 +117,7 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
               if (result.issues) {
                 // Create array path item
                 const pathItem: ArrayPathItem = {
-                  schema: 'array',
+                  type: 'array',
                   input,
                   key,
                   value,
@@ -153,7 +153,7 @@ export function arrayAsync<TArrayItem extends BaseSchema | BaseSchemaAsync>(
       // Return issues or pipe result
       return issues
         ? getIssues(issues)
-        : executePipeAsync(output as Output<TArrayItem>[], pipe, info, 'array');
+        : executePipeAsync(output as Output<TItem>[], pipe, info, 'array');
     },
   };
 }

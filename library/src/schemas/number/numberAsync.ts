@@ -12,7 +12,7 @@ export type NumberSchemaAsync<TOutput = number> = BaseSchemaAsync<
   number,
   TOutput
 > & {
-  schema: 'number';
+  type: 'number';
 };
 
 /**
@@ -49,7 +49,7 @@ export function numberAsync(
     /**
      * The schema type.
      */
-    schema: 'number',
+    type: 'number',
 
     /**
      * Whether it's async.

@@ -11,7 +11,7 @@ export type NullishSchema<
     ? Output<TWrapped>
     : Output<TWrapped> | null | undefined
 > = BaseSchema<Input<TWrapped> | null | undefined, TOutput> & {
-  schema: 'nullish';
+  type: 'nullish';
   wrapped: TWrapped;
   getDefault: () => TDefault;
 };
@@ -35,7 +35,7 @@ export function nullish<
     /**
      * The schema type.
      */
-    schema: 'nullish',
+    type: 'nullish',
 
     /**
      * The wrapped schema.

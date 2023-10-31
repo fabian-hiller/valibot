@@ -8,7 +8,7 @@ export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
   undefined,
   TOutput
 > & {
-  schema: 'undefined';
+  type: 'undefined';
 };
 
 /**
@@ -23,7 +23,7 @@ export function undefinedTypeAsync(error?: ErrorMessage): UndefinedSchemaAsync {
     /**
      * The schema type.
      */
-    schema: 'undefined',
+    type: 'undefined',
 
     /**
      * Whether it's async.

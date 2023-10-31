@@ -32,19 +32,19 @@ export function getFallbacks<
     fallbacks = schema.getFallback();
 
     // Otherwise, check if schema is of kind object or tuple
-  } else if ('schema' in schema) {
+  } else if ('type' in schema) {
     // If it is an object schema, set object with fallback value of each entry
-    if (schema.schema === 'object') {
+    if (schema.type === 'object') {
       fallbacks = {};
-      for (const key in schema.object.entries) {
-        fallbacks[key] = getFallbacks(schema.object.entries[key]);
+      for (const key in schema.entries) {
+        fallbacks[key] = getFallbacks(schema.entries[key]);
       }
 
       // If it is a tuple schema, set array with fallback value of each item
-    } else if (schema.schema === 'tuple') {
+    } else if (schema.type === 'tuple') {
       fallbacks = [];
-      for (let key = 0; key < schema.tuple.items.length; key++) {
-        fallbacks.push(getFallbacks(schema.tuple.items[key]));
+      for (let key = 0; key < schema.items.length; key++) {
+        fallbacks.push(getFallbacks(schema.items[key]));
       }
     }
   }

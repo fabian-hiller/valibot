@@ -13,7 +13,7 @@ export type InstanceSchemaAsync<
   TClass extends Class,
   TOutput = InstanceType<TClass>
 > = BaseSchemaAsync<InstanceType<TClass>, TOutput> & {
-  schema: 'instance';
+  type: 'instance';
   class: TClass;
 };
 
@@ -58,7 +58,7 @@ export function instanceAsync<TClass extends Class>(
     /**
      * The schema type.
      */
-    schema: 'instance',
+    type: 'instance',
 
     /**
      * The class of the instance.

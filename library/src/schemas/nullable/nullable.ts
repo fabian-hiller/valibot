@@ -11,7 +11,7 @@ export type NullableSchema<
     ? Output<TWrapped>
     : Output<TWrapped> | null
 > = BaseSchema<Input<TWrapped> | null, TOutput> & {
-  schema: 'nullable';
+  type: 'nullable';
   wrapped: TWrapped;
   getDefault: () => TDefault;
 };
@@ -35,7 +35,7 @@ export function nullable<
     /**
      * The schema type.
      */
-    schema: 'nullable',
+    type: 'nullable',
 
     /**
      * The wrapped schema.

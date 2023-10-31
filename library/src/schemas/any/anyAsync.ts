@@ -5,7 +5,7 @@ import { executePipeAsync } from '../../utils/index.ts';
  * Any schema type.
  */
 export type AnySchemaAsync<TOutput = any> = BaseSchemaAsync<any, TOutput> & {
-  schema: 'any';
+  type: 'any';
 };
 
 /**
@@ -20,7 +20,7 @@ export function anyAsync(pipe: PipeAsync<any> = []): AnySchemaAsync {
     /**
      * The schema type.
      */
-    schema: 'any',
+    type: 'any',
 
     /**
      * Whether it's async.

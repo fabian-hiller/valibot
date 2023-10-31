@@ -16,37 +16,35 @@ export type IntersectionOptionsAsync = [
  * Intersection schema async type.
  */
 export type IntersectionSchemaAsync<
-  TIntersectionOptions extends IntersectionOptionsAsync,
-  TOutput = IntersectionOutput<TIntersectionOptions>
-> = BaseSchemaAsync<IntersectionInput<TIntersectionOptions>, TOutput> & {
-  schema: 'intersection';
-  intersection: TIntersectionOptions;
+  TOptions extends IntersectionOptionsAsync,
+  TOutput = IntersectionOutput<TOptions>
+> = BaseSchemaAsync<IntersectionInput<TOptions>, TOutput> & {
+  type: 'intersection';
+  options: TOptions;
 };
 
 /**
  * Creates an async intersection schema.
  *
- * @param intersection The intersection schema.
+ * @param options The intersection options.
  * @param error The error message.
  *
  * @returns An async intersection schema.
  */
-export function intersectionAsync<
-  TIntersectionOptions extends IntersectionOptionsAsync
->(
-  intersection: TIntersectionOptions,
+export function intersectionAsync<TOptions extends IntersectionOptionsAsync>(
+  options: TOptions,
   error?: string
-): IntersectionSchemaAsync<TIntersectionOptions> {
+): IntersectionSchemaAsync<TOptions> {
   return {
     /**
      * The schema type.
      */
-    schema: 'intersection',
+    type: 'intersection',
 
     /**
-     * The intersection schema.
+     * The intersection options.
      */
-    intersection,
+    options,
 
     /**
      * Whether it's async.
@@ -68,7 +66,7 @@ export function intersectionAsync<
 
       // Parse schema of each option
       await Promise.all(
-        intersection.map(async (schema) => {
+        options.map(async (schema) => {
           // If not aborted early, continue execution
           if (!(info?.abortEarly && issues)) {
             const result = await schema._parse(input, info);

@@ -8,7 +8,7 @@ export type NanSchemaAsync<TOutput = number> = BaseSchemaAsync<
   number,
   TOutput
 > & {
-  schema: 'nan';
+  type: 'nan';
 };
 
 /**
@@ -23,7 +23,7 @@ export function nanAsync(error?: ErrorMessage): NanSchemaAsync {
     /**
      * The schema type.
      */
-    schema: 'nan',
+    type: 'nan',
 
     /**
      * Whether it's async.

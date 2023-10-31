@@ -9,7 +9,7 @@ export type EnumSchema<
   TEnum extends Enum,
   TOutput = TEnum[number]
 > = BaseSchema<TEnum[number], TOutput> & {
-  schema: 'enum';
+  type: 'enum';
   enum: TEnum;
 };
 
@@ -29,7 +29,7 @@ export function enumType<TOption extends string, TEnum extends Enum<TOption>>(
     /**
      * The schema type.
      */
-    schema: 'enum',
+    type: 'enum',
 
     /**
      * The enum value.

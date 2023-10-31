@@ -9,7 +9,7 @@ export type EnumSchemaAsync<
   TEnum extends Enum,
   TOutput = TEnum[number]
 > = BaseSchemaAsync<TEnum[number], TOutput> & {
-  schema: 'enum';
+  type: 'enum';
   enum: TEnum;
 };
 
@@ -29,7 +29,7 @@ export function enumTypeAsync<
     /**
      * The schema type.
      */
-    schema: 'enum',
+    type: 'enum',
 
     /**
      * The enum value.

@@ -19,7 +19,7 @@ export type NullishSchemaAsync<
     ? Output<TWrapped>
     : Output<TWrapped> | null | undefined
 > = BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> & {
-  schema: 'nullish';
+  type: 'nullish';
   wrapped: TWrapped;
   getDefault: () => Promise<TDefault>;
 };
@@ -46,7 +46,7 @@ export function nullishAsync<
     /**
      * The schema type.
      */
-    schema: 'nullish',
+    type: 'nullish',
 
     /**
      * The wrapped schema.

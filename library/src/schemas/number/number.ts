@@ -9,7 +9,7 @@ import {
  * Number schema type.
  */
 export type NumberSchema<TOutput = number> = BaseSchema<number, TOutput> & {
-  schema: 'number';
+  type: 'number';
 };
 
 /**
@@ -43,7 +43,7 @@ export function number(
     /**
      * The schema type.
      */
-    schema: 'number',
+    type: 'number',
 
     /**
      * Whether it's async.

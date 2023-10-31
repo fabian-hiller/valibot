@@ -16,8 +16,8 @@ export type DiscriminatedUnionOptionAsync<TKey extends string> =
   | ObjectSchema<Record<TKey, BaseSchema>, any>
   | ObjectSchemaAsync<Record<TKey, BaseSchema | BaseSchemaAsync>, any>
   | ((BaseSchema | BaseSchemaAsync) & {
-      schema: 'discriminated_union';
-      discriminatedUnion: DiscriminatedUnionOptionsAsync<TKey>;
+      type: 'discriminated_union';
+      options: DiscriminatedUnionOptionsAsync<TKey>;
     });
 
 /**
@@ -37,8 +37,8 @@ export type DiscriminatedUnionSchemaAsync<
   TOptions extends DiscriminatedUnionOptionsAsync<TKey>,
   TOutput = Output<TOptions[number]>
 > = BaseSchemaAsync<Input<TOptions[number]>, TOutput> & {
-  schema: 'discriminated_union';
-  discriminatedUnion: TOptions;
+  type: 'discriminated_union';
+  options: TOptions;
 };
 
 /**
@@ -62,12 +62,12 @@ export function discriminatedUnionAsync<
     /**
      * The schema type.
      */
-    schema: 'discriminated_union',
+    type: 'discriminated_union',
 
     /**
-     * The discriminated union schema.
+     * The union options.
      */
-    discriminatedUnion: options,
+    options,
 
     /**
      * Whether it's async.
@@ -104,8 +104,8 @@ export function discriminatedUnionAsync<
       ) => {
         for (const schema of options) {
           // If it is an object schema, parse discriminator key
-          if (schema.schema === 'object') {
-            const result = await schema.object.entries[key]._parse(
+          if (schema.type === 'object') {
+            const result = await schema.entries[key]._parse(
               (input as Record<TKey, unknown>)[key],
               info
             );
@@ -131,8 +131,8 @@ export function discriminatedUnionAsync<
 
             // Otherwise, if it is a discriminated union parse its options
             // recursively
-          } else if (schema.schema === 'discriminated_union') {
-            await parseOptions(schema.discriminatedUnion);
+          } else if (schema.type === 'discriminated_union') {
+            await parseOptions(schema.options);
 
             // If union option was found, break loop to end execution
             if (issues || output) {

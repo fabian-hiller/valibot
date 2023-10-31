@@ -9,7 +9,7 @@ export type NativeEnumSchemaAsync<
   TNativeEnum extends NativeEnum,
   TOutput = TNativeEnum[keyof TNativeEnum]
 > = BaseSchemaAsync<TNativeEnum[keyof TNativeEnum], TOutput> & {
-  schema: 'native_enum';
+  type: 'native_enum';
   nativeEnum: TNativeEnum;
 };
 
@@ -29,7 +29,7 @@ export function nativeEnumAsync<TNativeEnum extends NativeEnum>(
     /**
      * The schema type.
      */
-    schema: 'native_enum',
+    type: 'native_enum',
 
     /**
      * The native enum value.

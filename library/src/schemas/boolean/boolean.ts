@@ -9,7 +9,7 @@ import {
  * Boolean schema type.
  */
 export type BooleanSchema<TOutput = boolean> = BaseSchema<boolean, TOutput> & {
-  schema: 'boolean';
+  type: 'boolean';
 };
 
 /**
@@ -46,7 +46,7 @@ export function boolean(
     /**
      * The schema type.
      */
-    schema: 'boolean',
+    type: 'boolean',
 
     /**
      * Whether it's async.

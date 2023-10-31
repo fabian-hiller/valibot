@@ -18,10 +18,8 @@ import { getRestAndDefaultArgs } from '../../utils/index.ts';
 /**
  * Partial object entries async type.
  */
-export type PartialObjectEntriesAsync<
-  TObjectEntries extends ObjectEntriesAsync
-> = {
-  [TKey in keyof TObjectEntries]: OptionalSchemaAsync<TObjectEntries[TKey]>;
+export type PartialObjectEntriesAsync<TEntries extends ObjectEntriesAsync> = {
+  [TKey in keyof TEntries]: OptionalSchemaAsync<TEntries[TKey]>;
 };
 
 /**
@@ -34,18 +32,13 @@ export type PartialObjectEntriesAsync<
  * @returns An async object schema.
  */
 export function partialAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   pipe?: PipeAsync<
-    ObjectOutput<
-      PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
-      undefined
-    >
+    ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, undefined>
   >
-): ObjectSchemaAsync<
-  PartialObjectEntriesAsync<TObjectSchema['object']['entries']>
->;
+): ObjectSchemaAsync<PartialObjectEntriesAsync<TSchema['entries']>>;
 
 /**
  * Creates an async object schema consisting of all properties of an existing
@@ -58,19 +51,14 @@ export function partialAsync<
  * @returns An async object schema.
  */
 export function partialAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   error?: ErrorMessage,
   pipe?: PipeAsync<
-    ObjectOutput<
-      PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
-      undefined
-    >
+    ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, undefined>
   >
-): ObjectSchemaAsync<
-  PartialObjectEntriesAsync<TObjectSchema['object']['entries']>
->;
+): ObjectSchemaAsync<PartialObjectEntriesAsync<TSchema['entries']>>;
 
 /**
  * Creates an async object schema consisting of all properties of an existing
@@ -83,21 +71,15 @@ export function partialAsync<
  * @returns An async object schema.
  */
 export function partialAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TObjectRest extends BaseSchema | undefined
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TRest extends BaseSchema | undefined
 >(
-  schema: TObjectSchema,
-  rest: TObjectRest,
+  schema: TSchema,
+  rest: TRest,
   pipe?: PipeAsync<
-    ObjectOutput<
-      PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
-      TObjectRest
-    >
+    ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
   >
-): ObjectSchemaAsync<
-  PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
-  TObjectRest
->;
+): ObjectSchemaAsync<PartialObjectEntriesAsync<TSchema['entries']>, TRest>;
 
 /**
  * Creates an async object schema consisting of all properties of an existing
@@ -111,75 +93,54 @@ export function partialAsync<
  * @returns An async object schema.
  */
 export function partialAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TObjectRest extends BaseSchema | undefined
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TRest extends BaseSchema | undefined
 >(
-  schema: TObjectSchema,
-  rest: TObjectRest,
+  schema: TSchema,
+  rest: TRest,
   error?: ErrorMessage,
   pipe?: PipeAsync<
-    ObjectOutput<
-      PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
-      TObjectRest
-    >
+    ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
   >
-): ObjectSchemaAsync<
-  PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
-  TObjectRest
->;
+): ObjectSchemaAsync<PartialObjectEntriesAsync<TSchema['entries']>, TRest>;
 
 export function partialAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TObjectRest extends BaseSchema | undefined = undefined
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TRest extends BaseSchema | undefined = undefined
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   arg2?:
     | PipeAsync<
-        ObjectOutput<
-          PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
-          TObjectRest
-        >
+        ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
       >
     | ErrorMessage
-    | TObjectRest,
+    | TRest,
   arg3?:
     | PipeAsync<
-        ObjectOutput<
-          PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
-          TObjectRest
-        >
+        ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
       >
     | ErrorMessage,
   arg4?: PipeAsync<
-    ObjectOutput<
-      PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
-      TObjectRest
-    >
+    ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
   >
-): ObjectSchemaAsync<
-  PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
-  TObjectRest
-> {
+): ObjectSchemaAsync<PartialObjectEntriesAsync<TSchema['entries']>, TRest> {
   // Get rest, error and pipe argument
   const [rest, error, pipe] = getRestAndDefaultArgs<
-    TObjectRest,
+    TRest,
     PipeAsync<
-      ObjectOutput<
-        PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
-        TObjectRest
-      >
+      ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
     >
   >(arg2, arg3, arg4);
 
   // Create and return object schema
   return objectAsync(
-    Object.entries(schema.object.entries).reduce(
+    Object.entries(schema.entries).reduce(
       (entries, [key, schema]) => ({
         ...entries,
         [key]: optionalAsync(schema as BaseSchema | BaseSchemaAsync),
       }),
       {}
-    ) as PartialObjectEntriesAsync<TObjectSchema['object']['entries']>,
+    ) as PartialObjectEntriesAsync<TSchema['entries']>,
     rest,
     error,
     pipe

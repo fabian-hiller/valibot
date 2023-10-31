@@ -19,7 +19,7 @@ export type OptionalSchemaAsync<
     ? Output<TWrapped>
     : Output<TWrapped> | undefined
 > = BaseSchemaAsync<Input<TWrapped> | undefined, TOutput> & {
-  schema: 'optional';
+  type: 'optional';
   wrapped: TWrapped;
   getDefault: () => Promise<TDefault>;
 };
@@ -46,7 +46,7 @@ export function optionalAsync<
     /**
      * The schema type.
      */
-    schema: 'optional',
+    type: 'optional',
 
     /**
      * The wrapped schema.

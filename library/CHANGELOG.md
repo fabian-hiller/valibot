@@ -4,6 +4,8 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+> Note: The library has been revised and refactored. There is a migration guide in the [release notes](https://github.com/fabian-hiller/valibot/releases/tag/vX.X.X).
+
 - Add `getRestAndDefaultArgs` utility function
 - Add `rest` argument to `object` and `objectAsync` schema
 - Add `discriminatedUnion` and `discriminatedUnionAsync` schema (issue #90, #216)
@@ -19,6 +21,8 @@ All notable changes to the library will be documented in this file.
 - Change type check in `tuple` and `tupleAsync` to be less strict
 - Change return type of `action` argument in `coerce` and `coerceAsync` to `unknown`
 - Change type of `brand`, `getDefault`, `transform` and `transformAsync` method
+- Change type of `array`, `arrayAsync`, `intersection`, `intersectionAsync`, `map`, `mapAsync`, `object`, `objectAsync`, `union`, `unionAsync`, `record`, `recordAsync`, `set`, `setAsync`, `tuple` and `tupleAsync` schema
+- Rename `schema` property of every schema type to `type`
 - Rename `default` property of `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema to `getDefault`
 - Rename `ObjectShape` and `ObjectShapeAsync` types to `ObjectEntries` and `ObjectEntriesAsync`
 - Rename `TupleShape` and `TupleShapeAsync` types to `TupleItems` and `TupleItemsAsync`

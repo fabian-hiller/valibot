@@ -9,7 +9,7 @@ export type LiteralSchemaAsync<
   TLiteral extends Literal,
   TOutput = TLiteral
 > = BaseSchemaAsync<TLiteral, TOutput> & {
-  schema: 'literal';
+  type: 'literal';
   literal: TLiteral;
 };
 
@@ -29,7 +29,7 @@ export function literalAsync<TLiteral extends Literal>(
     /**
      * The schema type.
      */
-    schema: 'literal',
+    type: 'literal',
 
     /**
      * The literal value.

@@ -3,7 +3,7 @@ import { getOutput } from '../../utils/index.ts';
 import type { FallbackInfo } from './types.ts';
 
 /**
- * Schema with fallback type.
+ * Schema with fallback async type.
  */
 export type SchemaWithFallbackAsync<
   TSchema extends BaseSchemaAsync = BaseSchemaAsync,

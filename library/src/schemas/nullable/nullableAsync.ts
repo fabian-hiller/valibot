@@ -19,7 +19,7 @@ export type NullableSchemaAsync<
     ? Output<TWrapped>
     : Output<TWrapped> | null
 > = BaseSchemaAsync<Input<TWrapped> | null, TOutput> & {
-  schema: 'nullable';
+  type: 'nullable';
   wrapped: TWrapped;
   getDefault: () => Promise<TDefault>;
 };
@@ -46,7 +46,7 @@ export function nullableAsync<
     /**
      * The schema type.
      */
-    schema: 'nullable',
+    type: 'nullable',
 
     /**
      * The wrapped schema.

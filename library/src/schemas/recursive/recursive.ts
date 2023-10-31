@@ -7,7 +7,7 @@ export type RecursiveSchema<
   TSchemaGetter extends () => BaseSchema,
   TOutput = Output<ReturnType<TSchemaGetter>>
 > = BaseSchema<Input<ReturnType<TSchemaGetter>>, TOutput> & {
-  schema: 'recursive';
+  type: 'recursive';
   getter: TSchemaGetter;
 };
 
@@ -25,7 +25,7 @@ export function recursive<TSchemaGetter extends () => BaseSchema>(
     /**
      * The schema type.
      */
-    schema: 'recursive',
+    type: 'recursive',
 
     /**
      * The schema getter.

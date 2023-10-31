@@ -5,7 +5,7 @@ import { getSchemaIssues } from '../../utils/index.ts';
  * Never schema type.
  */
 export type NeverSchema = BaseSchema<never> & {
-  schema: 'never';
+  type: 'never';
 };
 
 /**
@@ -20,7 +20,7 @@ export function never(error?: ErrorMessage): NeverSchema {
     /**
      * The schema type.
      */
-    schema: 'never',
+    type: 'never',
 
     /**
      * Whether it's async.

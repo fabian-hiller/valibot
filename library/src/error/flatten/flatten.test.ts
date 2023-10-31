@@ -20,7 +20,7 @@ describe('flatten', () => {
     input: { key1: 'test', key2: ['test'] },
     path: [
       {
-        schema: 'object',
+        type: 'object',
         input: { key1: 'test', key2: ['test'] },
         key: 'key1',
         value: 'test',
@@ -36,7 +36,7 @@ describe('flatten', () => {
     input: { key1: 'test', key2: ['test'] },
     path: [
       {
-        schema: 'object',
+        type: 'object',
         input: { key1: 'test', key2: ['test'] },
         key: 'key1',
         value: 'test',
@@ -52,13 +52,13 @@ describe('flatten', () => {
     input: { key1: 'test', key2: ['test'] },
     path: [
       {
-        schema: 'object',
+        type: 'object',
         input: { key1: 'test', key2: ['test'] },
         key: 'key2',
         value: ['test'],
       },
       {
-        schema: 'array',
+        type: 'array',
         input: ['test'],
         key: 0,
         value: 'test',

@@ -5,7 +5,7 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
  * Null schema async type.
  */
 export type NullSchemaAsync<TOutput = null> = BaseSchemaAsync<null, TOutput> & {
-  schema: 'null';
+  type: 'null';
 };
 
 /**
@@ -20,7 +20,7 @@ export function nullTypeAsync(error?: ErrorMessage): NullSchemaAsync {
     /**
      * The schema type.
      */
-    schema: 'null',
+    type: 'null',
 
     /**
      * Whether it's async.

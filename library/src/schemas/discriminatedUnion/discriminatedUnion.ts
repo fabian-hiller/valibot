@@ -14,8 +14,8 @@ import type { ObjectSchema } from '../object/index.ts';
 export type DiscriminatedUnionOption<TKey extends string> =
   | ObjectSchema<Record<TKey, BaseSchema>, any>
   | (BaseSchema & {
-      schema: 'discriminated_union';
-      discriminatedUnion: DiscriminatedUnionOptions<TKey>;
+      type: 'discriminated_union';
+      options: DiscriminatedUnionOptions<TKey>;
     });
 
 /**
@@ -35,8 +35,8 @@ export type DiscriminatedUnionSchema<
   TOptions extends DiscriminatedUnionOptions<TKey>,
   TOutput = Output<TOptions[number]>
 > = BaseSchema<Input<TOptions[number]>, TOutput> & {
-  schema: 'discriminated_union';
-  discriminatedUnion: TOptions;
+  type: 'discriminated_union';
+  options: TOptions;
 };
 
 /**
@@ -60,12 +60,12 @@ export function discriminatedUnion<
     /**
      * The schema type.
      */
-    schema: 'discriminated_union',
+    type: 'discriminated_union',
 
     /**
-     * The discriminated union schema.
+     * The union options.
      */
-    discriminatedUnion: options,
+    options,
 
     /**
      * Whether it's async.
@@ -100,8 +100,8 @@ export function discriminatedUnion<
       const parseOptions = (options: DiscriminatedUnionOptions<TKey>) => {
         for (const schema of options) {
           // If it is an object schema, parse discriminator key
-          if (schema.schema === 'object') {
-            const result = schema.object.entries[key]._parse(
+          if (schema.type === 'object') {
+            const result = schema.entries[key]._parse(
               (input as Record<TKey, unknown>)[key],
               info
             );
@@ -127,8 +127,8 @@ export function discriminatedUnion<
 
             // Otherwise, if it is a discriminated union parse its options
             // recursively
-          } else if (schema.schema === 'discriminated_union') {
-            parseOptions(schema.discriminatedUnion);
+          } else if (schema.type === 'discriminated_union') {
+            parseOptions(schema.options);
 
             // If union option was found, break loop to end execution
             if (issues || output) {

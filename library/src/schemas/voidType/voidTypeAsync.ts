@@ -5,7 +5,7 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
  * Void schema async type.
  */
 export type VoidSchemaAsync<TOutput = void> = BaseSchemaAsync<void, TOutput> & {
-  schema: 'void';
+  type: 'void';
 };
 
 /**
@@ -20,7 +20,7 @@ export function voidTypeAsync(error?: ErrorMessage): VoidSchemaAsync {
     /**
      * The schema type.
      */
-    schema: 'void',
+    type: 'void',
 
     /**
      * Whether it's async.

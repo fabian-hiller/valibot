@@ -39,10 +39,10 @@ export function keyof<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
   schema: TSchema
-): EnumSchema<TupleOrNever<UnionToTuple<keyof TSchema['object']['entries']>>> {
+): EnumSchema<TupleOrNever<UnionToTuple<keyof TSchema['entries']>>> {
   return enumType(
-    Object.keys(schema.object.entries) as TupleOrNever<
-      UnionToTuple<keyof TSchema['object']['entries']>
+    Object.keys(schema.entries) as TupleOrNever<
+      UnionToTuple<keyof TSchema['entries']>
     >
   );
 }

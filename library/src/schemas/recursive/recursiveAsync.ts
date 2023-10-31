@@ -12,7 +12,7 @@ export type RecursiveSchemaAsync<
   TSchemaGetter extends () => BaseSchema | BaseSchemaAsync,
   TOutput = Output<ReturnType<TSchemaGetter>>
 > = BaseSchemaAsync<Input<ReturnType<TSchemaGetter>>, TOutput> & {
-  schema: 'recursive';
+  type: 'recursive';
   getter: TSchemaGetter;
 };
 
@@ -30,7 +30,7 @@ export function recursiveAsync<
     /**
      * The schema type.
      */
-    schema: 'recursive',
+    type: 'recursive',
 
     /**
      * The schema getter.
