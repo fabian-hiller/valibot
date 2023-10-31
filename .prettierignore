@@ -1,4 +1,4 @@
-menu.md
+**/routes/**/menu.md
 **/*.log
 **/.DS_Store
 *.
@@ -26,7 +26,6 @@ build
 .cache
 .vscode
 .rollup.cache
-dist
 tsconfig.tsbuildinfo
 *.spec.tsx
 *.spec.ts
