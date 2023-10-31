@@ -8,7 +8,6 @@
 - [blob](/api/blob)
 - [boolean](/api/boolean)
 - [date](/api/date)
-- [discriminatedUnion](/api/discriminatedUnion)
 - [enumType](/api/enumType)
 - [instance](/api/instance)
 - [intersection](/api/intersection)
@@ -36,6 +35,7 @@
 - [undefinedType](/api/undefinedType)
 - [union](/api/union)
 - [unknown](/api/unknown)
+- [variant](/api/variant)
 - [voidType](/api/voidType)
 
 ## Methods
@@ -132,7 +132,6 @@
 - [coerceAsync](/api/coerceAsync)
 - [customAsync](/api/customAsync)
 - [dateAsync](/api/dateAsync)
-- [discriminatedUnionAsync](/api/discriminatedUnionAsync)
 - [enumTypeAsync](/api/enumTypeAsync)
 - [fallbackAsync](/api/fallbackAsync)
 - [getDefaultAsync](/api/getDefaultAsync)
@@ -175,4 +174,5 @@
 - [undefinedTypeAsync](/api/undefinedTypeAsync)
 - [unionAsync](/api/unionAsync)
 - [unknownAsync](/api/unknownAsync)
+- [variantAsync](/api/variantAsync)
 - [voidTypeAsync](/api/voidTypeAsync)

@@ -10,62 +10,62 @@ import { getSchemaIssues, getOutput, getIssues } from '../../utils/index.ts';
 import type { ObjectSchema, ObjectSchemaAsync } from '../object/index.ts';
 
 /**
- * Discriminated union option async type.
+ * Variant option async type.
  */
-export type DiscriminatedUnionOptionAsync<TKey extends string> =
+export type VariantOptionAsync<TKey extends string> =
   | ObjectSchema<Record<TKey, BaseSchema>, any>
   | ObjectSchemaAsync<Record<TKey, BaseSchema | BaseSchemaAsync>, any>
   | ((BaseSchema | BaseSchemaAsync) & {
-      type: 'discriminated_union';
-      options: DiscriminatedUnionOptionsAsync<TKey>;
+      type: 'variant';
+      options: VariantOptionsAsync<TKey>;
     });
 
 /**
- * Discriminated union options async type.
+ * Variant options async type.
  */
-export type DiscriminatedUnionOptionsAsync<TKey extends string> = [
-  DiscriminatedUnionOptionAsync<TKey>,
-  DiscriminatedUnionOptionAsync<TKey>,
-  ...DiscriminatedUnionOptionAsync<TKey>[]
+export type VariantOptionsAsync<TKey extends string> = [
+  VariantOptionAsync<TKey>,
+  VariantOptionAsync<TKey>,
+  ...VariantOptionAsync<TKey>[]
 ];
 
 /**
- * Discriminated union schema async type.
+ * Variant schema async type.
  */
-export type DiscriminatedUnionSchemaAsync<
+export type VariantSchemaAsync<
   TKey extends string,
-  TOptions extends DiscriminatedUnionOptionsAsync<TKey>,
+  TOptions extends VariantOptionsAsync<TKey>,
   TOutput = Output<TOptions[number]>
 > = BaseSchemaAsync<Input<TOptions[number]>, TOutput> & {
-  type: 'discriminated_union';
+  type: 'variant';
   options: TOptions;
 };
 
 /**
- * Creates an async discriminated union schema.
+ * Creates an async variant (aka discriminated union) schema.
  *
  * @param key The discriminator key.
- * @param options The union options.
+ * @param options The variant options.
  * @param error The error message.
  *
- * @returns An async discriminated union schema.
+ * @returns An async variant schema.
  */
-export function discriminatedUnionAsync<
+export function variantAsync<
   TKey extends string,
-  TOptions extends DiscriminatedUnionOptionsAsync<TKey>
+  TOptions extends VariantOptionsAsync<TKey>
 >(
   key: TKey,
   options: TOptions,
   error?: ErrorMessage
-): DiscriminatedUnionSchemaAsync<TKey, TOptions> {
+): VariantSchemaAsync<TKey, TOptions> {
   return {
     /**
      * The schema type.
      */
-    type: 'discriminated_union',
+    type: 'variant',
 
     /**
-     * The union options.
+     * The variant options.
      */
     options,
 
@@ -88,7 +88,7 @@ export function discriminatedUnionAsync<
         return getSchemaIssues(
           info,
           'type',
-          'discriminated_union',
+          'variant',
           error || 'Invalid type',
           input
         );
@@ -99,9 +99,7 @@ export function discriminatedUnionAsync<
       let output: [Record<string, any>] | undefined;
 
       // Create function to parse options recursively
-      const parseOptions = async (
-        options: DiscriminatedUnionOptionsAsync<TKey>
-      ) => {
+      const parseOptions = async (options: VariantOptionsAsync<TKey>) => {
         for (const schema of options) {
           // If it is an object schema, parse discriminator key
           if (schema.type === 'object') {
@@ -110,7 +108,7 @@ export function discriminatedUnionAsync<
               info
             );
 
-            // If right union option was found, parse it
+            // If right variant option was found, parse it
             if (!result.issues) {
               const result = await schema._parse(input, info);
 
@@ -129,12 +127,12 @@ export function discriminatedUnionAsync<
               break;
             }
 
-            // Otherwise, if it is a discriminated union parse its options
+            // Otherwise, if it is a variant parse its options
             // recursively
-          } else if (schema.type === 'discriminated_union') {
+          } else if (schema.type === 'variant') {
             await parseOptions(schema.options);
 
-            // If union option was found, break loop to end execution
+            // If variant option was found, break loop to end execution
             if (issues || output) {
               break;
             }
@@ -153,10 +151,17 @@ export function discriminatedUnionAsync<
         : getSchemaIssues(
             info,
             'type',
-            'discriminated_union',
+            'variant',
             error || 'Invalid type',
             input
           );
     },
   };
 }
+
+/**
+ * See {@link variantAsync}
+ *
+ * @deprecated Use `variantAsync` instead.
+ */
+export const discriminatedUnionAsync = variantAsync;

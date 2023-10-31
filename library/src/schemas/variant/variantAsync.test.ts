@@ -5,11 +5,11 @@ import { literal } from '../literal/index.ts';
 import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
 import { string } from '../string/index.ts';
-import { discriminatedUnionAsync } from './discriminatedUnionAsync.ts';
+import { variantAsync } from './variantAsync.ts';
 
-describe('discriminatedUnionAsync', () => {
-  test('should pass only union values', async () => {
-    const schema1 = discriminatedUnionAsync('type', [
+describe('variantAsync', () => {
+  test('should pass only variant values', async () => {
+    const schema1 = variantAsync('type', [
       object({ type: literal('a'), a: string() }),
       object({ type: literal('b'), b: number() }),
     ]);
@@ -17,7 +17,7 @@ describe('discriminatedUnionAsync', () => {
     const output1 = await parseAsync(schema1, input1);
     expect(output1).toEqual(input1);
 
-    const schema2 = discriminatedUnionAsync('type', [
+    const schema2 = variantAsync('type', [
       schema1,
       object({ type: literal('c'), b: boolean() }),
     ]);
@@ -37,10 +37,10 @@ describe('discriminatedUnionAsync', () => {
   });
 
   test('should throw custom error', async () => {
-    const error = 'Value is not in union!';
+    const error = 'Value is not in variant!';
     await expect(
       parseAsync(
-        discriminatedUnionAsync(
+        variantAsync(
           'type',
           [
             object({ type: literal('a'), a: string() }),

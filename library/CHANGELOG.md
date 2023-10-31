@@ -8,7 +8,7 @@ All notable changes to the library will be documented in this file.
 
 - Add `getRestAndDefaultArgs` utility function
 - Add `rest` argument to `object` and `objectAsync` schema
-- Add `discriminatedUnion` and `discriminatedUnionAsync` schema (issue #90, #216)
+- Add `variant` and `variantAsync` schema (issue #90, #216)
 - Add `getFallback` property to schema in `fallback` method (pull request #177)
 - Add `PartialObjectEntries` and `PartialObjectEntriesAsync` type (issue #217)
 - Add export for any validation regex (pull request #219)

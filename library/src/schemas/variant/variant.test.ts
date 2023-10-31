@@ -5,11 +5,11 @@ import { literal } from '../literal/index.ts';
 import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
 import { string } from '../string/index.ts';
-import { discriminatedUnion } from './discriminatedUnion.ts';
+import { variant } from './variant.ts';
 
-describe('discriminatedUnion', () => {
-  test('should pass only union values', () => {
-    const schema1 = discriminatedUnion('type', [
+describe('variant', () => {
+  test('should pass only variant values', () => {
+    const schema1 = variant('type', [
       object({ type: literal('a'), a: string() }),
       object({ type: literal('b'), b: number() }),
     ]);
@@ -17,7 +17,7 @@ describe('discriminatedUnion', () => {
     const output1 = parse(schema1, input1);
     expect(output1).toEqual(input1);
 
-    const schema2 = discriminatedUnion('type', [
+    const schema2 = variant('type', [
       schema1,
       object({ type: literal('c'), b: boolean() }),
     ]);
@@ -35,10 +35,10 @@ describe('discriminatedUnion', () => {
   });
 
   test('should throw custom error', () => {
-    const error = 'Value is not in union!';
+    const error = 'Value is not in variant!';
     expect(() =>
       parse(
-        discriminatedUnion(
+        variant(
           'type',
           [
             object({ type: literal('a'), a: string() }),

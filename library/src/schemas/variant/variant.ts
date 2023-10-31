@@ -9,61 +9,75 @@ import { getSchemaIssues, getOutput, getIssues } from '../../utils/index.ts';
 import type { ObjectSchema } from '../object/index.ts';
 
 /**
- * Discriminated union option type.
+ * TODO: Finde ich hierfür noch einen kürzeren Namen? Was nutzen anderen Libraries wie TypeBox? AI Tools nutzen!
+ * - variant (best)
+ * - sum
+ * - dUnion
+ * - choice
+ * - tagged union
+ * - coproduct
+ *
+ *
+ * Kann es sinn machen auch einen Array mit Keys zu erlauben?
+ * - z.B. für `type` and `kind` Strukture in Valibot?
  */
-export type DiscriminatedUnionOption<TKey extends string> =
+
+/**
+ * Variant option type.
+ */
+export type VariantOption<TKey extends string> =
   | ObjectSchema<Record<TKey, BaseSchema>, any>
   | (BaseSchema & {
-      type: 'discriminated_union';
-      options: DiscriminatedUnionOptions<TKey>;
+      type: 'variant';
+      options: VariantOptions<TKey>;
     });
 
 /**
- * Discriminated union options type.
+ * Variant options type.
  */
-export type DiscriminatedUnionOptions<TKey extends string> = [
-  DiscriminatedUnionOption<TKey>,
-  DiscriminatedUnionOption<TKey>,
-  ...DiscriminatedUnionOption<TKey>[]
+export type VariantOptions<TKey extends string> = [
+  VariantOption<TKey>,
+  VariantOption<TKey>,
+  ...VariantOption<TKey>[]
 ];
 
 /**
- * Discriminated union schema type.
+ * Variant schema type.
  */
-export type DiscriminatedUnionSchema<
+export type VariantSchema<
   TKey extends string,
-  TOptions extends DiscriminatedUnionOptions<TKey>,
+  TOptions extends VariantOptions<TKey>,
   TOutput = Output<TOptions[number]>
 > = BaseSchema<Input<TOptions[number]>, TOutput> & {
-  type: 'discriminated_union';
+  type: 'variant';
   options: TOptions;
 };
 
 /**
- * Creates a discriminated union schema.
+ * Creates a variant (aka discriminated union) schema.
  *
  * @param key The discriminator key.
- * @param options The union options.
+ * @param options The variant options.
  * @param error The error message.
  *
- * @returns A discriminated union schema.
+ * @returns A variant schema.
  */
-export function discriminatedUnion<
+export function variant<
   TKey extends string,
-  TOptions extends DiscriminatedUnionOptions<TKey>
+  TOptions extends VariantOptions<TKey>
 >(
   key: TKey,
   options: TOptions,
   error?: ErrorMessage
-): DiscriminatedUnionSchema<TKey, TOptions> {
+): VariantSchema<TKey, TOptions> {
   return {
     /**
      * The schema type.
      */
-    type: 'discriminated_union',
+    type: 'variant',
 
     /**
-     * The union options.
+     * The variant options.
      */
     options,
 
@@ -86,7 +100,7 @@ export function discriminatedUnion<
         return getSchemaIssues(
           info,
           'type',
-          'discriminated_union',
+          'variant',
           error || 'Invalid type',
           input
         );
@@ -97,7 +111,7 @@ export function discriminatedUnion<
       let output: [Record<string, any>] | undefined;
 
       // Create function to parse options recursively
-      const parseOptions = (options: DiscriminatedUnionOptions<TKey>) => {
+      const parseOptions = (options: VariantOptions<TKey>) => {
         for (const schema of options) {
           // If it is an object schema, parse discriminator key
           if (schema.type === 'object') {
@@ -106,7 +120,7 @@ export function discriminatedUnion<
               info
             );
 
-            // If right union option was found, parse it
+            // If right variant option was found, parse it
             if (!result.issues) {
               const result = schema._parse(input, info);
 
@@ -125,12 +139,12 @@ export function discriminatedUnion<
               break;
             }
 
-            // Otherwise, if it is a discriminated union parse its options
+            // Otherwise, if it is a variant parse its options
             // recursively
-          } else if (schema.type === 'discriminated_union') {
+          } else if (schema.type === 'variant') {
             parseOptions(schema.options);
 
-            // If union option was found, break loop to end execution
+            // If variant option was found, break loop to end execution
             if (issues || output) {
               break;
             }
@@ -149,10 +163,17 @@ export function discriminatedUnion<
         : getSchemaIssues(
             info,
             'type',
-            'discriminated_union',
+            'variant',
             error || 'Invalid type',
             input
           );
     },
   };
 }
+
+/**
+ * See {@link variant}
+ *
+ * @deprecated Use `variant` instead.
+ */
+export const discriminatedUnion = variant;
