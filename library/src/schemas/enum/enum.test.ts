@@ -1,15 +1,15 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
-import { nativeEnum } from './nativeEnum.ts';
+import { enum_ } from './enum.ts';
 
 enum Direction {
   Left,
   Right,
 }
 
-describe('nativeEnum', () => {
+describe('enum_', () => {
   test('should pass only enum values', () => {
-    const schema = nativeEnum(Direction);
+    const schema = enum_(Direction);
     const input1 = Direction.Left;
     const output1 = parse(schema, input1);
     expect(output1).toBe(input1);
@@ -23,8 +23,6 @@ describe('nativeEnum', () => {
 
   test('should throw custom error', () => {
     const error = 'Value is not a enum value!';
-    expect(() => parse(nativeEnum(Direction, error), 'test')).toThrowError(
-      error
-    );
+    expect(() => parse(enum_(Direction, error), 'test')).toThrowError(error);
   });
 });

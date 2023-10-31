@@ -25,6 +25,7 @@ All notable changes to the library will be documented in this file.
 - Rename `schema` property of every schema type to `type`
 - Rename `intersection` and `intersectionAsync` schema to `intersect` and `intersectAsync`
 - Rename `enumType` and `enumTypeAsync` schema to `picklist` and `picklistAsync`
+- Rename `nativeEnum` and `nativeEnumAsync` schema to `enum_` and `enumAsync`
 - Rename `default` property of `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema to `getDefault`
 - Rename `ObjectShape` and `ObjectShapeAsync` types to `ObjectEntries` and `ObjectEntriesAsync`
 - Rename `TupleShape` and `TupleShapeAsync` types to `TupleItems` and `TupleItemsAsync`
