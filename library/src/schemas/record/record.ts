@@ -1,7 +1,7 @@
 import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
 import { executePipe, getIssues, getSchemaIssues } from '../../utils/index.ts';
-import type { EnumSchema } from '../enumType/index.ts';
-import type { NativeEnumSchema } from '../nativeEnum/index.ts';
+import type { EnumSchema } from '../enum/index.ts';
+import type { PicklistSchema } from '../picklist/index.ts';
 import type { StringSchema } from '../string/index.ts';
 import type { UnionSchema } from '../union/index.ts';
 import type { RecordOutput, RecordInput, RecordPathItem } from './types.ts';
@@ -13,7 +13,7 @@ import { BLOCKED_KEYS } from './values.ts';
  */
 export type RecordKey =
   | EnumSchema<any, string | number | symbol>
-  | NativeEnumSchema<any, string | number | symbol>
+  | PicklistSchema<any, string | number | symbol>
   | StringSchema<string | number | symbol>
   | UnionSchema<any, string | number | symbol>;
 

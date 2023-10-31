@@ -1,8 +1,8 @@
 import {
-  enumType,
-  type EnumSchema,
   type ObjectSchema,
   type ObjectSchemaAsync,
+  picklist,
+  type PicklistSchema,
 } from '../../schemas/index.ts';
 
 /**
@@ -39,8 +39,8 @@ export function keyof<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
   schema: TSchema
-): EnumSchema<TupleOrNever<UnionToTuple<keyof TSchema['entries']>>> {
-  return enumType(
+): PicklistSchema<TupleOrNever<UnionToTuple<keyof TSchema['entries']>>> {
+  return picklist(
     Object.keys(schema.entries) as TupleOrNever<
       UnionToTuple<keyof TSchema['entries']>
     >

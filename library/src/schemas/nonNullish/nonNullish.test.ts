@@ -2,16 +2,16 @@ import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
 import { union } from '../union/index.ts';
 import { string } from '../string/index.ts';
-import { nullType } from '../nullType/index.ts';
+import { null_ } from '../null/index.ts';
 import { number } from '../number/index.ts';
 import { any } from '../any/index.ts';
-import { undefinedType } from '../undefinedType/index.ts';
+import { undefined_ } from '../undefined/index.ts';
 import { nullish } from '../nullish/index.ts';
 import { nonNullish } from './nonNullish.ts';
 
 describe('nonNullish', () => {
   test('should not pass null or undefined', () => {
-    const schema1 = nonNullish(union([string(), nullType(), undefinedType()]));
+    const schema1 = nonNullish(union([string(), null_(), undefined_()]));
     const input1 = 'test';
     const output1 = parse(schema1, input1);
     expect(output1).toBe(input1);

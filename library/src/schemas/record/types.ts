@@ -5,11 +5,8 @@ import type {
   Output,
   ResolveObject,
 } from '../../types.ts';
-import type { EnumSchema, EnumSchemaAsync } from '../enumType/index.ts';
-import type {
-  NativeEnumSchema,
-  NativeEnumSchemaAsync,
-} from '../nativeEnum/index.ts';
+import type { EnumSchema, EnumSchemaAsync } from '../enum/index.ts';
+import type { PicklistSchema, PicklistSchemaAsync } from '../picklist/index.ts';
 import type { UnionSchema } from '../union/index.ts';
 import type { RecordKey } from './record.ts';
 import type { RecordKeyAsync } from './recordAsync.ts';
@@ -28,10 +25,10 @@ export type RecordPathItem = {
  * Partial key schema type.
  */
 type PartialKeySchema =
+  | PicklistSchema<any>
+  | PicklistSchemaAsync<any>
   | EnumSchema<any>
   | EnumSchemaAsync<any>
-  | NativeEnumSchema<any>
-  | NativeEnumSchemaAsync<any>
   | UnionSchema<any>;
 
 /**

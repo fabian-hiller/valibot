@@ -10,11 +10,8 @@ import {
   getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
-import type { EnumSchema, EnumSchemaAsync } from '../enumType/index.ts';
-import type {
-  NativeEnumSchema,
-  NativeEnumSchemaAsync,
-} from '../nativeEnum/index.ts';
+import type { EnumSchema, EnumSchemaAsync } from '../enum/index.ts';
+import type { PicklistSchema, PicklistSchemaAsync } from '../picklist/index.ts';
 import type { StringSchema, StringSchemaAsync } from '../string/index.ts';
 import type { UnionSchema, UnionSchemaAsync } from '../union/index.ts';
 import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';
@@ -27,8 +24,8 @@ import { BLOCKED_KEYS } from './values.ts';
 export type RecordKeyAsync =
   | EnumSchema<any, string | number | symbol>
   | EnumSchemaAsync<any, string | number | symbol>
-  | NativeEnumSchema<any, string | number | symbol>
-  | NativeEnumSchemaAsync<any, string | number | symbol>
+  | PicklistSchema<any, string | number | symbol>
+  | PicklistSchemaAsync<any, string | number | symbol>
   | StringSchema<string | number | symbol>
   | StringSchemaAsync<string | number | symbol>
   | UnionSchema<any, string | number | symbol>
