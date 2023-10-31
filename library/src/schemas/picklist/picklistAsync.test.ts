@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
-import { enumTypeAsync } from './enumTypeAsync.ts';
+import { picklistAsync } from './picklistAsync.ts';
 
-describe('enumTypeAsync', () => {
-  test('should pass only enum values', async () => {
-    const schema = enumTypeAsync(['value_1', 'value_2']);
+describe('picklistAsync', () => {
+  test('should pass only picklist values', async () => {
+    const schema = picklistAsync(['value_1', 'value_2']);
     const input1 = 'value_1';
     const output1 = await parseAsync(schema, input1);
     expect(output1).toBe(input1);
@@ -17,9 +17,9 @@ describe('enumTypeAsync', () => {
   });
 
   test('should throw custom error', async () => {
-    const error = 'Value is not a enum value!';
+    const error = 'Value is not a picklist value!';
     await expect(
-      parseAsync(enumTypeAsync(['value_1'], error), 'test')
+      parseAsync(picklistAsync(['value_1'], error), 'test')
     ).rejects.toThrowError(error);
   });
 });

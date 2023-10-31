@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
-import { enumType } from './enumType.ts';
+import { picklist } from './picklist.ts';
 
-describe('enumType', () => {
-  test('should pass only enum values', () => {
-    const schema = enumType(['value_1', 'value_2']);
+describe('picklist', () => {
+  test('should pass only picklist values', () => {
+    const schema = picklist(['value_1', 'value_2']);
     const input1 = 'value_1';
     const output1 = parse(schema, input1);
     expect(output1).toBe(input1);
@@ -17,8 +17,8 @@ describe('enumType', () => {
   });
 
   test('should throw custom error', () => {
-    const error = 'Value is not a enum value!';
-    expect(() => parse(enumType(['value_1'], error), 'test')).toThrowError(
+    const error = 'Value is not a picklist value!';
+    expect(() => parse(picklist(['value_1'], error), 'test')).toThrowError(
       error
     );
   });

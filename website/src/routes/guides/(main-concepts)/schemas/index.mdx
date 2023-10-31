@@ -105,11 +105,10 @@ const TupleSchema = tuple([string(), number()]); // [string, number]
 
 Beyond primitive and complex values, I also provide schema functions for more special cases.
 
-Schema functions: <Link href="/api/any">`any`</Link>, <Link href="/api/enumType">`enumType`</Link>, <Link href="/api/instance">`instance`</Link>, <Link href="/api/intersect">`intersect`</Link>, <Link href="/api/nan">`nan`</Link>, <Link href="/api/nativeEnum">`nativeEnum`</Link>, <Link href="/api/never">`never`</Link>, <Link href="/api/nonNullable">`nonNullable`</Link>, <Link href="/api/nonNullish">`nonNullish`</Link>, <Link href="/api/nonOptional">`nonOptional`</Link>,<Link href="/api/nullable">`nullable`</Link>, <Link href="/api/nullish">`nullish`</Link>, <Link href="/api/optional">`optional`</Link>, <Link href="/api/recursive">`recursive`</Link>, <Link href="/api/special">`special`</Link>, <Link href="/api/union">`union`</Link>, <Link href="/api/unknown">`unknown`</Link>, <Link href="/api/variant">`variant`</Link>, <Link href="/api/voidType">`voidType`</Link>
+Schema functions: <Link href="/api/any">`any`</Link>, <Link href="/api/instance">`instance`</Link>, <Link href="/api/intersect">`intersect`</Link>, <Link href="/api/nan">`nan`</Link>, <Link href="/api/nativeEnum">`nativeEnum`</Link>, <Link href="/api/never">`never`</Link>, <Link href="/api/nonNullable">`nonNullable`</Link>, <Link href="/api/nonNullish">`nonNullish`</Link>, <Link href="/api/nonOptional">`nonOptional`</Link>,<Link href="/api/nullable">`nullable`</Link>, <Link href="/api/nullish">`nullish`</Link>, <Link href="/api/optional">`optional`</Link>, <Link href="/api/picklist">`picklist`</Link>, <Link href="/api/recursive">`recursive`</Link>, <Link href="/api/special">`special`</Link>, <Link href="/api/union">`union`</Link>, <Link href="/api/unknown">`unknown`</Link>, <Link href="/api/variant">`variant`</Link>, <Link href="/api/voidType">`voidType`</Link>
 
 ```ts
 const AnySchema = any(); // any
-const EnumSchema = enumType(['a', 'b']); // 'a' | 'b'
 const InstanceSchema = instance(Error); // Error
 const IntersectSchema = intersect([string(), literal('a')]); // string & 'a'
 const NanSchema = nan(); // NaN
@@ -121,6 +120,7 @@ const NonOptionalSchema = nonOptional(optional(string())); // string
 const NullableSchema = nullable(string()); // string | null
 const NullishSchema = nullish(string()); // string | null | undefined
 const OptionalSchema = optional(string()); // string | undefined
+const PicklistSchema = picklist(['a', 'b']); // 'a' | 'b'
 const RecursiveSchema = recursive(() => string()); // string
 const SpecialSchema = special<`${number}px`>(isPixelString); // `${number}px`
 const UnionSchema = union([string(), number()]); // string | number
