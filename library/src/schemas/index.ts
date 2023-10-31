@@ -32,4 +32,4 @@ export * from './undefined/index.ts';
 export * from './union/index.ts';
 export * from './unknown/index.ts';
 export * from './variant/index.ts';
-export * from './voidType/index.ts';
+export * from './void/index.ts';

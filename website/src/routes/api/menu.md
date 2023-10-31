@@ -36,7 +36,7 @@
 - [union](/api/union)
 - [unknown](/api/unknown)
 - [variant](/api/variant)
-- [voidType](/api/voidType)
+- [void\_](/api/void_)
 
 ## Methods
 
@@ -175,4 +175,4 @@
 - [unionAsync](/api/unionAsync)
 - [unknownAsync](/api/unknownAsync)
 - [variantAsync](/api/variantAsync)
-- [voidTypeAsync](/api/voidTypeAsync)
+- [voidAsync](/api/voidAsync)

@@ -28,6 +28,7 @@ All notable changes to the library will be documented in this file.
 - Rename `nativeEnum` and `nativeEnumAsync` schema to `enum_` and `enumAsync`
 - Rename `nullType` and `nullTypeAsync` schema to `null_` and `nullAsync`
 - Rename `undefinedType` and `undefinedTypeAsync` schema to `undefined_` and `undefinedAsync`
+- Rename `voidType` and `voidTypeAsync` schema to `void_` and `voidAsync`
 - Rename `default` property of `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema to `getDefault`
 - Rename `ObjectShape` and `ObjectShapeAsync` types to `ObjectEntries` and `ObjectEntriesAsync`
 - Rename `TupleShape` and `TupleShapeAsync` types to `TupleItems` and `TupleItemsAsync`

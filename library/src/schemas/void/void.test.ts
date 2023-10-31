@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
-import { voidType } from './voidType.ts';
+import { void_ } from './void.ts';
 
 describe('void', () => {
   test('should pass only void', () => {
-    const schema = voidType();
+    const schema = void_();
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     expect(parse(schema, (() => {})())).toBeUndefined();
     expect(parse(schema, undefined)).toBeUndefined();
@@ -17,6 +17,6 @@ describe('void', () => {
 
   test('should throw custom error', () => {
     const error = 'Value is not void!';
-    expect(() => parse(voidType(error), 123)).toThrowError(error);
+    expect(() => parse(void_(error), 123)).toThrowError(error);
   });
 });

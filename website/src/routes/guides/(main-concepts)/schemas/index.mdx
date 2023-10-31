@@ -105,7 +105,7 @@ const TupleSchema = tuple([string(), number()]); // [string, number]
 
 Beyond primitive and complex values, I also provide schema functions for more special cases.
 
-Schema functions: <Link href="/api/any">`any`</Link>, <Link href="/api/enum_">`enum_`</Link>, <Link href="/api/instance">`instance`</Link>, <Link href="/api/intersect">`intersect`</Link>, <Link href="/api/nan">`nan`</Link>, <Link href="/api/never">`never`</Link>, <Link href="/api/nonNullable">`nonNullable`</Link>, <Link href="/api/nonNullish">`nonNullish`</Link>, <Link href="/api/nonOptional">`nonOptional`</Link>,<Link href="/api/nullable">`nullable`</Link>, <Link href="/api/nullish">`nullish`</Link>, <Link href="/api/optional">`optional`</Link>, <Link href="/api/picklist">`picklist`</Link>, <Link href="/api/recursive">`recursive`</Link>, <Link href="/api/special">`special`</Link>, <Link href="/api/union">`union`</Link>, <Link href="/api/unknown">`unknown`</Link>, <Link href="/api/variant">`variant`</Link>, <Link href="/api/voidType">`voidType`</Link>
+Schema functions: <Link href="/api/any">`any`</Link>, <Link href="/api/enum_">`enum_`</Link>, <Link href="/api/instance">`instance`</Link>, <Link href="/api/intersect">`intersect`</Link>, <Link href="/api/nan">`nan`</Link>, <Link href="/api/never">`never`</Link>, <Link href="/api/nonNullable">`nonNullable`</Link>, <Link href="/api/nonNullish">`nonNullish`</Link>, <Link href="/api/nonOptional">`nonOptional`</Link>,<Link href="/api/nullable">`nullable`</Link>, <Link href="/api/nullish">`nullish`</Link>, <Link href="/api/optional">`optional`</Link>, <Link href="/api/picklist">`picklist`</Link>, <Link href="/api/recursive">`recursive`</Link>, <Link href="/api/special">`special`</Link>, <Link href="/api/union">`union`</Link>, <Link href="/api/unknown">`unknown`</Link>, <Link href="/api/variant">`variant`</Link>, <Link href="/api/void_">`void_`</Link>
 
 ```ts
 const AnySchema = any(); // any
@@ -129,5 +129,5 @@ const VariantSchema = variant('type', [
   object({ type: literal('a'), foo: string() }),
   object({ type: literal('b'), bar: number() }),
 ]); // { type: 'a', foo: string } | { type: 'b', bar: number }
-const VoidSchema = voidType(); // void
+const VoidSchema = void_(); // void
 ```

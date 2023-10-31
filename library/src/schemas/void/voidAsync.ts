@@ -1,21 +1,21 @@
-import type { BaseSchema, ErrorMessage } from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage } from '../../types.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
- * Void schema type.
+ * Void schema async type.
  */
-export type VoidSchema<TOutput = void> = BaseSchema<void, TOutput> & {
+export type VoidSchemaAsync<TOutput = void> = BaseSchemaAsync<void, TOutput> & {
   type: 'void';
 };
 
 /**
- * Creates a void schema.
+ * Creates an async void schema.
  *
  * @param error The error message.
  *
- * @returns A void schema.
+ * @returns An async void schema.
  */
-export function voidType(error?: ErrorMessage): VoidSchema {
+export function voidAsync(error?: ErrorMessage): VoidSchemaAsync {
   return {
     /**
      * The schema type.
@@ -25,7 +25,7 @@ export function voidType(error?: ErrorMessage): VoidSchema {
     /**
      * Whether it's async.
      */
-    async: false,
+    async: true,
 
     /**
      * Parses unknown input based on its schema.
@@ -35,7 +35,7 @@ export function voidType(error?: ErrorMessage): VoidSchema {
      *
      * @returns The parsed output.
      */
-    _parse(input, info) {
+    async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'undefined') {
         return getSchemaIssues(
@@ -52,3 +52,10 @@ export function voidType(error?: ErrorMessage): VoidSchema {
     },
   };
 }
+
+/**
+ * See {@link voidAsync}
+ *
+ * @deprecated Use `voidAsync` instead.
+ */
+export const voidTypeAsync = voidAsync;
