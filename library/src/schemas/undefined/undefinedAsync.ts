@@ -18,7 +18,7 @@ export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
  *
  * @returns An async undefined schema.
  */
-export function undefinedTypeAsync(error?: ErrorMessage): UndefinedSchemaAsync {
+export function undefinedAsync(error?: ErrorMessage): UndefinedSchemaAsync {
   return {
     /**
      * The schema type.
@@ -55,3 +55,10 @@ export function undefinedTypeAsync(error?: ErrorMessage): UndefinedSchemaAsync {
     },
   };
 }
+
+/**
+ * See {@link undefinedAsync}
+ *
+ * @deprecated Use `undefinedAsync` instead.
+ */
+export const undefinedTypeAsync = undefinedAsync;

@@ -28,7 +28,7 @@ export * from './special/index.ts';
 export * from './string/index.ts';
 export * from './symbol/index.ts';
 export * from './tuple/index.ts';
-export * from './undefinedType/index.ts';
+export * from './undefined/index.ts';
 export * from './union/index.ts';
 export * from './unknown/index.ts';
 export * from './variant/index.ts';

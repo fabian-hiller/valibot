@@ -18,7 +18,7 @@ export type UndefinedSchema<TOutput = undefined> = BaseSchema<
  *
  * @returns A undefined schema.
  */
-export function undefinedType(error?: ErrorMessage): UndefinedSchema {
+export function undefined_(error?: ErrorMessage): UndefinedSchema {
   return {
     /**
      * The schema type.
@@ -55,3 +55,10 @@ export function undefinedType(error?: ErrorMessage): UndefinedSchema {
     },
   };
 }
+
+/**
+ * See {@link undefined_}
+ *
+ * @deprecated Use `undefined_` instead.
+ */
+export const undefinedType = undefined_;

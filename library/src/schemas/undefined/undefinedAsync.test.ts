@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
-import { undefinedTypeAsync } from './undefinedTypeAsync.ts';
+import { undefinedAsync } from './undefinedAsync.ts';
 
-describe('undefinedTypeAsync', () => {
+describe('undefinedAsync', () => {
   test('should pass only undefined', async () => {
-    const schema = undefinedTypeAsync();
+    const schema = undefinedAsync();
     expect(await parseAsync(schema, undefined)).toBeUndefined();
     await expect(parseAsync(schema, 123)).rejects.toThrowError();
     await expect(parseAsync(schema, 'test')).rejects.toThrowError();
@@ -15,8 +15,8 @@ describe('undefinedTypeAsync', () => {
 
   test('should throw custom error', async () => {
     const error = 'Value is not undefined!';
-    await expect(
-      parseAsync(undefinedTypeAsync(error), 123)
-    ).rejects.toThrowError(error);
+    await expect(parseAsync(undefinedAsync(error), 123)).rejects.toThrowError(
+      error
+    );
   });
 });
