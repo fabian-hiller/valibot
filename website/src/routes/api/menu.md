@@ -8,7 +8,7 @@
 - [blob](/api/blob)
 - [boolean](/api/boolean)
 - [date](/api/date)
-- [enum\_](/api/enum_)
+- [enum_](/api/enum_)
 - [instance](/api/instance)
 - [intersect](/api/intersect)
 - [literal](/api/literal)
@@ -18,7 +18,7 @@
 - [nonNullable](/api/nonNullable)
 - [nonNullish](/api/nonNullish)
 - [nonOptional](/api/nonOptional)
-- [null\_](/api/null_)
+- [null_](/api/null_)
 - [nullable](/api/nullable)
 - [nullish](/api/nullish)
 - [number](/api/number)
@@ -32,11 +32,11 @@
 - [string](/api/string)
 - [symbol](/api/symbol)
 - [tuple](/api/tuple)
-- [undefined\_](/api/undefined_)
+- [undefined_](/api/undefined_)
 - [union](/api/union)
 - [unknown](/api/unknown)
 - [variant](/api/variant)
-- [void\_](/api/void_)
+- [void_](/api/void_)
 
 ## Methods
 
