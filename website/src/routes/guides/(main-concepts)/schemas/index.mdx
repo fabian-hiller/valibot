@@ -70,12 +70,12 @@ I support the creation of schemas for any primitive data type. These are immutab
 
 > Due to the modular design, occasionally reserved keywords of JavaScript or TypeScript get in my way. As a workaround, I have added the suffix `_` in these cases. Let me know [here](https://github.com/fabian-hiller/valibot/issues/new) if you have alternative ideas.
 
-Schema functions: <Link href="/api/bigint">`bigint`</Link>, <Link href="/api/boolean">`boolean`</Link>, <Link href="/api/nullType">`nullType`</Link>, <Link href="/api/number">`number`</Link>, <Link href="/api/string">`string`</Link>, <Link href="/api/symbol">`symbol`</Link>, <Link href="/api/undefinedType">`undefinedType`</Link>
+Schema functions: <Link href="/api/bigint">`bigint`</Link>, <Link href="/api/boolean">`boolean`</Link>, <Link href="/api/null_">`null_`</Link>, <Link href="/api/number">`number`</Link>, <Link href="/api/string">`string`</Link>, <Link href="/api/symbol">`symbol`</Link>, <Link href="/api/undefinedType">`undefinedType`</Link>
 
 ```ts
 const BigintSchema = bigint(); // bigint
 const BooleanSchema = boolean(); // boolean
-const NullSchema = nullType(); // null
+const NullSchema = null_(); // null
 const NumberSchema = number(); // number
 const StringSchema = string(); // string
 const SymbolSchema = symbol(); // symbol

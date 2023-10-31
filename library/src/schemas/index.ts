@@ -16,7 +16,7 @@ export * from './nonNullish/index.ts';
 export * from './nonOptional/index.ts';
 export * from './nullable/index.ts';
 export * from './nullish/index.ts';
-export * from './nullType/index.ts';
+export * from './null/index.ts';
 export * from './number/index.ts';
 export * from './object/index.ts';
 export * from './optional/index.ts';

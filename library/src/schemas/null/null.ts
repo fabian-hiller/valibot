@@ -1,21 +1,21 @@
-import type { BaseSchemaAsync, ErrorMessage } from '../../types.ts';
+import type { BaseSchema, ErrorMessage } from '../../types.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
- * Null schema async type.
+ * Null schema type.
  */
-export type NullSchemaAsync<TOutput = null> = BaseSchemaAsync<null, TOutput> & {
+export type NullSchema<TOutput = null> = BaseSchema<null, TOutput> & {
   type: 'null';
 };
 
 /**
- * Creates an async null schema.
+ * Creates a null schema.
  *
  * @param error The error message.
  *
- * @returns An async null schema.
+ * @returns A null schema.
  */
-export function nullTypeAsync(error?: ErrorMessage): NullSchemaAsync {
+export function null_(error?: ErrorMessage): NullSchema {
   return {
     /**
      * The schema type.
@@ -25,7 +25,7 @@ export function nullTypeAsync(error?: ErrorMessage): NullSchemaAsync {
     /**
      * Whether it's async.
      */
-    async: true,
+    async: false,
 
     /**
      * Parses unknown input based on its schema.
@@ -35,7 +35,7 @@ export function nullTypeAsync(error?: ErrorMessage): NullSchemaAsync {
      *
      * @returns The parsed output.
      */
-    async _parse(input, info) {
+    _parse(input, info) {
       // Check type of input
       if (input !== null) {
         return getSchemaIssues(
@@ -52,3 +52,10 @@ export function nullTypeAsync(error?: ErrorMessage): NullSchemaAsync {
     },
   };
 }
+
+/**
+ * See {@link null_}
+ *
+ * @deprecated Use `null_` instead.
+ */
+export const nullType = null_;

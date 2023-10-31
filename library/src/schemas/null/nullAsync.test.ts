@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
-import { nullTypeAsync } from './nullTypeAsync.ts';
+import { nullAsync } from './nullAsync.ts';
 
-describe('nullTypeAsync', () => {
+describe('nullAsync', () => {
   test('should pass only null', async () => {
-    const schema = nullTypeAsync();
+    const schema = nullAsync();
     expect(await parseAsync(schema, null)).toBeNull();
     await expect(parseAsync(schema, 123)).rejects.toThrowError();
     await expect(parseAsync(schema, '123')).rejects.toThrowError();
@@ -15,8 +15,6 @@ describe('nullTypeAsync', () => {
 
   test('should throw custom error', async () => {
     const error = 'Value is not null!';
-    await expect(parseAsync(nullTypeAsync(error), 123)).rejects.toThrowError(
-      error
-    );
+    await expect(parseAsync(nullAsync(error), 123)).rejects.toThrowError(error);
   });
 });

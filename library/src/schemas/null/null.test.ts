@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
-import { nullType } from './nullType.ts';
+import { null_ } from './null.ts';
 
-describe('nullType', () => {
+describe('null_', () => {
   test('should pass only null', () => {
-    const schema = nullType();
+    const schema = null_();
     expect(parse(schema, null)).toBeNull();
     expect(() => parse(schema, 123)).toThrowError();
     expect(() => parse(schema, '123')).toThrowError();
@@ -15,6 +15,6 @@ describe('nullType', () => {
 
   test('should throw custom error', () => {
     const error = 'Value is not null!';
-    expect(() => parse(nullType(error), 123)).toThrowError(error);
+    expect(() => parse(null_(error), 123)).toThrowError(error);
   });
 });
