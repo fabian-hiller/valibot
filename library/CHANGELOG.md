@@ -5,7 +5,7 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add `getRestAndDefaultArgs` utility function
-- Add new `rest` argument to `object` and `objectAsync` schema
+- Add `rest` argument to `object` and `objectAsync` schema
 - Add `discriminatedUnion` and `discriminatedUnionAsync` schema (issue #90, #216)
 - Add `getFallback` property to schema in `fallback` method (pull request #177)
 - Add `PartialObjectEntries` and `PartialObjectEntriesAsync` type (issue #217)
@@ -17,7 +17,7 @@ All notable changes to the library will be documented in this file.
 - Change `ObjectSchema` and `ObjectSchemaAsync` type
 - Change type check in `tuple` and `tupleAsync` to be less strict
 - Change return type of `action` argument in `coerce` and `coerceAsync` to `unknown`
-- Change type of `getDefault` method
+- Change type of `brand` and `getDefault` method
 - Rename `default` property of `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema to `getDefault`
 - Rename `ObjectShape` and `ObjectShapeAsync` types to `ObjectEntries` and `ObjectEntriesAsync`
 - Rename `TupleShape` and `TupleShapeAsync` types to `TupleItems` and `TupleItemsAsync`
