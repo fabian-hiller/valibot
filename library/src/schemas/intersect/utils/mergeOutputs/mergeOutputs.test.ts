@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { mergeOutputs } from './mergeOutputs.ts';
 
-describe('intersection', () => {
+describe('mergeOutputs', () => {
   test('should detect equal values', () => {
     const date = new Date();
 

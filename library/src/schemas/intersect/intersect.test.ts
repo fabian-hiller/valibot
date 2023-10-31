@@ -6,11 +6,11 @@ import { object } from '../object/index.ts';
 import { record } from '../record/index.ts';
 import { string } from '../string/index.ts';
 import { unknown } from '../unknown/index.ts';
-import { intersection, type IntersectionOptions } from './intersection.ts';
+import { intersect, type IntersectOptions } from './intersect.ts';
 
-describe('intersection', () => {
-  test('should pass only intersection values', () => {
-    const schema1 = intersection([string(), literal('test')]);
+describe('intersect', () => {
+  test('should pass only intersect values', () => {
+    const schema1 = intersect([string(), literal('test')]);
     const input1 = 'test';
     const output1 = parse(schema1, input1);
     expect(output1).toBe(input1);
@@ -19,7 +19,7 @@ describe('intersection', () => {
     expect(() => parse(schema1, {})).toThrowError();
     expect(() => parse(schema1, [])).toThrowError();
 
-    const schema2 = intersection([
+    const schema2 = intersect([
       object({ foo: string() }),
       object({ bar: string() }),
     ]);
@@ -29,7 +29,7 @@ describe('intersection', () => {
     expect(() => parse(schema2, { foo: 'test' })).toThrowError();
     expect(() => parse(schema2, { bar: 'test' })).toThrowError();
 
-    const schema3 = intersection([
+    const schema3 = intersect([
       object({ key1: string() }),
       record(string(), unknown()),
     ]);
@@ -41,21 +41,19 @@ describe('intersection', () => {
   });
 
   test('should throw custom error', () => {
-    const error = 'Value is not a intersection!';
-    const options: IntersectionOptions = [
+    const error = 'Value is not an intersect!';
+    const options: IntersectOptions = [
       string(),
       transform(string(), (input) => input.length),
     ];
-    expect(() => parse(intersection(options), 'test')).toThrowError(
+    expect(() => parse(intersect(options), 'test')).toThrowError(
       'Invalid type'
     );
-    expect(() => parse(intersection(options, error), 'test')).toThrowError(
-      error
-    );
+    expect(() => parse(intersect(options, error), 'test')).toThrowError(error);
   });
 
   test('should throw every issue', () => {
-    const schema = intersection([string(), literal('test')]);
+    const schema = intersect([string(), literal('test')]);
     const input = 123;
     expect(() => parse(schema, input)).toThrowError();
     try {
@@ -66,7 +64,7 @@ describe('intersection', () => {
   });
 
   test('should throw only first issue', () => {
-    const schema = intersection([string(), literal('test')]);
+    const schema = intersect([string(), literal('test')]);
     const input = 123;
     const info = { abortEarly: true };
     expect(() => parse(schema, input, info)).toThrowError();

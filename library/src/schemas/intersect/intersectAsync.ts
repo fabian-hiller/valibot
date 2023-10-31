@@ -1,48 +1,48 @@
 import type { BaseSchema, BaseSchemaAsync, Issues } from '../../types.ts';
 import { getIssues, getOutput, getSchemaIssues } from '../../utils/index.ts';
-import type { IntersectionInput, IntersectionOutput } from './types.ts';
+import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
 
 /**
- * Intersection options async type.
+ * Intersect options async type.
  */
-export type IntersectionOptionsAsync = [
+export type IntersectOptionsAsync = [
   BaseSchema | BaseSchemaAsync,
   BaseSchema | BaseSchemaAsync,
   ...(BaseSchema[] | BaseSchemaAsync[])
 ];
 
 /**
- * Intersection schema async type.
+ * Intersect schema async type.
  */
-export type IntersectionSchemaAsync<
-  TOptions extends IntersectionOptionsAsync,
-  TOutput = IntersectionOutput<TOptions>
-> = BaseSchemaAsync<IntersectionInput<TOptions>, TOutput> & {
-  type: 'intersection';
+export type IntersectSchemaAsync<
+  TOptions extends IntersectOptionsAsync,
+  TOutput = IntersectOutput<TOptions>
+> = BaseSchemaAsync<IntersectInput<TOptions>, TOutput> & {
+  type: 'intersect';
   options: TOptions;
 };
 
 /**
- * Creates an async intersection schema.
+ * Creates an async intersect schema.
  *
- * @param options The intersection options.
+ * @param options The intersect options.
  * @param error The error message.
  *
- * @returns An async intersection schema.
+ * @returns An async intersect schema.
  */
-export function intersectionAsync<TOptions extends IntersectionOptionsAsync>(
+export function intersectAsync<TOptions extends IntersectOptionsAsync>(
   options: TOptions,
   error?: string
-): IntersectionSchemaAsync<TOptions> {
+): IntersectSchemaAsync<TOptions> {
   return {
     /**
      * The schema type.
      */
-    type: 'intersection',
+    type: 'intersect',
 
     /**
-     * The intersection options.
+     * The intersect options.
      */
     options,
 
@@ -118,7 +118,7 @@ export function intersectionAsync<TOptions extends IntersectionOptionsAsync>(
           return getSchemaIssues(
             info,
             'type',
-            'intersection',
+            'intersect',
             error || 'Invalid type',
             input
           );
@@ -133,3 +133,10 @@ export function intersectionAsync<TOptions extends IntersectionOptionsAsync>(
     },
   };
 }
+
+/**
+ * See {@link intersectAsync}
+ *
+ * @deprecated Use `intersectAsync` instead.
+ */
+export const intersectionAsync = intersectAsync;

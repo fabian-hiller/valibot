@@ -7,13 +7,13 @@ import { record } from '../record/index.ts';
 import { string } from '../string/index.ts';
 import { unknown } from '../unknown/index.ts';
 import {
-  intersectionAsync,
-  type IntersectionOptionsAsync,
-} from './intersectionAsync.ts';
+  intersectAsync,
+  type IntersectOptionsAsync,
+} from './intersectAsync.ts';
 
-describe('intersectionAsync', () => {
-  test('should pass only intersectionAsync values', async () => {
-    const schema1 = intersectionAsync([string(), literal('test')]);
+describe('intersectAsync', () => {
+  test('should pass only intersect values', async () => {
+    const schema1 = intersectAsync([string(), literal('test')]);
     const input1 = 'test';
     const output1 = await parseAsync(schema1, input1);
     expect(output1).toBe(input1);
@@ -22,7 +22,7 @@ describe('intersectionAsync', () => {
     await expect(parseAsync(schema1, {})).rejects.toThrowError();
     await expect(parseAsync(schema1, [])).rejects.toThrowError();
 
-    const schema2 = intersectionAsync([
+    const schema2 = intersectAsync([
       object({ foo: string() }),
       object({ bar: string() }),
     ]);
@@ -32,7 +32,7 @@ describe('intersectionAsync', () => {
     await expect(parseAsync(schema2, { foo: 'test' })).rejects.toThrowError();
     await expect(parseAsync(schema2, { bar: 'test' })).rejects.toThrowError();
 
-    const schema3 = intersectionAsync([
+    const schema3 = intersectAsync([
       object({ key1: string() }),
       record(string(), unknown()),
     ]);
@@ -44,21 +44,21 @@ describe('intersectionAsync', () => {
   });
 
   test('should throw custom error', async () => {
-    const error = 'Value is not a intersection!';
-    const options: IntersectionOptionsAsync = [
+    const error = 'Value is not an intersect!';
+    const options: IntersectOptionsAsync = [
       string(),
       transform(string(), (input) => input.length),
     ];
     await expect(
-      parseAsync(intersectionAsync(options), 'test')
+      parseAsync(intersectAsync(options), 'test')
     ).rejects.toThrowError('Invalid type');
     await expect(
-      parseAsync(intersectionAsync(options, error), 'test')
+      parseAsync(intersectAsync(options, error), 'test')
     ).rejects.toThrowError(error);
   });
 
   test('should throw every issue', async () => {
-    const schema = intersectionAsync([string(), literal('test')]);
+    const schema = intersectAsync([string(), literal('test')]);
     const input = 123;
     await expect(parseAsync(schema, input)).rejects.toThrowError();
     try {
@@ -69,7 +69,7 @@ describe('intersectionAsync', () => {
   });
 
   test('should throw only first issue', async () => {
-    const schema = intersectionAsync([string(), literal('test')]);
+    const schema = intersectAsync([string(), literal('test')]);
     const input = 123;
     const info = { abortEarly: true };
     await expect(parseAsync(schema, input, info)).rejects.toThrowError();

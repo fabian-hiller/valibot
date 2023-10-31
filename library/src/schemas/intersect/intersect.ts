@@ -1,44 +1,44 @@
 import type { BaseSchema, Issues } from '../../types.ts';
 import { getIssues, getOutput, getSchemaIssues } from '../../utils/index.ts';
-import type { IntersectionInput, IntersectionOutput } from './types.ts';
+import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
 
 /**
- * Intersection options type.
+ * Intersect options type.
  */
-export type IntersectionOptions = [BaseSchema, BaseSchema, ...BaseSchema[]];
+export type IntersectOptions = [BaseSchema, BaseSchema, ...BaseSchema[]];
 
 /**
- * Intersection schema type.
+ * Intersect schema type.
  */
-export type IntersectionSchema<
-  TOptions extends IntersectionOptions,
-  TOutput = IntersectionOutput<TOptions>
-> = BaseSchema<IntersectionInput<TOptions>, TOutput> & {
-  type: 'intersection';
+export type IntersectSchema<
+  TOptions extends IntersectOptions,
+  TOutput = IntersectOutput<TOptions>
+> = BaseSchema<IntersectInput<TOptions>, TOutput> & {
+  type: 'intersect';
   options: TOptions;
 };
 
 /**
- * Creates an intersection schema.
+ * Creates an intersect schema.
  *
- * @param options The intersection options.
+ * @param options The intersect options.
  * @param error The error message.
  *
- * @returns An intersection schema.
+ * @returns An intersect schema.
  */
-export function intersection<TOptions extends IntersectionOptions>(
+export function intersect<TOptions extends IntersectOptions>(
   options: TOptions,
   error?: string
-): IntersectionSchema<TOptions> {
+): IntersectSchema<TOptions> {
   return {
     /**
      * The schema type.
      */
-    type: 'intersection',
+    type: 'intersect',
 
     /**
-     * The intersection options.
+     * The intersect options.
      */
     options,
 
@@ -106,7 +106,7 @@ export function intersection<TOptions extends IntersectionOptions>(
           return getSchemaIssues(
             info,
             'type',
-            'intersection',
+            'intersect',
             error || 'Invalid type',
             input
           );
@@ -121,3 +121,10 @@ export function intersection<TOptions extends IntersectionOptions>(
     },
   };
 }
+
+/**
+ * See {@link intersect}
+ *
+ * @deprecated Use `intersect` instead.
+ */
+export const intersection = intersect;
