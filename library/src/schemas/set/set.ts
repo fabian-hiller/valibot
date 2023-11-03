@@ -11,11 +11,11 @@ import type { SetInput, SetOutput, SetPathItem } from './types.ts';
  * Set schema type.
  */
 export type SetSchema<
-  TSetValue extends BaseSchema,
-  TOutput = SetOutput<TSetValue>
-> = BaseSchema<SetInput<TSetValue>, TOutput> & {
-  schema: 'set';
-  set: { value: TSetValue };
+  TValue extends BaseSchema,
+  TOutput = SetOutput<TValue>
+> = BaseSchema<SetInput<TValue>, TOutput> & {
+  type: 'set';
+  value: TValue;
 };
 
 /**
@@ -26,10 +26,10 @@ export type SetSchema<
  *
  * @returns A set schema.
  */
-export function set<TSetValue extends BaseSchema>(
-  value: TSetValue,
-  pipe?: Pipe<SetOutput<TSetValue>>
-): SetSchema<TSetValue>;
+export function set<TValue extends BaseSchema>(
+  value: TValue,
+  pipe?: Pipe<SetOutput<TValue>>
+): SetSchema<TValue>;
 
 /**
  * Creates a set schema.
@@ -40,17 +40,17 @@ export function set<TSetValue extends BaseSchema>(
  *
  * @returns A set schema.
  */
-export function set<TSetValue extends BaseSchema>(
-  value: TSetValue,
+export function set<TValue extends BaseSchema>(
+  value: TValue,
   error?: ErrorMessage,
-  pipe?: Pipe<SetOutput<TSetValue>>
-): SetSchema<TSetValue>;
+  pipe?: Pipe<SetOutput<TValue>>
+): SetSchema<TValue>;
 
-export function set<TSetValue extends BaseSchema>(
-  value: TSetValue,
-  arg2?: Pipe<SetOutput<TSetValue>> | ErrorMessage,
-  arg3?: Pipe<SetOutput<TSetValue>>
-): SetSchema<TSetValue> {
+export function set<TValue extends BaseSchema>(
+  value: TValue,
+  arg2?: Pipe<SetOutput<TValue>> | ErrorMessage,
+  arg3?: Pipe<SetOutput<TValue>>
+): SetSchema<TValue> {
   // Get error and pipe argument
   const [error, pipe] = getDefaultArgs(arg2, arg3);
 
@@ -59,12 +59,12 @@ export function set<TSetValue extends BaseSchema>(
     /**
      * The schema type.
      */
-    schema: 'set',
+    type: 'set',
 
     /**
-     * The set value schema.
+     * The value schema.
      */
-    set: { value },
+    value,
 
     /**
      * Whether it's async.
@@ -94,7 +94,7 @@ export function set<TSetValue extends BaseSchema>(
       // Create key, output and issues
       let key = 0;
       let issues: Issues | undefined;
-      const output: SetOutput<TSetValue> = new Set();
+      const output: SetOutput<TValue> = new Set();
 
       // Parse each value by schema
       for (const inputValue of input) {
@@ -105,7 +105,7 @@ export function set<TSetValue extends BaseSchema>(
         if (result.issues) {
           // Create set path item
           const pathItem: SetPathItem = {
-            schema: 'set',
+            type: 'set',
             input,
             key,
             value: inputValue,

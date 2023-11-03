@@ -75,7 +75,7 @@ describe('map', () => {
     const result1 = schema1._parse(input1);
     expect(result1.issues?.[0].path).toEqual([
       {
-        schema: 'map',
+        type: 'map',
         input: input1,
         key: 'C',
         value: input1.get('C'),
@@ -91,13 +91,13 @@ describe('map', () => {
     expect(result2.issues?.[0].origin).toBe('value');
     expect(result2.issues?.[0].path).toEqual([
       {
-        schema: 'map',
+        type: 'map',
         input: input2,
         key: 'B',
         value: input2.get('B'),
       },
       {
-        schema: 'object',
+        type: 'object',
         input: input2.get('B'),
         key: 'key',
         value: input2.get('B').key,
@@ -114,13 +114,13 @@ describe('map', () => {
     expect(result3.issues?.[0].origin).toBe('key');
     expect(result3.issues?.[0].path).toEqual([
       {
-        schema: 'map',
+        type: 'map',
         input: input3,
         key: errorKey,
         value: input3.get(errorKey),
       },
       {
-        schema: 'object',
+        type: 'object',
         input: errorKey,
         key: 'key',
         value: errorKey.key,

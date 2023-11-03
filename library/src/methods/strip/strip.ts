@@ -13,9 +13,9 @@ import { getOutput } from '../../utils/index.ts';
  *
  * @returns A object schema.
  */
-export function strip<
-  TObjectSchema extends ObjectSchema<ObjectEntries, undefined>
->(schema: TObjectSchema): TObjectSchema {
+export function strip<TSchema extends ObjectSchema<ObjectEntries, undefined>>(
+  schema: TSchema
+): TSchema {
   // Create cached keys
   let cachedKeys: string[];
 
@@ -41,7 +41,7 @@ export function strip<
       }
 
       // Cache object keys lazy
-      cachedKeys = cachedKeys || Object.keys(schema.object.entries);
+      cachedKeys = cachedKeys || Object.keys(schema.entries);
 
       // Strip unknown keys
       const output: Record<string, any> = {};

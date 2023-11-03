@@ -9,7 +9,7 @@ import {
  * Date schema async type.
  */
 export type DateSchemaAsync<TOutput = Date> = BaseSchemaAsync<Date, TOutput> & {
-  schema: 'date';
+  type: 'date';
 };
 
 /**
@@ -46,7 +46,7 @@ export function dateAsync(
     /**
      * The schema type.
      */
-    schema: 'date',
+    type: 'date',
 
     /**
      * Whether it's async.

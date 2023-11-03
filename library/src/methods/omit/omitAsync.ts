@@ -24,18 +24,15 @@ import type { ObjectKeys } from './types.ts';
  * @returns An async object schema.
  */
 export function omitAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends ObjectKeys<TObjectSchema>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TKeys extends ObjectKeys<TSchema>
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
   pipe?: PipeAsync<
-    ObjectOutput<
-      Omit<TObjectSchema['object']['entries'], TKeys[number]>,
-      undefined
-    >
+    ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, undefined>
   >
-): ObjectSchemaAsync<Omit<TObjectSchema['object']['entries'], TKeys[number]>>;
+): ObjectSchemaAsync<Omit<TSchema['entries'], TKeys[number]>>;
 
 /**
  * Creates an async object schema that contains only the selected keys of an
@@ -49,19 +46,16 @@ export function omitAsync<
  * @returns An async object schema.
  */
 export function omitAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends ObjectKeys<TObjectSchema>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TKeys extends ObjectKeys<TSchema>
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
   error?: ErrorMessage,
   pipe?: PipeAsync<
-    ObjectOutput<
-      Omit<TObjectSchema['object']['entries'], TKeys[number]>,
-      undefined
-    >
+    ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, undefined>
   >
-): ObjectSchemaAsync<Omit<TObjectSchema['object']['entries'], TKeys[number]>>;
+): ObjectSchemaAsync<Omit<TSchema['entries'], TKeys[number]>>;
 
 /**
  * Creates an async object schema that contains only the selected keys of an
@@ -75,23 +69,15 @@ export function omitAsync<
  * @returns An async object schema.
  */
 export function omitAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends ObjectKeys<TObjectSchema>,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TKeys extends ObjectKeys<TSchema>,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
-  rest: TObjectRest,
-  pipe?: PipeAsync<
-    ObjectOutput<
-      Omit<TObjectSchema['object']['entries'], TKeys[number]>,
-      TObjectRest
-    >
-  >
-): ObjectSchemaAsync<
-  Omit<TObjectSchema['object']['entries'], TKeys[number]>,
-  TObjectRest
->;
+  rest: TRest,
+  pipe?: PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
+): ObjectSchemaAsync<Omit<TSchema['entries'], TKeys[number]>, TRest>;
 
 /**
  * Creates an async object schema that contains only the selected keys of an
@@ -106,77 +92,46 @@ export function omitAsync<
  * @returns An async object schema.
  */
 export function omitAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends ObjectKeys<TObjectSchema>,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TKeys extends ObjectKeys<TSchema>,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
-  rest: TObjectRest,
+  rest: TRest,
   error?: ErrorMessage,
-  pipe?: PipeAsync<
-    ObjectOutput<
-      Omit<TObjectSchema['object']['entries'], TKeys[number]>,
-      TObjectRest
-    >
-  >
-): ObjectSchemaAsync<
-  Omit<TObjectSchema['object']['entries'], TKeys[number]>,
-  TObjectRest
->;
+  pipe?: PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
+): ObjectSchemaAsync<Omit<TSchema['entries'], TKeys[number]>, TRest>;
 
 export function omitAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends ObjectKeys<TObjectSchema>,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TKeys extends ObjectKeys<TSchema>,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
   arg3?:
-    | PipeAsync<
-        ObjectOutput<
-          Omit<TObjectSchema['object']['entries'], TKeys[number]>,
-          TObjectRest
-        >
-      >
+    | PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
     | ErrorMessage
-    | TObjectRest,
+    | TRest,
   arg4?:
-    | PipeAsync<
-        ObjectOutput<
-          Omit<TObjectSchema['object']['entries'], TKeys[number]>,
-          TObjectRest
-        >
-      >
+    | PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
     | ErrorMessage,
-  arg5?: PipeAsync<
-    ObjectOutput<
-      Omit<TObjectSchema['object']['entries'], TKeys[number]>,
-      TObjectRest
-    >
-  >
-): ObjectSchemaAsync<
-  Omit<TObjectSchema['object']['entries'], TKeys[number]>,
-  TObjectRest
-> {
+  arg5?: PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
+): ObjectSchemaAsync<Omit<TSchema['entries'], TKeys[number]>, TRest> {
   // Get rest, error and pipe argument
   const [rest, error, pipe] = getRestAndDefaultArgs<
-    TObjectRest,
-    PipeAsync<
-      ObjectOutput<
-        Omit<TObjectSchema['object']['entries'], TKeys[number]>,
-        TObjectRest
-      >
-    >
+    TRest,
+    PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
   >(arg3, arg4, arg5);
 
   // Create and return object schema
   return objectAsync(
-    Object.entries(schema.object.entries).reduce(
+    Object.entries(schema.entries).reduce(
       (entries, [key, schema]) =>
         keys.includes(key) ? entries : { ...entries, [key]: schema },
       {}
-    ) as Omit<TObjectSchema['object']['entries'], TKeys[number]>,
+    ) as Omit<TSchema['entries'], TKeys[number]>,
     rest,
     error,
     pipe

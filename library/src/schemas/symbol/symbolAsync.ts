@@ -8,7 +8,7 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
   symbol,
   TOutput
 > & {
-  schema: 'symbol';
+  type: 'symbol';
 };
 
 /**
@@ -23,7 +23,7 @@ export function symbolAsync(error?: ErrorMessage): SymbolSchemaAsync {
     /**
      * The schema type.
      */
-    schema: 'symbol',
+    type: 'symbol',
 
     /**
      * Whether it's async.

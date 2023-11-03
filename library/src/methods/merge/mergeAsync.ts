@@ -11,7 +11,7 @@ import type {
   PipeAsync,
 } from '../../types.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
-import type { MergeSchemaObjects } from './types.ts';
+import type { MergeObjects } from './types.ts';
 
 /**
  * Object schemas type.
@@ -31,10 +31,10 @@ type ObjectSchemas = [
  *
  * @returns An async object schema.
  */
-export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
-  schemas: TObjectSchemas,
-  pipe?: PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, undefined>>
-): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>>;
+export function mergeAsync<TSchemas extends ObjectSchemas>(
+  schemas: TSchemas,
+  pipe?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, undefined>>
+): ObjectSchemaAsync<MergeObjects<TSchemas>>;
 
 /**
  * Merges the entries of multiple async object schemas. Subsequent object
@@ -46,11 +46,11 @@ export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
  *
  * @returns An async object schema.
  */
-export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
-  schemas: TObjectSchemas,
+export function mergeAsync<TSchemas extends ObjectSchemas>(
+  schemas: TSchemas,
   error?: ErrorMessage,
-  pipe?: PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, undefined>>
-): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>>;
+  pipe?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, undefined>>
+): ObjectSchemaAsync<MergeObjects<TSchemas>>;
 
 /**
  * Merges the entries of multiple async object schemas. Subsequent object
@@ -63,15 +63,13 @@ export function mergeAsync<TObjectSchemas extends ObjectSchemas>(
  * @returns An async object schema.
  */
 export function mergeAsync<
-  TObjectSchemas extends ObjectSchemas,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+  TSchemas extends ObjectSchemas,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
-  schemas: TObjectSchemas,
-  rest: TObjectRest,
-  pipe?: PipeAsync<
-    ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>
-  >
-): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>, TObjectRest>;
+  schemas: TSchemas,
+  rest: TRest,
+  pipe?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
+): ObjectSchemaAsync<MergeObjects<TSchemas>, TRest>;
 
 /**
  * Merges the entries of multiple async object schemas. Subsequent object
@@ -85,45 +83,39 @@ export function mergeAsync<
  * @returns An async object schema.
  */
 export function mergeAsync<
-  TObjectSchemas extends ObjectSchemas,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+  TSchemas extends ObjectSchemas,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
-  schemas: TObjectSchemas,
-  rest: TObjectRest,
+  schemas: TSchemas,
+  rest: TRest,
   error?: ErrorMessage,
-  pipe?: PipeAsync<
-    ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>
-  >
-): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>, TObjectRest>;
+  pipe?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
+): ObjectSchemaAsync<MergeObjects<TSchemas>, TRest>;
 
 export function mergeAsync<
-  TObjectSchemas extends ObjectSchemas,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TSchemas extends ObjectSchemas,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
 >(
-  schemas: TObjectSchemas,
+  schemas: TSchemas,
   arg2?:
-    | PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>>
+    | PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
     | ErrorMessage
-    | TObjectRest,
-  arg3?:
-    | PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>>
-    | ErrorMessage,
-  arg4?: PipeAsync<
-    ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>
-  >
-): ObjectSchemaAsync<MergeSchemaObjects<TObjectSchemas>, TObjectRest> {
+    | TRest,
+  arg3?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>> | ErrorMessage,
+  arg4?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
+): ObjectSchemaAsync<MergeObjects<TSchemas>, TRest> {
   // Get rest, error and pipe argument
   const [rest, error, pipe] = getRestAndDefaultArgs<
-    TObjectRest,
-    PipeAsync<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>>
+    TRest,
+    PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
   >(arg2, arg3, arg4);
 
   // Create and return async object schema
   return objectAsync(
     schemas.reduce(
-      (entries, schema) => ({ ...entries, ...schema.object.entries }),
+      (entries, schema) => ({ ...entries, ...schema.entries }),
       {}
-    ) as MergeSchemaObjects<TObjectSchemas>,
+    ) as MergeObjects<TSchemas>,
     rest,
     error,
     pipe

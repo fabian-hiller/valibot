@@ -33,9 +33,7 @@ export function strictAsync<
     async _parse(input, info) {
       const result = await schema._parse(input, info);
       return !result.issues &&
-        Object.keys(input as object).some(
-          (key) => !(key in schema.object.entries)
-        )
+        Object.keys(input as object).some((key) => !(key in schema.entries))
         ? getSchemaIssues(
             info,
             'object',

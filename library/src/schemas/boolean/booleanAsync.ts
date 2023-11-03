@@ -12,7 +12,7 @@ export type BooleanSchemaAsync<TOutput = boolean> = BaseSchemaAsync<
   boolean,
   TOutput
 > & {
-  schema: 'boolean';
+  type: 'boolean';
 };
 
 /**
@@ -49,7 +49,7 @@ export function booleanAsync(
     /**
      * The schema type.
      */
-    schema: 'boolean',
+    type: 'boolean',
 
     /**
      * Whether it's async.

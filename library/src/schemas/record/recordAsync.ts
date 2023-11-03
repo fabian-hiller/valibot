@@ -10,11 +10,8 @@ import {
   getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
-import type { EnumSchema, EnumSchemaAsync } from '../enumType/index.ts';
-import type {
-  NativeEnumSchema,
-  NativeEnumSchemaAsync,
-} from '../nativeEnum/index.ts';
+import type { EnumSchema, EnumSchemaAsync } from '../enum/index.ts';
+import type { PicklistSchema, PicklistSchemaAsync } from '../picklist/index.ts';
 import type { StringSchema, StringSchemaAsync } from '../string/index.ts';
 import type { UnionSchema, UnionSchemaAsync } from '../union/index.ts';
 import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';
@@ -27,8 +24,8 @@ import { BLOCKED_KEYS } from './values.ts';
 export type RecordKeyAsync =
   | EnumSchema<any, string | number | symbol>
   | EnumSchemaAsync<any, string | number | symbol>
-  | NativeEnumSchema<any, string | number | symbol>
-  | NativeEnumSchemaAsync<any, string | number | symbol>
+  | PicklistSchema<any, string | number | symbol>
+  | PicklistSchemaAsync<any, string | number | symbol>
   | StringSchema<string | number | symbol>
   | StringSchemaAsync<string | number | symbol>
   | UnionSchema<any, string | number | symbol>
@@ -38,12 +35,13 @@ export type RecordKeyAsync =
  * Record schema async type.
  */
 export type RecordSchemaAsync<
-  TRecordKey extends RecordKeyAsync,
-  TRecordValue extends BaseSchema | BaseSchemaAsync,
-  TOutput = RecordOutput<TRecordKey, TRecordValue>
-> = BaseSchemaAsync<RecordInput<TRecordKey, TRecordValue>, TOutput> & {
-  schema: 'record';
-  record: { key: TRecordKey; value: TRecordValue };
+  TKey extends RecordKeyAsync,
+  TValue extends BaseSchema | BaseSchemaAsync,
+  TOutput = RecordOutput<TKey, TValue>
+> = BaseSchemaAsync<RecordInput<TKey, TValue>, TOutput> & {
+  type: 'record';
+  key: TKey;
+  value: TValue;
 };
 
 /**
@@ -54,10 +52,10 @@ export type RecordSchemaAsync<
  *
  * @returns An async record schema.
  */
-export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
-  value: TRecordValue,
-  pipe?: PipeAsync<RecordOutput<StringSchema, TRecordValue>>
-): RecordSchemaAsync<StringSchema, TRecordValue>;
+export function recordAsync<TValue extends BaseSchema | BaseSchemaAsync>(
+  value: TValue,
+  pipe?: PipeAsync<RecordOutput<StringSchema, TValue>>
+): RecordSchemaAsync<StringSchema, TValue>;
 
 /**
  * Creates an async record schema.
@@ -68,11 +66,11 @@ export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
  *
  * @returns An async record schema.
  */
-export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
-  value: TRecordValue,
+export function recordAsync<TValue extends BaseSchema | BaseSchemaAsync>(
+  value: TValue,
   error?: ErrorMessage,
-  pipe?: PipeAsync<RecordOutput<StringSchema, TRecordValue>>
-): RecordSchemaAsync<StringSchema, TRecordValue>;
+  pipe?: PipeAsync<RecordOutput<StringSchema, TValue>>
+): RecordSchemaAsync<StringSchema, TValue>;
 
 /**
  * Creates an async record schema.
@@ -84,13 +82,13 @@ export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
  * @returns An async record schema.
  */
 export function recordAsync<
-  TRecordKey extends RecordKeyAsync,
-  TRecordValue extends BaseSchema | BaseSchemaAsync
+  TKey extends RecordKeyAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
 >(
-  key: TRecordKey,
-  value: TRecordValue,
-  pipe?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchemaAsync<TRecordKey, TRecordValue>;
+  key: TKey,
+  value: TValue,
+  pipe?: PipeAsync<RecordOutput<TKey, TValue>>
+): RecordSchemaAsync<TKey, TValue>;
 
 /**
  * Creates an async record schema.
@@ -103,32 +101,29 @@ export function recordAsync<
  * @returns An async record schema.
  */
 export function recordAsync<
-  TRecordKey extends RecordKeyAsync,
-  TRecordValue extends BaseSchema | BaseSchemaAsync
+  TKey extends RecordKeyAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
 >(
-  key: TRecordKey,
-  value: TRecordValue,
+  key: TKey,
+  value: TValue,
   error?: ErrorMessage,
-  pipe?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchemaAsync<TRecordKey, TRecordValue>;
+  pipe?: PipeAsync<RecordOutput<TKey, TValue>>
+): RecordSchemaAsync<TKey, TValue>;
 
 export function recordAsync<
-  TRecordKey extends RecordKeyAsync,
-  TRecordValue extends BaseSchema | BaseSchemaAsync
+  TKey extends RecordKeyAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
 >(
-  arg1: TRecordValue | TRecordKey,
-  arg2?:
-    | PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-    | ErrorMessage
-    | TRecordValue,
-  arg3?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>> | ErrorMessage,
-  arg4?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchemaAsync<TRecordKey, TRecordValue> {
+  arg1: TValue | TKey,
+  arg2?: PipeAsync<RecordOutput<TKey, TValue>> | ErrorMessage | TValue,
+  arg3?: PipeAsync<RecordOutput<TKey, TValue>> | ErrorMessage,
+  arg4?: PipeAsync<RecordOutput<TKey, TValue>>
+): RecordSchemaAsync<TKey, TValue> {
   // Get key, value, error and pipe argument
   const [key, value, error, pipe] = getRecordArgs<
-    TRecordKey,
-    TRecordValue,
-    PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
+    TKey,
+    TValue,
+    PipeAsync<RecordOutput<TKey, TValue>>
   >(arg1, arg2, arg3, arg4);
 
   // Create and return async record schema
@@ -136,12 +131,17 @@ export function recordAsync<
     /**
      * The schema type.
      */
-    schema: 'record',
+    type: 'record',
 
     /**
-     * The record key and value schema.
+     * The key schema.
      */
-    record: { key, value },
+    key,
+
+    /**
+     * The value schema.
+     */
+    value,
 
     /**
      * Whether it's async.
@@ -205,7 +205,7 @@ export function recordAsync<
                     if (result.issues) {
                       // Create record path item
                       pathItem = pathItem || {
-                        schema: 'record',
+                        type: 'record',
                         input,
                         key: inputKey,
                         value: inputValue,
@@ -250,7 +250,7 @@ export function recordAsync<
       return issues
         ? getIssues(issues)
         : executePipeAsync(
-            output as RecordOutput<TRecordKey, TRecordValue>,
+            output as RecordOutput<TKey, TValue>,
             pipe,
             info,
             'record'

@@ -12,7 +12,7 @@ export type StringSchemaAsync<TOutput = string> = BaseSchemaAsync<
   string,
   TOutput
 > & {
-  schema: 'string';
+  type: 'string';
 };
 
 /**
@@ -49,7 +49,7 @@ export function stringAsync(
     /**
      * The schema type.
      */
-    schema: 'string',
+    type: 'string',
 
     /**
      * Whether it's async.

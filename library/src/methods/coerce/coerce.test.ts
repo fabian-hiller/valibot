@@ -17,7 +17,7 @@ describe('coerce', () => {
   test('should coerce number to date', () => {
     const time = 1688902224413;
     const output = parse(
-      coerce(date(), (input) => new Date(input as any)),
+      coerce(date(), (input) => new Date(input as number)),
       time
     );
     expect(output).toBeInstanceOf(Date);

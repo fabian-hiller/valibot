@@ -2,13 +2,38 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.20.1 (November 2, 2023)
+
+- Remove `never` from type signatur of strict objects and tuples (issue #234)
+
+## v0.20.0 (October 31, 2023)
+
+> Note: The library has been revised and refactored. There is a migration guide in the [release notes](https://github.com/fabian-hiller/valibot/releases/tag/v0.20.0).
 
 - Add `getRestAndDefaultArgs` utility function
-- Add new `rest` argument to `object` and `objectAsync` schema
+- Add `rest` argument to `object` and `objectAsync` schema
+- Add `variant` and `variantAsync` schema (issue #90, #216)
+- Add `getFallback` property to schema in `fallback` method (pull request #177)
+- Add `PartialObjectEntries` and `PartialObjectEntriesAsync` type (issue #217)
+- Add export for any validation regex (pull request #219)
+- Add `getDefaultAsync`, `getDefaults` and `getDefaultsAsync`, `getFallback`, `getFallbackAsync`, `getFallbacks`, `getFallbacksAsync` method (issue #155)
+- Add support for schema validation to `transform` and `transformAsync`
 - Fix type check in `date` and `dateAsync` for invalid dates (pull request #214)
+- Improve security of regular expressions (pull request #202)
+- Improve `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema
 - Change `ObjectSchema` and `ObjectSchemaAsync` type
 - Change type check in `tuple` and `tupleAsync` to be less strict
+- Change return type of `action` argument in `coerce` and `coerceAsync` to `unknown`
+- Change type of `brand`, `getDefault`, `transform` and `transformAsync` method
+- Change type of `array`, `arrayAsync`, `intersection`, `intersectionAsync`, `map`, `mapAsync`, `object`, `objectAsync`, `union`, `unionAsync`, `record`, `recordAsync`, `set`, `setAsync`, `tuple` and `tupleAsync` schema
+- Rename `schema` property of every schema type to `type`
+- Rename `intersection` and `intersectionAsync` schema to `intersect` and `intersectAsync`
+- Rename `enumType` and `enumTypeAsync` schema to `picklist` and `picklistAsync`
+- Rename `nativeEnum` and `nativeEnumAsync` schema to `enum_` and `enumAsync`
+- Rename `nullType` and `nullTypeAsync` schema to `null_` and `nullAsync`
+- Rename `undefinedType` and `undefinedTypeAsync` schema to `undefined_` and `undefinedAsync`
+- Rename `voidType` and `voidTypeAsync` schema to `void_` and `voidAsync`
+- Rename `default` property of `optional`, `optionalAsync`, `nullable`, `nullableAsync`, `nullish` and `nullishAsync` schema to `getDefault`
 - Rename `ObjectShape` and `ObjectShapeAsync` types to `ObjectEntries` and `ObjectEntriesAsync`
 - Rename `TupleShape` and `TupleShapeAsync` types to `TupleItems` and `TupleItemsAsync`
 - Deprecate `passthrough`, `strict` and `strip` method in favor of `object` schema with `rest` argument

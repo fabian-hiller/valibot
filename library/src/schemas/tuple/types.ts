@@ -4,6 +4,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
+import type { NeverSchema, NeverSchemaAsync } from '../never/index.ts';
 import type { TupleItems } from './tuple.ts';
 import type { TupleItemsAsync } from './tupleAsync.ts';
 
@@ -11,7 +12,7 @@ import type { TupleItemsAsync } from './tupleAsync.ts';
  * Tuple path item type.
  */
 export type TuplePathItem = {
-  schema: 'tuple';
+  type: 'tuple';
   input: [any, ...any[]];
   key: number;
   value: any;
@@ -21,32 +22,36 @@ export type TuplePathItem = {
  * Tuple input inference type.
  */
 export type TupleInput<
-  TTupleItems extends TupleItems | TupleItemsAsync,
-  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
-> = TTupleRest extends BaseSchema | BaseSchemaAsync
+  TItems extends TupleItems | TupleItemsAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
+> = TRest extends undefined | NeverSchema | NeverSchemaAsync
+  ? {
+      [TKey in keyof TItems]: Input<TItems[TKey]>;
+    }
+  : TRest extends BaseSchema | BaseSchemaAsync
   ? [
       ...{
-        [TKey in keyof TTupleItems]: Input<TTupleItems[TKey]>;
+        [TKey in keyof TItems]: Input<TItems[TKey]>;
       },
-      ...Input<TTupleRest>[]
+      ...Input<TRest>[]
     ]
-  : {
-      [TKey in keyof TTupleItems]: Input<TTupleItems[TKey]>;
-    };
+  : never;
 
 /**
  * Tuple with rest output inference type.
  */
 export type TupleOutput<
-  TTupleItems extends TupleItems | TupleItemsAsync,
-  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
-> = TTupleRest extends BaseSchema | BaseSchemaAsync
+  TItems extends TupleItems | TupleItemsAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
+> = TRest extends undefined | NeverSchema | NeverSchemaAsync
+  ? {
+      [TKey in keyof TItems]: Output<TItems[TKey]>;
+    }
+  : TRest extends BaseSchema | BaseSchemaAsync
   ? [
       ...{
-        [TKey in keyof TTupleItems]: Output<TTupleItems[TKey]>;
+        [TKey in keyof TItems]: Output<TItems[TKey]>;
       },
-      ...Output<TTupleRest>[]
+      ...Output<TRest>[]
     ]
-  : {
-      [TKey in keyof TTupleItems]: Output<TTupleItems[TKey]>;
-    };
+  : never;

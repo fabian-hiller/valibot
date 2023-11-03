@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync, Input } from '../../types.ts';
+import type { BaseSchemaAsync } from '../../types.ts';
 
 /**
  * Coerces the input of a async schema to match the required type.
@@ -10,7 +10,7 @@ import type { BaseSchemaAsync, Input } from '../../types.ts';
  */
 export function coerceAsync<TSchema extends BaseSchemaAsync>(
   schema: TSchema,
-  action: (value: unknown) => Input<TSchema> | Promise<Input<TSchema>>
+  action: (value: unknown) => unknown
 ): TSchema {
   return {
     ...schema,

@@ -8,7 +8,7 @@ export type UnknownSchemaAsync<TOutput = unknown> = BaseSchemaAsync<
   unknown,
   TOutput
 > & {
-  schema: 'unknown';
+  type: 'unknown';
 };
 
 /**
@@ -25,7 +25,7 @@ export function unknownAsync(
     /**
      * The schema type.
      */
-    schema: 'unknown',
+    type: 'unknown',
 
     /**
      * Whether it's async.

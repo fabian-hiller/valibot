@@ -5,7 +5,7 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
  * Symbol schema type.
  */
 export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
-  schema: 'symbol';
+  type: 'symbol';
 };
 
 /**
@@ -20,7 +20,7 @@ export function symbol(error?: ErrorMessage): SymbolSchema {
     /**
      * The schema type.
      */
-    schema: 'symbol',
+    type: 'symbol',
 
     /**
      * Whether it's async.

@@ -9,7 +9,7 @@ import {
  * String schema type.
  */
 export type StringSchema<TOutput = string> = BaseSchema<string, TOutput> & {
-  schema: 'string';
+  type: 'string';
 };
 
 /**
@@ -43,7 +43,7 @@ export function string(
     /**
      * The schema type.
      */
-    schema: 'string',
+    type: 'string',
 
     /**
      * Whether it's async.

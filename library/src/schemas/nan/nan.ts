@@ -5,7 +5,7 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
  * NaN schema type.
  */
 export type NanSchema<TOutput = number> = BaseSchema<number, TOutput> & {
-  schema: 'nan';
+  type: 'nan';
 };
 
 /**
@@ -20,7 +20,7 @@ export function nan(error?: ErrorMessage): NanSchema {
     /**
      * The schema type.
      */
-    schema: 'nan',
+    type: 'nan',
 
     /**
      * Whether it's async.

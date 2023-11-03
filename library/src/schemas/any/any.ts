@@ -5,7 +5,7 @@ import { executePipe } from '../../utils/index.ts';
  * Any schema type.
  */
 export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
-  schema: 'any';
+  type: 'any';
 };
 
 /**
@@ -20,7 +20,7 @@ export function any(pipe: Pipe<any> = []): AnySchema {
     /**
      * The schema type.
      */
-    schema: 'any',
+    type: 'any',
 
     /**
      * Whether it's async.

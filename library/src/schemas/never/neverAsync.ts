@@ -5,7 +5,7 @@ import { getSchemaIssues } from '../../utils/index.ts';
  * Never schema async type.
  */
 export type NeverSchemaAsync = BaseSchemaAsync<never> & {
-  schema: 'never';
+  type: 'never';
 };
 
 /**
@@ -20,7 +20,7 @@ export function neverAsync(error?: ErrorMessage): NeverSchemaAsync {
     /**
      * The schema type.
      */
-    schema: 'never',
+    type: 'never',
 
     /**
      * Whether it's async.

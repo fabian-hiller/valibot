@@ -36,8 +36,11 @@ export const SideBar = component$(() => {
 
   // Use side bar toggle and compute open state
   const sideBarToggle = useSideBarToggle();
-  const sideBarOpen = useComputed$(
-    () => sideBarToggle.value?.state === 'opened'
+  const sideBarOpen = useComputed$(() =>
+    sideBarToggle.isRunning
+      ? // Optimistic UI
+        sideBarToggle.formData?.get('state') === 'opened'
+      : sideBarToggle.value?.state === 'opened'
   );
 
   // Use focus trap for sidebar

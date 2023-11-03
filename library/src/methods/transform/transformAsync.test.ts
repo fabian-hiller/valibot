@@ -1,5 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import { object, string } from '../../schemas/index.ts';
+import {
+  numberAsync,
+  object,
+  string,
+  stringAsync,
+} from '../../schemas/index.ts';
 import { maxValue, minValue } from '../../validations/index.ts';
 import { parseAsync } from '../parse/index.ts';
 import { transformAsync } from './transformAsync.ts';
@@ -31,6 +36,19 @@ describe('transformAsync', () => {
       minValue(1),
       maxValue(5),
     ]);
+    const input = 'hello';
+    const output = await parseAsync(schema, input);
+    expect(output).toBe(input.length);
+    await expect(parseAsync(schema, '')).rejects.toThrowError();
+    await expect(parseAsync(schema, '123456')).rejects.toThrowError();
+  });
+
+  test('should validate with schema', async () => {
+    const schema = transformAsync(
+      stringAsync(),
+      (output) => output.length,
+      numberAsync([minValue(1), maxValue(5)])
+    );
     const input = 'hello';
     const output = await parseAsync(schema, input);
     expect(output).toBe(input.length);

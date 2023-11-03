@@ -17,11 +17,11 @@ import type { SetInput, SetOutput, SetPathItem } from './types.ts';
  * Set schema async type.
  */
 export type SetSchemaAsync<
-  TSetValue extends BaseSchema | BaseSchemaAsync,
-  TOutput = SetOutput<TSetValue>
-> = BaseSchemaAsync<SetInput<TSetValue>, TOutput> & {
-  schema: 'set';
-  set: { value: TSetValue };
+  TValue extends BaseSchema | BaseSchemaAsync,
+  TOutput = SetOutput<TValue>
+> = BaseSchemaAsync<SetInput<TValue>, TOutput> & {
+  type: 'set';
+  value: TValue;
 };
 
 /**
@@ -32,10 +32,10 @@ export type SetSchemaAsync<
  *
  * @returns An async set schema.
  */
-export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
-  value: TSetValue,
-  pipe?: PipeAsync<SetOutput<TSetValue>>
-): SetSchemaAsync<TSetValue>;
+export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
+  value: TValue,
+  pipe?: PipeAsync<SetOutput<TValue>>
+): SetSchemaAsync<TValue>;
 
 /**
  * Creates an async set schema.
@@ -46,17 +46,17 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
  *
  * @returns An async set schema.
  */
-export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
-  value: TSetValue,
+export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
+  value: TValue,
   error?: ErrorMessage,
-  pipe?: PipeAsync<SetOutput<TSetValue>>
-): SetSchemaAsync<TSetValue>;
+  pipe?: PipeAsync<SetOutput<TValue>>
+): SetSchemaAsync<TValue>;
 
-export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
-  value: TSetValue,
-  arg2?: PipeAsync<SetOutput<TSetValue>> | ErrorMessage,
-  arg3?: PipeAsync<SetOutput<TSetValue>>
-): SetSchemaAsync<TSetValue> {
+export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
+  value: TValue,
+  arg2?: PipeAsync<SetOutput<TValue>> | ErrorMessage,
+  arg3?: PipeAsync<SetOutput<TValue>>
+): SetSchemaAsync<TValue> {
   // Get error and pipe argument
   const [error, pipe] = getDefaultArgs(arg2, arg3);
 
@@ -65,12 +65,12 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
     /**
      * The schema type.
      */
-    schema: 'set',
+    type: 'set',
 
     /**
-     * The set value schema.
+     * The value schema.
      */
-    set: { value },
+    value,
 
     /**
      * Whether it's async.
@@ -99,7 +99,7 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
 
       // Create index, output and issues
       let issues: Issues | undefined;
-      const output: SetOutput<TSetValue> = new Set();
+      const output: SetOutput<TValue> = new Set();
 
       // Parse each value by schema
       await Promise.all(
@@ -115,7 +115,7 @@ export function setAsync<TSetValue extends BaseSchema | BaseSchemaAsync>(
               if (result.issues) {
                 // Create set path item
                 const pathItem: SetPathItem = {
-                  schema: 'set',
+                  type: 'set',
                   input,
                   key,
                   value: inputValue,

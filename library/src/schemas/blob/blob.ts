@@ -9,7 +9,7 @@ import {
  * Blob schema type.
  */
 export type BlobSchema<TOutput = Blob> = BaseSchema<Blob, TOutput> & {
-  schema: 'blob';
+  type: 'blob';
 };
 
 /**
@@ -43,7 +43,7 @@ export function blob(
     /**
      * The schema type.
      */
-    schema: 'blob',
+    type: 'blob',
 
     /**
      * Whether it's async.

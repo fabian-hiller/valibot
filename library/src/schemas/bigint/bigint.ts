@@ -9,7 +9,7 @@ import {
  * Bigint schema type.
  */
 export type BigintSchema<TOutput = bigint> = BaseSchema<bigint, TOutput> & {
-  schema: 'bigint';
+  type: 'bigint';
 };
 
 /**
@@ -43,7 +43,7 @@ export function bigint(
     /**
      * The schema type.
      */
-    schema: 'bigint',
+    type: 'bigint',
 
     /**
      * Whether it's async.

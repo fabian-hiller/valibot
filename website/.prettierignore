@@ -1,0 +1,14 @@
+**/routes/**/menu.md
+**/*.log
+**/.DS_Store
+*.
+.vscode/settings.json
+dist
+node_modules
+tmp
+server
+.cache
+.vscode
+*.spec.tsx
+*.spec.ts
+.netlify

@@ -23,18 +23,15 @@ import { getRestAndDefaultArgs } from '../../utils/index.ts';
  * @returns An async object schema.
  */
 export function pickAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends (keyof TObjectSchema['object']['entries'])[]
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TKeys extends (keyof TSchema['entries'])[]
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
   pipe?: PipeAsync<
-    ObjectOutput<
-      Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-      undefined
-    >
+    ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, undefined>
   >
-): ObjectSchemaAsync<Pick<TObjectSchema['object']['entries'], TKeys[number]>>;
+): ObjectSchemaAsync<Pick<TSchema['entries'], TKeys[number]>>;
 
 /**
  * Creates an async object schema that contains only the selected keys of an
@@ -48,19 +45,16 @@ export function pickAsync<
  * @returns An async object schema.
  */
 export function pickAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends (keyof TObjectSchema['object']['entries'])[]
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TKeys extends (keyof TSchema['entries'])[]
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
   error?: ErrorMessage,
   pipe?: PipeAsync<
-    ObjectOutput<
-      Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-      undefined
-    >
+    ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, undefined>
   >
-): ObjectSchemaAsync<Pick<TObjectSchema['object']['entries'], TKeys[number]>>;
+): ObjectSchemaAsync<Pick<TSchema['entries'], TKeys[number]>>;
 
 /**
  * Creates an async object schema that contains only the selected keys of an
@@ -74,23 +68,15 @@ export function pickAsync<
  * @returns An async object schema.
  */
 export function pickAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends (keyof TObjectSchema['object']['entries'])[],
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TKeys extends (keyof TSchema['entries'])[],
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
-  rest: TObjectRest,
-  pipe?: PipeAsync<
-    ObjectOutput<
-      Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-      TObjectRest
-    >
-  >
-): ObjectSchemaAsync<
-  Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-  TObjectRest
->;
+  rest: TRest,
+  pipe?: PipeAsync<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
+): ObjectSchemaAsync<Pick<TSchema['entries'], TKeys[number]>, TRest>;
 
 /**
  * Creates an async object schema that contains only the selected keys of an
@@ -105,77 +91,46 @@ export function pickAsync<
  * @returns An async object schema.
  */
 export function pickAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends (keyof TObjectSchema['object']['entries'])[],
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TKeys extends (keyof TSchema['entries'])[],
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
-  rest: TObjectRest,
+  rest: TRest,
   error?: ErrorMessage,
-  pipe?: PipeAsync<
-    ObjectOutput<
-      Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-      TObjectRest
-    >
-  >
-): ObjectSchemaAsync<
-  Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-  TObjectRest
->;
+  pipe?: PipeAsync<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
+): ObjectSchemaAsync<Pick<TSchema['entries'], TKeys[number]>, TRest>;
 
 export function pickAsync<
-  TObjectSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends (keyof TObjectSchema['object']['entries'])[],
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
+  TKeys extends (keyof TSchema['entries'])[],
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
   arg3?:
-    | PipeAsync<
-        ObjectOutput<
-          Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-          TObjectRest
-        >
-      >
+    | PipeAsync<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
     | ErrorMessage
-    | TObjectRest,
+    | TRest,
   arg4?:
-    | PipeAsync<
-        ObjectOutput<
-          Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-          TObjectRest
-        >
-      >
+    | PipeAsync<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
     | ErrorMessage,
-  arg5?: PipeAsync<
-    ObjectOutput<
-      Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-      TObjectRest
-    >
-  >
-): ObjectSchemaAsync<
-  Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-  TObjectRest
-> {
+  arg5?: PipeAsync<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
+): ObjectSchemaAsync<Pick<TSchema['entries'], TKeys[number]>, TRest> {
   // Get rest, error and pipe argument
   const [rest, error, pipe] = getRestAndDefaultArgs<
-    TObjectRest,
-    PipeAsync<
-      ObjectOutput<
-        Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-        TObjectRest
-      >
-    >
+    TRest,
+    PipeAsync<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
   >(arg3, arg4, arg5);
 
   // Create and return object schema
   return objectAsync(
-    Object.entries(schema.object.entries).reduce(
+    Object.entries(schema.entries).reduce(
       (entries, [key, schema]) =>
         keys.includes(key) ? { ...entries, [key]: schema } : entries,
       {}
-    ) as Pick<TObjectSchema['object']['entries'], TKeys[number]>,
+    ) as Pick<TSchema['entries'], TKeys[number]>,
     rest,
     error,
     pipe

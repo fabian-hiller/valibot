@@ -14,8 +14,8 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A object schema.
  */
 export function passthrough<
-  TObjectSchema extends ObjectSchema<ObjectEntries, undefined>
->(schema: TObjectSchema): TObjectSchema {
+  TSchema extends ObjectSchema<ObjectEntries, undefined>
+>(schema: TSchema): TSchema {
   return {
     ...schema,
 

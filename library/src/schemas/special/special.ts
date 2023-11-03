@@ -12,7 +12,7 @@ export type SpecialSchema<TInput, TOutput = TInput> = BaseSchema<
   TInput,
   TOutput
 > & {
-  schema: 'special';
+  type: 'special';
 };
 
 /**
@@ -56,7 +56,7 @@ export function special<TInput>(
     /**
      * The schema type.
      */
-    schema: 'special',
+    type: 'special',
 
     /**
      * Whether it's async.

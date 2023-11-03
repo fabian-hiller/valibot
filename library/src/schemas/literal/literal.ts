@@ -9,7 +9,7 @@ export type LiteralSchema<
   TLiteral extends Literal,
   TOutput = TLiteral
 > = BaseSchema<TLiteral, TOutput> & {
-  schema: 'literal';
+  type: 'literal';
   literal: TLiteral;
 };
 
@@ -29,7 +29,7 @@ export function literal<TLiteral extends Literal>(
     /**
      * The schema type.
      */
-    schema: 'literal',
+    type: 'literal',
 
     /**
      * The literal value.

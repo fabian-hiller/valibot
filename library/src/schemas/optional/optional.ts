@@ -7,13 +7,13 @@ import { getOutput } from '../../utils/index.ts';
 export type OptionalSchema<
   TWrapped extends BaseSchema,
   TDefault extends Input<TWrapped> | undefined = undefined,
-  TOutput = TDefault extends undefined
-    ? Output<TWrapped> | undefined
-    : Output<TWrapped>
+  TOutput = TDefault extends Input<TWrapped>
+    ? Output<TWrapped>
+    : Output<TWrapped> | undefined
 > = BaseSchema<Input<TWrapped> | undefined, TOutput> & {
-  schema: 'optional';
+  type: 'optional';
   wrapped: TWrapped;
-  get default(): TDefault;
+  getDefault: () => TDefault;
 };
 
 /**
@@ -35,7 +35,7 @@ export function optional<
     /**
      * The schema type.
      */
-    schema: 'optional',
+    type: 'optional',
 
     /**
      * The wrapped schema.
@@ -43,9 +43,9 @@ export function optional<
     wrapped,
 
     /**
-     * The default value.
+     * Returns the default value.
      */
-    get default() {
+    getDefault() {
       return typeof default_ === 'function'
         ? (default_ as () => TDefault)()
         : (default_ as TDefault);
@@ -65,16 +65,17 @@ export function optional<
      * @returns The parsed output.
      */
     _parse(input, info) {
-      // Get default or input value
-      const value = input === undefined ? this.default : input;
-
-      // Allow `undefined` value to pass
-      if (value === undefined) {
-        return getOutput(value);
+      // Allow `undefined` to pass or override it with default value
+      if (input === undefined) {
+        const override = this.getDefault();
+        if (override === undefined) {
+          return getOutput(input);
+        }
+        input = override;
       }
 
-      // Return result of wrapped schema
-      return wrapped._parse(value, info);
+      // Otherwise, return result of wrapped schema
+      return wrapped._parse(input, info);
     },
   };
 }

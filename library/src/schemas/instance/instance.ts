@@ -17,7 +17,7 @@ export type InstanceSchema<
   TClass extends Class,
   TOutput = InstanceType<TClass>
 > = BaseSchema<InstanceType<TClass>, TOutput> & {
-  schema: 'instance';
+  type: 'instance';
   class: TClass;
 };
 
@@ -62,7 +62,7 @@ export function instance<TClass extends Class>(
     /**
      * The schema type.
      */
-    schema: 'instance',
+    type: 'instance',
 
     /**
      * The class of the instance.
