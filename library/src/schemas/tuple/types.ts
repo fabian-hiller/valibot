@@ -4,6 +4,7 @@ import type {
   Input,
   Output,
 } from '../../types.ts';
+import type { NeverSchema, NeverSchemaAsync } from '../never/index.ts';
 import type { TupleItems } from './tuple.ts';
 import type { TupleItemsAsync } from './tupleAsync.ts';
 
@@ -23,16 +24,18 @@ export type TuplePathItem = {
 export type TupleInput<
   TItems extends TupleItems | TupleItemsAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined
-> = TRest extends BaseSchema | BaseSchemaAsync
+> = TRest extends undefined | NeverSchema | NeverSchemaAsync
+  ? {
+      [TKey in keyof TItems]: Input<TItems[TKey]>;
+    }
+  : TRest extends BaseSchema | BaseSchemaAsync
   ? [
       ...{
         [TKey in keyof TItems]: Input<TItems[TKey]>;
       },
       ...Input<TRest>[]
     ]
-  : {
-      [TKey in keyof TItems]: Input<TItems[TKey]>;
-    };
+  : never;
 
 /**
  * Tuple with rest output inference type.
@@ -40,13 +43,15 @@ export type TupleInput<
 export type TupleOutput<
   TItems extends TupleItems | TupleItemsAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined
-> = TRest extends BaseSchema | BaseSchemaAsync
+> = TRest extends undefined | NeverSchema | NeverSchemaAsync
+  ? {
+      [TKey in keyof TItems]: Output<TItems[TKey]>;
+    }
+  : TRest extends BaseSchema | BaseSchemaAsync
   ? [
       ...{
         [TKey in keyof TItems]: Output<TItems[TKey]>;
       },
       ...Output<TRest>[]
     ]
-  : {
-      [TKey in keyof TItems]: Output<TItems[TKey]>;
-    };
+  : never;
