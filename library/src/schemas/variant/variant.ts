@@ -9,20 +9,6 @@ import { getSchemaIssues, getOutput, getIssues } from '../../utils/index.ts';
 import type { ObjectSchema } from '../object/index.ts';
 
 /**
- * TODO: Finde ich hierfür noch einen kürzeren Namen? Was nutzen anderen Libraries wie TypeBox? AI Tools nutzen!
- * - variant (best)
- * - sum
- * - dUnion
- * - choice
- * - tagged union
- * - coproduct
- *
- *
- * Kann es sinn machen auch einen Array mit Keys zu erlauben?
- * - z.B. für `type` and `kind` Strukture in Valibot?
- */
-
-/**
  * Variant option type.
  */
 export type VariantOption<TKey extends string> =
