@@ -1,0 +1,77 @@
+---
+title: PipeResult
+---
+
+import { Property } from '~/components';
+
+# PipeResult
+
+Pipe result type.
+
+## Definition
+
+- `PipeResult` <Property {...properties.pipeResult}/>
+
+export const properties = {
+  pipeResult: {
+    type: [
+      {
+        type: 'object',
+        entries: [
+          {
+            key: 'output',
+            value: 'any',
+          },
+          {
+            key: 'issues',
+            value: 'undefined',
+          }
+        ]
+      },
+      {
+        type: 'object',
+        entries: [
+          {
+            key: 'output',
+            value: 'undefined',
+          },
+          {
+            key: 'issues',
+            value: {
+              type: 'object',
+              entries: [
+                {
+                  key: 'validation',
+                  value: 'string',
+                },
+                {
+                  key: 'message',
+                  value: 'string',
+                },
+                {
+                  key: 'input',
+                  value: 'any',
+                },
+                {
+                  key: 'path',
+                  value: [
+                    {
+                      type: 'array',
+                      item: {
+                        type: 'custom',
+                        name: 'PathItem',
+                        href: '../PathItem',
+                      }
+                    },
+                    'undefined'
+                  ],
+                }
+              ]
+            },
+          }
+        ]
+      }
+    ]
+  }
+
+}

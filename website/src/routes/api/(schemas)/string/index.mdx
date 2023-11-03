@@ -19,12 +19,12 @@ const schema = string(message, pipe);
 
 ## Parameter
 
-- `errorMessage` <Property type='string'/> = 'Invalid type'
-- `pipe` <Property type={{ type: 'custom', name: 'Pipe<string>' }}/> = []
+- `errorMessage` <Property {...properties.errorMessage} />
+- `pipe` <Property {...properties.pipe}/>
 
 ## Return
 
-- `schema` <Property type={{ type: 'custom', name: 'StringSchema' }}/>
+- `schema` <Property {...properties.stringSchema} />
 
 ## Examples
 
@@ -107,3 +107,29 @@ const urlSchema = string([url('The URL is badly formatted.')]);
 - <Link href="/api/url">`url`</Link>
 - <Link href="/api/uuid">`uuid`</Link>
 - <Link href="/api/value">`value`</Link>
+
+export const properties = {
+  errorMessage: {
+    type: 'string',
+  },
+  pipe: {
+    type: [
+      {
+        type: 'custom',
+        name: 'Pipe',
+        href: '../Pipe',
+        generics: ['string'],
+      },
+    ],
+  },
+  stringSchema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'StringSchema',
+        href: '../StringSchema',
+        generics: ['string'],
+      },
+    ],
+  },
+};

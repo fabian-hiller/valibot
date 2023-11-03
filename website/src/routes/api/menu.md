@@ -171,3 +171,21 @@
 - [unionAsync](/api/unionAsync)
 - [unknownAsync](/api/unknownAsync)
 - [voidTypeAsync](/api/voidTypeAsync)
+
+## Types
+
+- [ArrayPathItem](/api/ArrayPathItem)
+- [BaseSchema](/api/BaseSchema)
+- [Issue](/api/Issue)
+- [IssueOrigin](/api/IssueOrigin)
+- [IssueReason](/api/IssueReason)
+- [Issues](/api/Issues)
+- [MapPathItem](/api/MapPathItem)
+- [ObjectPathItem](/api/ObjectPathItem)
+- [PathItem](/api/PathItem)
+- [Pipe](/api/Pipe)
+- [PipeResult](/api/PipeResult)
+- [RecordPathItem](/api/RecordPathItem)
+- [SetPathItem](/api/SetPathItem)
+- [StringSchema](/api/StringSchema)
+- [TuplePathItem](/api/TuplePathItem)

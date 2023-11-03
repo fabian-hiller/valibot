@@ -1,0 +1,40 @@
+---
+title: IssueReason
+---
+
+import { Property } from '~/components';
+
+# IssueReason
+
+Issue reason type.
+
+## Definition
+
+- `IssueReason` <Property {...properties.reason} />
+
+export const properties = {
+  reason: {
+    type: [
+      'any',
+      'array',
+      'bigint',
+      'blob',
+      'boolean',
+      'date',
+      'function',
+      'instance',
+      'map',
+      'number',
+      'object',
+      'record',
+      'set',
+      'special',
+      'string',
+      'symbol',
+      'tuple',
+      'undefined',
+      'unknown',
+      'type',
+    ],
+  },
+};

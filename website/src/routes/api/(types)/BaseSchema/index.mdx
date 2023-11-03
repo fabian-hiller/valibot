@@ -1,0 +1,97 @@
+---
+title: BaseSchema
+---
+
+import { Property } from '~/components';
+
+# BaseSchema
+
+Base schema type.
+
+## Definition
+
+- `BaseSchema`
+  - `async` <Property {...properties.async}/>
+  - `_parse` <Property {...properties.parse}/>
+  - `_types` <Property {...properties.types}/>
+
+export const properties = {
+  async: {
+    type: [
+      {
+        type: 'boolean',
+        value: false,
+      },
+    ],
+  },
+  parse: {
+    type: [
+      {
+        type: 'function',
+        params: [
+          {
+            name: 'input',
+            type: 'unknown',
+          },
+        ],
+        return: [
+          {
+            type: 'object',
+            entries: [
+              {
+                key: 'output',
+                value: 'any',
+              },
+              {
+                key: 'issues',
+                value: 'undefined',
+              },
+            ],
+          },
+          {
+            type: 'object',
+            entries: [
+              {
+                key: 'output',
+                value: 'undefined',
+              },
+              {
+                key: 'issues',
+                value: [
+                  {
+                    type: 'array',
+                    item: [
+                      {
+                        type: 'custom',
+                        name: 'Issue',
+                        href: '../Issue',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  types: {
+    type: [
+      {
+        type: 'object',
+        entries: [
+          {
+            key: 'input',
+            value: 'any',
+          },
+          {
+            key: 'output',
+            value: 'any',
+          },
+        ],
+      },
+      'undefined',
+    ],
+  },
+};

@@ -1,0 +1,26 @@
+---
+title: ObjectPathItem
+---
+
+import { Property } from '~/components';
+
+# ObjectPathItem
+
+Path item type.
+
+## Definition
+
+- `ObjectPathItem` <Property type="object"/>
+  - schema <Property type='string' value='object' />
+  - input <Property {...properties.input} />
+  - key <Property type='string' />
+  - value <Property type='any' />
+
+export const properties = {
+  input: {
+    type: {
+      type: 'custom',
+      name: 'Record<string, any>',
+    },
+  },
+};

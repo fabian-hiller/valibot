@@ -1,0 +1,50 @@
+---
+title: PathItem
+---
+
+import { Property } from '~/components';
+
+# PathItem
+
+Path item type.
+
+## Definition
+
+- `PathItem` <Property {...properties.pathItem}/>
+
+export const properties = {
+  pathItem: {
+    type: [
+      {
+        type: 'custom',
+        name: 'ObjectPathItem',
+        href: '../ObjectPathItem',
+      },
+      {
+        type: 'custom',
+        name: 'RecordPathItem',
+        href: '../RecordPathItem',
+      },
+      {
+        type: 'custom',
+        name: 'TuplePathItem',
+        href: '../TuplePathItem',
+      },
+      {
+        type: 'custom',
+        name: 'MapPathItem',
+        href: '../MapPathItem',
+      },
+      {
+        type: 'custom',
+        name: 'SetPathItem',
+        href: '../SetPathItem',
+      },
+      {
+        type: 'custom',
+        name: 'ArrayPathItem',
+        href: '../ArrayPathItem',
+      },
+    ],
+  },
+};

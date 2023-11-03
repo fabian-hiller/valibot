@@ -1,0 +1,26 @@
+---
+title: RecordPathItem
+---
+
+import { Property } from '~/components';
+
+# RecordPathItem
+
+Record path item type.
+
+## Definition
+
+- `RecordPathItem` <Property type="object"/>
+  - schema <Property type='string' value='record' />
+  - input <Property {...properties.input} />
+  - key <Property type='string' value={['string', 'number', 'symbol']} />
+  - value <Property type='any' />
+
+export const properties = {
+  input: {
+    type: {
+      type: 'custom',
+      name: 'Record<string | number | symbol, any>',
+    },
+  },
+};

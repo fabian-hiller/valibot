@@ -1,0 +1,30 @@
+---
+title: StringSchema
+---
+
+import { Property } from '~/components';
+
+# StringSchema
+
+String schema type.
+
+## Definition
+
+- `StringSchema` <Property {...properties.baseSchema}/>
+  - schema <Property {...properties.schema} />
+
+export const properties = {
+  baseSchema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'BaseSchema',
+        href: '../BaseSchema',
+        generics: ['string'],
+      },
+    ],
+  },
+  schema: {
+    type: 'string',
+  },
+};

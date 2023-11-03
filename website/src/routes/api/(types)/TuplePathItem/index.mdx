@@ -1,0 +1,28 @@
+---
+title: TuplePathItem
+---
+
+import { Property } from '~/components';
+
+# TuplePathItem
+
+Tuple path item type.
+
+## Definition
+
+- `TuplePathItem` <Property {...properties.pathItem}/>
+
+- `TuplePathItem` <Property type="object"/>
+  - schema <Property type='string' value='tuple' />
+  - input <Property {...properties.input} />
+  - key <Property type='number' />
+  - value <Property type='any' />
+
+export const properties = {
+  input: {
+    type: {
+      type: 'custom',
+      name: '...any[]',
+    },
+  },
+};

@@ -1,0 +1,26 @@
+---
+title: ArrayPathItem
+---
+
+import { Property } from '~/components';
+
+# ArrayPathItem
+
+Array path item type.
+
+## Definition
+
+- `ArrayPathItem` <Property type="object"/>
+  - schema <Property type='string' value='array' />
+  - input <Property {...properties.input} />
+  - key <Property type='number' />
+  - value <Property type='any' />
+
+export const properties = {
+  input: {
+    type: {
+      type: 'array',
+      item: 'any',
+    },
+  },
+};

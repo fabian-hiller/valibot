@@ -119,6 +119,7 @@ export function Property(props: PropertyProps) {
             </span>
           ) : type.type === 'object' ? (
             <span class="text-slate-600 dark:text-slate-400">
+              {'{'}
               {type.entries.map((entrie, index) => (
                 <>
                   {index === 0 ? ' ' : ', '}
@@ -136,6 +137,7 @@ export function Property(props: PropertyProps) {
                   {index === type.entries.length - 1 && ' '}
                 </>
               ))}
+              {'}'}
             </span>
           ) : type.type === 'array' ? (
             <span>

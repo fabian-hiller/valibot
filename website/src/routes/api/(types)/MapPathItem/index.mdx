@@ -1,0 +1,26 @@
+---
+title: MapPathItem
+---
+
+import { Property } from '~/components';
+
+# MapPathItem
+
+Map path item type.
+
+## Definition
+
+- `MapPathItem` <Property type="object"/>
+  - schema <Property type='string' value='map' />
+  - input <Property {...properties.input} />
+  - key <Property type='any' />
+  - value <Property type='any' />
+
+export const properties = {
+  input: {
+    type: {
+      type: 'custom',
+      name: 'Map<any, any>',
+    },
+  },
+};
