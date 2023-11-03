@@ -29,28 +29,22 @@ const schema = string(message, pipe);
 ## Examples
 
 ```ts
-const schema = string();
-parse(schema, 'string'); // returns 'string'
-parse(schema, 123); // throw ValiError 'Invalid Type'
+// Schema to validate an email
+const emailSchema = string([
+  minLength(1, 'Please enter your email.'),
+  email('The email is badly formatted.'),
+  maxLength(30, 'Your email is too long.'),
+]);
 
-const schemaWithCustomErrMsg = string('custom error message');
-parse(schemaWithCustomErrMsg, 123); // throw ValiError 'custom error message'
+// Schema to validate a password
+const passwordSchema = string([
+  minLength(4, 'Your password is too weak.'),
+  maxLength(30, 'Your password is too long.'),
+  regex(/^[a-zA-Z0-9]/, 'Your password must contain only letters and numbers.'),
+]);
 
-string([maxLength(5)]);
-string([minLength(5)]);
-string([length(5)]);
-string([email()]);
-string([url()]);
-string([emoji()]);
-string([uuid()]);
-string([cuid2()]);
-string([ulid()]);
-string([regex(regex)]);
-string([includes(string)]);
-string([startsWith(string)]);
-string([endsWith(string)]);
-string([datetime()]);
-string([ip()]);
+// Schema to validate a URL
+const urlSchema = string([url('The URL is badly formatted.')]);
 ```
 
 ## Methods
