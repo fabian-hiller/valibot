@@ -4,6 +4,7 @@ import { TextLink } from './TextLink';
 type SingleTypeOrValue =
   | 'string'
   | 'number'
+  | 'bigint'
   | 'boolean'
   | 'null'
   | 'undefined'
@@ -20,6 +21,10 @@ type SingleTypeOrValue =
     }
   | {
       type: 'number';
+      value: number;
+    }
+  | {
+      type: 'bigint';
       value: number;
     }
   | {
@@ -57,7 +62,7 @@ type TypeOrValue = SingleTypeOrValue | SingleTypeOrValue[];
 
 type PropertyProps = {
   type: TypeOrValue;
-  defaultValue?: TypeOrValue;
+  default?: TypeOrValue;
   padding?: 'none';
 };
 
@@ -71,19 +76,22 @@ export function Property(props: PropertyProps) {
   return (
     <code
       class={clsx(
-        'bg-transparent p-0 text-slate-600 dark:bg-transparent dark:text-slate-400',
-        !props.padding && 'px-2'
+        '!bg-transparent !p-0 !text-slate-600 dark:!text-slate-300',
+        !props.padding && '!px-2'
       )}
     >
       {types.map((type, index) => (
         <>
-          {index > 0 && ' | '}
+          <span class="text-red-600 dark:text-red-400">
+            {index > 0 && ' | '}
+          </span>
           {typeof type === 'string' ? (
             <span
-              class={clsx({
-                'text-yellow-600 dark:text-amber-200': type === 'string',
-                'text-purple-600 dark:text-purple-400': type === 'number',
+              class={{
+                'text-purple-600 dark:text-purple-400':
+                  type === 'number' || type === 'bigint',
                 'text-teal-600 dark:text-teal-400':
+                  type === 'string' ||
                   type === 'boolean' ||
                   type === 'null' ||
                   type === 'undefined' ||
@@ -95,7 +103,7 @@ export function Property(props: PropertyProps) {
                   type === 'array' ||
                   type === 'tuple' ||
                   type === 'function',
-              })}
+              }}
             >
               {type}
             </span>
@@ -103,7 +111,7 @@ export function Property(props: PropertyProps) {
             <span class="text-yellow-600 dark:text-amber-200">
               '{type.value}'
             </span>
-          ) : type.type === 'number' ? (
+          ) : type.type === 'number' || type.type === 'bigint' ? (
             <span class="text-purple-600 dark:text-purple-400">
               {type.value}
             </span>
@@ -183,21 +191,24 @@ export function Property(props: PropertyProps) {
               )}
               {type.generics && (
                 <>
+                  {'<'}
                   {type.generics.map((generic, index) => (
                     <>
                       {index > 0 && ', '}
                       <Property type={generic} padding="none" />
                     </>
                   ))}
+                  {'>'}
                 </>
               )}
             </>
           )}
         </>
       ))}
-      {props.defaultValue && (
+      {props.default && (
         <>
-          <Property type={props.defaultValue} padding="none" />
+          {' = '}
+          <Property type={props.default} padding="none" />
         </>
       )}
     </code>
