@@ -1,116 +1,80 @@
 ---
 title: string
+description: Creates a string schema.
 ---
 
-import { Property } from '~/components';
 import { Link } from '@builder.io/qwik-city';
+import { Property } from '~/components';
 
 # string
 
 Creates a string schema.
 
 ```ts
-// String schema with pipe
-const schema = string(pipe);
+// String schema with an optional pipe
+const Schema = string(pipe);
 
-// String schema with message and pipe
-const schema = string(message, pipe);
+// String schema with an optional message and pipe
+const Schema = string(message, pipe);
 ```
 
-## Parameter
+## Arguments
 
-- `errorMessage` <Property {...properties.errorMessage} />
+- `message` <Property {...properties.message} />
 - `pipe` <Property {...properties.pipe}/>
 
 ## Return
 
-- `schema` <Property {...properties.stringSchema} />
+- `Schema` <Property {...properties.stringSchema} />
 
 ## Examples
 
+With `string` you validate the data type of the incoming data and with the `pipe` you can then validate all further details.
+
 ```ts
 // Schema to validate an email
-const emailSchema = string([
+const EmailSchema = string([
   minLength(1, 'Please enter your email.'),
   email('The email is badly formatted.'),
   maxLength(30, 'Your email is too long.'),
 ]);
 
 // Schema to validate a password
-const passwordSchema = string([
-  minLength(4, 'Your password is too weak.'),
+const PasswordSchema = string([
+  minLength(8, 'Your password is too short.'),
   maxLength(30, 'Your password is too long.'),
-  regex(/^[a-zA-Z0-9]/, 'Your password must contain only letters and numbers.'),
+  regex(/[a-z]/, 'Your password must contain a lowercase letter.'),
+  regex(/[A-Z]/, 'Your password must contain a uppercase letter.'),
+  regex(/[0-9]/, 'Your password must contain a number.'),
 ]);
 
 // Schema to validate a URL
-const urlSchema = string([url('The URL is badly formatted.')]);
+const UrlSchema = string([url('The URL is badly formatted.')]);
 ```
 
-## Methods
+## Related
 
-- <Link href="/api/brand">`brand`</Link>
-- <Link href="/api/coerce">`coerce`</Link>
-- <Link href="/api/fallback">`fallback`</Link>
-- <Link href="/api/is">`is`</Link>
-- <Link href="/api/parse">`parse`</Link>
-- <Link href="/api/safeParse">`safeParse`</Link>
-- <Link href="/api/transform">`transform`</Link>
-- <Link href="/api/unwrap">`unwrap`</Link>
+The following APIs can be combined with `string`.
 
-## Transformations
+### Methods
 
-- <Link href="/api/toCustom">`toCustom`</Link>
-- <Link href="/api/toCustomAsync">`toCustomAsync`</Link>
-- <Link href="/api/toLowerCase">`toLowerCase`</Link>
-- <Link href="/api/toMaxValue">`toMaxValue`</Link>
-- <Link href="/api/toMinValue">`toMinValue`</Link>
-- <Link href="/api/toTrimmed">`toTrimmed`</Link>
-- <Link href="/api/toTrimmedEnd">`toTrimmedEnd`</Link>
-- <Link href="/api/toTrimmedStart">`toTrimmedStart`</Link>
-- <Link href="/api/toUpperCase">`toUpperCase`</Link>
+‎<Link href="/api/brand">`brand`</Link>, <Link href="/api/coerce">`coerce`</Link>, <Link href="/api/fallback">`fallback`</Link>, <Link href="/api/is">`is`</Link>, <Link href="/api/parse">`parse`</Link>, <Link href="/api/safeParse">`safeParse`</Link>, <Link href="/api/transform">`transform`</Link>, <Link href="/api/unwrap">`unwrap`</Link>
 
-## Validations
+### Transformations
 
-- <Link href="/api/bytes">`bytes`</Link>
-- <Link href="/api/cuid2">`cuid2`</Link>
-- <Link href="/api/custom">`custom`</Link>
-- <Link href="/api/customAsync">`customAsync`</Link>
-- <Link href="/api/email">`email`</Link>
-- <Link href="/api/emoji">`emoji`</Link>
-- <Link href="/api/endsWith">`endsWith`</Link>
-- <Link href="/api/equal">`equal`</Link>
-- <Link href="/api/excludes">`excludes`</Link>
-- <Link href="/api/imei">`imei`</Link>
-- <Link href="/api/includes">`includes`</Link>
-- <Link href="/api/ip">`ip`</Link>
-- <Link href="/api/ipv4">`ipv4`</Link>
-- <Link href="/api/isoDate">`isoDate`</Link>
-- <Link href="/api/isoDateTime">`isoDateTime`</Link>
-- <Link href="/api/isoTime">`isoTime`</Link>
-- <Link href="/api/isoTimeSecond">`isoTimeSecond`</Link>
-- <Link href="/api/isoTimestamp">`isoTimestamp`</Link>
-- <Link href="/api/isoWeek">`isoWeek`</Link>
-- <Link href="/api/length">`length`</Link>
-- <Link href="/api/maxBytes">`maxBytes`</Link>
-- <Link href="/api/maxLength">`maxLength`</Link>
-- <Link href="/api/maxValue">`maxValue`</Link>
-- <Link href="/api/minBytes">`minBytes`</Link>
-- <Link href="/api/minLength">`minLength`</Link>
-- <Link href="/api/minValue">`minValue`</Link>
-- <Link href="/api/notBytes">`notBytes`</Link>
-- <Link href="/api/notLength">`notLength`</Link>
-- <Link href="/api/notValue">`notValue`</Link>
-- <Link href="/api/regex">`regex`</Link>
-- <Link href="/api/startsWith">`startsWith`</Link>
-- <Link href="/api/ulid">`ulid`</Link>
-- <Link href="/api/url">`url`</Link>
-- <Link href="/api/uuid">`uuid`</Link>
-- <Link href="/api/value">`value`</Link>
+‎<Link href="/api/toCustom">`toCustom`</Link>, <Link href="/api/toCustomAsync">`toCustomAsync`</Link>, <Link href="/api/toLowerCase">`toLowerCase`</Link>, <Link href="/api/toMaxValue">`toMaxValue`</Link>, <Link href="/api/toMinValue">`toMinValue`</Link>, <Link href="/api/toTrimmed">`toTrimmed`</Link>, <Link href="/api/toTrimmedEnd">`toTrimmedEnd`</Link>, <Link href="/api/toTrimmedStart">`toTrimmedStart`</Link>, <Link href="/api/toUpperCase">`toUpperCase`</Link>
+
+### Validations
+
+‎<Link href="/api/bytes">`bytes`</Link>, <Link href="/api/cuid2">`cuid2`</Link>, <Link href="/api/custom">`custom`</Link>, <Link href="/api/customAsync">`customAsync`</Link>, <Link href="/api/email">`email`</Link>, <Link href="/api/emoji">`emoji`</Link>, <Link href="/api/endsWith">`endsWith`</Link>, <Link href="/api/equal">`equal`</Link>, <Link href="/api/excludes">`excludes`</Link>, <Link href="/api/imei">`imei`</Link>, <Link href="/api/includes">`includes`</Link>, <Link href="/api/ip">`ip`</Link>, <Link href="/api/ipv4">`ipv4`</Link>, <Link href="/api/isoDate">`isoDate`</Link>, <Link href="/api/isoDateTime">`isoDateTime`</Link>, <Link href="/api/isoTime">`isoTime`</Link>, <Link href="/api/isoTimeSecond">`isoTimeSecond`</Link>, <Link href="/api/isoTimestamp">`isoTimestamp`</Link>, <Link href="/api/isoWeek">`isoWeek`</Link>, <Link href="/api/length">`length`</Link>, <Link href="/api/maxBytes">`maxBytes`</Link>, <Link href="/api/maxLength">`maxLength`</Link>, <Link href="/api/maxValue">`maxValue`</Link>, <Link href="/api/minBytes">`minBytes`</Link>, <Link href="/api/minLength">`minLength`</Link>, <Link href="/api/minValue">`minValue`</Link>, <Link href="/api/notBytes">`notBytes`</Link>, <Link href="/api/notLength">`notLength`</Link>, <Link href="/api/notValue">`notValue`</Link>, <Link href="/api/regex">`regex`</Link>, <Link href="/api/startsWith">`startsWith`</Link>, <Link href="/api/ulid">`ulid`</Link>, <Link href="/api/url">`url`</Link>, <Link href="/api/uuid">`uuid`</Link>, <Link href="/api/value">`value`</Link>
 
 export const properties = {
-  errorMessage: {
-    type: 'string',
+  message: {
+    type: ['string', 'undefined'],
+    default: {
+      type: 'string',
+      value: 'Invalid type',
+    },
   },
   pipe: {
     type: [
@@ -120,6 +84,7 @@ export const properties = {
         href: '../Pipe',
         generics: ['string'],
       },
+      'undefined',
     ],
   },
   stringSchema: {
