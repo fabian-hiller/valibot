@@ -29,7 +29,7 @@ const Schema = string(message, pipe);
 
 ## Examples
 
-With `string` you validate the data type of the incoming data and with the `pipe` you can then validate all further details.
+With `string` you validate the data type of the incoming data and with the `pipe` you can then validate all further details. In the event of an error, the `message` argument allows you to customize the error message.
 
 ```ts
 // Schema to validate an email
@@ -70,7 +70,14 @@ The following APIs can be combined with `string`.
 
 export const properties = {
   message: {
-    type: ['string', 'undefined'],
+    type: [
+      {
+        type: 'custom',
+        name: 'ErrorMessage',
+        href: '../ErrorMessage/',
+      },
+      'undefined',
+    ],
     default: {
       type: 'string',
       value: 'Invalid type',
@@ -81,7 +88,7 @@ export const properties = {
       {
         type: 'custom',
         name: 'Pipe',
-        href: '../Pipe',
+        href: '../Pipe/',
         generics: ['string'],
       },
       'undefined',
@@ -92,7 +99,7 @@ export const properties = {
       {
         type: 'custom',
         name: 'StringSchema',
-        href: '../StringSchema',
+        href: '../StringSchema/',
         generics: ['string'],
       },
     ],

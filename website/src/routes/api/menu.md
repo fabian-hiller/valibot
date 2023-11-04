@@ -175,6 +175,7 @@
 
 - [ArrayPathItem](/api/ArrayPathItem)
 - [BaseSchema](/api/BaseSchema)
+- [ErrorMessage](/api/ErrorMessage)
 - [Issue](/api/Issue)
 - [IssueOrigin](/api/IssueOrigin)
 - [IssueReason](/api/IssueReason)
