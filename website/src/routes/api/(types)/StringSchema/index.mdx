@@ -11,7 +11,7 @@ String schema type.
 ## Definition
 
 - `StringSchema` <Property {...properties.baseSchema}/>
-  - schema <Property {...properties.schema} />
+  - type <Property {...properties.type} />
 
 export const properties = {
   baseSchema: {
@@ -19,12 +19,15 @@ export const properties = {
       {
         type: 'custom',
         name: 'BaseSchema',
-        href: '../BaseSchema',
+        href: '../BaseSchema/',
         generics: ['string'],
       },
     ],
   },
-  schema: {
-    type: 'string',
+  type: {
+    type: {
+      type: 'string',
+      value: 'string',
+    },
   },
 };
