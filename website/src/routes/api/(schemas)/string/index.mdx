@@ -89,7 +89,10 @@ export const properties = {
         type: 'custom',
         name: 'Pipe',
         href: '../Pipe/',
-        generics: ['string'],
+        generics: {
+          withDefault: false,
+          type: ['string']
+        },
       },
       'undefined',
     ],
@@ -100,7 +103,6 @@ export const properties = {
         type: 'custom',
         name: 'StringSchema',
         href: '../StringSchema/',
-        generics: ['string'],
       },
     ],
   },

@@ -54,7 +54,9 @@ type SingleTypeOrValue =
   | {
       type: 'custom';
       name: string;
-      generics?: TypeOrValue[];
+      generics?:
+        | { withDefault: true; name: string; type: TypeOrValue }
+        | { withDefault: false; type: TypeOrValue[] };
       href?: string;
     };
 
@@ -192,12 +194,19 @@ export function Property(props: PropertyProps) {
               {type.generics && (
                 <>
                   {'<'}
-                  {type.generics.map((generic, index) => (
+                  {type.generics.withDefault ? (
                     <>
-                      {index > 0 && ', '}
-                      <Property type={generic} padding="none" />
+                      {type.generics.name} =
+                      <Property type={type.generics.type} />
                     </>
-                  ))}
+                  ) : (
+                    type.generics.type.map((generic, index) => (
+                      <>
+                        {index > 0 && ', '}
+                        <Property type={generic} padding="none" />
+                      </>
+                    ))
+                  )}
                   {'>'}
                 </>
               )}
