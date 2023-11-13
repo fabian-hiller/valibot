@@ -49,7 +49,9 @@ const PasswordSchema = string([
 ]);
 
 // Schema to validate a URL
-const UrlSchema = string('A URL must be string', [url('The URL is badly formatted.')]);
+const UrlSchema = string('A URL must be string', [
+  url('The URL is badly formatted.'),
+]);
 ```
 
 ## Related
