@@ -9,6 +9,7 @@ import {
 } from '@builder.io/qwik-city';
 import { Slot, component$, useComputed$ } from '@builder.io/qwik';
 import '../styles/pace.css';
+import Contributors from '~/components/Contributors';
 
 type NavItems = (ContentMenu & { group: string })[];
 
@@ -72,6 +73,10 @@ export const DocsLayout = component$(() => {
         <article class="mdx">
           <Slot />
         </article>
+
+        <div class="mt-12 px-10">
+          <Contributors />
+        </div>
 
         {currentPage.value?.href && (
           <div class="mt-10 flex justify-between px-8 md:mt-12 lg:mt-14 lg:px-10">
