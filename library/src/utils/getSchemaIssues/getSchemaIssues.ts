@@ -12,7 +12,7 @@ import { getErrorMessage } from '../getErrorMessage/getErrorMessage.ts';
  * @param info The parse info.
  * @param reason The issue reason.
  * @param validation The validation name.
- * @param error The error message.
+ * @param message The error message.
  * @param input The input value.
  * @param issues The sub issues.
  *
@@ -22,7 +22,7 @@ export function getSchemaIssues(
   info: ParseInfo | undefined,
   reason: IssueReason,
   validation: string,
-  error: ErrorMessage,
+  message: ErrorMessage,
   input: unknown,
   issues?: Issues
 ): { issues: Issues } {
@@ -34,7 +34,7 @@ export function getSchemaIssues(
         reason,
         validation,
         origin: info?.origin || 'value',
-        message: getErrorMessage(error),
+        message: getErrorMessage(message),
         input,
         issues,
         abortEarly: info?.abortEarly,

@@ -16,15 +16,6 @@ export function withDefault<TSchema extends BaseSchema | BaseSchemaAsync>(
 ): TSchema {
   return {
     ...schema,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       return schema._parse(
         input === undefined

@@ -53,15 +53,6 @@ export function transform<TSchema extends BaseSchema, TOutput>(
 ): SchemaWithTransform<TSchema, TOutput> {
   return {
     ...schema,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Parse input with schema
       const result = schema._parse(input, info);

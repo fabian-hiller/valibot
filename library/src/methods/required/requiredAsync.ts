@@ -43,7 +43,7 @@ export function requiredAsync<
  * object schema set to none optional.
  *
  * @param schema The affected schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -52,7 +52,7 @@ export function requiredAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
   schema: TSchema,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<ObjectOutput<Required<TSchema['entries']>, undefined>>
 ): ObjectSchemaAsync<Required<TSchema['entries']>>;
 
@@ -81,7 +81,7 @@ export function requiredAsync<
  *
  * @param schema The affected schema.
  * @param rest The object rest.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -92,7 +92,7 @@ export function requiredAsync<
 >(
   schema: TSchema,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<ObjectOutput<Required<TSchema['entries']>, TRest>>
 ): ObjectSchemaAsync<Required<TSchema['entries']>, TRest>;
 
@@ -110,8 +110,8 @@ export function requiredAsync<
     | ErrorMessage,
   arg4?: PipeAsync<ObjectOutput<Required<TSchema['entries']>, TRest>>
 ): ObjectSchemaAsync<Required<TSchema['entries']>, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message, pipe] = getRestAndDefaultArgs<
     TRest,
     PipeAsync<ObjectOutput<Required<TSchema['entries']>, TRest>>
   >(arg2, arg3, arg4);
@@ -126,7 +126,7 @@ export function requiredAsync<
       {}
     ) as Required<TSchema['entries']>,
     rest,
-    error,
+    message,
     pipe
   );
 }
