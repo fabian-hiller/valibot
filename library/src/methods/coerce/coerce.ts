@@ -1,4 +1,4 @@
-import type { BaseSchema } from '../../types.ts';
+import type { BaseSchema } from '../../types/index.ts';
 
 /**
  * Coerces the input of a schema to match the required type.

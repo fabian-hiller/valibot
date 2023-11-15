@@ -9,7 +9,7 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 import type { ObjectKeys } from './types.ts';
 

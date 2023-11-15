@@ -34,8 +34,5 @@ describe('any', () => {
         message: 'Invalid length',
       }),
     ]);
-
-    const schema2 = any();
-    expect(schema2.pipe).toStrictEqual([]);
   });
 });

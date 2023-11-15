@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Issues,
+  Pipe,
+} from '../../types/index.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -14,15 +19,22 @@ export type SetSchema<
   TValue extends BaseSchema,
   TOutput = SetOutput<TValue>
 > = BaseSchema<SetInput<TValue>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'set';
   /**
-   * The value schema.
+   * The set value schema.
    */
   value: TValue;
   /**
-   * Validation and transformation pipe.
+   * The error message.
    */
-  pipe?: Pipe<SetOutput<TValue>>;
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<SetOutput<TValue>> | undefined;
 };
 
 /**
@@ -42,14 +54,14 @@ export function set<TValue extends BaseSchema>(
  * Creates a set schema.
  *
  * @param value The value schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A set schema.
  */
 export function set<TValue extends BaseSchema>(
   value: TValue,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<SetOutput<TValue>>
 ): SetSchema<TValue>;
 
@@ -58,25 +70,20 @@ export function set<TValue extends BaseSchema>(
   arg2?: Pipe<SetOutput<TValue>> | ErrorMessage,
   arg3?: Pipe<SetOutput<TValue>>
 ): SetSchema<TValue> {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return set schema
   return {
     type: 'set',
     async: false,
     value,
+    message,
     pipe,
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Set)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'set',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'set', this.message, input);
       }
 
       // Create key, output and issues
@@ -87,7 +94,7 @@ export function set<TValue extends BaseSchema>(
       // Parse each value by schema
       for (const inputValue of input) {
         // Get parse result of input value
-        const result = value._parse(inputValue, info);
+        const result = this.value._parse(inputValue, info);
 
         // If there are issues, capture them
         if (result.issues) {
@@ -129,7 +136,7 @@ export function set<TValue extends BaseSchema>(
       // Return issues or pipe result
       return issues
         ? getIssues(issues)
-        : executePipe(output, pipe, info, 'set');
+        : executePipe(output, this.pipe, info, 'set');
     },
   };
 }

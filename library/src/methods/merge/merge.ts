@@ -3,7 +3,7 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 import type { MergeObjects } from './types.ts';
 

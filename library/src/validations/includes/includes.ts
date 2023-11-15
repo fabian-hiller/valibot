@@ -1,36 +1,46 @@
-import type { ErrorMessage, PipeResult, Validation } from '../../types.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
-export function includes<TInput extends string>(
-  requirement: string,
-  error?: ErrorMessage
-): Validation<TInput>;
-
-export function includes<TInput extends TItem[], TItem>(
-  requirement: TItem,
-  error?: ErrorMessage
-): Validation<TInput>;
+/**
+ * Includes validation type.
+ */
+export type IncludesValidation<
+  TInput extends string | any[],
+  TRequirement extends TInput extends any[] ? TInput[number] : TInput
+> = BaseValidation<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'includes';
+  /**
+   * The required value.
+   */
+  requirement: TRequirement;
+};
 
 /**
  * Creates a validation function that validates the content of a string or array.
  *
  * @param requirement The content to be included.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
 export function includes<
-  TInput extends string | TItem[],
-  TItem,
-  const TRequirement extends string | TItem
->(requirement: TRequirement, error?: ErrorMessage) {
+  TInput extends string | any[],
+  const TRequirement extends TInput extends any[] ? TInput[number] : TInput
+>(
+  requirement: TRequirement,
+  message: ErrorMessage = 'Invalid content'
+): IncludesValidation<TInput, TRequirement> {
   return {
-    type: 'includes' as const,
-    message: error ?? 'Invalid content',
+    type: 'includes',
+    async: false,
+    message,
     requirement,
-    _parse(input: TInput): PipeResult<TInput> {
-      return !input.includes(requirement as any)
-        ? getPipeIssues(this.type, this.message, input)
+    _parse(input) {
+      return !input.includes(requirement)
+        ? getPipeIssues(this.type, this.message, input, this.requirement)
         : getOutput(input);
     },
   };

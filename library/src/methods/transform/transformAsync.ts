@@ -6,7 +6,7 @@ import type {
   ParseInfo,
   PipeAsync,
   _ParseResult,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { executePipeAsync } from '../../utils/index.ts';
 
 /**

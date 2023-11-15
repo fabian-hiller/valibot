@@ -1,4 +1,8 @@
-import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  PipeAsync,
+} from '../../types/index.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -12,11 +16,18 @@ export type NumberSchemaAsync<TOutput = number> = BaseSchemaAsync<
   number,
   TOutput
 > & {
+  /**
+   * The schema type.
+   */
   type: 'number';
   /**
-   * Validation and transformation pipe.
+   * The error message.
    */
-  pipe?: PipeAsync<number>;
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<number> | undefined;
 };
 
 /**
@@ -31,13 +42,13 @@ export function numberAsync(pipe?: PipeAsync<number>): NumberSchemaAsync;
 /**
  * Creates an async number schema.
  *
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async number schema.
  */
 export function numberAsync(
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<number>
 ): NumberSchemaAsync;
 
@@ -45,28 +56,23 @@ export function numberAsync(
   arg1?: ErrorMessage | PipeAsync<number>,
   arg2?: PipeAsync<number>
 ): NumberSchemaAsync {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return async number schema
   return {
     type: 'number',
     async: true,
+    message,
     pipe,
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'number' || isNaN(input)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'number',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'number', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipeAsync(input, pipe, info, 'number');
+      return executePipeAsync(input, this.pipe, info, 'number');
     },
   };
 }

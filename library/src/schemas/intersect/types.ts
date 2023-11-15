@@ -1,4 +1,4 @@
-import type { BaseSchema, BaseSchemaAsync } from '../../types.ts';
+import type { BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
 import type { IntersectOptions } from './intersect.ts';
 import type { IntersectOptionsAsync } from './intersectAsync.ts';
 

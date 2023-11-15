@@ -1,6 +1,21 @@
 import { ISO_WEEK_REGEX } from '../../regex.ts';
-import type { ErrorMessage, PipeResult } from '../../types.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
+
+/**
+ * ISO week validation type.
+ */
+export type IsoWeekValidation<TInput extends string> =
+  BaseValidation<TInput> & {
+    /**
+     * The validation type.
+     */
+    type: 'iso_week';
+    /**
+     * The ISO week regex.
+     */
+    requirement: RegExp;
+  };
 
 /**
  * Creates a validation function that validates a week.
@@ -11,18 +26,21 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * the year. For example, "2021W53" is valid even though the year 2021 has only
  * 52 weeks.
  *
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
-export function isoWeek<TInput extends string>(error?: ErrorMessage) {
+export function isoWeek<TInput extends string>(
+  message: ErrorMessage = 'Invalid week'
+): IsoWeekValidation<TInput> {
   return {
-    type: 'iso_week' as const,
-    message: error ?? 'Invalid week',
+    type: 'iso_week',
+    async: false,
+    message,
     requirement: ISO_WEEK_REGEX,
-    _parse(input: TInput): PipeResult<TInput> {
+    _parse(input) {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.type, this.message, input)
+        ? getPipeIssues(this.type, this.message, input, this.requirement)
         : getOutput(input);
     },
   };

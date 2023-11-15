@@ -1,32 +1,34 @@
-import type { BaseSchema, ErrorMessage } from '../../types.ts';
+import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
 import { getSchemaIssues } from '../../utils/index.ts';
 
 /**
  * Never schema type.
  */
 export type NeverSchema = BaseSchema<never> & {
+  /**
+   * The schema type.
+   */
   type: 'never';
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates a never schema.
  *
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A never schema.
  */
-export function never(error?: ErrorMessage): NeverSchema {
+export function never(message: ErrorMessage = 'Invalid type'): NeverSchema {
   return {
     type: 'never',
     async: false,
+    message,
     _parse(input, info) {
-      return getSchemaIssues(
-        info,
-        'type',
-        'never',
-        error || 'Invalid type',
-        input
-      );
+      return getSchemaIssues(info, 'type', 'never', this.message, input);
     },
   };
 }

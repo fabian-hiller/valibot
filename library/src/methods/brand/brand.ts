@@ -3,7 +3,7 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 
 /**
  * Brand symbol.

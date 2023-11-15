@@ -27,7 +27,7 @@ import type {
   BaseSchemaAsync,
   Input,
   Issues,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import type { ValiError } from '../ValiError/index.ts';
 
 /**

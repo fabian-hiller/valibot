@@ -4,7 +4,7 @@ import type {
   Input,
   Output,
   ResolveObject,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import type { ObjectEntries } from './object.ts';
 import type { ObjectEntriesAsync } from './objectAsync.ts';
 
@@ -13,9 +13,9 @@ import type { ObjectEntriesAsync } from './objectAsync.ts';
  */
 export type ObjectPathItem = {
   type: 'object';
-  input: Record<string, any>;
+  input: Record<string, unknown>;
   key: string;
-  value: any;
+  value: unknown;
 };
 
 /**

@@ -1,25 +1,46 @@
-import type { ErrorMessage, PipeResult } from '../../types.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
+
+/**
+ * MIME type validation type.
+ */
+export type MimeTypeValidation<
+  TInput extends Blob,
+  TRequirement extends `${string}/${string}`[]
+> = BaseValidation<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'mime_type';
+  /**
+   * The MIME types.
+   */
+  requirement: TRequirement;
+};
 
 /**
  * Creates a validation function that validates the MIME type of a file.
  *
  * @param requirement The MIME types.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
 export function mimeType<
   TInput extends Blob,
-  const TRequirement extends `${string}/${string}`[]
->(requirement: TRequirement, error?: ErrorMessage) {
+  TRequirement extends `${string}/${string}`[]
+>(
+  requirement: TRequirement,
+  message: ErrorMessage = 'Invalid MIME type'
+): MimeTypeValidation<TInput, TRequirement> {
   return {
-    type: 'mime_type' as const,
-    message: error ?? 'Invalid MIME type',
+    type: 'mime_type',
+    async: false,
+    message,
     requirement,
-    _parse(input: TInput): PipeResult<TInput> {
-      return !requirement.includes(input.type as `${string}/${string}`)
-        ? getPipeIssues(this.type, this.message, input)
+    _parse(input) {
+      return !this.requirement.includes(input.type as `${string}/${string}`)
+        ? getPipeIssues(this.type, this.message, input, this.requirement)
         : getOutput(input);
     },
   };

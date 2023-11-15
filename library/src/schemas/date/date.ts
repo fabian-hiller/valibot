@@ -1,4 +1,4 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -9,11 +9,18 @@ import {
  * Date schema type.
  */
 export type DateSchema<TOutput = Date> = BaseSchema<Date, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'date';
   /**
-   * Validation and transformation pipe.
+   * The error message.
    */
-  pipe?: Pipe<Date>;
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<Date> | undefined;
 };
 
 /**
@@ -28,39 +35,34 @@ export function date(pipe?: Pipe<Date>): DateSchema;
 /**
  * Creates a date schema.
  *
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A date schema.
  */
-export function date(error?: ErrorMessage, pipe?: Pipe<Date>): DateSchema;
+export function date(message?: ErrorMessage, pipe?: Pipe<Date>): DateSchema;
 
 export function date(
   arg1?: ErrorMessage | Pipe<Date>,
   arg2?: Pipe<Date>
 ): DateSchema {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return date schema
   return {
     type: 'date',
     async: false,
+    message,
     pipe,
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Date) || isNaN(input.getTime())) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'date',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'date', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipe(input, pipe, info, 'date');
+      return executePipe(input, this.pipe, info, 'date');
     },
   };
 }

@@ -1,25 +1,43 @@
-import type { ErrorMessage, PipeResult } from '../../types.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
+
+/**
+ * Bytes validation type.
+ */
+export type BytesValidation<
+  TInput extends string,
+  TRequirement extends number
+> = BaseValidation<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'bytes';
+  /**
+   * The byte length.
+   */
+  requirement: TRequirement;
+};
 
 /**
  * Creates a validation function that validates the byte length of a string.
  *
  * @param requirement The byte length.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
-export function bytes<TInput extends string, const TRequirement extends number>(
+export function bytes<TInput extends string, TRequirement extends number>(
   requirement: TRequirement,
-  error?: ErrorMessage
-) {
+  message: ErrorMessage = 'Invalid byte length'
+): BytesValidation<TInput, TRequirement> {
   return {
-    type: 'bytes' as const,
-    message: error ?? 'Invalid byte length',
+    type: 'bytes',
+    async: false,
+    message,
     requirement,
-    _parse(input: TInput): PipeResult<TInput> {
-      return new TextEncoder().encode(input).length !== requirement
-        ? getPipeIssues(this.type, this.message, input)
+    _parse(input) {
+      return new TextEncoder().encode(input).length !== this.requirement
+        ? getPipeIssues(this.type, this.message, input, this.requirement)
         : getOutput(input);
     },
   };

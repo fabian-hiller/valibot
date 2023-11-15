@@ -1,4 +1,4 @@
-import type { BaseSchema, BaseSchemaAsync, Input } from '../../types.ts';
+import type { BaseSchema, BaseSchemaAsync, Input } from '../../types/index.ts';
 
 /**
  * Passes a default value to a schema in case of an undefined input.

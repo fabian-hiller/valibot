@@ -4,7 +4,7 @@ import type {
   Issues,
   Output,
   Pipe,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -21,19 +21,26 @@ export type MapSchema<
   TValue extends BaseSchema,
   TOutput = MapOutput<TKey, TValue>
 > = BaseSchema<MapInput<TKey, TValue>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'map';
   /**
-   * The key schema.
+   * The map key schema.
    */
   key: TKey;
   /**
-   * The value schema.
+   * The map value schema.
    */
   value: TValue;
   /**
-   * Validation and transformation pipe.
+   * The error message.
    */
-  pipe?: Pipe<MapOutput<TKey, TValue>>;
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<MapOutput<TKey, TValue>> | undefined;
 };
 
 /**
@@ -56,7 +63,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
  *
  * @param key The key schema.
  * @param value The value schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A map schema.
@@ -64,7 +71,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
 export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
   key: TKey,
   value: TValue,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<MapOutput<TKey, TValue>>
 ): MapSchema<TKey, TValue>;
 
@@ -74,8 +81,8 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
   arg3?: Pipe<MapOutput<TKey, TValue>> | ErrorMessage,
   arg4?: Pipe<MapOutput<TKey, TValue>>
 ): MapSchema<TKey, TValue> {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg3, arg4);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg3, arg4);
 
   // Create and return map schema
   return {
@@ -83,17 +90,12 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
     async: false,
     key,
     value,
+    message,
     pipe,
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'map',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'map', this.message, input);
       }
 
       // Create issues and output
@@ -106,7 +108,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
         let pathItem: MapPathItem | undefined;
 
         // Get parse result of key
-        const keyResult = key._parse(inputKey, {
+        const keyResult = this.key._parse(inputKey, {
           origin: 'key',
           abortEarly: info?.abortEarly,
           abortPipeEarly: info?.abortPipeEarly,
@@ -143,7 +145,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
         }
 
         // Get parse result of value
-        const valueResult = value._parse(inputValue, info);
+        const valueResult = this.value._parse(inputValue, info);
 
         // If there are issues, capture them
         if (valueResult.issues) {
@@ -183,7 +185,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
       // Return issues or pipe result
       return issues
         ? getIssues(issues)
-        : executePipe(output, pipe, info, 'map');
+        : executePipe(output, this.pipe, info, 'map');
     },
   };
 }

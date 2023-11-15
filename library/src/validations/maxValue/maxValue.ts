@@ -1,25 +1,46 @@
-import type { ErrorMessage, PipeResult } from '../../types.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
+
+/**
+ * Max value validation type.
+ */
+export type MaxValueValidation<
+  TInput extends string | number | bigint | boolean | Date,
+  TRequirement extends TInput
+> = BaseValidation<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'max_value';
+  /**
+   * The maximum value.
+   */
+  requirement: TRequirement;
+};
 
 /**
  * Creates a validation function that validates the value of a string, number or date.
  *
  * @param requirement The maximum value.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
 export function maxValue<
-  TInput extends string | number | bigint | Date,
-  const TRequirement extends TInput
->(requirement: TRequirement, error?: ErrorMessage) {
+  TInput extends string | number | bigint | boolean | Date,
+  TRequirement extends TInput
+>(
+  requirement: TRequirement,
+  message: ErrorMessage = 'Invalid value'
+): MaxValueValidation<TInput, TRequirement> {
   return {
-    type: 'max_value' as const,
-    message: error ?? 'Invalid value',
+    type: 'max_value',
+    async: false,
+    message,
     requirement,
-    _parse(input: TInput): PipeResult<TInput> {
-      return input > requirement
-        ? getPipeIssues(this.type, this.message, input)
+    _parse(input) {
+      return input > this.requirement
+        ? getPipeIssues(this.type, this.message, input, this.requirement)
         : getOutput(input);
     },
   };

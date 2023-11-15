@@ -1,15 +1,18 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, Pipe } from '../../types/index.ts';
 import { executePipe } from '../../utils/index.ts';
 
 /**
  * Unknown schema type.
  */
 export type UnknownSchema<TOutput = unknown> = BaseSchema<unknown, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'unknown';
   /**
-   * Validation and transformation pipe.
+   * The validation and transformation pipeline.
    */
-  pipe: Pipe<unknown>;
+  pipe: Pipe<unknown> | undefined;
 };
 
 /**
@@ -19,13 +22,13 @@ export type UnknownSchema<TOutput = unknown> = BaseSchema<unknown, TOutput> & {
  *
  * @returns A unknown schema.
  */
-export function unknown(pipe: Pipe<unknown> = []): UnknownSchema {
+export function unknown(pipe?: Pipe<unknown>): UnknownSchema {
   return {
     type: 'unknown',
     async: false,
     pipe,
     _parse(input, info) {
-      return executePipe(input, pipe, info, 'unknown');
+      return executePipe(input, this.pipe, info, 'unknown');
     },
   };
 }

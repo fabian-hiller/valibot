@@ -1,4 +1,4 @@
-import type { ErrorMessage } from '../../types.ts';
+import type { ErrorMessage } from '../../types/index.ts';
 
 /**
  * Returns the final string of the error message.

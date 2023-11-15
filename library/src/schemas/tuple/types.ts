@@ -3,7 +3,7 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import type { TupleItems } from './tuple.ts';
 import type { TupleItemsAsync } from './tupleAsync.ts';
 
@@ -12,9 +12,9 @@ import type { TupleItemsAsync } from './tupleAsync.ts';
  */
 export type TuplePathItem = {
   type: 'tuple';
-  input: [any, ...any[]];
+  input: [unknown, ...unknown[]];
   key: number;
-  value: any;
+  value: unknown;
 };
 
 /**

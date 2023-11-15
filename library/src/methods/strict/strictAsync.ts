@@ -2,7 +2,7 @@ import type {
   ObjectEntriesAsync,
   ObjectSchemaAsync,
 } from '../../schemas/object/index.ts';
-import type { ErrorMessage } from '../../types.ts';
+import type { ErrorMessage } from '../../types/index.ts';
 import { getSchemaIssues } from '../../utils/index.ts';
 
 /**

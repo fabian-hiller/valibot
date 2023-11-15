@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { toCustom } from '../../transformations/index.ts';
 import { minValue } from '../../validations/index.ts';
-import type { Pipe } from '../../types.ts';
+import type { Pipe } from '../../types/index.ts';
 import { executePipe } from './executePipe.ts';
 
 describe('executePipe', () => {

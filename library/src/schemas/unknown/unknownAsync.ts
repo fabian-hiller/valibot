@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync, PipeAsync } from '../../types.ts';
+import type { BaseSchemaAsync, PipeAsync } from '../../types/index.ts';
 import { executePipeAsync } from '../../utils/index.ts';
 
 /**
@@ -8,11 +8,14 @@ export type UnknownSchemaAsync<TOutput = unknown> = BaseSchemaAsync<
   unknown,
   TOutput
 > & {
+  /**
+   * The schema type.
+   */
   type: 'unknown';
   /**
-   * Validation and transformation pipe.
+   * The validation and transformation pipeline.
    */
-  pipe: PipeAsync<unknown>;
+  pipe: PipeAsync<unknown> | undefined;
 };
 
 /**
@@ -22,15 +25,13 @@ export type UnknownSchemaAsync<TOutput = unknown> = BaseSchemaAsync<
  *
  * @returns An async unknown schema.
  */
-export function unknownAsync(
-  pipe: PipeAsync<unknown> = []
-): UnknownSchemaAsync {
+export function unknownAsync(pipe?: PipeAsync<unknown>): UnknownSchemaAsync {
   return {
     type: 'unknown',
     async: true,
     pipe,
     async _parse(input, info) {
-      return executePipeAsync(input, pipe, info, 'unknown');
+      return executePipeAsync(input, this.pipe, info, 'unknown');
     },
   };
 }

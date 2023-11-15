@@ -4,8 +4,11 @@ import type {
   TupleItems,
   TupleSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema } from '../../types.ts';
-import type { SchemaWithMaybeFallback } from '../getFallback/index.ts';
+import type { BaseSchema } from '../../types/index.ts';
+import {
+  getFallback,
+  type SchemaWithMaybeFallback,
+} from '../getFallback/index.ts';
 import type { FallbackValues } from './types.ts';
 
 /**
@@ -28,8 +31,8 @@ export function getFallbacks<
   let fallbacks: any;
 
   // If schema has a fallback, set its value
-  if (schema.getFallback) {
-    fallbacks = schema.getFallback();
+  if (schema.fallback) {
+    fallbacks = getFallback(schema);
 
     // Otherwise, check if schema is of kind object or tuple
   } else if ('type' in schema) {

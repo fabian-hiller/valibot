@@ -1,23 +1,41 @@
 import { IPV4_REGEX, IPV6_REGEX } from '../../regex.ts';
-import type { ErrorMessage, PipeResult } from '../../types.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
+
+/**
+ * IP validation type.
+ */
+export type IpValidation<TInput extends string> = BaseValidation<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'ip';
+  /**
+   * The IPv4 and IPv6 regex.
+   */
+  requirement: [RegExp, RegExp];
+};
 
 /**
  * Creates a validation function that validates an [IPv4](https://en.wikipedia.org/wiki/IPv4)
  * or [IPv6](https://en.wikipedia.org/wiki/IPv6) address.
  *
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
-export function ip<TInput extends string>(error?: ErrorMessage) {
+export function ip<TInput extends string>(
+  message: ErrorMessage = 'Invalid IP'
+): IpValidation<TInput> {
   return {
-    kind: 'ip' as const,
-    message: error ?? 'Invalid IP',
-    requirement: [IPV4_REGEX, IPV6_REGEX] as const,
-    _parse(input: TInput): PipeResult<TInput> {
-      return !this.requirement.some((regex) => regex.test(input))
-        ? getPipeIssues(this.kind, this.message, input)
+    type: 'ip',
+    async: false,
+    message,
+    requirement: [IPV4_REGEX, IPV6_REGEX],
+    _parse(input) {
+      return !this.requirement[0].test(input) &&
+        !this.requirement[1].test(input)
+        ? getPipeIssues(this.type, this.message, input, this.requirement)
         : getOutput(input);
     },
   };

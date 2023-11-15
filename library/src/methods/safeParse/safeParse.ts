@@ -1,5 +1,5 @@
 import { ValiError } from '../../error/index.ts';
-import type { BaseSchema, ParseInfo } from '../../types.ts';
+import type { BaseSchema, ParseInfo } from '../../types/index.ts';
 import type { SafeParseResult } from './types.ts';
 
 /**

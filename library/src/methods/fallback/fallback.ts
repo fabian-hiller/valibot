@@ -1,5 +1,6 @@
-import type { BaseSchema, Output } from '../../types.ts';
+import type { BaseSchema, Output } from '../../types/index.ts';
 import { getOutput } from '../../utils/index.ts';
+import { getFallback } from '../getFallback/index.ts';
 import type { FallbackInfo } from './types.ts';
 
 /**
@@ -7,8 +8,15 @@ import type { FallbackInfo } from './types.ts';
  */
 export type SchemaWithFallback<
   TSchema extends BaseSchema = BaseSchema,
-  TFallback extends Output<TSchema> = Output<TSchema>
-> = TSchema & { getFallback: (info?: FallbackInfo) => TFallback };
+  TFallback extends
+    | Output<TSchema>
+    | ((info?: FallbackInfo) => Output<TSchema>) = Output<TSchema>
+> = TSchema & {
+  /**
+   * The fallback value.
+   */
+  fallback: TFallback;
+};
 
 /**
  * Returns a fallback value when validating the passed schema failed.
@@ -20,36 +28,21 @@ export type SchemaWithFallback<
  */
 export function fallback<
   TSchema extends BaseSchema,
-  TFallback extends Output<TSchema>
+  const TFallback extends
+    | Output<TSchema>
+    | ((info?: FallbackInfo) => Output<TSchema>)
 >(
   schema: TSchema,
-  fallback: TFallback | ((info?: FallbackInfo) => TFallback)
+  fallback: TFallback
 ): SchemaWithFallback<TSchema, TFallback> {
   return {
     ...schema,
-
-    /**
-     * Returns the fallback value.
-     */
-    getFallback(info) {
-      return typeof fallback === 'function'
-        ? (fallback as (info?: FallbackInfo) => TFallback)(info)
-        : (fallback as TFallback);
-    },
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    fallback,
     _parse(input, info) {
       const result = schema._parse(input, info);
       return getOutput(
         result.issues
-          ? this.getFallback({ input, issues: result.issues })
+          ? getFallback(this, { input, issues: result.issues })
           : result.output
       );
     },

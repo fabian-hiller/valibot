@@ -4,7 +4,7 @@ import type {
   Input,
   Issues,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
@@ -19,36 +19,44 @@ export type UnionSchema<
   TOptions extends UnionOptions,
   TOutput = Output<TOptions[number]>
 > = BaseSchema<Input<TOptions[number]>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'union';
   /**
    * The union options.
    */
   options: TOptions;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates a union schema.
  *
  * @param options The union options.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A union schema.
  */
 export function union<TOptions extends UnionOptions>(
   options: TOptions,
-  error?: ErrorMessage
+  message: ErrorMessage = 'Invalid type'
 ): UnionSchema<TOptions> {
   return {
     type: 'union',
     async: false,
     options,
+    message,
     _parse(input, info) {
       // Create issues and output
       let issues: Issues | undefined;
       let output: [Output<TOptions[number]>] | undefined;
 
       // Parse schema of each option
-      for (const schema of options) {
+      for (const schema of this.options) {
         const result = schema._parse(input, info);
 
         // If there are issues, capture them
@@ -73,14 +81,7 @@ export function union<TOptions extends UnionOptions>(
       // Return output or issues
       return output
         ? getOutput(output[0])
-        : getSchemaIssues(
-            info,
-            'type',
-            'union',
-            error || 'Invalid type',
-            input,
-            issues
-          );
+        : getSchemaIssues(info, 'type', 'union', this.message, input, issues);
     },
   };
 }

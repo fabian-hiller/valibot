@@ -5,7 +5,7 @@ import type {
   ParseInfo,
   PipeAsync,
   PipeInfo,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getIssues } from '../getIssues/getIssues.ts';
 import { getOutput } from '../getOutput/getOutput.ts';
 import { getIssue, getPipeInfo } from './utils/index.ts';
@@ -15,7 +15,8 @@ import { getIssue, getPipeInfo } from './utils/index.ts';
  *
  * @param input The input value.
  * @param pipe The pipe to be executed.
- * @param info The validation info.
+ * @param parseInfo The validation info.
+ * @param reason The issue reason.
  *
  * @returns The output value.
  */

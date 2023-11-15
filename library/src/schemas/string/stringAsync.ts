@@ -1,4 +1,8 @@
-import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  PipeAsync,
+} from '../../types/index.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -12,11 +16,18 @@ export type StringSchemaAsync<TOutput = string> = BaseSchemaAsync<
   string,
   TOutput
 > & {
+  /**
+   * The schema type.
+   */
   type: 'string';
   /**
-   * Validation and transformation pipe.
+   * The error message.
    */
-  pipe?: PipeAsync<string>;
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<string> | undefined;
 };
 
 /**
@@ -31,13 +42,13 @@ export function stringAsync(pipe?: PipeAsync<string>): StringSchemaAsync;
 /**
  * Creates an async string schema.
  *
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async string schema.
  */
 export function stringAsync(
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<string>
 ): StringSchemaAsync;
 
@@ -45,28 +56,23 @@ export function stringAsync(
   arg1?: ErrorMessage | PipeAsync<string>,
   arg2?: PipeAsync<string>
 ): StringSchemaAsync {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return async string schema
   return {
     type: 'string',
     async: true,
+    message,
     pipe,
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'string') {
-        return getSchemaIssues(
-          info,
-          'type',
-          'string',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'string', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipeAsync(input, pipe, info, 'string');
+      return executePipeAsync(input, this.pipe, info, 'string');
     },
   };
 }

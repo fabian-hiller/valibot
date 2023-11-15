@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync } from '../../types.ts';
+import type { BaseSchemaAsync } from '../../types/index.ts';
 
 /**
  * Coerces the input of a async schema to match the required type.

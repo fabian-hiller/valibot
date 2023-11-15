@@ -1,4 +1,9 @@
-import type { BaseSchema, BaseSchemaAsync, Issues } from '../../types.ts';
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  ErrorMessage,
+  Issues,
+} from '../../types/index.ts';
 import { getIssues, getOutput, getSchemaIssues } from '../../utils/index.ts';
 import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
@@ -19,29 +24,37 @@ export type IntersectSchemaAsync<
   TOptions extends IntersectOptionsAsync,
   TOutput = IntersectOutput<TOptions>
 > = BaseSchemaAsync<IntersectInput<TOptions>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'intersect';
   /**
    * The intersect options.
    */
   options: TOptions;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates an async intersect schema.
  *
  * @param options The intersect options.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns An async intersect schema.
  */
 export function intersectAsync<TOptions extends IntersectOptionsAsync>(
   options: TOptions,
-  error?: string
+  message: ErrorMessage = 'Invalid type'
 ): IntersectSchemaAsync<TOptions> {
   return {
     type: 'intersect',
     async: true,
     options,
+    message,
     async _parse(input, info) {
       // Create issues and outputs
       let issues: Issues | undefined;
@@ -49,7 +62,7 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
 
       // Parse schema of each option
       await Promise.all(
-        options.map(async (schema) => {
+        this.options.map(async (schema) => {
           // If not aborted early, continue execution
           if (!(info?.abortEarly && issues)) {
             const result = await schema._parse(input, info);
@@ -102,7 +115,7 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
             info,
             'type',
             'intersect',
-            error || 'Invalid type',
+            this.message,
             input
           );
         }

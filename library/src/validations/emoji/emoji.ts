@@ -1,22 +1,39 @@
 import { EMOJI_REGEX } from '../../regex.ts';
-import type { ErrorMessage, PipeResult } from '../../types.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
+
+/**
+ * Emoji validation type.
+ */
+export type EmojiValidation<TInput extends string> = BaseValidation<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'emoji';
+  /**
+   * The emoji regex.
+   */
+  requirement: RegExp;
+};
 
 /**
  * Creates a validation function that validates an emoji.
  *
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
-export function emoji<TInput extends string>(error?: ErrorMessage) {
+export function emoji<TInput extends string>(
+  message: ErrorMessage = 'Invalid emoji'
+): EmojiValidation<TInput> {
   return {
-    type: 'emoji' as const,
-    message: error ?? 'Invalid emoji',
+    type: 'emoji',
+    async: false,
+    message,
     requirement: EMOJI_REGEX,
-    _parse(input: TInput): PipeResult<TInput> {
+    _parse(input) {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.type, this.message, input)
+        ? getPipeIssues(this.type, this.message, input, this.requirement)
         : getOutput(input);
     },
   };

@@ -1,32 +1,36 @@
-import type { BaseSchemaAsync, ErrorMessage } from '../../types.ts';
+import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
 import { getSchemaIssues } from '../../utils/index.ts';
 
 /**
  * Never schema async type.
  */
 export type NeverSchemaAsync = BaseSchemaAsync<never> & {
+  /**
+   * The schema type.
+   */
   type: 'never';
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates an async never schema.
  *
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns An async never schema.
  */
-export function neverAsync(error?: ErrorMessage): NeverSchemaAsync {
+export function neverAsync(
+  message: ErrorMessage = 'Invalid type'
+): NeverSchemaAsync {
   return {
     type: 'never',
     async: true,
+    message,
     async _parse(input, info) {
-      return getSchemaIssues(
-        info,
-        'type',
-        'never',
-        error || 'Invalid type',
-        input
-      );
+      return getSchemaIssues(info, 'type', 'never', this.message, input);
     },
   };
 }

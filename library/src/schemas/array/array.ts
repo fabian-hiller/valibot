@@ -5,7 +5,7 @@ import type {
   Issues,
   Output,
   Pipe,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -21,16 +21,22 @@ export type ArraySchema<
   TItem extends BaseSchema,
   TOutput = Output<TItem>[]
 > = BaseSchema<Input<TItem>[], TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'array';
   /**
    * The array item schema.
    */
   item: TItem;
   /**
-   * Validation checks that will be run against
-   * the input value.
+   * The error message.
    */
-  pipe?: Pipe<Output<TItem>[]>;
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<Output<TItem>[]> | undefined;
 };
 
 /**
@@ -50,14 +56,14 @@ export function array<TItem extends BaseSchema>(
  * Creates a array schema.
  *
  * @param item The item schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A array schema.
  */
 export function array<TItem extends BaseSchema>(
   item: TItem,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<Output<TItem>[]>
 ): ArraySchema<TItem>;
 
@@ -66,25 +72,20 @@ export function array<TItem extends BaseSchema>(
   arg2?: ErrorMessage | Pipe<Output<TItem>[]>,
   arg3?: Pipe<Output<TItem>[]>
 ): ArraySchema<TItem> {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return array schema
   return {
     type: 'array',
     async: false,
     item,
+    message,
     pipe,
     _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'array',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'array', this.message, input);
       }
 
       // Create issues and output
@@ -94,7 +95,7 @@ export function array<TItem extends BaseSchema>(
       // Parse schema of each array item
       for (let key = 0; key < input.length; key++) {
         const value = input[key];
-        const result = item._parse(value, info);
+        const result = this.item._parse(value, info);
 
         // If there are issues, capture them
         if (result.issues) {
@@ -133,7 +134,7 @@ export function array<TItem extends BaseSchema>(
       // Return issues or pipe result
       return issues
         ? getIssues(issues)
-        : executePipe(output as Output<TItem>[], pipe, info, 'array');
+        : executePipe(output as Output<TItem>[], this.pipe, info, 'array');
     },
   };
 }

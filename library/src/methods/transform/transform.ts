@@ -1,4 +1,4 @@
-import type { BaseSchema, Input, Output, Pipe } from '../../types.ts';
+import type { BaseSchema, Input, Output, Pipe } from '../../types/index.ts';
 import { executePipe } from '../../utils/index.ts';
 
 /**

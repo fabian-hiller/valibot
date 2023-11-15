@@ -1,4 +1,4 @@
-import type { BaseSchema, Issues } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Issues } from '../../types/index.ts';
 import { getIssues, getOutput, getSchemaIssues } from '../../utils/index.ts';
 import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
@@ -15,36 +15,44 @@ export type IntersectSchema<
   TOptions extends IntersectOptions,
   TOutput = IntersectOutput<TOptions>
 > = BaseSchema<IntersectInput<TOptions>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'intersect';
   /**
    * The intersect options.
    */
   options: TOptions;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates an intersect schema.
  *
  * @param options The intersect options.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns An intersect schema.
  */
 export function intersect<TOptions extends IntersectOptions>(
   options: TOptions,
-  error?: string
+  message: ErrorMessage = 'Invalid type'
 ): IntersectSchema<TOptions> {
   return {
     type: 'intersect',
     async: false,
     options,
+    message,
     _parse(input, info) {
       // Create issues and outputs
       let issues: Issues | undefined;
       let outputs: [any, ...any] | undefined;
 
       // Parse schema of each option
-      for (const schema of options) {
+      for (const schema of this.options) {
         const result = schema._parse(input, info);
 
         // If there are issues, capture them
@@ -90,7 +98,7 @@ export function intersect<TOptions extends IntersectOptions>(
             info,
             'type',
             'intersect',
-            error || 'Invalid type',
+            this.message,
             input
           );
         }

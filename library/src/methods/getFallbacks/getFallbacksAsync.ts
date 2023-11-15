@@ -8,10 +8,11 @@ import type {
   TupleSchema,
   TupleSchemaAsync,
 } from '../../schemas/index.ts';
-import type { BaseSchema, BaseSchemaAsync } from '../../types.ts';
-import type {
-  SchemaWithMaybeFallback,
-  SchemaWithMaybeFallbackAsync,
+import type { BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
+import {
+  getFallbackAsync,
+  type SchemaWithMaybeFallback,
+  type SchemaWithMaybeFallbackAsync,
 } from '../getFallback/index.ts';
 import type { FallbackValues } from './types.ts';
 
@@ -43,8 +44,8 @@ export async function getFallbacksAsync<
   let fallbacks: any;
 
   // If schema has a fallback, set its value
-  if (schema.getFallback) {
-    fallbacks = await schema.getFallback();
+  if (schema.fallback) {
+    fallbacks = await getFallbackAsync(schema);
 
     // Otherwise, check if schema is of kind object or tuple
   } else if ('type' in schema) {

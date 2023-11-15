@@ -1,4 +1,4 @@
-import type { Issue, PipeInfo } from '../../../../types.ts';
+import type { Issue, PipeInfo } from '../../../../types/index.ts';
 
 /**
  * Returns the final issue data.

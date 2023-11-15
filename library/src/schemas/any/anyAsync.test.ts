@@ -34,8 +34,5 @@ describe('anyAsync', () => {
         message: 'Invalid length',
       }),
     ]);
-
-    const schema2 = anyAsync();
-    expect(schema2.pipe).toStrictEqual([]);
   });
 });

@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Issues,
+  Pipe,
+} from '../../types/index.ts';
 import {
   executePipe,
   getIssues,
@@ -20,19 +25,26 @@ export type TupleSchema<
   TRest extends BaseSchema | undefined = undefined,
   TOutput = TupleOutput<TItems, TRest>
 > = BaseSchema<TupleInput<TItems, TRest>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'tuple';
   /**
-   * The items schema.
+   * The tuple items schema.
    */
   items: TItems;
   /**
-   * The rest schema.
+   * The tuple rest schema.
    */
   rest: TRest;
   /**
-   * Validation and transformation pipe.
+   * The error message.
    */
-  pipe?: Pipe<TupleOutput<TItems, TRest>>;
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<TupleOutput<TItems, TRest>> | undefined;
 };
 
 /**
@@ -52,14 +64,14 @@ export function tuple<TItems extends TupleItems>(
  * Creates a tuple schema.
  *
  * @param items The items schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A tuple schema.
  */
 export function tuple<TItems extends TupleItems>(
   items: TItems,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<TupleOutput<TItems, undefined>>
 ): TupleSchema<TItems>;
 
@@ -86,7 +98,7 @@ export function tuple<
  *
  * @param items The items schema.
  * @param rest The rest schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A tuple schema.
@@ -97,7 +109,7 @@ export function tuple<
 >(
   items: TItems,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<TupleOutput<TItems, TRest>>
 ): TupleSchema<TItems, TRest>;
 
@@ -110,8 +122,8 @@ export function tuple<
   arg3?: Pipe<TupleOutput<TItems, TRest>> | ErrorMessage,
   arg4?: Pipe<TupleOutput<TItems, TRest>>
 ): TupleSchema<TItems, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message = 'Invalid type', pipe] = getRestAndDefaultArgs<
     TRest,
     Pipe<TupleOutput<TItems, TRest>>
   >(arg2, arg3, arg4);
@@ -122,17 +134,12 @@ export function tuple<
     async: false,
     items,
     rest,
+    message,
     pipe,
     _parse(input, info) {
       // Check type of input
-      if (!Array.isArray(input) || items.length > input.length) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'tuple',
-          error || 'Invalid type',
-          input
-        );
+      if (!Array.isArray(input) || this.items.length > input.length) {
+        return getSchemaIssues(info, 'type', 'tuple', this.message, input);
       }
 
       // Create issues and output
@@ -140,9 +147,9 @@ export function tuple<
       const output: any[] = [];
 
       // Parse schema of each tuple item
-      for (let key = 0; key < items.length; key++) {
+      for (let key = 0; key < this.items.length; key++) {
         const value = input[key];
-        const result = items[key]._parse(value, info);
+        const result = this.items[key]._parse(value, info);
 
         // If there are issues, capture them
         if (result.issues) {
@@ -179,10 +186,10 @@ export function tuple<
       }
 
       // If necessary parse schema of each rest item
-      if (rest && !(info?.abortEarly && issues)) {
-        for (let key = items.length; key < input.length; key++) {
+      if (this.rest && !(info?.abortEarly && issues)) {
+        for (let key = this.items.length; key < input.length; key++) {
           const value = input[key];
-          const result = rest._parse(value, info);
+          const result = this.rest._parse(value, info);
 
           // If there are issues, capture them
           if (result.issues) {
@@ -224,7 +231,7 @@ export function tuple<
         ? getIssues(issues)
         : executePipe(
             output as TupleOutput<TItems, TRest>,
-            pipe,
+            this.pipe,
             info,
             'tuple'
           );

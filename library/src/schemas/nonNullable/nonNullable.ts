@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Input, Output } from '../../types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Input,
+  Output,
+} from '../../types/index.ts';
 import { getSchemaIssues } from '../../utils/index.ts';
 
 /**
@@ -13,29 +18,37 @@ export type NonNullableSchema<
   TWrapped extends BaseSchema,
   TOutput = NonNullable<Output<TWrapped>>
 > = BaseSchema<NonNullable<Input<TWrapped>>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'non_nullable';
   /**
    * The wrapped schema.
    */
   wrapped: TWrapped;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates a non nullable schema.
  *
  * @param wrapped The wrapped schema.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A non nullable schema.
  */
 export function nonNullable<TWrapped extends BaseSchema>(
   wrapped: TWrapped,
-  error?: ErrorMessage
+  message: ErrorMessage = 'Invalid type'
 ): NonNullableSchema<TWrapped> {
   return {
     type: 'non_nullable',
     async: false,
     wrapped,
+    message,
     _parse(input, info) {
       // Allow `null` values not to pass
       if (input === null) {
@@ -43,13 +56,13 @@ export function nonNullable<TWrapped extends BaseSchema>(
           info,
           'type',
           'non_nullable',
-          error || 'Invalid type',
+          this.message,
           input
         );
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(input, info);
+      return this.wrapped._parse(input, info);
     },
   };
 }

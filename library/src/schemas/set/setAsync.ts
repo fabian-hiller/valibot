@@ -4,7 +4,7 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -20,15 +20,22 @@ export type SetSchemaAsync<
   TValue extends BaseSchema | BaseSchemaAsync,
   TOutput = SetOutput<TValue>
 > = BaseSchemaAsync<SetInput<TValue>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'set';
   /**
-   * The value schema.
+   * The set value schema.
    */
   value: TValue;
   /**
-   * Validation and transformation pipe.
+   * The error message.
    */
-  pipe?: PipeAsync<SetOutput<TValue>>;
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<SetOutput<TValue>> | undefined;
 };
 
 /**
@@ -48,14 +55,14 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
  * Creates an async set schema.
  *
  * @param value The value schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async set schema.
  */
 export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
   value: TValue,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<SetOutput<TValue>>
 ): SetSchemaAsync<TValue>;
 
@@ -64,25 +71,20 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
   arg2?: PipeAsync<SetOutput<TValue>> | ErrorMessage,
   arg3?: PipeAsync<SetOutput<TValue>>
 ): SetSchemaAsync<TValue> {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return async set schema
   return {
     type: 'set',
     async: true,
     value,
+    message,
     pipe,
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Set)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'set',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'set', this.message, input);
       }
 
       // Create index, output and issues
@@ -95,7 +97,7 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
           // If not aborted early, continue execution
           if (!(info?.abortEarly && issues)) {
             // Get parse result of input value
-            const result = await value._parse(inputValue, info);
+            const result = await this.value._parse(inputValue, info);
 
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
@@ -139,7 +141,7 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
       // Return issues or pipe result
       return issues
         ? getIssues(issues)
-        : executePipeAsync(input, pipe, info, 'set');
+        : executePipeAsync(input, this.pipe, info, 'set');
     },
   };
 }

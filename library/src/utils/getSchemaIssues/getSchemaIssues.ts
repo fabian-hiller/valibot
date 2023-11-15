@@ -3,7 +3,7 @@ import type {
   IssueReason,
   Issues,
   ParseInfo,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getErrorMessage } from '../getErrorMessage/getErrorMessage.ts';
 
 /**
