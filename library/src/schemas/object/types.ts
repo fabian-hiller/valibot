@@ -5,6 +5,7 @@ import type {
   Output,
   ResolveObject,
 } from '../../types/index.ts';
+import type { NeverSchema, NeverSchemaAsync } from '../never/index.ts';
 import type { ObjectEntries } from './object.ts';
 import type { ObjectEntriesAsync } from './objectAsync.ts';
 
@@ -47,18 +48,20 @@ type WithQuestionMarks<TObject extends object> = Pick<
 export type ObjectInput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined
-> = TRest extends BaseSchema | BaseSchemaAsync
+> = TRest extends undefined | NeverSchema | NeverSchemaAsync
+  ? ResolveObject<
+      WithQuestionMarks<{
+        [TKey in keyof TEntries]: Input<TEntries[TKey]>;
+      }>
+    >
+  : TRest extends BaseSchema | BaseSchemaAsync
   ? ResolveObject<
       WithQuestionMarks<{
         [TKey in keyof TEntries]: Input<TEntries[TKey]>;
       }>
     > &
       Record<string, Input<TRest>>
-  : ResolveObject<
-      WithQuestionMarks<{
-        [TKey in keyof TEntries]: Input<TEntries[TKey]>;
-      }>
-    >;
+  : never;
 
 /**
  * Object output inference type.
@@ -66,15 +69,17 @@ export type ObjectInput<
 export type ObjectOutput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined
-> = TRest extends BaseSchema | BaseSchemaAsync
+> = TRest extends undefined | NeverSchema | NeverSchemaAsync
+  ? ResolveObject<
+      WithQuestionMarks<{
+        [TKey in keyof TEntries]: Output<TEntries[TKey]>;
+      }>
+    >
+  : TRest extends BaseSchema | BaseSchemaAsync
   ? ResolveObject<
       WithQuestionMarks<{
         [TKey in keyof TEntries]: Output<TEntries[TKey]>;
       }>
     > &
       Record<string, Output<TRest>>
-  : ResolveObject<
-      WithQuestionMarks<{
-        [TKey in keyof TEntries]: Output<TEntries[TKey]>;
-      }>
-    >;
+  : never;

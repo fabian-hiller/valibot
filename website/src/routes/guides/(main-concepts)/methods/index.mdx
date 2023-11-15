@@ -7,19 +7,19 @@ import { Link } from '@builder.io/qwik-city';
 
 # Methods
 
-Apart from <Link href="/api/parse">`parse`</Link> and <Link href="/api/safeParse">`safeParse`</Link> I offer you some more methods to add additional features to your schemas. I distinguish in the following between schema and object methods.
+Apart from <Link href="/api/parse">`parse`</Link>, <Link href="/api/safeParse">`safeParse`</Link> and <Link href="/api/is">`is`</Link> I offer you some more methods to add additional features to your schemas. I distinguish in the following between schema and object methods.
 
 ## Schema methods
 
 My schema methods either add additional functionality, simplify the handling or help you to use a schema, for example for validation.
 
-Schema methods: <Link href="/api/brand">`brand`</Link>, <Link href="/api/coerce">`coerce`</Link>, <Link href="/api/coerceAsync">`coerceAsync`</Link>, <Link href="/api/fallback">`fallback`</Link>, <Link href="/api/getDefault">`getDefault`</Link>, <Link href="/api/getDefaultAsync">`getDefaultAsync`</Link>, <Link href="/api/getDefaults">`getDefaults`</Link>, <Link href="/api/getDefaultsAsync">`getDefaultsAsync`</Link>, <Link href="/api/fallbackAsync">`fallbackAsync`</Link>, <Link href="/api/is">`is`</Link>, <Link href="/api/parse">`parse`</Link>, <Link href="/api/parseAsync">`parseAsync`</Link>, <Link href="/api/safeParse">`safeParse`</Link>, <Link href="/api/safeParseAsync">`safeParseAsync`</Link>, <Link href="/api/transform">`transform`</Link>, <Link href="/api/transformAsync">`transformAsync`</Link>, <Link href="/api/unwrap">`unwrap`</Link>
+Schema methods: <Link href="/api/brand">`brand`</Link>, <Link href="/api/coerce">`coerce`</Link>, <Link href="/api/fallback">`fallback`</Link>, <Link href="/api/getDefault">`getDefault`</Link>, <Link href="/api/getDefaults">`getDefaults`</Link>, <Link href="/api/getFallback">`getFallback`</Link>, <Link href="/api/getFallbacks">`getFallbacks`</Link>, <Link href="/api/is">`is`</Link>, <Link href="/api/parse">`parse`</Link>, <Link href="/api/safeParse">`safeParse`</Link>, <Link href="/api/transform">`transform`</Link>, <Link href="/api/unwrap">`unwrap`</Link>
 
 > For more on methods for validation, see the <Link href="/guides/parse-data">parse data</Link> guide.
 
 ### Coerce
 
-‎<Link href="/api/coerce">`coerce`</Link> and <Link href="/api/coerceAsync">`coerceAsync`</Link> can be used to transform an input before it is validated. They are therefore perfect for enforcing a specific data type using the built-in data type objects like [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/String), [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number) and [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
+‎<Link href="/api/coerce">`coerce`</Link> can be used to transform an input before it is validated. They are therefore perfect for enforcing a specific data type using the built-in data type objects like [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/String), [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number) and [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
 
 ```ts
 import { coerce, date, number, parse, string } from 'valibot'; // 0.63 kB
@@ -36,7 +36,7 @@ const dateOutput = parse(DateSchema, '2023-07-31'); // Date
 
 ### Transform
 
-‎<Link href="/api/transform">`transform`</Link> and <Link href="/api/transformAsync">`transformAsync`</Link> can be used to transform data after validation. Compared to the transformations you can perform inside <Link href="/guides/pipelines">pipelines</Link>, there are no rules here. So the input type can be completely different from the output type.
+‎<Link href="/api/transform">`transform`</Link> can be used to transform data after validation. Compared to the transformations you can perform inside <Link href="/guides/pipelines">pipelines</Link>, there are no rules here. So the input type can be completely different from the output type.
 
 ```ts
 import { type Input, type Output, parse, string, transform } from 'valibot'; // 0.58 kB
@@ -64,7 +64,7 @@ const stringOutput = parse(StringSchema, 123); // 'hello'
 
 My object methods make it easier for you to work with object schemas. They are strongly oriented towards the functionality of TypeScript.
 
-Object methods: <Link href="/api/keyof">`keyof`</Link>, <Link href="/api/merge">`merge`</Link>, <Link href="/api/mergeAsync">`mergeAsync`</Link>, <Link href="/api/omit">`omit`</Link>, <Link href="/api/omitAsync">`omitAsync`</Link>, <Link href="/api/partial">`partial`</Link>, <Link href="/api/partialAsync">`partialAsync`</Link>, <Link href="/api/passthrough">`passthrough`</Link>, <Link href="/api/passthroughAsync">`passthroughAsync`</Link>, <Link href="/api/pick">`pick`</Link>, <Link href="/api/pickAsync">`pickAsync`</Link>, <Link href="/api/required">`required`</Link>, <Link href="/api/requiredAsync">`requiredAsync`</Link>, <Link href="/api/strict">`strict`</Link>, <Link href="/api/strictAsync">`strictAsync`</Link>, <Link href="/api/strip">`strip`</Link>, <Link href="/api/stripAsync">`stripAsync`</Link>
+Object methods: <Link href="/api/keyof">`keyof`</Link>, <Link href="/api/merge">`merge`</Link>, <Link href="/api/omit">`omit`</Link>, <Link href="/api/partial">`partial`</Link>, <Link href="/api/pick">`pick`</Link>, <Link href="/api/required">`required`</Link>
 
 ### TypeScript similarities
 

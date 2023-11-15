@@ -96,7 +96,7 @@ const BlobSchema = blob(); // Blob
 const DateSchema = date(); // Date
 const MapSchema = map(string(), number()); // Map<string, number>
 const ObjectSchema = object({ key: string() }); // { key: string }
-const RecordSchema = record(number()); // { [key: string]: number }
+const RecordSchema = record(number()); // Record<string, number>
 const SetSchema = set(number()); // Set<number>
 const TupleSchema = tuple([string(), number()]); // [string, number]
 ```

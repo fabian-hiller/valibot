@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.20.1 (November 2, 2023)
+
+- Remove `never` from type signatur of strict objects and tuples (issue #234)
+
 ## v0.20.0 (October 31, 2023)
 
 > Note: The library has been revised and refactored. There is a migration guide in the [release notes](https://github.com/fabian-hiller/valibot/releases/tag/v0.20.0).
