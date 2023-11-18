@@ -36,7 +36,7 @@ describe('bigint', () => {
     expect(() => parse(schema2, 12346789n)).toThrowError(valueError);
   });
 
-  test(`should expose a pipe of transforms and validations`, () => {
+  test('should expose the pipeline', () => {
     const schema1 = bigint([maxValue(500n)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({

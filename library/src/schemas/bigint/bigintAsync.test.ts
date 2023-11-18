@@ -40,7 +40,7 @@ describe('bigintAsync', () => {
     );
   });
 
-  test(`should expose a pipe of transforms and validations`, () => {
+  test('should expose the pipeline', () => {
     const schema1 = bigintAsync([maxValue(500n)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({

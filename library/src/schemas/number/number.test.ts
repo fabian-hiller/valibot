@@ -37,8 +37,8 @@ describe('number', () => {
     expect(() => parse(schema2, 12346789)).toThrowError(valueError);
   });
 
-  test(`should expose a pipe of transforms and validations`, () => {
-    const schema1 = number([maxValue(5, `custom`)]);
+  test('should expose the pipeline', () => {
+    const schema1 = number([maxValue(5, 'custom')]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({
         type: 'max_value',

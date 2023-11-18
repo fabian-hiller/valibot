@@ -122,7 +122,7 @@ describe('setAsync', () => {
     );
   });
 
-  test(`should expose a pipe of transforms and validations`, () => {
+  test('should expose the pipeline', () => {
     const schema1 = setAsync(number(), [size(1)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({

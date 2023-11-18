@@ -174,7 +174,7 @@ describe('tupleAsync', () => {
     ).rejects.toThrowError(lengthError);
   });
 
-  test(`should expose a pipe of transforms and validations`, () => {
+  test('should expose the pipeline', () => {
     const schema1 = tupleAsync([string()], [minLength(2), maxLength(3)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({

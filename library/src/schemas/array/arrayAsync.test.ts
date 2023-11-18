@@ -115,7 +115,7 @@ describe('array', () => {
     await expect(parseAsync(schema2, [1])).rejects.toThrowError(contentError);
   });
 
-  test(`should expose a pipe of transforms and validations`, () => {
+  test('should expose the pipeline', () => {
     const schema1 = arrayAsync(string(), [maxLength(5)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({

@@ -24,7 +24,7 @@ describe('any', () => {
     expect(output).toBe(transformInput());
   });
 
-  test(`should expose a pipe of transforms and validations`, () => {
+  test('should expose the pipeline', () => {
     const schema1 = any([toCustom(String), maxLength(5)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({ type: 'to_custom' }),

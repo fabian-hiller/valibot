@@ -114,7 +114,7 @@ describe('set', () => {
     expect(() => parse(schema2, new Set().add('1'))).toThrowError(sizeError);
   });
 
-  test(`should expose a pipe of transforms and validations`, () => {
+  test('should expose the pipeline', () => {
     const schema1 = set(number(), [size(1)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({

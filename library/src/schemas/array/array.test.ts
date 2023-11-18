@@ -113,7 +113,7 @@ describe('array', () => {
     expect(() => parse(schema2, [1])).toThrowError(contentError);
   });
 
-  test(`should expose a pipe of transforms and validations`, () => {
+  test('should expose the pipeline', () => {
     const schema1 = array(string(), [maxLength(5)]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({

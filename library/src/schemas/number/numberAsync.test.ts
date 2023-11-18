@@ -41,8 +41,8 @@ describe('numberAsync', () => {
     );
   });
 
-  test(`should expose a pipe of transforms and validations`, () => {
-    const schema1 = numberAsync([maxValue(5, `custom`)]);
+  test('should expose the pipeline', () => {
+    const schema1 = numberAsync([maxValue(5, 'custom')]);
     expect(schema1.pipe).toStrictEqual([
       expect.objectContaining({
         type: 'max_value',

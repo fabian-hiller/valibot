@@ -46,7 +46,7 @@ describe('instance', () => {
     );
   });
 
-  test(`should expose a pipe of transforms and validations`, () => {
+  test('should expose the pipeline', () => {
     const requirement = new Date(Date.now() + 3600000);
     const schema1 = instance(Date, [maxValue(requirement)]);
     expect(schema1.pipe).toStrictEqual([
