@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Change structure of schemas, validations and transformations to make properties accessible (pull request #211)
+
 ## v0.20.1 (November 2, 2023)
 
 - Remove `never` from type signatur of strict objects and tuples (issue #234)
