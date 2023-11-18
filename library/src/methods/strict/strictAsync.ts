@@ -18,7 +18,7 @@ import { getSchemaIssues } from '../../utils/index.ts';
  */
 export function strictAsync<
   TSchema extends ObjectSchemaAsync<ObjectEntriesAsync, undefined>
->(schema: TSchema, message?: ErrorMessage): TSchema {
+>(schema: TSchema, message: ErrorMessage = 'Invalid keys'): TSchema {
   return {
     ...schema,
     message,
@@ -26,7 +26,7 @@ export function strictAsync<
       const result = await schema._parse(input, info);
       return !result.issues &&
         Object.keys(input as object).some((key) => !(key in schema.entries))
-        ? getSchemaIssues(info, 'object', 'strict', this.message, input)
+        ? getSchemaIssues(info, 'object', 'strict', message, input)
         : result;
     },
   };

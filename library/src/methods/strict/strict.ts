@@ -18,16 +18,15 @@ import { getSchemaIssues } from '../../utils/index.ts';
  */
 export function strict<TSchema extends ObjectSchema<ObjectEntries, undefined>>(
   schema: TSchema,
-  message?: ErrorMessage
+  message: ErrorMessage = 'Invalid keys'
 ): TSchema {
   return {
     ...schema,
-    message,
     _parse(input, info) {
       const result = schema._parse(input, info);
       return !result.issues &&
         Object.keys(input as object).some((key) => !(key in schema.entries))
-        ? getSchemaIssues(info, 'object', 'strict', this.message, input)
+        ? getSchemaIssues(info, 'object', 'strict', message, input)
         : result;
     },
   };
