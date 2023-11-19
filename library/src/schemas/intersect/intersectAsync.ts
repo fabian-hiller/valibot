@@ -20,10 +20,10 @@ export type IntersectOptionsAsync = [
 /**
  * Intersect schema async type.
  */
-export type IntersectSchemaAsync<
+export interface IntersectSchemaAsync<
   TOptions extends IntersectOptionsAsync,
   TOutput = IntersectOutput<TOptions>
-> = BaseSchemaAsync<IntersectInput<TOptions>, TOutput> & {
+> extends BaseSchemaAsync<IntersectInput<TOptions>, TOutput> {
   /**
    * The schema type.
    */
@@ -36,7 +36,7 @@ export type IntersectSchemaAsync<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates an async intersect schema.

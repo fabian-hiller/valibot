@@ -12,10 +12,8 @@ export type Enum = {
 /**
  * Native enum schema type.
  */
-export type EnumSchema<
-  TEnum extends Enum,
-  TOutput = TEnum[keyof TEnum]
-> = BaseSchema<TEnum[keyof TEnum], TOutput> & {
+export interface EnumSchema<TEnum extends Enum, TOutput = TEnum[keyof TEnum]>
+  extends BaseSchema<TEnum[keyof TEnum], TOutput> {
   /**
    * The schema type.
    */
@@ -28,7 +26,7 @@ export type EnumSchema<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates a enum schema.

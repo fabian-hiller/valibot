@@ -4,10 +4,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Max length validation type.
  */
-export type MaxLengthValidation<
+export interface MaxLengthValidation<
   TInput extends string | any[],
   TRequirement extends number
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type MaxLengthValidation<
    * The maximum length.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a validation function that validates the length of a string or array.

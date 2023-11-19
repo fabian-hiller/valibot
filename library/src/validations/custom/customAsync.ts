@@ -4,7 +4,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Custom validation async type.
  */
-export type CustomValidationAsync<TInput> = BaseValidationAsync<TInput> & {
+export interface CustomValidationAsync<TInput>
+  extends BaseValidationAsync<TInput> {
   /**
    * The validation type.
    */
@@ -13,7 +14,7 @@ export type CustomValidationAsync<TInput> = BaseValidationAsync<TInput> & {
    * The validation function.
    */
   requirement: (input: TInput) => Promise<boolean>;
-};
+}
 
 /**
  * Creates a async custom validation function.

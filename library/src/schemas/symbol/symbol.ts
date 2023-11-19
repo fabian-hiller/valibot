@@ -4,7 +4,8 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 /**
  * Symbol schema type.
  */
-export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
+export interface SymbolSchema<TOutput = symbol>
+  extends BaseSchema<symbol, TOutput> {
   /**
    * The schema type.
    */
@@ -13,7 +14,7 @@ export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates a symbol schema.

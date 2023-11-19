@@ -4,10 +4,10 @@ import { getOutput } from '../../utils/index.ts';
 /**
  * To min value transformation type.
  */
-export type ToMinValueTransformation<
+export interface ToMinValueTransformation<
   TInput extends string | number | bigint | Date,
   TRequirement extends TInput
-> = BaseTransformation<TInput> & {
+> extends BaseTransformation<TInput> {
   /**
    * The transformation type.
    */
@@ -16,7 +16,7 @@ export type ToMinValueTransformation<
    * The minium value.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a transformation function that sets a string, number or date to a

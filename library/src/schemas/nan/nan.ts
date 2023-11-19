@@ -4,7 +4,8 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 /**
  * NaN schema type.
  */
-export type NanSchema<TOutput = number> = BaseSchema<number, TOutput> & {
+export interface NanSchema<TOutput = number>
+  extends BaseSchema<number, TOutput> {
   /**
    * The schema type.
    */
@@ -13,7 +14,7 @@ export type NanSchema<TOutput = number> = BaseSchema<number, TOutput> & {
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates a NaN schema.

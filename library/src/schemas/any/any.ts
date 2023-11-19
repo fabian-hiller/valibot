@@ -4,7 +4,7 @@ import { executePipe } from '../../utils/index.ts';
 /**
  * Any schema type.
  */
-export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
+export interface AnySchema<TOutput = any> extends BaseSchema<any, TOutput> {
   /**
    * The schema type.
    */
@@ -13,7 +13,7 @@ export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
    * The validation and transformation pipeline.
    */
   pipe: Pipe<any> | undefined;
-};
+}
 
 /**
  * Creates a any schema.

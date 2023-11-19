@@ -4,10 +4,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Not bytes validation type.
  */
-export type NotBytesValidation<
+export interface NotBytesValidation<
   TInput extends string,
   TRequirement extends number
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type NotBytesValidation<
    * The byte length.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a validation function that validates the byte length of a string.

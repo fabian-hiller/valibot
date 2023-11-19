@@ -11,10 +11,10 @@ export type IntersectOptions = [BaseSchema, BaseSchema, ...BaseSchema[]];
 /**
  * Intersect schema type.
  */
-export type IntersectSchema<
+export interface IntersectSchema<
   TOptions extends IntersectOptions,
   TOutput = IntersectOutput<TOptions>
-> = BaseSchema<IntersectInput<TOptions>, TOutput> & {
+> extends BaseSchema<IntersectInput<TOptions>, TOutput> {
   /**
    * The schema type.
    */
@@ -27,7 +27,7 @@ export type IntersectSchema<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates an intersect schema.

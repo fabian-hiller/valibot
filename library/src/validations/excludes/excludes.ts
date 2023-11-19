@@ -4,10 +4,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Excludes validation type.
  */
-export type ExcludesValidation<
+export interface ExcludesValidation<
   TInput extends string | any[],
   TRequirement extends TInput extends any[] ? TInput[number] : TInput
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type ExcludesValidation<
    * The required value.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a validation function that validates the content of a string or array.

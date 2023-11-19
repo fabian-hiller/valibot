@@ -5,7 +5,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * ULID validation type.
  */
-export type UlidValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface UlidValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,7 +15,7 @@ export type UlidValidation<TInput extends string> = BaseValidation<TInput> & {
    * The ULID regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a validation function that validates a [ULID](https://github.com/ulid/spec).

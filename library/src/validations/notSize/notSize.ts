@@ -4,10 +4,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Not size validation type.
  */
-export type NotSizeValidation<
+export interface NotSizeValidation<
   TInput extends Map<any, any> | Set<any> | Blob,
   TRequirement extends number
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type NotSizeValidation<
    * The size.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a validation function that validates the size of a map, set or blob.

@@ -5,7 +5,7 @@ import { getOutput } from '../../utils/index.ts';
 /**
  * Nullish schema type.
  */
-export type NullishSchema<
+export interface NullishSchema<
   TWrapped extends BaseSchema,
   TDefault extends
     | Input<TWrapped>
@@ -14,7 +14,7 @@ export type NullishSchema<
   TOutput = TDefault extends Input<TWrapped>
     ? Output<TWrapped>
     : Output<TWrapped> | null | undefined
-> = BaseSchema<Input<TWrapped> | null | undefined, TOutput> & {
+> extends BaseSchema<Input<TWrapped> | null | undefined, TOutput> {
   /**
    * The schema type.
    */
@@ -27,7 +27,7 @@ export type NullishSchema<
    * Returns the default value.
    */
   default: TDefault;
-};
+}
 
 /**
  * Creates a nullish schema.

@@ -14,10 +14,10 @@ export type NonNullish<T> = T extends null | undefined ? never : T;
 /**
  * Non nullish schema type.
  */
-export type NonNullishSchema<
+export interface NonNullishSchema<
   TWrapped extends BaseSchema,
   TOutput = NonNullish<Output<TWrapped>>
-> = BaseSchema<NonNullish<Input<TWrapped>>, TOutput> & {
+> extends BaseSchema<NonNullish<Input<TWrapped>>, TOutput> {
   /**
    * The schema type.
    */
@@ -30,7 +30,7 @@ export type NonNullishSchema<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates a non nullish schema.

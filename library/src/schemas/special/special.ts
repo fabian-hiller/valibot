@@ -8,10 +8,8 @@ import {
 /**
  * Special schema type.
  */
-export type SpecialSchema<TInput, TOutput = TInput> = BaseSchema<
-  TInput,
-  TOutput
-> & {
+export interface SpecialSchema<TInput, TOutput = TInput>
+  extends BaseSchema<TInput, TOutput> {
   /**
    * The schema type.
    */
@@ -28,7 +26,7 @@ export type SpecialSchema<TInput, TOutput = TInput> = BaseSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<TInput> | undefined;
-};
+}
 
 /**
  * Creates a special schema.

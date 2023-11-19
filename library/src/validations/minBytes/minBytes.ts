@@ -4,10 +4,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Min bytes validation type.
  */
-export type MinBytesValidation<
+export interface MinBytesValidation<
   TInput extends string,
   TRequirement extends number
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type MinBytesValidation<
    * The minimum byte length.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a validation function that validates the byte length of a string.

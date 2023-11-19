@@ -4,12 +4,12 @@ import { getOutput } from '../../utils/index.ts';
 /**
  * To upper case transformation type.
  */
-export type ToUpperCaseTransformation = BaseTransformation<string> & {
+export interface ToUpperCaseTransformation extends BaseTransformation<string> {
   /**
    * The transformation type.
    */
   type: 'to_upper_case';
-};
+}
 
 /**
  * Creates a transformation function that converts all the alphabetic

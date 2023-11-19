@@ -8,7 +8,7 @@ import {
 /**
  * Blob schema type.
  */
-export type BlobSchema<TOutput = Blob> = BaseSchema<Blob, TOutput> & {
+export interface BlobSchema<TOutput = Blob> extends BaseSchema<Blob, TOutput> {
   /**
    * The schema type.
    */
@@ -21,7 +21,7 @@ export type BlobSchema<TOutput = Blob> = BaseSchema<Blob, TOutput> & {
    * The validation and transformation pipeline.
    */
   pipe: Pipe<Blob> | undefined;
-};
+}
 
 /**
  * Creates a blob schema.

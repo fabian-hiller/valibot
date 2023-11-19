@@ -5,7 +5,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * UUID validation type.
  */
-export type UuidValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface UuidValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,7 +15,7 @@ export type UuidValidation<TInput extends string> = BaseValidation<TInput> & {
    * The UUID regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a validation function that validates a [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier).

@@ -4,10 +4,8 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 /**
  * Undefined schema type.
  */
-export type UndefinedSchema<TOutput = undefined> = BaseSchema<
-  undefined,
-  TOutput
-> & {
+export interface UndefinedSchema<TOutput = undefined>
+  extends BaseSchema<undefined, TOutput> {
   /**
    * The schema type.
    */
@@ -16,7 +14,7 @@ export type UndefinedSchema<TOutput = undefined> = BaseSchema<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates a undefined schema.

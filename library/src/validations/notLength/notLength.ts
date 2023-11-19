@@ -4,10 +4,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Not length validation type.
  */
-export type NotLengthValidation<
+export interface NotLengthValidation<
   TInput extends string | any[],
   TRequirement extends number
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type NotLengthValidation<
    * The length.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a validation function that validates the length of a string or array.

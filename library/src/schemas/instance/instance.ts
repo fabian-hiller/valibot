@@ -13,10 +13,10 @@ export type Class = abstract new (...args: any) => any;
 /**
  * Instance schema type.
  */
-export type InstanceSchema<
+export interface InstanceSchema<
   TClass extends Class,
   TOutput = InstanceType<TClass>
-> = BaseSchema<InstanceType<TClass>, TOutput> & {
+> extends BaseSchema<InstanceType<TClass>, TOutput> {
   /**
    * The schema type.
    */
@@ -33,7 +33,7 @@ export type InstanceSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<InstanceType<TClass>> | undefined;
-};
+}
 
 /**
  * Creates an instance schema.

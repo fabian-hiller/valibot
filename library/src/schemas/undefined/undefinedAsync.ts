@@ -4,10 +4,8 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 /**
  * Undefined schema async type.
  */
-export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
-  undefined,
-  TOutput
-> & {
+export interface UndefinedSchemaAsync<TOutput = undefined>
+  extends BaseSchemaAsync<undefined, TOutput> {
   /**
    * The schema type.
    */
@@ -16,7 +14,7 @@ export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates an async undefined schema.

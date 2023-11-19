@@ -5,10 +5,10 @@ import type { PicklistOptions } from './types.ts';
 /**
  * Picklist schema type.
  */
-export type PicklistSchema<
+export interface PicklistSchema<
   TOptions extends PicklistOptions,
   TOutput = TOptions[number]
-> = BaseSchema<TOptions[number], TOutput> & {
+> extends BaseSchema<TOptions[number], TOutput> {
   /**
    * The schema type.
    */
@@ -21,7 +21,7 @@ export type PicklistSchema<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates a picklist schema.

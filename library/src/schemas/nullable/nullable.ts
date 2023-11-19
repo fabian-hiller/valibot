@@ -5,7 +5,7 @@ import { getOutput } from '../../utils/index.ts';
 /**
  * Nullable schema type.
  */
-export type NullableSchema<
+export interface NullableSchema<
   TWrapped extends BaseSchema,
   TDefault extends
     | Input<TWrapped>
@@ -14,7 +14,7 @@ export type NullableSchema<
   TOutput = TDefault extends Input<TWrapped>
     ? Output<TWrapped>
     : Output<TWrapped> | null
-> = BaseSchema<Input<TWrapped> | null, TOutput> & {
+> extends BaseSchema<Input<TWrapped> | null, TOutput> {
   /**
    * The schema type.
    */
@@ -27,7 +27,7 @@ export type NullableSchema<
    * The default value.
    */
   default: TDefault;
-};
+}
 
 /**
  * Creates a nullable schema.

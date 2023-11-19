@@ -10,7 +10,7 @@ import { getOutput } from '../../utils/index.ts';
 /**
  * Nullable schema async type.
  */
-export type NullableSchemaAsync<
+export interface NullableSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TDefault extends
     | Input<TWrapped>
@@ -19,7 +19,7 @@ export type NullableSchemaAsync<
   TOutput = Awaited<TDefault> extends Input<TWrapped>
     ? Output<TWrapped>
     : Output<TWrapped> | null
-> = BaseSchemaAsync<Input<TWrapped> | null, TOutput> & {
+> extends BaseSchemaAsync<Input<TWrapped> | null, TOutput> {
   /**
    * The schema type.
    */
@@ -32,7 +32,7 @@ export type NullableSchemaAsync<
    * Returns the default value.
    */
   default: TDefault;
-};
+}
 
 /**
  * Creates an async nullable schema.

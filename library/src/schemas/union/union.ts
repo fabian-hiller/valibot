@@ -15,10 +15,10 @@ export type UnionOptions = [BaseSchema, BaseSchema, ...BaseSchema[]];
 /**
  * Union schema type.
  */
-export type UnionSchema<
+export interface UnionSchema<
   TOptions extends UnionOptions,
   TOutput = Output<TOptions[number]>
-> = BaseSchema<Input<TOptions[number]>, TOutput> & {
+> extends BaseSchema<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
    */
@@ -31,7 +31,7 @@ export type UnionSchema<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates a union schema.

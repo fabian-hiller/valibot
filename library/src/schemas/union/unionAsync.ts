@@ -20,10 +20,10 @@ export type UnionOptionsAsync = [
 /**
  * Union schema async type.
  */
-export type UnionSchemaAsync<
+export interface UnionSchemaAsync<
   TOptions extends UnionOptionsAsync,
   TOutput = Output<TOptions[number]>
-> = BaseSchemaAsync<Input<TOptions[number]>, TOutput> & {
+> extends BaseSchemaAsync<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
    */
@@ -36,7 +36,7 @@ export type UnionSchemaAsync<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates an async union schema.

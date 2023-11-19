@@ -4,10 +4,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Equal validation type.
  */
-export type EqualValidation<
+export interface EqualValidation<
   TInput extends string | number | bigint | boolean,
   TRequirement extends TInput
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type EqualValidation<
    * The required value.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a validation function that checks the value for equality.

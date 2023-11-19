@@ -5,7 +5,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * IPv4 validation type.
  */
-export type Ipv4Validation<TInput extends string> = BaseValidation<TInput> & {
+export interface Ipv4Validation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,7 +15,7 @@ export type Ipv4Validation<TInput extends string> = BaseValidation<TInput> & {
    * The IPv4 regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a validation function that validates an [IPv4](https://en.wikipedia.org/wiki/IPv4) address.

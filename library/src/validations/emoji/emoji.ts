@@ -5,7 +5,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Emoji validation type.
  */
-export type EmojiValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface EmojiValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,7 +15,7 @@ export type EmojiValidation<TInput extends string> = BaseValidation<TInput> & {
    * The emoji regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a validation function that validates an emoji.

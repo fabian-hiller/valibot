@@ -5,17 +5,17 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * ISO timestamp validation type.
  */
-export type IsoTimestampValidation<TInput extends string> =
-  BaseValidation<TInput> & {
-    /**
-     * The validation type.
-     */
-    type: 'iso_timestamp';
-    /**
-     * The ISO timestamp regex.
-     */
-    requirement: RegExp;
-  };
+export interface IsoTimestampValidation<TInput extends string>
+  extends BaseValidation<TInput> {
+  /**
+   * The validation type.
+   */
+  type: 'iso_timestamp';
+  /**
+   * The ISO timestamp regex.
+   */
+  requirement: RegExp;
+}
 
 /**
  * Creates a validation function that validates a timestamp.

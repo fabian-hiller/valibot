@@ -4,10 +4,8 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 /**
  * Symbol schema async type.
  */
-export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
-  symbol,
-  TOutput
-> & {
+export interface SymbolSchemaAsync<TOutput = symbol>
+  extends BaseSchemaAsync<symbol, TOutput> {
   /**
    * The schema type.
    */
@@ -16,7 +14,7 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates an async symbol schema.

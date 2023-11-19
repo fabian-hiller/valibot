@@ -4,7 +4,7 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 /**
  * Void schema type.
  */
-export type VoidSchema<TOutput = void> = BaseSchema<void, TOutput> & {
+export interface VoidSchema<TOutput = void> extends BaseSchema<void, TOutput> {
   /**
    * The schema type.
    */
@@ -13,7 +13,7 @@ export type VoidSchema<TOutput = void> = BaseSchema<void, TOutput> & {
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates a void schema.

@@ -4,10 +4,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Max bytes validation type.
  */
-export type MaxBytesValidation<
+export interface MaxBytesValidation<
   TInput extends string,
   TRequirement extends number
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type MaxBytesValidation<
    * The maximum byte length.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a validation function that validates the byte length of a string.

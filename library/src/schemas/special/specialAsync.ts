@@ -12,10 +12,8 @@ import {
 /**
  * Special schema async type.
  */
-export type SpecialSchemaAsync<TInput, TOutput = TInput> = BaseSchemaAsync<
-  TInput,
-  TOutput
-> & {
+export interface SpecialSchemaAsync<TInput, TOutput = TInput>
+  extends BaseSchemaAsync<TInput, TOutput> {
   /**
    * The schema type.
    */
@@ -32,7 +30,7 @@ export type SpecialSchemaAsync<TInput, TOutput = TInput> = BaseSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<TInput> | undefined;
-};
+}
 
 /**
  * Creates an async special schema.

@@ -4,17 +4,17 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Safe integer validation type.
  */
-export type SafeIntegerValidation<TInput extends number> =
-  BaseValidation<TInput> & {
-    /**
-     * The validation type.
-     */
-    type: 'safe_integer';
-    /**
-     * The validation function.
-     */
-    requirement: (input: TInput) => boolean;
-  };
+export interface SafeIntegerValidation<TInput extends number>
+  extends BaseValidation<TInput> {
+  /**
+   * The validation type.
+   */
+  type: 'safe_integer';
+  /**
+   * The validation function.
+   */
+  requirement: (input: TInput) => boolean;
+}
 
 /**
  * Creates a validation function that validates whether a number is a safe integer.

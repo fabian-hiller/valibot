@@ -4,12 +4,13 @@ import { getOutput } from '../../utils/index.ts';
 /**
  * To trimmed start transformation type.
  */
-export type ToTrimmedStartTransformation = BaseTransformation<string> & {
+export interface ToTrimmedStartTransformation
+  extends BaseTransformation<string> {
   /**
    * The transformation type.
    */
   type: 'to_trimmed_start';
-};
+}
 
 /**
  * Creates a transformation function that removes the leading white space and

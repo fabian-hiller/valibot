@@ -10,7 +10,7 @@ import { getOutput } from '../../utils/index.ts';
 /**
  * Optional schema async type.
  */
-export type OptionalSchemaAsync<
+export interface OptionalSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TDefault extends
     | Input<TWrapped>
@@ -19,7 +19,7 @@ export type OptionalSchemaAsync<
   TOutput = Awaited<TDefault> extends Input<TWrapped>
     ? Output<TWrapped>
     : Output<TWrapped> | undefined
-> = BaseSchemaAsync<Input<TWrapped> | undefined, TOutput> & {
+> extends BaseSchemaAsync<Input<TWrapped> | undefined, TOutput> {
   /**
    * The schema type.
    */
@@ -32,7 +32,7 @@ export type OptionalSchemaAsync<
    * Returns the default value.
    */
   default: TDefault;
-};
+}
 
 /**
  * Creates an async optional schema.

@@ -35,7 +35,11 @@ export type _ParseResult<TOutput> =
 /**
  * Base schema type.
  */
-export type BaseSchema<TInput = any, TOutput = TInput> = {
+export interface BaseSchema<TInput = any, TOutput = TInput> {
+  /**
+   * The schema type.
+   */
+  type: string;
   /**
    * Whether it's async.
    */
@@ -57,12 +61,16 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
    * @internal
    */
   _types?: { input: TInput; output: TOutput };
-};
+}
 
 /**
  * Base schema async type.
  */
-export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
+export interface BaseSchemaAsync<TInput = any, TOutput = TInput> {
+  /**
+   * The schema type.
+   */
+  type: string;
   /**
    * Whether it's async.
    */
@@ -84,7 +92,7 @@ export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
    * @internal
    */
   _types?: { input: TInput; output: TOutput };
-};
+}
 
 /**
  * Input inference type.

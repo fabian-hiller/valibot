@@ -4,7 +4,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * URL validation type.
  */
-export type UrlValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface UrlValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -13,7 +14,7 @@ export type UrlValidation<TInput extends string> = BaseValidation<TInput> & {
    * The validation function.
    */
   requirement: (input: TInput) => boolean;
-};
+}
 
 /**
  * Creates a validation function that validates a URL.

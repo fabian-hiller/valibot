@@ -4,7 +4,7 @@ import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 /**
  * Null schema type.
  */
-export type NullSchema<TOutput = null> = BaseSchema<null, TOutput> & {
+export interface NullSchema<TOutput = null> extends BaseSchema<null, TOutput> {
   /**
    * The schema type.
    */
@@ -13,7 +13,7 @@ export type NullSchema<TOutput = null> = BaseSchema<null, TOutput> & {
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates a null schema.

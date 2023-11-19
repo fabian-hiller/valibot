@@ -4,10 +4,10 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Min size validation type.
  */
-export type MinSizeValidation<
+export interface MinSizeValidation<
   TInput extends Map<any, any> | Set<any> | Blob,
   TRequirement extends number
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type MinSizeValidation<
    * The minimum size.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a validation function that validates the size of a map, set or blob.

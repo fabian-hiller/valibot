@@ -10,7 +10,7 @@ import { getOutput } from '../../utils/index.ts';
 /**
  * Nullish schema async type.
  */
-export type NullishSchemaAsync<
+export interface NullishSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TDefault extends
     | Input<TWrapped>
@@ -19,7 +19,7 @@ export type NullishSchemaAsync<
   TOutput = Awaited<TDefault> extends Input<TWrapped>
     ? Output<TWrapped>
     : Output<TWrapped> | null | undefined
-> = BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> & {
+> extends BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> {
   /**
    * The schema type.
    */
@@ -32,7 +32,7 @@ export type NullishSchemaAsync<
    * Retutns the default value.
    */
   default: TDefault;
-};
+}
 
 /**
  * Creates an async nullish schema.

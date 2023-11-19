@@ -5,7 +5,8 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
 /**
  * Email validation type.
  */
-export type EmailValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface EmailValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,7 +15,7 @@ export type EmailValidation<TInput extends string> = BaseValidation<TInput> & {
    * The email regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a validation function that validates a email.
