@@ -15,7 +15,7 @@ import { getIssue, getPipeInfo } from './utils/index.ts';
  *
  * @param input The input value.
  * @param pipe The pipe to be executed.
- * @param parseInfo The validation info.
+ * @param parseInfo The parse info.
  * @param reason The issue reason.
  *
  * @returns The output value.

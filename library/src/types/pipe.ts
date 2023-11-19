@@ -47,11 +47,11 @@ export type BaseValidation<TInput = any> = {
   /**
    * Parses unknown input based on its requirement.
    *
-   * @internal This is an internal API.
-   *
    * @param input The input to be parsed.
    *
    * @returns The parse result.
+   *
+   * @internal
    */
   _parse(input: TInput): PipeResult<TInput>;
 };
@@ -71,11 +71,11 @@ export type BaseValidationAsync<TInput = any> = {
   /**
    * Parses unknown input based on its requirement.
    *
-   * @internal This is an internal API.
-   *
    * @param input The input to be parsed.
    *
    * @returns The parse result.
+   *
+   * @internal
    */
   _parse(input: TInput): Promise<PipeResult<TInput>>;
 };
@@ -91,11 +91,11 @@ export type BaseTransformation<TInput = any> = {
   /**
    * Parses unknown input based on its requirement.
    *
-   * @internal This is an internal API.
-   *
    * @param input The input to be parsed.
    *
    * @returns The parse result.
+   *
+   * @internal
    */
   _parse(input: TInput): PipeResult<TInput>;
 };
@@ -111,11 +111,11 @@ export type BaseTransformationAsync<TInput = any> = {
   /**
    * Parses unknown input based on its requirement.
    *
-   * @internal This is an internal API.
-   *
    * @param input The input to be parsed.
    *
    * @returns The parse result.
+   *
+   * @internal
    */
   _parse(input: TInput): Promise<PipeResult<TInput>>;
 };

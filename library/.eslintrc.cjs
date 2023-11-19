@@ -4,6 +4,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:jsdoc/recommended-typescript-error',
     'plugin:regexp/recommended',
     'plugin:security/recommended',
   ],
@@ -40,6 +41,38 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/consistent-type-imports': 'warn',
     '@typescript-eslint/no-non-null-assertion': 'off',
+
+    // Imports
+    'no-duplicate-imports': 'off',
+    'import/extensions': ['error', 'always'],
+
+    // JSDoc
+    'jsdoc/tag-lines': ['error', 'any', { startLines: 1 }],
+    'jsdoc/sort-tags': [
+      'error',
+      {
+        linesBetween: 1,
+        tagSequence: [
+          { tags: ['deprecated'] },
+          { tags: ['param'] },
+          { tags: ['returns'] },
+        ],
+      },
+    ],
+    // NOTE: For overloads functions, we only require a JSDoc at the top
+    // SEE: https://github.com/gajus/eslint-plugin-jsdoc/issues/666
+    'jsdoc/require-jsdoc': [
+      'error',
+      {
+        contexts: [
+          'ExportNamedDeclaration[declaration.type="TSDeclareFunction"]:not(ExportNamedDeclaration[declaration.type="TSDeclareFunction"] + ExportNamedDeclaration[declaration.type="TSDeclareFunction"])',
+          'ExportNamedDeclaration[declaration.type="FunctionDeclaration"]:not(ExportNamedDeclaration[declaration.type="TSDeclareFunction"] + ExportNamedDeclaration[declaration.type="FunctionDeclaration"])',
+        ],
+        require: {
+          FunctionDeclaration: false,
+        },
+      },
+    ],
 
     // Security
     'security/detect-object-injection': 'off', // Too many false positives

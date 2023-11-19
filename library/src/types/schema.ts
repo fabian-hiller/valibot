@@ -43,18 +43,18 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
   /**
    * Parses unknown input based on its schema.
    *
-   * @internal This is an internal API.
-   *
    * @param input The input to be parsed.
    * @param info The parse info.
    *
    * @returns The parse result.
+   *
+   * @internal
    */
   _parse(input: unknown, info?: ParseInfo): _ParseResult<TOutput>;
   /**
    * Input and output type.
    *
-   * @internal This is an internal API.
+   * @internal
    */
   _types?: { input: TInput; output: TOutput };
 };
@@ -70,18 +70,18 @@ export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
   /**
    * Parses unknown input based on its schema.
    *
-   * @internal This is an internal API.
-   *
    * @param input The input to be parsed.
    * @param info The parse info.
    *
    * @returns The parse result.
+   *
+   * @internal
    */
   _parse(input: unknown, info?: ParseInfo): Promise<_ParseResult<TOutput>>;
   /**
    * Input and output type.
    *
-   * @internal This is an internal API.
+   * @internal
    */
   _types?: { input: TInput; output: TOutput };
 };
