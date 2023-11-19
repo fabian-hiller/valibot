@@ -6,7 +6,7 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 
 /**
@@ -35,14 +35,14 @@ export function required<TSchema extends ObjectSchema<any, any>>(
  * schema set to none optional.
  *
  * @param schema The affected schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
 export function required<TSchema extends ObjectSchema<any, any>>(
   schema: TSchema,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<Required<TSchema['entries']>, undefined>>
 ): ObjectSchema<Required<TSchema['entries']>>;
 
@@ -71,7 +71,7 @@ export function required<
  *
  * @param schema The affected schema.
  * @param rest The object rest.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -82,7 +82,7 @@ export function required<
 >(
   schema: TSchema,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
 ): ObjectSchema<Required<TSchema['entries']>, TRest>;
 
@@ -98,8 +98,8 @@ export function required<
   arg3?: Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>> | ErrorMessage,
   arg4?: Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
 ): ObjectSchema<Required<TSchema['entries']>, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message, pipe] = getRestAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
   >(arg2, arg3, arg4);
@@ -114,7 +114,7 @@ export function required<
       {}
     ) as Required<TSchema['entries']>,
     rest,
-    error,
+    message,
     pipe
   );
 }

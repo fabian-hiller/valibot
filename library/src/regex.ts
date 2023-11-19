@@ -1,5 +1,5 @@
 /**
- * [cuid2](https://github.com/paralleldrive/cuid2#cuid2) regex.
+ * [Cuid2](https://github.com/paralleldrive/cuid2) regex.
  */
 export const CUID2_REGEX = /^[a-z][\da-z]*$/u;
 

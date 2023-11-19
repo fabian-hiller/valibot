@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Issues,
+  Pipe,
+} from '../../types/index.ts';
 import { executePipe, getIssues, getSchemaIssues } from '../../utils/index.ts';
 import type { EnumSchema } from '../enum/index.ts';
 import type { PicklistSchema } from '../picklist/index.ts';
@@ -25,9 +30,26 @@ export type RecordSchema<
   TValue extends BaseSchema,
   TOutput = RecordOutput<TKey, TValue>
 > = BaseSchema<RecordInput<TKey, TValue>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'record';
+  /**
+   * The record key schema.
+   */
   key: TKey;
+  /**
+   * The record value schema.
+   */
   value: TValue;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<RecordOutput<TKey, TValue>> | undefined;
 };
 
 /**
@@ -47,14 +69,14 @@ export function record<TValue extends BaseSchema>(
  * Creates a record schema.
  *
  * @param value The value schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A record schema.
  */
 export function record<TValue extends BaseSchema>(
   value: TValue,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<RecordOutput<StringSchema, TValue>>
 ): RecordSchema<StringSchema, TValue>;
 
@@ -78,7 +100,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
  *
  * @param key The key schema.
  * @param value The value schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A record schema.
@@ -86,7 +108,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
 export function record<TKey extends RecordKey, TValue extends BaseSchema>(
   key: TKey,
   value: TValue,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<RecordOutput<TKey, TValue>>
 ): RecordSchema<TKey, TValue>;
 
@@ -96,8 +118,8 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
   arg3?: Pipe<RecordOutput<TKey, TValue>> | ErrorMessage,
   arg4?: Pipe<RecordOutput<TKey, TValue>>
 ): RecordSchema<TKey, TValue> {
-  // Get key, value, error and pipe argument
-  const [key, value, error, pipe] = getRecordArgs<
+  // Get key, value, message and pipe argument
+  const [key, value, message = 'Invalid type', pipe] = getRecordArgs<
     TKey,
     TValue,
     Pipe<RecordOutput<TKey, TValue>>
@@ -105,44 +127,16 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
 
   // Create and return record schema
   return {
-    /**
-     * The schema type.
-     */
     type: 'record',
-
-    /**
-     * The key schema.
-     */
-    key,
-
-    /**
-     * The value schema.
-     */
-    value,
-
-    /**
-     * Whether it's async.
-     */
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    key,
+    value,
+    message,
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return getSchemaIssues(
-          info,
-          'type',
-          'record',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'record', this.message, input);
       }
 
       // Create issues and output
@@ -158,7 +152,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
           let pathItem: RecordPathItem | undefined;
 
           // Get parse result of key
-          const keyResult = key._parse(inputKey, {
+          const keyResult = this.key._parse(inputKey, {
             origin: 'key',
             abortEarly: info?.abortEarly,
             abortPipeEarly: info?.abortPipeEarly,
@@ -170,7 +164,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
             // Create record path item
             pathItem = {
               type: 'record',
-              input,
+              input: input as Record<string | number | symbol, unknown>,
               key: inputKey,
               value: inputValue,
             };
@@ -191,14 +185,14 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
           }
 
           // Get parse result of value
-          const valueResult = value._parse(inputValue, info);
+          const valueResult = this.value._parse(inputValue, info);
 
           // If there are issues, capture them
           if (valueResult.issues) {
             // Create record path item
             pathItem = pathItem || {
               type: 'record',
-              input,
+              input: input as Record<string | number | symbol, unknown>,
               key: inputKey,
               value: inputValue,
             };
@@ -234,7 +228,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
         ? getIssues(issues)
         : executePipe(
             output as RecordOutput<TKey, TValue>,
-            pipe,
+            this.pipe,
             info,
             'record'
           );

@@ -1,4 +1,4 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -12,7 +12,22 @@ export type SpecialSchema<TInput, TOutput = TInput> = BaseSchema<
   TInput,
   TOutput
 > & {
+  /**
+   * The schema type.
+   */
   type: 'special';
+  /**
+   * The type check function.
+   */
+  check: (input: unknown) => boolean;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<TInput> | undefined;
 };
 
 /**
@@ -32,14 +47,14 @@ export function special<TInput>(
  * Creates a special schema.
  *
  * @param check The type check function.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A special schema.
  */
 export function special<TInput>(
   check: (input: unknown) => boolean,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<TInput>
 ): SpecialSchema<TInput>;
 
@@ -48,43 +63,24 @@ export function special<TInput>(
   arg2?: Pipe<TInput> | ErrorMessage,
   arg3?: Pipe<TInput>
 ): SpecialSchema<TInput> {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
-    /**
-     * The schema type.
-     */
     type: 'special',
-
-    /**
-     * Whether it's async.
-     */
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    check,
+    message,
+    pipe,
     _parse(input, info) {
       // Check type of input
-      if (!check(input)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'special',
-          error || 'Invalid type',
-          input
-        );
+      if (!this.check(input)) {
+        return getSchemaIssues(info, 'type', 'special', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipe(input as TInput, pipe, info, 'special');
+      return executePipe(input as TInput, this.pipe, info, 'special');
     },
   };
 }

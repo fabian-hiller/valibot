@@ -18,15 +18,6 @@ export function passthroughAsync<
 >(schema: TSchema): TSchema {
   return {
     ...schema,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       const result = await schema._parse(input, info);
       return !result.issues

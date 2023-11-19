@@ -9,7 +9,7 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 
 /**
@@ -39,7 +39,7 @@ export function pickAsync<
  *
  * @param schema The schema to pick from.
  * @param keys The selected keys
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -50,7 +50,7 @@ export function pickAsync<
 >(
   schema: TSchema,
   keys: TKeys,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<
     ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, undefined>
   >
@@ -85,7 +85,7 @@ export function pickAsync<
  * @param schema The schema to pick from.
  * @param keys The selected keys
  * @param rest The object rest.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -98,7 +98,7 @@ export function pickAsync<
   schema: TSchema,
   keys: TKeys,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchemaAsync<Pick<TSchema['entries'], TKeys[number]>, TRest>;
 
@@ -118,8 +118,8 @@ export function pickAsync<
     | ErrorMessage,
   arg5?: PipeAsync<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchemaAsync<Pick<TSchema['entries'], TKeys[number]>, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message, pipe] = getRestAndDefaultArgs<
     TRest,
     PipeAsync<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
   >(arg3, arg4, arg5);
@@ -132,7 +132,7 @@ export function pickAsync<
       {}
     ) as Pick<TSchema['entries'], TKeys[number]>,
     rest,
-    error,
+    message,
     pipe
   );
 }

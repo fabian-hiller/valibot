@@ -1,4 +1,4 @@
-import type { BaseSchema, Input } from '../../types.ts';
+import type { BaseSchema, Input } from '../../types/index.ts';
 
 /**
  * Checks if the input matches the scheme. By using a type predicate, this

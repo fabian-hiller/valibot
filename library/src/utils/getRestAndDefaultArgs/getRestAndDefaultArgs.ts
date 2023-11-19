@@ -4,7 +4,7 @@ import type {
   ErrorMessage,
   Pipe,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getDefaultArgs } from '../getDefaultArgs/index.ts';
 
 /**

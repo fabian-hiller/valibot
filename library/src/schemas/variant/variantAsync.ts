@@ -5,7 +5,7 @@ import type {
   Input,
   Issues,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getSchemaIssues, getOutput, getIssues } from '../../utils/index.ts';
 import type { ObjectSchema, ObjectSchemaAsync } from '../object/index.ts';
 
@@ -37,8 +37,22 @@ export type VariantSchemaAsync<
   TOptions extends VariantOptionsAsync<TKey>,
   TOutput = Output<TOptions[number]>
 > = BaseSchemaAsync<Input<TOptions[number]>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'variant';
+  /**
+   * The discriminator key.
+   */
+  key: TKey;
+  /**
+   * The variant options.
+   */
   options: TOptions;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
@@ -46,7 +60,7 @@ export type VariantSchemaAsync<
  *
  * @param key The discriminator key.
  * @param options The variant options.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns An async variant schema.
  */
@@ -56,42 +70,18 @@ export function variantAsync<
 >(
   key: TKey,
   options: TOptions,
-  error?: ErrorMessage
+  message: ErrorMessage = 'Invalid type'
 ): VariantSchemaAsync<TKey, TOptions> {
   return {
-    /**
-     * The schema type.
-     */
     type: 'variant',
-
-    /**
-     * The variant options.
-     */
-    options,
-
-    /**
-     * Whether it's async.
-     */
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    key,
+    options,
+    message,
     async _parse(input, info) {
       // Check type of input
-      if (!input || typeof input !== 'object' || !(key in input)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'variant',
-          error || 'Invalid type',
-          input
-        );
+      if (!input || typeof input !== 'object' || !(this.key in input)) {
+        return getSchemaIssues(info, 'type', 'variant', this.message, input);
       }
 
       // Create issues and output
@@ -103,8 +93,8 @@ export function variantAsync<
         for (const schema of options) {
           // If it is an object schema, parse discriminator key
           if (schema.type === 'object') {
-            const result = await schema.entries[key]._parse(
-              (input as Record<TKey, unknown>)[key],
+            const result = await schema.entries[this.key]._parse(
+              (input as Record<TKey, unknown>)[this.key],
               info
             );
 
@@ -141,20 +131,14 @@ export function variantAsync<
       };
 
       // Parse options recursively
-      await parseOptions(options);
+      await parseOptions(this.options);
 
       // Return output or issues
       return output
         ? getOutput(output[0])
         : issues
         ? getIssues(issues)
-        : getSchemaIssues(
-            info,
-            'type',
-            'variant',
-            error || 'Invalid type',
-            input
-          );
+        : getSchemaIssues(info, 'type', 'variant', this.message, input);
     },
   };
 }

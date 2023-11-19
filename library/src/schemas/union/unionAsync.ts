@@ -5,7 +5,7 @@ import type {
   Input,
   Issues,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
@@ -24,53 +24,44 @@ export type UnionSchemaAsync<
   TOptions extends UnionOptionsAsync,
   TOutput = Output<TOptions[number]>
 > = BaseSchemaAsync<Input<TOptions[number]>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'union';
+  /**
+   * The union options.
+   */
   options: TOptions;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates an async union schema.
  *
  * @param union The union options.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns An async union schema.
  */
 export function unionAsync<TOptions extends UnionOptionsAsync>(
   options: TOptions,
-  error?: ErrorMessage
+  message: ErrorMessage = 'Invalid type'
 ): UnionSchemaAsync<TOptions> {
   return {
-    /**
-     * The schema type.
-     */
     type: 'union',
-
-    /**
-     * The union options.
-     */
-    options,
-
-    /**
-     * Whether it's async.
-     */
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    options,
+    message,
     async _parse(input, info) {
       // Create issues and output
       let issues: Issues | undefined;
       let output: [Output<TOptions[number]>] | undefined;
 
       // Parse schema of each option
-      for (const schema of options) {
+      for (const schema of this.options) {
         const result = await schema._parse(input, info);
 
         // If there are issues, capture them
@@ -95,14 +86,7 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
       // Return output or issues
       return output
         ? getOutput(output[0])
-        : getSchemaIssues(
-            info,
-            'type',
-            'union',
-            error || 'Invalid type',
-            input,
-            issues
-          );
+        : getSchemaIssues(info, 'type', 'union', this.message, input, issues);
     },
   };
 }

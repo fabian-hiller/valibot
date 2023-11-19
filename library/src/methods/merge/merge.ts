@@ -3,7 +3,7 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 import type { MergeObjects } from './types.ts';
 
@@ -35,14 +35,14 @@ export function merge<TSchemas extends ObjectSchemas>(
  * overwrite the previous ones.
  *
  * @param schemas The schemas to be merged.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
 export function merge<TSchemas extends ObjectSchemas>(
   schemas: TSchemas,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<MergeObjects<TSchemas>, undefined>>
 ): ObjectSchema<MergeObjects<TSchemas>>;
 
@@ -71,7 +71,7 @@ export function merge<
  *
  * @param schemas The schemas to be merged.
  * @param rest The object rest.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -82,7 +82,7 @@ export function merge<
 >(
   schemas: TSchemas,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>>
 ): ObjectSchema<MergeObjects<TSchemas>, TRest>;
 
@@ -98,8 +98,8 @@ export function merge<
   arg3?: Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>> | ErrorMessage,
   arg4?: Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>>
 ): ObjectSchema<MergeObjects<TSchemas>, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message, pipe] = getRestAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>>
   >(arg2, arg3, arg4);
@@ -111,7 +111,7 @@ export function merge<
       {}
     ) as MergeObjects<TSchemas>,
     rest,
-    error,
+    message,
     pipe
   );
 }

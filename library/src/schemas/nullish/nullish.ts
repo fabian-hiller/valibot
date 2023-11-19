@@ -1,4 +1,5 @@
-import type { BaseSchema, Input, Output } from '../../types.ts';
+import { getDefault } from '../../methods/index.ts';
+import type { BaseSchema, Input, Output } from '../../types/index.ts';
 import { getOutput } from '../../utils/index.ts';
 
 /**
@@ -6,15 +7,39 @@ import { getOutput } from '../../utils/index.ts';
  */
 export type NullishSchema<
   TWrapped extends BaseSchema,
-  TDefault extends Input<TWrapped> | undefined = undefined,
+  TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | undefined)
+    | undefined = undefined,
   TOutput = TDefault extends Input<TWrapped>
     ? Output<TWrapped>
     : Output<TWrapped> | null | undefined
 > = BaseSchema<Input<TWrapped> | null | undefined, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'nullish';
+  /**
+   * The wrapped schema.
+   */
   wrapped: TWrapped;
-  getDefault: () => TDefault;
+  /**
+   * Returns the default value.
+   */
+  default: TDefault;
 };
+
+/**
+ * Creates a nullish schema.
+ *
+ * @param wrapped The wrapped schema.
+ * @param default_ The default value.
+ *
+ * @returns A nullish schema.
+ */
+export function nullish<TWrapped extends BaseSchema>(
+  wrapped: TWrapped
+): NullishSchema<TWrapped>;
 
 /**
  * Creates a nullish schema.
@@ -26,48 +51,28 @@ export type NullishSchema<
  */
 export function nullish<
   TWrapped extends BaseSchema,
-  TDefault extends Input<TWrapped> | undefined = undefined
->(
-  wrapped: TWrapped,
-  default_?: TDefault | (() => TDefault)
-): NullishSchema<TWrapped, TDefault> {
+  const TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | undefined)
+    | undefined
+>(wrapped: TWrapped, default_: TDefault): NullishSchema<TWrapped, TDefault>;
+
+export function nullish<
+  TWrapped extends BaseSchema,
+  const TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | undefined)
+    | undefined = undefined
+>(wrapped: TWrapped, default_?: TDefault): NullishSchema<TWrapped, TDefault> {
   return {
-    /**
-     * The schema type.
-     */
     type: 'nullish',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped,
-
-    /**
-     * Returns the default value.
-     */
-    getDefault() {
-      return typeof default_ === 'function'
-        ? (default_ as () => TDefault)()
-        : (default_ as TDefault);
-    },
-
-    /**
-     * Whether it's async.
-     */
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
+    default: default_ as TDefault,
     _parse(input, info) {
       // Allow `null` or `undefined` to pass or override it with default value
       if (input === null || input === undefined) {
-        const override = this.getDefault();
+        const override = getDefault(this);
         if (override === undefined) {
           return getOutput(input);
         }
@@ -75,7 +80,7 @@ export function nullish<
       }
 
       // Otherwise, return result of wrapped schema
-      return wrapped._parse(input, info);
+      return this.wrapped._parse(input, info);
     },
   };
 }

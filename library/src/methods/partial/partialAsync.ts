@@ -12,7 +12,7 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 
 /**
@@ -45,7 +45,7 @@ export function partialAsync<
  * object schema set to optional.
  *
  * @param schema The affected schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -54,7 +54,7 @@ export function partialAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
   schema: TSchema,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<
     ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, undefined>
   >
@@ -87,7 +87,7 @@ export function partialAsync<
  *
  * @param schema The affected schema.
  * @param rest The object rest.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -98,7 +98,7 @@ export function partialAsync<
 >(
   schema: TSchema,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<
     ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
   >
@@ -124,8 +124,8 @@ export function partialAsync<
     ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
   >
 ): ObjectSchemaAsync<PartialObjectEntriesAsync<TSchema['entries']>, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message, pipe] = getRestAndDefaultArgs<
     TRest,
     PipeAsync<
       ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
@@ -142,7 +142,7 @@ export function partialAsync<
       {}
     ) as PartialObjectEntriesAsync<TSchema['entries']>,
     rest,
-    error,
+    message,
     pipe
   );
 }

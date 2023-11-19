@@ -6,7 +6,7 @@ import type {
   ParseInfo,
   PipeAsync,
   _ParseResult,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { executePipeAsync } from '../../utils/index.ts';
 
 /**
@@ -72,20 +72,7 @@ export function transformAsync<
 ): SchemaWithTransformAsync<TSchema, TOutput> {
   return {
     ...schema,
-
-    /**
-     * Whether it's async.
-     */
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Parse input with schema
       const result = await schema._parse(input, info);

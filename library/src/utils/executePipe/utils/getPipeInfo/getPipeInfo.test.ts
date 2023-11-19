@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { ParseInfo } from '../../../../types.ts';
+import type { ParseInfo } from '../../../../types/index.ts';
 import { getPipeInfo } from './getPipeInfo.ts';
 
 describe('getPipeInfo', () => {
