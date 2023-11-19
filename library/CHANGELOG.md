@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Change structure of schemas, validations and transformations to make properties accessible (pull request #211)
+- Fix errors in JSDoc comments and add JSDoc ESLint plugin (pull request #205)
 
 ## v0.20.1 (November 2, 2023)
 
