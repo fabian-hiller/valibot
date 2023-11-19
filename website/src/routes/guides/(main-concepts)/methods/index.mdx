@@ -19,10 +19,13 @@ Schema methods: <Link href="/api/brand">`brand`</Link>, <Link href="/api/coerce"
 
 ### Coerce
 
-‎<Link href="/api/coerce">`coerce`</Link> can be used to transform an input before it is validated. They are therefore perfect for enforcing a specific data type using the built-in data type objects like [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/String), [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number) and [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
+‎<Link href="/api/coerce">`coerce`</Link> can be used to transform an input before it is validated. They are therefore perfect for enforcing a specific data type using the built-in data type objects like [`Boolean`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean), [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/String), [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number) and [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
 
 ```ts
-import { coerce, date, number, parse, string } from 'valibot'; // 0.63 kB
+import { boolean, coerce, date, number, parse, string } from 'valibot'; // 0.63 kB
+
+const BooleanSchema = coerce(boolean(), Boolean);
+const booleanOutput = parse(BooleanSchema, null); // false
 
 const StringSchema = coerce(string(), String);
 const stringOutput = parse(StringSchema, 1234); // '1234'
