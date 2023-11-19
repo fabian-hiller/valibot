@@ -1,4 +1,8 @@
-import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  PipeAsync,
+} from '../../types/index.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -13,85 +17,75 @@ export type InstanceSchemaAsync<
   TClass extends Class,
   TOutput = InstanceType<TClass>
 > = BaseSchemaAsync<InstanceType<TClass>, TOutput> & {
-  schema: 'instance';
+  /**
+   * The schema type.
+   */
+  type: 'instance';
+  /**
+   * The class of the instance.
+   */
   class: TClass;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<InstanceType<TClass>> | undefined;
 };
 
 /**
  * Creates an async instance schema.
  *
- * @param of The class of the instance.
+ * @param class_ The class of the instance.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async instance schema.
  */
 export function instanceAsync<TClass extends Class>(
-  of: TClass,
+  class_: TClass,
   pipe?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass>;
 
 /**
  * Creates an async instance schema.
  *
- * @param of The class of the instance.
- * @param error The error message.
+ * @param class_ The class of the instance.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async instance schema.
  */
 export function instanceAsync<TClass extends Class>(
-  of: TClass,
-  error?: ErrorMessage,
+  class_: TClass,
+  message?: ErrorMessage,
   pipe?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass>;
 
 export function instanceAsync<TClass extends Class>(
-  of: TClass,
+  class_: TClass,
   arg2?: PipeAsync<InstanceType<TClass>> | ErrorMessage,
   arg3?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass> {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'instance',
-
-    /**
-     * The class of the instance.
-     */
-    class: of,
-
-    /**
-     * Whether it's async.
-     */
+    type: 'instance',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    class: class_,
+    message,
+    pipe,
     async _parse(input, info) {
       // Check type of input
-      if (!(input instanceof of)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'instance',
-          error || 'Invalid type',
-          input
-        );
+      if (!(input instanceof this.class)) {
+        return getSchemaIssues(info, 'type', 'instance', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipeAsync(input, pipe, info, 'instance');
+      return executePipeAsync(input, this.pipe, info, 'instance');
     },
   };
 }

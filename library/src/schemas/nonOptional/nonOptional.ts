@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Input, Output } from '../../types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Input,
+  Output,
+} from '../../types/index.ts';
 import { getSchemaIssues } from '../../utils/index.ts';
 
 /**
@@ -10,49 +15,40 @@ export type NonOptional<T> = T extends undefined ? never : T;
  * Non optional schema type.
  */
 export type NonOptionalSchema<
-  TSchema extends BaseSchema,
-  TOutput = NonOptional<Output<TSchema>>
-> = BaseSchema<NonOptional<Input<TSchema>>, TOutput> & {
-  schema: 'non_optional';
-  wrapped: TSchema;
+  TWrapped extends BaseSchema,
+  TOutput = NonOptional<Output<TWrapped>>
+> = BaseSchema<NonOptional<Input<TWrapped>>, TOutput> & {
+  /**
+   * The schema type.
+   */
+  type: 'non_optional';
+  /**
+   * The wrapped schema.
+   */
+  wrapped: TWrapped;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates a non optional schema.
  *
- * @param schema The wrapped schema.
- * @param error The error message.
+ * @param wrapped The wrapped schema.
+ * @param message The error message.
  *
  * @returns A non optional schema.
  */
-export function nonOptional<TSchema extends BaseSchema>(
-  schema: TSchema,
-  error?: ErrorMessage
-): NonOptionalSchema<TSchema> {
+export function nonOptional<TWrapped extends BaseSchema>(
+  wrapped: TWrapped,
+  message: ErrorMessage = 'Invalid type'
+): NonOptionalSchema<TWrapped> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'non_optional',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped: schema,
-
-    /**
-     * Whether it's async.
-     */
+    type: 'non_optional',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
+    message,
     _parse(input, info) {
       // Allow `undefined` values not to pass
       if (input === undefined) {
@@ -60,13 +56,13 @@ export function nonOptional<TSchema extends BaseSchema>(
           info,
           'type',
           'non_optional',
-          error || 'Invalid type',
+          this.message,
           input
         );
       }
 
       // Return result of wrapped schema
-      return schema._parse(input, info);
+      return this.wrapped._parse(input, info);
     },
   };
 }

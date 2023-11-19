@@ -4,7 +4,7 @@ import type {
   Input,
   Issues,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getSchemaIssues, getOutput } from '../../utils/index.ts';
 
 /**
@@ -16,56 +16,47 @@ export type UnionOptions = [BaseSchema, BaseSchema, ...BaseSchema[]];
  * Union schema type.
  */
 export type UnionSchema<
-  TUnionOptions extends UnionOptions,
-  TOutput = Output<TUnionOptions[number]>
-> = BaseSchema<Input<TUnionOptions[number]>, TOutput> & {
-  schema: 'union';
-  union: TUnionOptions;
+  TOptions extends UnionOptions,
+  TOutput = Output<TOptions[number]>
+> = BaseSchema<Input<TOptions[number]>, TOutput> & {
+  /**
+   * The schema type.
+   */
+  type: 'union';
+  /**
+   * The union options.
+   */
+  options: TOptions;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates a union schema.
  *
- * @param union The union schema.
- * @param error The error message.
+ * @param options The union options.
+ * @param message The error message.
  *
  * @returns A union schema.
  */
-export function union<TUnionOptions extends UnionOptions>(
-  union: TUnionOptions,
-  error?: ErrorMessage
-): UnionSchema<TUnionOptions> {
+export function union<TOptions extends UnionOptions>(
+  options: TOptions,
+  message: ErrorMessage = 'Invalid type'
+): UnionSchema<TOptions> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'union',
-
-    /**
-     * The union schema.
-     */
-    union,
-
-    /**
-     * Whether it's async.
-     */
+    type: 'union',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    options,
+    message,
     _parse(input, info) {
       // Create issues and output
       let issues: Issues | undefined;
-      let output: [Output<TUnionOptions[number]>] | undefined;
+      let output: [Output<TOptions[number]>] | undefined;
 
       // Parse schema of each option
-      for (const schema of union) {
+      for (const schema of this.options) {
         const result = schema._parse(input, info);
 
         // If there are issues, capture them
@@ -90,14 +81,7 @@ export function union<TUnionOptions extends UnionOptions>(
       // Return output or issues
       return output
         ? getOutput(output[0])
-        : getSchemaIssues(
-            info,
-            'type',
-            'union',
-            error || 'Invalid type',
-            input,
-            issues
-          );
+        : getSchemaIssues(info, 'type', 'union', this.message, input, issues);
     },
   };
 }

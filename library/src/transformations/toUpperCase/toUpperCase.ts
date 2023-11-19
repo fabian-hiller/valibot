@@ -1,5 +1,15 @@
-import type { PipeResult } from '../../types.ts';
+import type { BaseTransformation } from '../../types/index.ts';
 import { getOutput } from '../../utils/index.ts';
+
+/**
+ * To upper case transformation type.
+ */
+export type ToUpperCaseTransformation = BaseTransformation<string> & {
+  /**
+   * The transformation type.
+   */
+  type: 'to_upper_case';
+};
 
 /**
  * Creates a transformation function that converts all the alphabetic
@@ -7,6 +17,12 @@ import { getOutput } from '../../utils/index.ts';
  *
  * @returns A transformation function.
  */
-export function toUpperCase() {
-  return (input: string): PipeResult<string> => getOutput(input.toUpperCase());
+export function toUpperCase(): ToUpperCaseTransformation {
+  return {
+    type: 'to_upper_case',
+    async: false,
+    _parse(input) {
+      return getOutput(input.toUpperCase());
+    },
+  };
 }

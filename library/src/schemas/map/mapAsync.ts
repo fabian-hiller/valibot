@@ -5,7 +5,7 @@ import type {
   Issues,
   Output,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -18,12 +18,30 @@ import type { MapInput, MapOutput, MapPathItem } from './types.ts';
  * Map schema async type.
  */
 export type MapSchemaAsync<
-  TMapKey extends BaseSchema | BaseSchemaAsync,
-  TMapValue extends BaseSchema | BaseSchemaAsync,
-  TOutput = MapOutput<TMapKey, TMapValue>
-> = BaseSchemaAsync<MapInput<TMapKey, TMapValue>, TOutput> & {
-  schema: 'map';
-  map: { key: TMapKey; value: TMapValue };
+  TKey extends BaseSchema | BaseSchemaAsync,
+  TValue extends BaseSchema | BaseSchemaAsync,
+  TOutput = MapOutput<TKey, TValue>
+> = BaseSchemaAsync<MapInput<TKey, TValue>, TOutput> & {
+  /**
+   * The schema type.
+   */
+  type: 'map';
+  /**
+   * The map key schema.
+   */
+  key: TKey;
+  /**
+   * The map value schema.
+   */
+  value: TValue;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<MapOutput<TKey, TValue>> | undefined;
 };
 
 /**
@@ -36,85 +54,62 @@ export type MapSchemaAsync<
  * @returns An async map schema.
  */
 export function mapAsync<
-  TMapKey extends BaseSchema | BaseSchemaAsync,
-  TMapValue extends BaseSchema | BaseSchemaAsync
+  TKey extends BaseSchema | BaseSchemaAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
 >(
-  key: TMapKey,
-  value: TMapValue,
-  pipe?: PipeAsync<MapOutput<TMapKey, TMapValue>>
-): MapSchemaAsync<TMapKey, TMapValue>;
+  key: TKey,
+  value: TValue,
+  pipe?: PipeAsync<MapOutput<TKey, TValue>>
+): MapSchemaAsync<TKey, TValue>;
 
 /**
  * Creates an async map schema.
  *
  * @param key The key schema.
  * @param value The value schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async map schema.
  */
 export function mapAsync<
-  TMapKey extends BaseSchema | BaseSchemaAsync,
-  TMapValue extends BaseSchema | BaseSchemaAsync
+  TKey extends BaseSchema | BaseSchemaAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
 >(
-  key: TMapKey,
-  value: TMapValue,
-  error?: ErrorMessage,
-  pipe?: PipeAsync<MapOutput<TMapKey, TMapValue>>
-): MapSchemaAsync<TMapKey, TMapValue>;
+  key: TKey,
+  value: TValue,
+  message?: ErrorMessage,
+  pipe?: PipeAsync<MapOutput<TKey, TValue>>
+): MapSchemaAsync<TKey, TValue>;
 
 export function mapAsync<
-  TMapKey extends BaseSchema | BaseSchemaAsync,
-  TMapValue extends BaseSchema | BaseSchemaAsync
+  TKey extends BaseSchema | BaseSchemaAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
 >(
-  key: TMapKey,
-  value: TMapValue,
-  arg3?: PipeAsync<MapOutput<TMapKey, TMapValue>> | ErrorMessage,
-  arg4?: PipeAsync<MapOutput<TMapKey, TMapValue>>
-): MapSchemaAsync<TMapKey, TMapValue> {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg3, arg4);
+  key: TKey,
+  value: TValue,
+  arg3?: PipeAsync<MapOutput<TKey, TValue>> | ErrorMessage,
+  arg4?: PipeAsync<MapOutput<TKey, TValue>>
+): MapSchemaAsync<TKey, TValue> {
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg3, arg4);
 
   // Create and return async map schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'map',
-
-    /**
-     * The map key and value schema.
-     */
-    map: { key, value },
-
-    /**
-     * Whether it's async.
-     */
+    type: 'map',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    key,
+    value,
+    message,
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'map',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'map', this.message, input);
       }
 
       // Create issues and output
-      const output: Map<Output<TMapKey>, Output<TMapValue>> = new Map();
+      const output: Map<Output<TKey>, Output<TValue>> = new Map();
       let issues: Issues | undefined;
 
       // Parse each key and value by schema
@@ -127,8 +122,8 @@ export function mapAsync<
           const [keyResult, valueResult] = await Promise.all(
             (
               [
-                { schema: key, value: inputKey, origin: 'key' },
-                { schema: value, value: inputValue, origin: 'value' },
+                { schema: this.key, value: inputKey, origin: 'key' },
+                { schema: this.value, value: inputValue, origin: 'value' },
               ] as const
             ).map(async ({ schema, value, origin }) => {
               // If not aborted early, continue execution
@@ -147,7 +142,7 @@ export function mapAsync<
                   if (result.issues) {
                     // Create map path item
                     pathItem = pathItem || {
-                      schema: 'map',
+                      type: 'map',
                       input,
                       key: inputKey,
                       value: inputValue,
@@ -190,7 +185,7 @@ export function mapAsync<
       // Return issues or pipe result
       return issues
         ? getIssues(issues)
-        : executePipeAsync(input, pipe, info, 'map');
+        : executePipeAsync(input, this.pipe, info, 'map');
     },
   };
 }

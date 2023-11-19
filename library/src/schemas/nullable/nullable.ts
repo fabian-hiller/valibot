@@ -1,88 +1,85 @@
-import type { BaseSchema, Input, Output } from '../../types.ts';
+import { getDefault } from '../../methods/index.ts';
+import type { BaseSchema, Input, Output } from '../../types/index.ts';
 import { getOutput } from '../../utils/index.ts';
 
 /**
  * Nullable schema type.
  */
 export type NullableSchema<
-  TSchema extends BaseSchema,
-  TDefault extends Input<TSchema> | null | undefined = undefined,
-  TOutput = TDefault extends undefined | null
-    ? Output<TSchema> | null
-    : Output<TSchema>
-> = BaseSchema<Input<TSchema> | null, TOutput> & {
-  schema: 'nullable';
-  wrapped: TSchema;
-  getDefault: () => TDefault;
+  TWrapped extends BaseSchema,
+  TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | undefined)
+    | undefined = undefined,
+  TOutput = TDefault extends Input<TWrapped>
+    ? Output<TWrapped>
+    : Output<TWrapped> | null
+> = BaseSchema<Input<TWrapped> | null, TOutput> & {
+  /**
+   * The schema type.
+   */
+  type: 'nullable';
+  /**
+   * The wrapped schema.
+   */
+  wrapped: TWrapped;
+  /**
+   * The default value.
+   */
+  default: TDefault;
 };
 
 /**
  * Creates a nullable schema.
  *
- * @param schema The wrapped schema.
- * @param value The default value.
+ * @param wrapped The wrapped schema.
+ *
+ * @returns A nullable schema.
+ */
+export function nullable<TWrapped extends BaseSchema>(
+  wrapped: TWrapped
+): NullableSchema<TWrapped>;
+
+/**
+ * Creates a nullable schema.
+ *
+ * @param wrapped The wrapped schema.
+ * @param default_ The default value.
  *
  * @returns A nullable schema.
  */
 export function nullable<
-  TSchema extends BaseSchema,
-  TDefault extends Input<TSchema> | null | undefined = undefined
->(
-  schema: TSchema,
-  value?: TDefault | (() => TDefault)
-): NullableSchema<TSchema, TDefault> {
+  TWrapped extends BaseSchema,
+  const TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | undefined)
+    | undefined
+>(wrapped: TWrapped, default_: TDefault): NullableSchema<TWrapped, TDefault>;
+
+export function nullable<
+  TWrapped extends BaseSchema,
+  const TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | undefined)
+    | undefined = undefined
+>(wrapped: TWrapped, default_?: TDefault): NullableSchema<TWrapped, TDefault> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'nullable',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped: schema,
-
-    /**
-     * Returns the default value.
-     *
-     * @returns The default value.
-     */
-    getDefault() {
-      return typeof value === 'function'
-        ? (value as () => TDefault)()
-        : (value as TDefault);
-    },
-
-    /**
-     * Whether it's async.
-     */
+    type: 'nullable',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
+    default: default_ as TDefault,
     _parse(input, info) {
-      // Get default or input value
-      let default_: TDefault;
-      const value =
-        input === null &&
-        (default_ = this.getDefault()) &&
-        default_ !== undefined
-          ? default_
-          : input;
-
-      // Allow `null` value to pass
-      if (value === null) {
-        return getOutput(value);
+      // Allow `null` to pass or override it with default value
+      if (input === null) {
+        const override = getDefault(this);
+        if (override === undefined) {
+          return getOutput(input);
+        }
+        input = override;
       }
 
-      // Return result of wrapped schema
-      return schema._parse(value, info);
+      // Otherwise, return result of wrapped schema
+      return this.wrapped._parse(input, info);
     },
   };
 }

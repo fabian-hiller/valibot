@@ -26,7 +26,7 @@ describe('merge', () => {
       object({ key: string() }),
       object({ key: number() }),
     ]);
-    expect(schema.object.entries.key).toEqual(comparable(number()));
+    expect(schema.entries.key).toEqual(comparable(number()));
     const input = { key: 123 };
     const output = parse(schema, input);
     expect(output).toEqual(input);

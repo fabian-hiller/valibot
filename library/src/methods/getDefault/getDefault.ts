@@ -1,11 +1,16 @@
-import type { BaseSchema, Output } from '../../types.ts';
+import type { BaseSchema, Output } from '../../types/index.ts';
 import type { DefaultValue } from './types.ts';
 
 /**
  * Schema with maybe default type.
  */
 export type SchemaWithMaybeDefault<TSchema extends BaseSchema = BaseSchema> =
-  TSchema & { getDefault?: () => Output<TSchema> };
+  TSchema & {
+    /**
+     * The optional default value.
+     */
+    default?: Output<TSchema> | (() => Output<TSchema> | undefined);
+  };
 
 /**
  * Returns the default value of the schema.
@@ -17,5 +22,7 @@ export type SchemaWithMaybeDefault<TSchema extends BaseSchema = BaseSchema> =
 export function getDefault<TSchema extends SchemaWithMaybeDefault>(
   schema: TSchema
 ): DefaultValue<TSchema> {
-  return schema.getDefault?.();
+  return typeof schema.default === 'function'
+    ? schema.default()
+    : schema.default;
 }

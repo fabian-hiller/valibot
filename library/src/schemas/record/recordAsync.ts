@@ -4,17 +4,14 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import {
   executePipeAsync,
   getIssues,
   getSchemaIssues,
 } from '../../utils/index.ts';
-import type { EnumSchema, EnumSchemaAsync } from '../enumType/index.ts';
-import type {
-  NativeEnumSchema,
-  NativeEnumSchemaAsync,
-} from '../nativeEnum/index.ts';
+import type { EnumSchema, EnumSchemaAsync } from '../enum/index.ts';
+import type { PicklistSchema, PicklistSchemaAsync } from '../picklist/index.ts';
 import type { StringSchema, StringSchemaAsync } from '../string/index.ts';
 import type { UnionSchema, UnionSchemaAsync } from '../union/index.ts';
 import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';
@@ -27,8 +24,8 @@ import { BLOCKED_KEYS } from './values.ts';
 export type RecordKeyAsync =
   | EnumSchema<any, string | number | symbol>
   | EnumSchemaAsync<any, string | number | symbol>
-  | NativeEnumSchema<any, string | number | symbol>
-  | NativeEnumSchemaAsync<any, string | number | symbol>
+  | PicklistSchema<any, string | number | symbol>
+  | PicklistSchemaAsync<any, string | number | symbol>
   | StringSchema<string | number | symbol>
   | StringSchemaAsync<string | number | symbol>
   | UnionSchema<any, string | number | symbol>
@@ -38,12 +35,30 @@ export type RecordKeyAsync =
  * Record schema async type.
  */
 export type RecordSchemaAsync<
-  TRecordKey extends RecordKeyAsync,
-  TRecordValue extends BaseSchema | BaseSchemaAsync,
-  TOutput = RecordOutput<TRecordKey, TRecordValue>
-> = BaseSchemaAsync<RecordInput<TRecordKey, TRecordValue>, TOutput> & {
-  schema: 'record';
-  record: { key: TRecordKey; value: TRecordValue };
+  TKey extends RecordKeyAsync,
+  TValue extends BaseSchema | BaseSchemaAsync,
+  TOutput = RecordOutput<TKey, TValue>
+> = BaseSchemaAsync<RecordInput<TKey, TValue>, TOutput> & {
+  /**
+   * The schema type.
+   */
+  type: 'record';
+  /**
+   * The key schema.
+   */
+  key: TKey;
+  /**
+   * The value schema.
+   */
+  value: TValue;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<RecordOutput<TKey, TValue>> | undefined;
 };
 
 /**
@@ -54,118 +69,92 @@ export type RecordSchemaAsync<
  *
  * @returns An async record schema.
  */
-export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
-  value: TRecordValue,
-  pipe?: PipeAsync<RecordOutput<StringSchema, TRecordValue>>
-): RecordSchemaAsync<StringSchema, TRecordValue>;
+export function recordAsync<TValue extends BaseSchema | BaseSchemaAsync>(
+  value: TValue,
+  pipe?: PipeAsync<RecordOutput<StringSchema, TValue>>
+): RecordSchemaAsync<StringSchema, TValue>;
 
 /**
  * Creates an async record schema.
  *
  * @param value The value schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async record schema.
  */
-export function recordAsync<TRecordValue extends BaseSchema | BaseSchemaAsync>(
-  value: TRecordValue,
-  error?: ErrorMessage,
-  pipe?: PipeAsync<RecordOutput<StringSchema, TRecordValue>>
-): RecordSchemaAsync<StringSchema, TRecordValue>;
-
-/**
- * Creates an async record schema.
- *
- * @param key The key schema.
- * @param value The value schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async record schema.
- */
-export function recordAsync<
-  TRecordKey extends RecordKeyAsync,
-  TRecordValue extends BaseSchema | BaseSchemaAsync
->(
-  key: TRecordKey,
-  value: TRecordValue,
-  pipe?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchemaAsync<TRecordKey, TRecordValue>;
+export function recordAsync<TValue extends BaseSchema | BaseSchemaAsync>(
+  value: TValue,
+  message?: ErrorMessage,
+  pipe?: PipeAsync<RecordOutput<StringSchema, TValue>>
+): RecordSchemaAsync<StringSchema, TValue>;
 
 /**
  * Creates an async record schema.
  *
  * @param key The key schema.
  * @param value The value schema.
- * @param error The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async record schema.
  */
 export function recordAsync<
-  TRecordKey extends RecordKeyAsync,
-  TRecordValue extends BaseSchema | BaseSchemaAsync
+  TKey extends RecordKeyAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
 >(
-  key: TRecordKey,
-  value: TRecordValue,
-  error?: ErrorMessage,
-  pipe?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchemaAsync<TRecordKey, TRecordValue>;
+  key: TKey,
+  value: TValue,
+  pipe?: PipeAsync<RecordOutput<TKey, TValue>>
+): RecordSchemaAsync<TKey, TValue>;
+
+/**
+ * Creates an async record schema.
+ *
+ * @param key The key schema.
+ * @param value The value schema.
+ * @param message The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async record schema.
+ */
+export function recordAsync<
+  TKey extends RecordKeyAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
+>(
+  key: TKey,
+  value: TValue,
+  message?: ErrorMessage,
+  pipe?: PipeAsync<RecordOutput<TKey, TValue>>
+): RecordSchemaAsync<TKey, TValue>;
 
 export function recordAsync<
-  TRecordKey extends RecordKeyAsync,
-  TRecordValue extends BaseSchema | BaseSchemaAsync
+  TKey extends RecordKeyAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
 >(
-  arg1: TRecordValue | TRecordKey,
-  arg2?:
-    | PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-    | ErrorMessage
-    | TRecordValue,
-  arg3?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>> | ErrorMessage,
-  arg4?: PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
-): RecordSchemaAsync<TRecordKey, TRecordValue> {
-  // Get key, value, error and pipe argument
-  const [key, value, error, pipe] = getRecordArgs<
-    TRecordKey,
-    TRecordValue,
-    PipeAsync<RecordOutput<TRecordKey, TRecordValue>>
+  arg1: TValue | TKey,
+  arg2?: PipeAsync<RecordOutput<TKey, TValue>> | ErrorMessage | TValue,
+  arg3?: PipeAsync<RecordOutput<TKey, TValue>> | ErrorMessage,
+  arg4?: PipeAsync<RecordOutput<TKey, TValue>>
+): RecordSchemaAsync<TKey, TValue> {
+  // Get key, value, message and pipe argument
+  const [key, value, message = 'Invalid type', pipe] = getRecordArgs<
+    TKey,
+    TValue,
+    PipeAsync<RecordOutput<TKey, TValue>>
   >(arg1, arg2, arg3, arg4);
 
   // Create and return async record schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'record',
-
-    /**
-     * The record key and value schema.
-     */
-    record: { key, value },
-
-    /**
-     * Whether it's async.
-     */
+    type: 'record',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    key,
+    value,
+    message,
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return getSchemaIssues(
-          info,
-          'type',
-          'record',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'record', this.message, input);
       }
 
       // Create issues and output
@@ -185,8 +174,8 @@ export function recordAsync<
             const [keyResult, valueResult] = await Promise.all(
               (
                 [
-                  { schema: key, value: inputKey, origin: 'key' },
-                  { schema: value, value: inputValue, origin: 'value' },
+                  { schema: this.key, value: inputKey, origin: 'key' },
+                  { schema: this.value, value: inputValue, origin: 'value' },
                 ] as const
               ).map(async ({ schema, value, origin }) => {
                 // If not aborted early, continue execution
@@ -205,8 +194,11 @@ export function recordAsync<
                     if (result.issues) {
                       // Create record path item
                       pathItem = pathItem || {
-                        schema: 'record',
-                        input,
+                        type: 'record',
+                        input: input as Record<
+                          string | number | symbol,
+                          unknown
+                        >,
                         key: inputKey,
                         value: inputValue,
                       };
@@ -250,8 +242,8 @@ export function recordAsync<
       return issues
         ? getIssues(issues)
         : executePipeAsync(
-            output as RecordOutput<TRecordKey, TRecordValue>,
-            pipe,
+            output as RecordOutput<TKey, TValue>,
+            this.pipe,
             info,
             'record'
           );

@@ -1,61 +1,50 @@
-import type { BaseSchemaAsync, Output } from '../../types.ts';
+import type { BaseSchemaAsync, Output } from '../../types/index.ts';
 import { getOutput } from '../../utils/index.ts';
+import { getFallbackAsync } from '../getFallback/index.ts';
 import type { FallbackInfo } from './types.ts';
 
 /**
- * Schema with fallback type.
+ * Schema with fallback async type.
  */
 export type SchemaWithFallbackAsync<
   TSchema extends BaseSchemaAsync = BaseSchemaAsync,
-  TFallback extends Output<TSchema> = Output<TSchema>
-> = TSchema & { getFallback: (info?: FallbackInfo) => Promise<TFallback> };
+  TFallback extends
+    | Output<TSchema>
+    | ((
+        info?: FallbackInfo
+      ) => Output<TSchema> | Promise<Output<TSchema>>) = Output<TSchema>
+> = TSchema & {
+  /**
+   * The fallback value.
+   */
+  fallback: TFallback;
+};
 
 /**
  * Returns a fallback value when validating the passed schema failed.
  *
  * @param schema The schema to catch.
- * @param value The fallback value.
+ * @param fallback The fallback value.
  *
  * @returns The passed schema.
  */
 export function fallbackAsync<
   TSchema extends BaseSchemaAsync,
-  TFallback extends Output<TSchema>
+  const TFallback extends
+    | Output<TSchema>
+    | ((info?: FallbackInfo) => Output<TSchema> | Promise<Output<TSchema>>)
 >(
   schema: TSchema,
-  value: TFallback | ((info?: FallbackInfo) => TFallback | Promise<TFallback>)
+  fallback: TFallback
 ): SchemaWithFallbackAsync<TSchema, TFallback> {
   return {
     ...schema,
-
-    /**
-     * Returns the default value.
-     *
-     * @param info The fallback info.
-     *
-     * @returns The default value.
-     */
-    async getFallback(info) {
-      return typeof value === 'function'
-        ? await (
-            value as (info?: FallbackInfo) => TFallback | Promise<TFallback>
-          )(info)
-        : (value as TFallback);
-    },
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    fallback,
     async _parse(input, info) {
       const result = await schema._parse(input, info);
       return getOutput(
         result.issues
-          ? await this.getFallback({ input, issues: result.issues })
+          ? await getFallbackAsync(this, { input, issues: result.issues })
           : result.output
       );
     },

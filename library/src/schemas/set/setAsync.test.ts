@@ -70,7 +70,7 @@ describe('setAsync', () => {
     const result1 = await schema1._parse(input1);
     expect(result1.issues?.[0].path).toEqual([
       {
-        schema: 'set',
+        type: 'set',
         input: input1,
         key: 1,
         value: '2',
@@ -82,13 +82,13 @@ describe('setAsync', () => {
     const result2 = await schema2._parse(input2);
     expect(result2.issues?.[0].path).toEqual([
       {
-        schema: 'set',
+        type: 'set',
         input: input2,
         key: 1,
         value: { key: 123 },
       },
       {
-        schema: 'object',
+        type: 'object',
         input: { key: 123 },
         key: 'key',
         value: 123,
@@ -120,5 +120,19 @@ describe('setAsync', () => {
     await expect(parseAsync(schema2, new Set().add('1'))).rejects.toThrowError(
       sizeError
     );
+  });
+
+  test('should expose the pipeline', () => {
+    const schema1 = setAsync(number(), [size(1)]);
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        type: 'size',
+        requirement: 1,
+        message: 'Invalid size',
+      }),
+    ]);
+
+    const schema2 = setAsync(number());
+    expect(schema2.pipe).toBeUndefined();
   });
 });

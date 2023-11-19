@@ -4,8 +4,11 @@ import type {
   TupleItems,
   TupleSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema } from '../../types.ts';
-import type { SchemaWithMaybeDefault } from '../getDefault/getDefault.ts';
+import type { BaseSchema } from '../../types/index.ts';
+import {
+  getDefault,
+  type SchemaWithMaybeDefault,
+} from '../getDefault/index.ts';
 import type { DefaultValues } from './types.ts';
 
 /**
@@ -28,23 +31,23 @@ export function getDefaults<
   let defaults: any;
 
   // If schema contains a default function, set its default value
-  if (schema.getDefault) {
-    defaults = schema.getDefault();
+  if (schema.default) {
+    defaults = getDefault(schema);
 
     // Otherwise, check if schema is of kind object or tuple
-  } else if ('schema' in schema) {
+  } else if ('type' in schema) {
     // If it is an object schema, set object with default value of each entry
-    if (schema.schema === 'object') {
+    if (schema.type === 'object') {
       defaults = {};
-      for (const key in schema.object.entries) {
-        defaults[key] = getDefaults(schema.object.entries[key]);
+      for (const key in schema.entries) {
+        defaults[key] = getDefaults(schema.entries[key]);
       }
 
       // If it is a tuple schema, set array with default value of each item
-    } else if (schema.schema === 'tuple') {
+    } else if (schema.type === 'tuple') {
       defaults = [];
-      for (let key = 0; key < schema.tuple.items.length; key++) {
-        defaults.push(getDefaults(schema.tuple.items[key]));
+      for (let key = 0; key < schema.items.length; key++) {
+        defaults.push(getDefaults(schema.items[key]));
       }
     }
   }

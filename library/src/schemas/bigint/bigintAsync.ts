@@ -1,4 +1,8 @@
-import type { BaseSchemaAsync, ErrorMessage, PipeAsync } from '../../types.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  PipeAsync,
+} from '../../types/index.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -12,7 +16,18 @@ export type BigintSchemaAsync<TOutput = bigint> = BaseSchemaAsync<
   bigint,
   TOutput
 > & {
-  schema: 'bigint';
+  /**
+   * The schema type.
+   */
+  type: 'bigint';
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<bigint> | undefined;
 };
 
 /**
@@ -27,13 +42,13 @@ export function bigintAsync(pipe?: PipeAsync<bigint>): BigintSchemaAsync;
 /**
  * Creates an async bigint schema.
  *
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async bigint schema.
  */
 export function bigintAsync(
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<bigint>
 ): BigintSchemaAsync;
 
@@ -41,43 +56,23 @@ export function bigintAsync(
   arg1?: ErrorMessage | PipeAsync<bigint>,
   arg2?: PipeAsync<bigint>
 ): BigintSchemaAsync {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return async bigint schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'bigint',
-
-    /**
-     * Whether it's async.
-     */
+    type: 'bigint',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    message,
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'bigint') {
-        return getSchemaIssues(
-          info,
-          'type',
-          'bigint',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'bigint', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipeAsync(input, pipe, info, 'bigint');
+      return executePipeAsync(input, this.pipe, info, 'bigint');
     },
   };
 }

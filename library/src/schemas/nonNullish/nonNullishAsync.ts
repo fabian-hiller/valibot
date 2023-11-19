@@ -4,7 +4,7 @@ import type {
   ErrorMessage,
   Input,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getSchemaIssues } from '../../utils/index.ts';
 import type { NonNullish } from './nonNullish.ts';
 
@@ -12,49 +12,40 @@ import type { NonNullish } from './nonNullish.ts';
  * Non nullish schema async type.
  */
 export type NonNullishSchemaAsync<
-  TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput = NonNullish<Output<TSchema>>
-> = BaseSchemaAsync<NonNullish<Input<TSchema>>, TOutput> & {
-  schema: 'non_nullish';
-  wrapped: TSchema;
+  TWrapped extends BaseSchema | BaseSchemaAsync,
+  TOutput = NonNullish<Output<TWrapped>>
+> = BaseSchemaAsync<NonNullish<Input<TWrapped>>, TOutput> & {
+  /**
+   * The schema type.
+   */
+  type: 'non_nullish';
+  /**
+   * The wrapped schema.
+   */
+  wrapped: TWrapped;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates an async non nullish schema.
  *
- * @param schema The wrapped schema.
- * @param error The error message.
+ * @param wrapped The wrapped schema.
+ * @param message The error message.
  *
  * @returns An async non nullish schema.
  */
-export function nonNullishAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
-  schema: TSchema,
-  error?: ErrorMessage
-): NonNullishSchemaAsync<TSchema> {
+export function nonNullishAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
+  wrapped: TWrapped,
+  message: ErrorMessage = 'Invalid type'
+): NonNullishSchemaAsync<TWrapped> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'non_nullish',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped: schema,
-
-    /**
-     * Whether it's async.
-     */
+    type: 'non_nullish',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
+    message,
     async _parse(input, info) {
       // Allow `null` and `undefined` values not to pass
       if (input === null || input === undefined) {
@@ -62,13 +53,13 @@ export function nonNullishAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
           info,
           'type',
           'non_nullish',
-          error || 'Invalid type',
+          this.message,
           input
         );
       }
 
       // Return result of wrapped schema
-      return schema._parse(input, info);
+      return this.wrapped._parse(input, info);
     },
   };
 }

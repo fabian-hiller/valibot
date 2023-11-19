@@ -1,4 +1,4 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -9,7 +9,18 @@ import {
  * Bigint schema type.
  */
 export type BigintSchema<TOutput = bigint> = BaseSchema<bigint, TOutput> & {
-  schema: 'bigint';
+  /**
+   * The schema type.
+   */
+  type: 'bigint';
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<bigint> | undefined;
 };
 
 /**
@@ -24,54 +35,37 @@ export function bigint(pipe?: Pipe<bigint>): BigintSchema;
 /**
  * Creates a bigint schema.
  *
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A bigint schema.
  */
-export function bigint(error?: ErrorMessage, pipe?: Pipe<bigint>): BigintSchema;
+export function bigint(
+  message?: ErrorMessage,
+  pipe?: Pipe<bigint>
+): BigintSchema;
 
 export function bigint(
   arg1?: ErrorMessage | Pipe<bigint>,
   arg2?: Pipe<bigint>
 ): BigintSchema {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return bigint schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'bigint',
-
-    /**
-     * Whether it's async.
-     */
+    type: 'bigint',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    message,
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'bigint') {
-        return getSchemaIssues(
-          info,
-          'type',
-          'bigint',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'bigint', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipe(input, pipe, info, 'bigint');
+      return executePipe(input, this.pipe, info, 'bigint');
     },
   };
 }

@@ -4,12 +4,9 @@ import type {
   Input,
   Output,
   ResolveObject,
-} from '../../types.ts';
-import type { EnumSchema, EnumSchemaAsync } from '../enumType/index.ts';
-import type {
-  NativeEnumSchema,
-  NativeEnumSchemaAsync,
-} from '../nativeEnum/index.ts';
+} from '../../types/index.ts';
+import type { EnumSchema, EnumSchemaAsync } from '../enum/index.ts';
+import type { PicklistSchema, PicklistSchemaAsync } from '../picklist/index.ts';
 import type { UnionSchema } from '../union/index.ts';
 import type { RecordKey } from './record.ts';
 import type { RecordKeyAsync } from './recordAsync.ts';
@@ -18,42 +15,42 @@ import type { RecordKeyAsync } from './recordAsync.ts';
  * Record path item type.
  */
 export type RecordPathItem = {
-  schema: 'record';
-  input: Record<string | number | symbol, any>;
+  type: 'record';
+  input: Record<string | number | symbol, unknown>;
   key: string | number | symbol;
-  value: any;
+  value: unknown;
 };
 
 /**
  * Partial key schema type.
  */
 type PartialKeySchema =
+  | PicklistSchema<any>
+  | PicklistSchemaAsync<any>
   | EnumSchema<any>
   | EnumSchemaAsync<any>
-  | NativeEnumSchema<any>
-  | NativeEnumSchemaAsync<any>
   | UnionSchema<any>;
 
 /**
  * Record input inference type.
  */
 export type RecordInput<
-  TRecordKey extends RecordKey | RecordKeyAsync,
-  TRecordValue extends BaseSchema | BaseSchemaAsync
+  TKey extends RecordKey | RecordKeyAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
 > = ResolveObject<
-  TRecordKey extends PartialKeySchema
-    ? Partial<Record<Input<TRecordKey>, Input<TRecordValue>>>
-    : Record<Input<TRecordKey>, Input<TRecordValue>>
+  TKey extends PartialKeySchema
+    ? Partial<Record<Input<TKey>, Input<TValue>>>
+    : Record<Input<TKey>, Input<TValue>>
 >;
 
 /**
  * Record output inference type.
  */
 export type RecordOutput<
-  TRecordKey extends RecordKey | RecordKeyAsync,
-  TRecordValue extends BaseSchema | BaseSchemaAsync
+  TKey extends RecordKey | RecordKeyAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
 > = ResolveObject<
-  TRecordKey extends PartialKeySchema
-    ? Partial<Record<Output<TRecordKey>, Output<TRecordValue>>>
-    : Record<Output<TRecordKey>, Output<TRecordValue>>
+  TKey extends PartialKeySchema
+    ? Partial<Record<Output<TKey>, Output<TValue>>>
+    : Record<Output<TKey>, Output<TValue>>
 >;

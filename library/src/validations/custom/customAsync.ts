@@ -1,20 +1,41 @@
-import type { ErrorMessage, PipeResult } from '../../types.ts';
+import type { BaseValidationAsync, ErrorMessage } from '../../types/index.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
+
+/**
+ * Custom validation async type.
+ */
+export type CustomValidationAsync<TInput> = BaseValidationAsync<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'custom';
+  /**
+   * The validation function.
+   */
+  requirement: (input: TInput) => Promise<boolean>;
+};
 
 /**
  * Creates a async custom validation function.
  *
  * @param requirement The async validation function.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A async validation function.
  */
 export function customAsync<TInput>(
   requirement: (input: TInput) => Promise<boolean>,
-  error?: ErrorMessage
-) {
-  return async (input: TInput): Promise<PipeResult<TInput>> =>
-    !(await requirement(input))
-      ? getPipeIssues('custom', error || 'Invalid input', input)
-      : getOutput(input);
+  message: ErrorMessage = 'Invalid input'
+): CustomValidationAsync<TInput> {
+  return {
+    type: 'custom',
+    async: true,
+    message,
+    requirement,
+    async _parse(input) {
+      return !(await this.requirement(input))
+        ? getPipeIssues(this.type, this.message, input, this.requirement)
+        : getOutput(input);
+    },
+  };
 }

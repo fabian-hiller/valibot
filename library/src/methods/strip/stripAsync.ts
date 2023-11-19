@@ -14,23 +14,14 @@ import { getOutput } from '../../utils/index.ts';
  * @returns A object schema.
  */
 export function stripAsync<
-  TObjectSchema extends ObjectSchemaAsync<ObjectEntriesAsync, undefined>
->(schema: TObjectSchema): TObjectSchema {
+  TSchema extends ObjectSchemaAsync<ObjectEntriesAsync, undefined>
+>(schema: TSchema): TSchema {
   // Create cached keys
   let cachedKeys: string[];
 
   // Create and return object schema
   return {
     ...schema,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     async _parse(input, info) {
       // Get parse result of schema
       const result = await schema._parse(input, info);
@@ -41,7 +32,7 @@ export function stripAsync<
       }
 
       // Cache object keys lazy
-      cachedKeys = cachedKeys || Object.keys(schema.object.entries);
+      cachedKeys = cachedKeys || Object.keys(schema.entries);
 
       // Strip unknown keys
       const output: Record<string, any> = {};

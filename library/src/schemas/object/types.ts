@@ -4,7 +4,8 @@ import type {
   Input,
   Output,
   ResolveObject,
-} from '../../types.ts';
+} from '../../types/index.ts';
+import type { NeverSchema, NeverSchemaAsync } from '../never/index.ts';
 import type { ObjectEntries } from './object.ts';
 import type { ObjectEntriesAsync } from './objectAsync.ts';
 
@@ -12,10 +13,10 @@ import type { ObjectEntriesAsync } from './objectAsync.ts';
  * Object path item type.
  */
 export type ObjectPathItem = {
-  schema: 'object';
-  input: Record<string, any>;
+  type: 'object';
+  input: Record<string, unknown>;
   key: string;
-  value: any;
+  value: unknown;
 };
 
 /**
@@ -45,36 +46,40 @@ type WithQuestionMarks<TObject extends object> = Pick<
  * Object input inference type.
  */
 export type ObjectInput<
-  TObjectEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
-> = TObjectRest extends BaseSchema | BaseSchemaAsync
+  TEntries extends ObjectEntries | ObjectEntriesAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
+> = TRest extends undefined | NeverSchema | NeverSchemaAsync
   ? ResolveObject<
       WithQuestionMarks<{
-        [TKey in keyof TObjectEntries]: Input<TObjectEntries[TKey]>;
+        [TKey in keyof TEntries]: Input<TEntries[TKey]>;
+      }>
+    >
+  : TRest extends BaseSchema | BaseSchemaAsync
+  ? ResolveObject<
+      WithQuestionMarks<{
+        [TKey in keyof TEntries]: Input<TEntries[TKey]>;
       }>
     > &
-      Record<string, Input<TObjectRest>>
-  : ResolveObject<
-      WithQuestionMarks<{
-        [TKey in keyof TObjectEntries]: Input<TObjectEntries[TKey]>;
-      }>
-    >;
+      Record<string, Input<TRest>>
+  : never;
 
 /**
  * Object output inference type.
  */
 export type ObjectOutput<
-  TObjectEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObjectRest extends BaseSchema | BaseSchemaAsync | undefined
-> = TObjectRest extends BaseSchema | BaseSchemaAsync
+  TEntries extends ObjectEntries | ObjectEntriesAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
+> = TRest extends undefined | NeverSchema | NeverSchemaAsync
   ? ResolveObject<
       WithQuestionMarks<{
-        [TKey in keyof TObjectEntries]: Output<TObjectEntries[TKey]>;
+        [TKey in keyof TEntries]: Output<TEntries[TKey]>;
+      }>
+    >
+  : TRest extends BaseSchema | BaseSchemaAsync
+  ? ResolveObject<
+      WithQuestionMarks<{
+        [TKey in keyof TEntries]: Output<TEntries[TKey]>;
       }>
     > &
-      Record<string, Output<TObjectRest>>
-  : ResolveObject<
-      WithQuestionMarks<{
-        [TKey in keyof TObjectEntries]: Output<TObjectEntries[TKey]>;
-      }>
-    >;
+      Record<string, Output<TRest>>
+  : never;

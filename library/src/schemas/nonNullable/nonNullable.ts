@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Input, Output } from '../../types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Input,
+  Output,
+} from '../../types/index.ts';
 import { getSchemaIssues } from '../../utils/index.ts';
 
 /**
@@ -10,49 +15,40 @@ export type NonNullable<T> = T extends null ? never : T;
  * Non nullable schema type.
  */
 export type NonNullableSchema<
-  TSchema extends BaseSchema,
-  TOutput = NonNullable<Output<TSchema>>
-> = BaseSchema<NonNullable<Input<TSchema>>, TOutput> & {
-  schema: 'non_nullable';
-  wrapped: TSchema;
+  TWrapped extends BaseSchema,
+  TOutput = NonNullable<Output<TWrapped>>
+> = BaseSchema<NonNullable<Input<TWrapped>>, TOutput> & {
+  /**
+   * The schema type.
+   */
+  type: 'non_nullable';
+  /**
+   * The wrapped schema.
+   */
+  wrapped: TWrapped;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates a non nullable schema.
  *
- * @param schema The wrapped schema.
- * @param error The error message.
+ * @param wrapped The wrapped schema.
+ * @param message The error message.
  *
  * @returns A non nullable schema.
  */
-export function nonNullable<TSchema extends BaseSchema>(
-  schema: TSchema,
-  error?: ErrorMessage
-): NonNullableSchema<TSchema> {
+export function nonNullable<TWrapped extends BaseSchema>(
+  wrapped: TWrapped,
+  message: ErrorMessage = 'Invalid type'
+): NonNullableSchema<TWrapped> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'non_nullable',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped: schema,
-
-    /**
-     * Whether it's async.
-     */
+    type: 'non_nullable',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
+    message,
     _parse(input, info) {
       // Allow `null` values not to pass
       if (input === null) {
@@ -60,13 +56,13 @@ export function nonNullable<TSchema extends BaseSchema>(
           info,
           'type',
           'non_nullable',
-          error || 'Invalid type',
+          this.message,
           input
         );
       }
 
       // Return result of wrapped schema
-      return schema._parse(input, info);
+      return this.wrapped._parse(input, info);
     },
   };
 }

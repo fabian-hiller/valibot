@@ -3,28 +3,28 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 
 /**
  * Set path item type.
  */
 export type SetPathItem = {
-  schema: 'set';
-  input: Set<any>;
+  type: 'set';
+  input: Set<unknown>;
   key: number;
-  value: any;
+  value: unknown;
 };
 
 /**
  * Set output inference type.
  */
-export type SetInput<TSetValue extends BaseSchema | BaseSchemaAsync> = Set<
-  Input<TSetValue>
+export type SetInput<TValue extends BaseSchema | BaseSchemaAsync> = Set<
+  Input<TValue>
 >;
 
 /**
  * Set output inference type.
  */
-export type SetOutput<TSetValue extends BaseSchema | BaseSchemaAsync> = Set<
-  Output<TSetValue>
+export type SetOutput<TValue extends BaseSchema | BaseSchemaAsync> = Set<
+  Output<TValue>
 >;

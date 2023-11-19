@@ -1,11 +1,18 @@
-import type { BaseSchema, Pipe } from '../../types.ts';
+import type { BaseSchema, Pipe } from '../../types/index.ts';
 import { executePipe } from '../../utils/index.ts';
 
 /**
  * Any schema type.
  */
 export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
-  schema: 'any';
+  /**
+   * The schema type.
+   */
+  type: 'any';
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<any> | undefined;
 };
 
 /**
@@ -15,28 +22,13 @@ export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
  *
  * @returns A any schema.
  */
-export function any(pipe: Pipe<any> = []): AnySchema {
+export function any(pipe?: Pipe<any>): AnySchema {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'any',
-
-    /**
-     * Whether it's async.
-     */
+    type: 'any',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    pipe,
     _parse(input, info) {
-      return executePipe(input, pipe, info, 'any');
+      return executePipe(input, this.pipe, info, 'any');
     },
   };
 }

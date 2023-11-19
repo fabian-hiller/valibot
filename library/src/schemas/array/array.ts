@@ -5,7 +5,7 @@ import type {
   Issues,
   Output,
   Pipe,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -18,11 +18,25 @@ import type { ArrayPathItem } from './types.ts';
  * Array schema type.
  */
 export type ArraySchema<
-  TArrayItem extends BaseSchema,
-  TOutput = Output<TArrayItem>[]
-> = BaseSchema<Input<TArrayItem>[], TOutput> & {
-  schema: 'array';
-  array: { item: TArrayItem };
+  TItem extends BaseSchema,
+  TOutput = Output<TItem>[]
+> = BaseSchema<Input<TItem>[], TOutput> & {
+  /**
+   * The schema type.
+   */
+  type: 'array';
+  /**
+   * The array item schema.
+   */
+  item: TItem;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<Output<TItem>[]> | undefined;
 };
 
 /**
@@ -33,69 +47,45 @@ export type ArraySchema<
  *
  * @returns A array schema.
  */
-export function array<TArrayItem extends BaseSchema>(
-  item: TArrayItem,
-  pipe?: Pipe<Output<TArrayItem>[]>
-): ArraySchema<TArrayItem>;
+export function array<TItem extends BaseSchema>(
+  item: TItem,
+  pipe?: Pipe<Output<TItem>[]>
+): ArraySchema<TItem>;
 
 /**
  * Creates a array schema.
  *
  * @param item The item schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A array schema.
  */
-export function array<TArrayItem extends BaseSchema>(
-  item: TArrayItem,
-  error?: ErrorMessage,
-  pipe?: Pipe<Output<TArrayItem>[]>
-): ArraySchema<TArrayItem>;
+export function array<TItem extends BaseSchema>(
+  item: TItem,
+  message?: ErrorMessage,
+  pipe?: Pipe<Output<TItem>[]>
+): ArraySchema<TItem>;
 
-export function array<TArrayItem extends BaseSchema>(
-  item: TArrayItem,
-  arg2?: ErrorMessage | Pipe<Output<TArrayItem>[]>,
-  arg3?: Pipe<Output<TArrayItem>[]>
-): ArraySchema<TArrayItem> {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+export function array<TItem extends BaseSchema>(
+  item: TItem,
+  arg2?: ErrorMessage | Pipe<Output<TItem>[]>,
+  arg3?: Pipe<Output<TItem>[]>
+): ArraySchema<TItem> {
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return array schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'array',
-
-    /**
-     * The array item schema.
-     */
-    array: { item },
-
-    /**
-     * Whether it's async.
-     */
+    type: 'array',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    item,
+    message,
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'array',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'array', this.message, input);
       }
 
       // Create issues and output
@@ -105,13 +95,13 @@ export function array<TArrayItem extends BaseSchema>(
       // Parse schema of each array item
       for (let key = 0; key < input.length; key++) {
         const value = input[key];
-        const result = item._parse(value, info);
+        const result = this.item._parse(value, info);
 
         // If there are issues, capture them
         if (result.issues) {
           // Create array path item
           const pathItem: ArrayPathItem = {
-            schema: 'array',
+            type: 'array',
             input,
             key,
             value,
@@ -144,7 +134,7 @@ export function array<TArrayItem extends BaseSchema>(
       // Return issues or pipe result
       return issues
         ? getIssues(issues)
-        : executePipe(output as Output<TArrayItem>[], pipe, info, 'array');
+        : executePipe(output as Output<TItem>[], this.pipe, info, 'array');
     },
   };
 }

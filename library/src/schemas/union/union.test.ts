@@ -2,12 +2,12 @@ import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
 import { string } from '../string/index.ts';
 import { number } from '../number/index.ts';
-import { nullType } from '../nullType/index.ts';
+import { null_ } from '../null/index.ts';
 import { union } from './union.ts';
 
 describe('union', () => {
   test('should pass only union values', () => {
-    const schema = union([string(), number(), nullType()]);
+    const schema = union([string(), number(), null_()]);
     const input1 = 'test';
     const output1 = parse(schema, input1);
     expect(output1).toBe(input1);

@@ -3,30 +3,30 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 
 /**
  * Map path item type.
  */
 export type MapPathItem = {
-  schema: 'map';
-  input: Map<any, any>;
-  key: any;
-  value: any;
+  type: 'map';
+  input: Map<unknown, unknown>;
+  key: unknown;
+  value: unknown;
 };
 
 /**
  * Map input inference type.
  */
 export type MapInput<
-  TMapKey extends BaseSchema | BaseSchemaAsync,
-  TMapValue extends BaseSchema | BaseSchemaAsync
-> = Map<Input<TMapKey>, Input<TMapValue>>;
+  TKey extends BaseSchema | BaseSchemaAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
+> = Map<Input<TKey>, Input<TValue>>;
 
 /**
  * Map output inference type.
  */
 export type MapOutput<
-  TMapKey extends BaseSchema | BaseSchemaAsync,
-  TMapValue extends BaseSchema | BaseSchemaAsync
-> = Map<Output<TMapKey>, Output<TMapValue>>;
+  TKey extends BaseSchema | BaseSchemaAsync,
+  TValue extends BaseSchema | BaseSchemaAsync
+> = Map<Output<TKey>, Output<TValue>>;

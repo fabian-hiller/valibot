@@ -4,7 +4,7 @@ import type {
   ErrorMessage,
   Pipe,
   PipeAsync,
-} from '../../../../types.ts';
+} from '../../../../types/index.ts';
 import { getDefaultArgs } from '../../../../utils/index.ts';
 import { string } from '../../../string/index.ts';
 import type { RecordKey } from '../../record.ts';
@@ -21,22 +21,22 @@ import type { RecordKeyAsync } from '../../recordAsync.ts';
  * @returns The record arguments.
  */
 export function getRecordArgs<
-  TRecordKey extends RecordKey | RecordKeyAsync,
-  TRecordValue extends BaseSchema | BaseSchemaAsync,
+  TKey extends RecordKey | RecordKeyAsync,
+  TValue extends BaseSchema | BaseSchemaAsync,
   TPipe extends Pipe<any> | PipeAsync<any>
 >(
-  arg1: TRecordValue | TRecordKey,
-  arg2: TPipe | ErrorMessage | TRecordValue | undefined,
+  arg1: TValue | TKey,
+  arg2: TPipe | ErrorMessage | TValue | undefined,
   arg3: TPipe | ErrorMessage | undefined,
   arg4: TPipe | undefined
-): [TRecordKey, TRecordValue, ErrorMessage | undefined, TPipe | undefined] {
+): [TKey, TValue, ErrorMessage | undefined, TPipe | undefined] {
   if (typeof arg2 === 'object' && !Array.isArray(arg2)) {
-    const [error, pipe] = getDefaultArgs(arg3, arg4);
-    return [arg1 as TRecordKey, arg2, error, pipe];
+    const [message, pipe] = getDefaultArgs(arg3, arg4);
+    return [arg1 as TKey, arg2, message, pipe];
   }
-  const [error, pipe] = getDefaultArgs<TPipe>(
+  const [message, pipe] = getDefaultArgs<TPipe>(
     arg2 as TPipe | ErrorMessage | undefined,
     arg3 as TPipe | undefined
   );
-  return [string() as TRecordKey, arg1 as TRecordValue, error, pipe];
+  return [string() as TKey, arg1 as TValue, message, pipe];
 }

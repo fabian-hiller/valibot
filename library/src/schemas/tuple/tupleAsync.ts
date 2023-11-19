@@ -4,7 +4,7 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import {
   executePipeAsync,
   getIssues,
@@ -25,12 +25,30 @@ export type TupleItemsAsync = [
  * Tuple schema async type.
  */
 export type TupleSchemaAsync<
-  TTupleItems extends TupleItemsAsync,
-  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
-  TOutput = TupleOutput<TTupleItems, TTupleRest>
-> = BaseSchemaAsync<TupleInput<TTupleItems, TTupleRest>, TOutput> & {
-  schema: 'tuple';
-  tuple: { items: TTupleItems; rest: TTupleRest };
+  TItems extends TupleItemsAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
+  TOutput = TupleOutput<TItems, TRest>
+> = BaseSchemaAsync<TupleInput<TItems, TRest>, TOutput> & {
+  /**
+   * The schema type.
+   */
+  type: 'tuple';
+  /**
+   * The tuple items schema.
+   */
+  items: TItems;
+  /**
+   * The tuple rest schema.
+   */
+  rest: TRest;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<TupleOutput<TItems, TRest>> | undefined;
 };
 
 /**
@@ -41,117 +59,91 @@ export type TupleSchemaAsync<
  *
  * @returns An async tuple schema.
  */
-export function tupleAsync<TTupleItems extends TupleItemsAsync>(
-  items: TTupleItems,
-  pipe?: PipeAsync<TupleOutput<TTupleItems, undefined>>
-): TupleSchemaAsync<TTupleItems>;
+export function tupleAsync<TItems extends TupleItemsAsync>(
+  items: TItems,
+  pipe?: PipeAsync<TupleOutput<TItems, undefined>>
+): TupleSchemaAsync<TItems>;
 
 /**
  * Creates an async tuple schema.
  *
  * @param items The items schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async tuple schema.
  */
-export function tupleAsync<TTupleItems extends TupleItemsAsync>(
-  items: TTupleItems,
-  error?: ErrorMessage,
-  pipe?: PipeAsync<TupleOutput<TTupleItems, undefined>>
-): TupleSchemaAsync<TTupleItems>;
-
-/**
- * Creates an async tuple schema.
- *
- * @param items The items schema.
- * @param rest The rest schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async tuple schema.
- */
-export function tupleAsync<
-  TTupleItems extends TupleItemsAsync,
-  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
->(
-  items: TTupleItems,
-  rest: TTupleRest,
-  pipe?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
-): TupleSchemaAsync<TTupleItems, TTupleRest>;
+export function tupleAsync<TItems extends TupleItemsAsync>(
+  items: TItems,
+  message?: ErrorMessage,
+  pipe?: PipeAsync<TupleOutput<TItems, undefined>>
+): TupleSchemaAsync<TItems>;
 
 /**
  * Creates an async tuple schema.
  *
  * @param items The items schema.
  * @param rest The rest schema.
- * @param error The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async tuple schema.
  */
 export function tupleAsync<
-  TTupleItems extends TupleItemsAsync,
-  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined
+  TItems extends TupleItemsAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
 >(
-  items: TTupleItems,
-  rest: TTupleRest,
-  error?: ErrorMessage,
-  pipe?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
-): TupleSchemaAsync<TTupleItems, TTupleRest>;
+  items: TItems,
+  rest: TRest,
+  pipe?: PipeAsync<TupleOutput<TItems, TRest>>
+): TupleSchemaAsync<TItems, TRest>;
+
+/**
+ * Creates an async tuple schema.
+ *
+ * @param items The items schema.
+ * @param rest The rest schema.
+ * @param message The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async tuple schema.
+ */
+export function tupleAsync<
+  TItems extends TupleItemsAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined
+>(
+  items: TItems,
+  rest: TRest,
+  message?: ErrorMessage,
+  pipe?: PipeAsync<TupleOutput<TItems, TRest>>
+): TupleSchemaAsync<TItems, TRest>;
 
 export function tupleAsync<
-  TTupleItems extends TupleItemsAsync,
-  TTupleRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TItems extends TupleItemsAsync,
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
 >(
-  items: TTupleItems,
-  arg2?:
-    | PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
-    | ErrorMessage
-    | TTupleRest,
-  arg3?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>> | ErrorMessage,
-  arg4?: PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
-): TupleSchemaAsync<TTupleItems, TTupleRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
-    TTupleRest,
-    PipeAsync<TupleOutput<TTupleItems, TTupleRest>>
+  items: TItems,
+  arg2?: PipeAsync<TupleOutput<TItems, TRest>> | ErrorMessage | TRest,
+  arg3?: PipeAsync<TupleOutput<TItems, TRest>> | ErrorMessage,
+  arg4?: PipeAsync<TupleOutput<TItems, TRest>>
+): TupleSchemaAsync<TItems, TRest> {
+  // Get rest, message and pipe argument
+  const [rest, message = 'Invalid type', pipe] = getRestAndDefaultArgs<
+    TRest,
+    PipeAsync<TupleOutput<TItems, TRest>>
   >(arg2, arg3, arg4);
 
   // Create and return async tuple schema
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'tuple',
-
-    /**
-     * The tuple items and rest schema.
-     */
-    tuple: { items, rest },
-
-    /**
-     * Whether it's async.
-     */
+    type: 'tuple',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    items,
+    rest,
+    message,
+    pipe,
     async _parse(input, info) {
       // Check type of input
-      if (!Array.isArray(input) || items.length > input.length) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'tuple',
-          error || 'Invalid type',
-          input
-        );
+      if (!Array.isArray(input) || this.items.length > input.length) {
+        return getSchemaIssues(info, 'type', 'tuple', this.message, input);
       }
 
       // Create issues and output
@@ -161,7 +153,7 @@ export function tupleAsync<
       await Promise.all([
         // Parse schema of each tuple item
         Promise.all(
-          items.map(async (schema, key) => {
+          this.items.map(async (schema, key) => {
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
               const value = input[key];
@@ -173,7 +165,7 @@ export function tupleAsync<
                 if (result.issues) {
                   // Create tuple path item
                   const pathItem: TuplePathItem = {
-                    schema: 'tuple',
+                    type: 'tuple',
                     input: input as [any, ...any[]],
                     key,
                     value,
@@ -207,13 +199,13 @@ export function tupleAsync<
         ),
 
         // If necessary parse schema of each rest item
-        rest &&
+        this.rest &&
           Promise.all(
-            input.slice(items.length).map(async (value, index) => {
+            input.slice(this.items.length).map(async (value, index) => {
               // If not aborted early, continue execution
               if (!(info?.abortEarly && issues)) {
-                const key = items.length + index;
-                const result = await rest._parse(value, info);
+                const key = this.items.length + index;
+                const result = await this.rest!._parse(value, info);
 
                 // If not aborted early, continue execution
                 if (!(info?.abortEarly && issues)) {
@@ -221,7 +213,7 @@ export function tupleAsync<
                   if (result.issues) {
                     // Create tuple path item
                     const pathItem: TuplePathItem = {
-                      schema: 'tuple',
+                      type: 'tuple',
                       input: input as [any, ...any[]],
                       key,
                       value,
@@ -259,8 +251,8 @@ export function tupleAsync<
       return issues
         ? getIssues(issues)
         : executePipeAsync(
-            output as TupleOutput<TTupleItems, TTupleRest>,
-            pipe,
+            output as TupleOutput<TItems, TRest>,
+            this.pipe,
             info,
             'tuple'
           );

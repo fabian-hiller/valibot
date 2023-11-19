@@ -1,101 +1,96 @@
+import { getDefaultAsync } from '../../methods/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
   Input,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getOutput } from '../../utils/index.ts';
 
 /**
  * Nullable schema async type.
  */
 export type NullableSchemaAsync<
-  TSchema extends BaseSchema | BaseSchemaAsync,
+  TWrapped extends BaseSchema | BaseSchemaAsync,
   TDefault extends
-    | Input<TSchema>
-    | null
-    | undefined
-    | Promise<Input<TSchema> | null | undefined> = undefined,
-  TOutput = Awaited<TDefault> extends undefined | null
-    ? Output<TSchema> | null
-    : Output<TSchema>
-> = BaseSchemaAsync<Input<TSchema> | null, TOutput> & {
-  schema: 'nullable';
-  wrapped: TSchema;
-  getDefault: () => Promise<TDefault>;
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
+    | undefined = undefined,
+  TOutput = Awaited<TDefault> extends Input<TWrapped>
+    ? Output<TWrapped>
+    : Output<TWrapped> | null
+> = BaseSchemaAsync<Input<TWrapped> | null, TOutput> & {
+  /**
+   * The schema type.
+   */
+  type: 'nullable';
+  /**
+   * The wrapped schema.
+   */
+  wrapped: TWrapped;
+  /**
+   * Returns the default value.
+   */
+  default: TDefault;
 };
 
 /**
  * Creates an async nullable schema.
  *
- * @param schema The wrapped schema.
- * @param value The default value.
+ * @param wrapped The wrapped schema.
+ *
+ * @returns An async nullable schema.
+ */
+export function nullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
+  wrapped: TWrapped
+): NullableSchemaAsync<TWrapped>;
+
+/**
+ * Creates an async nullable schema.
+ *
+ * @param wrapped The wrapped schema.
+ * @param default_ The default value.
  *
  * @returns An async nullable schema.
  */
 export function nullableAsync<
-  TSchema extends BaseSchema | BaseSchemaAsync,
-  TDefault extends
-    | Input<TSchema>
-    | null
+  TWrapped extends BaseSchema | BaseSchemaAsync,
+  const TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined
-    | Promise<Input<TSchema> | null | undefined> = undefined
 >(
-  schema: TSchema,
-  value?: TDefault | (() => TDefault)
-): NullableSchemaAsync<TSchema, TDefault> {
+  wrapped: TWrapped,
+  default_: TDefault
+): NullableSchemaAsync<TWrapped, TDefault>;
+
+export function nullableAsync<
+  TWrapped extends BaseSchema | BaseSchemaAsync,
+  const TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
+    | undefined = undefined
+>(
+  wrapped: TWrapped,
+  default_?: TDefault
+): NullableSchemaAsync<TWrapped, TDefault> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'nullable',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped: schema,
-
-    /**
-     * Returns the default value.
-     *
-     * @returns The default value.
-     */
-    async getDefault() {
-      return typeof value === 'function'
-        ? (value as () => TDefault)()
-        : (value as TDefault);
-    },
-
-    /**
-     * Whether it's async.
-     */
+    type: 'nullable',
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
+    default: default_ as TDefault,
     async _parse(input, info) {
-      // Get default or input value
-      let default_: Awaited<TDefault>;
-      const value =
-        input === null &&
-        (default_ = await this.getDefault()) &&
-        default_ !== undefined
-          ? default_
-          : input;
-
-      // Allow `null` value to pass
-      if (value === null) {
-        return getOutput(value);
+      // Allow `null` to pass or override it with default value
+      if (input === null) {
+        const override = await getDefaultAsync(this);
+        if (override === undefined) {
+          return getOutput(input);
+        }
+        input = override;
       }
 
       // Return result of wrapped schema
-      return schema._parse(value, info);
+      return this.wrapped._parse(input, info);
     },
   };
 }

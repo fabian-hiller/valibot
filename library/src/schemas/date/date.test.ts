@@ -45,4 +45,19 @@ describe('date', () => {
       valueError
     );
   });
+
+  test('should expose the pipeline', () => {
+    const requirement = new Date(Date.now() + 3600000);
+    const schema1 = date([maxValue(requirement)]);
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        type: 'max_value',
+        requirement,
+        message: 'Invalid value',
+      }),
+    ]);
+
+    const schema2 = date();
+    expect(schema2.pipe).toBeUndefined();
+  });
 });

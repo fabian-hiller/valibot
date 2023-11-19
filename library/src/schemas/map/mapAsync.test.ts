@@ -79,7 +79,7 @@ describe('mapAsync', () => {
     const result1 = await schema1._parse(input1);
     expect(result1.issues?.[0].path).toEqual([
       {
-        schema: 'map',
+        type: 'map',
         input: input1,
         key: 'C',
         value: input1.get('C'),
@@ -95,13 +95,13 @@ describe('mapAsync', () => {
     expect(result2.issues?.[0].origin).toBe('value');
     expect(result2.issues?.[0].path).toEqual([
       {
-        schema: 'map',
+        type: 'map',
         input: input2,
         key: 'B',
         value: input2.get('B'),
       },
       {
-        schema: 'object',
+        type: 'object',
         input: input2.get('B'),
         key: 'key',
         value: input2.get('B').key,
@@ -118,13 +118,13 @@ describe('mapAsync', () => {
     expect(result3.issues?.[0].origin).toBe('key');
     expect(result3.issues?.[0].path).toEqual([
       {
-        schema: 'map',
+        type: 'map',
         input: input3,
         key: errorKey,
         value: input3.get(errorKey),
       },
       {
-        schema: 'object',
+        type: 'object',
         input: errorKey,
         key: 'key',
         value: errorKey.key,
@@ -159,5 +159,19 @@ describe('mapAsync', () => {
     await expect(
       parseAsync(schema2, new Map().set(1, '1'))
     ).rejects.toThrowError(sizeError);
+  });
+
+  test('should expose the pipeline', () => {
+    const schema1 = mapAsync(number(), string(), [size(1)]);
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        type: 'size',
+        requirement: 1,
+        message: 'Invalid size',
+      }),
+    ]);
+
+    const schema2 = mapAsync(number(), string());
+    expect(schema2.pipe).toBeUndefined();
   });
 });

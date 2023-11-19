@@ -1,82 +1,85 @@
-import type { BaseSchema, Input, Output } from '../../types.ts';
+import { getDefault } from '../../methods/index.ts';
+import type { BaseSchema, Input, Output } from '../../types/index.ts';
 import { getOutput } from '../../utils/index.ts';
 
 /**
  * Optional schema type.
  */
 export type OptionalSchema<
-  TSchema extends BaseSchema,
-  TDefault extends Input<TSchema> | undefined = undefined,
-  TOutput = TDefault extends undefined
-    ? Output<TSchema> | undefined
-    : Output<TSchema>
-> = BaseSchema<Input<TSchema> | undefined, TOutput> & {
-  schema: 'optional';
-  wrapped: TSchema;
-  getDefault: () => TDefault;
+  TWrapped extends BaseSchema,
+  TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | undefined)
+    | undefined = undefined,
+  TOutput = TDefault extends Input<TWrapped>
+    ? Output<TWrapped>
+    : Output<TWrapped> | undefined
+> = BaseSchema<Input<TWrapped> | undefined, TOutput> & {
+  /**
+   * The schema type.
+   */
+  type: 'optional';
+  /**
+   * The wrapped schema.
+   */
+  wrapped: TWrapped;
+  /**
+   * Returns the default value.
+   */
+  default: TDefault;
 };
 
 /**
  * Creates a optional schema.
  *
- * @param schema The wrapped schema.
- * @param value The default value.
+ * @param wrapped The wrapped schema.
+ *
+ * @returns A optional schema.
+ */
+export function optional<TWrapped extends BaseSchema>(
+  wrapped: TWrapped
+): OptionalSchema<TWrapped>;
+
+/**
+ * Creates a optional schema.
+ *
+ * @param wrapped The wrapped schema.
+ * @param default_ The default value.
  *
  * @returns A optional schema.
  */
 export function optional<
-  TSchema extends BaseSchema,
-  TDefault extends Input<TSchema> | undefined = undefined
->(
-  schema: TSchema,
-  value?: TDefault | (() => TDefault)
-): OptionalSchema<TSchema, TDefault> {
+  TWrapped extends BaseSchema,
+  const TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | undefined)
+    | undefined
+>(wrapped: TWrapped, default_: TDefault): OptionalSchema<TWrapped, TDefault>;
+
+export function optional<
+  TWrapped extends BaseSchema,
+  const TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | undefined)
+    | undefined = undefined
+>(wrapped: TWrapped, default_?: TDefault): OptionalSchema<TWrapped, TDefault> {
   return {
-    /**
-     * The schema type.
-     */
-    schema: 'optional',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped: schema,
-
-    /**
-     * Returns the default value.
-     *
-     * @returns The default value.
-     */
-    getDefault() {
-      return typeof value === 'function'
-        ? (value as () => TDefault)()
-        : (value as TDefault);
-    },
-
-    /**
-     * Whether it's async.
-     */
+    type: 'optional',
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
+    default: default_ as TDefault,
     _parse(input, info) {
-      // Get default or input value
-      const value = input === undefined ? this.getDefault() : input;
-
-      // Allow `undefined` value to pass
-      if (value === undefined) {
-        return getOutput(value);
+      // Allow `undefined` to pass or override it with default value
+      if (input === undefined) {
+        const override = getDefault(this);
+        if (override === undefined) {
+          return getOutput(input);
+        }
+        input = override;
       }
 
-      // Return result of wrapped schema
-      return schema._parse(value, info);
+      // Otherwise, return result of wrapped schema
+      return this.wrapped._parse(input, info);
     },
   };
 }

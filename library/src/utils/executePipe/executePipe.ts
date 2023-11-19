@@ -5,7 +5,7 @@ import type {
   ParseInfo,
   Pipe,
   PipeInfo,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getIssues } from '../getIssues/getIssues.ts';
 import { getOutput } from '../getOutput/getOutput.ts';
 import { getIssue, getPipeInfo } from './utils/index.ts';
@@ -38,7 +38,7 @@ export function executePipe<TValue>(
 
   // Execute any action of pipe
   for (const action of pipe) {
-    const result = action(output);
+    const result = action._parse(output);
 
     // If there are issues, capture them
     if (result.issues) {

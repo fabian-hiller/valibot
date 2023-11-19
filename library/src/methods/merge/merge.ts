@@ -3,9 +3,9 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
-import type { MergeSchemaObjects } from './types.ts';
+import type { MergeObjects } from './types.ts';
 
 /**
  * Object schemas type.
@@ -25,45 +25,26 @@ type ObjectSchemas = [
  *
  * @returns An object schema.
  */
-export function merge<TObjectSchemas extends ObjectSchemas>(
-  schemas: TObjectSchemas,
-  pipe?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, undefined>>
-): ObjectSchema<MergeSchemaObjects<TObjectSchemas>>;
+export function merge<TSchemas extends ObjectSchemas>(
+  schemas: TSchemas,
+  pipe?: Pipe<ObjectOutput<MergeObjects<TSchemas>, undefined>>
+): ObjectSchema<MergeObjects<TSchemas>>;
 
 /**
  * Merges the entries of multiple object schemas. Subsequent object entries
  * overwrite the previous ones.
  *
  * @param schemas The schemas to be merged.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
-export function merge<TObjectSchemas extends ObjectSchemas>(
-  schemas: TObjectSchemas,
-  error?: ErrorMessage,
-  pipe?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, undefined>>
-): ObjectSchema<MergeSchemaObjects<TObjectSchemas>>;
-
-/**
- * Merges the entries of multiple object schemas. Subsequent object entries
- * overwrite the previous ones.
- *
- * @param schemas The schemas to be merged.
- * @param rest The object rest.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An object schema.
- */
-export function merge<
-  TObjectSchemas extends ObjectSchemas,
-  TObjectRest extends BaseSchema | undefined
->(
-  schemas: TObjectSchemas,
-  rest: TObjectRest,
-  pipe?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>>
-): ObjectSchema<MergeSchemaObjects<TObjectSchemas>, TObjectRest>;
+export function merge<TSchemas extends ObjectSchemas>(
+  schemas: TSchemas,
+  message?: ErrorMessage,
+  pipe?: Pipe<ObjectOutput<MergeObjects<TSchemas>, undefined>>
+): ObjectSchema<MergeObjects<TSchemas>>;
 
 /**
  * Merges the entries of multiple object schemas. Subsequent object entries
@@ -71,49 +52,66 @@ export function merge<
  *
  * @param schemas The schemas to be merged.
  * @param rest The object rest.
- * @param error The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
 export function merge<
-  TObjectSchemas extends ObjectSchemas,
-  TObjectRest extends BaseSchema | undefined
+  TSchemas extends ObjectSchemas,
+  TRest extends BaseSchema | undefined
 >(
-  schemas: TObjectSchemas,
-  rest: TObjectRest,
-  error?: ErrorMessage,
-  pipe?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>>
-): ObjectSchema<MergeSchemaObjects<TObjectSchemas>, TObjectRest>;
+  schemas: TSchemas,
+  rest: TRest,
+  pipe?: Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>>
+): ObjectSchema<MergeObjects<TSchemas>, TRest>;
+
+/**
+ * Merges the entries of multiple object schemas. Subsequent object entries
+ * overwrite the previous ones.
+ *
+ * @param schemas The schemas to be merged.
+ * @param rest The object rest.
+ * @param message The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An object schema.
+ */
+export function merge<
+  TSchemas extends ObjectSchemas,
+  TRest extends BaseSchema | undefined
+>(
+  schemas: TSchemas,
+  rest: TRest,
+  message?: ErrorMessage,
+  pipe?: Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>>
+): ObjectSchema<MergeObjects<TSchemas>, TRest>;
 
 export function merge<
-  TObjectSchemas extends ObjectSchemas,
-  TObjectRest extends BaseSchema | undefined = undefined
+  TSchemas extends ObjectSchemas,
+  TRest extends BaseSchema | undefined = undefined
 >(
-  schemas: TObjectSchemas,
+  schemas: TSchemas,
   arg2?:
-    | Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>>
+    | Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>>
     | ErrorMessage
-    | TObjectRest,
-  arg3?:
-    | Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>>
-    | ErrorMessage,
-  arg4?: Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>>
-): ObjectSchema<MergeSchemaObjects<TObjectSchemas>, TObjectRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
-    TObjectRest,
-    Pipe<ObjectOutput<MergeSchemaObjects<TObjectSchemas>, TObjectRest>>
+    | TRest,
+  arg3?: Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>> | ErrorMessage,
+  arg4?: Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>>
+): ObjectSchema<MergeObjects<TSchemas>, TRest> {
+  // Get rest, message and pipe argument
+  const [rest, message, pipe] = getRestAndDefaultArgs<
+    TRest,
+    Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>>
   >(arg2, arg3, arg4);
 
   // Create and return object schema
   return object(
     schemas.reduce(
-      (entries, schema) => ({ ...entries, ...schema.object.entries }),
+      (entries, schema) => ({ ...entries, ...schema.entries }),
       {}
-    ) as MergeSchemaObjects<TObjectSchemas>,
+    ) as MergeObjects<TSchemas>,
     rest,
-    error,
+    message,
     pipe
   );
 }

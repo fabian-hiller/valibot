@@ -2,8 +2,8 @@
  * Array path item type.
  */
 export type ArrayPathItem = {
-  schema: 'array';
-  input: any[];
+  type: 'array';
+  input: unknown[];
   key: number;
-  value: any;
+  value: unknown;
 };

@@ -90,7 +90,7 @@ describe('tuple', () => {
     const result1 = schema1._parse(input1);
     expect(result1.issues?.[0].path).toEqual([
       {
-        schema: 'tuple',
+        type: 'tuple',
         input: input1,
         key: 1,
         value: input1[1],
@@ -102,13 +102,13 @@ describe('tuple', () => {
     const result2 = schema2._parse(input2);
     expect(result2.issues?.[0].path).toEqual([
       {
-        schema: 'tuple',
+        type: 'tuple',
         input: input2,
         key: 1,
         value: input2[1],
       },
       {
-        schema: 'object',
+        type: 'object',
         input: input2[1],
         key: 'key',
         value: input2[1].key,
@@ -120,7 +120,7 @@ describe('tuple', () => {
     const result3 = schema3._parse(input3);
     expect(result3.issues?.[0].path).toEqual([
       {
-        schema: 'tuple',
+        type: 'tuple',
         input: input3,
         key: 3,
         value: input3[3],
@@ -132,13 +132,13 @@ describe('tuple', () => {
     const result4 = schema4._parse(input4);
     expect(result4.issues?.[0].path).toEqual([
       {
-        schema: 'tuple',
+        type: 'tuple',
         input: input4,
         key: 2,
         value: input4[2],
       },
       {
-        schema: 'object',
+        type: 'object',
         input: input4[2],
         key: 'key',
         value: input4[2].key,
@@ -166,5 +166,24 @@ describe('tuple', () => {
     expect(() => parse(schema2, ['test', true, false, true])).toThrowError(
       lengthError
     );
+  });
+
+  test('should expose the pipeline', () => {
+    const schema1 = tuple([string()], [minLength(2), maxLength(3)]);
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        type: 'min_length',
+        requirement: 2,
+        message: 'Invalid length',
+      }),
+      expect.objectContaining({
+        type: 'max_length',
+        requirement: 3,
+        message: 'Invalid length',
+      }),
+    ]);
+
+    const schema2 = tuple([string()]);
+    expect(schema2.pipe).toBeUndefined();
   });
 });

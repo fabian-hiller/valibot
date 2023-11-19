@@ -3,7 +3,7 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 
 /**
@@ -17,18 +17,13 @@ import { getRestAndDefaultArgs } from '../../utils/index.ts';
  * @returns An object schema.
  */
 export function pick<
-  TObjectSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TObjectSchema['object']['entries'])[]
+  TSchema extends ObjectSchema<any, any>,
+  TKeys extends (keyof TSchema['entries'])[]
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
-  pipe?: Pipe<
-    ObjectOutput<
-      Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-      undefined
-    >
-  >
-): ObjectSchema<Pick<TObjectSchema['object']['entries'], TKeys[number]>>;
+  pipe?: Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, undefined>>
+): ObjectSchema<Pick<TSchema['entries'], TKeys[number]>>;
 
 /**
  * Creates an object schema that contains only the selected keys of an existing
@@ -36,25 +31,20 @@ export function pick<
  *
  * @param schema The schema to pick from.
  * @param keys The selected keys
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
 export function pick<
-  TObjectSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TObjectSchema['object']['entries'])[]
+  TSchema extends ObjectSchema<any, any>,
+  TKeys extends (keyof TSchema['entries'])[]
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
-  error?: ErrorMessage,
-  pipe?: Pipe<
-    ObjectOutput<
-      Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-      undefined
-    >
-  >
-): ObjectSchema<Pick<TObjectSchema['object']['entries'], TKeys[number]>>;
+  message?: ErrorMessage,
+  pipe?: Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, undefined>>
+): ObjectSchema<Pick<TSchema['entries'], TKeys[number]>>;
 
 /**
  * Creates an object schema that contains only the selected keys of an existing
@@ -68,23 +58,15 @@ export function pick<
  * @returns An object schema.
  */
 export function pick<
-  TObjectSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TObjectSchema['object']['entries'])[],
-  TObjectRest extends BaseSchema | undefined
+  TSchema extends ObjectSchema<any, any>,
+  TKeys extends (keyof TSchema['entries'])[],
+  TRest extends BaseSchema | undefined
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
-  rest: TObjectRest,
-  pipe?: Pipe<
-    ObjectOutput<
-      Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-      TObjectRest
-    >
-  >
-): ObjectSchema<
-  Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-  TObjectRest
->;
+  rest: TRest,
+  pipe?: Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
+): ObjectSchema<Pick<TSchema['entries'], TKeys[number]>, TRest>;
 
 /**
  * Creates an object schema that contains only the selected keys of an existing
@@ -93,85 +75,54 @@ export function pick<
  * @param schema The schema to pick from.
  * @param keys The selected keys
  * @param rest The object rest.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
 export function pick<
-  TObjectSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TObjectSchema['object']['entries'])[],
-  TObjectRest extends BaseSchema | undefined
+  TSchema extends ObjectSchema<any, any>,
+  TKeys extends (keyof TSchema['entries'])[],
+  TRest extends BaseSchema | undefined
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
-  rest: TObjectRest,
-  error?: ErrorMessage,
-  pipe?: Pipe<
-    ObjectOutput<
-      Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-      TObjectRest
-    >
-  >
-): ObjectSchema<
-  Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-  TObjectRest
->;
+  rest: TRest,
+  message?: ErrorMessage,
+  pipe?: Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
+): ObjectSchema<Pick<TSchema['entries'], TKeys[number]>, TRest>;
 
 export function pick<
-  TObjectSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TObjectSchema['object']['entries'])[],
-  TObjectRest extends BaseSchema | undefined = undefined
+  TSchema extends ObjectSchema<any, any>,
+  TKeys extends (keyof TSchema['entries'])[],
+  TRest extends BaseSchema | undefined = undefined
 >(
-  schema: TObjectSchema,
+  schema: TSchema,
   keys: TKeys,
   arg3?:
-    | Pipe<
-        ObjectOutput<
-          Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-          TObjectRest
-        >
-      >
+    | Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
     | ErrorMessage
-    | TObjectRest,
+    | TRest,
   arg4?:
-    | Pipe<
-        ObjectOutput<
-          Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-          TObjectRest
-        >
-      >
+    | Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
     | ErrorMessage,
-  arg5?: Pipe<
-    ObjectOutput<
-      Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-      TObjectRest
-    >
-  >
-): ObjectSchema<
-  Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-  TObjectRest
-> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
-    TObjectRest,
-    Pipe<
-      ObjectOutput<
-        Pick<TObjectSchema['object']['entries'], TKeys[number]>,
-        TObjectRest
-      >
-    >
+  arg5?: Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
+): ObjectSchema<Pick<TSchema['entries'], TKeys[number]>, TRest> {
+  // Get rest, message and pipe argument
+  const [rest, message, pipe] = getRestAndDefaultArgs<
+    TRest,
+    Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
   >(arg3, arg4, arg5);
 
   // Create and return object schema
   return object(
-    Object.entries(schema.object.entries).reduce(
+    Object.entries(schema.entries).reduce(
       (entries, [key, schema]) =>
         keys.includes(key) ? { ...entries, [key]: schema } : entries,
       {}
-    ) as Pick<TObjectSchema['object']['entries'], TKeys[number]>,
+    ) as Pick<TSchema['entries'], TKeys[number]>,
     rest,
-    error,
+    message,
     pipe
   );
 }
