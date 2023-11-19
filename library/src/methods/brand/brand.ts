@@ -35,6 +35,14 @@ export type SchemaWithBrand<
   };
 };
 
+/**
+ * Brands the output type of a schema.
+ *
+ * @param schema The scheme to be branded.
+ * @param name The brand name.
+ *
+ * @returns The branded schema.
+ */
 export function brand<
   TSchema extends BaseSchema | BaseSchemaAsync,
   TName extends BrandName

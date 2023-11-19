@@ -33,7 +33,6 @@ export type NullishSchema<
  * Creates a nullish schema.
  *
  * @param wrapped The wrapped schema.
- * @param default_ The default value.
  *
  * @returns A nullish schema.
  */

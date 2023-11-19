@@ -41,7 +41,7 @@ export type UnionSchemaAsync<
 /**
  * Creates an async union schema.
  *
- * @param union The union options.
+ * @param options The union options.
  * @param message The error message.
  *
  * @returns An async union schema.

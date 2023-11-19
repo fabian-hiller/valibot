@@ -24,6 +24,16 @@ export type SchemaWithTransformAsync<
   };
 };
 
+/**
+ * Adds an async transformation step to a schema, which is executed at the end
+ * of parsing and can change the output type.
+ *
+ * @param schema The schema to be used.
+ * @param action The transformation action.
+ * @param pipe A validation pipe.
+ *
+ * @returns A transformed schema.
+ */
 export function transformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
   TOutput
