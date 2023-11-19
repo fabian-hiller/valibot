@@ -27,6 +27,7 @@ type Issue = {
   input: any;
 
   // Optional info
+  requirement?: unknown;
   path?: PathItem[];
   issues?: Issues;
   abortEarly?: boolean;
@@ -62,6 +63,10 @@ Each issue contains the following required information.
 ### Optional info
 
 Some issue contain further optional information.
+
+#### Requirement
+
+`requirement` can contain future validation information. For example, if the `minLength` validation function detects that a string is too short, `requirement` contains the minimum length that the string should have.
 
 #### Path
 
