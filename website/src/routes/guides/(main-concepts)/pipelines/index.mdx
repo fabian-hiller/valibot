@@ -20,7 +20,7 @@ In simple words, a pipeline is an array of functions that synchronously passes t
 For example, the pipeline feature can be used to trim a string and make sure that it is an email that ends with a specific domain.
 
 ```ts
-import { email, endsWith, string, toTrimmed } from 'valibot'; // 0.6 kB
+import { email, endsWith, string, toTrimmed } from 'valibot'; // 0.73 kB
 
 const EmailSchema = string([toTrimmed(), email(), endsWith('@example.com')]);
 ```
@@ -36,7 +36,7 @@ Validation functions examine the input and, if the input does not meet a certain
 For example, a validation function that controls the length of a string might look like the following.
 
 ```ts
-import { getOutput, getPipeIssues, string } from 'valibot'; // 0.54 kB
+import { getOutput, getPipeIssues, string } from 'valibot'; // 0.56 kB
 
 const StringSchema = string([
   (input) => {
@@ -57,7 +57,7 @@ Utility functions: <Link href="/api/bytes">`bytes`</Link>, <Link href="/api/cuid
 Some of these utility functions can be used in the pipeline of different schema functions. For example, <Link href="/api/minValue">`minValue`</Link> can be used in the pipeline of <Link href="/api/string">`string`</Link>, <Link href="/api/number">`number`</Link>, <Link href="/api/bigint">`bigint`</Link> and <Link href="/api/date">`date`</Link>.
 
 ```ts
-import { bigint, date, minValue, number, string } from 'valibot'; // 0.58 kB
+import { bigint, date, minValue, number, string } from 'valibot'; // 0.71 kB
 
 const StringSchema = string([minValue('2023-07-29')]);
 const NumberSchema = number([minValue(1234)]);
@@ -70,7 +70,7 @@ const DateSchema = date([minValue(new Date())]);
 For custom validations <Link href="/api/custom">`custom`</Link> can be used. If the function passed as the first argument returns a falsy value, an error is thrown. Otherwise the input is considered valid.
 
 ```ts
-import { custom, string } from 'valibot'; // 0.5 kB
+import { custom, string } from 'valibot'; // 0.59 kB
 import { isValidUsername } from '~/utils';
 
 const UsernameSchema = string([
@@ -89,7 +89,7 @@ Transformation functions allow to change the value of an input, but not the data
 A transformation function that enforces a minimum value of a number could look like the following.
 
 ```ts
-import { getOutput, number } from 'valibot'; // 0.44 kB
+import { getOutput, number } from 'valibot'; // 0.53 kB
 
 const NumberSchema = number([(input) => getOutput(input > 10 ? input : 10)]);
 ```
@@ -101,7 +101,7 @@ To make the code of a pipeline more readable, you can use the utility functions 
 Utility functions: <Link href="/api/toCustom">`toCustom`</Link>, <Link href="/api/toLowerCase">`toLowerCase`</Link>, <Link href="/api/toMaxValue">`toMaxValue`</Link>, <Link href="/api/toMinValue">`toMinValue`</Link>, <Link href="/api/toTrimmed">`toTrimmed`</Link>, <Link href="/api/toTrimmedEnd">`toTrimmedEnd`</Link>, <Link href="/api/toTrimmedStart">`toTrimmedStart`</Link>, <Link href="/api/toUpperCase">`toUpperCase`</Link>
 
 ```ts
-import { number, toMinValue } from 'valibot'; // 0.47 kB
+import { number, toMinValue } from 'valibot'; // 0.57 kB
 
 const NumberSchema = number([toMinValue(10)]);
 ```

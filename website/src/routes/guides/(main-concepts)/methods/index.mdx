@@ -19,10 +19,13 @@ Schema methods: <Link href="/api/brand">`brand`</Link>, <Link href="/api/coerce"
 
 ### Coerce
 
-‎<Link href="/api/coerce">`coerce`</Link> can be used to transform an input before it is validated. They are therefore perfect for enforcing a specific data type using the built-in data type objects like [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/String), [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number) and [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
+‎<Link href="/api/coerce">`coerce`</Link> can be used to transform an input before it is validated. They are therefore perfect for enforcing a specific data type using the built-in data type objects like [`Boolean`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean), [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/String), [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number) and [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
 
 ```ts
-import { coerce, date, number, parse, string } from 'valibot'; // 0.63 kB
+import { boolean, coerce, date, number, parse, string } from 'valibot'; // 0.75 kB
+
+const BooleanSchema = coerce(boolean(), Boolean);
+const booleanOutput = parse(BooleanSchema, null); // false
 
 const StringSchema = coerce(string(), String);
 const stringOutput = parse(StringSchema, 1234); // '1234'
@@ -39,7 +42,7 @@ const dateOutput = parse(DateSchema, '2023-07-31'); // Date
 ‎<Link href="/api/transform">`transform`</Link> can be used to transform data after validation. Compared to the transformations you can perform inside <Link href="/guides/pipelines">pipelines</Link>, there are no rules here. So the input type can be completely different from the output type.
 
 ```ts
-import { type Input, type Output, parse, string, transform } from 'valibot'; // 0.58 kB
+import { type Input, type Output, parse, string, transform } from 'valibot'; // 0.67 kB
 
 const StringSchema = transform(string(), (input) => input.length);
 
@@ -54,7 +57,7 @@ const stringOutput = parse(StringSchema, 'hello'); // 5
 If an issue occurs while validating your schema, you can catch it with <Link href="/api/fallback">`fallback`</Link> to return a predefined value instead.
 
 ```ts
-import { parse, fallback, string } from 'valibot'; // 0.59 kB
+import { parse, fallback, string } from 'valibot'; // 0.68 kB
 
 const StringSchema = fallback(string(), 'hello');
 const stringOutput = parse(StringSchema, 123); // 'hello'
@@ -71,7 +74,7 @@ Object methods: <Link href="/api/keyof">`keyof`</Link>, <Link href="/api/merge">
 I offer almost the same options as TypeScript. For example, you can make the values of an object optional with <Link href="/api/partial">`partial`</Link> or make them required with <Link href="/api/required">`required`</Link>. With <Link href="/api/merge">`merge`</Link>, you can join multiple object schemas and with <Link href="/api/pick">`pick`</Link> or <Link href="/api/omit">`omit`</Link>, you can include or exclude certain values of an existing schema.
 
 ```ts
-import { number, object, partial, pick, string } from 'valibot'; // 0.8 kB
+import { number, object, partial, pick, string } from 'valibot'; // 1.08 kB
 
 // TypeScript
 type Object1 = Partial<{ key1: string; key2: number }>;
