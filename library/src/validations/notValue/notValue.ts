@@ -5,7 +5,7 @@ import { getOutput, getPipeIssues } from '../../utils/index.ts';
  * Not value validation type.
  */
 export type NotValueValidation<
-  TInput extends string | number | bigint | Date,
+  TInput extends string | number | bigint | boolean | Date,
   TRequirement extends TInput
 > = BaseValidation<TInput> & {
   /**
@@ -27,7 +27,7 @@ export type NotValueValidation<
  * @returns A validation function.
  */
 export function notValue<
-  TInput extends string | number | bigint,
+  TInput extends string | number | bigint | boolean | Date,
   TRequirement extends TInput
 >(
   requirement: TRequirement,
