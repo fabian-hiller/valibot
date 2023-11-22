@@ -5,6 +5,10 @@ export type Maybe<T> = T | null | undefined;
  *
  * When called, the given value's type is narrowed to `NonNullable<T>`.
  *
+ * @param val The value to be checked.
+ *
+ * @returns Whether the value is non-nullable.
+ *
  * ### Example Usage:
  *
  * ```ts
