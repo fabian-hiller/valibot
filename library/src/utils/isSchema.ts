@@ -1,5 +1,5 @@
-import { BaseSchema, BaseSchemaAsync } from '../types/schema';
-import { isNonNullable } from './isNonNullable';
+import type { BaseSchema, BaseSchemaAsync } from '../types/schema.ts';
+import { isNonNullable } from './isNonNullable.ts';
 
 export const isSchema = (val: unknown): val is BaseSchema | BaseSchemaAsync =>
   isNonNullable(val) &&

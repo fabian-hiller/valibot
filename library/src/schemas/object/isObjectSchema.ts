@@ -1,5 +1,5 @@
-import { ObjectSchemaAsync, ObjectEntriesAsync } from './objectAsync.ts';
-import { ObjectSchema, ObjectEntries } from './object.ts';
+import type { ObjectSchemaAsync, ObjectEntriesAsync } from './objectAsync.ts';
+import type { ObjectSchema, ObjectEntries } from './object.ts';
 import { isSchema } from '../../utils/isSchema.ts';
 
 export const isObjectSchema = (
