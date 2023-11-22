@@ -78,7 +78,7 @@ type NestedPath<TSchema extends BaseSchema | BaseSchemaAsync> =
     TSchema extends
         | ObjectSchema<infer TEntries, infer TRest>
         | ObjectSchemaAsync<infer TEntries, infer TRest>
-    ? TRest extends BaseSchema | BaseSchemaAsync
+    ? TRest extends NonNullable<TRest>
       ? ObjectPath<TEntries> | DotPath<string, TRest>
       : ObjectPath<TEntries>
     : // Record
@@ -102,7 +102,7 @@ type NestedPath<TSchema extends BaseSchema | BaseSchemaAsync> =
     TSchema extends
         | TupleSchema<infer TItems, infer TRest>
         | TupleSchemaAsync<infer TItems, infer TRest>
-    ? TRest extends BaseSchema | BaseSchemaAsync
+    ? TRest extends NonNullable<TRest>
       ? TuplePath<TItems> | DotPath<number, TRest>
       : TuplePath<TItems>
     : // Union
