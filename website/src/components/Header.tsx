@@ -123,6 +123,7 @@ export const Header = component$(() => {
           {[
             { label: 'Guides', href: '/guides' },
             { label: 'API reference', href: '/api' },
+            { label: 'Playground', href: '/playground' },
           ].map(({ label, href }) => (
             <Link
               key={href}
