@@ -50,7 +50,9 @@
     "vite-tsconfig-paths": "^4.2.0"
   },
   "dependencies": {
-    "clsx": "^2.0.0"
+    "@monaco-editor/react": "^4.6.0",
+    "clsx": "^2.0.0",
+    "monaco-editor": "^0.44.0"
   },
   "engines": {
     "node": ">=15.0.0"
