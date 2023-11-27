@@ -13,6 +13,9 @@ module.exports = {
         'lexend-exa': ['"Lexend Exa"', ...fontFamily.sans],
       },
     },
+    height: {
+      "screen-3/4": "75vh",
+    }
   },
   plugins: [],
 };
