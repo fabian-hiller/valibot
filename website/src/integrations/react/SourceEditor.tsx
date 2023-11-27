@@ -58,7 +58,10 @@ const RawSourceEditor = (props: {
         },
       }}
       onMount={handleEditorDidMount}
-      onChange={(str: string) => handleChange(str)}
+      onChange={(val: string | undefined) => {
+        if (val === undefined) return;
+        handleChange(val);
+      }}
       defaultValue={props.script}
     />
   );
