@@ -4,6 +4,7 @@ import { qwikCity } from '@builder.io/qwik-city/vite';
 import rehypeExternalLinks from 'rehype-external-links';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { qwikReact } from '@builder.io/qwik-react/vite';
 
 export default defineConfig(() => {
   return {
@@ -23,6 +24,7 @@ export default defineConfig(() => {
       }),
       qwikVite(),
       tsconfigPaths(),
+      qwikReact(),
     ],
     preview: {
       headers: {
