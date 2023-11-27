@@ -74,3 +74,9 @@ export const ULID_REGEX = /^[\da-hjkmnp-tv-z]{26}$/iu;
  * [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) regex.
  */
 export const UUID_REGEX = /^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/iu;
+
+/**
+ * [MAC](https://en.wikipedia.org/wiki/MAC_address) regex.
+ */
+export const MAC_REGEX =
+  /^(?:[\da-f]{2}[:-]){5}[\da-f]{2}$|^(?:[\da-f]{2}[:-]){7}[\da-f]{2}$|^(?:[\da-f]{4}:){3}[\da-f]{4}$|^(?:[\da-f]{4}\.){2}[\da-f]{4}$/iu;
