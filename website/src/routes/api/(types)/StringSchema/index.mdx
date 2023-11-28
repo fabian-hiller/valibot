@@ -20,11 +20,12 @@ export const properties = {
         type: 'custom',
         name: 'BaseSchema',
         href: '../BaseSchema/',
-        generics: {
-          withDefault: true,
-          name: 'TOutput',
-          type: 'string',
-        },
+        generics: [
+          {
+            name: 'TOutput',
+            type: 'string',
+          },
+        ],
       },
     ],
   },

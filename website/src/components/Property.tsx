@@ -54,9 +54,7 @@ type SingleTypeOrValue =
   | {
       type: 'custom';
       name: string;
-      generics?:
-        | { withDefault: true; name: string; type: TypeOrValue }
-        | { withDefault: false; type: TypeOrValue[] };
+      generics?: { name?: string; type: TypeOrValue }[];
       href?: string;
     };
 
@@ -187,26 +185,28 @@ export function Property(props: PropertyProps) {
               {type.href ? (
                 <TextLink href={type.href}>{type.name}</TextLink>
               ) : (
-                <span class="text-slate-600 dark:text-slate-400">
-                  {type.name}
-                </span>
+                <span class="text-sky-600 dark:text-sky-400">{type.name}</span>
               )}
               {type.generics && (
                 <>
                   {'<'}
-                  {type.generics.withDefault ? (
+                  {type.generics.map((generic, index) => (
                     <>
-                      {type.generics.name} =
-                      <Property type={type.generics.type} />
+                      {index > 0 && ', '}
+                      {generic.name && (
+                        <>
+                          <span class="text-sky-600 dark:text-sky-400">
+                            {generic.name}
+                          </span>
+                          <span class="text-slate-600 dark:text-slate-400">
+                            {' '}
+                            ={' '}
+                          </span>
+                        </>
+                      )}
+                      <Property type={generic.type} padding="none" />
                     </>
-                  ) : (
-                    type.generics.type.map((generic, index) => (
-                      <>
-                        {index > 0 && ', '}
-                        <Property type={generic} padding="none" />
-                      </>
-                    ))
-                  )}
+                  ))}
                   {'>'}
                 </>
               )}
