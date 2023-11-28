@@ -4,7 +4,7 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import {
   executePipeAsync,
   getIssues,
@@ -29,9 +29,26 @@ export type TupleSchemaAsync<
   TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
   TOutput = TupleOutput<TItems, TRest>
 > = BaseSchemaAsync<TupleInput<TItems, TRest>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'tuple';
+  /**
+   * The tuple items schema.
+   */
   items: TItems;
+  /**
+   * The tuple rest schema.
+   */
   rest: TRest;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<TupleOutput<TItems, TRest>> | undefined;
 };
 
 /**
@@ -51,14 +68,14 @@ export function tupleAsync<TItems extends TupleItemsAsync>(
  * Creates an async tuple schema.
  *
  * @param items The items schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async tuple schema.
  */
 export function tupleAsync<TItems extends TupleItemsAsync>(
   items: TItems,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<TupleOutput<TItems, undefined>>
 ): TupleSchemaAsync<TItems>;
 
@@ -85,7 +102,7 @@ export function tupleAsync<
  *
  * @param items The items schema.
  * @param rest The rest schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async tuple schema.
@@ -96,7 +113,7 @@ export function tupleAsync<
 >(
   items: TItems,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<TupleOutput<TItems, TRest>>
 ): TupleSchemaAsync<TItems, TRest>;
 
@@ -109,52 +126,24 @@ export function tupleAsync<
   arg3?: PipeAsync<TupleOutput<TItems, TRest>> | ErrorMessage,
   arg4?: PipeAsync<TupleOutput<TItems, TRest>>
 ): TupleSchemaAsync<TItems, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message = 'Invalid type', pipe] = getRestAndDefaultArgs<
     TRest,
     PipeAsync<TupleOutput<TItems, TRest>>
   >(arg2, arg3, arg4);
 
   // Create and return async tuple schema
   return {
-    /**
-     * The schema type.
-     */
     type: 'tuple',
-
-    /**
-     * The items schema.
-     */
-    items,
-
-    /**
-     * The rest schema.
-     */
-    rest,
-
-    /**
-     * Whether it's async.
-     */
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    items,
+    rest,
+    message,
+    pipe,
     async _parse(input, info) {
       // Check type of input
-      if (!Array.isArray(input) || items.length > input.length) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'tuple',
-          error || 'Invalid type',
-          input
-        );
+      if (!Array.isArray(input) || this.items.length > input.length) {
+        return getSchemaIssues(info, 'type', 'tuple', this.message, input);
       }
 
       // Create issues and output
@@ -164,7 +153,7 @@ export function tupleAsync<
       await Promise.all([
         // Parse schema of each tuple item
         Promise.all(
-          items.map(async (schema, key) => {
+          this.items.map(async (schema, key) => {
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
               const value = input[key];
@@ -210,13 +199,13 @@ export function tupleAsync<
         ),
 
         // If necessary parse schema of each rest item
-        rest &&
+        this.rest &&
           Promise.all(
-            input.slice(items.length).map(async (value, index) => {
+            input.slice(this.items.length).map(async (value, index) => {
               // If not aborted early, continue execution
               if (!(info?.abortEarly && issues)) {
-                const key = items.length + index;
-                const result = await rest._parse(value, info);
+                const key = this.items.length + index;
+                const result = await this.rest!._parse(value, info);
 
                 // If not aborted early, continue execution
                 if (!(info?.abortEarly && issues)) {
@@ -263,7 +252,7 @@ export function tupleAsync<
         ? getIssues(issues)
         : executePipeAsync(
             output as TupleOutput<TItems, TRest>,
-            pipe,
+            this.pipe,
             info,
             'tuple'
           );

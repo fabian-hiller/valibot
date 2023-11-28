@@ -1,4 +1,4 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import {
   executePipe,
   getDefaultArgs,
@@ -9,7 +9,18 @@ import {
  * Number schema type.
  */
 export type NumberSchema<TOutput = number> = BaseSchema<number, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'number';
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<number> | undefined;
 };
 
 /**
@@ -24,54 +35,37 @@ export function number(pipe?: Pipe<number>): NumberSchema;
 /**
  * Creates a number schema.
  *
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A number schema.
  */
-export function number(error?: ErrorMessage, pipe?: Pipe<number>): NumberSchema;
+export function number(
+  message?: ErrorMessage,
+  pipe?: Pipe<number>
+): NumberSchema;
 
 export function number(
   arg1?: ErrorMessage | Pipe<number>,
   arg2?: Pipe<number>
 ): NumberSchema {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg1, arg2);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg1, arg2);
 
   // Create and return number schema
   return {
-    /**
-     * The schema type.
-     */
     type: 'number',
-
-    /**
-     * Whether it's async.
-     */
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    message,
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'number' || isNaN(input)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'number',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'number', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipe(input, pipe, info, 'number');
+      return executePipe(input, this.pipe, info, 'number');
     },
   };
 }

@@ -6,7 +6,7 @@ import type {
   Issues,
   Output,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import {
   executePipeAsync,
   getDefaultArgs,
@@ -22,8 +22,22 @@ export type ArraySchemaAsync<
   TItem extends BaseSchema | BaseSchemaAsync,
   TOutput = Output<TItem>[]
 > = BaseSchemaAsync<Input<TItem>[], TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'array';
+  /**
+   * The array item schema.
+   */
   item: TItem;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<Output<TItem>[]> | undefined;
 };
 
 /**
@@ -43,14 +57,14 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
  * Creates an async array schema.
  *
  * @param item The item schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async array schema.
  */
 export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
   item: TItem,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<Output<TItem>[]>
 ): ArraySchemaAsync<TItem>;
 
@@ -59,44 +73,20 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
   arg2?: ErrorMessage | PipeAsync<Output<TItem>[]>,
   arg3?: PipeAsync<Output<TItem>[]>
 ): ArraySchemaAsync<TItem> {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
 
   // Create and return async array schema
   return {
-    /**
-     * The schema type.
-     */
     type: 'array',
-
-    /**
-     * The item schema.
-     */
-    item,
-
-    /**
-     * Whether it's async.
-     */
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    item,
+    message,
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'array',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'array', this.message, input);
       }
 
       // Create issues and output
@@ -109,7 +99,7 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
           // If not aborted early, continue execution
           if (!(info?.abortEarly && issues)) {
             // Parse schema of array item
-            const result = await item._parse(value, info);
+            const result = await this.item._parse(value, info);
 
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
@@ -153,7 +143,7 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
       // Return issues or pipe result
       return issues
         ? getIssues(issues)
-        : executePipeAsync(output as Output<TItem>[], pipe, info, 'array');
+        : executePipeAsync(output as Output<TItem>[], this.pipe, info, 'array');
     },
   };
 }

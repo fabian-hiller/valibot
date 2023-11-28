@@ -2,6 +2,16 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add support for boolean to `notValue` validation (pull request #261)
+
+## v0.21.0 (November 19, 2023)
+
+- Change structure of schemas, validations and transformations to make properties accessible (pull request #211)
+- Fix errors in JSDoc comments and add JSDoc ESLint plugin (pull request #205)
+- Fix missing file extension for Deno (pull request #249)
+
 ## v0.20.1 (November 2, 2023)
 
 - Remove `never` from type signatur of strict objects and tuples (issue #234)

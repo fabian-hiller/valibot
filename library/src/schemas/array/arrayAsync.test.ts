@@ -114,4 +114,18 @@ describe('array', () => {
     await expect(parseAsync(schema2, [1, 2])).rejects.toThrowError(lengthError);
     await expect(parseAsync(schema2, [1])).rejects.toThrowError(contentError);
   });
+
+  test('should expose the pipeline', () => {
+    const schema1 = arrayAsync(string(), [maxLength(5)]);
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        type: 'max_length',
+        requirement: 5,
+        message: 'Invalid length',
+      }),
+    ]);
+
+    const schema2 = arrayAsync(string());
+    expect(schema2.pipe).toBeUndefined();
+  });
 });

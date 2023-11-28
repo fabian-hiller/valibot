@@ -1,9 +1,10 @@
+import { getDefaultAsync } from '../../methods/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
   Input,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getOutput } from '../../utils/index.ts';
 
 /**
@@ -13,16 +14,36 @@ export type NullishSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TDefault extends
     | Input<TWrapped>
-    | undefined
-    | Promise<Input<TWrapped> | undefined> = undefined,
+    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
+    | undefined = undefined,
   TOutput = Awaited<TDefault> extends Input<TWrapped>
     ? Output<TWrapped>
     : Output<TWrapped> | null | undefined
 > = BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'nullish';
+  /**
+   * The wrapped schema.
+   */
   wrapped: TWrapped;
-  getDefault: () => Promise<TDefault>;
+  /**
+   * Retutns the default value.
+   */
+  default: TDefault;
 };
+
+/**
+ * Creates an async nullish schema.
+ *
+ * @param wrapped The wrapped schema.
+ *
+ * @returns An async nullish schema.
+ */
+export function nullishAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
+  wrapped: TWrapped
+): NullishSchemaAsync<TWrapped>;
 
 /**
  * Creates an async nullish schema.
@@ -34,51 +55,34 @@ export type NullishSchemaAsync<
  */
 export function nullishAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends
+  const TDefault extends
     | Input<TWrapped>
+    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined
-    | Promise<Input<TWrapped> | undefined> = undefined
 >(
   wrapped: TWrapped,
-  default_?: TDefault | (() => TDefault)
+  default_: TDefault
+): NullishSchemaAsync<TWrapped, TDefault>;
+
+export function nullishAsync<
+  TWrapped extends BaseSchema | BaseSchemaAsync,
+  const TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
+    | undefined = undefined
+>(
+  wrapped: TWrapped,
+  default_?: TDefault
 ): NullishSchemaAsync<TWrapped, TDefault> {
   return {
-    /**
-     * The schema type.
-     */
     type: 'nullish',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped,
-
-    /**
-     * Retutns the default value.
-     */
-    async getDefault() {
-      return typeof default_ === 'function'
-        ? (default_ as () => TDefault)()
-        : (default_ as TDefault);
-    },
-
-    /**
-     * Whether it's async.
-     */
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
+    default: default_ as TDefault,
     async _parse(input, info) {
       // Allow `null` or `undefined` to pass or override it with default value
       if (input === null || input === undefined) {
-        const override = await this.getDefault();
+        const override = await getDefaultAsync(this);
         if (override === undefined) {
           return getOutput(input);
         }
@@ -86,7 +90,7 @@ export function nullishAsync<
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(input, info);
+      return this.wrapped._parse(input, info);
     },
   };
 }

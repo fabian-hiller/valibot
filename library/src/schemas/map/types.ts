@@ -3,16 +3,16 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 
 /**
  * Map path item type.
  */
 export type MapPathItem = {
   type: 'map';
-  input: Map<any, any>;
-  key: any;
-  value: any;
+  input: Map<unknown, unknown>;
+  key: unknown;
+  value: unknown;
 };
 
 /**

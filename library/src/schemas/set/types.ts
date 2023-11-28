@@ -3,16 +3,16 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 
 /**
  * Set path item type.
  */
 export type SetPathItem = {
   type: 'set';
-  input: Set<any>;
+  input: Set<unknown>;
   key: number;
-  value: any;
+  value: unknown;
 };
 
 /**

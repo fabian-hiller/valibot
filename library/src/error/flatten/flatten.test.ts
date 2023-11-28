@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { Issue, Issues } from '../../types.ts';
+import type { Issue, Issues } from '../../types/index.ts';
 import { ValiError } from '../ValiError/index.ts';
 import { flatten } from './flatten.ts';
 

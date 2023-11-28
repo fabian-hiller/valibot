@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { Issue } from '../../types.ts';
+import type { Issue } from '../../types/index.ts';
 import { getSchemaIssues } from './getSchemaIssues.ts';
 
 describe('getSchemaIssues', () => {

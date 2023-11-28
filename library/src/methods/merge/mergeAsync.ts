@@ -9,7 +9,7 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 import type { MergeObjects } from './types.ts';
 
@@ -41,14 +41,14 @@ export function mergeAsync<TSchemas extends ObjectSchemas>(
  * entries overwrite the previous ones.
  *
  * @param schemas The schemas to be merged.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
  */
 export function mergeAsync<TSchemas extends ObjectSchemas>(
   schemas: TSchemas,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, undefined>>
 ): ObjectSchemaAsync<MergeObjects<TSchemas>>;
 
@@ -77,7 +77,7 @@ export function mergeAsync<
  *
  * @param schemas The schemas to be merged.
  * @param rest The object rest.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -88,7 +88,7 @@ export function mergeAsync<
 >(
   schemas: TSchemas,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
 ): ObjectSchemaAsync<MergeObjects<TSchemas>, TRest>;
 
@@ -104,8 +104,8 @@ export function mergeAsync<
   arg3?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>> | ErrorMessage,
   arg4?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
 ): ObjectSchemaAsync<MergeObjects<TSchemas>, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message, pipe] = getRestAndDefaultArgs<
     TRest,
     PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
   >(arg2, arg3, arg4);
@@ -117,7 +117,7 @@ export function mergeAsync<
       {}
     ) as MergeObjects<TSchemas>,
     rest,
-    error,
+    message,
     pipe
   );
 }

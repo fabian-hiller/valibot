@@ -3,7 +3,7 @@
  */
 export type ArrayPathItem = {
   type: 'array';
-  input: any[];
+  input: unknown[];
   key: number;
-  value: any;
+  value: unknown;
 };

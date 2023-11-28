@@ -6,7 +6,7 @@ import {
   optional,
   type OptionalSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import { getRestAndDefaultArgs } from '../../utils/index.ts';
 
 /**
@@ -35,14 +35,14 @@ export function partial<TSchema extends ObjectSchema<any, any>>(
  * schema set to optional.
  *
  * @param schema The affected schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
 export function partial<TSchema extends ObjectSchema<any, any>>(
   schema: TSchema,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, undefined>>
 ): ObjectSchema<PartialObjectEntries<TSchema['entries']>>;
 
@@ -71,7 +71,7 @@ export function partial<
  *
  * @param schema The affected schema.
  * @param rest The object rest.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -82,7 +82,7 @@ export function partial<
 >(
   schema: TSchema,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, TRest>>
 ): ObjectSchema<PartialObjectEntries<TSchema['entries']>, TRest>;
 
@@ -100,8 +100,8 @@ export function partial<
     | ErrorMessage,
   arg4?: Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, TRest>>
 ): ObjectSchema<PartialObjectEntries<TSchema['entries']>, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message, pipe] = getRestAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, TRest>>
   >(arg2, arg3, arg4);
@@ -116,7 +116,7 @@ export function partial<
       {}
     ) as PartialObjectEntries<TSchema['entries']>,
     rest,
-    error,
+    message,
     pipe
   );
 }

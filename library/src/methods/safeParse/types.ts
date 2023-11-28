@@ -4,7 +4,7 @@ import type {
   BaseSchemaAsync,
   Issues,
   Output,
-} from '../../types.ts';
+} from '../../types/index.ts';
 
 /**
  * Safe parse result type.

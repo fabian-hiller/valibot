@@ -22,15 +22,6 @@ export function strip<TSchema extends ObjectSchema<ObjectEntries, undefined>>(
   // Create and return object schema
   return {
     ...schema,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Get parse result of schema
       const result = schema._parse(input, info);

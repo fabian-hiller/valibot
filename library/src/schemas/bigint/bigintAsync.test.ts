@@ -39,4 +39,18 @@ describe('bigintAsync', () => {
       valueError
     );
   });
+
+  test('should expose the pipeline', () => {
+    const schema1 = bigintAsync([maxValue(500n)]);
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        type: 'max_value',
+        requirement: 500n,
+        message: 'Invalid value',
+      }),
+    ]);
+
+    const schema2 = bigintAsync();
+    expect(schema2.pipe).toBeUndefined();
+  });
 });

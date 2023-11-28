@@ -1,4 +1,8 @@
-import type { IssueReason, ParseInfo, PipeInfo } from '../../../../types.ts';
+import type {
+  IssueReason,
+  ParseInfo,
+  PipeInfo,
+} from '../../../../types/index.ts';
 
 /**
  * Returns the pipe info.

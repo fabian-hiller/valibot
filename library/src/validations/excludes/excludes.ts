@@ -1,30 +1,47 @@
-import type { ErrorMessage, PipeResult } from '../../types.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
-export function excludes<TInput extends string>(
-  requirement: string,
-  error?: ErrorMessage
-): (input: TInput) => PipeResult<TInput>;
-
-export function excludes<TInput extends TItem[], TItem>(
-  requirement: TItem,
-  error?: ErrorMessage
-): (input: TInput) => PipeResult<TInput>;
+/**
+ * Excludes validation type.
+ */
+export type ExcludesValidation<
+  TInput extends string | any[],
+  TRequirement extends TInput extends any[] ? TInput[number] : TInput
+> = BaseValidation<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'excludes';
+  /**
+   * The required value.
+   */
+  requirement: TRequirement;
+};
 
 /**
  * Creates a validation function that validates the content of a string or array.
  *
  * @param requirement The content to be excluded.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
-export function excludes<TInput extends string | TItem[], TItem>(
-  requirement: string | TItem,
-  error?: ErrorMessage
-) {
-  return (input: TInput): PipeResult<TInput> =>
-    input.includes(requirement as any)
-      ? getPipeIssues('excludes', error || 'Invalid content', input)
-      : getOutput(input);
+export function excludes<
+  TInput extends string | any[],
+  const TRequirement extends TInput extends any[] ? TInput[number] : TInput
+>(
+  requirement: TRequirement,
+  message: ErrorMessage = 'Invalid content'
+): ExcludesValidation<TInput, TRequirement> {
+  return {
+    type: 'excludes',
+    async: false,
+    message,
+    requirement,
+    _parse(input) {
+      return input.includes(this.requirement)
+        ? getPipeIssues(this.type, this.message, input, this.requirement)
+        : getOutput(input);
+    },
+  };
 }

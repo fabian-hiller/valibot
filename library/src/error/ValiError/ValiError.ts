@@ -1,4 +1,4 @@
-import type { Issues } from '../../types.ts';
+import type { Issues } from '../../types/index.ts';
 
 /**
  * A Valibot error with useful information.

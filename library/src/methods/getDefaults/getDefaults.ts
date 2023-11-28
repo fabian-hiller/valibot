@@ -4,8 +4,11 @@ import type {
   TupleItems,
   TupleSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema } from '../../types.ts';
-import type { SchemaWithMaybeDefault } from '../getDefault/getDefault.ts';
+import type { BaseSchema } from '../../types/index.ts';
+import {
+  getDefault,
+  type SchemaWithMaybeDefault,
+} from '../getDefault/index.ts';
 import type { DefaultValues } from './types.ts';
 
 /**
@@ -28,8 +31,8 @@ export function getDefaults<
   let defaults: any;
 
   // If schema contains a default function, set its default value
-  if (schema.getDefault) {
-    defaults = schema.getDefault();
+  if (schema.default) {
+    defaults = getDefault(schema);
 
     // Otherwise, check if schema is of kind object or tuple
   } else if ('type' in schema) {

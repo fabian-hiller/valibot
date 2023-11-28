@@ -160,4 +160,18 @@ describe('mapAsync', () => {
       parseAsync(schema2, new Map().set(1, '1'))
     ).rejects.toThrowError(sizeError);
   });
+
+  test('should expose the pipeline', () => {
+    const schema1 = mapAsync(number(), string(), [size(1)]);
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        type: 'size',
+        requirement: 1,
+        message: 'Invalid size',
+      }),
+    ]);
+
+    const schema2 = mapAsync(number(), string());
+    expect(schema2.pipe).toBeUndefined();
+  });
 });

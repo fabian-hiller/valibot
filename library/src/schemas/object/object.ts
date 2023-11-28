@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Issues, Pipe } from '../../types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Issues,
+  Pipe,
+} from '../../types/index.ts';
 import {
   executePipe,
   getIssues,
@@ -20,9 +25,26 @@ export type ObjectSchema<
   TRest extends BaseSchema | undefined = undefined,
   TOutput = ObjectOutput<TEntries, TRest>
 > = BaseSchema<ObjectInput<TEntries, TRest>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'object';
+  /**
+   * The object entries schema.
+   */
   entries: TEntries;
+  /**
+   * The object rest schema.
+   */
   rest: TRest;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<ObjectOutput<TEntries, TRest>> | undefined;
 };
 
 /**
@@ -42,14 +64,14 @@ export function object<TEntries extends ObjectEntries>(
  * Creates an object schema.
  *
  * @param entries The object entries.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
 export function object<TEntries extends ObjectEntries>(
   entries: TEntries,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<TEntries, undefined>>
 ): ObjectSchema<TEntries>;
 
@@ -76,7 +98,7 @@ export function object<
  *
  * @param entries The object entries.
  * @param rest The object rest.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -87,7 +109,7 @@ export function object<
 >(
   entries: TEntries,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<TEntries, TRest>>
 ): ObjectSchema<TEntries, TRest>;
 
@@ -100,8 +122,8 @@ export function object<
   arg3?: Pipe<ObjectOutput<TEntries, TRest>> | ErrorMessage,
   arg4?: Pipe<ObjectOutput<TEntries, TRest>>
 ): ObjectSchema<TEntries, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message = 'Invalid type', pipe] = getRestAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<TEntries, TRest>>
   >(arg2, arg3, arg4);
@@ -111,48 +133,20 @@ export function object<
 
   // Create and return object schema
   return {
-    /**
-     * The schema type.
-     */
     type: 'object',
-
-    /**
-     * The entries schema.
-     */
-    entries,
-
-    /**
-     * The rest schema.
-     */
-    rest,
-
-    /**
-     * Whether it's async.
-     */
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    entries,
+    rest,
+    message,
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return getSchemaIssues(
-          info,
-          'type',
-          'object',
-          error || 'Invalid type',
-          input
-        );
+        return getSchemaIssues(info, 'type', 'object', this.message, input);
       }
 
       // Cache object entries lazy
-      cachedEntries = cachedEntries || Object.entries(entries);
+      cachedEntries = cachedEntries || Object.entries(this.entries);
 
       // Create issues and output
       let issues: Issues | undefined;
@@ -168,7 +162,7 @@ export function object<
           // Create object path item
           const pathItem: ObjectPathItem = {
             type: 'object',
-            input,
+            input: input as Record<string, unknown>,
             key,
             value,
           };
@@ -198,18 +192,18 @@ export function object<
       }
 
       // If necessary parse schema of each rest entry
-      if (rest && !(info?.abortEarly && issues)) {
+      if (this.rest && !(info?.abortEarly && issues)) {
         for (const key in input) {
-          if (!(key in entries)) {
+          if (!(key in this.entries)) {
             const value = (input as Record<string, unknown>)[key];
-            const result = rest._parse(value, info);
+            const result = this.rest._parse(value, info);
 
             // If there are issues, capture them
             if (result.issues) {
               // Create object path item
               const pathItem: ObjectPathItem = {
                 type: 'object',
-                input,
+                input: input as Record<string, unknown>,
                 key,
                 value,
               };
@@ -245,7 +239,7 @@ export function object<
         ? getIssues(issues)
         : executePipe(
             output as ObjectOutput<TEntries, TRest>,
-            pipe,
+            this.pipe,
             info,
             'object'
           );

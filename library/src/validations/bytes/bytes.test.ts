@@ -6,19 +6,19 @@ describe('bytes', () => {
     const validate = bytes(3);
 
     const value1 = '123';
-    expect(validate(value1).output).toBe(value1);
+    expect(validate._parse(value1).output).toBe(value1);
     const value2 = 'あ'; // in UTF-8, 'あ' is 3 bytes
-    expect(validate(value2).output).toBe(value2);
+    expect(validate._parse(value2).output).toBe(value2);
 
-    expect(validate('').issues).toBeTruthy();
-    expect(validate('12').issues).toBeTruthy();
-    expect(validate('1234').issues).toBeTruthy();
-    expect(validate('あいう').issues).toBeTruthy();
+    expect(validate._parse('').issues).toBeTruthy();
+    expect(validate._parse('12').issues).toBeTruthy();
+    expect(validate._parse('1234').issues).toBeTruthy();
+    expect(validate._parse('あいう').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value byte length is not "10"!';
     const validate = bytes(10, error);
-    expect(validate('test').issues?.[0].message).toBe(error);
+    expect(validate._parse('test').issues?.[0].message).toBe(error);
   });
 });

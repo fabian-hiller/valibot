@@ -1,4 +1,4 @@
-import type { Output } from '../../types.ts';
+import type { Output } from '../../types/index.ts';
 import type { SchemaWithMaybeDefault } from './getDefault.ts';
 import type { SchemaWithMaybeDefaultAsync } from './getDefaultAsync.ts';
 
@@ -7,8 +7,10 @@ import type { SchemaWithMaybeDefaultAsync } from './getDefaultAsync.ts';
  */
 export type DefaultValue<
   TSchema extends SchemaWithMaybeDefault | SchemaWithMaybeDefaultAsync
-> = TSchema['getDefault'] extends () => Output<TSchema>
-  ? ReturnType<TSchema['getDefault']>
-  : TSchema['getDefault'] extends () => Promise<Output<TSchema>>
-  ? Awaited<ReturnType<TSchema['getDefault']>>
+> = TSchema['default'] extends Output<TSchema> | undefined
+  ? TSchema['default']
+  : TSchema['default'] extends () => Output<TSchema> | undefined
+  ? ReturnType<TSchema['default']>
+  : TSchema['default'] extends () => Promise<Output<TSchema> | undefined>
+  ? Awaited<ReturnType<TSchema['default']>>
   : undefined;

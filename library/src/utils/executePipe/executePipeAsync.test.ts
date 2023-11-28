@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { toCustom, toCustomAsync } from '../../transformations/index.ts';
 import { minValue } from '../../validations/index.ts';
-import type { PipeAsync } from '../../types.ts';
+import type { PipeAsync } from '../../types/index.ts';
 import { executePipeAsync } from './executePipeAsync.ts';
 
 describe('executePipeAsync', () => {

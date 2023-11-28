@@ -1,4 +1,4 @@
-import type { ErrorMessage, Pipe, PipeAsync } from '../../types.ts';
+import type { ErrorMessage, Pipe, PipeAsync } from '../../types/index.ts';
 
 /**
  * Returns error and pipe from dynamic arguments.

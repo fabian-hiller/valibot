@@ -1,20 +1,47 @@
-import type { ErrorMessage, PipeResult } from '../../types.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
+
+/**
+ * Min size validation type.
+ */
+export type MinSizeValidation<
+  TInput extends Map<any, any> | Set<any> | Blob,
+  TRequirement extends number
+> = BaseValidation<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'min_size';
+  /**
+   * The minimum size.
+   */
+  requirement: TRequirement;
+};
 
 /**
  * Creates a validation function that validates the size of a map, set or blob.
  *
  * @param requirement The minimum size.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
-export function minSize<TInput extends Map<any, any> | Set<any> | Blob>(
-  requirement: number,
-  error?: ErrorMessage
-) {
-  return (input: TInput): PipeResult<TInput> =>
-    input.size < requirement
-      ? getPipeIssues('min_size', error || 'Invalid size', input)
-      : getOutput(input);
+export function minSize<
+  TInput extends Map<any, any> | Set<any> | Blob,
+  TRequirement extends number
+>(
+  requirement: TRequirement,
+  message: ErrorMessage = 'Invalid size'
+): MinSizeValidation<TInput, TRequirement> {
+  return {
+    type: 'min_size',
+    async: false,
+    message,
+    requirement,
+    _parse(input) {
+      return input.size < this.requirement
+        ? getPipeIssues(this.type, this.message, input, this.requirement)
+        : getOutput(input);
+    },
+  };
 }
