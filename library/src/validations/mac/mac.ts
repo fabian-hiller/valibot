@@ -11,20 +11,20 @@ export type MacValidation<TInput extends string> = BaseValidation<TInput> & {
    */
   type: 'mac';
   /**
-   * The <MAC> regex.
+   * The MAC address regex.
    */
   requirement: RegExp;
 };
 
 /**
- * Creates a validation function that validates a [MAC](https://en.wikipedia.org/wiki/MAC_address).
+ * Creates a validation function that validates a [MAC address](https://en.wikipedia.org/wiki/MAC_address).
  *
  * @param message The error message.
  *
  * @returns A validation function.
  */
 export function mac<TInput extends string>(
-  message: ErrorMessage = 'Invalid MAC Address'
+  message: ErrorMessage = 'Invalid MAC address'
 ): MacValidation<TInput> {
   return {
     type: 'mac',
