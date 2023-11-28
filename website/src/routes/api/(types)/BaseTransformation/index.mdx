@@ -1,0 +1,63 @@
+---
+title: BaseTransformation
+description: Base transformation type.
+---
+
+import { Property } from '~/components';
+
+# BaseTransformation
+
+Base transformation type.
+
+## Definition
+
+- `BaseTransformation` <Property {...properties.BaseTransformation} />
+  - `async` <Property {...properties.async} />
+  - `_parse` {/* prettier-ignore */}<Property {...properties._parse} />
+
+export const properties = {
+  BaseTransformation: {
+    type: {
+      type: 'custom',
+      name: 'Object',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+          default: 'unknown',
+        },
+      ],
+    },
+  },
+  async: {
+    type: {
+      type: 'boolean',
+      value: false,
+    },
+  },
+  _parse: {
+    type: {
+      type: 'function',
+      params: [
+        {
+          name: 'input',
+          type: {
+            type: 'custom',
+            name: 'TInput',
+          },
+        },
+      ],
+      return: {
+        type: 'custom',
+        name: 'PipeResult',
+        href: '../PipeResult/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'TInput',
+          },
+        ],
+      },
+    },
+  },
+};

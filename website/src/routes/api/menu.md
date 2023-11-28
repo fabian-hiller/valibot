@@ -175,6 +175,8 @@
 
 - [ArrayPathItem](/api/ArrayPathItem)
 - [BaseSchema](/api/BaseSchema)
+- [BaseTransformation](/api/BaseTransformation)
+- [BaseValidation](/api/BaseValidation)
 - [ErrorMessage](/api/ErrorMessage)
 - [Issue](/api/Issue)
 - [IssueOrigin](/api/IssueOrigin)
@@ -182,6 +184,7 @@
 - [Issues](/api/Issues)
 - [MapPathItem](/api/MapPathItem)
 - [ObjectPathItem](/api/ObjectPathItem)
+- [ParseInfo](/api/ParseInfo)
 - [PathItem](/api/PathItem)
 - [Pipe](/api/Pipe)
 - [PipeResult](/api/PipeResult)

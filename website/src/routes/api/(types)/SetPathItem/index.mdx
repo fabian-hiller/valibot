@@ -1,5 +1,6 @@
 ---
 title: SetPathItem
+description: Set path item type.
 ---
 
 import { Property } from '~/components';
@@ -10,17 +11,24 @@ Set path item type.
 
 ## Definition
 
-- `SetPathItem` <Property type="object"/>
-  - schema <Property type='string' value='set' />
-  - input <Property {...properties.input} />
-  - key <Property type='number' />
-  - value <Property type='any' />
+- `SetPathItem` <Property type="object" />
+  - `type` <Property {...properties.type} />
+  - `input` <Property {...properties.input} />
+  - `key` <Property type="number" />
+  - `value` <Property type="unknown" />
 
 export const properties = {
+  type: {
+    type: {
+      type: 'string',
+      value: 'set',
+    },
+  },
   input: {
     type: {
       type: 'custom',
-      name: 'Set<any>',
+      name: 'Set',
+      generics: ['unknown'],
     },
   },
 };

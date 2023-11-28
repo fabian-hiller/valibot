@@ -1,5 +1,6 @@
 ---
 title: BaseSchema
+description: Base schema type.
 ---
 
 import { Property } from '~/components';
@@ -10,84 +11,83 @@ Base schema type.
 
 ## Definition
 
-- `BaseSchema`
-  - `async` <Property {...properties.async}/>
-  - `_parse` <Property {...properties.parse}/>
-  - `_types` <Property {...properties.types}/>
+- `BaseSchema` <Property {...properties.BaseSchema} />
+  - `async` <Property {...properties.async} />
+  - `_parse` {/* prettier-ignore */}<Property {...properties._parse} />
+  - `_types` {/* prettier-ignore */}<Property {...properties._types} />
 
 export const properties = {
+  BaseSchema: {
+    type: {
+      type: 'custom',
+      name: 'Object',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+          default: 'unknown',
+        },
+        {
+          type: 'custom',
+          name: 'TOutput',
+          default: {
+            type: 'custom',
+            name: 'TInput',
+          },
+        },
+      ],
+    },
+  },
   async: {
-    type: [
-      {
-        type: 'boolean',
-        value: false,
-      },
-    ],
+    type: {
+      type: 'boolean',
+      value: false,
+    },
   },
-  parse: {
-    type: [
-      {
-        type: 'function',
-        params: [
-          {
-            name: 'input',
-            type: 'unknown',
+  _parse: {
+    type: {
+      type: 'function',
+      params: [
+        {
+          name: 'input',
+          type: 'unknown',
+        },
+        {
+          name: 'info',
+          optional: true,
+          type: {
+            type: 'custom',
+            name: 'ParseInfo',
+            href: '../ParseInfo/',
           },
-        ],
-        return: [
-          {
-            type: 'object',
-            entries: [
-              {
-                key: 'output',
-                value: 'any',
-              },
-              {
-                key: 'issues',
-                value: 'undefined',
-              },
-            ],
-          },
-          {
-            type: 'object',
-            entries: [
-              {
-                key: 'output',
-                value: 'undefined',
-              },
-              {
-                key: 'issues',
-                value: [
-                  {
-                    type: 'array',
-                    item: [
-                      {
-                        type: 'custom',
-                        name: 'Issue',
-                        href: '../Issue',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
+        },
+      ],
+      return: {
+        type: 'custom',
+        name: '_ParseResult',
+        href: '../_ParseResult/',
+        generics: [{ type: 'custom', name: 'TOutput' }],
       },
-    ],
+    },
   },
-  types: {
+  _types: {
     type: [
       {
         type: 'object',
         entries: [
           {
             key: 'input',
-            value: 'any',
+            value: {
+              type: 'custom',
+              name: 'TInput',
+            },
           },
           {
             key: 'output',
-            value: 'any',
+            value: {
+              type: 'custom',
+              name: 'TOutput',
+            },
           },
         ],
       },

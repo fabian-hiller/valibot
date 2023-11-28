@@ -1,5 +1,6 @@
 ---
 title: MapPathItem
+description: Map path item type.
 ---
 
 import { Property } from '~/components';
@@ -11,16 +12,23 @@ Map path item type.
 ## Definition
 
 - `MapPathItem` <Property type="object"/>
-  - schema <Property type='string' value='map' />
-  - input <Property {...properties.input} />
-  - key <Property type='any' />
-  - value <Property type='any' />
+  - `type` <Property {...properties.type} />
+  - `input` <Property {...properties.input} />
+  - `key` <Property type='unknown' />
+  - `value` <Property type='unknown' />
 
 export const properties = {
+  type: {
+    type: {
+      type: 'string',
+      value: 'map',
+    },
+  },
   input: {
     type: {
       type: 'custom',
-      name: 'Map<any, any>',
+      name: 'Map',
+      generics: ['unknown', 'unknown'],
     },
   },
 };

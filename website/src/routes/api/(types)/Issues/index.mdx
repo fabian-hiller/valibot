@@ -1,5 +1,6 @@
 ---
 title: Issues
+description: Issues type.
 ---
 
 import { Property } from '~/components';
@@ -20,11 +21,16 @@ export const properties = {
         {
           type: 'custom',
           name: 'Issue',
-          href: '../Issue',
+          href: '../Issue/',
         },
         {
-          type: 'custom',
-          name: '...Issue[]',
+          type: 'array',
+          spread: true,
+          item: {
+            type: 'custom',
+            name: 'Issue',
+            href: '../Issue/',
+          },
         },
       ],
     },

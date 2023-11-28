@@ -1,5 +1,6 @@
 ---
 title: PipeResult
+description: Pipe result type.
 ---
 
 import { Property } from '~/components';
@@ -10,7 +11,7 @@ Pipe result type.
 
 ## Definition
 
-- `PipeResult` <Property {...properties.pipeResult}/>
+- `PipeResult` <Property {...properties.pipeResult} />
 
 export const properties = {
   pipeResult: {
@@ -20,58 +21,51 @@ export const properties = {
         entries: [
           {
             key: 'output',
-            value: 'any',
+            value: {
+              type: 'custom',
+              name: 'TOutput',
+            },
           },
           {
             key: 'issues',
+            optional: true,
             value: 'undefined',
-          }
-        ]
+          },
+        ],
       },
       {
         type: 'object',
         entries: [
           {
             key: 'output',
+            optional: true,
             value: 'undefined',
           },
           {
             key: 'issues',
             value: {
-              type: 'object',
-              entries: [
-                {
-                  key: 'validation',
-                  value: 'string',
-                },
-                {
-                  key: 'message',
-                  value: 'string',
-                },
-                {
-                  key: 'input',
-                  value: 'any',
-                },
-                {
-                  key: 'path',
-                  value: [
-                    {
-                      type: 'array',
-                      item: {
-                        type: 'custom',
-                        name: 'PathItem',
-                        href: '../PathItem',
-                      }
-                    },
-                    'undefined'
+              type: 'array',
+              item: {
+                type: 'custom',
+                name: 'Pick',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'Issue',
+                    href: '../Issue/',
+                  },
+                  [
+                    { type: 'string', value: 'validation' },
+                    { type: 'string', value: 'message' },
+                    { type: 'string', value: 'input' },
+                    { type: 'string', value: 'requirement' },
                   ],
-                }
-              ]
+                ],
+              },
             },
-          }
-        ]
-      }
-    ]
-  }
-
-}
+          },
+        ],
+      },
+    ],
+  },
+};

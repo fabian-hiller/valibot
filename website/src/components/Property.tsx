@@ -1,8 +1,9 @@
 import clsx from 'clsx';
-import { TextLink } from './TextLink';
+import { Link } from '@builder.io/qwik-city';
 
 type SingleTypeOrValue =
   | 'string'
+  | 'symbol'
   | 'number'
   | 'bigint'
   | 'boolean'
@@ -35,11 +36,13 @@ type SingleTypeOrValue =
       type: 'object';
       entries: {
         key: string | { name: string; type: TypeOrValue };
+        optional?: boolean;
         value: TypeOrValue;
       }[];
     }
   | {
       type: 'array';
+      spread?: boolean;
       item: TypeOrValue;
     }
   | {
@@ -48,13 +51,14 @@ type SingleTypeOrValue =
     }
   | {
       type: 'function';
-      params: { name: string; type: TypeOrValue }[];
+      params: { name: string; optional?: boolean; type: TypeOrValue }[];
       return: TypeOrValue;
     }
   | {
       type: 'custom';
       name: string;
-      generics?: { name?: string; type: TypeOrValue }[];
+      default?: TypeOrValue;
+      generics?: TypeOrValue[];
       href?: string;
     };
 
@@ -88,10 +92,11 @@ export function Property(props: PropertyProps) {
           {typeof type === 'string' ? (
             <span
               class={{
-                'text-purple-600 dark:text-purple-400':
-                  type === 'number' || type === 'bigint',
                 'text-teal-600 dark:text-teal-400':
                   type === 'string' ||
+                  type === 'symbol' ||
+                  type === 'number' ||
+                  type === 'bigint' ||
                   type === 'boolean' ||
                   type === 'null' ||
                   type === 'undefined' ||
@@ -116,13 +121,7 @@ export function Property(props: PropertyProps) {
               {type.value}
             </span>
           ) : type.type === 'boolean' ? (
-            <span
-              class={clsx(
-                type.value
-                  ? 'text-emerald-600 dark:text-emerald-400'
-                  : 'text-red-600 dark:text-red-400'
-              )}
-            >
+            <span class="text-teal-600 dark:text-teal-400">
               {type.value.toString()}
             </span>
           ) : type.type === 'object' ? (
@@ -133,15 +132,24 @@ export function Property(props: PropertyProps) {
                   {index === 0 ? ' ' : ', '}
                   <>
                     {typeof entrie.key === 'string' ? (
-                      entrie.key
+                      <span class="text-slate-700 dark:text-slate-300">
+                        {entrie.key}
+                      </span>
                     ) : (
                       <>
-                        [{entrie.key.name}:{' '}
+                        [
+                        <span class="italic text-orange-500 dark:text-orange-300">
+                          {entrie.key.name}
+                        </span>
+                        <span class="text-red-600 dark:text-red-400">:</span>{' '}
                         <Property type={entrie.key.type} padding="none" />]
                       </>
                     )}
                   </>
-                  : <Property type={entrie.value} padding="none" />
+                  <span class="text-red-600 dark:text-red-400">
+                    {entrie.optional && '?'}:
+                  </span>{' '}
+                  <Property type={entrie.value} padding="none" />
                   {index === type.entries.length - 1 && ' '}
                 </>
               ))}
@@ -149,6 +157,9 @@ export function Property(props: PropertyProps) {
             </span>
           ) : type.type === 'array' ? (
             <span>
+              {type.spread && (
+                <span class="text-red-600 dark:text-red-400">...</span>
+              )}
               {Array.isArray(type.item) && type.item.length > 1 && '('}
               <Property type={type.item} padding="none" />
               {Array.isArray(type.item) && type.item.length > 1 && ')'}
@@ -172,7 +183,12 @@ export function Property(props: PropertyProps) {
                 <>
                   <span>
                     {index > 0 && ', '}
-                    {param.name}:{' '}
+                    <span class="italic text-orange-500 dark:text-orange-300">
+                      {param.name}
+                    </span>
+                    <span class="text-red-600 dark:text-red-400">
+                      {param.optional && '?'}:
+                    </span>{' '}
                   </span>
                   <Property type={param.type} padding="none" />
                 </>
@@ -183,9 +199,19 @@ export function Property(props: PropertyProps) {
           ) : (
             <>
               {type.href ? (
-                <TextLink href={type.href}>{type.name}</TextLink>
+                <Link class="text-sky-600 dark:text-sky-400" href={type.href}>
+                  {type.name}
+                </Link>
               ) : (
                 <span class="text-sky-600 dark:text-sky-400">{type.name}</span>
+              )}
+              {type.default && (
+                <>
+                  <span class="text-slate-600 dark:text-slate-400">
+                    {' = '}
+                  </span>
+                  <Property type={type.default} padding="none" />
+                </>
               )}
               {type.generics && (
                 <>
@@ -193,18 +219,7 @@ export function Property(props: PropertyProps) {
                   {type.generics.map((generic, index) => (
                     <>
                       {index > 0 && ', '}
-                      {generic.name && (
-                        <>
-                          <span class="text-sky-600 dark:text-sky-400">
-                            {generic.name}
-                          </span>
-                          <span class="text-slate-600 dark:text-slate-400">
-                            {' '}
-                            ={' '}
-                          </span>
-                        </>
-                      )}
-                      <Property type={generic.type} padding="none" />
+                      <Property type={generic} padding="none" />
                     </>
                   ))}
                   {'>'}

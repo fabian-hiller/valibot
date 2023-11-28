@@ -1,5 +1,6 @@
 ---
 title: Issue
+description: Issue type.
 ---
 
 import { Property } from '~/components';
@@ -10,12 +11,13 @@ Issue type.
 
 ## Definition
 
-- `Issue`
+- `Issue` <Property type="object" />
   - reason <Property {...properties.reason} />
   - validation <Property type="string" />
   - origin <Property {...properties.origin} />
   - message <Property type="string" />
-  - input <Property type="any" />
+  - input <Property type="unknown" />
+  - requirement <Property type="unknown" />
   - path <Property {...properties.path} />
   - issues <Property {...properties.issues} />
   - abortEarly <Property {...properties.abortEarly} />
@@ -27,14 +29,14 @@ export const properties = {
     type: {
       type: 'custom',
       name: 'IssueReason',
-      href: '../IssueReason',
+      href: '../IssueReason/',
     },
   },
   origin: {
     type: {
       type: 'custom',
       name: 'IssueOrigin',
-      href: '../IssueOrigin',
+      href: '../IssueOrigin/',
     },
   },
   path: {
@@ -44,7 +46,7 @@ export const properties = {
         item: {
           type: 'custom',
           name: 'PathItem',
-          href: '../PathItem',
+          href: '../PathItem/',
         },
       },
       'undefined',
@@ -53,12 +55,9 @@ export const properties = {
   issues: {
     type: [
       {
-        type: 'array',
-        item: {
-          type: 'custom',
-          name: 'Issues',
-          href: '../Issues',
-        },
+        type: 'custom',
+        name: 'Issues',
+        href: '../Issues/',
       },
       'undefined',
     ],

@@ -1,26 +1,34 @@
 ---
 title: ObjectPathItem
+description: Object path item type.
 ---
 
 import { Property } from '~/components';
 
 # ObjectPathItem
 
-Path item type.
+Object path item type.
 
 ## Definition
 
 - `ObjectPathItem` <Property type="object"/>
-  - schema <Property type='string' value='object' />
-  - input <Property {...properties.input} />
-  - key <Property type='string' />
-  - value <Property type='any' />
+  - `type` <Property {...properties.type} />
+  - `input` <Property {...properties.input} />
+  - `key` <Property type="string" />
+  - `value` <Property type="unknown" />
 
 export const properties = {
+  type: {
+    type: {
+      type: 'string',
+      value: 'object',
+    },
+  },
   input: {
     type: {
       type: 'custom',
-      name: 'Record<string, any>',
+      name: 'Record',
+      generics: ['string', 'unknown'],
     },
   },
 };

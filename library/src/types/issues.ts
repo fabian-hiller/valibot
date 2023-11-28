@@ -41,12 +41,12 @@ export type IssueOrigin = 'key' | 'value';
  * Path item type.
  */
 export type PathItem =
+  | ArrayPathItem
+  | MapPathItem
   | ObjectPathItem
   | RecordPathItem
-  | TuplePathItem
-  | MapPathItem
   | SetPathItem
-  | ArrayPathItem;
+  | TuplePathItem;
 
 /**
  * Issue type.

@@ -1,40 +1,46 @@
 ---
 title: Pipe
+description: Pipe type.
 ---
 
 import { Property } from '~/components';
 
 # Pipe
 
-Validation and transformation pipe type.
+Pipe type.
 
 ## Definition
 
-- `Pipe` <Property {...properties.pipe}/>
+- `Pipe` <Property {...properties.Pipe} />
 
 export const properties = {
-  pipe: {
-    type: [
-      {
-        type: 'function',
-        params: [
-          {
-            name: 'value',
-            type: 'any',
-          }
-        ],
-        return: {
-          type: 'array',
-          item: [
+  Pipe: {
+    type: {
+      type: 'array',
+      item: [
+        {
+          type: 'custom',
+          name: 'BaseValidation',
+          href: '../BaseValidation/',
+          generics: [
             {
               type: 'custom',
-              name: 'PipeResult',
-              href: '../PipeResult',
+              name: 'TInput',
             },
-          ]
-        }
-      }
-    ]
-  }
-
-}
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'BaseTransformation',
+          href: '../BaseTransformation/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+          ],
+        },
+      ],
+    },
+  },
+};
