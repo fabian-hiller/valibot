@@ -15,6 +15,7 @@ import { getErrorMessage } from '../getErrorMessage/getErrorMessage.ts';
  * @param message The error message.
  * @param input The input value.
  * @param issues The sub issues.
+ * @param requirement The requirement.
  *
  * @returns The schema result object.
  */
@@ -24,7 +25,8 @@ export function getSchemaIssues(
   validation: string,
   message: ErrorMessage,
   input: unknown,
-  issues?: Issues
+  issues?: Issues,
+  requirement?: unknown
 ): { issues: Issues } {
   // Note: The issue is deliberately not constructed with the spread operator
   // for performance reasons
@@ -40,6 +42,7 @@ export function getSchemaIssues(
         abortEarly: info?.abortEarly,
         abortPipeEarly: info?.abortPipeEarly,
         skipPipe: info?.skipPipe,
+        requirement,
       },
     ],
   };

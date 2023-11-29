@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
+import { parse, safeParse } from '../../methods/index.ts';
 import { boolean } from '../boolean/index.ts';
 import { literal } from '../literal/index.ts';
 import { number } from '../number/index.ts';
@@ -49,5 +49,69 @@ describe('variant', () => {
         null
       )
     ).toThrowError(error);
+  });
+
+  test('should create the correct issue when passing a non object value', () => {
+    const schema = variant('type', [
+      object({ type: literal('a'), val: string() }),
+      object({ type: literal('b'), val: number() }),
+    ]);
+
+    const result = safeParse(schema, true) as Record<string, unknown>;
+
+    expect(result.issues).toEqual([
+      {
+        validation: 'variant',
+        reason: 'type',
+        message: 'Invalid type',
+        input: true,
+        origin: 'value',
+      },
+    ]);
+  });
+
+  test('should create the correct issue when passing an object value with non matching variant key', () => {
+    const schema = variant('type', [
+      object({ type: literal('a'), val: string() }),
+      object({ type: literal('b'), val: number() }),
+    ]);
+
+    const result1 = safeParse(schema, { type: 'c', val: false }) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result1.issues).toEqual([
+      {
+        validation: 'variant',
+        reason: 'invalid_variant_key',
+        message: 'Invalid variant key',
+        input: 'c',
+        origin: 'value',
+        path: [
+          {
+            type: 'object',
+            key: 'type',
+            value: 'c',
+            input: { type: 'c', val: false },
+          },
+        ],
+        requirement: ['a', 'b'],
+      },
+    ]);
+
+    const result2 = safeParse(schema, {}) as Record<string, unknown>;
+
+    expect(result2.issues).toEqual([
+      {
+        validation: 'variant',
+        reason: 'invalid_variant_key',
+        message: 'Invalid variant key',
+        input: undefined,
+        origin: 'value',
+        path: [{ type: 'object', key: 'type', value: undefined, input: {} }],
+        requirement: ['a', 'b'],
+      },
+    ]);
   });
 });

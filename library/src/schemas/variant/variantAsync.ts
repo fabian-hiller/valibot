@@ -7,14 +7,24 @@ import type {
   Output,
 } from '../../types/index.ts';
 import { getSchemaIssues, getOutput, getIssues } from '../../utils/index.ts';
-import type { ObjectSchema, ObjectSchemaAsync } from '../object/index.ts';
+import type { LiteralSchema } from '../literal/literal.ts';
+import type { LiteralSchemaAsync } from '../literal/literalAsync.ts';
+import type { Literal } from '../literal/types.ts';
+import type {
+  ObjectPathItem,
+  ObjectSchema,
+  ObjectSchemaAsync,
+} from '../object/index.ts';
 
 /**
  * Variant option async type.
  */
 export type VariantOptionAsync<TKey extends string> =
-  | ObjectSchema<Record<TKey, BaseSchema>, any>
-  | ObjectSchemaAsync<Record<TKey, BaseSchema | BaseSchemaAsync>, any>
+  | ObjectSchema<Record<TKey, LiteralSchema<Literal>>, any>
+  | ObjectSchemaAsync<
+      Record<TKey, LiteralSchema<Literal> | LiteralSchemaAsync<Literal>>,
+      any
+    >
   | ((BaseSchema | BaseSchemaAsync) & {
       type: 'variant';
       options: VariantOptionsAsync<TKey>;
@@ -80,20 +90,25 @@ export function variantAsync<
     message,
     async _parse(input, info) {
       // Check type of input
-      if (!input || typeof input !== 'object' || !(this.key in input)) {
+      if (!input || typeof input !== 'object') {
         return getSchemaIssues(info, 'type', 'variant', this.message, input);
       }
 
       // Create issues and output
       let issues: Issues | undefined;
       let output: [Record<string, any>] | undefined;
+      const requirement: Literal[] = [];
 
       // Create function to parse options recursively
       const parseOptions = async (options: VariantOptionsAsync<TKey>) => {
         for (const schema of options) {
           // If it is an object schema, parse discriminator key
           if (schema.type === 'object') {
-            const result = await schema.entries[this.key]._parse(
+            const variantKeySchema = schema.entries[this.key];
+
+            requirement.push(variantKeySchema.literal);
+
+            const result = await variantKeySchema._parse(
               (input as Record<TKey, unknown>)[this.key],
               info
             );
@@ -133,12 +148,35 @@ export function variantAsync<
       // Parse options recursively
       await parseOptions(this.options);
 
-      // Return output or issues
-      return output
-        ? getOutput(output[0])
-        : issues
-        ? getIssues(issues)
-        : getSchemaIssues(info, 'type', 'variant', this.message, input);
+      // Return output
+      if (output) {
+        return getOutput(output[0]);
+      }
+
+      // Return variant issues
+      if (issues) {
+        return getIssues(issues);
+      }
+
+      // Return new issue for non matching variant key
+      const inputRecord = input as Record<string, unknown>;
+      const pathItem: ObjectPathItem = {
+        type: 'object',
+        input: inputRecord,
+        key: this.key,
+        value: inputRecord[this.key],
+      };
+      const nonMatchingKeyIssues = getSchemaIssues(
+        info,
+        'invalid_variant_key',
+        'variant',
+        'Invalid variant key',
+        inputRecord[this.key],
+        undefined,
+        requirement
+      );
+      nonMatchingKeyIssues.issues[0].path = [pathItem];
+      return nonMatchingKeyIssues;
     },
   };
 }

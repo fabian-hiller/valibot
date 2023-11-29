@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods/index.ts';
+import { parseAsync, safeParseAsync } from '../../methods/index.ts';
 import { boolean } from '../boolean/index.ts';
 import { literal } from '../literal/index.ts';
 import { number } from '../number/index.ts';
@@ -51,5 +51,75 @@ describe('variantAsync', () => {
         null
       )
     ).rejects.toThrowError(error);
+  });
+
+  test('should create the correct issue when passing a non object value', async () => {
+    const schema = variantAsync('type', [
+      object({ type: literal('a'), val: string() }),
+      object({ type: literal('b'), val: number() }),
+    ]);
+
+    const result = (await safeParseAsync(schema, true)) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.issues).toEqual([
+      {
+        validation: 'variant',
+        reason: 'type',
+        message: 'Invalid type',
+        input: true,
+        origin: 'value',
+      },
+    ]);
+  });
+
+  test('should create the correct issue when passing an object value with non matching variant key', async () => {
+    const schema = variantAsync('type', [
+      object({ type: literal('a'), val: string() }),
+      object({ type: literal('b'), val: number() }),
+    ]);
+
+    const result1 = (await safeParseAsync(schema, {
+      type: 'c',
+      val: false,
+    })) as Record<string, unknown>;
+
+    expect(result1.issues).toEqual([
+      {
+        validation: 'variant',
+        reason: 'invalid_variant_key',
+        message: 'Invalid variant key',
+        input: 'c',
+        origin: 'value',
+        path: [
+          {
+            type: 'object',
+            key: 'type',
+            value: 'c',
+            input: { type: 'c', val: false },
+          },
+        ],
+        requirement: ['a', 'b'],
+      },
+    ]);
+
+    const result2 = (await safeParseAsync(schema, {})) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result2.issues).toEqual([
+      {
+        validation: 'variant',
+        reason: 'invalid_variant_key',
+        message: 'Invalid variant key',
+        input: undefined,
+        origin: 'value',
+        path: [{ type: 'object', key: 'type', value: undefined, input: {} }],
+        requirement: ['a', 'b'],
+      },
+    ]);
   });
 });
