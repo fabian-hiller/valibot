@@ -55,7 +55,7 @@ export function optionalAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
  */
 export function optionalAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined
@@ -66,7 +66,7 @@ export function optionalAsync<
 
 export function optionalAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined = undefined

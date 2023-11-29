@@ -50,7 +50,7 @@ export function optional<TWrapped extends BaseSchema>(
  */
 export function optional<
   TWrapped extends BaseSchema,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
     | undefined
@@ -58,7 +58,7 @@ export function optional<
 
 export function optional<
   TWrapped extends BaseSchema,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
     | undefined = undefined

@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Add support for boolean to `notValue` validation (pull request #261)
 - Fix `RecordInput` and `RecordOuput` type when using `unionAsync` as key
+- Fix output type for `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional` and `optionalAsync` when using a default value (issue #271)
 
 ## v0.21.0 (November 19, 2023)
 
