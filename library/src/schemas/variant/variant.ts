@@ -6,7 +6,7 @@ import type {
   Output,
 } from '../../types/index.ts';
 import { getSchemaIssues, getOutput, getIssues } from '../../utils/index.ts';
-import type { ObjectSchema } from '../object/index.ts';
+import type { ObjectPathItem, ObjectSchema } from '../object/index.ts';
 
 /**
  * Variant option type.
@@ -78,7 +78,7 @@ export function variant<
     message,
     _parse(input, info) {
       // Check type of input
-      if (!input || typeof input !== 'object' || !(this.key in input)) {
+      if (!input || typeof input !== 'object') {
         return getSchemaIssues(info, 'type', 'variant', this.message, input);
       }
 
@@ -91,7 +91,8 @@ export function variant<
         for (const schema of options) {
           // If it is an object schema, parse discriminator key
           if (schema.type === 'object') {
-            const result = schema.entries[this.key]._parse(
+            const variantKeySchema = schema.entries[this.key];
+            const result = variantKeySchema._parse(
               (input as Record<TKey, unknown>)[this.key],
               info
             );
@@ -131,12 +132,35 @@ export function variant<
       // Parse options recursively
       parseOptions(this.options);
 
-      // Return output or issues
-      return output
-        ? getOutput(output[0])
-        : issues
-        ? getIssues(issues)
-        : getSchemaIssues(info, 'type', 'variant', this.message, input);
+      // Return output
+      if (output) {
+        return getOutput(output[0]);
+      }
+
+      // Return variant issues
+      if (issues) {
+        return getIssues(issues);
+      }
+
+      // Return new issue for non matching variant key
+      const inputRecord = input as Record<string, unknown>;
+      const pathItem: ObjectPathItem = {
+        type: 'object',
+        input: inputRecord,
+        key: this.key,
+        value: inputRecord[this.key],
+      };
+      const nonMatchingKeyIssues = getSchemaIssues(
+        info,
+        'invalid_variant_key',
+        'variant',
+        'Invalid variant key',
+        inputRecord[this.key],
+        undefined,
+        this.options
+      );
+      nonMatchingKeyIssues.issues[0].path = [pathItem];
+      return nonMatchingKeyIssues;
     },
   };
 }

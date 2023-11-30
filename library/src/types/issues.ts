@@ -30,7 +30,8 @@ export type IssueReason =
   | 'tuple'
   | 'undefined'
   | 'unknown'
-  | 'type';
+  | 'type'
+  | 'invalid_variant_key';
 
 /**
  * Issue origin type.
