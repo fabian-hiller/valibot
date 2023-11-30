@@ -6,15 +6,13 @@ import type {
   Output,
 } from '../../types/index.ts';
 import { getSchemaIssues, getOutput, getIssues } from '../../utils/index.ts';
-import type { Literal } from '../literal/index.ts';
-import type { LiteralSchema } from '../literal/literal.ts';
 import type { ObjectPathItem, ObjectSchema } from '../object/index.ts';
 
 /**
  * Variant option type.
  */
 export type VariantOption<TKey extends string> =
-  | ObjectSchema<Record<TKey, LiteralSchema<Literal>>, any>
+  | ObjectSchema<Record<TKey, BaseSchema>, any>
   | (BaseSchema & {
       type: 'variant';
       options: VariantOptions<TKey>;
@@ -87,7 +85,6 @@ export function variant<
       // Create issues and output
       let issues: Issues | undefined;
       let output: [Record<string, any>] | undefined;
-      const requirement: Literal[] = [];
 
       // Create function to parse options recursively
       const parseOptions = (options: VariantOptions<TKey>) => {
@@ -95,9 +92,6 @@ export function variant<
           // If it is an object schema, parse discriminator key
           if (schema.type === 'object') {
             const variantKeySchema = schema.entries[this.key];
-
-            requirement.push(variantKeySchema.literal);
-
             const result = variantKeySchema._parse(
               (input as Record<TKey, unknown>)[this.key],
               info
@@ -163,7 +157,7 @@ export function variant<
         'Invalid variant key',
         inputRecord[this.key],
         undefined,
-        requirement
+        this.options
       );
       nonMatchingKeyIssues.issues[0].path = [pathItem];
       return nonMatchingKeyIssues;

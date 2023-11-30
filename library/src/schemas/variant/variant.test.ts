@@ -96,7 +96,7 @@ describe('variant', () => {
             input: { type: 'c', val: false },
           },
         ],
-        requirement: ['a', 'b'],
+        requirement: schema.options,
       },
     ]);
 
@@ -110,7 +110,7 @@ describe('variant', () => {
         input: undefined,
         origin: 'value',
         path: [{ type: 'object', key: 'type', value: undefined, input: {} }],
-        requirement: ['a', 'b'],
+        requirement: schema.options,
       },
     ]);
   });

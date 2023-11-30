@@ -7,9 +7,6 @@ import type {
   Output,
 } from '../../types/index.ts';
 import { getSchemaIssues, getOutput, getIssues } from '../../utils/index.ts';
-import type { LiteralSchema } from '../literal/literal.ts';
-import type { LiteralSchemaAsync } from '../literal/literalAsync.ts';
-import type { Literal } from '../literal/types.ts';
 import type {
   ObjectPathItem,
   ObjectSchema,
@@ -20,11 +17,8 @@ import type {
  * Variant option async type.
  */
 export type VariantOptionAsync<TKey extends string> =
-  | ObjectSchema<Record<TKey, LiteralSchema<Literal>>, any>
-  | ObjectSchemaAsync<
-      Record<TKey, LiteralSchema<Literal> | LiteralSchemaAsync<Literal>>,
-      any
-    >
+  | ObjectSchema<Record<TKey, BaseSchema>, any>
+  | ObjectSchemaAsync<Record<TKey, BaseSchema | BaseSchemaAsync>, any>
   | ((BaseSchema | BaseSchemaAsync) & {
       type: 'variant';
       options: VariantOptionsAsync<TKey>;
@@ -97,7 +91,6 @@ export function variantAsync<
       // Create issues and output
       let issues: Issues | undefined;
       let output: [Record<string, any>] | undefined;
-      const requirement: Literal[] = [];
 
       // Create function to parse options recursively
       const parseOptions = async (options: VariantOptionsAsync<TKey>) => {
@@ -105,9 +98,6 @@ export function variantAsync<
           // If it is an object schema, parse discriminator key
           if (schema.type === 'object') {
             const variantKeySchema = schema.entries[this.key];
-
-            requirement.push(variantKeySchema.literal);
-
             const result = await variantKeySchema._parse(
               (input as Record<TKey, unknown>)[this.key],
               info
@@ -173,7 +163,7 @@ export function variantAsync<
         'Invalid variant key',
         inputRecord[this.key],
         undefined,
-        requirement
+        this.options
       );
       nonMatchingKeyIssues.issues[0].path = [pathItem];
       return nonMatchingKeyIssues;

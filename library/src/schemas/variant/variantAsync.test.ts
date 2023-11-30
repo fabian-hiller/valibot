@@ -101,7 +101,7 @@ describe('variantAsync', () => {
             input: { type: 'c', val: false },
           },
         ],
-        requirement: ['a', 'b'],
+        requirement: schema.options,
       },
     ]);
 
@@ -118,7 +118,7 @@ describe('variantAsync', () => {
         input: undefined,
         origin: 'value',
         path: [{ type: 'object', key: 'type', value: undefined, input: {} }],
-        requirement: ['a', 'b'],
+        requirement: schema.options,
       },
     ]);
   });
