@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from './parse.ts';
+import { parseValidation } from './parseValidation.ts';
 import type { BaseValidation } from '../../types/pipe.ts';
 
 describe('parse', () => {
@@ -11,7 +11,7 @@ describe('parse', () => {
         return { output: val };
       },
     };
-    const res = parse(validationMock, 'some value');
+    const res = parseValidation(validationMock, 'some value');
     expect(res).toBeTruthy();
   });
 
@@ -33,7 +33,7 @@ describe('parse', () => {
         };
       },
     };
-    const res = parse(validationMock, 'some value');
+    const res = parseValidation(validationMock, 'some value');
     expect(res).toBeFalsy();
   });
 });

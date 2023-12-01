@@ -8,10 +8,10 @@ import type { BaseValidation } from '../../types';
  *
  * @returns boolean
  */
-export function parse<TValidate extends BaseValidation<TInput>, TInput>(
-  validate: TValidate,
-  value: TInput
-): boolean {
+export function parseValidation<
+  TValidate extends BaseValidation<TInput>,
+  TInput
+>(validate: TValidate, value: TInput): boolean {
   const parsed = validate._parse(value);
   return !parsed.issues;
 }
