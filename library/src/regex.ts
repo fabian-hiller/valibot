@@ -7,7 +7,7 @@ export const CUID2_REGEX = /^[a-z][\da-z]*$/u;
  * Email regex.
  */
 export const EMAIL_REGEX =
-  /^[\w+-]{1,64}(?:\.[\w+-]{1,64})*@[\da-z]{1,255}(?:[.-][\da-z]{1,255})*\.[a-z]{2,}$/iu;
+  /^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/iu;
 
 /**
  * Emoji regex.

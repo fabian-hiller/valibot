@@ -123,18 +123,6 @@ describe('email', () => {
       expect(parseValidation(validateEmail, value)).toBeFalsy();
     });
 
-    test('should reject email where local part is longer or equal 64 chars', () => {
-      const value =
-        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com';
-      expect(parseValidation(validateEmail, value)).toBeFalsy();
-    });
-
-    test('should reject email where domain part is longer or equal 255 chars', () => {
-      const value =
-        'email@exaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaample.com';
-      expect(parseValidation(validateEmail, value)).toBeFalsy();
-    });
-
     test('should reject email where domain consists from numerical values', () => {
       const value = 'email@111.222.333.44444';
       expect(parseValidation(validateEmail, value)).toBeFalsy();
