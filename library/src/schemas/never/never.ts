@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { getSchemaIssues } from '../../utils/index.ts';
+import { schemaIssue } from '../../utils/index.ts';
 
 /**
  * Never schema type.
@@ -28,7 +28,7 @@ export function never(message: ErrorMessage = 'Invalid type'): NeverSchema {
     async: false,
     message,
     _parse(input, info) {
-      return getSchemaIssues(info, 'type', 'never', this.message, input);
+      return schemaIssue(info, 'type', 'never', this.message, input);
     },
   };
 }

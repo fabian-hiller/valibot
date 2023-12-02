@@ -5,6 +5,8 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add support for boolean to `notValue` validation (pull request #261)
+- Add `.typed` to schema validation result and execute pipeline of complex schemas if output is typed (issue #76, #145)
+- Rename and change util functions and refactor codebase
 - Fix `RecordInput` and `RecordOuput` type when using `unionAsync` as key
 - Fix output type for `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional` and `optionalAsync` when using a default value (issue #271)
 

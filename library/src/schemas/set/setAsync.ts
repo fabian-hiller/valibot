@@ -6,10 +6,10 @@ import type {
   PipeAsync,
 } from '../../types/index.ts';
 import {
-  executePipeAsync,
-  getDefaultArgs,
-  getIssues,
-  getSchemaIssues,
+  defaultArgs,
+  parseResult,
+  pipeResultAsync,
+  schemaIssue,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput, SetPathItem } from './types.ts';
 
@@ -72,7 +72,7 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
   arg3?: PipeAsync<SetOutput<TValue>>
 ): SetSchemaAsync<TValue> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
 
   // Create and return async set schema
   return {
@@ -84,10 +84,11 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Set)) {
-        return getSchemaIssues(info, 'type', 'set', this.message, input);
+        return schemaIssue(info, 'type', 'set', this.message, input);
       }
 
-      // Create index, output and issues
+      // Create typed, index, output and issues
+      let typed = true;
       let issues: Issues | undefined;
       const output: SetOutput<TValue> = new Set();
 
@@ -126,22 +127,30 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
 
                 // If necessary, abort early
                 if (info?.abortEarly) {
+                  typed = false;
                   throw null;
                 }
-
-                // Otherwise, add item to set
-              } else {
-                output.add(result.output);
               }
+
+              // If not typed, set typed to false
+              if (!result.typed) {
+                typed = false;
+              }
+
+              // Set output of entry if necessary
+              output.add(result.output);
             }
           }
         })
       ).catch(() => null);
 
-      // Return issues or pipe result
-      return issues
-        ? getIssues(issues)
-        : executePipeAsync(input, this.pipe, info, 'set');
+      // If output is typed, execute pipe
+      if (typed) {
+        return pipeResultAsync(output, this.pipe, info, 'set', issues);
+      }
+
+      // Otherwise, return untyped parse result
+      return parseResult(false, output, issues as Issues);
     },
   };
 }

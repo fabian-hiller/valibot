@@ -5,9 +5,10 @@ import type {
   Output,
   ParseInfo,
   PipeAsync,
-  _ParseResult,
+  SchemaResult,
 } from '../../types/index.ts';
-import { executePipeAsync } from '../../utils/index.ts';
+import { pipeResultAsync } from '../../utils/index.ts';
+import type { TransformInfo } from './types.ts';
 
 /**
  * Schema with transform async type.
@@ -17,7 +18,7 @@ export type SchemaWithTransformAsync<
   TOutput
 > = Omit<TSchema, 'async' | '_parse' | '_types'> & {
   async: true;
-  _parse(input: unknown, info?: ParseInfo): Promise<_ParseResult<TOutput>>;
+  _parse(input: unknown, info?: ParseInfo): Promise<SchemaResult<TOutput>>;
   _types?: {
     input: Input<TSchema>;
     output: TOutput;
@@ -39,7 +40,10 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  action: (
+    value: Output<TSchema>,
+    info: TransformInfo
+  ) => TOutput | Promise<TOutput>,
   pipe?: PipeAsync<TOutput>
 ): SchemaWithTransformAsync<TSchema, TOutput>;
 
@@ -58,7 +62,10 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  action: (
+    value: Output<TSchema>,
+    info: TransformInfo
+  ) => TOutput | Promise<TOutput>,
   validate?: BaseSchema<TOutput> | BaseSchemaAsync<TOutput>
 ): SchemaWithTransformAsync<TSchema, TOutput>;
 
@@ -67,7 +74,10 @@ export function transformAsync<
   TOutput
 >(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput | Promise<TOutput>,
+  action: (
+    value: Output<TSchema>,
+    info: TransformInfo
+  ) => TOutput | Promise<TOutput>,
   arg1?: PipeAsync<TOutput> | BaseSchema<TOutput> | BaseSchemaAsync<TOutput>
 ): SchemaWithTransformAsync<TSchema, TOutput> {
   return {
@@ -77,21 +87,31 @@ export function transformAsync<
       // Parse input with schema
       const result = await schema._parse(input, info);
 
-      // If there are issues, return them
-      if (result.issues) {
-        return result;
+      // If result is typed, transform output
+      if (result.typed) {
+        result.output = await action(result.output, { issues: result.issues });
+
+        // If there are issues or no validation arg, return result
+        if (result.issues || !arg1) {
+          return result;
+        }
+
+        // Otherwise, if a pipe is provided, return pipe result
+        if (Array.isArray(arg1)) {
+          return pipeResultAsync(
+            result.output,
+            arg1,
+            info,
+            typeof result.output
+          );
+        }
+
+        // Otherwise, validate output with schema
+        return arg1._parse(result.output, info);
       }
 
-      // Otherwise, transform output
-      const output = await action(result.output);
-
-      // Validate output with schema if available
-      if (arg1 && !Array.isArray(arg1)) {
-        return arg1._parse(output, info);
-      }
-
-      // Otherwise, return pipe result
-      return executePipeAsync(output, arg1, info, typeof output);
+      // Otherwise, return untyped result
+      return result;
     },
   };
 }

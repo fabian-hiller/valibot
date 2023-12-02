@@ -1,5 +1,5 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { actionOutput } from '../../utils/index.ts';
 
 /**
  * To upper case transformation type.
@@ -22,7 +22,7 @@ export function toUpperCase(): ToUpperCaseTransformation {
     type: 'to_upper_case',
     async: false,
     _parse(input) {
-      return getOutput(input.toUpperCase());
+      return actionOutput(input.toUpperCase());
     },
   };
 }

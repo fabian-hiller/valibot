@@ -4,7 +4,7 @@ import type {
   Input,
   Output,
 } from '../../types/index.ts';
-import { getSchemaIssues } from '../../utils/index.ts';
+import { schemaIssue } from '../../utils/index.ts';
 
 /**
  * Non optional type.
@@ -52,13 +52,7 @@ export function nonOptional<TWrapped extends BaseSchema>(
     _parse(input, info) {
       // Allow `undefined` values not to pass
       if (input === undefined) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'non_optional',
-          this.message,
-          input
-        );
+        return schemaIssue(info, 'type', 'non_optional', this.message, input);
       }
 
       // Return result of wrapped schema

@@ -7,10 +7,10 @@ import type {
   Pipe,
 } from '../../types/index.ts';
 import {
-  executePipe,
-  getDefaultArgs,
-  getIssues,
-  getSchemaIssues,
+  defaultArgs,
+  parseResult,
+  pipeResult,
+  schemaIssue,
 } from '../../utils/index.ts';
 import type { ArrayPathItem } from './types.ts';
 
@@ -73,7 +73,7 @@ export function array<TItem extends BaseSchema>(
   arg3?: Pipe<Output<TItem>[]>
 ): ArraySchema<TItem> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
 
   // Create and return array schema
   return {
@@ -85,10 +85,11 @@ export function array<TItem extends BaseSchema>(
     _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {
-        return getSchemaIssues(info, 'type', 'array', this.message, input);
+        return schemaIssue(info, 'type', 'array', this.message, input);
       }
 
-      // Create issues and output
+      // Create typed, issues and output
+      let typed = true;
       let issues: Issues | undefined;
       const output: any[] = [];
 
@@ -122,19 +123,33 @@ export function array<TItem extends BaseSchema>(
 
           // If necessary, abort early
           if (info?.abortEarly) {
+            typed = false;
             break;
           }
-
-          // Otherwise, add item to array
-        } else {
-          output.push(result.output);
         }
+
+        // If not typed, set typed to false
+        if (!result.typed) {
+          typed = false;
+        }
+
+        // Set output of item
+        output.push(result.output);
       }
 
-      // Return issues or pipe result
-      return issues
-        ? getIssues(issues)
-        : executePipe(output as Output<TItem>[], this.pipe, info, 'array');
+      // If output is typed, execute pipe
+      if (typed) {
+        return pipeResult(
+          output as Output<TItem>[],
+          this.pipe,
+          info,
+          'array',
+          issues
+        );
+      }
+
+      // Otherwise, return untyped parse result
+      return parseResult(false, output, issues as Issues);
     },
   };
 }

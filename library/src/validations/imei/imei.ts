@@ -1,6 +1,6 @@
 import { IMEI_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues, isLuhnAlgo } from '../../utils/index.ts';
+import { actionIssue, actionOutput, isLuhnAlgo } from '../../utils/index.ts';
 
 /**
  * IMEI validation type.
@@ -35,8 +35,8 @@ export function imei<TInput extends string>(
     requirement: [IMEI_REGEX, isLuhnAlgo],
     _parse(input) {
       return !this.requirement[0].test(input) || !this.requirement[1](input)
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

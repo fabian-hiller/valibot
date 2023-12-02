@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Enum type.
@@ -50,11 +50,11 @@ export function enum_<TEnum extends Enum>(
     _parse(input, info) {
       // Check type of input
       if (!Object.values(this.enum).includes(input as any)) {
-        return getSchemaIssues(info, 'type', 'enum', this.message, input);
+        return schemaIssue(info, 'type', 'enum', this.message, input);
       }
 
-      // Return input as output
-      return getOutput(input as TEnum[keyof TEnum]);
+      // Return parse result
+      return parseResult(true, input as TEnum[keyof TEnum]);
     },
   };
 }

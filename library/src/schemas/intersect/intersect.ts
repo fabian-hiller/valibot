@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage, Issues } from '../../types/index.ts';
-import { getIssues, getOutput, getSchemaIssues } from '../../utils/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
 
@@ -47,9 +47,11 @@ export function intersect<TOptions extends IntersectOptions>(
     options,
     message,
     _parse(input, info) {
-      // Create issues and outputs
+      // Create typed, issues, output and outputs
+      let typed = true;
       let issues: Issues | undefined;
-      let outputs: [any, ...any] | undefined;
+      let output: any;
+      const outputs: any[] = [];
 
       // Parse schema of each option
       for (const schema of this.options) {
@@ -67,48 +69,44 @@ export function intersect<TOptions extends IntersectOptions>(
 
           // If necessary, abort early
           if (info?.abortEarly) {
+            typed = false;
             break;
           }
+        }
 
-          // Otherwise, add output to list
-        } else {
-          if (outputs) {
-            outputs.push(result.output);
-          } else {
-            outputs = [result.output];
+        // If not typed, set typed to false
+        if (!result.typed) {
+          typed = false;
+        }
+
+        // Set output of option
+        outputs.push(result.output);
+      }
+
+      // If outputs are typed, merge them
+      if (typed) {
+        // Set first output as initial output
+        output = outputs![0];
+
+        // Merge outputs into one final output
+        for (let index = 1; index < outputs!.length; index++) {
+          const result = mergeOutputs(output, outputs![index]);
+
+          // If outputs can't be merged, return issue
+          if (result.invalid) {
+            return schemaIssue(info, 'type', 'intersect', this.message, input);
           }
-        }
-      }
 
-      // If there are issues, return them
-      if (issues) {
-        return getIssues(issues);
-      }
-
-      // Create output
-      let output = outputs![0];
-
-      // Merge outputs into one final output
-      for (let index = 1; index < outputs!.length; index++) {
-        const result = mergeOutputs(output, outputs![index]);
-
-        // If outputs can't be merged, return issues
-        if (result.invalid) {
-          return getSchemaIssues(
-            info,
-            'type',
-            'intersect',
-            this.message,
-            input
-          );
+          // Otherwise, set merged output
+          output = result.output;
         }
 
-        // Otherwise, set merged output
-        output = result.output;
+        // Return typed parse result
+        return parseResult(true, output, issues);
       }
 
-      // Return merged output
-      return getOutput(output);
+      // Otherwise, return untyped parse result
+      return parseResult(false, output, issues as Issues);
     },
   };
 }

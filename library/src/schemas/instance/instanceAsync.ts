@@ -4,9 +4,9 @@ import type {
   PipeAsync,
 } from '../../types/index.ts';
 import {
-  executePipeAsync,
-  getDefaultArgs,
-  getSchemaIssues,
+  defaultArgs,
+  pipeResultAsync,
+  schemaIssue,
 } from '../../utils/index.ts';
 import { type Class } from './instance.ts';
 
@@ -69,7 +69,7 @@ export function instanceAsync<TClass extends Class>(
   arg3?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
@@ -81,11 +81,11 @@ export function instanceAsync<TClass extends Class>(
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof this.class)) {
-        return getSchemaIssues(info, 'type', 'instance', this.message, input);
+        return schemaIssue(info, 'type', 'instance', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipeAsync(input, this.pipe, info, 'instance');
+      return pipeResultAsync(input, this.pipe, info, 'instance');
     },
   };
 }

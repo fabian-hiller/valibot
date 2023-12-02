@@ -1,6 +1,6 @@
 import { getDefault } from '../../methods/index.ts';
 import type { BaseSchema, Input, Output } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { parseResult } from '../../utils/index.ts';
 
 /**
  * Optional schema type.
@@ -73,7 +73,7 @@ export function optional<
       if (input === undefined) {
         const override = getDefault(this);
         if (override === undefined) {
-          return getOutput(input);
+          return parseResult(true, input);
         }
         input = override;
       }

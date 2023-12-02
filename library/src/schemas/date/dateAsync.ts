@@ -4,9 +4,9 @@ import type {
   PipeAsync,
 } from '../../types/index.ts';
 import {
-  executePipeAsync,
-  getDefaultArgs,
-  getSchemaIssues,
+  defaultArgs,
+  pipeResultAsync,
+  schemaIssue,
 } from '../../utils/index.ts';
 
 /**
@@ -54,7 +54,7 @@ export function dateAsync(
   arg2?: PipeAsync<Date>
 ): DateSchemaAsync {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg1, arg2);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
 
   // Create and return async date schema
   return {
@@ -65,11 +65,11 @@ export function dateAsync(
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Date) || isNaN(input.getTime())) {
-        return getSchemaIssues(info, 'type', 'date', this.message, input);
+        return schemaIssue(info, 'type', 'date', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipeAsync(input, this.pipe, info, 'date');
+      return pipeResultAsync(input, this.pipe, info, 'date');
     },
   };
 }
