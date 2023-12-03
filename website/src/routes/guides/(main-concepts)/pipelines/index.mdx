@@ -31,28 +31,7 @@ Validation functions examine the input and, if the input does not meet a certain
 
 > By default I run a pipeline completely, even if an error is thrown in between, to collect all issues. If you want me to abort the pipeline early after the first error is thrown, you have to set the `abortPipeEarly` option of <Link href="/api/parse">`parse`</Link> or <Link href="/api/safeParse">`safeParse`</Link> to `true`. Learn more <Link href="/guides/parse-data/#abort-early">here</Link>.
 
-### Example
-
-For example, a validation function that controls the length of a string might look like the following.
-
-```ts
-import { getOutput, getPipeIssues, string } from 'valibot'; // 0.56 kB
-
-const StringSchema = string([
-  (input) => {
-    if (input.length > 10) {
-      return getPipeIssues('custom', 'Invalid length', input);
-    }
-    return getOutput(input);
-  },
-]);
-```
-
-### Utility functions
-
-Since the code of a pipeline, as seen in the previous example, can quickly become confusing. I provide you with small utility functions that make your code more understandable and readable.
-
-Utility functions: <Link href="/api/bytes">`bytes`</Link>, <Link href="/api/cuid2">`cuid2`</Link>, <Link href="/api/custom">`custom`</Link>, <Link href="/api/email">`email`</Link>, <Link href="/api/emoji">`emoji`</Link>, <Link href="/api/endsWith">`endsWith`</Link>, <Link href="/api/excludes">`excludes`</Link>, <Link href="/api/finite">`finite`</Link>, <Link href="/api/includes">`includes`</Link>, <Link href="/api/integer">`integer`</Link>, <Link href="/api/ip">`ip`</Link>, <Link href="/api/ipv4">`ipv4`</Link>, <Link href="/api/ipv6">`ipv6`</Link>, <Link href="/api/isoDate">`isoDate`</Link>, <Link href="/api/isoDateTime">`isoDateTime`</Link>, <Link href="/api/isoTime">`isoTime`</Link>, <Link href="/api/isoTimeSecond">`isoTimeSecond`</Link>, <Link href="/api/isoTimestamp">`isoTimestamp`</Link>, <Link href="/api/isoWeek">`isoWeek`</Link>, <Link href="/api/length">`length`</Link>, <Link href="/api/maxBytes">`maxBytes`</Link>, <Link href="/api/maxLength">`maxLength`</Link>, <Link href="/api/maxSize">`maxSize`</Link>, <Link href="/api/maxValue">`maxValue`</Link>, <Link href="/api/mimeType">`mimeType`</Link>, <Link href="/api/minBytes">`minBytes`</Link>, <Link href="/api/minLength">`minLength`</Link>, <Link href="/api/minSize">`minSize`</Link>, <Link href="/api/minValue">`minValue`</Link>, <Link href="/api/multipleOf">`multipleOf`</Link>, <Link href="/api/notBytes">`notBytes`</Link>, <Link href="/api/notLength">`notLength`</Link>, <Link href="/api/notSize">`notSize`</Link>, <Link href="/api/notValue">`notValue`</Link>, <Link href="/api/regex">`regex`</Link>, <Link href="/api/safeInteger">`safeInteger`</Link>, <Link href="/api/size">`size`</Link>, <Link href="/api/startsWith">`startsWith`</Link>, <Link href="/api/ulid">`ulid`</Link>, <Link href="/api/url">`url`</Link>, <Link href="/api/uuid">`uuid`</Link>, <Link href="/api/value">`value`</Link>
+Validation functions: <Link href="/api/bytes">`bytes`</Link>, <Link href="/api/cuid2">`cuid2`</Link>, <Link href="/api/custom">`custom`</Link>, <Link href="/api/email">`email`</Link>, <Link href="/api/emoji">`emoji`</Link>, <Link href="/api/endsWith">`endsWith`</Link>, <Link href="/api/excludes">`excludes`</Link>, <Link href="/api/finite">`finite`</Link>, <Link href="/api/includes">`includes`</Link>, <Link href="/api/integer">`integer`</Link>, <Link href="/api/ip">`ip`</Link>, <Link href="/api/ipv4">`ipv4`</Link>, <Link href="/api/ipv6">`ipv6`</Link>, <Link href="/api/isoDate">`isoDate`</Link>, <Link href="/api/isoDateTime">`isoDateTime`</Link>, <Link href="/api/isoTime">`isoTime`</Link>, <Link href="/api/isoTimeSecond">`isoTimeSecond`</Link>, <Link href="/api/isoTimestamp">`isoTimestamp`</Link>, <Link href="/api/isoWeek">`isoWeek`</Link>, <Link href="/api/length">`length`</Link>, <Link href="/api/maxBytes">`maxBytes`</Link>, <Link href="/api/maxLength">`maxLength`</Link>, <Link href="/api/maxSize">`maxSize`</Link>, <Link href="/api/maxValue">`maxValue`</Link>, <Link href="/api/mimeType">`mimeType`</Link>, <Link href="/api/minBytes">`minBytes`</Link>, <Link href="/api/minLength">`minLength`</Link>, <Link href="/api/minSize">`minSize`</Link>, <Link href="/api/minValue">`minValue`</Link>, <Link href="/api/multipleOf">`multipleOf`</Link>, <Link href="/api/notBytes">`notBytes`</Link>, <Link href="/api/notLength">`notLength`</Link>, <Link href="/api/notSize">`notSize`</Link>, <Link href="/api/notValue">`notValue`</Link>, <Link href="/api/regex">`regex`</Link>, <Link href="/api/safeInteger">`safeInteger`</Link>, <Link href="/api/size">`size`</Link>, <Link href="/api/startsWith">`startsWith`</Link>, <Link href="/api/ulid">`ulid`</Link>, <Link href="/api/url">`url`</Link>, <Link href="/api/uuid">`uuid`</Link>, <Link href="/api/value">`value`</Link>
 
 Some of these utility functions can be used in the pipeline of different schema functions. For example, <Link href="/api/minValue">`minValue`</Link> can be used in the pipeline of <Link href="/api/string">`string`</Link>, <Link href="/api/number">`number`</Link>, <Link href="/api/bigint">`bigint`</Link> and <Link href="/api/date">`date`</Link>.
 
@@ -78,27 +57,15 @@ const UsernameSchema = string([
 ]);
 ```
 
+> You can forward the issues of a pipeline validation to a child. See the <Link href="/guides/methods/#forward">methods</Link> guide for more information.
+
 ## Transformations
 
 Transformation functions allow to change the value of an input, but not the data type. This can be useful for example to remove spaces at the beginning or end of a string or to force a minimum or maximum value.
 
 > If you also want to change the data type, you must explicitly use the <Link href="/api/transform">`transform`</Link> method.
 
-### Example
-
-A transformation function that enforces a minimum value of a number could look like the following.
-
-```ts
-import { getOutput, number } from 'valibot'; // 0.53 kB
-
-const NumberSchema = number([(input) => getOutput(input > 10 ? input : 10)]);
-```
-
-### Utility functions
-
-To make the code of a pipeline more readable, you can use the utility functions I provide for transformations.
-
-Utility functions: <Link href="/api/toCustom">`toCustom`</Link>, <Link href="/api/toLowerCase">`toLowerCase`</Link>, <Link href="/api/toMaxValue">`toMaxValue`</Link>, <Link href="/api/toMinValue">`toMinValue`</Link>, <Link href="/api/toTrimmed">`toTrimmed`</Link>, <Link href="/api/toTrimmedEnd">`toTrimmedEnd`</Link>, <Link href="/api/toTrimmedStart">`toTrimmedStart`</Link>, <Link href="/api/toUpperCase">`toUpperCase`</Link>
+Transformation functions: <Link href="/api/toCustom">`toCustom`</Link>, <Link href="/api/toLowerCase">`toLowerCase`</Link>, <Link href="/api/toMaxValue">`toMaxValue`</Link>, <Link href="/api/toMinValue">`toMinValue`</Link>, <Link href="/api/toTrimmed">`toTrimmed`</Link>, <Link href="/api/toTrimmedEnd">`toTrimmedEnd`</Link>, <Link href="/api/toTrimmedStart">`toTrimmedStart`</Link>, <Link href="/api/toUpperCase">`toUpperCase`</Link>
 
 ```ts
 import { number, toMinValue } from 'valibot'; // 0.57 kB
