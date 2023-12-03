@@ -1,7 +1,7 @@
 import type { ErrorMessage, Pipe, PipeAsync } from '../../types/index.ts';
 
 /**
- * Returns error and pipe from dynamic arguments.
+ * Returns message and pipe from dynamic arguments.
  *
  * @param arg1 First argument.
  * @param arg2 Second argument.

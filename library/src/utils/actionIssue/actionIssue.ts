@@ -1,4 +1,8 @@
-import type { ErrorMessage, InvalidActionResult } from '../../types/index.ts';
+import type {
+  ErrorMessage,
+  InvalidActionResult,
+  PathItem,
+} from '../../types/index.ts';
 import { errorMessage } from '../errorMessage/index.ts';
 
 /**
@@ -8,6 +12,7 @@ import { errorMessage } from '../errorMessage/index.ts';
  * @param message The error message.
  * @param input The input value.
  * @param requirement The requirement.
+ * @param path The issue path.
  *
  * @returns The pipeline result object.
  */
@@ -15,7 +20,8 @@ export function actionIssue(
   validation: string,
   message: ErrorMessage,
   input: unknown,
-  requirement?: unknown
+  requirement?: unknown,
+  path?: PathItem[]
 ): InvalidActionResult {
   return {
     issues: [
@@ -24,6 +30,7 @@ export function actionIssue(
         message: errorMessage(message),
         input,
         requirement,
+        path,
       },
     ],
   };

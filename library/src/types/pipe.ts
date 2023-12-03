@@ -32,7 +32,10 @@ export type InvalidActionResult = {
   /**
    * The pipe issues.
    */
-  issues: Pick<Issue, 'validation' | 'message' | 'input' | 'requirement'>[];
+  issues: Pick<
+    Issue,
+    'validation' | 'message' | 'input' | 'requirement' | 'path'
+  >[];
 };
 
 /**
