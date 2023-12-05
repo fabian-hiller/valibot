@@ -6,25 +6,26 @@ import {
   type ContentMenu,
   useContent,
   useLocation,
+  useDocumentHead,
 } from '@builder.io/qwik-city';
 import { Slot, component$, useComputed$ } from '@builder.io/qwik';
 import '../styles/pace.css';
-import Contributors from '~/components/Contributors';
 
-type NavItems = (ContentMenu & { group: string })[];
+type NavItem = ContentMenu & { group: string };
 
 /**
  * Provides the layout for the documentation pages.
  */
 export const DocsLayout = component$(() => {
-  // Use location and content
+  // Use location, content and docuemnt head
   const location = useLocation();
   const content = useContent();
+  const documentHead = useDocumentHead();
 
   // Compute navigation items
   const navItems = useComputed$(
     () =>
-      content.menu?.items?.reduce<NavItems>(
+      content.menu?.items?.reduce<NavItem[]>(
         (list, { text, items }) =>
           items
             ? [...list, ...items.map((item) => ({ ...item, group: text }))]
@@ -39,9 +40,20 @@ export const DocsLayout = component$(() => {
   );
 
   // Compute previous, current and next page
-  const prevPage = useComputed$(() => navItems.value[navIndex.value - 1]);
-  const currentPage = useComputed$(() => navItems.value[navIndex.value]);
-  const nextPage = useComputed$(() => navItems.value[navIndex.value + 1]);
+  const prevPage = useComputed$<NavItem | undefined>(
+    () => navItems.value[navIndex.value - 1]
+  );
+  const currentPage = useComputed$<NavItem | undefined>(
+    () => navItems.value[navIndex.value]
+  );
+  const nextPage = useComputed$<NavItem | undefined>(
+    () => navItems.value[navIndex.value + 1]
+  );
+
+  // Compute contributors
+  const contributors = useComputed$<string[]>(
+    () => documentHead.frontmatter.contributors || []
+  );
 
   return (
     <div class="flex w-full max-w-screen-xl flex-1 flex-col-reverse self-center lg:flex-row">
@@ -74,9 +86,36 @@ export const DocsLayout = component$(() => {
           <Slot />
         </article>
 
-        <div class="mt-12 px-10">
-          <Contributors />
-        </div>
+        {/* Contributors */}
+        {contributors.value.length > 0 && (
+          <div class="mx-8 mt-10 border-t-2 pt-10 dark:border-slate-800 md:mt-12 md:pt-12 lg:mx-10 lg:mt-14 lg:pt-14">
+            <h3 class="text-lg font-medium text-slate-900 dark:text-slate-200 md:text-xl lg:text-2xl">
+              Contributors
+            </h3>
+            <p class="mt-3 leading-loose md:mt-4 md:text-lg md:leading-loose lg:mt-5 lg:text-xl lg:leading-loose">
+              Thanks to all the contributors who helped make this documentation
+              better!
+            </p>
+            <ul class="mt-4 flex flex-wrap gap-2 md:mt-5 lg:mt-6 lg:gap-3">
+              {contributors.value.map((contributor) => (
+                <li key={contributor}>
+                  <a
+                    href={`https://github.com/${contributor}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      loading="lazy"
+                      src={`https://github.com/${contributor}.png?size=88`}
+                      alt={`GitHub profile picture of ${contributor}`}
+                      class="w-9 rounded-full md:w-10 lg:w-11"
+                    />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {currentPage.value?.href && (
           <div class="mt-10 flex justify-between px-8 md:mt-12 lg:mt-14 lg:px-10">
