@@ -81,6 +81,8 @@
 - [isoWeek](/api/isoWeek)
 - [length](/api/length)
 - [mac](/api/mac)
+- [mac48](/api/mac48)
+- [mac64](/api/mac64)
 - [maxBytes](/api/maxBytes)
 - [maxLength](/api/maxLength)
 - [maxSize](/api/maxSize)
