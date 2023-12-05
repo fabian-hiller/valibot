@@ -74,3 +74,8 @@ export const ULID_REGEX = /^[\da-hjkmnp-tv-z]{26}$/iu;
  * [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) regex.
  */
 export const UUID_REGEX = /^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/iu;
+
+/**
+ * [BIC] (https://en.wikipedia.org/wiki/ISO_9362) regex.
+ */
+export const BIC_REGEX = /^[A-Z]{6}(?!00)[A-Z\d]{2}(?:[A-Z\d]{3})?$/u;
