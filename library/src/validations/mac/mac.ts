@@ -1,4 +1,4 @@
-import { MAC_REGEX } from '../../regex.ts';
+import { MAC48_REGEX, MAC64_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { getOutput, getPipeIssues } from '../../utils/index.ts';
 
@@ -11,9 +11,9 @@ export type MacValidation<TInput extends string> = BaseValidation<TInput> & {
    */
   type: 'mac';
   /**
-   * The MAC address regex.
+   * The MAC 48 and 64 bit regex.
    */
-  requirement: RegExp;
+  requirement: [RegExp, RegExp];
 };
 
 /**
@@ -30,9 +30,10 @@ export function mac<TInput extends string>(
     type: 'mac',
     async: false,
     message,
-    requirement: MAC_REGEX,
+    requirement: [MAC48_REGEX, MAC64_REGEX],
     _parse(input) {
-      return !this.requirement.test(input)
+      return !this.requirement[0].test(input) &&
+        !this.requirement[1].test(input)
         ? getPipeIssues(this.type, this.message, input, this.requirement)
         : getOutput(input);
     },
