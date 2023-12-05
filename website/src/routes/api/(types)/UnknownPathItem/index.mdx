@@ -1,0 +1,27 @@
+---
+title: UnknownPathItem
+description: Unknown path item type.
+---
+
+import { Property } from '~/components';
+
+# UnknownPathItem
+
+Unknown path item type.
+
+## Definition
+
+- `UnknownPathItem` <Property type="object"/>
+  - `type` <Property {...properties.type} />
+  - `input` <Property type="unknown" />
+  - `key` <Property type="unknown" />
+  - `value` <Property type="unknown" />
+
+export const properties = {
+  type: {
+    type: {
+      type: 'string',
+      value: 'unknown',
+    },
+  },
+};

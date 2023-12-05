@@ -1,7 +1,180 @@
 ---
 title: string
+description: Creates a string schema.
 ---
+
+import { ApiList, Property } from '~/components';
 
 # string
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/string/string.ts).
+Creates a string schema.
+
+```ts
+// String schema with an optional pipe
+const Schema = string(pipe);
+
+// String schema with an optional message and pipe
+const Schema = string(message, pipe);
+```
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+- `pipe` <Property {...properties.pipe}/>
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+With `string` you validate the data type of the incoming data and with the `pipe` you can then validate all further details. In the event of an error, the `message` parameter allows you to customize the error message.
+
+### Email schema
+
+Schema to validate an email.
+
+```ts
+const EmailSchema = string([
+  minLength(1, 'Please enter your email.'),
+  email('The email is badly formatted.'),
+  maxLength(30, 'Your email is too long.'),
+]);
+```
+
+### Password schema
+
+Schema to validate a password.
+
+```ts
+const PasswordSchema = string([
+  minLength(8, 'Your password is too short.'),
+  maxLength(30, 'Your password is too long.'),
+  regex(/[a-z]/, 'Your password must contain a lowercase letter.'),
+  regex(/[A-Z]/, 'Your password must contain a uppercase letter.'),
+  regex(/[0-9]/, 'Your password must contain a number.'),
+]);
+```
+
+### URL schema
+
+Schema to validate a URL.
+
+```ts
+const UrlSchema = string('A URL must be string.', [
+  url('The URL is badly formatted.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `string`.
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+    'unwrap',
+  ]}
+/>
+
+### Transformations
+
+<ApiList
+  items={[
+    'toCustom',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toTrimmed',
+    'toTrimmedEnd',
+    'toTrimmedStart',
+    'toUpperCase',
+  ]}
+/>
+
+### Validations
+
+<ApiList
+  items={[
+    'bytes',
+    'cuid2',
+    'custom',
+    'email',
+    'emoji',
+    'endsWith',
+    'equal',
+    'excludes',
+    'imei',
+    'includes',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'maxBytes',
+    'maxLength',
+    'maxValue',
+    'minBytes',
+    'minLength',
+    'minValue',
+    'notBytes',
+    'notLength',
+    'notValue',
+    'regex',
+    'startsWith',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
+  ]}
+/>
+
+export const properties = {
+  message: {
+    type: [
+      {
+        type: 'custom',
+        name: 'ErrorMessage',
+        href: '../ErrorMessage/',
+      },
+      'undefined',
+    ],
+    default: {
+      type: 'string',
+      value: 'Invalid type',
+    },
+  },
+  pipe: {
+    type: [
+      {
+        type: 'custom',
+        name: 'Pipe',
+        href: '../Pipe/',
+        generics: ['string'],
+      },
+      'undefined',
+    ],
+  },
+  Schema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'StringSchema',
+        href: '../StringSchema/',
+      },
+    ],
+  },
+};
