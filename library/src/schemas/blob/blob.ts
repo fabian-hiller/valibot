@@ -1,9 +1,5 @@
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import {
-  executePipe,
-  getDefaultArgs,
-  getSchemaIssues,
-} from '../../utils/index.ts';
+import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Blob schema type.
@@ -47,7 +43,7 @@ export function blob(
   arg2?: Pipe<Blob>
 ): BlobSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg1, arg2);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
 
   // Create and return blob schema
   return {
@@ -58,11 +54,11 @@ export function blob(
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Blob)) {
-        return getSchemaIssues(info, 'type', 'blob', this.message, input);
+        return schemaIssue(info, 'type', 'blob', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipe(input, this.pipe, info, 'blob');
+      return pipeResult(input, this.pipe, info, 'blob');
     },
   };
 }

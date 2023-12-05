@@ -1,5 +1,5 @@
 import type { BaseSchema, Output } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { parseResult } from '../../utils/index.ts';
 import { getFallback } from '../getFallback/index.ts';
 import type { FallbackInfo, SchemaWithFallback } from './types.ts';
 
@@ -25,11 +25,9 @@ export function fallback<
     fallback,
     _parse(input, info) {
       const result = schema._parse(input, info);
-      return getOutput(
-        result.issues
-          ? getFallback(this, { input, issues: result.issues })
-          : result.output
-      );
+      return result.issues
+        ? parseResult(true, getFallback(this, { input, issues: result.issues }))
+        : result;
     },
   };
 }

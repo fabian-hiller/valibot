@@ -7,7 +7,7 @@ import { Link } from '@builder.io/qwik-city';
 
 # Methods
 
-Apart from <Link href="/api/parse">`parse`</Link>, <Link href="/api/safeParse">`safeParse`</Link> and <Link href="/api/is">`is`</Link> I offer you some more methods to add additional features to your schemas. I distinguish in the following between schema and object methods.
+Apart from <Link href="/api/parse">`parse`</Link>, <Link href="/api/safeParse">`safeParse`</Link> and <Link href="/api/is">`is`</Link> I offer you some more methods to add additional features to your schemas. I distinguish in the following between schema, object and pipeline methods.
 
 ## Schema methods
 
@@ -87,4 +87,43 @@ type Object2 = Pick<Object1, 'key1'>;
 
 // Valibot
 const object2 = pick(object1, ['key1']);
+```
+
+## Pipeline methods
+
+My pipeline methods help you to modify the results of validations and transformations within a pipeline.
+
+Pipeline methods: <Link href="/api/forward">`forward`</Link>
+
+> For more infos about our pipeline feature, see the <Link href="/guides/pipelines">pipelines</Link> guide.
+
+### Forward
+
+For example, if you want to check that both password entries in a registration form match, you can use <Link href="/api/forward">`forward`</Link> to forward the issue to the second password field in case of an error. This allows you to display the error message in the correct place.
+
+```ts
+import { custom, email, forward, minLength, object, string } from 'valibot'; // 1.23 kB
+
+const RegisterSchema = object(
+  {
+    email: string([
+      minLength(1, 'Please enter your email.'),
+      email('The email address is badly formatted.'),
+    ]),
+    password1: string([
+      minLength(1, 'Please enter your password.'),
+      minLength(8, 'Your password must have 8 characters or more.'),
+    ]),
+    password2: string(),
+  },
+  [
+    forward(
+      custom(
+        (input) => input.password1 === input.password2,
+        'The two passwords do not match.'
+      ),
+      ['password2']
+    ),
+  ]
+);
 ```

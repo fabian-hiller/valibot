@@ -5,7 +5,7 @@ import type {
   Issues,
   Output,
 } from '../../types/index.ts';
-import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Union options type.
@@ -78,10 +78,13 @@ export function union<TOptions extends UnionOptions>(
         }
       }
 
-      // Return output or issues
-      return output
-        ? getOutput(output[0])
-        : getSchemaIssues(info, 'type', 'union', this.message, input, issues);
+      // If there is an output, return parse result
+      if (output) {
+        return parseResult(true, output[0]);
+      }
+
+      // Otherwise, return schema issue
+      return schemaIssue(info, 'type', 'union', this.message, input, issues);
     },
   };
 }

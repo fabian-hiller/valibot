@@ -1,5 +1,5 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { actionOutput } from '../../utils/index.ts';
 
 /**
  * To trimmed transformation type.
@@ -22,7 +22,7 @@ export function toTrimmed(): ToTrimmedTransformation {
     type: 'to_trimmed',
     async: false,
     _parse(input) {
-      return getOutput(input.trim());
+      return actionOutput(input.trim());
     },
   };
 }

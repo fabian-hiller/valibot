@@ -5,7 +5,7 @@ import type {
   Input,
   Output,
 } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { parseResult } from '../../utils/index.ts';
 
 /**
  * Optional schema async type.
@@ -55,7 +55,7 @@ export function optionalAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
  */
 export function optionalAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined
@@ -66,7 +66,7 @@ export function optionalAsync<
 
 export function optionalAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined = undefined
@@ -84,7 +84,7 @@ export function optionalAsync<
       if (input === undefined) {
         const override = await getDefaultAsync(this);
         if (override === undefined) {
-          return getOutput(input);
+          return parseResult(true, input);
         }
         input = override;
       }

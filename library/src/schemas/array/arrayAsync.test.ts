@@ -128,4 +128,67 @@ describe('array', () => {
     const schema2 = arrayAsync(string());
     expect(schema2.pipe).toBeUndefined();
   });
+
+  test('should execute pipe if output is typed', async () => {
+    const schema = arrayAsync(string([minLength(10)]), [minLength(10)]);
+    const input = ['12345'];
+    const result = await schema._parse(input);
+    expect(result).toEqual({
+      typed: true,
+      output: input,
+      issues: [
+        {
+          reason: 'string',
+          validation: 'min_length',
+          origin: 'value',
+          message: 'Invalid length',
+          input: input[0],
+          requirement: 10,
+          path: [
+            {
+              type: 'array',
+              input: input,
+              key: 0,
+              value: input[0],
+            },
+          ],
+        },
+        {
+          reason: 'array',
+          validation: 'min_length',
+          origin: 'value',
+          message: 'Invalid length',
+          input: input,
+          requirement: 10,
+        },
+      ],
+    });
+  });
+
+  test('should skip pipe if output is not typed', async () => {
+    const schema = arrayAsync(string(), [minLength(10)]);
+    const input = [12345];
+    const result = await schema._parse(input);
+    expect(result).toEqual({
+      typed: false,
+      output: input,
+      issues: [
+        {
+          reason: 'type',
+          validation: 'string',
+          origin: 'value',
+          message: 'Invalid type',
+          input: input[0],
+          path: [
+            {
+              type: 'array',
+              input: input,
+              key: 0,
+              value: input[0],
+            },
+          ],
+        },
+      ],
+    });
+  });
 });

@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 import type { Literal } from './types.ts';
 
 /**
@@ -41,11 +41,11 @@ export function literal<TLiteral extends Literal>(
     _parse(input, info) {
       // Check type of input
       if (input !== this.literal) {
-        return getSchemaIssues(info, 'type', 'literal', this.message, input);
+        return schemaIssue(info, 'type', 'literal', this.message, input);
       }
 
-      // Return input as output
-      return getOutput(input as TLiteral);
+      // Return parse result
+      return parseResult(true, input as TLiteral);
     },
   };
 }

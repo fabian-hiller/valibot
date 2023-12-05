@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Void schema async type.
@@ -33,11 +33,11 @@ export function voidAsync(
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'undefined') {
-        return getSchemaIssues(info, 'type', 'void', this.message, input);
+        return schemaIssue(info, 'type', 'void', this.message, input);
       }
 
-      // Return input as output
-      return getOutput(input);
+      // Return parse result
+      return parseResult(true, input);
     },
   };
 }

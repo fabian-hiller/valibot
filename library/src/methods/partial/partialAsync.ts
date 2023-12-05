@@ -13,7 +13,7 @@ import type {
   ErrorMessage,
   PipeAsync,
 } from '../../types/index.ts';
-import { getRestAndDefaultArgs } from '../../utils/index.ts';
+import { restAndDefaultArgs } from '../../utils/index.ts';
 
 /**
  * Partial object entries async type.
@@ -125,7 +125,7 @@ export function partialAsync<
   >
 ): ObjectSchemaAsync<PartialObjectEntriesAsync<TSchema['entries']>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = getRestAndDefaultArgs<
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     PipeAsync<
       ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>

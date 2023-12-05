@@ -6,10 +6,10 @@ import type {
   PipeAsync,
 } from '../../types/index.ts';
 import {
-  executePipeAsync,
-  getIssues,
-  getRestAndDefaultArgs,
-  getSchemaIssues,
+  pipeResultAsync,
+  restAndDefaultArgs,
+  schemaIssue,
+  parseResult,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 
@@ -124,7 +124,7 @@ export function objectAsync<
   arg4?: PipeAsync<ObjectOutput<TEntries, TRest>>
 ): ObjectSchemaAsync<TEntries, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message = 'Invalid type', pipe] = getRestAndDefaultArgs<
+  const [rest, message = 'Invalid type', pipe] = restAndDefaultArgs<
     TRest,
     PipeAsync<ObjectOutput<TEntries, TRest>>
   >(arg2, arg3, arg4);
@@ -143,13 +143,14 @@ export function objectAsync<
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return getSchemaIssues(info, 'type', 'object', this.message, input);
+        return schemaIssue(info, 'type', 'object', this.message, input);
       }
 
       // Cache object entries lazy
       cachedEntries = cachedEntries || Object.entries(this.entries);
 
-      // Create issues and output
+      // Create typed, issues and output
+      let typed = true;
       let issues: Issues | undefined;
       const output: Record<string, any> = {};
 
@@ -192,11 +193,18 @@ export function objectAsync<
 
                   // If necessary, abort early
                   if (info?.abortEarly) {
+                    typed = false;
                     throw null;
                   }
+                }
 
-                  // Otherwise, add value to object
-                } else if (result.output !== undefined || key in input) {
+                // If not typed, set typed to false
+                if (!result.typed) {
+                  typed = false;
+                }
+
+                // Set output of entry if necessary
+                if (result.output !== undefined || key in input) {
                   output[key] = result.output;
                 }
               }
@@ -240,13 +248,18 @@ export function objectAsync<
 
                       // If necessary, abort early
                       if (info?.abortEarly) {
+                        typed = false;
                         throw null;
                       }
-
-                      // Otherwise, add value to object
-                    } else {
-                      output[key] = result.output;
                     }
+
+                    // If not typed, set typed to false
+                    if (!result.typed) {
+                      typed = false;
+                    }
+
+                    // Set output of entry
+                    output[key] = result.output;
                   }
                 }
               }
@@ -254,15 +267,19 @@ export function objectAsync<
           ),
       ]).catch(() => null);
 
-      // Return issues or pipe result
-      return issues
-        ? getIssues(issues)
-        : executePipeAsync(
-            output as ObjectOutput<TEntries, TRest>,
-            this.pipe,
-            info,
-            'object'
-          );
+      // If output is typed, execute pipe
+      if (typed) {
+        return pipeResultAsync(
+          output as ObjectOutput<TEntries, TRest>,
+          this.pipe,
+          info,
+          'object',
+          issues
+        );
+      }
+
+      // Otherwise, return untyped parse result
+      return parseResult(false, output, issues as Issues);
     },
   };
 }

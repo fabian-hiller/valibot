@@ -1,9 +1,5 @@
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import {
-  executePipe,
-  getDefaultArgs,
-  getSchemaIssues,
-} from '../../utils/index.ts';
+import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Bigint schema type.
@@ -51,7 +47,7 @@ export function bigint(
   arg2?: Pipe<bigint>
 ): BigintSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg1, arg2);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
 
   // Create and return bigint schema
   return {
@@ -62,11 +58,11 @@ export function bigint(
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'bigint') {
-        return getSchemaIssues(info, 'type', 'bigint', this.message, input);
+        return schemaIssue(info, 'type', 'bigint', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipe(input, this.pipe, info, 'bigint');
+      return pipeResult(input, this.pipe, info, 'bigint');
     },
   };
 }

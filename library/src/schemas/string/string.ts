@@ -1,9 +1,5 @@
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import {
-  executePipe,
-  getDefaultArgs,
-  getSchemaIssues,
-} from '../../utils/index.ts';
+import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * String schema type.
@@ -51,7 +47,7 @@ export function string(
   arg2?: Pipe<string>
 ): StringSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg1, arg2);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
 
   // Create and return string schema
   return {
@@ -62,11 +58,11 @@ export function string(
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'string') {
-        return getSchemaIssues(info, 'type', 'string', this.message, input);
+        return schemaIssue(info, 'type', 'string', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipe(input, this.pipe, info, 'string');
+      return pipeResult(input, this.pipe, info, 'string');
     },
   };
 }

@@ -1,9 +1,5 @@
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import {
-  executePipe,
-  getDefaultArgs,
-  getSchemaIssues,
-} from '../../utils/index.ts';
+import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Special schema type.
@@ -62,7 +58,7 @@ export function special<TInput>(
   arg3?: Pipe<TInput>
 ): SpecialSchema<TInput> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
@@ -74,11 +70,11 @@ export function special<TInput>(
     _parse(input, info) {
       // Check type of input
       if (!this.check(input)) {
-        return getSchemaIssues(info, 'type', 'special', this.message, input);
+        return schemaIssue(info, 'type', 'special', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipe(input as TInput, this.pipe, info, 'special');
+      return pipeResult(input as TInput, this.pipe, info, 'special');
     },
   };
 }

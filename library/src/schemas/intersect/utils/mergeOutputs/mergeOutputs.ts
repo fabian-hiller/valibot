@@ -1,5 +1,3 @@
-import { getOutput } from '../../../../utils/index.ts';
-
 /**
  * Merges two outputs into one single output.
  *
@@ -23,7 +21,7 @@ export function mergeOutputs(
         output2 instanceof Date &&
         +output1 === +output2)
     ) {
-      return getOutput(output1);
+      return { output: output1 };
     }
 
     // Return deeply merged array
@@ -47,7 +45,7 @@ export function mergeOutputs(
         }
 
         // Return deeply merged array
-        return getOutput(array);
+        return { output: array };
       }
 
       // Return that arrays can't be merged
@@ -80,7 +78,7 @@ export function mergeOutputs(
       }
 
       // Return deeply merged object
-      return getOutput(object);
+      return { output: object };
     }
   }
 

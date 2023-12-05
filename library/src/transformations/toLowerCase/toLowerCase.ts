@@ -1,5 +1,5 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { actionOutput } from '../../utils/index.ts';
 
 /**
  * To lower case transformation type.
@@ -22,7 +22,7 @@ export function toLowerCase(): ToLowerCaseTransformation {
     type: 'to_lower_case',
     async: false,
     _parse(input) {
-      return getOutput(input.toLocaleLowerCase());
+      return actionOutput(input.toLocaleLowerCase());
     },
   };
 }

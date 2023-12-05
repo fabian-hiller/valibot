@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 import type { PicklistOptions } from './types.ts';
 
 /**
@@ -46,11 +46,11 @@ export function picklist<
     _parse(input, info) {
       // Check type of input
       if (!this.options.includes(input as any)) {
-        return getSchemaIssues(info, 'type', 'picklist', this.message, input);
+        return schemaIssue(info, 'type', 'picklist', this.message, input);
       }
 
       // Return inpot as output
-      return getOutput(input as TOptions[number]);
+      return parseResult(true, input as TOptions[number]);
     },
   };
 }

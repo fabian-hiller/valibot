@@ -5,7 +5,7 @@ import type {
   Input,
   Output,
 } from '../../types/index.ts';
-import { getSchemaIssues } from '../../utils/index.ts';
+import { schemaIssue } from '../../utils/index.ts';
 import type { NonNullish } from './nonNullish.ts';
 
 /**
@@ -49,13 +49,7 @@ export function nonNullishAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
     async _parse(input, info) {
       // Allow `null` and `undefined` values not to pass
       if (input === null || input === undefined) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'non_nullish',
-          this.message,
-          input
-        );
+        return schemaIssue(info, 'type', 'non_nullish', this.message, input);
       }
 
       // Return result of wrapped schema

@@ -1,5 +1,5 @@
 import type { BaseTransformationAsync } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { actionOutput } from '../../utils/index.ts';
 
 /**
  * To custom transformation async type.
@@ -26,7 +26,7 @@ export function toCustomAsync<TInput>(
     type: 'to_custom',
     async: true,
     async _parse(input) {
-      return getOutput(await action(input));
+      return actionOutput(await action(input));
     },
   };
 }

@@ -10,7 +10,7 @@ import type {
   ErrorMessage,
   PipeAsync,
 } from '../../types/index.ts';
-import { getRestAndDefaultArgs } from '../../utils/index.ts';
+import { restAndDefaultArgs } from '../../utils/index.ts';
 import type { MergeObjects } from './types.ts';
 
 /**
@@ -105,7 +105,7 @@ export function mergeAsync<
   arg4?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
 ): ObjectSchemaAsync<MergeObjects<TSchemas>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = getRestAndDefaultArgs<
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
   >(arg2, arg3, arg4);

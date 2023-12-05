@@ -1,53 +1,143 @@
 import { describe, expect, test } from 'vitest';
 import { number, object, string } from '../../schemas/index.ts';
-import { maxValue, minValue } from '../../validations/index.ts';
-import { parse } from '../parse/index.ts';
+import { maxValue, minLength, minValue } from '../../validations/index.ts';
 import { transform } from './transform.ts';
 
 describe('transform', () => {
   test('should transform string to number', () => {
-    const schema = transform(string(), (output) => output.length);
-    const output = parse(schema, 'hello');
-    expect(output).toBe(5);
+    const schema = transform(string(), (value) => value.length);
+    const output = schema._parse('hello');
+    expect(output).toEqual({
+      typed: true,
+      output: 5,
+      issues: undefined,
+    });
   });
 
-  test('should add key to object', () => {
-    const schema = transform(object({ key1: string() }), (output) => ({
-      ...output,
-      key2: 'test',
+  test('should add new key to object', () => {
+    const merge = { key2: 'test' };
+    const schema = transform(object({ key1: string() }), (value) => ({
+      ...value,
+      ...merge,
     }));
     const input = { key1: 'hello' };
-    const output = parse(schema, input);
-    expect(output).toEqual({ ...input, key2: 'test' });
+    const result = schema._parse(input);
+    expect(result).toEqual({
+      typed: true,
+      output: { ...input, ...merge },
+      issues: undefined,
+    });
   });
 
-  test('should return issues', () => {
+  test('should return type issue', () => {
     const schema = transform(string(), (output) => output.length);
-    expect(() => parse(schema, 123)).toThrowError();
+    const input = 123;
+    const result = schema._parse(input);
+    expect(result).toEqual({
+      typed: false,
+      output: input,
+      issues: [
+        {
+          reason: 'type',
+          validation: 'string',
+          origin: 'value',
+          message: 'Invalid type',
+          input: input,
+        },
+      ],
+    });
   });
 
-  test('should execute pipe', () => {
+  test('should return string issue', () => {
+    const schema = transform(
+      string([minLength(10)]),
+      (output) => output.length
+    );
+    const input = 'hello';
+    const result = schema._parse(input);
+    expect(result).toEqual({
+      typed: true,
+      output: 5,
+      issues: [
+        {
+          reason: 'string',
+          validation: 'min_length',
+          origin: 'value',
+          message: 'Invalid length',
+          input: input,
+          requirement: 10,
+        },
+      ],
+    });
+  });
+
+  test('should skip validation argument', () => {
+    const schema = transform(
+      string([minLength(10)]),
+      (output) => output.length,
+      number([minValue(10)])
+    );
+    const input = 'hello';
+    const result = schema._parse(input);
+    expect(result).toEqual({
+      typed: true,
+      output: 5,
+      issues: [
+        {
+          reason: 'string',
+          validation: 'min_length',
+          origin: 'value',
+          message: 'Invalid length',
+          input: input,
+          requirement: 10,
+        },
+      ],
+    });
+  });
+
+  test('should validate output with pipe', () => {
     const schema = transform(string(), (output) => output.length, [
-      minValue(1),
       maxValue(5),
     ]);
-    const input = 'hello';
-    const output = parse(schema, input);
-    expect(output).toBe(input.length);
-    expect(() => parse(schema, '')).toThrowError();
-    expect(() => parse(schema, '123456')).toThrowError();
+    const input = '123456';
+    const result = schema._parse(input);
+    expect(result).toEqual({
+      typed: true,
+      output: 6,
+      issues: [
+        {
+          reason: 'number',
+          validation: 'max_value',
+          origin: 'value',
+          message: 'Invalid value',
+          input: 6,
+          requirement: 5,
+        },
+      ],
+    });
   });
 
-  test('should validate with schema', () => {
+  test('should validate output with schema', () => {
     const schema = transform(
       string(),
       (output) => output.length,
-      number([minValue(1), maxValue(5)])
+      number([maxValue(5)])
     );
-    const input = 'hello';
-    const output = parse(schema, input);
-    expect(output).toBe(input.length);
-    expect(() => parse(schema, '')).toThrowError();
-    expect(() => parse(schema, '123456')).toThrowError();
+    const input = '123456';
+    const result = schema._parse(input);
+    expect(result).toEqual({
+      typed: true,
+      output: 6,
+      issues: [
+        {
+          reason: 'number',
+          validation: 'max_value',
+          origin: 'value',
+          message: 'Invalid value',
+          input: 6,
+          requirement: 5,
+        },
+      ],
+    });
   });
 });

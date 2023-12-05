@@ -1,6 +1,6 @@
 import { ISO_DATE_TIME_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * ISO date time validation type.
@@ -40,8 +40,8 @@ export function isoDateTime<TInput extends string>(
     requirement: ISO_DATE_TIME_REGEX,
     _parse(input) {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

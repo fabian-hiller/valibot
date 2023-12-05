@@ -8,10 +8,10 @@ import type {
   PipeAsync,
 } from '../../types/index.ts';
 import {
-  executePipeAsync,
-  getDefaultArgs,
-  getIssues,
-  getSchemaIssues,
+  defaultArgs,
+  parseResult,
+  pipeResultAsync,
+  schemaIssue,
 } from '../../utils/index.ts';
 import type { ArrayPathItem } from './types.ts';
 
@@ -74,7 +74,7 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
   arg3?: PipeAsync<Output<TItem>[]>
 ): ArraySchemaAsync<TItem> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
 
   // Create and return async array schema
   return {
@@ -86,10 +86,11 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
     async _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {
-        return getSchemaIssues(info, 'type', 'array', this.message, input);
+        return schemaIssue(info, 'type', 'array', this.message, input);
       }
 
-      // Create issues and output
+      // Create typed, issues and output
+      let typed = true;
       let issues: Issues | undefined;
       const output: any[] = [];
 
@@ -128,22 +129,36 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
 
                 // If necessary, abort early
                 if (info?.abortEarly) {
+                  typed = false;
                   throw null;
                 }
-
-                // Otherwise, add item to array
-              } else {
-                output[key] = result.output;
               }
+
+              // If not typed, set typed to false
+              if (!result.typed) {
+                typed = false;
+              }
+
+              // Set output of item
+              output[key] = result.output;
             }
           }
         })
       ).catch(() => null);
 
-      // Return issues or pipe result
-      return issues
-        ? getIssues(issues)
-        : executePipeAsync(output as Output<TItem>[], this.pipe, info, 'array');
+      // If output is typed, execute pipe
+      if (typed) {
+        return pipeResultAsync(
+          output as Output<TItem>[],
+          this.pipe,
+          info,
+          'array',
+          issues
+        );
+      }
+
+      // Otherwise, return untyped parse result
+      return parseResult(false, output, issues as Issues);
     },
   };
 }
