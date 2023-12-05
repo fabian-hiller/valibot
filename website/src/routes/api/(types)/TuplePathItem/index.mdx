@@ -1,0 +1,40 @@
+---
+title: TuplePathItem
+description: Tuple path item type.
+---
+
+import { Property } from '~/components';
+
+# TuplePathItem
+
+Tuple path item type.
+
+## Definition
+
+- `TuplePathItem` <Property type="object" />
+  - `type` <Property {...properties.type} />
+  - `input` <Property {...properties.input} />
+  - `key` <Property type="number" />
+  - `value` <Property type="unknown" />
+
+export const properties = {
+  type: {
+    type: {
+      type: 'string',
+      value: 'tuple',
+    },
+  },
+  input: {
+    type: {
+      type: 'tuple',
+      items: [
+        'unknown',
+        {
+          type: 'array',
+          spread: true,
+          item: 'unknown',
+        },
+      ],
+    },
+  },
+};
