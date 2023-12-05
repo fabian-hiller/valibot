@@ -4,10 +4,10 @@ import type {
   Input,
   Output,
   ResolveObject,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import type { EnumSchema, EnumSchemaAsync } from '../enum/index.ts';
 import type { PicklistSchema, PicklistSchemaAsync } from '../picklist/index.ts';
-import type { UnionSchema } from '../union/index.ts';
+import type { UnionSchema, UnionSchemaAsync } from '../union/index.ts';
 import type { RecordKey } from './record.ts';
 import type { RecordKeyAsync } from './recordAsync.ts';
 
@@ -16,9 +16,9 @@ import type { RecordKeyAsync } from './recordAsync.ts';
  */
 export type RecordPathItem = {
   type: 'record';
-  input: Record<string | number | symbol, any>;
+  input: Record<string | number | symbol, unknown>;
   key: string | number | symbol;
-  value: any;
+  value: unknown;
 };
 
 /**
@@ -29,7 +29,8 @@ type PartialKeySchema =
   | PicklistSchemaAsync<any>
   | EnumSchema<any>
   | EnumSchemaAsync<any>
-  | UnionSchema<any>;
+  | UnionSchema<any>
+  | UnionSchemaAsync<any>;
 
 /**
  * Record input inference type.

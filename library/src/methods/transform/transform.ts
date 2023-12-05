@@ -1,5 +1,6 @@
-import type { BaseSchema, Input, Output, Pipe } from '../../types.ts';
-import { executePipe } from '../../utils/index.ts';
+import type { BaseSchema, Input, Output, Pipe } from '../../types/index.ts';
+import { pipeResult } from '../../utils/index.ts';
+import type { TransformInfo } from './types.ts';
 
 /**
  * Schema with transform type.
@@ -26,7 +27,7 @@ export type SchemaWithTransform<TSchema extends BaseSchema, TOutput> = Omit<
  */
 export function transform<TSchema extends BaseSchema, TOutput>(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput,
+  action: (value: Output<TSchema>, info: TransformInfo) => TOutput,
   pipe?: Pipe<TOutput>
 ): SchemaWithTransform<TSchema, TOutput>;
 
@@ -42,45 +43,41 @@ export function transform<TSchema extends BaseSchema, TOutput>(
  */
 export function transform<TSchema extends BaseSchema, TOutput>(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput,
+  action: (value: Output<TSchema>, info: TransformInfo) => TOutput,
   validate?: BaseSchema<TOutput>
 ): SchemaWithTransform<TSchema, TOutput>;
 
 export function transform<TSchema extends BaseSchema, TOutput>(
   schema: TSchema,
-  action: (value: Output<TSchema>) => TOutput,
+  action: (value: Output<TSchema>, info: TransformInfo) => TOutput,
   arg1?: Pipe<TOutput> | BaseSchema<TOutput>
 ): SchemaWithTransform<TSchema, TOutput> {
   return {
     ...schema,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       // Parse input with schema
       const result = schema._parse(input, info);
 
-      // If there are issues, return them
-      if (result.issues) {
-        return result;
+      // If result is typed, transform output
+      if (result.typed) {
+        result.output = action(result.output, { issues: result.issues });
+
+        // If there are issues or no validation arg, return result
+        if (result.issues || !arg1) {
+          return result;
+        }
+
+        // Otherwise, if a pipe is provided, return pipe result
+        if (Array.isArray(arg1)) {
+          return pipeResult(result.output, arg1, info, typeof result.output);
+        }
+
+        // Otherwise, validate output with schema
+        return arg1._parse(result.output, info);
       }
 
-      // Otherwise, transform output
-      const output = action(result.output);
-
-      // Validate output with schema if available
-      if (arg1 && !Array.isArray(arg1)) {
-        return arg1._parse(output, info);
-      }
-
-      // Otherwise, return pipe result
-      return executePipe(output, arg1, info, typeof output);
+      // Otherwise, return untyped result
+      return result;
     },
   };
 }

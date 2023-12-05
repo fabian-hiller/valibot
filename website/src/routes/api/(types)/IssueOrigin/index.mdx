@@ -1,0 +1,29 @@
+---
+title: IssueOrigin
+description: Issue origin type.
+---
+
+import { Property } from '~/components';
+
+# IssueOrigin
+
+Issue origin type.
+
+## Definition
+
+- `IssueOrigin` <Property {...properties.origin} />
+
+export const properties = {
+  origin: {
+    type: [
+      {
+        type: 'string',
+        value: 'key',
+      },
+      {
+        type: 'string',
+        value: 'value',
+      },
+    ],
+  },
+};

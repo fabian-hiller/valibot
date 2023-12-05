@@ -30,6 +30,7 @@ type Issue = {
   input: any;
 
   // Optional info
+  requirement?: unknown;
   path?: PathItem[];
   issues?: Issues;
   abortEarly?: boolean;
@@ -65,6 +66,10 @@ Each issue contains the following required information.
 ### Optional info
 
 Some issue contain further optional information.
+
+#### Requirement
+
+`requirement` can contain future validation information. For example, if the `minLength` validation function detects that a string is too short, `requirement` contains the minimum length that the string should have.
 
 #### Path
 
@@ -102,7 +107,7 @@ For common use cases like forms, I help you with small functions to format the i
 If you are only interested in the error messages to show them to your users, you can convert a <Link href="/api/ValiError">`ValiError`</Link> to a flat object with <Link href="/api/flatten">`flatten`</Link>. Below is an example.
 
 ```ts
-import { flatten, object, parse, string } from 'valibot'; // 0.84 kB
+import { flatten, object, parse, string } from 'valibot'; // 1.1 kB
 
 const ObjectSchema = object({
   key: string('Value of "key" is missing.'),

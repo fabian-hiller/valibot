@@ -1,16 +1,40 @@
-import type { ErrorMessage, PipeResult } from '../../types.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
+
+/**
+ * Safe integer validation type.
+ */
+export type SafeIntegerValidation<TInput extends number> =
+  BaseValidation<TInput> & {
+    /**
+     * The validation type.
+     */
+    type: 'safe_integer';
+    /**
+     * The validation function.
+     */
+    requirement: (input: TInput) => boolean;
+  };
 
 /**
  * Creates a validation function that validates whether a number is a safe integer.
  *
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
-export function safeInteger<TInput extends number>(error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    !Number.isSafeInteger(input)
-      ? getPipeIssues('safe_integer', error || 'Invalid safe integer', input)
-      : getOutput(input);
+export function safeInteger<TInput extends number>(
+  message: ErrorMessage = 'Invalid safe integer'
+): SafeIntegerValidation<TInput> {
+  return {
+    type: 'safe_integer',
+    async: false,
+    message,
+    requirement: Number.isSafeInteger,
+    _parse(input) {
+      return !this.requirement(input)
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
+    },
+  };
 }

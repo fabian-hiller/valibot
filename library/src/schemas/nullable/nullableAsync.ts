@@ -1,10 +1,11 @@
+import { getDefaultAsync } from '../../methods/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
   Input,
   Output,
-} from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+} from '../../types/index.ts';
+import { parseResult } from '../../utils/index.ts';
 
 /**
  * Nullable schema async type.
@@ -13,16 +14,36 @@ export type NullableSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TDefault extends
     | Input<TWrapped>
-    | undefined
-    | Promise<Input<TWrapped> | undefined> = undefined,
+    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
+    | undefined = undefined,
   TOutput = Awaited<TDefault> extends Input<TWrapped>
     ? Output<TWrapped>
     : Output<TWrapped> | null
 > = BaseSchemaAsync<Input<TWrapped> | null, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'nullable';
+  /**
+   * The wrapped schema.
+   */
   wrapped: TWrapped;
-  getDefault: () => Promise<TDefault>;
+  /**
+   * Returns the default value.
+   */
+  default: TDefault;
 };
+
+/**
+ * Creates an async nullable schema.
+ *
+ * @param wrapped The wrapped schema.
+ *
+ * @returns An async nullable schema.
+ */
+export function nullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
+  wrapped: TWrapped
+): NullableSchemaAsync<TWrapped>;
 
 /**
  * Creates an async nullable schema.
@@ -36,57 +57,40 @@ export function nullableAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TDefault extends
     | Input<TWrapped>
+    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined
-    | Promise<Input<TWrapped> | undefined> = undefined
 >(
   wrapped: TWrapped,
-  default_?: TDefault | (() => TDefault)
+  default_: TDefault
+): NullableSchemaAsync<TWrapped, TDefault>;
+
+export function nullableAsync<
+  TWrapped extends BaseSchema | BaseSchemaAsync,
+  TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
+    | undefined = undefined
+>(
+  wrapped: TWrapped,
+  default_?: TDefault
 ): NullableSchemaAsync<TWrapped, TDefault> {
   return {
-    /**
-     * The schema type.
-     */
     type: 'nullable',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped,
-
-    /**
-     * Returns the default value.
-     */
-    async getDefault() {
-      return typeof default_ === 'function'
-        ? (default_ as () => TDefault)()
-        : (default_ as TDefault);
-    },
-
-    /**
-     * Whether it's async.
-     */
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
+    default: default_ as TDefault,
     async _parse(input, info) {
       // Allow `null` to pass or override it with default value
       if (input === null) {
-        const override = await this.getDefault();
+        const override = await getDefaultAsync(this);
         if (override === undefined) {
-          return getOutput(input);
+          return parseResult(true, input);
         }
         input = override;
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(input, info);
+      return this.wrapped._parse(input, info);
     },
   };
 }

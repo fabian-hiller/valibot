@@ -1,5 +1,22 @@
-import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import type { BaseTransformation } from '../../types/index.ts';
+import { actionOutput } from '../../utils/index.ts';
+
+/**
+ * To max value transformation type.
+ */
+export type ToMaxValueTransformation<
+  TInput extends string | number | bigint | Date,
+  TRequirement extends TInput
+> = BaseTransformation<TInput> & {
+  /**
+   * The transformation type.
+   */
+  type: 'to_max_value';
+  /**
+   * The maximum value.
+   */
+  requirement: TRequirement;
+};
 
 /**
  * Creates a transformation function that sets a string, number or date to a
@@ -12,7 +29,13 @@ import { getOutput } from '../../utils/index.ts';
 export function toMaxValue<
   TInput extends string | number | bigint | Date,
   TRequirement extends TInput
->(requirement: TRequirement) {
-  return (input: TInput): PipeResult<TInput> =>
-    getOutput(input > requirement ? requirement : input);
+>(requirement: TRequirement): ToMaxValueTransformation<TInput, TRequirement> {
+  return {
+    type: 'to_max_value',
+    async: false,
+    requirement,
+    _parse(input) {
+      return actionOutput(input > this.requirement ? this.requirement : input);
+    },
+  };
 }

@@ -1,20 +1,47 @@
-import type { ErrorMessage, PipeResult } from '../../types.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
+
+/**
+ * Not length validation type.
+ */
+export type NotLengthValidation<
+  TInput extends string | any[],
+  TRequirement extends number
+> = BaseValidation<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'not_length';
+  /**
+   * The length.
+   */
+  requirement: TRequirement;
+};
 
 /**
  * Creates a validation function that validates the length of a string or array.
  *
  * @param requirement The length.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
-export function notLength<TInput extends string | any[]>(
-  requirement: number,
-  error?: ErrorMessage
-) {
-  return (input: TInput): PipeResult<TInput> =>
-    input.length === requirement
-      ? getPipeIssues('not_length', error || 'Invalid length', input)
-      : getOutput(input);
+export function notLength<
+  TInput extends string | any[],
+  TRequirement extends number
+>(
+  requirement: TRequirement,
+  message: ErrorMessage = 'Invalid length'
+): NotLengthValidation<TInput, TRequirement> {
+  return {
+    type: 'not_length',
+    async: false,
+    message,
+    requirement,
+    _parse(input) {
+      return input.length === this.requirement
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
+    },
+  };
 }

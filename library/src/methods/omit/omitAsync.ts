@@ -9,8 +9,8 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   PipeAsync,
-} from '../../types.ts';
-import { getRestAndDefaultArgs } from '../../utils/index.ts';
+} from '../../types/index.ts';
+import { restAndDefaultArgs } from '../../utils/index.ts';
 import type { ObjectKeys } from './types.ts';
 
 /**
@@ -40,7 +40,7 @@ export function omitAsync<
  *
  * @param schema The schema to omit from.
  * @param keys The selected keys
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -51,7 +51,7 @@ export function omitAsync<
 >(
   schema: TSchema,
   keys: TKeys,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<
     ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, undefined>
   >
@@ -86,7 +86,7 @@ export function omitAsync<
  * @param schema The schema to omit from.
  * @param keys The selected keys
  * @param rest The object rest.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -99,7 +99,7 @@ export function omitAsync<
   schema: TSchema,
   keys: TKeys,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchemaAsync<Omit<TSchema['entries'], TKeys[number]>, TRest>;
 
@@ -119,8 +119,8 @@ export function omitAsync<
     | ErrorMessage,
   arg5?: PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchemaAsync<Omit<TSchema['entries'], TKeys[number]>, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
   >(arg3, arg4, arg5);
@@ -133,7 +133,7 @@ export function omitAsync<
       {}
     ) as Omit<TSchema['entries'], TKeys[number]>,
     rest,
-    error,
+    message,
     pipe
   );
 }

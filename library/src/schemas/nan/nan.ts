@@ -1,54 +1,40 @@
-import type { BaseSchema, ErrorMessage } from '../../types.ts';
-import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * NaN schema type.
  */
 export type NanSchema<TOutput = number> = BaseSchema<number, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'nan';
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates a NaN schema.
  *
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A NaN schema.
  */
-export function nan(error?: ErrorMessage): NanSchema {
+export function nan(message: ErrorMessage = 'Invalid type'): NanSchema {
   return {
-    /**
-     * The schema type.
-     */
     type: 'nan',
-
-    /**
-     * Whether it's async.
-     */
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    message,
     _parse(input, info) {
       // Check type of input
       if (!Number.isNaN(input)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'nan',
-          error || 'Invalid type',
-          input
-        );
+        return schemaIssue(info, 'type', 'nan', this.message, input);
       }
 
-      // Return input as output
-      return getOutput(input as number);
+      // Return parse result
+      return parseResult(true, input as number);
     },
   };
 }

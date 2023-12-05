@@ -36,4 +36,18 @@ describe('number', () => {
     expect(output2).toBe(input2);
     expect(() => parse(schema2, 12346789)).toThrowError(valueError);
   });
+
+  test('should expose the pipeline', () => {
+    const schema1 = number([maxValue(5, 'custom')]);
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        type: 'max_value',
+        requirement: 5,
+        message: 'custom',
+      }),
+    ]);
+
+    const schema2 = number();
+    expect(schema2.pipe).toBeUndefined();
+  });
 });

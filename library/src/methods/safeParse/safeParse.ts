@@ -1,5 +1,5 @@
 import { ValiError } from '../../error/index.ts';
-import type { BaseSchema, ParseInfo } from '../../types.ts';
+import type { BaseSchema, ParseInfo } from '../../types/index.ts';
 import type { SafeParseResult } from './types.ts';
 
 /**
@@ -17,15 +17,12 @@ export function safeParse<TSchema extends BaseSchema>(
   info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly' | 'skipPipe'>
 ): SafeParseResult<TSchema> {
   const result = schema._parse(input, info);
-  return result.issues
-    ? {
-        success: false,
-        error: new ValiError(result.issues),
-        issues: result.issues,
-      }
-    : {
-        success: true,
-        data: result.output,
-        output: result.output,
-      };
+  return {
+    typed: result.typed,
+    success: !result.issues,
+    data: result.output,
+    output: result.output,
+    error: result.issues && new ValiError(result.issues),
+    issues: result.issues,
+  } as unknown as SafeParseResult<TSchema>;
 }

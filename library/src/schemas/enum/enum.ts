@@ -1,5 +1,5 @@
-import type { BaseSchema, ErrorMessage } from '../../types.ts';
-import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Enum type.
@@ -16,60 +16,45 @@ export type EnumSchema<
   TEnum extends Enum,
   TOutput = TEnum[keyof TEnum]
 > = BaseSchema<TEnum[keyof TEnum], TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'enum';
+  /**
+   * The enum value.
+   */
   enum: TEnum;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates a enum schema.
  *
  * @param enum_ The enum value.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A enum schema.
  */
 export function enum_<TEnum extends Enum>(
   enum_: TEnum,
-  error?: ErrorMessage
+  message: ErrorMessage = 'Invalid type'
 ): EnumSchema<TEnum> {
   return {
-    /**
-     * The schema type.
-     */
     type: 'enum',
-
-    /**
-     * The enum value.
-     */
-    enum: enum_,
-
-    /**
-     * Whether it's async.
-     */
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    enum: enum_,
+    message,
     _parse(input, info) {
       // Check type of input
-      if (!Object.values(enum_).includes(input as any)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'enum',
-          error || 'Invalid type',
-          input
-        );
+      if (!Object.values(this.enum).includes(input as any)) {
+        return schemaIssue(info, 'type', 'enum', this.message, input);
       }
 
-      // Return input as output
-      return getOutput(input as TEnum[keyof TEnum]);
+      // Return parse result
+      return parseResult(true, input as TEnum[keyof TEnum]);
     },
   };
 }

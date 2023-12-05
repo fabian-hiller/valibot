@@ -30,7 +30,7 @@ Hello, I am Valibot and I would like to help you validate data easily using a sc
 First you create a schema. A schema can be compared to a type definition in TypeScript. The big difference is that TypeScript types are "not executed" and are more or less a DX feature. A schema on the other hand, apart from the inferred type definition, can also be executed at runtime to guarantee type safety of unknown data.
 
 ```ts
-import { email, minLength, object, type Output, parse, string } from 'valibot'; // 0.87 kB
+import { email, minLength, object, type Output, parse, string } from 'valibot'; // 1.15 kB
 
 // Create login schema with email and password
 const LoginSchema = object({

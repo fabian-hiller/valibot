@@ -3,8 +3,8 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types.ts';
-import { getRestAndDefaultArgs } from '../../utils/index.ts';
+import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import { restAndDefaultArgs } from '../../utils/index.ts';
 import type { ObjectKeys } from './types.ts';
 
 /**
@@ -32,7 +32,7 @@ export function omit<
  *
  * @param schema The schema to omit from.
  * @param keys The selected keys
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -43,7 +43,7 @@ export function omit<
 >(
   schema: TSchema,
   keys: TKeys,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, undefined>>
 ): ObjectSchema<Omit<TSchema['entries'], TKeys[number]>>;
 
@@ -76,7 +76,7 @@ export function omit<
  * @param schema The schema to omit from.
  * @param keys The selected keys
  * @param rest The object rest.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -89,7 +89,7 @@ export function omit<
   schema: TSchema,
   keys: TKeys,
   rest: TRest,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: Pipe<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchema<Omit<TSchema['entries'], TKeys[number]>, TRest>;
 
@@ -109,8 +109,8 @@ export function omit<
     | ErrorMessage,
   arg5?: Pipe<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchema<Omit<TSchema['entries'], TKeys[number]>, TRest> {
-  // Get rest, error and pipe argument
-  const [rest, error, pipe] = getRestAndDefaultArgs<
+  // Get rest, message and pipe argument
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
   >(arg3, arg4, arg5);
@@ -123,7 +123,7 @@ export function omit<
       {}
     ) as Omit<TSchema['entries'], TKeys[number]>,
     rest,
-    error,
+    message,
     pipe
   );
 }

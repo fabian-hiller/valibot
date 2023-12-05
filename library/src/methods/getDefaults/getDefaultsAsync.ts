@@ -8,10 +8,11 @@ import type {
   TupleSchema,
   TupleSchemaAsync,
 } from '../../schemas/index.ts';
-import type { BaseSchema, BaseSchemaAsync } from '../../types.ts';
-import type {
-  SchemaWithMaybeDefault,
-  SchemaWithMaybeDefaultAsync,
+import type { BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
+import {
+  getDefaultAsync,
+  type SchemaWithMaybeDefault,
+  type SchemaWithMaybeDefaultAsync,
 } from '../getDefault/index.ts';
 import type { DefaultValues } from './types.ts';
 
@@ -43,8 +44,8 @@ export async function getDefaultsAsync<
   let defaults: any;
 
   // If schema contains a default function, set its default value
-  if (schema.getDefault) {
-    defaults = await schema.getDefault();
+  if (schema.default) {
+    defaults = await getDefaultAsync(schema);
 
     // Otherwise, check if schema is of kind object or tuple
   } else if ('type' in schema) {

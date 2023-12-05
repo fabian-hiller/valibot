@@ -1,4 +1,4 @@
-import type { BaseSchema } from '../../types.ts';
+import type { BaseSchema } from '../../types/index.ts';
 
 /**
  * Coerces the input of a schema to match the required type.
@@ -14,15 +14,6 @@ export function coerce<TSchema extends BaseSchema>(
 ): TSchema {
   return {
     ...schema,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
     _parse(input, info) {
       return schema._parse(action(input), info);
     },

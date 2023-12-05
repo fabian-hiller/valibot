@@ -1,5 +1,15 @@
-import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import type { BaseTransformation } from '../../types/index.ts';
+import { actionOutput } from '../../utils/index.ts';
+
+/**
+ * To trimmed start transformation type.
+ */
+export type ToTrimmedStartTransformation = BaseTransformation<string> & {
+  /**
+   * The transformation type.
+   */
+  type: 'to_trimmed_start';
+};
 
 /**
  * Creates a transformation function that removes the leading white space and
@@ -7,6 +17,12 @@ import { getOutput } from '../../utils/index.ts';
  *
  * @returns A transformation function.
  */
-export function toTrimmedStart() {
-  return (input: string): PipeResult<string> => getOutput(input.trimStart());
+export function toTrimmedStart(): ToTrimmedStartTransformation {
+  return {
+    type: 'to_trimmed_start',
+    async: false,
+    _parse(input) {
+      return actionOutput(input.trimStart());
+    },
+  };
 }

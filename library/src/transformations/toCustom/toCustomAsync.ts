@@ -1,5 +1,16 @@
-import type { PipeResult } from '../../types.ts';
-import { getOutput } from '../../utils/index.ts';
+import type { BaseTransformationAsync } from '../../types/index.ts';
+import { actionOutput } from '../../utils/index.ts';
+
+/**
+ * To custom transformation async type.
+ */
+export type ToCustomTransformationAsync<TInput> =
+  BaseTransformationAsync<TInput> & {
+    /**
+     * The transformation type.
+     */
+    type: 'to_custom';
+  };
 
 /**
  * Creates a async custom transformation function.
@@ -10,7 +21,12 @@ import { getOutput } from '../../utils/index.ts';
  */
 export function toCustomAsync<TInput>(
   action: (input: TInput) => TInput | Promise<TInput>
-) {
-  return async (input: TInput): Promise<PipeResult<TInput>> =>
-    getOutput(await action(input));
+): ToCustomTransformationAsync<TInput> {
+  return {
+    type: 'to_custom',
+    async: true,
+    async _parse(input) {
+      return actionOutput(await action(input));
+    },
+  };
 }

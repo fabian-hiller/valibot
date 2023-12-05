@@ -5,12 +5,12 @@ import type {
   Issues,
   Output,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import {
-  executePipeAsync,
-  getDefaultArgs,
-  getIssues,
-  getSchemaIssues,
+  defaultArgs,
+  parseResult,
+  pipeResultAsync,
+  schemaIssue,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 
@@ -22,9 +22,26 @@ export type MapSchemaAsync<
   TValue extends BaseSchema | BaseSchemaAsync,
   TOutput = MapOutput<TKey, TValue>
 > = BaseSchemaAsync<MapInput<TKey, TValue>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'map';
+  /**
+   * The map key schema.
+   */
   key: TKey;
+  /**
+   * The map value schema.
+   */
   value: TValue;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<MapOutput<TKey, TValue>> | undefined;
 };
 
 /**
@@ -50,7 +67,7 @@ export function mapAsync<
  *
  * @param key The key schema.
  * @param value The value schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async map schema.
@@ -61,7 +78,7 @@ export function mapAsync<
 >(
   key: TKey,
   value: TValue,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<MapOutput<TKey, TValue>>
 ): MapSchemaAsync<TKey, TValue>;
 
@@ -74,54 +91,27 @@ export function mapAsync<
   arg3?: PipeAsync<MapOutput<TKey, TValue>> | ErrorMessage,
   arg4?: PipeAsync<MapOutput<TKey, TValue>>
 ): MapSchemaAsync<TKey, TValue> {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg3, arg4);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
 
   // Create and return async map schema
   return {
-    /**
-     * The schema type.
-     */
     type: 'map',
-
-    /**
-     * The key schema.
-     */
-    key,
-
-    /**
-     * The  value schema.
-     */
-    value,
-
-    /**
-     * Whether it's async.
-     */
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    key,
+    value,
+    message,
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'map',
-          error || 'Invalid type',
-          input
-        );
+        return schemaIssue(info, 'type', 'map', this.message, input);
       }
 
-      // Create issues and output
-      const output: Map<Output<TKey>, Output<TValue>> = new Map();
+      // Create typed, issues and output
+      let typed = true;
       let issues: Issues | undefined;
+      const output: Map<Output<TKey>, Output<TValue>> = new Map();
 
       // Parse each key and value by schema
       await Promise.all(
@@ -133,8 +123,8 @@ export function mapAsync<
           const [keyResult, valueResult] = await Promise.all(
             (
               [
-                { schema: key, value: inputKey, origin: 'key' },
-                { schema: value, value: inputValue, origin: 'value' },
+                { schema: this.key, value: inputKey, origin: 'key' },
+                { schema: this.value, value: inputValue, origin: 'value' },
               ] as const
             ).map(async ({ schema, value, origin }) => {
               // If not aborted early, continue execution
@@ -176,27 +166,34 @@ export function mapAsync<
                     if (info?.abortEarly) {
                       throw null;
                     }
-
-                    // Otherwise, return parse result
-                  } else {
-                    return result;
                   }
+
+                  // Return parse result
+                  return result;
                 }
               }
             })
           ).catch(() => []);
 
-          // Set entry if there are no issues
+          // If not typed, set typed to false
+          if (!keyResult?.typed || !valueResult?.typed) {
+            typed = false;
+          }
+
+          // Set output of entry
           if (keyResult && valueResult) {
             output.set(keyResult.output, valueResult.output);
           }
         })
       );
 
-      // Return issues or pipe result
-      return issues
-        ? getIssues(issues)
-        : executePipeAsync(input, pipe, info, 'map');
+      // If output is typed, execute pipe
+      if (typed) {
+        return pipeResultAsync(output, this.pipe, info, 'map', issues);
+      }
+
+      // Otherwise, return untyped parse result
+      return parseResult(false, output, issues as Issues);
     },
   };
 }

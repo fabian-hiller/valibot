@@ -1,5 +1,5 @@
-import type { BaseSchemaAsync, ErrorMessage } from '../../types.ts';
-import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * NaN schema async type.
@@ -8,50 +8,38 @@ export type NanSchemaAsync<TOutput = number> = BaseSchemaAsync<
   number,
   TOutput
 > & {
+  /**
+   * The schema type.
+   */
   type: 'nan';
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates an async NaN schema.
  *
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns An async NaN schema.
  */
-export function nanAsync(error?: ErrorMessage): NanSchemaAsync {
+export function nanAsync(
+  message: ErrorMessage = 'Invalid type'
+): NanSchemaAsync {
   return {
-    /**
-     * The schema type.
-     */
     type: 'nan',
-
-    /**
-     * Whether it's async.
-     */
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    message,
     async _parse(input, info) {
       // Check type of input
       if (!Number.isNaN(input)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'nan',
-          error || 'Invalid type',
-          input
-        );
+        return schemaIssue(info, 'type', 'nan', this.message, input);
       }
 
-      // Return input as output
-      return getOutput(input as number);
+      // Return parse result
+      return parseResult(true, input as number);
     },
   };
 }

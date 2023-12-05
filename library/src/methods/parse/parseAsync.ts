@@ -4,7 +4,7 @@ import type {
   BaseSchemaAsync,
   Output,
   ParseInfo,
-} from '../../types.ts';
+} from '../../types/index.ts';
 
 /**
  * Parses unknown input based on a schema.

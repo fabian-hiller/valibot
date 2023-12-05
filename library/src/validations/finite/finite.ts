@@ -1,16 +1,39 @@
-import type { ErrorMessage, PipeResult } from '../../types.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
+
+/**
+ * Finite validation type.
+ */
+export type FiniteValidation<TInput extends number> = BaseValidation<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'finite';
+  /**
+   * The validation function.
+   */
+  requirement: (input: TInput) => boolean;
+};
 
 /**
  * Creates a validation function that validates whether a number is finite.
  *
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A validation function.
  */
-export function finite<TInput extends number>(error?: ErrorMessage) {
-  return (input: TInput): PipeResult<TInput> =>
-    !Number.isFinite(input)
-      ? getPipeIssues('finite', error || 'Invalid finite number', input)
-      : getOutput(input);
+export function finite<TInput extends number>(
+  message: ErrorMessage = 'Invalid finite number'
+): FiniteValidation<TInput> {
+  return {
+    type: 'finite',
+    async: false,
+    message,
+    requirement: Number.isFinite,
+    _parse(input: TInput) {
+      return !this.requirement(input)
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
+    },
+  };
 }

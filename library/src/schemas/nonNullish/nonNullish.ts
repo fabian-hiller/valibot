@@ -1,5 +1,10 @@
-import type { BaseSchema, ErrorMessage, Input, Output } from '../../types.ts';
-import { getSchemaIssues } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Input,
+  Output,
+} from '../../types/index.ts';
+import { schemaIssue } from '../../utils/index.ts';
 
 /**
  * Non nullish type.
@@ -13,60 +18,45 @@ export type NonNullishSchema<
   TWrapped extends BaseSchema,
   TOutput = NonNullish<Output<TWrapped>>
 > = BaseSchema<NonNullish<Input<TWrapped>>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'non_nullish';
+  /**
+   * The wrapped schema.
+   */
   wrapped: TWrapped;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates a non nullish schema.
  *
  * @param wrapped The wrapped schema.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A non nullish schema.
  */
 export function nonNullish<TWrapped extends BaseSchema>(
   wrapped: TWrapped,
-  error?: ErrorMessage
+  message: ErrorMessage = 'Invalid type'
 ): NonNullishSchema<TWrapped> {
   return {
-    /**
-     * The schema type.
-     */
     type: 'non_nullish',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped,
-
-    /**
-     * Whether it's async.
-     */
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
+    message,
     _parse(input, info) {
       // Allow `null` and `undefined` values not to pass
       if (input === null || input === undefined) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'non_nullish',
-          error || 'Invalid type',
-          input
-        );
+        return schemaIssue(info, 'type', 'non_nullish', this.message, input);
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(input, info);
+      return this.wrapped._parse(input, info);
     },
   };
 }

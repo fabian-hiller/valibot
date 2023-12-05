@@ -1,54 +1,40 @@
-import type { BaseSchema, ErrorMessage } from '../../types.ts';
-import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Void schema type.
  */
 export type VoidSchema<TOutput = void> = BaseSchema<void, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'void';
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates a void schema.
  *
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns A void schema.
  */
-export function void_(error?: ErrorMessage): VoidSchema {
+export function void_(message: ErrorMessage = 'Invalid type'): VoidSchema {
   return {
-    /**
-     * The schema type.
-     */
     type: 'void',
-
-    /**
-     * Whether it's async.
-     */
     async: false,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    message,
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'undefined') {
-        return getSchemaIssues(
-          info,
-          'type',
-          'void',
-          error || 'Invalid type',
-          input
-        );
+        return schemaIssue(info, 'type', 'void', this.message, input);
       }
 
-      // Return input as output
-      return getOutput(input);
+      // Return parse result
+      return parseResult(true, input);
     },
   };
 }

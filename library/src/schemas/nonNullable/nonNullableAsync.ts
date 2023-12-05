@@ -4,8 +4,8 @@ import type {
   ErrorMessage,
   Input,
   Output,
-} from '../../types.ts';
-import { getSchemaIssues } from '../../utils/index.ts';
+} from '../../types/index.ts';
+import { schemaIssue } from '../../utils/index.ts';
 import type { NonNullable } from './nonNullable.ts';
 
 /**
@@ -15,60 +15,45 @@ export type NonNullableSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TOutput = NonNullable<Output<TWrapped>>
 > = BaseSchemaAsync<NonNullable<Input<TWrapped>>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'non_nullable';
+  /**
+   * The wrapped schema.
+   */
   wrapped: TWrapped;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
 };
 
 /**
  * Creates an async non nullable schema.
  *
  * @param wrapped The wrapped schema.
- * @param error The error message.
+ * @param message The error message.
  *
  * @returns An async non nullable schema.
  */
 export function nonNullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
   wrapped: TWrapped,
-  error?: ErrorMessage
+  message: ErrorMessage = 'Invalid type'
 ): NonNullableSchemaAsync<TWrapped> {
   return {
-    /**
-     * The schema type.
-     */
     type: 'non_nullable',
-
-    /**
-     * The wrapped schema.
-     */
-    wrapped,
-
-    /**
-     * Whether it's async.
-     */
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    wrapped,
+    message,
     async _parse(input, info) {
       // Allow `null` values not to pass
       if (input === null) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'non_nullable',
-          error || 'Invalid type',
-          input
-        );
+        return schemaIssue(info, 'type', 'non_nullable', this.message, input);
       }
 
       // Return result of wrapped schema
-      return wrapped._parse(input, info);
+      return this.wrapped._parse(input, info);
     },
   };
 }

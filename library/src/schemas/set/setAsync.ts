@@ -4,12 +4,12 @@ import type {
   ErrorMessage,
   Issues,
   PipeAsync,
-} from '../../types.ts';
+} from '../../types/index.ts';
 import {
-  executePipeAsync,
-  getDefaultArgs,
-  getIssues,
-  getSchemaIssues,
+  defaultArgs,
+  parseResult,
+  pipeResultAsync,
+  schemaIssue,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput, SetPathItem } from './types.ts';
 
@@ -20,8 +20,22 @@ export type SetSchemaAsync<
   TValue extends BaseSchema | BaseSchemaAsync,
   TOutput = SetOutput<TValue>
 > = BaseSchemaAsync<SetInput<TValue>, TOutput> & {
+  /**
+   * The schema type.
+   */
   type: 'set';
+  /**
+   * The set value schema.
+   */
   value: TValue;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<SetOutput<TValue>> | undefined;
 };
 
 /**
@@ -41,14 +55,14 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
  * Creates an async set schema.
  *
  * @param value The value schema.
- * @param error The error message.
+ * @param message The error message.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async set schema.
  */
 export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
   value: TValue,
-  error?: ErrorMessage,
+  message?: ErrorMessage,
   pipe?: PipeAsync<SetOutput<TValue>>
 ): SetSchemaAsync<TValue>;
 
@@ -57,47 +71,24 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
   arg2?: PipeAsync<SetOutput<TValue>> | ErrorMessage,
   arg3?: PipeAsync<SetOutput<TValue>>
 ): SetSchemaAsync<TValue> {
-  // Get error and pipe argument
-  const [error, pipe] = getDefaultArgs(arg2, arg3);
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
 
   // Create and return async set schema
   return {
-    /**
-     * The schema type.
-     */
     type: 'set',
-
-    /**
-     * The value schema.
-     */
-    value,
-
-    /**
-     * Whether it's async.
-     */
     async: true,
-
-    /**
-     * Parses unknown input based on its schema.
-     *
-     * @param input The input to be parsed.
-     * @param info The parse info.
-     *
-     * @returns The parsed output.
-     */
+    value,
+    message,
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Set)) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'set',
-          error || 'Invalid type',
-          input
-        );
+        return schemaIssue(info, 'type', 'set', this.message, input);
       }
 
-      // Create index, output and issues
+      // Create typed, index, output and issues
+      let typed = true;
       let issues: Issues | undefined;
       const output: SetOutput<TValue> = new Set();
 
@@ -107,7 +98,7 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
           // If not aborted early, continue execution
           if (!(info?.abortEarly && issues)) {
             // Get parse result of input value
-            const result = await value._parse(inputValue, info);
+            const result = await this.value._parse(inputValue, info);
 
             // If not aborted early, continue execution
             if (!(info?.abortEarly && issues)) {
@@ -136,22 +127,30 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
 
                 // If necessary, abort early
                 if (info?.abortEarly) {
+                  typed = false;
                   throw null;
                 }
-
-                // Otherwise, add item to set
-              } else {
-                output.add(result.output);
               }
+
+              // If not typed, set typed to false
+              if (!result.typed) {
+                typed = false;
+              }
+
+              // Set output of entry if necessary
+              output.add(result.output);
             }
           }
         })
       ).catch(() => null);
 
-      // Return issues or pipe result
-      return issues
-        ? getIssues(issues)
-        : executePipeAsync(input, pipe, info, 'set');
+      // If output is typed, execute pipe
+      if (typed) {
+        return pipeResultAsync(output, this.pipe, info, 'set', issues);
+      }
+
+      // Otherwise, return untyped parse result
+      return parseResult(false, output, issues as Issues);
     },
   };
 }

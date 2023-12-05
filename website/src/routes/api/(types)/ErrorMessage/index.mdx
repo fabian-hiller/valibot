@@ -1,0 +1,27 @@
+---
+title: ErrorMessage
+description: Error message type.
+---
+
+import { Property } from '~/components';
+
+# ErrorMessage
+
+Error message type.
+
+## Definition
+
+- `ErrorMessage` <Property {...properties.ErrorMessage} />
+
+export const properties = {
+  ErrorMessage: {
+    type: [
+      'string',
+      {
+        type: 'function',
+        params: [],
+        return: 'string',
+      },
+    ],
+  },
+};

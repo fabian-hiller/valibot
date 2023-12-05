@@ -47,4 +47,19 @@ describe('dateAsync', () => {
       parseAsync(schema2, new Date(Date.now() + 1))
     ).rejects.toThrowError(valueError);
   });
+
+  test('should expose the pipeline', () => {
+    const requirement = new Date(Date.now() + 3600000);
+    const schema1 = dateAsync([maxValue(requirement)]);
+    expect(schema1.pipe).toStrictEqual([
+      expect.objectContaining({
+        type: 'max_value',
+        requirement,
+        message: 'Invalid value',
+      }),
+    ]);
+
+    const schema2 = dateAsync();
+    expect(schema2.pipe).toBeUndefined();
+  });
 });

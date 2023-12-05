@@ -7,25 +7,45 @@ contributors: []
 ---
 
 import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
 
 # Methods
 
-Apart from <Link href="/api/parse">`parse`</Link>, <Link href="/api/safeParse">`safeParse`</Link> and <Link href="/api/is">`is`</Link> I offer you some more methods to add additional features to your schemas. I distinguish in the following between schema and object methods.
+Apart from <Link href="/api/parse">`parse`</Link>, <Link href="/api/safeParse">`safeParse`</Link> and <Link href="/api/is">`is`</Link> I offer you some more methods to add additional features to your schemas. I distinguish in the following between schema, object and pipeline methods.
 
 ## Schema methods
 
 My schema methods either add additional functionality, simplify the handling or help you to use a schema, for example for validation.
 
-Schema methods: <Link href="/api/brand">`brand`</Link>, <Link href="/api/coerce">`coerce`</Link>, <Link href="/api/fallback">`fallback`</Link>, <Link href="/api/getDefault">`getDefault`</Link>, <Link href="/api/getDefaults">`getDefaults`</Link>, <Link href="/api/getFallback">`getFallback`</Link>, <Link href="/api/getFallbacks">`getFallbacks`</Link>, <Link href="/api/is">`is`</Link>, <Link href="/api/parse">`parse`</Link>, <Link href="/api/safeParse">`safeParse`</Link>, <Link href="/api/transform">`transform`</Link>, <Link href="/api/unwrap">`unwrap`</Link>
+<ApiList
+  label="Schema methods"
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+    'unwrap',
+  ]}
+/>
 
 > For more on methods for validation, see the <Link href="/guides/parse-data">parse data</Link> guide.
 
 ### Coerce
 
-‎<Link href="/api/coerce">`coerce`</Link> can be used to transform an input before it is validated. They are therefore perfect for enforcing a specific data type using the built-in data type objects like [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/String), [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number) and [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
+‎<Link href="/api/coerce">`coerce`</Link> can be used to transform an input before it is validated. They are therefore perfect for enforcing a specific data type using the built-in data type objects like [`Boolean`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean), [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/String), [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number) and [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
 
 ```ts
-import { coerce, date, number, parse, string } from 'valibot'; // 0.63 kB
+import { boolean, coerce, date, number, parse, string } from 'valibot'; // 0.75 kB
+
+const BooleanSchema = coerce(boolean(), Boolean);
+const booleanOutput = parse(BooleanSchema, null); // false
 
 const StringSchema = coerce(string(), String);
 const stringOutput = parse(StringSchema, 1234); // '1234'
@@ -42,7 +62,7 @@ const dateOutput = parse(DateSchema, '2023-07-31'); // Date
 ‎<Link href="/api/transform">`transform`</Link> can be used to transform data after validation. Compared to the transformations you can perform inside <Link href="/guides/pipelines">pipelines</Link>, there are no rules here. So the input type can be completely different from the output type.
 
 ```ts
-import { type Input, type Output, parse, string, transform } from 'valibot'; // 0.58 kB
+import { type Input, type Output, parse, string, transform } from 'valibot'; // 0.67 kB
 
 const StringSchema = transform(string(), (input) => input.length);
 
@@ -57,7 +77,7 @@ const stringOutput = parse(StringSchema, 'hello'); // 5
 If an issue occurs while validating your schema, you can catch it with <Link href="/api/fallback">`fallback`</Link> to return a predefined value instead.
 
 ```ts
-import { parse, fallback, string } from 'valibot'; // 0.59 kB
+import { parse, fallback, string } from 'valibot'; // 0.68 kB
 
 const StringSchema = fallback(string(), 'hello');
 const stringOutput = parse(StringSchema, 123); // 'hello'
@@ -67,14 +87,17 @@ const stringOutput = parse(StringSchema, 123); // 'hello'
 
 My object methods make it easier for you to work with object schemas. They are strongly oriented towards the functionality of TypeScript.
 
-Object methods: <Link href="/api/keyof">`keyof`</Link>, <Link href="/api/merge">`merge`</Link>, <Link href="/api/omit">`omit`</Link>, <Link href="/api/partial">`partial`</Link>, <Link href="/api/pick">`pick`</Link>, <Link href="/api/required">`required`</Link>
+<ApiList
+  label="Object methods"
+  items={['keyof', 'merge', 'omit', 'partial', 'pick', 'required']}
+/>
 
 ### TypeScript similarities
 
 I offer almost the same options as TypeScript. For example, you can make the values of an object optional with <Link href="/api/partial">`partial`</Link> or make them required with <Link href="/api/required">`required`</Link>. With <Link href="/api/merge">`merge`</Link>, you can join multiple object schemas and with <Link href="/api/pick">`pick`</Link> or <Link href="/api/omit">`omit`</Link>, you can include or exclude certain values of an existing schema.
 
 ```ts
-import { number, object, partial, pick, string } from 'valibot'; // 0.8 kB
+import { number, object, partial, pick, string } from 'valibot'; // 1.08 kB
 
 // TypeScript
 type Object1 = Partial<{ key1: string; key2: number }>;
@@ -87,4 +110,43 @@ type Object2 = Pick<Object1, 'key1'>;
 
 // Valibot
 const object2 = pick(object1, ['key1']);
+```
+
+## Pipeline methods
+
+My pipeline methods help you to modify the results of validations and transformations within a pipeline.
+
+<ApiList label="Pipeline methods" items={['forward']} />
+
+> For more infos about our pipeline feature, see the <Link href="/guides/pipelines">pipelines</Link> guide.
+
+### Forward
+
+For example, if you want to check that both password entries in a registration form match, you can use <Link href="/api/forward">`forward`</Link> to forward the issue to the second password field in case of an error. This allows you to display the error message in the correct place.
+
+```ts
+import { custom, email, forward, minLength, object, string } from 'valibot'; // 1.23 kB
+
+const RegisterSchema = object(
+  {
+    email: string([
+      minLength(1, 'Please enter your email.'),
+      email('The email address is badly formatted.'),
+    ]),
+    password1: string([
+      minLength(1, 'Please enter your password.'),
+      minLength(8, 'Your password must have 8 characters or more.'),
+    ]),
+    password2: string(),
+  },
+  [
+    forward(
+      custom(
+        (input) => input.password1 === input.password2,
+        'The two passwords do not match.'
+      ),
+      ['password2']
+    ),
+  ]
+);
 ```
