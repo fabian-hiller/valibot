@@ -3,8 +3,7 @@ title: string
 description: Creates a string schema.
 ---
 
-import { Link } from '@builder.io/qwik-city';
-import { Property } from '~/components';
+import { ApiList, Property } from '~/components';
 
 # string
 
@@ -73,15 +72,75 @@ The following APIs can be combined with `string`.
 
 ### Methods
 
-‎<Link href="/api/brand">`brand`</Link>, <Link href="/api/coerce">`coerce`</Link>, <Link href="/api/fallback">`fallback`</Link>, <Link href="/api/is">`is`</Link>, <Link href="/api/parse">`parse`</Link>, <Link href="/api/safeParse">`safeParse`</Link>, <Link href="/api/transform">`transform`</Link>, <Link href="/api/unwrap">`unwrap`</Link>
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+    'unwrap',
+  ]}
+/>
 
 ### Transformations
 
-‎<Link href="/api/toCustom">`toCustom`</Link>, <Link href="/api/toLowerCase">`toLowerCase`</Link>, <Link href="/api/toMaxValue">`toMaxValue`</Link>, <Link href="/api/toMinValue">`toMinValue`</Link>, <Link href="/api/toTrimmed">`toTrimmed`</Link>, <Link href="/api/toTrimmedEnd">`toTrimmedEnd`</Link>, <Link href="/api/toTrimmedStart">`toTrimmedStart`</Link>, <Link href="/api/toUpperCase">`toUpperCase`</Link>
+<ApiList
+  items={[
+    'toCustom',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toTrimmed',
+    'toTrimmedEnd',
+    'toTrimmedStart',
+    'toUpperCase',
+  ]}
+/>
 
 ### Validations
 
-‎<Link href="/api/bytes">`bytes`</Link>, <Link href="/api/cuid2">`cuid2`</Link>, <Link href="/api/custom">`custom`</Link>, <Link href="/api/email">`email`</Link>, <Link href="/api/emoji">`emoji`</Link>, <Link href="/api/endsWith">`endsWith`</Link>, <Link href="/api/equal">`equal`</Link>, <Link href="/api/excludes">`excludes`</Link>, <Link href="/api/imei">`imei`</Link>, <Link href="/api/includes">`includes`</Link>, <Link href="/api/ip">`ip`</Link>, <Link href="/api/ipv4">`ipv4`</Link>, <Link href="/api/ipv6">`ipv6`</Link>, <Link href="/api/isoDate">`isoDate`</Link>, <Link href="/api/isoDateTime">`isoDateTime`</Link>, <Link href="/api/isoTime">`isoTime`</Link>, <Link href="/api/isoTimeSecond">`isoTimeSecond`</Link>, <Link href="/api/isoTimestamp">`isoTimestamp`</Link>, <Link href="/api/isoWeek">`isoWeek`</Link>, <Link href="/api/length">`length`</Link>, <Link href="/api/maxBytes">`maxBytes`</Link>, <Link href="/api/maxLength">`maxLength`</Link>, <Link href="/api/maxValue">`maxValue`</Link>, <Link href="/api/minBytes">`minBytes`</Link>, <Link href="/api/minLength">`minLength`</Link>, <Link href="/api/minValue">`minValue`</Link>, <Link href="/api/notBytes">`notBytes`</Link>, <Link href="/api/notLength">`notLength`</Link>, <Link href="/api/notValue">`notValue`</Link>, <Link href="/api/regex">`regex`</Link>, <Link href="/api/startsWith">`startsWith`</Link>, <Link href="/api/ulid">`ulid`</Link>, <Link href="/api/url">`url`</Link>, <Link href="/api/uuid">`uuid`</Link>, <Link href="/api/value">`value`</Link>
+<ApiList
+  items={[
+    'bytes',
+    'cuid2',
+    'custom',
+    'email',
+    'emoji',
+    'endsWith',
+    'equal',
+    'excludes',
+    'imei',
+    'includes',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'maxBytes',
+    'maxLength',
+    'maxValue',
+    'minBytes',
+    'minLength',
+    'minValue',
+    'notBytes',
+    'notLength',
+    'notValue',
+    'regex',
+    'startsWith',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
+  ]}
+/>
 
 export const properties = {
   message: {
