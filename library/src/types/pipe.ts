@@ -75,7 +75,7 @@ export interface BaseValidation<TInput = any> {
    * @internal
    */
   _parse(input: TInput): PipeActionResult<TInput>;
-};
+}
 
 /**
  * Base validation async type.
@@ -107,7 +107,7 @@ export interface BaseValidationAsync<TInput = any> {
    * @internal
    */
   _parse(input: TInput): Promise<PipeActionResult<TInput>>;
-};
+}
 
 /**
  * Base transformation type.
@@ -131,7 +131,7 @@ export interface BaseTransformation<TInput = any> {
    * @internal
    */
   _parse(input: TInput): PipeActionResult<TInput>;
-};
+}
 
 /**
  * Base transformation async type.
@@ -155,7 +155,7 @@ export interface BaseTransformationAsync<TInput = any> {
    * @internal
    */
   _parse(input: TInput): Promise<PipeActionResult<TInput>>;
-};
+}
 
 /**
  * Pipe type.
