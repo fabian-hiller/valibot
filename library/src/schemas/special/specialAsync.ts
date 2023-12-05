@@ -4,9 +4,9 @@ import type {
   PipeAsync,
 } from '../../types/index.ts';
 import {
-  executePipeAsync,
-  getDefaultArgs,
-  getSchemaIssues,
+  defaultArgs,
+  pipeResultAsync,
+  schemaIssue,
 } from '../../utils/index.ts';
 
 /**
@@ -68,7 +68,7 @@ export function specialAsync<TInput>(
   arg3?: PipeAsync<TInput>
 ): SpecialSchemaAsync<TInput> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
@@ -80,11 +80,11 @@ export function specialAsync<TInput>(
     async _parse(input, info) {
       // Check type of input
       if (!(await this.check(input))) {
-        return getSchemaIssues(info, 'type', 'special', this.message, input);
+        return schemaIssue(info, 'type', 'special', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipeAsync(input as TInput, this.pipe, info, 'special');
+      return pipeResultAsync(input as TInput, this.pipe, info, 'special');
     },
   };
 }

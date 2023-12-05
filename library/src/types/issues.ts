@@ -38,6 +38,16 @@ export type IssueReason =
 export type IssueOrigin = 'key' | 'value';
 
 /**
+ * Unknown path item type.
+ */
+export type UnknownPathItem = {
+  type: 'unknown';
+  input: unknown;
+  key: unknown;
+  value: unknown;
+};
+
+/**
  * Path item type.
  */
 export type PathItem =
@@ -46,7 +56,8 @@ export type PathItem =
   | ObjectPathItem
   | RecordPathItem
   | SetPathItem
-  | TuplePathItem;
+  | TuplePathItem
+  | UnknownPathItem;
 
 /**
  * Issue type.

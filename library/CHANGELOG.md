@@ -2,9 +2,14 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.22.0 (December 03, 2023)
 
 - Add support for boolean to `notValue` validation (pull request #261)
+- Add `.typed` to schema validation result and execute pipeline of complex schemas if output is typed (issue #76, #145)
+- Add `forward` method that forwards issues of pipelines to nested fields (issue #76, #145)
+- Rename and change util functions and refactor codebase
+- Fix `RecordInput` and `RecordOuput` type when using `unionAsync` as key
+- Fix output type for `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional` and `optionalAsync` when using a default value (issue #271)
 
 ## v0.21.0 (November 19, 2023)
 

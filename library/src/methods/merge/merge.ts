@@ -4,7 +4,7 @@ import {
   type ObjectSchema,
 } from '../../schemas/index.ts';
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import { getRestAndDefaultArgs } from '../../utils/index.ts';
+import { restAndDefaultArgs } from '../../utils/index.ts';
 import type { MergeObjects } from './types.ts';
 
 /**
@@ -99,7 +99,7 @@ export function merge<
   arg4?: Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>>
 ): ObjectSchema<MergeObjects<TSchemas>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = getRestAndDefaultArgs<
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<MergeObjects<TSchemas>, TRest>>
   >(arg2, arg3, arg4);

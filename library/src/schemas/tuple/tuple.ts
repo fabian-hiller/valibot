@@ -5,10 +5,10 @@ import type {
   Pipe,
 } from '../../types/index.ts';
 import {
-  executePipe,
-  getIssues,
-  getRestAndDefaultArgs,
-  getSchemaIssues,
+  parseResult,
+  pipeResult,
+  restAndDefaultArgs,
+  schemaIssue,
 } from '../../utils/index.ts';
 import type { TupleOutput, TupleInput, TuplePathItem } from './types.ts';
 
@@ -123,7 +123,7 @@ export function tuple<
   arg4?: Pipe<TupleOutput<TItems, TRest>>
 ): TupleSchema<TItems, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message = 'Invalid type', pipe] = getRestAndDefaultArgs<
+  const [rest, message = 'Invalid type', pipe] = restAndDefaultArgs<
     TRest,
     Pipe<TupleOutput<TItems, TRest>>
   >(arg2, arg3, arg4);
@@ -139,10 +139,11 @@ export function tuple<
     _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input) || this.items.length > input.length) {
-        return getSchemaIssues(info, 'type', 'tuple', this.message, input);
+        return schemaIssue(info, 'type', 'tuple', this.message, input);
       }
 
-      // Create issues and output
+      // Create typed, issues and output
+      let typed = true;
       let issues: Issues | undefined;
       const output: any[] = [];
 
@@ -176,13 +177,18 @@ export function tuple<
 
           // If necessary, abort early
           if (info?.abortEarly) {
+            typed = false;
             break;
           }
-
-          // Otherwise, add item to tuple
-        } else {
-          output[key] = result.output;
         }
+
+        // If not typed, set typed to false
+        if (!result.typed) {
+          typed = false;
+        }
+
+        // Set output of item
+        output[key] = result.output;
       }
 
       // If necessary parse schema of each rest item
@@ -216,25 +222,34 @@ export function tuple<
 
             // If necessary, abort early
             if (info?.abortEarly) {
+              typed = false;
               break;
             }
-
-            // Otherwise, add item to tuple
-          } else {
-            output[key] = result.output;
           }
+
+          // If not typed, set typed to false
+          if (!result.typed) {
+            typed = false;
+          }
+
+          // Set output of item
+          output[key] = result.output;
         }
       }
 
-      // Return issues or pipe result
-      return issues
-        ? getIssues(issues)
-        : executePipe(
-            output as TupleOutput<TItems, TRest>,
-            this.pipe,
-            info,
-            'tuple'
-          );
+      // If output is typed, execute pipe
+      if (typed) {
+        return pipeResult(
+          output as TupleOutput<TItems, TRest>,
+          this.pipe,
+          info,
+          'tuple',
+          issues
+        );
+      }
+
+      // Otherwise, return untyped parse result
+      return parseResult(false, output, issues as Issues);
     },
   };
 }

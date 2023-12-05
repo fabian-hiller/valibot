@@ -1,6 +1,6 @@
 import { getDefault } from '../../methods/index.ts';
 import type { BaseSchema, Input, Output } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { parseResult } from '../../utils/index.ts';
 
 /**
  * Nullish schema type.
@@ -50,7 +50,7 @@ export function nullish<TWrapped extends BaseSchema>(
  */
 export function nullish<
   TWrapped extends BaseSchema,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
     | undefined
@@ -58,7 +58,7 @@ export function nullish<
 
 export function nullish<
   TWrapped extends BaseSchema,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
     | undefined = undefined
@@ -73,7 +73,7 @@ export function nullish<
       if (input === null || input === undefined) {
         const override = getDefault(this);
         if (override === undefined) {
-          return getOutput(input);
+          return parseResult(true, input);
         }
         input = override;
       }

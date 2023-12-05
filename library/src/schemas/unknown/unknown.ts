@@ -1,5 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types/index.ts';
-import { executePipe } from '../../utils/index.ts';
+import { pipeResult } from '../../utils/index.ts';
 
 /**
  * Unknown schema type.
@@ -28,7 +28,7 @@ export function unknown(pipe?: Pipe<unknown>): UnknownSchema {
     async: false,
     pipe,
     _parse(input, info) {
-      return executePipe(input, this.pipe, info, 'unknown');
+      return pipeResult(input, this.pipe, info, 'unknown');
     },
   };
 }

@@ -32,29 +32,8 @@ Validation functions examine the input and, if the input does not meet a certain
 
 > By default I run a pipeline completely, even if an error is thrown in between, to collect all issues. If you want me to abort the pipeline early after the first error is thrown, you have to set the `abortPipeEarly` option of <Link href="/api/parse">`parse`</Link> or <Link href="/api/safeParse">`safeParse`</Link> to `true`. Learn more <Link href="/guides/parse-data/#abort-early">here</Link>.
 
-### Example
-
-For example, a validation function that controls the length of a string might look like the following.
-
-```ts
-import { getOutput, getPipeIssues, string } from 'valibot'; // 0.56 kB
-
-const StringSchema = string([
-  (input) => {
-    if (input.length > 10) {
-      return getPipeIssues('custom', 'Invalid length', input);
-    }
-    return getOutput(input);
-  },
-]);
-```
-
-### Utility functions
-
-Since the code of a pipeline, as seen in the previous example, can quickly become confusing. I provide you with small utility functions that make your code more understandable and readable.
-
 <ApiList
-  label="Utility functions"
+  label="Validation functions"
   items={[
     'bytes',
     'cuid2',
@@ -125,28 +104,16 @@ const UsernameSchema = string([
 ]);
 ```
 
+> You can forward the issues of a pipeline validation to a child. See the <Link href="/guides/methods/#forward">methods</Link> guide for more information.
+
 ## Transformations
 
 Transformation functions allow to change the value of an input, but not the data type. This can be useful for example to remove spaces at the beginning or end of a string or to force a minimum or maximum value.
 
 > If you also want to change the data type, you must explicitly use the <Link href="/api/transform">`transform`</Link> method.
 
-### Example
-
-A transformation function that enforces a minimum value of a number could look like the following.
-
-```ts
-import { getOutput, number } from 'valibot'; // 0.53 kB
-
-const NumberSchema = number([(input) => getOutput(input > 10 ? input : 10)]);
-```
-
-### Utility functions
-
-To make the code of a pipeline more readable, you can use the utility functions I provide for transformations.
-
 <ApiList
-  label="Utility functions"
+  label="Transformation functions"
   items={[
     'toCustom',
     'toLowerCase',

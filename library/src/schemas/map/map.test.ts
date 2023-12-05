@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
-import { maxSize, minSize, size } from '../../validations/index.ts';
+import { maxSize, minLength, minSize, size } from '../../validations/index.ts';
 import { date } from '../date/index.ts';
 import { map } from '../map/index.ts';
 import { number } from '../number/index.ts';
@@ -160,5 +160,68 @@ describe('map', () => {
 
     const schema2 = map(number(), string());
     expect(schema2.pipe).toBeUndefined();
+  });
+
+  test('should execute pipe if output is typed', () => {
+    const schema = map(number(), string([minLength(10)]), [minSize(10)]);
+    const input = new Map().set(0, '12345');
+    const result = schema._parse(input);
+    expect(result).toEqual({
+      typed: true,
+      output: input,
+      issues: [
+        {
+          reason: 'string',
+          validation: 'min_length',
+          origin: 'value',
+          message: 'Invalid length',
+          input: input.get(0),
+          requirement: 10,
+          path: [
+            {
+              type: 'map',
+              input: input,
+              key: 0,
+              value: input.get(0),
+            },
+          ],
+        },
+        {
+          reason: 'map',
+          validation: 'min_size',
+          origin: 'value',
+          message: 'Invalid size',
+          input: input,
+          requirement: 10,
+        },
+      ],
+    });
+  });
+
+  test('should skip pipe if output is not typed', () => {
+    const schema = map(number(), string(), [minSize(10)]);
+    const input = new Map().set(0, 12345);
+    const result = schema._parse(input);
+    expect(result).toEqual({
+      typed: false,
+      output: input,
+      issues: [
+        {
+          reason: 'type',
+          validation: 'string',
+          origin: 'value',
+          message: 'Invalid type',
+          input: input.get(0),
+          path: [
+            {
+              type: 'map',
+              input: input,
+              key: 0,
+              value: input.get(0),
+            },
+          ],
+        },
+      ],
+    });
   });
 });

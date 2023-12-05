@@ -1,5 +1,5 @@
 import type { BaseValidationAsync, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * Custom validation async type.
@@ -34,8 +34,8 @@ export function customAsync<TInput>(
     requirement,
     async _parse(input) {
       return !(await this.requirement(input))
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }
