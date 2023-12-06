@@ -32,7 +32,7 @@ export function bic<TInput extends string>(
     message,
     requirement: BIC_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
+      return !this.requirement.test(input.toUpperCase())
         ? actionIssue(this.type, this.message, input, this.requirement)
         : actionOutput(input);
     },
