@@ -6,7 +6,8 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["."]
+  "include": ["src", "./*.ts"]
 }

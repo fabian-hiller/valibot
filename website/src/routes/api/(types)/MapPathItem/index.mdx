@@ -1,0 +1,37 @@
+---
+title: MapPathItem
+description: Map path item type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Property } from '~/components';
+
+# MapPathItem
+
+Map path item type.
+
+## Definition
+
+- `MapPathItem` <Property type="object"/>
+  - `type` <Property {...properties.type} />
+  - `input` <Property {...properties.input} />
+  - `key` <Property type='unknown' />
+  - `value` <Property type='unknown' />
+
+export const properties = {
+  type: {
+    type: {
+      type: 'string',
+      value: 'map',
+    },
+  },
+  input: {
+    type: {
+      type: 'custom',
+      name: 'Map',
+      generics: ['unknown', 'unknown'],
+    },
+  },
+};

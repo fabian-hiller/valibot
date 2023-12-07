@@ -1,0 +1,73 @@
+---
+title: BaseValidation
+description: Base validation type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+
+# BaseValidation
+
+Base validation type.
+
+## Definition
+
+- `BaseValidation` <Property {...properties.BaseValidation} />
+  - `async` <Property {...properties.async} />
+  - `message` <Property {...properties.message} />
+  - `_parse` {/* prettier-ignore */}<Property {...properties._parse} />
+
+export const properties = {
+  BaseValidation: {
+    type: {
+      type: 'custom',
+      name: 'Object',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+          default: 'unknown',
+        },
+      ],
+    },
+  },
+  async: {
+    type: {
+      type: 'boolean',
+      value: false,
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'ErrorMessage',
+      href: '../ErrorMessage/',
+    },
+  },
+  _parse: {
+    type: {
+      type: 'function',
+      params: [
+        {
+          name: 'input',
+          type: {
+            type: 'custom',
+            name: 'TInput',
+          },
+        },
+      ],
+      return: {
+        type: 'custom',
+        name: 'PipeActionResult',
+        href: '../PipeActionResult/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'TInput',
+          },
+        ],
+      },
+    },
+  },
+};

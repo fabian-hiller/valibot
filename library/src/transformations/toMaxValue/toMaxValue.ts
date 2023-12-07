@@ -1,5 +1,5 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { actionOutput } from '../../utils/index.ts';
 
 /**
  * To max value transformation type.
@@ -35,7 +35,7 @@ export function toMaxValue<
     async: false,
     requirement,
     _parse(input) {
-      return getOutput(input > this.requirement ? this.requirement : input);
+      return actionOutput(input > this.requirement ? this.requirement : input);
     },
   };
 }

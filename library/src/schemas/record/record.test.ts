@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
 import { toCustom } from '../../transformations/index.ts';
-import { maxLength, minLength } from '../../validations/index.ts';
+import { custom, maxLength, minLength } from '../../validations/index.ts';
 import { any } from '../any/index.ts';
 import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
@@ -156,5 +156,72 @@ describe('record', () => {
     const output = parse(schema, input);
     expect(output.__proto__.polluted).toBeUndefined();
     expect(output.polluted).toBeUndefined();
+  });
+
+  test('should execute pipe if output is typed', () => {
+    const requirement = (value: Record<string, string>) =>
+      value.key.length >= 10;
+    const schema = record(string([minLength(10)]), [custom(requirement)]);
+    const input = { key: '12345' };
+    const result = schema._parse(input);
+    expect(result).toEqual({
+      typed: true,
+      output: input,
+      issues: [
+        {
+          reason: 'string',
+          validation: 'min_length',
+          origin: 'value',
+          message: 'Invalid length',
+          input: input.key,
+          requirement: 10,
+          path: [
+            {
+              type: 'record',
+              input: input,
+              key: 'key',
+              value: input.key,
+            },
+          ],
+        },
+        {
+          reason: 'record',
+          validation: 'custom',
+          origin: 'value',
+          message: 'Invalid input',
+          input: input,
+          requirement,
+        },
+      ],
+    });
+  });
+
+  test('should skip pipe if output is not typed', () => {
+    const schema = record(string(), [
+      custom((value) => value.key.length >= 10),
+    ]);
+    const input = { key: 12345 };
+    const result = schema._parse(input);
+    expect(result).toEqual({
+      typed: false,
+      output: input,
+      issues: [
+        {
+          reason: 'type',
+          validation: 'string',
+          origin: 'value',
+          message: 'Invalid type',
+          input: input.key,
+          path: [
+            {
+              type: 'record',
+              input: input,
+              key: 'key',
+              value: input.key,
+            },
+          ],
+        },
+      ],
+    });
   });
 });

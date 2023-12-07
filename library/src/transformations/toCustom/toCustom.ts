@@ -1,5 +1,5 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { actionOutput } from '../../utils/index.ts';
 
 /**
  * To custom transformation type.
@@ -25,7 +25,7 @@ export function toCustom<TInput>(
     type: 'to_custom',
     async: false,
     _parse(input) {
-      return getOutput(action(input));
+      return actionOutput(action(input));
     },
   };
 }

@@ -7,7 +7,7 @@ import {
   type ObjectSchema,
 } from '../../schemas/index.ts';
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import { getRestAndDefaultArgs } from '../../utils/index.ts';
+import { restAndDefaultArgs } from '../../utils/index.ts';
 
 /**
  * Required object schema type.
@@ -99,7 +99,7 @@ export function required<
   arg4?: Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
 ): ObjectSchema<Required<TSchema['entries']>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = getRestAndDefaultArgs<
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
   >(arg2, arg3, arg4);

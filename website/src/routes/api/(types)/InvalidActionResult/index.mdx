@@ -1,0 +1,59 @@
+---
+title: InvalidActionResult
+description: Invalid action result type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+
+# InvalidActionResult
+
+Invalid action result type.
+
+## Definition
+
+- `InvalidActionResult` <Property type="object" />
+  - `output` <Property type="undefined" />
+  - `issues` <Property {...properties.issues} />
+
+export const properties = {
+  issues: {
+    type: {
+      type: 'array',
+      item: {
+        type: 'custom',
+        name: 'Pick',
+        generics: [
+          {
+            type: 'custom',
+            name: 'Issue',
+            href: '../Issue/',
+          },
+          [
+            {
+              type: 'string',
+              value: 'validation',
+            },
+            {
+              type: 'string',
+              value: 'message',
+            },
+            {
+              type: 'string',
+              value: 'input',
+            },
+            {
+              type: 'string',
+              value: 'requirement',
+            },
+            {
+              type: 'string',
+              value: 'path',
+            },
+          ],
+        ],
+      },
+    },
+  },
+};

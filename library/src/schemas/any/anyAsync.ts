@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync, PipeAsync } from '../../types/index.ts';
-import { executePipeAsync } from '../../utils/index.ts';
+import { pipeResultAsync } from '../../utils/index.ts';
 
 /**
  * Any schema type.
@@ -28,7 +28,7 @@ export function anyAsync(pipe?: PipeAsync<any>): AnySchemaAsync {
     async: true,
     pipe,
     async _parse(input, info) {
-      return executePipeAsync(input, this.pipe, info, 'any');
+      return pipeResultAsync(input, this.pipe, info, 'any');
     },
   };
 }

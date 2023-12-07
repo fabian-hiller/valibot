@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
-import { maxSize, minSize, size } from '../../validations/index.ts';
+import { maxSize, minLength, minSize, size } from '../../validations/index.ts';
 import { date } from '../date/index.ts';
 import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
@@ -134,5 +134,68 @@ describe('setAsync', () => {
 
     const schema2 = setAsync(number());
     expect(schema2.pipe).toBeUndefined();
+  });
+
+  test('should execute pipe if output is typed', async () => {
+    const schema = setAsync(string([minLength(10)]), [minSize(10)]);
+    const input = new Set().add('12345');
+    const result = await schema._parse(input);
+    expect(result).toEqual({
+      typed: true,
+      output: input,
+      issues: [
+        {
+          reason: 'string',
+          validation: 'min_length',
+          origin: 'value',
+          message: 'Invalid length',
+          input: '12345',
+          requirement: 10,
+          path: [
+            {
+              type: 'set',
+              input: input,
+              key: 0,
+              value: '12345',
+            },
+          ],
+        },
+        {
+          reason: 'set',
+          validation: 'min_size',
+          origin: 'value',
+          message: 'Invalid size',
+          input: input,
+          requirement: 10,
+        },
+      ],
+    });
+  });
+
+  test('should skip pipe if output is not typed', async () => {
+    const schema = setAsync(string(), [minSize(10)]);
+    const input = new Set().add(12345);
+    const result = await schema._parse(input);
+    expect(result).toEqual({
+      typed: false,
+      output: input,
+      issues: [
+        {
+          reason: 'type',
+          validation: 'string',
+          origin: 'value',
+          message: 'Invalid type',
+          input: 12345,
+          path: [
+            {
+              type: 'set',
+              input: input,
+              key: 0,
+              value: 12345,
+            },
+          ],
+        },
+      ],
+    });
   });
 });

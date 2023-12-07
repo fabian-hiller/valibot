@@ -1,49 +1,91 @@
 import { describe, expect, test } from 'vitest';
-import { number, objectAsync, string } from '../../schemas/index.ts';
+import { ValiError } from '../../error/index.ts';
+import { object, string } from '../../schemas/index.ts';
+import type { Issues } from '../../types/index.ts';
+import { minLength } from '../../validations/index.ts';
 import { safeParseAsync } from './safeParseAsync.ts';
 
 describe('safeParseAsync', () => {
-  test('should return data', async () => {
-    const output1 = await safeParseAsync(string(), 'hello');
-    expect(output1).toEqual({
+  test('should return successful output', async () => {
+    const input = { key: 'hello' };
+    const result = await safeParseAsync(object({ key: string() }), input);
+    expect(result).toEqual({
+      typed: true,
       success: true,
-      data: 'hello',
-      output: 'hello',
-    });
-    const output2 = await safeParseAsync(number(), 123);
-    expect(output2).toEqual({
-      success: true,
-      data: 123,
-      output: 123,
-    });
-    const output3 = await safeParseAsync(objectAsync({ test: string() }), {
-      test: 'hello',
-    });
-    expect(output3).toEqual({
-      success: true,
-      data: { test: 'hello' },
-      output: { test: 'hello' },
+      data: input,
+      output: input,
+      error: undefined,
+      issues: undefined,
     });
   });
 
-  test('should return error', async () => {
-    const output1 = await safeParseAsync(string(), 123);
-    expect(output1.success).toBe(false);
-    if (!output1.success) {
-      expect(output1.issues).toBeTruthy();
-      expect(output1.issues[0].message).toBe('Invalid type');
-    }
-    const output2 = await safeParseAsync(number(), 'hello');
-    expect(output2.success).toBe(false);
-    if (!output2.success) {
-      expect(output2.issues).toBeTruthy();
-      expect(output2.issues[0].message).toBe('Invalid type');
-    }
-    const output3 = await safeParseAsync(objectAsync({ test: string() }), {});
-    expect(output3.success).toBe(false);
-    if (!output3.success) {
-      expect(output3.issues).toBeTruthy();
-      expect(output3.issues[0].message).toBe('Invalid type');
-    }
+  test('should return typed output with issues', async () => {
+    const input = { key: 'hello' };
+    const result = await safeParseAsync(
+      object({ key: string([minLength(10)]) }),
+      input
+    );
+    const issues: Issues = [
+      {
+        reason: 'string',
+        validation: 'min_length',
+        origin: 'value',
+        message: 'Invalid length',
+        input: input.key,
+        requirement: 10,
+        path: [
+          {
+            type: 'object',
+            input,
+            key: 'key',
+            value: input.key,
+          },
+        ],
+        abortEarly: undefined,
+        abortPipeEarly: undefined,
+        skipPipe: undefined,
+      },
+    ];
+    expect(result).toEqual({
+      typed: true,
+      success: false,
+      data: input,
+      output: input,
+      error: new ValiError(issues),
+      issues,
+    });
+  });
+
+  test('should return type issues', async () => {
+    const input = { key: 123 };
+    const result = await safeParseAsync(object({ key: string() }), input);
+    const issues: Issues = [
+      {
+        reason: 'type',
+        validation: 'string',
+        origin: 'value',
+        message: 'Invalid type',
+        input: input.key,
+        path: [
+          {
+            type: 'object',
+            input,
+            key: 'key',
+            value: input.key,
+          },
+        ],
+        abortEarly: undefined,
+        abortPipeEarly: undefined,
+        skipPipe: undefined,
+      },
+    ];
+    expect(result).toEqual({
+      typed: false,
+      success: false,
+      data: input,
+      output: input,
+      error: new ValiError(issues),
+      issues,
+    });
   });
 });

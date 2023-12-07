@@ -1,6 +1,6 @@
 import { IPV4_REGEX, IPV6_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * IP validation type.
@@ -35,8 +35,8 @@ export function ip<TInput extends string>(
     _parse(input) {
       return !this.requirement[0].test(input) &&
         !this.requirement[1].test(input)
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

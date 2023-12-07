@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
-import { maxSize, minSize, size } from '../../validations/index.ts';
+import { maxSize, minLength, minSize, size } from '../../validations/index.ts';
 import { date } from '../date/index.ts';
 import { mapAsync } from '../map/index.ts';
 import { number, numberAsync } from '../number/index.ts';
@@ -173,5 +173,68 @@ describe('mapAsync', () => {
 
     const schema2 = mapAsync(number(), string());
     expect(schema2.pipe).toBeUndefined();
+  });
+
+  test('should execute pipe if output is typed', async () => {
+    const schema = mapAsync(number(), string([minLength(10)]), [minSize(10)]);
+    const input = new Map().set(0, '12345');
+    const result = await schema._parse(input);
+    expect(result).toEqual({
+      typed: true,
+      output: input,
+      issues: [
+        {
+          reason: 'string',
+          validation: 'min_length',
+          origin: 'value',
+          message: 'Invalid length',
+          input: input.get(0),
+          requirement: 10,
+          path: [
+            {
+              type: 'map',
+              input: input,
+              key: 0,
+              value: input.get(0),
+            },
+          ],
+        },
+        {
+          reason: 'map',
+          validation: 'min_size',
+          origin: 'value',
+          message: 'Invalid size',
+          input: input,
+          requirement: 10,
+        },
+      ],
+    });
+  });
+
+  test('should skip pipe if output is not typed', async () => {
+    const schema = mapAsync(number(), string(), [minSize(10)]);
+    const input = new Map().set(0, 12345);
+    const result = await schema._parse(input);
+    expect(result).toEqual({
+      typed: false,
+      output: input,
+      issues: [
+        {
+          reason: 'type',
+          validation: 'string',
+          origin: 'value',
+          message: 'Invalid type',
+          input: input.get(0),
+          path: [
+            {
+              type: 'map',
+              input: input,
+              key: 0,
+              value: input.get(0),
+            },
+          ],
+        },
+      ],
+    });
   });
 });

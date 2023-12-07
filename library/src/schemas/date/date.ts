@@ -1,9 +1,5 @@
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import {
-  executePipe,
-  getDefaultArgs,
-  getSchemaIssues,
-} from '../../utils/index.ts';
+import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Date schema type.
@@ -47,7 +43,7 @@ export function date(
   arg2?: Pipe<Date>
 ): DateSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg1, arg2);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
 
   // Create and return date schema
   return {
@@ -58,11 +54,11 @@ export function date(
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Date) || isNaN(input.getTime())) {
-        return getSchemaIssues(info, 'type', 'date', this.message, input);
+        return schemaIssue(info, 'type', 'date', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipe(input, this.pipe, info, 'date');
+      return pipeResult(input, this.pipe, info, 'date');
     },
   };
 }

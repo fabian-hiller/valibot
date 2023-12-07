@@ -1,0 +1,49 @@
+---
+title: Pipe
+description: Pipe type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Property } from '~/components';
+
+# Pipe
+
+Pipe type.
+
+## Definition
+
+- `Pipe` <Property {...properties.Pipe} />
+
+export const properties = {
+  Pipe: {
+    type: {
+      type: 'array',
+      item: [
+        {
+          type: 'custom',
+          name: 'BaseValidation',
+          href: '../BaseValidation/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'BaseTransformation',
+          href: '../BaseTransformation/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+          ],
+        },
+      ],
+    },
+  },
+};

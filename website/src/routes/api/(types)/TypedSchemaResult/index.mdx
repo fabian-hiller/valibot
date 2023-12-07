@@ -1,0 +1,56 @@
+---
+title: TypedSchemaResult
+description: Typed schema result type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+
+# TypedSchemaResult
+
+Typed schema result type.
+
+## Definition
+
+- `TypedSchemaResult` <Property {...properties.TypedSchemaResult} />
+  - `typed` <Property {...properties.typed} />
+  - `output` <Property {...properties.output} />
+  - `issues` <Property {...properties.issues} />
+
+export const properties = {
+  TypedSchemaResult: {
+    type: {
+      type: 'custom',
+      name: 'Object',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TOutput',
+        },
+      ],
+    },
+  },
+  typed: {
+    type: {
+      type: 'boolean',
+      value: 'true',
+    },
+  },
+  output: {
+    type: {
+      type: 'custom',
+      name: 'TOutput',
+    },
+  },
+  issues: {
+    type: [
+      {
+        type: 'custom',
+        name: 'Issues',
+        href: '../Issues/',
+      },
+      'undefined',
+    ],
+  },
+};

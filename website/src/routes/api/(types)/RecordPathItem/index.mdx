@@ -1,0 +1,40 @@
+---
+title: RecordPathItem
+description: Record path item type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Property } from '~/components';
+
+# RecordPathItem
+
+Record path item type.
+
+## Definition
+
+- `RecordPathItem` <Property type="object" />
+  - `type` <Property {...properties.type} />
+  - `input` <Property {...properties.input} />
+  - `key` <Property {...properties.key} />
+  - `value` <Property type="unknown" />
+
+export const properties = {
+  type: {
+    type: {
+      type: 'string',
+      value: 'record',
+    },
+  },
+  input: {
+    type: {
+      type: 'custom',
+      name: 'Record',
+      generics: [['string', 'number', 'symbol'], 'unknown'],
+    },
+  },
+  key: {
+    type: ['string', 'number', 'symbol'],
+  },
+};

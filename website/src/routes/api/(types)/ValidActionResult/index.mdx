@@ -1,0 +1,39 @@
+---
+title: ValidActionResult
+description: Valid action result type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+
+# ValidActionResult
+
+Valid action result type.
+
+## Definition
+
+- `ValidActionResult` <Property {...properties.ValidActionResult} />
+  - `output` <Property {...properties.output} />
+  - `issues` <Property type="undefined" />
+
+export const properties = {
+  ValidActionResult: {
+    type: {
+      type: 'custom',
+      name: 'Object',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TOutput',
+        },
+      ],
+    },
+  },
+  output: {
+    type: {
+      type: 'custom',
+      name: 'TOutput',
+    },
+  },
+};

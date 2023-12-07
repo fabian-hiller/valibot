@@ -1,6 +1,11 @@
 ---
 title: Comparison
-description: Even though my API resembles other solutions at first glance, the implementation and structure of the source code is very different.
+description: >-
+  Even though my API resembles other solutions at first glance, the
+  implementation and structure of the source code is very different.
+contributors:
+  - fabian-hiller
+  - Neon-20
 ---
 
 # Comparison
@@ -34,7 +39,7 @@ const LoginSchema = object({
 
 ### Comparison with Zod
 
-For example, to validate a simple login form, [Zod](https://zod.dev/) requires [11.8 kB](https://bundlejs.com/?q=zod&treeshake=%5B%7B+object%2Cstring+%7D%5D) whereas I requires only [1.06 kB](https://bundlejs.com/?q=valibot&treeshake=%5B%7B+email%2CminLength%2Cobject%2Cstring+%7D%5D). That's a 91 % reduction in bundle size. This is due to the fact that Zod's functions have several methods with additional functionalities, that cannot be easily removed by current bundlers when they are not executed in your source code.
+For example, to validate a simple login form, [Zod](https://zod.dev/) requires [11.8 kB](https://bundlejs.com/?q=zod&treeshake=%5B%7B+object%2Cstring+%7D%5D) whereas I require only [1.06 kB](https://bundlejs.com/?q=valibot&treeshake=%5B%7B+email%2CminLength%2Cobject%2Cstring+%7D%5D). That's a 91 % reduction in bundle size. This is due to the fact that Zod's functions have several methods with additional functionalities, that cannot be easily removed by current bundlers when they are not executed in your source code.
 
 ```ts
 import { object, string } from 'zod'; // 11.8 kB

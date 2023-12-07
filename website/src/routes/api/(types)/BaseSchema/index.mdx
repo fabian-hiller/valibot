@@ -1,0 +1,100 @@
+---
+title: BaseSchema
+description: Base schema type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Property } from '~/components';
+
+# BaseSchema
+
+Base schema type.
+
+## Definition
+
+- `BaseSchema` <Property {...properties.BaseSchema} />
+  - `async` <Property {...properties.async} />
+  - `_parse` {/* prettier-ignore */}<Property {...properties._parse} />
+  - `_types` {/* prettier-ignore */}<Property {...properties._types} />
+
+export const properties = {
+  BaseSchema: {
+    type: {
+      type: 'custom',
+      name: 'Object',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+          default: 'unknown',
+        },
+        {
+          type: 'custom',
+          name: 'TOutput',
+          default: {
+            type: 'custom',
+            name: 'TInput',
+          },
+        },
+      ],
+    },
+  },
+  async: {
+    type: {
+      type: 'boolean',
+      value: false,
+    },
+  },
+  _parse: {
+    type: {
+      type: 'function',
+      params: [
+        {
+          name: 'input',
+          type: 'unknown',
+        },
+        {
+          name: 'info',
+          optional: true,
+          type: {
+            type: 'custom',
+            name: 'ParseInfo',
+            href: '../ParseInfo/',
+          },
+        },
+      ],
+      return: {
+        type: 'custom',
+        name: 'SchemaResult',
+        href: '../SchemaResult/',
+        generics: [{ type: 'custom', name: 'TOutput' }],
+      },
+    },
+  },
+  _types: {
+    type: [
+      {
+        type: 'object',
+        entries: [
+          {
+            key: 'input',
+            value: {
+              type: 'custom',
+              name: 'TInput',
+            },
+          },
+          {
+            key: 'output',
+            value: {
+              type: 'custom',
+              name: 'TOutput',
+            },
+          },
+        ],
+      },
+      'undefined',
+    ],
+  },
+};
