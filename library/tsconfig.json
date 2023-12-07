@@ -6,7 +6,13 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["."]
+  "include": [
+    "src/**/*.ts",
+    "mod.ts",
+    "tsup.config.ts",
+    "vite.config.ts"
+  ]
 }
