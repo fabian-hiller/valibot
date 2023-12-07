@@ -24,7 +24,7 @@ export type Mac48Validation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation function.
  */
 export function mac48<TInput extends string>(
-  message: ErrorMessage = 'Invalid MAC 48 bit Address'
+  message: ErrorMessage = 'Invalid 48 bit MAC'
 ): Mac48Validation<TInput> {
   return {
     type: 'mac48',

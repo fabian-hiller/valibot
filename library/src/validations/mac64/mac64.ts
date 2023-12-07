@@ -24,7 +24,7 @@ export type Mac64Validation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation function.
  */
 export function mac64<TInput extends string>(
-  message: ErrorMessage = 'Invalid MAC 64 bit Address'
+  message: ErrorMessage = 'Invalid 64 bit MAC'
 ): Mac64Validation<TInput> {
   return {
     type: 'mac64',

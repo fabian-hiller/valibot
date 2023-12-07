@@ -24,7 +24,7 @@ export type MacValidation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation function.
  */
 export function mac<TInput extends string>(
-  message: ErrorMessage = 'Invalid MAC address'
+  message: ErrorMessage = 'Invalid MAC'
 ): MacValidation<TInput> {
   return {
     type: 'mac',
