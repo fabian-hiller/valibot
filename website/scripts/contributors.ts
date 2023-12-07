@@ -14,6 +14,8 @@ dotenv.config({ path: '.env.local', override: true });
  */
 const GITHUB_PERSONAL_ACCESS_TOKEN = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
 
+const EXCLUDED_COMMITS = ['2cc351f6db7798cf60276225abcbacbc1ea491db'];
+
 /**
  * Finds all index files in the given directory.
  *
@@ -89,6 +91,7 @@ async function updateContributors() {
     if (response.status === 200) {
       // Get commits from response
       const commits = (await response.json()) as {
+        sha: string;
         author: { login: string };
       }[];
 
@@ -97,14 +100,16 @@ async function updateContributors() {
 
       // Count commits of each author
       for (const commit of commits) {
-        const author = commit.author.login;
-        const contributor = contributors.find(
-          (contributor) => contributor.author === commit.author.login
-        );
-        if (contributor) {
-          contributor.count++;
-        } else {
-          contributors.push({ author, count: 1 });
+        if (!EXCLUDED_COMMITS.includes(commit.sha)) {
+          const author = commit.author.login;
+          const contributor = contributors.find(
+            (contributor) => contributor.author === commit.author.login
+          );
+          if (contributor) {
+            contributor.count++;
+          } else {
+            contributors.push({ author, count: 1 });
+          }
         }
       }
 
