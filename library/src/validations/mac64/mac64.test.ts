@@ -7,10 +7,12 @@ describe('mac64', () => {
 
     const value1 = '00:25:96:FF:FE:12:34:56';
     expect(validate._parse(value1).output).toBe(value1);
-    const value2 = '0025:96FF:FE12:3456';
+    const value2 = '00-1A-2B-3C-4D-5E-6F-70';
     expect(validate._parse(value2).output).toBe(value2);
-    const value3 = '00-1A-2B-3C-4D-5E-6F-70';
+    const value3 = '0025.96FF.FE12.3456';
     expect(validate._parse(value3).output).toBe(value3);
+    const value4 = '0025:96FF:FE12:3456';
+    expect(validate._parse(value4).output).toBe(value4);
 
     expect(validate._parse('').issues).toBeTruthy();
     expect(validate._parse('00:1G:2B:3C:4D:5E').issues).toBeTruthy();

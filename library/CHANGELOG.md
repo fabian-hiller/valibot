@@ -2,9 +2,12 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `mac`, `mac48` and `mac64` validation function (pull request #270)
+
 ## v0.22.0 (December 03, 2023)
 
-- Add `mac` validation function (pull request #270)
 - Add support for boolean to `notValue` validation (pull request #261)
 - Add `.typed` to schema validation result and execute pipeline of complex schemas if output is typed (issue #76, #145)
 - Add `forward` method that forwards issues of pipelines to nested fields (issue #76, #145)

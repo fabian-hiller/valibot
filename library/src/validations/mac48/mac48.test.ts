@@ -15,7 +15,6 @@ describe('mac48', () => {
     expect(validate._parse('').issues).toBeTruthy();
     expect(validate._parse('00:1G:2B:3C:4D:5E').issues).toBeTruthy();
     expect(validate._parse('00:1A:2B:3C:4D').issues).toBeTruthy();
-
     expect(validate._parse('b605-2067-f958').issues).toBeTruthy();
     expect(validate._parse('00_1A_2B_3C_4D_5E').issues).toBeTruthy();
     expect(validate._parse('001A2B3C4D5E6F').issues).toBeTruthy();
