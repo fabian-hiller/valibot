@@ -71,6 +71,18 @@ export const ISO_TIMESTAMP_REGEX =
 export const ISO_WEEK_REGEX = /^\d{4}-W(?:0[1-9]|[1-4]\d|5[0-3])$/u;
 
 /**
+ * [MAC](https://en.wikipedia.org/wiki/MAC_address) 48 bit regex.
+ */
+export const MAC48_REGEX =
+  /^(?:[\da-f]{2}:){5}[\da-f]{2}$|^(?:[\da-f]{2}-){5}[\da-f]{2}$|^(?:[\da-f]{4}\.){2}[\da-f]{4}$/iu;
+
+/**
+ * [MAC](https://en.wikipedia.org/wiki/MAC_address) 64 bit regex.
+ */
+export const MAC64_REGEX =
+  /^(?:[\da-f]{2}:){7}[\da-f]{2}$|^(?:[\da-f]{2}-){7}[\da-f]{2}$|^(?:[\da-f]{4}\.){3}[\da-f]{4}$|^(?:[\da-f]{4}:){3}[\da-f]{4}$/iu;
+
+/**
  * [ULID](https://github.com/ulid/spec) regex.
  */
 export const ULID_REGEX = /^[\da-hjkmnp-tv-z]{26}$/iu;
