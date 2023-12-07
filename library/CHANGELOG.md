@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `bic` validation function (pull request #284)
+
 ## v0.22.0 (December 03, 2023)
 
 - Add support for boolean to `notValue` validation (pull request #261)

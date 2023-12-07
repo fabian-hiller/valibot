@@ -24,7 +24,7 @@ export type BicValidation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation function.
  */
 export function bic<TInput extends string>(
-  message: ErrorMessage = 'Invalid BIC code.'
+  message: ErrorMessage = 'Invalid BIC'
 ): BicValidation<TInput> {
   return {
     type: 'bic',

@@ -7,13 +7,10 @@ describe('bic', () => {
 
     const value1 = 'DEUTDEFF';
     expect(validate._parse(value1).output).toBe(value1);
-
     const value2 = 'deutdeff';
     expect(validate._parse(value2).output).toBe(value2);
-
     const value3 = 'DEUTDEFF400';
     expect(validate._parse(value3).output).toBe(value3);
-
     const value4 = 'NEDSZAJJXXX';
     expect(validate._parse(value4).output).toBe(value4);
 
