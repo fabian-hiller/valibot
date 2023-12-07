@@ -60,6 +60,7 @@
 
 ## Validations
 
+- [bic](/api/bic)
 - [bytes](/api/bytes)
 - [cuid2](/api/cuid2)
 - [custom](/api/custom)

@@ -1,4 +1,9 @@
 /**
+ * [BIC] (https://en.wikipedia.org/wiki/ISO_9362) regex.
+ */
+export const BIC_REGEX = /^[A-Z]{6}(?!00)[A-Z\d]{2}(?:[A-Z\d]{3})?$/u;
+
+/**
  * [Cuid2](https://github.com/paralleldrive/cuid2) regex.
  */
 export const CUID2_REGEX = /^[a-z][\da-z]*$/u;

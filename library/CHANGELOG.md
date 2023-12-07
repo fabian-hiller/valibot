@@ -4,6 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `bic` validation function (pull request #284)
 - Add `mac`, `mac48` and `mac64` validation function (pull request #270)
 
 ## v0.22.0 (December 03, 2023)
