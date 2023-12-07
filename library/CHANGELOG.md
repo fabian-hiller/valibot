@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `mac`, `mac48` and `mac64` validation function (pull request #270)
+
 ## v0.22.0 (December 03, 2023)
 
 - Add support for boolean to `notValue` validation (pull request #261)
