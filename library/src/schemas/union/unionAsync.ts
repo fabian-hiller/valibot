@@ -4,6 +4,7 @@ import type {
   ErrorMessage,
   Input,
   Issues,
+  MaybeReadonly,
   Output,
 } from '../../types/index.ts';
 import { parseResult, schemaIssue } from '../../utils/index.ts';
@@ -11,11 +12,13 @@ import { parseResult, schemaIssue } from '../../utils/index.ts';
 /**
  * Union options async type.
  */
-export type UnionOptionsAsync = [
-  BaseSchema | BaseSchemaAsync,
-  BaseSchema | BaseSchemaAsync,
-  ...(BaseSchema[] | BaseSchemaAsync[])
-];
+export type UnionOptionsAsync = MaybeReadonly<
+  [
+    BaseSchema | BaseSchemaAsync,
+    BaseSchema | BaseSchemaAsync,
+    ...(BaseSchema[] | BaseSchemaAsync[])
+  ]
+>;
 
 /**
  * Union schema async type.

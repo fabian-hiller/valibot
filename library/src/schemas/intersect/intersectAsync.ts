@@ -3,6 +3,7 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   Issues,
+  MaybeReadonly,
 } from '../../types/index.ts';
 import { parseResult, schemaIssue } from '../../utils/index.ts';
 import type { IntersectInput, IntersectOutput } from './types.ts';
@@ -11,11 +12,13 @@ import { mergeOutputs } from './utils/index.ts';
 /**
  * Intersect options async type.
  */
-export type IntersectOptionsAsync = [
-  BaseSchema | BaseSchemaAsync,
-  BaseSchema | BaseSchemaAsync,
-  ...(BaseSchema[] | BaseSchemaAsync[])
-];
+export type IntersectOptionsAsync = MaybeReadonly<
+  [
+    BaseSchema | BaseSchemaAsync,
+    BaseSchema | BaseSchemaAsync,
+    ...(BaseSchema[] | BaseSchemaAsync[])
+  ]
+>;
 
 /**
  * Intersect schema async type.

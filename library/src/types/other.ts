@@ -4,6 +4,11 @@
 export type ErrorMessage = string | (() => string);
 
 /**
+ * Maybe readonly type.
+ */
+export type MaybeReadonly<T> = Readonly<T> | T;
+
+/**
  * Resolve type.
  *
  * Hint: This type has no effect and is only used so that TypeScript displays

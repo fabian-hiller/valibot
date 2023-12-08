@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Issues } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Issues,
+  MaybeReadonly,
+} from '../../types/index.ts';
 import { parseResult, schemaIssue } from '../../utils/index.ts';
 import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
@@ -6,7 +11,9 @@ import { mergeOutputs } from './utils/index.ts';
 /**
  * Intersect options type.
  */
-export type IntersectOptions = [BaseSchema, BaseSchema, ...BaseSchema[]];
+export type IntersectOptions = MaybeReadonly<
+  [BaseSchema, BaseSchema, ...BaseSchema[]]
+>;
 
 /**
  * Intersect schema type.
