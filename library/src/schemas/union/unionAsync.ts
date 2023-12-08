@@ -12,13 +12,7 @@ import { parseResult, schemaIssue } from '../../utils/index.ts';
 /**
  * Union options async type.
  */
-export type UnionOptionsAsync = MaybeReadonly<
-  [
-    BaseSchema | BaseSchemaAsync,
-    BaseSchema | BaseSchemaAsync,
-    ...(BaseSchema[] | BaseSchemaAsync[])
-  ]
->;
+export type UnionOptionsAsync = MaybeReadonly<(BaseSchema | BaseSchemaAsync)[]>;
 
 /**
  * Union schema async type.

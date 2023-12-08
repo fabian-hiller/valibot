@@ -49,7 +49,7 @@ export function picklistAsync<
         return schemaIssue(info, 'type', 'picklist', this.message, input);
       }
 
-      // Return inpot as output
+      // Return input as output
       return parseResult(true, input as TOptions[number]);
     },
   };

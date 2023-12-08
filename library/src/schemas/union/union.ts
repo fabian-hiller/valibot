@@ -11,9 +11,7 @@ import { parseResult, schemaIssue } from '../../utils/index.ts';
 /**
  * Union options type.
  */
-export type UnionOptions = MaybeReadonly<
-  [BaseSchema, BaseSchema, ...BaseSchema[]]
->;
+export type UnionOptions = MaybeReadonly<BaseSchema[]>;
 
 /**
  * Union schema type.
