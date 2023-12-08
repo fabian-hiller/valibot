@@ -2,12 +2,12 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.23.0 (December 08, 2023)
 
 - Add `bic` validation function (pull request #284)
 - Add `mac`, `mac48` and `mac64` validation function (pull request #270)
-- Change `IntersectOptions`, `IntersectOptionsAsync`, `UnionOptions` and `UnionOptionsAsync` type to support readonly tuples (issue #279)
 - Change `PicklistOptions`, `UnionOptions` and `UnionOptionsAsync` type from tuple to array (issue #279)
+- Change `IntersectOptions`, `IntersectOptionsAsync`, `UnionOptions` and `UnionOptionsAsync` type to support readonly values (issue #279)
 - Fix optional keys of `ObjectInput` and `ObjectOutput` type (issue #242)
 
 ## v0.22.0 (December 03, 2023)
@@ -15,6 +15,8 @@ All notable changes to the library will be documented in this file.
 - Add support for boolean to `notValue` validation (pull request #261)
 - Add `.typed` to schema validation result and execute pipeline of complex schemas if output is typed (issue #76, #145)
 - Add `forward` method that forwards issues of pipelines to nested fields (issue #76, #145)
+- Add `skipPipe` option to `is` type guard method (pull request #166)
+- Change return type of `safeParse` and `safeParseAsync` method
 - Rename and change util functions and refactor codebase
 - Fix `RecordInput` and `RecordOuput` type when using `unionAsync` as key
 - Fix output type for `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional` and `optionalAsync` when using a default value (issue #271)
