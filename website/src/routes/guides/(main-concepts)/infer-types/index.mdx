@@ -16,7 +16,7 @@ Another cool feature that my schemas allow you to do is to infer the input and o
 
 ## Infer input types
 
-The input type of a schema corresponds to the TypeScript type that the incoming data of a schema must match to be valid. To extract this type you use the utility type <Link href="/api/Input">`Input`</Link> that I provide.
+The input type of a schema corresponds to the TypeScript type that the incoming data of a schema must match to be valid. To extract this type you use the utility type <Link href="/api/Input/">`Input`</Link> that I provide.
 
 > You are probably interested in input type only in special cases. I recommend you to use the output type in most cases.
 
@@ -33,7 +33,7 @@ type LoginInput = Input<typeof LoginSchema>; // { email: string; password: strin
 
 ## Infer output types
 
-The output type differs from the input type only if you use <Link href="/api/transform">`transform`</Link> to transform the input of a schema after validation. The output type always corresponds to the return value of the <Link href="/api/parse">`parse`</Link> method. To infer it, you use the utility type <Link href="/api/Output">`Output`</Link>.
+The output type differs from the input type only if you use <Link href="/api/transform/">`transform`</Link> to transform the input of a schema after validation. The output type always corresponds to the return value of the <Link href="/api/parse/">`parse`</Link> method. To infer it, you use the utility type <Link href="/api/Output/">`Output`</Link>.
 
 ```ts
 import { object, type Output, string, transform } from 'valibot'; // 0.93 kB

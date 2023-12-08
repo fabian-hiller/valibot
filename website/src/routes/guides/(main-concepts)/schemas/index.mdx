@@ -49,11 +49,11 @@ import { email, endsWith, string } from 'valibot'; // 0.7 kB
 const EmailSchema = string([email(), endsWith('@example.com')]);
 ```
 
-Pipeline are optional and, if needed, are always added in the form of an array as the last argument of a schema function. More details about pipelines can be found in <Link href="/guides/pipelines">this guide</Link>.
+Pipeline are optional and, if needed, are always added in the form of an array as the last argument of a schema function. More details about pipelines can be found in <Link href="/guides/pipelines/">this guide</Link>.
 
 ### Error messages
 
-If I detect an issue during validation, I throw a <Link href="/api/ValiError">`ValiError`</Link> and add a short error message to each issue. This error message can be overridden via the first optional argument of a schema or validation function.
+If I detect an issue during validation, I throw a <Link href="/api/ValiError/">`ValiError`</Link> and add a short error message to each issue. This error message can be overridden via the first optional argument of a schema or validation function.
 
 ```ts
 import { email, minLength, object, string } from 'valibot'; // 1.06 kB
@@ -105,7 +105,7 @@ const UndefinedSchema = undefined_(); // undefined
 
 Among complex values I support objects, records, arrays, tuples as well as various other classes.
 
-> For objects I provide various methods like <Link href="/api/partial">`partial`</Link> and <Link href="/api/merge">`merge`</Link>. Learn more about them <Link href="/guides/methods">here</Link>.
+> For objects I provide various methods like <Link href="/api/partial/">`partial`</Link> and <Link href="/api/merge/">`merge`</Link>. Learn more about them <Link href="/guides/methods/">here</Link>.
 
 <ApiList
   label="Schema functions"

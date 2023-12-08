@@ -16,13 +16,13 @@ import { ApiList } from '~/components';
 
 # Pipelines
 
-For detailed validations and transformations, a pipeline can be passed as the last optional argument to almost any schema function. Especially for schema functions like <Link href="/api/string">`string`</Link>, <Link href="/api/number">`number`</Link>, <Link href="/api/bigint">`bigint`</Link>, <Link href="/api/date">`date`</Link> and <Link href="/api/array">`array`</Link> this feature is useful to validate further details apart from the raw data type.
+For detailed validations and transformations, a pipeline can be passed as the last optional argument to almost any schema function. Especially for schema functions like <Link href="/api/string/">`string`</Link>, <Link href="/api/number/">`number`</Link>, <Link href="/api/bigint/">`bigint`</Link>, <Link href="/api/date/">`date`</Link> and <Link href="/api/array/">`array`</Link> this feature is useful to validate further details apart from the raw data type.
 
 ## How it works
 
 In simple words, a pipeline is an array of functions that synchronously passes through the input of a schema. Each function can examine and modify the input. The pipeline is therefore perfect for detailed validations and transformations.
 
-> Important: The pipeline cannot be used to change the data type of a value. For this, the <Link href="/api/transform">`transform`</Link> method must be used explicitly.
+> Important: The pipeline cannot be used to change the data type of a value. For this, the <Link href="/api/transform/">`transform`</Link> method must be used explicitly.
 
 ### Example
 
@@ -38,7 +38,7 @@ const EmailSchema = string([toTrimmed(), email(), endsWith('@example.com')]);
 
 Validation functions examine the input and, if the input does not meet a certain condition, return an issue. If the input is valid, it is returned as the output and, if present, picked up by the next function in the pipeline.
 
-> By default I run a pipeline completely, even if an error is thrown in between, to collect all issues. If you want me to abort the pipeline early after the first error is thrown, you have to set the `abortPipeEarly` option of <Link href="/api/parse">`parse`</Link> or <Link href="/api/safeParse">`safeParse`</Link> to `true`. Learn more <Link href="/guides/parse-data/#abort-early">here</Link>.
+> By default I run a pipeline completely, even if an error is thrown in between, to collect all issues. If you want me to abort the pipeline early after the first error is thrown, you have to set the `abortPipeEarly` option of <Link href="/api/parse/">`parse`</Link> or <Link href="/api/safeParse/">`safeParse`</Link> to `true`. Learn more <Link href="/guides/parse-data/#abort-early">here</Link>.
 
 <ApiList
   label="Validation functions"
@@ -92,7 +92,7 @@ Validation functions examine the input and, if the input does not meet a certain
   ]}
 />
 
-Some of these utility functions can be used in the pipeline of different schema functions. For example, <Link href="/api/minValue">`minValue`</Link> can be used in the pipeline of <Link href="/api/string">`string`</Link>, <Link href="/api/number">`number`</Link>, <Link href="/api/bigint">`bigint`</Link> and <Link href="/api/date">`date`</Link>.
+Some of these utility functions can be used in the pipeline of different schema functions. For example, <Link href="/api/minValue/">`minValue`</Link> can be used in the pipeline of <Link href="/api/string/">`string`</Link>, <Link href="/api/number/">`number`</Link>, <Link href="/api/bigint/">`bigint`</Link> and <Link href="/api/date/">`date`</Link>.
 
 ```ts
 import { bigint, date, minValue, number, string } from 'valibot'; // 0.71 kB
@@ -105,7 +105,7 @@ const DateSchema = date([minValue(new Date())]);
 
 ### Custom validation
 
-For custom validations <Link href="/api/custom">`custom`</Link> can be used. If the function passed as the first argument returns a falsy value, an error is thrown. Otherwise the input is considered valid.
+For custom validations <Link href="/api/custom/">`custom`</Link> can be used. If the function passed as the first argument returns a falsy value, an error is thrown. Otherwise the input is considered valid.
 
 ```ts
 import { custom, string } from 'valibot'; // 0.59 kB
@@ -122,7 +122,7 @@ const UsernameSchema = string([
 
 Transformation functions allow to change the value of an input, but not the data type. This can be useful for example to remove spaces at the beginning or end of a string or to force a minimum or maximum value.
 
-> If you also want to change the data type, you must explicitly use the <Link href="/api/transform">`transform`</Link> method.
+> If you also want to change the data type, you must explicitly use the <Link href="/api/transform/">`transform`</Link> method.
 
 <ApiList
   label="Transformation functions"

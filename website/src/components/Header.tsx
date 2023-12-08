@@ -121,8 +121,8 @@ export const Header = component$(() => {
           id="main-menu"
         >
           {[
-            { label: 'Guides', href: '/guides' },
-            { label: 'API reference', href: '/api' },
+            { label: 'Guides', href: '/guides/' },
+            { label: 'API reference', href: '/api/' },
           ].map(({ label, href }) => (
             <Link
               key={href}

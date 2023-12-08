@@ -65,13 +65,13 @@ export default component$(() => {
             variant="primary"
             label="Get started"
             type="link"
-            href="/guides"
+            href="/guides/"
           />
           <ActionButton
             variant="secondary"
             label="API reference"
             type="link"
-            href="/api"
+            href="/api/"
           />
         </ButtonGroup>
       </section>
@@ -282,13 +282,13 @@ export default component$(() => {
           variant="primary"
           label="Get started"
           type="link"
-          href="/guides"
+          href="/guides/"
         />
         <ActionButton
           variant="secondary"
           label="API reference"
           type="link"
-          href="/api"
+          href="/api/"
         />
       </ButtonGroup>
     </main>
