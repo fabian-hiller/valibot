@@ -17,11 +17,11 @@ const GITHUB_PERSONAL_ACCESS_TOKEN = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
 const EXCLUDED_COMMITS = ['2cc351f6db7798cf60276225abcbacbc1ea491db'];
 
 /**
- * Finds all index files in the given directory.
+ * Finds all index files in the given directories.
  *
  * @param directories The directories to search in.
  */
-async function findIndexFiles(directories: string[]) {
+function findIndexFiles(directories: string[]) {
   // Create file paths list
   const filePaths: string[] = [];
 
@@ -40,7 +40,7 @@ async function findIndexFiles(directories: string[]) {
         const itemPath = path.join(directory, itemName);
         const itemStat = fs.statSync(itemPath);
         if (itemStat.isDirectory()) {
-          filePaths.push(...(await findIndexFiles([itemPath])));
+          filePaths.push(...findIndexFiles([itemPath]));
         }
       }
     }
@@ -60,7 +60,7 @@ async function updateContributors() {
   }
 
   // Find all MDX files of guides and API reference
-  const filePaths = await findIndexFiles([
+  const filePaths = findIndexFiles([
     path.join('src', 'routes', 'guides'),
     path.join('src', 'routes', 'api'),
   ]);
