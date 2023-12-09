@@ -42,7 +42,7 @@ async function generateSitemap() {
   const filePaths = findIndexFiles(path.join('src', 'routes'));
 
   // Create URL paths and sort them
-  const urlSet = filePaths
+  let urlSet = filePaths
     // Transform file paths to URL paths
     .map((filePath) =>
       filePath
@@ -59,6 +59,9 @@ async function generateSitemap() {
         `${urlPaths}<url><loc>${ORIGIN}/${urlPath}</loc></url>`,
       ''
     );
+
+  // Add thesis to URL set
+  urlSet += `<url><loc>${ORIGIN}/thesis.pdf</loc></url>`;
 
   // Write sitemap.xml to public directory
   fs.writeFileSync(
