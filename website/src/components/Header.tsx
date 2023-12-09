@@ -4,6 +4,7 @@ import {
   useComputed$,
   useSignal,
   useTask$,
+  type Signal,
 } from '@builder.io/qwik';
 import {
   Link,
@@ -13,11 +14,12 @@ import {
   zod$,
 } from '@builder.io/qwik-city';
 import clsx from 'clsx';
-import { ThemeToggle } from './ThemeToggle';
 import { useFocusTrap } from '~/hooks';
+import { LogoIcon } from '~/icons';
 import { GitHubIconLink } from './GitHubIconLink';
 import { MainMenuToggle } from './MainMenuToggle';
-import { LogoIcon } from '~/icons';
+import { SearchToggle } from './SearchToggle';
+import { ThemeToggle } from './ThemeToggle';
 
 /**
  * Toggles the open state of the main menu.
@@ -27,10 +29,14 @@ export const useMainMenuToggle = globalAction$(
   zod$({ state: z.enum(['opened', 'closed']) })
 );
 
+type HeaderProps = {
+  searchOpen: Signal<boolean>;
+};
+
 /**
  * Fixed header with logo, main navigation and theme toogle.
  */
-export const Header = component$(() => {
+export const Header = component$<HeaderProps>(({ searchOpen }) => {
   // Use location, root element and scrolled signal
   const location = useLocation();
   const rootElement = useSignal<HTMLElement>();
@@ -103,6 +109,7 @@ export const Header = component$(() => {
         <div class="flex items-center space-x-4 lg:hidden">
           <GitHubIconLink />
           <ThemeToggle />
+          <SearchToggle open={searchOpen} />
           <MainMenuToggle action={mainMenuToggle} open={mainMenuOpen.value} />
         </div>
 
@@ -140,6 +147,7 @@ export const Header = component$(() => {
 
         {/* Icon buttons (desktop) */}
         <div class="hidden lg:flex lg:w-56 lg:items-center lg:justify-end lg:space-x-6">
+          <SearchToggle open={searchOpen} />
           <ThemeToggle />
           <div
             class="lg:block lg:h-5 lg:w-0.5 lg:rounded-full lg:bg-slate-200 lg:dark:bg-slate-800"

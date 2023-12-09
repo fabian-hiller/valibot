@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const ORIGIN = 'https://valibot.dev/';
+const ORIGIN = 'https://valibot.dev';
 
 /**
  * Finds all index files in the given directory.
@@ -56,7 +56,7 @@ async function generateSitemap() {
     // Reduce URL paths to URL set
     .reduce(
       (urlPaths, urlPath) =>
-        `${urlPaths}<url><loc>${ORIGIN}${urlPath}</loc></url>`,
+        `${urlPaths}<url><loc>${ORIGIN}/${urlPath}</loc></url>`,
       ''
     );
 

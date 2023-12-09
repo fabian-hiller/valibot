@@ -1,6 +1,7 @@
 export * from './ActionButton';
 export * from './ApiList';
 export * from './ButtonGroup';
+export * from './DocSearch';
 export * from './DocsLayout';
 export * from './Expandable';
 export * from './Footer';
@@ -11,6 +12,7 @@ export * from './IconButton';
 export * from './MainMenuToggle';
 export * from './Navigation';
 export * from './RoutingIndicator';
+export * from './SearchToggle';
 export * from './SideBar';
 export * from './Spinner';
 export * from './SystemIcon';

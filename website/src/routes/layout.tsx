@@ -1,6 +1,6 @@
-import { component$, Slot } from '@builder.io/qwik';
+import { component$, Slot, useSignal } from '@builder.io/qwik';
 import { type DocumentHead } from '@builder.io/qwik-city';
-import { Footer, Header, RoutingIndicator } from '~/components';
+import { DocSearch, Footer, Header, RoutingIndicator } from '~/components';
 
 export const head: DocumentHead = (request) => ({
   // Add name of site to title of subpages
@@ -10,11 +10,17 @@ export const head: DocumentHead = (request) => ({
       : `${request.head.title} | Valibot`,
 });
 
-export default component$(() => (
-  <>
-    <RoutingIndicator />
-    <Header />
-    <Slot />
-    <Footer />
-  </>
-));
+export default component$(() => {
+  // Use search open signal
+  const searchOpen = useSignal(false);
+
+  return (
+    <>
+      <RoutingIndicator />
+      <Header searchOpen={searchOpen} />
+      <Slot />
+      <Footer />
+      <DocSearch open={searchOpen} />
+    </>
+  );
+});
