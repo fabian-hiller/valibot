@@ -10,11 +10,11 @@ contributors:
 Input inference type.
 
 ```ts
-// Create schema
-const Schema = object({
+// Create object schema
+const ObjectSchema = object({
   key: transform(string(), (input) => input.length),
 });
 
-// Infer input type
-type SchemaInput = Input<typeof Schema>; // { key: string }
+// Infer object input type
+type ObjectInput = Input<typeof ObjectSchema>; // { key: string }
 ```
