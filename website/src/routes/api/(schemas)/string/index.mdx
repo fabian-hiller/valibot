@@ -25,13 +25,17 @@ const Schema = string(message, pipe);
 - `message` <Property {...properties.message} />
 - `pipe` <Property {...properties.pipe}/>
 
+### Explanation
+
+With `string` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the string. If the input is not a string, you can use `message` to customize the error message.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
 
 ## Examples
 
-With `string` you validate the data type of the incoming data and with the `pipe` you can then validate all further details. In the event of an error, the `message` parameter allows you to customize the error message.
+The following examples show how `string` can be used.
 
 ### Email schema
 
