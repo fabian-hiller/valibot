@@ -46,6 +46,8 @@
 - [forward](/api/forward/)
 - [getDefault](/api/getDefault/)
 - [getDefaults](/api/getDefaults/)
+- [getFallback](/api/getFallback/)
+- [getFallbacks](/api/getFallbacks/)
 - [is](/api/is/)
 - [keyof](/api/keyof/)
 - [merge](/api/merge/)
@@ -139,6 +141,8 @@
 - [forwardAsync](/api/forwardAsync/)
 - [getDefaultAsync](/api/getDefaultAsync/)
 - [getDefaultsAsync](/api/getDefaultsAsync/)
+- [getFallbackAsync](/api/getFallbackAsync/)
+- [getFallbacksAsync](/api/getFallbacksAsync/)
 - [instanceAsync](/api/instanceAsync/)
 - [intersectAsync](/api/intersectAsync/)
 - [literalAsync](/api/literalAsync/)
@@ -175,7 +179,7 @@
 - [unionAsync](/api/unionAsync/)
 - [unknownAsync](/api/unknownAsync/)
 - [variantAsync](/api/variantAsync/)
-- [voidTypeAsync](/api/voidTypeAsync/)
+- [voidAsync](/api/voidAsync/)
 
 ## Types
 
@@ -184,6 +188,7 @@
 - [BaseTransformation](/api/BaseTransformation/)
 - [BaseValidation](/api/BaseValidation/)
 - [ErrorMessage](/api/ErrorMessage/)
+- [Input](/api/Input/)
 - [InvalidActionResult](/api/InvalidActionResult/)
 - [Issue](/api/Issue/)
 - [IssueOrigin](/api/IssueOrigin/)
@@ -191,6 +196,7 @@
 - [Issues](/api/Issues/)
 - [MapPathItem](/api/MapPathItem/)
 - [ObjectPathItem](/api/ObjectPathItem/)
+- [Output](/api/Output/)
 - [ParseInfo](/api/ParseInfo/)
 - [PathItem](/api/PathItem/)
 - [Pipe](/api/Pipe/)

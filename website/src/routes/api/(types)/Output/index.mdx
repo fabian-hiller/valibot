@@ -1,0 +1,20 @@
+---
+title: Output
+description: Output inference type.
+contributors:
+  - fabian-hiller
+---
+
+# Output
+
+Output inference type.
+
+```ts
+// Create schema
+const Schema = object({
+  key: transform(string(), (input) => input.length),
+});
+
+// Infer output type
+type SchemaOutput = Output<typeof Schema>; // { key: number }
+```

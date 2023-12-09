@@ -1,0 +1,20 @@
+---
+title: Input
+description: Input inference type.
+contributors:
+  - fabian-hiller
+---
+
+# Input
+
+Input inference type.
+
+```ts
+// Create schema
+const Schema = object({
+  key: transform(string(), (input) => input.length),
+});
+
+// Infer input type
+type SchemaInput = Input<typeof Schema>; // { key: string }
+```
