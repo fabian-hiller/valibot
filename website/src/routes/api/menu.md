@@ -69,6 +69,7 @@
 - [endsWith](/api/endsWith/)
 - [excludes](/api/excludes/)
 - [finite](/api/finite/)
+- [iban](/api/iban/)
 - [imei](/api/imei/)
 - [includes](/api/includes/)
 - [integer](/api/integer/)
