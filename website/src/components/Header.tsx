@@ -129,7 +129,7 @@ export const Header = component$(() => {
               class={clsx(
                 'focus-ring mx-4 rounded-lg px-4 py-3 text-lg transition-colors hover:text-slate-900 dark:hover:text-slate-200 lg:px-3 lg:py-2 lg:text-[17px] lg:font-medium',
                 location.url.pathname === href &&
-                  'text-slate-900 dark:text-slate-200'
+                  'docsearch-lvl0 text-slate-900 dark:text-slate-200'
               )}
               href={href}
             >
