@@ -2,6 +2,11 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add support for `special` schema as key of `record` schema (issue #291)
+- Add support for `special` and `specialAsync` schema as key of `recordAsync` schema (issue #291)
+
 ## v0.23.0 (December 08, 2023)
 
 - Add `bic` validation function (pull request #284)
