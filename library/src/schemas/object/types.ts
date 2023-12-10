@@ -25,8 +25,8 @@ export type ObjectPathItem = {
  */
 type RequiredKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
   [TKey in keyof TEntries]: TEntries[TKey] extends
-    | OptionalSchema<any>
-    | OptionalSchemaAsync<any>
+    | OptionalSchema<any, any>
+    | OptionalSchemaAsync<any, any>
     ? never
     : TKey;
 }[keyof TEntries];
@@ -36,8 +36,8 @@ type RequiredKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
  */
 type OptionalKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
   [TKey in keyof TEntries]: TEntries[TKey] extends
-    | OptionalSchema<any>
-    | OptionalSchemaAsync<any>
+    | OptionalSchema<any, any>
+    | OptionalSchemaAsync<any, any>
     ? TKey
     : never;
 }[keyof TEntries];
