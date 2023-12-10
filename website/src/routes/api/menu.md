@@ -64,6 +64,7 @@
 
 - [bic](/api/bic/)
 - [bytes](/api/bytes/)
+- [bytes](/api/creditCard/)
 - [cuid2](/api/cuid2/)
 - [custom](/api/custom/)
 - [email](/api/email/)

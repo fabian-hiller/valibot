@@ -1,5 +1,6 @@
 export * from './bic/index.ts';
 export * from './bytes/index.ts';
+export * from './creditCard/index.ts';
 export * from './cuid2/index.ts';
 export * from './custom/index.ts';
 export * from './email/index.ts';
