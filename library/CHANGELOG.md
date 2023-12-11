@@ -2,11 +2,16 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Fix output type of optional `object` and `objectAsync` entries with default value (issue #286)
+- Fix output type of `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional` and `optionalAsync` schema with default value (issue #286)
+
 ## v0.24.0 (December 08, 2023)
 
 - Add support for `special` schema as key of `record` schema (issue #291)
 - Add support for `special` and `specialAsync` schema as key of `recordAsync` schema (issue #291)
-- Fix input and output type of optional object keys with default value (issue #286)
+- Fix input and output type of optional `object` and `objectAsync` entries with default value (issue #286)
 
 ## v0.23.0 (December 08, 2023)
 

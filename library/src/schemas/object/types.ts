@@ -23,22 +23,32 @@ export type ObjectPathItem = {
 /**
  * Required object keys type.
  */
-type RequiredKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
+type RequiredKeys<
+  TEntries extends ObjectEntries | ObjectEntriesAsync,
+  TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>
+> = {
   [TKey in keyof TEntries]: TEntries[TKey] extends
     | OptionalSchema<any, any>
     | OptionalSchemaAsync<any, any>
-    ? never
+    ? undefined extends TObject[TKey]
+      ? never
+      : TKey
     : TKey;
 }[keyof TEntries];
 
 /**
  * Optional object keys type.
  */
-type OptionalKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
+type OptionalKeys<
+  TEntries extends ObjectEntries | ObjectEntriesAsync,
+  TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>
+> = {
   [TKey in keyof TEntries]: TEntries[TKey] extends
     | OptionalSchema<any, any>
     | OptionalSchemaAsync<any, any>
-    ? TKey
+    ? undefined extends TObject[TKey]
+      ? TKey
+      : never
     : never;
 }[keyof TEntries];
 
@@ -62,8 +72,8 @@ type EntriesOutput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
 type WithQuestionMarks<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
   TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>
-> = Pick<TObject, RequiredKeys<TEntries>> &
-  Partial<Pick<TObject, OptionalKeys<TEntries>>>;
+> = Pick<TObject, RequiredKeys<TEntries, TObject>> &
+  Partial<Pick<TObject, OptionalKeys<TEntries, TObject>>>;
 
 /**
  * Object input inference type.
