@@ -188,6 +188,7 @@
 - [BaseSchema](/api/BaseSchema/)
 - [BaseTransformation](/api/BaseTransformation/)
 - [BaseValidation](/api/BaseValidation/)
+- [BigintSchema](/api/BigintSchema/)
 - [ErrorMessage](/api/ErrorMessage/)
 - [Input](/api/Input/)
 - [InvalidActionResult](/api/InvalidActionResult/)
