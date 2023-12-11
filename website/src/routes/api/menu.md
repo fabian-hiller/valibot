@@ -183,6 +183,7 @@
 
 ## Types
 
+- [AnySchema](/api/AnySchema/)
 - [ArrayPathItem](/api/ArrayPathItem/)
 - [BaseSchema](/api/BaseSchema/)
 - [BaseTransformation](/api/BaseTransformation/)
