@@ -1,3 +1,6 @@
+[![NPM version][npm-image]][npm-url]
+[![CI][ci-image]][ci-url]
+[![Downloads][downloads-image]][npm-url]
 ![Valibot Logo](https://github.com/fabian-hiller/valibot/blob/main/valibot.jpg?raw=true)
 
 # Valibot
@@ -60,3 +63,11 @@ Find a bug or have an idea how to improve my code? Please fill out an [issue](ht
 ## License
 
 I am completely free and licensed under the [MIT license](https://github.com/fabian-hiller/valibot/blob/main/LICENSE.md). But if you like, you can feed me with a star on [GitHub](https://github.com/fabian-hiller/valibot).
+
+[downloads-image]: https://img.shields.io/npm/dm/valibot.svg
+
+[npm-url]: https://npmjs.org/package/valibot
+[npm-image]: https://img.shields.io/npm/v/valibot.svg
+
+[ci-url]: https://github.com/fabian-hiller/valibot/actions/workflows/ci.yml?query=workflow%3ACI
+[ci-image]: https://github.com/fabian-hiller/valibot/actions/workflows/ci.yml/badge.svg?branch=main
