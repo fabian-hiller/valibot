@@ -13,7 +13,7 @@ export type ImeiValidation<TInput extends string> = BaseValidation<TInput> & {
   /**
    * The IMEI regex and luhn algorithm.
    */
-  requirement: [RegExp, (input: string) => boolean];
+  requirement: [RegExp, typeof isLuhnAlgo];
 };
 
 /**
