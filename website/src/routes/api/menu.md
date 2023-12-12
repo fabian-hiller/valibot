@@ -190,6 +190,8 @@
 - [BaseValidation](/api/BaseValidation/)
 - [BigintSchema](/api/BigintSchema/)
 - [BlobSchema](/api/BlobSchema/)
+- [Enum](/api/Enum/)
+- [EnumSchema](/api/EnumSchema/)
 - [ErrorMessage](/api/ErrorMessage/)
 - [Input](/api/Input/)
 - [InvalidActionResult](/api/InvalidActionResult/)

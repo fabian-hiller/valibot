@@ -31,12 +31,12 @@ export type EnumSchema<
 };
 
 /**
- * Creates a enum schema.
+ * Creates an enum schema.
  *
  * @param enum_ The enum value.
  * @param message The error message.
  *
- * @returns A enum schema.
+ * @returns An enum schema.
  */
 export function enum_<TEnum extends Enum>(
   enum_: TEnum,
