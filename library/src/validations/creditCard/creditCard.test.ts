@@ -25,6 +25,8 @@ describe('creditCard', () => {
     expect(validate._parse(value9).output).toBe(value9);
     const value10 = '3021 8047 1965 57';
     expect(validate._parse(value10).output).toBe(value10);
+    const value11 = '30218047196557';
+    expect(validate._parse(value11).output).toBe(value11);
 
     expect(validate._parse('').issues).toBeTruthy();
     expect(validate._parse('1234 5678 9012 3456').issues).toBeTruthy();

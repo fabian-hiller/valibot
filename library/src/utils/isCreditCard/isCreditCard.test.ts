@@ -13,6 +13,7 @@ describe('isCreditCard', () => {
     expect(isCreditCard('4005 5500 0000 0001')).toBe(true); // Visa
     expect(isCreditCard('3020 4169 3226 43')).toBe(true); // Diners Club
     expect(isCreditCard('3021 8047 1965 57')).toBe(true); // Diners Club
+    expect(isCreditCard('30218047196557')).toBe(true); // Diners Club without spaces
   });
 
   test('should return true, if credit card is invalid', () => {
