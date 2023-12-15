@@ -77,6 +77,7 @@
 - [ip](/api/ip/)
 - [ipv4](/api/ipv4/)
 - [ipv6](/api/ipv6/)
+- [isin](/api/isin/)
 - [isoDate](/api/isoDate/)
 - [isoDateTime](/api/isoDateTime/)
 - [isoTime](/api/isoTime/)
