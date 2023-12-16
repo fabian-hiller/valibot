@@ -87,6 +87,7 @@
 - [mac](/api/mac/)
 - [mac48](/api/mac48/)
 - [mac64](/api/mac64/)
+- [match](/api/match/)
 - [maxBytes](/api/maxBytes/)
 - [maxLength](/api/maxLength/)
 - [maxSize](/api/maxSize/)
