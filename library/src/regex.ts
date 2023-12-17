@@ -91,3 +91,8 @@ export const ULID_REGEX = /^[\da-hjkmnp-tv-z]{26}$/iu;
  * [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) regex.
  */
 export const UUID_REGEX = /^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/iu;
+
+/**
+ * [HEX] (https://en.wikipedia.org/wiki/Hexadecimal)
+ */
+export const HEX_REGEX = /^(0h|0x)?[\dA-F]+$/iu;
