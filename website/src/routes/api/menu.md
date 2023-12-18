@@ -71,6 +71,7 @@
 - [endsWith](/api/endsWith/)
 - [excludes](/api/excludes/)
 - [finite](/api/finite/)
+- [hash](/api/hash/)
 - [imei](/api/imei/)
 - [includes](/api/includes/)
 - [integer](/api/integer/)
