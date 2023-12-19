@@ -101,6 +101,7 @@
 - [notLength](/api/notLength/)
 - [notSize](/api/notSize/)
 - [notValue](/api/notValue/)
+- [octal](/api/octal/)
 - [regex](/api/regex/)
 - [safeInteger](/api/safeInteger/)
 - [size](/api/size/)

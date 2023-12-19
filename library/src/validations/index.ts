@@ -38,6 +38,7 @@ export * from './notBytes/index.ts';
 export * from './notLength/index.ts';
 export * from './notSize/index.ts';
 export * from './notValue/index.ts';
+export * from './octal/index.ts';
 export * from './regex/index.ts';
 export * from './safeInteger/index.ts';
 export * from './size/index.ts';
