@@ -2,8 +2,117 @@
 title: picklist
 contributors:
   - fabian-hiller
+  - sqmasep
 ---
+
+import { Property } from '~/components';
 
 # picklist
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/picklist/picklist.ts).
+Creates a picklist schema.
+
+```ts
+// Picklist schema with an array of string options
+const Schema = picklist(options);
+
+// Picklist schema with an array of string options and a custom message
+const Schema = picklist(options, message);
+```
+
+## Parameters
+
+- `options` <Property {...properties.options}/>
+- `message` <Property {...properties.message}/>
+
+### Explanation
+
+With `options` you can specify a list of restricted options. If the input is not included in the picklist options, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `picklist` can be used.
+
+### Basic picklist schema
+
+```ts
+// Validation will only allow `Typescript` or `Javascript`
+const LanguageSchema = picklist(['Typescript', 'Javascript']);
+```
+
+### Picklist schema with custom error message
+
+You can specify a custom error message as the second argument.
+
+```ts
+const LanguageSchema = picklist(
+  ['Typescript', 'Javascript'],
+  'Please select a language'
+);
+
+// Error! `Ruby` is not included in the picklist options
+const safeValue = parse(LanguageSchema, 'Ruby');
+
+// Success! `Typescript` is included in the picklist options
+const safeValue = parse(LanguageSchema, 'Typescript');
+//    ^? 'Typescript' | 'Javascript'
+```
+
+### Picklist schema with dynamic array
+
+I can also receive a dynamic array of options! This can be useful if you want to fetch the options from an API,
+or generate them dynamically.
+
+```ts
+const cities = await getCities();
+//    ^? string[]
+
+const CitySchema = picklist(cities);
+
+const safeValue = parse(CitySchema, 'Paris');
+//    ^? string
+```
+
+export const properties = {
+  options: {
+    type: [
+      {
+        type: 'custom',
+        name: 'PicklistOptions',
+        href: '../PicklistOptions/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'TOption',
+          },
+        ],
+      },
+    ],
+  },
+  message: {
+    type: [
+      {
+        type: 'custom',
+        name: 'ErrorMessage',
+        href: '../ErrorMessage/',
+      },
+      'undefined',
+    ],
+    default: {
+      type: 'string',
+      value: 'Invalid type',
+    },
+  },
+  Schema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'PicklistSchema',
+        href: '../PicklistSchema',
+      },
+    ],
+  },
+};
