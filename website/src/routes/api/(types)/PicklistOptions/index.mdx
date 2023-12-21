@@ -1,0 +1,35 @@
+---
+title: PicklistOptions
+description: Picklist options type.
+contributors:
+  - fabian-hiller
+  - sqmasep
+---
+
+import { Property } from '~/components';
+
+# PicklistOptions
+
+Picklist options type.
+
+## Definition
+
+- `PicklistOptions` <Property {...properties.BaseSchema} />
+
+export const properties = {
+  BaseSchema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'MaybeReadonly',
+        href: '../MaybeReadonly/',
+        generics: [
+          {
+            type: 'array',
+            item: 'string',
+          },
+        ],
+      },
+    ],
+  },
+};

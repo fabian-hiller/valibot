@@ -1,0 +1,77 @@
+---
+title: PicklistSchema
+description: Picklist schema type.
+contributors:
+  - fabian-hiller
+  - sqmasep
+---
+
+import { Property } from '~/components';
+
+# PicklistSchema
+
+Picklist schema type.
+
+## Definition
+
+- `PicklistSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `options` <Property {...properties.options} />
+  - `message` <Property {...properties.message} />
+
+export const properties = {
+  BaseSchema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'BaseSchema',
+        href: '../BaseSchema/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'TOptions',
+            indexes: [
+              {
+                type: 'custom',
+                name: 'number',
+              },
+            ],
+          },
+          {
+            type: 'custom',
+            name: 'TOutput',
+            default: {
+              type: 'custom',
+              name: 'TOptions',
+              indexes: [
+                {
+                  type: 'custom',
+                  name: 'number',
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'picklist',
+    },
+  },
+  options: {
+    type: {
+      type: 'custom',
+      name: 'TOptions',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'ErrorMessage',
+      href: '../ErrorMessage/',
+    },
+  },
+};
