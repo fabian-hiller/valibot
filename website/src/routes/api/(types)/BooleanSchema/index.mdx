@@ -1,0 +1,66 @@
+---
+title: BooleanSchema
+description: Boolean schema type.
+contributors:
+  - wout-junius
+---
+
+import { Property } from '~/components';
+
+# BooleanSchema
+
+Boolean schema type.
+
+## Definition
+
+- `BooleanSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />
+
+export const properties = {
+  BaseSchema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'BaseSchema',
+        href: '../BaseSchema/',
+        generics: [
+            'boolean',
+          {
+            type: 'custom',
+            name: 'TOutput',
+            default: {
+              type: 'custom',
+              name: 'boolean',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'boolean',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'ErrorMessage',
+      href: '../ErrorMessage/',
+    },
+  },
+  pipe: {
+    type: [
+      {
+        type: 'custom',
+        name: 'Pipe',
+        href: '../Pipe/',
+        generics: ['boolean'],
+      },
+      'undefined',
+    ],
+  },
+};

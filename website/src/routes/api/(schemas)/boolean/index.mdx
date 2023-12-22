@@ -2,8 +2,116 @@
 title: boolean
 contributors:
   - fabian-hiller
+  - wout-junius
 ---
+
+import { ApiList, Property } from '~/components';
 
 # boolean
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/boolean/boolean.ts).
+Creates a bigint schema.
+
+```ts
+// boolean schema with an optional pipe
+const Schema = boolean(pipe);
+
+// boolean schema with an optional message and pipe
+const Schema = boolean(message, pipe);
+```
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+- `pipe` <Property {...properties.pipe}/>
+
+### Explanation
+
+With `boolean` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the boolean. If the input is not a boolean, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `boolean` can be used.
+
+### A schema for not being true whit a custom message
+
+```ts
+const Schema = boolean('This is not true', notValue(true));
+```
+
+### A schema for being true
+
+```ts
+const Schema = boolean(value(true));
+```
+
+
+## Related
+
+The following APIs can be combined with `boolean`.
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>
+
+### Transformations
+
+<ApiList items={['toCustom', 'toMaxValue', 'toMinValue']} />
+
+### Validations
+
+<ApiList items={['custom', 'maxValue', 'minValue', 'notValue', 'value']} />
+
+export const properties = {
+  message: {
+    type: [
+      {
+        type: 'custom',
+        name: 'ErrorMessage',
+        href: '../ErrorMessage/',
+      },
+      'undefined',
+    ],
+    default: {
+      type: 'string',
+      value: 'Invalid type',
+    },
+  },
+  pipe: {
+    type: [
+      {
+        type: 'custom',
+        name: 'Pipe',
+        href: '../Pipe/',
+        generics: ['boolean'],
+      },
+      'undefined',
+    ],
+  },
+  Schema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'BooleanSchema',
+        href: '../BooleanSchema/',
+      },
+    ],
+  },
+};
