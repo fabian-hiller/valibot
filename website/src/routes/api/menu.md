@@ -212,6 +212,7 @@
 - [SchemaResult](/api/SchemaResult/)
 - [SetPathItem](/api/SetPathItem/)
 - [StringSchema](/api/StringSchema/)
+- [SymbolSchema](/api/SymbolSchema/)
 - [TuplePathItem](/api/TuplePathItem/)
 - [TypedSchemaResult](/api/TypedSchemaResult/)
 - [UnknownPathItem](/api/UnknownPathItem/)

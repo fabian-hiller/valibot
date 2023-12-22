@@ -1,0 +1,66 @@
+---
+title: SymbolSchema
+description: String schema type.
+contributors:
+  - wout-junius
+---
+
+import { Property } from '~/components';
+
+# SymbolSchema
+
+String schema type.
+
+## Definition
+
+- `SymbolSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />
+
+export const properties = {
+  BaseSchema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'BaseSchema',
+        href: '../BaseSchema/',
+        generics: [
+          'symbol',
+          {
+            type: 'custom',
+            name: 'TOutput',
+            default: 'string',
+          },
+        ],
+      },
+    ],
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'symbol',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'ErrorMessage',
+      href: '../ErrorMessage/',
+    },
+  },
+  pipe: {
+    type: [
+      {
+        type: 'custom',
+        name: 'Pipe',
+        href: '../Pipe/',
+        generics: [{
+            type: 'custom',
+            name: 'Symbol',
+        }],
+      },
+      'undefined',
+    ],
+  },
+};

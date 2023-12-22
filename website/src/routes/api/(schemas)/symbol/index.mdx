@@ -2,8 +2,88 @@
 title: symbol
 contributors:
   - fabian-hiller
+  - wout-junius
 ---
+
+import { ApiList, Property } from '~/components';
 
 # symbol
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/symbol/symbol.ts).
+Creates a symbol schema.
+
+```ts
+// Symbol schema with an optional message
+const Schema = symbol(message);
+```
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `symbol` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the bigint. If the input is not a symbol, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `symbol` can be used.
+
+### Make a Symbol Schema whit custom error message
+
+```ts
+const schema = symbol('This is not a symbol');
+```
+
+### 
+
+## Related
+
+The following APIs can be combined with `symbol`.
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>
+
+export const properties = {
+  message: {
+    type: [
+      {
+        type: 'custom',
+        name: 'ErrorMessage',
+        href: '../ErrorMessage/',
+      },
+      'undefined',
+    ],
+    default: {
+      type: 'string',
+      value: 'Invalid type',
+    },
+  },
+  Schema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'SymbolSchema',
+        href: '../SymbolSchema/',
+      },
+    ],
+  },
+};
