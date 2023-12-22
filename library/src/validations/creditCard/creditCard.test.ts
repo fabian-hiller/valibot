@@ -40,7 +40,7 @@ describe('creditCard', () => {
   });
 
   test('should return custom error message', () => {
-    const error = 'Value is not a valid Credit Card number!';
+    const error = 'Value is not a valid credit card number!';
     const validate = creditCard(error);
     expect(validate._parse('').issues?.[0].message).toBe(error);
   });
