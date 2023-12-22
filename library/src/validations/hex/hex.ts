@@ -11,20 +11,20 @@ export type HexValidation<TInput extends string> = BaseValidation<TInput> & {
    */
   type: 'hex';
   /**
-   * The validation function.
+   * The hexadecimal regex.
    */
   requirement: RegExp;
 };
 
 /**
- * Creates a validation function that validates if string is hexadecimal.
+ * Creates a validation function that validates a hexadecimal string.
  *
  * @param message The error message.
  *
  * @returns A validation function.
  */
 export function hex<TInput extends string>(
-  message: ErrorMessage = 'Invalid hexadecimal string'
+  message: ErrorMessage = 'Invalid hex'
 ): HexValidation<TInput> {
   return {
     type: 'hex',
