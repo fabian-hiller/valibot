@@ -56,10 +56,12 @@ type SingleTypeOrValue =
     }
   | {
       type: 'custom';
+      modifier?: string;
       name: string;
-      default?: TypeOrValue;
-      generics?: TypeOrValue[];
       href?: string;
+      generics?: TypeOrValue[];
+      indexes?: TypeOrValue[];
+      default?: TypeOrValue;
     };
 
 type TypeOrValue = SingleTypeOrValue | SingleTypeOrValue[];
@@ -198,6 +200,13 @@ export function Property(props: PropertyProps) {
             </span>
           ) : (
             <>
+              {type.modifier && (
+                <>
+                  <span class="text-red-600 dark:text-red-400">
+                    {type.modifier}
+                  </span>{' '}
+                </>
+              )}
               {type.href ? (
                 <Link class="text-sky-600 dark:text-sky-400" href={type.href}>
                   {type.name}
@@ -225,6 +234,13 @@ export function Property(props: PropertyProps) {
                   {'>'}
                 </>
               )}
+              {type.indexes?.map((index) => (
+                <>
+                  {'['}
+                  <Property type={index} padding="none" />
+                  {']'}
+                </>
+              ))}
             </>
           )}
         </>

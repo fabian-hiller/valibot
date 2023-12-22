@@ -1,0 +1,74 @@
+---
+title: BlobSchema
+description: Blob schema type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+
+# BlobSchema
+
+Blob schema type.
+
+## Definition
+
+- `BlobSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />
+
+export const properties = {
+  BaseSchema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'BaseSchema',
+        href: '../BaseSchema/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'Blob',
+          },
+          {
+            type: 'custom',
+            name: 'TOutput',
+            default: {
+              type: 'custom',
+              name: 'Blob',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'blob',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'ErrorMessage',
+      href: '../ErrorMessage/',
+    },
+  },
+  pipe: {
+    type: [
+      {
+        type: 'custom',
+        name: 'Pipe',
+        href: '../Pipe/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'Blob',
+          },
+        ],
+      },
+      'undefined',
+    ],
+  },
+};

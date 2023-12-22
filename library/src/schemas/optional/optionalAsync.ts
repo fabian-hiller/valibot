@@ -16,7 +16,9 @@ export type OptionalSchemaAsync<
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined = undefined,
-  TOutput = Awaited<TDefault> extends Input<TWrapped>
+  TOutput = TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
     ? Output<TWrapped>
     : Output<TWrapped> | undefined
 > = BaseSchemaAsync<Input<TWrapped> | undefined, TOutput> & {

@@ -2,6 +2,11 @@
 
 # Valibot
 
+[![License: MIT][license-image]][license-url]
+[![CI][ci-image]][ci-url]
+[![NPM version][npm-image]][npm-url]
+[![Downloads][downloads-image]][npm-url]
+
 Hello, I am Valibot and I would like to help you validate data easily using a schema. No matter if it is incoming data on a server, a form or even configuration files. I have no dependencies and can run in any JavaScript environment.
 
 > I highly recommend you read the [announcement post](https://www.builder.io/blog/introducing-valibot), and if you are a nerd like me, the [bachelor's thesis](https://valibot.dev/thesis.pdf) I am based on.
@@ -60,3 +65,11 @@ Find a bug or have an idea how to improve my code? Please fill out an [issue](ht
 ## License
 
 I am completely free and licensed under the [MIT license](https://github.com/fabian-hiller/valibot/blob/main/LICENSE.md). But if you like, you can feed me with a star on [GitHub](https://github.com/fabian-hiller/valibot).
+
+[license-image]: https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square
+[license-url]: https://opensource.org/licenses/MIT
+[ci-image]: https://img.shields.io/github/actions/workflow/status/fabian-hiller/valibot/ci.yml?branch=main&logo=github&style=flat-square
+[ci-url]: https://github.com/fabian-hiller/valibot/actions/workflows/ci.yml
+[npm-image]: https://img.shields.io/npm/v/valibot.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/valibot
+[downloads-image]: https://img.shields.io/npm/dm/valibot.svg?style=flat-square

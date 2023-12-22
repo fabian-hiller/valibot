@@ -16,7 +16,9 @@ export type NullishSchemaAsync<
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined = undefined,
-  TOutput = Awaited<TDefault> extends Input<TWrapped>
+  TOutput = TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
     ? Output<TWrapped>
     : Output<TWrapped> | null | undefined
 > = BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> & {

@@ -1,0 +1,78 @@
+---
+title: EnumSchema
+description: Enum schema type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+
+# EnumSchema
+
+Enum schema type.
+
+## Definition
+
+- `EnumSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `enum` <Property {...properties.enum} />
+  - `message` <Property {...properties.message} />
+
+export const properties = {
+  BaseSchema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'BaseSchema',
+        href: '../BaseSchema/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'TEnum',
+            indexes: [
+              {
+                type: 'custom',
+                modifier: 'keyof',
+                name: 'TEnum',
+              },
+            ],
+          },
+          {
+            type: 'custom',
+            name: 'TOutput',
+            default: {
+              type: 'custom',
+              name: 'TEnum',
+              indexes: [
+                {
+                  type: 'custom',
+                  modifier: 'keyof',
+                  name: 'TEnum',
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'enum',
+    },
+  },
+  enum: {
+    type: {
+      type: 'custom',
+      name: 'TEnum',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'ErrorMessage',
+      href: '../ErrorMessage/',
+    },
+  },
+};

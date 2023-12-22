@@ -11,7 +11,7 @@ export type NullishSchema<
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
     | undefined = undefined,
-  TOutput = TDefault extends Input<TWrapped>
+  TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
     : Output<TWrapped> | null | undefined
 > = BaseSchema<Input<TWrapped> | null | undefined, TOutput> & {

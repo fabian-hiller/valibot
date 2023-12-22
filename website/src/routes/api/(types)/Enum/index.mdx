@@ -1,0 +1,34 @@
+---
+title: Enum
+description: Enum type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+
+# Enum
+
+Enum type.
+
+## Definition
+
+- `Enum` <Property {...properties.Enum} />
+
+export const properties = {
+  Enum: {
+    type: {
+      type: 'object',
+      entries: [
+        {
+          key: { name: 'key', type: 'string' },
+          value: ['string', 'number'],
+        },
+        {
+          key: { name: 'key', type: 'number' },
+          value: 'string',
+        },
+      ],
+    },
+  },
+};
