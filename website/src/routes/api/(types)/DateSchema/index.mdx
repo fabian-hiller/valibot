@@ -1,0 +1,71 @@
+---
+title: DateSchema
+description: Date schema type.
+contributors:
+  - wout-junius
+---
+
+import { Property } from '~/components';
+
+# DateSchema
+
+Date schema type.
+
+## Definition
+
+- `BaseSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />
+
+export const properties = {
+  BaseSchema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'BaseSchema',
+        href: '../BaseSchema/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'Date',
+          },
+          {
+            type: 'custom',
+            name: 'TOutput',
+            default: 'string',
+          },
+        ],
+      },
+    ],
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'date',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'ErrorMessage',
+      href: '../ErrorMessage/',
+    },
+  },
+  pipe: {
+    type: [
+      {
+        type: 'custom',
+        name: 'Pipe',
+        href: '../Pipe/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'Date',
+          }
+          ],
+      },
+      'undefined',
+    ],
+  },
+};

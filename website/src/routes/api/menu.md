@@ -192,6 +192,7 @@
 - [BaseValidation](/api/BaseValidation/)
 - [BigintSchema](/api/BigintSchema/)
 - [BlobSchema](/api/BlobSchema/)
+- [DateSchema](/api/DateSchema/)
 - [Enum](/api/Enum/)
 - [EnumSchema](/api/EnumSchema/)
 - [ErrorMessage](/api/ErrorMessage/)
