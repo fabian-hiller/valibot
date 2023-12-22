@@ -10,15 +10,15 @@ export type HexColorValidation<TInput extends string> =
     /**
      * The validation type.
      */
-    type: 'hexColor';
+    type: 'hex_color';
     /**
-     * The validation regex type.
+     * The hex color regex.
      */
     requirement: RegExp;
   };
 
 /**
- * Creates a validation function that validates whether a string is hex color.
+ * Creates a validation function that validates hex color string.
  *
  * @param message The error message.
  *
@@ -28,7 +28,7 @@ export function hexColor<TInput extends string>(
   message: ErrorMessage = 'Invalid hex color'
 ): HexColorValidation<TInput> {
   return {
-    type: 'hexColor',
+    type: 'hex_color',
     async: false,
     message,
     requirement: HEX_COLOR_REGEX,

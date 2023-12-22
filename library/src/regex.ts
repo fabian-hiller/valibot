@@ -25,6 +25,12 @@ export const EMOJI_REGEX = /^[\p{Extended_Pictographic}\p{Emoji_Component}]+$/u;
 export const HEX_REGEX = /^(0h|0x)?[\da-f]+$/iu;
 
 /**
+ * [Hex color](https://en.wikipedia.org/wiki/Web_colors#Hex_triplet) regex.
+ */
+export const HEX_COLOR_REGEX =
+  /^#([\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})$/iu;
+
+/**
  * [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity) regex.
  */
 export const IMEI_REGEX = /^\d{2}(?:[ /|-]?\d{6}){2}[ /|-]?\d$/u;
@@ -96,9 +102,3 @@ export const ULID_REGEX = /^[\da-hjkmnp-tv-z]{26}$/iu;
  * [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) regex.
  */
 export const UUID_REGEX = /^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/iu;
-
-/**
- * [HexColor](https://en.wikipedia.org/wiki/Web_colors#Hex_triplet) regex.
- */
-export const HEX_COLOR_REGEX =
-  /^#([\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})$/iu;
