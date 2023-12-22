@@ -20,6 +20,11 @@ export const EMAIL_REGEX =
 export const EMOJI_REGEX = /^[\p{Extended_Pictographic}\p{Emoji_Component}]+$/u;
 
 /**
+ * [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) regex.
+ */
+export const HEX_REGEX = /^(0h|0x)?[\da-f]+$/iu;
+
+/**
  * [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity) regex.
  */
 export const IMEI_REGEX = /^\d{2}(?:[ /|-]?\d{6}){2}[ /|-]?\d$/u;
