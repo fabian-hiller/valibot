@@ -94,6 +94,11 @@ export const MAC64_REGEX =
   /^(?:[\da-f]{2}:){7}[\da-f]{2}$|^(?:[\da-f]{2}-){7}[\da-f]{2}$|^(?:[\da-f]{4}\.){3}[\da-f]{4}$|^(?:[\da-f]{4}:){3}[\da-f]{4}$/iu;
 
 /**
+ * [Octal](https://en.wikipedia.org/wiki/Octal) regex.
+ */
+export const OCTAL_REGEX = /^(0o)?[0-7]+$/iu;
+
+/**
  * [ULID](https://github.com/ulid/spec) regex.
  */
 export const ULID_REGEX = /^[\da-hjkmnp-tv-z]{26}$/iu;
