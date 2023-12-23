@@ -67,6 +67,7 @@
 - [creditCard](/api/creditCard/)
 - [cuid2](/api/cuid2/)
 - [custom](/api/custom/)
+- [decimal](/api/decimal/)
 - [email](/api/email/)
 - [emoji](/api/emoji/)
 - [endsWith](/api/endsWith/)

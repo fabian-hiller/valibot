@@ -9,6 +9,11 @@ export const BIC_REGEX = /^[A-Z]{6}(?!00)[A-Z\d]{2}(?:[A-Z\d]{3})?$/u;
 export const CUID2_REGEX = /^[a-z][\da-z]*$/u;
 
 /**
+ * [Decimal](https://en.wikipedia.org/wiki/Decimal) regex.
+ */
+export const DECIMAL_REGEX = /^\d+$/u;
+
+/**
  * Email regex.
  */
 export const EMAIL_REGEX =
