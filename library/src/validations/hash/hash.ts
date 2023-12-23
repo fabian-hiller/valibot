@@ -4,7 +4,6 @@ import type {
   HashType,
 } from '../../types/index.ts';
 import { actionIssue, actionOutput } from '../../utils/index.ts';
-import { isHash } from '../../utils/isHash/index.ts';
 
 /**
  * Hash validation type.
@@ -17,7 +16,24 @@ export type HashValidation<TInput extends string> = BaseValidation<TInput> & {
   /**
    * Map with hash type and validation regular expression.
    */
-  requirement: typeof isHash;
+  requirement: (input: string, hashTypes: HashType[]) => boolean;
+};
+
+const hashLength: Record<HashType, number> = {
+  md5: 32,
+  md4: 32,
+  sha1: 40,
+  sha256: 64,
+  sha384: 96,
+  sha512: 128,
+  ripemd128: 32,
+  ripemd160: 40,
+  tiger128: 32,
+  tiger160: 40,
+  tiger192: 48,
+  crc32: 8,
+  crc32b: 8,
+  adler32: 8,
 };
 
 /**
@@ -36,7 +52,17 @@ export function hash<TInput extends string, THashTypes extends HashType[]>(
     type: 'hash',
     async: false,
     message,
-    requirement: isHash,
+    requirement: (input: string, hashTypes: HashType[]) => {
+      if (hashTypes.length === 0) return false;
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      return RegExp(
+        hashTypes
+          .map((htype) => `^[a-f0-9]{${hashLength[htype]}}`)
+          .join('|')
+          .concat('$'),
+        'iu'
+      ).test(input);
+    },
     _parse(input: TInput) {
       return !this.requirement(input, hashType)
         ? actionIssue(this.type, this.message, input, this.requirement)
