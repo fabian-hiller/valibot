@@ -1,27 +1,12 @@
-import type {
-  BaseValidation,
-  ErrorMessage,
-  HashType,
-} from '../../types/index.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
- * Hash validation type.
+ * Hash lengths object.
  */
-export type HashValidation<TInput extends string> = BaseValidation<TInput> & {
-  /**
-   * The validation type.
-   */
-  type: 'hash';
-  /**
-   * Map with hash type and validation regular expression.
-   */
-  requirement: (input: string, hashTypes: HashType[]) => boolean;
-};
-
-const hashLength: Record<HashType, number> = {
-  md5: 32,
+const HASH_LENGTHS = {
   md4: 32,
+  md5: 32,
   sha1: 40,
   sha256: 64,
   sha384: 96,
@@ -34,37 +19,49 @@ const hashLength: Record<HashType, number> = {
   crc32: 8,
   crc32b: 8,
   adler32: 8,
+} as const;
+
+/**
+ * Hash type type.
+ */
+type HashType = keyof typeof HASH_LENGTHS;
+
+/**
+ * Hash validation type.
+ */
+export type HashValidation<TInput extends string> = BaseValidation<TInput> & {
+  /**
+   * The validation type.
+   */
+  type: 'hash';
+  /**
+   * The hash regex.
+   */
+  requirement: RegExp;
 };
 
 /**
- * Creates a validation function that validates whether a string is one of hash types.
+ * Creates a validation function that validates a hash string.
  *
- * @param hashType hashType
+ * @param types The hash types.
  * @param message The error message.
  *
  * @returns A validation function.
  */
-export function hash<TInput extends string, THashTypes extends HashType[]>(
-  hashType: THashTypes,
-  message: ErrorMessage = 'Invalid hash format.'
+export function hash<TInput extends string>(
+  types: [HashType, ...HashType[]],
+  message: ErrorMessage = 'Invalid hash'
 ): HashValidation<TInput> {
   return {
     type: 'hash',
     async: false,
     message,
-    requirement: (input: string, hashTypes: HashType[]) => {
-      if (hashTypes.length === 0) return false;
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      return RegExp(
-        hashTypes
-          .map((htype) => `^[a-f0-9]{${hashLength[htype]}}`)
-          .join('|')
-          .concat('$'),
-        'iu'
-      ).test(input);
-    },
-    _parse(input: TInput) {
-      return !this.requirement(input, hashType)
+    requirement: RegExp(
+      types.map((type) => `^[a-f0-9]{${HASH_LENGTHS[type]}}$`).join('|'),
+      'iu'
+    ),
+    _parse(input) {
+      return !this.requirement.test(input)
         ? actionIssue(this.type, this.message, input, this.requirement)
         : actionOutput(input);
     },

@@ -69,6 +69,7 @@ describe('hash', () => {
 
   test('should reject invalid hash strings', () => {
     const validate = hash(['md5']);
+
     expect(validate._parse('12345').issues).toBeTruthy();
     expect(
       validate._parse('zxcvbnmasdfghjkqwertyuiop123456').issues
@@ -161,9 +162,6 @@ describe('hash', () => {
 
     const validate9 = hash(['md5', 'sha1', 'sha256']);
     expect(validate9._parse('12345').issues).toBeTruthy();
-
-    const validate10 = hash([]);
-    expect(validate10._parse('12345').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
