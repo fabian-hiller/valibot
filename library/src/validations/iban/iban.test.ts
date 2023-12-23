@@ -61,6 +61,12 @@ describe('iban', () => {
     expect(validate._parse(value27).output).toBe(value27);
     const value28 = 'NL02ABNA0123456789';
     expect(validate._parse(value28).output).toBe(value28);
+    const value29 = 'SI56101000057903854';
+    expect(validate._parse(value29).output).toBe(value29);
+  });
+
+  test('should reject invalid IBAN', () => {
+    const validate = iban();
 
     expect(validate._parse('').issues).toBeTruthy();
     expect(validate._parse('GB82WEST12345698').issues).toBeTruthy();
@@ -73,6 +79,16 @@ describe('iban', () => {
     expect(validate._parse('GB82!EST12345698765432').issues).toBeTruthy();
     expect(validate._parse('GB82!NL91ABNA0417164300').issues).toBeTruthy();
     expect(validate._parse('GB12 3456 7890 1234 5678 90').issues).toBeTruthy();
+
+    expect(validate._parse('XX22YYY1234567890123').issues).toBeTruthy();
+    expect(validate._parse('FR14 2004 1010 0505 0001 3').issues).toBeTruthy();
+    expect(validate._parse('FR7630006000011234567890189@').issues).toBeTruthy();
+    expect(
+      validate._parse('FR7630006000011234567890189😅').issues
+    ).toBeTruthy();
+    expect(
+      validate._parse('FR763000600001123456!!🤨7890189@').issues
+    ).toBeTruthy();
   });
 
   test('should return custom error message', () => {

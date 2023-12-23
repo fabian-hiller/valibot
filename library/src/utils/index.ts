@@ -4,7 +4,6 @@ export * from './defaultArgs/index.ts';
 export * from './parseResult/index.ts';
 export * from './restAndDefaultArgs/index.ts';
 export * from './parseResult/index.ts';
-export * from './isIBAN/index.ts';
 export * from './isLuhnAlgo/index.ts';
 export * from './pipeResult/index.ts';
 export * from './schemaIssue/index.ts';
