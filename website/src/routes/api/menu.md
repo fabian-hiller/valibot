@@ -72,6 +72,8 @@
 - [endsWith](/api/endsWith/)
 - [excludes](/api/excludes/)
 - [finite](/api/finite/)
+- [hex](/api/hex/)
+- [hexColor](/api/hexColor/)
 - [imei](/api/imei/)
 - [includes](/api/includes/)
 - [integer](/api/integer/)
