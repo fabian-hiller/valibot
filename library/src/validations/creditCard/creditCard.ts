@@ -2,7 +2,7 @@ import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { actionIssue, actionOutput, isLuhnAlgo } from '../../utils/index.ts';
 
 /**
- * Credit Card validation type.
+ * Credit card validation type.
  */
 export type CreditCardValidation<TInput extends string> =
   BaseValidation<TInput> & {
@@ -42,7 +42,7 @@ const PROVIDER_REGEX_LIST = [
 ];
 
 /**
- * Creates a validation function that validates a [Credit Card](https://en.wikipedia.org/wiki/Payment_card_number).
+ * Creates a validation function that validates a [credit card](https://en.wikipedia.org/wiki/Payment_card_number).
  *
  * @param message The error message.
  *
@@ -55,7 +55,7 @@ export function creditCard<TInput extends string>(
     type: 'credit_card',
     async: false,
     message,
-    requirement: (input: string) => {
+    requirement: (input) => {
       // Remove any hyphens and blanks
       const sanitized = input.replace(SANITIZE_REGEX, '');
 
