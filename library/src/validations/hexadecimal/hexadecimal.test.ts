@@ -1,9 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import { hex } from './hex.ts';
+import { hexadecimal } from './hexadecimal.ts';
 
-describe('hex', () => {
+describe('hexadecimal', () => {
   test('should pass only hexadecimal strings', () => {
-    const validate = hex();
+    const validate = hexadecimal();
+
     const value1 = '1A3F';
     expect(validate._parse(value1).output).toBe(value1);
     const value2 = '00ff';
@@ -43,7 +44,7 @@ describe('hex', () => {
 
   test('should return custom error message', () => {
     const error = 'Value is not hexadecimal string!';
-    const validate = hex(error);
+    const validate = hexadecimal(error);
     expect(validate._parse('1G').issues?.[0].message).toBe(error);
   });
 });

@@ -1,20 +1,21 @@
-import { HEX_REGEX } from '../../regex.ts';
+import { HEXADECIMAL_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * Hexadecimal validation type.
  */
-export type HexValidation<TInput extends string> = BaseValidation<TInput> & {
-  /**
-   * The validation type.
-   */
-  type: 'hex';
-  /**
-   * The hexadecimal regex.
-   */
-  requirement: RegExp;
-};
+export type HexadecimalValidation<TInput extends string> =
+  BaseValidation<TInput> & {
+    /**
+     * The validation type.
+     */
+    type: 'hexadecimal';
+    /**
+     * The hexadecimal regex.
+     */
+    requirement: RegExp;
+  };
 
 /**
  * Creates a validation function that validates a hexadecimal string.
@@ -23,14 +24,14 @@ export type HexValidation<TInput extends string> = BaseValidation<TInput> & {
  *
  * @returns A validation function.
  */
-export function hex<TInput extends string>(
-  message: ErrorMessage = 'Invalid hex'
-): HexValidation<TInput> {
+export function hexadecimal<TInput extends string>(
+  message: ErrorMessage = 'Invalid hexadecimal'
+): HexadecimalValidation<TInput> {
   return {
-    type: 'hex',
+    type: 'hexadecimal',
     async: false,
     message,
-    requirement: HEX_REGEX,
+    requirement: HEXADECIMAL_REGEX,
     _parse(input) {
       return !this.requirement.test(input)
         ? actionIssue(this.type, this.message, input, this.requirement)

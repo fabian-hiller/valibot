@@ -73,7 +73,7 @@
 - [excludes](/api/excludes/)
 - [finite](/api/finite/)
 - [hash](/api/hash/)
-- [hex](/api/hex/)
+- [hexadecimal](/api/hexadecimal/)
 - [hexColor](/api/hexColor/)
 - [imei](/api/imei/)
 - [includes](/api/includes/)

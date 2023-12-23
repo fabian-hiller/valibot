@@ -22,7 +22,7 @@ export const EMOJI_REGEX = /^[\p{Extended_Pictographic}\p{Emoji_Component}]+$/u;
 /**
  * [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) regex.
  */
-export const HEX_REGEX = /^(0h|0x)?[\da-f]+$/iu;
+export const HEXADECIMAL_REGEX = /^(0h|0x)?[\da-f]+$/iu;
 
 /**
  * [Hex color](https://en.wikipedia.org/wiki/Web_colors#Hex_triplet) regex.
