@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `creditCard`, `hex` and `hexColor` validation function (pull request #292, #304, #308)
+
 ## v0.24.1 (December 11, 2023)
 
 - Fix output type of optional `object` and `objectAsync` entries with default value (issue #286)
