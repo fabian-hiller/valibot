@@ -43,7 +43,7 @@
   },
   "scripts": {
     "playground": "tsm ./playground.ts",
-    "test": "vitest --no-isolate",
+    "test": "vitest",
     "coverage": "vitest run --coverage",
     "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit",
     "format": "prettier --write ./src",
