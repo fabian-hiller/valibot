@@ -4,29 +4,25 @@ import { octal } from './octal.ts';
 describe('octal', () => {
   test('should pass only valid strings', () => {
     const validate = octal();
+
     const value = '123';
     expect(validate._parse(value).output).toBe(value);
-
     const value2 = '001';
     expect(validate._parse(value2).output).toBe(value2);
-
     const value3 = '765';
     expect(validate._parse(value3).output).toBe(value3);
-
     const value4 = '000';
     expect(validate._parse(value4).output).toBe(value4);
-
     const value5 = '111';
     expect(validate._parse(value5).output).toBe(value5);
-
     const value6 = '020';
     expect(validate._parse(value6).output).toBe(value6);
-
     const value7 = '707';
     expect(validate._parse(value7).output).toBe(value7);
-
     const value8 = '00012345';
     expect(validate._parse(value8).output).toBe(value8);
+    const value9 = '0o12345';
+    expect(validate._parse(value9).output).toBe(value9);
 
     expect(validate._parse('').issues).toBeTruthy();
     expect(validate._parse('8').issues).toBeTruthy();

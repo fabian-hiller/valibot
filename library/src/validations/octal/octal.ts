@@ -11,13 +11,13 @@ export type OctalValidation<TInput extends string> = BaseValidation<TInput> & {
    */
   type: 'octal';
   /**
-   * The Octal regex.
+   * The octal regex.
    */
   requirement: RegExp;
 };
 
 /**
- * Creates a validation function that validates an [OCTAL](https://en.wikipedia.org/wiki/Octal) string.
+ * Creates a validation function that validates an [octal](https://en.wikipedia.org/wiki/Octal) string.
  *
  * @param message The error message.
  *
