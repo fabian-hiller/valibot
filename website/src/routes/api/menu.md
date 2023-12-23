@@ -64,6 +64,7 @@
 
 - [bic](/api/bic/)
 - [bytes](/api/bytes/)
+- [creditCard](/api/creditCard/)
 - [cuid2](/api/cuid2/)
 - [custom](/api/custom/)
 - [email](/api/email/)
@@ -71,6 +72,9 @@
 - [endsWith](/api/endsWith/)
 - [excludes](/api/excludes/)
 - [finite](/api/finite/)
+- [hash](/api/hash/)
+- [hex](/api/hex/)
+- [hexColor](/api/hexColor/)
 - [imei](/api/imei/)
 - [includes](/api/includes/)
 - [integer](/api/integer/)

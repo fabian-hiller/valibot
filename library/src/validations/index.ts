@@ -1,5 +1,6 @@
 export * from './bic/index.ts';
 export * from './bytes/index.ts';
+export * from './creditCard/index.ts';
 export * from './cuid2/index.ts';
 export * from './custom/index.ts';
 export * from './email/index.ts';
@@ -8,6 +9,8 @@ export * from './endsWith/index.ts';
 export * from './equal/index.ts';
 export * from './excludes/index.ts';
 export * from './finite/index.ts';
+export * from './hex/index.ts';
+export * from './hexColor/index.ts';
 export * from './imei/index.ts';
 export * from './includes/index.ts';
 export * from './integer/integer.ts';
