@@ -17,11 +17,11 @@ export type EmojiValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates an emoji.
+ * Creates a pipeline validation action that validates an emoji.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function emoji<TInput extends string>(
   message: ErrorMessage = 'Invalid emoji'

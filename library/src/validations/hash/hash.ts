@@ -41,12 +41,12 @@ export type HashValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates a hash string.
+ * Creates a pipeline validation action that validates a hash string.
  *
  * @param types The hash types.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function hash<TInput extends string>(
   types: [HashType, ...HashType[]],

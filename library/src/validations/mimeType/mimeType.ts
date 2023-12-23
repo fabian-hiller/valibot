@@ -19,12 +19,12 @@ export type MimeTypeValidation<
 };
 
 /**
- * Creates a validation function that validates the MIME type of a file.
+ * Creates a pipeline validation action that validates the MIME type of a file.
  *
  * @param requirement The MIME types.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function mimeType<
   TInput extends Blob,

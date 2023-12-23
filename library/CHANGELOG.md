@@ -4,7 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
-- Add `creditCard`, `decimal`, `hash`, `hexadecimal`, `hexColor` and `octal` validation function (pull request #292, #304, #307, #308, #309)
+- Add `creditCard`, `decimal`, `hash`, `hexadecimal`, `hexColor` and `octal` pipeline validation action (pull request #292, #304, #307, #308, #309)
 
 ## v0.24.1 (December 11, 2023)
 

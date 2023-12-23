@@ -17,11 +17,11 @@ export type OctalValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates an [octal](https://en.wikipedia.org/wiki/Octal) string.
+ * Creates a pipeline validation action that validates an [octal](https://en.wikipedia.org/wiki/Octal) string.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function octal<TInput extends string>(
   message: ErrorMessage = 'Invalid octal'

@@ -19,12 +19,13 @@ export type NotValueValidation<
 };
 
 /**
- * Creates a validation function that validates the value of a string or number.
+ * Creates a pipeline validation action that validates the value of a string
+ * or number.
  *
  * @param requirement The value.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function notValue<
   TInput extends string | number | bigint | boolean | Date,

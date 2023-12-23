@@ -18,11 +18,11 @@ export type DecimalValidation<TInput extends string> =
   };
 
 /**
- * Creates a validation function that validates a decimal string.
+ * Creates a pipeline validation action that validates a decimal string.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function decimal<TInput extends string>(
   message: ErrorMessage = 'Invalid decimal'

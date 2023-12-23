@@ -42,11 +42,11 @@ const PROVIDER_REGEX_LIST = [
 ];
 
 /**
- * Creates a validation function that validates a [credit card](https://en.wikipedia.org/wiki/Payment_card_number).
+ * Creates a pipeline validation action that validates a [credit card](https://en.wikipedia.org/wiki/Payment_card_number).
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function creditCard<TInput extends string>(
   message: ErrorMessage = 'Invalid credit card'

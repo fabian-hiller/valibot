@@ -19,12 +19,13 @@ export type NotSizeValidation<
 };
 
 /**
- * Creates a validation function that validates the size of a map, set or blob.
+ * Creates a pipeline validation action that validates the size of a map, set
+ * or blob.
  *
  * @param requirement The size.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function notSize<
   TInput extends Map<any, any> | Set<any> | Blob,

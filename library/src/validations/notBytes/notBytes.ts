@@ -19,12 +19,13 @@ export type NotBytesValidation<
 };
 
 /**
- * Creates a validation function that validates the byte length of a string.
+ * Creates a pipeline validation action that validates the byte length of a
+ * string.
  *
  * @param requirement The byte length.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function notBytes<TInput extends string, TRequirement extends number>(
   requirement: TRequirement,

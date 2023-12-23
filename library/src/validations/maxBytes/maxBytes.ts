@@ -19,12 +19,13 @@ export type MaxBytesValidation<
 };
 
 /**
- * Creates a validation function that validates the byte length of a string.
+ * Creates a pipeline validation action that validates the byte length of a
+ * string.
  *
  * @param requirement The maximum byte length.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function maxBytes<TInput extends string, TRequirement extends number>(
   requirement: TRequirement,
