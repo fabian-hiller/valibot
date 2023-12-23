@@ -30,7 +30,7 @@ export function finite<TInput extends number>(
     async: false,
     message,
     requirement: Number.isFinite,
-    _parse(input: TInput) {
+    _parse(input) {
       return !this.requirement(input)
         ? actionIssue(this.type, this.message, input, this.requirement)
         : actionOutput(input);

@@ -32,7 +32,7 @@ export function hexColor<TInput extends string>(
     async: false,
     message,
     requirement: HEX_COLOR_REGEX,
-    _parse(input: TInput) {
+    _parse(input) {
       return !this.requirement.test(input)
         ? actionIssue(this.type, this.message, input, this.requirement)
         : actionOutput(input);
