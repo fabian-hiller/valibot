@@ -18,11 +18,11 @@ export type HexColorValidation<TInput extends string> =
   };
 
 /**
- * Creates a validation function that validates hex color string.
+ * Creates a pipeline validation action that validates hex color string.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function hexColor<TInput extends string>(
   message: ErrorMessage = 'Invalid hex color'
@@ -32,7 +32,7 @@ export function hexColor<TInput extends string>(
     async: false,
     message,
     requirement: HEX_COLOR_REGEX,
-    _parse(input: TInput) {
+    _parse(input) {
       return !this.requirement.test(input)
         ? actionIssue(this.type, this.message, input, this.requirement)
         : actionOutput(input);

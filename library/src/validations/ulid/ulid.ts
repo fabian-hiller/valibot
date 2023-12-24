@@ -17,11 +17,11 @@ export type UlidValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates a [ULID](https://github.com/ulid/spec).
+ * Creates a pipeline validation action that validates a [ULID](https://github.com/ulid/spec).
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function ulid<TInput extends string>(
   message: ErrorMessage = 'Invalid ULID'

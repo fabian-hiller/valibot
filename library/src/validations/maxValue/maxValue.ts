@@ -19,12 +19,13 @@ export type MaxValueValidation<
 };
 
 /**
- * Creates a validation function that validates the value of a string, number or date.
+ * Creates a pipeline validation action that validates the value of a string,
+ * number or date.
  *
  * @param requirement The maximum value.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function maxValue<
   TInput extends string | number | bigint | boolean | Date,

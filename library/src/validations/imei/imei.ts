@@ -17,13 +17,13 @@ export type ImeiValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates an [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity).
+ * Creates a pipeline validation action that validates an [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity).
  *
  * Format: AA-BBBBBB-CCCCCC-D
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function imei<TInput extends string>(
   message: ErrorMessage = 'Invalid IMEI'

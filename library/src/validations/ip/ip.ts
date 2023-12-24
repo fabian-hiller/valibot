@@ -17,12 +17,12 @@ export type IpValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates an [IPv4](https://en.wikipedia.org/wiki/IPv4)
+ * Creates a pipeline validation action that validates an [IPv4](https://en.wikipedia.org/wiki/IPv4)
  * or [IPv6](https://en.wikipedia.org/wiki/IPv6) address.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function ip<TInput extends string>(
   message: ErrorMessage = 'Invalid IP'

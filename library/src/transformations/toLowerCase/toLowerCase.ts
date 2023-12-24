@@ -12,10 +12,10 @@ export type ToLowerCaseTransformation = BaseTransformation<string> & {
 };
 
 /**
- * Creates a transformation function that converts all the alphabetic
+ * Creates a pipeline transformation action that converts all the alphabetic
  * characters in a string to lowercase.
  *
- * @returns A transformation function.
+ * @returns A transformation action.
  */
 export function toLowerCase(): ToLowerCaseTransformation {
   return {

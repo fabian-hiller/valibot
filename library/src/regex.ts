@@ -9,6 +9,11 @@ export const BIC_REGEX = /^[A-Z]{6}(?!00)[A-Z\d]{2}(?:[A-Z\d]{3})?$/u;
 export const CUID2_REGEX = /^[a-z][\da-z]*$/u;
 
 /**
+ * [Decimal](https://en.wikipedia.org/wiki/Decimal) regex.
+ */
+export const DECIMAL_REGEX = /^\d+$/u;
+
+/**
  * Email regex.
  */
 export const EMAIL_REGEX =
@@ -22,7 +27,7 @@ export const EMOJI_REGEX = /^[\p{Extended_Pictographic}\p{Emoji_Component}]+$/u;
 /**
  * [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) regex.
  */
-export const HEX_REGEX = /^(0h|0x)?[\da-f]+$/iu;
+export const HEXADECIMAL_REGEX = /^(0h|0x)?[\da-f]+$/iu;
 
 /**
  * [Hex color](https://en.wikipedia.org/wiki/Web_colors#Hex_triplet) regex.
@@ -92,6 +97,11 @@ export const MAC48_REGEX =
  */
 export const MAC64_REGEX =
   /^(?:[\da-f]{2}:){7}[\da-f]{2}$|^(?:[\da-f]{2}-){7}[\da-f]{2}$|^(?:[\da-f]{4}\.){3}[\da-f]{4}$|^(?:[\da-f]{4}:){3}[\da-f]{4}$/iu;
+
+/**
+ * [Octal](https://en.wikipedia.org/wiki/Octal) regex.
+ */
+export const OCTAL_REGEX = /^(0o)?[0-7]+$/iu;
 
 /**
  * [ULID](https://github.com/ulid/spec) regex.
