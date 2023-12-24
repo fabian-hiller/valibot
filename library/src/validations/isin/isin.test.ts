@@ -22,7 +22,10 @@ describe('isin', () => {
     expect(validate._parse(value8).output).toBe(value8);
     const value9 = 'NL0000009165';
     expect(validate._parse(value9).output).toBe(value9);
+  });
 
+  test('should reject invalid ISIN values', () => {
+    const validate = isin();
     expect(validate._parse('').issues).toBeTruthy();
     expect(validate._parse('US1234567890').issues).toBeTruthy();
     expect(validate._parse('XX0002634946').issues).toBeTruthy();
@@ -34,6 +37,10 @@ describe('isin', () => {
     expect(validate._parse('CH00443287452').issues).toBeTruthy();
     expect(validate._parse('SE00001086566').issues).toBeTruthy();
     expect(validate._parse('NL0000009165A').issues).toBeTruthy();
+    expect(validate._parse('DE000BAY0018').issues).toBeTruthy();
+    expect(validate._parse('PLLWBGD00019').issues).toBeTruthy();
+    expect(validate._parse('5398228707871528').issues).toBeTruthy();
+    expect(validate._parse('NL000000916$').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {

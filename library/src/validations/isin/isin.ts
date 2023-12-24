@@ -1,6 +1,6 @@
+import { ISIN_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { actionIssue, actionOutput } from '../../utils/index.ts';
-import { isISIN } from '../../utils/isISIN/index.ts';
+import { actionIssue, actionOutput, isLuhnAlgo } from '../../utils/index.ts';
 
 /**
  * ISIN (International Securities Identification Number) validation type.
@@ -11,9 +11,9 @@ export type IsinValidation<TInput extends string> = BaseValidation<TInput> & {
    */
   type: 'isin';
   /**
-   * The isISIN validation util function.
+   *  The validation function.
    */
-  requirement: typeof isISIN;
+  requirement: (input: TInput) => boolean;
 };
 
 /**
@@ -37,4 +37,31 @@ export function isin<TInput extends string>(
         : actionOutput(input);
     },
   };
+}
+
+/**
+ * Checks whether input is an valid ISIN (International Securities Identification Number)
+ *
+ * @param input The input to be checked.
+ *
+ * @returns Whether input is valid.
+ */
+function isISIN(input: string) {
+  if (!ISIN_REGEX.test(input)) {
+    return false;
+  }
+
+  const converted = input
+    .split('')
+    .map((char: string) => convertLetterToNumber(char))
+    .join('');
+
+  return isLuhnAlgo(converted);
+}
+
+function convertLetterToNumber(char: string): string {
+  const code = char.charCodeAt(0);
+  return code >= 65 && code <= 90 // Check if character is a letter
+    ? (code - 55).toString() // Convert letter to number (A=10, B=11, ..., Z=35)
+    : char; // Return the character as is if it's a digit
 }

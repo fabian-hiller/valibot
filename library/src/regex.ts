@@ -91,3 +91,8 @@ export const ULID_REGEX = /^[\da-hjkmnp-tv-z]{26}$/iu;
  * [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) regex.
  */
 export const UUID_REGEX = /^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/iu;
+
+/**
+ * [ISIN](https://en.wikipedia.org/wiki/International_Securities_Identification_Number) regex.
+ */
+export const ISIN_REGEX = /^[A-Z]{2}[A-Z\d]{9}\d$/iu;
