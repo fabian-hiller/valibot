@@ -1,21 +1,23 @@
 ---
 title: boolean
+description: Creates a boolean schema.
 contributors:
-  - fabian-hiller
   - wout-junius
+  - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
 
 # boolean
 
-Creates a bigint schema.
+Creates a boolean schema.
 
 ```ts
-// boolean schema with an optional pipe
+// Boolean schema with an optional pipe
 const Schema = boolean(pipe);
 
-// boolean schema with an optional message and pipe
+// Boolean schema with an optional message and pipe
 const Schema = boolean(message, pipe);
 ```
 
@@ -28,6 +30,8 @@ const Schema = boolean(message, pipe);
 
 With `boolean` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the boolean. If the input is not a boolean, you can use `message` to customize the error message.
 
+> Instead of using the `pipe` to force `true` or `false` as a value, in most cases it makes more sense to use <Link href="../literal/">`literal`</Link> for better typing.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
@@ -36,18 +40,13 @@ With `boolean` you can validate the data type of the input and with `pipe` you c
 
 The following examples show how `boolean` can be used.
 
-### A schema for not being true whit a custom message
+### Custom message
+
+Boolean schema with a custom error message.
 
 ```ts
-const Schema = boolean('This is not true', notValue(true));
+const BooleanSchema = boolean('A boolean is required');
 ```
-
-### A schema for being true
-
-```ts
-const Schema = boolean(value(true));
-```
-
 
 ## Related
 

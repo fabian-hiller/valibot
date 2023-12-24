@@ -3,6 +3,7 @@ title: BooleanSchema
 description: Boolean schema type.
 contributors:
   - wout-junius
+  - fabian-hiller
 ---
 
 import { Property } from '~/components';
@@ -26,14 +27,11 @@ export const properties = {
         name: 'BaseSchema',
         href: '../BaseSchema/',
         generics: [
-            'boolean',
+          'boolean',
           {
             type: 'custom',
             name: 'TOutput',
-            default: {
-              type: 'custom',
-              name: 'boolean',
-            },
+            default: 'boolean',
           },
         ],
       },
