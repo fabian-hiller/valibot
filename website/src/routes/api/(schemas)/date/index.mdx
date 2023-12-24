@@ -1,15 +1,15 @@
 ---
 title: date
 contributors:
-  - fabian-hiller
   - wout-junius
+  - fabian-hiller
 ---
 
 import { ApiList, Property } from '~/components';
 
 # date
 
-Creates a bigint schema.
+Creates a date schema.
 
 ```ts
 // Date schema with an optional pipe
@@ -26,7 +26,7 @@ const Schema = date(message, pipe);
 
 ### Explanation
 
-With `date` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the bigint. If the input is not a date, you can use `message` to customize the error message.
+With `date` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the date. If the input is not a date, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -38,21 +38,21 @@ The following examples show how `date` can be used.
 
 ### Force minimum
 
-Schema that forces a data after today.
+Schema that forces a minimum date of today.
 
 ```ts
-const DateAfterTodaySchema = date([minValue(new Date())]);
+const MinDateSchema = date([toMinValue(new Date())]);
 ```
 
 ### Validate range
 
-Schema that validates a date of a range.
+Schema that validates a date in a range.
 
 ```ts
 const DateRangeSchema = date([
   minValue(new Date(2019, 0, 1)),
-  maxValue(new Date(2020, 0, 1))
-  ]);
+  maxValue(new Date(2020, 0, 1)),
+]);
 ```
 
 ## Related
@@ -106,7 +106,12 @@ export const properties = {
         type: 'custom',
         name: 'Pipe',
         href: '../Pipe/',
-        generics: ['date'],
+        generics: [
+          {
+            type: 'custom',
+            name: 'Date',
+          },
+        ],
       },
       'undefined',
     ],

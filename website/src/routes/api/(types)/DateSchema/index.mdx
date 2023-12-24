@@ -3,6 +3,7 @@ title: DateSchema
 description: Date schema type.
 contributors:
   - wout-junius
+  - fabian-hiller
 ---
 
 import { Property } from '~/components';
@@ -33,7 +34,10 @@ export const properties = {
           {
             type: 'custom',
             name: 'TOutput',
-            default: 'string',
+            default: {
+              type: 'custom',
+              name: 'Date',
+            },
           },
         ],
       },
@@ -62,8 +66,8 @@ export const properties = {
           {
             type: 'custom',
             name: 'Date',
-          }
-          ],
+          },
+        ],
       },
       'undefined',
     ],
