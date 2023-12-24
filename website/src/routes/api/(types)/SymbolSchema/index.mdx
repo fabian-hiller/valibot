@@ -1,15 +1,16 @@
 ---
 title: SymbolSchema
-description: String schema type.
+description: Symbol schema type.
 contributors:
   - wout-junius
+  - fabian-hiller
 ---
 
 import { Property } from '~/components';
 
 # SymbolSchema
 
-String schema type.
+Symbol schema type.
 
 ## Definition
 
@@ -30,7 +31,7 @@ export const properties = {
           {
             type: 'custom',
             name: 'TOutput',
-            default: 'string',
+            default: 'symbol',
           },
         ],
       },
@@ -55,10 +56,7 @@ export const properties = {
         type: 'custom',
         name: 'Pipe',
         href: '../Pipe/',
-        generics: [{
-            type: 'custom',
-            name: 'Symbol',
-        }],
+        generics: ['symbol'],
       },
       'undefined',
     ],

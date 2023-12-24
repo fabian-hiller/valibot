@@ -1,8 +1,9 @@
 ---
 title: symbol
+description: Creates a symbol schema.
 contributors:
-  - fabian-hiller
   - wout-junius
+  - fabian-hiller
 ---
 
 import { ApiList, Property } from '~/components';
@@ -22,7 +23,7 @@ const Schema = symbol(message);
 
 ### Explanation
 
-With `symbol` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the bigint. If the input is not a symbol, you can use `message` to customize the error message.
+With `symbol` you can validate the data type of the input. If it is not a symbol, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -32,13 +33,13 @@ With `symbol` you can validate the data type of the input and with `pipe` you ca
 
 The following examples show how `symbol` can be used.
 
-### Make a Symbol Schema whit custom error message
+### Custom message
+
+Symbol schema with a custom error message.
 
 ```ts
-const schema = symbol('This is not a symbol');
+const schema = symbol('A symbol is required');
 ```
-
-### 
 
 ## Related
 
