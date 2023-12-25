@@ -1,32 +1,36 @@
 ---
 title: picklist
+description: Creates a picklist schema.
 contributors:
   - fabian-hiller
   - sqmasep
 ---
 
-import { Property } from '~/components';
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
 
 # picklist
 
 Creates a picklist schema.
 
 ```ts
-// Picklist schema with an array of string options
-const Schema = picklist(options);
-
-// Picklist schema with an array of string options and a custom message
-const Schema = picklist(options, message);
+const Schema = picklist<TOptions>(options, message);
 ```
+
+## Generics
+
+- `TOptions` <Property {...properties.TOptions} />
 
 ## Parameters
 
-- `options` <Property {...properties.options}/>
-- `message` <Property {...properties.message}/>
+- `options` <Property {...properties.options} />
+- `message` <Property {...properties.message} />
 
 ### Explanation
 
-With `options` you can specify a list of restricted options. If the input is not included in the picklist options, you can use `message` to customize the error message.
+With `picklist` you can validate that the input corresponds to a picklist option. If the input is invalid, you can use `message` to customize the error message.
+
+> `picklist` works in a similar way to <Link href="../enum_/">`enum_`</Link>. However, in many cases it is easier to use because you can pass an array of strings instead of an enum.
 
 ## Returns
 
@@ -36,61 +40,68 @@ With `options` you can specify a list of restricted options. If the input is not
 
 The following examples show how `picklist` can be used.
 
-### Basic picklist schema
+### Language schema
+
+Schema to validate programming languages.
 
 ```ts
-// Validation will only allow `Typescript` or `Javascript`
-const LanguageSchema = picklist(['Typescript', 'Javascript']);
+const LanguageSchema = picklist(['JavaScript', 'TypeScript']);
 ```
 
-### Picklist schema with custom error message
+### Country schema
 
-You can specify a custom error message as the second argument.
+Schema to validate country codes.
 
 ```ts
-const LanguageSchema = picklist(
-  ['Typescript', 'Javascript'],
-  'Please select a language'
+const countries = [
+  { name: 'Germany', code: 'DE' },
+  { name: 'France', code: 'FR' },
+  { name: 'United States', code: 'US' },
+] as const;
+
+const CountrySchema = picklist(
+  countries.map((country) => country.code),
+  'Please select your country.'
 );
-
-// Error! `Ruby` is not included in the picklist options
-const safeValue = parse(LanguageSchema, 'Ruby');
-
-// Success! `Typescript` is included in the picklist options
-const safeValue = parse(LanguageSchema, 'Typescript');
-//    ^? 'Typescript' | 'Javascript'
 ```
 
-### Picklist schema with dynamic array
+## Related
 
-I can also receive a dynamic array of options! This can be useful if you want to fetch the options from an API,
-or generate them dynamically.
+The following APIs can be combined with `enum_`.
 
-```ts
-const cities = await getCities();
-//    ^? string[]
+### Methods
 
-const CitySchema = picklist(cities);
-
-const safeValue = parse(CitySchema, 'Paris');
-//    ^? string
-```
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>
 
 export const properties = {
-  options: {
+  TOptions: {
     type: [
       {
         type: 'custom',
         name: 'PicklistOptions',
         href: '../PicklistOptions/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'TOption',
-          },
-        ],
       },
     ],
+  },
+  options: {
+    type: {
+      type: 'custom',
+      name: 'TOptions',
+    },
   },
   message: {
     type: [
@@ -111,7 +122,7 @@ export const properties = {
       {
         type: 'custom',
         name: 'PicklistSchema',
-        href: '../PicklistSchema',
+        href: '../PicklistSchema/',
       },
     ],
   },
