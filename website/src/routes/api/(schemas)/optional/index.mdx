@@ -1,9 +1,202 @@
 ---
 title: optional
+description: Creates an optional schema.
 contributors:
   - fabian-hiller
+  - sqmasep
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ALL_SCHEMAS } from '~/data/allSchemas';
+import { ApiList, Property } from '~/components';
 
 # optional
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/optional/optional.ts).
+Creates an optional schema.
+
+```ts
+// Optional schema
+const Schema = optional(wrappedSchema);
+
+// Optional schema with a default value
+const Schema = optional(wrappedSchema, defaultValue);
+```
+
+## Parameters
+
+- `wrappedSchema` <Property {...properties.wrappedSchema} />
+- `defaultValue` <Property {...properties.defaultValue}/>
+
+### Explanation
+
+With `optional()` you can create a schema that will accept `undefined` as an input. If the input is `undefined`, the schema
+will return the default value, or `undefined` if no default value is provided.
+
+## Returns
+
+- `Schema` <Property {...properties.OptionalSchema} />
+
+## Examples
+
+The following examples show how `optional` can be used.
+
+### Optional atom name schema
+
+```ts
+const AtomNameSchema = optional(string());
+
+// Success!
+const safeValue = parse(AtomNameSchema, 'hydrogen');
+// safeValue === 'hydrogen' // => true
+
+// Success!
+const safeValue = parse(AtomNameSchema, undefined);
+// safeValue === undefined // => true
+
+// Error! The passed value is not a string or undefined
+const safeValue = parse(AtomNameSchema, null);
+
+// Error! The passed value is not a string or undefined
+const safeValue = parse(AtomNameSchema, 2);
+```
+
+### Optional atom name schema with default value
+
+```ts
+const AtomNameSchema = optional(string(), 'hydrogen');
+
+// Success!
+const safeValue = parse(AtomNameSchema, 'helium');
+// safeValue === 'helium' // => true
+
+// Success! safeValue has now the default value
+const safeValue = parse(AtomNameSchema, undefined);
+// safeValue === 'hydrogen' // => true
+
+// Error! The passed value is not a string or undefined
+const safeValue = parse(AtomNameSchema, null);
+
+// Error! The passed value is not a string or undefined
+const safeValue = parse(AtomNameSchema, 5);
+```
+
+### Difference with <Link href="/api/nullable">`nullable()`</Link> and <Link href="/api/nullish">`nullish()`</Link>
+
+`optional()` is similar to `nullable()` and `nullish()`. However, `optional()` only accepts the schema's value or `undefined`,
+while `nullable()` can accept only `null` or the schema's value. `nullish()` is more permissive and accepts `null`, `undefined` or the schema's value as an input.
+
+### Difference with <Link href="/api/fallback">`fallback()`</Link>
+
+`optional()` and `fallback()` are very different. `optional()` creates a new schema that will accept `undefined` as an input,
+but `fallback()` modifies the schema so that it will accept any input: if the value does not match the schema, it will use the fallback value
+instead. It acts like a wrapper.
+
+> Note that you can use `fallback()` with `optional()`.
+
+Learn more <Link href="/api/fallback">about `fallback()`</Link>
+
+```ts
+// These three schemas are different!
+const OptionalSchema = optional(string(), 'default value');
+const FallbackSchema = fallback(string(), 'fallback value');
+const CombinedSchema = fallback(
+  optional(string(), 'default optional value'),
+  'fallback value'
+);
+
+parse(OptionalSchema, null); // Error!
+parse(FallbackSchema, undefined); // => 'fallback value'
+parse(CombinedSchema, undefined); // => 'default optional value'
+parse(CombinedSchema, 5); // => 'fallback value'
+```
+
+## Related
+
+The following APIs can be combined with `optional`.
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+    'unwrap',
+  ]}
+/>
+
+### Schemas
+
+<ApiList items={ALL_SCHEMAS.filter((schema) => schema !== 'optional')} />
+
+export const properties = {
+  wrappedSchema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'BaseSchema',
+        href: '../BaseSchema/',
+      },
+    ],
+  },
+  defaultValue: {
+    type: [
+      {
+        type: 'custom',
+        name: 'Input',
+        href: '../Input/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'BaseSchema',
+            href: '../BaseSchema/',
+          },
+        ],
+        generics: [
+          {
+            type: 'custom',
+            name: 'BaseSchema',
+            href: '../BaseSchema/',
+          },
+        ],
+      },
+      {
+        type: 'function',
+        params: [],
+        return: [
+          {
+            type: 'custom',
+            name: 'Input',
+            href: '../Input/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'BaseSchema',
+                href: '../BaseSchema/',
+              },
+            ],
+          },
+          'undefined',
+        ],
+      },
+      'undefined',
+    ],
+  },
+  OptionalSchema: {
+    type: [
+      {
+        type: 'custom',
+        name: 'OptionalSchema',
+        href: '../OptionalSchema/',
+      },
+    ],
+  },
+};
