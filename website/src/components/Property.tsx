@@ -66,7 +66,7 @@ type SingleTypeOrValue =
 
 type TypeOrValue = SingleTypeOrValue | SingleTypeOrValue[];
 
-type PropertyProps = {
+export type PropertyProps = {
   type: TypeOrValue;
   default?: TypeOrValue;
   padding?: 'none';

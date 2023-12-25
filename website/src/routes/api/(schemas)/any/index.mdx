@@ -7,6 +7,7 @@ contributors:
 
 import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # any
 
@@ -122,26 +123,3 @@ The following APIs can be combined with `any`.
     'value',
   ]}
 />
-
-export const properties = {
-  pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: ['any'],
-      },
-      'undefined',
-    ],
-  },
-  Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'AnySchema',
-        href: '../AnySchema/',
-      },
-    ],
-  },
-};

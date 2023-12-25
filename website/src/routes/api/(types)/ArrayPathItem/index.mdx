@@ -7,6 +7,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # ArrayPathItem
 
@@ -19,18 +20,3 @@ Array path item type.
   - `input` <Property {...properties.input} />
   - `key` <Property type="number" />
   - `value` <Property type="unknown" />
-
-export const properties = {
-  type: {
-    type: {
-      type: 'string',
-      value: 'array',
-    },
-  },
-  input: {
-    type: {
-      type: 'array',
-      item: 'unknown',
-    },
-  },
-};

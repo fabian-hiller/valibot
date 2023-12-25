@@ -6,6 +6,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # ErrorMessage
 
@@ -14,16 +15,3 @@ Error message type.
 ## Definition
 
 - `ErrorMessage` <Property {...properties.ErrorMessage} />
-
-export const properties = {
-  ErrorMessage: {
-    type: [
-      'string',
-      {
-        type: 'function',
-        params: [],
-        return: 'string',
-      },
-    ],
-  },
-};

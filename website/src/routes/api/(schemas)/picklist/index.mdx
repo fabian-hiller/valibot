@@ -8,6 +8,7 @@ contributors:
 
 import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # picklist
 
@@ -86,44 +87,3 @@ The following APIs can be combined with `enum_`.
     'transform',
   ]}
 />
-
-export const properties = {
-  TOptions: {
-    type: [
-      {
-        type: 'custom',
-        name: 'PicklistOptions',
-        href: '../PicklistOptions/',
-      },
-    ],
-  },
-  options: {
-    type: {
-      type: 'custom',
-      name: 'TOptions',
-    },
-  },
-  message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
-    default: {
-      type: 'string',
-      value: 'Invalid type',
-    },
-  },
-  Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'PicklistSchema',
-        href: '../PicklistSchema/',
-      },
-    ],
-  },
-};

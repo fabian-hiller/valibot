@@ -6,6 +6,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # BaseValidation
 
@@ -17,57 +18,3 @@ Base validation type.
   - `async` <Property {...properties.async} />
   - `message` <Property {...properties.message} />
   - `_parse` {/* prettier-ignore */}<Property {...properties._parse} />
-
-export const properties = {
-  BaseValidation: {
-    type: {
-      type: 'custom',
-      name: 'Object',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TInput',
-          default: 'unknown',
-        },
-      ],
-    },
-  },
-  async: {
-    type: {
-      type: 'boolean',
-      value: false,
-    },
-  },
-  message: {
-    type: {
-      type: 'custom',
-      name: 'ErrorMessage',
-      href: '../ErrorMessage/',
-    },
-  },
-  _parse: {
-    type: {
-      type: 'function',
-      params: [
-        {
-          name: 'input',
-          type: {
-            type: 'custom',
-            name: 'TInput',
-          },
-        },
-      ],
-      return: {
-        type: 'custom',
-        name: 'PipeActionResult',
-        href: '../PipeActionResult/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'TInput',
-          },
-        ],
-      },
-    },
-  },
-};

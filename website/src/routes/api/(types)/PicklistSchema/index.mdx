@@ -7,6 +7,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # PicklistSchema
 
@@ -18,50 +19,3 @@ Picklist schema type.
   - `type` <Property {...properties.type} />
   - `options` <Property {...properties.options} />
   - `message` <Property {...properties.message} />
-
-export const properties = {
-  BaseSchema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BaseSchema',
-        href: '../BaseSchema/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'TOptions',
-            indexes: ['number'],
-          },
-          {
-            type: 'custom',
-            name: 'TOutput',
-            default: {
-              type: 'custom',
-              name: 'TOptions',
-              indexes: ['number'],
-            },
-          },
-        ],
-      },
-    ],
-  },
-  type: {
-    type: {
-      type: 'string',
-      value: 'picklist',
-    },
-  },
-  options: {
-    type: {
-      type: 'custom',
-      name: 'TOptions',
-    },
-  },
-  message: {
-    type: {
-      type: 'custom',
-      name: 'ErrorMessage',
-      href: '../ErrorMessage/',
-    },
-  },
-};
