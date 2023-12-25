@@ -19,12 +19,13 @@ export type MinLengthValidation<
 };
 
 /**
- * Creates a validation function that validates the length of a string or array.
+ * Creates a pipeline validation action that validates the length of a string
+ * or array.
  *
  * @param requirement The minimum length.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function minLength<
   TInput extends string | any[],

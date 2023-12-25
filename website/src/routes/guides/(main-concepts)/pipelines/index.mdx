@@ -20,7 +20,7 @@ For detailed validations and transformations, a pipeline can be passed as the la
 
 ## How it works
 
-In simple words, a pipeline is an array of functions that synchronously passes through the input of a schema. Each function can examine and modify the input. The pipeline is therefore perfect for detailed validations and transformations.
+In simple words, a pipeline is an array of actions that synchronously passes through the input of a schema. Each actions can examine and modify the input. The pipeline is therefore perfect for detailed validations and transformations.
 
 > Important: The pipeline cannot be used to change the data type of a value. For this, the <Link href="/api/transform/">`transform`</Link> method must be used explicitly.
 
@@ -36,22 +36,27 @@ const EmailSchema = string([toTrimmed(), email(), endsWith('@example.com')]);
 
 ## Validations
 
-Validation functions examine the input and, if the input does not meet a certain condition, return an issue. If the input is valid, it is returned as the output and, if present, picked up by the next function in the pipeline.
+Pipeline validation actions examine the input and, if the input does not meet a certain condition, return an issue. If the input is valid, it is returned as the output and, if present, picked up by the next action in the pipeline.
 
 > By default I run a pipeline completely, even if an error is thrown in between, to collect all issues. If you want me to abort the pipeline early after the first error is thrown, you have to set the `abortPipeEarly` option of <Link href="/api/parse/">`parse`</Link> or <Link href="/api/safeParse/">`safeParse`</Link> to `true`. Learn more <Link href="/guides/parse-data/#abort-early">here</Link>.
 
 <ApiList
-  label="Validation functions"
+  label="Validation actions"
   items={[
     'bic',
     'bytes',
+    'creditCard',
     'cuid2',
     'custom',
+    'decimal',
     'email',
     'emoji',
     'endsWith',
     'excludes',
     'finite',
+    'hash',
+    'hexadecimal',
+    'hexColor',
     'includes',
     'integer',
     'ip',
@@ -81,6 +86,7 @@ Validation functions examine the input and, if the input does not meet a certain
     'notLength',
     'notSize',
     'notValue',
+    'octal',
     'regex',
     'safeInteger',
     'size',
@@ -120,12 +126,12 @@ const UsernameSchema = string([
 
 ## Transformations
 
-Transformation functions allow to change the value of an input, but not the data type. This can be useful for example to remove spaces at the beginning or end of a string or to force a minimum or maximum value.
+Pipeline transformation actions allow to change the value of an input, but not the data type. This can be useful for example to remove spaces at the beginning or end of a string or to force a minimum or maximum value.
 
 > If you also want to change the data type, you must explicitly use the <Link href="/api/transform/">`transform`</Link> method.
 
 <ApiList
-  label="Transformation functions"
+  label="Transformation actions"
   items={[
     'toCustom',
     'toLowerCase',

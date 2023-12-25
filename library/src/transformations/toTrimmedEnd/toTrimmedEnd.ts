@@ -12,10 +12,10 @@ export type ToTrimmedEndTransformation = BaseTransformation<string> & {
 };
 
 /**
- * Creates a transformation function that removes the trailing white space and
- * line terminator characters from a string.
+ * Creates a pipeline transformation action that removes the trailing white
+ * space and line terminator characters from a string.
  *
- * @returns A transformation function.
+ * @returns A transformation action.
  */
 export function toTrimmedEnd(): ToTrimmedEndTransformation {
   return {

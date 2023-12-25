@@ -18,7 +18,7 @@ export type IsoTimestampValidation<TInput extends string> =
   };
 
 /**
- * Creates a validation function that validates a timestamp.
+ * Creates a pipeline validation action that validates a timestamp.
  *
  * Format: yyyy-mm-ddThh:mm:ss.sssZ
  *
@@ -28,7 +28,7 @@ export type IsoTimestampValidation<TInput extends string> =
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function isoTimestamp<TInput extends string>(
   message: ErrorMessage = 'Invalid timestamp'

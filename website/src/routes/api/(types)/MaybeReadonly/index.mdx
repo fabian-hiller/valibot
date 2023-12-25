@@ -1,0 +1,38 @@
+---
+title: MaybeReadonly
+description: Maybe readonly type.
+contributors:
+  - fabian-hiller
+  - sqmasep
+---
+
+import { Property } from '~/components';
+
+# MaybeReadonly
+
+Maybe readonly type.
+
+## Definition
+
+- `MaybeReadonly` <Property {...properties.MaybeReadonly} />
+
+export const properties = {
+  MaybeReadonly: {
+    type: [
+      {
+        type: 'custom',
+        name: 'Readonly',
+        generics: [
+          {
+            type: 'custom',
+            name: 'T',
+          },
+        ],
+      },
+      {
+        type: 'custom',
+        name: 'T',
+      },
+    ],
+  },
+};

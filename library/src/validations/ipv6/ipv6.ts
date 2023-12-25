@@ -17,11 +17,11 @@ export type Ipv6Validation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates an [IPv6](https://en.wikipedia.org/wiki/IPv6) address.
+ * Creates a pipeline validation action that validates an [IPv6](https://en.wikipedia.org/wiki/IPv6) address.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function ipv6<TInput extends string>(
   message: ErrorMessage = 'Invalid IPv6'

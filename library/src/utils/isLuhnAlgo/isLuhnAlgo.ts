@@ -12,7 +12,7 @@ const NON_DIGIT_REGEX = /\D/gu;
  */
 export function isLuhnAlgo(input: string) {
   // Remove any non-digit chars
-  const number = input.replaceAll(NON_DIGIT_REGEX, '');
+  const number = input.replace(NON_DIGIT_REGEX, '');
 
   // Create necessary variables
   let length = number.length;
