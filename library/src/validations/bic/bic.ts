@@ -17,11 +17,11 @@ export type BicValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates a [BIC](https://en.wikipedia.org/wiki/Universally_unique_identifier).
+ * Creates a pipeline validation action that validates a [BIC](https://en.wikipedia.org/wiki/Universally_unique_identifier).
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function bic<TInput extends string>(
   message: ErrorMessage = 'Invalid BIC'

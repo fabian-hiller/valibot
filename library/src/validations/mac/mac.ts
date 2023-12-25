@@ -17,11 +17,11 @@ export type MacValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates a [MAC](https://en.wikipedia.org/wiki/MAC_address).
+ * Creates a pipeline validation action that validates a [MAC](https://en.wikipedia.org/wiki/MAC_address).
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function mac<TInput extends string>(
   message: ErrorMessage = 'Invalid MAC'

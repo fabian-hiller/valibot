@@ -18,13 +18,13 @@ export type IsoTimeSecondValidation<TInput extends string> =
   };
 
 /**
- * Creates a validation function that validates a time with seconds.
+ * Creates a pipeline validation action that validates a time with seconds.
  *
  * Format: hh:mm:ss
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function isoTimeSecond<TInput extends string>(
   message: ErrorMessage = 'Invalid time second'

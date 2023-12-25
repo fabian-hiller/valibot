@@ -16,12 +16,12 @@ export type CustomValidation<TInput> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a custom validation function.
+ * Creates a custom pipeline validation action.
  *
  * @param requirement The validation function.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function custom<TInput>(
   requirement: (input: TInput) => boolean,

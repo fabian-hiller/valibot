@@ -18,7 +18,7 @@ export type IsoWeekValidation<TInput extends string> =
   };
 
 /**
- * Creates a validation function that validates a week.
+ * Creates a pipeline validation action that validates a week.
  *
  * Format: yyyy-Www
  *
@@ -28,7 +28,7 @@ export type IsoWeekValidation<TInput extends string> =
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function isoWeek<TInput extends string>(
   message: ErrorMessage = 'Invalid week'
