@@ -31,10 +31,7 @@ export type PicklistSchemaAsync<
  *
  * @returns An async picklist schema.
  */
-export function picklistAsync<
-  TOption extends string,
-  TOptions extends PicklistOptions<TOption>
->(
+export function picklistAsync<const TOptions extends PicklistOptions>(
   options: TOptions,
   message: ErrorMessage = 'Invalid type'
 ): PicklistSchemaAsync<TOptions> {

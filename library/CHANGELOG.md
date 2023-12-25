@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Change `PicklistOptions` type and generics of `picklist` and `picklistAsync` schema
+
 ## v0.24.1 (December 11, 2023)
 
 - Fix output type of optional `object` and `objectAsync` entries with default value (issue #286)
