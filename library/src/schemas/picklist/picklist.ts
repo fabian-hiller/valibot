@@ -31,10 +31,7 @@ export type PicklistSchema<
  *
  * @returns A picklist schema.
  */
-export function picklist<
-  TOption extends string,
-  TOptions extends PicklistOptions<TOption>
->(
+export function picklist<const TOptions extends PicklistOptions>(
   options: TOptions,
   message: ErrorMessage = 'Invalid type'
 ): PicklistSchema<TOptions> {
