@@ -119,6 +119,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
             'absolute left-0 top-full flex max-h-[60vh] w-full origin-top flex-col overflow-y-auto border-b-2 pb-8 pt-4 duration-200 lg:static lg:top-auto lg:w-auto lg:translate-y-0 lg:flex-row lg:space-x-10 lg:overflow-visible lg:border-none lg:bg-transparent lg:p-0 lg:dark:bg-transparent',
             !mainMenuOpen.value &&
               'invisible scale-y-0 lg:visible lg:scale-y-100',
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             (mainMenuOpen.value && 'bg-white dark:bg-gray-900') ||
               (windowScrolled.value && 'bg-white/90  dark:bg-gray-900/90'),
             mainMenuOpen.value || windowScrolled.value
