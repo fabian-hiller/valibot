@@ -48,7 +48,6 @@ const EAN_LENGTH_REGEX = /^\d{8}$|^\d{13}$|^\d{14}$/u;
  * @returns boolan true if input string is valid ean string, false otherwise
  */
 function isEAN(input: string): boolean {
-
   if (!EAN_LENGTH_REGEX.test(input)) {
     return false;
   }
@@ -57,7 +56,8 @@ function isEAN(input: string): boolean {
   const isEAN8 = input.length === 8;
   const checksumDigit = parseInt(input.slice(-1));
   const calculateWeightedSum = (acc: number, digit: string, index: number) => {
-    const weight = isEAN14 || isEAN8 ? (index % 2 === 0 ? 3 : 1) : (index % 2 === 0 ? 1 : 3);
+    const weight =
+      isEAN14 || isEAN8 ? (index % 2 === 0 ? 3 : 1) : index % 2 === 0 ? 1 : 3;
     return acc + parseInt(digit) * weight;
   };
 
