@@ -7,6 +7,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # OptionalSchema
 
@@ -18,67 +19,3 @@ Optional schema type.
   - `type` <Property {...properties.type} />
   - `wrapped` <Property {...properties.wrapped} />
   - `default` <Property {...properties.default} />
-
-export const properties = {
-  BaseSchema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BaseSchema',
-        href: '../BaseSchema/',
-        generics: [
-          // WARN how to make the first generic a union?
-          // like in `BaseSchema<Input<TWrapped> | undefined, ...>`
-          {
-            type: 'custom',
-            name: 'Input',
-            href: '../Input/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'TWrapped',
-              },
-            ],
-          },
-          {
-            type: 'custom',
-            name: 'TOutput',
-            // WARN same problem here, since the default depends on
-            // TDefault, `undefined` may not appear if a default value is set
-            default: [
-              {
-                type: 'custom',
-                name: 'Output',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TWrapped',
-                  },
-                ],
-              },
-              'undefined',
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  type: {
-    type: {
-      type: 'string',
-      value: 'optional',
-    },
-  },
-  wrapped: {
-    type: {
-      type: 'custom',
-      name: 'TWrapped',
-    },
-  },
-  default: {
-    type: {
-      type: 'custom',
-      name: 'TDefault',
-    },
-  },
-};
