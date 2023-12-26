@@ -7,6 +7,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # PicklistOptions
 
@@ -15,21 +16,3 @@ Picklist options type.
 ## Definition
 
 - `PicklistOptions` <Property {...properties.PicklistOptions} />
-
-export const properties = {
-  PicklistOptions: {
-    type: [
-      {
-        type: 'custom',
-        name: 'MaybeReadonly',
-        href: '../MaybeReadonly/',
-        generics: [
-          {
-            type: 'array',
-            item: 'string',
-          },
-        ],
-      },
-    ],
-  },
-};

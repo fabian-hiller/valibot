@@ -7,6 +7,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # MaybeReadonly
 
@@ -15,24 +16,3 @@ Maybe readonly type.
 ## Definition
 
 - `MaybeReadonly` <Property {...properties.MaybeReadonly} />
-
-export const properties = {
-  MaybeReadonly: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Readonly',
-        generics: [
-          {
-            type: 'custom',
-            name: 'T',
-          },
-        ],
-      },
-      {
-        type: 'custom',
-        name: 'T',
-      },
-    ],
-  },
-};

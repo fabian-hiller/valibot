@@ -8,6 +8,7 @@ contributors:
 
 import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # boolean
 
@@ -77,40 +78,3 @@ The following APIs can be combined with `boolean`.
 ### Validations
 
 <ApiList items={['custom', 'maxValue', 'minValue', 'notValue', 'value']} />
-
-export const properties = {
-  message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
-    default: {
-      type: 'string',
-      value: 'Invalid type',
-    },
-  },
-  pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: ['boolean'],
-      },
-      'undefined',
-    ],
-  },
-  Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BooleanSchema',
-        href: '../BooleanSchema/',
-      },
-    ],
-  },
-};

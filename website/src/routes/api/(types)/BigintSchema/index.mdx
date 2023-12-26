@@ -6,6 +6,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # BigintSchema
 
@@ -17,47 +18,3 @@ Bigint schema type.
   - `type` <Property {...properties.type} />
   - `message` <Property {...properties.message} />
   - `pipe` <Property {...properties.pipe} />
-
-export const properties = {
-  BaseSchema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BaseSchema',
-        href: '../BaseSchema/',
-        generics: [
-          'bigint',
-          {
-            type: 'custom',
-            name: 'TOutput',
-            default: 'bigint',
-          },
-        ],
-      },
-    ],
-  },
-  type: {
-    type: {
-      type: 'string',
-      value: 'bigint',
-    },
-  },
-  message: {
-    type: {
-      type: 'custom',
-      name: 'ErrorMessage',
-      href: '../ErrorMessage/',
-    },
-  },
-  pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: ['bigint'],
-      },
-      'undefined',
-    ],
-  },
-};

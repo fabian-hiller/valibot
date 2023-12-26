@@ -7,6 +7,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # IssueOrigin
 
@@ -15,18 +16,3 @@ Issue origin type.
 ## Definition
 
 - `IssueOrigin` <Property {...properties.origin} />
-
-export const properties = {
-  origin: {
-    type: [
-      {
-        type: 'string',
-        value: 'key',
-      },
-      {
-        type: 'string',
-        value: 'value',
-      },
-    ],
-  },
-};
