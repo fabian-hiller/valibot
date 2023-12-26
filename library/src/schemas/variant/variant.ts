@@ -4,8 +4,14 @@ import type {
   Input,
   Issues,
   Output,
+  Pipe,
 } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import {
+  defaultArgs,
+  parseResult,
+  pipeResult,
+  schemaIssue,
+} from '../../utils/index.ts';
 import type { ObjectSchema } from '../object/index.ts';
 
 /**
@@ -51,6 +57,10 @@ export type VariantSchema<
    * The error message.
    */
   message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<Input<TOptions[number]>> | undefined;
 };
 
 /**
@@ -58,7 +68,7 @@ export type VariantSchema<
  *
  * @param key The discriminator key.
  * @param options The variant options.
- * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns A variant schema.
  */
@@ -68,14 +78,49 @@ export function variant<
 >(
   key: TKey,
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  pipe?: Pipe<Input<TOptions[number]>>
+): VariantSchema<TKey, TOptions>;
+
+/**
+ * Creates a variant (aka discriminated union) schema.
+ *
+ * @param key The discriminator key.
+ * @param options The variant options.
+ * @param message The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A variant schema.
+ */
+export function variant<
+  TKey extends string,
+  TOptions extends VariantOptions<TKey>
+>(
+  key: TKey,
+  options: TOptions,
+  message?: ErrorMessage,
+  pipe?: Pipe<Input<TOptions[number]>>
+): VariantSchema<TKey, TOptions>;
+
+export function variant<
+  TKey extends string,
+  TOptions extends VariantOptions<TKey>
+>(
+  key: TKey,
+  options: TOptions,
+  arg3?: Pipe<Input<TOptions[number]>> | ErrorMessage,
+  arg4?: Pipe<Input<TOptions[number]>>
 ): VariantSchema<TKey, TOptions> {
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
+
+  // Create and return variant schema
   return {
     type: 'variant',
     async: false,
     key,
     options,
     message,
+    pipe,
     _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object' || !(this.key in input)) {
@@ -131,9 +176,9 @@ export function variant<
       // Parse options recursively
       parseOptions(this.options);
 
-      // If there is an output, return typed parse result
+      // If there is an output, execute pipe
       if (output) {
-        return parseResult(true, output[0]);
+        return pipeResult(output[0], this.pipe, info, 'variant');
       }
 
       // If there are issues, return untyped parse result

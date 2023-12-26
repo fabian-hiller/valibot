@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
+import { custom } from '../../validations/index.ts';
 import { boolean } from '../boolean/index.ts';
 import { literal } from '../literal/index.ts';
 import { number } from '../number/index.ts';
@@ -49,5 +50,58 @@ describe('variant', () => {
         null
       )
     ).toThrowError(error);
+  });
+
+  test('should execute pipe', () => {
+    const error = 'Input is invalid';
+
+    const schema1 = variant(
+      'type',
+      [
+        object({ type: literal('a'), a: string() }),
+        object({ type: literal('b'), b: number() }),
+      ],
+      [
+        custom(
+          (input) =>
+            (input.type === 'a' && input.a === 'test') ||
+            (input.type === 'b' && input.b === 10),
+          error
+        ),
+      ]
+    );
+    const input1 = { type: 'a', a: 'test' };
+    const output1 = parse(schema1, input1);
+    expect(output1).toEqual(input1);
+    const input2 = { type: 'b', b: 10 };
+    const output2 = parse(schema1, input2);
+    expect(output2).toEqual(input2);
+    expect(() => parse(schema1, { type: 'a', a: 'foo' })).toThrowError(error);
+    expect(() => parse(schema1, { type: 'b', b: 123 })).toThrowError(error);
+
+    const schema2 = variant(
+      'type',
+      [
+        object({ type: literal('a'), a: string() }),
+        object({ type: literal('b'), b: number() }),
+      ],
+      'Error',
+      [
+        custom(
+          (input) =>
+            (input.type === 'a' && input.a === 'test') ||
+            (input.type === 'b' && input.b === 10),
+          error
+        ),
+      ]
+    );
+    const input3 = { type: 'a', a: 'test' };
+    const output3 = parse(schema2, input3);
+    expect(output3).toEqual(input3);
+    const input4 = { type: 'b', b: 10 };
+    const output4 = parse(schema2, input4);
+    expect(output4).toEqual(input4);
+    expect(() => parse(schema2, { type: 'a', a: 'foo' })).toThrowError(error);
+    expect(() => parse(schema2, { type: 'b', b: 123 })).toThrowError(error);
   });
 });

@@ -6,8 +6,13 @@ import type {
   Issues,
   MaybeReadonly,
   Output,
+  PipeAsync,
 } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import {
+  defaultArgs,
+  pipeResultAsync,
+  schemaIssue,
+} from '../../utils/index.ts';
 
 /**
  * Union options async type.
@@ -33,25 +38,55 @@ export type UnionSchemaAsync<
    * The error message.
    */
   message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<Input<TOptions[number]>> | undefined;
 };
 
 /**
  * Creates an async union schema.
  *
  * @param options The union options.
- * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An async union schema.
  */
 export function unionAsync<TOptions extends UnionOptionsAsync>(
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  pipe?: PipeAsync<Input<TOptions[number]>>
+): UnionSchemaAsync<TOptions>;
+
+/**
+ * Creates an async union schema.
+ *
+ * @param options The union options.
+ * @param message The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async union schema.
+ */
+export function unionAsync<TOptions extends UnionOptionsAsync>(
+  options: TOptions,
+  message?: ErrorMessage,
+  pipe?: PipeAsync<Input<TOptions[number]>>
+): UnionSchemaAsync<TOptions>;
+
+export function unionAsync<TOptions extends UnionOptionsAsync>(
+  options: TOptions,
+  arg2?: PipeAsync<Input<TOptions[number]>> | ErrorMessage,
+  arg3?: PipeAsync<Input<TOptions[number]>>
 ): UnionSchemaAsync<TOptions> {
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+
+  // Create and return union schema
   return {
     type: 'union',
     async: true,
     options,
     message,
+    pipe,
     async _parse(input, info) {
       // Create issues and output
       let issues: Issues | undefined;
@@ -80,9 +115,9 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
         }
       }
 
-      // If there is an output, return parse result
+      // If there is an output, execute pipe
       if (output) {
-        return parseResult(true, output[0]);
+        return pipeResultAsync(output[0], this.pipe, info, 'union');
       }
 
       // Otherwise, return schema issue

@@ -5,8 +5,14 @@ import type {
   Input,
   Issues,
   Output,
+  PipeAsync,
 } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import {
+  defaultArgs,
+  parseResult,
+  pipeResultAsync,
+  schemaIssue,
+} from '../../utils/index.ts';
 import type { ObjectSchema, ObjectSchemaAsync } from '../object/index.ts';
 
 /**
@@ -53,6 +59,10 @@ export type VariantSchemaAsync<
    * The error message.
    */
   message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<Input<TOptions[number]>> | undefined;
 };
 
 /**
@@ -60,7 +70,7 @@ export type VariantSchemaAsync<
  *
  * @param key The discriminator key.
  * @param options The variant options.
- * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An async variant schema.
  */
@@ -70,14 +80,49 @@ export function variantAsync<
 >(
   key: TKey,
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  pipe?: PipeAsync<Input<TOptions[number]>>
+): VariantSchemaAsync<TKey, TOptions>;
+
+/**
+ * Creates an async variant (aka discriminated union) schema.
+ *
+ * @param key The discriminator key.
+ * @param options The variant options.
+ * @param message The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async variant schema.
+ */
+export function variantAsync<
+  TKey extends string,
+  TOptions extends VariantOptionsAsync<TKey>
+>(
+  key: TKey,
+  options: TOptions,
+  message?: ErrorMessage,
+  pipe?: PipeAsync<Input<TOptions[number]>>
+): VariantSchemaAsync<TKey, TOptions>;
+
+export function variantAsync<
+  TKey extends string,
+  TOptions extends VariantOptionsAsync<TKey>
+>(
+  key: TKey,
+  options: TOptions,
+  arg3?: PipeAsync<Input<TOptions[number]>> | ErrorMessage,
+  arg4?: PipeAsync<Input<TOptions[number]>>
 ): VariantSchemaAsync<TKey, TOptions> {
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
+
+  // Create and return variant schema
   return {
     type: 'variant',
     async: true,
     key,
     options,
     message,
+    pipe,
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object' || !(this.key in input)) {
@@ -133,9 +178,9 @@ export function variantAsync<
       // Parse options recursively
       await parseOptions(this.options);
 
-      // If there is an output, return typed parse result
+      // If there is an output, execute pipe
       if (output) {
-        return parseResult(true, output[0]);
+        return pipeResultAsync(output[0], this.pipe, info, 'variant');
       }
 
       // If there are issues, return untyped parse result

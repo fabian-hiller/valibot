@@ -17,6 +17,7 @@ export type IssueReason =
   | 'blob'
   | 'boolean'
   | 'date'
+  | 'intersect'
   | 'function'
   | 'instance'
   | 'map'
@@ -29,7 +30,9 @@ export type IssueReason =
   | 'symbol'
   | 'tuple'
   | 'undefined'
+  | 'union'
   | 'unknown'
+  | 'variant'
   | 'type';
 
 /**
