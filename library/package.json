@@ -44,7 +44,7 @@
   "scripts": {
     "playground": "tsm ./playground.ts",
     "test": "vitest",
-    "coverage": "vitest run --coverage",
+    "coverage": "vitest run --coverage --isolate",
     "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit",
     "format": "prettier --write ./src",
     "format.check": "prettier --check ./src",
