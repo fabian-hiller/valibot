@@ -210,6 +210,7 @@
 - [MapPathItem](/api/MapPathItem/)
 - [MaybeReadonly](/api/MaybeReadonly/)
 - [ObjectPathItem](/api/ObjectPathItem/)
+- [OptionalSchema](/api/OptionalSchema/)
 - [Output](/api/Output/)
 - [ParseInfo](/api/ParseInfo/)
 - [PathItem](/api/PathItem/)
