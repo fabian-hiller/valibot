@@ -88,6 +88,7 @@
 - [isoTimeSecond](/api/isoTimeSecond/)
 - [isoTimestamp](/api/isoTimestamp/)
 - [isoWeek](/api/isoWeek/)
+- [issn](/api/issn/)
 - [length](/api/length/)
 - [mac](/api/mac/)
 - [mac48](/api/mac48/)
