@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
 import { custom } from '../../validations/index.ts';
-import { boolean } from '../boolean/index.ts';
 import { literal } from '../literal/index.ts';
 import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
@@ -17,21 +16,29 @@ describe('variant', () => {
     const input1 = { type: 'a', a: 'hello' };
     const output1 = parse(schema1, input1);
     expect(output1).toEqual(input1);
+    const input2 = { type: 'b', b: 123 };
+    const output2 = parse(schema1, input2);
+    expect(output2).toEqual(input2);
 
     const schema2 = variant('type', [
       schema1,
-      object({ type: literal('c'), b: boolean() }),
+      object({ type: literal('c'), foo: literal('foo') }),
+      object({ type: literal('c'), bar: literal('bar') }),
     ]);
-    const input2 = { type: 'b', b: 123 };
-    const output2 = parse(schema2, input2);
-    expect(output2).toEqual(input2);
-    const input3 = { type: 'c', b: true };
+    const input3 = { type: 'b', b: 123 };
     const output3 = parse(schema2, input3);
     expect(output3).toEqual(input3);
+    const input4 = { type: 'c', foo: 'foo' };
+    const output4 = parse(schema2, input4);
+    expect(output4).toEqual(input4);
+    const input5 = { type: 'c', bar: 'bar' };
+    const output5 = parse(schema2, input5);
+    expect(output5).toEqual(input5);
 
     expect(() => parse(schema2, null)).toThrowError();
     expect(() => parse(schema2, {})).toThrowError();
     expect(() => parse(schema2, { type: 'b', b: '123' })).toThrowError();
+    expect(() => parse(schema2, { type: 'c', c: 123 })).toThrowError();
     expect(() => parse(schema2, { type: 'x' })).toThrowError();
   });
 

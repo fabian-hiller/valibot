@@ -156,10 +156,10 @@ export function variantAsync<
                 // Note: Output is nested in array, so that also a falsy value
                 // further down can be recognized as valid value
                 output = [dataResult.output!];
-              }
 
-              // Break loop to end execution
-              break;
+                // Break loop to end execution
+                break;
+              }
             }
 
             // Otherwise, if it is a variant parse its options
@@ -168,7 +168,7 @@ export function variantAsync<
             await parseOptions(schema.options);
 
             // If variant option was found, break loop to end execution
-            if (issues || output) {
+            if (output) {
               break;
             }
           }

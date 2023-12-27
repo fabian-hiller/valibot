@@ -44,15 +44,15 @@ describe('unionAsync', () => {
     );
     expect(await parseAsync(schema1, '10')).toEqual('10');
     expect(await parseAsync(schema1, 10)).toEqual(10);
-    expect(parseAsync(schema1, '123')).rejects.toThrowError(equalError);
-    expect(parseAsync(schema1, 123)).rejects.toThrowError(equalError);
+    await expect(parseAsync(schema1, '123')).rejects.toThrowError(equalError);
+    await expect(parseAsync(schema1, 123)).rejects.toThrowError(equalError);
 
     const schema2 = unionAsync([string(), number()], 'Error', [
       customAsync(async (input) => +input === 10, equalError),
     ]);
     expect(await parseAsync(schema2, '10')).toEqual('10');
     expect(await parseAsync(schema2, 10)).toEqual(10);
-    expect(parseAsync(schema2, '123')).rejects.toThrowError(equalError);
-    expect(parseAsync(schema2, 123)).rejects.toThrowError(equalError);
+    await expect(parseAsync(schema2, '123')).rejects.toThrowError(equalError);
+    await expect(parseAsync(schema2, 123)).rejects.toThrowError(equalError);
   });
 });

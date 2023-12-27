@@ -91,7 +91,7 @@ describe('intersectAsync', () => {
     const input1 = { foo: 'test', bar: 'test' };
     const output1 = await parseAsync(schema1, input1);
     expect(output1).toEqual(input1);
-    expect(
+    await expect(
       parseAsync(schema1, { foo: 'abc', bar: '123' })
     ).rejects.toThrowError(equalError);
 
@@ -103,7 +103,7 @@ describe('intersectAsync', () => {
     const input2 = { foo: 'test', bar: 'test' };
     const output2 = await parseAsync(schema2, input2);
     expect(output2).toEqual(input2);
-    expect(
+    await expect(
       parseAsync(schema2, { foo: 'abc', bar: '123' })
     ).rejects.toThrowError(equalError);
   });
