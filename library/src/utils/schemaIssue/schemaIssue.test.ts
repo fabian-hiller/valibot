@@ -52,6 +52,7 @@ describe('schemaIssue', () => {
       info2.validation,
       info2.message,
       info2.input,
+      undefined,
       info2.issues
     );
     expect(issue2).toEqual({

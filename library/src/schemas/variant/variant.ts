@@ -123,71 +123,81 @@ export function variant<
     pipe,
     _parse(input, info) {
       // Check type of input
-      if (!input || typeof input !== 'object' || !(this.key in input)) {
+      if (!input || typeof input !== 'object') {
         return schemaIssue(info, 'type', 'variant', this.message, input);
       }
 
-      // Create issues and output
-      let issues: Issues | undefined;
-      let output: [Record<string, any>] | undefined;
+      // Continue if discriminator key is included
+      if (this.key in input) {
+        // Create issues and output
+        let issues: Issues | undefined;
+        let output: [Record<string, any>] | undefined;
 
-      // Create function to parse options recursively
-      const parseOptions = (options: VariantOptions<TKey>) => {
-        for (const schema of options) {
-          // If it is an object schema, parse discriminator key
-          if (schema.type === 'object') {
-            const keyResult = schema.entries[this.key]._parse(
-              (input as Record<TKey, unknown>)[this.key],
-              info
-            );
+        // Create function to parse options recursively
+        const parseOptions = (options: VariantOptions<TKey>) => {
+          for (const schema of options) {
+            // If it is an object schema, parse discriminator key
+            if (schema.type === 'object') {
+              const keyResult = schema.entries[this.key]._parse(
+                (input as Record<TKey, unknown>)[this.key],
+                info
+              );
 
-            // If right variant option was found, parse it
-            if (!keyResult.issues) {
-              const dataResult = schema._parse(input, info);
+              // If right variant option was found, parse it
+              if (!keyResult.issues) {
+                const dataResult = schema._parse(input, info);
 
-              // If there are issues, capture them
-              if (dataResult.issues) {
-                issues = dataResult.issues;
+                // If there are issues, capture them
+                if (dataResult.issues) {
+                  issues = dataResult.issues;
 
-                // Otherwise, set output
-              } else {
-                // Note: Output is nested in array, so that also a falsy value
-                // further down can be recognized as valid value
-                output = [dataResult.output!];
+                  // Otherwise, set output
+                } else {
+                  // Note: Output is nested in array, so that also a falsy value
+                  // further down can be recognized as valid value
+                  output = [dataResult.output!];
 
-                // Break loop to end execution
+                  // Break loop to end execution
+                  break;
+                }
+              }
+
+              // Otherwise, if it is a variant parse its options
+              // recursively
+            } else if (schema.type === 'variant') {
+              parseOptions(schema.options);
+
+              // If variant option was found, break loop to end execution
+              if (output) {
                 break;
               }
             }
-
-            // Otherwise, if it is a variant parse its options
-            // recursively
-          } else if (schema.type === 'variant') {
-            parseOptions(schema.options);
-
-            // If variant option was found, break loop to end execution
-            if (output) {
-              break;
-            }
           }
+        };
+
+        // Parse options recursively
+        parseOptions(this.options);
+
+        // If there is an output, execute pipe
+        if (output) {
+          return pipeResult(output[0], this.pipe, info, 'variant');
         }
-      };
 
-      // Parse options recursively
-      parseOptions(this.options);
-
-      // If there is an output, execute pipe
-      if (output) {
-        return pipeResult(output[0], this.pipe, info, 'variant');
-      }
-
-      // If there are issues, return untyped parse result
-      if (issues) {
-        return parseResult(false, output, issues);
+        // If there are issues, return untyped parse result
+        if (issues) {
+          return parseResult(false, output, issues);
+        }
       }
 
       // If discriminator key is invalid, return issue
-      return schemaIssue(info, 'type', 'variant', this.message, input);
+      return schemaIssue(info, 'type', 'variant', this.message, input, [
+        {
+          type: 'object',
+          input: input as Record<string, unknown>,
+          key: this.key,
+          value: undefined,
+        },
+      ]);
     },
   };
 }

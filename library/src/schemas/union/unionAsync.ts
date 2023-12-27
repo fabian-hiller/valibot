@@ -121,7 +121,15 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
       }
 
       // Otherwise, return schema issue
-      return schemaIssue(info, 'type', 'union', this.message, input, issues);
+      return schemaIssue(
+        info,
+        'type',
+        'union',
+        this.message,
+        input,
+        undefined,
+        issues
+      );
     },
   };
 }
