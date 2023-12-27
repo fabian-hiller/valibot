@@ -144,6 +144,8 @@ Pipeline transformation actions allow to change the value of an input, but not t
   ]}
 />
 
+For example, the pipeline of the following schema enforces a minimum value of 10. If the input is less than 10, it is replaced with the specified minimum value.
+
 ```ts
 import { number, toMinValue } from 'valibot'; // 0.57 kB
 
