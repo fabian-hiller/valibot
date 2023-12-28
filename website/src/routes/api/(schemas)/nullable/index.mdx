@@ -50,14 +50,14 @@ Schema that accepts `string` and `null`.
 const NullableStringSchema = nullable(string(), "I'm the default!");
 ```
 
-### Nullable URL schema
+### Nullable date schema
 
-Schema that accepts an URL and `null`.
+Schema that accepts `Date` and `null`.
 
-> By using a function as the `default_` parameter, the schema will return a new URL string each time the input is `undefined`.
+> By using a function as the `default_` parameter, the schema will return a new `Date` instance each time the input is `null`.
 
 ```ts
-const NullableUrlSchema = nullable(string([url()]), () => generateUrl());
+const NullableDateSchema = nullable(date(), () => new Date());
 ```
 
 ### Nullable entry schema
