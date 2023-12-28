@@ -23,10 +23,10 @@ Hello, I am Valibot and I would like to help you validate data easily using a sc
 
 ## Example
 
-First you create a schema. A schema can be compared to a type definition in TypeScript. The big difference is that TypeScript types are "not executed" and are more or less a DX feature. A schema on the other hand, apart from the inferred type definition, can also be executed at runtime to guarantee type safety of unknown data.
+First you create a schema that describes a structured data set. A schema can be compared to a type definition in TypeScript. The big difference is that TypeScript types are "not executed" and are more or less a DX feature. A schema on the other hand, apart from the inferred type definition, can also be executed at runtime to guarantee type safety of unknown data.
 
 ```ts
-import { email, minLength, object, type Output, parse, string } from 'valibot'; // 1.15 kB
+import { email, minLength, object, type Output, parse, string } from 'valibot'; // 1.2 kB
 
 // Create login schema with email and password
 const LoginSchema = object({
@@ -52,7 +52,7 @@ Instead of relying on a few large functions with many methods, my API design and
 
 For example, this allows a bundler to use the import statements to remove code that is not needed. This way, only the code that is actually used gets into your production build. This can reduce the bundle size by up to 98 % compared to [Zod](https://zod.dev/).
 
-Besides the individual bundle size, the overall size of the library is also significantly smaller. This is due to the fact that my source code is simpler in structure, less complicated and optimized for compression.
+In addition, it allows you to easily extend my functionality with external code and makes my source code more robust and secure because the functionality of the individual functions can be tested much more easily through unit tests.
 
 ## Credits
 

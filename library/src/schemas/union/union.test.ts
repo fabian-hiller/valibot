@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
+import { custom } from '../../validations/index.ts';
 import { string } from '../string/index.ts';
 import { number } from '../number/index.ts';
 import { null_ } from '../null/index.ts';
@@ -28,5 +29,26 @@ describe('union', () => {
     expect(() => parse(union([string(), number()], error), null)).toThrowError(
       error
     );
+  });
+
+  test('should execute pipe', () => {
+    const equalError = 'Not equal 10';
+
+    const schema1 = union(
+      [string(), number()],
+      [custom((input) => +input === 10, equalError)]
+    );
+    expect(parse(schema1, '10')).toEqual('10');
+    expect(parse(schema1, 10)).toEqual(10);
+    expect(() => parse(schema1, '123')).toThrowError(equalError);
+    expect(() => parse(schema1, 123)).toThrowError(equalError);
+
+    const schema2 = union([string(), number()], 'Error', [
+      custom((input) => +input === 10, equalError),
+    ]);
+    expect(parse(schema2, '10')).toEqual('10');
+    expect(parse(schema2, 10)).toEqual(10);
+    expect(() => parse(schema2, '123')).toThrowError(equalError);
+    expect(() => parse(schema2, 123)).toThrowError(equalError);
   });
 });
