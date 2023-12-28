@@ -209,6 +209,7 @@
 - [Issues](/api/Issues/)
 - [MapPathItem](/api/MapPathItem/)
 - [MaybeReadonly](/api/MaybeReadonly/)
+- [NullishSchema](/api/NullishSchema/)
 - [ObjectPathItem](/api/ObjectPathItem/)
 - [OptionalSchema](/api/OptionalSchema/)
 - [Output](/api/Output/)
