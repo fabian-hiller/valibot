@@ -1,8 +1,8 @@
 ---
 title: Schemas
 description: >-
-  My core functionality is to create a schema. A schema can be compared to a
-  type definition in TypeScript.
+  My core functionality is to create a schema that describes a structured data
+  set. A schema can be compared to a type definition in TypeScript.
 contributors:
   - fabian-hiller
   - alonidiom
@@ -15,7 +15,7 @@ import { ApiList } from '~/components';
 
 # Schemas
 
-My core functionality is to create a schema. A schema can be compared to a type definition in TypeScript. The big difference is that TypeScript types are "not executed" and are more or less a DX feature. A schema on the other hand, apart from the inferred type definition, can also be executed at runtime to guarantee type safety of unknown data.
+My core functionality is to create a schema that describes a structured data set. A schema can be compared to a type definition in TypeScript. The big difference is that TypeScript types are "not executed" and are more or less a DX feature. A schema on the other hand, apart from the inferred type definition, can also be executed at runtime to guarantee type safety of unknown data.
 
 > Until I reach v1, I welcome lots of feedback on the API, naming and implementation. Please create or reply to an [issue](https://github.com/fabian-hiller/valibot/issues) and help me become the best schema library for JavaScript and TypeScript.
 
@@ -49,7 +49,7 @@ import { email, endsWith, string } from 'valibot'; // 0.7 kB
 const EmailSchema = string([email(), endsWith('@example.com')]);
 ```
 
-Pipeline are optional and, if needed, are always added in the form of an array as the last argument of a schema function. More details about pipelines can be found in <Link href="/guides/pipelines/">this guide</Link>.
+Pipelines are optional and, if needed, are always added in the form of an array as the last argument of a schema function. More details about pipelines can be found in <Link href="/guides/pipelines/">this guide</Link>.
 
 ### Error messages
 

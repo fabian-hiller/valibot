@@ -1,7 +1,7 @@
 {
   "name": "valibot",
   "description": "The modular and TypeScript-first schema library",
-  "version": "0.24.1",
+  "version": "0.25.0",
   "license": "MIT",
   "author": "Fabian Hiller",
   "homepage": "https://valibot.dev",
@@ -44,7 +44,7 @@
   "scripts": {
     "playground": "tsm ./playground.ts",
     "test": "vitest",
-    "coverage": "vitest run --coverage",
+    "coverage": "vitest run --coverage --isolate",
     "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit",
     "format": "prettier --write ./src",
     "format.check": "prettier --check ./src",
