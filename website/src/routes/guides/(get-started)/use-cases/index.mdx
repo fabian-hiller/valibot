@@ -24,6 +24,10 @@ A schema can also be used for form validation. Due to my small bundle size and t
 
 [Modular Forms](https://modularforms.dev/react/guides/validate-your-fields#schema-validation), for example, offers validation based on a schema at form and field level. In addition, the form can be made type-safe using the schema, which also enables autocompletion during development. In combination with the right framework, a fully type-safe and progressively enhanced form can be created with few lines of code and a great experience for developers and end-users.
 
+## Browser state
+
+The browser state, which is stored using cookies, search parameters or the local storage, can be accidentally or intentionally manipulated by the user. To ensure the functionality of an application, it can help to validate this data before processing. My schemas can be used for this, which also improves type safety.
+
 ## Config files
 
 Library authors can also make use of me, for example, to match configuration files with a schema and, in the event of an error, provide clear indications of the cause and how to fix the problem. The same applies to environment variables to quickly detect configuration errors.
