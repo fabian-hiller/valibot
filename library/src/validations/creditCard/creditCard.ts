@@ -21,24 +21,28 @@ export type CreditCardValidation<TInput extends string> =
  */
 const SANITIZE_REGEX = /[- ]+/gu;
 
+export const AMERICAN_EXPRESS_REGEX = /^3[47]\d{13}$/u;
+export const DINERS_CLUB_REGEX = /^3(?:0[0-5]|[68]\d)\d{11}$/u;
+export const DISCOVER_REGEX = /^6(?:011|5\d{2})\d{12,15}$/u;
+export const JCB_REGEX = /^(?:2131|1800|35\d{3})\d{11}$/u;
+export const MASTERCARD_REGEX =
+  /^5[1-5]\d{2}|(222\d|22[3-9]\d|2[3-6]\d{2}|27[01]\d|2720)\d{12}$/u;
+export const UNION_PAY_REGEX = /^(6[27]\d{14}|81\d{14,17})$/u;
+export const VISA_REGEX = /^4\d{12}(?:\d{3,6})?$/u;
+export const HIPERCARD_REGEX = /^(606282\d{10}(\d{3})?)|(3841\d{13})$/u;
+
 /**
  * Provider regex list.
  */
 const PROVIDER_REGEX_LIST = [
-  // American Express
-  /^3[47]\d{13}$/u,
-  // Diners Club
-  /^3(?:0[0-5]|[68]\d)\d{11}$/u,
-  // Discover
-  /^6(?:011|5\d{2})\d{12,15}$/u,
-  // JCB
-  /^(?:2131|1800|35\d{3})\d{11}$/u,
-  // Mastercard
-  /^5[1-5]\d{2}|(222\d|22[3-9]\d|2[3-6]\d{2}|27[01]\d|2720)\d{12}$/u,
-  // UnionPay
-  /^(6[27]\d{14}|81\d{14,17})$/u,
-  // Visa
-  /^4\d{12}(?:\d{3,6})?$/u,
+  AMERICAN_EXPRESS_REGEX,
+  DINERS_CLUB_REGEX,
+  DISCOVER_REGEX,
+  JCB_REGEX,
+  MASTERCARD_REGEX,
+  UNION_PAY_REGEX,
+  VISA_REGEX,
+  HIPERCARD_REGEX,
 ];
 
 /**

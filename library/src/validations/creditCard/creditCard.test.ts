@@ -27,6 +27,18 @@ describe('creditCard', () => {
     expect(validate._parse(value10).output).toBe(value10);
     const value11 = '30218047196557';
     expect(validate._parse(value11).output).toBe(value11);
+    const value12 = '6062825624254001';
+    expect(validate._parse(value12).output).toBe(value12);
+    const value13 = '6062823936268330';
+    expect(validate._parse(value13).output).toBe(value13);
+    const value14 = '38410012946684';
+    expect(validate._parse(value14).output).toBe(value14);
+    const value15 = '3841 6058 9902 54';
+    expect(validate._parse(value15).output).toBe(value15);
+  });
+
+  test('should reject invalid cards', () => {
+    const validate = creditCard();
 
     expect(validate._parse('').issues).toBeTruthy();
     expect(validate._parse('1234 5678 9012 3456').issues).toBeTruthy();
@@ -37,6 +49,8 @@ describe('creditCard', () => {
     expect(validate._parse('4111 1111 1111 111').issues).toBeTruthy();
     expect(validate._parse('abcd efgh ijkl mnop').issues).toBeTruthy();
     expect(validate._parse('0000 0000 0000 0000').issues).toBeTruthy();
+    expect(validate._parse('60628260434272857').issues).toBeTruthy();
+    expect(validate._parse('5121647321685222').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
