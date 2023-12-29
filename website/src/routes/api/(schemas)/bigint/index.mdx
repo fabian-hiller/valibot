@@ -1,11 +1,13 @@
 ---
 title: bigint
 description: Creates a bigint schema.
+source: /schemas/bigint/bigint.ts
 contributors:
   - fabian-hiller
 ---
 
 import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # bigint
 
@@ -81,40 +83,3 @@ The following APIs can be combined with `bigint`.
 ### Validations
 
 <ApiList items={['custom', 'maxValue', 'minValue', 'notValue', 'value']} />
-
-export const properties = {
-  message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
-    default: {
-      type: 'string',
-      value: 'Invalid type',
-    },
-  },
-  pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: ['bigint'],
-      },
-      'undefined',
-    ],
-  },
-  Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BigintSchema',
-        href: '../BigintSchema/',
-      },
-    ],
-  },
-};

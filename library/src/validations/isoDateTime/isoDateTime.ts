@@ -18,7 +18,7 @@ export type IsoDateTimeValidation<TInput extends string> =
   };
 
 /**
- * Creates a validation function that validates a datetime.
+ * Creates a pipeline validation action that validates a datetime.
  *
  * Format: yyyy-mm-ddThh:mm
  *
@@ -28,7 +28,7 @@ export type IsoDateTimeValidation<TInput extends string> =
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function isoDateTime<TInput extends string>(
   message: ErrorMessage = 'Invalid date-time'

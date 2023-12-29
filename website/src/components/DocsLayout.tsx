@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, ArrowRightIcon, PenIcon } from '~/icons';
+import { ArrowLeftIcon, ArrowRightIcon, GitHubIcon, PenIcon } from '~/icons';
 import { IconButton } from './IconButton';
 import { Navigation } from './Navigation';
 import { SideBar } from './SideBar';
@@ -62,6 +62,7 @@ export const DocsLayout = component$(() => {
         <div q:slot="buttons" class="mr-4 flex space-x-6 lg:hidden">
           <NavButtons
             pageIndex={navIndex.value}
+            sourcePath={documentHead.frontmatter.source}
             prevPage={prevPage.value}
             nextPage={nextPage.value}
           />
@@ -76,6 +77,7 @@ export const DocsLayout = component$(() => {
         <div class="hidden px-8 lg:absolute lg:right-0 lg:flex lg:space-x-6 lg:px-10">
           <NavButtons
             pageIndex={navIndex.value}
+            sourcePath={documentHead.frontmatter.source}
             prevPage={prevPage.value}
             nextPage={nextPage.value}
           />
@@ -158,15 +160,16 @@ export const DocsLayout = component$(() => {
 
 type NavButtonsProps = {
   pageIndex: number;
-  prevPage?: ContentMenu;
-  nextPage?: ContentMenu;
+  sourcePath: string | undefined;
+  prevPage: ContentMenu | undefined;
+  nextPage: ContentMenu | undefined;
 };
 
 /**
  * Buttons to navigate to the previous or next page.
  */
 export const NavButtons = component$<NavButtonsProps>(
-  ({ pageIndex, prevPage, nextPage }) => (
+  ({ pageIndex, sourcePath, prevPage, nextPage }) => (
     <>
       {pageIndex !== -1 && (
         <>
@@ -195,6 +198,18 @@ export const NavButtons = component$<NavButtonsProps>(
             </IconButton>
           ) : (
             <div class="w-10" />
+          )}
+          {sourcePath && (
+            <IconButton
+              variant="secondary"
+              type="link"
+              href={`https://github.com/fabian-hiller/valibot/blob/main/library/src${sourcePath}`}
+              target="_blank"
+              label="Source code"
+              hideLabel
+            >
+              <GitHubIcon class="h-[18px]" />
+            </IconButton>
           )}
         </>
       )}

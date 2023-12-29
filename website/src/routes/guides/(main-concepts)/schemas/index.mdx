@@ -1,8 +1,8 @@
 ---
 title: Schemas
 description: >-
-  My core functionality is to create a schema. A schema can be compared to a
-  type definition in TypeScript.
+  My core functionality is to create a schema that describes a structured data
+  set. A schema can be compared to a type definition in TypeScript.
 contributors:
   - fabian-hiller
   - alonidiom
@@ -15,7 +15,7 @@ import { ApiList } from '~/components';
 
 # Schemas
 
-My core functionality is to create a schema. A schema can be compared to a type definition in TypeScript. The big difference is that TypeScript types are "not executed" and are more or less a DX feature. A schema on the other hand, apart from the inferred type definition, can also be executed at runtime to guarantee type safety of unknown data.
+My core functionality is to create a schema that describes a structured data set. A schema can be compared to a type definition in TypeScript. The big difference is that TypeScript types are "not executed" and are more or less a DX feature. A schema on the other hand, apart from the inferred type definition, can also be executed at runtime to guarantee type safety of unknown data.
 
 > Until I reach v1, I welcome lots of feedback on the API, naming and implementation. Please create or reply to an [issue](https://github.com/fabian-hiller/valibot/issues) and help me become the best schema library for JavaScript and TypeScript.
 
@@ -24,7 +24,7 @@ My core functionality is to create a schema. A schema can be compared to a type 
 Similar to how types can be defined in TypeScript, my source code allows you to define a schema with various small functions. This applies to primitive values like strings as well as to more complex data sets like objects.
 
 ```ts
-import { object, string } from 'valibot'; // 0.86 kB
+import * as v from 'valibot';
 
 // TypeScript
 type LoginForm = {
@@ -33,9 +33,9 @@ type LoginForm = {
 };
 
 // Valibot
-const LoginSchema = object({
-  email: string(),
-  password: string(),
+const LoginSchema = v.object({
+  email: v.string(),
+  password: v.string(),
 });
 ```
 
@@ -44,28 +44,28 @@ const LoginSchema = object({
 In addition, I can help you to perform more detailed validations and transformations with pipelines. Thus, for example, it can be ensured that a string is an email and ends with a certain domain.
 
 ```ts
-import { email, endsWith, string } from 'valibot'; // 0.7 kB
+import * as v from 'valibot';
 
-const EmailSchema = string([email(), endsWith('@example.com')]);
+const EmailSchema = v.string([v.email(), v.endsWith('@example.com')]);
 ```
 
-Pipeline are optional and, if needed, are always added in the form of an array as the last argument of a schema function. More details about pipelines can be found in <Link href="/guides/pipelines/">this guide</Link>.
+Pipelines are optional and, if needed, are always added in the form of an array as the last argument of a schema function. More details about pipelines can be found in <Link href="/guides/pipelines/">this guide</Link>.
 
 ### Error messages
 
 If I detect an issue during validation, I throw a <Link href="/api/ValiError/">`ValiError`</Link> and add a short error message to each issue. This error message can be overridden via the first optional argument of a schema or validation function.
 
 ```ts
-import { email, minLength, object, string } from 'valibot'; // 1.06 kB
+import * as v from 'valibot';
 
-const LoginSchema = object({
-  email: string('Your email must be a string.', [
-    minLength(1, 'Please enter your email.'),
-    email('The email address is badly formatted.'),
+const LoginSchema = v.object({
+  email: v.string('Your email must be a string.', [
+    v.minLength(1, 'Please enter your email.'),
+    v.email('The email address is badly formatted.'),
   ]),
-  password: string('Your password must be a string.', [
-    minLength(1, 'Please enter your password.'),
-    minLength(8, 'Your password must have 8 characters or more.'),
+  password: v.string('Your password must be a string.', [
+    v.minLength(1, 'Please enter your password.'),
+    v.minLength(8, 'Your password must have 8 characters or more.'),
   ]),
 });
 ```
@@ -92,20 +92,22 @@ I support the creation of schemas for any primitive data type. These are immutab
 />
 
 ```ts
-const BigintSchema = bigint(); // bigint
-const BooleanSchema = boolean(); // boolean
-const NullSchema = null_(); // null
-const NumberSchema = number(); // number
-const StringSchema = string(); // string
-const SymbolSchema = symbol(); // symbol
-const UndefinedSchema = undefined_(); // undefined
+import * as v from 'valibot';
+
+const BigintSchema = v.bigint(); // bigint
+const BooleanSchema = v.boolean(); // boolean
+const NullSchema = v.null_(); // null
+const NumberSchema = v.number(); // number
+const StringSchema = v.string(); // string
+const SymbolSchema = v.symbol(); // symbol
+const UndefinedSchema = v.undefined_(); // undefined
 ```
 
 ## Complex values
 
 Among complex values I support objects, records, arrays, tuples as well as various other classes.
 
-> For objects I provide various methods like <Link href="/api/partial/">`partial`</Link> and <Link href="/api/merge/">`merge`</Link>. Learn more about them <Link href="/guides/methods/">here</Link>.
+> For objects I provide various methods like <Link href="/api/pick/">`pick`</Link>, <Link href="/api/partial/">`partial`</Link> and <Link href="/api/merge/">`merge`</Link>. Learn more about them <Link href="/guides/methods/#object-methods">here</Link>.
 
 <ApiList
   label="Schema functions"
@@ -113,14 +115,16 @@ Among complex values I support objects, records, arrays, tuples as well as vario
 />
 
 ```ts
-const ArraySchema = array(string()); // string[]
-const BlobSchema = blob(); // Blob
-const DateSchema = date(); // Date
-const MapSchema = map(string(), number()); // Map<string, number>
-const ObjectSchema = object({ key: string() }); // { key: string }
-const RecordSchema = record(number()); // Record<string, number>
-const SetSchema = set(number()); // Set<number>
-const TupleSchema = tuple([string(), number()]); // [string, number]
+import * as v from 'valibot';
+
+const ArraySchema = v.array(v.string()); // string[]
+const BlobSchema = v.blob(); // Blob
+const DateSchema = v.date(); // Date
+const MapSchema = v.map(v.string(), v.number()); // Map<string, number>
+const ObjectSchema = v.object({ key: v.string() }); // { key: string }
+const RecordSchema = v.record(v.number()); // Record<string, number>
+const SetSchema = v.set(v.number()); // Set<number>
+const TupleSchema = v.tuple([v.string(), v.number()]); // [string, number]
 ```
 
 ## Special cases
@@ -153,26 +157,28 @@ Beyond primitive and complex values, I also provide schema functions for more sp
 />
 
 ```ts
-const AnySchema = any(); // any
-const InstanceSchema = instance(Error); // Error
-const IntersectSchema = intersect([string(), literal('a')]); // string & 'a'
-const NanSchema = nan(); // NaN
-const EnumSchema = enum_(Direction); // Direction
-const NeverSchema = never(); // never
-const NonNullableSchema = nonNullable(nullable(string())); // string
-const NonNullishSchema = nonNullish(nullish(string())); // string
-const NonOptionalSchema = nonOptional(optional(string())); // string
-const NullableSchema = nullable(string()); // string | null
-const NullishSchema = nullish(string()); // string | null | undefined
-const OptionalSchema = optional(string()); // string | undefined
-const PicklistSchema = picklist(['a', 'b']); // 'a' | 'b'
-const RecursiveSchema = recursive(() => string()); // string
-const SpecialSchema = special<`${number}px`>(isPixelString); // `${number}px`
-const UnionSchema = union([string(), number()]); // string | number
-const UnknownSchema = unknown(); // unknown
-const VariantSchema = variant('type', [
-  object({ type: literal('a'), foo: string() }),
-  object({ type: literal('b'), bar: number() }),
+import * as v from 'valibot';
+
+const AnySchema = v.any(); // any
+const InstanceSchema = v.instance(Error); // Error
+const IntersectSchema = v.intersect([v.string(), v.literal('a')]); // string & 'a'
+const NanSchema = v.nan(); // NaN
+const EnumSchema = v.enum_(Direction); // Direction
+const NeverSchema = v.never(); // never
+const NonNullableSchema = v.nonNullable(v.nullable(v.string())); // string
+const NonNullishSchema = v.nonNullish(v.nullish(v.string())); // string
+const NonOptionalSchema = v.nonOptional(v.optional(v.string())); // string
+const NullableSchema = v.nullable(v.string()); // string | null
+const NullishSchema = v.nullish(v.string()); // string | null | undefined
+const OptionalSchema = v.optional(v.string()); // string | undefined
+const PicklistSchema = v.picklist(['a', 'b']); // 'a' | 'b'
+const RecursiveSchema = v.recursive(() => v.string()); // string
+const SpecialSchema = v.special<`${number}px`>(isPixelString); // `${number}px`
+const UnionSchema = v.union([v.string(), v.number()]); // string | number
+const UnknownSchema = v.unknown(); // unknown
+const VariantSchema = v.variant('type', [
+  v.object({ type: v.literal('a'), foo: v.string() }),
+  v.object({ type: v.literal('b'), bar: v.number() }),
 ]); // { type: 'a', foo: string } | { type: 'b', bar: number }
-const VoidSchema = void_(); // void
+const VoidSchema = v.void_(); // void
 ```

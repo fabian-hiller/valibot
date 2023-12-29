@@ -6,6 +6,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # SchemaResult
 
@@ -14,21 +15,3 @@ Schema result type.
 ## Definition
 
 - `SchemaResult` <Property {...properties.SchemaResult} />
-
-export const properties = {
-  SchemaResult: {
-    type: [
-      {
-        type: 'custom',
-        name: 'TypedSchemaResult',
-        href: '../TypedSchemaResult/',
-        generics: [{ type: 'custom', name: 'TOutput' }],
-      },
-      {
-        type: 'custom',
-        name: 'UntypedSchemaResult',
-        href: '../UntypedSchemaResult/',
-      },
-    ],
-  },
-};

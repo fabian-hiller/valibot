@@ -308,6 +308,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
         // Select current active index
         if (key === 'Enter') {
           const item = searchItems.value[activeIndex.value];
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (item) {
             if (item.path === location.url.pathname) {
               open.value = false;

@@ -1,11 +1,13 @@
 ---
 title: blob
 description: Creates a blob schema.
+source: /schemas/blob/blob.ts
 contributors:
   - fabian-hiller
 ---
 
 import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # blob
 
@@ -78,40 +80,3 @@ The following APIs can be combined with `blob`.
 <ApiList
   items={['custom', 'maxSize', 'mimeType', 'minSize', 'notSize', 'size']}
 />
-
-export const properties = {
-  message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
-    default: {
-      type: 'string',
-      value: 'Invalid type',
-    },
-  },
-  pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: [{ type: 'custom', name: 'Blob' }],
-      },
-      'undefined',
-    ],
-  },
-  Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BlobSchema',
-        href: '../BlobSchema/',
-      },
-    ],
-  },
-};

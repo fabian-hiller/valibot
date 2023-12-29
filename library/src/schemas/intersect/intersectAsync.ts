@@ -4,8 +4,14 @@ import type {
   ErrorMessage,
   Issues,
   MaybeReadonly,
+  PipeAsync,
 } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import {
+  defaultArgs,
+  parseResult,
+  pipeResultAsync,
+  schemaIssue,
+} from '../../utils/index.ts';
 import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
 
@@ -39,25 +45,55 @@ export type IntersectSchemaAsync<
    * The error message.
    */
   message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<IntersectInput<TOptions>> | undefined;
 };
 
 /**
  * Creates an async intersect schema.
  *
  * @param options The intersect options.
- * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An async intersect schema.
  */
 export function intersectAsync<TOptions extends IntersectOptionsAsync>(
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  pipe?: PipeAsync<IntersectInput<TOptions>>
+): IntersectSchemaAsync<TOptions>;
+
+/**
+ * Creates an async intersect schema.
+ *
+ * @param options The intersect options.
+ * @param message The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async intersect schema.
+ */
+export function intersectAsync<TOptions extends IntersectOptionsAsync>(
+  options: TOptions,
+  message?: ErrorMessage,
+  pipe?: PipeAsync<IntersectInput<TOptions>>
+): IntersectSchemaAsync<TOptions>;
+
+export function intersectAsync<TOptions extends IntersectOptionsAsync>(
+  options: TOptions,
+  arg2?: PipeAsync<IntersectInput<TOptions>> | ErrorMessage,
+  arg3?: PipeAsync<IntersectInput<TOptions>>
 ): IntersectSchemaAsync<TOptions> {
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+
+  // Create and return intersect schema
   return {
     type: 'intersect',
     async: true,
     options,
     message,
+    pipe,
     async _parse(input, info) {
       // Create typed, issues, output and outputs
       let typed = true;
@@ -121,8 +157,8 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
           output = result.output;
         }
 
-        // Return typed parse result
-        return parseResult(true, output, issues);
+        // Execute pipe and return typed parse result
+        return pipeResultAsync(output, this.pipe, info, 'intersect', issues);
       }
 
       // Otherwise, return untyped parse result

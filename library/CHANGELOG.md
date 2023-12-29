@@ -2,6 +2,14 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.25.0 (December 26, 2023)
+
+- Add `creditCard`, `decimal`, `hash`, `hexadecimal`, `hexColor` and `octal` pipeline validation action (pull request #292, #304, #307, #308, #309)
+- Add `pipe` parameter to `intersect`, `intersectAsync`, `union`, `unionAsync`, `variant` and `variantAsync` schema (discussion #297)
+- Add support for multiple variant options with same discriminator key to `variant` and `variantAsync` schema (issue #310)
+- Add path to issues if discriminator key of `variant` and `variantAsync` schema is missing (issue #235, #303)
+- Change `PicklistOptions` type and generics of `picklist` and `picklistAsync` schema
+
 ## v0.24.1 (December 11, 2023)
 
 - Fix output type of optional `object` and `objectAsync` entries with default value (issue #286)

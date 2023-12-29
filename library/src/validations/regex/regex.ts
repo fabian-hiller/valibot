@@ -16,12 +16,12 @@ export type RegexValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates a string with a regex.
+ * Creates a pipeline validation action that validates a string with a regex.
  *
  * @param requirement The regex pattern.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function regex<TInput extends string>(
   requirement: RegExp,

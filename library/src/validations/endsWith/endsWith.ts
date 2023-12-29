@@ -19,12 +19,12 @@ export type EndsWithValidation<
 };
 
 /**
- * Creates a validation function that validates the end of a string.
+ * Creates a pipeline validation action that validates the end of a string.
  *
  * @param requirement The end string.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function endsWith<TInput extends string, TRequirement extends string>(
   requirement: TRequirement,

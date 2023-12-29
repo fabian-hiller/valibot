@@ -7,6 +7,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # ObjectPathItem
 
@@ -19,19 +20,3 @@ Object path item type.
   - `input` <Property {...properties.input} />
   - `key` <Property type="string" />
   - `value` <Property type="unknown" />
-
-export const properties = {
-  type: {
-    type: {
-      type: 'string',
-      value: 'object',
-    },
-  },
-  input: {
-    type: {
-      type: 'custom',
-      name: 'Record',
-      generics: ['string', 'unknown'],
-    },
-  },
-};

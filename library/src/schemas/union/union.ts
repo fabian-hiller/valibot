@@ -5,8 +5,9 @@ import type {
   Issues,
   MaybeReadonly,
   Output,
+  Pipe,
 } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Union options type.
@@ -32,25 +33,55 @@ export type UnionSchema<
    * The error message.
    */
   message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<Input<TOptions[number]>> | undefined;
 };
 
 /**
  * Creates a union schema.
  *
  * @param options The union options.
- * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns A union schema.
  */
 export function union<TOptions extends UnionOptions>(
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  pipe?: Pipe<Input<TOptions[number]>>
+): UnionSchema<TOptions>;
+
+/**
+ * Creates a union schema.
+ *
+ * @param options The union options.
+ * @param message The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A union schema.
+ */
+export function union<TOptions extends UnionOptions>(
+  options: TOptions,
+  message?: ErrorMessage,
+  pipe?: Pipe<Input<TOptions[number]>>
+): UnionSchema<TOptions>;
+
+export function union<TOptions extends UnionOptions>(
+  options: TOptions,
+  arg2?: Pipe<Input<TOptions[number]>> | ErrorMessage,
+  arg3?: Pipe<Input<TOptions[number]>>
 ): UnionSchema<TOptions> {
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+
+  // Create and return union schema
   return {
     type: 'union',
     async: false,
     options,
     message,
+    pipe,
     _parse(input, info) {
       // Create issues and output
       let issues: Issues | undefined;
@@ -79,13 +110,21 @@ export function union<TOptions extends UnionOptions>(
         }
       }
 
-      // If there is an output, return parse result
+      // If there is an output, execute pipe
       if (output) {
-        return parseResult(true, output[0]);
+        return pipeResult(output[0], this.pipe, info, 'union');
       }
 
       // Otherwise, return schema issue
-      return schemaIssue(info, 'type', 'union', this.message, input, issues);
+      return schemaIssue(
+        info,
+        'type',
+        'union',
+        this.message,
+        input,
+        undefined,
+        issues
+      );
     },
   };
 }
