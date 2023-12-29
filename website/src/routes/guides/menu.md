@@ -15,7 +15,7 @@
 - [Parse data](/guides/parse-data/)
 - [Infer types](/guides/infer-types/)
 - [Methods](/guides/methods/)
-- [Errors](/guides/errors/)
+- [Issues](/guides/issues/)
 
 ## Migration
 
