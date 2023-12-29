@@ -116,4 +116,4 @@ export const UUID_REGEX = /^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/iu;
 /**
  * [Ethereum address](https://en.wikipedia.org/wiki/Ethereum) regex.
  */
-export const ETHEREUM_ADDRESS_REGEX = /^0x[a-fA-F\d]{40}$/u;
+export const ETH_ADDRESS_REGEX = /^0x[a-fA-F\d]{40}$/u;

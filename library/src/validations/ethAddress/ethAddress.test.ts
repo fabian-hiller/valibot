@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest';
-import { ethereumAddress } from './ethereumAddress.ts';
+import { ethAddress } from './ethAddress.ts';
 
-describe('ethereumAddress', () => {
+describe('ethAddress', () => {
   test('should pass valid ethereum addresses', () => {
-    const validate = ethereumAddress();
+    const validate = ethAddress();
 
     const value1 = '0x0000000000000000000000000000000000000001';
     expect(validate._parse(value1).output).toBe(value1);
@@ -22,7 +22,7 @@ describe('ethereumAddress', () => {
   });
 
   test('should reject invalid etherum addresses', () => {
-    const validate = ethereumAddress();
+    const validate = ethAddress();
 
     expect(validate._parse('').issues).toBeTruthy();
     expect(
@@ -50,7 +50,7 @@ describe('ethereumAddress', () => {
 
   test('should return custom error message', () => {
     const error = 'Value is not a valid Ethereum address!';
-    const validate = ethereumAddress(error);
+    const validate = ethAddress(error);
     expect(validate._parse('').issues?.[0].message).toBe(error);
   });
 });
