@@ -8,7 +8,7 @@ contributors:
 ---
 
 import { ApiList, Property } from '~/components';
-import { properties } from './properties'
+import { properties } from './properties';
 
 # array
 
@@ -62,7 +62,7 @@ const StringArraySchema = array(string());
 Schema that accepts `array` which contains only `string` and `number`.
 
 ```ts
-const StringNumberMixedArraySchema = array(union([string(), number()]))
+const StringNumberMixedArraySchema = array(union([string(), number()]));
 ```
 
 ### User object array schema
@@ -102,11 +102,7 @@ The following APIs can be combined with `array`.
 
 ### Transformations
 
-<ApiList
-  items={[
-    'toCustom',
-  ]}
-/>
+<ApiList items={['toCustom']} />
 
 ### Validations
 
