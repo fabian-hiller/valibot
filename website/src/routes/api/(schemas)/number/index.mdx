@@ -43,9 +43,7 @@ The following examples show how `number` can be used.
 Schema that validates if input is an integer
 
 ```ts
-const IntegerSchema = number([
-  integer(),
-]);
+const IntegerSchema = number([integer()]);
 ```
 
 ### Validate range
@@ -53,10 +51,7 @@ const IntegerSchema = number([
 Schema that validates a number in a range.
 
 ```ts
-const NumberRangeSchema = number([
-  minValue(1),
-  maxValue(100),
-]);
+const NumberRangeSchema = number([minValue(1), maxValue(100)]);
 ```
 
 ### Validate if input is a multiple of 100
@@ -64,9 +59,7 @@ const NumberRangeSchema = number([
 Schema that validates if input is a multiple of 100.
 
 ```ts
-const MultipleOf100Schema = number([
-  multipleOf(100),
-]);
+const MultipleOf100Schema = number([multipleOf(100)]);
 ```
 
 ## Related
@@ -88,19 +81,13 @@ The following APIs can be combined with `number`.
     'parse',
     'safeParse',
     'transform',
-    'withDefault'
+    'withDefault',
   ]}
 />
 
 ### Transformations
 
-<ApiList
-  items={[
-    'toCustom',
-    'toMaxValue',
-    'toMinValue'
-  ]}
-/>
+<ApiList items={['toCustom', 'toMaxValue', 'toMinValue']} />
 
 ### Validations
 
@@ -114,6 +101,6 @@ The following APIs can be combined with `number`.
     'multipleOf',
     'notValue',
     'safeInteger',
-    'value'
+    'value',
   ]}
 />
