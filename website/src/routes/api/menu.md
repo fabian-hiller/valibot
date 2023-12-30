@@ -212,6 +212,7 @@
 - [MaybeReadonly](/api/MaybeReadonly/)
 - [NullableSchema](/api/NullableSchema/)
 - [NullishSchema](/api/NullishSchema/)
+- [NumberSchema](/api/NumberSchema/)
 - [ObjectPathItem](/api/ObjectPathItem/)
 - [OptionalSchema](/api/OptionalSchema/)
 - [Output](/api/Output/)
