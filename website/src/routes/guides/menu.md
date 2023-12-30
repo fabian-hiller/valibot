@@ -19,7 +19,7 @@
 
 ## Advanced
 
-- [Naming](/guides/naming/)
+- [Naming](/guides/naming-convention/)
 - [Special cases](/guides/special-cases/)
 - [Objects](/guides/objects/)
 
