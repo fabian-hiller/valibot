@@ -191,6 +191,7 @@
 
 - [AnySchema](/api/AnySchema/)
 - [ArrayPathItem](/api/ArrayPathItem/)
+- [ArraySchema](/api/ArraySchema/)
 - [BaseSchema](/api/BaseSchema/)
 - [BaseTransformation](/api/BaseTransformation/)
 - [BaseValidation](/api/BaseValidation/)
