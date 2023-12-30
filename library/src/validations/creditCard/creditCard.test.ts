@@ -31,9 +31,32 @@ describe('creditCard', () => {
     expect(validate._parse(value12).output).toBe(value12);
     const value13 = '5041757714635542';
     expect(validate._parse(value13).output).toBe(value13);
+    const value14 = '4011 1111 1111 1112';
+    expect(validate._parse(value14).output).toBe(value14);
+    const value15 = '4312 7410 0065 7175';
+    expect(validate._parse(value15).output).toBe(value15);
+    const value16 = '6277 8901 2345 6789';
+    expect(validate._parse(value16).output).toBe(value16);
+    const value17 = '6505 9883 4294 5980';
+    expect(validate._parse(value17).output).toBe(value17);
+    const value18 = '6505 5684 6905 0671';
+    expect(validate._parse(value18).output).toBe(value18);
+    const value19 = '5067 2147 8107 0269';
+    expect(validate._parse(value19).output).toBe(value19);
+    const value20 = '6509 4228 7282 0161';
+    expect(validate._parse(value20).output).toBe(value20);
+    const value21 = '6504 2498 1750 6596';
+    expect(validate._parse(value21).output).toBe(value21);
+    const value22 = '6363 6826 9764 9005';
+    expect(validate._parse(value22).output).toBe(value22);
 
     expect(validate._parse('').issues).toBeTruthy();
     expect(validate._parse('1234 5678 9012 3456').issues).toBeTruthy();
+    // TODO: add more tests to validate an invalid Elo cared
+    expect(validate._parse('4011 1111 1111 1111').issues).toBeTruthy();
+    expect(validate._parse('4312 7410 0065 7176').issues).toBeTruthy();
+    expect(validate._parse('6277 8901 2345 6780').issues).toBeTruthy();
+    expect(validate._parse('6505 9883 4294 5981').issues).toBeTruthy();
     expect(validate._parse('4532 7597 3454 2975 123').issues).toBeTruthy();
     expect(validate._parse('4532-8940-1234-5678').issues).toBeTruthy();
     expect(validate._parse('3543 0505 5555 5555').issues).toBeTruthy();
