@@ -4,8 +4,8 @@ description: >-
   Even though my API resembles other solutions at first glance, the
   implementation and structure of the source code is very different.
 contributors:
-  - nikolailehbrink
   - fabian-hiller
+  - nikolailehbrink
   - Neon-20
 ---
 
@@ -57,6 +57,8 @@ const LoginSchema = object({
 
 ## Performance
 
-With a schema library, a distinction must be made between startup performance and runtime performance. Startup performance describes the time required to load and initialize the library. This benchmark is mainly influenced by the bundle size and the amount of work required to create the schema. Runtime performance describes the time required to validate unknown data using a schema.
+With a schema library, a distinction must be made between startup performance and runtime performance. Startup performance describes the time required to load and initialize the library. This benchmark is mainly influenced by the bundle size and the amount of work required to create a schema. Runtime performance describes the time required to validate unknown data using a schema.
 
 Since my implementation is optimized to minimize the bundle size and the effort of initialization, there is hardly a library that performs better in a [TTI](https://web.dev/articles/tti) benchmark than I do. In terms of runtime performance, I am in the midfield. Roughly speaking, I am about twice as fast as [Zod](https://zod.dev/), but much slower than [Typia](https://typia.io/) and [TypeBox](https://github.com/sinclairzx81/typebox), because I don't use a compiler that can generate optimal code, and my implementation doesn't allow the use of the [`Function`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/Function) constructor.
+
+> Further details on performance can be found in the [bachelor's thesis](/thesis.pdf) I am based on.
