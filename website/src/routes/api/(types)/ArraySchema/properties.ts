@@ -22,22 +22,21 @@ export const properties: Record<string, PropertyProps> = {
               ],
             },
           },
-
           {
-            type: 'array',
-            item: {
-              type: 'custom',
-              name: 'TOutput',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TItem',
-                },
-              ],
-              default: {
+            type: 'custom',
+            name: 'TOutput',
+            default: {
+              type: 'array',
+              item: {
                 type: 'custom',
                 name: 'Output',
                 href: '../Output/',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'TItem',
+                  },
+                ],
               },
             },
           },
@@ -45,11 +44,10 @@ export const properties: Record<string, PropertyProps> = {
       },
     ],
   },
-  message: {
+  type: {
     type: {
-      type: 'custom',
-      name: 'ErrorMessage',
-      href: '../ErrorMessage/',
+      type: 'string',
+      value: 'array',
     },
   },
   item: {
@@ -60,10 +58,11 @@ export const properties: Record<string, PropertyProps> = {
       },
     ],
   },
-  type: {
+  message: {
     type: {
-      type: 'string',
-      value: 'array',
+      type: 'custom',
+      name: 'ErrorMessage',
+      href: '../ErrorMessage/',
     },
   },
   pipe: {
@@ -72,7 +71,21 @@ export const properties: Record<string, PropertyProps> = {
         type: 'custom',
         name: 'Pipe',
         href: '../Pipe/',
-        generics: ['array'],
+        generics: [
+          {
+            type: 'array',
+            item: {
+              type: 'custom',
+              name: 'Output',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TItem',
+                },
+              ],
+            },
+          },
+        ],
       },
       'undefined',
     ],
