@@ -372,7 +372,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
                     An unexpected error has occurred. If this happens regularly,
                     please create an{' '}
                     <TextLink
-                      href={`${import.meta.env.VITE_GITHUB_URL}/issues/new`}
+                      href="https://github.com/fabian-hiller/valibot/issues/new"
                       target="_blank"
                       colored
                       underlined
