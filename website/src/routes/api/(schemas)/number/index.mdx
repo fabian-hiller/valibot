@@ -38,12 +38,20 @@ With `number` you can validate the data type of the input and with `pipe` you ca
 
 The following examples show how `number` can be used.
 
-### Validate if input is an integer
+### Integer schema
 
-Schema that validates if input is an integer
+Schema to validate an integer.
 
 ```ts
 const IntegerSchema = number([integer()]);
+```
+
+### Force minimum
+
+Schema that forces a minimum number of 10.
+
+```ts
+const MinNumberSchema = number([toMinValue(10)]);
 ```
 
 ### Validate range
@@ -52,14 +60,6 @@ Schema that validates a number in a range.
 
 ```ts
 const NumberRangeSchema = number([minValue(1), maxValue(100)]);
-```
-
-### Validate if input is a multiple of 100
-
-Schema that validates if input is a multiple of 100.
-
-```ts
-const MultipleOf100Schema = number([multipleOf(100)]);
 ```
 
 ## Related
@@ -93,7 +93,7 @@ The following APIs can be combined with `number`.
 
 <ApiList
   items={[
-    'equal',
+    'custom',
     'finite',
     'integer',
     'maxValue',
