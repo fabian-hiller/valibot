@@ -1,6 +1,6 @@
 ---
 title: fallback
-description: Creates a fallback for any schema.
+description: Returns a fallback output value when validating the passed schema failed.
 source: /methods/fallback/fallback.ts
 contributors:
   - fabian-hiller
@@ -14,7 +14,7 @@ import { properties } from './properties';
 
 # fallback
 
-Creates a fallback for any schema.
+Returns a fallback output value when validating the passed schema failed.
 
 ```ts
 const Schema = fallback<TSchema, TFallback>(schema, fallback);
@@ -32,11 +32,11 @@ const Schema = fallback<TSchema, TFallback>(schema, fallback);
 
 ### Explanation
 
-With `fallback` the validation of your schema will pass any input, the schema will use the fallback value if the input is the wrong type.
+`fallback` allows you to define a fallback value for the output that will be used if the validation of the input fails. This means that no issues will be returned when using `fallback` and the schema will always return an output.
 
-> Note that `fallback` accepts any input, including the ones that don't match the schema. If you want to accept only `undefined` inputs, use <Link href="../optional/">`optional`</Link>, and if you want to accept only `null` inputs, use <Link href="../nullable/">`nullable`</Link> instead. Also, if you want to accept both `undefined` and `null` inputs, consider using <Link href="../nullish/">`nullish`</Link>.
+> If you only want to set a default value for `null` or `undefined` inputs, you should use <Link href="../optional/">`optional`</Link>, <Link href="../nullable/">`nullable`</Link> or <Link href="../nullish/">`nullish`</Link> instead.
 
-> Warning: `fallback` will not send the fallback value into the pipeline. Make sure your fallback value is correct for your usage. [See issue #334](https://github.com/fabian-hiller/valibot/issues/334)
+> Warning: The fallback value is not validated. Make sure that the fallback value matches your schema.
 
 ## Returns
 
@@ -46,9 +46,9 @@ With `fallback` the validation of your schema will pass any input, the schema wi
 
 The following examples show how `fallback` can be used.
 
-### String schema with fallback
+### Fallback string schema
 
-Schema that accepts any input, but uses the fallback value if the input is not a string.
+Schema that will always return a string output.
 
 ```ts
 const FallbackStringSchema = fallback(string(), "I'm the fallback!");
@@ -56,25 +56,12 @@ const FallbackStringSchema = fallback(string(), "I'm the fallback!");
 
 ### Fallback date schema
 
-Schema that accepts any input, but uses the fallback value if the input is not a date.
+Schema that will always return a `Date` output.
 
 > By using a function as the `fallback` parameter, the schema will return a new `Date` instance each time the input does not match the schema.
 
 ```ts
-const FallbackDateSchema = fallback(date(), (info) => {
-  console.info('Input is not a date:', info?.input);
-  return new Date();
-});
-```
-
-### Fallback entry schema
-
-Object schema with a fallback value for the `key` property.
-
-```ts
-const FallbackEntrySchema = object({
-  key: fallback(string(), 'value'),
-});
+const FallbackDateSchema = fallback(date(), () => new Date());
 ```
 
 ## Related

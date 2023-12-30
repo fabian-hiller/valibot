@@ -54,7 +54,7 @@ export const properties: Record<string, PropertyProps> = {
     type: [
       {
         type: 'custom',
-        name: 'TWrapped',
+        name: 'TSchema',
       },
     ],
   },
@@ -62,7 +62,7 @@ export const properties: Record<string, PropertyProps> = {
     type: [
       {
         type: 'custom',
-        name: 'TDefault',
+        name: 'TFallback',
       },
     ],
   },
