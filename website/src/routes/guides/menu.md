@@ -17,6 +17,12 @@
 - [Methods](/guides/methods/)
 - [Issues](/guides/issues/)
 
+## Advanced
+
+- [Naming](/guides/naming/)
+- [Special cases](/guides/special-cases/)
+- [Objects](/guides/objects/)
+
 ## Migration
 
 - [From Zod](/guides/migrate-from-zod/)
