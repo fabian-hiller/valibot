@@ -21,7 +21,7 @@ export type SchemaWithFallbackAsync<
 };
 
 /**
- * Returns a fallback value when validating the passed schema failed.
+ * Returns a fallback output value when validating the passed schema failed.
  *
  * @param schema The schema to catch.
  * @param fallback The fallback value.
