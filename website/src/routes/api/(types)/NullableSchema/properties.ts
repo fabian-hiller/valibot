@@ -20,7 +20,7 @@ export const properties: Record<string, PropertyProps> = {
                 },
               ],
             },
-            'undefined',
+            'null',
           ],
           {
             type: 'custom',
@@ -37,7 +37,7 @@ export const properties: Record<string, PropertyProps> = {
                   },
                 ],
               },
-              'undefined',
+              'null',
             ],
           },
         ],
