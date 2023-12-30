@@ -1,10 +1,146 @@
 ---
 title: nullish
+description: Creates a nullish schema.
 source: /schemas/nullish/nullish.ts
 contributors:
   - fabian-hiller
+  - sqmasep
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # nullish
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/nullish/nullish.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a nullish schema.
+
+```ts
+const Schema = nullish<TWrapped, TDefault>(wrapped, default_);
+```
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+- `TDefault` <Property {...properties.TDefault} />
+
+## Parameters
+
+- `wrapped` <Property {...properties.wrapped} />
+- `default_` {/* prettier-ignore */}<Property {...properties.default_}/>
+
+### Explanation
+
+With `nullish` the validation of your schema will pass `undefined` and `null` inputs, and if you specify a `default_` value, the schema will use it if the input is `undefined` or `null`.
+
+> Note that `nullish` accepts `undefined` and `null` as an input. If you want to accept only `null` inputs, use <Link href="../nullable/">`nullable`</Link>, and if you want to accept only `undefined` inputs, use <Link href="../optional/">`optional`</Link> instead. Also, if you want to set a default value for any invalid input, you should use <Link href="../fallback/">`fallback`</Link> instead.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `nullish` can be used.
+
+### Nullish string schema
+
+Schema that accepts `string`, `undefined` and `null`.
+
+```ts
+const NullishStringSchema = nullish(string(), "I'm the default!");
+```
+
+### Nullish date schema
+
+Schema that accepts `Date`, `undefined` and `null`.
+
+> By using a function as the `default_` parameter, the schema will return a new `Date` instance each time the input is `undefined` or `null`.
+
+```ts
+const NullishDateSchema = nullish(date(), () => new Date());
+```
+
+### Nullish entry schema
+
+Object schema with a nullish entry.
+
+```ts
+const NullishEntrySchema = object({
+  key: nullish(string()),
+});
+```
+
+### Unwrap nullish schema
+
+Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `nullish`.
+
+```ts
+const NullishNumberSchema = nullish(number());
+const NumberSchema = unwrap(NullishNumberSchema);
+```
+
+## Related
+
+The following APIs can be combined with `nullish`.
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+    'unwrap',
+  ]}
+/>
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'recursive',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
