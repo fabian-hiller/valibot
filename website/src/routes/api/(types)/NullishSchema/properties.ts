@@ -20,6 +20,7 @@ export const properties: Record<string, PropertyProps> = {
                 },
               ],
             },
+            'null',
             'undefined',
           ],
           {
@@ -37,6 +38,7 @@ export const properties: Record<string, PropertyProps> = {
                   },
                 ],
               },
+              'null',
               'undefined',
             ],
           },
