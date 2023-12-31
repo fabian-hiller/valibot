@@ -240,3 +240,4 @@
 - [UnknownPathItem](/api/UnknownPathItem/)
 - [UntypedSchemaResult](/api/UntypedSchemaResult/)
 - [ValidActionResult](/api/ValidActionResult/)
+- [VoidSchema](/api/VoidSchema/)
