@@ -213,6 +213,7 @@
 - [Issues](/api/Issues/)
 - [MapPathItem](/api/MapPathItem/)
 - [MaybeReadonly](/api/MaybeReadonly/)
+- [NanSchema](/api/NanSchema/)
 - [NullableSchema](/api/NullableSchema/)
 - [NullishSchema](/api/NullishSchema/)
 - [NumberSchema](/api/NumberSchema/)
