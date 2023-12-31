@@ -51,7 +51,13 @@ type SingleTypeOrValue =
     }
   | {
       type: 'function';
-      params: { name: string; optional?: boolean; type: TypeOrValue }[];
+      modifier?: string;
+      params: {
+        spread?: boolean;
+        name: string;
+        optional?: boolean;
+        type: TypeOrValue;
+      }[];
       return: TypeOrValue;
     }
   | {
@@ -180,11 +186,21 @@ export function Property(props: PropertyProps) {
             </span>
           ) : type.type === 'function' ? (
             <span class="text-slate-600 dark:text-slate-400">
+              {type.modifier && (
+                <>
+                  <span class="text-red-600 dark:text-red-400">
+                    {type.modifier}
+                  </span>{' '}
+                </>
+              )}
               {Array.isArray(type.return) && '('}(
               {type.params.map((param, index) => (
                 <>
                   <span>
                     {index > 0 && ', '}
+                    {param.spread && (
+                      <span class="text-red-600 dark:text-red-400">...</span>
+                    )}
                     <span class="italic text-orange-500 dark:text-orange-300">
                       {param.name}
                     </span>
