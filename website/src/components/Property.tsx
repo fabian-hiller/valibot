@@ -10,6 +10,7 @@ type SingleTypeOrValue =
   | 'null'
   | 'undefined'
   | 'void'
+  | 'never'
   | 'any'
   | 'unknown'
   | 'object'
@@ -109,6 +110,7 @@ export function Property(props: PropertyProps) {
                   type === 'null' ||
                   type === 'undefined' ||
                   type === 'void' ||
+                  type === 'never' ||
                   type === 'any' ||
                   type === 'unknown',
                 'capitalize text-sky-600 dark:text-sky-400':

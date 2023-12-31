@@ -214,6 +214,7 @@
 - [MapPathItem](/api/MapPathItem/)
 - [MaybeReadonly](/api/MaybeReadonly/)
 - [NanSchema](/api/NanSchema/)
+- [NeverSchema](/api/NeverSchema/)
 - [NullableSchema](/api/NullableSchema/)
 - [NullishSchema](/api/NullishSchema/)
 - [NumberSchema](/api/NumberSchema/)

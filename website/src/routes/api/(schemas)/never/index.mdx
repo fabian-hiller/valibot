@@ -1,10 +1,98 @@
 ---
 title: never
+description: Creates a never schema.
 source: /schemas/never/never.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # never
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/never/never.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a never schema.
+
+```ts
+const Schema = never(message);
+```
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+When validated, `never` always returns an issue. You can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `never` can be used.
+
+### Strict object schema
+
+Schema to prevent any unknown object properties.
+
+> Otherwise, unknown object properties are simply ignored by default.
+
+```ts
+const StrictObjectSchema = object({ key: sting() }, never());
+```
+
+### Strict tuple schema
+
+Schema to prevent any unknown tuple items.
+
+> Otherwise, unknown tuple items are simply ignored by default.
+
+```ts
+const StrictTupleSchema = tuple([string(), number()], never());
+```
+
+## Related
+
+The following APIs can be combined with `never`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>
