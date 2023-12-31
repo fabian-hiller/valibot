@@ -217,6 +217,7 @@
 - [NeverSchema](/api/NeverSchema/)
 - [NullableSchema](/api/NullableSchema/)
 - [NullishSchema](/api/NullishSchema/)
+- [NullSchema](/api/NullSchema/)
 - [NumberSchema](/api/NumberSchema/)
 - [ObjectPathItem](/api/ObjectPathItem/)
 - [OptionalSchema](/api/OptionalSchema/)
