@@ -236,6 +236,7 @@
 - [SymbolSchema](/api/SymbolSchema/)
 - [TuplePathItem](/api/TuplePathItem/)
 - [TypedSchemaResult](/api/TypedSchemaResult/)
+- [UndefinedSchema](/api/UndefinedSchema/)
 - [UnknownPathItem](/api/UnknownPathItem/)
 - [UntypedSchemaResult](/api/UntypedSchemaResult/)
 - [ValidActionResult](/api/ValidActionResult/)
