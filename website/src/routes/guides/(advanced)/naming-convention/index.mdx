@@ -27,7 +27,7 @@ In the following example, a schema is created for a user object. In order to fol
 import * as v from 'valibot';
 
 export const PublicUser = v.object({
-  name: v.string([v.maxLength(100)]),
+  name: v.string([v.maxLength(30)]),
   email: v.string([v.email()]),
   avatar: v.nullable(v.blob()),
   bio: v.string([v.maxLength(1000)]),
@@ -68,7 +68,7 @@ This requires the schema and types to be imported separately, which increases th
 
 ### Example
 
-In the following example, a schema is created for a image object. In order to follow the naming convention, the schema and the types are exported with different names.
+In the following example, a schema is created for an image object. In order to follow the naming convention, the schema and the types are exported with different names.
 
 ```ts
 import * as v from 'valibot';
