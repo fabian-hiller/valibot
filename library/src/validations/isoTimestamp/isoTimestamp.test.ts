@@ -10,6 +10,8 @@ describe('isoTimestamp', () => {
     expect(validate._parse(value2).output).toBe(value2);
     const value3 = '9999-12-31T23:59:59.999Z';
     expect(validate._parse(value3).output).toBe(value3);
+    const value4 = '2024-01-04T17:40:21.157953900Z';
+    expect(validate._parse(value4).output).toBe(value4);
 
     expect(validate._parse('').issues).toBeTruthy();
     expect(validate._parse('2023-07-11T17:26:27.243').issues).toBeTruthy();
