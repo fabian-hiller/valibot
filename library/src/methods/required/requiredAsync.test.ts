@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../comparable.ts';
 import {
   nonOptionalAsync,
   object,
@@ -16,8 +15,8 @@ describe('requiredAsync', () => {
     const schema = requiredAsync(
       objectAsync({ key1: optionalAsync(string()), key2: string() })
     );
-    expect(schema).toEqual(
-      comparable(
+    expect(JSON.stringify(schema)).toEqual(
+      JSON.stringify(
         objectAsync({
           key1: nonOptionalAsync(optionalAsync(string())),
           key2: nonOptionalAsync(string()),

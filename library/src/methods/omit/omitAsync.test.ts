@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../comparable.ts';
 import { object, objectAsync, string } from '../../schemas/index.ts';
 import { toCustom } from '../../transformations/index.ts';
 import { parseAsync } from '../parse/index.ts';
@@ -11,7 +10,9 @@ describe('omitAsync', () => {
       objectAsync({ key1: string(), key2: string(), key3: string() }),
       ['key1', 'key3']
     );
-    expect(schema).toEqual(comparable(objectAsync({ key2: string() })));
+    expect(JSON.stringify(schema)).toEqual(
+      JSON.stringify(objectAsync({ key2: string() }))
+    );
     const input = { key2: 'test' };
     const output = await parseAsync(schema, input);
     expect(output).toEqual(input);

@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../comparable.ts';
 import { nonOptional, object, optional, string } from '../../schemas/index.ts';
 import { toCustom } from '../../transformations/index.ts';
 import { parse } from '../parse/index.ts';
@@ -10,8 +9,8 @@ describe('required', () => {
     const schema = required(
       object({ key1: optional(string()), key2: string() })
     );
-    expect(schema).toEqual(
-      comparable(
+    expect(JSON.stringify(schema)).toEqual(
+      JSON.stringify(
         object({
           key1: nonOptional(optional(string())),
           key2: nonOptional(string()),

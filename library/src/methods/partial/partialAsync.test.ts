@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../comparable.ts';
 import {
   object,
   objectAsync,
@@ -15,8 +14,8 @@ describe('partialAsync', () => {
     const schema = partialAsync(
       objectAsync({ key1: string(), key2: string() })
     );
-    expect(schema).toEqual(
-      comparable(
+    expect(JSON.stringify(schema)).toEqual(
+      JSON.stringify(
         objectAsync({
           key1: optionalAsync(string()),
           key2: optionalAsync(string()),

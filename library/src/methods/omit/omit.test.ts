@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../comparable.ts';
 import { object, string } from '../../schemas/index.ts';
 import { toCustom } from '../../transformations/index.ts';
 import { omit } from '../omit/index.ts';
@@ -11,7 +10,9 @@ describe('omit', () => {
       object({ key1: string(), key2: string(), key3: string() }),
       ['key1', 'key3']
     );
-    expect(schema).toEqual(comparable(object({ key2: string() })));
+    expect(JSON.stringify(schema)).toEqual(
+      JSON.stringify(object({ key2: string() }))
+    );
     const input = { key2: 'test' };
     const output = parse(schema, input);
     expect(output).toEqual(input);
