@@ -49,7 +49,7 @@ export interface IntersectSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<IntersectInput<TOptions>> | undefined;
-};
+}
 
 /**
  * Creates an async intersect schema.

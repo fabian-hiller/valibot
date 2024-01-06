@@ -42,7 +42,7 @@ export interface UnionSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<Input<TOptions[number]>> | undefined;
-};
+}
 
 /**
  * Creates an async union schema.

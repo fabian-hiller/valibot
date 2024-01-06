@@ -63,7 +63,7 @@ export interface VariantSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<Input<TOptions[number]>> | undefined;
-};
+}
 
 /**
  * Creates an async variant (aka discriminated union) schema.

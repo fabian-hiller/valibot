@@ -61,7 +61,7 @@ export interface VariantSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<Input<TOptions[number]>> | undefined;
-};
+}
 
 /**
  * Creates a variant (aka discriminated union) schema.

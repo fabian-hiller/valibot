@@ -15,7 +15,7 @@ export interface ImeiValidation<TInput extends string>
    * The IMEI regex and luhn algorithm.
    */
   requirement: [RegExp, typeof isLuhnAlgo];
-};
+}
 
 /**
  * Creates a pipeline validation action that validates an [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity).

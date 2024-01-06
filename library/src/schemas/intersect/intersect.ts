@@ -44,7 +44,7 @@ export interface IntersectSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<IntersectInput<TOptions>> | undefined;
-};
+}
 
 /**
  * Creates an intersect schema.
