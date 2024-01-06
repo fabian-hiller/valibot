@@ -56,9 +56,9 @@ const FallbackStringSchema = fallback(string(), "I'm the fallback!");
 
 ### Fallback date schema
 
-Schema that will always return a `Date` output.
+Schema that will always return a [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) output.
 
-> By using a function as the `fallback` parameter, the schema will return a new `Date` instance each time the input does not match the schema.
+> By using a function as the `fallback` parameter, the schema will return a new [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance each time the input does not match the schema.
 
 ```ts
 const FallbackDateSchema = fallback(date(), () => new Date());
