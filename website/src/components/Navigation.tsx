@@ -66,7 +66,11 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
     <li class="space-y-6">
       <div class="sticky -top-1 z-10 lg:static">
         <h4
-          class={clsx('text-lg font-medium text-slate-900 dark:text-slate-200')}
+          class={clsx(
+            'text-lg font-medium text-slate-900 dark:text-slate-200',
+            items?.some(({ href }) => location.url.pathname === href) &&
+              'docsearch-lvl1'
+          )}
         >
           {text}
         </h4>

@@ -19,12 +19,13 @@ export interface MaxLengthValidation<
 }
 
 /**
- * Creates a validation function that validates the length of a string or array.
+ * Creates a pipeline validation action that validates the length of a string
+ * or array.
  *
  * @param requirement The maximum length.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function maxLength<
   TInput extends string | any[],

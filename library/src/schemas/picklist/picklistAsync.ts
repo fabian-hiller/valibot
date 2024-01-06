@@ -31,10 +31,7 @@ export interface PicklistSchemaAsync<
  *
  * @returns An async picklist schema.
  */
-export function picklistAsync<
-  TOption extends string,
-  TOptions extends PicklistOptions<TOption>
->(
+export function picklistAsync<const TOptions extends PicklistOptions>(
   options: TOptions,
   message: ErrorMessage = 'Invalid type'
 ): PicklistSchemaAsync<TOptions> {
@@ -49,7 +46,7 @@ export function picklistAsync<
         return schemaIssue(info, 'type', 'picklist', this.message, input);
       }
 
-      // Return inpot as output
+      // Return input as output
       return parseResult(true, input as TOptions[number]);
     },
   };

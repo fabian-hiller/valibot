@@ -1,7 +1,146 @@
 ---
 title: optional
+description: Creates an optional schema.
+source: /schemas/optional/optional.ts
+contributors:
+  - fabian-hiller
+  - sqmasep
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # optional
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/optional/optional.ts).
+Creates an optional schema.
+
+```ts
+const Schema = optional<TWrapped, TDefault>(wrapped, default_);
+```
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+- `TDefault` <Property {...properties.TDefault} />
+
+## Parameters
+
+- `wrapped` <Property {...properties.wrapped} />
+- `default_` {/* prettier-ignore */}<Property {...properties.default_} />
+
+### Explanation
+
+With `optional` the validation of your schema will pass `undefined` inputs, and if you specify a `default_` input value, the schema will use it if the input is `undefined`. For this reason, the output type may differ from the input type of the schema.
+
+> Note that `optional` does not accept `null` as an input. If you want to accept `null` inputs, use <Link href="../nullable/">`nullable`</Link>, and if you want to accept `null` and `undefined` inputs, use <Link href="../nullish/">`nullish`</Link> instead. Also, if you want to set a default output value for any invalid input, you should use <Link href="../fallback/">`fallback`</Link> instead.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `optional` can be used.
+
+### Optional string schema
+
+Schema that accepts `string` and `undefined`.
+
+```ts
+const OptionalStringSchema = optional(string(), "I'm the default!");
+```
+
+### Optional date schema
+
+Schema that accepts `Date` and `undefined`.
+
+> By using a function as the `default_` parameter, the schema will return a new `Date` instance each time the input is `undefined`.
+
+```ts
+const OptionalDateSchema = optional(date(), () => new Date());
+```
+
+### Optional entry schema
+
+Object schema with an optional entry.
+
+```ts
+const OptionalEntrySchema = object({
+  key: optional(string()),
+});
+```
+
+### Unwrap optional schema
+
+Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `optional`.
+
+```ts
+const OptionalNumberSchema = optional(number());
+const NumberSchema = unwrap(OptionalNumberSchema);
+```
+
+## Related
+
+The following APIs can be combined with `optional`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'recursive',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+    'unwrap',
+  ]}
+/>

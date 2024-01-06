@@ -10,6 +10,7 @@ type SingleTypeOrValue =
   | 'null'
   | 'undefined'
   | 'void'
+  | 'never'
   | 'any'
   | 'unknown'
   | 'object'
@@ -51,20 +52,28 @@ type SingleTypeOrValue =
     }
   | {
       type: 'function';
-      params: { name: string; optional?: boolean; type: TypeOrValue }[];
+      modifier?: string;
+      params: {
+        spread?: boolean;
+        name: string;
+        optional?: boolean;
+        type: TypeOrValue;
+      }[];
       return: TypeOrValue;
     }
   | {
       type: 'custom';
+      modifier?: string;
       name: string;
-      default?: TypeOrValue;
-      generics?: TypeOrValue[];
       href?: string;
+      generics?: TypeOrValue[];
+      indexes?: TypeOrValue[];
+      default?: TypeOrValue;
     };
 
 type TypeOrValue = SingleTypeOrValue | SingleTypeOrValue[];
 
-type PropertyProps = {
+export type PropertyProps = {
   type: TypeOrValue;
   default?: TypeOrValue;
   padding?: 'none';
@@ -101,6 +110,7 @@ export function Property(props: PropertyProps) {
                   type === 'null' ||
                   type === 'undefined' ||
                   type === 'void' ||
+                  type === 'never' ||
                   type === 'any' ||
                   type === 'unknown',
                 'capitalize text-sky-600 dark:text-sky-400':
@@ -178,11 +188,21 @@ export function Property(props: PropertyProps) {
             </span>
           ) : type.type === 'function' ? (
             <span class="text-slate-600 dark:text-slate-400">
+              {type.modifier && (
+                <>
+                  <span class="text-red-600 dark:text-red-400">
+                    {type.modifier}
+                  </span>{' '}
+                </>
+              )}
               {Array.isArray(type.return) && '('}(
               {type.params.map((param, index) => (
                 <>
                   <span>
                     {index > 0 && ', '}
+                    {param.spread && (
+                      <span class="text-red-600 dark:text-red-400">...</span>
+                    )}
                     <span class="italic text-orange-500 dark:text-orange-300">
                       {param.name}
                     </span>
@@ -198,6 +218,13 @@ export function Property(props: PropertyProps) {
             </span>
           ) : (
             <>
+              {type.modifier && (
+                <>
+                  <span class="text-red-600 dark:text-red-400">
+                    {type.modifier}
+                  </span>{' '}
+                </>
+              )}
               {type.href ? (
                 <Link class="text-sky-600 dark:text-sky-400" href={type.href}>
                   {type.name}
@@ -225,6 +252,13 @@ export function Property(props: PropertyProps) {
                   {'>'}
                 </>
               )}
+              {type.indexes?.map((index) => (
+                <>
+                  {'['}
+                  <Property type={index} padding="none" />
+                  {']'}
+                </>
+              ))}
             </>
           )}
         </>

@@ -19,12 +19,13 @@ export interface MultipleOfValidation<
 }
 
 /**
- * Creates a validation function that validates whether a number is a multiple.
+ * Creates a pipeline validation action that validates whether a number is a
+ * multiple.
  *
  * @param requirement The divisor.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function multipleOf<TInput extends number, TRequirement extends number>(
   requirement: TRequirement,

@@ -1,7 +1,110 @@
 ---
 title: picklist
+description: Creates a picklist schema.
+source: /schemas/picklist/picklist.ts
+contributors:
+  - fabian-hiller
+  - sqmasep
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # picklist
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/picklist/picklist.ts).
+Creates a picklist schema.
+
+```ts
+const Schema = picklist<TOptions>(options, message);
+```
+
+## Generics
+
+- `TOptions` <Property {...properties.TOptions} />
+
+## Parameters
+
+- `options` <Property {...properties.options} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `picklist` you can validate that the input corresponds to a picklist option. If the input is invalid, you can use `message` to customize the error message.
+
+> `picklist` works in a similar way to <Link href="../enum_/">`enum_`</Link>. However, in many cases it is easier to use because you can pass an array of strings instead of an enum.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `picklist` can be used.
+
+### Language schema
+
+Schema to validate programming languages.
+
+```ts
+const LanguageSchema = picklist(['JavaScript', 'TypeScript']);
+```
+
+### Country schema
+
+Schema to validate country codes.
+
+```ts
+const countries = [
+  { name: 'Germany', code: 'DE' },
+  { name: 'France', code: 'FR' },
+  { name: 'United States', code: 'US' },
+] as const;
+
+const CountrySchema = picklist(
+  countries.map((country) => country.code),
+  'Please select your country.'
+);
+```
+
+## Related
+
+The following APIs can be combined with `enum_`.
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>

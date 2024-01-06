@@ -11,7 +11,7 @@ export interface NullableSchema<
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
     | undefined = undefined,
-  TOutput = TDefault extends Input<TWrapped>
+  TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
     : Output<TWrapped> | null
 > extends BaseSchema<Input<TWrapped> | null, TOutput> {

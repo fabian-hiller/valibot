@@ -19,12 +19,12 @@ export interface StartsWithValidation<
 }
 
 /**
- * Creates a validation function that validates the start of a string.
+ * Creates a pipeline validation action that validates the start of a string.
  *
  * @param requirement The start string.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function startsWith<TInput extends string, TRequirement extends string>(
   requirement: TRequirement,

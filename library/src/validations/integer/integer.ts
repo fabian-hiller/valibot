@@ -17,11 +17,12 @@ export interface IntegerValidation<TInput extends number>
 }
 
 /**
- * Creates a validation function that validates whether a number is an integer.
+ * Creates a pipeline validation action that validates whether a number is an
+ * integer.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function integer<TInput extends number>(
   message: ErrorMessage = 'Invalid integer'

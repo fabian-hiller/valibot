@@ -1,9 +1,14 @@
 ---
 title: string
 description: Creates a string schema.
+source: /schemas/string/string.ts
+contributors:
+  - fabian-hiller
+  - kazizi55
 ---
 
 import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # string
 
@@ -20,7 +25,11 @@ const Schema = string(message, pipe);
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe}/>
+- `pipe` <Property {...properties.pipe} />
+
+### Explanation
+
+With `string` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the string. If the input is not a string, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -28,7 +37,7 @@ const Schema = string(message, pipe);
 
 ## Examples
 
-With `string` you validate the data type of the incoming data and with the `pipe` you can then validate all further details. In the event of an error, the `message` parameter allows you to customize the error message.
+The following examples show how `string` can be used.
 
 ### Email schema
 
@@ -70,6 +79,26 @@ const UrlSchema = string('A URL must be string.', [
 
 The following APIs can be combined with `string`.
 
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
 ### Methods
 
 <ApiList
@@ -77,11 +106,14 @@ The following APIs can be combined with `string`.
     'brand',
     'coerce',
     'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
     'is',
     'parse',
     'safeParse',
     'transform',
-    'unwrap',
   ]}
 />
 
@@ -104,14 +136,19 @@ The following APIs can be combined with `string`.
 
 <ApiList
   items={[
+    'bic',
     'bytes',
+    'creditCard',
     'cuid2',
     'custom',
+    'decimal',
     'email',
     'emoji',
     'endsWith',
-    'equal',
     'excludes',
+    'hash',
+    'hexadecimal',
+    'hexColor',
     'imei',
     'includes',
     'ip',
@@ -124,6 +161,9 @@ The following APIs can be combined with `string`.
     'isoTimestamp',
     'isoWeek',
     'length',
+    'mac',
+    'mac48',
+    'mac64',
     'maxBytes',
     'maxLength',
     'maxValue',
@@ -133,6 +173,7 @@ The following APIs can be combined with `string`.
     'notBytes',
     'notLength',
     'notValue',
+    'octal',
     'regex',
     'startsWith',
     'ulid',
@@ -141,40 +182,3 @@ The following APIs can be combined with `string`.
     'value',
   ]}
 />
-
-export const properties = {
-  message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
-    default: {
-      type: 'string',
-      value: 'Invalid type',
-    },
-  },
-  pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: ['string'],
-      },
-      'undefined',
-    ],
-  },
-  Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'StringSchema',
-        href: '../StringSchema/',
-      },
-    ],
-  },
-};

@@ -11,7 +11,7 @@ export interface OptionalSchema<
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
     | undefined = undefined,
-  TOutput = TDefault extends Input<TWrapped>
+  TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
     : Output<TWrapped> | undefined
 > extends BaseSchema<Input<TWrapped> | undefined, TOutput> {

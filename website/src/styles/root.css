@@ -10,6 +10,11 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  /* Reset appearance */
+  [type='search']::-webkit-search-cancel-button {
+    @apply hidden;
+  }
+
   /* Disable transitions */
   .disable-transitions,
   .disable-transitions * {

@@ -12,6 +12,7 @@ import {
 } from '../../utils/index.ts';
 import type { EnumSchema, EnumSchemaAsync } from '../enum/index.ts';
 import type { PicklistSchema, PicklistSchemaAsync } from '../picklist/index.ts';
+import type { SpecialSchema, SpecialSchemaAsync } from '../special/index.ts';
 import type { StringSchema, StringSchemaAsync } from '../string/index.ts';
 import type { UnionSchema, UnionSchemaAsync } from '../union/index.ts';
 import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';
@@ -26,6 +27,8 @@ export type RecordKeyAsync =
   | EnumSchemaAsync<any, string | number | symbol>
   | PicklistSchema<any, string | number | symbol>
   | PicklistSchemaAsync<any, string | number | symbol>
+  | SpecialSchema<any, string | number | symbol>
+  | SpecialSchemaAsync<any, string | number | symbol>
   | StringSchema<string | number | symbol>
   | StringSchemaAsync<string | number | symbol>
   | UnionSchema<any, string | number | symbol>

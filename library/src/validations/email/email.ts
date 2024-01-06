@@ -18,11 +18,11 @@ export interface EmailValidation<TInput extends string>
 }
 
 /**
- * Creates a validation function that validates a email.
+ * Creates a pipeline validation action that validates an email.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function email<TInput extends string>(
   message: ErrorMessage = 'Invalid email'

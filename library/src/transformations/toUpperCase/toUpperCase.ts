@@ -12,10 +12,10 @@ export interface ToUpperCaseTransformation extends BaseTransformation<string> {
 }
 
 /**
- * Creates a transformation function that converts all the alphabetic
+ * Creates a pipeline transformation action that converts all the alphabetic
  * characters in a string to uppercase.
  *
- * @returns A transformation function.
+ * @returns A transformation action.
  */
 export function toUpperCase(): ToUpperCaseTransformation {
   return {

@@ -7,6 +7,7 @@ import type {
 import { parseResult, pipeResult, schemaIssue } from '../../utils/index.ts';
 import type { EnumSchema } from '../enum/index.ts';
 import type { PicklistSchema } from '../picklist/index.ts';
+import type { SpecialSchema } from '../special/index.ts';
 import type { StringSchema } from '../string/index.ts';
 import type { UnionSchema } from '../union/index.ts';
 import type { RecordOutput, RecordInput, RecordPathItem } from './types.ts';
@@ -19,6 +20,7 @@ import { BLOCKED_KEYS } from './values.ts';
 export type RecordKey =
   | EnumSchema<any, string | number | symbol>
   | PicklistSchema<any, string | number | symbol>
+  | SpecialSchema<any, string | number | symbol>
   | StringSchema<string | number | symbol>
   | UnionSchema<any, string | number | symbol>;
 

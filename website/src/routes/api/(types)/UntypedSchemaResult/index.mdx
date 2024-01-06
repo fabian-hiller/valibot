@@ -1,9 +1,12 @@
 ---
 title: UntypedSchemaResult
 description: Untyped parse result type.
+contributors:
+  - fabian-hiller
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # UntypedSchemaResult
 
@@ -15,19 +18,3 @@ Untyped parse result type.
   - `typed` <Property {...properties.typed} />
   - `output` <Property type="unknown" />
   - `issues` <Property {...properties.issues} />
-
-export const properties = {
-  typed: {
-    type: {
-      type: 'boolean',
-      value: 'false',
-    },
-  },
-  issues: {
-    type: {
-      type: 'custom',
-      name: 'Issues',
-      href: '../Issues/',
-    },
-  },
-};

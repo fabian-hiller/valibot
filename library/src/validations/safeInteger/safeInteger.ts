@@ -17,11 +17,12 @@ export interface SafeIntegerValidation<TInput extends number>
 }
 
 /**
- * Creates a validation function that validates whether a number is a safe integer.
+ * Creates a pipeline validation action that validates whether a number is a
+ * safe integer.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function safeInteger<TInput extends number>(
   message: ErrorMessage = 'Invalid safe integer'

@@ -18,11 +18,11 @@ export interface Cuid2Validation<TInput extends string>
 }
 
 /**
- * Creates a validation function that validates a [Cuid2](https://github.com/paralleldrive/cuid2).
+ * Creates a pipeline validation action that validates a [Cuid2](https://github.com/paralleldrive/cuid2).
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function cuid2<TInput extends string>(
   message: ErrorMessage = 'Invalid Cuid2'

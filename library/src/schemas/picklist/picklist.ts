@@ -31,10 +31,7 @@ export interface PicklistSchema<
  *
  * @returns A picklist schema.
  */
-export function picklist<
-  TOption extends string,
-  TOptions extends PicklistOptions<TOption>
->(
+export function picklist<const TOptions extends PicklistOptions>(
   options: TOptions,
   message: ErrorMessage = 'Invalid type'
 ): PicklistSchema<TOptions> {
@@ -49,7 +46,7 @@ export function picklist<
         return schemaIssue(info, 'type', 'picklist', this.message, input);
       }
 
-      // Return inpot as output
+      // Return input as output
       return parseResult(true, input as TOptions[number]);
     },
   };

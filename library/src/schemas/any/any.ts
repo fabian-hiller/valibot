@@ -16,11 +16,11 @@ export interface AnySchema<TOutput = any> extends BaseSchema<any, TOutput> {
 }
 
 /**
- * Creates a any schema.
+ * Creates an any schema.
  *
  * @param pipe A validation and transformation pipe.
  *
- * @returns A any schema.
+ * @returns An any schema.
  */
 export function any(pipe?: Pipe<any>): AnySchema {
   return {

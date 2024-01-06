@@ -1,10 +1,6 @@
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
-
-/**
- * Class enum type.
- */
-export type Class = abstract new (...args: any) => any;
+import type { Class } from './types.ts';
 
 /**
  * Instance schema type.

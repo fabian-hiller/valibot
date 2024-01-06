@@ -1,9 +1,12 @@
 ---
 title: PipeActionResult
 description: Pipe action result type.
+contributors:
+  - fabian-hiller
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # PipeActionResult
 
@@ -12,21 +15,3 @@ Pipe action result type.
 ## Definition
 
 - `PipeActionResult` <Property {...properties.PipeActionResult} />
-
-export const properties = {
-  PipeActionResult: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ValidActionResult',
-        href: '../ValidActionResult/',
-        generics: [{ type: 'custom', name: 'TOutput' }],
-      },
-      {
-        type: 'custom',
-        name: 'InvalidActionResult',
-        href: '../InvalidActionResult/',
-      },
-    ],
-  },
-};

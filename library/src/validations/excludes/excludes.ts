@@ -19,12 +19,13 @@ export interface ExcludesValidation<
 }
 
 /**
- * Creates a validation function that validates the content of a string or array.
+ * Creates a pipeline validation action that validates the content of a string
+ * or array.
  *
  * @param requirement The content to be excluded.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function excludes<
   TInput extends string | any[],

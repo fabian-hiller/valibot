@@ -19,12 +19,13 @@ export interface IncludesValidation<
 }
 
 /**
- * Creates a validation function that validates the content of a string or array.
+ * Creates a pipeline validation action that validates the content of a string
+ * or array.
  *
  * @param requirement The content to be included.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function includes<
   TInput extends string | any[],

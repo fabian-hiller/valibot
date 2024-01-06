@@ -17,11 +17,11 @@ export interface FiniteValidation<TInput extends number>
 }
 
 /**
- * Creates a validation function that validates whether a number is finite.
+ * Creates a pipeline validation action that validates whether a number is finite.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function finite<TInput extends number>(
   message: ErrorMessage = 'Invalid finite number'
@@ -31,7 +31,7 @@ export function finite<TInput extends number>(
     async: false,
     message,
     requirement: Number.isFinite,
-    _parse(input: TInput) {
+    _parse(input) {
       return !this.requirement(input)
         ? actionIssue(this.type, this.message, input, this.requirement)
         : actionOutput(input);

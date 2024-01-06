@@ -1,12 +1,25 @@
-import type { BaseSchema, ErrorMessage, Issues } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  Issues,
+  MaybeReadonly,
+  Pipe,
+} from '../../types/index.ts';
+import {
+  defaultArgs,
+  parseResult,
+  pipeResult,
+  schemaIssue,
+} from '../../utils/index.ts';
 import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
 
 /**
  * Intersect options type.
  */
-export type IntersectOptions = [BaseSchema, BaseSchema, ...BaseSchema[]];
+export type IntersectOptions = MaybeReadonly<
+  [BaseSchema, BaseSchema, ...BaseSchema[]]
+>;
 
 /**
  * Intersect schema type.
@@ -27,25 +40,55 @@ export interface IntersectSchema<
    * The error message.
    */
   message: ErrorMessage;
-}
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<IntersectInput<TOptions>> | undefined;
+};
+
+/**
+ * Creates an intersect schema.
+ *
+ * @param options The intersect options.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An intersect schema.
+ */
+export function intersect<TOptions extends IntersectOptions>(
+  options: TOptions,
+  pipe?: Pipe<IntersectInput<TOptions>>
+): IntersectSchema<TOptions>;
 
 /**
  * Creates an intersect schema.
  *
  * @param options The intersect options.
  * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An intersect schema.
  */
 export function intersect<TOptions extends IntersectOptions>(
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage,
+  pipe?: Pipe<IntersectInput<TOptions>>
+): IntersectSchema<TOptions>;
+
+export function intersect<TOptions extends IntersectOptions>(
+  options: TOptions,
+  arg2?: Pipe<IntersectInput<TOptions>> | ErrorMessage,
+  arg3?: Pipe<IntersectInput<TOptions>>
 ): IntersectSchema<TOptions> {
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+
+  // Create and return intersect schema
   return {
     type: 'intersect',
     async: false,
     options,
     message,
+    pipe,
     _parse(input, info) {
       // Create typed, issues, output and outputs
       let typed = true;
@@ -101,8 +144,8 @@ export function intersect<TOptions extends IntersectOptions>(
           output = result.output;
         }
 
-        // Return typed parse result
-        return parseResult(true, output, issues);
+        // Execute pipe and return typed parse result
+        return pipeResult(output, this.pipe, info, 'intersect', issues);
       }
 
       // Otherwise, return untyped parse result

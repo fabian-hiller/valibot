@@ -13,11 +13,11 @@ export interface ToCustomTransformation<TInput>
 }
 
 /**
- * Creates a custom transformation function.
+ * Creates a custom pipeline transformation action.
  *
  * @param action The transform action.
  *
- * @returns A transformation function.
+ * @returns A transformation action.
  */
 export function toCustom<TInput>(
   action: (input: TInput) => TInput

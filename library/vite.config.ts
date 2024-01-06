@@ -4,6 +4,7 @@ export default defineConfig(() => {
   return {
     test: {
       environment: 'jsdom',
+      isolate: false,
     },
     build: {
       target: 'ESNext',

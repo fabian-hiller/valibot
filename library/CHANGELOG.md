@@ -2,11 +2,40 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.25.0 (December 26, 2023)
+
+- Add `creditCard`, `decimal`, `hash`, `hexadecimal`, `hexColor` and `octal` pipeline validation action (pull request #292, #304, #307, #308, #309)
+- Add `pipe` parameter to `intersect`, `intersectAsync`, `union`, `unionAsync`, `variant` and `variantAsync` schema (discussion #297)
+- Add support for multiple variant options with same discriminator key to `variant` and `variantAsync` schema (issue #310)
+- Add path to issues if discriminator key of `variant` and `variantAsync` schema is missing (issue #235, #303)
+- Change `PicklistOptions` type and generics of `picklist` and `picklistAsync` schema
+
+## v0.24.1 (December 11, 2023)
+
+- Fix output type of optional `object` and `objectAsync` entries with default value (issue #286)
+- Fix output type of `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional` and `optionalAsync` schema with default value (issue #286)
+
+## v0.24.0 (December 10, 2023)
+
+- Add support for `special` schema as key of `record` schema (issue #291)
+- Add support for `special` and `specialAsync` schema as key of `recordAsync` schema (issue #291)
+- Fix input and output type of optional `object` and `objectAsync` entries with default value (issue #286)
+
+## v0.23.0 (December 08, 2023)
+
+- Add `bic` validation function (pull request #284)
+- Add `mac`, `mac48` and `mac64` validation function (pull request #270)
+- Change `PicklistOptions`, `UnionOptions` and `UnionOptionsAsync` type from tuple to array (issue #279)
+- Change `IntersectOptions`, `IntersectOptionsAsync`, `UnionOptions` and `UnionOptionsAsync` type to support readonly values (issue #279)
+- Fix optional keys of `ObjectInput` and `ObjectOutput` type (issue #242)
+
 ## v0.22.0 (December 03, 2023)
 
 - Add support for boolean to `notValue` validation (pull request #261)
 - Add `.typed` to schema validation result and execute pipeline of complex schemas if output is typed (issue #76, #145)
 - Add `forward` method that forwards issues of pipelines to nested fields (issue #76, #145)
+- Add `skipPipe` option to `is` type guard method (pull request #166)
+- Change return type of `safeParse` and `safeParseAsync` method
 - Rename and change util functions and refactor codebase
 - Fix `RecordInput` and `RecordOuput` type when using `unionAsync` as key
 - Fix output type for `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional` and `optionalAsync` when using a default value (issue #271)

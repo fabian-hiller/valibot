@@ -1,0 +1,83 @@
+---
+title: Arrays
+description: >-
+  To validate arrays with a schema you can use array or tuple. You use tuple if
+  your array has a specific shape and array in the other case.
+contributors:
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+
+# Arrays
+
+To validate arrays with a schema you can use <Link href="/api/array/">`array`</Link> or <Link href="/api/tuple/">`tuple`</Link>. You use <Link href="/api/tuple/">`tuple`</Link> if your array has a specific shape and <Link href="/api/array/">`array`</Link> if it has any number of uniform items.
+
+## Array schema
+
+The first argument you pass to <Link href="/api/array/">`array`</Link> is a schema, which is used to validate the items of the array.
+
+```ts
+import * as v from 'valibot';
+
+const ArraySchema = v.array(v.number()); // number[]
+```
+
+### Pipeline validation
+
+To validate the length or contents of the array, you can use its pipeline.
+
+```ts
+import * as v from 'valibot';
+
+const ArraySchema = v.array(v.string(), [
+  v.minLength(1),
+  v.maxLength(5),
+  v.includes('foo'),
+  v.excludes('bar'),
+]);
+```
+
+## Tuple schema
+
+A <Link href="/api/tuple/">`tuple`</Link> is an array with a specific shape. The first argument that you pass to the function is a tuple of schemas that defines its shape.
+
+```ts
+import * as v from 'valibot';
+
+const TupleSchema = v.tuple([v.string(), v.number()]); // [string, number]
+```
+
+### Rest argument
+
+By default, <Link href="/api/tuple/">`tuple`</Link> ignores and removes unknown items. This means that items that occur after the items defined by the first argument will not be validated and will not be added to the output. You can control this behavior with the `rest` argument.
+
+By using <Link href="/api/never/">`never`</Link> for the `rest` argument, you can make the validation strict and forbid unknown items completely. If unknown items are detected, an issue is returned for each entry.
+
+```ts
+import * as v from 'valibot';
+
+const TupleSchema = v.tuple([v.string(), v.number()], v.never());
+```
+
+Alternatively, you can also allow unknown items with <Link href="/api/unknown/">`unknown`</Link> and add them to the output. Instead of <Link href="/api/unknown/">`unknown`</Link>, you can also use any other schema function, such as <Link href="/api/string/">`string`</Link>, for a typed output.
+
+```ts
+import * as v from 'valibot';
+
+const TupleSchema = v.tuple([v.string()], v.unknown()); // [string, ...unknown[]]
+```
+
+### Pipeline validation
+
+Similar to <Link href="/api/array/">`array`</Link>, you can use the pipeline of <Link href="/api/tuple/">`tuple`</Link> to validate its length and contents.
+
+```ts
+import * as v from 'valibot';
+
+const TupleSchema = v.tuple([v.string()], v.string(), [
+  v.maxLength(5),
+  v.includes('foo'),
+  v.excludes('bar'),
+]);
+```

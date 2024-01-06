@@ -19,14 +19,14 @@ export interface EqualValidation<
 }
 
 /**
- * Creates a validation function that checks the value for equality.
+ * Creates a pipeline validation action that checks the value for equality.
  *
  * @deprecated Function has been renamed to `value`.
  *
  * @param requirement The required value.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function equal<
   TInput extends string | number | bigint | boolean,

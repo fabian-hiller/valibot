@@ -1,9 +1,13 @@
 ---
 title: Issues
 description: Issues type.
+contributors:
+  - fabian-hiller
+  - kazizi55
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # Issues
 
@@ -12,27 +16,3 @@ Issues type.
 ## Definition
 
 - `Issues` <Property {...properties.issues} />
-
-export const properties = {
-  issues: {
-    type: {
-      type: 'tuple',
-      items: [
-        {
-          type: 'custom',
-          name: 'Issue',
-          href: '../Issue/',
-        },
-        {
-          type: 'array',
-          spread: true,
-          item: {
-            type: 'custom',
-            name: 'Issue',
-            href: '../Issue/',
-          },
-        },
-      ],
-    },
-  },
-};

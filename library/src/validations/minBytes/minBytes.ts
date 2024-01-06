@@ -19,12 +19,13 @@ export interface MinBytesValidation<
 }
 
 /**
- * Creates a validation function that validates the byte length of a string.
+ * Creates a pipeline validation action that validates the byte length of a
+ * string.
  *
  * @param requirement The minimum length in byte.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function minBytes<TInput extends string, TRequirement extends number>(
   requirement: TRequirement,

@@ -18,11 +18,11 @@ export interface UuidValidation<TInput extends string>
 }
 
 /**
- * Creates a validation function that validates a [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier).
+ * Creates a pipeline validation action that validates a [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier).
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function uuid<TInput extends string>(
   message: ErrorMessage = 'Invalid UUID'
