@@ -31,15 +31,23 @@ You may contribute by:
 
 Push to your fork and [submit a pull request][pr].
 
-We will review and may suggest some changes or improvements or alternatives.
-Some things that will increase the chance that your pull request is accepted:
+🔹 Contributing to Our Project: Best Practices for Pull Requests (PRs) 🔹
 
-- We use **Typescript** to write code.
-- Write clean and understandable code.
-- Properly comment the code and explain what validation is doing with some link to Wiki or source.
-- You may also explain the output using a minimal example.
-- Try to also include a test cases.
-- Write a [good commit message][commit].
+As we strive for excellence in our codebase, here are some guidelines to make your contributions shine:
+
+- Code in TypeScript: Embrace the power of TypeScript for writing your code. It helps in maintaining consistency and leveraging TypeScript's robust features.
+
+- Clarity and Cleanliness: Write code that speaks for itself. Aim for simplicity and clarity, making it easy for others to read and understand at a glance.
+
+- Commenting and Documentation: Illuminate your code with clear comments. Explain the purpose and functionality of your code, especially validations. Where applicable, include links to relevant Wiki articles or external sources for further context.
+
+- Illustrative Examples: Enhance understanding by providing minimal yet meaningful examples to demonstrate the expected output of your code.
+
+- Include Test Cases: Show the robustness of your code by accompanying it with well-thought-out test cases. This practice not only validates your code but also assists in maintaining the code quality in the long run.
+
+- Size Matters for PRs: Keep your pull requests concise and focused. Smaller PRs are easier to review and merge, speeding up the development process. This approach helps in isolating changes and simplifying troubleshooting.
+
+- Crafting a Good Commit Message: Your commit messages are a roadmap of your changes. Follow [good commit message practices][commit] to make them informative and useful for everyone.
 
 ## Issues
 
