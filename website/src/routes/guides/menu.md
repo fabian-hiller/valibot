@@ -30,6 +30,7 @@
 ## Advanced
 
 - [Naming](/guides/naming-convention/)
+- [Async](/guides/async-validation/)
 - [i18n](/guides/internationalization/)
 
 ## Migration
