@@ -11,6 +11,24 @@ Hello, I am Valibot and I would like to help you validate data easily using a sc
 
 > I highly recommend you read the [announcement post](https://www.builder.io/blog/introducing-valibot), and if you are a nerd like me, the [bachelor's thesis](https://valibot.dev/thesis.pdf) I am based on.
 
+## Installation
+
+Use your preferred package manager to install valibot.
+
+```sh
+npm i valibot
+```
+```sh
+yarn add valibot
+```
+```sh
+pnpm i valibot
+```
+```sh
+bun i valibot
+```
+
+
 ## Highlights
 
 - Fully type safe with static type inference
