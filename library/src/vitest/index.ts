@@ -8,11 +8,11 @@ declare module 'vitest' {
 }
 
 expect.extend({
-  toEqualSchema(received: unknown, expected: unknown) {
+  toEqualSchema(actual: unknown, expected: unknown) {
     return {
-      pass: this.equals(received, comparable(expected)),
-      message: () => `expect(received).toEqualSchema(expected):`,
-      actual: received,
+      pass: this.equals(actual, comparable(expected)),
+      message: () => `expect(actual).toEqualSchema(expected):`,
+      actual,
       expected,
     };
   },
