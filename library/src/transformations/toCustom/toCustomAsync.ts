@@ -4,13 +4,13 @@ import { actionOutput } from '../../utils/index.ts';
 /**
  * To custom transformation async type.
  */
-export type ToCustomTransformationAsync<TInput> =
-  BaseTransformationAsync<TInput> & {
-    /**
-     * The transformation type.
-     */
-    type: 'to_custom';
-  };
+export interface ToCustomTransformationAsync<TInput>
+  extends BaseTransformationAsync<TInput> {
+  /**
+   * The transformation type.
+   */
+  type: 'to_custom';
+}
 
 /**
  * Creates a async custom transformation function.

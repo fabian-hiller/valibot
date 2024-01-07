@@ -4,12 +4,12 @@ import { actionOutput } from '../../utils/index.ts';
 /**
  * To trimmed transformation type.
  */
-export type ToTrimmedTransformation = BaseTransformation<string> & {
+export interface ToTrimmedTransformation extends BaseTransformation<string> {
   /**
    * The transformation type.
    */
   type: 'to_trimmed';
-};
+}
 
 /**
  * Creates a pipeline transformation action that removes the leading and

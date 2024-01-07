@@ -12,7 +12,8 @@ import {
 /**
  * Blob schema async type.
  */
-export type BlobSchemaAsync<TOutput = Blob> = BaseSchemaAsync<Blob, TOutput> & {
+export interface BlobSchemaAsync<TOutput = Blob>
+  extends BaseSchemaAsync<Blob, TOutput> {
   /**
    * The schema type.
    */
@@ -25,7 +26,7 @@ export type BlobSchemaAsync<TOutput = Blob> = BaseSchemaAsync<Blob, TOutput> & {
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<Blob> | undefined;
-};
+}
 
 /**
  * Creates an async blob schema.

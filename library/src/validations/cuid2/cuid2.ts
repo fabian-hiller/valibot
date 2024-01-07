@@ -5,7 +5,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Cuid2 validation type.
  */
-export type Cuid2Validation<TInput extends string> = BaseValidation<TInput> & {
+export interface Cuid2Validation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,7 +15,7 @@ export type Cuid2Validation<TInput extends string> = BaseValidation<TInput> & {
    * The Cuid2 regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates a [Cuid2](https://github.com/paralleldrive/cuid2).

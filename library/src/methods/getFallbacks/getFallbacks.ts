@@ -1,10 +1,4 @@
-import type {
-  ObjectEntries,
-  ObjectSchema,
-  TupleItems,
-  TupleSchema,
-} from '../../schemas/index.ts';
-import type { BaseSchema } from '../../types/index.ts';
+import { isObjectSchema, isTupleSchema } from '../../schemas/index.ts';
 import {
   getFallback,
   type SchemaWithMaybeFallback,
@@ -22,36 +16,24 @@ import type { FallbackValues } from './types.ts';
  *
  * @returns The fallback values.
  */
-export function getFallbacks<
-  TSchema extends SchemaWithMaybeFallback<
-    BaseSchema | ObjectSchema<ObjectEntries, any> | TupleSchema<TupleItems, any>
-  >
->(schema: TSchema): FallbackValues<TSchema> {
-  // Create fallbacks variable
-  let fallbacks: any;
-
+export function getFallbacks<TSchema extends SchemaWithMaybeFallback>(
+  schema: TSchema
+): FallbackValues<TSchema> | undefined {
   // If schema has a fallback, set its value
   if (schema.fallback) {
-    fallbacks = getFallback(schema);
-
-    // Otherwise, check if schema is of kind object or tuple
-  } else if ('type' in schema) {
-    // If it is an object schema, set object with fallback value of each entry
-    if (schema.type === 'object') {
-      fallbacks = {};
-      for (const key in schema.entries) {
-        fallbacks[key] = getFallbacks(schema.entries[key]);
-      }
-
-      // If it is a tuple schema, set array with fallback value of each item
-    } else if (schema.type === 'tuple') {
-      fallbacks = [];
-      for (let key = 0; key < schema.items.length; key++) {
-        fallbacks.push(getFallbacks(schema.items[key]));
-      }
-    }
+    return getFallback(schema);
   }
-
-  // Return fallback values
-  return fallbacks;
+  // Otherwise, check if schema is of kind object or tuple
+  // If it is an object schema, set object with fallback value of each entry
+  if (isObjectSchema(schema)) {
+    return Object.entries(schema.entries).reduce(
+      (hash, [key, value]) =>
+        Object.assign(hash, { [key]: getFallbacks(value) }),
+      {}
+    ) as FallbackValues<TSchema>;
+  }
+  // If it is a tuple schema, set array with fallback value of each item
+  if (isTupleSchema(schema)) {
+    return schema.items.map(getFallbacks) as FallbackValues<TSchema>;
+  }
 }

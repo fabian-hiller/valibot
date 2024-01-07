@@ -12,7 +12,8 @@ import {
 /**
  * Date schema async type.
  */
-export type DateSchemaAsync<TOutput = Date> = BaseSchemaAsync<Date, TOutput> & {
+export interface DateSchemaAsync<TOutput = Date>
+  extends BaseSchemaAsync<Date, TOutput> {
   /**
    * The schema type.
    */
@@ -25,7 +26,7 @@ export type DateSchemaAsync<TOutput = Date> = BaseSchemaAsync<Date, TOutput> & {
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<Date> | undefined;
-};
+}
 
 /**
  * Creates an async date schema.

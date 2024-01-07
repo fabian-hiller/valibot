@@ -5,17 +5,17 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * ISO time validation type.
  */
-export type IsoTimeValidation<TInput extends string> =
-  BaseValidation<TInput> & {
-    /**
-     * The validation type.
-     */
-    type: 'iso_time';
-    /**
-     * The ISO time regex.
-     */
-    requirement: RegExp;
-  };
+export interface IsoTimeValidation<TInput extends string>
+  extends BaseValidation<TInput> {
+  /**
+   * The validation type.
+   */
+  type: 'iso_time';
+  /**
+   * The ISO time regex.
+   */
+  requirement: RegExp;
+}
 
 /**
  * Creates a pipeline validation action that validates a time.

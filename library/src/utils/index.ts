@@ -5,5 +5,7 @@ export * from './parseResult/index.ts';
 export * from './restAndDefaultArgs/index.ts';
 export * from './parseResult/index.ts';
 export * from './isLuhnAlgo/index.ts';
+export * from './isNonNullable.ts';
+export * from './isSchema.ts';
 export * from './pipeResult/index.ts';
 export * from './schemaIssue/index.ts';

@@ -4,7 +4,7 @@ import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 /**
  * Date schema type.
  */
-export type DateSchema<TOutput = Date> = BaseSchema<Date, TOutput> & {
+export interface DateSchema<TOutput = Date> extends BaseSchema<Date, TOutput> {
   /**
    * The schema type.
    */
@@ -17,7 +17,7 @@ export type DateSchema<TOutput = Date> = BaseSchema<Date, TOutput> & {
    * The validation and transformation pipeline.
    */
   pipe: Pipe<Date> | undefined;
-};
+}
 
 /**
  * Creates a date schema.

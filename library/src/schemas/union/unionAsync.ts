@@ -22,10 +22,10 @@ export type UnionOptionsAsync = MaybeReadonly<(BaseSchema | BaseSchemaAsync)[]>;
 /**
  * Union schema async type.
  */
-export type UnionSchemaAsync<
+export interface UnionSchemaAsync<
   TOptions extends UnionOptionsAsync,
   TOutput = Output<TOptions[number]>
-> = BaseSchemaAsync<Input<TOptions[number]>, TOutput> & {
+> extends BaseSchemaAsync<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
    */
@@ -42,7 +42,7 @@ export type UnionSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<Input<TOptions[number]>> | undefined;
-};
+}
 
 /**
  * Creates an async union schema.

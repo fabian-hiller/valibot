@@ -12,10 +12,8 @@ import {
 /**
  * String schema async type.
  */
-export type StringSchemaAsync<TOutput = string> = BaseSchemaAsync<
-  string,
-  TOutput
-> & {
+export interface StringSchemaAsync<TOutput = string>
+  extends BaseSchemaAsync<string, TOutput> {
   /**
    * The schema type.
    */
@@ -28,7 +26,7 @@ export type StringSchemaAsync<TOutput = string> = BaseSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<string> | undefined;
-};
+}
 
 /**
  * Creates an async string schema.

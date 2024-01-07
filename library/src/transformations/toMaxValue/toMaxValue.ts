@@ -4,10 +4,10 @@ import { actionOutput } from '../../utils/index.ts';
 /**
  * To max value transformation type.
  */
-export type ToMaxValueTransformation<
+export interface ToMaxValueTransformation<
   TInput extends string | number | bigint | Date,
   TRequirement extends TInput
-> = BaseTransformation<TInput> & {
+> extends BaseTransformation<TInput> {
   /**
    * The transformation type.
    */
@@ -16,7 +16,7 @@ export type ToMaxValueTransformation<
    * The maximum value.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline transformation action that sets a string, number or date

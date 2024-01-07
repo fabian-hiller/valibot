@@ -4,7 +4,7 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Custom validation type.
  */
-export type CustomValidation<TInput> = BaseValidation<TInput> & {
+export interface CustomValidation<TInput> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -13,7 +13,7 @@ export type CustomValidation<TInput> = BaseValidation<TInput> & {
    * The validation function.
    */
   requirement: (input: TInput) => boolean;
-};
+}
 
 /**
  * Creates a custom pipeline validation action.

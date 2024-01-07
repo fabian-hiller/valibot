@@ -5,7 +5,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * IPv6 validation type.
  */
-export type Ipv6Validation<TInput extends string> = BaseValidation<TInput> & {
+export interface Ipv6Validation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,7 +15,7 @@ export type Ipv6Validation<TInput extends string> = BaseValidation<TInput> & {
    * The IPv6 regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates an [IPv6](https://en.wikipedia.org/wiki/IPv6) address.

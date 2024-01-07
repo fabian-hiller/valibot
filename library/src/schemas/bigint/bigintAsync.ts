@@ -12,10 +12,8 @@ import {
 /**
  * Bigint schema async type.
  */
-export type BigintSchemaAsync<TOutput = bigint> = BaseSchemaAsync<
-  bigint,
-  TOutput
-> & {
+export interface BigintSchemaAsync<TOutput = bigint>
+  extends BaseSchemaAsync<bigint, TOutput> {
   /**
    * The schema type.
    */
@@ -28,7 +26,7 @@ export type BigintSchemaAsync<TOutput = bigint> = BaseSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<bigint> | undefined;
-};
+}
 
 /**
  * Creates an async bigint schema.

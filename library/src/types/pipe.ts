@@ -48,7 +48,11 @@ export type PipeActionResult<TOutput> =
 /**
  * Base validation type.
  */
-export type BaseValidation<TInput = any> = {
+export interface BaseValidation<TInput = any> {
+  /**
+   * The validation type.
+   */
+  type: string;
   /**
    * Whether it's async.
    */
@@ -57,6 +61,10 @@ export type BaseValidation<TInput = any> = {
    * The error message.
    */
   message: ErrorMessage;
+  /**
+   * The validation requirement.
+   */
+  requirement: unknown;
   /**
    * Parses unknown input based on its requirement.
    *
@@ -67,12 +75,16 @@ export type BaseValidation<TInput = any> = {
    * @internal
    */
   _parse(input: TInput): PipeActionResult<TInput>;
-};
+}
 
 /**
  * Base validation async type.
  */
-export type BaseValidationAsync<TInput = any> = {
+export interface BaseValidationAsync<TInput = any> {
+  /**
+   * The validation type.
+   */
+  type: string;
   /**
    * Whether it's async.
    */
@@ -81,6 +93,10 @@ export type BaseValidationAsync<TInput = any> = {
    * The error message.
    */
   message: ErrorMessage;
+  /**
+   * The validation requirement.
+   */
+  requirement: unknown;
   /**
    * Parses unknown input based on its requirement.
    *
@@ -91,12 +107,16 @@ export type BaseValidationAsync<TInput = any> = {
    * @internal
    */
   _parse(input: TInput): Promise<PipeActionResult<TInput>>;
-};
+}
 
 /**
  * Base transformation type.
  */
-export type BaseTransformation<TInput = any> = {
+export interface BaseTransformation<TInput = any> {
+  /**
+   * The transformation type.
+   */
+  type: string;
   /**
    * Whether it's async.
    */
@@ -111,12 +131,16 @@ export type BaseTransformation<TInput = any> = {
    * @internal
    */
   _parse(input: TInput): PipeActionResult<TInput>;
-};
+}
 
 /**
  * Base transformation async type.
  */
-export type BaseTransformationAsync<TInput = any> = {
+export interface BaseTransformationAsync<TInput = any> {
+  /**
+   * The transformation type.
+   */
+  type: string;
   /**
    * Whether it's async.
    */
@@ -131,7 +155,7 @@ export type BaseTransformationAsync<TInput = any> = {
    * @internal
    */
   _parse(input: TInput): Promise<PipeActionResult<TInput>>;
-};
+}
 
 /**
  * Pipe type.

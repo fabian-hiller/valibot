@@ -14,10 +14,10 @@ export type NonNullable<T> = T extends null ? never : T;
 /**
  * Non nullable schema type.
  */
-export type NonNullableSchema<
+export interface NonNullableSchema<
   TWrapped extends BaseSchema,
   TOutput = NonNullable<Output<TWrapped>>
-> = BaseSchema<NonNullable<Input<TWrapped>>, TOutput> & {
+> extends BaseSchema<NonNullable<Input<TWrapped>>, TOutput> {
   /**
    * The schema type.
    */
@@ -30,7 +30,7 @@ export type NonNullableSchema<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates a non nullable schema.

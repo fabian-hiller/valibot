@@ -14,10 +14,10 @@ export type NonOptional<T> = T extends undefined ? never : T;
 /**
  * Non optional schema type.
  */
-export type NonOptionalSchema<
+export interface NonOptionalSchema<
   TWrapped extends BaseSchema,
   TOutput = NonOptional<Output<TWrapped>>
-> = BaseSchema<NonOptional<Input<TWrapped>>, TOutput> & {
+> extends BaseSchema<NonOptional<Input<TWrapped>>, TOutput> {
   /**
    * The schema type.
    */
@@ -30,7 +30,7 @@ export type NonOptionalSchema<
    * The error message.
    */
   message: ErrorMessage;
-};
+}
 
 /**
  * Creates a non optional schema.

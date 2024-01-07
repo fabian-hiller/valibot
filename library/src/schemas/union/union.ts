@@ -17,10 +17,10 @@ export type UnionOptions = MaybeReadonly<BaseSchema[]>;
 /**
  * Union schema type.
  */
-export type UnionSchema<
+export interface UnionSchema<
   TOptions extends UnionOptions,
   TOutput = Output<TOptions[number]>
-> = BaseSchema<Input<TOptions[number]>, TOutput> & {
+> extends BaseSchema<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
    */
@@ -37,7 +37,7 @@ export type UnionSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<Input<TOptions[number]>> | undefined;
-};
+}
 
 /**
  * Creates a union schema.

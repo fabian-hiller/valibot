@@ -4,7 +4,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Regex validation type.
  */
-export type RegexValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface RegexValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -13,7 +14,7 @@ export type RegexValidation<TInput extends string> = BaseValidation<TInput> & {
    * The regex pattern.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates a string with a regex.

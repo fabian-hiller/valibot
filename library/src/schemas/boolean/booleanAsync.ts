@@ -12,10 +12,8 @@ import {
 /**
  * Boolean schema async type.
  */
-export type BooleanSchemaAsync<TOutput = boolean> = BaseSchemaAsync<
-  boolean,
-  TOutput
-> & {
+export interface BooleanSchemaAsync<TOutput = boolean>
+  extends BaseSchemaAsync<boolean, TOutput> {
   /**
    * The schema type.
    */
@@ -28,7 +26,7 @@ export type BooleanSchemaAsync<TOutput = boolean> = BaseSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<boolean> | undefined;
-};
+}
 
 /**
  * Creates an async boolean schema.

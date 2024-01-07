@@ -4,10 +4,8 @@ import { pipeResultAsync } from '../../utils/index.ts';
 /**
  * Unknown schema async type.
  */
-export type UnknownSchemaAsync<TOutput = unknown> = BaseSchemaAsync<
-  unknown,
-  TOutput
-> & {
+export interface UnknownSchemaAsync<TOutput = unknown>
+  extends BaseSchemaAsync<unknown, TOutput> {
   /**
    * The schema type.
    */
@@ -16,7 +14,7 @@ export type UnknownSchemaAsync<TOutput = unknown> = BaseSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<unknown> | undefined;
-};
+}
 
 /**
  * Creates an async unknown schema.

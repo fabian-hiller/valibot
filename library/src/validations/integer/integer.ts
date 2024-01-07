@@ -4,17 +4,17 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Integer validation type.
  */
-export type IntegerValidation<TInput extends number> =
-  BaseValidation<TInput> & {
-    /**
-     * The validation type.
-     */
-    type: 'integer';
-    /**
-     * The validation function.
-     */
-    requirement: (input: TInput) => boolean;
-  };
+export interface IntegerValidation<TInput extends number>
+  extends BaseValidation<TInput> {
+  /**
+   * The validation type.
+   */
+  type: 'integer';
+  /**
+   * The validation function.
+   */
+  requirement: (input: TInput) => boolean;
+}
 
 /**
  * Creates a pipeline validation action that validates whether a number is an

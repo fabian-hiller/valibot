@@ -4,7 +4,8 @@ import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 /**
  * Bigint schema type.
  */
-export type BigintSchema<TOutput = bigint> = BaseSchema<bigint, TOutput> & {
+export interface BigintSchema<TOutput = bigint>
+  extends BaseSchema<bigint, TOutput> {
   /**
    * The schema type.
    */
@@ -17,7 +18,7 @@ export type BigintSchema<TOutput = bigint> = BaseSchema<bigint, TOutput> & {
    * The validation and transformation pipeline.
    */
   pipe: Pipe<bigint> | undefined;
-};
+}
 
 /**
  * Creates a bigint schema.
