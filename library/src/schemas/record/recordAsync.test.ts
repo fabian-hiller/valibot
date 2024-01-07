@@ -160,7 +160,7 @@ describe('recordAsync', () => {
     expect(input.__proto__.polluted).toBe('yes');
     expect(({} as any).polluted).toBeUndefined();
     const output = await parseAsync(schema, input);
-    expect(output.__proto__.polluted).toBeUndefined();
+    expect(output.__proto__?.polluted).toBeUndefined();
     expect(output.polluted).toBeUndefined();
   });
 
