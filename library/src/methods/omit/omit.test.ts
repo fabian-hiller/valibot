@@ -10,9 +10,7 @@ describe('omit', () => {
       object({ key1: string(), key2: string(), key3: string() }),
       ['key1', 'key3']
     );
-    expect(JSON.stringify(schema)).toEqual(
-      JSON.stringify(object({ key2: string() }))
-    );
+    expect(schema).toEqualSchema(object({ key2: string() }));
     const input = { key2: 'test' };
     const output = parse(schema, input);
     expect(output).toEqual(input);

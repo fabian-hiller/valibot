@@ -10,9 +10,7 @@ describe('omitAsync', () => {
       objectAsync({ key1: string(), key2: string(), key3: string() }),
       ['key1', 'key3']
     );
-    expect(JSON.stringify(schema)).toEqual(
-      JSON.stringify(objectAsync({ key2: string() }))
-    );
+    expect(schema).toEqualSchema(objectAsync({ key2: string() }));
     const input = { key2: 'test' };
     const output = await parseAsync(schema, input);
     expect(output).toEqual(input);

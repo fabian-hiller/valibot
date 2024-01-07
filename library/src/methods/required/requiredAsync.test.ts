@@ -15,13 +15,11 @@ describe('requiredAsync', () => {
     const schema = requiredAsync(
       objectAsync({ key1: optionalAsync(string()), key2: string() })
     );
-    expect(JSON.stringify(schema)).toEqual(
-      JSON.stringify(
-        objectAsync({
-          key1: nonOptionalAsync(optionalAsync(string())),
-          key2: nonOptionalAsync(string()),
-        })
-      )
+    expect(schema).toEqualSchema(
+      objectAsync({
+        key1: nonOptionalAsync(optionalAsync(string())),
+        key2: nonOptionalAsync(string()),
+      })
     );
     const input = { key1: 'test', key2: 'test' };
     const output = await parseAsync(schema, input);

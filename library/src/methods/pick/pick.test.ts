@@ -10,9 +10,7 @@ describe('pick', () => {
       object({ key1: string(), key2: string(), key3: string() }),
       ['key1', 'key3']
     );
-    expect(JSON.stringify(schema)).toEqual(
-      JSON.stringify(object({ key1: string(), key3: string() }))
-    );
+    expect(schema).toEqualSchema(object({ key1: string(), key3: string() }));
     const input = { key1: 'test', key3: 'test' };
     const output = parse(schema, input);
     expect(output).toEqual(input);

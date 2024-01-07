@@ -9,18 +9,26 @@ describe('restAndDefaultArgs', () => {
       undefined,
       undefined,
     ]);
-    expect(
-      JSON.stringify(restAndDefaultArgs(string(), undefined, undefined))
-    ).toEqual(JSON.stringify([string(), undefined, undefined]));
-    expect(JSON.stringify(restAndDefaultArgs(string(), [], undefined))).toEqual(
-      JSON.stringify([string(), undefined, []])
-    );
-    expect(
-      JSON.stringify(restAndDefaultArgs(string(), 'error', undefined))
-    ).toEqual(JSON.stringify([string(), 'error', undefined]));
-    expect(JSON.stringify(restAndDefaultArgs(string(), 'error', []))).toEqual(
-      JSON.stringify([string(), 'error', []])
-    );
+    expect(restAndDefaultArgs(string(), undefined, undefined)).toEqualSchema([
+      string(),
+      undefined,
+      undefined,
+    ]);
+    expect(restAndDefaultArgs(string(), [], undefined)).toEqualSchema([
+      string(),
+      undefined,
+      [],
+    ]);
+    expect(restAndDefaultArgs(string(), 'error', undefined)).toEqualSchema([
+      string(),
+      'error',
+      undefined,
+    ]);
+    expect(restAndDefaultArgs(string(), 'error', [])).toEqualSchema([
+      string(),
+      'error',
+      [],
+    ]);
     expect(restAndDefaultArgs([], undefined, undefined)).toEqual([
       undefined,
       undefined,

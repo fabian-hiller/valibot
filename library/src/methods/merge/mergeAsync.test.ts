@@ -10,8 +10,8 @@ describe('mergeAsync', () => {
       objectAsync({ key1: string() }),
       object({ key2: number() }),
     ]);
-    expect(JSON.stringify(schema)).toEqual(
-      JSON.stringify(objectAsync({ key1: string(), key2: number() }))
+    expect(schema).toEqualSchema(
+      objectAsync({ key1: string(), key2: number() })
     );
     const input = { key1: '1', key2: 2 };
     const output = await parseAsync(schema, input);
@@ -25,9 +25,7 @@ describe('mergeAsync', () => {
       objectAsync({ key: string() }),
       object({ key: number() }),
     ]);
-    expect(JSON.stringify(schema.entries.key)).toEqual(
-      JSON.stringify(number())
-    );
+    expect(schema.entries.key).toEqualSchema(number());
     const input = { key: 123 };
     const output = await parseAsync(schema, input);
     expect(output).toEqual(input);

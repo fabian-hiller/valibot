@@ -9,13 +9,11 @@ describe('required', () => {
     const schema = required(
       object({ key1: optional(string()), key2: string() })
     );
-    expect(JSON.stringify(schema)).toEqual(
-      JSON.stringify(
-        object({
-          key1: nonOptional(optional(string())),
-          key2: nonOptional(string()),
-        })
-      )
+    expect(schema).toEqualSchema(
+      object({
+        key1: nonOptional(optional(string())),
+        key2: nonOptional(string()),
+      })
     );
     const input = { key1: 'test', key2: 'test' };
     const output = parse(schema, input);

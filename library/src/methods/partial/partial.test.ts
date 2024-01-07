@@ -7,10 +7,8 @@ import { partial } from './partial.ts';
 describe('partial', () => {
   test('should have optional keys', () => {
     const schema = partial(object({ key1: string(), key2: string() }));
-    expect(JSON.stringify(schema)).toEqual(
-      JSON.stringify(
-        object({ key1: optional(string()), key2: optional(string()) })
-      )
+    expect(schema).toEqualSchema(
+      object({ key1: optional(string()), key2: optional(string()) })
     );
     const input = { key1: 'test' };
     const output = parse(schema, input);

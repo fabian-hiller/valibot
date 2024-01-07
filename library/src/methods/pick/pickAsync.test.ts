@@ -10,8 +10,8 @@ describe('pickAsync', () => {
       object({ key1: string(), key2: string(), key3: string() }),
       ['key1', 'key3']
     );
-    expect(JSON.stringify(schema)).toEqual(
-      JSON.stringify(objectAsync({ key1: string(), key3: string() }))
+    expect(schema).toEqualSchema(
+      objectAsync({ key1: string(), key3: string() })
     );
     const input = { key1: 'test', key3: 'test' };
     const output = await parseAsync(schema, input);

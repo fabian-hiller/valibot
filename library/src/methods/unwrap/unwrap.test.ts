@@ -5,10 +5,10 @@ import { unwrap } from './unwrap.ts';
 describe('unwrap', () => {
   test('should unwrap wrapped schema', () => {
     const schema1 = unwrap(optional(string()));
-    expect(JSON.stringify(schema1)).toEqual(JSON.stringify(string()));
+    expect(schema1).toEqualSchema(string());
     const schema2 = unwrap(nonOptional(optional(string())));
-    expect(JSON.stringify(schema2)).toEqual(JSON.stringify(optional(string())));
+    expect(schema2).toEqualSchema(optional(string()));
     const schema3 = unwrap(unwrap(nonOptional(optional(string()))));
-    expect(JSON.stringify(schema3)).toEqual(JSON.stringify(string()));
+    expect(schema3).toEqualSchema(string());
   });
 });
