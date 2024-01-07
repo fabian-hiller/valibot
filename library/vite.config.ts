@@ -5,6 +5,7 @@ export default defineConfig(() => {
     test: {
       environment: 'jsdom',
       isolate: false,
+      setupFiles: ['./src/vitest']
     },
     build: {
       target: 'ESNext',

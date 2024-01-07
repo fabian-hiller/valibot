@@ -7,12 +7,12 @@ import { expect } from 'vitest';
  *
  * @returns The comparable object.
  */
-export function comparable(value: any): any {
+export function comparable<T>(value: T): T {
   if (Array.isArray(value)) {
-    return value.map((item) => comparable(item));
+    return value.map((item) => comparable(item)) as T;
   }
   if (value && typeof value === 'object') {
-    return Object.entries(value).reduce<Record<string, any>>(
+    return Object.entries(value).reduce<Record<string, unknown>>(
       (object, [key, value]) => {
         if (typeof value === 'function') {
           object[key] = expect.any(Function);
@@ -22,7 +22,7 @@ export function comparable(value: any): any {
         return object;
       },
       {}
-    );
+    ) as T;
   }
   return value;
 }
