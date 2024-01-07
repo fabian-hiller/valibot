@@ -68,6 +68,7 @@
 - [cuid2](/api/cuid2/)
 - [custom](/api/custom/)
 - [decimal](/api/decimal/)
+- [ean](/api/ean/)
 - [email](/api/email/)
 - [emoji](/api/emoji/)
 - [endsWith](/api/endsWith/)
