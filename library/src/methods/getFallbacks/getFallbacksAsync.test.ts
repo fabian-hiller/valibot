@@ -1,44 +1,60 @@
 import { describe, expect, test } from 'vitest';
-import { object, optional, string, tuple } from '../../schemas/index.ts';
+import {
+  number,
+  numberAsync,
+  object,
+  objectAsync,
+  string,
+  stringAsync,
+  tuple,
+  tupleAsync,
+} from '../../schemas/index.ts';
+import { fallback, fallbackAsync } from '../fallback/index.ts';
 import { getFallbacksAsync } from './getFallbacksAsync.ts';
-import { fallback } from '../fallback/index.ts';
 
 describe('getFallbacksAsync', () => {
   test('should return undefined', async () => {
-    expect(await getFallbacksAsync(string())).toBeUndefined();
-    expect(await getFallbacksAsync(optional(string()))).toBeUndefined();
+    expect(await getFallbacksAsync(stringAsync())).toBeUndefined();
   });
 
-  test('should return fallback value', async () => {
-    expect(await getFallbacksAsync(fallback(string(), 'test'))).toBe('test');
+  test('should return fallbackAsync value', async () => {
+    expect(await getFallbacksAsync(fallbackAsync(stringAsync(), ''))).toBe('');
+    expect(await getFallbacksAsync(fallbackAsync(numberAsync(), 0))).toBe(0);
+    expect(await getFallbacksAsync(fallbackAsync(stringAsync(), 'test'))).toBe(
+      'test'
+    );
     expect(
       await getFallbacksAsync(
-        fallback(object({ key: string() }), { key: 'test' })
+        fallbackAsync(objectAsync({ key: stringAsync() }), { key: 'test' })
       )
     ).toEqual({
       key: 'test',
     });
   });
 
-  test('should return object fallbacks', async () => {
-    expect(await getFallbacksAsync(object({}))).toEqual({});
+  test('should return objectAsync fallbacks', async () => {
+    expect(await getFallbacksAsync(objectAsync({}))).toEqual({});
     expect(
       await getFallbacksAsync(
-        object({
-          key1: string(),
-          key2: fallback(string(), 'test'),
+        objectAsync({
+          key1: stringAsync(),
+          key2: fallbackAsync(stringAsync(), 'test'),
+          key3: fallbackAsync(numberAsync(), 0),
           nested: object({
             key1: string(),
             key2: fallback(string(), 'test'),
+            key3: fallback(number(), 0),
           }),
         })
       )
     ).toEqual({
       key1: undefined,
       key2: 'test',
+      key3: 0,
       nested: {
         key1: undefined,
         key2: 'test',
+        key3: 0,
       },
     });
   });
@@ -46,12 +62,13 @@ describe('getFallbacksAsync', () => {
   test('should return tuple fallbacks', async () => {
     expect(
       await getFallbacksAsync(
-        tuple([
-          string(),
-          fallback(string(), 'test'),
-          tuple([string(), fallback(string(), 'test')]),
+        tupleAsync([
+          stringAsync(),
+          fallbackAsync(stringAsync(), 'test'),
+          fallbackAsync(numberAsync(), 0),
+          tuple([string(), fallback(string(), 'test'), fallback(number(), 0)]),
         ])
       )
-    ).toEqual([undefined, 'test', [undefined, 'test']]);
+    ).toEqual([undefined, 'test', 0, [undefined, 'test', 0]]);
   });
 });

@@ -31,7 +31,7 @@ export function getDefaults<
   let defaults: any;
 
   // If schema contains a default function, set its default value
-  if (schema.default) {
+  if (schema.default !== undefined) {
     defaults = getDefault(schema);
 
     // Otherwise, check if schema is of kind object or tuple

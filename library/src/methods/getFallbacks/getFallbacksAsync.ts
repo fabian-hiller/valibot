@@ -44,7 +44,7 @@ export async function getFallbacksAsync<
   let fallbacks: any;
 
   // If schema has a fallback, set its value
-  if (schema.fallback) {
+  if (schema.fallback !== undefined) {
     fallbacks = await getFallbackAsync(schema);
 
     // Otherwise, check if schema is of kind object or tuple
