@@ -52,6 +52,45 @@ With `object` you can validate if the data type of the input matches `entries` a
 
 The following examples show how `object` can be used.
 
+### Object schema with rest object
+
+Schema to validate an object with a specific set of keys and a rest `number` object.
+
+```ts
+const ObjectSchemaWithRest = object(
+  {
+    key1: string(),
+    key2: number(),
+  },
+  number()
+);
+```
+
+### Merge content
+
+Schema that merges the content of two objects.
+
+```ts
+const mergedSchema = merge([
+  object({ key1: string() }),
+  object({ key2: number() }),
+]);
+```
+
+### Pick content
+
+Schema that picks the content of an object.
+
+```ts
+const PickedObjectContentSchema = pick(
+  object({
+    key1: string(),
+    key2: number(),
+  }),
+  ['key1', 'key2']
+);
+```
+
 ## Related
 
 The following APIs can be combined with `object`.
