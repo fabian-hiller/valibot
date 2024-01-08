@@ -20,7 +20,7 @@ export function getFallbacks<TSchema extends SchemaWithMaybeFallback>(
   schema: TSchema
 ): FallbackValues<TSchema> | undefined {
   // If schema has a fallback, set its value
-  if (schema.fallback) {
+  if (schema.fallback !== undefined) {
     return getFallback(schema);
   }
   // Otherwise, check if schema is of kind object or tuple

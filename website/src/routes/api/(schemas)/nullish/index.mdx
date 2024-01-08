@@ -53,9 +53,9 @@ const NullishStringSchema = nullish(string(), "I'm the default!");
 
 ### Nullish date schema
 
-Schema that accepts `Date`, `undefined` and `null`.
+Schema that accepts [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), `undefined` and `null`.
 
-> By using a function as the `default_` parameter, the schema will return a new `Date` instance each time the input is `undefined` or `null`.
+> By using a function as the `default_` parameter, the schema will return a new [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance each time the input is `undefined` or `null`.
 
 ```ts
 const NullishDateSchema = nullish(date(), () => new Date());

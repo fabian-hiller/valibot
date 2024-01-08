@@ -138,6 +138,7 @@ Beyond primitive and complex values, I also provide schema functions for more sp
     'enum_',
     'instance',
     'intersect',
+    'literal',
     'nan',
     'never',
     'nonNullable',
@@ -160,10 +161,11 @@ Beyond primitive and complex values, I also provide schema functions for more sp
 import * as v from 'valibot';
 
 const AnySchema = v.any(); // any
+const EnumSchema = v.enum_(Direction); // Direction
 const InstanceSchema = v.instance(Error); // Error
 const IntersectSchema = v.intersect([v.string(), v.literal('a')]); // string & 'a'
+const LiteralSchema = v.literal('foo'); // 'foo'
 const NanSchema = v.nan(); // NaN
-const EnumSchema = v.enum_(Direction); // Direction
 const NeverSchema = v.never(); // never
 const NonNullableSchema = v.nonNullable(v.nullable(v.string())); // string
 const NonNullishSchema = v.nonNullish(v.nullish(v.string())); // string

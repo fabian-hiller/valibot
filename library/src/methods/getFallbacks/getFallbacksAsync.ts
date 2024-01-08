@@ -21,7 +21,7 @@ export async function getFallbacksAsync<
   TSchema extends SchemaWithMaybeFallback | SchemaWithMaybeFallbackAsync
 >(schema: TSchema): Promise<FallbackValues<TSchema> | undefined> {
   // If schema has a fallback, set its value
-  if (schema.fallback) {
+  if (schema.fallback !== undefined) {
     return getFallbackAsync(schema);
   }
   // Otherwise, check if schema is of kind object or tuple

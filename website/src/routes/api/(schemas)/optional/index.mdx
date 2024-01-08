@@ -53,9 +53,9 @@ const OptionalStringSchema = optional(string(), "I'm the default!");
 
 ### Optional date schema
 
-Schema that accepts `Date` and `undefined`.
+Schema that accepts [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) and `undefined`.
 
-> By using a function as the `default_` parameter, the schema will return a new `Date` instance each time the input is `undefined`.
+> By using a function as the `default_` parameter, the schema will return a new [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance each time the input is `undefined`.
 
 ```ts
 const OptionalDateSchema = optional(date(), () => new Date());
