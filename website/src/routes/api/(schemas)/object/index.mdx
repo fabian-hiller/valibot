@@ -1,11 +1,96 @@
 ---
 title: object
+description: Creates an object schema.
 source: /schemas/object/object.ts
 contributors:
   - fabian-hiller
   - kazizi55
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # object
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/object/object.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates an object schema.
+
+```ts
+// Object schema with a some object
+const Schema = object<TEntries>(someObject);
+
+// Object schema with a some object and a rest object
+const Schema = object<TEntries, TRest>(someObject, restObject);
+
+// Object schema with a some object and an optional message
+const Schema = object<TEntries>(someObject, message);
+
+// Object schema with a some object, an optional message and pipe
+const Schema = object<TEntries>(someObject, message, pipe);
+```
+
+## Generics
+
+- `TEntries` <Property {...properties.TEntries} />
+- `TRest` <Property {...properties.TRest} />
+
+## Parameters
+
+- `entries` <Property {...properties.entries} />
+- `rest` <Property {...properties.rest} />
+- `message` <Property {...properties.message} />
+- `pipe` <Property {...properties.pipe}/>
+
+### Explanation
+
+With `object` you can validate if the data type of the input matches `entries` and `rest`, and with `pipe` you can transform and validate the further details of the object. If the input is not an object, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `object` can be used.
+
+
+
+## Related
+
+The following APIs can be combined with `object`.
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'merge',
+    'omit',
+    'parse',
+    'partial',
+    'passthrough',
+    'pick',
+    'required',
+    'safeParse',
+    'strict',
+    'strip',
+    'transform',
+    'withDefault',
+  ]}
+/>
+
+### Transformations
+
+<ApiList items={['toCustom']} />
+
+### Validations
+
+<ApiList items={['custom']}
+/>
