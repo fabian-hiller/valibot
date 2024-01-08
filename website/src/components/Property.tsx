@@ -34,6 +34,7 @@ type SingleTypeOrValue =
     }
   | {
       type: 'object';
+      index?: SingleTypeOrValue;
       entries: {
         key: string | { name: string; type: TypeOrValue };
         optional?: boolean;
@@ -170,6 +171,13 @@ export function Property(props: PropertyProps) {
                 </>
               ))}
               {'}'}
+              {type.index && (
+                <>
+                  {'['}
+                  <Property type={type.index} padding="none" />
+                  {']'}
+                </>
+              )}
             </span>
           ) : type.type === 'array' ? (
             <span>
