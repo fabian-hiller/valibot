@@ -39,7 +39,7 @@ export const Head = component$(() => {
               )}&description=${encodeURIComponent(
                 head.meta.find((item) => item.name === 'description')
                   ?.content || ''
-              )}`
+              )}&path=${location.url.pathname.split('/')[1]}`
         }
       />
 

@@ -123,6 +123,9 @@ importers:
       netlify-cli:
         specifier: ^15.0.0
         version: 15.0.0(@types/node@20.4.2)
+      og-img:
+        specifier: ^0.1.0
+        version: 0.1.0
       postcss:
         specifier: ^8.4.27
         version: 8.4.27
@@ -9624,6 +9627,14 @@ packages:
       es-abstract: 1.22.1
     dev: true
 
+  /og-img@0.1.0:
+    resolution: {integrity: sha512-+XXsADy9/Tiln3yXxO5q6yzSJ44ZkOyUMHkLDcu28X8Ku7UvvnHl+5ArjxZRrUv102GI7TfwP97knP6nqjMl/A==}
+    dependencies:
+      '@resvg/resvg-wasm': 2.6.0
+      satori: 0.10.11
+      satori-html: 0.3.2
+    dev: true
+
   /omit.js@2.0.2:
     resolution: {integrity: sha512-hJmu9D+bNB40YpL9jYebQl4lsTW6yEHRTroJzNLqQJYHm7c+NQnJGfZmIWh8S3q3KoaxV1aLhV6B3+0N0/kyJg==}
     dev: true
@@ -11159,6 +11170,12 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: true
 
+  /satori-html@0.3.2:
+    resolution: {integrity: sha512-wjTh14iqADFKDK80e51/98MplTGfxz2RmIzh0GqShlf4a67+BooLywF17TvJPD6phO0Hxm7Mf1N5LtRYvdkYRA==}
+    dependencies:
+      ultrahtml: 1.5.2
+    dev: true
+
   /satori@0.10.11:
     resolution: {integrity: sha512-yLm1xPRPZUaKcBZJ6nmezoJjHB4MqV8x7Mu0PyZUJodRWRDD27UbeMwzuY9LEGG57WYLO4CQsGPlbHWV1Ex9TQ==}
     engines: {node: '>=16'}
@@ -12490,6 +12507,10 @@ packages:
   /ulid@2.3.0:
     resolution: {integrity: sha512-keqHubrlpvT6G2wH0OEfSW4mquYRcbe/J8NMmveoQOjUqmo+hXtO+ORCpWhdbZ7k72UtY61BL7haGxW6enBnjw==}
     hasBin: true
+    dev: true
+
+  /ultrahtml@1.5.2:
+    resolution: {integrity: sha512-qh4mBffhlkiXwDAOxvSGxhL0QEQsTbnP9BozOK3OYPEGvPvdWzvAUaXNtUSMdNsKDtuyjEbyVUPFZ52SSLhLqw==}
     dev: true
 
   /unbox-primitive@1.0.2:
