@@ -24,6 +24,11 @@ export default defineConfig(() => {
       qwikVite(),
       tsconfigPaths(),
     ],
+    build: {
+      rollupOptions: {
+        external: ['@vercel/og'],
+      },
+    },
     preview: {
       headers: {
         'Cache-Control': 'public, max-age=600',
