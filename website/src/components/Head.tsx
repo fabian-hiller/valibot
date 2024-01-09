@@ -12,7 +12,9 @@ export const Head = component$(() => {
 
   return (
     <head>
-      <title>{head.title}</title>
+      <title>
+        {location.url.pathname === '/' ? head.title : `${head.title} | Valibot`}
+      </title>
 
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,6 +28,20 @@ export const Head = component$(() => {
       <link rel="icon" type="image/png" sizes="16x16" href="/icon-16px.png" />
       <link rel="apple-touch-icon" sizes="180x180" href="/icon-180px.jpg" />
       <link rel="manifest" href="/manifest.json" />
+
+      <meta
+        property="og:image"
+        content={
+          location.url.pathname === '/'
+            ? '/og-image'
+            : `/og-image?title=${encodeURIComponent(
+                head.title
+              )}&description=${encodeURIComponent(
+                head.meta.find((item) => item.name === 'description')
+                  ?.content || ''
+              )}`
+        }
+      />
 
       <script
         async
@@ -41,20 +57,8 @@ export const Head = component$(() => {
         <script dangerouslySetInnerHTML="document.documentElement.classList.remove('dark')" />
       )}
 
-      {[...head.meta, ...(head.frontmatter.meta || [])].map(
-        ({ key, ...props }) => (
-          <meta key={key} {...props} />
-        )
-      )}
-
-      {/* TODO: Check if we really need this code */}
-      {head.links.map(({ key, ...props }) => (
-        <link key={key} {...props} />
-      ))}
-
-      {/* TODO: Check if we really need this code */}
-      {head.styles.map(({ key, style, ...props }) => (
-        <style key={key} {...props} dangerouslySetInnerHTML={style} />
+      {head.meta.map(({ key, ...props }) => (
+        <meta key={key} {...props} />
       ))}
     </head>
   );
