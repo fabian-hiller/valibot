@@ -1,12 +1,5 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
-import { ImageResponse, html } from 'og-img';
-
-async function getFontData(fileName: string) {
-  const resposne = await fetch(
-    `${import.meta.env.PUBLIC_WEBSITE_URL}/fonts/${fileName}`
-  );
-  return resposne.arrayBuffer();
-}
+import { fetchFont, ImageResponse, html } from 'og-img';
 
 export const onGet: RequestHandler = async ({ send, url }) => {
   // Get data from search params
@@ -14,10 +7,13 @@ export const onGet: RequestHandler = async ({ send, url }) => {
   const description = url.searchParams.get('description');
   const path = url.searchParams.get('path');
 
+  // Create font directory URL
+  const fontDirectory = import.meta.env.PUBLIC_WEBSITE_URL + '/fonts';
+
   // Create Lexend 400 font object
   const lexend400 = {
     name: 'Lexend',
-    data: await getFontData('lexend-400.ttf'),
+    data: await fetchFont(fontDirectory + '/lexend-400.ttf'),
     style: 'normal',
     weight: 400,
   } as const;
@@ -25,7 +21,7 @@ export const onGet: RequestHandler = async ({ send, url }) => {
   // Create Lexend 500 font object
   const lexend500 = {
     name: 'Lexend',
-    data: await getFontData('lexend-500.ttf'),
+    data: await fetchFont(fontDirectory + '/lexend-500.ttf'),
     style: 'normal',
     weight: 500,
   } as const;
@@ -33,7 +29,7 @@ export const onGet: RequestHandler = async ({ send, url }) => {
   // Create Lexend Exa 500 font object
   const lexendExa500 = {
     name: 'Lexend Exa',
-    data: await getFontData('lexend-exa-500.ttf'),
+    data: await fetchFont(fontDirectory + '/lexend-exa-500.ttf'),
     style: 'normal',
     weight: 500,
   } as const;

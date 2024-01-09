@@ -124,8 +124,8 @@ importers:
         specifier: ^15.0.0
         version: 15.0.0(@types/node@20.4.2)
       og-img:
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.2.0
+        version: 0.2.0
       postcss:
         specifier: ^8.4.27
         version: 8.4.27
@@ -9627,8 +9627,8 @@ packages:
       es-abstract: 1.22.1
     dev: true
 
-  /og-img@0.1.0:
-    resolution: {integrity: sha512-+XXsADy9/Tiln3yXxO5q6yzSJ44ZkOyUMHkLDcu28X8Ku7UvvnHl+5ArjxZRrUv102GI7TfwP97knP6nqjMl/A==}
+  /og-img@0.2.0:
+    resolution: {integrity: sha512-TI6k25NV++e3HCYOrXFAZtWCr2wtjnvSAibrqDjlDZZZywBr6PmDPIRcQq+e/KO8ao0O7xq+7Enpdm9WE4O0iA==}
     dependencies:
       '@resvg/resvg-wasm': 2.6.0
       satori: 0.10.11
