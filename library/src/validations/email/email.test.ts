@@ -7,82 +7,82 @@ describe('email', () => {
   describe('passing tests', () => {
     test('should pass standard email', () => {
       const value = 'email@example.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with country code top level domain', () => {
       const value = 'email@example.co.uk';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with dot in local part', () => {
       const value = 'firstname.lastname@example.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with hyphen in local part', () => {
       const value = 'firstname-lastname@example.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with plus in local part', () => {
       const value = 'firstname+lastname@example.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with plus in end of local part', () => {
       const value = 'email+@example.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with plus in begining of local part', () => {
       const value = '+email@example.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with hyphen in domain part', () => {
       const value = 'email@aaa-bbb.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with long top level domain', () => {
       const value = 'email@example.technology';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with numerical local part', () => {
       const value = '1234567890@example.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with numerical local part', () => {
       const value = '1234567890@example.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with subdomain', () => {
       const value = 'email@subdomain.example.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with subdomain and hyphen in domain', () => {
       const value = 'email@subdomain.aaa-bbb.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with subdomain and country code top level domain', () => {
       const value = 'email@subdomain.example.co.uk';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with short domain and top level domain', () => {
       const value = 'email@ab.cd';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
 
     test('should pass email with numeric domain and top level domain', () => {
       const value = 'email@123.com';
-      expect(validate._parse(value).output).toBe(value);
+      expect(validate._parse(value)).toEqual({ output: value });
     });
   });
 
