@@ -1,19 +1,23 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { fetchFont, ImageResponse, html } from 'og-img';
 
-export const onGet: RequestHandler = async ({ send, url }) => {
+export const onGet: RequestHandler = async ({ cacheControl, send, url }) => {
+  // Disable caching
+  cacheControl('no-cache');
+
   // Get data from search params
   const title = url.searchParams.get('title');
   const description = url.searchParams.get('description');
   const path = url.searchParams.get('path');
 
-  // Create font directory URL
-  const fontDirectory = import.meta.env.PUBLIC_WEBSITE_URL + '/fonts';
+  // Create icon and font directory URL
+  const iconUrl = import.meta.env.PUBLIC_WEBSITE_URL + '/icon-192px.png';
+  const fontDirUrl = import.meta.env.PUBLIC_WEBSITE_URL + '/fonts';
 
   // Create Lexend 400 font object
   const lexend400 = {
     name: 'Lexend',
-    data: await fetchFont(fontDirectory + '/lexend-400.ttf'),
+    data: await fetchFont(fontDirUrl + '/lexend-400.ttf'),
     style: 'normal',
     weight: 400,
   } as const;
@@ -21,7 +25,7 @@ export const onGet: RequestHandler = async ({ send, url }) => {
   // Create Lexend 500 font object
   const lexend500 = {
     name: 'Lexend',
-    data: await fetchFont(fontDirectory + '/lexend-500.ttf'),
+    data: await fetchFont(fontDirUrl + '/lexend-500.ttf'),
     style: 'normal',
     weight: 500,
   } as const;
@@ -29,7 +33,7 @@ export const onGet: RequestHandler = async ({ send, url }) => {
   // Create Lexend Exa 500 font object
   const lexendExa500 = {
     name: 'Lexend Exa',
-    data: await fetchFont(fontDirectory + '/lexend-exa-500.ttf'),
+    data: await fetchFont(fontDirUrl + '/lexend-exa-500.ttf'),
     style: 'normal',
     weight: 500,
   } as const;
@@ -45,10 +49,7 @@ export const onGet: RequestHandler = async ({ send, url }) => {
           >
             <div tw="flex items-center justify-between">
               <div tw="flex items-center">
-                <img
-                  tw="w-16 h-16"
-                  src="${import.meta.env.PUBLIC_WEBSITE_URL}/icon-192px.png"
-                />
+                <img tw="w-16 h-16" src="${iconUrl}" />
                 <div
                   tw="text-4xl font-medium text-slate-300 ml-4"
                   style="font-family: 'Lexend Exa'"
@@ -101,10 +102,7 @@ export const onGet: RequestHandler = async ({ send, url }) => {
             style="font-family: 'Lexend Exa'"
           >
             <div tw="flex items-center">
-              <img
-                tw="w-36 h-36"
-                src="${import.meta.env.PUBLIC_WEBSITE_URL}/icon-192px.png"
-              />
+              <img tw="w-36 h-36" src="${iconUrl}" />
               <div tw="text-8xl font-medium text-slate-300 ml-10">Valibot</div>
             </div>
           </div>
