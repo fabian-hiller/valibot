@@ -30,23 +30,23 @@ export function addArticleMetadata({
     meta: [
       // Open Graph
       {
-        name: 'og:type',
+        property: 'og:type',
         content: 'article',
       },
       {
-        name: 'og:url',
+        property: 'og:url',
         content: url.href,
       },
       {
-        name: 'og:title',
+        property: 'og:title',
         content: head.title,
       },
       {
-        name: 'og:description',
+        property: 'og:description',
         content: description,
       },
       {
-        name: 'og:image',
+        property: 'og:image',
         content: imageUrl,
       },
 
