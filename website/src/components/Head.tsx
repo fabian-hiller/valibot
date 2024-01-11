@@ -29,20 +29,6 @@ export const Head = component$(() => {
       <link rel="apple-touch-icon" sizes="180x180" href="/icon-180px.jpg" />
       <link rel="manifest" href="/manifest.json" />
 
-      <meta
-        property="og:image"
-        content={
-          location.url.pathname === '/'
-            ? '/og-image'
-            : `/og-image?title=${encodeURIComponent(
-                head.title
-              )}&description=${encodeURIComponent(
-                head.meta.find((item) => item.name === 'description')
-                  ?.content || ''
-              )}&path=${location.url.pathname.split('/')[1]}`
-        }
-      />
-
       <script
         async
         src="https://umami.valibot.dev/script.js"
