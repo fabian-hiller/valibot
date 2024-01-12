@@ -1,8 +1,8 @@
 ---
 title: Unions
 description: >-
-  In relational algebra, an union represents the conjunction of two sets. Simply
-  put, it is a logical OR relationship. You can apply this concept to schemas.
+  An union represents a logical OR relationship. You can apply this concept to
+  your schemas with union and variant.
 contributors:
   - fabian-hiller
 ---
@@ -11,7 +11,7 @@ import { Link } from '@builder.io/qwik-city';
 
 # Unions
 
-In relational algebra, an union represents the conjunction of two sets. Simply put, it is a logical OR relationship. You can apply this concept to schemas with <Link href="/api/union/">`union`</Link> and <Link href="/api/variant/">`variant`</Link>. For [discriminated unions](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#discriminated-unions) you use <Link href="/api/variant/">`variant`</Link> and in all other cases you use <Link href="/api/union/">`union`</Link>.
+An union represents a logical OR relationship. You can apply this concept to your schemas with <Link href="/api/union/">`union`</Link> and <Link href="/api/variant/">`variant`</Link>. For [discriminated unions](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#discriminated-unions) you use <Link href="/api/variant/">`variant`</Link> and in all other cases you use <Link href="/api/union/">`union`</Link>.
 
 ## Union schema
 
@@ -20,7 +20,11 @@ The schema function <Link href="/api/union/">`union`</Link> creates an OR relati
 ```ts
 import * as v from 'valibot';
 
-const UnionSchema = v.union([v.string(), v.number()]); // string | number
+// TypeScript
+type Union = string | number;
+
+// Valibot
+const UnionSchema = v.union([v.string(), v.number()]);
 ```
 
 If the input does not match any of the schemas, an issue is returned that contains the issues of each schema as subissues. This is a special case within the library, as the issues of <Link href="/api/union/">`union`</Link> can contradict each other.
