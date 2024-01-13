@@ -4,6 +4,67 @@ contributors:
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+
 # Other
 
-> The content of this page is not yet ready. Check back in a few days.
+This guide explains other special schema functions such as <Link href="/api/literal/">`literal`</Link>, <Link href="/api/instance/">`instance`</Link>, <Link href="/api/special/">`special`</Link> and <Link href="/api/recursive/">`recursive`</Link> that are not covered in the other guides.
+
+## Literal schema
+
+You can use <Link href="/api/literal/">`literal`</Link> to define a schema that matches a specific string, number or boolean value. Therefore, this schema is perfect for representing [literal types](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types). Usage is simple, just pass the value you want to match as the first argument.
+
+```ts
+import * as v from 'valibot';
+
+const StringLiteralSchema = v.literal('foo'); // 'foo'
+const NumberLiteralSchema = v.literal(12345); // 12345
+const BooleanLiteralSchema = v.literal(true); // true
+```
+
+## Instance schema
+
+With schema functions like <Link href="/api/blob/">`blob`</Link>, <Link href="/api/date/">`date`</Link>, <Link href="/api/map/">`map`</Link> and <Link href="/api/set/">`set`</Link> I already cover the most common JavaScript classes. However, there are many more classes that you may want to validate. For this purpose, you can use the <Link href="/api/instance/">`instance`</Link> schema function. It takes a class as its first argument and returns a schema that matches only instances of that class.
+
+```ts
+import * as v from 'valibot';
+
+const ErrorSchema = v.instance(Error); // Error
+const FileSchema = v.instance(File); // File
+```
+
+## Special schema
+
+The <Link href="/api/special/">`special`</Link> schema function is a bit more advanced. It allows you to define a schema that matches a value based on a custom function. Use it whenever you need to define a schema that cannot be expressed using any of the other schema functions.
+
+The function receives the value to validate as its first argument and must return a boolean value. If the function returns `true`, the value is considered valid. Otherwise, it is considered invalid.
+
+```ts
+import * as v from 'valibot';
+
+const PixelStringSchema = v.special<`${number}px`>((val) =>
+  typeof val === 'string' ? /^\d+px$/.test(val) : false
+);
+```
+
+## Recursive schema
+
+The <Link href="/api/recursive/">`recursive`</Link> schema function allows you to define recursive schemas. A recursive schema is a schema that references itself. For example, you can use it to define a schema for a tree-like data structure.
+
+> Due to a TypeScript limitation, the input and output types cannot be inferred automatically. Therefore, you must explicitly specify these types using `BaseSchema`.
+
+```ts
+import * as v from 'valibot';
+
+type BinaryTree = {
+  element: string;
+  left: BinaryTree | null;
+  right: BinaryTree | null;
+};
+
+const BinaryTreeSchema: v.BaseSchema<BinaryTree> = v.object({
+  element: v.string(),
+  left: v.nullable(v.recursive(() => BinaryTreeSchema)),
+  right: v.nullable(v.recursive(() => BinaryTreeSchema)),
+});
+```
