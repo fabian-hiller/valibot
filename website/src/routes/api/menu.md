@@ -238,6 +238,7 @@
 - [TypedSchemaResult](/api/TypedSchemaResult/)
 - [UndefinedSchema](/api/UndefinedSchema/)
 - [UnknownPathItem](/api/UnknownPathItem/)
+- [UnknownSchema](/api/UnknownSchema/)
 - [UntypedSchemaResult](/api/UntypedSchemaResult/)
 - [ValidActionResult](/api/ValidActionResult/)
 - [VoidSchema](/api/VoidSchema/)
