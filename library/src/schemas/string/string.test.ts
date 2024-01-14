@@ -17,7 +17,7 @@ describe('string', () => {
   describe('shoud reject', () => {
     const schema = string();
 
-    test('schema, which imcludes numbers', () => {
+    test('schema, which includes numbers', () => {
       expect(() => parse(schema, 123)).toThrowError();
     });
 
