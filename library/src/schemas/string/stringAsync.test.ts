@@ -4,14 +4,34 @@ import { email, maxLength, minLength } from '../../validations/index.ts';
 import { stringAsync } from './stringAsync.ts';
 
 describe('stringAsync', () => {
-  test('should pass only strings', async () => {
+  describe('should pass', () => {
     const schema = stringAsync();
-    const input = '';
-    const output = await parseAsync(schema, input);
-    expect(output).toBe(input);
-    await expect(parseAsync(schema, 123n)).rejects.toThrowError();
-    await expect(parseAsync(schema, null)).rejects.toThrowError();
-    await expect(parseAsync(schema, {})).rejects.toThrowError();
+
+    test('empty string schema', async () => {
+      const input = '';
+      const output = await parseAsync(schema, input);
+      expect(output).toBe(input);
+    });
+  });
+
+  describe('should reject', () => {
+    const schema = stringAsync();
+
+    test('schema, if not string', async () => {
+      await expect(parseAsync(schema, 123n)).rejects.toThrowError(
+        'Invalid type'
+      );
+    });
+
+    test('null schema', async () => {
+      await expect(parseAsync(schema, null)).rejects.toThrowError(
+        'Invalid type'
+      );
+    });
+
+    test('empty object schema', async () => {
+      await expect(parseAsync(schema, {})).rejects.toThrowError('Invalid type');
+    });
   });
 
   test('should throw custom error', async () => {
@@ -21,41 +41,66 @@ describe('stringAsync', () => {
     );
   });
 
-  test('should execute pipe', async () => {
-    const lengthError = 'Invalid length';
-    const schema1 = stringAsync([minLength(1), maxLength(3)]);
-    const input1 = '12';
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toBe(input1);
-    await expect(parseAsync(schema1, '')).rejects.toThrowError(lengthError);
-    await expect(parseAsync(schema1, '1234')).rejects.toThrowError(lengthError);
+  describe('should execute pipe', () => {
+    describe('minLength and maxLength', async () => {
+      const lengthError = 'Invalid length';
+      const schema1 = stringAsync([minLength(1), maxLength(3)]);
 
-    const emailError = 'Invalid email';
-    const schema2 = stringAsync('Error', [email()]);
-    const input2 = 'jane@example.com';
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toBe(input2);
-    await expect(parseAsync(schema2, 'jane@example')).rejects.toThrowError(
-      emailError
-    );
+      test('should pass correct length', async () => {
+        const input1 = '123';
+        expect(await parseAsync(schema1, input1)).toBe(input1);
+      });
+
+      test('should reject empty string', async () => {
+        await expect(parseAsync(schema1, '')).rejects.toThrowError(lengthError);
+      });
+
+      test('should reject to long strings', async () => {
+        await expect(parseAsync(schema1, '1234')).rejects.toThrowError(
+          lengthError
+        );
+      });
+    });
+
+    describe('email', () => {
+      const emailError = 'Invalid email';
+      const schema2 = stringAsync('Error', [email()]);
+
+      test('should pass', async () => {
+        const input2 = 'jane@example.com';
+        const output2 = await parseAsync(schema2, input2);
+        expect(output2).toBe(input2);
+      });
+
+      test('should reject invalid email address string', async () => {
+        await expect(parseAsync(schema2, 'jane@example')).rejects.toThrowError(
+          emailError
+        );
+      });
+    });
   });
 
-  test('should expose the pipeline', () => {
+  describe('schema pipeline', () => {
     const schema1 = stringAsync([minLength(2), maxLength(3)]);
-    expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({
-        type: 'min_length',
-        requirement: 2,
-        message: 'Invalid length',
-      }),
-      expect.objectContaining({
-        type: 'max_length',
-        requirement: 3,
-        message: 'Invalid length',
-      }),
-    ]);
 
-    const schema2 = stringAsync();
-    expect(schema2.pipe).toBeUndefined();
+    test('should contain invalid length message, type and requirements', () => {
+      expect(schema1.pipe).toStrictEqual([
+        expect.objectContaining({
+          type: 'min_length',
+          requirement: 2,
+          message: 'Invalid length',
+        }),
+        expect.objectContaining({
+          type: 'max_length',
+          requirement: 3,
+          message: 'Invalid length',
+        }),
+      ]);
+    });
+
+    test('should be undefined, if empty schema', () => {
+      const schema2 = stringAsync();
+      expect(schema2.pipe).toBeUndefined();
+    });
   });
 });

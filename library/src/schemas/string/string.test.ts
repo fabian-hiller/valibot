@@ -14,7 +14,7 @@ describe('string', () => {
     });
   });
 
-  describe('shoud reject', () => {
+  describe('should reject', () => {
     const schema = string();
 
     test('schema, which includes numbers', () => {
@@ -35,13 +35,13 @@ describe('string', () => {
     expect(() => parse(string(error), 123)).toThrowError(error);
   });
 
-  test('should execute pipe', () => {
+  describe('should execute pipe', () => {
     describe('minLength & maxLength', () => {
       const lengthError = 'Invalid length';
       const schema1 = string([minLength(1), maxLength(3)]);
 
       test('should pass correct length', () => {
-        const input1 = '12';
+        const input1 = '123';
         const output1 = parse(schema1, input1);
         expect(output1).toBe(input1);
       });
