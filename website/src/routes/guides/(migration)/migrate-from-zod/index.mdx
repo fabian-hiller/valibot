@@ -1,9 +1,97 @@
 ---
 title: Migrate from Zod
+description: >-
+  Migrating from Zod to Valibot is very easy in most cases since both APIs have
+  a lot of similarities.
 contributors:
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+
 # Migrate from Zod
 
-> The content of this page is not yet ready. Check back in a few days.
+Migrating from [Zod](https://zod.dev/) to Valibot is very easy in most cases since both APIs have a lot of similarities. The following guide will help you migrate step by step and also point out important differences.
+
+> If anything is unclear or missing, please create an [issue](https://github.com/fabian-hiller/valibot/issues/new) on GitHub. We are very interested in making this guide as good as possible.
+
+## Replace imports
+
+The first thing to do after <Link href="../installation/">installing</Link> Valibot is to update your imports. Just change your Zod imports to Valibot's and replace all occurrences of `z.` with `v.`.
+
+```ts
+// Change this
+import { z } from 'zod';
+const Schema = z.object({ key: z.string() });
+
+// To this
+import * as v from 'valibot';
+const Schema = v.object({ key: v.string() });
+```
+
+## Restructure code
+
+One of the biggest differences between Zod and Valibot is the way you further validate a given type. In Zod, you chain methods like `.email` and `.endsWith`. In Valibot you use <Link href="../pipelines/">pipelines</Link> to do the same thing. This is an array of validation and transformation actions defined as the last argument of a schema function.
+
+```ts
+// Change this
+const Schema = z.string().email().endsWith('@example.com');
+
+// To this
+const Schema = v.string([v.email(), v.endsWith('@example.com')]);
+```
+
+Due to the modular design of Valibot, also all other methods like `.parse` or `.safeParse` have to be used a little bit differently. Instead of chaining them, you usually pass the schema as the first argument and move any existing arguments one position to the right.
+
+```ts
+// Change this
+const value = z.string().parse('foo');
+
+// To this
+const email = v.parse(v.string(), 'foo');
+```
+
+## Change names
+
+Most of the names are the same as in Zod. However, there are some exceptions. The following table shows all names that have changed.
+
+| Zod                  | Valibot                                                                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `and`                | <Link href="/api/intersect/">`intersect`</Link>                                                                                             |
+| `catch`              | <Link href="/api/fallback/">`fallback`</Link>                                                                                               |
+| `catchall`           | <Link href="/api/object/">`object`</Link>                                                                                                   |
+| `custom`             | <Link href="/api/special/">`special`</Link>                                                                                                 |
+| `datetime`           | <Link href="/api/isoDate/">`isoDate`</Link>, <Link href="/api/isoDateTime/">`isoDateTime`</Link>                                            |
+| `default`            | <Link href="/api/optional/">`optional`</Link>                                                                                               |
+| `discriminatedUnion` | <Link href="/api/variant/">`variant`</Link>                                                                                                 |
+| `element`            | <Link href="/api/item/">`item`</Link>                                                                                                       |
+| `enum`               | <Link href="/api/picklist/">`picklist`</Link>                                                                                               |
+| `extend`             | <Link href="/api/merge/">`merge`</Link>                                                                                                     |
+| `gt`, `gte`          | <Link href="/api/minValue/">`minValue`</Link>                                                                                               |
+| `infer`              | <Link href="/api/Output/">`Output`</Link>                                                                                                   |
+| `int`                | <Link href="/api/integer/">`integer`</Link>                                                                                                 |
+| `input`              | <Link href="/api/Input/">`Input`</Link>                                                                                                     |
+| `instanceof`         | <Link href="/api/instance/">`instance`</Link>                                                                                               |
+| `intersection`       | <Link href="/api/intersect/">`intersect`</Link>                                                                                             |
+| `lazy`               | <Link href="/api/recursive/">`recursive`</Link>                                                                                             |
+| `lt`, `lte`          | <Link href="/api/maxValue/">`maxValue`</Link>                                                                                               |
+| `max`                | <Link href="/api/maxLength/">`maxLength`</Link>, <Link href="/api/maxSize/">`maxSize`</Link>, <Link href="/api/maxValue/">`maxValue`</Link> |
+| `min`                | <Link href="/api/minLength/">`minLength`</Link>, <Link href="/api/minSize/">`minSize`</Link>, <Link href="/api/minValue/">`minValue`</Link> |
+| `nativeEnum`         | <Link href="/api/enum_/">`enum_`</Link>                                                                                                     |
+| `negative`           | <Link href="/api/maxValue/">`maxValue`</Link>                                                                                               |
+| `nonnegative`        | <Link href="/api/minValue/">`minValue`</Link>                                                                                               |
+| `nonpositive`        | <Link href="/api/maxValue/">`maxValue`</Link>                                                                                               |
+| `null`               | <Link href="/api/null_/">`null_`</Link>                                                                                                     |
+| `or`                 | <Link href="/api/union/">`union`</Link>                                                                                                     |
+| `output`             | <Link href="/api/Output/">`Output`</Link>                                                                                                   |
+| `passthrough`        | <Link href="/api/object/">`object`</Link>                                                                                                   |
+| `positive`           | <Link href="/api/minValue/">`minValue`</Link>                                                                                               |
+| `refine`             | <Link href="/api/custom/">`custom`</Link>                                                                                                   |
+| `rest`               | <Link href="/api/tuple/">`tuple`</Link>                                                                                                     |
+| `safe`               | <Link href="/api/safeInteger/">`safeInteger`</Link>                                                                                         |
+| `shape`              | <Link href="/api/entries/">`entries`</Link>                                                                                                 |
+| `strict`             | <Link href="/api/object/">`object`</Link>                                                                                                   |
+| `strip`              | <Link href="/api/object/">`object`</Link>                                                                                                   |
+| `trim`               | <Link href="/api/toTrimmed/">`toTrimmed`</Link>                                                                                             |
+| `undefined`          | <Link href="/api/undefined_/">`undefined_`</Link>                                                                                           |
+| `void`               | <Link href="/api/void_/">`void_`</Link>                                                                                                     |
