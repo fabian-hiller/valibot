@@ -1,7 +1,6 @@
 import { IPV6_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { actionIssue, actionOutput } from '../../utils/index.ts';
-import { isIPv6 } from '../../utils/isIPv6/isIPv6.ts';
+import { actionIssue, actionOutput, isIPv6 } from '../../utils/index.ts';
 
 /**
  * IPv6 validation type.

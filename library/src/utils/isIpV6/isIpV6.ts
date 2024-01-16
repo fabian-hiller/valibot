@@ -1,4 +1,5 @@
 /**
+ * Checks whether a string is a valid IP 6 address.
  *
  * @param ip a string representing the IP address
  *
