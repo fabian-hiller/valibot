@@ -34,7 +34,6 @@ type SingleTypeOrValue =
     }
   | {
       type: 'object';
-      index?: SingleTypeOrValue;
       entries: {
         key: string | { name: string; type: TypeOrValue };
         optional?: boolean;
@@ -65,10 +64,7 @@ type SingleTypeOrValue =
       default?: TypeOrValue;
     };
 
-type TypeOrValue =
-  | SingleTypeOrValue
-  | SingleTypeOrValue[]
-  | (SingleTypeOrValue | SingleTypeOrValue[])[];
+type TypeOrValue = SingleTypeOrValue | SingleTypeOrValue[];
 
 export type PropertyProps = {
   type: TypeOrValue;
@@ -118,17 +114,6 @@ export function Property(props: PropertyProps) {
             >
               {type}
             </span>
-          ) : Array.isArray(type) ? (
-            <span>
-              {type.length > 0 && '('}
-              {type.map((item, index) => (
-                <>
-                  {index > 0 && ' & '}
-                  <Property type={item} padding="none" />
-                </>
-              ))}
-              {type.length > 0 && ')'}
-            </span>
           ) : type.type === 'string' ? (
             <span class="text-yellow-600 dark:text-amber-200">
               '{type.value}'
@@ -171,13 +156,6 @@ export function Property(props: PropertyProps) {
                 </>
               ))}
               {'}'}
-              {type.index && (
-                <>
-                  {'['}
-                  <Property type={type.index} padding="none" />
-                  {']'}
-                </>
-              )}
             </span>
           ) : type.type === 'array' ? (
             <span>

@@ -19,20 +19,16 @@ export const properties: Record<string, PropertyProps> = {
     ],
   },
   entries: {
-    type: [
-      {
-        type: 'custom',
-        name: 'TEntries',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'TEntries',
+    },
   },
   rest: {
-    type: [
-      {
-        type: 'custom',
-        name: 'TRest',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'TRest',
+    },
   },
   message: {
     type: [

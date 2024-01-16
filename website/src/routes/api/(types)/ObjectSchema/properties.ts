@@ -8,11 +8,39 @@ export const properties: Record<string, PropertyProps> = {
         name: 'BaseSchema',
         href: '../BaseSchema/',
         generics: [
-          'any',
+          {
+            type: 'custom',
+            name: 'ObjectInput',
+            href: '../ObjectInput/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TEntries',
+              },
+              {
+                type: 'custom',
+                name: 'TRest',
+              },
+            ],
+          },
           {
             type: 'custom',
             name: 'TOutput',
-            default: 'any',
+            default: {
+              type: 'custom',
+              name: 'ObjectOutput',
+              href: '../ObjectOutput/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TEntries',
+                },
+                {
+                  type: 'custom',
+                  name: 'TRest',
+                },
+              ],
+            },
           },
         ],
       },
@@ -21,7 +49,26 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'any',
+      value: 'object',
+    },
+  },
+  entries: {
+    type: {
+      type: 'custom',
+      name: 'TEntries',
+    },
+  },
+  rest: {
+    type: {
+      type: 'custom',
+      name: 'TRest',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'ErrorMessage',
+      href: '../ErrorMessage/',
     },
   },
   pipe: {
@@ -30,7 +77,23 @@ export const properties: Record<string, PropertyProps> = {
         type: 'custom',
         name: 'Pipe',
         href: '../Pipe/',
-        generics: ['any'],
+        generics: [
+          {
+            type: 'custom',
+            name: 'ObjectOutput',
+            href: '../ObjectOutput/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TEntries',
+              },
+              {
+                type: 'custom',
+                name: 'TRest',
+              },
+            ],
+          },
+        ],
       },
       'undefined',
     ],

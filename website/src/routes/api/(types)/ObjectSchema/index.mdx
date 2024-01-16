@@ -1,19 +1,23 @@
 ---
-title: AnySchema
-description: Any schema type.
+title: ObjectSchema
+description: Object schema type.
 contributors:
   - fabian-hiller
+  - kazizi55
 ---
 
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# AnySchema
+# ObjectSchema
 
-Any schema type.
+Object schema type.
 
 ## Definition
 
-- `AnySchema` <Property {...properties.BaseSchema} />
+- `ObjectSchema` <Property {...properties.BaseSchema} />
   - `type` <Property {...properties.type} />
+  - `entries` <Property {...properties.entries} />
+  - `rest` <Property {...properties.rest} />
+  - `message` <Property {...properties.message} />
   - `pipe` <Property {...properties.pipe} />
