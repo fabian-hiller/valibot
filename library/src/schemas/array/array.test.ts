@@ -13,24 +13,42 @@ import { string } from '../string/index.ts';
 import { array } from './array.ts';
 
 describe('array', () => {
-  test('should pass only arrays', () => {
-    const schema1 = array(number());
-    const input1 = [1, 2, 3];
-    const output1 = parse(schema1, input1);
-    expect(output1).toEqual(input1);
+  const schema1 = array(number());
+  const schema2 = array(schema1);
 
-    const schema2 = array(schema1);
-    const input2 = [input1, input1, input1];
-    const output2 = parse(schema2, input2);
-    expect(output2).toEqual(input2);
+  const input1 = [1, 2, 3];
+  describe('should pass', () => {
+    test('number array should pass', () => {
+      const output1 = parse(schema1, input1);
+      expect(output1).toEqual(input1);
+    });
 
-    const input3: number[] = [];
-    const output3 = parse(schema2, input3);
-    expect(output3).toEqual(input3);
+    test('should pass nested arrays of numbers', () => {
+      const schema2 = array(schema1);
+      const input2 = [input1, input1, input1];
+      const output2 = parse(schema2, input2);
+      expect(output2).toEqual(input2);
+    });
 
-    expect(() => parse(schema1, {})).toThrowError();
-    expect(() => parse(schema1, 123)).toThrowError();
-    expect(() => parse(schema2, input1)).toThrowError();
+    test('should pass empty array', () => {
+      const input3: number[] = [];
+      const output3 = parse(schema2, input3);
+      expect(output3).toEqual(input3);
+    });
+  });
+
+  describe('should reject', () => {
+    test('if input is empty object', () => {
+      expect(() => parse(schema1, {})).toThrowError();
+    });
+
+    test('if empty object', () => {
+      expect(() => parse(schema1, {})).toThrowError();
+    });
+
+    test("if input doesn' match schema", () => {
+      expect(() => parse(schema2, input1)).toThrowError();
+    });
   });
 
   test('should throw custom error', () => {
