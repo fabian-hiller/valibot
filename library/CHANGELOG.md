@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Change ISO timestamp regex to support timestamps with lower and higher millisecond accuracy (pull request #353)
+
 ## v0.25.0 (December 26, 2023)
 
 - Add `creditCard`, `decimal`, `hash`, `hexadecimal`, `hexColor` and `octal` pipeline validation action (pull request #292, #304, #307, #308, #309)
