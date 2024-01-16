@@ -1,0 +1,22 @@
+---
+title: ObjectOutput
+description: Object output inference type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+# ObjectOutput
+
+Object output inference type.
+
+```ts
+// Create object entries
+const entries = { key: transform(string(), (input) => input.length) };
+
+// Infer entries output type
+type EntriesOutput = ObjectOutput<typeof entries, undefined>; // { key: number }
+
+// Infer output type with rest
+type WithRestOutput = ObjectOutput<typeof entries, BooleanSchema>; // { key: number } & Record<string, boolean>
+```

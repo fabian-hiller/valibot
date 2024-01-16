@@ -44,7 +44,7 @@ export async function getDefaultsAsync<
   let defaults: any;
 
   // If schema contains a default function, set its default value
-  if (schema.default) {
+  if (schema.default !== undefined) {
     defaults = await getDefaultAsync(schema);
 
     // Otherwise, check if schema is of kind object or tuple

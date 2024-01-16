@@ -11,15 +11,40 @@ import { ActionButton, ButtonGroup, Expandable, TextLink } from '~/components';
 import { PlusIcon } from '~/icons';
 import { blurredCodeDarkUrl, blurredCodeLightUrl } from '~/images';
 
-export const head: DocumentHead = {
-  title: 'Valibot: The modular and type safe schema library',
-  meta: [
-    {
-      name: 'description',
-      content:
-        'Validate unknown data with Valibot, the open source schema library with bundle size, type safety and developer experience in mind.',
-    },
-  ],
+export const head: DocumentHead = ({ url }) => {
+  const title = 'Valibot: The modular and type safe schema library';
+  const description =
+    'Validate unknown data with Valibot, the open source schema library with bundle size, type safety and developer experience in mind.';
+
+  return {
+    title,
+    meta: [
+      {
+        name: 'description',
+        content: description,
+      },
+      {
+        name: 'og:type',
+        content: 'website',
+      },
+      {
+        name: 'og:url',
+        content: url.href,
+      },
+      {
+        name: 'og:title',
+        content: title,
+      },
+      {
+        name: 'og:description',
+        content: description,
+      },
+      {
+        name: 'og:image',
+        content: `${url.origin}/og-image`,
+      },
+    ],
+  };
 };
 
 /**

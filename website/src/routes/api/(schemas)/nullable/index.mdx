@@ -53,9 +53,9 @@ const NullableStringSchema = nullable(string(), "I'm the default!");
 
 ### Nullable date schema
 
-Schema that accepts `Date` and `null`.
+Schema that accepts [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) and `null`.
 
-> By using a function as the `default_` parameter, the schema will return a new `Date` instance each time the input is `null`.
+> By using a function as the `default_` parameter, the schema will return a new [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance each time the input is `null`.
 
 ```ts
 const NullableDateSchema = nullable(date(), () => new Date());

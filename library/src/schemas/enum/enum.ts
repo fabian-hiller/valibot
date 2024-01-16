@@ -42,14 +42,21 @@ export function enum_<TEnum extends Enum>(
   enum_: TEnum,
   message: ErrorMessage = 'Invalid type'
 ): EnumSchema<TEnum> {
+  // Create cached values
+  let cachedValues: (string | number)[];
+
+  // Create and return enum schema
   return {
     type: 'enum',
     async: false,
     enum: enum_,
     message,
     _parse(input, info) {
+      // Cache values lazy
+      cachedValues = cachedValues || Object.values(this.enum);
+
       // Check type of input
-      if (!Object.values(this.enum).includes(input as any)) {
+      if (!cachedValues.includes(input as any)) {
         return schemaIssue(info, 'type', 'enum', this.message, input);
       }
 

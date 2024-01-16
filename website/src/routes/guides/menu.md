@@ -17,11 +17,21 @@
 - [Methods](/guides/methods/)
 - [Issues](/guides/issues/)
 
+## Schemas
+
+- [Objects](/guides/objects/)
+- [Arrays](/guides/arrays/)
+- [Optionals](/guides/optionals/)
+- [Enums](/guides/enums/)
+- [Unions](/guides/unions/)
+- [Intersects](/guides/intersections/)
+- [Other](/guides/other/)
+
 ## Advanced
 
 - [Naming](/guides/naming-convention/)
-- [Special cases](/guides/special-cases/)
-- [Objects](/guides/objects/)
+- [Async](/guides/async-validation/)
+- [i18n](/guides/internationalization/)
 
 ## Migration
 
