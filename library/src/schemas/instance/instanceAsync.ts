@@ -8,7 +8,7 @@ import {
   pipeResultAsync,
   schemaIssue,
 } from '../../utils/index.ts';
-import { type Class } from './instance.ts';
+import type { Class } from './types.ts';
 
 /**
  * Instance schema type.

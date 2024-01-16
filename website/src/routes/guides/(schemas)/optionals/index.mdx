@@ -1,0 +1,79 @@
+---
+title: Optionals
+description: >-
+  It often happens that undefined or null should also be accepted. To make the
+  API more readable for this and to reduce boilerplate, I offer a shortcut.
+contributors:
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+
+# Optionals
+
+It often happens that `undefined` or `null` should also be accepted instead of the value. To make the API more readable for this and to reduce boilerplate, I offer a shortcut for this functionality with <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link> and <Link href="/api/nullish/">`nullish`</Link>.
+
+## How it works
+
+To accept `undefined` or `null` besides your actual value, you just have to nest the schema in <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link> and <Link href="/api/nullish/">`nullish`</Link>.
+
+```ts
+import * as v from 'valibot';
+
+const OptionalStringSchema = v.optional(v.string()); // string | undefined
+const NullableStringSchema = v.nullable(v.string()); // string | null
+const NullishStringSchema = v.nullish(v.string()); // string | null | undefined
+```
+
+### Use in objects
+
+When used inside of objects, <Link href="/api/optional/">`optional`</Link> is a special case, as it also marks the value as optional in TypeScript with a question mark.
+
+```ts
+import * as v from 'valibot';
+
+const OptionalKeySchema = v.object({ key: v.optional(v.string()) }); // { key?: string | undefined }
+```
+
+It is important to note that <Link href="/api/nullish/">`nullish`</Link> does not behave this way. To make a nullable value optional, you must explicitly nest it in <Link href="/api/optional/">`optional`</Link>.
+
+> Let us know with an [issue](https://github.com/fabian-hiller/valibot/issues/new) if you find this cumbersome and would prefer <Link href="/api/nullish/">`nullish`</Link> to do this automatically.
+
+```ts
+import * as v from 'valibot';
+
+const NullishKeySchema = v.object({
+  key: v.nullish(v.string()),
+}); // { key: string | null | undefined }
+
+const OptionalNullableKeySchema = v.object({
+  key: v.optional(v.nullable(v.string())),
+}); // { key?: string | null | undefined }
+```
+
+## Default values
+
+The special thing about <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link> and <Link href="/api/nullish/">`nullish`</Link> is that the schema functions accept a default value as the second argument. Depending on the schema function, this default value is always used if the input is `undefined` or `null`.
+
+```ts
+import * as v from 'valibot';
+
+const OptionalStringSchema = v.optional(v.string(), "I'm the default!");
+
+type OptionalStringInput = v.Input<typeof OptionalStringSchema>; // string | undefined
+type OptionalStringOutput = v.Output<typeof OptionalStringSchema>; // string
+```
+
+By providing a default value, the input type of the schema now differs from the output type. The schema in the example now accepts `string` and `undefined` as input, but returns a string as output in both cases.
+
+### Dynamic values
+
+In some cases it is necessary to generate the default value dynamically. For this purpose, a function that generates and returns the default value can also be passed as the second argument.
+
+```ts
+import * as v from 'valibot';
+
+const NullableDateSchema = v.nullable(v.date(), () => new Date());
+```
+
+The previous example thus creates a new instance of the [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) class for each validation with `null` as input, which is then used as the default value.

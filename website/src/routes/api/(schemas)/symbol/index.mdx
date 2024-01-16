@@ -3,8 +3,8 @@ title: symbol
 description: Creates a symbol schema.
 source: /schemas/symbol/symbol.ts
 contributors:
-  - wout-junius
   - fabian-hiller
+  - wout-junius
 ---
 
 import { ApiList, Property } from '~/components';
@@ -46,6 +46,28 @@ const schema = symbol('A symbol is required');
 ## Related
 
 The following APIs can be combined with `symbol`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
 
 ### Methods
 

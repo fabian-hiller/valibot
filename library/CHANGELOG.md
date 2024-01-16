@@ -2,6 +2,11 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Improve performance of `enum_` and `enumAsync` schema by caching values
+- Fix bug in `getDefaults`, `getDefaultsAsync`, `getFallbacks` and `getFallbacksAsync` for falsy but not `undefined` values (issue #356)
+
 ## v0.25.0 (December 26, 2023)
 
 - Add `creditCard`, `decimal`, `hash`, `hexadecimal`, `hexColor` and `octal` pipeline validation action (pull request #292, #304, #307, #308, #309)

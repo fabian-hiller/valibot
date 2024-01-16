@@ -3,8 +3,8 @@ title: date
 description: Creates a date schema.
 source: /schemas/date/date.ts
 contributors:
-  - wout-junius
   - fabian-hiller
+  - wout-junius
 ---
 
 import { ApiList, Property } from '~/components';
@@ -25,7 +25,7 @@ const Schema = date(message, pipe);
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe}/>
+- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
@@ -61,6 +61,28 @@ const DateRangeSchema = date([
 ## Related
 
 The following APIs can be combined with `date`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
 
 ### Methods
 

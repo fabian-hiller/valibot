@@ -3,8 +3,104 @@ title: number
 source: /schemas/number/number.ts
 contributors:
   - fabian-hiller
+  - kazizi55
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # number
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/number/number.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a number schema.
+
+```ts
+// Number schema with an optional pipe
+const Schema = number(pipe);
+
+// Number schema with an optional message and pipe
+const Schema = number(message, pipe);
+```
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+- `pipe` <Property {...properties.pipe} />
+
+### Explanation
+
+With `number` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the number. If the input is not an number, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `number` can be used.
+
+### Integer schema
+
+Schema to validate an integer.
+
+```ts
+const IntegerSchema = number([integer()]);
+```
+
+### Force minimum
+
+Schema that forces a minimum number of 10.
+
+```ts
+const MinNumberSchema = number([toMinValue(10)]);
+```
+
+### Validate range
+
+Schema that validates a number in a range.
+
+```ts
+const NumberRangeSchema = number([minValue(1), maxValue(100)]);
+```
+
+## Related
+
+The following APIs can be combined with `number`.
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+    'withDefault',
+  ]}
+/>
+
+### Transformations
+
+<ApiList items={['toCustom', 'toMaxValue', 'toMinValue']} />
+
+### Validations
+
+<ApiList
+  items={[
+    'custom',
+    'finite',
+    'integer',
+    'maxValue',
+    'minValue',
+    'multipleOf',
+    'notValue',
+    'safeInteger',
+    'value',
+  ]}
+/>

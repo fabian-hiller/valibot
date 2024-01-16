@@ -25,7 +25,7 @@ const Schema = string(message, pipe);
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe}/>
+- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
@@ -78,6 +78,28 @@ const UrlSchema = string('A URL must be string.', [
 ## Related
 
 The following APIs can be combined with `string`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
 
 ### Methods
 

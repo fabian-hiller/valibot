@@ -24,7 +24,7 @@ const Schema = blob(message, pipe);
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe}/>
+- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
@@ -52,6 +52,28 @@ const ImageSchema = blob('Please select an image file.', [
 ## Related
 
 The following APIs can be combined with `blob`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
 
 ### Methods
 

@@ -27,13 +27,13 @@ const Schema = optional<TWrapped, TDefault>(wrapped, default_);
 ## Parameters
 
 - `wrapped` <Property {...properties.wrapped} />
-- `default_` {/* prettier-ignore */}<Property {...properties.default_}/>
+- `default_` {/* prettier-ignore */}<Property {...properties.default_} />
 
 ### Explanation
 
-With `optional` the validation of your schema will pass `undefined` inputs, and if you specify a `default_` value, the schema will use it if the input is `undefined`.
+With `optional` the validation of your schema will pass `undefined` inputs, and if you specify a `default_` input value, the schema will use it if the input is `undefined`. For this reason, the output type may differ from the input type of the schema.
 
-> Note that `optional` does not accept `null` as an input. If you want to accept `null` inputs, use <Link href="../nullable/">`nullable`</Link>, and if you want to accept `null` and `undefined` inputs, use <Link href="../nullish/">`nullish`</Link> instead. Also, if you want to set a default value for any invalid input, you should use <Link href="../fallback/">`fallback`</Link> instead.
+> Note that `optional` does not accept `null` as an input. If you want to accept `null` inputs, use <Link href="../nullable/">`nullable`</Link>, and if you want to accept `null` and `undefined` inputs, use <Link href="../nullish/">`nullish`</Link> instead. Also, if you want to set a default output value for any invalid input, you should use <Link href="../fallback/">`fallback`</Link> instead.
 
 ## Returns
 
@@ -53,9 +53,9 @@ const OptionalStringSchema = optional(string(), "I'm the default!");
 
 ### Optional date schema
 
-Schema that accepts `Date` and `undefined`.
+Schema that accepts [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) and `undefined`.
 
-> By using a function as the `default_` parameter, the schema will return a new `Date` instance each time the input is `undefined`.
+> By using a function as the `default_` parameter, the schema will return a new [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance each time the input is `undefined`.
 
 ```ts
 const OptionalDateSchema = optional(date(), () => new Date());
@@ -83,25 +83,6 @@ const NumberSchema = unwrap(OptionalNumberSchema);
 ## Related
 
 The following APIs can be combined with `optional`.
-
-### Methods
-
-<ApiList
-  items={[
-    'brand',
-    'coerce',
-    'fallback',
-    'getDefault',
-    'getDefaults',
-    'getFallback',
-    'getFallbacks',
-    'is',
-    'parse',
-    'safeParse',
-    'transform',
-    'unwrap',
-  ]}
-/>
 
 ### Schemas
 
@@ -142,5 +123,24 @@ The following APIs can be combined with `optional`.
     'unknown',
     'variant',
     'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+    'unwrap',
   ]}
 />

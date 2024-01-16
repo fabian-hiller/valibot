@@ -1,7 +1,7 @@
 ---
 title: enum_
 description: Creates an enum schema.
-source: /schemas/enum_/enum_.ts
+source: /schemas/enum/enum.ts
 contributors:
   - fabian-hiller
 ---
@@ -23,7 +23,7 @@ const Schema = enum_<TEnum>(enum_, message);
 
 ## Parameters
 
-- `enum_` {/* prettier-ignore */}<Property {...properties.enum_}/>
+- `enum_` {/* prettier-ignore */}<Property {...properties.enum_} />
 - `message` <Property {...properties.message} />
 
 ### Explanation
@@ -54,6 +54,28 @@ const DirectionSchema = enum_(Direction, 'Invalid direction');
 ## Related
 
 The following APIs can be combined with `enum_`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
 
 ### Methods
 

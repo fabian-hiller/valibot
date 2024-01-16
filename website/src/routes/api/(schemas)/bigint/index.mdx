@@ -24,7 +24,7 @@ const Schema = bigint(message, pipe);
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe}/>
+- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
@@ -57,6 +57,28 @@ const MaxBigintSchema = bigint([maxValue(999n)]);
 ## Related
 
 The following APIs can be combined with `bigint`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
 
 ### Methods
 

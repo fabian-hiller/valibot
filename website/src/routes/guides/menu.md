@@ -15,7 +15,23 @@
 - [Parse data](/guides/parse-data/)
 - [Infer types](/guides/infer-types/)
 - [Methods](/guides/methods/)
-- [Errors](/guides/errors/)
+- [Issues](/guides/issues/)
+
+## Schemas
+
+- [Objects](/guides/objects/)
+- [Arrays](/guides/arrays/)
+- [Optionals](/guides/optionals/)
+- [Enums](/guides/enums/)
+- [Unions](/guides/unions/)
+- [Intersects](/guides/intersections/)
+- [Other](/guides/other/)
+
+## Advanced
+
+- [Naming](/guides/naming-convention/)
+- [Async](/guides/async-validation/)
+- [i18n](/guides/internationalization/)
 
 ## Migration
 
