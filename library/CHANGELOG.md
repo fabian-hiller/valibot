@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Improve performance of `enum_` and `enumAsync` schema by caching values
 - Fix bug in `getDefaults`, `getDefaultsAsync`, `getFallbacks` and `getFallbacksAsync` for falsy but not `undefined` values (issue #356)
+- Change ISO timestamp regex to support timestamps with lower and higher millisecond accuracy (pull request #353)
 
 ## v0.25.0 (December 26, 2023)
 
