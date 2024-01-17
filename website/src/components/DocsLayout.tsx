@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon, GitHubIcon, PenIcon } from '~/icons';
-import { NetlifyLogo, PaceLogo } from '~/logos';
+import { BuilderLogo, NetlifyLogo, PaceLogo } from '~/logos';
 import { IconButton } from './IconButton';
 import { Navigation } from './Navigation';
 import { SideBar } from './SideBar';
@@ -131,6 +131,7 @@ export const DocsLayout = component$(() => {
           <ul class="mt-4 flex flex-wrap gap-6 md:mt-5 lg:mt-6 lg:gap-10">
             {[
               { Logo: PaceLogo, href: 'https://www.pace.edu' },
+              { Logo: BuilderLogo, href: 'https://www.builder.io' },
               { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
             ].map(({ Logo, href }) => (
               <li key={href}>
