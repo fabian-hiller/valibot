@@ -242,6 +242,8 @@
 - [TuplePathItem](/api/TuplePathItem/)
 - [TypedSchemaResult](/api/TypedSchemaResult/)
 - [UndefinedSchema](/api/UndefinedSchema/)
+- [UnionOptions](/api/UnionOptions/)
+- [UnionSchema](/api/UnionSchema/)
 - [UnknownPathItem](/api/UnknownPathItem/)
 - [UnknownSchema](/api/UnknownSchema/)
 - [UntypedSchemaResult](/api/UntypedSchemaResult/)
