@@ -39,7 +39,7 @@ export interface UnionSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<Output<TOptions[number]>> | undefined;
-};
+}
 
 /**
  * Creates a union schema.
