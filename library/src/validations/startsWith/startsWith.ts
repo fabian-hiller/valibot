@@ -11,7 +11,7 @@ export interface StartsWithValidation<
   /**
    * The validation type.
    */
-  type: 'stars_with';
+  type: 'starts_with';
   /**
    * The start string.
    */
@@ -31,7 +31,7 @@ export function startsWith<TInput extends string, TRequirement extends string>(
   message: ErrorMessage = 'Invalid start'
 ): StartsWithValidation<TInput, TRequirement> {
   return {
-    type: 'stars_with',
+    type: 'starts_with',
     async: false,
     message,
     requirement,

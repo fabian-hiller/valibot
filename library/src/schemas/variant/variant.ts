@@ -2,16 +2,11 @@ import type {
   BaseSchema,
   ErrorMessage,
   Input,
-  Issues,
   Output,
   Pipe,
+  SchemaResult,
 } from '../../types/index.ts';
-import {
-  defaultArgs,
-  parseResult,
-  pipeResult,
-  schemaIssue,
-} from '../../utils/index.ts';
+import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 import type { ObjectSchema } from '../object/index.ts';
 
 /**
@@ -60,8 +55,8 @@ export interface VariantSchema<
   /**
    * The validation and transformation pipeline.
    */
-  pipe: Pipe<Input<TOptions[number]>> | undefined;
-}
+  pipe: Pipe<Output<TOptions[number]>> | undefined;
+};
 
 /**
  * Creates a variant (aka discriminated union) schema.
@@ -78,7 +73,7 @@ export function variant<
 >(
   key: TKey,
   options: TOptions,
-  pipe?: Pipe<Input<TOptions[number]>>
+  pipe?: Pipe<Output<TOptions[number]>>
 ): VariantSchema<TKey, TOptions>;
 
 /**
@@ -98,7 +93,7 @@ export function variant<
   key: TKey,
   options: TOptions,
   message?: ErrorMessage,
-  pipe?: Pipe<Input<TOptions[number]>>
+  pipe?: Pipe<Output<TOptions[number]>>
 ): VariantSchema<TKey, TOptions>;
 
 export function variant<
@@ -107,8 +102,8 @@ export function variant<
 >(
   key: TKey,
   options: TOptions,
-  arg3?: Pipe<Input<TOptions[number]>> | ErrorMessage,
-  arg4?: Pipe<Input<TOptions[number]>>
+  arg3?: Pipe<Output<TOptions[number]>> | ErrorMessage,
+  arg4?: Pipe<Output<TOptions[number]>>
 ): VariantSchema<TKey, TOptions> {
   // Get message and pipe argument
   const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
@@ -129,9 +124,8 @@ export function variant<
 
       // Continue if discriminator key is included
       if (this.key in input) {
-        // Create issues and output
-        let issues: Issues | undefined;
-        let output: [Record<string, any>] | undefined;
+        // Create variable to store variant result
+        let variantResult: SchemaResult<Output<TOptions[number]>> | undefined;
 
         // Create function to parse options recursively
         const parseOptions = (options: VariantOptions<TKey>) => {
@@ -147,18 +141,18 @@ export function variant<
               if (!keyResult.issues) {
                 const dataResult = schema._parse(input, info);
 
-                // If there are issues, capture them
-                if (dataResult.issues) {
-                  issues = dataResult.issues;
-
-                  // Otherwise, set output
-                } else {
-                  // Note: Output is nested in array, so that also a falsy value
-                  // further down can be recognized as valid value
-                  output = [dataResult.output!];
-
-                  // Break loop to end execution
+                // If there are not issues, store result and break loop
+                if (!dataResult.issues) {
+                  variantResult = dataResult;
                   break;
+                }
+
+                // Otherwise, replace variant result only if necessary
+                if (
+                  !variantResult ||
+                  (!variantResult.typed && dataResult.typed)
+                ) {
+                  variantResult = dataResult;
                 }
               }
 
@@ -168,7 +162,7 @@ export function variant<
               parseOptions(schema.options);
 
               // If variant option was found, break loop to end execution
-              if (output) {
+              if (variantResult && !variantResult.issues) {
                 break;
               }
             }
@@ -178,14 +172,21 @@ export function variant<
         // Parse options recursively
         parseOptions(this.options);
 
-        // If there is an output, execute pipe
-        if (output) {
-          return pipeResult(output[0], this.pipe, info, 'variant');
-        }
+        // If a variant result is available, process it
+        if (variantResult) {
+          // If result is typed, execute pipe
+          if (variantResult.typed) {
+            return pipeResult(
+              variantResult.output,
+              this.pipe,
+              info,
+              'variant',
+              variantResult.issues
+            );
+          }
 
-        // If there are issues, return untyped parse result
-        if (issues) {
-          return parseResult(false, output, issues);
+          // Otherwise, return variant result
+          return variantResult;
         }
       }
 

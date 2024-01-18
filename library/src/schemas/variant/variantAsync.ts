@@ -3,13 +3,12 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   Input,
-  Issues,
   Output,
   PipeAsync,
+  SchemaResult,
 } from '../../types/index.ts';
 import {
   defaultArgs,
-  parseResult,
   pipeResultAsync,
   schemaIssue,
 } from '../../utils/index.ts';
@@ -131,9 +130,8 @@ export function variantAsync<
 
       // Continue if discriminator key is included
       if (this.key in input) {
-        // Create issues and output
-        let issues: Issues | undefined;
-        let output: [Record<string, any>] | undefined;
+        // Create variable to store variant result
+        let variantResult: SchemaResult<Output<TOptions[number]>> | undefined;
 
         // Create function to parse options recursively
         const parseOptions = async (options: VariantOptionsAsync<TKey>) => {
@@ -149,18 +147,18 @@ export function variantAsync<
               if (!keyResult.issues) {
                 const dataResult = await schema._parse(input, info);
 
-                // If there are issues, capture them
-                if (dataResult.issues) {
-                  issues = dataResult.issues;
-
-                  // Otherwise, set output
-                } else {
-                  // Note: Output is nested in array, so that also a falsy value
-                  // further down can be recognized as valid value
-                  output = [dataResult.output!];
-
-                  // Break loop to end execution
+                // If there are not issues, store result and break loop
+                if (!dataResult.issues) {
+                  variantResult = dataResult;
                   break;
+                }
+
+                // Otherwise, replace variant result only if necessary
+                if (
+                  !variantResult ||
+                  (!variantResult.typed && dataResult.typed)
+                ) {
+                  variantResult = dataResult;
                 }
               }
 
@@ -170,7 +168,7 @@ export function variantAsync<
               await parseOptions(schema.options);
 
               // If variant option was found, break loop to end execution
-              if (output) {
+              if (variantResult && !variantResult.issues) {
                 break;
               }
             }
@@ -180,14 +178,21 @@ export function variantAsync<
         // Parse options recursively
         await parseOptions(this.options);
 
-        // If there is an output, execute pipe
-        if (output) {
-          return pipeResultAsync(output[0], this.pipe, info, 'variant');
-        }
+        // If a variant result is available, process it
+        if (variantResult) {
+          // If result is typed, execute pipe
+          if (variantResult.typed) {
+            return pipeResultAsync(
+              variantResult.output,
+              this.pipe,
+              info,
+              'variant',
+              variantResult.issues
+            );
+          }
 
-        // If there are issues, return untyped parse result
-        if (issues) {
-          return parseResult(false, output, issues);
+          // Otherwise, return variant result
+          return variantResult;
         }
       }
 
