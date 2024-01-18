@@ -200,6 +200,7 @@
 - [BooleanSchema](/api/BooleanSchema/)
 - [Class](/api/Class/)
 - [DateSchema](/api/DateSchema/)
+- [EmailValidation](/api/EmailValidation/)
 - [Enum](/api/Enum/)
 - [EnumSchema](/api/EnumSchema/)
 - [ErrorMessage](/api/ErrorMessage/)
