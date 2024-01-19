@@ -108,7 +108,7 @@ Instead of <Link href="/api/string/">`string`</Link>, you can also use <Link hre
 ```ts
 import * as v from 'valibot';
 
-const RecordSchema = v.record(v.picklist(['key1', 'key2']), v.number()); // { key1?: number, key2?: number }
+const RecordSchema = v.record(v.picklist(['key1', 'key2']), v.number()); // { key1?: number; key2?: number }
 ```
 
 ### Pipeline validation

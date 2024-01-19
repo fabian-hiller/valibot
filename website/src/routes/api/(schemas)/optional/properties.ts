@@ -9,62 +9,62 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   TDefault: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Input',
-        href: '../Input/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'TWrapped',
-          },
-        ],
-      },
-      {
-        type: 'function',
-        params: [],
-        return: [
-          {
-            type: 'custom',
-            name: 'Input',
-            href: '../Input/',
-            generics: [
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Input',
+          href: '../Input/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
+        },
+        {
+          type: 'function',
+          params: [],
+          return: {
+            type: 'union',
+            options: [
               {
                 type: 'custom',
-                name: 'TWrapped',
+                name: 'Input',
+                href: '../Input/',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'TWrapped',
+                  },
+                ],
               },
+              'undefined',
             ],
           },
-          'undefined',
-        ],
-      },
-      'undefined',
-    ],
+        },
+        'undefined',
+      ],
+    },
   },
   wrapped: {
-    type: [
-      {
-        type: 'custom',
-        name: 'TWrapped',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'TWrapped',
+    },
   },
   default_: {
-    type: [
-      {
-        type: 'custom',
-        name: 'TDefault',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'TDefault',
+    },
   },
   Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'OptionalSchema',
-        href: '../OptionalSchema/',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'OptionalSchema',
+      href: '../OptionalSchema/',
+    },
   },
 };

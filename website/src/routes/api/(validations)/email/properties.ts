@@ -5,26 +5,27 @@ export const properties: Record<string, PropertyProps> = {
     type: 'string',
   },
   message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+        },
+        'undefined',
+      ],
+    },
     default: {
       type: 'string',
       value: 'Invalid email',
     },
   },
   Validation: {
-    type: [
-      {
-        type: 'custom',
-        name: 'EmailValidation',
-        href: '../EmailValidation/',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'EmailValidation',
+      href: '../EmailValidation/',
+    },
   },
 };

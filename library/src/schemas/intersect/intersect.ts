@@ -43,7 +43,7 @@ export interface IntersectSchema<
   /**
    * The validation and transformation pipeline.
    */
-  pipe: Pipe<IntersectInput<TOptions>> | undefined;
+  pipe: Pipe<IntersectOutput<TOptions>> | undefined;
 }
 
 /**
@@ -56,7 +56,7 @@ export interface IntersectSchema<
  */
 export function intersect<TOptions extends IntersectOptions>(
   options: TOptions,
-  pipe?: Pipe<IntersectInput<TOptions>>
+  pipe?: Pipe<IntersectOutput<TOptions>>
 ): IntersectSchema<TOptions>;
 
 /**
@@ -71,13 +71,13 @@ export function intersect<TOptions extends IntersectOptions>(
 export function intersect<TOptions extends IntersectOptions>(
   options: TOptions,
   message?: ErrorMessage,
-  pipe?: Pipe<IntersectInput<TOptions>>
+  pipe?: Pipe<IntersectOutput<TOptions>>
 ): IntersectSchema<TOptions>;
 
 export function intersect<TOptions extends IntersectOptions>(
   options: TOptions,
-  arg2?: Pipe<IntersectInput<TOptions>> | ErrorMessage,
-  arg3?: Pipe<IntersectInput<TOptions>>
+  arg2?: Pipe<IntersectOutput<TOptions>> | ErrorMessage,
+  arg3?: Pipe<IntersectOutput<TOptions>>
 ): IntersectSchema<TOptions> {
   // Get message and pipe argument
   const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);

@@ -55,27 +55,30 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   _types: {
-    type: [
-      {
-        type: 'object',
-        entries: [
-          {
-            key: 'input',
-            value: {
-              type: 'custom',
-              name: 'TInput',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'object',
+          entries: [
+            {
+              key: 'input',
+              value: {
+                type: 'custom',
+                name: 'TInput',
+              },
             },
-          },
-          {
-            key: 'output',
-            value: {
-              type: 'custom',
-              name: 'TOutput',
+            {
+              key: 'output',
+              value: {
+                type: 'custom',
+                name: 'TOutput',
+              },
             },
-          },
-        ],
-      },
-      'undefined',
-    ],
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
 };

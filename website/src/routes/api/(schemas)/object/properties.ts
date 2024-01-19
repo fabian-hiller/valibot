@@ -9,14 +9,17 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   TRest: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BaseSchema',
-        href: '../BaseSchema/',
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'BaseSchema',
+          href: '../BaseSchema/',
+        },
+        'undefined',
+      ],
+    },
   },
   entries: {
     type: {
@@ -31,53 +34,57 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+        },
+        'undefined',
+      ],
+    },
     default: {
       type: 'string',
       value: 'Invalid type',
     },
   },
   pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'ObjectOutput',
-            href: '../ObjectOutput/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'TEntries',
-              },
-              {
-                type: 'custom',
-                name: 'TRest',
-              },
-            ],
-          },
-        ],
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Pipe',
+          href: '../Pipe/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'ObjectOutput',
+              href: '../ObjectOutput/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TEntries',
+                },
+                {
+                  type: 'custom',
+                  name: 'TRest',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
   Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ObjectSchema',
-        href: '../ObjectSchema/',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'ObjectSchema',
+      href: '../ObjectSchema/',
+    },
   },
 };

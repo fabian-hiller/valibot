@@ -27,7 +27,7 @@ type Union = string | number;
 const UnionSchema = v.union([v.string(), v.number()]);
 ```
 
-If a bad input can be uniquely assigned to one of the schemas based on the data type, the output of that schema is returned. Otherwise, a general issue is returned that contains the issues of each schema as subissues. This is a special case within the library, as the issues of <Link href="/api/union/">`union`</Link> can contradict each other.
+If a bad input can be uniquely assigned to one of the schemas based on the data type, the result of that schema is returned. Otherwise, a general issue is returned that contains the issues of each schema as subissues. This is a special case within the library, as the issues of <Link href="/api/union/">`union`</Link> can contradict each other.
 
 The following issues are returned if the input is `null` instead of a string or number. Since the input cannot be associated with a schema in this case, the issues of both schemas are returned as subissues.
 
