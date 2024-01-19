@@ -15,12 +15,15 @@ export const properties: Record<string, PropertyProps> = {
               name: 'Issue',
               href: '../Issue/',
             },
-            [
-              { type: 'string', value: 'origin' },
-              { type: 'string', value: 'abortEarly' },
-              { type: 'string', value: 'abortPipeEarly' },
-              { type: 'string', value: 'skipPipe' },
-            ],
+            {
+              type: 'union',
+              options: [
+                { type: 'string', value: 'origin' },
+                { type: 'string', value: 'abortEarly' },
+                { type: 'string', value: 'abortPipeEarly' },
+                { type: 'string', value: 'skipPipe' },
+              ],
+            },
           ],
         },
       ],

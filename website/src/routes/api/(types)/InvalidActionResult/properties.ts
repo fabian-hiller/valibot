@@ -13,28 +13,31 @@ export const properties: Record<string, PropertyProps> = {
             name: 'Issue',
             href: '../Issue/',
           },
-          [
-            {
-              type: 'string',
-              value: 'validation',
-            },
-            {
-              type: 'string',
-              value: 'message',
-            },
-            {
-              type: 'string',
-              value: 'input',
-            },
-            {
-              type: 'string',
-              value: 'requirement',
-            },
-            {
-              type: 'string',
-              value: 'path',
-            },
-          ],
+          {
+            type: 'union',
+            options: [
+              {
+                type: 'string',
+                value: 'validation',
+              },
+              {
+                type: 'string',
+                value: 'message',
+              },
+              {
+                type: 'string',
+                value: 'input',
+              },
+              {
+                type: 'string',
+                value: 'requirement',
+              },
+              {
+                type: 'string',
+                value: 'path',
+              },
+            ],
+          },
         ],
       },
     },
