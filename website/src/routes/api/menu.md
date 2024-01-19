@@ -248,4 +248,7 @@
 - [UnknownSchema](/api/UnknownSchema/)
 - [UntypedSchemaResult](/api/UntypedSchemaResult/)
 - [ValidActionResult](/api/ValidActionResult/)
+- [VariantOption](/api/VariantOption/)
+- [VariantOptions](/api/VariantOptions/)
+- [VariantSchema](/api/VariantSchema/)
 - [VoidSchema](/api/VoidSchema/)
