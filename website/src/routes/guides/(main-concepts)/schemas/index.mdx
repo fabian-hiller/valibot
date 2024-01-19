@@ -181,6 +181,6 @@ const UnknownSchema = v.unknown(); // unknown
 const VariantSchema = v.variant('type', [
   v.object({ type: v.literal('a'), foo: v.string() }),
   v.object({ type: v.literal('b'), bar: v.number() }),
-]); // { type: 'a', foo: string } | { type: 'b', bar: number }
+]); // { type: 'a'; foo: string } | { type: 'b'; bar: number }
 const VoidSchema = v.void_(); // void
 ```
