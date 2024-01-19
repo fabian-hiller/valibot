@@ -9,59 +9,61 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   options: {
-    type: [
-      {
-        type: 'custom',
-        name: 'TOptions',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'TOptions',
+    },
   },
   message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+        },
+        'undefined',
+      ],
+    },
     default: {
       type: 'string',
       value: 'Invalid type',
     },
   },
   pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'Output',
-            href: '../Output/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'TOptions',
-                href: '../TOptions/',
-                indexes: ['number'],
-              },
-            ],
-          },
-        ],
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Pipe',
+          href: '../Pipe/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'Output',
+              href: '../Output/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TOptions',
+                  href: '../TOptions/',
+                  indexes: ['number'],
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
   Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'UnionSchema',
-        href: '../UnionSchema/',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'UnionSchema',
+      href: '../UnionSchema/',
+    },
   },
 };

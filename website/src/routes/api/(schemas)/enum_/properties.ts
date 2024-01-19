@@ -15,26 +15,27 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+        },
+        'undefined',
+      ],
+    },
     default: {
       type: 'string',
       value: 'Invalid type',
     },
   },
   Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'EnumSchema',
-        href: '../EnumSchema/',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'EnumSchema',
+      href: '../EnumSchema/',
+    },
   },
 };

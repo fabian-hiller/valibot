@@ -2,13 +2,26 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   BaseSchema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BaseSchema',
-        href: '../BaseSchema/',
-        generics: [
-          {
+    type: {
+      type: 'custom',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TEnum',
+          indexes: [
+            {
+              type: 'custom',
+              modifier: 'keyof',
+              name: 'TEnum',
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'TOutput',
+          default: {
             type: 'custom',
             name: 'TEnum',
             indexes: [
@@ -19,24 +32,9 @@ export const properties: Record<string, PropertyProps> = {
               },
             ],
           },
-          {
-            type: 'custom',
-            name: 'TOutput',
-            default: {
-              type: 'custom',
-              name: 'TEnum',
-              indexes: [
-                {
-                  type: 'custom',
-                  modifier: 'keyof',
-                  name: 'TEnum',
-                },
-              ],
-            },
-          },
-        ],
-      },
-    ],
+        },
+      ],
+    },
   },
   type: {
     type: {

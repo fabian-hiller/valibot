@@ -16,35 +16,50 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   path: {
-    type: [
-      {
-        type: 'array',
-        item: {
-          type: 'custom',
-          name: 'PathItem',
-          href: '../PathItem/',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'array',
+          item: {
+            type: 'custom',
+            name: 'PathItem',
+            href: '../PathItem/',
+          },
         },
-      },
-      'undefined',
-    ],
+        'undefined',
+      ],
+    },
   },
   issues: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Issues',
-        href: '../Issues/',
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Issues',
+          href: '../Issues/',
+        },
+        'undefined',
+      ],
+    },
   },
   abortEarly: {
-    type: ['boolean', 'undefined'],
+    type: {
+      type: 'union',
+      options: ['boolean', 'undefined'],
+    },
   },
   abortPipeEarly: {
-    type: ['boolean', 'undefined'],
+    type: {
+      type: 'union',
+      options: ['boolean', 'undefined'],
+    },
   },
   skipPipe: {
-    type: ['boolean', 'undefined'],
+    type: {
+      type: 'union',
+      options: ['boolean', 'undefined'],
+    },
   },
 };

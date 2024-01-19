@@ -26,13 +26,16 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   issues: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Issues',
-        href: '../Issues/',
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Issues',
+          href: '../Issues/',
+        },
+        'undefined',
+      ],
+    },
   },
 };

@@ -11,10 +11,19 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'custom',
       name: 'Record',
-      generics: [['string', 'number', 'symbol'], 'unknown'],
+      generics: [
+        {
+          type: 'union',
+          options: ['string', 'number', 'symbol'],
+        },
+        'unknown',
+      ],
     },
   },
   key: {
-    type: ['string', 'number', 'symbol'],
+    type: {
+      type: 'union',
+      options: ['string', 'number', 'symbol'],
+    },
   },
 };

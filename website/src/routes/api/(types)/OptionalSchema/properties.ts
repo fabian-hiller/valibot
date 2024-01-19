@@ -2,13 +2,14 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   BaseSchema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BaseSchema',
-        href: '../BaseSchema/',
-        generics: [
-          [
+    type: {
+      type: 'custom',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+      generics: [
+        {
+          type: 'union',
+          options: [
             {
               type: 'custom',
               name: 'Input',
@@ -22,10 +23,13 @@ export const properties: Record<string, PropertyProps> = {
             },
             'undefined',
           ],
-          {
-            type: 'custom',
-            name: 'TOutput',
-            default: [
+        },
+        {
+          type: 'custom',
+          name: 'TOutput',
+          default: {
+            type: 'union',
+            options: [
               {
                 type: 'custom',
                 name: 'Output',
@@ -40,9 +44,9 @@ export const properties: Record<string, PropertyProps> = {
               'undefined',
             ],
           },
-        ],
-      },
-    ],
+        },
+      ],
+    },
   },
   type: {
     type: {
