@@ -2,9 +2,11 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   TKey: {
+    modifier: 'extends',
     type: 'string',
   },
   TOptions: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'VariantOptions',

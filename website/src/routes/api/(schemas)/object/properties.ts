@@ -2,6 +2,7 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   TEntries: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'ObjectEntries',
@@ -9,6 +10,7 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   TRest: {
+    modifier: 'extends',
     type: {
       type: 'union',
       options: [

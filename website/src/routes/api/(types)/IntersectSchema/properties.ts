@@ -1,6 +1,30 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TOptions: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'IntersectOptions',
+      href: '../IntersectOptions/',
+    },
+  },
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+    default: {
+      type: 'custom',
+      name: 'IntersectOutput',
+      href: '../IntersectOutput/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TOptions',
+          href: '../TOptions/',
+        },
+      ],
+    },
+  },
   BaseSchema: {
     type: {
       type: 'custom',
@@ -22,18 +46,6 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TOutput',
-          default: {
-            type: 'custom',
-            name: 'IntersectOutput',
-            href: '../IntersectOutput/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'TOptions',
-                href: '../TOptions/',
-              },
-            ],
-          },
         },
       ],
     },

@@ -1,6 +1,11 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+    default: 'unknown',
+  },
   BaseSchema: {
     type: {
       type: 'custom',
@@ -11,7 +16,6 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TOutput',
-          default: 'unknown',
         },
       ],
     },

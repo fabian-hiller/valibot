@@ -1,6 +1,10 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+  },
   SchemaResult: {
     type: {
       type: 'union',
