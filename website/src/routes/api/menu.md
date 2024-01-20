@@ -216,6 +216,8 @@
 - [IssueOrigin](/api/IssueOrigin/)
 - [IssueReason](/api/IssueReason/)
 - [Issues](/api/Issues/)
+- [Literal](/api/Literal/)
+- [LiteralSchema](/api/LiteralSchema/)
 - [MapPathItem](/api/MapPathItem/)
 - [MaybeReadonly](/api/MaybeReadonly/)
 - [NanSchema](/api/NanSchema/)

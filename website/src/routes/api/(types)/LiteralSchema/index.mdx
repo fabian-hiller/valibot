@@ -1,0 +1,25 @@
+---
+title: LiteralSchema
+description: Literal schema type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# LiteralSchema
+
+Literal schema type.
+
+## Generics
+
+- `TLiteral` <Property {...properties.TLiteral} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `LiteralSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `literal` <Property {...properties.literal} />
+  - `message` <Property {...properties.message} />
