@@ -1,23 +1,14 @@
-import type {
-  BaseSchema,
-  ErrorMessage,
-  Input,
-  Output,
-} from '../../types/index.ts';
+import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
 import { schemaIssue } from '../../utils/index.ts';
-
-/**
- * Non optional type.
- */
-export type NonOptional<T> = T extends undefined ? never : T;
+import type { NonOptionalInput, NonOptionalOutput } from './types.ts';
 
 /**
  * Non optional schema type.
  */
 export type NonOptionalSchema<
   TWrapped extends BaseSchema,
-  TOutput = NonOptional<Output<TWrapped>>
-> = BaseSchema<NonOptional<Input<TWrapped>>, TOutput> & {
+  TOutput = NonOptionalOutput<TWrapped>
+> = BaseSchema<NonOptionalInput<TWrapped>, TOutput> & {
   /**
    * The schema type.
    */

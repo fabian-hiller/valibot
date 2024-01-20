@@ -4,6 +4,8 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Remove `NonNullable`, `NonNullish` and `NonOptional` type
+- Add `NonNullableInput`, `NonNullableOutput`, `NonNullishInput`, `NonNullishOutput`, `NonOptionalInput` and `NonOptionalOutput` type
 - Fix type of `pipe` argument at `intersect` and `intersectAsync` schema
 
 ## v0.26.0 (January 16, 2023)
