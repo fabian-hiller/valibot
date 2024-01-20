@@ -67,6 +67,16 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'OptionalSchema',
       href: '../OptionalSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TWrapped',
+        },
+        {
+          type: 'custom',
+          name: 'TDefault',
+        },
+      ],
     },
   },
 };

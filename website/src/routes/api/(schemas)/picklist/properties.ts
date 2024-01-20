@@ -37,6 +37,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'PicklistSchema',
       href: '../PicklistSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TOptions',
+        },
+      ],
     },
   },
 };

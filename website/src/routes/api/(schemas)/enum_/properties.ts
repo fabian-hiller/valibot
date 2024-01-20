@@ -37,6 +37,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'EnumSchema',
       href: '../EnumSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TEnum',
+        },
+      ],
     },
   },
 };

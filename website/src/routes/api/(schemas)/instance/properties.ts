@@ -56,6 +56,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'InstanceSchema',
       href: '../InstanceSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TClass',
+        },
+      ],
     },
   },
 };

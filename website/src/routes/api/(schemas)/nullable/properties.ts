@@ -67,6 +67,16 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'NullableSchema',
       href: '../NullableSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TWrapped',
+        },
+        {
+          type: 'custom',
+          name: 'TDefault',
+        },
+      ],
     },
   },
 };

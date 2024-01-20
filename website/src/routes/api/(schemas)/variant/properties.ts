@@ -81,6 +81,16 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'VariantSchema',
       href: '../VariantSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TKey',
+        },
+        {
+          type: 'custom',
+          name: 'TOptions',
+        },
+      ],
     },
   },
 };

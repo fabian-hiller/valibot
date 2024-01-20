@@ -64,6 +64,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'IntersectSchema',
       href: '../IntersectSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TOptions',
+        },
+      ],
     },
   },
 };

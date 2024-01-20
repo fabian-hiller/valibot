@@ -66,6 +66,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'ArraySchema',
       href: '../ArraySchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TItem',
+        },
+      ],
     },
   },
 };
