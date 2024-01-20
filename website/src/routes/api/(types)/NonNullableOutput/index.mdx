@@ -1,0 +1,20 @@
+---
+title: NonNullableOutput
+description: Non nullable output inference type.
+contributors:
+  - fabian-hiller
+---
+
+# NonNullableOutput
+
+NonNullableOutput inference type.
+
+```ts
+// Create nullable sting schema
+const NullableStringSchema = nullable(
+  transform(string(), (input) => input.length)
+);
+
+// Infer non nullable string output type
+type NonNullableStringOutput = NonNullableOutput<typeof NullableStringSchema>; // number
+```
