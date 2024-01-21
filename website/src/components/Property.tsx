@@ -1,5 +1,5 @@
 import { Link } from '@builder.io/qwik-city';
-import { component$ } from '@builder.io/qwik';
+import { Fragment, component$ } from '@builder.io/qwik';
 
 type DefinitionData =
   | 'string'
@@ -67,6 +67,15 @@ type DefinitionData =
   | {
       type: 'intersect';
       options: [DefinitionData, DefinitionData, ...DefinitionData[]];
+    }
+  | {
+      type: 'conditional';
+      conditions: {
+        type: DefinitionData;
+        extends: DefinitionData;
+        true: DefinitionData;
+      }[];
+      false: DefinitionData;
     }
   | {
       type: 'custom';
@@ -238,6 +247,20 @@ const Definition = component$<DefinitionProps>(({ data }) => (
           <Definition data={option} />
         </>
       ))
+    ) : data.type === 'conditional' ? (
+      <>
+        {data.conditions.map((condition, index) => (
+          <Fragment key={index}>
+            <Definition data={condition.type} />
+            <span class="text-red-600 dark:text-red-400"> extends </span>
+            <Definition data={condition.extends} />
+            <span class="text-red-600 dark:text-red-400"> ? </span>
+            <Definition data={condition.true} />
+          </Fragment>
+        ))}
+        <span class="text-red-600 dark:text-red-400"> : </span>
+        <Definition data={data.false} />
+      </>
     ) : (
       <>
         {data.modifier && (
