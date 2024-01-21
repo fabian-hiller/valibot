@@ -2,19 +2,17 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  Input,
-  Output,
 } from '../../types/index.ts';
 import { schemaIssue } from '../../utils/index.ts';
-import type { NonNullish } from './nonNullish.ts';
+import type { NonNullishInput, NonNullishOutput } from './types.ts';
 
 /**
  * Non nullish schema async type.
  */
 export interface NonNullishSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TOutput = NonNullish<Output<TWrapped>>
-> extends BaseSchemaAsync<NonNullish<Input<TWrapped>>, TOutput> {
+  TOutput = NonNullishOutput<TWrapped>
+> extends BaseSchemaAsync<NonNullishInput<TWrapped>, TOutput> {
   /**
    * The schema type.
    */

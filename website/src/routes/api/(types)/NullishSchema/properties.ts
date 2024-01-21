@@ -1,6 +1,77 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TWrapped: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+    },
+  },
+  TDefault: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Input',
+          href: '../Input/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
+        },
+        {
+          type: 'function',
+          params: [],
+          return: {
+            type: 'union',
+            options: [
+              {
+                type: 'custom',
+                name: 'Input',
+                href: '../Input/',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'TWrapped',
+                  },
+                ],
+              },
+              'undefined',
+            ],
+          },
+        },
+        'undefined',
+      ],
+    },
+  },
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+    default: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Output',
+          href: '../Output/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
+        },
+        'null',
+        'undefined',
+      ],
+    },
+  },
   BaseSchema: {
     type: {
       type: 'custom',
@@ -28,24 +99,6 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TOutput',
-          default: {
-            type: 'union',
-            options: [
-              {
-                type: 'custom',
-                name: 'Output',
-                href: '../Output/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TWrapped',
-                  },
-                ],
-              },
-              'null',
-              'undefined',
-            ],
-          },
         },
       ],
     },

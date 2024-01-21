@@ -20,7 +20,7 @@ import { recordArgs } from './utils/index.ts';
 import { BLOCKED_KEYS } from './values.ts';
 
 /**
- * Record key type.
+ * Record key async type.
  */
 export type RecordKeyAsync =
   | EnumSchema<any, string | number | symbol>

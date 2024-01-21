@@ -2,6 +2,7 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   TOptions: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'IntersectOptions',
@@ -63,6 +64,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'IntersectSchema',
       href: '../IntersectSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TOptions',
+        },
+      ],
     },
   },
 };

@@ -2,6 +2,7 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   TClass: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'Class',
@@ -55,6 +56,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'InstanceSchema',
       href: '../InstanceSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TClass',
+        },
+      ],
     },
   },
 };

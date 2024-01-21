@@ -1,23 +1,14 @@
-import type {
-  BaseSchema,
-  ErrorMessage,
-  Input,
-  Output,
-} from '../../types/index.ts';
+import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
 import { schemaIssue } from '../../utils/index.ts';
-
-/**
- * Non nullish type.
- */
-export type NonNullish<T> = T extends null | undefined ? never : T;
+import type { NonNullishInput, NonNullishOutput } from './types.ts';
 
 /**
  * Non nullish schema type.
  */
 export interface NonNullishSchema<
   TWrapped extends BaseSchema,
-  TOutput = NonNullish<Output<TWrapped>>
-> extends BaseSchema<NonNullish<Input<TWrapped>>, TOutput> {
+  TOutput = NonNullishOutput<TWrapped>
+> extends BaseSchema<NonNullishInput<TWrapped>, TOutput> {
   /**
    * The schema type.
    */

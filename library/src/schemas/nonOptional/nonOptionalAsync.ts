@@ -2,19 +2,17 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  Input,
-  Output,
 } from '../../types/index.ts';
 import { schemaIssue } from '../../utils/index.ts';
-import type { NonOptional } from './nonOptional.ts';
+import type { NonOptionalInput, NonOptionalOutput } from './types.ts';
 
 /**
  * Non optional schema async type.
  */
 export interface NonOptionalSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TOutput = NonOptional<Output<TWrapped>>
-> extends BaseSchemaAsync<NonOptional<Input<TWrapped>>, TOutput> {
+  TOutput = NonOptionalOutput<TWrapped>
+> extends BaseSchemaAsync<NonOptionalInput<TWrapped>, TOutput> {
   /**
    * The schema type.
    */

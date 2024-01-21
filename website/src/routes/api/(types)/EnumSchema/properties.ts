@@ -1,6 +1,29 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TEnum: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'Enum',
+      href: '../Enum/',
+    },
+  },
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+    default: {
+      type: 'custom',
+      name: 'TEnum',
+      indexes: [
+        {
+          type: 'custom',
+          modifier: 'keyof',
+          name: 'TEnum',
+        },
+      ],
+    },
+  },
   BaseSchema: {
     type: {
       type: 'custom',
@@ -21,17 +44,6 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TOutput',
-          default: {
-            type: 'custom',
-            name: 'TEnum',
-            indexes: [
-              {
-                type: 'custom',
-                modifier: 'keyof',
-                name: 'TEnum',
-              },
-            ],
-          },
         },
       ],
     },

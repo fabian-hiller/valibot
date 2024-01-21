@@ -2,6 +2,7 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   TEnum: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'Enum',
@@ -36,6 +37,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'EnumSchema',
       href: '../EnumSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TEnum',
+        },
+      ],
     },
   },
 };

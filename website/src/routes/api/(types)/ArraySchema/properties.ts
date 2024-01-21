@@ -1,6 +1,32 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TItem: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+    },
+  },
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+    default: {
+      type: 'array',
+      item: {
+        type: 'custom',
+        name: 'Output',
+        href: '../Output/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'TItem',
+          },
+        ],
+      },
+    },
+  },
   BaseSchema: {
     type: {
       type: 'custom',
@@ -24,20 +50,6 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TOutput',
-          default: {
-            type: 'array',
-            item: {
-              type: 'custom',
-              name: 'Output',
-              href: '../Output/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TItem',
-                },
-              ],
-            },
-          },
         },
       ],
     },

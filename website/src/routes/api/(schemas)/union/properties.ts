@@ -2,6 +2,7 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   TOptions: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'UnionOptions',
@@ -64,6 +65,13 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'UnionSchema',
       href: '../UnionSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TOptions',
+          href: '../TOptions/',
+        },
+      ],
     },
   },
 };

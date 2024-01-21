@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon, GitHubIcon, PenIcon } from '~/icons';
-import { BuilderLogo, NetlifyLogo, PaceLogo } from '~/logos';
+import { AlgoliaLogo, BuilderLogo, NetlifyLogo, PaceLogo } from '~/logos';
 import { IconButton } from './IconButton';
 import { Navigation } from './Navigation';
 import { SideBar } from './SideBar';
@@ -162,11 +162,12 @@ export const DocsLayout = component$(() => {
             Thanks to our partners who support the project ideally and
             financially.
           </p>
-          <ul class="mt-4 flex flex-wrap gap-6 md:mt-5 md:gap-8 lg:mt-6 lg:gap-10">
+          <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-3 md:mt-5 md:gap-x-8 md:gap-y-4 lg:mt-6 lg:gap-x-10 lg:gap-y-5">
             {[
               { Logo: PaceLogo, href: 'https://www.pace.edu' },
               { Logo: BuilderLogo, href: 'https://www.builder.io' },
               { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
+              { Logo: AlgoliaLogo, href: 'https://www.algolia.com' },
             ].map(({ Logo, href }) => (
               <li key={href}>
                 <a href={href} target="_blank" rel="noreferrer">
@@ -190,6 +191,7 @@ export const DocsLayout = component$(() => {
               'osdiab',
               'richardvanbergen',
               'Thanaen',
+              'hyunbinseo',
               'armandsalle',
               'caegdeveloper',
             ].map((sponsor) => (
