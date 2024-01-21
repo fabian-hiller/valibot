@@ -263,6 +263,7 @@
 - [RecordOutput](/api/RecordOutput/)
 - [RecordPathItem](/api/RecordPathItem/)
 - [RecordSchema](/api/RecordSchema/)
+- [RecursiveSchema](/api/RecursiveSchema/)
 - [SchemaResult](/api/SchemaResult/)
 - [SchemaWithFallback](/api/SchemaWithFallback/)
 - [SetPathItem](/api/SetPathItem/)
