@@ -191,6 +191,7 @@ export const DocsLayout = component$(() => {
               'osdiab',
               'richardvanbergen',
               'Thanaen',
+              'hyunbinseo',
               'armandsalle',
               'caegdeveloper',
             ].map((sponsor) => (
