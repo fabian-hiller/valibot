@@ -3,9 +3,13 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ObjectKeys,
+  Pipe,
+} from '../../types/index.ts';
 import { restAndDefaultArgs } from '../../utils/index.ts';
-import type { ObjectKeys } from './types.ts';
 
 /**
  * Creates an object schema that contains not the selected keys of an existing
