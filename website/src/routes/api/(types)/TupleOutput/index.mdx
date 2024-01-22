@@ -1,0 +1,21 @@
+---
+title: TupleOutput
+description: Tuple output inference type.
+contributors:
+  - fabian-hiller
+---
+
+# TupleOutput
+
+Tuple output inference type.
+
+```ts
+// Create tuple items
+const items = [transform(string(), (output) => output.length)];
+
+// Infer items output type
+type ItemsOutput = TupleOutput<typeof items, undefined>; // [number]
+
+// Infer output type with rest
+type WithRestOutput = TupleOutput<typeof items, BooleanSchema>; // [number, ...boolean[]]
+```
