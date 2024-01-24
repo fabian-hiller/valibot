@@ -8,7 +8,7 @@ import type {
 /**
  * Recursive schema async type.
  */
-export type RecursiveSchemaAsync<
+export interface RecursiveSchemaAsync<
   TGetter extends () => BaseSchema | BaseSchemaAsync,
   TOutput = Output<ReturnType<TGetter>>
 > extends BaseSchemaAsync<Input<ReturnType<TGetter>>, TOutput> {
@@ -20,6 +20,7 @@ export type RecursiveSchemaAsync<
    * The schema getter.
    */
   getter: TGetter;
+}
 
 /**
  * Creates an async recursive schema.
