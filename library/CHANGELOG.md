@@ -2,11 +2,11 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.27.0 (January 24, 2023)
 
 - Remove `NonNullable`, `NonNullish` and `NonOptional` type
-- Improve type signature of `omit`, `omitAsync`, `pick` and `pickAsync` schema to also allow read-only object keys (issue #380)
 - Add `NonNullableInput`, `NonNullableOutput`, `NonNullishInput`, `NonNullishOutput`, `NonOptionalInput` and `NonOptionalOutput` type
+- Improve type signature of `omit`, `omitAsync`, `pick` and `pickAsync` schema to also allow read-only object keys (issue #380)
 - Fix type of `pipe` argument at `intersect` and `intersectAsync` schema
 
 ## v0.26.0 (January 16, 2023)
