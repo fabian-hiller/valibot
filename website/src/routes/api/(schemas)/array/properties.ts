@@ -2,6 +2,7 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   TItem: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -9,60 +10,68 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   item: {
-    type: [
-      {
-        type: 'custom',
-        name: 'TItem',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'TItem',
+    },
   },
   message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+        },
+        'undefined',
+      ],
+    },
     default: {
       type: 'string',
       value: 'Invalid type',
     },
   },
   pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: [
-          {
-            type: 'array',
-            item: {
-              type: 'custom',
-              name: 'Output',
-              href: '../Output/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TItem',
-                },
-              ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Pipe',
+          href: '../Pipe/',
+          generics: [
+            {
+              type: 'array',
+              item: {
+                type: 'custom',
+                name: 'Output',
+                href: '../Output/',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'TItem',
+                  },
+                ],
+              },
             },
-          },
-        ],
-      },
-      'undefined',
-    ],
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
   Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ArraySchema',
-        href: '../ArraySchema/',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'ArraySchema',
+      href: '../ArraySchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TItem',
+        },
+      ],
+    },
   },
 };

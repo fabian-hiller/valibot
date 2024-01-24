@@ -1,28 +1,30 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+    default: {
+      type: 'custom',
+      name: 'Blob',
+    },
+  },
   BaseSchema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BaseSchema',
-        href: '../BaseSchema/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'Blob',
-          },
-          {
-            type: 'custom',
-            name: 'TOutput',
-            default: {
-              type: 'custom',
-              name: 'Blob',
-            },
-          },
-        ],
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'Blob',
+        },
+        {
+          type: 'custom',
+          name: 'TOutput',
+        },
+      ],
+    },
   },
   type: {
     type: {
@@ -38,19 +40,22 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'Blob',
-          },
-        ],
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Pipe',
+          href: '../Pipe/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'Blob',
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
 };

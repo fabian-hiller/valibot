@@ -7,7 +7,10 @@ export const properties: Record<string, PropertyProps> = {
       entries: [
         {
           key: { name: 'key', type: 'string' },
-          value: ['string', 'number'],
+          value: {
+            type: 'union',
+            options: ['string', 'number'],
+          },
         },
         {
           key: { name: 'key', type: 'number' },

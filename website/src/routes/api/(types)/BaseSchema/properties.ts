@@ -1,6 +1,18 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TInput: {
+    modifier: 'extends',
+    type: 'any',
+  },
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+    default: {
+      type: 'custom',
+      name: 'TInput',
+    },
+  },
   BaseSchema: {
     type: {
       type: 'custom',
@@ -9,15 +21,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TInput',
-          default: 'unknown',
         },
         {
           type: 'custom',
           name: 'TOutput',
-          default: {
-            type: 'custom',
-            name: 'TInput',
-          },
         },
       ],
     },
@@ -55,27 +62,30 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   _types: {
-    type: [
-      {
-        type: 'object',
-        entries: [
-          {
-            key: 'input',
-            value: {
-              type: 'custom',
-              name: 'TInput',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'object',
+          entries: [
+            {
+              key: 'input',
+              value: {
+                type: 'custom',
+                name: 'TInput',
+              },
             },
-          },
-          {
-            key: 'output',
-            value: {
-              type: 'custom',
-              name: 'TOutput',
+            {
+              key: 'output',
+              value: {
+                type: 'custom',
+                name: 'TOutput',
+              },
             },
-          },
-        ],
-      },
-      'undefined',
-    ],
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
 };

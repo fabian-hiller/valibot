@@ -1,6 +1,10 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TInput: {
+    modifier: 'extends',
+    type: 'any',
+  },
   BaseTransformation: {
     type: {
       type: 'custom',
@@ -9,7 +13,6 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TInput',
-          default: 'unknown',
         },
       ],
     },

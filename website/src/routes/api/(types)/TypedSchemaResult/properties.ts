@@ -1,6 +1,10 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+  },
   TypedSchemaResult: {
     type: {
       type: 'custom',
@@ -26,13 +30,16 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   issues: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Issues',
-        href: '../Issues/',
-      },
-      'undefined',
-    ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Issues',
+          href: '../Issues/',
+        },
+        'undefined',
+      ],
+    },
   },
 };

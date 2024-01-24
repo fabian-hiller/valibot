@@ -1,0 +1,28 @@
+---
+title: VariantSchema
+description: Variant schema type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# VariantSchema
+
+Variant schema type.
+
+## Generics
+
+- `TKey` <Property {...properties.TKey} />
+- `TOptions` <Property {...properties.TOptions} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `VariantSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `key` <Property {...properties.key} />
+  - `options` <Property {...properties.options} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />
