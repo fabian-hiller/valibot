@@ -54,7 +54,7 @@ const PixelStringSchema = v.special<`${number}px`>((val) =>
 
 The <Link href="/api/recursive/">`recursive`</Link> schema function allows you to define recursive schemas. A recursive schema is a schema that references itself. For example, you can use it to define a schema for a tree-like data structure.
 
-> Due to a TypeScript limitation, the input and output types cannot be inferred automatically. Therefore, you must explicitly specify these types using `BaseSchema`.
+> Due to a TypeScript limitation, the input and output types cannot be inferred automatically. Therefore, you must explicitly specify these types using <Link href="/api/BaseSchema/">`BaseSchema`</Link>.
 
 ```ts
 import * as v from 'valibot';

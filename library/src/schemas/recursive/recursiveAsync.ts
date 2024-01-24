@@ -8,10 +8,10 @@ import type {
 /**
  * Recursive schema async type.
  */
-export interface RecursiveSchemaAsync<
-  TSchemaGetter extends () => BaseSchema | BaseSchemaAsync,
-  TOutput = Output<ReturnType<TSchemaGetter>>
-> extends BaseSchemaAsync<Input<ReturnType<TSchemaGetter>>, TOutput> {
+export type RecursiveSchemaAsync<
+  TGetter extends () => BaseSchema | BaseSchemaAsync,
+  TOutput = Output<ReturnType<TGetter>>
+> extends BaseSchemaAsync<Input<ReturnType<TGetter>>, TOutput> {
   /**
    * The schema type.
    */
@@ -19,8 +19,7 @@ export interface RecursiveSchemaAsync<
   /**
    * The schema getter.
    */
-  getter: TSchemaGetter;
-}
+  getter: TGetter;
 
 /**
  * Creates an async recursive schema.
@@ -30,8 +29,8 @@ export interface RecursiveSchemaAsync<
  * @returns An async recursive schema.
  */
 export function recursiveAsync<
-  TSchemaGetter extends () => BaseSchema | BaseSchemaAsync
->(getter: TSchemaGetter): RecursiveSchemaAsync<TSchemaGetter> {
+  TGetter extends () => BaseSchema | BaseSchemaAsync
+>(getter: TGetter): RecursiveSchemaAsync<TGetter> {
   return {
     type: 'recursive',
     async: true,

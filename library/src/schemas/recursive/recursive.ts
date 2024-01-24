@@ -3,10 +3,10 @@ import type { BaseSchema, Input, Output } from '../../types/index.ts';
 /**
  * Recursive schema type.
  */
-export interface RecursiveSchema<
-  TSchemaGetter extends () => BaseSchema,
-  TOutput = Output<ReturnType<TSchemaGetter>>
-> extends BaseSchema<Input<ReturnType<TSchemaGetter>>, TOutput> {
+export type RecursiveSchema<
+  TGetter extends () => BaseSchema,
+  TOutput = Output<ReturnType<TGetter>>
+> extends BaseSchema<Input<ReturnType<TGetter>>, TOutput> {
   /**
    * The schema type.
    */
@@ -14,8 +14,7 @@ export interface RecursiveSchema<
   /**
    * The schema getter.
    */
-  getter: TSchemaGetter;
-}
+  getter: TGetter;
 
 /**
  * Creates a recursive schema.
@@ -24,9 +23,9 @@ export interface RecursiveSchema<
  *
  * @returns A recursive schema.
  */
-export function recursive<TSchemaGetter extends () => BaseSchema>(
-  getter: TSchemaGetter
-): RecursiveSchema<TSchemaGetter> {
+export function recursive<TGetter extends () => BaseSchema>(
+  getter: TGetter
+): RecursiveSchema<TGetter> {
   return {
     type: 'recursive',
     async: false,
