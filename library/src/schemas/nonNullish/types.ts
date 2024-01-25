@@ -3,7 +3,7 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
-} from '../../types/index';
+} from '../../types/index.ts';
 
 /**
  * Non nullish type.
