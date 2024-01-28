@@ -1,5 +1,11 @@
 import { ArrowLeftIcon, ArrowRightIcon, GitHubIcon, PenIcon } from '~/icons';
-import { AlgoliaLogo, BuilderLogo, NetlifyLogo, PaceLogo } from '~/logos';
+import {
+  AlgoliaLogo,
+  BuilderLogo,
+  HdmLogo,
+  NetlifyLogo,
+  PaceLogo,
+} from '~/logos';
 import { IconButton } from './IconButton';
 import { Navigation } from './Navigation';
 import { SideBar } from './SideBar';
@@ -166,6 +172,7 @@ export const DocsLayout = component$(() => {
             {[
               { Logo: PaceLogo, href: 'https://www.pace.edu' },
               { Logo: BuilderLogo, href: 'https://www.builder.io' },
+              { Logo: HdmLogo, href: 'https://www.hdm-stuttgart.de' },
               { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
               { Logo: AlgoliaLogo, href: 'https://www.algolia.com' },
             ].map(({ Logo, href }) => (
