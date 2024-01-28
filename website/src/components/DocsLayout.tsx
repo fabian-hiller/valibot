@@ -196,10 +196,8 @@ export const DocsLayout = component$(() => {
               'ivan-mihalic',
               'KATT',
               'osdiab',
-              'richardvanbergen',
               'Thanaen',
               'hyunbinseo',
-              'armandsalle',
               'caegdeveloper',
             ].map((sponsor) => (
               <li key={sponsor}>
