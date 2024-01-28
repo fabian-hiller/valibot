@@ -20,7 +20,7 @@ export type NonOptionalSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -33,21 +33,22 @@ export type NonOptionalSchema<
  */
 export function nonOptional<TWrapped extends BaseSchema>(
   wrapped: TWrapped,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage
 ): NonOptionalSchema<TWrapped> {
   return {
     type: 'non_optional',
+    expects: '!undefined',
     async: false,
     wrapped,
     message,
-    _parse(input, info) {
+    _parse(input, config) {
       // Allow `undefined` values not to pass
       if (input === undefined) {
-        return schemaIssue(info, 'type', 'non_optional', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      return this.wrapped._parse(input, config);
     },
   };
 }

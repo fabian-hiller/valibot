@@ -2,9 +2,9 @@ import type {
   BaseSchema,
   ErrorMessage,
   Input,
-  Issues,
   Output,
   Pipe,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   defaultArgs,
@@ -32,7 +32,7 @@ export type ArraySchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -73,30 +73,31 @@ export function array<TItem extends BaseSchema>(
   arg3?: Pipe<Output<TItem>[]>
 ): ArraySchema<TItem> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return array schema
   return {
     type: 'array',
+    expects: 'Array',
     async: false,
     item,
     message,
     pipe,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (!Array.isArray(input)) {
-        return schemaIssue(info, 'type', 'array', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Create typed, issues and output
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       const output: any[] = [];
 
       // Parse schema of each array item
       for (let key = 0; key < input.length; key++) {
         const value = input[key];
-        const result = this.item._parse(value, info);
+        const result = this.item._parse(value, config);
 
         // If there are issues, capture them
         if (result.issues) {
@@ -122,7 +123,7 @@ export function array<TItem extends BaseSchema>(
           }
 
           // If necessary, abort early
-          if (info?.abortEarly) {
+          if (config?.abortEarly) {
             typed = false;
             break;
           }
@@ -139,17 +140,11 @@ export function array<TItem extends BaseSchema>(
 
       // If output is typed, execute pipe
       if (typed) {
-        return pipeResult(
-          output as Output<TItem>[],
-          this.pipe,
-          info,
-          'array',
-          issues
-        );
+        return pipeResult(this, output as Output<TItem>[], config, issues);
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

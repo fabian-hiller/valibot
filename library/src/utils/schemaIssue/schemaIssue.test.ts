@@ -1,64 +1,89 @@
 import { describe, expect, test } from 'vitest';
-import type { Issue } from '../../types/index.ts';
+import type { PathItem, SchemaIssues } from '../../types/index.ts';
 import { schemaIssue } from './schemaIssue.ts';
 
 describe('schemaIssue', () => {
   test('should return results with issues', () => {
-    const info1 = {
-      reason: 'any' as const,
-      validation: 'validation',
-      origin: 'value',
-      message: 'message',
-      input: 'input',
+    const context1 = {
+      type: 'string',
+      expects: 'string',
+      message: undefined,
     };
-    const issue1 = schemaIssue(
-      {},
-      info1.reason,
-      info1.validation,
-      info1.message,
-      info1.input
-    );
-    expect(issue1).toEqual({
+    const input1 = 123;
+    const received1 = '123';
+    expect(schemaIssue(context1, input1, undefined)).toEqual({
       typed: false,
-      output: info1.input,
-      issues: [info1],
+      output: input1,
+      issues: [
+        {
+          reason: 'type',
+          validation: context1.type,
+          origin: 'value',
+          expected: context1.expects,
+          received: received1,
+          message: `Invalid type: Expected ${context1.expects} but received ${received1}`,
+          input: 123,
+        },
+      ],
     });
 
-    const info2: Issue = {
-      reason: 'object',
-      validation: 'validation',
-      origin: 'key',
-      message: 'message',
-      input: 'input',
+    const context2 = {
+      type: 'any',
+      expects: '1234',
+      message: 'Custom message',
+    };
+    const config2 = {
+      origin: 'key' as const,
+      lang: 'en',
+      abortEarly: true,
+      abortPipeEarly: false,
+      skipPipe: false,
+    };
+    const input2 = { abc: 123 };
+    const other2 = {
+      reason: 'any' as const,
+      path: [
+        {
+          type: 'unknown',
+          input: 'input',
+          key: 'key',
+          value: 'value',
+        },
+      ] satisfies PathItem[],
       issues: [
         {
           reason: 'any',
           validation: 'validation',
           origin: 'value',
+          expected: 'expected',
+          received: 'received',
           message: 'message',
           input: 'input',
         },
-      ],
-      abortEarly: true,
-      abortPipeEarly: false,
+      ] satisfies SchemaIssues,
     };
-    const issue2 = schemaIssue(
-      {
-        origin: info2.origin,
-        abortEarly: info2.abortEarly,
-        abortPipeEarly: info2.abortPipeEarly,
-      },
-      info2.reason,
-      info2.validation,
-      info2.message,
-      info2.input,
-      undefined,
-      info2.issues
-    );
-    expect(issue2).toEqual({
+    const received2 = 'Object';
+    const result2 = schemaIssue(context2, input2, config2, other2);
+    expect(result2).toEqual({
       typed: false,
-      output: info2.input,
-      issues: [info2],
+      output: input2,
+      issues: [
+        {
+          reason: other2.reason,
+          validation: context2.type,
+          origin: config2.origin,
+          expected: context2.expects,
+          received: received2,
+          message: context2.message,
+          input: input2,
+          issues: other2.issues,
+          path: other2.path,
+          lang: config2.lang,
+          abortEarly: config2.abortEarly,
+          abortPipeEarly: config2.abortPipeEarly,
+          skipPipe: config2.skipPipe,
+        },
+      ] satisfies SchemaIssues,
     });
   });
 });

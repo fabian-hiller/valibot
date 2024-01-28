@@ -1,8 +1,8 @@
 import type {
   BaseSchema,
   ErrorMessage,
-  Issues,
   Pipe,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   defaultArgs,
@@ -30,7 +30,7 @@ export type SetSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -71,31 +71,32 @@ export function set<TValue extends BaseSchema>(
   arg3?: Pipe<SetOutput<TValue>>
 ): SetSchema<TValue> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return set schema
   return {
     type: 'set',
+    expects: 'Set',
     async: false,
     value,
     message,
     pipe,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (!(input instanceof Set)) {
-        return schemaIssue(info, 'type', 'set', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Create key, typed, output and issues
       let key = 0;
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       const output: SetOutput<TValue> = new Set();
 
       // Parse each value by schema
       for (const inputValue of input) {
         // Get parse result of input value
-        const result = this.value._parse(inputValue, info);
+        const result = this.value._parse(inputValue, config);
 
         // If there are issues, capture them
         if (result.issues) {
@@ -121,7 +122,7 @@ export function set<TValue extends BaseSchema>(
           }
 
           // If necessary, abort early
-          if (info?.abortEarly) {
+          if (config?.abortEarly) {
             typed = false;
             break;
           }
@@ -141,11 +142,11 @@ export function set<TValue extends BaseSchema>(
 
       // If output is typed, execute pipe
       if (typed) {
-        return pipeResult(output, this.pipe, info, 'set', issues);
+        return pipeResult(this, output, config, issues);
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

@@ -12,7 +12,7 @@ export type VoidSchemaAsync<TOutput = void> = BaseSchemaAsync<void, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -22,17 +22,16 @@ export type VoidSchemaAsync<TOutput = void> = BaseSchemaAsync<void, TOutput> & {
  *
  * @returns An async void schema.
  */
-export function voidAsync(
-  message: ErrorMessage = 'Invalid type'
-): VoidSchemaAsync {
+export function voidAsync(message?: ErrorMessage): VoidSchemaAsync {
   return {
     type: 'void',
+    expects: 'void',
     async: true,
     message,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Check type of input
       if (typeof input !== 'undefined') {
-        return schemaIssue(info, 'type', 'void', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return parse result

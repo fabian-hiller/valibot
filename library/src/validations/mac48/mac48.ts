@@ -24,17 +24,19 @@ export type Mac48Validation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function mac48<TInput extends string>(
-  message: ErrorMessage = 'Invalid 48 bit MAC'
+  message?: ErrorMessage
 ): Mac48Validation<TInput> {
   return {
     type: 'mac48',
+    expects: null,
     async: false,
     message,
     requirement: MAC48_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, '48 bit MAC');
     },
   };
 }

@@ -32,17 +32,19 @@ export function minSize<
   TRequirement extends number
 >(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid size'
+  message?: ErrorMessage
 ): MinSizeValidation<TInput, TRequirement> {
   return {
     type: 'min_size',
+    expects: `>=${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return input.size < this.requirement
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (input.size >= this.requirement) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'size', `${input.size}`);
     },
   };
 }

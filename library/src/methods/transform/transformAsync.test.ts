@@ -1,5 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import { number, object, string } from '../../schemas/index.ts';
+import type {
+  Output,
+  TypedSchemaResult,
+  UntypedSchemaResult,
+} from '../../types/index.ts';
 import { maxValue, minLength, minValue } from '../../validations/index.ts';
 import { transformAsync } from './transformAsync.ts';
 
@@ -41,11 +46,13 @@ describe('transformAsync', () => {
           reason: 'type',
           validation: 'string',
           origin: 'value',
-          message: 'Invalid type',
+          expected: 'string',
+          received: '123',
+          message: 'Invalid type: Expected string but received 123',
           input: input,
         },
       ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 
   test('should return string issue', async () => {
@@ -63,12 +70,14 @@ describe('transformAsync', () => {
           reason: 'string',
           validation: 'min_length',
           origin: 'value',
-          message: 'Invalid length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: input,
           requirement: 10,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should skip validation argument', async () => {
@@ -87,12 +96,14 @@ describe('transformAsync', () => {
           reason: 'string',
           validation: 'min_length',
           origin: 'value',
-          message: 'Invalid length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: input,
           requirement: 10,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should validate output with pipe', async () => {
@@ -109,12 +120,14 @@ describe('transformAsync', () => {
           reason: 'number',
           validation: 'max_value',
           origin: 'value',
-          message: 'Invalid value',
+          expected: '<=5',
+          received: '6',
+          message: 'Invalid value: Expected <=5 but received 6',
           input: 6,
           requirement: 5,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should validate output with schema', async () => {
@@ -133,11 +146,13 @@ describe('transformAsync', () => {
           reason: 'number',
           validation: 'max_value',
           origin: 'value',
-          message: 'Invalid value',
+          expected: '<=5',
+          received: '6',
+          message: 'Invalid value: Expected <=5 but received 6',
           input: 6,
           requirement: 5,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 });

@@ -1,8 +1,8 @@
 import type {
-  Issues,
+  SchemaIssues,
+  SchemaResult,
   TypedSchemaResult,
   UntypedSchemaResult,
-  SchemaResult,
 } from '../../types/index.ts';
 
 /**
@@ -17,7 +17,7 @@ import type {
 export function parseResult<TOutput>(
   typed: true,
   output: TOutput,
-  issues?: Issues
+  issues?: SchemaIssues
 ): TypedSchemaResult<TOutput>;
 
 /**
@@ -32,13 +32,13 @@ export function parseResult<TOutput>(
 export function parseResult(
   typed: false,
   output: unknown,
-  issues: Issues
+  issues: SchemaIssues
 ): UntypedSchemaResult;
 
 export function parseResult<TOutput>(
   typed: boolean,
   output: TOutput | unknown,
-  issues?: Issues
+  issues?: SchemaIssues
 ): SchemaResult<TOutput> {
   return { typed, output, issues } as SchemaResult<TOutput>;
 }

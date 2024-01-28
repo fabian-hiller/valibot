@@ -30,6 +30,6 @@ describe('ulid', () => {
   test('should return custom error message', () => {
     const error = 'Value is not an ULID!';
     const validate = ulid(error);
-    expect(validate._parse('test').issues?.[0].message).toBe(error);
+    expect(validate._parse('test').issues?.[0].context.message).toBe(error);
   });
 });

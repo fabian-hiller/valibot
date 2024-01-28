@@ -23,17 +23,19 @@ export type FiniteValidation<TInput extends number> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function finite<TInput extends number>(
-  message: ErrorMessage = 'Invalid finite number'
+  message?: ErrorMessage
 ): FiniteValidation<TInput> {
   return {
     type: 'finite',
+    expects: null,
     async: false,
     message,
     requirement: Number.isFinite,
     _parse(input) {
-      return !this.requirement(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'finite');
     },
   };
 }

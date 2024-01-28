@@ -15,7 +15,7 @@ export type NanSchemaAsync<TOutput = number> = BaseSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -25,17 +25,16 @@ export type NanSchemaAsync<TOutput = number> = BaseSchemaAsync<
  *
  * @returns An async NaN schema.
  */
-export function nanAsync(
-  message: ErrorMessage = 'Invalid type'
-): NanSchemaAsync {
+export function nanAsync(message?: ErrorMessage): NanSchemaAsync {
   return {
     type: 'nan',
+    expects: 'NaN',
     async: true,
     message,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Check type of input
       if (!Number.isNaN(input)) {
-        return schemaIssue(info, 'type', 'nan', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return parse result

@@ -2,6 +2,11 @@ import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
 import { toCustom } from '../../transformations/index.ts';
+import type {
+  Output,
+  TypedSchemaResult,
+  UntypedSchemaResult,
+} from '../../types/index.ts';
 import { custom, maxLength, minLength } from '../../validations/index.ts';
 import { any } from '../any/index.ts';
 import { number } from '../number/index.ts';
@@ -57,13 +62,13 @@ describe('record', () => {
   });
 
   test('should throw only first issue', () => {
-    const info = { abortEarly: true };
+    const config = { abortEarly: true };
 
     const schema1 = record(number());
     const input1 = { 1: '1', 2: 2, 3: '3' };
-    expect(() => parse(schema1, input1, info)).toThrowError();
+    expect(() => parse(schema1, input1, config)).toThrowError();
     try {
-      parse(schema1, input1, info);
+      parse(schema1, input1, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
       expect((error as ValiError).issues[0].origin).toBe('value');
@@ -71,9 +76,9 @@ describe('record', () => {
 
     const schema2 = record(string([minLength(2)]), number());
     const input2 = { '1': '1', 2: 2, 3: '3' };
-    expect(() => parse(schema2, input2, info)).toThrowError();
+    expect(() => parse(schema2, input2, config)).toThrowError();
     try {
-      parse(schema2, input2, info);
+      parse(schema2, input2, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
       expect((error as ValiError).issues[0].origin).toBe('key');
@@ -172,7 +177,9 @@ describe('record', () => {
           reason: 'string',
           validation: 'min_length',
           origin: 'value',
-          message: 'Invalid length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: input.key,
           requirement: 10,
           path: [
@@ -187,13 +194,15 @@ describe('record', () => {
         {
           reason: 'record',
           validation: 'custom',
+          expected: null,
+          received: 'Object',
           origin: 'value',
-          message: 'Invalid input',
+          message: 'Invalid input: Received Object',
           input: input,
           requirement,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should skip pipe if output is not typed', () => {
@@ -210,7 +219,9 @@ describe('record', () => {
           reason: 'type',
           validation: 'string',
           origin: 'value',
-          message: 'Invalid type',
+          expected: 'string',
+          received: '12345',
+          message: 'Invalid type: Expected string but received 12345',
           input: input.key,
           path: [
             {
@@ -222,6 +233,6 @@ describe('record', () => {
           ],
         },
       ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 });

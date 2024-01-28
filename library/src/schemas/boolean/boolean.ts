@@ -12,7 +12,7 @@ export type BooleanSchema<TOutput = boolean> = BaseSchema<boolean, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -46,22 +46,23 @@ export function boolean(
   arg2?: Pipe<boolean>
 ): BooleanSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe] = defaultArgs(arg1, arg2);
 
   // Create and return boolean schema
   return {
     type: 'boolean',
+    expects: 'boolean',
     async: false,
     message,
     pipe,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (typeof input !== 'boolean') {
-        return schemaIssue(info, 'type', 'boolean', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Execute pipe and return result
-      return pipeResult(input, this.pipe, info, 'boolean');
+      return pipeResult(this, input, config);
     },
   };
 }

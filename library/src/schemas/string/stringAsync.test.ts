@@ -39,23 +39,4 @@ describe('stringAsync', () => {
       emailError
     );
   });
-
-  test('should expose the pipeline', () => {
-    const schema1 = stringAsync([minLength(2), maxLength(3)]);
-    expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({
-        type: 'min_length',
-        requirement: 2,
-        message: 'Invalid length',
-      }),
-      expect.objectContaining({
-        type: 'max_length',
-        requirement: 3,
-        message: 'Invalid length',
-      }),
-    ]);
-
-    const schema2 = stringAsync();
-    expect(schema2.pipe).toBeUndefined();
-  });
 });

@@ -12,6 +12,9 @@ coverage
 # Backups
 backups
 
+# Custom
+library/i18n
+
 # Services
 .vscode
 .netlify

@@ -12,7 +12,7 @@ export type NullSchemaAsync<TOutput = null> = BaseSchemaAsync<null, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -22,17 +22,16 @@ export type NullSchemaAsync<TOutput = null> = BaseSchemaAsync<null, TOutput> & {
  *
  * @returns An async null schema.
  */
-export function nullAsync(
-  message: ErrorMessage = 'Invalid type'
-): NullSchemaAsync {
+export function nullAsync(message?: ErrorMessage): NullSchemaAsync {
   return {
     type: 'null',
+    expects: 'null',
     async: true,
     message,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Check type of input
       if (input !== null) {
-        return schemaIssue(info, 'type', 'null', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return parse result

@@ -19,27 +19,29 @@ export type NotBytesValidation<
 };
 
 /**
- * Creates a pipeline validation action that validates the byte length of a
- * string.
+ * Creates a pipeline validation action that validates the bytes of a string.
  *
- * @param requirement The byte length.
+ * @param requirement The bytes.
  * @param message The error message.
  *
  * @returns A validation action.
  */
 export function notBytes<TInput extends string, TRequirement extends number>(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid byte length'
+  message?: ErrorMessage
 ): NotBytesValidation<TInput, TRequirement> {
   return {
     type: 'not_bytes',
+    expects: `!${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return new TextEncoder().encode(input).length === this.requirement
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      const length = new TextEncoder().encode(input).length;
+      if (length !== this.requirement) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'bytes', `${length}`);
     },
   };
 }

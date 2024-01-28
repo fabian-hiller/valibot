@@ -1,6 +1,6 @@
-import { HEX_COLOR_REGEX } from './../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { actionIssue, actionOutput } from '../../utils/index.ts';
+import { HEX_COLOR_REGEX } from './../../regex.ts';
 
 /**
  * Hex color validation type.
@@ -25,17 +25,19 @@ export type HexColorValidation<TInput extends string> =
  * @returns A validation action.
  */
 export function hexColor<TInput extends string>(
-  message: ErrorMessage = 'Invalid hex color'
+  message?: ErrorMessage
 ): HexColorValidation<TInput> {
   return {
     type: 'hex_color',
+    expects: null,
     async: false,
     message,
     requirement: HEX_COLOR_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'hex color');
     },
   };
 }

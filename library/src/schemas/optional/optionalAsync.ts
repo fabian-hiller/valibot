@@ -78,10 +78,11 @@ export function optionalAsync<
 ): OptionalSchemaAsync<TWrapped, TDefault> {
   return {
     type: 'optional',
+    expects: `${wrapped.expects} | undefined`,
     async: true,
     wrapped,
     default: default_ as TDefault,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Allow `undefined` to pass or override it with default value
       if (input === undefined) {
         const override = await getDefaultAsync(this);
@@ -92,7 +93,7 @@ export function optionalAsync<
       }
 
       // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      return this.wrapped._parse(input, config);
     },
   };
 }

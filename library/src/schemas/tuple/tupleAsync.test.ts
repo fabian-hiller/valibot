@@ -1,6 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
+import type {
+  Output,
+  TypedSchemaResult,
+  UntypedSchemaResult,
+} from '../../types/index.ts';
 import { maxLength, minLength } from '../../validations/index.ts';
 import { booleanAsync } from '../boolean/index.ts';
 import { never } from '../never/index.ts';
@@ -65,22 +70,22 @@ describe('tupleAsync', () => {
   });
 
   test('should throw only first issue', async () => {
-    const info = { abortEarly: true };
+    const config = { abortEarly: true };
 
     const schema1 = tupleAsync([number(), number(), number()]);
     const input1 = ['1', 2, '3'];
-    await expect(parseAsync(schema1, input1, info)).rejects.toThrowError();
+    await expect(parseAsync(schema1, input1, config)).rejects.toThrowError();
     try {
-      await parseAsync(schema1, input1, info);
+      await parseAsync(schema1, input1, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
 
     const schema2 = tupleAsync([string()], number());
     const input2 = ['hello', 1, '2', 3, '4'];
-    await expect(parseAsync(schema2, input2, info)).rejects.toThrowError();
+    await expect(parseAsync(schema2, input2, config)).rejects.toThrowError();
     try {
-      await parseAsync(schema2, input2, info);
+      await parseAsync(schema2, input2, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
@@ -174,30 +179,11 @@ describe('tupleAsync', () => {
     ).rejects.toThrowError(lengthError);
   });
 
-  test('should expose the pipeline', () => {
-    const schema1 = tupleAsync([string()], [minLength(2), maxLength(3)]);
-    expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({
-        type: 'min_length',
-        requirement: 2,
-        message: 'Invalid length',
-      }),
-      expect.objectContaining({
-        type: 'max_length',
-        requirement: 3,
-        message: 'Invalid length',
-      }),
-    ]);
-
-    const schema2 = tupleAsync([string()]);
-    expect(schema2.pipe).toBeUndefined();
-  });
-
   test('should execute pipe if output is typed', async () => {
     const schema = tupleAsync([string([minLength(10)])], number(), [
-      minLength(10),
+      minLength(5),
     ]);
-    const input = ['12345'];
+    const input: [string] = ['12345'];
     const result = await schema._parse(input);
     expect(result).toEqual({
       typed: true,
@@ -207,7 +193,9 @@ describe('tupleAsync', () => {
           reason: 'string',
           validation: 'min_length',
           origin: 'value',
-          message: 'Invalid length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: input[0],
           requirement: 10,
           path: [
@@ -222,18 +210,20 @@ describe('tupleAsync', () => {
         {
           reason: 'tuple',
           validation: 'min_length',
+          expected: '>=5',
+          received: '1',
           origin: 'value',
-          message: 'Invalid length',
+          message: 'Invalid length: Expected >=5 but received 1',
           input: input,
-          requirement: 10,
+          requirement: 5,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should skip pipe if output is not typed', async () => {
     const schema = tupleAsync([string()], number(), [minLength(10)]);
-    const input = [12345];
+    const input: [number] = [12345];
     const result = await schema._parse(input);
     expect(result).toEqual({
       typed: false,
@@ -243,7 +233,9 @@ describe('tupleAsync', () => {
           reason: 'type',
           validation: 'string',
           origin: 'value',
-          message: 'Invalid type',
+          expected: 'string',
+          received: '12345',
+          message: 'Invalid type: Expected string but received 12345',
           input: input[0],
           path: [
             {
@@ -255,6 +247,6 @@ describe('tupleAsync', () => {
           ],
         },
       ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 });

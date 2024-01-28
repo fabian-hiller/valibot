@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { parseResult, schemaIssue, stringify } from '../../utils/index.ts';
 import type { Literal } from './types.ts';
 
 /**
@@ -20,7 +20,7 @@ export type LiteralSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -33,17 +33,18 @@ export type LiteralSchema<
  */
 export function literal<TLiteral extends Literal>(
   literal: TLiteral,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage
 ): LiteralSchema<TLiteral> {
   return {
     type: 'literal',
+    expects: stringify(literal),
     async: false,
     literal,
     message,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (input !== this.literal) {
-        return schemaIssue(info, 'type', 'literal', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return parse result

@@ -3,9 +3,9 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   Input,
-  Issues,
   Output,
   PipeAsync,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   defaultArgs,
@@ -33,7 +33,7 @@ export type ArraySchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -74,36 +74,37 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
   arg3?: PipeAsync<Output<TItem>[]>
 ): ArraySchemaAsync<TItem> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return async array schema
   return {
     type: 'array',
+    expects: 'Array',
     async: true,
     item,
     message,
     pipe,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Check type of input
       if (!Array.isArray(input)) {
-        return schemaIssue(info, 'type', 'array', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Create typed, issues and output
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       const output: any[] = [];
 
       // Parse schema of each array item
       await Promise.all(
         input.map(async (value, key) => {
           // If not aborted early, continue execution
-          if (!(info?.abortEarly && issues)) {
+          if (!(config?.abortEarly && issues)) {
             // Parse schema of array item
-            const result = await this.item._parse(value, info);
+            const result = await this.item._parse(value, config);
 
             // If not aborted early, continue execution
-            if (!(info?.abortEarly && issues)) {
+            if (!(config?.abortEarly && issues)) {
               // If there are issues, capture them
               if (result.issues) {
                 // Create array path item
@@ -128,7 +129,7 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
                 }
 
                 // If necessary, abort early
-                if (info?.abortEarly) {
+                if (config?.abortEarly) {
                   typed = false;
                   throw null;
                 }
@@ -148,17 +149,11 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
 
       // If output is typed, execute pipe
       if (typed) {
-        return pipeResultAsync(
-          output as Output<TItem>[],
-          this.pipe,
-          info,
-          'array',
-          issues
-        );
+        return pipeResultAsync(this, output as Output<TItem>[], config, issues);
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

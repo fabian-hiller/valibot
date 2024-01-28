@@ -25,17 +25,19 @@ export type HexadecimalValidation<TInput extends string> =
  * @returns A validation action.
  */
 export function hexadecimal<TInput extends string>(
-  message: ErrorMessage = 'Invalid hexadecimal'
+  message?: ErrorMessage
 ): HexadecimalValidation<TInput> {
   return {
     type: 'hexadecimal',
+    expects: null,
     async: false,
     message,
     requirement: HEXADECIMAL_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'hexadecimal');
     },
   };
 }

@@ -1,11 +1,16 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
+import type {
+  Output,
+  TypedSchemaResult,
+  UntypedSchemaResult,
+} from '../../types/index.ts';
 import {
+  includes,
+  length,
   maxLength,
   minLength,
-  length,
-  includes,
 } from '../../validations/index.ts';
 import { number, numberAsync } from '../number/index.ts';
 import { object } from '../object/index.ts';
@@ -53,10 +58,10 @@ describe('array', () => {
   test('should throw only first issue', async () => {
     const schema = arrayAsync(number());
     const input = ['1', 2, '3'];
-    const info = { abortEarly: true };
-    await expect(parseAsync(schema, input, info)).rejects.toThrowError();
+    const config = { abortEarly: true };
+    await expect(parseAsync(schema, input, config)).rejects.toThrowError();
     try {
-      await parseAsync(schema, input, info);
+      await parseAsync(schema, input, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
@@ -115,20 +120,6 @@ describe('array', () => {
     await expect(parseAsync(schema2, [1])).rejects.toThrowError(contentError);
   });
 
-  test('should expose the pipeline', () => {
-    const schema1 = arrayAsync(string(), [maxLength(5)]);
-    expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({
-        type: 'max_length',
-        requirement: 5,
-        message: 'Invalid length',
-      }),
-    ]);
-
-    const schema2 = arrayAsync(string());
-    expect(schema2.pipe).toBeUndefined();
-  });
-
   test('should execute pipe if output is typed', async () => {
     const schema = arrayAsync(string([minLength(10)]), [minLength(10)]);
     const input = ['12345'];
@@ -141,7 +132,9 @@ describe('array', () => {
           reason: 'string',
           validation: 'min_length',
           origin: 'value',
-          message: 'Invalid length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: input[0],
           requirement: 10,
           path: [
@@ -157,12 +150,14 @@ describe('array', () => {
           reason: 'array',
           validation: 'min_length',
           origin: 'value',
-          message: 'Invalid length',
+          expected: '>=10',
+          received: '1',
+          message: 'Invalid length: Expected >=10 but received 1',
           input: input,
           requirement: 10,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should skip pipe if output is not typed', async () => {
@@ -177,7 +172,9 @@ describe('array', () => {
           reason: 'type',
           validation: 'string',
           origin: 'value',
-          message: 'Invalid type',
+          expected: 'string',
+          received: '12345',
+          message: 'Invalid type: Expected string but received 12345',
           input: input[0],
           path: [
             {
@@ -189,6 +186,6 @@ describe('array', () => {
           ],
         },
       ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 });

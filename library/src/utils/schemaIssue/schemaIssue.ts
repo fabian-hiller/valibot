@@ -1,53 +1,67 @@
 import type {
   ErrorMessage,
   IssueReason,
-  Issues,
-  ParseInfo,
+  ParseConfig,
   PathItem,
+  SchemaIssue,
+  SchemaIssues,
   UntypedSchemaResult,
 } from '../../types/index.ts';
-import { errorMessage } from '../errorMessage/errorMessage.ts';
+import { i18n } from '../i18n/index.ts';
+import { stringify } from '../stringify/index.ts';
+
+/**
+ * The schema context type.
+ */
+type SchemaContext = {
+  type: string;
+  expects: string | null;
+  message: ErrorMessage | undefined;
+};
+
+/**
+ * The other info type.
+ */
+type OtherInfo = Partial<{
+  reason: IssueReason;
+  path: PathItem[];
+  issues: SchemaIssues;
+}>;
 
 /**
  * Returns the schema result object with issues.
  *
- * @param info The parse info.
- * @param reason The issue reason.
- * @param validation The validation name.
- * @param message The error message.
- * @param input The input value.
- * @param path The issue path.
- * @param issues The sub issues.
+ * @param context The schema context.
+ * @param input The raw input data.
+ * @param config The parse configuration.
+ * @param other The other info.
  *
  * @returns The schema result object.
  */
 export function schemaIssue(
-  info: ParseInfo | undefined,
-  reason: IssueReason,
-  validation: string,
-  message: ErrorMessage,
+  context: SchemaContext,
   input: unknown,
-  path?: PathItem[],
-  issues?: Issues
+  config: ParseConfig | undefined,
+  other?: OtherInfo
 ): UntypedSchemaResult {
+  const received = stringify(input);
   // Note: The issue is deliberately not constructed with the spread operator
   // for performance reasons
-  return {
-    typed: false,
-    output: input,
-    issues: [
-      {
-        reason,
-        validation,
-        origin: info?.origin || 'value',
-        message: errorMessage(message),
-        input,
-        path,
-        issues,
-        abortEarly: info?.abortEarly,
-        abortPipeEarly: info?.abortPipeEarly,
-        skipPipe: info?.skipPipe,
-      },
-    ],
+  const issue: SchemaIssue = {
+    reason: other?.reason || 'type',
+    validation: context.type,
+    origin: config?.origin || 'value',
+    expected: context.expects,
+    received,
+    message: `Invalid type: Expected ${context.expects} but received ${received}`,
+    input,
+    path: other?.path,
+    issues: other?.issues,
+    lang: config?.lang,
+    abortEarly: config?.abortEarly,
+    abortPipeEarly: config?.abortPipeEarly,
+    skipPipe: config?.skipPipe,
   };
+  issue.message = i18n(context, config, issue);
+  return { typed: false, output: input, issues: [issue] };
 }

@@ -12,7 +12,7 @@ export type BlobSchema<TOutput = Blob> = BaseSchema<Blob, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -43,22 +43,23 @@ export function blob(
   arg2?: Pipe<Blob>
 ): BlobSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe] = defaultArgs(arg1, arg2);
 
   // Create and return blob schema
   return {
     type: 'blob',
+    expects: 'Blob',
     async: false,
     message,
     pipe,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (!(input instanceof Blob)) {
-        return schemaIssue(info, 'type', 'blob', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Execute pipe and return result
-      return pipeResult(input, this.pipe, info, 'blob');
+      return pipeResult(this, input, config);
     },
   };
 }

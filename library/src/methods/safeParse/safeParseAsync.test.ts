@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { ValiError } from '../../error/index.ts';
 import { object, string } from '../../schemas/index.ts';
-import type { Issues } from '../../types/index.ts';
+import type { SchemaIssues } from '../../types/index.ts';
 import { minLength } from '../../validations/index.ts';
 import { safeParseAsync } from './safeParseAsync.ts';
 
@@ -25,12 +25,14 @@ describe('safeParseAsync', () => {
       object({ key: string([minLength(10)]) }),
       input
     );
-    const issues: Issues = [
+    const issues: SchemaIssues = [
       {
         reason: 'string',
         validation: 'min_length',
         origin: 'value',
-        message: 'Invalid length',
+        expected: '>=10',
+        received: '5',
+        message: 'Invalid length: Expected >=10 but received 5',
         input: input.key,
         requirement: 10,
         path: [
@@ -59,12 +61,14 @@ describe('safeParseAsync', () => {
   test('should return type issues', async () => {
     const input = { key: 123 };
     const result = await safeParseAsync(object({ key: string() }), input);
-    const issues: Issues = [
+    const issues: SchemaIssues = [
       {
         reason: 'type',
         validation: 'string',
         origin: 'value',
-        message: 'Invalid type',
+        expected: 'string',
+        received: '123',
+        message: 'Invalid type: Expected string but received 123',
         input: input.key,
         path: [
           {

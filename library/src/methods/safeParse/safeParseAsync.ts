@@ -1,9 +1,6 @@
 import { ValiError } from '../../error/index.ts';
-import type {
-  BaseSchema,
-  BaseSchemaAsync,
-  ParseInfo,
-} from '../../types/index.ts';
+import { getConfig } from '../../storages/index.ts';
+import type { BaseSchema, BaseSchemaAsync, Config } from '../../types/index.ts';
 import type { SafeParseResult } from './types.ts';
 
 /**
@@ -11,7 +8,7 @@ import type { SafeParseResult } from './types.ts';
  *
  * @param schema The schema to be used.
  * @param input The input to be parsed.
- * @param info The optional parse info.
+ * @param config The parse configuration.
  *
  * @returns The parsed output.
  */
@@ -20,9 +17,9 @@ export async function safeParseAsync<
 >(
   schema: TSchema,
   input: unknown,
-  info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly' | 'skipPipe'>
+  config?: Config
 ): Promise<SafeParseResult<TSchema>> {
-  const result = await schema._parse(input, info);
+  const result = await schema._parse(input, getConfig(config));
   return {
     typed: result.typed,
     success: !result.issues,

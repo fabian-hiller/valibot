@@ -24,17 +24,19 @@ export type EmailValidation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function email<TInput extends string>(
-  message: ErrorMessage = 'Invalid email'
+  message?: ErrorMessage
 ): EmailValidation<TInput> {
   return {
     type: 'email',
+    expects: null,
     async: false,
     message,
     requirement: EMAIL_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'email');
     },
   };
 }

@@ -6,8 +6,12 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "valibot": ["./src/index.ts"]
+    }
   },
-  "include": ["src", "./*.config.ts"]
+  "include": ["scripts", "src", "./*.config.ts"]
 }

@@ -24,17 +24,20 @@ export type BicValidation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function bic<TInput extends string>(
-  message: ErrorMessage = 'Invalid BIC'
+  message?: ErrorMessage
 ): BicValidation<TInput> {
   return {
     type: 'bic',
+    expects: null,
     async: false,
     message,
     requirement: BIC_REGEX,
     _parse(input) {
-      return !this.requirement.test(input.toUpperCase())
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // TODO: Why are we using `.toUpperCase()` here?
+      if (this.requirement.test(input.toUpperCase())) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'BIC');
     },
   };
 }

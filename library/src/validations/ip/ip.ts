@@ -25,18 +25,20 @@ export type IpValidation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function ip<TInput extends string>(
-  message: ErrorMessage = 'Invalid IP'
+  message?: ErrorMessage
 ): IpValidation<TInput> {
   return {
     type: 'ip',
+    expects: null,
     async: false,
     message,
+    // TODO: It is strange that we have an OR relationship between requirements
     requirement: [IPV4_REGEX, IPV6_REGEX],
     _parse(input) {
-      return !this.requirement[0].test(input) &&
-        !this.requirement[1].test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement[0].test(input) || this.requirement[1].test(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'IP');
     },
   };
 }

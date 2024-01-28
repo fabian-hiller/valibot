@@ -28,17 +28,24 @@ export type StartsWithValidation<
  */
 export function startsWith<TInput extends string, TRequirement extends string>(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid start'
+  message?: ErrorMessage
 ): StartsWithValidation<TInput, TRequirement> {
   return {
     type: 'starts_with',
+    expects: `"${requirement}"`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return !input.startsWith(this.requirement)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (input.startsWith(this.requirement)) {
+        return actionOutput(input);
+      }
+      return actionIssue(
+        this,
+        input,
+        'start',
+        `"${input.slice(0, this.requirement.length)}"`
+      );
     },
   };
 }

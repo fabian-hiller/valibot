@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import {} from '../../schemas/index.ts';
 import { custom } from '../../validations/index.ts';
 import { forward } from './forward.ts';
 
@@ -7,15 +6,24 @@ describe('forward', () => {
   test('should forward issues to end of path list', () => {
     type Input = { nested: { key: string } };
     const requirement = () => false;
-    const validate = forward<Input>(custom(requirement), ['nested', 'key']);
+    const validate = forward<Input>(custom(requirement, 'Custom error'), [
+      'nested',
+      'key',
+    ]);
     const result = validate._parse({ nested: { key: 'value' } });
     expect(result).toEqual({
       issues: [
         {
-          validation: 'custom',
-          message: 'Invalid input',
+          context: {
+            type: 'custom',
+            expects: null,
+            async: false,
+            message: 'Custom error',
+            requirement,
+            _parse: expect.any(Function),
+          },
           input: 'value',
-          requirement,
+          label: 'input',
           path: [
             {
               type: 'unknown',
@@ -38,15 +46,25 @@ describe('forward', () => {
   test('should stop forwarding if path input is undefined', () => {
     type Input = { nested: { key: string }[] };
     const requirement = () => false;
-    const validate = forward<Input>(custom(requirement), ['nested', 10, 'key']);
+    const validate = forward<Input>(custom(requirement, 'Custom error'), [
+      'nested',
+      10,
+      'key',
+    ]);
     const result = validate._parse({ nested: [{ key: 'value' }] });
     expect(result).toEqual({
       issues: [
         {
-          validation: 'custom',
-          message: 'Invalid input',
+          context: {
+            type: 'custom',
+            expects: null,
+            async: false,
+            message: 'Custom error',
+            requirement,
+            _parse: expect.any(Function),
+          },
           input: undefined,
-          requirement,
+          label: 'input',
           path: [
             {
               type: 'unknown',

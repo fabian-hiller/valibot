@@ -32,17 +32,19 @@ export function length<
   TRequirement extends number
 >(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid length'
+  message?: ErrorMessage
 ): LengthValidation<TInput, TRequirement> {
   return {
     type: 'length',
+    expects: `${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return input.length !== this.requirement
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (input.length === this.requirement) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'length', `${input.length}`);
     },
   };
 }

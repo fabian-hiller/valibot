@@ -15,7 +15,7 @@ export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -25,17 +25,16 @@ export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
  *
  * @returns An async undefined schema.
  */
-export function undefinedAsync(
-  message: ErrorMessage = 'Invalid type'
-): UndefinedSchemaAsync {
+export function undefinedAsync(message?: ErrorMessage): UndefinedSchemaAsync {
   return {
     type: 'undefined',
+    expects: 'undefined',
     async: true,
     message,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Check type of input
       if (typeof input !== 'undefined') {
-        return schemaIssue(info, 'type', 'undefined', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return parse result

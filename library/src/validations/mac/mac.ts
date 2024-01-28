@@ -24,18 +24,20 @@ export type MacValidation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function mac<TInput extends string>(
-  message: ErrorMessage = 'Invalid MAC'
+  message?: ErrorMessage
 ): MacValidation<TInput> {
   return {
     type: 'mac',
+    expects: null,
     async: false,
     message,
+    // TODO: It is strange that we have an OR relationship between requirements
     requirement: [MAC48_REGEX, MAC64_REGEX],
     _parse(input) {
-      return !this.requirement[0].test(input) &&
-        !this.requirement[1].test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement[0].test(input) || this.requirement[1].test(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'MAC');
     },
   };
 }

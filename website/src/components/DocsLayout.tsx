@@ -1,16 +1,16 @@
-import { ArrowLeftIcon, ArrowRightIcon, GitHubIcon, PenIcon } from '~/icons';
-import { AlgoliaLogo, BuilderLogo, NetlifyLogo, PaceLogo } from '~/logos';
-import { IconButton } from './IconButton';
-import { Navigation } from './Navigation';
-import { SideBar } from './SideBar';
+import { component$, Slot, useComputed$ } from '@builder.io/qwik';
 import {
   type ContentMenu,
   useContent,
-  useLocation,
   useDocumentHead,
+  useLocation,
 } from '@builder.io/qwik-city';
-import { Slot, component$, useComputed$ } from '@builder.io/qwik';
+import { ArrowLeftIcon, ArrowRightIcon, GitHubIcon, PenIcon } from '~/icons';
+import { AlgoliaLogo, BuilderLogo, NetlifyLogo, PaceLogo } from '~/logos';
 import '../styles/pace.css';
+import { IconButton } from './IconButton';
+import { Navigation } from './Navigation';
+import { SideBar } from './SideBar';
 
 type NavItem = ContentMenu & { group: string };
 

@@ -2,9 +2,9 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  Issues,
   Output,
   PipeAsync,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   defaultArgs,
@@ -37,7 +37,7 @@ export type MapSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -92,25 +92,26 @@ export function mapAsync<
   arg4?: PipeAsync<MapOutput<TKey, TValue>>
 ): MapSchemaAsync<TKey, TValue> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
+  const [message, pipe] = defaultArgs(arg3, arg4);
 
   // Create and return async map schema
   return {
     type: 'map',
+    expects: 'Map',
     async: true,
     key,
     value,
     message,
     pipe,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Check type of input
       if (!(input instanceof Map)) {
-        return schemaIssue(info, 'type', 'map', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Create typed, issues and output
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       const output: Map<Output<TKey>, Output<TValue>> = new Map();
 
       // Parse each key and value by schema
@@ -128,17 +129,17 @@ export function mapAsync<
               ] as const
             ).map(async ({ schema, value, origin }) => {
               // If not aborted early, continue execution
-              if (!(info?.abortEarly && issues)) {
+              if (!(config?.abortEarly && issues)) {
                 // Get parse result of value
                 const result = await schema._parse(value, {
                   origin,
-                  abortEarly: info?.abortEarly,
-                  abortPipeEarly: info?.abortPipeEarly,
-                  skipPipe: info?.skipPipe,
+                  abortEarly: config?.abortEarly,
+                  abortPipeEarly: config?.abortPipeEarly,
+                  skipPipe: config?.skipPipe,
                 });
 
                 // If not aborted early, continue execution
-                if (!(info?.abortEarly && issues)) {
+                if (!(config?.abortEarly && issues)) {
                   // If there are issues, capture them
                   if (result.issues) {
                     // Create map path item
@@ -163,7 +164,7 @@ export function mapAsync<
                     }
 
                     // If necessary, abort early
-                    if (info?.abortEarly) {
+                    if (config?.abortEarly) {
                       throw null;
                     }
                   }
@@ -189,11 +190,11 @@ export function mapAsync<
 
       // If output is typed, execute pipe
       if (typed) {
-        return pipeResultAsync(output, this.pipe, info, 'map', issues);
+        return pipeResultAsync(this, output, config, issues);
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

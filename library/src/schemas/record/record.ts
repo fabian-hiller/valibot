@@ -1,8 +1,8 @@
 import type {
   BaseSchema,
   ErrorMessage,
-  Issues,
   Pipe,
+  SchemaIssues,
 } from '../../types/index.ts';
 import { parseResult, pipeResult, schemaIssue } from '../../utils/index.ts';
 import type { EnumSchema } from '../enum/index.ts';
@@ -10,7 +10,7 @@ import type { PicklistSchema } from '../picklist/index.ts';
 import type { SpecialSchema } from '../special/index.ts';
 import type { StringSchema } from '../string/index.ts';
 import type { UnionSchema } from '../union/index.ts';
-import type { RecordOutput, RecordInput, RecordPathItem } from './types.ts';
+import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';
 import { recordArgs } from './utils/index.ts';
 import { BLOCKED_KEYS } from './values.ts';
 
@@ -47,7 +47,7 @@ export type RecordSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -121,7 +121,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
   arg4?: Pipe<RecordOutput<TKey, TValue>>
 ): RecordSchema<TKey, TValue> {
   // Get key, value, message and pipe argument
-  const [key, value, message = 'Invalid type', pipe] = recordArgs<
+  const [key, value, message, pipe] = recordArgs<
     TKey,
     TValue,
     Pipe<RecordOutput<TKey, TValue>>
@@ -130,20 +130,21 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
   // Create and return record schema
   return {
     type: 'record',
+    expects: 'Object',
     async: false,
     key,
     value,
     message,
     pipe,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return schemaIssue(info, 'type', 'record', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Create typed, issues and output
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       const output: Record<string | number | symbol, any> = {};
 
       // Parse each key and value by schema
@@ -157,9 +158,9 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
           // Get parse result of key
           const keyResult = this.key._parse(inputKey, {
             origin: 'key',
-            abortEarly: info?.abortEarly,
-            abortPipeEarly: info?.abortPipeEarly,
-            skipPipe: info?.skipPipe,
+            abortEarly: config?.abortEarly,
+            abortPipeEarly: config?.abortPipeEarly,
+            skipPipe: config?.skipPipe,
           });
 
           // If there are issues, capture them
@@ -182,14 +183,14 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
             }
 
             // If necessary, abort early
-            if (info?.abortEarly) {
+            if (config?.abortEarly) {
               typed = false;
               break;
             }
           }
 
           // Get parse result of value
-          const valueResult = this.value._parse(inputValue, info);
+          const valueResult = this.value._parse(inputValue, config);
 
           // If there are issues, capture them
           if (valueResult.issues) {
@@ -215,7 +216,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
             }
 
             // If necessary, abort early
-            if (info?.abortEarly) {
+            if (config?.abortEarly) {
               typed = false;
               break;
             }
@@ -236,16 +237,15 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
       // If output is typed, execute pipe
       if (typed) {
         return pipeResult(
+          this,
           output as RecordOutput<TKey, TValue>,
-          this.pipe,
-          info,
-          'record',
+          config,
           issues
         );
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

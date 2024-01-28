@@ -12,7 +12,7 @@ export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -22,15 +22,16 @@ export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
  *
  * @returns A symbol schema.
  */
-export function symbol(message: ErrorMessage = 'Invalid type'): SymbolSchema {
+export function symbol(message?: ErrorMessage): SymbolSchema {
   return {
     type: 'symbol',
+    expects: 'symbol',
     async: false,
     message,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (typeof input !== 'symbol') {
-        return schemaIssue(info, 'type', 'symbol', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return parse result

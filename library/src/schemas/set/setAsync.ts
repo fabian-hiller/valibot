@@ -2,8 +2,8 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  Issues,
   PipeAsync,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   defaultArgs,
@@ -31,7 +31,7 @@ export type SetSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -72,36 +72,37 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
   arg3?: PipeAsync<SetOutput<TValue>>
 ): SetSchemaAsync<TValue> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return async set schema
   return {
     type: 'set',
+    expects: 'Set',
     async: true,
     value,
     message,
     pipe,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Check type of input
       if (!(input instanceof Set)) {
-        return schemaIssue(info, 'type', 'set', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Create typed, index, output and issues
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       const output: SetOutput<TValue> = new Set();
 
       // Parse each value by schema
       await Promise.all(
         Array.from(input.values()).map(async (inputValue, key) => {
           // If not aborted early, continue execution
-          if (!(info?.abortEarly && issues)) {
+          if (!(config?.abortEarly && issues)) {
             // Get parse result of input value
-            const result = await this.value._parse(inputValue, info);
+            const result = await this.value._parse(inputValue, config);
 
             // If not aborted early, continue execution
-            if (!(info?.abortEarly && issues)) {
+            if (!(config?.abortEarly && issues)) {
               // If there are issues, capture them
               if (result.issues) {
                 // Create set path item
@@ -126,7 +127,7 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
                 }
 
                 // If necessary, abort early
-                if (info?.abortEarly) {
+                if (config?.abortEarly) {
                   typed = false;
                   throw null;
                 }
@@ -146,11 +147,11 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
 
       // If output is typed, execute pipe
       if (typed) {
-        return pipeResultAsync(output, this.pipe, info, 'set', issues);
+        return pipeResultAsync(this, output, config, issues);
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

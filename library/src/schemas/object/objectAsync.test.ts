@@ -2,6 +2,11 @@ import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { toCustom } from '../../transformations/index.ts';
+import type {
+  Output,
+  TypedSchemaResult,
+  UntypedSchemaResult,
+} from '../../types/index.ts';
 import { customAsync, minLength } from '../../validations/index.ts';
 import { never } from '../never/index.ts';
 import { number } from '../number/index.ts';
@@ -69,21 +74,21 @@ describe('objectAsync', () => {
   });
 
   test('should throw only first issue', async () => {
-    const info = { abortEarly: true };
+    const config = { abortEarly: true };
     const schema = objectAsync({ key1: string(), key2: string() }, number());
 
     const input1 = { key1: 1, key2: 2, key3: 3, key4: '4' };
-    await expect(parseAsync(schema, input1, info)).rejects.toThrowError();
+    await expect(parseAsync(schema, input1, config)).rejects.toThrowError();
     try {
-      await parseAsync(schema, input1, info);
+      await parseAsync(schema, input1, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
 
     const input2 = { key1: '1', key2: '2', key3: '3', key4: '4' };
-    await expect(parseAsync(schema, input2, info)).rejects.toThrowError();
+    await expect(parseAsync(schema, input2, config)).rejects.toThrowError();
     try {
-      await parseAsync(schema, input2, info);
+      await parseAsync(schema, input2, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
@@ -186,7 +191,9 @@ describe('objectAsync', () => {
           reason: 'string',
           validation: 'min_length',
           origin: 'value',
-          message: 'Invalid length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: input.key,
           requirement: 10,
           path: [
@@ -202,12 +209,14 @@ describe('objectAsync', () => {
           reason: 'object',
           validation: 'custom',
           origin: 'value',
-          message: 'Invalid input',
+          expected: null,
+          received: 'Object',
+          message: 'Invalid input: Received Object',
           input: input,
           requirement,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should skip pipe if output is not typed', async () => {
@@ -224,7 +233,9 @@ describe('objectAsync', () => {
           reason: 'type',
           validation: 'string',
           origin: 'value',
-          message: 'Invalid type',
+          expected: 'string',
+          received: '12345',
+          message: 'Invalid type: Expected string but received 12345',
           input: input.key,
           path: [
             {
@@ -236,6 +247,6 @@ describe('objectAsync', () => {
           ],
         },
       ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 });

@@ -40,6 +40,6 @@ describe('mac', () => {
   test('should return custom error message', () => {
     const error = 'Value is not MAC address!';
     const validate = mac(error);
-    expect(validate._parse('test').issues?.[0].message).toBe(error);
+    expect(validate._parse('test').issues?.[0].context.message).toBe(error);
   });
 });

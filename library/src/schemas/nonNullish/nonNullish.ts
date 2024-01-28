@@ -20,7 +20,7 @@ export type NonNullishSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -33,21 +33,22 @@ export type NonNullishSchema<
  */
 export function nonNullish<TWrapped extends BaseSchema>(
   wrapped: TWrapped,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage
 ): NonNullishSchema<TWrapped> {
   return {
     type: 'non_nullish',
+    expects: '!null & !undefined',
     async: false,
     wrapped,
     message,
-    _parse(input, info) {
+    _parse(input, config) {
       // Allow `null` and `undefined` values not to pass
       if (input === null || input === undefined) {
-        return schemaIssue(info, 'type', 'non_nullish', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      return this.wrapped._parse(input, config);
     },
   };
 }

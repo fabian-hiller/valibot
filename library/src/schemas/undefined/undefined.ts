@@ -15,7 +15,7 @@ export type UndefinedSchema<TOutput = undefined> = BaseSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -25,17 +25,16 @@ export type UndefinedSchema<TOutput = undefined> = BaseSchema<
  *
  * @returns A undefined schema.
  */
-export function undefined_(
-  message: ErrorMessage = 'Invalid type'
-): UndefinedSchema {
+export function undefined_(message?: ErrorMessage): UndefinedSchema {
   return {
     type: 'undefined',
+    expects: 'undefined',
     async: false,
     message,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (typeof input !== 'undefined') {
-        return schemaIssue(info, 'type', 'undefined', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return parse result

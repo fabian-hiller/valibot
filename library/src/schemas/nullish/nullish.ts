@@ -65,10 +65,11 @@ export function nullish<
 >(wrapped: TWrapped, default_?: TDefault): NullishSchema<TWrapped, TDefault> {
   return {
     type: 'nullish',
+    expects: `${wrapped.expects} | null | undefined`,
     async: false,
     wrapped,
     default: default_ as TDefault,
-    _parse(input, info) {
+    _parse(input, config) {
       // Allow `null` or `undefined` to pass or override it with default value
       if (input === null || input === undefined) {
         const override = getDefault(this);
@@ -79,7 +80,7 @@ export function nullish<
       }
 
       // Otherwise, return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      return this.wrapped._parse(input, config);
     },
   };
 }

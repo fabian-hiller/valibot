@@ -1,16 +1,16 @@
 import type {
   BaseSchema,
   ErrorMessage,
-  Issues,
   Pipe,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
-  pipeResult,
   parseResult,
+  pipeResult,
   restAndDefaultArgs,
   schemaIssue,
 } from '../../utils/index.ts';
-import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
+import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 
 /**
  * Object entries type.
@@ -40,7 +40,7 @@ export type ObjectSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -123,7 +123,7 @@ export function object<
   arg4?: Pipe<ObjectOutput<TEntries, TRest>>
 ): ObjectSchema<TEntries, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message = 'Invalid type', pipe] = restAndDefaultArgs<
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<TEntries, TRest>>
   >(arg2, arg3, arg4);
@@ -134,15 +134,16 @@ export function object<
   // Create and return object schema
   return {
     type: 'object',
+    expects: 'Object',
     async: false,
     entries,
     rest,
     message,
     pipe,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return schemaIssue(info, 'type', 'object', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Cache object entries lazy
@@ -150,13 +151,13 @@ export function object<
 
       // Create typed, issues and output
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       const output: Record<string, any> = {};
 
       // Parse schema of each key
       for (const [key, schema] of cachedEntries) {
         const value = (input as Record<string, unknown>)[key];
-        const result = schema._parse(value, info);
+        const result = schema._parse(value, config);
 
         // If there are issues, capture them
         if (result.issues) {
@@ -182,7 +183,7 @@ export function object<
           }
 
           // If necessary, abort early
-          if (info?.abortEarly) {
+          if (config?.abortEarly) {
             typed = false;
             break;
           }
@@ -200,11 +201,11 @@ export function object<
       }
 
       // If necessary parse schema of each rest entry
-      if (this.rest && !(info?.abortEarly && issues)) {
+      if (this.rest && !(config?.abortEarly && issues)) {
         for (const key in input) {
           if (!(key in this.entries)) {
             const value = (input as Record<string, unknown>)[key];
-            const result = this.rest._parse(value, info);
+            const result = this.rest._parse(value, config);
 
             // If there are issues, capture them
             if (result.issues) {
@@ -230,7 +231,7 @@ export function object<
               }
 
               // If necessary, abort early
-              if (info?.abortEarly) {
+              if (config?.abortEarly) {
                 typed = false;
                 break;
               }
@@ -250,16 +251,15 @@ export function object<
       // If output is typed, execute pipe
       if (typed) {
         return pipeResult(
+          this,
           output as ObjectOutput<TEntries, TRest>,
-          this.pipe,
-          info,
-          'object',
+          config,
           issues
         );
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

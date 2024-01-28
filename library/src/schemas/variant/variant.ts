@@ -51,7 +51,7 @@ export type VariantSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -106,20 +106,21 @@ export function variant<
   arg4?: Pipe<Output<TOptions[number]>>
 ): VariantSchema<TKey, TOptions> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
+  const [message, pipe] = defaultArgs(arg3, arg4);
 
   // Create and return variant schema
   return {
     type: 'variant',
+    expects: 'Object',
     async: false,
     key,
     options,
     message,
     pipe,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return schemaIssue(info, 'type', 'variant', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Continue if discriminator key is included
@@ -134,12 +135,12 @@ export function variant<
             if (schema.type === 'object') {
               const keyResult = schema.entries[this.key]._parse(
                 (input as Record<TKey, unknown>)[this.key],
-                info
+                config
               );
 
               // If right variant option was found, parse it
               if (!keyResult.issues) {
-                const dataResult = schema._parse(input, info);
+                const dataResult = schema._parse(input, config);
 
                 // If there are not issues, store result and break loop
                 if (!dataResult.issues) {
@@ -177,10 +178,9 @@ export function variant<
           // If result is typed, execute pipe
           if (variantResult.typed) {
             return pipeResult(
+              this,
               variantResult.output,
-              this.pipe,
-              info,
-              'variant',
+              config,
               variantResult.issues
             );
           }
@@ -191,14 +191,16 @@ export function variant<
       }
 
       // If discriminator key is invalid, return issue
-      return schemaIssue(info, 'type', 'variant', this.message, input, [
-        {
-          type: 'object',
-          input: input as Record<string, unknown>,
-          key: this.key,
-          value: undefined,
-        },
-      ]);
+      return schemaIssue(this, input, config, {
+        path: [
+          {
+            type: 'object',
+            input: input as Record<string, unknown>,
+            key: this.key,
+            value: undefined,
+          },
+        ],
+      });
     },
   };
 }

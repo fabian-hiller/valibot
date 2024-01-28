@@ -2,14 +2,14 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  Issues,
   PipeAsync,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
+  parseResult,
   pipeResultAsync,
   restAndDefaultArgs,
   schemaIssue,
-  parseResult,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 
@@ -41,7 +41,7 @@ export type ObjectSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -124,7 +124,7 @@ export function objectAsync<
   arg4?: PipeAsync<ObjectOutput<TEntries, TRest>>
 ): ObjectSchemaAsync<TEntries, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message = 'Invalid type', pipe] = restAndDefaultArgs<
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     PipeAsync<ObjectOutput<TEntries, TRest>>
   >(arg2, arg3, arg4);
@@ -135,15 +135,16 @@ export function objectAsync<
   // Create and return async object schema
   return {
     type: 'object',
+    expects: 'Object',
     async: true,
     entries,
     rest,
     message,
     pipe,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return schemaIssue(info, 'type', 'object', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Cache object entries lazy
@@ -151,7 +152,7 @@ export function objectAsync<
 
       // Create typed, issues and output
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       const output: Record<string, any> = {};
 
       // Parse schema of each key
@@ -159,15 +160,15 @@ export function objectAsync<
         Promise.all(
           cachedEntries.map(async ([key, schema]) => {
             // If not aborted early, continue execution
-            if (!(info?.abortEarly && issues)) {
+            if (!(config?.abortEarly && issues)) {
               // Get value by key
               const value = (input as Record<string, unknown>)[key];
 
               // Get parse result of value
-              const result = await schema._parse(value, info);
+              const result = await schema._parse(value, config);
 
               // If not aborted early, continue execution
-              if (!(info?.abortEarly && issues)) {
+              if (!(config?.abortEarly && issues)) {
                 // If there are issues, capture them
                 if (result.issues) {
                   // Create object path item
@@ -192,7 +193,7 @@ export function objectAsync<
                   }
 
                   // If necessary, abort early
-                  if (info?.abortEarly) {
+                  if (config?.abortEarly) {
                     typed = false;
                     throw null;
                   }
@@ -216,13 +217,13 @@ export function objectAsync<
           Promise.all(
             Object.entries(input).map(async ([key, value]) => {
               // If not aborted early, continue execution
-              if (!(info?.abortEarly && issues)) {
+              if (!(config?.abortEarly && issues)) {
                 if (!(key in this.entries)) {
                   // Get parse result of value
-                  const result = await this.rest!._parse(value, info);
+                  const result = await this.rest!._parse(value, config);
 
                   // If not aborted early, continue execution
-                  if (!(info?.abortEarly && issues)) {
+                  if (!(config?.abortEarly && issues)) {
                     // If there are issues, capture them
                     if (result.issues) {
                       // Create object path item
@@ -247,7 +248,7 @@ export function objectAsync<
                       }
 
                       // If necessary, abort early
-                      if (info?.abortEarly) {
+                      if (config?.abortEarly) {
                         typed = false;
                         throw null;
                       }
@@ -270,16 +271,15 @@ export function objectAsync<
       // If output is typed, execute pipe
       if (typed) {
         return pipeResultAsync(
+          this,
           output as ObjectOutput<TEntries, TRest>,
-          this.pipe,
-          info,
-          'object',
+          config,
           issues
         );
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

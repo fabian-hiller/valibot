@@ -24,17 +24,19 @@ export type EmojiValidation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function emoji<TInput extends string>(
-  message: ErrorMessage = 'Invalid emoji'
+  message?: ErrorMessage
 ): EmojiValidation<TInput> {
   return {
     type: 'emoji',
+    expects: null,
     async: false,
     message,
     requirement: EMOJI_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'emoji');
     },
   };
 }

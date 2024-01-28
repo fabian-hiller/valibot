@@ -28,17 +28,24 @@ export type EndsWithValidation<
  */
 export function endsWith<TInput extends string, TRequirement extends string>(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid end'
+  message?: ErrorMessage
 ): EndsWithValidation<TInput, TRequirement> {
   return {
     type: 'ends_with',
+    expects: `"${requirement}"`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return !input.endsWith(this.requirement)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (input.endsWith(this.requirement)) {
+        return actionOutput(input);
+      }
+      return actionIssue(
+        this,
+        input,
+        'end',
+        `"${input.slice(-this.requirement.length)}"`
+      );
     },
   };
 }

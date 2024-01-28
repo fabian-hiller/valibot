@@ -2,7 +2,6 @@ import type {
   ObjectEntries,
   ObjectSchema,
 } from '../../schemas/object/index.ts';
-import type { ErrorMessage } from '../../types/index.ts';
 import { schemaIssue } from '../../utils/index.ts';
 
 /**
@@ -12,21 +11,19 @@ import { schemaIssue } from '../../utils/index.ts';
  * @deprecated Use `object` with `rest` argument instead.
  *
  * @param schema A object schema.
- * @param message The error message.
  *
  * @returns A strict object schema.
  */
 export function strict<TSchema extends ObjectSchema<ObjectEntries, undefined>>(
-  schema: TSchema,
-  message: ErrorMessage = 'Invalid keys'
+  schema: TSchema
 ): TSchema {
   return {
     ...schema,
-    _parse(input, info) {
-      const result = schema._parse(input, info);
+    _parse(input, config) {
+      const result = schema._parse(input, config);
       return !result.issues &&
         Object.keys(input as object).some((key) => !(key in schema.entries))
-        ? schemaIssue(info, 'object', 'strict', message, input)
+        ? schemaIssue(this, input, config)
         : result;
     },
   };

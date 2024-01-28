@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import {} from '../../schemas/index.ts';
+import '../../schemas/index.ts';
 import { customAsync } from '../../validations/index.ts';
 import { forwardAsync } from './forwardAsync.ts';
 
@@ -7,18 +7,24 @@ describe('forwardAsync', () => {
   test('should forward issues to end of path list', async () => {
     type Input = { nested: { key: string } };
     const requirement = async () => false;
-    const validate = forwardAsync<Input>(customAsync(requirement), [
-      'nested',
-      'key',
-    ]);
+    const validate = forwardAsync<Input>(
+      customAsync(requirement, 'Custom error'),
+      ['nested', 'key']
+    );
     const result = await validate._parse({ nested: { key: 'value' } });
     expect(result).toEqual({
       issues: [
         {
-          validation: 'custom',
-          message: 'Invalid input',
+          context: {
+            type: 'custom',
+            expects: null,
+            async: true,
+            message: 'Custom error',
+            requirement,
+            _parse: expect.any(Function),
+          },
           input: 'value',
-          requirement,
+          label: 'input',
           path: [
             {
               type: 'unknown',
@@ -41,19 +47,24 @@ describe('forwardAsync', () => {
   test('should stop forwarding if path input is undefined', async () => {
     type Input = { nested: { key: string }[] };
     const requirement = async () => false;
-    const validate = forwardAsync<Input>(customAsync(requirement), [
-      'nested',
-      10,
-      'key',
-    ]);
+    const validate = forwardAsync<Input>(
+      customAsync(requirement, 'Custom error'),
+      ['nested', 10, 'key']
+    );
     const result = await validate._parse({ nested: [{ key: 'value' }] });
     expect(result).toEqual({
       issues: [
         {
-          validation: 'custom',
-          message: 'Invalid input',
+          context: {
+            type: 'custom',
+            expects: null,
+            async: true,
+            message: 'Custom error',
+            requirement,
+            _parse: expect.any(Function),
+          },
           input: undefined,
-          requirement,
+          label: 'input',
           path: [
             {
               type: 'unknown',

@@ -20,7 +20,7 @@ export type InstanceSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -61,23 +61,24 @@ export function instance<TClass extends Class>(
   arg3?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
     type: 'instance',
+    expects: class_.name,
     async: false,
     class: class_,
     message,
     pipe,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (!(input instanceof this.class)) {
-        return schemaIssue(info, 'type', 'instance', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Execute pipe and return result
-      return pipeResult(input, this.pipe, info, 'instance');
+      return pipeResult(this, input, config);
     },
   };
 }

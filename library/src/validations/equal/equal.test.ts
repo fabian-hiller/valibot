@@ -20,6 +20,6 @@ describe('equal', () => {
   test('should return custom error message', () => {
     const error = 'Value is not equal "abc"!';
     const validate = equal('abc', error);
-    expect(validate._parse('test').issues?.[0].message).toBe(error);
+    expect(validate._parse('test').issues?.[0].context.message).toBe(error);
   });
 });

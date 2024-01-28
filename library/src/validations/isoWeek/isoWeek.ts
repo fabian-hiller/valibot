@@ -31,17 +31,19 @@ export type IsoWeekValidation<TInput extends string> =
  * @returns A validation action.
  */
 export function isoWeek<TInput extends string>(
-  message: ErrorMessage = 'Invalid week'
+  message?: ErrorMessage
 ): IsoWeekValidation<TInput> {
   return {
     type: 'iso_week',
+    expects: null,
     async: false,
     message,
     requirement: ISO_WEEK_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'week');
     },
   };
 }

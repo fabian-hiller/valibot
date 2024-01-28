@@ -1,9 +1,9 @@
 import type {
   BaseSchema,
   ErrorMessage,
-  Issues,
   MaybeReadonly,
   Pipe,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   defaultArgs,
@@ -39,7 +39,7 @@ export type IntersectSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -80,25 +80,26 @@ export function intersect<TOptions extends IntersectOptions>(
   arg3?: Pipe<IntersectOutput<TOptions>>
 ): IntersectSchema<TOptions> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return intersect schema
   return {
     type: 'intersect',
+    expects: options.map((option) => option.expects).join(' & '),
     async: false,
     options,
     message,
     pipe,
-    _parse(input, info) {
+    _parse(input, config) {
       // Create typed, issues, output and outputs
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       let output: any;
       const outputs: any[] = [];
 
       // Parse schema of each option
       for (const schema of this.options) {
-        const result = schema._parse(input, info);
+        const result = schema._parse(input, config);
 
         // If there are issues, capture them
         if (result.issues) {
@@ -111,7 +112,7 @@ export function intersect<TOptions extends IntersectOptions>(
           }
 
           // If necessary, abort early
-          if (info?.abortEarly) {
+          if (config?.abortEarly) {
             typed = false;
             break;
           }
@@ -137,7 +138,7 @@ export function intersect<TOptions extends IntersectOptions>(
 
           // If outputs can't be merged, return issue
           if (result.invalid) {
-            return schemaIssue(info, 'type', 'intersect', this.message, input);
+            return schemaIssue(this, input, config);
           }
 
           // Otherwise, set merged output
@@ -145,11 +146,11 @@ export function intersect<TOptions extends IntersectOptions>(
         }
 
         // Execute pipe and return typed parse result
-        return pipeResult(output, this.pipe, info, 'intersect', issues);
+        return pipeResult(this, output, config, issues);
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

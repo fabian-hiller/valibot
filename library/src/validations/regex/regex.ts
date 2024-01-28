@@ -25,17 +25,19 @@ export type RegexValidation<TInput extends string> = BaseValidation<TInput> & {
  */
 export function regex<TInput extends string>(
   requirement: RegExp,
-  message: ErrorMessage = 'Invalid regex'
+  message?: ErrorMessage
 ): RegexValidation<TInput> {
   return {
     type: 'regex',
+    expects: `${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'format');
     },
   };
 }

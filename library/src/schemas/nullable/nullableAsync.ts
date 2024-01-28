@@ -78,10 +78,11 @@ export function nullableAsync<
 ): NullableSchemaAsync<TWrapped, TDefault> {
   return {
     type: 'nullable',
+    expects: `${wrapped.expects} | null`,
     async: true,
     wrapped,
     default: default_ as TDefault,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Allow `null` to pass or override it with default value
       if (input === null) {
         const override = await getDefaultAsync(this);
@@ -92,7 +93,7 @@ export function nullableAsync<
       }
 
       // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      return this.wrapped._parse(input, config);
     },
   };
 }

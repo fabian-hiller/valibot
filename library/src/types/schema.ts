@@ -1,11 +1,10 @@
-import type { Issue, Issues } from './issues.ts';
+import type { Config } from './config.ts';
+import type { SchemaIssue, SchemaIssues } from './issues.ts';
 
 /**
- * Parse info type.
+ * Parse config type.
  */
-export type ParseInfo = Partial<
-  Pick<Issue, 'origin' | 'abortEarly' | 'abortPipeEarly' | 'skipPipe'>
->;
+export type ParseConfig = Config & Partial<Pick<SchemaIssue, 'origin'>>;
 
 /**
  * Typed schema result type.
@@ -22,7 +21,7 @@ export type TypedSchemaResult<TOutput> = {
   /**
    * The parse issues.
    */
-  issues?: Issues;
+  issues?: SchemaIssues;
 };
 
 /**
@@ -40,7 +39,7 @@ export type UntypedSchemaResult = {
   /**
    * The parse issues.
    */
-  issues: Issues;
+  issues: SchemaIssues;
 };
 
 /**
@@ -55,6 +54,10 @@ export type SchemaResult<TOutput> =
  */
 export type BaseSchema<TInput = any, TOutput = TInput> = {
   /**
+   * The expected property.
+   */
+  expects: string;
+  /**
    * Whether it's async.
    */
   async: false;
@@ -62,13 +65,13 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
    * Parses unknown input based on its schema.
    *
    * @param input The input to be parsed.
-   * @param info The parse info.
+   * @param config The parse configuration.
    *
    * @returns The parse result.
    *
    * @internal
    */
-  _parse(input: unknown, info?: ParseInfo): SchemaResult<TOutput>;
+  _parse(input: unknown, config?: ParseConfig): SchemaResult<TOutput>;
   /**
    * Input and output type.
    *
@@ -82,6 +85,10 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
  */
 export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
   /**
+   * The expected property.
+   */
+  expects: string;
+  /**
    * Whether it's async.
    */
   async: true;
@@ -89,13 +96,13 @@ export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
    * Parses unknown input based on its schema.
    *
    * @param input The input to be parsed.
-   * @param info The parse info.
+   * @param config The parse configuration.
    *
    * @returns The parse result.
    *
    * @internal
    */
-  _parse(input: unknown, info?: ParseInfo): Promise<SchemaResult<TOutput>>;
+  _parse(input: unknown, config?: ParseConfig): Promise<SchemaResult<TOutput>>;
   /**
    * Input and output type.
    *

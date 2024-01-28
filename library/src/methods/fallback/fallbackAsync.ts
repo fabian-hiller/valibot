@@ -40,8 +40,8 @@ export function fallbackAsync<
   return {
     ...schema,
     fallback,
-    async _parse(input, info) {
-      const result = await schema._parse(input, info);
+    async _parse(input, config) {
+      const result = await schema._parse(input, config);
       return result.issues
         ? parseResult(
             true,

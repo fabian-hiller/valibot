@@ -49,10 +49,11 @@ const PROVIDER_REGEX_LIST = [
  * @returns A validation action.
  */
 export function creditCard<TInput extends string>(
-  message: ErrorMessage = 'Invalid credit card'
+  message?: ErrorMessage
 ): CreditCardValidation<TInput> {
   return {
     type: 'credit_card',
+    expects: null,
     async: false,
     message,
     requirement: (input) => {
@@ -66,9 +67,10 @@ export function creditCard<TInput extends string>(
       );
     },
     _parse(input) {
-      return !this.requirement(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'credit card');
     },
   };
 }

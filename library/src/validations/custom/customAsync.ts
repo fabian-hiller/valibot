@@ -25,17 +25,19 @@ export type CustomValidationAsync<TInput> = BaseValidationAsync<TInput> & {
  */
 export function customAsync<TInput>(
   requirement: (input: TInput) => Promise<boolean>,
-  message: ErrorMessage = 'Invalid input'
+  message?: ErrorMessage
 ): CustomValidationAsync<TInput> {
   return {
     type: 'custom',
+    expects: null,
     async: true,
     message,
     requirement,
     async _parse(input) {
-      return !(await this.requirement(input))
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (await this.requirement(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'input');
     },
   };
 }

@@ -15,7 +15,7 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -25,17 +25,16 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
  *
  * @returns An async symbol schema.
  */
-export function symbolAsync(
-  message: ErrorMessage = 'Invalid type'
-): SymbolSchemaAsync {
+export function symbolAsync(message?: ErrorMessage): SymbolSchemaAsync {
   return {
     type: 'symbol',
+    expects: 'symbol',
     async: true,
     message,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Check type of input
       if (typeof input !== 'symbol') {
-        return schemaIssue(info, 'type', 'symbol', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return parse result

@@ -24,17 +24,19 @@ export type Cuid2Validation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function cuid2<TInput extends string>(
-  message: ErrorMessage = 'Invalid Cuid2'
+  message?: ErrorMessage
 ): Cuid2Validation<TInput> {
   return {
     type: 'cuid2',
+    expects: null,
     async: false,
     message,
     requirement: CUID2_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'Cuid2');
     },
   };
 }

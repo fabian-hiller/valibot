@@ -6,6 +6,8 @@ import type {
   SetPathItem,
   TuplePathItem,
 } from '../schemas/index.ts';
+import type { Config } from './config.ts';
+import type { PipeActionContext } from './pipe.ts';
 
 /**
  * Issue reason type.
@@ -63,9 +65,9 @@ export type PathItem =
   | UnknownPathItem;
 
 /**
- * Issue type.
+ * Schema issue type.
  */
-export type Issue = {
+export type SchemaIssue = Omit<Config, 'message'> & {
   /**
    * The issue reason.
    */
@@ -79,13 +81,21 @@ export type Issue = {
    */
   origin: IssueOrigin;
   /**
+   * The raw input data.
+   */
+  input: unknown;
+  /**
+   * The expected input.
+   */
+  expected: string | null;
+  /**
+   * The received input.
+   */
+  received: string;
+  /**
    * The error message.
    */
   message: string;
-  /**
-   * The input data.
-   */
-  input: unknown;
   /**
    * The validation requirement
    */
@@ -97,22 +107,21 @@ export type Issue = {
   /**
    * The sub issues.
    */
-  issues?: Issues;
-  /**
-   * Whether it was abort early.
-   */
-  abortEarly?: boolean;
-  /**
-   * Whether the pipe was abort early.
-   */
-  abortPipeEarly?: boolean;
-  /**
-   * Whether the pipe was skipped.
-   */
-  skipPipe?: boolean;
+  issues?: SchemaIssues;
 };
 
 /**
- * Issues type.
+ * Schema issues type.
  */
-export type Issues = [Issue, ...Issue[]];
+export type SchemaIssues = [SchemaIssue, ...SchemaIssue[]];
+
+/**
+ * Pipe action issue type.
+ */
+export type PipeActionIssue = {
+  context: PipeActionContext;
+  input: unknown;
+  label: string;
+  received?: string;
+  path?: PathItem[];
+};

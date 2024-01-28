@@ -21,9 +21,9 @@ export function stripAsync<
   // Create and return object schema
   return {
     ...schema,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Get parse result of schema
-      const result = await schema._parse(input, info);
+      const result = await schema._parse(input, config);
 
       // If result is typed, strip unknown keys
       if (result.typed) {

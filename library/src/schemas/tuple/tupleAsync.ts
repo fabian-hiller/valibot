@@ -2,8 +2,8 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  Issues,
   PipeAsync,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   parseResult,
@@ -44,7 +44,7 @@ export type TupleSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -127,7 +127,7 @@ export function tupleAsync<
   arg4?: PipeAsync<TupleOutput<TItems, TRest>>
 ): TupleSchemaAsync<TItems, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message = 'Invalid type', pipe] = restAndDefaultArgs<
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     PipeAsync<TupleOutput<TItems, TRest>>
   >(arg2, arg3, arg4);
@@ -135,20 +135,21 @@ export function tupleAsync<
   // Create and return async tuple schema
   return {
     type: 'tuple',
+    expects: 'Array',
     async: true,
     items,
     rest,
     message,
     pipe,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Check type of input
       if (!Array.isArray(input) || this.items.length > input.length) {
-        return schemaIssue(info, 'type', 'tuple', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Create typed, issues and output
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       const output: any[] = [];
 
       await Promise.all([
@@ -156,12 +157,12 @@ export function tupleAsync<
         Promise.all(
           this.items.map(async (schema, key) => {
             // If not aborted early, continue execution
-            if (!(info?.abortEarly && issues)) {
+            if (!(config?.abortEarly && issues)) {
               const value = input[key];
-              const result = await schema._parse(value, info);
+              const result = await schema._parse(value, config);
 
               // If not aborted early, continue execution
-              if (!(info?.abortEarly && issues)) {
+              if (!(config?.abortEarly && issues)) {
                 // If there are issues, capture them
                 if (result.issues) {
                   // Create tuple path item
@@ -186,7 +187,7 @@ export function tupleAsync<
                   }
 
                   // If necessary, abort early
-                  if (info?.abortEarly) {
+                  if (config?.abortEarly) {
                     typed = false;
                     throw null;
                   }
@@ -209,12 +210,12 @@ export function tupleAsync<
           Promise.all(
             input.slice(this.items.length).map(async (value, index) => {
               // If not aborted early, continue execution
-              if (!(info?.abortEarly && issues)) {
+              if (!(config?.abortEarly && issues)) {
                 const key = this.items.length + index;
-                const result = await this.rest!._parse(value, info);
+                const result = await this.rest!._parse(value, config);
 
                 // If not aborted early, continue execution
-                if (!(info?.abortEarly && issues)) {
+                if (!(config?.abortEarly && issues)) {
                   // If there are issues, capture them
                   if (result.issues) {
                     // Create tuple path item
@@ -239,7 +240,7 @@ export function tupleAsync<
                     }
 
                     // If necessary, abort early
-                    if (info?.abortEarly) {
+                    if (config?.abortEarly) {
                       typed = false;
                       throw null;
                     }
@@ -261,16 +262,15 @@ export function tupleAsync<
       // If output is typed, execute pipe
       if (typed) {
         return pipeResultAsync(
+          this,
           output as TupleOutput<TItems, TRest>,
-          this.pipe,
-          info,
-          'tuple',
+          config,
           issues
         );
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

@@ -2,8 +2,8 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  Issues,
   PipeAsync,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   parseResult,
@@ -57,7 +57,7 @@ export type RecordSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -140,7 +140,7 @@ export function recordAsync<
   arg4?: PipeAsync<RecordOutput<TKey, TValue>>
 ): RecordSchemaAsync<TKey, TValue> {
   // Get key, value, message and pipe argument
-  const [key, value, message = 'Invalid type', pipe] = recordArgs<
+  const [key, value, message, pipe] = recordArgs<
     TKey,
     TValue,
     PipeAsync<RecordOutput<TKey, TValue>>
@@ -149,20 +149,21 @@ export function recordAsync<
   // Create and return async record schema
   return {
     type: 'record',
+    expects: 'Object',
     async: true,
     key,
     value,
     message,
     pipe,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return schemaIssue(info, 'type', 'record', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Create typed, issues and output
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       const output: Record<string | number | symbol, any> = {};
 
       // Parse each key and value by schema
@@ -183,17 +184,17 @@ export function recordAsync<
                 ] as const
               ).map(async ({ schema, value, origin }) => {
                 // If not aborted early, continue execution
-                if (!(info?.abortEarly && issues)) {
+                if (!(config?.abortEarly && issues)) {
                   // Get parse result of value
                   const result = await schema._parse(value, {
                     origin,
-                    abortEarly: info?.abortEarly,
-                    abortPipeEarly: info?.abortPipeEarly,
-                    skipPipe: info?.skipPipe,
+                    abortEarly: config?.abortEarly,
+                    abortPipeEarly: config?.abortPipeEarly,
+                    skipPipe: config?.skipPipe,
                   });
 
                   // If not aborted early, continue execution
-                  if (!(info?.abortEarly && issues)) {
+                  if (!(config?.abortEarly && issues)) {
                     // If there are issues, capture them
                     if (result.issues) {
                       // Create record path item
@@ -221,7 +222,7 @@ export function recordAsync<
                       }
 
                       // If necessary, abort early
-                      if (info?.abortEarly) {
+                      if (config?.abortEarly) {
                         throw null;
                       }
                     }
@@ -249,16 +250,15 @@ export function recordAsync<
       // If output is typed, execute pipe
       if (typed) {
         return pipeResultAsync(
+          this,
           output as RecordOutput<TKey, TValue>,
-          this.pipe,
-          info,
-          'record',
+          config,
           issues
         );
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

@@ -25,17 +25,19 @@ export type DecimalValidation<TInput extends string> =
  * @returns A validation action.
  */
 export function decimal<TInput extends string>(
-  message: ErrorMessage = 'Invalid decimal'
+  message?: ErrorMessage
 ): DecimalValidation<TInput> {
   return {
     type: 'decimal',
+    expects: null,
     async: false,
     message,
     requirement: DECIMAL_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'decimal');
     },
   };
 }

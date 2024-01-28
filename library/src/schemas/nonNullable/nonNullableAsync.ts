@@ -24,7 +24,7 @@ export type NonNullableSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -37,21 +37,22 @@ export type NonNullableSchemaAsync<
  */
 export function nonNullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
   wrapped: TWrapped,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage
 ): NonNullableSchemaAsync<TWrapped> {
   return {
     type: 'non_nullable',
+    expects: '!null',
     async: true,
     wrapped,
     message,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Allow `null` values not to pass
       if (input === null) {
-        return schemaIssue(info, 'type', 'non_nullable', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      return this.wrapped._parse(input, config);
     },
   };
 }

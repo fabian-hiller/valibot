@@ -1,9 +1,9 @@
 import type {
   BaseSchema,
   ErrorMessage,
-  Issues,
   Output,
   Pipe,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   defaultArgs,
@@ -36,7 +36,7 @@ export type MapSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -82,25 +82,26 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
   arg4?: Pipe<MapOutput<TKey, TValue>>
 ): MapSchema<TKey, TValue> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
+  const [message, pipe] = defaultArgs(arg3, arg4);
 
   // Create and return map schema
   return {
     type: 'map',
+    expects: 'Map',
     async: false,
     key,
     value,
     message,
     pipe,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (!(input instanceof Map)) {
-        return schemaIssue(info, 'type', 'map', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Create typed, issues and output
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       const output: Map<Output<TKey>, Output<TValue>> = new Map();
 
       // Parse each key and value by schema
@@ -111,9 +112,9 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
         // Get parse result of key
         const keyResult = this.key._parse(inputKey, {
           origin: 'key',
-          abortEarly: info?.abortEarly,
-          abortPipeEarly: info?.abortPipeEarly,
-          skipPipe: info?.skipPipe,
+          abortEarly: config?.abortEarly,
+          abortPipeEarly: config?.abortPipeEarly,
+          skipPipe: config?.skipPipe,
         });
 
         // If there are issues, capture them
@@ -140,14 +141,14 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
           }
 
           // If necessary, abort early
-          if (info?.abortEarly) {
+          if (config?.abortEarly) {
             typed = false;
             break;
           }
         }
 
         // Get parse result of value
-        const valueResult = this.value._parse(inputValue, info);
+        const valueResult = this.value._parse(inputValue, config);
 
         // If there are issues, capture them
         if (valueResult.issues) {
@@ -173,7 +174,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
           }
 
           // If necessary, abort early
-          if (info?.abortEarly) {
+          if (config?.abortEarly) {
             typed = false;
             break;
           }
@@ -190,11 +191,11 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
 
       // If output is typed, execute pipe
       if (typed) {
-        return pipeResult(output, this.pipe, info, 'map', issues);
+        return pipeResult(this, output, config, issues);
       }
 
       // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      return parseResult(false, output, issues as SchemaIssues);
     },
   };
 }

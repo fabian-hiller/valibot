@@ -25,17 +25,19 @@ export type IntegerValidation<TInput extends number> =
  * @returns A validation action.
  */
 export function integer<TInput extends number>(
-  message: ErrorMessage = 'Invalid integer'
+  message?: ErrorMessage
 ): IntegerValidation<TInput> {
   return {
     type: 'integer',
+    expects: null,
     async: false,
     message,
     requirement: Number.isInteger,
     _parse(input) {
-      return !this.requirement(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      if (this.requirement(input)) {
+        return actionOutput(input);
+      }
+      return actionIssue(this, input, 'integer');
     },
   };
 }

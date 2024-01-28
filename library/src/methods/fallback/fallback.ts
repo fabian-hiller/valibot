@@ -38,8 +38,8 @@ export function fallback<
   return {
     ...schema,
     fallback,
-    _parse(input, info) {
-      const result = schema._parse(input, info);
+    _parse(input, config) {
+      const result = schema._parse(input, config);
       return result.issues
         ? parseResult(true, getFallback(this, { input, issues: result.issues }))
         : result;

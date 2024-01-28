@@ -12,7 +12,7 @@ export type NanSchema<TOutput = number> = BaseSchema<number, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -22,15 +22,16 @@ export type NanSchema<TOutput = number> = BaseSchema<number, TOutput> & {
  *
  * @returns A NaN schema.
  */
-export function nan(message: ErrorMessage = 'Invalid type'): NanSchema {
+export function nan(message?: ErrorMessage): NanSchema {
   return {
     type: 'nan',
+    expects: 'NaN',
     async: false,
     message,
-    _parse(input, info) {
+    _parse(input, config) {
       // Check type of input
       if (!Number.isNaN(input)) {
-        return schemaIssue(info, 'type', 'nan', this.message, input);
+        return schemaIssue(this, input, config);
       }
 
       // Return parse result

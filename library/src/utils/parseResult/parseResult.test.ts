@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { Issues } from '../../types/index.ts';
+import type { SchemaIssues } from '../../types/index.ts';
 import { parseResult } from './parseResult.ts';
 
 describe('parseResult', () => {
@@ -14,11 +14,13 @@ describe('parseResult', () => {
 
   test('should return untyped parse result', () => {
     const output = { test: 123 };
-    const issues: Issues = [
+    const issues: SchemaIssues = [
       {
         reason: 'type',
         validation: 'string',
         origin: 'value',
+        expected: 'string',
+        received: 'Object',
         message: 'Invalid type',
         input: output,
       },
