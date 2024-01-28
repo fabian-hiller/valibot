@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.27.1 (January 28, 2023)
+
+- Fix missing file extension for Deno (pull request #387)
+
 ## v0.27.0 (January 24, 2023)
 
 - Remove `NonNullable`, `NonNullish` and `NonOptional` type
