@@ -1,10 +1,114 @@
 ---
 title: parse
+description: Parses an unknown input based on a schema.
 source: /methods/parse/parse.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # parse
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/parse/parse.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Parses an unknown input based on a schema.
+
+```ts
+const output = parse<TSchema>(schema, input);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `input` <Property {...properties.input} />
+
+### Explanation
+
+`parse` will throw a <Link href="/../ValiError/">`ValiError`</Link> if the `input` does not match the `schema`. Therefore you should use a try/catch block to catch errors. If the input matches the schema, it is valid and the `output` of the schema will be returned typed.
+
+## Returns
+
+- `output` <Property {...properties.output} />
+
+## Example
+
+The following example show how `parse` can be used.
+
+```ts
+try {
+  const EmailSchema = string([email()]);
+  const email = parse(EmailSchema, 'jane@example.com');
+
+  // Handle errors if one occurs
+} catch (error) {
+  console.log(error);
+}
+```
+
+## Related
+
+The following APIs can be combined with `parse`.
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'keyof',
+    'merge',
+    'omit',
+    'partial',
+    'pick',
+    'required',
+    'transform',
+  ]}
+/>
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'recursive',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
