@@ -203,6 +203,7 @@
 - [BlobSchema](/api/BlobSchema/)
 - [BooleanSchema](/api/BooleanSchema/)
 - [Class](/api/Class/)
+- [CreditCardValidation](/api/CreditCardValidation/)
 - [DateSchema](/api/DateSchema/)
 - [EmailValidation](/api/EmailValidation/)
 - [Enum](/api/Enum/)
