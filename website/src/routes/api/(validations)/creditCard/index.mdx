@@ -12,7 +12,7 @@ import { properties } from './properties';
 
 # creditCard
 
-Creates a pipeline validation action that validates a credit card.
+Creates a pipeline validation action that validates a [credit card](https://en.wikipedia.org/wiki/Payment_card_number).
 
 ```ts
 const Validation = creditCard<TInput>(message);
@@ -29,7 +29,8 @@ const Validation = creditCard<TInput>(message);
 ### Explanation
 
 With `creditCard` you can validate the formatting of a string. If the input is not a valid credit card, you can use `message` to customize the error message.
-Currently it supports validation for the following credit card types: American Express, Diners Card, Discover, JCB, Union Pay, Master Card, Visa.
+
+> The following credit card providers are currently supported: American Express, Diners Card, Discover, JCB, Union Pay, Master Card, and Visa.
 
 ## Returns
 
@@ -44,7 +45,9 @@ The following examples show how `creditCard` can be used.
 Schema to validate a credit card.
 
 ```ts
-const CreditCardSchema = creditCard('Credit card is invalid.');
+const CreditCardSchema = string([
+  creditCard('The credit card is badly formatted.'),
+]);
 ```
 
 ## Related
