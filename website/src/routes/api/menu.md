@@ -198,6 +198,7 @@
 - [BaseTransformationAsync](/api/BaseTransformationAsync/)
 - [BaseValidation](/api/BaseValidation/)
 - [BaseValidationAsync](/api/BaseValidationAsync/)
+- [BicValidation](/api/BicValidation/)
 - [BigintSchema](/api/BigintSchema/)
 - [BlobSchema](/api/BlobSchema/)
 - [BooleanSchema](/api/BooleanSchema/)
