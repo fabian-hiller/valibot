@@ -3,19 +3,28 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   Issues,
+  MaybeReadonly,
+  PipeAsync,
 } from '../../types/index.ts';
-import { getIssues, getOutput, getSchemaIssues } from '../../utils/index.ts';
+import {
+  defaultArgs,
+  parseResult,
+  pipeResultAsync,
+  schemaIssue,
+} from '../../utils/index.ts';
 import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
 
 /**
  * Intersect options async type.
  */
-export type IntersectOptionsAsync = [
-  BaseSchema | BaseSchemaAsync,
-  BaseSchema | BaseSchemaAsync,
-  ...(BaseSchema[] | BaseSchemaAsync[])
-];
+export type IntersectOptionsAsync = MaybeReadonly<
+  [
+    BaseSchema | BaseSchemaAsync,
+    BaseSchema | BaseSchemaAsync,
+    ...(BaseSchema[] | BaseSchemaAsync[])
+  ]
+>;
 
 /**
  * Intersect schema async type.
@@ -36,29 +45,61 @@ export type IntersectSchemaAsync<
    * The error message.
    */
   message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<IntersectInput<TOptions>> | undefined;
 };
 
 /**
  * Creates an async intersect schema.
  *
  * @param options The intersect options.
- * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An async intersect schema.
  */
 export function intersectAsync<TOptions extends IntersectOptionsAsync>(
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  pipe?: PipeAsync<IntersectInput<TOptions>>
+): IntersectSchemaAsync<TOptions>;
+
+/**
+ * Creates an async intersect schema.
+ *
+ * @param options The intersect options.
+ * @param message The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async intersect schema.
+ */
+export function intersectAsync<TOptions extends IntersectOptionsAsync>(
+  options: TOptions,
+  message?: ErrorMessage,
+  pipe?: PipeAsync<IntersectInput<TOptions>>
+): IntersectSchemaAsync<TOptions>;
+
+export function intersectAsync<TOptions extends IntersectOptionsAsync>(
+  options: TOptions,
+  arg2?: PipeAsync<IntersectInput<TOptions>> | ErrorMessage,
+  arg3?: PipeAsync<IntersectInput<TOptions>>
 ): IntersectSchemaAsync<TOptions> {
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+
+  // Create and return intersect schema
   return {
     type: 'intersect',
     async: true,
     options,
     message,
+    pipe,
     async _parse(input, info) {
-      // Create issues and outputs
+      // Create typed, issues, output and outputs
+      let typed = true;
       let issues: Issues | undefined;
-      let outputs: [any, ...any] | undefined;
+      let output: any;
+      const outputs: any[] = [];
 
       // Parse schema of each option
       await Promise.all(
@@ -81,51 +122,47 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
 
                 // If necessary, abort early
                 if (info?.abortEarly) {
+                  typed = false;
                   throw null;
                 }
-
-                // Otherwise, add output to list
-              } else {
-                if (outputs) {
-                  outputs.push(result.output);
-                } else {
-                  outputs = [result.output];
-                }
               }
+
+              // If not typed, set typed to false
+              if (!result.typed) {
+                typed = false;
+              }
+
+              // Set output of option
+              outputs.push(result.output);
             }
           }
         })
       ).catch(() => null);
 
-      // If there are issues, return them
-      if (issues) {
-        return getIssues(issues);
-      }
+      // If outputs are typed, merge them
+      if (typed) {
+        // Set first output as initial output
+        output = outputs![0];
 
-      // Create output
-      let output = outputs![0];
+        // Merge outputs into one final output
+        for (let index = 1; index < outputs!.length; index++) {
+          const result = mergeOutputs(output, outputs![index]);
 
-      // Merge outputs into one final output
-      for (let index = 1; index < outputs!.length; index++) {
-        const result = mergeOutputs(output, outputs![index]);
+          // If outputs can't be merged, return issue
+          if (result.invalid) {
+            return schemaIssue(info, 'type', 'intersect', this.message, input);
+          }
 
-        // If outputs can't be merged, return issues
-        if (result.invalid) {
-          return getSchemaIssues(
-            info,
-            'type',
-            'intersect',
-            this.message,
-            input
-          );
+          // Otherwise, set merged output
+          output = result.output;
         }
 
-        // Otherwise, set merged output
-        output = result.output;
+        // Execute pipe and return typed parse result
+        return pipeResultAsync(output, this.pipe, info, 'intersect', issues);
       }
 
-      // Return merged output
-      return getOutput(output);
+      // Otherwise, return untyped parse result
+      return parseResult(false, output, issues as Issues);
     },
   };
 }

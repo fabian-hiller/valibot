@@ -1,6 +1,6 @@
 import { ISO_TIMESTAMP_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * ISO timestamp validation type.
@@ -18,9 +18,12 @@ export type IsoTimestampValidation<TInput extends string> =
   };
 
 /**
- * Creates a validation function that validates a timestamp.
+ * Creates a pipeline validation action that validates a timestamp.
  *
  * Format: yyyy-mm-ddThh:mm:ss.sssZ
+ *
+ * Hint: To support timestamps with lower or higher accuracy, the millisecond
+ * specification can be removed or contain up to 9 digits.
  *
  * Hint: The regex used cannot validate the maximum number of days based on
  * year and month. For example, "2023-06-31T00:00:00.000Z" is valid although
@@ -28,7 +31,7 @@ export type IsoTimestampValidation<TInput extends string> =
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function isoTimestamp<TInput extends string>(
   message: ErrorMessage = 'Invalid timestamp'
@@ -40,8 +43,8 @@ export function isoTimestamp<TInput extends string>(
     requirement: ISO_TIMESTAMP_REGEX,
     _parse(input) {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

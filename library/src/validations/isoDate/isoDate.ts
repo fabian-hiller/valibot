@@ -1,6 +1,6 @@
 import { ISO_DATE_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * ISO date validation type.
@@ -18,7 +18,7 @@ export type IsoDateValidation<TInput extends string> =
   };
 
 /**
- * Creates a validation function that validates a date.
+ * Creates a pipeline validation action that validates a date.
  *
  * Format: yyyy-mm-dd
  *
@@ -28,7 +28,7 @@ export type IsoDateValidation<TInput extends string> =
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function isoDate<TInput extends string>(
   message: ErrorMessage = 'Invalid date'
@@ -40,8 +40,8 @@ export function isoDate<TInput extends string>(
     requirement: ISO_DATE_REGEX,
     _parse(input) {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

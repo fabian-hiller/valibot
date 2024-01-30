@@ -1,5 +1,5 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { actionOutput } from '../../utils/index.ts';
 
 /**
  * To lower case transformation type.
@@ -12,17 +12,17 @@ export type ToLowerCaseTransformation = BaseTransformation<string> & {
 };
 
 /**
- * Creates a transformation function that converts all the alphabetic
+ * Creates a pipeline transformation action that converts all the alphabetic
  * characters in a string to lowercase.
  *
- * @returns A transformation function.
+ * @returns A transformation action.
  */
 export function toLowerCase(): ToLowerCaseTransformation {
   return {
     type: 'to_lower_case',
     async: false,
     _parse(input) {
-      return getOutput(input.toLocaleLowerCase());
+      return actionOutput(input.toLocaleLowerCase());
     },
   };
 }

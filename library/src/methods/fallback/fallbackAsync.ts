@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync, Output } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { parseResult } from '../../utils/index.ts';
 import { getFallbackAsync } from '../getFallback/index.ts';
 import type { FallbackInfo } from './types.ts';
 
@@ -21,7 +21,7 @@ export type SchemaWithFallbackAsync<
 };
 
 /**
- * Returns a fallback value when validating the passed schema failed.
+ * Returns a fallback output value when validating the passed schema failed.
  *
  * @param schema The schema to catch.
  * @param fallback The fallback value.
@@ -42,11 +42,12 @@ export function fallbackAsync<
     fallback,
     async _parse(input, info) {
       const result = await schema._parse(input, info);
-      return getOutput(
-        result.issues
-          ? await getFallbackAsync(this, { input, issues: result.issues })
-          : result.output
-      );
+      return result.issues
+        ? parseResult(
+            true,
+            await getFallbackAsync(this, { input, issues: result.issues })
+          )
+        : result;
     },
   };
 }

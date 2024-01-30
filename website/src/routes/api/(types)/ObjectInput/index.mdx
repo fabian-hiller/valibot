@@ -1,0 +1,22 @@
+---
+title: ObjectInput
+description: Object input inference type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+# ObjectInput
+
+Object input inference type.
+
+```ts
+// Create object entries
+const entries = { key: transform(string(), (input) => input.length) };
+
+// Infer entries input type
+type EntriesInput = ObjectInput<typeof entries, undefined>; // { key: string }
+
+// Infer input type with rest
+type WithRestInput = ObjectInput<typeof entries, BooleanSchema>; // { key: string } & Record<string, boolean>
+```

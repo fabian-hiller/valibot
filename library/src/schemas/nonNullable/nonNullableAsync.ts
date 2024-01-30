@@ -2,19 +2,17 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  Input,
-  Output,
 } from '../../types/index.ts';
-import { getSchemaIssues } from '../../utils/index.ts';
-import type { NonNullable } from './nonNullable.ts';
+import { schemaIssue } from '../../utils/index.ts';
+import type { NonNullableInput, NonNullableOutput } from './types.ts';
 
 /**
  * Non nullable schema async type.
  */
 export type NonNullableSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TOutput = NonNullable<Output<TWrapped>>
-> = BaseSchemaAsync<NonNullable<Input<TWrapped>>, TOutput> & {
+  TOutput = NonNullableOutput<TWrapped>
+> = BaseSchemaAsync<NonNullableInput<TWrapped>, TOutput> & {
   /**
    * The schema type.
    */
@@ -49,13 +47,7 @@ export function nonNullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
     async _parse(input, info) {
       // Allow `null` values not to pass
       if (input === null) {
-        return getSchemaIssues(
-          info,
-          'type',
-          'non_nullable',
-          this.message,
-          input
-        );
+        return schemaIssue(info, 'type', 'non_nullable', this.message, input);
       }
 
       // Return result of wrapped schema

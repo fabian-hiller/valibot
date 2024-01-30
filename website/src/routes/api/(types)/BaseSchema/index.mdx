@@ -1,0 +1,26 @@
+---
+title: BaseSchema
+description: Base schema type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# BaseSchema
+
+Base schema type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `BaseSchema` <Property {...properties.BaseSchema} />
+  - `async` <Property {...properties.async} />
+  - `_parse` {/* prettier-ignore */}<Property {...properties._parse} />
+  - `_types` {/* prettier-ignore */}<Property {...properties._types} />

@@ -2,7 +2,6 @@ import type {
   ObjectEntriesAsync,
   ObjectSchemaAsync,
 } from '../../schemas/object/index.ts';
-import { getOutput } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that passes unknown keys.
@@ -20,9 +19,10 @@ export function passthroughAsync<
     ...schema,
     async _parse(input, info) {
       const result = await schema._parse(input, info);
-      return !result.issues
-        ? getOutput({ ...(input as object), ...result.output })
-        : result;
+      if (result.typed) {
+        result.output = { ...(input as object), ...result.output };
+      }
+      return result;
     },
   };
 }

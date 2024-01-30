@@ -1,7 +1,152 @@
 ---
 title: unknown
+description: Creates an unknown schema.
+source: /schemas/unknown/unknown.ts
+contributors:
+  - fabian-hiller
+  - mwskwong
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # unknown
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/unknown/unknown.ts).
+Creates an unknown schema.
+
+> Use this schema function only if the data is truly unknown. Otherwise, use the other more specific schema functions that describe the data exactly.
+
+```ts
+const Schema = unknown(pipe);
+```
+
+## Parameters
+
+- `pipe` <Property {...properties.pipe} />
+
+### Explanation
+
+With `pipe` you can transform and validate the further details of the unknown data.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Related
+
+The following APIs can be combined with `unknwon`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>
+
+### Transformations
+
+<ApiList
+  items={[
+    'toCustom',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toTrimmed',
+    'toTrimmedEnd',
+    'toTrimmedStart',
+    'toUpperCase',
+  ]}
+/>
+
+### Validations
+
+<ApiList
+  items={[
+    'bic',
+    'bytes',
+    'creditCard',
+    'cuid2',
+    'custom',
+    'decimal',
+    'email',
+    'emoji',
+    'endsWith',
+    'excludes',
+    'finite',
+    'hash',
+    'hexadecimal',
+    'hexColor',
+    'imei',
+    'includes',
+    'integer',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'mac',
+    'mac48',
+    'mac64',
+    'maxBytes',
+    'maxLength',
+    'maxSize',
+    'maxValue',
+    'mimeType',
+    'minBytes',
+    'minLength',
+    'minSize',
+    'minValue',
+    'multipleOf',
+    'notBytes',
+    'notLength',
+    'notSize',
+    'notValue',
+    'octal',
+    'regex',
+    'safeInteger',
+    'size',
+    'startsWith',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
+  ]}
+/>

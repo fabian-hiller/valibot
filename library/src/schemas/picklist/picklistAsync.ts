@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 import type { PicklistOptions } from './types.ts';
 
 /**
@@ -31,10 +31,7 @@ export type PicklistSchemaAsync<
  *
  * @returns An async picklist schema.
  */
-export function picklistAsync<
-  TOption extends string,
-  TOptions extends PicklistOptions<TOption>
->(
+export function picklistAsync<const TOptions extends PicklistOptions>(
   options: TOptions,
   message: ErrorMessage = 'Invalid type'
 ): PicklistSchemaAsync<TOptions> {
@@ -46,11 +43,11 @@ export function picklistAsync<
     async _parse(input, info) {
       // Check type of input
       if (!this.options.includes(input as any)) {
-        return getSchemaIssues(info, 'type', 'picklist', this.message, input);
+        return schemaIssue(info, 'type', 'picklist', this.message, input);
       }
 
-      // Return inpot as output
-      return getOutput(input as TOptions[number]);
+      // Return input as output
+      return parseResult(true, input as TOptions[number]);
     },
   };
 }

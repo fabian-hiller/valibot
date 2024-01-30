@@ -1,5 +1,5 @@
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * MIME type validation type.
@@ -19,12 +19,12 @@ export type MimeTypeValidation<
 };
 
 /**
- * Creates a validation function that validates the MIME type of a file.
+ * Creates a pipeline validation action that validates the MIME type of a file.
  *
  * @param requirement The MIME types.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function mimeType<
   TInput extends Blob,
@@ -40,8 +40,8 @@ export function mimeType<
     requirement,
     _parse(input) {
       return !this.requirement.includes(input.type as `${string}/${string}`)
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

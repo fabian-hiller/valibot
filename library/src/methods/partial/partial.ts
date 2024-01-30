@@ -7,7 +7,7 @@ import {
   type OptionalSchema,
 } from '../../schemas/index.ts';
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import { getRestAndDefaultArgs } from '../../utils/index.ts';
+import { restAndDefaultArgs } from '../../utils/index.ts';
 
 /**
  * Partial object entries type.
@@ -101,7 +101,7 @@ export function partial<
   arg4?: Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, TRest>>
 ): ObjectSchema<PartialObjectEntries<TSchema['entries']>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = getRestAndDefaultArgs<
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, TRest>>
   >(arg2, arg3, arg4);

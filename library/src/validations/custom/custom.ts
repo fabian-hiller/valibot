@@ -1,5 +1,5 @@
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * Custom validation type.
@@ -16,12 +16,12 @@ export type CustomValidation<TInput> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a custom validation function.
+ * Creates a custom pipeline validation action.
  *
  * @param requirement The validation function.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function custom<TInput>(
   requirement: (input: TInput) => boolean,
@@ -34,8 +34,8 @@ export function custom<TInput>(
     requirement,
     _parse(input) {
       return !this.requirement(input)
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

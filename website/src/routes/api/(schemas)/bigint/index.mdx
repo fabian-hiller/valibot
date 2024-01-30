@@ -1,7 +1,107 @@
 ---
 title: bigint
+description: Creates a bigint schema.
+source: /schemas/bigint/bigint.ts
+contributors:
+  - fabian-hiller
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # bigint
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/bigint/bigint.ts).
+Creates a bigint schema.
+
+```ts
+// Bigint schema with an optional pipe
+const Schema = bigint(pipe);
+
+// Bigint schema with an optional message and pipe
+const Schema = bigint(message, pipe);
+```
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+- `pipe` <Property {...properties.pipe} />
+
+### Explanation
+
+With `bigint` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the bigint. If the input is not a bigint, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `bigint` can be used.
+
+### Force minimum
+
+Schema that forces a minimum bigint value.
+
+```ts
+const MinBigintSchema = bigint([toMinValue(10n)]);
+```
+
+### Validate maximum
+
+Schema that validates a maximum bigint value.
+
+```ts
+const MaxBigintSchema = bigint([maxValue(999n)]);
+```
+
+## Related
+
+The following APIs can be combined with `bigint`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>
+
+### Transformations
+
+<ApiList items={['toCustom', 'toMaxValue', 'toMinValue']} />
+
+### Validations
+
+<ApiList items={['custom', 'maxValue', 'minValue', 'notValue', 'value']} />

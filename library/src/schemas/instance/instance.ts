@@ -1,14 +1,6 @@
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import {
-  executePipe,
-  getDefaultArgs,
-  getSchemaIssues,
-} from '../../utils/index.ts';
-
-/**
- * Class enum type.
- */
-export type Class = abstract new (...args: any) => any;
+import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
+import type { Class } from './types.ts';
 
 /**
  * Instance schema type.
@@ -69,7 +61,7 @@ export function instance<TClass extends Class>(
   arg3?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
@@ -81,11 +73,11 @@ export function instance<TClass extends Class>(
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof this.class)) {
-        return getSchemaIssues(info, 'type', 'instance', this.message, input);
+        return schemaIssue(info, 'type', 'instance', this.message, input);
       }
 
       // Execute pipe and return result
-      return executePipe(input, this.pipe, info, 'instance');
+      return pipeResult(input, this.pipe, info, 'instance');
     },
   };
 }

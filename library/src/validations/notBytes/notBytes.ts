@@ -1,5 +1,5 @@
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * Not bytes validation type.
@@ -19,12 +19,13 @@ export type NotBytesValidation<
 };
 
 /**
- * Creates a validation function that validates the byte length of a string.
+ * Creates a pipeline validation action that validates the byte length of a
+ * string.
  *
  * @param requirement The byte length.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function notBytes<TInput extends string, TRequirement extends number>(
   requirement: TRequirement,
@@ -37,8 +38,8 @@ export function notBytes<TInput extends string, TRequirement extends number>(
     requirement,
     _parse(input) {
       return new TextEncoder().encode(input).length === this.requirement
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

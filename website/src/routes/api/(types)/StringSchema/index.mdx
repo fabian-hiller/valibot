@@ -1,0 +1,25 @@
+---
+title: StringSchema
+description: String schema type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# StringSchema
+
+String schema type.
+
+## Generics
+
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `StringSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />

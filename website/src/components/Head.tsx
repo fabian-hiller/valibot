@@ -12,7 +12,9 @@ export const Head = component$(() => {
 
   return (
     <head>
-      <title>{head.title}</title>
+      <title>
+        {location.url.pathname === '/' ? head.title : `${head.title} | Valibot`}
+      </title>
 
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -41,20 +43,8 @@ export const Head = component$(() => {
         <script dangerouslySetInnerHTML="document.documentElement.classList.remove('dark')" />
       )}
 
-      {[...head.meta, ...(head.frontmatter.meta || [])].map(
-        ({ key, ...props }) => (
-          <meta key={key} {...props} />
-        )
-      )}
-
-      {/* TODO: Check if we really need this code */}
-      {head.links.map(({ key, ...props }) => (
-        <link key={key} {...props} />
-      ))}
-
-      {/* TODO: Check if we really need this code */}
-      {head.styles.map(({ key, style, ...props }) => (
-        <style key={key} {...props} dangerouslySetInnerHTML={style} />
+      {head.meta.map(({ key, ...props }) => (
+        <meta key={key} {...props} />
       ))}
     </head>
   );

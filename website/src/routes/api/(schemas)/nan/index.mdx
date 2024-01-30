@@ -1,7 +1,74 @@
 ---
 title: nan
+description: Creates a NaN schema.
+source: /schemas/nan/nan.ts
+contributors:
+  - fabian-hiller
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # nan
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/nan/nan.ts).
+Creates a NaN schema.
+
+```ts
+const Schema = nan(message);
+```
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `nan` you can validate the data type of the input and if it is not `NaN`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Related
+
+The following APIs can be combined with `nan`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>

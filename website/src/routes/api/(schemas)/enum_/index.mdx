@@ -1,7 +1,96 @@
 ---
 title: enum_
+description: Creates an enum schema.
+source: /schemas/enum/enum.ts
+contributors:
+  - fabian-hiller
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # enum\_
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/enum/enum.ts).
+Creates an enum schema.
+
+```ts
+const Schema = enum_<TEnum>(enum_, message);
+```
+
+## Generics
+
+- `TEnum` <Property {...properties.TEnum} />
+
+## Parameters
+
+- `enum_` {/* prettier-ignore */}<Property {...properties.enum_} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `enum_` you can validate that the input corresponds to an enum option. If the input is invalid, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `enum_` can be used.
+
+### Direction enum
+
+Schema to validate a direction enum option.
+
+```ts
+enum Direction {
+  Left,
+  Right,
+}
+
+const DirectionSchema = enum_(Direction, 'Invalid direction');
+```
+
+## Related
+
+The following APIs can be combined with `enum_`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>

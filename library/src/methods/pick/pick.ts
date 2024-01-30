@@ -3,8 +3,13 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import { getRestAndDefaultArgs } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ObjectKeys,
+  Pipe,
+} from '../../types/index.ts';
+import { restAndDefaultArgs } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that contains only the selected keys of an existing
@@ -18,7 +23,7 @@ import { getRestAndDefaultArgs } from '../../utils/index.ts';
  */
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TSchema['entries'])[]
+  TKeys extends ObjectKeys<TSchema>
 >(
   schema: TSchema,
   keys: TKeys,
@@ -38,7 +43,7 @@ export function pick<
  */
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TSchema['entries'])[]
+  TKeys extends ObjectKeys<TSchema>
 >(
   schema: TSchema,
   keys: TKeys,
@@ -59,7 +64,7 @@ export function pick<
  */
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TSchema['entries'])[],
+  TKeys extends ObjectKeys<TSchema>,
   TRest extends BaseSchema | undefined
 >(
   schema: TSchema,
@@ -82,7 +87,7 @@ export function pick<
  */
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TSchema['entries'])[],
+  TKeys extends ObjectKeys<TSchema>,
   TRest extends BaseSchema | undefined
 >(
   schema: TSchema,
@@ -94,7 +99,7 @@ export function pick<
 
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TSchema['entries'])[],
+  TKeys extends ObjectKeys<TSchema>,
   TRest extends BaseSchema | undefined = undefined
 >(
   schema: TSchema,
@@ -109,7 +114,7 @@ export function pick<
   arg5?: Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchema<Pick<TSchema['entries'], TKeys[number]>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = getRestAndDefaultArgs<
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
   >(arg3, arg4, arg5);

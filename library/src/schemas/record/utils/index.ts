@@ -1,1 +1,1 @@
-export * from './getRecordArgs/index.ts';
+export * from './recordArgs/index.ts';

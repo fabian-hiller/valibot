@@ -1,0 +1,20 @@
+---
+title: NonOptionalOutput
+description: Non optional output inference type.
+contributors:
+  - fabian-hiller
+---
+
+# NonOptionalOutput
+
+Non optional output inference type.
+
+```ts
+// Create optional sting schema
+const OptionalStringSchema = optional(
+  transform(string(), (input) => input.length)
+);
+
+// Infer non optional string output type
+type NonOptionalStringOutput = NonOptionalOutput<typeof OptionalStringSchema>; // number
+```

@@ -1,5 +1,5 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { actionOutput } from '../../utils/index.ts';
 
 /**
  * To custom transformation type.
@@ -12,11 +12,11 @@ export type ToCustomTransformation<TInput> = BaseTransformation<TInput> & {
 };
 
 /**
- * Creates a custom transformation function.
+ * Creates a custom pipeline transformation action.
  *
  * @param action The transform action.
  *
- * @returns A transformation function.
+ * @returns A transformation action.
  */
 export function toCustom<TInput>(
   action: (input: TInput) => TInput
@@ -25,7 +25,7 @@ export function toCustom<TInput>(
     type: 'to_custom',
     async: false,
     _parse(input) {
-      return getOutput(action(input));
+      return actionOutput(action(input));
     },
   };
 }

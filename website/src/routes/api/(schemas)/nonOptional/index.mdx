@@ -1,7 +1,123 @@
 ---
 title: nonOptional
+description: Creates a non optional schema.
+source: /schemas/nonOptional/nonOptional.ts
+contributors:
+  - fabian-hiller
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # nonOptional
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/nonOptional/nonOptional.ts).
+Creates a non optional schema.
+
+> This schema function can be used to override the behavior of <Link href="../optional/">`optional`</Link>.
+
+```ts
+const Schema = nonOptional<TWrapped>(wrapped, message);
+```
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+
+## Parameters
+
+- `wrapped` <Property {...properties.wrapped} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `nonOptional` the validation of your schema will not pass `undefined` inputs. If the input is `undefined`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `nonOptional` can be used.
+
+### Non optional string
+
+Schema that does not accept `null`.
+
+```ts
+const NonOptionalStringSchema = nonOptional(optional(string()));
+```
+
+### Unwrap non optional
+
+Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `nonOptional`.
+
+```ts
+const NonOptionalNumberSchema = nonOptional(optional(number()));
+const OptionalNumberSchema = unwrap(NonOptionalNumberSchema);
+```
+
+## Related
+
+The following APIs can be combined with `nonOptional`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'recursive',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+    'unwrap',
+  ]}
+/>

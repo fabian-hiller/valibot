@@ -1,5 +1,5 @@
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * Not size validation type.
@@ -19,12 +19,13 @@ export type NotSizeValidation<
 };
 
 /**
- * Creates a validation function that validates the size of a map, set or blob.
+ * Creates a pipeline validation action that validates the size of a map, set
+ * or blob.
  *
  * @param requirement The size.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function notSize<
   TInput extends Map<any, any> | Set<any> | Blob,
@@ -40,8 +41,8 @@ export function notSize<
     requirement,
     _parse(input) {
       return input.size === this.requirement
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

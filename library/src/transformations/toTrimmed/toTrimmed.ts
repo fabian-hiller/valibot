@@ -1,5 +1,5 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { actionOutput } from '../../utils/index.ts';
 
 /**
  * To trimmed transformation type.
@@ -12,17 +12,17 @@ export type ToTrimmedTransformation = BaseTransformation<string> & {
 };
 
 /**
- * Creates a transformation function that removes the leading and trailing
- * white space and line terminator characters from a string.
+ * Creates a pipeline transformation action that removes the leading and
+ * trailing white space and line terminator characters from a string.
  *
- * @returns A transformation function.
+ * @returns A transformation action.
  */
 export function toTrimmed(): ToTrimmedTransformation {
   return {
     type: 'to_trimmed',
     async: false,
     _parse(input) {
-      return getOutput(input.trim());
+      return actionOutput(input.trim());
     },
   };
 }

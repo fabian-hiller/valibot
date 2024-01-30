@@ -2,10 +2,11 @@ import type {
   BaseSchema,
   ErrorMessage,
   Input,
-  Issues,
   Output,
+  Pipe,
+  SchemaResult,
 } from '../../types/index.ts';
-import { getSchemaIssues, getOutput, getIssues } from '../../utils/index.ts';
+import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 import type { ObjectSchema } from '../object/index.ts';
 
 /**
@@ -51,6 +52,10 @@ export type VariantSchema<
    * The error message.
    */
   message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<Output<TOptions[number]>> | undefined;
 };
 
 /**
@@ -58,7 +63,7 @@ export type VariantSchema<
  *
  * @param key The discriminator key.
  * @param options The variant options.
- * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns A variant schema.
  */
@@ -68,75 +73,132 @@ export function variant<
 >(
   key: TKey,
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  pipe?: Pipe<Output<TOptions[number]>>
+): VariantSchema<TKey, TOptions>;
+
+/**
+ * Creates a variant (aka discriminated union) schema.
+ *
+ * @param key The discriminator key.
+ * @param options The variant options.
+ * @param message The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A variant schema.
+ */
+export function variant<
+  TKey extends string,
+  TOptions extends VariantOptions<TKey>
+>(
+  key: TKey,
+  options: TOptions,
+  message?: ErrorMessage,
+  pipe?: Pipe<Output<TOptions[number]>>
+): VariantSchema<TKey, TOptions>;
+
+export function variant<
+  TKey extends string,
+  TOptions extends VariantOptions<TKey>
+>(
+  key: TKey,
+  options: TOptions,
+  arg3?: Pipe<Output<TOptions[number]>> | ErrorMessage,
+  arg4?: Pipe<Output<TOptions[number]>>
 ): VariantSchema<TKey, TOptions> {
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
+
+  // Create and return variant schema
   return {
     type: 'variant',
     async: false,
     key,
     options,
     message,
+    pipe,
     _parse(input, info) {
       // Check type of input
-      if (!input || typeof input !== 'object' || !(this.key in input)) {
-        return getSchemaIssues(info, 'type', 'variant', this.message, input);
+      if (!input || typeof input !== 'object') {
+        return schemaIssue(info, 'type', 'variant', this.message, input);
       }
 
-      // Create issues and output
-      let issues: Issues | undefined;
-      let output: [Record<string, any>] | undefined;
+      // Continue if discriminator key is included
+      if (this.key in input) {
+        // Create variable to store variant result
+        let variantResult: SchemaResult<Output<TOptions[number]>> | undefined;
 
-      // Create function to parse options recursively
-      const parseOptions = (options: VariantOptions<TKey>) => {
-        for (const schema of options) {
-          // If it is an object schema, parse discriminator key
-          if (schema.type === 'object') {
-            const result = schema.entries[this.key]._parse(
-              (input as Record<TKey, unknown>)[this.key],
-              info
-            );
+        // Create function to parse options recursively
+        const parseOptions = (options: VariantOptions<TKey>) => {
+          for (const schema of options) {
+            // If it is an object schema, parse discriminator key
+            if (schema.type === 'object') {
+              const keyResult = schema.entries[this.key]._parse(
+                (input as Record<TKey, unknown>)[this.key],
+                info
+              );
 
-            // If right variant option was found, parse it
-            if (!result.issues) {
-              const result = schema._parse(input, info);
+              // If right variant option was found, parse it
+              if (!keyResult.issues) {
+                const dataResult = schema._parse(input, info);
 
-              // If there are issues, capture them
-              if (result.issues) {
-                issues = result.issues;
+                // If there are not issues, store result and break loop
+                if (!dataResult.issues) {
+                  variantResult = dataResult;
+                  break;
+                }
 
-                // Otherwise, set output
-              } else {
-                // Note: Output is nested in array, so that also a falsy value
-                // further down can be recognized as valid value
-                output = [result.output];
+                // Otherwise, replace variant result only if necessary
+                if (
+                  !variantResult ||
+                  (!variantResult.typed && dataResult.typed)
+                ) {
+                  variantResult = dataResult;
+                }
               }
 
-              // Break loop to end execution
-              break;
-            }
+              // Otherwise, if it is a variant parse its options
+              // recursively
+            } else if (schema.type === 'variant') {
+              parseOptions(schema.options);
 
-            // Otherwise, if it is a variant parse its options
-            // recursively
-          } else if (schema.type === 'variant') {
-            parseOptions(schema.options);
-
-            // If variant option was found, break loop to end execution
-            if (issues || output) {
-              break;
+              // If variant option was found, break loop to end execution
+              if (variantResult && !variantResult.issues) {
+                break;
+              }
             }
           }
+        };
+
+        // Parse options recursively
+        parseOptions(this.options);
+
+        // If a variant result is available, process it
+        if (variantResult) {
+          // If result is typed, execute pipe
+          if (variantResult.typed) {
+            return pipeResult(
+              variantResult.output,
+              this.pipe,
+              info,
+              'variant',
+              variantResult.issues
+            );
+          }
+
+          // Otherwise, return variant result
+          return variantResult;
         }
-      };
+      }
 
-      // Parse options recursively
-      parseOptions(this.options);
-
-      // Return output or issues
-      return output
-        ? getOutput(output[0])
-        : issues
-        ? getIssues(issues)
-        : getSchemaIssues(info, 'type', 'variant', this.message, input);
+      // If discriminator key is invalid, return issue
+      return schemaIssue(info, 'type', 'variant', this.message, input, [
+        {
+          type: 'object',
+          input: input as Record<string, unknown>,
+          key: this.key,
+          value: undefined,
+        },
+      ]);
     },
   };
 }

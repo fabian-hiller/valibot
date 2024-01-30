@@ -1,7 +1,129 @@
 ---
 title: fallback
+description: Returns a fallback output value when validating the passed schema failed.
+source: /methods/fallback/fallback.ts
+contributors:
+  - fabian-hiller
+  - sqmasep
+  - FlorianDevPhynix
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # fallback
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/fallback/fallback.ts).
+Returns a fallback output value when validating the passed schema failed.
+
+```ts
+const Schema = fallback<TSchema, TFallback>(schema, fallback);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFallback` <Property {...properties.TFallback} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `fallback` <Property {...properties.fallback} />
+
+### Explanation
+
+`fallback` allows you to define a fallback value for the output that will be used if the validation of the input fails. This means that no issues will be returned when using `fallback` and the schema will always return an output.
+
+> If you only want to set a default value for `null` or `undefined` inputs, you should use <Link href="../optional/">`optional`</Link>, <Link href="../nullable/">`nullable`</Link> or <Link href="../nullish/">`nullish`</Link> instead.
+
+> Warning: The fallback value is not validated. Make sure that the fallback value matches your schema.
+
+## Returns
+
+- `Schema` <Property {...properties.SchemaWithFallback} />
+
+## Examples
+
+The following examples show how `fallback` can be used.
+
+### Fallback string schema
+
+Schema that will always return a string output.
+
+```ts
+const FallbackStringSchema = fallback(string(), "I'm the fallback!");
+```
+
+### Fallback date schema
+
+Schema that will always return a [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) output.
+
+> By using a function as the `fallback` parameter, the schema will return a new [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance each time the input does not match the schema.
+
+```ts
+const FallbackDateSchema = fallback(date(), () => new Date());
+```
+
+## Related
+
+The following APIs can be combined with `fallback`.
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'recursive',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>

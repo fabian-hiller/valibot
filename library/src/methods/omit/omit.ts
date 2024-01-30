@@ -3,9 +3,13 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import { getRestAndDefaultArgs } from '../../utils/index.ts';
-import type { ObjectKeys } from './types.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ObjectKeys,
+  Pipe,
+} from '../../types/index.ts';
+import { restAndDefaultArgs } from '../../utils/index.ts';
 
 /**
  * Creates an object schema that contains not the selected keys of an existing
@@ -110,7 +114,7 @@ export function omit<
   arg5?: Pipe<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchema<Omit<TSchema['entries'], TKeys[number]>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = getRestAndDefaultArgs<
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
   >(arg3, arg4, arg5);

@@ -1,6 +1,6 @@
 import { ULID_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * ULID validation type.
@@ -17,11 +17,11 @@ export type UlidValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates a [ULID](https://github.com/ulid/spec).
+ * Creates a pipeline validation action that validates a [ULID](https://github.com/ulid/spec).
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function ulid<TInput extends string>(
   message: ErrorMessage = 'Invalid ULID'
@@ -33,8 +33,8 @@ export function ulid<TInput extends string>(
     requirement: ULID_REGEX,
     _parse(input) {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

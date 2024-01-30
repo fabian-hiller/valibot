@@ -5,7 +5,7 @@ import type {
   Input,
   Output,
 } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { parseResult } from '../../utils/index.ts';
 
 /**
  * Nullish schema async type.
@@ -16,7 +16,9 @@ export type NullishSchemaAsync<
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined = undefined,
-  TOutput = Awaited<TDefault> extends Input<TWrapped>
+  TOutput = TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
     ? Output<TWrapped>
     : Output<TWrapped> | null | undefined
 > = BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> & {
@@ -55,7 +57,7 @@ export function nullishAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
  */
 export function nullishAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined
@@ -66,7 +68,7 @@ export function nullishAsync<
 
 export function nullishAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined = undefined
@@ -84,7 +86,7 @@ export function nullishAsync<
       if (input === null || input === undefined) {
         const override = await getDefaultAsync(this);
         if (override === undefined) {
-          return getOutput(input);
+          return parseResult(true, input);
         }
         input = override;
       }

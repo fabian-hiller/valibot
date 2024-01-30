@@ -1,5 +1,5 @@
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * Includes validation type.
@@ -19,12 +19,13 @@ export type IncludesValidation<
 };
 
 /**
- * Creates a validation function that validates the content of a string or array.
+ * Creates a pipeline validation action that validates the content of a string
+ * or array.
  *
  * @param requirement The content to be included.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function includes<
   TInput extends string | any[],
@@ -40,8 +41,8 @@ export function includes<
     requirement,
     _parse(input) {
       return !input.includes(requirement)
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

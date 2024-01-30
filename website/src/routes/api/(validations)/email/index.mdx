@@ -1,7 +1,58 @@
 ---
 title: email
+description: Creates a pipeline validation action that validates an email.
+source: /validations/email/email.ts
+contributors:
+  - fabian-hiller
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # email
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/email/email.ts).
+Creates a pipeline validation action that validates an email.
+
+```ts
+const Validation = email<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `email` you can validate the formatting of a string. If the input is not an email, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `email` can be used.
+
+### Email schema
+
+Schema to validate an email.
+
+```ts
+const EmailSchema = string([
+  minLength(1, 'Please enter your email.'),
+  email('The email is badly formatted.'),
+  maxLength(30, 'Your email is too long.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `email`.
+
+### Schemas
+
+<ApiList items={['any', 'string', 'unknown']} />

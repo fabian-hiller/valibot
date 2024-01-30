@@ -1,7 +1,131 @@
 ---
 title: set
+description: Creates a set schema.
+source: /schemas/set/set.ts
+contributors:
+  - fabian-hiller
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # set
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/set/set.ts).
+Creates a set schema.
+
+```ts
+// Set schema with an optional pipe
+const Schema = set<TValue>(value, pipe);
+
+// Set schema with an optional message and pipe
+const Schema = set<TValue>(value, message, pipe);
+```
+
+## Generics
+
+- `TValue` <Property {...properties.TValue} />
+
+## Parameters
+
+- `value` <Property {...properties.value} />
+- `message` <Property {...properties.message} />
+- `pipe` <Property {...properties.pipe} />
+
+### Explanation
+
+With `set` you can validate the data type of the input and whether the content matches `value`. With `pipe` you can transform and validate the further details of the set. If the input is not a set, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `set` can be used.
+
+### String set schema
+
+Schema to validate a set with string values.
+
+```ts
+const StringSetSchema = set(string());
+```
+
+### Object set schema
+
+Schema to validate a set with object values.
+
+```ts
+const ObjectSetSchema = set(object({ key: string() }));
+```
+
+## Related
+
+The following APIs can be combined with `set`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'recursive',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>
+
+### Transformations
+
+<ApiList items={['toCustom']} />
+
+### Validations
+
+<ApiList items={['custom', 'maxSize', 'minSize', 'notSize', 'size']} />

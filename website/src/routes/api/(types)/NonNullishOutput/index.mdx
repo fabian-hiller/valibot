@@ -1,0 +1,20 @@
+---
+title: NonNullishOutput
+description: Non nullish output inference type.
+contributors:
+  - fabian-hiller
+---
+
+# NonNullishOutput
+
+Non nullish output inference type.
+
+```ts
+// Create nullish sting schema
+const NullishStringSchema = nullish(
+  transform(string(), (input) => input.length)
+);
+
+// Infer non nullish string output type
+type NonNullishStringOutput = NonNullishOutput<typeof NullishStringSchema>; // number
+```

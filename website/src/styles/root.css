@@ -10,6 +10,11 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  /* Reset appearance */
+  [type='search']::-webkit-search-cancel-button {
+    @apply hidden;
+  }
+
   /* Disable transitions */
   .disable-transitions,
   .disable-transitions * {
@@ -22,7 +27,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url(../fonts/lexend-400.woff2) format('woff2');
+    src: url(/fonts/lexend-400.woff2) format('woff2');
   }
 
   /* Lexend 500 */
@@ -31,7 +36,7 @@
     font-style: normal;
     font-weight: 500;
     font-display: swap;
-    src: url(../fonts/lexend-500.woff2) format('woff2');
+    src: url(/fonts/lexend-500.woff2) format('woff2');
   }
 
   /* Lexend Exa 500 */
@@ -40,7 +45,7 @@
     font-style: normal;
     font-weight: 500;
     font-display: swap;
-    src: url(../fonts/lexend-exa-500.woff2) format('woff2');
+    src: url(/fonts/lexend-exa-500.woff2) format('woff2');
   }
 
   /* Typography */

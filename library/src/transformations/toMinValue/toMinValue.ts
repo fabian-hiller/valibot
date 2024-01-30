@@ -1,5 +1,5 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { actionOutput } from '../../utils/index.ts';
 
 /**
  * To min value transformation type.
@@ -19,12 +19,12 @@ export type ToMinValueTransformation<
 };
 
 /**
- * Creates a transformation function that sets a string, number or date to a
- * minimum value.
+ * Creates a pipeline transformation action that sets a string, number or date
+ * to a minimum value.
  *
  * @param requirement The minimum value.
  *
- * @returns A transformation function.
+ * @returns A transformation action.
  */
 export function toMinValue<
   TInput extends string | number | bigint | Date,
@@ -35,7 +35,7 @@ export function toMinValue<
     async: false,
     requirement,
     _parse(input) {
-      return getOutput(input < this.requirement ? this.requirement : input);
+      return actionOutput(input < this.requirement ? this.requirement : input);
     },
   };
 }

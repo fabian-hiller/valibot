@@ -1,0 +1,29 @@
+---
+title: ObjectSchema
+description: Object schema type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# ObjectSchema
+
+Object schema type.
+
+## Generics
+
+- `TEntries` <Property {...properties.TEntries} />
+- `TRest` <Property {...properties.TRest} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `ObjectSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `entries` <Property {...properties.entries} />
+  - `rest` <Property {...properties.rest} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />

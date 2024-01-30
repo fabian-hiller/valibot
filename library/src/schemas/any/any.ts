@@ -1,5 +1,5 @@
 import type { BaseSchema, Pipe } from '../../types/index.ts';
-import { executePipe } from '../../utils/index.ts';
+import { pipeResult } from '../../utils/index.ts';
 
 /**
  * Any schema type.
@@ -16,11 +16,11 @@ export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
 };
 
 /**
- * Creates a any schema.
+ * Creates an any schema.
  *
  * @param pipe A validation and transformation pipe.
  *
- * @returns A any schema.
+ * @returns An any schema.
  */
 export function any(pipe?: Pipe<any>): AnySchema {
   return {
@@ -28,7 +28,7 @@ export function any(pipe?: Pipe<any>): AnySchema {
     async: false,
     pipe,
     _parse(input, info) {
-      return executePipe(input, this.pipe, info, 'any');
+      return pipeResult(input, this.pipe, info, 'any');
     },
   };
 }

@@ -2,9 +2,64 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.27.1 (January 28, 2023)
+
+- Fix missing file extension for Deno (pull request #387)
+
+## v0.27.0 (January 24, 2023)
+
+- Remove `NonNullable`, `NonNullish` and `NonOptional` type
+- Add `NonNullableInput`, `NonNullableOutput`, `NonNullishInput`, `NonNullishOutput`, `NonOptionalInput` and `NonOptionalOutput` type
+- Improve type signature of `omit`, `omitAsync`, `pick` and `pickAsync` schema to also allow read-only object keys (issue #380)
+- Fix type of `pipe` argument at `intersect` and `intersectAsync` schema
+
+## v0.26.0 (January 16, 2023)
+
+- Improve performance of `enum_` and `enumAsync` schema by caching values
+- Change ISO timestamp regex to support timestamps with lower and higher millisecond accuracy (pull request #353)
+- Change issue handling of `union`, `unionAsync`, `variant` and `variantAsync` schema to improve developer experience
+- Fix bug in `getDefaults`, `getDefaultsAsync`, `getFallbacks` and `getFallbacksAsync` schema for falsy but not `undefined` values (issue #356)
+- Fix type of `pipe` argument at `union`, `unionAsync`, `variant` and `variantAsync` schema
+- Fix bug that broke pipeline execution in `union`, `unionAsync`, `variant` and `variantAsync` schema (issue #364)
+- Fix typo in type name of `startsWith` validation action (pull request #375)
+
+## v0.25.0 (December 26, 2023)
+
+- Add `creditCard`, `decimal`, `hash`, `hexadecimal`, `hexColor` and `octal` pipeline validation action (pull request #292, #304, #307, #308, #309)
+- Add `pipe` parameter to `intersect`, `intersectAsync`, `union`, `unionAsync`, `variant` and `variantAsync` schema (discussion #297)
+- Add support for multiple variant options with same discriminator key to `variant` and `variantAsync` schema (issue #310)
+- Add path to issues if discriminator key of `variant` and `variantAsync` schema is missing (issue #235, #303)
+- Change `PicklistOptions` type and generics of `picklist` and `picklistAsync` schema
+
+## v0.24.1 (December 11, 2023)
+
+- Fix output type of optional `object` and `objectAsync` entries with default value (issue #286)
+- Fix output type of `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional` and `optionalAsync` schema with default value (issue #286)
+
+## v0.24.0 (December 10, 2023)
+
+- Add support for `special` schema as key of `record` schema (issue #291)
+- Add support for `special` and `specialAsync` schema as key of `recordAsync` schema (issue #291)
+- Fix input and output type of optional `object` and `objectAsync` entries with default value (issue #286)
+
+## v0.23.0 (December 08, 2023)
+
+- Add `bic` validation function (pull request #284)
+- Add `mac`, `mac48` and `mac64` validation function (pull request #270)
+- Change `PicklistOptions`, `UnionOptions` and `UnionOptionsAsync` type from tuple to array (issue #279)
+- Change `IntersectOptions`, `IntersectOptionsAsync`, `UnionOptions` and `UnionOptionsAsync` type to support readonly values (issue #279)
+- Fix optional keys of `ObjectInput` and `ObjectOutput` type (issue #242)
+
+## v0.22.0 (December 03, 2023)
 
 - Add support for boolean to `notValue` validation (pull request #261)
+- Add `.typed` to schema validation result and execute pipeline of complex schemas if output is typed (issue #76, #145)
+- Add `forward` method that forwards issues of pipelines to nested fields (issue #76, #145)
+- Add `skipPipe` option to `is` type guard method (pull request #166)
+- Change return type of `safeParse` and `safeParseAsync` method
+- Rename and change util functions and refactor codebase
+- Fix `RecordInput` and `RecordOuput` type when using `unionAsync` as key
+- Fix output type for `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional` and `optionalAsync` when using a default value (issue #271)
 
 ## v0.21.0 (November 19, 2023)
 

@@ -1,0 +1,20 @@
+---
+title: UntypedSchemaResult
+description: Untyped parse result type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# UntypedSchemaResult
+
+Untyped parse result type.
+
+## Definition
+
+- `UntypedSchemaResult` <Property type="object"/>
+  - `typed` <Property {...properties.typed} />
+  - `output` <Property type="unknown" />
+  - `issues` <Property {...properties.issues} />

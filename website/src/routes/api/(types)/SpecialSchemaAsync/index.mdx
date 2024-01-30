@@ -1,0 +1,26 @@
+---
+title: SpecialSchemaAsync
+description: Special schema async type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# SpecialSchemaAsync
+
+Special schema async type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `SpecialSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `check` <Property {...properties.check} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />

@@ -5,7 +5,7 @@ import type {
   Input,
   Output,
 } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { parseResult } from '../../utils/index.ts';
 
 /**
  * Optional schema async type.
@@ -16,7 +16,9 @@ export type OptionalSchemaAsync<
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined = undefined,
-  TOutput = Awaited<TDefault> extends Input<TWrapped>
+  TOutput = TDefault extends
+    | Input<TWrapped>
+    | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
     ? Output<TWrapped>
     : Output<TWrapped> | undefined
 > = BaseSchemaAsync<Input<TWrapped> | undefined, TOutput> & {
@@ -55,7 +57,7 @@ export function optionalAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
  */
 export function optionalAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined
@@ -66,7 +68,7 @@ export function optionalAsync<
 
 export function optionalAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
     | undefined = undefined
@@ -84,7 +86,7 @@ export function optionalAsync<
       if (input === undefined) {
         const override = await getDefaultAsync(this);
         if (override === undefined) {
-          return getOutput(input);
+          return parseResult(true, input);
         }
         input = override;
       }

@@ -8,29 +8,42 @@ import type { ParseInfo } from './schema.ts';
 export type PipeInfo = ParseInfo & Pick<Issue, 'reason'>;
 
 /**
- * Pipe result type.
+ * Valid action result type.
  */
-export type PipeResult<TOutput> =
-  | {
-      /**
-       * The pipe output.
-       */
-      output: TOutput;
-      /**
-       * The pipe issues.
-       */
-      issues?: undefined;
-    }
-  | {
-      /**
-       * The pipe output.
-       */
-      output?: undefined;
-      /**
-       * The pipe issues.
-       */
-      issues: Pick<Issue, 'validation' | 'message' | 'input' | 'requirement'>[];
-    };
+export type ValidActionResult<TOutput> = {
+  /**
+   * The pipe output.
+   */
+  output: TOutput;
+  /**
+   * The pipe issues.
+   */
+  issues?: undefined;
+};
+
+/**
+ * Invalid action result type.
+ */
+export type InvalidActionResult = {
+  /**
+   * The pipe output.
+   */
+  output?: undefined;
+  /**
+   * The pipe issues.
+   */
+  issues: Pick<
+    Issue,
+    'validation' | 'message' | 'input' | 'requirement' | 'path'
+  >[];
+};
+
+/**
+ * Pipe action result type.
+ */
+export type PipeActionResult<TOutput> =
+  | ValidActionResult<TOutput>
+  | InvalidActionResult;
 
 /**
  * Base validation type.
@@ -53,7 +66,7 @@ export type BaseValidation<TInput = any> = {
    *
    * @internal
    */
-  _parse(input: TInput): PipeResult<TInput>;
+  _parse(input: TInput): PipeActionResult<TInput>;
 };
 
 /**
@@ -77,7 +90,7 @@ export type BaseValidationAsync<TInput = any> = {
    *
    * @internal
    */
-  _parse(input: TInput): Promise<PipeResult<TInput>>;
+  _parse(input: TInput): Promise<PipeActionResult<TInput>>;
 };
 
 /**
@@ -97,7 +110,7 @@ export type BaseTransformation<TInput = any> = {
    *
    * @internal
    */
-  _parse(input: TInput): PipeResult<TInput>;
+  _parse(input: TInput): PipeActionResult<TInput>;
 };
 
 /**
@@ -117,7 +130,7 @@ export type BaseTransformationAsync<TInput = any> = {
    *
    * @internal
    */
-  _parse(input: TInput): Promise<PipeResult<TInput>>;
+  _parse(input: TInput): Promise<PipeActionResult<TInput>>;
 };
 
 /**

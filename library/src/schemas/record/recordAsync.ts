@@ -6,26 +6,29 @@ import type {
   PipeAsync,
 } from '../../types/index.ts';
 import {
-  executePipeAsync,
-  getIssues,
-  getSchemaIssues,
+  parseResult,
+  pipeResultAsync,
+  schemaIssue,
 } from '../../utils/index.ts';
 import type { EnumSchema, EnumSchemaAsync } from '../enum/index.ts';
 import type { PicklistSchema, PicklistSchemaAsync } from '../picklist/index.ts';
+import type { SpecialSchema, SpecialSchemaAsync } from '../special/index.ts';
 import type { StringSchema, StringSchemaAsync } from '../string/index.ts';
 import type { UnionSchema, UnionSchemaAsync } from '../union/index.ts';
 import type { RecordInput, RecordOutput, RecordPathItem } from './types.ts';
-import { getRecordArgs } from './utils/index.ts';
+import { recordArgs } from './utils/index.ts';
 import { BLOCKED_KEYS } from './values.ts';
 
 /**
- * Record key type.
+ * Record key async type.
  */
 export type RecordKeyAsync =
   | EnumSchema<any, string | number | symbol>
   | EnumSchemaAsync<any, string | number | symbol>
   | PicklistSchema<any, string | number | symbol>
   | PicklistSchemaAsync<any, string | number | symbol>
+  | SpecialSchema<any, string | number | symbol>
+  | SpecialSchemaAsync<any, string | number | symbol>
   | StringSchema<string | number | symbol>
   | StringSchemaAsync<string | number | symbol>
   | UnionSchema<any, string | number | symbol>
@@ -137,7 +140,7 @@ export function recordAsync<
   arg4?: PipeAsync<RecordOutput<TKey, TValue>>
 ): RecordSchemaAsync<TKey, TValue> {
   // Get key, value, message and pipe argument
-  const [key, value, message = 'Invalid type', pipe] = getRecordArgs<
+  const [key, value, message = 'Invalid type', pipe] = recordArgs<
     TKey,
     TValue,
     PipeAsync<RecordOutput<TKey, TValue>>
@@ -154,10 +157,11 @@ export function recordAsync<
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return getSchemaIssues(info, 'type', 'record', this.message, input);
+        return schemaIssue(info, 'type', 'record', this.message, input);
       }
 
-      // Create issues and output
+      // Create typed, issues and output
+      let typed = true;
       let issues: Issues | undefined;
       const output: Record<string | number | symbol, any> = {};
 
@@ -220,33 +224,41 @@ export function recordAsync<
                       if (info?.abortEarly) {
                         throw null;
                       }
-
-                      // Otherwise, return parse result
-                    } else {
-                      return result;
                     }
+
+                    // Return parse result
+                    return result;
                   }
                 }
               })
             ).catch(() => []);
 
-            // Set entry if there are no issues
-            if (keyResult && valueResult) {
+            // If not typed, set typed to false
+            if (!keyResult?.typed || !valueResult?.typed) {
+              typed = false;
+            }
+
+            // If key is typed, set output of entry
+            if (keyResult?.typed && valueResult) {
               output[keyResult.output] = valueResult.output;
             }
           }
         })
       );
 
-      // Return issues or pipe result
-      return issues
-        ? getIssues(issues)
-        : executePipeAsync(
-            output as RecordOutput<TKey, TValue>,
-            this.pipe,
-            info,
-            'record'
-          );
+      // If output is typed, execute pipe
+      if (typed) {
+        return pipeResultAsync(
+          output as RecordOutput<TKey, TValue>,
+          this.pipe,
+          info,
+          'record',
+          issues
+        );
+      }
+
+      // Otherwise, return untyped parse result
+      return parseResult(false, output, issues as Issues);
     },
   };
 }

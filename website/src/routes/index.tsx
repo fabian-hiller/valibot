@@ -11,15 +11,40 @@ import { ActionButton, ButtonGroup, Expandable, TextLink } from '~/components';
 import { PlusIcon } from '~/icons';
 import { blurredCodeDarkUrl, blurredCodeLightUrl } from '~/images';
 
-export const head: DocumentHead = {
-  title: 'Valibot: The modular and type safe schema library',
-  meta: [
-    {
-      name: 'description',
-      content:
-        'Validate unknown data with Valibot, the open source schema library with bundle size, type safety and developer experience in mind.',
-    },
-  ],
+export const head: DocumentHead = ({ url }) => {
+  const title = 'Valibot: The modular and type safe schema library';
+  const description =
+    'Validate unknown data with Valibot, the open source schema library with bundle size, type safety and developer experience in mind.';
+
+  return {
+    title,
+    meta: [
+      {
+        name: 'description',
+        content: description,
+      },
+      {
+        name: 'og:type',
+        content: 'website',
+      },
+      {
+        name: 'og:url',
+        content: url.href,
+      },
+      {
+        name: 'og:title',
+        content: title,
+      },
+      {
+        name: 'og:description',
+        content: description,
+      },
+      {
+        name: 'og:image',
+        content: `${url.origin}/og-image`,
+      },
+    ],
+  };
 };
 
 /**
@@ -65,13 +90,13 @@ export default component$(() => {
             variant="primary"
             label="Get started"
             type="link"
-            href="/guides"
+            href="/guides/"
           />
           <ActionButton
             variant="secondary"
             label="API reference"
             type="link"
-            href="/api"
+            href="/api/"
           />
         </ButtonGroup>
       </section>
@@ -196,12 +221,13 @@ export default component$(() => {
               heading: 'What exactly does Valibot do?',
               Text: () => (
                 <>
-                  The core function of Valibot is to create a schema. A schema
-                  can be compared to a type definition in TypeScript. The big
-                  difference is that TypeScript types are "not executed" and are
-                  more or less a DX feature. A schema on the other hand, apart
-                  from the inferred type definition, can also be executed at
-                  runtime to guarantee type safety of unknown data.
+                  The core function of Valibot is to create a schema that
+                  describes a structured data set. A schema can be compared to a
+                  type definition in TypeScript. The big difference is that
+                  TypeScript types are "not executed" and are more or less a DX
+                  feature. A schema on the other hand, apart from the inferred
+                  type definition, can also be executed at runtime to guarantee
+                  type safety of unknown data.
                 </>
               ),
             },
@@ -282,13 +308,13 @@ export default component$(() => {
           variant="primary"
           label="Get started"
           type="link"
-          href="/guides"
+          href="/guides/"
         />
         <ActionButton
           variant="secondary"
           label="API reference"
           type="link"
-          href="/api"
+          href="/api/"
         />
       </ButtonGroup>
     </main>

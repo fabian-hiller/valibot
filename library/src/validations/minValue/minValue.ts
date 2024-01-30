@@ -1,5 +1,5 @@
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * Min value validation type.
@@ -19,12 +19,13 @@ export type MinValueValidation<
 };
 
 /**
- * Creates a validation function that validates the value of a string, number or date.
+ * Creates a pipeline validation action that validates the value of a string,
+ * number or date.
  *
  * @param requirement The minimum value.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function minValue<
   TInput extends string | number | bigint | boolean | Date,
@@ -40,8 +41,8 @@ export function minValue<
     requirement,
     _parse(input) {
       return input < this.requirement
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }

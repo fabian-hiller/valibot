@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { getSchemaIssues, getOutput } from '../../utils/index.ts';
+import { parseResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Symbol schema type.
@@ -30,11 +30,11 @@ export function symbol(message: ErrorMessage = 'Invalid type'): SymbolSchema {
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'symbol') {
-        return getSchemaIssues(info, 'type', 'symbol', this.message, input);
+        return schemaIssue(info, 'type', 'symbol', this.message, input);
       }
 
-      // Return input as output
-      return getOutput(input);
+      // Return parse result
+      return parseResult(true, input);
     },
   };
 }

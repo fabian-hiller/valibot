@@ -3,10 +3,15 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   Input,
-  Issues,
   Output,
+  PipeAsync,
+  SchemaResult,
 } from '../../types/index.ts';
-import { getSchemaIssues, getOutput, getIssues } from '../../utils/index.ts';
+import {
+  defaultArgs,
+  pipeResultAsync,
+  schemaIssue,
+} from '../../utils/index.ts';
 import type { ObjectSchema, ObjectSchemaAsync } from '../object/index.ts';
 
 /**
@@ -53,6 +58,10 @@ export type VariantSchemaAsync<
    * The error message.
    */
   message: ErrorMessage;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: PipeAsync<Input<TOptions[number]>> | undefined;
 };
 
 /**
@@ -60,7 +69,7 @@ export type VariantSchemaAsync<
  *
  * @param key The discriminator key.
  * @param options The variant options.
- * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An async variant schema.
  */
@@ -70,75 +79,132 @@ export function variantAsync<
 >(
   key: TKey,
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  pipe?: PipeAsync<Input<TOptions[number]>>
+): VariantSchemaAsync<TKey, TOptions>;
+
+/**
+ * Creates an async variant (aka discriminated union) schema.
+ *
+ * @param key The discriminator key.
+ * @param options The variant options.
+ * @param message The error message.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An async variant schema.
+ */
+export function variantAsync<
+  TKey extends string,
+  TOptions extends VariantOptionsAsync<TKey>
+>(
+  key: TKey,
+  options: TOptions,
+  message?: ErrorMessage,
+  pipe?: PipeAsync<Input<TOptions[number]>>
+): VariantSchemaAsync<TKey, TOptions>;
+
+export function variantAsync<
+  TKey extends string,
+  TOptions extends VariantOptionsAsync<TKey>
+>(
+  key: TKey,
+  options: TOptions,
+  arg3?: PipeAsync<Input<TOptions[number]>> | ErrorMessage,
+  arg4?: PipeAsync<Input<TOptions[number]>>
 ): VariantSchemaAsync<TKey, TOptions> {
+  // Get message and pipe argument
+  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
+
+  // Create and return variant schema
   return {
     type: 'variant',
     async: true,
     key,
     options,
     message,
+    pipe,
     async _parse(input, info) {
       // Check type of input
-      if (!input || typeof input !== 'object' || !(this.key in input)) {
-        return getSchemaIssues(info, 'type', 'variant', this.message, input);
+      if (!input || typeof input !== 'object') {
+        return schemaIssue(info, 'type', 'variant', this.message, input);
       }
 
-      // Create issues and output
-      let issues: Issues | undefined;
-      let output: [Record<string, any>] | undefined;
+      // Continue if discriminator key is included
+      if (this.key in input) {
+        // Create variable to store variant result
+        let variantResult: SchemaResult<Output<TOptions[number]>> | undefined;
 
-      // Create function to parse options recursively
-      const parseOptions = async (options: VariantOptionsAsync<TKey>) => {
-        for (const schema of options) {
-          // If it is an object schema, parse discriminator key
-          if (schema.type === 'object') {
-            const result = await schema.entries[this.key]._parse(
-              (input as Record<TKey, unknown>)[this.key],
-              info
-            );
+        // Create function to parse options recursively
+        const parseOptions = async (options: VariantOptionsAsync<TKey>) => {
+          for (const schema of options) {
+            // If it is an object schema, parse discriminator key
+            if (schema.type === 'object') {
+              const keyResult = await schema.entries[this.key]._parse(
+                (input as Record<TKey, unknown>)[this.key],
+                info
+              );
 
-            // If right variant option was found, parse it
-            if (!result.issues) {
-              const result = await schema._parse(input, info);
+              // If right variant option was found, parse it
+              if (!keyResult.issues) {
+                const dataResult = await schema._parse(input, info);
 
-              // If there are issues, capture them
-              if (result.issues) {
-                issues = result.issues;
+                // If there are not issues, store result and break loop
+                if (!dataResult.issues) {
+                  variantResult = dataResult;
+                  break;
+                }
 
-                // Otherwise, set output
-              } else {
-                // Note: Output is nested in array, so that also a falsy value
-                // further down can be recognized as valid value
-                output = [result.output];
+                // Otherwise, replace variant result only if necessary
+                if (
+                  !variantResult ||
+                  (!variantResult.typed && dataResult.typed)
+                ) {
+                  variantResult = dataResult;
+                }
               }
 
-              // Break loop to end execution
-              break;
-            }
+              // Otherwise, if it is a variant parse its options
+              // recursively
+            } else if (schema.type === 'variant') {
+              await parseOptions(schema.options);
 
-            // Otherwise, if it is a variant parse its options
-            // recursively
-          } else if (schema.type === 'variant') {
-            await parseOptions(schema.options);
-
-            // If variant option was found, break loop to end execution
-            if (issues || output) {
-              break;
+              // If variant option was found, break loop to end execution
+              if (variantResult && !variantResult.issues) {
+                break;
+              }
             }
           }
+        };
+
+        // Parse options recursively
+        await parseOptions(this.options);
+
+        // If a variant result is available, process it
+        if (variantResult) {
+          // If result is typed, execute pipe
+          if (variantResult.typed) {
+            return pipeResultAsync(
+              variantResult.output,
+              this.pipe,
+              info,
+              'variant',
+              variantResult.issues
+            );
+          }
+
+          // Otherwise, return variant result
+          return variantResult;
         }
-      };
+      }
 
-      // Parse options recursively
-      await parseOptions(this.options);
-
-      // Return output or issues
-      return output
-        ? getOutput(output[0])
-        : issues
-        ? getIssues(issues)
-        : getSchemaIssues(info, 'type', 'variant', this.message, input);
+      // If discriminator key is invalid, return issue
+      return schemaIssue(info, 'type', 'variant', this.message, input, [
+        {
+          type: 'object',
+          input: input as Record<string, unknown>,
+          key: this.key,
+          value: undefined,
+        },
+      ]);
     },
   };
 }

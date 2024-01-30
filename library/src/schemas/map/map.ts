@@ -6,10 +6,10 @@ import type {
   Pipe,
 } from '../../types/index.ts';
 import {
-  executePipe,
-  getDefaultArgs,
-  getIssues,
-  getSchemaIssues,
+  defaultArgs,
+  parseResult,
+  pipeResult,
+  schemaIssue,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 
@@ -82,7 +82,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
   arg4?: Pipe<MapOutput<TKey, TValue>>
 ): MapSchema<TKey, TValue> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = getDefaultArgs(arg3, arg4);
+  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
 
   // Create and return map schema
   return {
@@ -95,10 +95,11 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {
-        return getSchemaIssues(info, 'type', 'map', this.message, input);
+        return schemaIssue(info, 'type', 'map', this.message, input);
       }
 
-      // Create issues and output
+      // Create typed, issues and output
+      let typed = true;
       let issues: Issues | undefined;
       const output: Map<Output<TKey>, Output<TValue>> = new Map();
 
@@ -140,6 +141,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
 
           // If necessary, abort early
           if (info?.abortEarly) {
+            typed = false;
             break;
           }
         }
@@ -172,20 +174,27 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
 
           // If necessary, abort early
           if (info?.abortEarly) {
+            typed = false;
             break;
           }
         }
 
-        // Set entry if there are no issues
-        if (!keyResult.issues && !valueResult.issues) {
-          output.set(keyResult.output, valueResult.output);
+        // If not typed, set typed to false
+        if (!keyResult.typed || !valueResult.typed) {
+          typed = false;
         }
+
+        // Set output of entry
+        output.set(keyResult.output, valueResult.output);
       }
 
-      // Return issues or pipe result
-      return issues
-        ? getIssues(issues)
-        : executePipe(output, this.pipe, info, 'map');
+      // If output is typed, execute pipe
+      if (typed) {
+        return pipeResult(output, this.pipe, info, 'map', issues);
+      }
+
+      // Otherwise, return untyped parse result
+      return parseResult(false, output, issues as Issues);
     },
   };
 }

@@ -1,6 +1,6 @@
 import { getDefault } from '../../methods/index.ts';
 import type { BaseSchema, Input, Output } from '../../types/index.ts';
-import { getOutput } from '../../utils/index.ts';
+import { parseResult } from '../../utils/index.ts';
 
 /**
  * Nullable schema type.
@@ -11,7 +11,7 @@ export type NullableSchema<
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
     | undefined = undefined,
-  TOutput = TDefault extends Input<TWrapped>
+  TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
     : Output<TWrapped> | null
 > = BaseSchema<Input<TWrapped> | null, TOutput> & {
@@ -50,7 +50,7 @@ export function nullable<TWrapped extends BaseSchema>(
  */
 export function nullable<
   TWrapped extends BaseSchema,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
     | undefined
@@ -58,7 +58,7 @@ export function nullable<
 
 export function nullable<
   TWrapped extends BaseSchema,
-  const TDefault extends
+  TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
     | undefined = undefined
@@ -73,7 +73,7 @@ export function nullable<
       if (input === null) {
         const override = getDefault(this);
         if (override === undefined) {
-          return getOutput(input);
+          return parseResult(true, input);
         }
         input = override;
       }

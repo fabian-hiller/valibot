@@ -8,29 +8,47 @@ export type ParseInfo = Partial<
 >;
 
 /**
- * Parse result type.
+ * Typed schema result type.
  */
-export type _ParseResult<TOutput> =
-  | {
-      /**
-       * The parse output.
-       */
-      output: TOutput;
-      /**
-       * The parse issues.
-       */
-      issues?: undefined;
-    }
-  | {
-      /**
-       * The parse output.
-       */
-      output?: undefined;
-      /**
-       * The parse issues.
-       */
-      issues: Issues;
-    };
+export type TypedSchemaResult<TOutput> = {
+  /**
+   * Whether is's typed.
+   */
+  typed: true;
+  /**
+   * The parse output.
+   */
+  output: TOutput;
+  /**
+   * The parse issues.
+   */
+  issues?: Issues;
+};
+
+/**
+ * Untyped parse result type.
+ */
+export type UntypedSchemaResult = {
+  /**
+   * Whether is's typed.
+   */
+  typed: false;
+  /**
+   * The parse output.
+   */
+  output: unknown;
+  /**
+   * The parse issues.
+   */
+  issues: Issues;
+};
+
+/**
+ * Schema result type.
+ */
+export type SchemaResult<TOutput> =
+  | TypedSchemaResult<TOutput>
+  | UntypedSchemaResult;
 
 /**
  * Base schema type.
@@ -50,7 +68,7 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
    *
    * @internal
    */
-  _parse(input: unknown, info?: ParseInfo): _ParseResult<TOutput>;
+  _parse(input: unknown, info?: ParseInfo): SchemaResult<TOutput>;
   /**
    * Input and output type.
    *
@@ -77,7 +95,7 @@ export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
    *
    * @internal
    */
-  _parse(input: unknown, info?: ParseInfo): Promise<_ParseResult<TOutput>>;
+  _parse(input: unknown, info?: ParseInfo): Promise<SchemaResult<TOutput>>;
   /**
    * Input and output type.
    *

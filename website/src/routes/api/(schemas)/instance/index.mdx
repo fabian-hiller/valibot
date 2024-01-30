@@ -1,7 +1,128 @@
 ---
 title: instance
+description: Creates an instance schema.
+source: /schemas/instance/instance.ts
+contributors:
+  - fabian-hiller
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # instance
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/instance/instance.ts).
+Creates an instance schema.
+
+```ts
+// Instance schema with an optional pipe
+const Schema = instance<TClass>(class_, pipe);
+
+// Instance schema with an optional message and pipe
+const Schema = instance<TClass>(class_, message, pipe);
+```
+
+## Generics
+
+- `TClass` <Property {...properties.TClass} />
+
+## Parameters
+
+- `class_` {/* prettier-ignore */}<Property {...properties.class_} />
+- `message` <Property {...properties.message} />
+- `pipe` <Property {...properties.pipe} />
+
+### Explanation
+
+With `instance` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the instance. If the input is not an instance of the specified `class_`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `instance` can be used.
+
+### Error schema
+
+Schema to validate an `Error` instance.
+
+```ts
+const ErrorSchema = instance(Error, 'Error instance required.');
+```
+
+### File schema
+
+Schema to validate an `File` instance.
+
+```ts
+const FileSchema = instance(File, [
+  mimeType(['image/jpeg', 'image/png']),
+  maxSize(1024 * 1024 * 10),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `instance`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>
+
+### Transformations
+
+<ApiList items={['toCustom', 'toMaxValue', 'toMinValue']} />
+
+### Validations
+
+<ApiList
+  items={[
+    'custom',
+    'maxSize',
+    'maxValue',
+    'mimeType',
+    'minSize',
+    'minValue',
+    'notSize',
+    'notValue',
+    'size',
+    'value',
+  ]}
+/>

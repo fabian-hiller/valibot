@@ -1,6 +1,6 @@
 import { UUID_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { getOutput, getPipeIssues } from '../../utils/index.ts';
+import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
  * UUID validation type.
@@ -17,11 +17,11 @@ export type UuidValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a validation function that validates a [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier).
+ * Creates a pipeline validation action that validates a [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier).
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function uuid<TInput extends string>(
   message: ErrorMessage = 'Invalid UUID'
@@ -33,8 +33,8 @@ export function uuid<TInput extends string>(
     requirement: UUID_REGEX,
     _parse(input) {
       return !this.requirement.test(input)
-        ? getPipeIssues(this.type, this.message, input, this.requirement)
-        : getOutput(input);
+        ? actionIssue(this.type, this.message, input, this.requirement)
+        : actionOutput(input);
     },
   };
 }
