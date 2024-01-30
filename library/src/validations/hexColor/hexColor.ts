@@ -18,7 +18,7 @@ export type HexColorValidation<TInput extends string> =
   };
 
 /**
- * Creates a pipeline validation action that validates hex color string.
+ * Creates a pipeline validation action that validates hex color.
  *
  * @param message The error message.
  *

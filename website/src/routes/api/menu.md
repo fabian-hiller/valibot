@@ -209,6 +209,7 @@
 - [EnumSchemaAsync](/api/EnumSchemaAsync/)
 - [ErrorMessage](/api/ErrorMessage/)
 - [FallbackInfo](/api/FallbackInfo/)
+- [HexColorValidation](/api/HexColorValidation/)
 - [Input](/api/Input/)
 - [InstanceSchema](/api/InstanceSchema/)
 - [IntersectInput](/api/IntersectInput/)
