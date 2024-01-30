@@ -13,7 +13,7 @@ export type CreditCardValidation<TInput extends string> =
     /**
      * The validation function.
      */
-    requirement: (input: string) => boolean;
+    requirement: (input: TInput) => boolean;
   };
 
 /**
