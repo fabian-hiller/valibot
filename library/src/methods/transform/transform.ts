@@ -37,14 +37,14 @@ export function transform<TSchema extends BaseSchema, TOutput>(
  *
  * @param schema The schema to be used.
  * @param action The transformation action.
- * @param validate A validation schema.
+ * @param validation A validation schema.
  *
  * @returns A transformed schema.
  */
 export function transform<TSchema extends BaseSchema, TOutput>(
   schema: TSchema,
   action: (input: Output<TSchema>, info: TransformInfo) => TOutput,
-  validate?: BaseSchema<TOutput>
+  validation?: BaseSchema<TOutput>
 ): SchemaWithTransform<TSchema, TOutput>;
 
 export function transform<TSchema extends BaseSchema, TOutput>(
