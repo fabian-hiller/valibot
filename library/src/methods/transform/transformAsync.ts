@@ -53,7 +53,7 @@ export function transformAsync<
  *
  * @param schema The schema to be used.
  * @param action The transformation action.
- * @param validate A validation schema.
+ * @param validation A validation schema.
  *
  * @returns A transformed schema.
  */
@@ -66,7 +66,7 @@ export function transformAsync<
     input: Output<TSchema>,
     info: TransformInfo
   ) => TOutput | Promise<TOutput>,
-  validate?: BaseSchema<TOutput> | BaseSchemaAsync<TOutput>
+  validation?: BaseSchema<TOutput> | BaseSchemaAsync<TOutput>
 ): SchemaWithTransformAsync<TSchema, TOutput>;
 
 export function transformAsync<
