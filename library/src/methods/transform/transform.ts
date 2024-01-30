@@ -27,7 +27,7 @@ export type SchemaWithTransform<TSchema extends BaseSchema, TOutput> = Omit<
  */
 export function transform<TSchema extends BaseSchema, TOutput>(
   schema: TSchema,
-  action: (value: Output<TSchema>, info: TransformInfo) => TOutput,
+  action: (input: Output<TSchema>, info: TransformInfo) => TOutput,
   pipe?: Pipe<TOutput>
 ): SchemaWithTransform<TSchema, TOutput>;
 
@@ -43,13 +43,13 @@ export function transform<TSchema extends BaseSchema, TOutput>(
  */
 export function transform<TSchema extends BaseSchema, TOutput>(
   schema: TSchema,
-  action: (value: Output<TSchema>, info: TransformInfo) => TOutput,
+  action: (input: Output<TSchema>, info: TransformInfo) => TOutput,
   validate?: BaseSchema<TOutput>
 ): SchemaWithTransform<TSchema, TOutput>;
 
 export function transform<TSchema extends BaseSchema, TOutput>(
   schema: TSchema,
-  action: (value: Output<TSchema>, info: TransformInfo) => TOutput,
+  action: (input: Output<TSchema>, info: TransformInfo) => TOutput,
   arg1?: Pipe<TOutput> | BaseSchema<TOutput>
 ): SchemaWithTransform<TSchema, TOutput> {
   return {

@@ -10,7 +10,7 @@ import type { BaseSchema } from '../../types/index.ts';
  */
 export function coerce<TSchema extends BaseSchema>(
   schema: TSchema,
-  action: (value: unknown) => unknown
+  action: (input: unknown) => unknown
 ): TSchema {
   return {
     ...schema,

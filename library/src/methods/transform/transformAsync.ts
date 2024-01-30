@@ -41,7 +41,7 @@ export function transformAsync<
 >(
   schema: TSchema,
   action: (
-    value: Output<TSchema>,
+    input: Output<TSchema>,
     info: TransformInfo
   ) => TOutput | Promise<TOutput>,
   pipe?: PipeAsync<TOutput>
@@ -63,7 +63,7 @@ export function transformAsync<
 >(
   schema: TSchema,
   action: (
-    value: Output<TSchema>,
+    input: Output<TSchema>,
     info: TransformInfo
   ) => TOutput | Promise<TOutput>,
   validate?: BaseSchema<TOutput> | BaseSchemaAsync<TOutput>
@@ -75,7 +75,7 @@ export function transformAsync<
 >(
   schema: TSchema,
   action: (
-    value: Output<TSchema>,
+    input: Output<TSchema>,
     info: TransformInfo
   ) => TOutput | Promise<TOutput>,
   arg1?: PipeAsync<TOutput> | BaseSchema<TOutput> | BaseSchemaAsync<TOutput>
