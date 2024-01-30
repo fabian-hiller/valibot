@@ -1,5 +1,6 @@
 ---
 title: hash
+description: Creates a pipeline validation action that validates a hash.
 source: /validations/hash/hash.ts
 contributors:
   - fabian-hiller
@@ -30,9 +31,6 @@ const Validation = hash<TInput>(message);
 ### Explanation
 
 With `hash` you can validate the formatting of a string. If the input is not a hash, you can use `message` to customize the error message.
-If no types are provided, it validate against all the types, otherwise it will validate against the ones that are provided.
-
-Supported types are: md4, md5, sha1, sha256, sha384, sha512, ripemd128, ripemd160, tiger128, tiger160, tiger192, crc32, crc32b, adler32
 
 ## Returns
 
@@ -44,16 +42,12 @@ The following examples show how `hash` can be used.
 
 ### Hash schema
 
-Schema to validate an hash.
+Schema to validate a hash.
 
 ```ts
-const HashSchema = hash('Hash is invalid.');
-```
-
-Schema to validate an hash with array of valid hash params to validate.
-
-```ts
-const HashSchema = hash(['md5', 'sha1'], 'Hash is invalid.');
+const HashSchema = string([
+  hash(['md5', 'sha1'], 'The specified hash is invalid.'),
+]);
 ```
 
 ## Related

@@ -24,7 +24,7 @@ const HASH_LENGTHS = {
 /**
  * Hash type type.
  */
-type HashType = keyof typeof HASH_LENGTHS;
+export type HashType = keyof typeof HASH_LENGTHS;
 
 /**
  * Hash validation type.
@@ -41,7 +41,7 @@ export type HashValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a pipeline validation action that validates a hash string.
+ * Creates a pipeline validation action that validates a hash.
  *
  * @param types The hash types.
  * @param message The error message.
