@@ -12,10 +12,11 @@ import { properties } from './properties';
 
 # hexColor
 
-Creates a pipeline validation action that validates a hexColor.
+Creates a pipeline validation action that validates a hex color.
 
-````ts
+```ts
 const Validation = hexColor<TInput>(message);
+```
 
 ## Generics
 
@@ -42,8 +43,8 @@ The following examples show how `hexColor` can be used.
 Schema to validate a hex color.
 
 ```ts
-const HexColorSchema = hexColor('Hex color is in invalid format.');
-````
+const HexColorSchema = string([hexColor('The hex color is badly formatted.')]);
+```
 
 ## Related
 
