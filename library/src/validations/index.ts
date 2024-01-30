@@ -10,6 +10,7 @@ export * from './endsWith/index.ts';
 export * from './equal/index.ts';
 export * from './excludes/index.ts';
 export * from './finite/index.ts';
+export * from './hash/index.ts';
 export * from './hexadecimal/index.ts';
 export * from './hexColor/index.ts';
 export * from './imei/index.ts';

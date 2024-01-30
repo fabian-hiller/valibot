@@ -211,6 +211,8 @@
 - [EnumSchemaAsync](/api/EnumSchemaAsync/)
 - [ErrorMessage](/api/ErrorMessage/)
 - [FallbackInfo](/api/FallbackInfo/)
+- [HashType](/api/HashType/)
+- [HashValidation](/api/HashValidation/)
 - [Input](/api/Input/)
 - [InstanceSchema](/api/InstanceSchema/)
 - [IntersectInput](/api/IntersectInput/)

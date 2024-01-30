@@ -1,7 +1,7 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  origin: {
+  IssueOrigin: {
     type: {
       type: 'union',
       options: [
