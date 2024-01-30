@@ -1,6 +1,6 @@
 ---
 title: bic
-description: Creates a pipeline validation action that validates a bic.
+description: Creates a pipeline validation action that validates a BIC.
 source: /validations/bic/bic.ts
 contributors:
   - fabian-hiller
@@ -12,7 +12,7 @@ import { properties } from './properties';
 
 # bic
 
-Creates a pipeline validation action that validates BIC (ISO 9362 Business Identifier Code).
+Creates a pipeline validation action that validates a [BIC](https://en.wikipedia.org/wiki/ISO_9362).
 
 ```ts
 const Validation = bic<TInput>(message);
@@ -28,7 +28,7 @@ const Validation = bic<TInput>(message);
 
 ### Explanation
 
-With `bic` you can validate the formatting of a string, if it's valid BIC - Business Identifier Code. If the input is not a bic, you can use `message` to customize the error message.
+With `bic` you can validate the formatting of a string. If the input is not a BIC, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -38,14 +38,10 @@ With `bic` you can validate the formatting of a string, if it's valid BIC - Busi
 
 The following examples show how `bic` can be used.
 
-Schema to validate an email.
+Schema to validate a BIC.
 
 ```ts
-const BicSchema = string([
-  minLength(8, 'Please enter a BIC.'),
-  bic('Input is not a valid BIC .'),
-  maxLength(11, 'Your BIC is too long.'),
-]);
+const BicSchema = string([toUpperCase(), bic('The BIC is badly formatted.')]);
 ```
 
 ## Related
