@@ -1,10 +1,110 @@
 ---
 title: is
+description: Checks if the input matches the scheme.
 source: /methods/is/is.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # is
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/is/is.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Checks if the input matches the scheme.
+
+> By using a type predicate, this function can be used as a type guard.
+
+```ts
+const result = is<TSchema>(schema, input, info);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `input` <Property {...properties.input} />
+- `info` <Property {...properties.info} />
+
+## Returns
+
+- `result` <Property {...properties.result} />
+
+## Example
+
+The following example show how `is` can be used.
+
+```ts
+const EmailSchema = string([email()]);
+const data: unknown = 'jane@example.com';
+
+if (is(EmailSchema, data)) {
+  const email = data; // string
+}
+```
+
+## Related
+
+The following APIs can be combined with `is`.
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'keyof',
+    'merge',
+    'omit',
+    'partial',
+    'pick',
+    'required',
+    'transform',
+  ]}
+/>
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'recursive',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
