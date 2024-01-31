@@ -31,7 +31,7 @@ export function nan(message?: ErrorMessage): NanSchema {
     _parse(input, config) {
       // Check type of input
       if (!Number.isNaN(input)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, nan, input, config);
       }
 
       // Return parse result

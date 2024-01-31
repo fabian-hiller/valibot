@@ -44,7 +44,7 @@ export function nonOptional<TWrapped extends BaseSchema>(
     _parse(input, config) {
       // Allow `undefined` values not to pass
       if (input === undefined) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, nonOptional, input, config);
       }
 
       // Return result of wrapped schema

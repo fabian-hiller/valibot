@@ -106,7 +106,7 @@ export function mapAsync<
     async _parse(input, config) {
       // Check type of input
       if (!(input instanceof Map)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, mapAsync, input, config);
       }
 
       // Create typed, issues and output
@@ -143,7 +143,7 @@ export function mapAsync<
                   // If there are issues, capture them
                   if (result.issues) {
                     // Create map path item
-                    pathItem = pathItem || {
+                    pathItem = pathItem ?? {
                       type: 'map',
                       input,
                       key: inputKey,

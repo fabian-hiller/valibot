@@ -58,7 +58,7 @@ export function string(
     _parse(input, config) {
       // Check type of input
       if (typeof input !== 'string') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, string, input, config);
       }
 
       // Execute pipe and return result

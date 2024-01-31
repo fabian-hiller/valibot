@@ -45,7 +45,7 @@ export function equal<
       if (input === this.requirement) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'value');
+      return actionIssue(this, equal, input, 'value');
     },
   };
 }

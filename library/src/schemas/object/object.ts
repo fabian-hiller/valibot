@@ -143,11 +143,11 @@ export function object<
     _parse(input, config) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, object, input, config);
       }
 
       // Cache object entries lazy
-      cachedEntries = cachedEntries || Object.entries(this.entries);
+      cachedEntries = cachedEntries ?? Object.entries(this.entries);
 
       // Create typed, issues and output
       let typed = true;

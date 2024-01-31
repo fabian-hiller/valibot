@@ -73,7 +73,7 @@ export function special<TInput>(
     _parse(input, config) {
       // Check type of input
       if (!this.check(input)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, special, input, config);
       }
 
       // Execute pipe and return result

@@ -31,7 +31,7 @@ export function symbol(message?: ErrorMessage): SymbolSchema {
     _parse(input, config) {
       // Check type of input
       if (typeof input !== 'symbol') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, symbol, input, config);
       }
 
       // Return parse result

@@ -36,7 +36,7 @@ export function mac64<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, '64 bit MAC');
+      return actionIssue(this, mac64, input, '64 bit MAC');
     },
   };
 }

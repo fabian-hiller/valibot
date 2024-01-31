@@ -144,7 +144,7 @@ export function tupleAsync<
     async _parse(input, config) {
       // Check type of input
       if (!Array.isArray(input) || this.items.length > input.length) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, tupleAsync, input, config);
       }
 
       // Create typed, issues and output

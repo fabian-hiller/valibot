@@ -45,7 +45,7 @@ export function url<TInput extends string>(
       if (this.requirement(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'URL');
+      return actionIssue(this, url, input, 'URL');
     },
   };
 }

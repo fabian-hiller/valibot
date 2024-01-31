@@ -86,7 +86,7 @@ export function array<TItem extends BaseSchema>(
     _parse(input, config) {
       // Check type of input
       if (!Array.isArray(input)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, array, input, config);
       }
 
       // Create typed, issues and output

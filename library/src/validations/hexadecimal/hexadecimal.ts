@@ -37,7 +37,7 @@ export function hexadecimal<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'hexadecimal');
+      return actionIssue(this, hexadecimal, input, 'hexadecimal');
     },
   };
 }

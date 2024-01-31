@@ -32,6 +32,7 @@ type OtherInfo = Partial<{
  * Returns the schema result object with issues.
  *
  * @param context The schema context.
+ * @param reference The schema reference.
  * @param input The raw input data.
  * @param config The parse configuration.
  * @param other The other info.
@@ -40,6 +41,8 @@ type OtherInfo = Partial<{
  */
 export function schemaIssue(
   context: SchemaContext,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  reference: Function,
   input: unknown,
   config: ParseConfig | undefined,
   other?: OtherInfo
@@ -48,9 +51,9 @@ export function schemaIssue(
   // Note: The issue is deliberately not constructed with the spread operator
   // for performance reasons
   const issue: SchemaIssue = {
-    reason: other?.reason || 'type',
+    reason: other?.reason ?? 'type',
     validation: context.type,
-    origin: config?.origin || 'value',
+    origin: config?.origin ?? 'value',
     expected: context.expects,
     received,
     message: `Invalid type: Expected ${context.expects} but received ${received}`,
@@ -62,6 +65,6 @@ export function schemaIssue(
     abortPipeEarly: config?.abortPipeEarly,
     skipPipe: config?.skipPipe,
   };
-  issue.message = i18n(context, config, issue);
+  issue.message = i18n(context, reference, config, issue);
   return { typed: false, output: input, issues: [issue] };
 }

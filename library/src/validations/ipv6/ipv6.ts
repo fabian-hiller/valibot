@@ -36,7 +36,7 @@ export function ipv6<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'IPv6');
+      return actionIssue(this, ipv6, input, 'IPv6');
     },
   };
 }

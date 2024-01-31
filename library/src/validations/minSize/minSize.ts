@@ -44,7 +44,7 @@ export function minSize<
       if (input.size >= this.requirement) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'size', `${input.size}`);
+      return actionIssue(this, minSize, input, 'size', `${input.size}`);
     },
   };
 }

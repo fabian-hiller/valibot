@@ -87,7 +87,7 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
     async _parse(input, config) {
       // Check type of input
       if (!Array.isArray(input)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, arrayAsync, input, config);
       }
 
       // Create typed, issues and output

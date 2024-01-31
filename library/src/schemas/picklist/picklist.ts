@@ -44,7 +44,7 @@ export function picklist<const TOptions extends PicklistOptions>(
     _parse(input, config) {
       // Check type of input
       if (!this.options.includes(input as any)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, picklist, input, config);
       }
 
       // Return input as output

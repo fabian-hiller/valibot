@@ -120,7 +120,7 @@ export function variant<
     _parse(input, config) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, variant, input, config);
       }
 
       // Continue if discriminator key is included
@@ -191,7 +191,7 @@ export function variant<
       }
 
       // If discriminator key is invalid, return issue
-      return schemaIssue(this, input, config, {
+      return schemaIssue(this, variant, input, config, {
         path: [
           {
             type: 'object',

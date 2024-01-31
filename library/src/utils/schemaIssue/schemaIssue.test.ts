@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { any, string } from '../../schemas/index.ts';
 import type { PathItem, SchemaIssues } from '../../types/index.ts';
 import { schemaIssue } from './schemaIssue.ts';
 
@@ -9,9 +10,10 @@ describe('schemaIssue', () => {
       expects: 'string',
       message: undefined,
     };
+    const reference1 = string;
     const input1 = 123;
     const received1 = '123';
-    expect(schemaIssue(context1, input1, undefined)).toEqual({
+    expect(schemaIssue(context1, reference1, input1, undefined)).toEqual({
       typed: false,
       output: input1,
       issues: [
@@ -32,6 +34,7 @@ describe('schemaIssue', () => {
       expects: '1234',
       message: 'Custom message',
     };
+    const reference2 = any;
     const config2 = {
       origin: 'key' as const,
       lang: 'en',
@@ -63,7 +66,7 @@ describe('schemaIssue', () => {
       ] satisfies SchemaIssues,
     };
     const received2 = 'Object';
-    const result2 = schemaIssue(context2, input2, config2, other2);
+    const result2 = schemaIssue(context2, reference2, input2, config2, other2);
     expect(result2).toEqual({
       typed: false,
       output: input2,

@@ -38,7 +38,7 @@ export function imei<TInput extends string>(
       if (this.requirement[0].test(input) && this.requirement[1](input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'IMEI');
+      return actionIssue(this, imei, input, 'IMEI');
     },
   };
 }

@@ -139,7 +139,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
     _parse(input, config) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, record, input, config);
       }
 
       // Create typed, issues and output
@@ -195,7 +195,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
           // If there are issues, capture them
           if (valueResult.issues) {
             // Create record path item
-            pathItem = pathItem || {
+            pathItem = pathItem ?? {
               type: 'record',
               input: input as Record<string | number | symbol, unknown>,
               key: inputKey,

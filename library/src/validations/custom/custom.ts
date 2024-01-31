@@ -37,7 +37,7 @@ export function custom<TInput>(
       if (this.requirement(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'input');
+      return actionIssue(this, custom, input, 'input');
     },
   };
 }

@@ -39,7 +39,7 @@ export function isoTimeSecond<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'time second');
+      return actionIssue(this, isoTimeSecond, input, 'time second');
     },
   };
 }

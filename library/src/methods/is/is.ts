@@ -1,4 +1,4 @@
-import { getConfig } from '../../storages/index.ts';
+import { getGlobalConfig } from '../../storages/index.ts';
 import type { BaseSchema, Config, Input } from '../../types/index.ts';
 
 /**
@@ -18,6 +18,6 @@ export function is<TSchema extends BaseSchema>(
 ): input is Input<TSchema> {
   return !schema._parse(input, {
     abortEarly: true,
-    skipPipe: getConfig(config)?.skipPipe,
+    skipPipe: getGlobalConfig(config)?.skipPipe,
   }).issues;
 }

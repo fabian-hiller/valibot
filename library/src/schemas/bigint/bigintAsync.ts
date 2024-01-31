@@ -69,7 +69,7 @@ export function bigintAsync(
     async _parse(input, config) {
       // Check type of input
       if (typeof input !== 'bigint') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, bigintAsync, input, config);
       }
 
       // Execute pipe and return result

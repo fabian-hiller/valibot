@@ -36,7 +36,7 @@ export function email<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'email');
+      return actionIssue(this, email, input, 'email');
     },
   };
 }

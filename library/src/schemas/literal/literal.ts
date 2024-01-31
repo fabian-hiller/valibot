@@ -26,25 +26,25 @@ export type LiteralSchema<
 /**
  * Creates a literal schema.
  *
- * @param literal The literal value.
+ * @param literal_ The literal value.
  * @param message The error message.
  *
  * @returns A literal schema.
  */
 export function literal<TLiteral extends Literal>(
-  literal: TLiteral,
+  literal_: TLiteral,
   message?: ErrorMessage
 ): LiteralSchema<TLiteral> {
   return {
     type: 'literal',
-    expects: stringify(literal),
+    expects: stringify(literal_),
     async: false,
-    literal,
+    literal: literal_,
     message,
     _parse(input, config) {
       // Check type of input
       if (input !== this.literal) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, literal, input, config);
       }
 
       // Return parse result

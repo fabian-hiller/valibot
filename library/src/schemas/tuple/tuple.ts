@@ -140,7 +140,7 @@ export function tuple<
     _parse(input, config) {
       // Check type of input
       if (!Array.isArray(input) || this.items.length > input.length) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, tuple, input, config);
       }
 
       // Create typed, issues and output

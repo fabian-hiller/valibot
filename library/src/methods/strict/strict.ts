@@ -1,6 +1,7 @@
-import type {
-  ObjectEntries,
-  ObjectSchema,
+import {
+  object,
+  type ObjectEntries,
+  type ObjectSchema,
 } from '../../schemas/object/index.ts';
 import { schemaIssue } from '../../utils/index.ts';
 
@@ -23,7 +24,7 @@ export function strict<TSchema extends ObjectSchema<ObjectEntries, undefined>>(
       const result = schema._parse(input, config);
       return !result.issues &&
         Object.keys(input as object).some((key) => !(key in schema.entries))
-        ? schemaIssue(this, input, config)
+        ? schemaIssue(this, object, input, config)
         : result;
     },
   };

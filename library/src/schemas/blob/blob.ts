@@ -55,7 +55,7 @@ export function blob(
     _parse(input, config) {
       // Check type of input
       if (!(input instanceof Blob)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, blob, input, config);
       }
 
       // Execute pipe and return result

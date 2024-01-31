@@ -34,7 +34,7 @@ export function undefinedAsync(message?: ErrorMessage): UndefinedSchemaAsync {
     async _parse(input, config) {
       // Check type of input
       if (typeof input !== 'undefined') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, undefinedAsync, input, config);
       }
 
       // Return parse result

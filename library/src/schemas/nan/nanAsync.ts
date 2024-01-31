@@ -34,7 +34,7 @@ export function nanAsync(message?: ErrorMessage): NanSchemaAsync {
     async _parse(input, config) {
       // Check type of input
       if (!Number.isNaN(input)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, nanAsync, input, config);
       }
 
       // Return parse result

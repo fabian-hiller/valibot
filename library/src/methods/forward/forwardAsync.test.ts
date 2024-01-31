@@ -23,6 +23,7 @@ describe('forwardAsync', () => {
             requirement,
             _parse: expect.any(Function),
           },
+          reference: expect.any(Function),
           input: 'value',
           label: 'input',
           path: [
@@ -63,6 +64,7 @@ describe('forwardAsync', () => {
             requirement,
             _parse: expect.any(Function),
           },
+          reference: expect.any(Function),
           input: undefined,
           label: 'input',
           path: [

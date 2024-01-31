@@ -37,7 +37,7 @@ export function bic<TInput extends string>(
       if (this.requirement.test(input.toUpperCase())) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'BIC');
+      return actionIssue(this, bic, input, 'BIC');
     },
   };
 }

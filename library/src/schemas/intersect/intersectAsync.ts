@@ -151,7 +151,7 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
 
           // If outputs can't be merged, return issue
           if (result.invalid) {
-            return schemaIssue(this, input, config);
+            return schemaIssue(this, intersectAsync, input, config);
           }
 
           // Otherwise, set merged output

@@ -120,6 +120,8 @@ export type SchemaIssues = [SchemaIssue, ...SchemaIssue[]];
  */
 export type PipeActionIssue = {
   context: PipeActionContext;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  reference: Function;
   input: unknown;
   label: string;
   received?: string;

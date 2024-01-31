@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { PipeActionContext } from '../../types/index.ts';
+import { minLength } from '../../validations/index.ts';
 import { actionIssue } from './actionIssue.ts';
 
 describe('actionIssue', () => {
@@ -10,11 +11,12 @@ describe('actionIssue', () => {
       message: undefined,
       requirement: 10,
     };
+    const reference = minLength;
     const input = 'hello';
     const label = 'length';
     const received = '5';
-    expect(actionIssue(context, input, label, received)).toEqual({
-      issues: [{ context, input, label, received }],
+    expect(actionIssue(context, reference, input, label, received)).toEqual({
+      issues: [{ context, reference, input, label, received }],
     });
   });
 });

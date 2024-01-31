@@ -158,7 +158,7 @@ export function recordAsync<
     async _parse(input, config) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, recordAsync, input, config);
       }
 
       // Create typed, issues and output
@@ -198,7 +198,7 @@ export function recordAsync<
                     // If there are issues, capture them
                     if (result.issues) {
                       // Create record path item
-                      pathItem = pathItem || {
+                      pathItem = pathItem ?? {
                         type: 'record',
                         input: input as Record<
                           string | number | symbol,

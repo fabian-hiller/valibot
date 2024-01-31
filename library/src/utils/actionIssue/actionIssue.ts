@@ -7,6 +7,7 @@ import type {
  * Returns the pipeline result object with issues.
  *
  * @param context The action context.
+ * @param reference The action reference.
  * @param input The raw input data.
  * @param label The issue label.
  * @param received The received input.
@@ -15,11 +16,13 @@ import type {
  */
 export function actionIssue(
   context: PipeActionContext,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  reference: Function,
   input: unknown,
   label: string,
   received?: string
 ): InvalidActionResult {
   return {
-    issues: [{ context, input, label, received }],
+    issues: [{ context, reference, input, label, received }],
   };
 }

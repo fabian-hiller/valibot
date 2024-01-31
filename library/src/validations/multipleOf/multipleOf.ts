@@ -41,7 +41,7 @@ export function multipleOf<TInput extends number, TRequirement extends number>(
       if (input % this.requirement === 0) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'multiple', `${input}`);
+      return actionIssue(this, multipleOf, input, 'multiple', `${input}`);
     },
   };
 }

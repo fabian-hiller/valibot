@@ -34,7 +34,7 @@ export function symbolAsync(message?: ErrorMessage): SymbolSchemaAsync {
     async _parse(input, config) {
       // Check type of input
       if (typeof input !== 'symbol') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, symbolAsync, input, config);
       }
 
       // Return parse result

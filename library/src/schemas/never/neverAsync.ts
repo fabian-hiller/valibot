@@ -29,7 +29,7 @@ export function neverAsync(message?: ErrorMessage): NeverSchemaAsync {
     async: true,
     message,
     async _parse(input, config) {
-      return schemaIssue(this, input, config);
+      return schemaIssue(this, neverAsync, input, config);
     },
   };
 }

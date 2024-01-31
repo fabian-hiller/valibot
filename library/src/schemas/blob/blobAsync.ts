@@ -66,7 +66,7 @@ export function blobAsync(
     async _parse(input, config) {
       // Check type of input
       if (!(input instanceof Blob)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, blobAsync, input, config);
       }
 
       // Execute pipe and return result

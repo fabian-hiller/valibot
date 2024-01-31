@@ -44,7 +44,7 @@ export function picklistAsync<const TOptions extends PicklistOptions>(
     async _parse(input, config) {
       // Check type of input
       if (!this.options.includes(input as any)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, picklistAsync, input, config);
       }
 
       // Return input as output

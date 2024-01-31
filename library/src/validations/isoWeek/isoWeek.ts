@@ -43,7 +43,7 @@ export function isoWeek<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'week');
+      return actionIssue(this, isoWeek, input, 'week');
     },
   };
 }

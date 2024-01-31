@@ -29,7 +29,7 @@ export function never(message?: ErrorMessage): NeverSchema {
     async: false,
     message,
     _parse(input, config) {
-      return schemaIssue(this, input, config);
+      return schemaIssue(this, never, input, config);
     },
   };
 }

@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import type { PipeActionIssue, SchemaIssue } from '../../../../types/issues.ts';
 import type { ParseConfig } from '../../../../types/schema.ts';
+import { minLength, value } from '../../../../validations/index.ts';
 import { pipeIssue } from './pipeIssue.ts';
 
 describe('pipeIssue', () => {
@@ -13,6 +14,7 @@ describe('pipeIssue', () => {
         message: undefined,
         requirement: 10,
       },
+      reference: minLength,
       input: 'hello',
       label: 'length',
       received: '5',
@@ -42,6 +44,7 @@ describe('pipeIssue', () => {
         message: 'Custom message',
         requirement: 'key',
       },
+      reference: value,
       input: 'hello',
       label: 'value',
       received: '"hello"',

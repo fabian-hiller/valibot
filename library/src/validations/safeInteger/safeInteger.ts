@@ -37,7 +37,7 @@ export function safeInteger<TInput extends number>(
       if (this.requirement(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'safe integer');
+      return actionIssue(this, safeInteger, input, 'safe integer');
     },
   };
 }

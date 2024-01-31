@@ -31,7 +31,7 @@ export function null_(message?: ErrorMessage): NullSchema {
     _parse(input, config) {
       // Check type of input
       if (input !== null) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, null_, input, config);
       }
 
       // Return parse result

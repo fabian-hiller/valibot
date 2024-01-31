@@ -74,7 +74,7 @@ export function instance<TClass extends Class>(
     _parse(input, config) {
       // Check type of input
       if (!(input instanceof this.class)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, instance, input, config);
       }
 
       // Execute pipe and return result

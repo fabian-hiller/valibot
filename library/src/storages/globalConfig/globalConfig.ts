@@ -13,7 +13,7 @@ let store: GlobalConfig | undefined;
  *
  * @param config The configuration.
  */
-export function setConfig(config: GlobalConfig | undefined) {
+export function setGlobalConfig(config: GlobalConfig) {
   store = config;
 }
 
@@ -24,14 +24,21 @@ export function setConfig(config: GlobalConfig | undefined) {
  *
  * @returns The configuration.
  */
-export function getConfig(config?: Config): Config {
+export function getGlobalConfig(config?: Config): Config {
   // Note: The issue is deliberately not constructed with the spread operator
   // for performance reasons
   return {
-    lang: config?.lang || store?.lang,
+    lang: config?.lang ?? store?.lang,
     message: config?.message,
-    abortEarly: config?.abortEarly || store?.abortEarly,
-    abortPipeEarly: config?.abortPipeEarly || store?.abortPipeEarly,
-    skipPipe: config?.skipPipe || store?.skipPipe,
+    abortEarly: config?.abortEarly ?? store?.abortEarly,
+    abortPipeEarly: config?.abortPipeEarly ?? store?.abortPipeEarly,
+    skipPipe: config?.skipPipe ?? store?.skipPipe,
   };
+}
+
+/**
+ * Deletes the global configuration.
+ */
+export function deleteGlobalConfig() {
+  store = undefined;
 }

@@ -1,5 +1,5 @@
 import { ValiError } from '../../error/index.ts';
-import { getConfig } from '../../storages/index.ts';
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
@@ -21,7 +21,7 @@ export async function parseAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
   input: unknown,
   config?: Config
 ): Promise<Output<TSchema>> {
-  const result = await schema._parse(input, getConfig(config));
+  const result = await schema._parse(input, getGlobalConfig(config));
   if (result.issues) {
     throw new ValiError(result.issues);
   }

@@ -1,5 +1,5 @@
 import { ValiError } from '../../error/index.ts';
-import { getConfig } from '../../storages/index.ts';
+import { getGlobalConfig } from '../../storages/index.ts';
 import type { BaseSchema, Config } from '../../types/index.ts';
 import type { SafeParseResult } from './types.ts';
 
@@ -17,7 +17,7 @@ export function safeParse<TSchema extends BaseSchema>(
   input: unknown,
   config?: Config
 ): SafeParseResult<TSchema> {
-  const result = schema._parse(input, getConfig(config));
+  const result = schema._parse(input, getGlobalConfig(config));
   return {
     typed: result.typed,
     success: !result.issues,

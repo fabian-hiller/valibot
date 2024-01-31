@@ -126,7 +126,7 @@ export function variantAsync<
     async _parse(input, config) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, variantAsync, input, config);
       }
 
       // Continue if discriminator key is included
@@ -197,7 +197,7 @@ export function variantAsync<
       }
 
       // If discriminator key is invalid, return issue
-      return schemaIssue(this, input, config, {
+      return schemaIssue(this, variantAsync, input, config, {
         path: [
           {
             type: 'object',

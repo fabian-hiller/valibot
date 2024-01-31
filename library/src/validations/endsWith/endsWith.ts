@@ -42,6 +42,7 @@ export function endsWith<TInput extends string, TRequirement extends string>(
       }
       return actionIssue(
         this,
+        endsWith,
         input,
         'end',
         `"${input.slice(-this.requirement.length)}"`

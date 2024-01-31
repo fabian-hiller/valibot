@@ -36,7 +36,7 @@ export function ipv4<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'IPv4');
+      return actionIssue(this, ipv4, input, 'IPv4');
     },
   };
 }

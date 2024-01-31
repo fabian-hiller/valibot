@@ -43,7 +43,7 @@ export function mimeType<
       if (this.requirement.includes(input.type as `${string}/${string}`)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'MIME type');
+      return actionIssue(this, mimeType, input, 'MIME type');
     },
   };
 }

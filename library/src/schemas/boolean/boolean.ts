@@ -58,7 +58,7 @@ export function boolean(
     _parse(input, config) {
       // Check type of input
       if (typeof input !== 'boolean') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, boolean, input, config);
       }
 
       // Execute pipe and return result

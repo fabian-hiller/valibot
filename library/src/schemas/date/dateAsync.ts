@@ -66,7 +66,7 @@ export function dateAsync(
     async _parse(input, config) {
       // Check type of input
       if (!(input instanceof Date) || isNaN(input.getTime())) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, dateAsync, input, config);
       }
 
       // Execute pipe and return result

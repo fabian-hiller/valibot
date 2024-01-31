@@ -41,7 +41,7 @@ export function minBytes<TInput extends string, TRequirement extends number>(
       if (length >= this.requirement) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'bytes', `${length}`);
+      return actionIssue(this, minBytes, input, 'bytes', `${length}`);
     },
   };
 }

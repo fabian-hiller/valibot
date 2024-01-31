@@ -37,7 +37,7 @@ export function mac<TInput extends string>(
       if (this.requirement[0].test(input) || this.requirement[1].test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'MAC');
+      return actionIssue(this, mac, input, 'MAC');
     },
   };
 }

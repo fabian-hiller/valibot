@@ -84,7 +84,7 @@ export function set<TValue extends BaseSchema>(
     _parse(input, config) {
       // Check type of input
       if (!(input instanceof Set)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, set, input, config);
       }
 
       // Create key, typed, output and issues

@@ -48,7 +48,7 @@ export function enumAsync<TEnum extends Enum>(
     async _parse(input, config) {
       // Check type of input
       if (!values.includes(input as any)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, enumAsync, input, config);
       }
 
       // Return parse result

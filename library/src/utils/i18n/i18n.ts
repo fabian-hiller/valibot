@@ -1,4 +1,8 @@
-import { getGlobalMessage, getLocalMessage } from '../../storages/index.ts';
+import {
+  getGlobalMessage,
+  getSchemaMessage,
+  getSpecificMessage,
+} from '../../storages/index.ts';
 import type {
   ErrorMessage,
   ParseConfig,
@@ -17,6 +21,7 @@ type I18nContext = {
  * Creates the i18n error message.
  *
  * @param context The message context.
+ * @param reference The identifier reference.
  * @param config The parse configuration.
  * @param issue The issue.
  *
@@ -24,14 +29,17 @@ type I18nContext = {
  */
 export function i18n(
   context: I18nContext,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  reference: Function,
   config: ParseConfig | undefined,
   issue: SchemaIssue
 ): string {
   const message =
-    context.message ||
-    config?.message ||
-    getLocalMessage(context.type, issue.lang) ||
-    getGlobalMessage(issue.lang) ||
+    context.message ??
+    getSpecificMessage(reference, issue.lang) ??
+    (context.type === 'type' ? getSchemaMessage(issue.lang) : null) ??
+    config?.message ??
+    getGlobalMessage(issue.lang) ??
     issue.message;
   return typeof message === 'function' ? message(issue) : message;
 }

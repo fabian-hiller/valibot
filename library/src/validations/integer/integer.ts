@@ -37,7 +37,7 @@ export function integer<TInput extends number>(
       if (this.requirement(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'integer');
+      return actionIssue(this, integer, input, 'integer');
     },
   };
 }

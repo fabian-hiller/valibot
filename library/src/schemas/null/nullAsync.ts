@@ -31,7 +31,7 @@ export function nullAsync(message?: ErrorMessage): NullSchemaAsync {
     async _parse(input, config) {
       // Check type of input
       if (input !== null) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, nullAsync, input, config);
       }
 
       // Return parse result

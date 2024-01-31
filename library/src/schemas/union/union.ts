@@ -136,7 +136,7 @@ export function union<TOptions extends UnionOptions>(
           // each other.
           typedResults.length === 1
             ? firstResult.issues
-            : schemaIssue(this, input, config, {
+            : schemaIssue(this, union, input, config, {
                 reason: 'union',
                 issues: subissues(typedResults),
               }).issues
@@ -152,7 +152,7 @@ export function union<TOptions extends UnionOptions>(
       // Hint: If there are zero or more than one untyped results, we use a
       // general union issue with subissues because the issues could contradict
       // each other.
-      return schemaIssue(this, input, config, {
+      return schemaIssue(this, union, input, config, {
         issues: subissues(untypedResults),
       });
     },

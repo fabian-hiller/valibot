@@ -44,7 +44,7 @@ export function literalAsync<TLiteral extends Literal>(
     async _parse(input, config) {
       // Check type of input
       if (input !== this.literal) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, literalAsync, input, config);
       }
 
       // Return parse result

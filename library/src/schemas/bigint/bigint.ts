@@ -58,7 +58,7 @@ export function bigint(
     _parse(input, config) {
       // Check type of input
       if (typeof input !== 'bigint') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, bigint, input, config);
       }
 
       // Execute pipe and return result

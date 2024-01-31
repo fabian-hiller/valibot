@@ -37,7 +37,7 @@ export function regex<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'format');
+      return actionIssue(this, regex, input, 'format');
     },
   };
 }

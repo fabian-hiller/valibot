@@ -50,6 +50,7 @@ export function value<
       }
       return actionIssue(
         this,
+        value,
         input,
         'value',
         input instanceof Date ? input.toJSON() : stringify(input)

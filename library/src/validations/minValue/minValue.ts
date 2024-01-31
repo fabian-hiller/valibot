@@ -50,6 +50,7 @@ export function minValue<
       }
       return actionIssue(
         this,
+        minValue,
         input,
         'value',
         input instanceof Date ? input.toJSON() : stringify(input)

@@ -85,7 +85,7 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
     async _parse(input, config) {
       // Check type of input
       if (!(input instanceof Set)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, setAsync, input, config);
       }
 
       // Create typed, index, output and issues

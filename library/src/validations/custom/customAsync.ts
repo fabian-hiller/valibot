@@ -37,7 +37,7 @@ export function customAsync<TInput>(
       if (await this.requirement(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'input');
+      return actionIssue(this, customAsync, input, 'input');
     },
   };
 }

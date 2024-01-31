@@ -50,6 +50,7 @@ export function maxValue<
       }
       return actionIssue(
         this,
+        maxValue,
         input,
         'value',
         input instanceof Date ? input.toJSON() : stringify(input)

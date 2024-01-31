@@ -45,7 +45,7 @@ export function excludes<
       if (!input.includes(this.requirement)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'content', received);
+      return actionIssue(this, excludes, input, 'content', received);
     },
   };
 }

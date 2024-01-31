@@ -36,7 +36,7 @@ export function emoji<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'emoji');
+      return actionIssue(this, emoji, input, 'emoji');
     },
   };
 }

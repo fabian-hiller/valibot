@@ -37,7 +37,7 @@ export function hexColor<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'hex color');
+      return actionIssue(this, hexColor, input, 'hex color');
     },
   };
 }

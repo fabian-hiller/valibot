@@ -35,7 +35,7 @@ export function finite<TInput extends number>(
       if (this.requirement(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'finite');
+      return actionIssue(this, finite, input, 'finite');
     },
   };
 }

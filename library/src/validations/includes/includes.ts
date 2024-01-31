@@ -45,7 +45,7 @@ export function includes<
       if (input.includes(this.requirement)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'content', `!${expects}`);
+      return actionIssue(this, includes, input, 'content', `!${expects}`);
     },
   };
 }

@@ -96,7 +96,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
     _parse(input, config) {
       // Check type of input
       if (!(input instanceof Map)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, map, input, config);
       }
 
       // Create typed, issues and output
@@ -153,7 +153,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
         // If there are issues, capture them
         if (valueResult.issues) {
           // Create map path item
-          pathItem = pathItem || {
+          pathItem = pathItem ?? {
             type: 'map',
             input,
             key: inputKey,

@@ -69,7 +69,7 @@ export function booleanAsync(
     async _parse(input, config) {
       // Check type of input
       if (typeof input !== 'boolean') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, booleanAsync, input, config);
       }
 
       // Execute pipe and return result

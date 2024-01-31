@@ -65,7 +65,7 @@ export function hash<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'hash');
+      return actionIssue(this, hash, input, 'hash');
     },
   };
 }

@@ -36,7 +36,7 @@ export function cuid2<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'Cuid2');
+      return actionIssue(this, cuid2, input, 'Cuid2');
     },
   };
 }

@@ -44,7 +44,7 @@ export function notLength<
       if (input.length !== this.requirement) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'length', `${input.length}`);
+      return actionIssue(this, notLength, input, 'length', `${input.length}`);
     },
   };
 }

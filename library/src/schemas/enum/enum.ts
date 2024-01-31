@@ -33,29 +33,29 @@ export type EnumSchema<
 /**
  * Creates an enum schema.
  *
- * @param enum_ The enum value.
+ * @param enum__ The enum value.
  * @param message The error message.
  *
  * @returns An enum schema.
  */
 export function enum_<TEnum extends Enum>(
-  enum_: TEnum,
+  enum__: TEnum,
   message?: ErrorMessage
 ): EnumSchema<TEnum> {
   // Get values
-  const values = Object.values(enum_);
+  const values = Object.values(enum__);
 
   // Create and return enum schema
   return {
     type: 'enum',
     expects: values.map(stringify).join(' | '),
     async: false,
-    enum: enum_,
+    enum: enum__,
     message,
     _parse(input, config) {
       // Check type of input
       if (!values.includes(input as any)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, enum_, input, config);
       }
 
       // Return parse result

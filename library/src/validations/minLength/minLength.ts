@@ -44,7 +44,7 @@ export function minLength<
       if (input.length >= this.requirement) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'length', `${input.length}`);
+      return actionIssue(this, minLength, input, 'length', `${input.length}`);
     },
   };
 }

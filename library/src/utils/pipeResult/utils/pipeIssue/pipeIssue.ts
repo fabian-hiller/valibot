@@ -28,13 +28,13 @@ export function pipeIssue(
   config: ParseConfig | undefined,
   issue: PipeActionIssue
 ): SchemaIssue {
-  const received = issue.received || stringify(issue.input);
+  const received = issue.received ?? stringify(issue.input);
   // Note: The issue is deliberately not constructed with the spread operator
   // for performance reasons
   const schemaIssue: SchemaIssue = {
     reason: context.type,
     validation: issue.context.type,
-    origin: config?.origin || 'value',
+    origin: config?.origin ?? 'value',
     expected: issue.context.expects,
     received,
     message: `Invalid ${issue.label}: ${
@@ -48,6 +48,11 @@ export function pipeIssue(
     abortPipeEarly: config?.abortPipeEarly,
     skipPipe: config?.skipPipe,
   };
-  schemaIssue.message = i18n(issue.context, config, schemaIssue);
+  schemaIssue.message = i18n(
+    issue.context,
+    issue.reference,
+    config,
+    schemaIssue
+  );
   return schemaIssue;
 }

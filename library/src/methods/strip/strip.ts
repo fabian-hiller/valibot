@@ -28,7 +28,7 @@ export function strip<TSchema extends ObjectSchema<ObjectEntries, undefined>>(
       // If result is typed, strip unknown keys
       if (result.typed) {
         // Cache object keys lazy
-        cachedKeys = cachedKeys || Object.keys(schema.entries);
+        cachedKeys = cachedKeys ?? Object.keys(schema.entries);
 
         // Strip unknown keys
         const output: Record<string, any> = {};

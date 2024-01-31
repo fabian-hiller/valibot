@@ -58,7 +58,7 @@ export function number(
     _parse(input, config) {
       // Check type of input
       if (typeof input !== 'number' || isNaN(input)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, number, input, config);
       }
 
       // Execute pipe and return result

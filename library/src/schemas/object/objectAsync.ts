@@ -144,11 +144,11 @@ export function objectAsync<
     async _parse(input, config) {
       // Check type of input
       if (!input || typeof input !== 'object') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, objectAsync, input, config);
       }
 
       // Cache object entries lazy
-      cachedEntries = cachedEntries || Object.entries(this.entries);
+      cachedEntries = cachedEntries ?? Object.entries(this.entries);
 
       // Create typed, issues and output
       let typed = true;

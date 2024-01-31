@@ -1,5 +1,5 @@
 import { ValiError } from '../../error/index.ts';
-import { getConfig } from '../../storages/index.ts';
+import { getGlobalConfig } from '../../storages/index.ts';
 import type { BaseSchema, Config, Output } from '../../types/index.ts';
 
 /**
@@ -16,7 +16,7 @@ export function parse<TSchema extends BaseSchema>(
   input: unknown,
   config?: Config
 ): Output<TSchema> {
-  const result = schema._parse(input, getConfig(config));
+  const result = schema._parse(input, getGlobalConfig(config));
   if (result.issues) {
     throw new ValiError(result.issues);
   }

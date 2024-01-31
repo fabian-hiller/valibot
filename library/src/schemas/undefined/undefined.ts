@@ -34,7 +34,7 @@ export function undefined_(message?: ErrorMessage): UndefinedSchema {
     _parse(input, config) {
       // Check type of input
       if (typeof input !== 'undefined') {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, undefined_, input, config);
       }
 
       // Return parse result

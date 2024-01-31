@@ -50,6 +50,7 @@ export function notValue<
       }
       return actionIssue(
         this,
+        notValue,
         input,
         'value',
         input instanceof Date ? input.toJSON() : stringify(input)

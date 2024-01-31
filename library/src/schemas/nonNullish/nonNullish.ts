@@ -44,7 +44,7 @@ export function nonNullish<TWrapped extends BaseSchema>(
     _parse(input, config) {
       // Allow `null` and `undefined` values not to pass
       if (input === null || input === undefined) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, nonNullish, input, config);
       }
 
       // Return result of wrapped schema

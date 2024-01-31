@@ -44,7 +44,7 @@ export function maxLength<
       if (input.length <= this.requirement) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'length', `${input.length}`);
+      return actionIssue(this, maxLength, input, 'length', `${input.length}`);
     },
   };
 }

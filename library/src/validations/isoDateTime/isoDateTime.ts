@@ -43,7 +43,7 @@ export function isoDateTime<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'date-time');
+      return actionIssue(this, isoDateTime, input, 'date-time');
     },
   };
 }

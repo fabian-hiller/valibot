@@ -69,7 +69,7 @@ export function numberAsync(
     async _parse(input, config) {
       // Check type of input
       if (typeof input !== 'number' || isNaN(input)) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, numberAsync, input, config);
       }
 
       // Execute pipe and return result

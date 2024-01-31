@@ -46,7 +46,7 @@ export function isoTimestamp<TInput extends string>(
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
-      return actionIssue(this, input, 'timestamp');
+      return actionIssue(this, isoTimestamp, input, 'timestamp');
     },
   };
 }

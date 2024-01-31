@@ -44,7 +44,7 @@ export function nonNullable<TWrapped extends BaseSchema>(
     _parse(input, config) {
       // Allow `null` values not to pass
       if (input === null) {
-        return schemaIssue(this, input, config);
+        return schemaIssue(this, nonNullable, input, config);
       }
 
       // Return result of wrapped schema

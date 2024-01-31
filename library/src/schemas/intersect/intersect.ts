@@ -138,7 +138,7 @@ export function intersect<TOptions extends IntersectOptions>(
 
           // If outputs can't be merged, return issue
           if (result.invalid) {
-            return schemaIssue(this, input, config);
+            return schemaIssue(this, intersect, input, config);
           }
 
           // Otherwise, set merged output
