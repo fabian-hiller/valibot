@@ -53,11 +53,11 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  output: {
+  result: {
     type: {
       type: 'custom',
-      name: 'Output',
-      href: '../Output/',
+      name: 'SafeParseResult',
+      href: '../SafeParseResult/',
       generics: [
         {
           type: 'custom',

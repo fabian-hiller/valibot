@@ -269,6 +269,7 @@
 - [RecordPathItem](/api/RecordPathItem/)
 - [RecordSchema](/api/RecordSchema/)
 - [RecursiveSchema](/api/RecursiveSchema/)
+- [SafeParseResult](/api/SafeParseResult/)
 - [SchemaResult](/api/SchemaResult/)
 - [SchemaWithFallback](/api/SchemaWithFallback/)
 - [SchemaWithTransform](/api/SchemaWithTransform/)

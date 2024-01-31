@@ -7,7 +7,7 @@ import type {
 import type { SafeParseResult } from './types.ts';
 
 /**
- * Parses unknown input based on a schema.
+ * Parses an unknown input based on a schema.
  *
  * @param schema The schema to be used.
  * @param input The input to be parsed.

@@ -15,7 +15,7 @@ import { properties } from './properties';
 Parses an unknown input based on a schema.
 
 ```ts
-const output = parse<TSchema>(schema, input);
+const output = parse<TSchema>(schema, input, info);
 ```
 
 ## Generics
@@ -26,10 +26,11 @@ const output = parse<TSchema>(schema, input);
 
 - `schema` <Property {...properties.schema} />
 - `input` <Property {...properties.input} />
+- `info` <Property {...properties.info} />
 
 ### Explanation
 
-`parse` will throw a <Link href="/../ValiError/">`ValiError`</Link> if the `input` does not match the `schema`. Therefore you should use a try/catch block to catch errors. If the input matches the schema, it is valid and the `output` of the schema will be returned typed.
+`parse` will throw a <Link href="../ValiError/">`ValiError`</Link> if the `input` does not match the `schema`. Therefore you should use a try/catch block to catch errors. If the input matches the schema, it is valid and the `output` of the schema will be returned typed.
 
 ## Returns
 
