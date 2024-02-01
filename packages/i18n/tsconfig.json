@@ -6,8 +6,10 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src", "./*.config.ts"]
+  "include": ["scripts", "src"]
 }

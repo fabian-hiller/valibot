@@ -1,7 +1,7 @@
-import { setLocalMessage } from '../../index.ts';
+import { bytes, setSpecificMessage } from '../../index.ts';
 
-setLocalMessage(
-  'bytes',
+setSpecificMessage(
+  bytes,
   (issue) =>
     `Ungültige Bytes: ${issue.expected} erwartet aber ${issue.received} erhalten`,
   'de'
