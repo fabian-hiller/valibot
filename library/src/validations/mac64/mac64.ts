@@ -3,7 +3,7 @@ import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { actionIssue, actionOutput } from '../../utils/index.ts';
 
 /**
- * MAC validation type.
+ * 64-bit MAC validation type.
  */
 export type Mac64Validation<TInput extends string> = BaseValidation<TInput> & {
   /**
@@ -11,13 +11,13 @@ export type Mac64Validation<TInput extends string> = BaseValidation<TInput> & {
    */
   type: 'mac64';
   /**
-   * The 64 bit MAC regex.
+   * The 64-bit MAC regex.
    */
   requirement: RegExp;
 };
 
 /**
- * Creates a pipeline validation action that validates a 64 bit [MAC](https://en.wikipedia.org/wiki/MAC_address).
+ * Creates a pipeline validation action that validates a 64-bit [MAC address](https://en.wikipedia.org/wiki/MAC_address).
  *
  * @param message The error message.
  *

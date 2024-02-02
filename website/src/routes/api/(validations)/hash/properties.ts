@@ -43,7 +43,7 @@ export const properties: Record<string, PropertyProps> = {
       value: 'Invalid hash',
     },
   },
-  Validation: {
+  validation: {
     type: {
       type: 'custom',
       name: 'HashValidation',

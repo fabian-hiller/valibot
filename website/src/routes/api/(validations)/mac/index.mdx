@@ -1,23 +1,24 @@
 ---
 title: mac
-description: Creates a pipeline validation action that validates a mac address.
+description: Creates a pipeline validation action that validates a MAC address.
 source: /validations/mac/mac.ts
 contributors:
   - fabian-hiller
   - ariskemper
 ---
 
+import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
 # mac
 
-Creates a pipeline validation action that validates a mac address. It validates 48 bit and 64 bit mac addresses.
-If you want to validate just 48 bit mac address, you can use `mac48` validation action and if you want
-to validate the 64 bit mac address, you can use `mac64` validation action.
+Creates a pipeline validation action that validates a [MAC address](https://en.wikipedia.org/wiki/MAC_address).
+
+> This validation action accepts 48-bit and 64-bit MAC addresses. For a more specific validation, you can also use <Link href="../mac48/">`mac48`</Link> or <Link href="../mac64/">`mac64`</Link>.
 
 ```ts
-const Validation = mac<TInput>(message);
+const validation = mac<TInput>(message);
 ```
 
 ## Generics
@@ -30,22 +31,22 @@ const Validation = mac<TInput>(message);
 
 ### Explanation
 
-With `mac` you can validate the formatting of a string. If the input is not a mac address, you can use `message` to customize the error message.
+With `mac` you can validate the formatting of a string. If the input is not a MAC address, you can use `message` to customize the error message.
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `validation` <Property {...properties.validation} />
 
 ## Examples
 
 The following examples show how `mac` can be used.
 
-### Mac schema
+### MAC schema
 
-Schema to validate a mac address.
+Schema to validate a MAC address.
 
 ```ts
-const MacAddressSchema = string([mac('The mac address is badly formatted.')]);
+const MacSchema = string([mac('The MAC address is badly formatted.')]);
 ```
 
 ## Related

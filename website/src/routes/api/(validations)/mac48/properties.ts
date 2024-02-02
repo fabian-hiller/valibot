@@ -19,10 +19,10 @@ export const properties: Record<string, PropertyProps> = {
     },
     default: {
       type: 'string',
-      value: 'Invalid 48 bit MAC',
+      value: 'Invalid 48-bit MAC',
     },
   },
-  Validation: {
+  validation: {
     type: {
       type: 'custom',
       name: 'Mac48Validation',

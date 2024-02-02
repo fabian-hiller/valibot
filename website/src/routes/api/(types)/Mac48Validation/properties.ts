@@ -5,28 +5,29 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'string',
   },
-  message: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-    default: {
-      type: 'string',
-      value: 'Invalid hex color',
-    },
-  },
-  validation: {
+  BaseValidation: {
     type: {
       type: 'custom',
-      name: 'HexColorValidation',
-      href: '../HexColorValidation/',
+      name: 'BaseValidation',
+      href: '../BaseValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
+    },
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'mac',
+    },
+  },
+  requirement: {
+    type: {
+      type: 'custom',
+      name: 'RegExp',
     },
   },
 };

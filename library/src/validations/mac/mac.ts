@@ -11,13 +11,13 @@ export type MacValidation<TInput extends string> = BaseValidation<TInput> & {
    */
   type: 'mac';
   /**
-   * The MAC 48 and 64 bit regex.
+   * The 48-bit and 64-bit MAC regex.
    */
   requirement: [RegExp, RegExp];
 };
 
 /**
- * Creates a pipeline validation action that validates a [MAC](https://en.wikipedia.org/wiki/MAC_address).
+ * Creates a pipeline validation action that validates a [MAC address](https://en.wikipedia.org/wiki/MAC_address).
  *
  * @param message The error message.
  *
