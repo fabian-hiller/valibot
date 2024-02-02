@@ -1,11 +1,58 @@
 ---
 title: mac64
+description: Creates a pipeline validation action that validates a mac 64 bit address.
 source: /validations/mac64/mac64.ts
 contributors:
   - fabian-hiller
   - ariskemper
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # mac64
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/mac64/mac64.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates a mac 64 bit address. If you want to validate both 48 bit mac address and 64 bit address, you can use `mac` validation action and if you want
+to validate the 48 bit mac address, you can use `mac48` validation action.
+
+```ts
+const Validation = mac64<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `mac64` you can validate the formatting of a string. If the input is not a mac 64 bit address, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `mac64` can be used.
+
+### Mac 64 bit address schema
+
+Schema to validate a mac 64 bit address.
+
+```ts
+const Mac64AddressSchema = string([
+  mac64('The mac address is badly formatted.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `mac64`.
+
+### Schemas
+
+<ApiList items={['any', 'string', 'unknown']} />
