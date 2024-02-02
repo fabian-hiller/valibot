@@ -19,14 +19,14 @@ export const properties: Record<string, PropertyProps> = {
     },
     default: {
       type: 'string',
-      value: 'Invalid hex color',
+      value: 'Invalid MAC',
     },
   },
   validation: {
     type: {
       type: 'custom',
-      name: 'HexColorValidation',
-      href: '../HexColorValidation/',
+      name: 'MacValidation',
+      href: '../MacValidation/',
     },
   },
 };

@@ -22,7 +22,7 @@ export const properties: Record<string, PropertyProps> = {
       value: 'Invalid credit card',
     },
   },
-  Validation: {
+  validation: {
     type: {
       type: 'custom',
       name: 'CreditCardValidation',
