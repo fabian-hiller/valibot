@@ -1,7 +1,7 @@
 ---
-title: transfrom
+title: transform
 description: Adds a transformation step to a schema, which is executed at the end of parsing and can change the output type.
-source: /methods/transfrom/transfrom.ts
+source: /methods/transform/transform.ts
 contributors:
   - fabian-hiller
 ---
@@ -10,16 +10,16 @@ import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# transfrom
+# transform
 
 Adds a transformation step to a schema, which is executed at the end of parsing and can change the output type.
 
 ```ts
 // Transform with an optional pipe
-const Schema = transfrom<TSchema, TOutput>(schema, action, pipe);
+const Schema = transform<TSchema, TOutput>(schema, action, pipe);
 
 // Transform with an optional validation
-const Schema = transfrom<TSchema, TOutput>(schema, action, validation);
+const Schema = transform<TSchema, TOutput>(schema, action, validation);
 ```
 
 ## Generics
@@ -48,22 +48,22 @@ The `pipe` and `validation` arguments can optionally be used to validate the out
 
 ## Examples
 
-The following examples show how `transfrom` can be used.
+The following examples show how `transform` can be used.
 
-### Transfrom to length
+### Transform to length
 
-Schema that transfroms a string to its length.
+Schema that transforms a string to its length.
 
 ```ts
-const StringLengthSchema = transfrom(string(), (input) => input.length);
+const StringLengthSchema = transform(string(), (input) => input.length);
 ```
 
 ### Add object entry
 
-Schema that transfroms an object to add an entry.
+Schema that transforms an object to add an entry.
 
 ```ts
-const UserSchema = transfrom(
+const UserSchema = transform(
   object({ name: string(), age: number() }),
   (input) => ({
     ...input,
@@ -74,7 +74,7 @@ const UserSchema = transfrom(
 
 ## Related
 
-The following APIs can be combined with `transfrom`.
+The following APIs can be combined with `transform`.
 
 ### Methods
 
