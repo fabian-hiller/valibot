@@ -53,4 +53,12 @@ describe('bigintAsync', () => {
     const schema2 = bigintAsync();
     expect(schema2.pipe).toBeUndefined();
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = bigintAsync({ description: 'bigint value' });
+    expect(schema1.metadata).toEqual({ description: 'bigint value' });
+
+    const schema2 = bigintAsync();
+    expect(schema2.metadata).toBeUndefined();
+  });
 });

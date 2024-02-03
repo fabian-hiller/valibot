@@ -1,6 +1,7 @@
 import type {
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   PipeAsync,
 } from '../../types/index.ts';
 import {
@@ -42,22 +43,22 @@ export function bigintAsync(pipe?: PipeAsync<bigint>): BigintSchemaAsync;
 /**
  * Creates an async bigint schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async bigint schema.
  */
 export function bigintAsync(
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<bigint>
 ): BigintSchemaAsync;
 
 export function bigintAsync(
-  arg1?: ErrorMessage | PipeAsync<bigint>,
+  arg1?: ErrorMessageOrMetadata | PipeAsync<bigint>,
   arg2?: PipeAsync<bigint>
 ): BigintSchemaAsync {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return async bigint schema
   return {
@@ -65,6 +66,7 @@ export function bigintAsync(
     async: true,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'bigint') {
