@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../comparable.ts';
 import { number, object, string } from '../../schemas/index.ts';
 import { toCustom } from '../../transformations/index.ts';
 import { merge } from '../merge/index.ts';
@@ -11,9 +10,7 @@ describe('merge', () => {
       object({ key1: string() }),
       object({ key2: number() }),
     ]);
-    expect(schema).toEqual(
-      comparable(object({ key1: string(), key2: number() }))
-    );
+    expect(schema).toEqualSchema(object({ key1: string(), key2: number() }));
     const input = { key1: '1', key2: 2 };
     const output1 = parse(schema, input);
     expect(output1).toEqual(input);
@@ -26,7 +23,7 @@ describe('merge', () => {
       object({ key: string() }),
       object({ key: number() }),
     ]);
-    expect(schema.entries.key).toEqual(comparable(number()));
+    expect(schema.entries.key).toEqualSchema(number());
     const input = { key: 123 };
     const output = parse(schema, input);
     expect(output).toEqual(input);

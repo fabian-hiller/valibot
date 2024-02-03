@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../comparable.ts';
 import { string } from '../../schemas/index.ts';
 import { restAndDefaultArgs } from './restAndDefaultArgs.ts';
 
@@ -10,23 +9,23 @@ describe('restAndDefaultArgs', () => {
       undefined,
       undefined,
     ]);
-    expect(restAndDefaultArgs(string(), undefined, undefined)).toEqual([
-      comparable(string()),
+    expect(restAndDefaultArgs(string(), undefined, undefined)).toEqualSchema([
+      string(),
       undefined,
       undefined,
     ]);
-    expect(restAndDefaultArgs(string(), [], undefined)).toEqual([
-      comparable(string()),
+    expect(restAndDefaultArgs(string(), [], undefined)).toEqualSchema([
+      string(),
       undefined,
       [],
     ]);
-    expect(restAndDefaultArgs(string(), 'error', undefined)).toEqual([
-      comparable(string()),
+    expect(restAndDefaultArgs(string(), 'error', undefined)).toEqualSchema([
+      string(),
       'error',
       undefined,
     ]);
-    expect(restAndDefaultArgs(string(), 'error', [])).toEqual([
-      comparable(string()),
+    expect(restAndDefaultArgs(string(), 'error', [])).toEqualSchema([
+      string(),
       'error',
       [],
     ]);

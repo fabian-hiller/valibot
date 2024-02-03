@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../comparable.ts';
 import { object, string } from '../../schemas/index.ts';
 import { toCustom } from '../../transformations/index.ts';
 import { parse } from '../parse/index.ts';
@@ -11,9 +10,7 @@ describe('pick', () => {
       object({ key1: string(), key2: string(), key3: string() }),
       ['key1', 'key3']
     );
-    expect(schema).toEqual(
-      comparable(object({ key1: string(), key3: string() }))
-    );
+    expect(schema).toEqualSchema(object({ key1: string(), key3: string() }));
     const input = { key1: 'test', key3: 'test' };
     const output = parse(schema, input);
     expect(output).toEqual(input);
