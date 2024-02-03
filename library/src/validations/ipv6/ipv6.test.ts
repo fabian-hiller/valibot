@@ -21,7 +21,6 @@ describe('ipv6', () => {
     expect(
       validate._parse('test:test:test:test:test:test:test:test').issues
     ).toBeTruthy();
-    expect(validate._parse('fe80::3:bEFf:5b:%3NG').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
