@@ -19,7 +19,7 @@ describe('schemaIssue', () => {
       issues: [
         {
           reason: 'type',
-          validation: context1.type,
+          context: context1.type,
           origin: 'value',
           expected: context1.expects,
           received: received1,
@@ -56,7 +56,7 @@ describe('schemaIssue', () => {
       issues: [
         {
           reason: 'any',
-          validation: 'validation',
+          context: 'validation',
           origin: 'value',
           expected: 'expected',
           received: 'received',
@@ -73,7 +73,7 @@ describe('schemaIssue', () => {
       issues: [
         {
           reason: other2.reason,
-          validation: context2.type,
+          context: context2.type,
           origin: config2.origin,
           expected: context2.expects,
           received: received2,

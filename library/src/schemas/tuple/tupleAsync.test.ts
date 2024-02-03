@@ -191,7 +191,7 @@ describe('tupleAsync', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
+          context: 'min_length',
           origin: 'value',
           expected: '>=10',
           received: '5',
@@ -209,7 +209,7 @@ describe('tupleAsync', () => {
         },
         {
           reason: 'tuple',
-          validation: 'min_length',
+          context: 'min_length',
           expected: '>=5',
           received: '1',
           origin: 'value',
@@ -231,7 +231,7 @@ describe('tupleAsync', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
+          context: 'string',
           origin: 'value',
           expected: 'string',
           received: '12345',

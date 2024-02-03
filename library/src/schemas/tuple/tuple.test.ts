@@ -183,7 +183,7 @@ describe('tuple', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
+          context: 'min_length',
           origin: 'value',
           expected: '>=10',
           received: '5',
@@ -201,7 +201,7 @@ describe('tuple', () => {
         },
         {
           reason: 'tuple',
-          validation: 'min_length',
+          context: 'min_length',
           expected: '>=5',
           received: '1',
           origin: 'value',
@@ -223,7 +223,7 @@ describe('tuple', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
+          context: 'string',
           origin: 'value',
           expected: 'string',
           received: '12345',

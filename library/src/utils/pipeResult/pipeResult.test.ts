@@ -23,7 +23,7 @@ describe('pipeResult', () => {
     const issues: SchemaIssues = [
       {
         reason: 'number',
-        validation: 'min_value',
+        context: 'min_value',
         origin: 'value',
         expected: '>=1',
         received: '0',

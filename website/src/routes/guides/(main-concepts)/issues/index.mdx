@@ -21,7 +21,7 @@ The issues are an array of objects. In the following I will explain you exactly 
 type Issue = {
   // Required info
   reason: IssueReason;
-  validation: string;
+  context: string;
   origin: 'key' | 'value';
   message: string;
   input: any;
@@ -44,9 +44,9 @@ Each issue contains the following required information.
 
 `reason` describes the reason of the problem. If an input does not match the data type, for example a number was passed instead of a string, `reason` has the value `'type'`. In all other cases the reason is not the datatype but the actual content of the data. For example, if a string is invalid because it does not match a regex, `reason` has the value `'string'`.
 
-#### Validation
+#### Context
 
-`validation` describes which function did the validation. If the schema function <Link href="/api/array/">`array`</Link> detects that the input is not an array, `validation` has the value `'array'`. If the <Link href="/api/minLength/">`minLength`</Link> validation function detects that an array is too short, `validation` has the value `'min_length'`.
+`context` describes which function did the validation. If the schema function <Link href="/api/array/">`array`</Link> detects that the input is not an array, `context` has the value `'array'`. If the <Link href="/api/minLength/">`minLength`</Link> validation function detects that an array is too short, `context` has the value `'min_length'`.
 
 #### Origin
 
@@ -126,7 +126,7 @@ The <Link href="/api/ValiError/">`ValiError`</Link> thrown in the code sample ab
 [
   {
     reason: 'type',
-    validation: 'string',
+    context: 'string',
     origin: 'value',
     message: 'Value of "key" is missing.',
     input: undefined,
@@ -141,7 +141,7 @@ The <Link href="/api/ValiError/">`ValiError`</Link> thrown in the code sample ab
   },
   {
     reason: 'type',
-    validation: 'string',
+    context: 'string',
     origin: 'value',
     message: 'Value of "nested.key" is missing.',
     input: undefined,

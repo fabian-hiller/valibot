@@ -52,7 +52,7 @@ export function schemaIssue(
   // for performance reasons
   const issue: SchemaIssue = {
     reason: other?.reason ?? 'type',
-    validation: context.type,
+    context: context.type,
     origin: config?.origin ?? 'value',
     expected: context.expects,
     received,

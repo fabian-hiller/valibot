@@ -23,7 +23,7 @@ describe('pipeIssue', () => {
 
     expect(pipeIssue(schemaContext, undefined, actionIssue1)).toEqual({
       reason: schemaContext.type,
-      validation: actionIssue1.context.type,
+      context: actionIssue1.context.type,
       origin: 'value',
       expected: actionIssue1.context.expects,
       received: actionIssue1.received!,
@@ -62,7 +62,7 @@ describe('pipeIssue', () => {
 
     expect(pipeIssue(schemaContext, parseConfig, actionIssue2)).toEqual({
       reason: schemaContext.type,
-      validation: actionIssue2.context.type,
+      context: actionIssue2.context.type,
       origin: parseConfig.origin!,
       expected: actionIssue2.context.expects,
       received: actionIssue2.received!,

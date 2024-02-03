@@ -189,7 +189,7 @@ describe('objectAsync', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
+          context: 'min_length',
           origin: 'value',
           expected: '>=10',
           received: '5',
@@ -207,7 +207,7 @@ describe('objectAsync', () => {
         },
         {
           reason: 'object',
-          validation: 'custom',
+          context: 'custom',
           origin: 'value',
           expected: null,
           received: 'Object',
@@ -231,7 +231,7 @@ describe('objectAsync', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
+          context: 'string',
           origin: 'value',
           expected: 'string',
           received: '12345',

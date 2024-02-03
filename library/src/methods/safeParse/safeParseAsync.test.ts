@@ -28,7 +28,7 @@ describe('safeParseAsync', () => {
     const issues: SchemaIssues = [
       {
         reason: 'string',
-        validation: 'min_length',
+        context: 'min_length',
         origin: 'value',
         expected: '>=10',
         received: '5',
@@ -64,7 +64,7 @@ describe('safeParseAsync', () => {
     const issues: SchemaIssues = [
       {
         reason: 'type',
-        validation: 'string',
+        context: 'string',
         origin: 'value',
         expected: 'string',
         received: '123',

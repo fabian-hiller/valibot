@@ -182,7 +182,7 @@ describe('object', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
+          context: 'min_length',
           origin: 'value',
           expected: '>=10',
           received: '5',
@@ -200,7 +200,7 @@ describe('object', () => {
         },
         {
           reason: 'object',
-          validation: 'custom',
+          context: 'custom',
           origin: 'value',
           expected: null,
           received: 'Object',
@@ -224,7 +224,7 @@ describe('object', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
+          context: 'string',
           origin: 'value',
           expected: 'string',
           received: '12345',

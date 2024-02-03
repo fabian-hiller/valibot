@@ -44,7 +44,7 @@ describe('transformAsync', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
+          context: 'string',
           origin: 'value',
           expected: 'string',
           received: '123',
@@ -68,7 +68,7 @@ describe('transformAsync', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
+          context: 'min_length',
           origin: 'value',
           expected: '>=10',
           received: '5',
@@ -94,7 +94,7 @@ describe('transformAsync', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
+          context: 'min_length',
           origin: 'value',
           expected: '>=10',
           received: '5',
@@ -118,7 +118,7 @@ describe('transformAsync', () => {
       issues: [
         {
           reason: 'number',
-          validation: 'max_value',
+          context: 'max_value',
           origin: 'value',
           expected: '<=5',
           received: '6',
@@ -144,7 +144,7 @@ describe('transformAsync', () => {
       issues: [
         {
           reason: 'number',
-          validation: 'max_value',
+          context: 'max_value',
           origin: 'value',
           expected: '<=5',
           received: '6',

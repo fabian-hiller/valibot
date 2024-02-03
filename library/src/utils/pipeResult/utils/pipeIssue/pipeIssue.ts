@@ -33,7 +33,7 @@ export function pipeIssue(
   // for performance reasons
   const schemaIssue: SchemaIssue = {
     reason: context.type,
-    validation: issue.context.type,
+    context: issue.context.type,
     origin: config?.origin ?? 'value',
     expected: issue.context.expects,
     received,

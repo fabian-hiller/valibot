@@ -73,9 +73,9 @@ export type SchemaIssue = Omit<Config, 'message'> & {
    */
   reason: IssueReason;
   /**
-   * The validation name.
+   * The context name.
    */
-  validation: string;
+  context: string;
   /**
    * The issue origin.
    */

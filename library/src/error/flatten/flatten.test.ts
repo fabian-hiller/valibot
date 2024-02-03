@@ -6,7 +6,7 @@ import { flatten } from './flatten.ts';
 describe('flatten', () => {
   const rootIssue: SchemaIssue = {
     reason: 'object',
-    validation: 'custom',
+    context: 'custom',
     origin: 'value',
     input: { key1: 'test', key2: ['test'] },
     expected: null,
@@ -16,7 +16,7 @@ describe('flatten', () => {
 
   const nestedIssue1: SchemaIssue = {
     reason: 'string',
-    validation: 'email',
+    context: 'email',
     origin: 'value',
     input: { key1: 'test', key2: ['test'] },
     expected: 'email',
@@ -34,7 +34,7 @@ describe('flatten', () => {
 
   const nestedIssue2: SchemaIssue = {
     reason: 'string',
-    validation: 'ends_with',
+    context: 'ends_with',
     origin: 'value',
     input: { key1: 'test', key2: ['test'] },
     expected: '"@gmail.com"',
@@ -52,7 +52,7 @@ describe('flatten', () => {
 
   const nestedIssue3: SchemaIssue = {
     reason: 'type',
-    validation: 'number',
+    context: 'number',
     origin: 'value',
     input: { key1: 'test', key2: ['test'] },
     expected: 'number',

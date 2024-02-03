@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Rename `validation` property of `Issue` type to `context`
+
 ## v0.27.1 (January 28, 2023)
 
 - Fix missing file extension for Deno (pull request #387)

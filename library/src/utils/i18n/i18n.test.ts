@@ -23,7 +23,7 @@ describe('i18n', () => {
 
   const issue: SchemaIssue = {
     reason: 'type',
-    validation: 'string',
+    context: 'string',
     origin: 'value',
     expected: 'string',
     received: '123',

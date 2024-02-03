@@ -17,7 +17,7 @@ describe('schemaResult', () => {
     const issues: SchemaIssues = [
       {
         reason: 'type',
-        validation: 'string',
+        context: 'string',
         origin: 'value',
         expected: 'string',
         received: 'Object',

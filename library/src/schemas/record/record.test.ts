@@ -175,7 +175,7 @@ describe('record', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
+          context: 'min_length',
           origin: 'value',
           expected: '>=10',
           received: '5',
@@ -193,7 +193,7 @@ describe('record', () => {
         },
         {
           reason: 'record',
-          validation: 'custom',
+          context: 'custom',
           expected: null,
           received: 'Object',
           origin: 'value',
@@ -217,7 +217,7 @@ describe('record', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
+          context: 'string',
           origin: 'value',
           expected: 'string',
           received: '12345',

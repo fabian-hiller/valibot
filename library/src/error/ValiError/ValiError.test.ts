@@ -6,7 +6,7 @@ describe('ValiError', () => {
   test('should create error instance', () => {
     const issue: SchemaIssue = {
       reason: 'type',
-      validation: 'string',
+      context: 'string',
       origin: 'value',
       input: 1,
       expected: 'string',

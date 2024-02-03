@@ -11,7 +11,7 @@ describe('subissues', () => {
   test('should return subissues', () => {
     const issue1: SchemaIssue = {
       reason: 'string',
-      validation: 'length',
+      context: 'length',
       origin: 'value',
       expected: '2',
       received: '3',
@@ -21,7 +21,7 @@ describe('subissues', () => {
     };
     const issue2: SchemaIssue = {
       reason: 'string',
-      validation: 'length',
+      context: 'length',
       origin: 'value',
       expected: '4',
       received: '3',
@@ -31,7 +31,7 @@ describe('subissues', () => {
     };
     const issue3: SchemaIssue = {
       reason: 'string',
-      validation: 'starts_with',
+      context: 'starts_with',
       origin: 'value',
       expected: '"bar"',
       received: '"foo"',
