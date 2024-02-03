@@ -187,6 +187,19 @@ describe('tuple', () => {
     expect(schema2.pipe).toBeUndefined();
   });
 
+  test('should expose the metadata', () => {
+    const schema1 = tuple([string()], { description: 'a simple tuple' }, [
+      minLength(2),
+      maxLength(3),
+    ]);
+    expect(schema1.metadata).toEqual({ description: 'a simple tuple' });
+
+    const schema2 = tuple([string()], number(), {
+      description: 'a tuple with rest',
+    });
+    expect(schema2.metadata).toEqual({ description: 'a tuple with rest' });
+  });
+
   test('should execute pipe if output is typed', () => {
     const schema = tuple([string([minLength(10)])], number(), [minLength(10)]);
     const input = ['12345'];

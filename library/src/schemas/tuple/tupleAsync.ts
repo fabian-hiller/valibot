@@ -2,6 +2,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Issues,
   PipeAsync,
 } from '../../types/index.ts';
@@ -68,14 +69,14 @@ export function tupleAsync<TItems extends TupleItemsAsync>(
  * Creates an async tuple schema.
  *
  * @param items The items schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async tuple schema.
  */
 export function tupleAsync<TItems extends TupleItemsAsync>(
   items: TItems,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<TupleOutput<TItems, undefined>>
 ): TupleSchemaAsync<TItems>;
 
@@ -102,7 +103,7 @@ export function tupleAsync<
  *
  * @param items The items schema.
  * @param rest The rest schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async tuple schema.
@@ -113,7 +114,7 @@ export function tupleAsync<
 >(
   items: TItems,
   rest: TRest,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<TupleOutput<TItems, TRest>>
 ): TupleSchemaAsync<TItems, TRest>;
 
@@ -122,12 +123,12 @@ export function tupleAsync<
   TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
 >(
   items: TItems,
-  arg2?: PipeAsync<TupleOutput<TItems, TRest>> | ErrorMessage | TRest,
-  arg3?: PipeAsync<TupleOutput<TItems, TRest>> | ErrorMessage,
+  arg2?: PipeAsync<TupleOutput<TItems, TRest>> | ErrorMessageOrMetadata | TRest,
+  arg3?: PipeAsync<TupleOutput<TItems, TRest>> | ErrorMessageOrMetadata,
   arg4?: PipeAsync<TupleOutput<TItems, TRest>>
 ): TupleSchemaAsync<TItems, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message = 'Invalid type', pipe] = restAndDefaultArgs<
+  const [rest, message = 'Invalid type', pipe, metadata] = restAndDefaultArgs<
     TRest,
     PipeAsync<TupleOutput<TItems, TRest>>
   >(arg2, arg3, arg4);
@@ -140,6 +141,7 @@ export function tupleAsync<
     rest,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input) || this.items.length > input.length) {

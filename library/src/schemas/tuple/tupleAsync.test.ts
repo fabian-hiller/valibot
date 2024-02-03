@@ -193,6 +193,19 @@ describe('tupleAsync', () => {
     expect(schema2.pipe).toBeUndefined();
   });
 
+  test('should expose the metadata', () => {
+    const schema1 = tupleAsync([string()], { description: 'a simple tuple' }, [
+      minLength(2),
+      maxLength(3),
+    ]);
+    expect(schema1.metadata).toEqual({ description: 'a simple tuple' });
+
+    const schema2 = tupleAsync([string()], number(), {
+      description: 'a tuple with rest',
+    });
+    expect(schema2.metadata).toEqual({ description: 'a tuple with rest' });
+  });
+
   test('should execute pipe if output is typed', async () => {
     const schema = tupleAsync([string([minLength(10)])], number(), [
       minLength(10),
