@@ -124,12 +124,12 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
         }
       }
 
-      // If there is a valid result, execute pipe
+      // If there is a valid result, return pipe result
       if (validResult) {
         return pipeResultAsync(this, input, config);
       }
 
-      // If there are typed results, execute pipe
+      // If there are typed results, return pipe result
       if (typedResults?.length) {
         const firstResult = typedResults[0];
         return pipeResultAsync(

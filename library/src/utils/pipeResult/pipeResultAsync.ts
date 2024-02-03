@@ -5,7 +5,7 @@ import type {
   SchemaIssues,
   SchemaResult,
 } from '../../types/index.ts';
-import { parseResult } from '../parseResult/index.ts';
+import { schemaResult } from '../schemaResult/index.ts';
 import { pipeIssue } from './utils/index.ts';
 
 /**
@@ -60,6 +60,6 @@ export async function pipeResultAsync<TValue>(
     }
   }
 
-  // Return final parse result
-  return parseResult(true, output, issues);
+  // Return final schema result
+  return schemaResult(true, output, issues);
 }

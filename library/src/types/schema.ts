@@ -25,7 +25,7 @@ export type TypedSchemaResult<TOutput> = {
 };
 
 /**
- * Untyped parse result type.
+ * Untyped schema result type.
  */
 export type UntypedSchemaResult = {
   /**
@@ -67,7 +67,7 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
    * @param input The input to be parsed.
    * @param config The parse configuration.
    *
-   * @returns The parse result.
+   * @returns The schema result.
    *
    * @internal
    */
@@ -98,7 +98,7 @@ export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
    * @param input The input to be parsed.
    * @param config The parse configuration.
    *
-   * @returns The parse result.
+   * @returns The schema result.
    *
    * @internal
    */

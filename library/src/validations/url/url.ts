@@ -42,9 +42,12 @@ export function url<TInput extends string>(
       }
     },
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, url, input, 'URL');
     },
   };

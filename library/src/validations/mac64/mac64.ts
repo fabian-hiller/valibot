@@ -33,9 +33,12 @@ export function mac64<TInput extends string>(
     message,
     requirement: MAC64_REGEX,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, mac64, input, '64 bit MAC');
     },
   };

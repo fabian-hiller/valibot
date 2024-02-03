@@ -35,9 +35,12 @@ export function imei<TInput extends string>(
     message,
     requirement: [IMEI_REGEX, isLuhnAlgo],
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement[0].test(input) && this.requirement[1](input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, imei, input, 'IMEI');
     },
   };

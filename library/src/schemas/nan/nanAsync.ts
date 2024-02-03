@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * NaN schema async type.
@@ -32,13 +32,13 @@ export function nanAsync(message?: ErrorMessage): NanSchemaAsync {
     async: true,
     message,
     async _parse(input, config) {
-      // Check type of input
-      if (!Number.isNaN(input)) {
-        return schemaIssue(this, nanAsync, input, config);
+      // If type is valid, return schema result
+      if (Number.isNaN(input)) {
+        return schemaResult(true, input as number);
       }
 
-      // Return parse result
-      return parseResult(true, input as number);
+      // Otherwise, return schema issue
+      return schemaIssue(this, nanAsync, input, config);
     },
   };
 }

@@ -53,13 +53,13 @@ export function blob(
     message,
     pipe,
     _parse(input, config) {
-      // Check type of input
-      if (!(input instanceof Blob)) {
-        return schemaIssue(this, blob, input, config);
+      // If type is valid, return pipe result
+      if (input instanceof Blob) {
+        return pipeResult(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(this, input, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, blob, input, config);
     },
   };
 }

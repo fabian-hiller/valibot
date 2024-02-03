@@ -46,12 +46,12 @@ export function nonNullishAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
     wrapped,
     message,
     async _parse(input, config) {
-      // Allow `null` and `undefined` values not to pass
+      // In input is `null` or `undefined`, return schema issue
       if (input === null || input === undefined) {
         return schemaIssue(this, nonNullishAsync, input, config);
       }
 
-      // Return result of wrapped schema
+      // Otherwise, return result of wrapped schema
       return this.wrapped._parse(input, config);
     },
   };

@@ -33,9 +33,12 @@ export function ipv4<TInput extends string>(
     message,
     requirement: IPV4_REGEX,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, ipv4, input, 'IPv4');
     },
   };

@@ -1,6 +1,6 @@
 import { getDefault } from '../../methods/index.ts';
 import type { BaseSchema, Input, Output } from '../../types/index.ts';
-import { parseResult } from '../../utils/index.ts';
+import { schemaResult } from '../../utils/index.ts';
 
 /**
  * Nullish schema type.
@@ -70,11 +70,12 @@ export function nullish<
     wrapped,
     default: default_ as TDefault,
     _parse(input, config) {
-      // Allow `null` or `undefined` to pass or override it with default value
+      // If input is `null` or `undefined`, return typed schema result or
+      // override it with default value
       if (input === null || input === undefined) {
         const override = getDefault(this);
         if (override === undefined) {
-          return parseResult(true, input);
+          return schemaResult(true, input);
         }
         input = override;
       }

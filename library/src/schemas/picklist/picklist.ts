@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue, stringify } from '../../utils/index.ts';
+import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
 import type { PicklistOptions } from './types.ts';
 
 /**
@@ -42,13 +42,13 @@ export function picklist<const TOptions extends PicklistOptions>(
     options,
     message,
     _parse(input, config) {
-      // Check type of input
-      if (!this.options.includes(input as any)) {
-        return schemaIssue(this, picklist, input, config);
+      // If type is valid, return schema result
+      if (this.options.includes(input as any)) {
+        return schemaResult(true, input as TOptions[number]);
       }
 
-      // Return input as output
-      return parseResult(true, input as TOptions[number]);
+      // Otherwise, return schema issue
+      return schemaIssue(this, picklist, input, config);
     },
   };
 }

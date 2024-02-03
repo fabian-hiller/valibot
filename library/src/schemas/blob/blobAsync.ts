@@ -64,13 +64,13 @@ export function blobAsync(
     message,
     pipe,
     async _parse(input, config) {
-      // Check type of input
-      if (!(input instanceof Blob)) {
-        return schemaIssue(this, blobAsync, input, config);
+      // If type is valid, return pipe result
+      if (input instanceof Blob) {
+        return pipeResultAsync(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResultAsync(this, input, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, blobAsync, input, config);
     },
   };
 }

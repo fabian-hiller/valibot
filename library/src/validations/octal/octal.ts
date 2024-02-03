@@ -33,9 +33,12 @@ export function octal<TInput extends string>(
     message,
     requirement: OCTAL_REGEX,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, octal, input, 'octal');
     },
   };

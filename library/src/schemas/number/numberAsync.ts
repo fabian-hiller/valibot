@@ -67,13 +67,13 @@ export function numberAsync(
     message,
     pipe,
     async _parse(input, config) {
-      // Check type of input
-      if (typeof input !== 'number' || isNaN(input)) {
-        return schemaIssue(this, numberAsync, input, config);
+      // If type is valid, return pipe result
+      if (typeof input === 'number' && !isNaN(input)) {
+        return pipeResultAsync(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResultAsync(this, input, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, numberAsync, input, config);
     },
   };
 }

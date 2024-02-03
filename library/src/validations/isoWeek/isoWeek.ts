@@ -40,9 +40,12 @@ export function isoWeek<TInput extends string>(
     message,
     requirement: ISO_WEEK_REGEX,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, isoWeek, input, 'week');
     },
   };

@@ -33,10 +33,13 @@ export function bic<TInput extends string>(
     message,
     requirement: BIC_REGEX,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       // TODO: Why are we using `.toUpperCase()` here?
       if (this.requirement.test(input.toUpperCase())) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, bic, input, 'BIC');
     },
   };

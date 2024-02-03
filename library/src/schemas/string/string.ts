@@ -56,13 +56,13 @@ export function string(
     message,
     pipe,
     _parse(input, config) {
-      // Check type of input
-      if (typeof input !== 'string') {
-        return schemaIssue(this, string, input, config);
+      // If type is valid, return pipe result
+      if (typeof input === 'string') {
+        return pipeResult(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(this, input, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, string, input, config);
     },
   };
 }

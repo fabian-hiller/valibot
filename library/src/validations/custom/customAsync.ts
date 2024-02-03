@@ -34,9 +34,12 @@ export function customAsync<TInput>(
     message,
     requirement,
     async _parse(input) {
+      // If requirement is fulfilled, return action output
       if (await this.requirement(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, customAsync, input, 'input');
     },
   };

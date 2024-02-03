@@ -46,12 +46,12 @@ export function nonNullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
     wrapped,
     message,
     async _parse(input, config) {
-      // Allow `null` values not to pass
+      // In input is `null`, return schema issue
       if (input === null) {
         return schemaIssue(this, nonNullableAsync, input, config);
       }
 
-      // Return result of wrapped schema
+      // Otherwise, return result of wrapped schema
       return this.wrapped._parse(input, config);
     },
   };

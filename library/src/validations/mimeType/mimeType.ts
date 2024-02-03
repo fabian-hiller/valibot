@@ -40,9 +40,12 @@ export function mimeType<
     message,
     requirement,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement.includes(input.type as `${string}/${string}`)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, mimeType, input, 'MIME type');
     },
   };

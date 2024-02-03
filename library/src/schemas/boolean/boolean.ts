@@ -56,13 +56,13 @@ export function boolean(
     message,
     pipe,
     _parse(input, config) {
-      // Check type of input
-      if (typeof input !== 'boolean') {
-        return schemaIssue(this, boolean, input, config);
+      // If type is valid, return pipe result
+      if (typeof input === 'boolean') {
+        return pipeResult(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(this, input, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, boolean, input, config);
     },
   };
 }

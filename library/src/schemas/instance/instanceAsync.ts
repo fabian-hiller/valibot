@@ -80,13 +80,13 @@ export function instanceAsync<TClass extends Class>(
     message,
     pipe,
     async _parse(input, config) {
-      // Check type of input
-      if (!(input instanceof this.class)) {
-        return schemaIssue(this, instanceAsync, input, config);
+      // If type is valid, return pipe result
+      if (input instanceof this.class) {
+        return pipeResultAsync(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResultAsync(this, input, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, instanceAsync, input, config);
     },
   };
 }

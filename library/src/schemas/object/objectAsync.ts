@@ -6,10 +6,10 @@ import type {
   SchemaIssues,
 } from '../../types/index.ts';
 import {
-  parseResult,
   pipeResultAsync,
   restAndDefaultArgs,
   schemaIssue,
+  schemaResult,
 } from '../../utils/index.ts';
 import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 
@@ -142,144 +142,145 @@ export function objectAsync<
     message,
     pipe,
     async _parse(input, config) {
-      // Check type of input
-      if (!input || typeof input !== 'object') {
-        return schemaIssue(this, objectAsync, input, config);
-      }
+      // If root type is valid, check nested types
+      if (input && typeof input === 'object') {
+        // Cache object entries lazy
+        cachedEntries = cachedEntries ?? Object.entries(this.entries);
 
-      // Cache object entries lazy
-      cachedEntries = cachedEntries ?? Object.entries(this.entries);
+        // Create typed, issues and output
+        let typed = true;
+        let issues: SchemaIssues | undefined;
+        const output: Record<string, any> = {};
 
-      // Create typed, issues and output
-      let typed = true;
-      let issues: SchemaIssues | undefined;
-      const output: Record<string, any> = {};
-
-      // Parse schema of each key
-      await Promise.all([
-        Promise.all(
-          cachedEntries.map(async ([key, schema]) => {
-            // If not aborted early, continue execution
-            if (!(config?.abortEarly && issues)) {
-              // Get value by key
-              const value = (input as Record<string, unknown>)[key];
-
-              // Get parse result of value
-              const result = await schema._parse(value, config);
-
-              // If not aborted early, continue execution
-              if (!(config?.abortEarly && issues)) {
-                // If there are issues, capture them
-                if (result.issues) {
-                  // Create object path item
-                  const pathItem: ObjectPathItem = {
-                    type: 'object',
-                    input: input as Record<string, unknown>,
-                    key,
-                    value,
-                  };
-
-                  // Add modified result issues to issues
-                  for (const issue of result.issues) {
-                    if (issue.path) {
-                      issue.path.unshift(pathItem);
-                    } else {
-                      issue.path = [pathItem];
-                    }
-                    issues?.push(issue);
-                  }
-                  if (!issues) {
-                    issues = result.issues;
-                  }
-
-                  // If necessary, abort early
-                  if (config?.abortEarly) {
-                    typed = false;
-                    throw null;
-                  }
-                }
-
-                // If not typed, set typed to false
-                if (!result.typed) {
-                  typed = false;
-                }
-
-                // Set output of entry if necessary
-                if (result.output !== undefined || key in input) {
-                  output[key] = result.output;
-                }
-              }
-            }
-          })
-        ),
-
-        this.rest &&
+        // Parse schema of each key
+        await Promise.all([
           Promise.all(
-            Object.entries(input).map(async ([key, value]) => {
+            cachedEntries.map(async ([key, schema]) => {
               // If not aborted early, continue execution
               if (!(config?.abortEarly && issues)) {
-                if (!(key in this.entries)) {
-                  // Get parse result of value
-                  const result = await this.rest!._parse(value, config);
+                // Get value by key
+                const value = (input as Record<string, unknown>)[key];
 
-                  // If not aborted early, continue execution
-                  if (!(config?.abortEarly && issues)) {
-                    // If there are issues, capture them
-                    if (result.issues) {
-                      // Create object path item
-                      const pathItem: ObjectPathItem = {
-                        type: 'object',
-                        input: input as Record<string, unknown>,
-                        key,
-                        value,
-                      };
+                // Get schema result of value
+                const result = await schema._parse(value, config);
 
-                      // Add modified result issues to issues
-                      for (const issue of result.issues) {
-                        if (issue.path) {
-                          issue.path.unshift(pathItem);
-                        } else {
-                          issue.path = [pathItem];
-                        }
-                        issues?.push(issue);
-                      }
-                      if (!issues) {
-                        issues = result.issues;
-                      }
+                // If not aborted early, continue execution
+                if (!(config?.abortEarly && issues)) {
+                  // If there are issues, capture them
+                  if (result.issues) {
+                    // Create object path item
+                    const pathItem: ObjectPathItem = {
+                      type: 'object',
+                      input: input as Record<string, unknown>,
+                      key,
+                      value,
+                    };
 
-                      // If necessary, abort early
-                      if (config?.abortEarly) {
-                        typed = false;
-                        throw null;
+                    // Add modified result issues to issues
+                    for (const issue of result.issues) {
+                      if (issue.path) {
+                        issue.path.unshift(pathItem);
+                      } else {
+                        issue.path = [pathItem];
                       }
+                      issues?.push(issue);
+                    }
+                    if (!issues) {
+                      issues = result.issues;
                     }
 
-                    // If not typed, set typed to false
-                    if (!result.typed) {
+                    // If necessary, abort early
+                    if (config?.abortEarly) {
                       typed = false;
+                      throw null;
                     }
+                  }
 
-                    // Set output of entry
+                  // If not typed, set typed to false
+                  if (!result.typed) {
+                    typed = false;
+                  }
+
+                  // Set output of entry if necessary
+                  if (result.output !== undefined || key in input) {
                     output[key] = result.output;
                   }
                 }
               }
             })
           ),
-      ]).catch(() => null);
 
-      // If output is typed, execute pipe
-      if (typed) {
-        return pipeResultAsync(
-          this,
-          output as ObjectOutput<TEntries, TRest>,
-          config,
-          issues
-        );
+          this.rest &&
+            Promise.all(
+              Object.entries(input).map(async ([key, value]) => {
+                // If not aborted early, continue execution
+                if (!(config?.abortEarly && issues)) {
+                  if (!(key in this.entries)) {
+                    // Get schema result of value
+                    const result = await this.rest!._parse(value, config);
+
+                    // If not aborted early, continue execution
+                    if (!(config?.abortEarly && issues)) {
+                      // If there are issues, capture them
+                      if (result.issues) {
+                        // Create object path item
+                        const pathItem: ObjectPathItem = {
+                          type: 'object',
+                          input: input as Record<string, unknown>,
+                          key,
+                          value,
+                        };
+
+                        // Add modified result issues to issues
+                        for (const issue of result.issues) {
+                          if (issue.path) {
+                            issue.path.unshift(pathItem);
+                          } else {
+                            issue.path = [pathItem];
+                          }
+                          issues?.push(issue);
+                        }
+                        if (!issues) {
+                          issues = result.issues;
+                        }
+
+                        // If necessary, abort early
+                        if (config?.abortEarly) {
+                          typed = false;
+                          throw null;
+                        }
+                      }
+
+                      // If not typed, set typed to false
+                      if (!result.typed) {
+                        typed = false;
+                      }
+
+                      // Set output of entry
+                      output[key] = result.output;
+                    }
+                  }
+                }
+              })
+            ),
+        ]).catch(() => null);
+
+        // If output is typed, return pipe result
+        if (typed) {
+          return pipeResultAsync(
+            this,
+            output as ObjectOutput<TEntries, TRest>,
+            config,
+            issues
+          );
+        }
+
+        // Otherwise, return untyped schema result
+        return schemaResult(false, output, issues as SchemaIssues);
       }
 
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as SchemaIssues);
+      // Otherwise, return schema issue
+      return schemaIssue(this, objectAsync, input, config);
     },
   };
 }

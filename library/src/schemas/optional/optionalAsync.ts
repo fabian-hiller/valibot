@@ -5,7 +5,7 @@ import type {
   Input,
   Output,
 } from '../../types/index.ts';
-import { parseResult } from '../../utils/index.ts';
+import { schemaResult } from '../../utils/index.ts';
 
 /**
  * Optional schema async type.
@@ -83,16 +83,17 @@ export function optionalAsync<
     wrapped,
     default: default_ as TDefault,
     async _parse(input, config) {
-      // Allow `undefined` to pass or override it with default value
+      // If input is `undefined`, return typed schema result or override it
+      // with default value
       if (input === undefined) {
         const override = await getDefaultAsync(this);
         if (override === undefined) {
-          return parseResult(true, input);
+          return schemaResult(true, input);
         }
         input = override;
       }
 
-      // Return result of wrapped schema
+      // Otherwise, return result of wrapped schema
       return this.wrapped._parse(input, config);
     },
   };

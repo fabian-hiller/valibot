@@ -71,13 +71,13 @@ export function special<TInput>(
     message,
     pipe,
     _parse(input, config) {
-      // Check type of input
-      if (!this.check(input)) {
-        return schemaIssue(this, special, input, config);
+      // If check is fulfilled, return pipe output
+      if (this.check(input)) {
+        return pipeResult(this, input as TInput, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(this, input as TInput, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, special, input, config);
     },
   };
 }

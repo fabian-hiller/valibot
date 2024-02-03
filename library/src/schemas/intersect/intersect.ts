@@ -7,9 +7,9 @@ import type {
 } from '../../types/index.ts';
 import {
   defaultArgs,
-  parseResult,
   pipeResult,
   schemaIssue,
+  schemaResult,
 } from '../../utils/index.ts';
 import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
@@ -145,12 +145,12 @@ export function intersect<TOptions extends IntersectOptions>(
           output = result.output;
         }
 
-        // Execute pipe and return typed parse result
+        // Execute pipe and return typed schema result
         return pipeResult(this, output, config, issues);
       }
 
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as SchemaIssues);
+      // Otherwise, return untyped schema result
+      return schemaResult(false, output, issues as SchemaIssues);
     },
   };
 }

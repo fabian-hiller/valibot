@@ -56,13 +56,13 @@ export function number(
     message,
     pipe,
     _parse(input, config) {
-      // Check type of input
-      if (typeof input !== 'number' || isNaN(input)) {
-        return schemaIssue(this, number, input, config);
+      // If type is valid, return pipe result
+      if (typeof input === 'number' && !isNaN(input)) {
+        return pipeResult(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(this, input, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, number, input, config);
     },
   };
 }

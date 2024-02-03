@@ -41,9 +41,12 @@ export function maxLength<
     message,
     requirement,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (input.length <= this.requirement) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, maxLength, input, 'length', `${input.length}`);
     },
   };

@@ -1,18 +1,18 @@
 import { describe, expect, test } from 'vitest';
 import type { SchemaIssues } from '../../types/index.ts';
-import { parseResult } from './parseResult.ts';
+import { schemaResult } from './schemaResult.ts';
 
-describe('parseResult', () => {
-  test('should return typed parse result', () => {
+describe('schemaResult', () => {
+  test('should return typed schema result', () => {
     const output = { test: 123 };
-    expect(parseResult(true, output)).toEqual({
+    expect(schemaResult(true, output)).toEqual({
       typed: true,
       output,
       issues: undefined,
     });
   });
 
-  test('should return untyped parse result', () => {
+  test('should return untyped schema result', () => {
     const output = { test: 123 };
     const issues: SchemaIssues = [
       {
@@ -25,7 +25,7 @@ describe('parseResult', () => {
         input: output,
       },
     ];
-    expect(parseResult(false, output, issues)).toEqual({
+    expect(schemaResult(false, output, issues)).toEqual({
       typed: false,
       output,
       issues,

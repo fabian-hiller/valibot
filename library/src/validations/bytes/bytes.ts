@@ -37,10 +37,15 @@ export function bytes<TInput extends string, TRequirement extends number>(
     message,
     requirement,
     _parse(input) {
+      // Calculate byte length
       const length = new TextEncoder().encode(input).length;
+
+      // If requirement is fulfilled, return action output
       if (length === this.requirement) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, bytes, input, 'bytes', `${length}`);
     },
   };

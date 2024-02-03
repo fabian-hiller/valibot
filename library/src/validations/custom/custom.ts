@@ -34,9 +34,12 @@ export function custom<TInput>(
     message,
     requirement,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, custom, input, 'input');
     },
   };

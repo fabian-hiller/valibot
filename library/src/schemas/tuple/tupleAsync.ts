@@ -6,10 +6,10 @@ import type {
   SchemaIssues,
 } from '../../types/index.ts';
 import {
-  parseResult,
   pipeResultAsync,
   restAndDefaultArgs,
   schemaIssue,
+  schemaResult,
 } from '../../utils/index.ts';
 import type { TupleInput, TupleOutput, TuplePathItem } from './types.ts';
 
@@ -142,77 +142,22 @@ export function tupleAsync<
     message,
     pipe,
     async _parse(input, config) {
-      // Check type of input
-      if (!Array.isArray(input) || this.items.length > input.length) {
-        return schemaIssue(this, tupleAsync, input, config);
-      }
+      // If root type is valid, check nested types
+      // TODO: Due to length check, error message can be confusing
+      if (Array.isArray(input) && this.items.length <= input.length) {
+        // Create typed, issues and output
+        let typed = true;
+        let issues: SchemaIssues | undefined;
+        const output: any[] = [];
 
-      // Create typed, issues and output
-      let typed = true;
-      let issues: SchemaIssues | undefined;
-      const output: any[] = [];
-
-      await Promise.all([
-        // Parse schema of each tuple item
-        Promise.all(
-          this.items.map(async (schema, key) => {
-            // If not aborted early, continue execution
-            if (!(config?.abortEarly && issues)) {
-              const value = input[key];
-              const result = await schema._parse(value, config);
-
-              // If not aborted early, continue execution
-              if (!(config?.abortEarly && issues)) {
-                // If there are issues, capture them
-                if (result.issues) {
-                  // Create tuple path item
-                  const pathItem: TuplePathItem = {
-                    type: 'tuple',
-                    input: input as [any, ...any[]],
-                    key,
-                    value,
-                  };
-
-                  // Add modified result issues to issues
-                  for (const issue of result.issues) {
-                    if (issue.path) {
-                      issue.path.unshift(pathItem);
-                    } else {
-                      issue.path = [pathItem];
-                    }
-                    issues?.push(issue);
-                  }
-                  if (!issues) {
-                    issues = result.issues;
-                  }
-
-                  // If necessary, abort early
-                  if (config?.abortEarly) {
-                    typed = false;
-                    throw null;
-                  }
-                }
-
-                // If not typed, set typed to false
-                if (!result.typed) {
-                  typed = false;
-                }
-
-                // Set output of item
-                output[key] = result.output;
-              }
-            }
-          })
-        ),
-
-        // If necessary parse schema of each rest item
-        this.rest &&
+        await Promise.all([
+          // Parse schema of each tuple item
           Promise.all(
-            input.slice(this.items.length).map(async (value, index) => {
+            this.items.map(async (schema, key) => {
               // If not aborted early, continue execution
               if (!(config?.abortEarly && issues)) {
-                const key = this.items.length + index;
-                const result = await this.rest!._parse(value, config);
+                const value = input[key];
+                const result = await schema._parse(value, config);
 
                 // If not aborted early, continue execution
                 if (!(config?.abortEarly && issues)) {
@@ -257,20 +202,77 @@ export function tupleAsync<
               }
             })
           ),
-      ]).catch(() => null);
 
-      // If output is typed, execute pipe
-      if (typed) {
-        return pipeResultAsync(
-          this,
-          output as TupleOutput<TItems, TRest>,
-          config,
-          issues
-        );
+          // If necessary parse schema of each rest item
+          this.rest &&
+            Promise.all(
+              input.slice(this.items.length).map(async (value, index) => {
+                // If not aborted early, continue execution
+                if (!(config?.abortEarly && issues)) {
+                  const key = this.items.length + index;
+                  const result = await this.rest!._parse(value, config);
+
+                  // If not aborted early, continue execution
+                  if (!(config?.abortEarly && issues)) {
+                    // If there are issues, capture them
+                    if (result.issues) {
+                      // Create tuple path item
+                      const pathItem: TuplePathItem = {
+                        type: 'tuple',
+                        input: input as [any, ...any[]],
+                        key,
+                        value,
+                      };
+
+                      // Add modified result issues to issues
+                      for (const issue of result.issues) {
+                        if (issue.path) {
+                          issue.path.unshift(pathItem);
+                        } else {
+                          issue.path = [pathItem];
+                        }
+                        issues?.push(issue);
+                      }
+                      if (!issues) {
+                        issues = result.issues;
+                      }
+
+                      // If necessary, abort early
+                      if (config?.abortEarly) {
+                        typed = false;
+                        throw null;
+                      }
+                    }
+
+                    // If not typed, set typed to false
+                    if (!result.typed) {
+                      typed = false;
+                    }
+
+                    // Set output of item
+                    output[key] = result.output;
+                  }
+                }
+              })
+            ),
+        ]).catch(() => null);
+
+        // If output is typed, return pipe result
+        if (typed) {
+          return pipeResultAsync(
+            this,
+            output as TupleOutput<TItems, TRest>,
+            config,
+            issues
+          );
+        }
+
+        // Otherwise, return untyped schema result
+        return schemaResult(false, output, issues as SchemaIssues);
       }
 
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as SchemaIssues);
+      // Otherwise, return schema issue
+      return schemaIssue(this, tupleAsync, input, config);
     },
   };
 }

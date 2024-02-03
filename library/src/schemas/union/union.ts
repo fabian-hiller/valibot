@@ -119,12 +119,12 @@ export function union<TOptions extends UnionOptions>(
         }
       }
 
-      // If there is a valid result, execute pipe
+      // If there is a valid result, return pipe result
       if (validResult) {
         return pipeResult(this, input, config);
       }
 
-      // If there are typed results, execute pipe
+      // If there are typed results, return pipe result
       if (typedResults?.length) {
         const firstResult = typedResults[0];
         return pipeResult(

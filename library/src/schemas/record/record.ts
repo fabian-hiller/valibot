@@ -4,7 +4,7 @@ import type {
   Pipe,
   SchemaIssues,
 } from '../../types/index.ts';
-import { parseResult, pipeResult, schemaIssue } from '../../utils/index.ts';
+import { pipeResult, schemaIssue, schemaResult } from '../../utils/index.ts';
 import type { EnumSchema } from '../enum/index.ts';
 import type { PicklistSchema } from '../picklist/index.ts';
 import type { SpecialSchema } from '../special/index.ts';
@@ -137,115 +137,116 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
     message,
     pipe,
     _parse(input, config) {
-      // Check type of input
-      if (!input || typeof input !== 'object') {
-        return schemaIssue(this, record, input, config);
-      }
+      // If root type is valid, check nested types
+      if (input && typeof input === 'object') {
+        // Create typed, issues and output
+        let typed = true;
+        let issues: SchemaIssues | undefined;
+        const output: Record<string | number | symbol, any> = {};
 
-      // Create typed, issues and output
-      let typed = true;
-      let issues: SchemaIssues | undefined;
-      const output: Record<string | number | symbol, any> = {};
+        // Parse each key and value by schema
+        // Note: `Object.entries(...)` converts each key to a string
+        for (const [inputKey, inputValue] of Object.entries(input)) {
+          // Exclude blocked keys to prevent prototype pollutions
+          if (!BLOCKED_KEYS.includes(inputKey)) {
+            // Create path item variable
+            let pathItem: RecordPathItem | undefined;
 
-      // Parse each key and value by schema
-      // Note: `Object.entries(...)` converts each key to a string
-      for (const [inputKey, inputValue] of Object.entries(input)) {
-        // Exclude blocked keys to prevent prototype pollutions
-        if (!BLOCKED_KEYS.includes(inputKey)) {
-          // Create path item variable
-          let pathItem: RecordPathItem | undefined;
+            // Get schema result of key
+            const keyResult = this.key._parse(inputKey, {
+              origin: 'key',
+              abortEarly: config?.abortEarly,
+              abortPipeEarly: config?.abortPipeEarly,
+              skipPipe: config?.skipPipe,
+            });
 
-          // Get parse result of key
-          const keyResult = this.key._parse(inputKey, {
-            origin: 'key',
-            abortEarly: config?.abortEarly,
-            abortPipeEarly: config?.abortPipeEarly,
-            skipPipe: config?.skipPipe,
-          });
+            // If there are issues, capture them
+            if (keyResult.issues) {
+              // Create record path item
+              pathItem = {
+                type: 'record',
+                input: input as Record<string | number | symbol, unknown>,
+                key: inputKey,
+                value: inputValue,
+              };
 
-          // If there are issues, capture them
-          if (keyResult.issues) {
-            // Create record path item
-            pathItem = {
-              type: 'record',
-              input: input as Record<string | number | symbol, unknown>,
-              key: inputKey,
-              value: inputValue,
-            };
-
-            // Add modified result issues to issues
-            for (const issue of keyResult.issues) {
-              issue.path = [pathItem];
-              issues?.push(issue);
-            }
-            if (!issues) {
-              issues = keyResult.issues;
-            }
-
-            // If necessary, abort early
-            if (config?.abortEarly) {
-              typed = false;
-              break;
-            }
-          }
-
-          // Get parse result of value
-          const valueResult = this.value._parse(inputValue, config);
-
-          // If there are issues, capture them
-          if (valueResult.issues) {
-            // Create record path item
-            pathItem = pathItem ?? {
-              type: 'record',
-              input: input as Record<string | number | symbol, unknown>,
-              key: inputKey,
-              value: inputValue,
-            };
-
-            // Add modified result issues to issues
-            for (const issue of valueResult.issues) {
-              if (issue.path) {
-                issue.path.unshift(pathItem);
-              } else {
+              // Add modified result issues to issues
+              for (const issue of keyResult.issues) {
                 issue.path = [pathItem];
+                issues?.push(issue);
               }
-              issues?.push(issue);
-            }
-            if (!issues) {
-              issues = valueResult.issues;
+              if (!issues) {
+                issues = keyResult.issues;
+              }
+
+              // If necessary, abort early
+              if (config?.abortEarly) {
+                typed = false;
+                break;
+              }
             }
 
-            // If necessary, abort early
-            if (config?.abortEarly) {
+            // Get schema result of value
+            const valueResult = this.value._parse(inputValue, config);
+
+            // If there are issues, capture them
+            if (valueResult.issues) {
+              // Create record path item
+              pathItem = pathItem ?? {
+                type: 'record',
+                input: input as Record<string | number | symbol, unknown>,
+                key: inputKey,
+                value: inputValue,
+              };
+
+              // Add modified result issues to issues
+              for (const issue of valueResult.issues) {
+                if (issue.path) {
+                  issue.path.unshift(pathItem);
+                } else {
+                  issue.path = [pathItem];
+                }
+                issues?.push(issue);
+              }
+              if (!issues) {
+                issues = valueResult.issues;
+              }
+
+              // If necessary, abort early
+              if (config?.abortEarly) {
+                typed = false;
+                break;
+              }
+            }
+
+            // If not typed, set typed to false
+            if (!keyResult.typed || !valueResult.typed) {
               typed = false;
-              break;
             }
-          }
 
-          // If not typed, set typed to false
-          if (!keyResult.typed || !valueResult.typed) {
-            typed = false;
-          }
-
-          // If key is typed, set output of entry
-          if (keyResult.typed) {
-            output[keyResult.output] = valueResult.output;
+            // If key is typed, set output of entry
+            if (keyResult.typed) {
+              output[keyResult.output] = valueResult.output;
+            }
           }
         }
+
+        // If output is typed, return pipe result
+        if (typed) {
+          return pipeResult(
+            this,
+            output as RecordOutput<TKey, TValue>,
+            config,
+            issues
+          );
+        }
+
+        // Otherwise, return untyped schema result
+        return schemaResult(false, output, issues as SchemaIssues);
       }
 
-      // If output is typed, execute pipe
-      if (typed) {
-        return pipeResult(
-          this,
-          output as RecordOutput<TKey, TValue>,
-          config,
-          issues
-        );
-      }
-
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as SchemaIssues);
+      // Otherwise, return schema issue
+      return schemaIssue(this, record, input, config);
     },
   };
 }

@@ -35,9 +35,12 @@ export function ip<TInput extends string>(
     // TODO: It is strange that we have an OR relationship between requirements
     requirement: [IPV4_REGEX, IPV6_REGEX],
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement[0].test(input) || this.requirement[1].test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, ip, input, 'IP');
     },
   };

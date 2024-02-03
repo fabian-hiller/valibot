@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * NaN schema type.
@@ -29,13 +29,13 @@ export function nan(message?: ErrorMessage): NanSchema {
     async: false,
     message,
     _parse(input, config) {
-      // Check type of input
-      if (!Number.isNaN(input)) {
-        return schemaIssue(this, nan, input, config);
+      // If type is valid, return schema result
+      if (Number.isNaN(input)) {
+        return schemaResult(true, input as number);
       }
 
-      // Return parse result
-      return parseResult(true, input as number);
+      // Otherwise, return schema issue
+      return schemaIssue(this, nan, input, config);
     },
   };
 }

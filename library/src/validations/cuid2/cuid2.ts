@@ -33,9 +33,12 @@ export function cuid2<TInput extends string>(
     message,
     requirement: CUID2_REGEX,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, cuid2, input, 'Cuid2');
     },
   };

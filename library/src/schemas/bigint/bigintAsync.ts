@@ -67,13 +67,13 @@ export function bigintAsync(
     message,
     pipe,
     async _parse(input, config) {
-      // Check type of input
-      if (typeof input !== 'bigint') {
-        return schemaIssue(this, bigintAsync, input, config);
+      // If type is valid, return pipe result
+      if (typeof input === 'bigint') {
+        return pipeResultAsync(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResultAsync(this, input, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, bigintAsync, input, config);
     },
   };
 }

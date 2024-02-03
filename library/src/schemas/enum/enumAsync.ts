@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue, stringify } from '../../utils/index.ts';
+import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
 import type { Enum } from './enum.ts';
 
 /**
@@ -46,13 +46,13 @@ export function enumAsync<TEnum extends Enum>(
     enum: enum_,
     message,
     async _parse(input, config) {
-      // Check type of input
-      if (!values.includes(input as any)) {
-        return schemaIssue(this, enumAsync, input, config);
+      // If type is valid, return schema result
+      if (values.includes(input as any)) {
+        return schemaResult(true, input as TEnum[keyof TEnum]);
       }
 
-      // Return parse result
-      return parseResult(true, input as TEnum[keyof TEnum]);
+      // Otherwise, return schema issue
+      return schemaIssue(this, enumAsync, input, config);
     },
   };
 }

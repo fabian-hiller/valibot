@@ -8,9 +8,9 @@ import type {
 } from '../../types/index.ts';
 import {
   defaultArgs,
-  parseResult,
   pipeResult,
   schemaIssue,
+  schemaResult,
 } from '../../utils/index.ts';
 import type { ArrayPathItem } from './types.ts';
 
@@ -84,67 +84,68 @@ export function array<TItem extends BaseSchema>(
     message,
     pipe,
     _parse(input, config) {
-      // Check type of input
-      if (!Array.isArray(input)) {
-        return schemaIssue(this, array, input, config);
-      }
+      // If root type is valid, check nested types
+      if (Array.isArray(input)) {
+        // Create typed, issues and output
+        let typed = true;
+        let issues: SchemaIssues | undefined;
+        const output: any[] = [];
 
-      // Create typed, issues and output
-      let typed = true;
-      let issues: SchemaIssues | undefined;
-      const output: any[] = [];
+        // Parse schema of each array item
+        for (let key = 0; key < input.length; key++) {
+          const value = input[key];
+          const result = this.item._parse(value, config);
 
-      // Parse schema of each array item
-      for (let key = 0; key < input.length; key++) {
-        const value = input[key];
-        const result = this.item._parse(value, config);
+          // If there are issues, capture them
+          if (result.issues) {
+            // Create array path item
+            const pathItem: ArrayPathItem = {
+              type: 'array',
+              input,
+              key,
+              value,
+            };
 
-        // If there are issues, capture them
-        if (result.issues) {
-          // Create array path item
-          const pathItem: ArrayPathItem = {
-            type: 'array',
-            input,
-            key,
-            value,
-          };
-
-          // Add modified result issues to issues
-          for (const issue of result.issues) {
-            if (issue.path) {
-              issue.path.unshift(pathItem);
-            } else {
-              issue.path = [pathItem];
+            // Add modified result issues to issues
+            for (const issue of result.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                issue.path = [pathItem];
+              }
+              issues?.push(issue);
             }
-            issues?.push(issue);
-          }
-          if (!issues) {
-            issues = result.issues;
+            if (!issues) {
+              issues = result.issues;
+            }
+
+            // If necessary, abort early
+            if (config?.abortEarly) {
+              typed = false;
+              break;
+            }
           }
 
-          // If necessary, abort early
-          if (config?.abortEarly) {
+          // If not typed, set typed to false
+          if (!result.typed) {
             typed = false;
-            break;
           }
+
+          // Set output of item
+          output.push(result.output);
         }
 
-        // If not typed, set typed to false
-        if (!result.typed) {
-          typed = false;
+        // If output is typed, return pipe result
+        if (typed) {
+          return pipeResult(this, output as Output<TItem>[], config, issues);
         }
 
-        // Set output of item
-        output.push(result.output);
+        // Otherwise, return untyped schema result
+        return schemaResult(false, output, issues as SchemaIssues);
       }
 
-      // If output is typed, execute pipe
-      if (typed) {
-        return pipeResult(this, output as Output<TItem>[], config, issues);
-      }
-
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as SchemaIssues);
+      // Otherwise, return schema issue
+      return schemaIssue(this, array, input, config);
     },
   };
 }

@@ -3,9 +3,9 @@ import type {
   ParseConfig,
   Pipe,
   SchemaIssues,
-  SchemaResult,
+  TypedSchemaResult,
 } from '../../types/index.ts';
-import { parseResult } from '../parseResult/index.ts';
+import { schemaResult } from '../schemaResult/index.ts';
 import { pipeIssue } from './utils/index.ts';
 
 /**
@@ -31,7 +31,7 @@ export function pipeResult<TValue>(
   input: TValue,
   config: ParseConfig | undefined,
   issues?: SchemaIssues
-): SchemaResult<TValue> {
+): TypedSchemaResult<TValue> {
   // Create output
   let output: TValue = input;
 
@@ -60,6 +60,6 @@ export function pipeResult<TValue>(
     }
   }
 
-  // Return final parse result
-  return parseResult(true, output, issues);
+  // Return final schema result
+  return schemaResult(true, output, issues);
 }

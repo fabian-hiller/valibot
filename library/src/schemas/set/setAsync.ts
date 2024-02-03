@@ -7,9 +7,9 @@ import type {
 } from '../../types/index.ts';
 import {
   defaultArgs,
-  parseResult,
   pipeResultAsync,
   schemaIssue,
+  schemaResult,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput, SetPathItem } from './types.ts';
 
@@ -83,75 +83,76 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
     message,
     pipe,
     async _parse(input, config) {
-      // Check type of input
-      if (!(input instanceof Set)) {
-        return schemaIssue(this, setAsync, input, config);
-      }
+      // If root type is valid, check nested types
+      if (input instanceof Set) {
+        // Create typed, index, output and issues
+        let typed = true;
+        let issues: SchemaIssues | undefined;
+        const output: SetOutput<TValue> = new Set();
 
-      // Create typed, index, output and issues
-      let typed = true;
-      let issues: SchemaIssues | undefined;
-      const output: SetOutput<TValue> = new Set();
-
-      // Parse each value by schema
-      await Promise.all(
-        Array.from(input.values()).map(async (inputValue, key) => {
-          // If not aborted early, continue execution
-          if (!(config?.abortEarly && issues)) {
-            // Get parse result of input value
-            const result = await this.value._parse(inputValue, config);
-
+        // Parse each value by schema
+        await Promise.all(
+          Array.from(input.values()).map(async (inputValue, key) => {
             // If not aborted early, continue execution
             if (!(config?.abortEarly && issues)) {
-              // If there are issues, capture them
-              if (result.issues) {
-                // Create set path item
-                const pathItem: SetPathItem = {
-                  type: 'set',
-                  input,
-                  key,
-                  value: inputValue,
-                };
+              // Get schema result of input value
+              const result = await this.value._parse(inputValue, config);
 
-                // Add modified result issues to issues
-                for (const issue of result.issues) {
-                  if (issue.path) {
-                    issue.path.unshift(pathItem);
-                  } else {
-                    issue.path = [pathItem];
+              // If not aborted early, continue execution
+              if (!(config?.abortEarly && issues)) {
+                // If there are issues, capture them
+                if (result.issues) {
+                  // Create set path item
+                  const pathItem: SetPathItem = {
+                    type: 'set',
+                    input,
+                    key,
+                    value: inputValue,
+                  };
+
+                  // Add modified result issues to issues
+                  for (const issue of result.issues) {
+                    if (issue.path) {
+                      issue.path.unshift(pathItem);
+                    } else {
+                      issue.path = [pathItem];
+                    }
+                    issues?.push(issue);
                   }
-                  issues?.push(issue);
-                }
-                if (!issues) {
-                  issues = result.issues;
+                  if (!issues) {
+                    issues = result.issues;
+                  }
+
+                  // If necessary, abort early
+                  if (config?.abortEarly) {
+                    typed = false;
+                    throw null;
+                  }
                 }
 
-                // If necessary, abort early
-                if (config?.abortEarly) {
+                // If not typed, set typed to false
+                if (!result.typed) {
                   typed = false;
-                  throw null;
                 }
-              }
 
-              // If not typed, set typed to false
-              if (!result.typed) {
-                typed = false;
+                // Set output of entry if necessary
+                output.add(result.output);
               }
-
-              // Set output of entry if necessary
-              output.add(result.output);
             }
-          }
-        })
-      ).catch(() => null);
+          })
+        ).catch(() => null);
 
-      // If output is typed, execute pipe
-      if (typed) {
-        return pipeResultAsync(this, output, config, issues);
+        // If output is typed, return pipe result
+        if (typed) {
+          return pipeResultAsync(this, output, config, issues);
+        }
+
+        // Otherwise, return untyped schema result
+        return schemaResult(false, output, issues as SchemaIssues);
       }
 
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as SchemaIssues);
+      // Otherwise, return schema issue
+      return schemaIssue(this, setAsync, input, config);
     },
   };
 }

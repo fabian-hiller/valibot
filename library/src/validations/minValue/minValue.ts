@@ -45,9 +45,12 @@ export function minValue<
     message,
     requirement,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (input >= this.requirement) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(
         this,
         minValue,

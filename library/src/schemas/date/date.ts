@@ -53,13 +53,13 @@ export function date(
     message,
     pipe,
     _parse(input, config) {
-      // Check type of input
-      if (!(input instanceof Date) || isNaN(input.getTime())) {
-        return schemaIssue(this, date, input, config);
+      // If type is valid, return pipe result
+      if (input instanceof Date && !isNaN(input.getTime())) {
+        return pipeResult(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(this, input, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, date, input, config);
     },
   };
 }

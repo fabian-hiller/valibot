@@ -34,9 +34,12 @@ export function integer<TInput extends number>(
     message,
     requirement: Number.isInteger,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, integer, input, 'integer');
     },
   };

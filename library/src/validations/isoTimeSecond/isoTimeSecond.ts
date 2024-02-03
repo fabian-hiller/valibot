@@ -36,9 +36,12 @@ export function isoTimeSecond<TInput extends string>(
     message,
     requirement: ISO_TIME_SECOND_REGEX,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, isoTimeSecond, input, 'time second');
     },
   };

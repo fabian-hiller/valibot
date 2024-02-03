@@ -67,7 +67,7 @@ export type BaseValidation<TInput = any> = {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
@@ -95,7 +95,7 @@ export type BaseValidationAsync<TInput = any> = {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
@@ -115,7 +115,7 @@ export type BaseTransformation<TInput = any> = {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
@@ -135,7 +135,7 @@ export type BaseTransformationAsync<TInput = any> = {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */

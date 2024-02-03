@@ -79,13 +79,13 @@ export function specialAsync<TInput>(
     message,
     pipe,
     async _parse(input, config) {
-      // Check type of input
-      if (!(await this.check(input))) {
-        return schemaIssue(this, specialAsync, input, config);
+      // If check is fulfilled, return pipe output
+      if (await this.check(input)) {
+        return pipeResultAsync(this, input as TInput, config);
       }
 
-      // Execute pipe and return result
-      return pipeResultAsync(this, input as TInput, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, specialAsync, input, config);
     },
   };
 }

@@ -42,9 +42,12 @@ export function excludes<
     message,
     requirement,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (!input.includes(this.requirement)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, excludes, input, 'content', received);
     },
   };

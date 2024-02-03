@@ -43,9 +43,12 @@ export function isoTimestamp<TInput extends string>(
     message,
     requirement: ISO_TIMESTAMP_REGEX,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, isoTimestamp, input, 'timestamp');
     },
   };

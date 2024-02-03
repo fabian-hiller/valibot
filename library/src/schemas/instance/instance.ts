@@ -72,13 +72,13 @@ export function instance<TClass extends Class>(
     message,
     pipe,
     _parse(input, config) {
-      // Check type of input
-      if (!(input instanceof this.class)) {
-        return schemaIssue(this, instance, input, config);
+      // If type is valid, return pipe result
+      if (input instanceof this.class) {
+        return pipeResult(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(this, input, config);
+      // Otherwise, return schema issue
+      return schemaIssue(this, instance, input, config);
     },
   };
 }

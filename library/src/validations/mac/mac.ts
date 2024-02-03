@@ -34,9 +34,12 @@ export function mac<TInput extends string>(
     // TODO: It is strange that we have an OR relationship between requirements
     requirement: [MAC48_REGEX, MAC64_REGEX],
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement[0].test(input) || this.requirement[1].test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, mac, input, 'MAC');
     },
   };

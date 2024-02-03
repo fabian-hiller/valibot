@@ -42,12 +42,12 @@ export function nonNullable<TWrapped extends BaseSchema>(
     wrapped,
     message,
     _parse(input, config) {
-      // Allow `null` values not to pass
+      // In input is `null`, return schema issue
       if (input === null) {
         return schemaIssue(this, nonNullable, input, config);
       }
 
-      // Return result of wrapped schema
+      // Otherwise, return result of wrapped schema
       return this.wrapped._parse(input, config);
     },
   };

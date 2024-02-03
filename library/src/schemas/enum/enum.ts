@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue, stringify } from '../../utils/index.ts';
+import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
 
 /**
  * Enum type.
@@ -53,13 +53,13 @@ export function enum_<TEnum extends Enum>(
     enum: enum__,
     message,
     _parse(input, config) {
-      // Check type of input
-      if (!values.includes(input as any)) {
-        return schemaIssue(this, enum_, input, config);
+      // If type is valid, return schema result
+      if (values.includes(input as any)) {
+        return schemaResult(true, input as TEnum[keyof TEnum]);
       }
 
-      // Return parse result
-      return parseResult(true, input as TEnum[keyof TEnum]);
+      // Otherwise, return schema issue
+      return schemaIssue(this, enum_, input, config);
     },
   };
 }

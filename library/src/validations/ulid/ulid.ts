@@ -33,9 +33,12 @@ export function ulid<TInput extends string>(
     message,
     requirement: ULID_REGEX,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, ulid, input, 'ULID');
     },
   };

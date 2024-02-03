@@ -40,9 +40,12 @@ export function isoDate<TInput extends string>(
     message,
     requirement: ISO_DATE_REGEX,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, isoDate, input, 'date');
     },
   };

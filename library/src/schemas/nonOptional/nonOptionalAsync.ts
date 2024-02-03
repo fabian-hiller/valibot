@@ -46,12 +46,12 @@ export function nonOptionalAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
     wrapped,
     message,
     async _parse(input, config) {
-      // Allow `undefined` values not to pass
+      // In input is `undefined`, return schema issue
       if (input === undefined) {
         return schemaIssue(this, nonOptionalAsync, input, config);
       }
 
-      // Return result of wrapped schema
+      // Otherwise, return result of wrapped schema
       return this.wrapped._parse(input, config);
     },
   };

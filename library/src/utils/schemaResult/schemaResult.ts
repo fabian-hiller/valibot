@@ -6,7 +6,7 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Returns the result object with an output.
+ * Returns the schema result object.
  *
  * @param typed Whether it's typed.
  * @param output The output value.
@@ -14,14 +14,14 @@ import type {
  *
  * @returns The result object.
  */
-export function parseResult<TOutput>(
+export function schemaResult<TOutput>(
   typed: true,
   output: TOutput,
   issues?: SchemaIssues
 ): TypedSchemaResult<TOutput>;
 
 /**
- * Returns the result object with an output.
+ * Returns the schema result object.
  *
  * @param typed Whether it's typed.
  * @param output The output value.
@@ -29,13 +29,13 @@ export function parseResult<TOutput>(
  *
  * @returns The result object.
  */
-export function parseResult(
+export function schemaResult(
   typed: false,
   output: unknown,
   issues: SchemaIssues
 ): UntypedSchemaResult;
 
-export function parseResult<TOutput>(
+export function schemaResult<TOutput>(
   typed: boolean,
   output: TOutput | unknown,
   issues?: SchemaIssues

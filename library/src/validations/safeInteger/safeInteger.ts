@@ -34,9 +34,12 @@ export function safeInteger<TInput extends number>(
     message,
     requirement: Number.isSafeInteger,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, safeInteger, input, 'safe integer');
     },
   };

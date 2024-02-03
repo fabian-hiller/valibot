@@ -32,9 +32,12 @@ export function finite<TInput extends number>(
     message,
     requirement: Number.isFinite,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, finite, input, 'finite');
     },
   };

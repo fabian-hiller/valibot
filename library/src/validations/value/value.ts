@@ -45,9 +45,12 @@ export function value<
     message,
     requirement,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (input <= this.requirement && input >= this.requirement) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(
         this,
         value,

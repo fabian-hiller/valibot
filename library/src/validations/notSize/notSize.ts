@@ -41,9 +41,12 @@ export function notSize<
     message,
     requirement,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (input.size !== this.requirement) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, notSize, input, 'size', `${input.size}`);
     },
   };

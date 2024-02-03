@@ -34,9 +34,12 @@ export function regex<TInput extends string>(
     message,
     requirement,
     _parse(input) {
+      // If requirement is fulfilled, return action output
       if (this.requirement.test(input)) {
         return actionOutput(input);
       }
+
+      // Otherwise, return action issue
       return actionIssue(this, regex, input, 'format');
     },
   };
