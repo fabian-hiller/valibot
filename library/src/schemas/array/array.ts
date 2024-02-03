@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Input,
   Issues,
   Output,
@@ -56,24 +57,24 @@ export function array<TItem extends BaseSchema>(
  * Creates a array schema.
  *
  * @param item The item schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A array schema.
  */
 export function array<TItem extends BaseSchema>(
   item: TItem,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<Output<TItem>[]>
 ): ArraySchema<TItem>;
 
 export function array<TItem extends BaseSchema>(
   item: TItem,
-  arg2?: ErrorMessage | Pipe<Output<TItem>[]>,
+  arg2?: ErrorMessageOrMetadata | Pipe<Output<TItem>[]>,
   arg3?: Pipe<Output<TItem>[]>
 ): ArraySchema<TItem> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return array schema
   return {
@@ -82,6 +83,7 @@ export function array<TItem extends BaseSchema>(
     item,
     message,
     pipe,
+    metadata,
     _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {

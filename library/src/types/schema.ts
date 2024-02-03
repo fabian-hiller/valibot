@@ -112,6 +112,11 @@ export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
    * @internal
    */
   _parse(input: unknown, info?: ParseInfo): Promise<SchemaResult<TOutput>>;
+
+  /**
+   * Schema metadata.
+   */
+  metadata?: SchemaMetadata;
   /**
    * Input and output type.
    *

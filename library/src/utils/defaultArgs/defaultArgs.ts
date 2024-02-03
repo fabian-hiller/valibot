@@ -1,4 +1,10 @@
-import type { ErrorMessage, Pipe, PipeAsync } from '../../types/index.ts';
+import type {
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+  Pipe,
+  PipeAsync,
+  SchemaMetadata,
+} from '../../types/index.ts';
 
 /**
  * Returns message and pipe from dynamic arguments.
@@ -9,8 +15,15 @@ import type { ErrorMessage, Pipe, PipeAsync } from '../../types/index.ts';
  * @returns The default arguments.
  */
 export function defaultArgs<TPipe extends Pipe<any> | PipeAsync<any>>(
-  arg1: ErrorMessage | TPipe | undefined,
+  arg1: ErrorMessageOrMetadata | TPipe | undefined,
   arg2: TPipe | undefined
-): [ErrorMessage | undefined, TPipe | undefined] {
-  return Array.isArray(arg1) ? [undefined, arg1] : [arg1, arg2];
+): [ErrorMessage | undefined, TPipe | undefined, SchemaMetadata | undefined] {
+  if (Array.isArray(arg1)) return [undefined, arg1, undefined];
+
+  if (typeof arg1 === 'string' || typeof arg1 === 'function')
+    return [arg1, arg2, undefined];
+
+  if (arg1 === undefined) return [undefined, arg2, undefined];
+  const { message, ...metadata } = arg1;
+  return [message, arg2, metadata];
 }

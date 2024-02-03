@@ -2,6 +2,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Input,
   Issues,
   Output,
@@ -57,24 +58,24 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
  * Creates an async array schema.
  *
  * @param item The item schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async array schema.
  */
 export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
   item: TItem,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<Output<TItem>[]>
 ): ArraySchemaAsync<TItem>;
 
 export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
   item: TItem,
-  arg2?: ErrorMessage | PipeAsync<Output<TItem>[]>,
+  arg2?: ErrorMessageOrMetadata | PipeAsync<Output<TItem>[]>,
   arg3?: PipeAsync<Output<TItem>[]>
 ): ArraySchemaAsync<TItem> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return async array schema
   return {
@@ -83,6 +84,7 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
     item,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (!Array.isArray(input)) {
