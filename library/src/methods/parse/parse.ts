@@ -10,9 +10,9 @@ import type { BaseSchema, Output, ParseInfo } from '../../types/index.ts';
  *
  * @returns The parsed output.
  */
-export function parse<TSchema extends BaseSchema>(
+export function parse<TSchema extends BaseSchema, TInput>(
   schema: TSchema,
-  input: unknown,
+  input: TInput extends Promise<any> ? never : TInput,
   info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly' | 'skipPipe'>
 ): Output<TSchema> {
   const result = schema._parse(input, info);
