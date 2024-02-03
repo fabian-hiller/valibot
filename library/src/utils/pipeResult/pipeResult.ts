@@ -32,13 +32,10 @@ export function pipeResult<TValue>(
   config: ParseConfig | undefined,
   issues?: SchemaIssues
 ): TypedSchemaResult<TValue> {
-  // Create output
-  let output: TValue = input;
-
   // Execute any action of pipe if necessary
-  if (context.pipe?.length && !config?.skipPipe) {
+  if (context.pipe && !config?.skipPipe) {
     for (const action of context.pipe) {
-      const result = action._parse(output);
+      const result = action._parse(input);
 
       // If there are issues, capture them
       if (result.issues) {
@@ -53,13 +50,13 @@ export function pipeResult<TValue>(
           break;
         }
 
-        // Otherwise, overwrite output
+        // Otherwise, overwrite input
       } else {
-        output = result.output;
+        input = result.output;
       }
     }
   }
 
   // Return final schema result
-  return schemaResult(true, output, issues);
+  return schemaResult(true, input, issues);
 }
