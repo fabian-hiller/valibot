@@ -39,7 +39,7 @@ export function mac48<TInput extends string>(
       }
 
       // Otherwise, return action issue
-      return actionIssue(this, mac48, input, '48 bit MAC');
+      return actionIssue(this, mac48, input, '48-bit MAC');
     },
   };
 }
