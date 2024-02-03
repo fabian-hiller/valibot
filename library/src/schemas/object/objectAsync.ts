@@ -2,6 +2,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Issues,
   PipeAsync,
 } from '../../types/index.ts';
@@ -65,14 +66,14 @@ export function objectAsync<TEntries extends ObjectEntriesAsync>(
  * Creates an async object schema.
  *
  * @param entries The object entries.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
  */
 export function objectAsync<TEntries extends ObjectEntriesAsync>(
   entries: TEntries,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<ObjectOutput<TEntries, undefined>>
 ): ObjectSchemaAsync<TEntries>;
 
@@ -99,7 +100,7 @@ export function objectAsync<
  *
  * @param entries The object entries.
  * @param rest The object rest.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -110,7 +111,7 @@ export function objectAsync<
 >(
   entries: TEntries,
   rest: TRest,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<ObjectOutput<TEntries, TRest>>
 ): ObjectSchemaAsync<TEntries, TRest>;
 
@@ -119,12 +120,15 @@ export function objectAsync<
   TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
 >(
   entries: TEntries,
-  arg2?: PipeAsync<ObjectOutput<TEntries, TRest>> | ErrorMessage | TRest,
-  arg3?: PipeAsync<ObjectOutput<TEntries, TRest>> | ErrorMessage,
+  arg2?:
+    | PipeAsync<ObjectOutput<TEntries, TRest>>
+    | ErrorMessageOrMetadata
+    | TRest,
+  arg3?: PipeAsync<ObjectOutput<TEntries, TRest>> | ErrorMessageOrMetadata,
   arg4?: PipeAsync<ObjectOutput<TEntries, TRest>>
 ): ObjectSchemaAsync<TEntries, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message = 'Invalid type', pipe] = restAndDefaultArgs<
+  const [rest, message = 'Invalid type', pipe, metadata] = restAndDefaultArgs<
     TRest,
     PipeAsync<ObjectOutput<TEntries, TRest>>
   >(arg2, arg3, arg4);
@@ -140,6 +144,7 @@ export function objectAsync<
     rest,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {

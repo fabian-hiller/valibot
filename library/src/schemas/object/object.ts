@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Issues,
   Pipe,
 } from '../../types/index.ts';
@@ -64,14 +65,14 @@ export function object<TEntries extends ObjectEntries>(
  * Creates an object schema.
  *
  * @param entries The object entries.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
 export function object<TEntries extends ObjectEntries>(
   entries: TEntries,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<ObjectOutput<TEntries, undefined>>
 ): ObjectSchema<TEntries>;
 
@@ -98,7 +99,7 @@ export function object<
  *
  * @param entries The object entries.
  * @param rest The object rest.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -109,7 +110,7 @@ export function object<
 >(
   entries: TEntries,
   rest: TRest,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<ObjectOutput<TEntries, TRest>>
 ): ObjectSchema<TEntries, TRest>;
 
@@ -118,12 +119,12 @@ export function object<
   TRest extends BaseSchema | undefined = undefined
 >(
   entries: TEntries,
-  arg2?: Pipe<ObjectOutput<TEntries, TRest>> | ErrorMessage | TRest,
-  arg3?: Pipe<ObjectOutput<TEntries, TRest>> | ErrorMessage,
+  arg2?: Pipe<ObjectOutput<TEntries, TRest>> | ErrorMessageOrMetadata | TRest,
+  arg3?: Pipe<ObjectOutput<TEntries, TRest>> | ErrorMessageOrMetadata,
   arg4?: Pipe<ObjectOutput<TEntries, TRest>>
 ): ObjectSchema<TEntries, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message = 'Invalid type', pipe] = restAndDefaultArgs<
+  const [rest, message = 'Invalid type', pipe, metadata] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<TEntries, TRest>>
   >(arg2, arg3, arg4);
@@ -139,6 +140,7 @@ export function object<
     rest,
     message,
     pipe,
+    metadata,
     _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {

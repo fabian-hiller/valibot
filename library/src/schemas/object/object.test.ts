@@ -231,4 +231,16 @@ describe('object', () => {
       ],
     });
   });
+
+  test('should expose the metadata', async () => {
+    const schema1 = object(
+      { key: string() },
+      { description: 'a simple object' }
+    );
+    expect(schema1.metadata).toEqual({ description: 'a simple object' });
+    const schema2 = object({ key: string() }, number(), {
+      description: 'an object with a rest',
+    });
+    expect(schema2.metadata).toEqual({ description: 'an object with a rest' });
+  });
 });
