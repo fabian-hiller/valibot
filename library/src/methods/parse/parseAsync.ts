@@ -3,8 +3,8 @@ import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
-  Config,
   Output,
+  SchemaConfig,
 } from '../../types/index.ts';
 
 /**
@@ -19,7 +19,7 @@ import type {
 export async function parseAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
   schema: TSchema,
   input: unknown,
-  config?: Config
+  config?: SchemaConfig
 ): Promise<Output<TSchema>> {
   const result = await schema._parse(input, getGlobalConfig(config));
   if (result.issues) {

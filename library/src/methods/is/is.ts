@@ -1,5 +1,5 @@
 import { getGlobalConfig } from '../../storages/index.ts';
-import type { BaseSchema, Config, Input } from '../../types/index.ts';
+import type { BaseSchema, Input, SchemaConfig } from '../../types/index.ts';
 
 /**
  * Checks if the input matches the scheme. By using a type predicate, this
@@ -14,7 +14,7 @@ import type { BaseSchema, Config, Input } from '../../types/index.ts';
 export function is<TSchema extends BaseSchema>(
   schema: TSchema,
   input: unknown,
-  config?: Pick<Config, 'skipPipe'>
+  config?: Pick<SchemaConfig, 'skipPipe'>
 ): input is Input<TSchema> {
   return !schema._parse(input, {
     abortEarly: true,

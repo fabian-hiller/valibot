@@ -6,9 +6,9 @@ import type { SchemaIssue } from './issues.ts';
 export type ErrorMessage = string | ((issue: SchemaIssue) => string);
 
 /**
- * The config type.
+ * The schema config type.
  */
-export type Config = {
+export type SchemaConfig = {
   /**
    * The selected language.
    */

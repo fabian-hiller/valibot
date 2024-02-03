@@ -6,7 +6,7 @@ import type {
   SetPathItem,
   TuplePathItem,
 } from '../schemas/index.ts';
-import type { Config } from './config.ts';
+import type { SchemaConfig } from './config.ts';
 import type { PipeActionContext } from './pipe.ts';
 
 /**
@@ -67,7 +67,7 @@ export type PathItem =
 /**
  * Schema issue type.
  */
-export type SchemaIssue = Omit<Config, 'message'> & {
+export type SchemaIssue = Omit<SchemaConfig, 'message'> & {
   /**
    * The issue reason.
    */

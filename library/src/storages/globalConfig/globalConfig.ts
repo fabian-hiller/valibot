@@ -1,9 +1,9 @@
-import type { Config } from '../../types/index.ts';
+import type { SchemaConfig } from '../../types/index.ts';
 
 /**
  * The global config type.
  */
-export type GlobalConfig = Omit<Config, 'message'>;
+export type GlobalConfig = Omit<SchemaConfig, 'message'>;
 
 // Create global configuration store
 let store: GlobalConfig | undefined;
@@ -24,7 +24,7 @@ export function setGlobalConfig(config: GlobalConfig) {
  *
  * @returns The configuration.
  */
-export function getGlobalConfig(config?: Config): Config {
+export function getGlobalConfig(config?: SchemaConfig): SchemaConfig {
   // Note: The issue is deliberately not constructed with the spread operator
   // for performance reasons
   return {
