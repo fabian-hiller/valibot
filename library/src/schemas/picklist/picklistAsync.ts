@@ -1,5 +1,9 @@
-import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, parseResult, schemaIssue } from '../../utils/index.ts';
 import type { PicklistOptions } from './types.ts';
 
 /**
@@ -27,19 +31,25 @@ export type PicklistSchemaAsync<
  * Creates an async picklist schema.
  *
  * @param options The picklist options.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns An async picklist schema.
  */
 export function picklistAsync<const TOptions extends PicklistOptions>(
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  messageOrMetadata?: ErrorMessageOrMetadata
 ): PicklistSchemaAsync<TOptions> {
+  // Extracts the message and metadata from the input.
+  const [message = 'Invalid type', , metadata] = defaultArgs(
+    messageOrMetadata,
+    undefined
+  );
   return {
     type: 'picklist',
     async: true,
     options,
     message,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (!this.options.includes(input as any)) {

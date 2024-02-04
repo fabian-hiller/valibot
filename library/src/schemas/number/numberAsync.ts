@@ -1,6 +1,7 @@
 import type {
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   PipeAsync,
 } from '../../types/index.ts';
 import {
@@ -42,22 +43,22 @@ export function numberAsync(pipe?: PipeAsync<number>): NumberSchemaAsync;
 /**
  * Creates an async number schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async number schema.
  */
 export function numberAsync(
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<number>
 ): NumberSchemaAsync;
 
 export function numberAsync(
-  arg1?: ErrorMessage | PipeAsync<number>,
+  arg1?: ErrorMessageOrMetadata | PipeAsync<number>,
   arg2?: PipeAsync<number>
 ): NumberSchemaAsync {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return async number schema
   return {
@@ -65,6 +66,7 @@ export function numberAsync(
     async: true,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'number' || isNaN(input)) {

@@ -54,4 +54,19 @@ describe('numberAsync', () => {
     const schema2 = numberAsync();
     expect(schema2.pipe).toBeUndefined();
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = numberAsync({ description: 'number value' });
+    expect(schema1.metadata).toEqual({ description: 'number value' });
+
+    const schema2 = numberAsync({
+      description: 'number value',
+      message: 'Value is not a number!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'number value' });
+    expect(schema2.message).toEqual('Value is not a number!');
+
+    const schema3 = numberAsync();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });
