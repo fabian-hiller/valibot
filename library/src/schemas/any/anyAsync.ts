@@ -44,7 +44,10 @@ export function anyAsync(
   arg1?: SchemaMetadata | PipeAsync<any>,
   arg2?: PipeAsync<any>
 ): AnySchemaAsync {
+  // Get pipe and metadata argument
   const [, pipe, metadata] = defaultArgs<PipeAsync<any>>(arg1, arg2);
+
+  // Create and return any schema
   return {
     type: 'any',
     async: true,

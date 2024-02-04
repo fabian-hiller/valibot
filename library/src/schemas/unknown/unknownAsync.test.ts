@@ -25,4 +25,11 @@ describe('unknownAsync', () => {
     );
     expect(output).toBe(transformInput());
   });
+  test('should expose the metadata', () => {
+    const schema1 = unknownAsync({ description: 'unknown value' });
+    expect(schema1.metadata).toEqual({ description: 'unknown value' });
+
+    const schema2 = unknownAsync();
+    expect(schema2.metadata).toBeUndefined();
+  });
 });

@@ -22,4 +22,12 @@ describe('unknown', () => {
     const output = parse(unknown([toCustom(transformInput)]), 123);
     expect(output).toBe(transformInput());
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = unknown({ description: 'unknown value' });
+    expect(schema1.metadata).toEqual({ description: 'unknown value' });
+
+    const schema2 = unknown();
+    expect(schema2.metadata).toBeUndefined();
+  });
 });

@@ -38,7 +38,10 @@ export function any(
   arg1?: SchemaMetadata | Pipe<any>,
   arg2?: Pipe<any>
 ): AnySchema {
+  // Get pipe and metadata argument
   const [, pipe, metadata] = defaultArgs<Pipe<any>>(arg1, arg2);
+
+  // Create and return any schema
   return {
     type: 'any',
     async: false,
