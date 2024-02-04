@@ -29,4 +29,9 @@ describe('nullable', () => {
     expect(parse(schema2, input)).toBe(input);
     expect(parse(schema2, null)).toBe(default_);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = nullable(string({ description: 'nullable string' }));
+    expect(schema1.metadata).toEqual({ description: 'nullable string' });
+  });
 });

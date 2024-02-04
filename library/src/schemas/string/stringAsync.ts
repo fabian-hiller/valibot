@@ -1,6 +1,7 @@
 import type {
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   PipeAsync,
 } from '../../types/index.ts';
 import {
@@ -42,22 +43,22 @@ export function stringAsync(pipe?: PipeAsync<string>): StringSchemaAsync;
 /**
  * Creates an async string schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async string schema.
  */
 export function stringAsync(
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<string>
 ): StringSchemaAsync;
 
 export function stringAsync(
-  arg1?: ErrorMessage | PipeAsync<string>,
+  arg1?: ErrorMessageOrMetadata | PipeAsync<string>,
   arg2?: PipeAsync<string>
 ): StringSchemaAsync {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return async string schema
   return {
@@ -65,6 +66,7 @@ export function stringAsync(
     async: true,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (typeof input !== 'string') {

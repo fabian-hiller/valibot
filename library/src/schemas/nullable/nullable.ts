@@ -67,6 +67,9 @@ export function nullable<
     type: 'nullable',
     async: false,
     wrapped,
+    get metadata() {
+      return this.wrapped.metadata;
+    },
     default: default_ as TDefault,
     _parse(input, info) {
       // Allow `null` to pass or override it with default value

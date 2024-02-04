@@ -81,6 +81,9 @@ export function optionalAsync<
     async: true,
     wrapped,
     default: default_ as TDefault,
+    get metadata() {
+      return this.wrapped.metadata;
+    },
     async _parse(input, info) {
       // Allow `undefined` to pass or override it with default value
       if (input === undefined) {

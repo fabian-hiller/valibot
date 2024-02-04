@@ -29,4 +29,9 @@ describe('nullableAsync', () => {
     expect(await parseAsync(schema2, input)).toBe(input);
     expect(await parseAsync(schema2, null)).toBe(default_);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = nullableAsync(string({ description: 'nullable string' }));
+    expect(schema1.metadata).toEqual({ description: 'nullable string' });
+  });
 });

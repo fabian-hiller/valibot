@@ -58,4 +58,19 @@ describe('stringAsync', () => {
     const schema2 = stringAsync();
     expect(schema2.pipe).toBeUndefined();
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = stringAsync({ description: 'string value' });
+    expect(schema1.metadata).toEqual({ description: 'string value' });
+
+    const schema2 = stringAsync({
+      description: 'string value',
+      message: 'Value is not a string!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'string value' });
+    expect(schema2.message).toEqual('Value is not a string!');
+
+    const schema3 = stringAsync();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+  Pipe,
+} from '../../types/index.ts';
 import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
@@ -31,22 +36,22 @@ export function string(pipe?: Pipe<string>): StringSchema;
 /**
  * Creates a string schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A string schema.
  */
 export function string(
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<string>
 ): StringSchema;
 
 export function string(
-  arg1?: ErrorMessage | Pipe<string>,
+  arg1?: ErrorMessageOrMetadata | Pipe<string>,
   arg2?: Pipe<string>
 ): StringSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return string schema
   return {
@@ -54,6 +59,7 @@ export function string(
     async: false,
     message,
     pipe,
+    metadata,
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'string') {

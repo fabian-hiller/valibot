@@ -81,6 +81,9 @@ export function nullishAsync<
     async: true,
     wrapped,
     default: default_ as TDefault,
+    get metadata() {
+      return this.wrapped.metadata;
+    },
     async _parse(input, info) {
       // Allow `null` or `undefined` to pass or override it with default value
       if (input === null || input === undefined) {
