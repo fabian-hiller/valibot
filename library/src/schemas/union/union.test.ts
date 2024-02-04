@@ -99,4 +99,19 @@ describe('union', () => {
     expect(() => parse(schema, null)).toThrowError(typeError);
     expect(() => parse(schema, 123)).toThrowError(typeError);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = union([string()], { description: 'string value' });
+    expect(schema1.metadata).toEqual({ description: 'string value' });
+
+    const schema2 = union([string()], {
+      description: 'string value',
+      message: 'Value is not a string!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'string value' });
+    expect(schema2.message).toEqual('Value is not a string!');
+
+    const schema3 = union([string()]);
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

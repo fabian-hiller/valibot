@@ -2,6 +2,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Input,
   Output,
   PipeAsync,
@@ -87,7 +88,7 @@ export function variantAsync<
  *
  * @param key The discriminator key.
  * @param options The variant options.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async variant schema.
@@ -98,7 +99,7 @@ export function variantAsync<
 >(
   key: TKey,
   options: TOptions,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<Input<TOptions[number]>>
 ): VariantSchemaAsync<TKey, TOptions>;
 
@@ -108,11 +109,11 @@ export function variantAsync<
 >(
   key: TKey,
   options: TOptions,
-  arg3?: PipeAsync<Input<TOptions[number]>> | ErrorMessage,
+  arg3?: PipeAsync<Input<TOptions[number]>> | ErrorMessageOrMetadata,
   arg4?: PipeAsync<Input<TOptions[number]>>
 ): VariantSchemaAsync<TKey, TOptions> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg3, arg4);
 
   // Create and return variant schema
   return {
@@ -122,6 +123,7 @@ export function variantAsync<
     options,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {

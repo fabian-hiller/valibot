@@ -19,4 +19,19 @@ describe('voidAsync', () => {
     const error = 'Value is not void!';
     await expect(parseAsync(voidAsync(error), 123)).rejects.toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = voidAsync({ description: 'void value' });
+    expect(schema1.metadata).toEqual({ description: 'void value' });
+
+    const schema2 = voidAsync({
+      description: 'void value',
+      message: 'Value is not a void!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'void value' });
+    expect(schema2.message).toEqual('Value is not a void!');
+
+    const schema3 = voidAsync();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

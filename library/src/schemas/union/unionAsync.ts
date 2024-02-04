@@ -2,6 +2,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Input,
   MaybeReadonly,
   Output,
@@ -63,24 +64,24 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
  * Creates an async union schema.
  *
  * @param options The union options.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async union schema.
  */
 export function unionAsync<TOptions extends UnionOptionsAsync>(
   options: TOptions,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<Input<TOptions[number]>>
 ): UnionSchemaAsync<TOptions>;
 
 export function unionAsync<TOptions extends UnionOptionsAsync>(
   options: TOptions,
-  arg2?: PipeAsync<Input<TOptions[number]>> | ErrorMessage,
+  arg2?: PipeAsync<Input<TOptions[number]>> | ErrorMessageOrMetadata,
   arg3?: PipeAsync<Input<TOptions[number]>>
 ): UnionSchemaAsync<TOptions> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return union schema
   return {
@@ -89,6 +90,7 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
     options,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Create variables to collect results
       let validResult: TypedSchemaResult<Output<TOptions[number]>> | undefined;

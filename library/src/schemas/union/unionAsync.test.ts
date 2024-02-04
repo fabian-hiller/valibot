@@ -103,4 +103,19 @@ describe('unionAsync', () => {
     await expect(parseAsync(schema, null)).rejects.toThrowError(typeError);
     await expect(parseAsync(schema, 123)).rejects.toThrowError(typeError);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = unionAsync([string()], { description: 'string value' });
+    expect(schema1.metadata).toEqual({ description: 'string value' });
+
+    const schema2 = unionAsync([string()], {
+      description: 'string value',
+      message: 'Value is not a string!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'string value' });
+    expect(schema2.message).toEqual('Value is not a string!');
+
+    const schema3 = unionAsync([string()]);
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

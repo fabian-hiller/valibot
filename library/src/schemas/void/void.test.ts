@@ -19,4 +19,19 @@ describe('void', () => {
     const error = 'Value is not void!';
     expect(() => parse(void_(error), 123)).toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = void_({ description: 'void value' });
+    expect(schema1.metadata).toEqual({ description: 'void value' });
+
+    const schema2 = void_({
+      description: 'void value',
+      message: 'Value is not a void!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'void value' });
+    expect(schema2.message).toEqual('Value is not a void!');
+
+    const schema3 = void_();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });
