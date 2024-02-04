@@ -16,4 +16,19 @@ describe('never', () => {
     const error = 'Value is not never!';
     expect(() => parse(never(error), undefined)).toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = never({ description: 'never value' });
+    expect(schema1.metadata).toEqual({ description: 'never value' });
+
+    const schema2 = never({
+      description: 'never value',
+      message: 'Value is not a never!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'never value' });
+    expect(schema2.message).toEqual('Value is not a never!');
+
+    const schema3 = never();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

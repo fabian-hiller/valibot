@@ -18,4 +18,19 @@ describe('neverAsync', () => {
       error
     );
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = neverAsync({ description: 'never value' });
+    expect(schema1.metadata).toEqual({ description: 'never value' });
+
+    const schema2 = neverAsync({
+      description: 'never value',
+      message: 'Value is not a never!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'never value' });
+    expect(schema2.message).toEqual('Value is not a never!');
+
+    const schema3 = neverAsync();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });
