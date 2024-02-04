@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+  Pipe,
+} from '../../types/index.ts';
 import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 import type { Class } from './types.ts';
 
@@ -44,24 +49,24 @@ export function instance<TClass extends Class>(
  * Creates an instance schema.
  *
  * @param class_ The class of the instance.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An instance schema.
  */
 export function instance<TClass extends Class>(
   class_: TClass,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass>;
 
 export function instance<TClass extends Class>(
   class_: TClass,
-  arg2?: Pipe<InstanceType<TClass>> | ErrorMessage,
+  arg2?: Pipe<InstanceType<TClass>> | ErrorMessageOrMetadata,
   arg3?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
@@ -70,6 +75,7 @@ export function instance<TClass extends Class>(
     class: class_,
     message,
     pipe,
+    metadata,
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof this.class)) {

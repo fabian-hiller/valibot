@@ -25,4 +25,19 @@ describe('enum_', () => {
     const error = 'Value is not a enum value!';
     expect(() => parse(enum_(Direction, error), 'test')).toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = enum_(Direction, { description: 'enum value' });
+    expect(schema1.metadata).toEqual({ description: 'enum value' });
+
+    const schema2 = enum_(Direction, {
+      description: 'enum value',
+      message: 'Value is not a enum!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'enum value' });
+    expect(schema2.message).toEqual('Value is not a enum!');
+
+    const schema3 = enum_(Direction);
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

@@ -24,6 +24,7 @@ export function defaultArgs<TPipe extends Pipe<any> | PipeAsync<any>>(
     return [arg1, arg2, undefined];
 
   if (arg1 === undefined) return [undefined, arg2, undefined];
+
   const { message, ...metadata } = arg1;
   return [message, arg2, metadata];
 }

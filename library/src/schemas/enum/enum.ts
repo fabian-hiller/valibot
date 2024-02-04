@@ -1,5 +1,9 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, parseResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Enum type.
@@ -34,16 +38,22 @@ export type EnumSchema<
  * Creates an enum schema.
  *
  * @param enum_ The enum value.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns An enum schema.
  */
 export function enum_<TEnum extends Enum>(
   enum_: TEnum,
-  message: ErrorMessage = 'Invalid type'
+  messageOrMetadata?: ErrorMessageOrMetadata
 ): EnumSchema<TEnum> {
   // Create cached values
   let cachedValues: (string | number)[];
+
+  // Extract message and metadata
+  const [message = 'Invalid type', , metadata] = defaultArgs(
+    messageOrMetadata,
+    undefined
+  );
 
   // Create and return enum schema
   return {
@@ -51,6 +61,7 @@ export function enum_<TEnum extends Enum>(
     async: false,
     enum: enum_,
     message,
+    metadata,
     _parse(input, info) {
       // Cache values lazy
       cachedValues = cachedValues || Object.values(this.enum);

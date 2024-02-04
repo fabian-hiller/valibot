@@ -1,6 +1,7 @@
 import type {
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   PipeAsync,
 } from '../../types/index.ts';
 import {
@@ -52,24 +53,24 @@ export function instanceAsync<TClass extends Class>(
  * Creates an async instance schema.
  *
  * @param class_ The class of the instance.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async instance schema.
  */
 export function instanceAsync<TClass extends Class>(
   class_: TClass,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass>;
 
 export function instanceAsync<TClass extends Class>(
   class_: TClass,
-  arg2?: PipeAsync<InstanceType<TClass>> | ErrorMessage,
+  arg2?: PipeAsync<InstanceType<TClass>> | ErrorMessageOrMetadata,
   arg3?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
@@ -77,6 +78,7 @@ export function instanceAsync<TClass extends Class>(
     async: true,
     class: class_,
     message,
+    metadata,
     pipe,
     async _parse(input, info) {
       // Check type of input

@@ -2,6 +2,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Issues,
   MaybeReadonly,
   PipeAsync,
@@ -68,24 +69,24 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
  * Creates an async intersect schema.
  *
  * @param options The intersect options.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async intersect schema.
  */
 export function intersectAsync<TOptions extends IntersectOptionsAsync>(
   options: TOptions,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<IntersectInput<TOptions>>
 ): IntersectSchemaAsync<TOptions>;
 
 export function intersectAsync<TOptions extends IntersectOptionsAsync>(
   options: TOptions,
-  arg2?: PipeAsync<IntersectInput<TOptions>> | ErrorMessage,
+  arg2?: PipeAsync<IntersectInput<TOptions>> | ErrorMessageOrMetadata,
   arg3?: PipeAsync<IntersectInput<TOptions>>
 ): IntersectSchemaAsync<TOptions> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return intersect schema
   return {
@@ -94,6 +95,7 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
     options,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Create typed, issues, output and outputs
       let typed = true;

@@ -62,4 +62,19 @@ describe('instanceAsync', () => {
     const schema2 = instanceAsync(Date);
     expect(schema2.pipe).toBeUndefined();
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = instanceAsync(Date, { description: 'instance value' });
+    expect(schema1.metadata).toEqual({ description: 'instance value' });
+
+    const schema2 = instanceAsync(Date, {
+      description: 'instance value',
+      message: 'Value is not a instance!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'instance value' });
+    expect(schema2.message).toEqual('Value is not a instance!');
+
+    const schema3 = instanceAsync(Date);
+    expect(schema3.metadata).toBeUndefined();
+  });
 });
