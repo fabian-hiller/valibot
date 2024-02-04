@@ -114,6 +114,9 @@ export function variantAsync<
   // Get message and pipe argument
   const [message, pipe] = defaultArgs(arg3, arg4);
 
+  // Create cached expected key
+  let cachedExpectedKey: string | undefined;
+
   // Create and return variant schema
   return {
     type: 'variant',
@@ -124,11 +127,12 @@ export function variantAsync<
     message,
     pipe,
     async _parse(input, config) {
-      // If root type is valid and discriminator key is included, check nested
-      // types
+      // If root type is valid, check nested types
       if (input && typeof input === 'object') {
-        if (this.key in input) {
-          // Create variable to store variant result
+        // If key is in input or expected key is not cached, continue
+        if (this.key in input || !cachedExpectedKey) {
+          // Create expected key and variant result
+          let expectedKey: string[] | undefined;
           let variantResult: SchemaResult<Output<TOptions[number]>> | undefined;
 
           // Create function to parse options recursively
@@ -136,10 +140,18 @@ export function variantAsync<
             for (const schema of options) {
               // If it is an object schema, parse discriminator key
               if (schema.type === 'object') {
-                const keyResult = await schema.entries[this.key]._parse(
+                const keySchema = schema.entries[this.key];
+                const keyResult = await keySchema._parse(
                   (input as Record<TKey, unknown>)[this.key],
                   config
                 );
+
+                // If expected key is not cached create it
+                if (!cachedExpectedKey) {
+                  expectedKey
+                    ? expectedKey.push(keySchema.expects)
+                    : (expectedKey = [keySchema.expects]);
+                }
 
                 // If right variant option was found, parse it
                 if (!keyResult.issues) {
@@ -176,6 +188,10 @@ export function variantAsync<
           // Parse options recursively
           await parseOptions(this.options);
 
+          // Cache expected key lazy
+          cachedExpectedKey =
+            cachedExpectedKey || [...new Set(expectedKey)].join(' | ');
+
           // If a variant result is available, process it
           if (variantResult) {
             // If result is typed, return pipe result
@@ -193,23 +209,23 @@ export function variantAsync<
           }
         }
 
-        // Otherwise, if discriminator key is invalid, return schema issue with
-        // path
-        // TODO: Default error message can be confusing in this case
-        return schemaIssue(this, variantAsync, input, config, {
+        // Otherwise, if discriminator key is invalid, return schema issue
+        const value = (input as Record<string, unknown>)[this.key];
+        return schemaIssue(this, variantAsync, value, config, {
+          expected: cachedExpectedKey,
           path: [
             {
               type: 'object',
               origin: 'value',
               input: input as Record<string, unknown>,
               key: this.key,
-              value: undefined,
+              value,
             },
           ],
         });
       }
 
-      // Otherwise, return schema issue
+      // Otherwise, return default schema issue
       return schemaIssue(this, variantAsync, input, config);
     },
   };

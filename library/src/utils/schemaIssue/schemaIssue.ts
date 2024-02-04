@@ -24,6 +24,7 @@ type SchemaContext = {
  */
 type OtherInfo = Partial<{
   reason: IssueReason;
+  expected: string;
   path: PathItem[];
   issues: SchemaIssues;
 }>;
@@ -48,14 +49,15 @@ export function schemaIssue(
   other?: OtherInfo
 ): UntypedSchemaResult {
   const received = stringify(input);
+  const expected = other?.expected ?? context.expects;
   // Note: The issue is deliberately not constructed with the spread operator
   // for performance reasons
   const issue: SchemaIssue = {
     reason: other?.reason ?? 'type',
     context: context.type,
-    expected: context.expects,
+    expected,
     received,
-    message: `Invalid type: Expected ${context.expects} but received ${received}`,
+    message: `Invalid type: Expected ${expected} but received ${received}`,
     input,
     path: other?.path,
     issues: other?.issues,
