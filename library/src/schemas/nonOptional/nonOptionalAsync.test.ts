@@ -54,5 +54,8 @@ describe('nonOptionalAsync', () => {
 
     const schema3 = nonOptionalAsync(any());
     expect(schema3.metadata).toBeUndefined();
+
+    const schema4 = nonOptionalAsync(any({ description: 'any value' }));
+    expect(schema4.metadata).toEqual({ description: 'any value' });
   });
 });

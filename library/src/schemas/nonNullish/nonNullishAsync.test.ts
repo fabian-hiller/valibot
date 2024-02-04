@@ -54,5 +54,8 @@ describe('nonNullishAsync', () => {
 
     const schema3 = nonNullishAsync(any());
     expect(schema3.metadata).toBeUndefined();
+
+    const schema4 = nonNullishAsync(any({ description: 'any value' }));
+    expect(schema4.metadata).toEqual({ description: 'any value' });
   });
 });

@@ -49,7 +49,9 @@ export function nonNullable<TWrapped extends BaseSchema>(
     async: false,
     wrapped,
     message,
-    metadata,
+    get metadata() {
+      return metadata ?? this.wrapped.metadata;
+    },
     _parse(input, info) {
       // Allow `null` values not to pass
       if (input === null) {

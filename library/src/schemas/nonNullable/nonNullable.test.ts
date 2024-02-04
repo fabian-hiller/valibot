@@ -48,5 +48,8 @@ describe('nonNullable', () => {
 
     const schema3 = nonNullable(any());
     expect(schema3.metadata).toBeUndefined();
+
+    const schema4 = nonNullable(any({ description: 'any value' }));
+    expect(schema4.metadata).toEqual({ description: 'any value' });
   });
 });

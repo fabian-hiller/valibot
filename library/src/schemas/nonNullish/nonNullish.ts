@@ -49,7 +49,9 @@ export function nonNullish<TWrapped extends BaseSchema>(
     async: false,
     wrapped,
     message,
-    metadata,
+    get metadata() {
+      return metadata ?? this.wrapped.metadata;
+    },
     _parse(input, info) {
       // Allow `null` and `undefined` values not to pass
       if (input === null || input === undefined) {

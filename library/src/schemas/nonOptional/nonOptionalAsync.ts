@@ -50,7 +50,9 @@ export function nonOptionalAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
     async: true,
     wrapped,
     message,
-    metadata,
+    get metadata() {
+      return metadata ?? this.wrapped.metadata;
+    },
     async _parse(input, info) {
       // Allow `undefined` values not to pass
       if (input === undefined) {
