@@ -85,7 +85,7 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
   // Create and return union schema
   return {
     type: 'union',
-    expects: options.map((option) => option.expects).join(' | '),
+    expects: [...new Set(options.map((option) => option.expects))].join(' | '),
     async: true,
     options,
     message,

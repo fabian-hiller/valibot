@@ -90,7 +90,7 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
   // Create and return intersect schema
   return {
     type: 'intersect',
-    expects: options.map((option) => option.expects).join(' & '),
+    expects: [...new Set(options.map((option) => option.expects))].join(' & '),
     async: true,
     options,
     message,
