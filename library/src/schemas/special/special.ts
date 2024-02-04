@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+  Pipe,
+} from '../../types/index.ts';
 import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
@@ -43,24 +48,24 @@ export function special<TInput>(
  * Creates a special schema.
  *
  * @param check The type check function.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A special schema.
  */
 export function special<TInput>(
   check: (input: unknown) => boolean,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<TInput>
 ): SpecialSchema<TInput>;
 
 export function special<TInput>(
   check: (input: unknown) => boolean,
-  arg2?: Pipe<TInput> | ErrorMessage,
+  arg2?: Pipe<TInput> | ErrorMessageOrMetadata,
   arg3?: Pipe<TInput>
 ): SpecialSchema<TInput> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
@@ -69,6 +74,7 @@ export function special<TInput>(
     check,
     message,
     pipe,
+    metadata,
     _parse(input, info) {
       // Check type of input
       if (!this.check(input)) {
