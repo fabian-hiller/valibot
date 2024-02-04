@@ -34,4 +34,19 @@ describe('nonNullable', () => {
     const error = 'Value is not non null!';
     expect(() => parse(nonNullable(any(), error), null)).toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = nonNullable(any(), { description: 'non null value' });
+    expect(schema1.metadata).toEqual({ description: 'non null value' });
+
+    const schema2 = nonNullable(any(), {
+      description: 'non null value',
+      message: 'Value is not a non null!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'non null value' });
+    expect(schema2.message).toEqual('Value is not a non null!');
+
+    const schema3 = nonNullable(any());
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

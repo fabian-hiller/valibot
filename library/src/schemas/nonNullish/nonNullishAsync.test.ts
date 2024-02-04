@@ -38,4 +38,21 @@ describe('nonNullishAsync', () => {
       parseAsync(nonNullishAsync(any(), error), null)
     ).rejects.toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = nonNullishAsync(any(), {
+      description: 'non nullish value',
+    });
+    expect(schema1.metadata).toEqual({ description: 'non nullish value' });
+
+    const schema2 = nonNullishAsync(any(), {
+      description: 'non nullish value',
+      message: 'Value is not a nullish null!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'non nullish value' });
+    expect(schema2.message).toEqual('Value is not a nullish null!');
+
+    const schema3 = nonNullishAsync(any());
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

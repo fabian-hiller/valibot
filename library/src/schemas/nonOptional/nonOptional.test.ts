@@ -36,4 +36,19 @@ describe('nonOptional', () => {
       error
     );
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = nonOptional(any(), { description: 'non optional value' });
+    expect(schema1.metadata).toEqual({ description: 'non optional value' });
+
+    const schema2 = nonOptional(any(), {
+      description: 'non optional value',
+      message: 'Value is not a optional null!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'non optional value' });
+    expect(schema2.message).toEqual('Value is not a optional null!');
+
+    const schema3 = nonOptional(any());
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

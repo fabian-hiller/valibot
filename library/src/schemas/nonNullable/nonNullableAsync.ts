@@ -2,8 +2,9 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
 } from '../../types/index.ts';
-import { schemaIssue } from '../../utils/index.ts';
+import { defaultArgs, schemaIssue } from '../../utils/index.ts';
 import type { NonNullableInput, NonNullableOutput } from './types.ts';
 
 /**
@@ -31,19 +32,25 @@ export type NonNullableSchemaAsync<
  * Creates an async non nullable schema.
  *
  * @param wrapped The wrapped schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns An async non nullable schema.
  */
 export function nonNullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
   wrapped: TWrapped,
-  message: ErrorMessage = 'Invalid type'
+  messageOrMetadata: ErrorMessageOrMetadata = 'Invalid type'
 ): NonNullableSchemaAsync<TWrapped> {
+  // Extracts the message and metadata from the input.
+  const [message = 'Invalid type', , metadata] = defaultArgs(
+    messageOrMetadata,
+    undefined
+  );
   return {
     type: 'non_nullable',
     async: true,
     wrapped,
     message,
+    metadata,
     async _parse(input, info) {
       // Allow `null` values not to pass
       if (input === null) {

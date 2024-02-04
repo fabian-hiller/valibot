@@ -1,5 +1,9 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, schemaIssue } from '../../utils/index.ts';
 import type { NonOptionalInput, NonOptionalOutput } from './types.ts';
 
 /**
@@ -27,19 +31,25 @@ export type NonOptionalSchema<
  * Creates a non optional schema.
  *
  * @param wrapped The wrapped schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns A non optional schema.
  */
 export function nonOptional<TWrapped extends BaseSchema>(
   wrapped: TWrapped,
-  message: ErrorMessage = 'Invalid type'
+  messageOrMetadata?: ErrorMessageOrMetadata
 ): NonOptionalSchema<TWrapped> {
+  // Extracts the message and metadata from the input.
+  const [message = 'Invalid type', , metadata] = defaultArgs(
+    messageOrMetadata,
+    undefined
+  );
   return {
     type: 'non_optional',
     async: false,
     wrapped,
     message,
+    metadata,
     _parse(input, info) {
       // Allow `undefined` values not to pass
       if (input === undefined) {
