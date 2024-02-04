@@ -39,5 +39,8 @@ describe('anyAsync', () => {
   test('should expose the metadata', () => {
     const schema1 = anyAsync({ description: 'any value' });
     expect(schema1.metadata).toEqual({ description: 'any value' });
+
+    const schema2 = anyAsync();
+    expect(schema2.metadata).toBeUndefined();
   });
 });

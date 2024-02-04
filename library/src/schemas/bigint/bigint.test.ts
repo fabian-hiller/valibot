@@ -54,7 +54,14 @@ describe('bigint', () => {
     const schema1 = bigint({ description: 'bigint value' });
     expect(schema1.metadata).toEqual({ description: 'bigint value' });
 
-    const schema2 = bigint();
-    expect(schema2.metadata).toBeUndefined();
+    const schema2 = bigint({
+      description: 'bigint value',
+      message: 'Value is not a bigint!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'bigint value' });
+    expect(schema2.message).toEqual('Value is not a bigint!');
+
+    const schema3 = bigint();
+    expect(schema3.metadata).toBeUndefined();
   });
 });

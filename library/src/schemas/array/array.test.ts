@@ -130,14 +130,18 @@ describe('array', () => {
   });
 
   test('should expose the metadata', () => {
-    const schema1 = array(string(), {
-      description: 'array of strings',
+    const schema1 = array(string(), { description: 'array value' });
+    expect(schema1.metadata).toEqual({ description: 'array value' });
+
+    const schema2 = array(string(), {
+      description: 'array value',
       message: 'Value is not an array!',
     });
-    expect(schema1.metadata).toEqual({
-      description: 'array of strings',
-    });
-    expect(schema1.message).toBe('Value is not an array!');
+    expect(schema2.metadata).toEqual({ description: 'array value' });
+    expect(schema2.message).toEqual('Value is not an array!');
+
+    const schema3 = array(string());
+    expect(schema3.metadata).toBeUndefined();
   });
 
   test('should execute pipe if output is typed', () => {
