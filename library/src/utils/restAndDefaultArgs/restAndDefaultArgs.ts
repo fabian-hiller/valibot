@@ -49,10 +49,9 @@ export function restAndDefaultArgs<
  *
  * @returns result
  */
-function isSchema(target: any): target is BaseSchema | BaseSchemaAsync {
+export function isSchema(target: any): target is BaseSchema | BaseSchemaAsync {
   if (target == null) return false;
   if (typeof target !== 'object') return false;
-  if (Array.isArray(target)) return false;
   return (
     typeof target._parse === 'function' && typeof target.async === 'boolean'
   );

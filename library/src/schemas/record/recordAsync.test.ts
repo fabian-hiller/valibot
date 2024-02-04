@@ -230,4 +230,16 @@ describe('recordAsync', () => {
       ],
     });
   });
+
+  test('should expose the metadata', async () => {
+    const schema2 = recordAsync(string(), {
+      description: 'a record without key',
+    });
+    expect(schema2.metadata).toEqual({ description: 'a record without key' });
+
+    const schema1 = recordAsync(string(), any(), {
+      description: 'a simple record',
+    });
+    expect(schema1.metadata).toEqual({ description: 'a simple record' });
+  });
 });

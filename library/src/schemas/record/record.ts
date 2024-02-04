@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Issues,
   Pipe,
 } from '../../types/index.ts';
@@ -71,14 +72,14 @@ export function record<TValue extends BaseSchema>(
  * Creates a record schema.
  *
  * @param value The value schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A record schema.
  */
 export function record<TValue extends BaseSchema>(
   value: TValue,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<RecordOutput<StringSchema, TValue>>
 ): RecordSchema<StringSchema, TValue>;
 
@@ -102,7 +103,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
  *
  * @param key The key schema.
  * @param value The value schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A record schema.
@@ -110,18 +111,18 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
 export function record<TKey extends RecordKey, TValue extends BaseSchema>(
   key: TKey,
   value: TValue,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<RecordOutput<TKey, TValue>>
 ): RecordSchema<TKey, TValue>;
 
 export function record<TKey extends RecordKey, TValue extends BaseSchema>(
   arg1: TValue | TKey,
-  arg2?: Pipe<RecordOutput<TKey, TValue>> | ErrorMessage | TValue,
-  arg3?: Pipe<RecordOutput<TKey, TValue>> | ErrorMessage,
+  arg2?: Pipe<RecordOutput<TKey, TValue>> | ErrorMessageOrMetadata | TValue,
+  arg3?: Pipe<RecordOutput<TKey, TValue>> | ErrorMessageOrMetadata,
   arg4?: Pipe<RecordOutput<TKey, TValue>>
 ): RecordSchema<TKey, TValue> {
   // Get key, value, message and pipe argument
-  const [key, value, message = 'Invalid type', pipe] = recordArgs<
+  const [key, value, message = 'Invalid type', pipe, metadata] = recordArgs<
     TKey,
     TValue,
     Pipe<RecordOutput<TKey, TValue>>
@@ -135,6 +136,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
     value,
     message,
     pipe,
+    metadata,
     _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {

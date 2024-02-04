@@ -2,6 +2,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Issues,
   PipeAsync,
 } from '../../types/index.ts';
@@ -81,14 +82,14 @@ export function recordAsync<TValue extends BaseSchema | BaseSchemaAsync>(
  * Creates an async record schema.
  *
  * @param value The value schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async record schema.
  */
 export function recordAsync<TValue extends BaseSchema | BaseSchemaAsync>(
   value: TValue,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<RecordOutput<StringSchema, TValue>>
 ): RecordSchemaAsync<StringSchema, TValue>;
 
@@ -115,7 +116,7 @@ export function recordAsync<
  *
  * @param key The key schema.
  * @param value The value schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async record schema.
@@ -126,7 +127,7 @@ export function recordAsync<
 >(
   key: TKey,
   value: TValue,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<RecordOutput<TKey, TValue>>
 ): RecordSchemaAsync<TKey, TValue>;
 
@@ -135,12 +136,15 @@ export function recordAsync<
   TValue extends BaseSchema | BaseSchemaAsync
 >(
   arg1: TValue | TKey,
-  arg2?: PipeAsync<RecordOutput<TKey, TValue>> | ErrorMessage | TValue,
-  arg3?: PipeAsync<RecordOutput<TKey, TValue>> | ErrorMessage,
+  arg2?:
+    | PipeAsync<RecordOutput<TKey, TValue>>
+    | ErrorMessageOrMetadata
+    | TValue,
+  arg3?: PipeAsync<RecordOutput<TKey, TValue>> | ErrorMessageOrMetadata,
   arg4?: PipeAsync<RecordOutput<TKey, TValue>>
 ): RecordSchemaAsync<TKey, TValue> {
   // Get key, value, message and pipe argument
-  const [key, value, message = 'Invalid type', pipe] = recordArgs<
+  const [key, value, message = 'Invalid type', pipe, metadata] = recordArgs<
     TKey,
     TValue,
     PipeAsync<RecordOutput<TKey, TValue>>
@@ -154,6 +158,7 @@ export function recordAsync<
     value,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (!input || typeof input !== 'object') {
