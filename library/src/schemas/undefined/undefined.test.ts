@@ -17,4 +17,19 @@ describe('undefined', () => {
     const error = 'Value is not undefined!';
     expect(() => parse(undefined_(error), 123)).toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = undefined_({ description: 'undefined value' });
+    expect(schema1.metadata).toEqual({ description: 'undefined value' });
+
+    const schema2 = undefined_({
+      description: 'undefined value',
+      message: 'Value is not undefined!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'undefined value' });
+    expect(schema2.message).toEqual('Value is not undefined!');
+
+    const schema3 = undefined_();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });
