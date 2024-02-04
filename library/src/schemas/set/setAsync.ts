@@ -2,6 +2,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Issues,
   PipeAsync,
 } from '../../types/index.ts';
@@ -55,24 +56,24 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
  * Creates an async set schema.
  *
  * @param value The value schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async set schema.
  */
 export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
   value: TValue,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<SetOutput<TValue>>
 ): SetSchemaAsync<TValue>;
 
 export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
   value: TValue,
-  arg2?: PipeAsync<SetOutput<TValue>> | ErrorMessage,
+  arg2?: PipeAsync<SetOutput<TValue>> | ErrorMessageOrMetadata,
   arg3?: PipeAsync<SetOutput<TValue>>
 ): SetSchemaAsync<TValue> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return async set schema
   return {
@@ -81,6 +82,7 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
     value,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Set)) {

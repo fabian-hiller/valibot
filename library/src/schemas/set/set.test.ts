@@ -34,7 +34,7 @@ describe('set', () => {
   });
 
   test('should throw custom error', () => {
-    const error = 'Value is not an set!';
+    const error = 'Value is not a set!';
     const schema = set(number(), error);
     expect(() => parse(schema, 'test')).toThrowError(error);
   });
@@ -189,5 +189,20 @@ describe('set', () => {
         },
       ],
     });
+  });
+
+  test('should expose the metadata', () => {
+    const schema1 = set(number(), { description: 'set value' });
+    expect(schema1.metadata).toEqual({ description: 'set value' });
+
+    const schema2 = set(number(), {
+      description: 'set value',
+      message: 'Value is not a set!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'set value' });
+    expect(schema2.message).toEqual('Value is not a set!');
+
+    const schema3 = set(number());
+    expect(schema3.metadata).toBeUndefined();
   });
 });
