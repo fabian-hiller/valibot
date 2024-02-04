@@ -1,5 +1,9 @@
-import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, parseResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Null schema async type.
@@ -18,17 +22,23 @@ export type NullSchemaAsync<TOutput = null> = BaseSchemaAsync<null, TOutput> & {
 /**
  * Creates an async null schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns An async null schema.
  */
 export function nullAsync(
-  message: ErrorMessage = 'Invalid type'
+  messageOrMetadata?: ErrorMessageOrMetadata
 ): NullSchemaAsync {
+  // Extracts the message and metadata from the input.
+  const [message = 'Invalid type', , metadata] = defaultArgs(
+    messageOrMetadata,
+    undefined
+  );
   return {
     type: 'null',
     async: true,
     message,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (input !== null) {

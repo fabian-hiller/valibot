@@ -1,5 +1,9 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, parseResult, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Null schema type.
@@ -18,15 +22,21 @@ export type NullSchema<TOutput = null> = BaseSchema<null, TOutput> & {
 /**
  * Creates a null schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns A null schema.
  */
-export function null_(message: ErrorMessage = 'Invalid type'): NullSchema {
+export function null_(messageOrMetadata?: ErrorMessageOrMetadata): NullSchema {
+  // Extracts the message and metadata from the input.
+  const [message = 'Invalid type', , metadata] = defaultArgs(
+    messageOrMetadata,
+    undefined
+  );
   return {
     type: 'null',
     async: false,
     message,
+    metadata,
     _parse(input, info) {
       // Check type of input
       if (input !== null) {
