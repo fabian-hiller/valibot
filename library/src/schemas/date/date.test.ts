@@ -60,4 +60,19 @@ describe('date', () => {
     const schema2 = date();
     expect(schema2.pipe).toBeUndefined();
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = date({ description: 'date value' });
+    expect(schema1.metadata).toEqual({ description: 'date value' });
+
+    const schema2 = date({
+      description: 'date value',
+      message: 'Value is not a date!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'date value' });
+    expect(schema2.message).toEqual('Value is not a date!');
+
+    const schema3 = date();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

@@ -1,6 +1,7 @@
 import type {
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   PipeAsync,
 } from '../../types/index.ts';
 import {
@@ -39,22 +40,22 @@ export function dateAsync(pipe?: PipeAsync<Date>): DateSchemaAsync;
 /**
  * Creates an async date schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async date schema.
  */
 export function dateAsync(
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<Date>
 ): DateSchemaAsync;
 
 export function dateAsync(
-  arg1?: ErrorMessage | PipeAsync<Date>,
+  arg1?: ErrorMessageOrMetadata | PipeAsync<Date>,
   arg2?: PipeAsync<Date>
 ): DateSchemaAsync {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return async date schema
   return {
@@ -62,6 +63,7 @@ export function dateAsync(
     async: true,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Date) || isNaN(input.getTime())) {

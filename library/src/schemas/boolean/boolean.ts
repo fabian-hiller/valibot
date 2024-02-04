@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+  Pipe,
+} from '../../types/index.ts';
 import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
@@ -31,22 +36,22 @@ export function boolean(pipe?: Pipe<boolean>): BooleanSchema;
 /**
  * Creates a boolean schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A boolean schema.
  */
 export function boolean(
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<boolean>
 ): BooleanSchema;
 
 export function boolean(
-  arg1?: ErrorMessage | Pipe<boolean>,
+  arg1?: ErrorMessageOrMetadata | Pipe<boolean>,
   arg2?: Pipe<boolean>
 ): BooleanSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return boolean schema
   return {
@@ -54,6 +59,7 @@ export function boolean(
     async: false,
     message,
     pipe,
+    metadata,
     _parse(input, info) {
       // Check type of input
       if (typeof input !== 'boolean') {

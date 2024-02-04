@@ -27,4 +27,19 @@ describe('blobAsync', () => {
     );
     expect(output).toBe(value);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = blobAsync({ description: 'blob value' });
+    expect(schema1.metadata).toEqual({ description: 'blob value' });
+
+    const schema2 = blobAsync({
+      description: 'blob value',
+      message: 'Value is not a blob!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'blob value' });
+    expect(schema2.message).toEqual('Value is not a blob!');
+
+    const schema3 = blobAsync();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

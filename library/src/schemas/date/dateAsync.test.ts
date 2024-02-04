@@ -62,4 +62,19 @@ describe('dateAsync', () => {
     const schema2 = dateAsync();
     expect(schema2.pipe).toBeUndefined();
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = dateAsync({ description: 'date value' });
+    expect(schema1.metadata).toEqual({ description: 'date value' });
+
+    const schema2 = dateAsync({
+      description: 'date value',
+      message: 'Value is not a date!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'date value' });
+    expect(schema2.message).toEqual('Value is not a date!');
+
+    const schema3 = dateAsync();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

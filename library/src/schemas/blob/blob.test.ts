@@ -24,4 +24,19 @@ describe('blob', () => {
     const output = parse(blob([toCustom(() => value)]), new Blob());
     expect(output).toBe(value);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = blob({ description: 'blob value' });
+    expect(schema1.metadata).toEqual({ description: 'blob value' });
+
+    const schema2 = blob({
+      description: 'blob value',
+      message: 'Value is not a blob!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'blob value' });
+    expect(schema2.message).toEqual('Value is not a blob!');
+
+    const schema3 = blob();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });
