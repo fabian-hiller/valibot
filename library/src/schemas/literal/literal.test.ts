@@ -42,4 +42,19 @@ describe('literal', () => {
     const error = 'Value is not the literal!';
     expect(() => parse(literal('value_1', error), 'test')).toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = literal('value_1', { description: 'literal value' });
+    expect(schema1.metadata).toEqual({ description: 'literal value' });
+
+    const schema2 = literal('value_1', {
+      description: 'literal value',
+      message: 'Value is not a literal!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'literal value' });
+    expect(schema2.message).toEqual('Value is not a literal!');
+
+    const schema3 = literal('value_1');
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

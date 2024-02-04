@@ -237,4 +237,19 @@ describe('mapAsync', () => {
       ],
     });
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = mapAsync(number(), string(), { description: 'map value' });
+    expect(schema1.metadata).toEqual({ description: 'map value' });
+
+    const schema2 = mapAsync(number(), string(), {
+      description: 'map value',
+      message: 'Value is not a map!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'map value' });
+    expect(schema2.message).toEqual('Value is not a map!');
+
+    const schema3 = mapAsync(number(), string());
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

@@ -44,4 +44,19 @@ describe('literalAsync', () => {
       parseAsync(literalAsync('value_1', error), 'test')
     ).rejects.toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = literalAsync('value_1', { description: 'literal value' });
+    expect(schema1.metadata).toEqual({ description: 'literal value' });
+
+    const schema2 = literalAsync('value_1', {
+      description: 'literal value',
+      message: 'Value is not a literal!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'literal value' });
+    expect(schema2.message).toEqual('Value is not a literal!');
+
+    const schema3 = literalAsync('value_1');
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

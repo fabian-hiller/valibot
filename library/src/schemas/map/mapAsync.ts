@@ -2,6 +2,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Issues,
   Output,
   PipeAsync,
@@ -67,7 +68,7 @@ export function mapAsync<
  *
  * @param key The key schema.
  * @param value The value schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async map schema.
@@ -78,7 +79,7 @@ export function mapAsync<
 >(
   key: TKey,
   value: TValue,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<MapOutput<TKey, TValue>>
 ): MapSchemaAsync<TKey, TValue>;
 
@@ -88,11 +89,11 @@ export function mapAsync<
 >(
   key: TKey,
   value: TValue,
-  arg3?: PipeAsync<MapOutput<TKey, TValue>> | ErrorMessage,
+  arg3?: PipeAsync<MapOutput<TKey, TValue>> | ErrorMessageOrMetadata,
   arg4?: PipeAsync<MapOutput<TKey, TValue>>
 ): MapSchemaAsync<TKey, TValue> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg3, arg4);
 
   // Create and return async map schema
   return {
@@ -102,6 +103,7 @@ export function mapAsync<
     value,
     message,
     pipe,
+    metadata,
     async _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {

@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Issues,
   Output,
   Pipe,
@@ -63,7 +64,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
  *
  * @param key The key schema.
  * @param value The value schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A map schema.
@@ -71,18 +72,18 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
 export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
   key: TKey,
   value: TValue,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<MapOutput<TKey, TValue>>
 ): MapSchema<TKey, TValue>;
 
 export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
   key: TKey,
   value: TValue,
-  arg3?: Pipe<MapOutput<TKey, TValue>> | ErrorMessage,
+  arg3?: Pipe<MapOutput<TKey, TValue>> | ErrorMessageOrMetadata,
   arg4?: Pipe<MapOutput<TKey, TValue>>
 ): MapSchema<TKey, TValue> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
+  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg3, arg4);
 
   // Create and return map schema
   return {
@@ -92,6 +93,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
     value,
     message,
     pipe,
+    metadata,
     _parse(input, info) {
       // Check type of input
       if (!(input instanceof Map)) {
