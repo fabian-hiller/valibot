@@ -143,8 +143,7 @@ export function tupleAsync<
     pipe,
     async _parse(input, config) {
       // If root type is valid, check nested types
-      // TODO: Due to length check, error message can be confusing
-      if (Array.isArray(input) && this.items.length <= input.length) {
+      if (Array.isArray(input)) {
         // Create typed, issues and output
         let typed = true;
         let issues: SchemaIssues | undefined;
