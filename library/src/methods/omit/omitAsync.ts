@@ -7,7 +7,7 @@ import {
 import type {
   BaseSchema,
   BaseSchemaAsync,
-  ErrorMessage,
+  ErrorMessageOrMetadata,
   ObjectKeys,
   PipeAsync,
 } from '../../types/index.ts';
@@ -40,7 +40,7 @@ export function omitAsync<
  *
  * @param schema The schema to omit from.
  * @param keys The selected keys
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -51,7 +51,7 @@ export function omitAsync<
 >(
   schema: TSchema,
   keys: TKeys,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<
     ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, undefined>
   >
@@ -86,7 +86,7 @@ export function omitAsync<
  * @param schema The schema to omit from.
  * @param keys The selected keys
  * @param rest The object rest.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -99,7 +99,7 @@ export function omitAsync<
   schema: TSchema,
   keys: TKeys,
   rest: TRest,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchemaAsync<Omit<TSchema['entries'], TKeys[number]>, TRest>;
 
@@ -112,15 +112,15 @@ export function omitAsync<
   keys: TKeys,
   arg3?:
     | PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
-    | ErrorMessage
+    | ErrorMessageOrMetadata
     | TRest,
   arg4?:
     | PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
-    | ErrorMessage,
+    | ErrorMessageOrMetadata,
   arg5?: PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchemaAsync<Omit<TSchema['entries'], TKeys[number]>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = restAndDefaultArgs<
+  const [rest, message, pipe, metadata] = restAndDefaultArgs<
     TRest,
     PipeAsync<ObjectOutput<Omit<TSchema['entries'], TKeys[number]>, TRest>>
   >(arg3, arg4, arg5);
@@ -133,7 +133,7 @@ export function omitAsync<
       {}
     ) as Omit<TSchema['entries'], TKeys[number]>,
     rest,
-    message,
+    metadata === undefined ? message : { message, ...metadata },
     pipe
   );
 }

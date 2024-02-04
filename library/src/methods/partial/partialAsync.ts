@@ -10,7 +10,7 @@ import {
 import type {
   BaseSchema,
   BaseSchemaAsync,
-  ErrorMessage,
+  ErrorMessageOrMetadata,
   PipeAsync,
 } from '../../types/index.ts';
 import { restAndDefaultArgs } from '../../utils/index.ts';
@@ -45,7 +45,7 @@ export function partialAsync<
  * object schema set to optional.
  *
  * @param schema The affected schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -54,7 +54,7 @@ export function partialAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
   schema: TSchema,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<
     ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, undefined>
   >
@@ -87,7 +87,7 @@ export function partialAsync<
  *
  * @param schema The affected schema.
  * @param rest The object rest.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -98,7 +98,7 @@ export function partialAsync<
 >(
   schema: TSchema,
   rest: TRest,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<
     ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
   >
@@ -113,19 +113,19 @@ export function partialAsync<
     | PipeAsync<
         ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
       >
-    | ErrorMessage
+    | ErrorMessageOrMetadata
     | TRest,
   arg3?:
     | PipeAsync<
         ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
       >
-    | ErrorMessage,
+    | ErrorMessageOrMetadata,
   arg4?: PipeAsync<
     ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
   >
 ): ObjectSchemaAsync<PartialObjectEntriesAsync<TSchema['entries']>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = restAndDefaultArgs<
+  const [rest, message, pipe, metadata] = restAndDefaultArgs<
     TRest,
     PipeAsync<
       ObjectOutput<PartialObjectEntriesAsync<TSchema['entries']>, TRest>
@@ -142,7 +142,7 @@ export function partialAsync<
       {}
     ) as PartialObjectEntriesAsync<TSchema['entries']>,
     rest,
-    message,
+    metadata === undefined ? message : { message, ...metadata },
     pipe
   );
 }

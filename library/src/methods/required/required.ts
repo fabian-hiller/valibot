@@ -6,7 +6,11 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessageOrMetadata,
+  Pipe,
+} from '../../types/index.ts';
 import { restAndDefaultArgs } from '../../utils/index.ts';
 
 /**
@@ -35,14 +39,14 @@ export function required<TSchema extends ObjectSchema<any, any>>(
  * schema set to none optional.
  *
  * @param schema The affected schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
 export function required<TSchema extends ObjectSchema<any, any>>(
   schema: TSchema,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<ObjectOutput<Required<TSchema['entries']>, undefined>>
 ): ObjectSchema<Required<TSchema['entries']>>;
 
@@ -71,7 +75,7 @@ export function required<
  *
  * @param schema The affected schema.
  * @param rest The object rest.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -82,7 +86,7 @@ export function required<
 >(
   schema: TSchema,
   rest: TRest,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
 ): ObjectSchema<Required<TSchema['entries']>, TRest>;
 
@@ -93,13 +97,15 @@ export function required<
   schema: TSchema,
   arg2?:
     | Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
-    | ErrorMessage
+    | ErrorMessageOrMetadata
     | TRest,
-  arg3?: Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>> | ErrorMessage,
+  arg3?:
+    | Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
+    | ErrorMessageOrMetadata,
   arg4?: Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
 ): ObjectSchema<Required<TSchema['entries']>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = restAndDefaultArgs<
+  const [rest, message, pipe, metadata] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<Required<TSchema['entries']>, TRest>>
   >(arg2, arg3, arg4);
@@ -114,7 +120,7 @@ export function required<
       {}
     ) as Required<TSchema['entries']>,
     rest,
-    message,
+    metadata === undefined ? message : { message, ...metadata },
     pipe
   );
 }

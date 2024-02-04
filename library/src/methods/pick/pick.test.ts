@@ -50,4 +50,21 @@ describe('pick', () => {
     expect(output1).toEqual(transformInput());
     expect(output2).toEqual(transformInput());
   });
+
+  test('should expose the metadata', async () => {
+    const schema1 = pick(
+      object({ key1: string(), key2: string(), key3: string() }),
+      ['key1', 'key3'],
+      { description: 'a simple object' }
+    );
+    expect(schema1.metadata).toEqual({ description: 'a simple object' });
+
+    const schema2 = pick(
+      object({ key1: string(), key2: string(), key3: string() }),
+      ['key1', 'key3'],
+      { description: 'a simple object', message: 'Value is not an object!' }
+    );
+    expect(schema2.metadata).toEqual({ description: 'a simple object' });
+    expect(schema2.message).toEqual('Value is not an object!');
+  });
 });

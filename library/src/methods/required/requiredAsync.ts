@@ -10,7 +10,7 @@ import {
 import type {
   BaseSchema,
   BaseSchemaAsync,
-  ErrorMessage,
+  ErrorMessageOrMetadata,
   PipeAsync,
 } from '../../types/index.ts';
 import { restAndDefaultArgs } from '../../utils/index.ts';
@@ -43,7 +43,7 @@ export function requiredAsync<
  * object schema set to none optional.
  *
  * @param schema The affected schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -52,7 +52,7 @@ export function requiredAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
 >(
   schema: TSchema,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<ObjectOutput<Required<TSchema['entries']>, undefined>>
 ): ObjectSchemaAsync<Required<TSchema['entries']>>;
 
@@ -81,7 +81,7 @@ export function requiredAsync<
  *
  * @param schema The affected schema.
  * @param rest The object rest.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -92,7 +92,7 @@ export function requiredAsync<
 >(
   schema: TSchema,
   rest: TRest,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<ObjectOutput<Required<TSchema['entries']>, TRest>>
 ): ObjectSchemaAsync<Required<TSchema['entries']>, TRest>;
 
@@ -103,15 +103,15 @@ export function requiredAsync<
   schema: TSchema,
   arg2?:
     | PipeAsync<ObjectOutput<Required<TSchema['entries']>, TRest>>
-    | ErrorMessage
+    | ErrorMessageOrMetadata
     | TRest,
   arg3?:
     | PipeAsync<ObjectOutput<Required<TSchema['entries']>, TRest>>
-    | ErrorMessage,
+    | ErrorMessageOrMetadata,
   arg4?: PipeAsync<ObjectOutput<Required<TSchema['entries']>, TRest>>
 ): ObjectSchemaAsync<Required<TSchema['entries']>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = restAndDefaultArgs<
+  const [rest, message, pipe, metadata] = restAndDefaultArgs<
     TRest,
     PipeAsync<ObjectOutput<Required<TSchema['entries']>, TRest>>
   >(arg2, arg3, arg4);
@@ -126,7 +126,7 @@ export function requiredAsync<
       {}
     ) as Required<TSchema['entries']>,
     rest,
-    message,
+    metadata === undefined ? message : { message, ...metadata },
     pipe
   );
 }

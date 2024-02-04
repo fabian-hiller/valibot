@@ -6,7 +6,11 @@ import {
   optional,
   type OptionalSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessageOrMetadata,
+  Pipe,
+} from '../../types/index.ts';
 import { restAndDefaultArgs } from '../../utils/index.ts';
 
 /**
@@ -35,14 +39,14 @@ export function partial<TSchema extends ObjectSchema<any, any>>(
  * schema set to optional.
  *
  * @param schema The affected schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
  */
 export function partial<TSchema extends ObjectSchema<any, any>>(
   schema: TSchema,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, undefined>>
 ): ObjectSchema<PartialObjectEntries<TSchema['entries']>>;
 
@@ -71,7 +75,7 @@ export function partial<
  *
  * @param schema The affected schema.
  * @param rest The object rest.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -82,7 +86,7 @@ export function partial<
 >(
   schema: TSchema,
   rest: TRest,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, TRest>>
 ): ObjectSchema<PartialObjectEntries<TSchema['entries']>, TRest>;
 
@@ -93,15 +97,15 @@ export function partial<
   schema: TSchema,
   arg2?:
     | Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, TRest>>
-    | ErrorMessage
+    | ErrorMessageOrMetadata
     | TRest,
   arg3?:
     | Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, TRest>>
-    | ErrorMessage,
+    | ErrorMessageOrMetadata,
   arg4?: Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, TRest>>
 ): ObjectSchema<PartialObjectEntries<TSchema['entries']>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = restAndDefaultArgs<
+  const [rest, message, pipe, metadata] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<PartialObjectEntries<TSchema['entries']>, TRest>>
   >(arg2, arg3, arg4);
@@ -116,7 +120,7 @@ export function partial<
       {}
     ) as PartialObjectEntries<TSchema['entries']>,
     rest,
-    message,
+    metadata === undefined ? message : { message, ...metadata },
     pipe
   );
 }

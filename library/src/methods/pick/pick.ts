@@ -5,7 +5,7 @@ import {
 } from '../../schemas/index.ts';
 import type {
   BaseSchema,
-  ErrorMessage,
+  ErrorMessageOrMetadata,
   ObjectKeys,
   Pipe,
 } from '../../types/index.ts';
@@ -36,7 +36,7 @@ export function pick<
  *
  * @param schema The schema to pick from.
  * @param keys The selected keys
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -47,7 +47,7 @@ export function pick<
 >(
   schema: TSchema,
   keys: TKeys,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, undefined>>
 ): ObjectSchema<Pick<TSchema['entries'], TKeys[number]>>;
 
@@ -80,7 +80,7 @@ export function pick<
  * @param schema The schema to pick from.
  * @param keys The selected keys
  * @param rest The object rest.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An object schema.
@@ -93,7 +93,7 @@ export function pick<
   schema: TSchema,
   keys: TKeys,
   rest: TRest,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchema<Pick<TSchema['entries'], TKeys[number]>, TRest>;
 
@@ -106,15 +106,15 @@ export function pick<
   keys: TKeys,
   arg3?:
     | Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
-    | ErrorMessage
+    | ErrorMessageOrMetadata
     | TRest,
   arg4?:
     | Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
-    | ErrorMessage,
+    | ErrorMessageOrMetadata,
   arg5?: Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
 ): ObjectSchema<Pick<TSchema['entries'], TKeys[number]>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = restAndDefaultArgs<
+  const [rest, message, pipe, metadata] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<Pick<TSchema['entries'], TKeys[number]>, TRest>>
   >(arg3, arg4, arg5);
@@ -127,7 +127,7 @@ export function pick<
       {}
     ) as Pick<TSchema['entries'], TKeys[number]>,
     rest,
-    message,
+    metadata === undefined ? message : { message, ...metadata },
     pipe
   );
 }
