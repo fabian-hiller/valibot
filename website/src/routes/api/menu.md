@@ -222,7 +222,6 @@
 - [IntersectSchema](/api/IntersectSchema/)
 - [InvalidActionResult](/api/InvalidActionResult/)
 - [Issue](/api/Issue/)
-- [IssueOrigin](/api/IssueOrigin/)
 - [IssueReason](/api/IssueReason/)
 - [Issues](/api/Issues/)
 - [Literal](/api/Literal/)

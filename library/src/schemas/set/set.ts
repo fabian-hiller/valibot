@@ -100,6 +100,7 @@ export function set<TValue extends BaseSchema>(
             // Create set path item
             const pathItem: SetPathItem = {
               type: 'set',
+              origin: 'value',
               input,
               key,
               value: inputValue,

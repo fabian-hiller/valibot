@@ -1,10 +1,11 @@
 import type { SchemaConfig } from './config.ts';
-import type { SchemaIssue, SchemaIssues } from './issues.ts';
+import type { SchemaIssues } from './issues.ts';
 
 /**
  * Parse config type.
+ * TODO: Remove parse config type.
  */
-export type ParseConfig = SchemaConfig & Partial<Pick<SchemaIssue, 'origin'>>;
+export type ParseConfig = SchemaConfig;
 
 /**
  * Typed schema result type.

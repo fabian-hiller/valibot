@@ -65,7 +65,7 @@ describe('mapAsync', () => {
       await parseAsync(schema, input1, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].origin).toBe('value');
+      expect((error as ValiError).issues[0].path?.[0].origin).toBe('value');
     }
 
     const input2 = new Map().set('1', 1).set(2, '2').set('3', '3');
@@ -74,7 +74,7 @@ describe('mapAsync', () => {
       await parseAsync(schema, input2, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].origin).toBe('key');
+      expect((error as ValiError).issues[0].path?.[0].origin).toBe('key');
     }
   });
 
@@ -85,6 +85,7 @@ describe('mapAsync', () => {
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'map',
+        origin: 'value',
         input: input1,
         key: 'C',
         value: input1.get('C'),
@@ -97,16 +98,17 @@ describe('mapAsync', () => {
       .set('B', { key: 2 })
       .set('C', { key: '3' });
     const result2 = await schema2._parse(input2);
-    expect(result2.issues?.[0].origin).toBe('value');
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'map',
+        origin: 'value',
         input: input2,
         key: 'B',
         value: input2.get('B'),
       },
       {
         type: 'object',
+        origin: 'value',
         input: input2.get('B'),
         key: 'key',
         value: input2.get('B').key,
@@ -120,16 +122,17 @@ describe('mapAsync', () => {
       .set(errorKey, 'B')
       .set({ key: '3' }, 'C');
     const result3 = await schema3._parse(input3);
-    expect(result3.issues?.[0].origin).toBe('key');
     expect(result3.issues?.[0].path).toEqual([
       {
         type: 'map',
+        origin: 'key',
         input: input3,
         key: errorKey,
         value: input3.get(errorKey),
       },
       {
         type: 'object',
+        origin: 'value',
         input: errorKey,
         key: 'key',
         value: errorKey.key,
@@ -177,7 +180,6 @@ describe('mapAsync', () => {
         {
           reason: 'string',
           context: 'min_length',
-          origin: 'value',
           expected: '>=10',
           received: '5',
           message: 'Invalid length: Expected >=10 but received 5',
@@ -186,6 +188,7 @@ describe('mapAsync', () => {
           path: [
             {
               type: 'map',
+              origin: 'value',
               input: input,
               key: 0,
               value: input.get(0),
@@ -195,7 +198,6 @@ describe('mapAsync', () => {
         {
           reason: 'map',
           context: 'min_size',
-          origin: 'value',
           expected: '>=10',
           received: '1',
           message: 'Invalid size: Expected >=10 but received 1',
@@ -217,7 +219,6 @@ describe('mapAsync', () => {
         {
           reason: 'type',
           context: 'string',
-          origin: 'value',
           expected: 'string',
           received: '12345',
           message: 'Invalid type: Expected string but received 12345',
@@ -225,6 +226,7 @@ describe('mapAsync', () => {
           path: [
             {
               type: 'map',
+              origin: 'value',
               input: input,
               key: 0,
               value: input.get(0),

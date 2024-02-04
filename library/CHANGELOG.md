@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Rename `validation` property of `Issue` type to `context`
+- Moven origin property of `SchemaIssue` type into `PathItem`
 
 ## v0.27.1 (January 28, 2023)
 

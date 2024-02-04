@@ -20,7 +20,6 @@ describe('schemaIssue', () => {
         {
           reason: 'type',
           context: context1.type,
-          origin: 'value',
           expected: context1.expects,
           received: received1,
           message: `Invalid type: Expected ${context1.expects} but received ${received1}`,
@@ -36,7 +35,6 @@ describe('schemaIssue', () => {
     };
     const reference2 = any;
     const config2 = {
-      origin: 'key' as const,
       lang: 'en',
       abortEarly: true,
       abortPipeEarly: false,
@@ -48,6 +46,7 @@ describe('schemaIssue', () => {
       path: [
         {
           type: 'unknown',
+          origin: 'value',
           input: 'input',
           key: 'key',
           value: 'value',
@@ -57,7 +56,6 @@ describe('schemaIssue', () => {
         {
           reason: 'any',
           context: 'validation',
-          origin: 'value',
           expected: 'expected',
           received: 'received',
           message: 'message',
@@ -74,7 +72,6 @@ describe('schemaIssue', () => {
         {
           reason: other2.reason,
           context: context2.type,
-          origin: config2.origin,
           expected: context2.expects,
           received: received2,
           message: context2.message,

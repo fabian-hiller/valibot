@@ -74,6 +74,7 @@ describe('array', () => {
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'array',
+        origin: 'value',
         input: input1,
         key: 2,
         value: input1[2],
@@ -86,12 +87,14 @@ describe('array', () => {
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'array',
+        origin: 'value',
         input: input2,
         key: 1,
         value: input2[1],
       },
       {
         type: 'object',
+        origin: 'value',
         input: input2[1],
         key: 'key',
         value: input2[1].key,
@@ -131,7 +134,6 @@ describe('array', () => {
         {
           reason: 'string',
           context: 'min_length',
-          origin: 'value',
           expected: '>=10',
           received: '5',
           message: 'Invalid length: Expected >=10 but received 5',
@@ -140,6 +142,7 @@ describe('array', () => {
           path: [
             {
               type: 'array',
+              origin: 'value',
               input: input,
               key: 0,
               value: input[0],
@@ -149,7 +152,6 @@ describe('array', () => {
         {
           reason: 'array',
           context: 'min_length',
-          origin: 'value',
           expected: '>=10',
           received: '1',
           message: 'Invalid length: Expected >=10 but received 1',
@@ -171,7 +173,6 @@ describe('array', () => {
         {
           reason: 'type',
           context: 'string',
-          origin: 'value',
           expected: 'string',
           received: '12345',
           message: 'Invalid type: Expected string but received 12345',
@@ -179,6 +180,7 @@ describe('array', () => {
           path: [
             {
               type: 'array',
+              origin: 'value',
               input: input,
               key: 0,
               value: input[0],

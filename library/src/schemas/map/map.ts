@@ -107,18 +107,14 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
           let pathItem: MapPathItem | undefined;
 
           // Get schema result of key
-          const keyResult = this.key._parse(inputKey, {
-            origin: 'key',
-            abortEarly: config?.abortEarly,
-            abortPipeEarly: config?.abortPipeEarly,
-            skipPipe: config?.skipPipe,
-          });
+          const keyResult = this.key._parse(inputKey, config);
 
           // If there are issues, capture them
           if (keyResult.issues) {
             // Create map path item
             pathItem = {
               type: 'map',
+              origin: 'key',
               input,
               key: inputKey,
               value: inputValue,
@@ -152,6 +148,7 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
             // Create map path item
             pathItem = pathItem ?? {
               type: 'map',
+              origin: 'value',
               input,
               key: inputKey,
               value: inputValue,

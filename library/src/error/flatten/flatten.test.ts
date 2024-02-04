@@ -7,7 +7,6 @@ describe('flatten', () => {
   const rootIssue: SchemaIssue = {
     reason: 'object',
     context: 'custom',
-    origin: 'value',
     input: { key1: 'test', key2: ['test'] },
     expected: null,
     received: 'Object',
@@ -17,7 +16,7 @@ describe('flatten', () => {
   const nestedIssue1: SchemaIssue = {
     reason: 'string',
     context: 'email',
-    origin: 'value',
+
     input: { key1: 'test', key2: ['test'] },
     expected: 'email',
     received: '"test"',
@@ -25,6 +24,7 @@ describe('flatten', () => {
     path: [
       {
         type: 'object',
+        origin: 'value',
         input: { key1: 'test', key2: ['test'] },
         key: 'key1',
         value: 'test',
@@ -35,7 +35,6 @@ describe('flatten', () => {
   const nestedIssue2: SchemaIssue = {
     reason: 'string',
     context: 'ends_with',
-    origin: 'value',
     input: { key1: 'test', key2: ['test'] },
     expected: '"@gmail.com"',
     received: '"test"',
@@ -43,6 +42,7 @@ describe('flatten', () => {
     path: [
       {
         type: 'object',
+        origin: 'value',
         input: { key1: 'test', key2: ['test'] },
         key: 'key1',
         value: 'test',
@@ -53,7 +53,6 @@ describe('flatten', () => {
   const nestedIssue3: SchemaIssue = {
     reason: 'type',
     context: 'number',
-    origin: 'value',
     input: { key1: 'test', key2: ['test'] },
     expected: 'number',
     received: '"test"',
@@ -61,12 +60,14 @@ describe('flatten', () => {
     path: [
       {
         type: 'object',
+        origin: 'value',
         input: { key1: 'test', key2: ['test'] },
         key: 'key2',
         value: ['test'],
       },
       {
         type: 'array',
+        origin: 'value',
         input: ['test'],
         key: 0,
         value: 'test',

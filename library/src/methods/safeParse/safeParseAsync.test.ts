@@ -29,7 +29,6 @@ describe('safeParseAsync', () => {
       {
         reason: 'string',
         context: 'min_length',
-        origin: 'value',
         expected: '>=10',
         received: '5',
         message: 'Invalid length: Expected >=10 but received 5',
@@ -38,6 +37,7 @@ describe('safeParseAsync', () => {
         path: [
           {
             type: 'object',
+            origin: 'value',
             input,
             key: 'key',
             value: input.key,
@@ -65,7 +65,6 @@ describe('safeParseAsync', () => {
       {
         reason: 'type',
         context: 'string',
-        origin: 'value',
         expected: 'string',
         received: '123',
         message: 'Invalid type: Expected string but received 123',
@@ -73,6 +72,7 @@ describe('safeParseAsync', () => {
         path: [
           {
             type: 'object',
+            origin: 'value',
             input,
             key: 'key',
             value: input.key,

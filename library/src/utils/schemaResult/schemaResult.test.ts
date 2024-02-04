@@ -18,7 +18,6 @@ describe('schemaResult', () => {
       {
         reason: 'type',
         context: 'string',
-        origin: 'value',
         expected: 'string',
         received: 'Object',
         message: 'Invalid type',

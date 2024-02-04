@@ -171,6 +171,7 @@ export function objectAsync<
                     // Create object path item
                     const pathItem: ObjectPathItem = {
                       type: 'object',
+                      origin: 'value',
                       input: input as Record<string, unknown>,
                       key,
                       value,
@@ -226,6 +227,7 @@ export function objectAsync<
                         // Create object path item
                         const pathItem: ObjectPathItem = {
                           type: 'object',
+                          origin: 'value',
                           input: input as Record<string, unknown>,
                           key,
                           value,

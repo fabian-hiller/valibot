@@ -12,7 +12,6 @@ describe('subissues', () => {
     const issue1: SchemaIssue = {
       reason: 'string',
       context: 'length',
-      origin: 'value',
       expected: '2',
       received: '3',
       message: 'Invalid length',
@@ -22,7 +21,6 @@ describe('subissues', () => {
     const issue2: SchemaIssue = {
       reason: 'string',
       context: 'length',
-      origin: 'value',
       expected: '4',
       received: '3',
       message: 'Invalid length',
@@ -32,7 +30,6 @@ describe('subissues', () => {
     const issue3: SchemaIssue = {
       reason: 'string',
       context: 'starts_with',
-      origin: 'value',
       expected: '"bar"',
       received: '"foo"',
       message: 'Invalid start',

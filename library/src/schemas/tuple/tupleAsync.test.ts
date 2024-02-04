@@ -98,6 +98,7 @@ describe('tupleAsync', () => {
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'tuple',
+        origin: 'value',
         input: input1,
         key: 1,
         value: input1[1],
@@ -110,12 +111,14 @@ describe('tupleAsync', () => {
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'tuple',
+        origin: 'value',
         input: input2,
         key: 1,
         value: input2[1],
       },
       {
         type: 'object',
+        origin: 'value',
         input: input2[1],
         key: 'key',
         value: input2[1].key,
@@ -128,6 +131,7 @@ describe('tupleAsync', () => {
     expect(result3.issues?.[0].path).toEqual([
       {
         type: 'tuple',
+        origin: 'value',
         input: input3,
         key: 3,
         value: input3[3],
@@ -140,12 +144,14 @@ describe('tupleAsync', () => {
     expect(result4.issues?.[0].path).toEqual([
       {
         type: 'tuple',
+        origin: 'value',
         input: input4,
         key: 2,
         value: input4[2],
       },
       {
         type: 'object',
+        origin: 'value',
         input: input4[2],
         key: 'key',
         value: input4[2].key,
@@ -192,7 +198,6 @@ describe('tupleAsync', () => {
         {
           reason: 'string',
           context: 'min_length',
-          origin: 'value',
           expected: '>=10',
           received: '5',
           message: 'Invalid length: Expected >=10 but received 5',
@@ -201,6 +206,7 @@ describe('tupleAsync', () => {
           path: [
             {
               type: 'tuple',
+              origin: 'value',
               input: input,
               key: 0,
               value: input[0],
@@ -212,7 +218,6 @@ describe('tupleAsync', () => {
           context: 'min_length',
           expected: '>=5',
           received: '1',
-          origin: 'value',
           message: 'Invalid length: Expected >=5 but received 1',
           input: input,
           requirement: 5,
@@ -232,7 +237,6 @@ describe('tupleAsync', () => {
         {
           reason: 'type',
           context: 'string',
-          origin: 'value',
           expected: 'string',
           received: '12345',
           message: 'Invalid type: Expected string but received 12345',
@@ -240,6 +244,7 @@ describe('tupleAsync', () => {
           path: [
             {
               type: 'tuple',
+              origin: 'value',
               input: input,
               key: 0,
               value: input[0],

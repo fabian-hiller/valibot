@@ -24,7 +24,6 @@ describe('pipeIssue', () => {
     expect(pipeIssue(schemaContext, undefined, actionIssue1)).toEqual({
       reason: schemaContext.type,
       context: actionIssue1.context.type,
-      origin: 'value',
       expected: actionIssue1.context.expects,
       received: actionIssue1.received!,
       message: `Invalid ${actionIssue1.label}: Expected ${actionIssue1.context.expects} but received ${actionIssue1.received}`,
@@ -49,11 +48,16 @@ describe('pipeIssue', () => {
       label: 'value',
       received: '"hello"',
       path: [
-        { type: 'record', input: { hello: 123 }, key: 'hello', value: 123 },
+        {
+          type: 'record',
+          origin: 'value',
+          input: { hello: 123 },
+          key: 'hello',
+          value: 123,
+        },
       ],
     };
     const parseConfig: ParseConfig = {
-      origin: 'key',
       lang: 'en',
       abortEarly: true,
       abortPipeEarly: false,
@@ -63,7 +67,6 @@ describe('pipeIssue', () => {
     expect(pipeIssue(schemaContext, parseConfig, actionIssue2)).toEqual({
       reason: schemaContext.type,
       context: actionIssue2.context.type,
-      origin: parseConfig.origin!,
       expected: actionIssue2.context.expects,
       received: actionIssue2.received!,
       message: actionIssue2.context.message as string,

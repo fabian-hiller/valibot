@@ -194,6 +194,7 @@ export function variant<
           path: [
             {
               type: 'object',
+              origin: 'value',
               input: input as Record<string, unknown>,
               key: this.key,
               value: undefined,

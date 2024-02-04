@@ -34,7 +34,6 @@ export function pipeIssue(
   const schemaIssue: SchemaIssue = {
     reason: context.type,
     context: issue.context.type,
-    origin: config?.origin ?? 'value',
     expected: issue.context.expects,
     received,
     message: `Invalid ${issue.label}: ${

@@ -128,12 +128,7 @@ export function mapAsync<
                 // If not aborted early, continue execution
                 if (!(config?.abortEarly && issues)) {
                   // Get schema result of value
-                  const result = await schema._parse(value, {
-                    origin,
-                    abortEarly: config?.abortEarly,
-                    abortPipeEarly: config?.abortPipeEarly,
-                    skipPipe: config?.skipPipe,
-                  });
+                  const result = await schema._parse(value, config);
 
                   // If not aborted early, continue execution
                   if (!(config?.abortEarly && issues)) {
@@ -142,6 +137,7 @@ export function mapAsync<
                       // Create map path item
                       pathItem = pathItem ?? {
                         type: 'map',
+                        origin,
                         input,
                         key: inputKey,
                         value: inputValue,

@@ -183,12 +183,7 @@ export function recordAsync<
                   // If not aborted early, continue execution
                   if (!(config?.abortEarly && issues)) {
                     // Get schema result of value
-                    const result = await schema._parse(value, {
-                      origin,
-                      abortEarly: config?.abortEarly,
-                      abortPipeEarly: config?.abortPipeEarly,
-                      skipPipe: config?.skipPipe,
-                    });
+                    const result = await schema._parse(value, config);
 
                     // If not aborted early, continue execution
                     if (!(config?.abortEarly && issues)) {
@@ -197,6 +192,7 @@ export function recordAsync<
                         // Create record path item
                         pathItem = pathItem ?? {
                           type: 'record',
+                          origin,
                           input: input as Record<
                             string | number | symbol,
                             unknown

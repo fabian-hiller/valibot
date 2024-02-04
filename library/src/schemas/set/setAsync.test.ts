@@ -76,6 +76,7 @@ describe('setAsync', () => {
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'set',
+        origin: 'value',
         input: input1,
         key: 1,
         value: '2',
@@ -88,12 +89,14 @@ describe('setAsync', () => {
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'set',
+        origin: 'value',
         input: input2,
         key: 1,
         value: { key: 123 },
       },
       {
         type: 'object',
+        origin: 'value',
         input: { key: 123 },
         key: 'key',
         value: 123,
@@ -138,7 +141,6 @@ describe('setAsync', () => {
         {
           reason: 'string',
           context: 'min_length',
-          origin: 'value',
           expected: '>=10',
           received: '5',
           message: 'Invalid length: Expected >=10 but received 5',
@@ -147,6 +149,7 @@ describe('setAsync', () => {
           path: [
             {
               type: 'set',
+              origin: 'value',
               input: input,
               key: 0,
               value: '12345',
@@ -156,7 +159,6 @@ describe('setAsync', () => {
         {
           reason: 'set',
           context: 'min_size',
-          origin: 'value',
           expected: '>=10',
           received: '1',
           message: 'Invalid size: Expected >=10 but received 1',
@@ -178,7 +180,6 @@ describe('setAsync', () => {
         {
           reason: 'type',
           context: 'string',
-          origin: 'value',
           expected: 'string',
           received: '12345',
           message: 'Invalid type: Expected string but received 12345',
@@ -186,6 +187,7 @@ describe('setAsync', () => {
           path: [
             {
               type: 'set',
+              origin: 'value',
               input: input,
               key: 0,
               value: 12345,

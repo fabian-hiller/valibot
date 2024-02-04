@@ -166,6 +166,7 @@ export function tupleAsync<
                     // Create tuple path item
                     const pathItem: TuplePathItem = {
                       type: 'tuple',
+                      origin: 'value',
                       input: input as [any, ...any[]],
                       key,
                       value,
@@ -219,6 +220,7 @@ export function tupleAsync<
                       // Create tuple path item
                       const pathItem: TuplePathItem = {
                         type: 'tuple',
+                        origin: 'value',
                         input: input as [any, ...any[]],
                         key,
                         value,

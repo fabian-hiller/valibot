@@ -38,15 +38,11 @@ export type IssueReason =
   | 'type';
 
 /**
- * Issue origin type.
- */
-export type IssueOrigin = 'key' | 'value';
-
-/**
  * Unknown path item type.
  */
 export type UnknownPathItem = {
   type: 'unknown';
+  origin: 'key' | 'value';
   input: unknown;
   key: unknown;
   value: unknown;
@@ -76,10 +72,6 @@ export type SchemaIssue = Omit<SchemaConfig, 'message'> & {
    * The context name.
    */
   context: string;
-  /**
-   * The issue origin.
-   */
-  origin: IssueOrigin;
   /**
    * The raw input data.
    */

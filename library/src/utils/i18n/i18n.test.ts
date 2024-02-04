@@ -24,7 +24,6 @@ describe('i18n', () => {
   const issue: SchemaIssue = {
     reason: 'type',
     context: 'string',
-    origin: 'value',
     expected: 'string',
     received: '123',
     message: 'Invalid type: Expected string but received 123',

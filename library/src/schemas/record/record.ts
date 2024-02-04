@@ -153,18 +153,14 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
             let pathItem: RecordPathItem | undefined;
 
             // Get schema result of key
-            const keyResult = this.key._parse(inputKey, {
-              origin: 'key',
-              abortEarly: config?.abortEarly,
-              abortPipeEarly: config?.abortPipeEarly,
-              skipPipe: config?.skipPipe,
-            });
+            const keyResult = this.key._parse(inputKey, config);
 
             // If there are issues, capture them
             if (keyResult.issues) {
               // Create record path item
               pathItem = {
                 type: 'record',
+                origin: 'key',
                 input: input as Record<string | number | symbol, unknown>,
                 key: inputKey,
                 value: inputValue,
@@ -194,6 +190,7 @@ export function record<TKey extends RecordKey, TValue extends BaseSchema>(
               // Create record path item
               pathItem = pathItem ?? {
                 type: 'record',
+                origin: 'value',
                 input: input as Record<string | number | symbol, unknown>,
                 key: inputKey,
                 value: inputValue,

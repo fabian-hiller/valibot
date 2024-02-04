@@ -97,6 +97,7 @@ describe('object', () => {
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'object',
+        origin: 'value',
         input: input1,
         key: 'key',
         value: input1.key,
@@ -109,12 +110,14 @@ describe('object', () => {
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'object',
+        origin: 'value',
         input: input2,
         key: 'nested',
         value: input2.nested,
       },
       {
         type: 'object',
+        origin: 'value',
         input: input2.nested,
         key: 'key',
         value: input2.nested.key,
@@ -127,6 +130,7 @@ describe('object', () => {
     expect(result3.issues?.[0].path).toEqual([
       {
         type: 'object',
+        origin: 'value',
         input: input3,
         key: 'key2',
         value: input3.key2,
@@ -139,12 +143,14 @@ describe('object', () => {
     expect(result4.issues?.[0].path).toEqual([
       {
         type: 'object',
+        origin: 'value',
         input: input4,
         key: 'nested',
         value: input4.nested,
       },
       {
         type: 'object',
+        origin: 'value',
         input: input4.nested,
         key: 'key',
         value: input4.nested.key,
@@ -183,7 +189,6 @@ describe('object', () => {
         {
           reason: 'string',
           context: 'min_length',
-          origin: 'value',
           expected: '>=10',
           received: '5',
           message: 'Invalid length: Expected >=10 but received 5',
@@ -192,6 +197,7 @@ describe('object', () => {
           path: [
             {
               type: 'object',
+              origin: 'value',
               input: input,
               key: 'key',
               value: input.key,
@@ -201,7 +207,6 @@ describe('object', () => {
         {
           reason: 'object',
           context: 'custom',
-          origin: 'value',
           expected: null,
           received: 'Object',
           message: 'Invalid input: Received Object',
@@ -225,7 +230,6 @@ describe('object', () => {
         {
           reason: 'type',
           context: 'string',
-          origin: 'value',
           expected: 'string',
           received: '12345',
           message: 'Invalid type: Expected string but received 12345',
@@ -233,6 +237,7 @@ describe('object', () => {
           path: [
             {
               type: 'object',
+              origin: 'value',
               input: input,
               key: 'key',
               value: input.key,

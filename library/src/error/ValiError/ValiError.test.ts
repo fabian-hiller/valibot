@@ -7,7 +7,6 @@ describe('ValiError', () => {
     const issue: SchemaIssue = {
       reason: 'type',
       context: 'string',
-      origin: 'value',
       input: 1,
       expected: 'string',
       received: 'number',

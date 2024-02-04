@@ -71,7 +71,7 @@ describe('record', () => {
       parse(schema1, input1, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].origin).toBe('value');
+      expect((error as ValiError).issues[0].path?.[0].origin).toBe('value');
     }
 
     const schema2 = record(string([minLength(2)]), number());
@@ -81,7 +81,7 @@ describe('record', () => {
       parse(schema2, input2, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].origin).toBe('key');
+      expect((error as ValiError).issues[0].path?.[0].origin).toBe('key');
     }
   });
 
@@ -92,6 +92,7 @@ describe('record', () => {
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'record',
+        origin: 'value',
         input: input1,
         key: 'b',
         value: input1.b,
@@ -101,16 +102,17 @@ describe('record', () => {
     const schema2 = record(object({ key: string() }));
     const input2 = { a: { key: 'test' }, b: { key: 123 } };
     const result2 = schema2._parse(input2);
-    expect(result2.issues?.[0].origin).toBe('value');
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'record',
+        origin: 'value',
         input: input2,
         key: 'b',
         value: input2.b,
       },
       {
         type: 'object',
+        origin: 'value',
         input: input2.b,
         key: 'key',
         value: input2.b.key,
@@ -120,10 +122,10 @@ describe('record', () => {
     const schema3 = record(string([maxLength(1)]), number());
     const input3 = { a: 1, bb: 2, c: 3 };
     const result3 = schema3._parse(input3);
-    expect(result3.issues?.[0].origin).toBe('key');
     expect(result3.issues?.[0].path).toEqual([
       {
         type: 'record',
+        origin: 'key',
         input: input3,
         key: 'bb',
         value: input3.bb,
@@ -176,7 +178,6 @@ describe('record', () => {
         {
           reason: 'string',
           context: 'min_length',
-          origin: 'value',
           expected: '>=10',
           received: '5',
           message: 'Invalid length: Expected >=10 but received 5',
@@ -185,6 +186,7 @@ describe('record', () => {
           path: [
             {
               type: 'record',
+              origin: 'value',
               input: input,
               key: 'key',
               value: input.key,
@@ -196,7 +198,6 @@ describe('record', () => {
           context: 'custom',
           expected: null,
           received: 'Object',
-          origin: 'value',
           message: 'Invalid input: Received Object',
           input: input,
           requirement,
@@ -218,7 +219,6 @@ describe('record', () => {
         {
           reason: 'type',
           context: 'string',
-          origin: 'value',
           expected: 'string',
           received: '12345',
           message: 'Invalid type: Expected string but received 12345',
@@ -226,6 +226,7 @@ describe('record', () => {
           path: [
             {
               type: 'record',
+              origin: 'value',
               input: input,
               key: 'key',
               value: input.key,

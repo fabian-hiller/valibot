@@ -8,13 +8,6 @@ export const properties: Record<string, PropertyProps> = {
       href: '../IssueReason/',
     },
   },
-  origin: {
-    type: {
-      type: 'custom',
-      name: 'IssueOrigin',
-      href: '../IssueOrigin/',
-    },
-  },
   path: {
     type: {
       type: 'union',

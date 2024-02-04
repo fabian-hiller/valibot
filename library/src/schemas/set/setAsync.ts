@@ -105,6 +105,7 @@ export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
                   // Create set path item
                   const pathItem: SetPathItem = {
                     type: 'set',
+                    origin: 'value',
                     input,
                     key,
                     value: inputValue,

@@ -200,6 +200,7 @@ export function variantAsync<
           path: [
             {
               type: 'object',
+              origin: 'value',
               input: input as Record<string, unknown>,
               key: this.key,
               value: undefined,

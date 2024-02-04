@@ -107,6 +107,7 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
                   // Create array path item
                   const pathItem: ArrayPathItem = {
                     type: 'array',
+                    origin: 'value',
                     input,
                     key,
                     value,

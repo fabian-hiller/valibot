@@ -22,7 +22,6 @@ type Issue = {
   // Required info
   reason: IssueReason;
   context: string;
-  origin: 'key' | 'value';
   message: string;
   input: any;
 
@@ -48,10 +47,6 @@ Each issue contains the following required information.
 
 `context` describes which function did the validation. If the schema function <Link href="/api/array/">`array`</Link> detects that the input is not an array, `context` has the value `'array'`. If the <Link href="/api/minLength/">`minLength`</Link> validation function detects that an array is too short, `context` has the value `'min_length'`.
 
-#### Origin
-
-`origin` describes the source of the issue and, except for an issue on a key of a map or record, always has the value `'value'`.
-
 #### Message
 
 `message` contains a human-understandable error message that can be fully customized as described <Link href="/guides/schemas/#error-messages">here</Link>.
@@ -75,6 +70,7 @@ Some issues contain further optional information.
 ```ts
 type PathItem = {
   schema: string;
+  origin: 'key' | 'value';
   input: unknown;
   key: string | number | symbol;
   value: unknown;
@@ -127,12 +123,12 @@ The <Link href="/api/ValiError/">`ValiError`</Link> thrown in the code sample ab
   {
     reason: 'type',
     context: 'string',
-    origin: 'value',
     message: 'Value of "key" is missing.',
     input: undefined,
     path: [
       {
         schema: 'object',
+        origin: 'value',
         input: { nested: {} },
         key: 'key',
         value: undefined,
@@ -142,18 +138,19 @@ The <Link href="/api/ValiError/">`ValiError`</Link> thrown in the code sample ab
   {
     reason: 'type',
     context: 'string',
-    origin: 'value',
     message: 'Value of "nested.key" is missing.',
     input: undefined,
     path: [
       {
         schema: 'object',
+        origin: 'value',
         input: { nested: {} },
         key: 'nested',
         value: {},
       },
       {
         schema: 'object',
+        origin: 'value',
         input: {},
         key: 'key',
         value: undefined,

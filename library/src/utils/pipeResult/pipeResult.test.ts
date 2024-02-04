@@ -24,7 +24,6 @@ describe('pipeResult', () => {
       {
         reason: 'number',
         context: 'min_value',
-        origin: 'value',
         expected: '>=1',
         received: '0',
         message: 'Invalid min value',

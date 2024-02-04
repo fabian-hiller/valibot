@@ -28,12 +28,14 @@ describe('forward', () => {
           path: [
             {
               type: 'unknown',
+              origin: 'value',
               input: { nested: { key: 'value' } },
               key: 'nested',
               value: { key: 'value' },
             },
             {
               type: 'unknown',
+              origin: 'value',
               input: { key: 'value' },
               key: 'key',
               value: 'value',
@@ -70,12 +72,14 @@ describe('forward', () => {
           path: [
             {
               type: 'unknown',
+              origin: 'value',
               input: { nested: [{ key: 'value' }] },
               key: 'nested',
               value: [{ key: 'value' }],
             },
             {
               type: 'unknown',
+              origin: 'value',
               input: [{ key: 'value' }],
               key: 10,
               value: undefined,

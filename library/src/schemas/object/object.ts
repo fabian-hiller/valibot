@@ -161,6 +161,7 @@ export function object<
             // Create object path item
             const pathItem: ObjectPathItem = {
               type: 'object',
+              origin: 'value',
               input: input as Record<string, unknown>,
               key,
               value,
@@ -209,6 +210,7 @@ export function object<
                 // Create object path item
                 const pathItem: ObjectPathItem = {
                   type: 'object',
+                  origin: 'value',
                   input: input as Record<string, unknown>,
                   key,
                   value,

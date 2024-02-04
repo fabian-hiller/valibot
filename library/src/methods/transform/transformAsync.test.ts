@@ -45,7 +45,6 @@ describe('transformAsync', () => {
         {
           reason: 'type',
           context: 'string',
-          origin: 'value',
           expected: 'string',
           received: '123',
           message: 'Invalid type: Expected string but received 123',
@@ -69,7 +68,6 @@ describe('transformAsync', () => {
         {
           reason: 'string',
           context: 'min_length',
-          origin: 'value',
           expected: '>=10',
           received: '5',
           message: 'Invalid length: Expected >=10 but received 5',
@@ -95,7 +93,6 @@ describe('transformAsync', () => {
         {
           reason: 'string',
           context: 'min_length',
-          origin: 'value',
           expected: '>=10',
           received: '5',
           message: 'Invalid length: Expected >=10 but received 5',
@@ -119,7 +116,6 @@ describe('transformAsync', () => {
         {
           reason: 'number',
           context: 'max_value',
-          origin: 'value',
           expected: '<=5',
           received: '6',
           message: 'Invalid value: Expected <=5 but received 6',
@@ -145,7 +141,6 @@ describe('transformAsync', () => {
         {
           reason: 'number',
           context: 'max_value',
-          origin: 'value',
           expected: '<=5',
           received: '6',
           message: 'Invalid value: Expected <=5 but received 6',

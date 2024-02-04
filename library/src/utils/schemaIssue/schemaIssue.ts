@@ -53,7 +53,6 @@ export function schemaIssue(
   const issue: SchemaIssue = {
     reason: other?.reason ?? 'type',
     context: context.type,
-    origin: config?.origin ?? 'value',
     expected: context.expects,
     received,
     message: `Invalid type: Expected ${context.expects} but received ${received}`,

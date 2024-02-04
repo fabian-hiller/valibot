@@ -18,7 +18,6 @@ export const properties: Record<string, PropertyProps> = {
             {
               type: 'union',
               options: [
-                { type: 'string', value: 'origin' },
                 { type: 'string', value: 'abortEarly' },
                 { type: 'string', value: 'abortPipeEarly' },
                 { type: 'string', value: 'skipPipe' },

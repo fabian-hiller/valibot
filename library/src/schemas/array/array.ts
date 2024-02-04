@@ -101,6 +101,7 @@ export function array<TItem extends BaseSchema>(
             // Create array path item
             const pathItem: ArrayPathItem = {
               type: 'array',
+              origin: 'value',
               input,
               key,
               value,
