@@ -15,4 +15,14 @@ describe('recursive', () => {
     expect(() => parse(schema, null)).toThrowError();
     expect(() => parse(schema, {})).toThrowError();
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = recursive(() => string({ description: 'string value' }));
+    expect(schema1.metadata).toEqual({ description: 'string value' });
+
+    const schema2 = recursive(() => string(), {
+      description: 'recursive value',
+    });
+    expect(schema2.metadata).toEqual({ description: 'recursive value' });
+  });
 });

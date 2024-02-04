@@ -15,4 +15,16 @@ describe('recursiveAsync', () => {
     await expect(parseAsync(schema, null)).rejects.toThrowError();
     await expect(parseAsync(schema, {})).rejects.toThrowError();
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = recursiveAsync(() =>
+      stringAsync({ description: 'string value' })
+    );
+    expect(schema1.metadata).toEqual({ description: 'string value' });
+
+    const schema2 = recursiveAsync(() => stringAsync(), {
+      description: 'recursive value',
+    });
+    expect(schema2.metadata).toEqual({ description: 'recursive value' });
+  });
 });
