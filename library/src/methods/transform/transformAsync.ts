@@ -3,8 +3,8 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
-  ParseConfig,
   PipeAsync,
+  SchemaConfig,
   SchemaResult,
 } from '../../types/index.ts';
 import { pipeResultAsync } from '../../utils/index.ts';
@@ -18,7 +18,7 @@ export type SchemaWithTransformAsync<
   TOutput
 > = Omit<TSchema, 'async' | '_parse' | '_types'> & {
   async: true;
-  _parse(input: unknown, config?: ParseConfig): Promise<SchemaResult<TOutput>>;
+  _parse(input: unknown, config?: SchemaConfig): Promise<SchemaResult<TOutput>>;
   _types?: {
     input: Input<TSchema>;
     output: TOutput;

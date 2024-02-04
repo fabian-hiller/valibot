@@ -5,7 +5,7 @@ import {
 } from '../../storages/index.ts';
 import type {
   ErrorMessage,
-  ParseConfig,
+  SchemaConfig,
   SchemaIssue,
 } from '../../types/index.ts';
 
@@ -31,7 +31,7 @@ export function i18n(
   context: I18nContext,
   // eslint-disable-next-line @typescript-eslint/ban-types
   reference: Function,
-  config: ParseConfig | undefined,
+  config: SchemaConfig | undefined,
   issue: SchemaIssue
 ): string {
   const message =

@@ -1,7 +1,7 @@
 import type {
   IssueReason,
-  ParseConfig,
   PipeAsync,
+  SchemaConfig,
   SchemaIssues,
   SchemaResult,
 } from '../../types/index.ts';
@@ -29,7 +29,7 @@ type SchemaContext<TValue> = {
 export async function pipeResultAsync<TValue>(
   context: SchemaContext<TValue>,
   input: TValue,
-  config: ParseConfig | undefined,
+  config: SchemaConfig | undefined,
   issues?: SchemaIssues
 ): Promise<SchemaResult<TValue>> {
   // Execute any action of pipe if necessary

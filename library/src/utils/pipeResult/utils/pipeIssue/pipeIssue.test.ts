@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
+import type { SchemaConfig } from '../../../../types/index.ts';
 import type { PipeActionIssue, SchemaIssue } from '../../../../types/issues.ts';
-import type { ParseConfig } from '../../../../types/schema.ts';
 import { minLength, value } from '../../../../validations/index.ts';
 import { pipeIssue } from './pipeIssue.ts';
 
@@ -57,14 +57,14 @@ describe('pipeIssue', () => {
         },
       ],
     };
-    const parseConfig: ParseConfig = {
+    const schemaConfig: SchemaConfig = {
       lang: 'en',
       abortEarly: true,
       abortPipeEarly: false,
       skipPipe: false,
     };
 
-    expect(pipeIssue(schemaContext, parseConfig, actionIssue2)).toEqual({
+    expect(pipeIssue(schemaContext, schemaConfig, actionIssue2)).toEqual({
       reason: schemaContext.type,
       context: actionIssue2.context.type,
       expected: actionIssue2.context.expects,
@@ -73,10 +73,10 @@ describe('pipeIssue', () => {
       input: actionIssue2.input,
       requirement: actionIssue2.context.requirement,
       path: actionIssue2.path,
-      lang: parseConfig.lang,
-      abortEarly: parseConfig.abortEarly,
-      abortPipeEarly: parseConfig.abortPipeEarly,
-      skipPipe: parseConfig.skipPipe,
+      lang: schemaConfig.lang,
+      abortEarly: schemaConfig.abortEarly,
+      abortPipeEarly: schemaConfig.abortPipeEarly,
+      skipPipe: schemaConfig.skipPipe,
     } satisfies SchemaIssue);
   });
 });

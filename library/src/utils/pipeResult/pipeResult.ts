@@ -1,7 +1,7 @@
 import type {
   IssueReason,
-  ParseConfig,
   Pipe,
+  SchemaConfig,
   SchemaIssues,
   TypedSchemaResult,
 } from '../../types/index.ts';
@@ -29,7 +29,7 @@ type SchemaContext<TValue> = {
 export function pipeResult<TValue>(
   context: SchemaContext<TValue>,
   input: TValue,
-  config: ParseConfig | undefined,
+  config: SchemaConfig | undefined,
   issues?: SchemaIssues
 ): TypedSchemaResult<TValue> {
   // Execute any action of pipe if necessary

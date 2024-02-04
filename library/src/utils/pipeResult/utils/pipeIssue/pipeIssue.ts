@@ -1,7 +1,7 @@
 import type {
   IssueReason,
-  ParseConfig,
   PipeActionIssue,
+  SchemaConfig,
   SchemaIssue,
 } from '../../../../types/index.ts';
 import { i18n } from '../../../i18n/index.ts';
@@ -25,7 +25,7 @@ type SchemaContext = {
  */
 export function pipeIssue(
   context: SchemaContext,
-  config: ParseConfig | undefined,
+  config: SchemaConfig | undefined,
   issue: PipeActionIssue
 ): SchemaIssue {
   const received = issue.received ?? stringify(issue.input);

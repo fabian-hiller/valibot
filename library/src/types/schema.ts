@@ -2,12 +2,6 @@ import type { SchemaConfig } from './config.ts';
 import type { SchemaIssues } from './issues.ts';
 
 /**
- * Parse config type.
- * TODO: Remove parse config type.
- */
-export type ParseConfig = SchemaConfig;
-
-/**
  * Typed schema result type.
  */
 export type TypedSchemaResult<TOutput> = {
@@ -72,7 +66,7 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
    *
    * @internal
    */
-  _parse(input: unknown, config?: ParseConfig): SchemaResult<TOutput>;
+  _parse(input: unknown, config?: SchemaConfig): SchemaResult<TOutput>;
   /**
    * Input and output type.
    *
@@ -103,7 +97,7 @@ export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
    *
    * @internal
    */
-  _parse(input: unknown, config?: ParseConfig): Promise<SchemaResult<TOutput>>;
+  _parse(input: unknown, config?: SchemaConfig): Promise<SchemaResult<TOutput>>;
   /**
    * Input and output type.
    *

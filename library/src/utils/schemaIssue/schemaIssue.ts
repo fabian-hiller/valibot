@@ -1,8 +1,8 @@
 import type {
   ErrorMessage,
   IssueReason,
-  ParseConfig,
   PathItem,
+  SchemaConfig,
   SchemaIssue,
   SchemaIssues,
   UntypedSchemaResult,
@@ -44,7 +44,7 @@ export function schemaIssue(
   // eslint-disable-next-line @typescript-eslint/ban-types
   reference: Function,
   input: unknown,
-  config: ParseConfig | undefined,
+  config: SchemaConfig | undefined,
   other?: OtherInfo
 ): UntypedSchemaResult {
   const received = stringify(input);
