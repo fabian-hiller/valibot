@@ -7,6 +7,7 @@ All notable changes to the library will be documented in this file.
 > Note: The library has been revised and refactored. Therefore, not every change is listed in detail.
 
 - Add i18n feature, global configurations and improve error messages (pull request #397)
+- Add `number` and `bigint` to `PicklistOptions` type (issue #378)
 - Fix missing export of `forwardAsync` method (issue #412)
 
 ## v0.27.1 (January 28, 2023)
