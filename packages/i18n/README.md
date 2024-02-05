@@ -2,6 +2,11 @@
 
 The official i18n translations for Valibot.
 
+| Language     | Pull Request | Status |
+| ------------ | ------------ | ------ |
+| English (en) | –            | ✅     |
+| German (de)  | –            | ✅     |
+
 ## Getting started
 
 Step 1: Clone repository
