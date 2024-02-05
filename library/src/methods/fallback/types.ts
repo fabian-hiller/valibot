@@ -1,4 +1,8 @@
-import type { SchemaIssues, BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  BaseSchemaAsync,
+  SchemaIssues,
+} from '../../types/index.ts';
 
 /**
  * Fallback info type.

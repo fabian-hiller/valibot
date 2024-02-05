@@ -1,6 +1,6 @@
-import type { TupleSchemaAsync, TupleItemsAsync } from './tupleAsync.ts';
-import type { TupleSchema, TupleItems } from './tuple.ts';
 import { isSchema } from '../../utils/isSchema.ts';
+import type { TupleItems, TupleSchema } from './tuple.ts';
+import type { TupleItemsAsync, TupleSchemaAsync } from './tupleAsync.ts';
 
 export const isTupleSchema = (
   val: unknown

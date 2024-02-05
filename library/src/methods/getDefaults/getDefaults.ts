@@ -27,9 +27,10 @@ export function getDefaults<TSchema extends SchemaWithMaybeDefault>(
   // If it is an object schema, set object with default value of each entry
   if (isObjectSchema(schema)) {
     return Object.fromEntries(
-      Object.entries(schema.entries).map(
-        ([key, value]) => [key, getDefaults(value)]
-      )
+      Object.entries(schema.entries).map(([key, value]) => [
+        key,
+        getDefaults(value),
+      ])
     ) as DefaultValues<TSchema>;
   }
   // If it is a tuple schema, set array with default value of each item
