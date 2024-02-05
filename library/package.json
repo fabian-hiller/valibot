@@ -64,7 +64,7 @@
     "eslint-plugin-security": "^1.7.1",
     "jsdom": "^22.1.0",
     "tsm": "^2.3.0",
-    "tsup": "^7.1.0",
+    "tsup": "^8.0.1",
     "typescript": "^5.3.3",
     "vite": "^4.4.6",
     "vitest": "^0.33.0"

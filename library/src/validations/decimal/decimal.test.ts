@@ -28,6 +28,6 @@ describe('decimal', () => {
   test('should return custom error message', () => {
     const error = 'Value is not decimal string!';
     const validate = decimal(error);
-    expect(validate._parse('1G').issues?.[0].message).toBe(error);
+    expect(validate._parse('1G').issues?.[0].context.message).toBe(error);
   });
 });

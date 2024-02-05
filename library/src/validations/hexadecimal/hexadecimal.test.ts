@@ -45,6 +45,6 @@ describe('hexadecimal', () => {
   test('should return custom error message', () => {
     const error = 'Value is not hexadecimal string!';
     const validate = hexadecimal(error);
-    expect(validate._parse('1G').issues?.[0].message).toBe(error);
+    expect(validate._parse('1G').issues?.[0].context.message).toBe(error);
   });
 });

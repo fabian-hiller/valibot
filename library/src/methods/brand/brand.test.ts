@@ -2,7 +2,7 @@ import { describe, expect, expectTypeOf, test } from 'vitest';
 import { object, string } from '../../schemas/index.ts';
 import type { Output } from '../../types/index.ts';
 import { parse } from '../parse/index.ts';
-import { brand, type Brand } from './brand.ts';
+import { type Brand, brand } from './brand.ts';
 
 describe('brand', () => {
   test('should not affect parse', () => {

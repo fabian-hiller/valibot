@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
 import { custom, length } from '../../validations/index.ts';
-import { string } from '../string/index.ts';
-import { number } from '../number/index.ts';
 import { null_ } from '../null/index.ts';
+import { number } from '../number/index.ts';
+import { string } from '../string/index.ts';
 import { union } from './union.ts';
 
 describe('union', () => {

@@ -15,6 +15,7 @@ import type { ObjectEntriesAsync } from './objectAsync.ts';
  */
 export type ObjectPathItem = {
   type: 'object';
+  origin: 'value';
   input: Record<string, unknown>;
   key: string;
   value: unknown;

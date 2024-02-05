@@ -16,14 +16,14 @@ export function withDefault<TSchema extends BaseSchema | BaseSchemaAsync>(
 ): TSchema {
   return {
     ...schema,
-    _parse(input, info) {
+    _parse(input, config) {
       return schema._parse(
         input === undefined
           ? typeof value === 'function'
             ? (value as () => Input<TSchema>)()
             : value
           : input,
-        info
+        config
       );
     },
   };

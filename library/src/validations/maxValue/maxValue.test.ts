@@ -41,6 +41,6 @@ describe('maxValue', () => {
   test('should return custom error message', () => {
     const error = 'Value value is greater than "3"!';
     const validate = maxValue(3, error);
-    expect(validate._parse(4).issues?.[0].message).toBe(error);
+    expect(validate._parse(4).issues?.[0].context.message).toBe(error);
   });
 });

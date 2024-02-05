@@ -18,7 +18,7 @@ export const properties: Record<string, PropertyProps> = {
   input: {
     type: 'unknown',
   },
-  info: {
+  config: {
     type: {
       type: 'union',
       options: [
@@ -28,7 +28,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'ParseInfo',
+              name: 'SchemaConfig',
+              href: '../SchemaConfig/',
             },
             {
               type: 'string',

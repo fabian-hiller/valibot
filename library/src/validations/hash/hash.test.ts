@@ -167,6 +167,6 @@ describe('hash', () => {
   test('should return custom error message', () => {
     const error = 'Value is not a sha1 hash!';
     const validate = hash(['sha1'], error);
-    expect(validate._parse('sdsds').issues?.[0].message).toBe(error);
+    expect(validate._parse('sdsds').issues?.[0].context.message).toBe(error);
   });
 });

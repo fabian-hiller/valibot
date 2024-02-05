@@ -1,5 +1,8 @@
 module.exports = {
-  plugins: [require('prettier-plugin-tailwindcss')],
+  plugins: [
+    'prettier-plugin-tailwindcss',
+    '@trivago/prettier-plugin-sort-imports',
+  ],
   printWidth: 80,
   tabWidth: 2,
   useTabs: false,
@@ -12,4 +15,8 @@ module.exports = {
   bracketSameLine: false,
   arrowParens: 'always',
   endOfLine: 'lf',
+  // prettier-ignore
+  importOrder: ['^\w', '^[./]'],
+  importOrderSortSpecifiers: true,
+  importOrderCaseInsensitive: true,
 };

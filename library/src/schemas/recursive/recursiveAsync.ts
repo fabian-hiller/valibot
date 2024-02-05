@@ -34,10 +34,11 @@ export function recursiveAsync<
 >(getter: TGetter): RecursiveSchemaAsync<TGetter> {
   return {
     type: 'recursive',
+    expects: 'unknown',
     async: true,
     getter,
-    async _parse(input, info) {
-      return this.getter()._parse(input, info);
+    async _parse(input, config) {
+      return this.getter()._parse(input, config);
     },
   };
 }

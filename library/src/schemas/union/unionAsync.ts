@@ -39,7 +39,7 @@ export type UnionSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -80,16 +80,17 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
   arg3?: PipeAsync<Input<TOptions[number]>>
 ): UnionSchemaAsync<TOptions> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return union schema
   return {
     type: 'union',
+    expects: [...new Set(options.map((option) => option.expects))].join(' | '),
     async: true,
     options,
     message,
     pipe,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Create variables to collect results
       let validResult: TypedSchemaResult<Output<TOptions[number]>> | undefined;
       let untypedResults: UntypedSchemaResult[] | undefined;
@@ -99,7 +100,7 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
 
       // Parse schema of each option
       for (const schema of this.options) {
-        const result = await schema._parse(input, info);
+        const result = await schema._parse(input, config);
 
         // If typed, add valid or typed result
         if (result.typed) {
@@ -123,33 +124,27 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
         }
       }
 
-      // If there is a valid result, execute pipe
+      // If there is a valid result, return pipe result
       if (validResult) {
-        return pipeResultAsync(validResult.output, this.pipe, info, 'union');
+        return pipeResultAsync(this, input, config);
       }
 
-      // If there are typed results, execute pipe
+      // If there are typed results, return pipe result
       if (typedResults?.length) {
         const firstResult = typedResults[0];
         return pipeResultAsync(
+          this,
           firstResult.output,
-          this.pipe,
-          info,
-          'union',
+          config,
           // Hint: If there is more than one typed result, we use a general
           // union issue with subissues because the issues could contradict
           // each other.
           typedResults.length === 1
             ? firstResult.issues
-            : schemaIssue(
-                info,
-                'union',
-                'union',
-                this.message,
-                input,
-                undefined,
-                subissues(typedResults)
-              ).issues
+            : schemaIssue(this, unionAsync, input, config, {
+                reason: 'union',
+                issues: subissues(typedResults),
+              }).issues
         );
       }
 
@@ -162,15 +157,9 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
       // Hint: If there are zero or more than one untyped results, we use a
       // general union issue with subissues because the issues could contradict
       // each other.
-      return schemaIssue(
-        info,
-        'type',
-        'union',
-        this.message,
-        input,
-        undefined,
-        subissues(untypedResults)
-      );
+      return schemaIssue(this, unionAsync, input, config, {
+        issues: subissues(untypedResults),
+      });
     },
   };
 }

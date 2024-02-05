@@ -12,7 +12,7 @@ export type NeverSchema = BaseSchema<never> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -22,13 +22,14 @@ export type NeverSchema = BaseSchema<never> & {
  *
  * @returns A never schema.
  */
-export function never(message: ErrorMessage = 'Invalid type'): NeverSchema {
+export function never(message?: ErrorMessage): NeverSchema {
   return {
     type: 'never',
+    expects: 'never',
     async: false,
     message,
-    _parse(input, info) {
-      return schemaIssue(info, 'type', 'never', this.message, input);
+    _parse(input, config) {
+      return schemaIssue(this, never, input, config);
     },
   };
 }

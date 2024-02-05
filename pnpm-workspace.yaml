@@ -1,3 +1,4 @@
 packages:
   - 'library'
+  - 'packages/*'
   - 'website'

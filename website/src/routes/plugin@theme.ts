@@ -1,4 +1,4 @@
-import { routeLoader$, routeAction$, zod$, z } from '@builder.io/qwik-city';
+import { routeAction$, routeLoader$, z, zod$ } from '@builder.io/qwik-city';
 
 /**
  * Returns the current theme.

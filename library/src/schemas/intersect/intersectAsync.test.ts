@@ -72,10 +72,10 @@ describe('intersectAsync', () => {
   test('should throw only first issue', async () => {
     const schema = intersectAsync([string(), literal('test')]);
     const input = 123;
-    const info = { abortEarly: true };
-    await expect(parseAsync(schema, input, info)).rejects.toThrowError();
+    const config = { abortEarly: true };
+    await expect(parseAsync(schema, input, config)).rejects.toThrowError();
     try {
-      await parseAsync(schema, input, info);
+      await parseAsync(schema, input, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }

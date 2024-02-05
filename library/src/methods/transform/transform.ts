@@ -54,9 +54,9 @@ export function transform<TSchema extends BaseSchema, TOutput>(
 ): SchemaWithTransform<TSchema, TOutput> {
   return {
     ...schema,
-    _parse(input, info) {
+    _parse(input, config) {
       // Parse input with schema
-      const result = schema._parse(input, info);
+      const result = schema._parse(input, config);
 
       // If result is typed, transform output
       if (result.typed) {
@@ -69,11 +69,15 @@ export function transform<TSchema extends BaseSchema, TOutput>(
 
         // Otherwise, if a pipe is provided, return pipe result
         if (Array.isArray(arg1)) {
-          return pipeResult(result.output, arg1, info, typeof result.output);
+          return pipeResult(
+            { type: typeof result.output, pipe: arg1 },
+            result.output,
+            config
+          );
         }
 
         // Otherwise, validate output with schema
-        return arg1._parse(result.output, info);
+        return arg1._parse(result.output, config);
       }
 
       // Otherwise, return untyped result
