@@ -18,7 +18,15 @@ describe('pipeIssue', () => {
       input: 'hello',
       label: 'length',
       received: '5',
-      path: [],
+      path: [
+        {
+          type: 'object',
+          origin: 'value',
+          input: { key: 'hello' },
+          key: 'key',
+          value: 'hello',
+        },
+      ],
     };
 
     expect(pipeIssue(schemaContext, undefined, actionIssue1)).toEqual({

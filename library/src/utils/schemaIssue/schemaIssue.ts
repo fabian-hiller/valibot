@@ -1,7 +1,7 @@
 import type {
   ErrorMessage,
+  IssuePath,
   IssueReason,
-  PathItem,
   SchemaConfig,
   SchemaIssue,
   SchemaIssues,
@@ -15,7 +15,7 @@ import { stringify } from '../stringify/index.ts';
  */
 type SchemaContext = {
   type: string;
-  expects: string | null;
+  expects: string;
   message: ErrorMessage | undefined;
 };
 
@@ -25,7 +25,7 @@ type SchemaContext = {
 type OtherInfo = Partial<{
   reason: IssueReason;
   expected: string;
-  path: PathItem[];
+  path: IssuePath;
   issues: SchemaIssues;
 }>;
 

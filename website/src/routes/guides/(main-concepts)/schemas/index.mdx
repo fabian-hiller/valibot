@@ -53,7 +53,7 @@ Pipelines are optional and, if needed, are always added in the form of an array 
 
 ### Error messages
 
-If I detect an issue during validation, I throw a <Link href="/api/ValiError/">`ValiError`</Link> and add a short error message to each issue. This error message can be overridden via the first optional argument of a schema or validation function.
+If I detect an issue during validation, I create a <Link href="/api/SchemaIssue/">`SchemaIssue`</Link> with various details and an error message. This error message can be overridden via the first optional argument of a schema or validation function.
 
 ```ts
 import * as v from 'valibot';
@@ -70,7 +70,7 @@ const LoginSchema = v.object({
 });
 ```
 
-Custom error messages allow you to improve the usability of your software by providing specific troubleshooting information and returning error messages in a language other than English.
+Custom error messages allow you to improve the usability of your software by providing specific troubleshooting information and returning error messages in a language other than English. See the <Link href="/guides/internationalization/">i18n guide</Link> for more information.
 
 ## Primitive values
 

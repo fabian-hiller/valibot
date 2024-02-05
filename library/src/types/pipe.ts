@@ -1,5 +1,5 @@
 import type { ErrorMessage } from './config.ts';
-import type { PipeActionIssue } from './issues.ts';
+import type { PipeActionIssues } from './issues.ts';
 
 /**
  * Pipe action context type.
@@ -36,7 +36,7 @@ export type InvalidActionResult = {
   /**
    * The pipe issues.
    */
-  issues: PipeActionIssue[];
+  issues: PipeActionIssues;
 };
 
 /**

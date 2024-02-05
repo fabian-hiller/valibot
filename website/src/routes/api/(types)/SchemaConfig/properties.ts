@@ -1,37 +1,23 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  reason: {
-    type: {
-      type: 'custom',
-      name: 'IssueReason',
-      href: '../IssueReason/',
-    },
+  SchemaConfig: {
+    type: 'object',
   },
-  path: {
+  lang: {
     type: {
       type: 'union',
-      options: [
-        {
-          type: 'array',
-          item: {
-            type: 'custom',
-            name: 'PathItem',
-            href: '../PathItem/',
-          },
-        },
-        'undefined',
-      ],
+      options: ['string', 'undefined'],
     },
   },
-  issues: {
+  message: {
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'Issues',
-          href: '../Issues/',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
         },
         'undefined',
       ],

@@ -4,10 +4,9 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
-- Moven origin property of `SchemaIssue` type into `PathItem`
-- Rename `validation` property of `Issue` type to `context`
-- Fix issue info in `tuple` and `tupleAsync` schema by removing length check
-- Fix issue info for discriminator key in `variant` and `variantAsync` schema
+> Note: The library has been revised and refactored. Therefore, not every change is listed in detail.
+
+- Add i18n feature and revised and refactored library (pull request #397)
 
 ## v0.27.1 (January 28, 2023)
 

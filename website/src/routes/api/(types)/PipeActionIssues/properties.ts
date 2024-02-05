@@ -1,22 +1,22 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  issues: {
+  PipeActionIssues: {
     type: {
       type: 'tuple',
       items: [
         {
           type: 'custom',
-          name: 'Issue',
-          href: '../Issue/',
+          name: 'PipeActionIssue',
+          href: '../PipeActionIssue/',
         },
         {
           type: 'array',
           spread: true,
           item: {
             type: 'custom',
-            name: 'Issue',
-            href: '../Issue/',
+            name: 'PipeActionIssue',
+            href: '../PipeActionIssue/',
           },
         },
       ],

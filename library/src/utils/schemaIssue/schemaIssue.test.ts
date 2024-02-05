@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { any, string } from '../../schemas/index.ts';
-import type { PathItem, SchemaIssues } from '../../types/index.ts';
+import type { IssuePath, SchemaIssues } from '../../types/index.ts';
 import { schemaIssue } from './schemaIssue.ts';
 
 describe('schemaIssue', () => {
@@ -51,7 +51,7 @@ describe('schemaIssue', () => {
           key: 'key',
           value: 'value',
         },
-      ] satisfies PathItem[],
+      ] satisfies IssuePath,
       issues: [
         {
           reason: 'any',

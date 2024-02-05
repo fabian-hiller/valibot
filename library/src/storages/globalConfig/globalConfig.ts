@@ -25,8 +25,8 @@ export function setGlobalConfig(config: GlobalConfig) {
  * @returns The configuration.
  */
 export function getGlobalConfig(config?: SchemaConfig): SchemaConfig {
-  // Note: The issue is deliberately not constructed with the spread operator
-  // for performance reasons
+  // Note: The configuration is deliberately not constructed with the spread
+  // operator for performance reasons
   return {
     lang: config?.lang ?? store?.lang,
     message: config?.message,

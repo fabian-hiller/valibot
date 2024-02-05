@@ -61,6 +61,11 @@ export type PathItem =
   | UnknownPathItem;
 
 /**
+ * Issue path type.
+ */
+export type IssuePath = [PathItem, ...PathItem[]];
+
+/**
  * Schema issue type.
  */
 export type SchemaIssue = Omit<SchemaConfig, 'message'> & {
@@ -95,7 +100,7 @@ export type SchemaIssue = Omit<SchemaConfig, 'message'> & {
   /**
    * The issue path.
    */
-  path?: PathItem[];
+  path?: IssuePath;
   /**
    * The sub issues.
    */
@@ -117,5 +122,10 @@ export type PipeActionIssue = {
   input: unknown;
   label: string;
   received?: string;
-  path?: PathItem[];
+  path?: IssuePath;
 };
+
+/**
+ * Pipe action issues type.
+ */
+export type PipeActionIssues = [PipeActionIssue, ...PipeActionIssue[]];
