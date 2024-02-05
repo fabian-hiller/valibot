@@ -21,7 +21,7 @@ export interface NumberSchemaAsync<TOutput = number>
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -55,22 +55,23 @@ export function numberAsync(
   arg2?: PipeAsync<number>
 ): NumberSchemaAsync {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe] = defaultArgs(arg1, arg2);
 
   // Create and return async number schema
   return {
     type: 'number',
+    expects: 'number',
     async: true,
     message,
     pipe,
-    async _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'number' || isNaN(input)) {
-        return schemaIssue(info, 'type', 'number', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return pipe result
+      if (typeof input === 'number' && !isNaN(input)) {
+        return pipeResultAsync(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResultAsync(input, this.pipe, info, 'number');
+      // Otherwise, return schema issue
+      return schemaIssue(this, numberAsync, input, config);
     },
   };
 }

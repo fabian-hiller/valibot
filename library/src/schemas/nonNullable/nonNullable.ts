@@ -20,7 +20,7 @@ export interface NonNullableSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 }
 
 /**
@@ -33,21 +33,22 @@ export interface NonNullableSchema<
  */
 export function nonNullable<TWrapped extends BaseSchema>(
   wrapped: TWrapped,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage
 ): NonNullableSchema<TWrapped> {
   return {
     type: 'non_nullable',
+    expects: '!null',
     async: false,
     wrapped,
     message,
-    _parse(input, info) {
-      // Allow `null` values not to pass
+    _parse(input, config) {
+      // In input is `null`, return schema issue
       if (input === null) {
-        return schemaIssue(info, 'type', 'non_nullable', this.message, input);
+        return schemaIssue(this, nonNullable, input, config);
       }
 
-      // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      // Otherwise, return result of wrapped schema
+      return this.wrapped._parse(input, config);
     },
   };
 }

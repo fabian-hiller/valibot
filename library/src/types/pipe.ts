@@ -1,11 +1,15 @@
-import type { Issue } from './issues.ts';
-import type { ErrorMessage } from './other.ts';
-import type { ParseInfo } from './schema.ts';
+import type { ErrorMessage } from './config.ts';
+import type { PipeActionIssues } from './issues.ts';
 
 /**
- * Pipe info type.
+ * Pipe action context type.
  */
-export type PipeInfo = ParseInfo & Pick<Issue, 'reason'>;
+export type PipeActionContext = {
+  type: string;
+  expects: string | null;
+  message: ErrorMessage | undefined;
+  requirement: unknown;
+};
 
 /**
  * Valid action result type.
@@ -32,10 +36,7 @@ export type InvalidActionResult = {
   /**
    * The pipe issues.
    */
-  issues: Pick<
-    Issue,
-    'validation' | 'message' | 'input' | 'requirement' | 'path'
-  >[];
+  issues: PipeActionIssues;
 };
 
 /**
@@ -54,13 +55,17 @@ export interface BaseValidation<TInput = any> {
    */
   type: string;
   /**
-   * Whether it's async.
+   * The expected property.
    */
-  async: false;
+  expects: string | null;
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
+  /**
+   * Whether it's async.
+   */
+  async: false;
   /**
    * The validation requirement.
    */
@@ -70,7 +75,7 @@ export interface BaseValidation<TInput = any> {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
@@ -86,13 +91,17 @@ export interface BaseValidationAsync<TInput = any> {
    */
   type: string;
   /**
-   * Whether it's async.
+   * The expected property.
    */
-  async: true;
+  expects: string | null;
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
+  /**
+   * Whether it's async.
+   */
+  async: true;
   /**
    * The validation requirement.
    */
@@ -102,7 +111,7 @@ export interface BaseValidationAsync<TInput = any> {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
@@ -126,7 +135,7 @@ export interface BaseTransformation<TInput = any> {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
@@ -150,7 +159,7 @@ export interface BaseTransformationAsync<TInput = any> {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */

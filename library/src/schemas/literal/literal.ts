@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
 import type { Literal } from './types.ts';
 
 /**
@@ -18,34 +18,35 @@ export interface LiteralSchema<TLiteral extends Literal, TOutput = TLiteral>
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 }
 
 /**
  * Creates a literal schema.
  *
- * @param literal The literal value.
+ * @param literal_ The literal value.
  * @param message The error message.
  *
  * @returns A literal schema.
  */
 export function literal<TLiteral extends Literal>(
-  literal: TLiteral,
-  message: ErrorMessage = 'Invalid type'
+  literal_: TLiteral,
+  message?: ErrorMessage
 ): LiteralSchema<TLiteral> {
   return {
     type: 'literal',
+    expects: stringify(literal_),
     async: false,
-    literal,
+    literal: literal_,
     message,
-    _parse(input, info) {
-      // Check type of input
-      if (input !== this.literal) {
-        return schemaIssue(info, 'type', 'literal', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return schema result
+      if (input === this.literal) {
+        return schemaResult(true, input as TLiteral);
       }
 
-      // Return parse result
-      return parseResult(true, input as TLiteral);
+      // Otherwise, return schema issue
+      return schemaIssue(this, literal, input, config);
     },
   };
 }

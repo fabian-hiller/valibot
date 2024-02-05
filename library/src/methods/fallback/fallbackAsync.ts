@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync, Output } from '../../types/index.ts';
-import { parseResult } from '../../utils/index.ts';
+import { schemaResult } from '../../utils/index.ts';
 import { getFallbackAsync } from '../getFallback/index.ts';
 import type { FallbackInfo, SchemaWithFallbackAsync } from './types.ts';
 
@@ -23,10 +23,10 @@ export function fallbackAsync<
   return {
     ...schema,
     fallback,
-    async _parse(input, info) {
-      const result = await schema._parse(input, info);
+    async _parse(input, config) {
+      const result = await schema._parse(input, config);
       return result.issues
-        ? parseResult(
+        ? schemaResult(
             true,
             await getFallbackAsync(this, { input, issues: result.issues })
           )

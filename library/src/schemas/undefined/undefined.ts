@@ -1,5 +1,5 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * Undefined schema type.
@@ -13,7 +13,7 @@ export interface UndefinedSchema<TOutput = undefined>
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 }
 
 /**
@@ -23,21 +23,20 @@ export interface UndefinedSchema<TOutput = undefined>
  *
  * @returns A undefined schema.
  */
-export function undefined_(
-  message: ErrorMessage = 'Invalid type'
-): UndefinedSchema {
+export function undefined_(message?: ErrorMessage): UndefinedSchema {
   return {
     type: 'undefined',
+    expects: 'undefined',
     async: false,
     message,
-    _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'undefined') {
-        return schemaIssue(info, 'type', 'undefined', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return schema result
+      if (input === undefined) {
+        return schemaResult(true, input);
       }
 
-      // Return parse result
-      return parseResult(true, input);
+      // Otherwise, return schema issue
+      return schemaIssue(this, undefined_, input, config);
     },
   };
 }

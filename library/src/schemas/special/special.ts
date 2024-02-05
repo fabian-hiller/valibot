@@ -17,7 +17,7 @@ export interface SpecialSchema<TInput, TOutput = TInput>
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -58,23 +58,24 @@ export function special<TInput>(
   arg3?: Pipe<TInput>
 ): SpecialSchema<TInput> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
     type: 'special',
+    expects: 'unknown',
     async: false,
     check,
     message,
     pipe,
-    _parse(input, info) {
-      // Check type of input
-      if (!this.check(input)) {
-        return schemaIssue(info, 'type', 'special', this.message, input);
+    _parse(input, config) {
+      // If check is fulfilled, return pipe output
+      if (this.check(input)) {
+        return pipeResult(this, input as TInput, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(input as TInput, this.pipe, info, 'special');
+      // Otherwise, return schema issue
+      return schemaIssue(this, special, input, config);
     },
   };
 }

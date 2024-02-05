@@ -1,14 +1,14 @@
 import type {
   BaseSchema,
   ErrorMessage,
-  Issues,
   Pipe,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   defaultArgs,
-  parseResult,
   pipeResult,
   schemaIssue,
+  schemaResult,
 } from '../../utils/index.ts';
 import type { SetInput, SetOutput, SetPathItem } from './types.ts';
 
@@ -30,7 +30,7 @@ export interface SetSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -71,81 +71,84 @@ export function set<TValue extends BaseSchema>(
   arg3?: Pipe<SetOutput<TValue>>
 ): SetSchema<TValue> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return set schema
   return {
     type: 'set',
+    expects: 'Set',
     async: false,
     value,
     message,
     pipe,
-    _parse(input, info) {
-      // Check type of input
-      if (!(input instanceof Set)) {
-        return schemaIssue(info, 'type', 'set', this.message, input);
-      }
+    _parse(input, config) {
+      // If root type is valid, check nested types
+      if (input instanceof Set) {
+        // Create key, typed, output and issues
+        let key = 0;
+        let typed = true;
+        let issues: SchemaIssues | undefined;
+        const output: SetOutput<TValue> = new Set();
 
-      // Create key, typed, output and issues
-      let key = 0;
-      let typed = true;
-      let issues: Issues | undefined;
-      const output: SetOutput<TValue> = new Set();
+        // Parse each value by schema
+        for (const inputValue of input) {
+          // Get schema result of input value
+          const result = this.value._parse(inputValue, config);
 
-      // Parse each value by schema
-      for (const inputValue of input) {
-        // Get parse result of input value
-        const result = this.value._parse(inputValue, info);
+          // If there are issues, capture them
+          if (result.issues) {
+            // Create set path item
+            const pathItem: SetPathItem = {
+              type: 'set',
+              origin: 'value',
+              input,
+              key,
+              value: inputValue,
+            };
 
-        // If there are issues, capture them
-        if (result.issues) {
-          // Create set path item
-          const pathItem: SetPathItem = {
-            type: 'set',
-            input,
-            key,
-            value: inputValue,
-          };
-
-          // Add modified result issues to issues
-          for (const issue of result.issues) {
-            if (issue.path) {
-              issue.path.unshift(pathItem);
-            } else {
-              issue.path = [pathItem];
+            // Add modified result issues to issues
+            for (const issue of result.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                issue.path = [pathItem];
+              }
+              issues?.push(issue);
             }
-            issues?.push(issue);
-          }
-          if (!issues) {
-            issues = result.issues;
+            if (!issues) {
+              issues = result.issues;
+            }
+
+            // If necessary, abort early
+            if (config?.abortEarly) {
+              typed = false;
+              break;
+            }
           }
 
-          // If necessary, abort early
-          if (info?.abortEarly) {
+          // If not typed, set typed to false
+          if (!result.typed) {
             typed = false;
-            break;
           }
+
+          // Set output of entry if necessary
+          output.add(result.output);
+
+          // Increment key
+          key++;
         }
 
-        // If not typed, set typed to false
-        if (!result.typed) {
-          typed = false;
+        // If output is typed, return pipe result
+        if (typed) {
+          return pipeResult(this, output, config, issues);
         }
 
-        // Set output of entry if necessary
-        output.add(result.output);
-
-        // Increment key
-        key++;
+        // Otherwise, return untyped schema result
+        return schemaResult(false, output, issues as SchemaIssues);
       }
 
-      // If output is typed, execute pipe
-      if (typed) {
-        return pipeResult(output, this.pipe, info, 'set', issues);
-      }
-
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      // Otherwise, return schema issue
+      return schemaIssue(this, set, input, config);
     },
   };
 }

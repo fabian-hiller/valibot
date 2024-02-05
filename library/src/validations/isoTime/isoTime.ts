@@ -27,17 +27,22 @@ export interface IsoTimeValidation<TInput extends string>
  * @returns A validation action.
  */
 export function isoTime<TInput extends string>(
-  message: ErrorMessage = 'Invalid time'
+  message?: ErrorMessage
 ): IsoTimeValidation<TInput> {
   return {
     type: 'iso_time',
+    expects: null,
     async: false,
     message,
     requirement: ISO_TIME_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, isoTime, input, 'time');
     },
   };
 }

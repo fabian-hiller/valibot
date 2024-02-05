@@ -32,17 +32,22 @@ export function notLength<
   TRequirement extends number
 >(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid length'
+  message?: ErrorMessage
 ): NotLengthValidation<TInput, TRequirement> {
   return {
     type: 'not_length',
+    expects: `!${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return input.length === this.requirement
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (input.length !== this.requirement) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, notLength, input, 'length', `${input.length}`);
     },
   };
 }

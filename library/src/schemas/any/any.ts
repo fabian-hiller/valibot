@@ -25,10 +25,11 @@ export interface AnySchema<TOutput = any> extends BaseSchema<any, TOutput> {
 export function any(pipe?: Pipe<any>): AnySchema {
   return {
     type: 'any',
+    expects: 'any',
     async: false,
     pipe,
-    _parse(input, info) {
-      return pipeResult(input, this.pipe, info, 'any');
+    _parse(input, config) {
+      return pipeResult(this, input, config);
     },
   };
 }

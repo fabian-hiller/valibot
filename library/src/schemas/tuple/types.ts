@@ -13,6 +13,7 @@ import type { TupleItemsAsync } from './tupleAsync.ts';
  */
 export type TuplePathItem = {
   type: 'tuple';
+  origin: 'value';
   input: [unknown, ...unknown[]];
   key: number;
   value: unknown;

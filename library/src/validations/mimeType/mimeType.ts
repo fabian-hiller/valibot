@@ -31,17 +31,22 @@ export function mimeType<
   TRequirement extends `${string}/${string}`[]
 >(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid MIME type'
+  message?: ErrorMessage
 ): MimeTypeValidation<TInput, TRequirement> {
   return {
     type: 'mime_type',
+    expects: requirement.map((option) => `"${option}"`).join(' | '),
     async: false,
     message,
     requirement,
     _parse(input) {
-      return !this.requirement.includes(input.type as `${string}/${string}`)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.includes(input.type as `${string}/${string}`)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, mimeType, input, 'MIME type');
     },
   };
 }

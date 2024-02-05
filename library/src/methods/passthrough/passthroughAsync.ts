@@ -17,8 +17,8 @@ export function passthroughAsync<
 >(schema: TSchema): TSchema {
   return {
     ...schema,
-    async _parse(input, info) {
-      const result = await schema._parse(input, info);
+    async _parse(input, config) {
+      const result = await schema._parse(input, config);
       if (result.typed) {
         result.output = { ...(input as object), ...result.output };
       }

@@ -7,14 +7,14 @@ describe('bic', () => {
 
     const value1 = 'DEUTDEFF';
     expect(validate._parse(value1).output).toBe(value1);
-    const value2 = 'deutdeff';
-    expect(validate._parse(value2).output).toBe(value2);
     const value3 = 'DEUTDEFF400';
     expect(validate._parse(value3).output).toBe(value3);
     const value4 = 'NEDSZAJJXXX';
     expect(validate._parse(value4).output).toBe(value4);
 
     expect(validate._parse('').issues).toBeTruthy();
+    expect(validate._parse('deutdeff').issues).toBeTruthy();
+    expect(validate._parse('deutdeff400').issues).toBeTruthy();
     expect(validate._parse('DEUTFF').issues).toBeTruthy();
     expect(validate._parse('DEUT5EFF').issues).toBeTruthy();
     expect(validate._parse('DE1TDEFF').issues).toBeTruthy();
@@ -28,6 +28,6 @@ describe('bic', () => {
   test('should return custom error message', () => {
     const error = 'Value is invalid BIC code!';
     const validate = bic(error);
-    expect(validate._parse('test').issues?.[0].message).toBe(error);
+    expect(validate._parse('test').issues?.[0].context.message).toBe(error);
   });
 });

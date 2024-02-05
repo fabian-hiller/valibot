@@ -1,15 +1,15 @@
 import type {
   BaseSchema,
   ErrorMessage,
-  Issues,
   Output,
   Pipe,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   defaultArgs,
-  parseResult,
   pipeResult,
   schemaIssue,
+  schemaResult,
 } from '../../utils/index.ts';
 import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 
@@ -36,7 +36,7 @@ export interface MapSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -82,119 +82,118 @@ export function map<TKey extends BaseSchema, TValue extends BaseSchema>(
   arg4?: Pipe<MapOutput<TKey, TValue>>
 ): MapSchema<TKey, TValue> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg3, arg4);
+  const [message, pipe] = defaultArgs(arg3, arg4);
 
   // Create and return map schema
   return {
     type: 'map',
+    expects: 'Map',
     async: false,
     key,
     value,
     message,
     pipe,
-    _parse(input, info) {
-      // Check type of input
-      if (!(input instanceof Map)) {
-        return schemaIssue(info, 'type', 'map', this.message, input);
-      }
+    _parse(input, config) {
+      // If root type is valid, check nested types
+      if (input instanceof Map) {
+        // Create typed, issues and output
+        let typed = true;
+        let issues: SchemaIssues | undefined;
+        const output: Map<Output<TKey>, Output<TValue>> = new Map();
 
-      // Create typed, issues and output
-      let typed = true;
-      let issues: Issues | undefined;
-      const output: Map<Output<TKey>, Output<TValue>> = new Map();
+        // Parse each key and value by schema
+        for (const [inputKey, inputValue] of input.entries()) {
+          // Create path item variable
+          let pathItem: MapPathItem | undefined;
 
-      // Parse each key and value by schema
-      for (const [inputKey, inputValue] of input.entries()) {
-        // Create path item variable
-        let pathItem: MapPathItem | undefined;
+          // Get schema result of key
+          const keyResult = this.key._parse(inputKey, config);
 
-        // Get parse result of key
-        const keyResult = this.key._parse(inputKey, {
-          origin: 'key',
-          abortEarly: info?.abortEarly,
-          abortPipeEarly: info?.abortPipeEarly,
-          skipPipe: info?.skipPipe,
-        });
+          // If there are issues, capture them
+          if (keyResult.issues) {
+            // Create map path item
+            pathItem = {
+              type: 'map',
+              origin: 'key',
+              input,
+              key: inputKey,
+              value: inputValue,
+            };
 
-        // If there are issues, capture them
-        if (keyResult.issues) {
-          // Create map path item
-          pathItem = {
-            type: 'map',
-            input,
-            key: inputKey,
-            value: inputValue,
-          };
-
-          // Add modified result issues to issues
-          for (const issue of keyResult.issues) {
-            if (issue.path) {
-              issue.path.unshift(pathItem);
-            } else {
-              issue.path = [pathItem];
+            // Add modified result issues to issues
+            for (const issue of keyResult.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                issue.path = [pathItem];
+              }
+              issues?.push(issue);
             }
-            issues?.push(issue);
-          }
-          if (!issues) {
-            issues = keyResult.issues;
-          }
-
-          // If necessary, abort early
-          if (info?.abortEarly) {
-            typed = false;
-            break;
-          }
-        }
-
-        // Get parse result of value
-        const valueResult = this.value._parse(inputValue, info);
-
-        // If there are issues, capture them
-        if (valueResult.issues) {
-          // Create map path item
-          pathItem = pathItem || {
-            type: 'map',
-            input,
-            key: inputKey,
-            value: inputValue,
-          };
-
-          // Add modified result issues to issues
-          for (const issue of valueResult.issues) {
-            if (issue.path) {
-              issue.path.unshift(pathItem);
-            } else {
-              issue.path = [pathItem];
+            if (!issues) {
+              issues = keyResult.issues;
             }
-            issues?.push(issue);
-          }
-          if (!issues) {
-            issues = valueResult.issues;
+
+            // If necessary, abort early
+            if (config?.abortEarly) {
+              typed = false;
+              break;
+            }
           }
 
-          // If necessary, abort early
-          if (info?.abortEarly) {
+          // Get schema result of value
+          const valueResult = this.value._parse(inputValue, config);
+
+          // If there are issues, capture them
+          if (valueResult.issues) {
+            // Create map path item
+            pathItem = pathItem ?? {
+              type: 'map',
+              origin: 'value',
+              input,
+              key: inputKey,
+              value: inputValue,
+            };
+
+            // Add modified result issues to issues
+            for (const issue of valueResult.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                issue.path = [pathItem];
+              }
+              issues?.push(issue);
+            }
+            if (!issues) {
+              issues = valueResult.issues;
+            }
+
+            // If necessary, abort early
+            if (config?.abortEarly) {
+              typed = false;
+              break;
+            }
+          }
+
+          // If not typed, set typed to false
+          if (!keyResult.typed || !valueResult.typed) {
             typed = false;
-            break;
           }
+
+          // Set output of entry
+          output.set(keyResult.output, valueResult.output);
         }
 
-        // If not typed, set typed to false
-        if (!keyResult.typed || !valueResult.typed) {
-          typed = false;
+        // If output is typed, return pipe result
+        if (typed) {
+          return pipeResult(this, output, config, issues);
         }
 
-        // Set output of entry
-        output.set(keyResult.output, valueResult.output);
+        // Otherwise, return untyped schema result
+        return schemaResult(false, output, issues as SchemaIssues);
       }
 
-      // If output is typed, execute pipe
-      if (typed) {
-        return pipeResult(output, this.pipe, info, 'map', issues);
-      }
-
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      // Otherwise, return schema issue
+      return schemaIssue(this, map, input, config);
     },
   };
 }

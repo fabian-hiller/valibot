@@ -1,6 +1,6 @@
+import { component$ } from '@builder.io/qwik';
 import { GitHubIcon } from '~/icons';
 import { SystemIcon } from './SystemIcon';
-import { component$ } from '@builder.io/qwik';
 
 /**
  * GitHub icon pointing to our repository.

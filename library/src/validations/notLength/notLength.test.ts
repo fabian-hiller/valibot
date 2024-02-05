@@ -21,6 +21,6 @@ describe('notLength', () => {
   test('should return custom error message', () => {
     const error = 'Value length is "5"!';
     const validate = notLength(5, error);
-    expect(validate._parse('12345').issues?.[0].message).toBe(error);
+    expect(validate._parse('12345').issues?.[0].context.message).toBe(error);
   });
 });

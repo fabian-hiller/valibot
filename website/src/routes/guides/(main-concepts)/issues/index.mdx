@@ -5,7 +5,6 @@ description: >-
   about each issue.
 contributors:
   - fabian-hiller
-  - alonidiom
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -19,18 +18,20 @@ When validating unknown data against a schema, I collect information about each 
 The issues are an array of objects. In the following I will explain you exactly what information an issue contains and how this information can help you.
 
 ```ts
-type Issue = {
+type SchemaIssue = {
   // Required info
   reason: IssueReason;
-  validation: string;
-  origin: 'key' | 'value';
+  context: string;
+  input: unknown;
+  expected: string | null;
+  received: string;
   message: string;
-  input: any;
 
   // Optional info
   requirement?: unknown;
-  path?: PathItem[];
+  path?: IssuePath;
   issues?: Issues;
+  lang?: string;
   abortEarly?: boolean;
   abortPipeEarly?: boolean;
   skipPipe?: boolean;
@@ -45,21 +46,25 @@ Each issue contains the following required information.
 
 `reason` describes the reason of the problem. If an input does not match the data type, for example a number was passed instead of a string, `reason` has the value `'type'`. In all other cases the reason is not the datatype but the actual content of the data. For example, if a string is invalid because it does not match a regex, `reason` has the value `'string'`.
 
-#### Validation
+#### Context
 
-`validation` describes which function did the validation. If the schema function <Link href="/api/array/">`array`</Link> detects that the input is not an array, `validation` has the value `'array'`. If the <Link href="/api/minLength/">`minLength`</Link> validation function detects that an array is too short, `validation` has the value `'min_length'`.
-
-#### Origin
-
-`origin` describes the source of the issue and, except for an issue on a key of a map or record, always has the value `'value'`.
-
-#### Message
-
-`message` contains a human-understandable error message that can be fully customized as described <Link href="/guides/schemas/#error-messages">here</Link>.
+`context` describes which function did the validation. If the schema function <Link href="/api/array/">`array`</Link> detects that the input is not an array, `context` has the value `'array'`. If the <Link href="/api/minLength/">`minLength`</Link> validation function detects that an array is too short, `context` has the value `'min_length'`.
 
 #### Input
 
-`input` contains the specific data where the issue was found. For complex data, for example objects, `input` contains the value of the respective key that does not match the schema.
+`input` contains the input data where the issue was found. For complex data, for example objects, `input` contains the value of the respective key that does not match the schema.
+
+#### Expected
+
+`expected` is a language-neutral string that describes the data property that was expected. It can be used to create useful error messages. If your users aren't developers, you can replace the language-neutral symbols with language-specific words.
+
+#### Received
+
+`received` is a language-neutral string that describes the data property that was received. It can be used to create useful error messages. If your users aren't developers, you can replace the language-neutral symbols with language-specific words.
+
+#### Message
+
+`message` contains a human-understandable error message that can be fully customized as described in our <Link href="/guides/schemas/#error-messages">schemas</Link> and <Link href="/guides/internationalization/">internationalization</Link> guide.
 
 ### Optional info
 
@@ -76,6 +81,7 @@ Some issues contain further optional information.
 ```ts
 type PathItem = {
   schema: string;
+  origin: 'key' | 'value';
   input: unknown;
   key: string | number | symbol;
   value: unknown;
@@ -94,7 +100,7 @@ const dotPath = issue.path.map((item) => item.key).join('.');
 
 #### Config
 
-`abortEarly` and `abortPipeEarly` gives you an info that the validation was aborted prematurely. You can find more info about this in the <Link href="/guides/parse-data/#abort-early">parse data</Link> guide. `skipPipe` indicates that the pipeline validation was skipped. These are configurations that you can control yourself.
+`lang` can be used as part of our <Link href="/guides/internationalization/">i18n feature</Link> to define the required language. `abortEarly` and `abortPipeEarly` gives you an info that the validation was aborted prematurely. You can find more info about this in the <Link href="/guides/parse-data/#abort-early">parse data</Link> guide. `skipPipe` indicates that the pipeline validation was skipped. These are all configurations that you can control yourself.
 
 ## Formatting
 
@@ -127,13 +133,15 @@ The <Link href="/api/ValiError/">`ValiError`</Link> thrown in the code sample ab
 [
   {
     reason: 'type',
-    validation: 'string',
-    origin: 'value',
-    message: 'Value of "key" is missing.',
+    context: 'string',
     input: undefined,
+    expected: 'string',
+    received: 'undefined',
+    message: 'Value of "key" is missing.',
     path: [
       {
         schema: 'object',
+        origin: 'value',
         input: { nested: {} },
         key: 'key',
         value: undefined,
@@ -142,19 +150,22 @@ The <Link href="/api/ValiError/">`ValiError`</Link> thrown in the code sample ab
   },
   {
     reason: 'type',
-    validation: 'string',
-    origin: 'value',
-    message: 'Value of "nested.key" is missing.',
+    context: 'string',
     input: undefined,
+    expected: 'string',
+    received: 'undefined',
+    message: 'Value of "nested.key" is missing.',
     path: [
       {
         schema: 'object',
+        origin: 'value',
         input: { nested: {} },
         key: 'nested',
         value: {},
       },
       {
         schema: 'object',
+        origin: 'value',
         input: {},
         key: 'key',
         value: undefined,

@@ -12,7 +12,7 @@ export interface NeverSchemaAsync extends BaseSchemaAsync<never> {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 }
 
 /**
@@ -22,15 +22,14 @@ export interface NeverSchemaAsync extends BaseSchemaAsync<never> {
  *
  * @returns An async never schema.
  */
-export function neverAsync(
-  message: ErrorMessage = 'Invalid type'
-): NeverSchemaAsync {
+export function neverAsync(message?: ErrorMessage): NeverSchemaAsync {
   return {
     type: 'never',
+    expects: 'never',
     async: true,
     message,
-    async _parse(input, info) {
-      return schemaIssue(info, 'type', 'never', this.message, input);
+    async _parse(input, config) {
+      return schemaIssue(this, neverAsync, input, config);
     },
   };
 }

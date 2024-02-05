@@ -25,17 +25,22 @@ export interface SafeIntegerValidation<TInput extends number>
  * @returns A validation action.
  */
 export function safeInteger<TInput extends number>(
-  message: ErrorMessage = 'Invalid safe integer'
+  message?: ErrorMessage
 ): SafeIntegerValidation<TInput> {
   return {
     type: 'safe_integer',
+    expects: null,
     async: false,
     message,
     requirement: Number.isSafeInteger,
     _parse(input) {
-      return !this.requirement(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, safeInteger, input, 'safe integer');
     },
   };
 }

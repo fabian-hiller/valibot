@@ -21,7 +21,7 @@ export interface BlobSchemaAsync<TOutput = Blob>
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -55,22 +55,23 @@ export function blobAsync(
   arg2?: PipeAsync<Blob>
 ): BlobSchemaAsync {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe] = defaultArgs(arg1, arg2);
 
   // Create and return async blob schema
   return {
     type: 'blob',
+    expects: 'Blob',
     async: true,
     message,
     pipe,
-    async _parse(input, info) {
-      // Check type of input
-      if (!(input instanceof Blob)) {
-        return schemaIssue(info, 'type', 'blob', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return pipe result
+      if (input instanceof Blob) {
+        return pipeResultAsync(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResultAsync(input, this.pipe, info, 'blob');
+      // Otherwise, return schema issue
+      return schemaIssue(this, blobAsync, input, config);
     },
   };
 }

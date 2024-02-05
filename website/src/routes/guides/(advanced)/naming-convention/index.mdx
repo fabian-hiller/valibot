@@ -4,6 +4,7 @@ description: >-
   There are two naming conventions that I recommend you to use when working with
   me. In this guide I will explain both of them.
 contributors:
+  - shairez
   - fabian-hiller
 ---
 
@@ -89,7 +90,7 @@ The schema and the input and output types can then be imported and used separate
 
 ```ts
 import * as v from 'valibot';
-import { ImageSchema, ImageInput, ImageOutput } from './types';
+import { ImageInput, ImageOutput, ImageSchema } from './types';
 
 export function createImage(input: ImageInput): ImageOutput {
   return v.parse(ImageSchema, input);

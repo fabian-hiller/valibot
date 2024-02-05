@@ -4,6 +4,7 @@ description: >-
   Migrating from Zod to Valibot is very easy in most cases since both APIs have
   a lot of similarities.
 contributors:
+  - morinokami
   - fabian-hiller
 ---
 
@@ -48,7 +49,7 @@ Due to the modular design of Valibot, also all other methods like `.parse` or `.
 const value = z.string().parse('foo');
 
 // To this
-const email = v.parse(v.string(), 'foo');
+const value = v.parse(v.string(), 'foo');
 ```
 
 ## Change names

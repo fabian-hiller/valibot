@@ -1,5 +1,5 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
-import { fetchFont, ImageResponse, html } from 'og-img';
+import { fetchFont, html, ImageResponse } from 'og-img';
 
 export const onGet: RequestHandler = async ({ cacheControl, send, url }) => {
   // Disable caching

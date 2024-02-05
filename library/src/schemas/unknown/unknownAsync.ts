@@ -26,10 +26,11 @@ export interface UnknownSchemaAsync<TOutput = unknown>
 export function unknownAsync(pipe?: PipeAsync<unknown>): UnknownSchemaAsync {
   return {
     type: 'unknown',
+    expects: 'unknown',
     async: true,
     pipe,
-    async _parse(input, info) {
-      return pipeResultAsync(input, this.pipe, info, 'unknown');
+    async _parse(input, config) {
+      return pipeResultAsync(this, input, config);
     },
   };
 }

@@ -32,17 +32,22 @@ export function maxLength<
   TRequirement extends number
 >(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid length'
+  message?: ErrorMessage
 ): MaxLengthValidation<TInput, TRequirement> {
   return {
     type: 'max_length',
+    expects: `<=${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return input.length > this.requirement
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (input.length <= this.requirement) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, maxLength, input, 'length', `${input.length}`);
     },
   };
 }

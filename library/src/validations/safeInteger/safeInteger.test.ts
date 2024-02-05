@@ -26,6 +26,6 @@ describe('safeInteger', () => {
   test('should return custom error message', () => {
     const error = 'Value is not a safe integer!';
     const validate = safeInteger(error);
-    expect(validate._parse(Infinity).issues?.[0].message).toBe(error);
+    expect(validate._parse(Infinity).issues?.[0].context.message).toBe(error);
   });
 });

@@ -1,11 +1,11 @@
-import type { Issues, BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
+import type { SchemaIssues, BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
 
 /**
  * Fallback info type.
  */
 export type FallbackInfo = {
   input: unknown;
-  issues: Issues;
+  issues: SchemaIssues;
 };
 
 /**

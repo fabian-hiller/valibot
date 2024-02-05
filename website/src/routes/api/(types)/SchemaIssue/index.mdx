@@ -1,0 +1,27 @@
+---
+title: SchemaIssue
+description: Schema issue type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# SchemaIssue
+
+Schema issue type.
+
+## Definition
+
+- `SchemaIssue` <Property {...properties.SchemaIssue} />
+  - `reason` <Property {...properties.reason} />
+  - `context` <Property {...properties.context} />
+  - `input` <Property {...properties.input} />
+  - `expected` <Property {...properties.expected} />
+  - `received` <Property {...properties.received} />
+  - `message` <Property {...properties.message} />
+  - `requirement` <Property {...properties.requirement} />
+  - `path` <Property {...properties.path} />
+  - `issues` <Property {...properties.issues} />

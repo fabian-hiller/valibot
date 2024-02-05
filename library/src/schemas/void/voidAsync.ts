@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * Void schema async type.
@@ -13,7 +13,7 @@ export interface VoidSchemaAsync<TOutput = void>
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 }
 
 /**
@@ -23,21 +23,20 @@ export interface VoidSchemaAsync<TOutput = void>
  *
  * @returns An async void schema.
  */
-export function voidAsync(
-  message: ErrorMessage = 'Invalid type'
-): VoidSchemaAsync {
+export function voidAsync(message?: ErrorMessage): VoidSchemaAsync {
   return {
     type: 'void',
+    expects: 'void',
     async: true,
     message,
-    async _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'undefined') {
-        return schemaIssue(info, 'type', 'void', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return schema result
+      if (input === undefined) {
+        return schemaResult(true, input);
       }
 
-      // Return parse result
-      return parseResult(true, input);
+      // Otherwise, return schema issue
+      return schemaIssue(this, voidAsync, input, config);
     },
   };
 }

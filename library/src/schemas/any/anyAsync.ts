@@ -26,10 +26,11 @@ export interface AnySchemaAsync<TOutput = any>
 export function anyAsync(pipe?: PipeAsync<any>): AnySchemaAsync {
   return {
     type: 'any',
+    expects: 'any',
     async: true,
     pipe,
-    async _parse(input, info) {
-      return pipeResultAsync(input, this.pipe, info, 'any');
+    async _parse(input, config) {
+      return pipeResultAsync(this, input, config);
     },
   };
 }

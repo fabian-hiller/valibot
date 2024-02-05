@@ -26,7 +26,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   Input,
-  Issues,
+  SchemaIssues,
 } from '../../types/index.ts';
 import type { ValiError } from '../ValiError/index.ts';
 
@@ -142,11 +142,11 @@ export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
  * @returns Flat errors.
  */
 export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
-  issues: Issues
+  issues: SchemaIssues
 ): FlatErrors<TSchema>;
 
 export function flatten<TSchema extends BaseSchema | BaseSchemaAsync = any>(
-  arg1: ValiError | Issues
+  arg1: ValiError | SchemaIssues
 ): FlatErrors<TSchema> {
   return (Array.isArray(arg1) ? arg1 : arg1.issues).reduce<FlatErrors<TSchema>>(
     (flatErrors, issue) => {

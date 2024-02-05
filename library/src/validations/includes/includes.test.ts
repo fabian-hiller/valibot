@@ -19,6 +19,6 @@ describe('includes', () => {
   test('should return custom error message', () => {
     const error = 'Value does not include "abc"!';
     const validate = includes('abc', error);
-    expect(validate._parse('test').issues?.[0].message).toBe(error);
+    expect(validate._parse('test').issues?.[0].context.message).toBe(error);
   });
 });

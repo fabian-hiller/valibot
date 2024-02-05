@@ -1,17 +1,17 @@
-import type { Issues } from '../../types/index.ts';
+import type { SchemaIssues } from '../../types/index.ts';
 
 /**
  * A Valibot error with useful information.
  */
 export class ValiError extends Error {
-  issues: Issues;
+  issues: SchemaIssues;
 
   /**
    * Creates a Valibot error with useful information.
    *
    * @param issues The error issues.
    */
-  constructor(issues: Issues) {
+  constructor(issues: SchemaIssues) {
     super(issues[0].message);
     this.name = 'ValiError';
     this.issues = issues;

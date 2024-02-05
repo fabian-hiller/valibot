@@ -1,11 +1,6 @@
 import type { ObjectSchema, ObjectSchemaAsync } from '../schemas/index.ts';
 
 /**
- * Error message type.
- */
-export type ErrorMessage = string | (() => string);
-
-/**
  * Object keys type.
  */
 export type ObjectKeys<

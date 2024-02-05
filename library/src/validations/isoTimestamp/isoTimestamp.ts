@@ -34,17 +34,22 @@ export interface IsoTimestampValidation<TInput extends string>
  * @returns A validation action.
  */
 export function isoTimestamp<TInput extends string>(
-  message: ErrorMessage = 'Invalid timestamp'
+  message?: ErrorMessage
 ): IsoTimestampValidation<TInput> {
   return {
     type: 'iso_timestamp',
+    expects: null,
     async: false,
     message,
     requirement: ISO_TIMESTAMP_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, isoTimestamp, input, 'timestamp');
     },
   };
 }

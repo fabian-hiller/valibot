@@ -27,10 +27,11 @@ export interface UrlValidation<TInput extends string>
  * @returns A validation action.
  */
 export function url<TInput extends string>(
-  message: ErrorMessage = 'Invalid URL'
+  message?: ErrorMessage
 ): UrlValidation<TInput> {
   return {
     type: 'url',
+    expects: null,
     async: false,
     message,
     requirement(input) {
@@ -42,9 +43,13 @@ export function url<TInput extends string>(
       }
     },
     _parse(input) {
-      return !this.requirement(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, url, input, 'URL');
     },
   };
 }

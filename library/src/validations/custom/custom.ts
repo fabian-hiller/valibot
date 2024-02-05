@@ -25,17 +25,22 @@ export interface CustomValidation<TInput> extends BaseValidation<TInput> {
  */
 export function custom<TInput>(
   requirement: (input: TInput) => boolean,
-  message: ErrorMessage = 'Invalid input'
+  message?: ErrorMessage
 ): CustomValidation<TInput> {
   return {
     type: 'custom',
+    expects: null,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return !this.requirement(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, custom, input, 'input');
     },
   };
 }
