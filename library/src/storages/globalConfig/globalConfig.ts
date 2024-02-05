@@ -14,7 +14,7 @@ let store: GlobalConfig | undefined;
  * @param config The configuration.
  */
 export function setGlobalConfig(config: GlobalConfig) {
-  store = config;
+  store = { ...store, ...config };
 }
 
 /**
