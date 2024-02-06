@@ -44,12 +44,12 @@ export const properties: Record<string, PropertyProps> = {
           type: 'unknown',
         },
         {
-          name: 'info',
+          name: 'config',
           optional: true,
           type: {
             type: 'custom',
-            name: 'ParseInfo',
-            href: '../ParseInfo/',
+            name: 'SchemaConfig',
+            href: '../SchemaConfig/',
           },
         },
       ],

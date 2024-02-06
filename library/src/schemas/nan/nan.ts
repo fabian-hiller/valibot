@@ -3,7 +3,7 @@ import type {
   ErrorMessage,
   ErrorMessageOrMetadata,
 } from '../../types/index.ts';
-import { defaultArgs, parseResult, schemaIssue } from '../../utils/index.ts';
+import { defaultArgs, schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * NaN schema type.
@@ -16,7 +16,7 @@ export type NanSchema<TOutput = number> = BaseSchema<number, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -28,23 +28,21 @@ export type NanSchema<TOutput = number> = BaseSchema<number, TOutput> & {
  */
 export function nan(messageOrMetadata?: ErrorMessageOrMetadata): NanSchema {
   // Extract message and metadata
-  const [message = 'Invalid type', , metadata] = defaultArgs(
-    messageOrMetadata,
-    undefined
-  );
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'nan',
+    expects: 'NaN',
     async: false,
     message,
     metadata,
-    _parse(input, info) {
-      // Check type of input
-      if (!Number.isNaN(input)) {
-        return schemaIssue(info, 'type', 'nan', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return schema result
+      if (Number.isNaN(input)) {
+        return schemaResult(true, input as number);
       }
 
-      // Return parse result
-      return parseResult(true, input as number);
+      // Otherwise, return schema issue
+      return schemaIssue(this, nan, input, config);
     },
   };
 }

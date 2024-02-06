@@ -50,10 +50,11 @@ export type HashValidation<TInput extends string> = BaseValidation<TInput> & {
  */
 export function hash<TInput extends string>(
   types: [HashType, ...HashType[]],
-  message: ErrorMessage = 'Invalid hash'
+  message?: ErrorMessage
 ): HashValidation<TInput> {
   return {
     type: 'hash',
+    expects: null,
     async: false,
     message,
     requirement: RegExp(
@@ -61,9 +62,13 @@ export function hash<TInput extends string>(
       'iu'
     ),
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, hash, input, 'hash');
     },
   };
 }

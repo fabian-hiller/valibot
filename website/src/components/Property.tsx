@@ -1,5 +1,5 @@
+import { component$, Fragment } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
-import { Fragment, component$ } from '@builder.io/qwik';
 
 type DefinitionData =
   | 'string'

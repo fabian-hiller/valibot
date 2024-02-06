@@ -17,7 +17,7 @@ export type BigintSchema<TOutput = bigint> = BaseSchema<bigint, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -51,23 +51,24 @@ export function bigint(
   arg2?: Pipe<bigint>
 ): BigintSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg1, arg2);
+  const [message, pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return bigint schema
   return {
     type: 'bigint',
+    expects: 'bigint',
     async: false,
     message,
     pipe,
     metadata,
-    _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'bigint') {
-        return schemaIssue(info, 'type', 'bigint', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return pipe result
+      if (typeof input === 'bigint') {
+        return pipeResult(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(input, this.pipe, info, 'bigint');
+      // Otherwise, return schema issue
+      return schemaIssue(this, bigint, input, config);
     },
   };
 }

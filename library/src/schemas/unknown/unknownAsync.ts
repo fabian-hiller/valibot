@@ -53,11 +53,12 @@ export function unknownAsync(
   // Create and return unknown schema
   return {
     type: 'unknown',
+    expects: 'unknown',
     async: true,
     pipe,
     metadata,
-    async _parse(input, info) {
-      return pipeResultAsync(input, this.pipe, info, 'unknown');
+    async _parse(input, config) {
+      return pipeResultAsync(this, input, config);
     },
   };
 }

@@ -25,7 +25,7 @@ export type NonNullishSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -41,26 +41,24 @@ export function nonNullishAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
   messageOrMetadata?: ErrorMessageOrMetadata
 ): NonNullishSchemaAsync<TWrapped> {
   // Extracts the message and metadata from the input.
-  const [message = 'Invalid type', , metadata] = defaultArgs(
-    messageOrMetadata,
-    undefined
-  );
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'non_nullish',
+    expects: '!null & !undefined',
     async: true,
     wrapped,
     message,
     get metadata() {
       return metadata ?? this.wrapped.metadata;
     },
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Allow `null` and `undefined` values not to pass
       if (input === null || input === undefined) {
-        return schemaIssue(info, 'type', 'non_nullish', this.message, input);
+        return schemaIssue(this, nonNullishAsync, input, config);
       }
 
-      // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      // Otherwise, return result of wrapped schema
+      return this.wrapped._parse(input, config);
     },
   };
 }

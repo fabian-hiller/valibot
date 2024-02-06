@@ -16,7 +16,7 @@ export type NeverSchemaAsync = BaseSchemaAsync<never> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -30,17 +30,15 @@ export function neverAsync(
   messageOrMetadata?: ErrorMessageOrMetadata
 ): NeverSchemaAsync {
   // Extracts the message and metadata from the input.
-  const [message = 'Invalid type', , metadata] = defaultArgs(
-    messageOrMetadata,
-    undefined
-  );
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'never',
+    expects: 'never',
     async: true,
     message,
     metadata,
-    async _parse(input, info) {
-      return schemaIssue(info, 'type', 'never', this.message, input);
+    async _parse(input, config) {
+      return schemaIssue(this, neverAsync, input, config);
     },
   };
 }

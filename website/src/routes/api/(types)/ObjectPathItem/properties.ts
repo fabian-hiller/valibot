@@ -7,6 +7,12 @@ export const properties: Record<string, PropertyProps> = {
       value: 'object',
     },
   },
+  origin: {
+    type: {
+      type: 'string',
+      value: 'value',
+    },
+  },
   input: {
     type: {
       type: 'custom',

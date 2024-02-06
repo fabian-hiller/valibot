@@ -7,4 +7,19 @@ export const properties: Record<string, PropertyProps> = {
       value: 'unknown',
     },
   },
+  origin: {
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'string',
+          value: 'key',
+        },
+        {
+          type: 'string',
+          value: 'value',
+        },
+      ],
+    },
+  },
 };

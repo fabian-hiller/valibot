@@ -11,6 +11,6 @@ describe('custom', () => {
   test('should return custom error message', () => {
     const error = 'Value is not greater than 1!';
     const validate = custom<number>((input) => input > 0, error);
-    expect(validate._parse(-1).issues?.[0].message).toBe(error);
+    expect(validate._parse(-1).issues?.[0].context.message).toBe(error);
   });
 });

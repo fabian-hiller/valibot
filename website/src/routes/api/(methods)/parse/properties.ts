@@ -18,36 +18,14 @@ export const properties: Record<string, PropertyProps> = {
   input: {
     type: 'unknown',
   },
-  info: {
+  config: {
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'Pick',
-          generics: [
-            {
-              type: 'custom',
-              name: 'ParseInfo',
-            },
-            {
-              type: 'union',
-              options: [
-                {
-                  type: 'string',
-                  value: 'abortEarly',
-                },
-                {
-                  type: 'string',
-                  value: 'abortPipeEarly',
-                },
-                {
-                  type: 'string',
-                  value: 'skipPipe',
-                },
-              ],
-            },
-          ],
+          name: 'SchemaConfig',
+          href: '../SchemaConfig/',
         },
         'undefined',
       ],

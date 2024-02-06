@@ -36,13 +36,14 @@ export function recursiveAsync<
 >(getter: TGetter, metadata?: SchemaMetadata): RecursiveSchemaAsync<TGetter> {
   return {
     type: 'recursive',
+    expects: 'unknown',
     async: true,
     getter,
     get metadata() {
       return metadata ?? this.getter().metadata;
     },
-    async _parse(input, info) {
-      return this.getter()._parse(input, info);
+    async _parse(input, config) {
+      return this.getter()._parse(input, config);
     },
   };
 }

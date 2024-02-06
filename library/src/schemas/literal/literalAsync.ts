@@ -3,7 +3,12 @@ import type {
   ErrorMessage,
   ErrorMessageOrMetadata,
 } from '../../types/index.ts';
-import { defaultArgs, parseResult, schemaIssue } from '../../utils/index.ts';
+import {
+  defaultArgs,
+  schemaIssue,
+  schemaResult,
+  stringify,
+} from '../../utils/index.ts';
 import type { Literal } from './types.ts';
 
 /**
@@ -24,7 +29,7 @@ export type LiteralSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -40,24 +45,22 @@ export function literalAsync<TLiteral extends Literal>(
   messageOrMetadata?: ErrorMessageOrMetadata
 ): LiteralSchemaAsync<TLiteral> {
   // Extract message and metadata
-  const [message = 'Invalid type', , metadata] = defaultArgs(
-    messageOrMetadata,
-    undefined
-  );
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'literal',
+    expects: stringify(literal),
     async: true,
     literal,
     message,
     metadata,
-    async _parse(input, info) {
-      // Check type of input
-      if (input !== this.literal) {
-        return schemaIssue(info, 'type', 'literal', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return schema result
+      if (input === this.literal) {
+        return schemaResult(true, input as TLiteral);
       }
 
-      // Return parse result
-      return parseResult(true, input as TLiteral);
+      // Otherwise, return schema issue
+      return schemaIssue(this, literalAsync, input, config);
     },
   };
 }

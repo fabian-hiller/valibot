@@ -17,7 +17,7 @@ export type DateSchema<TOutput = Date> = BaseSchema<Date, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -51,23 +51,24 @@ export function date(
   arg2?: Pipe<Date>
 ): DateSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg1, arg2);
+  const [message, pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return date schema
   return {
     type: 'date',
+    expects: 'Date',
     async: false,
     message,
     pipe,
     metadata,
-    _parse(input, info) {
-      // Check type of input
-      if (!(input instanceof Date) || isNaN(input.getTime())) {
-        return schemaIssue(info, 'type', 'date', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return pipe result
+      if (input instanceof Date && !isNaN(input.getTime())) {
+        return pipeResult(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(input, this.pipe, info, 'date');
+      // Otherwise, return schema issue
+      return schemaIssue(this, date, input, config);
     },
   };
 }

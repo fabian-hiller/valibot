@@ -21,14 +21,14 @@ export function strip<TSchema extends ObjectSchema<ObjectEntries, undefined>>(
   // Create and return object schema
   return {
     ...schema,
-    _parse(input, info) {
+    _parse(input, config) {
       // Get parse result of schema
-      const result = schema._parse(input, info);
+      const result = schema._parse(input, config);
 
       // If result is typed, strip unknown keys
       if (result.typed) {
         // Cache object keys lazy
-        cachedKeys = cachedKeys || Object.keys(schema.entries);
+        cachedKeys = cachedKeys ?? Object.keys(schema.entries);
 
         // Strip unknown keys
         const output: Record<string, any> = {};

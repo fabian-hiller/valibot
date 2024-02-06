@@ -24,7 +24,7 @@ export type BooleanSchemaAsync<TOutput = boolean> = BaseSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -58,23 +58,24 @@ export function booleanAsync(
   arg2?: PipeAsync<boolean>
 ): BooleanSchemaAsync {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg1, arg2);
+  const [message, pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return async boolean schema
   return {
     type: 'boolean',
+    expects: 'boolean',
     async: true,
     message,
     pipe,
     metadata,
-    async _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'boolean') {
-        return schemaIssue(info, 'type', 'boolean', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return pipe result
+      if (typeof input === 'boolean') {
+        return pipeResultAsync(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResultAsync(input, this.pipe, info, 'boolean');
+      // Otherwise, return schema issue
+      return schemaIssue(this, booleanAsync, input, config);
     },
   };
 }

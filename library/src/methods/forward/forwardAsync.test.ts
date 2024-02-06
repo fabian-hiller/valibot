@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import {} from '../../schemas/index.ts';
+import '../../schemas/index.ts';
 import { customAsync } from '../../validations/index.ts';
 import { forwardAsync } from './forwardAsync.ts';
 
@@ -7,27 +7,36 @@ describe('forwardAsync', () => {
   test('should forward issues to end of path list', async () => {
     type Input = { nested: { key: string } };
     const requirement = async () => false;
-    const validate = forwardAsync<Input>(customAsync(requirement), [
-      'nested',
-      'key',
-    ]);
+    const validate = forwardAsync<Input>(
+      customAsync(requirement, 'Custom error'),
+      ['nested', 'key']
+    );
     const result = await validate._parse({ nested: { key: 'value' } });
     expect(result).toEqual({
       issues: [
         {
-          validation: 'custom',
-          message: 'Invalid input',
+          context: {
+            type: 'custom',
+            expects: null,
+            async: true,
+            message: 'Custom error',
+            requirement,
+            _parse: expect.any(Function),
+          },
+          reference: expect.any(Function),
           input: 'value',
-          requirement,
+          label: 'input',
           path: [
             {
               type: 'unknown',
+              origin: 'value',
               input: { nested: { key: 'value' } },
               key: 'nested',
               value: { key: 'value' },
             },
             {
               type: 'unknown',
+              origin: 'value',
               input: { key: 'value' },
               key: 'key',
               value: 'value',
@@ -41,28 +50,36 @@ describe('forwardAsync', () => {
   test('should stop forwarding if path input is undefined', async () => {
     type Input = { nested: { key: string }[] };
     const requirement = async () => false;
-    const validate = forwardAsync<Input>(customAsync(requirement), [
-      'nested',
-      10,
-      'key',
-    ]);
+    const validate = forwardAsync<Input>(
+      customAsync(requirement, 'Custom error'),
+      ['nested', 10, 'key']
+    );
     const result = await validate._parse({ nested: [{ key: 'value' }] });
     expect(result).toEqual({
       issues: [
         {
-          validation: 'custom',
-          message: 'Invalid input',
+          context: {
+            type: 'custom',
+            expects: null,
+            async: true,
+            message: 'Custom error',
+            requirement,
+            _parse: expect.any(Function),
+          },
+          reference: expect.any(Function),
           input: undefined,
-          requirement,
+          label: 'input',
           path: [
             {
               type: 'unknown',
+              origin: 'value',
               input: { nested: [{ key: 'value' }] },
               key: 'nested',
               value: [{ key: 'value' }],
             },
             {
               type: 'unknown',
+              origin: 'value',
               input: [{ key: 'value' }],
               key: 10,
               value: undefined,

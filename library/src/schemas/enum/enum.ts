@@ -3,7 +3,12 @@ import type {
   ErrorMessage,
   ErrorMessageOrMetadata,
 } from '../../types/index.ts';
-import { defaultArgs, parseResult, schemaIssue } from '../../utils/index.ts';
+import {
+  defaultArgs,
+  schemaIssue,
+  schemaResult,
+  stringify,
+} from '../../utils/index.ts';
 
 /**
  * Enum type.
@@ -31,48 +36,43 @@ export type EnumSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
  * Creates an enum schema.
  *
- * @param enum_ The enum value.
+ * @param enum__ The enum value.
  * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns An enum schema.
  */
 export function enum_<TEnum extends Enum>(
-  enum_: TEnum,
+  enum__: TEnum,
   messageOrMetadata?: ErrorMessageOrMetadata
 ): EnumSchema<TEnum> {
-  // Create cached values
-  let cachedValues: (string | number)[];
+  // Get values
+  const values = Object.values(enum__);
 
   // Extract message and metadata
-  const [message = 'Invalid type', , metadata] = defaultArgs(
-    messageOrMetadata,
-    undefined
-  );
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
 
   // Create and return enum schema
   return {
     type: 'enum',
+    expects: values.map(stringify).join(' | '),
     async: false,
-    enum: enum_,
+    enum: enum__,
     message,
     metadata,
-    _parse(input, info) {
-      // Cache values lazy
-      cachedValues = cachedValues || Object.values(this.enum);
-
-      // Check type of input
-      if (!cachedValues.includes(input as any)) {
-        return schemaIssue(info, 'type', 'enum', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return schema result
+      if (values.includes(input as any)) {
+        return schemaResult(true, input as TEnum[keyof TEnum]);
       }
 
-      // Return parse result
-      return parseResult(true, input as TEnum[keyof TEnum]);
+      // Otherwise, return schema issue
+      return schemaIssue(this, enum_, input, config);
     },
   };
 }

@@ -24,7 +24,7 @@ export type NonNullableSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -40,26 +40,22 @@ export function nonNullable<TWrapped extends BaseSchema>(
   messageOrMetadata?: ErrorMessageOrMetadata
 ): NonNullableSchema<TWrapped> {
   // Extracts the message and metadata from the input.
-  const [message = 'Invalid type', , metadata] = defaultArgs(
-    messageOrMetadata,
-    undefined
-  );
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'non_nullable',
+    expects: '!null',
     async: false,
     wrapped,
     message,
-    get metadata() {
-      return metadata ?? this.wrapped.metadata;
-    },
-    _parse(input, info) {
-      // Allow `null` values not to pass
+    metadata,
+    _parse(input, config) {
+      // In input is `null`, return schema issue
       if (input === null) {
-        return schemaIssue(info, 'type', 'non_nullable', this.message, input);
+        return schemaIssue(this, nonNullable, input, config);
       }
 
-      // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      // Otherwise, return result of wrapped schema
+      return this.wrapped._parse(input, config);
     },
   };
 }

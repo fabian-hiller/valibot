@@ -3,7 +3,7 @@ import type {
   ErrorMessage,
   ErrorMessageOrMetadata,
 } from '../../types/index.ts';
-import { defaultArgs, parseResult, schemaIssue } from '../../utils/index.ts';
+import { defaultArgs, schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * Symbol schema type.
@@ -16,7 +16,7 @@ export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -30,23 +30,21 @@ export function symbol(
   messageOrMetadata?: ErrorMessageOrMetadata
 ): SymbolSchema {
   // Extracts the message and metadata from the input.
-  const [message = 'Invalid type', , metadata] = defaultArgs(
-    messageOrMetadata,
-    undefined
-  );
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'symbol',
+    expects: 'symbol',
     async: false,
     message,
     metadata,
-    _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'symbol') {
-        return schemaIssue(info, 'type', 'symbol', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return schema result
+      if (typeof input === 'symbol') {
+        return schemaResult(true, input);
       }
 
-      // Return parse result
-      return parseResult(true, input);
+      // Otherwise, return schema issue
+      return schemaIssue(this, symbol, input, config);
     },
   };
 }

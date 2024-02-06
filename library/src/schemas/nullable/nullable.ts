@@ -1,6 +1,6 @@
 import { getDefault } from '../../methods/index.ts';
 import type { BaseSchema, Input, Output } from '../../types/index.ts';
-import { parseResult } from '../../utils/index.ts';
+import { schemaResult } from '../../utils/index.ts';
 
 /**
  * Nullable schema type.
@@ -65,24 +65,26 @@ export function nullable<
 >(wrapped: TWrapped, default_?: TDefault): NullableSchema<TWrapped, TDefault> {
   return {
     type: 'nullable',
+    expects: `${wrapped.expects} | null`,
     async: false,
     wrapped,
     get metadata() {
       return this.wrapped.metadata;
     },
     default: default_ as TDefault,
-    _parse(input, info) {
-      // Allow `null` to pass or override it with default value
+    _parse(input, config) {
+      // If input is `null`, return typed schema result or override it with
+      // default value
       if (input === null) {
         const override = getDefault(this);
         if (override === undefined) {
-          return parseResult(true, input);
+          return schemaResult(true, input);
         }
         input = override;
       }
 
       // Otherwise, return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      return this.wrapped._parse(input, config);
     },
   };
 }

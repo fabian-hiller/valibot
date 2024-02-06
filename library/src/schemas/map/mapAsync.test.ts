@@ -1,6 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
+import type {
+  Output,
+  TypedSchemaResult,
+  UntypedSchemaResult,
+} from '../../types/index.ts';
 import { maxSize, minLength, minSize, size } from '../../validations/index.ts';
 import { date } from '../date/index.ts';
 import { mapAsync } from '../map/index.ts';
@@ -53,23 +58,23 @@ describe('mapAsync', () => {
 
   test('should throw only first issue', async () => {
     const schema = mapAsync(number(), string());
-    const info = { abortEarly: true };
+    const config = { abortEarly: true };
     const input1 = new Map().set(1, 1).set(2, '2').set('3', '3');
-    await expect(parseAsync(schema, input1, info)).rejects.toThrowError();
+    await expect(parseAsync(schema, input1, config)).rejects.toThrowError();
     try {
-      await parseAsync(schema, input1, info);
+      await parseAsync(schema, input1, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].origin).toBe('value');
+      expect((error as ValiError).issues[0].path?.[0].origin).toBe('value');
     }
 
     const input2 = new Map().set('1', 1).set(2, '2').set('3', '3');
-    await expect(parseAsync(schema, input2, info)).rejects.toThrowError();
+    await expect(parseAsync(schema, input2, config)).rejects.toThrowError();
     try {
-      await parseAsync(schema, input2, info);
+      await parseAsync(schema, input2, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].origin).toBe('key');
+      expect((error as ValiError).issues[0].path?.[0].origin).toBe('key');
     }
   });
 
@@ -80,6 +85,7 @@ describe('mapAsync', () => {
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'map',
+        origin: 'value',
         input: input1,
         key: 'C',
         value: input1.get('C'),
@@ -92,16 +98,17 @@ describe('mapAsync', () => {
       .set('B', { key: 2 })
       .set('C', { key: '3' });
     const result2 = await schema2._parse(input2);
-    expect(result2.issues?.[0].origin).toBe('value');
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'map',
+        origin: 'value',
         input: input2,
         key: 'B',
         value: input2.get('B'),
       },
       {
         type: 'object',
+        origin: 'value',
         input: input2.get('B'),
         key: 'key',
         value: input2.get('B').key,
@@ -115,16 +122,17 @@ describe('mapAsync', () => {
       .set(errorKey, 'B')
       .set({ key: '3' }, 'C');
     const result3 = await schema3._parse(input3);
-    expect(result3.issues?.[0].origin).toBe('key');
     expect(result3.issues?.[0].path).toEqual([
       {
         type: 'map',
+        origin: 'key',
         input: input3,
         key: errorKey,
         value: input3.get(errorKey),
       },
       {
         type: 'object',
+        origin: 'value',
         input: errorKey,
         key: 'key',
         value: errorKey.key,
@@ -161,20 +169,6 @@ describe('mapAsync', () => {
     ).rejects.toThrowError(sizeError);
   });
 
-  test('should expose the pipeline', () => {
-    const schema1 = mapAsync(number(), string(), [size(1)]);
-    expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({
-        type: 'size',
-        requirement: 1,
-        message: 'Invalid size',
-      }),
-    ]);
-
-    const schema2 = mapAsync(number(), string());
-    expect(schema2.pipe).toBeUndefined();
-  });
-
   test('should execute pipe if output is typed', async () => {
     const schema = mapAsync(number(), string([minLength(10)]), [minSize(10)]);
     const input = new Map().set(0, '12345');
@@ -185,14 +179,16 @@ describe('mapAsync', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
-          origin: 'value',
-          message: 'Invalid length',
+          context: 'min_length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: input.get(0),
           requirement: 10,
           path: [
             {
               type: 'map',
+              origin: 'value',
               input: input,
               key: 0,
               value: input.get(0),
@@ -201,14 +197,15 @@ describe('mapAsync', () => {
         },
         {
           reason: 'map',
-          validation: 'min_size',
-          origin: 'value',
-          message: 'Invalid size',
+          context: 'min_size',
+          expected: '>=10',
+          received: '1',
+          message: 'Invalid size: Expected >=10 but received 1',
           input: input,
           requirement: 10,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should skip pipe if output is not typed', async () => {
@@ -221,13 +218,15 @@ describe('mapAsync', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
-          origin: 'value',
-          message: 'Invalid type',
+          context: 'string',
+          expected: 'string',
+          received: '12345',
+          message: 'Invalid type: Expected string but received 12345',
           input: input.get(0),
           path: [
             {
               type: 'map',
+              origin: 'value',
               input: input,
               key: 0,
               value: input.get(0),
@@ -235,7 +234,7 @@ describe('mapAsync', () => {
           ],
         },
       ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 
   test('should expose the metadata', () => {

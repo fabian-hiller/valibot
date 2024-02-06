@@ -1,11 +1,16 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
+import type {
+  Output,
+  TypedSchemaResult,
+  UntypedSchemaResult,
+} from '../../types/index.ts';
 import {
+  includes,
+  length,
   maxLength,
   minLength,
-  length,
-  includes,
 } from '../../validations/index.ts';
 import { number } from '../number/index.ts';
 import { object } from '../object/object.ts';
@@ -55,10 +60,10 @@ describe('array', () => {
   test('should throw only first issue', () => {
     const schema = array(number());
     const input = ['1', 2, '3'];
-    const info = { abortEarly: true };
-    expect(() => parse(schema, input, info)).toThrowError();
+    const config = { abortEarly: true };
+    expect(() => parse(schema, input, config)).toThrowError();
     try {
-      parse(schema, input, info);
+      parse(schema, input, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
@@ -71,6 +76,7 @@ describe('array', () => {
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'array',
+        origin: 'value',
         input: input1,
         key: 2,
         value: input1[2],
@@ -83,12 +89,14 @@ describe('array', () => {
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'array',
+        origin: 'value',
         input: input2,
         key: 1,
         value: input2[1],
       },
       {
         type: 'object',
+        origin: 'value',
         input: input2[1],
         key: 'key',
         value: input2[1].key,
@@ -113,20 +121,6 @@ describe('array', () => {
     expect(output2).toEqual(input2);
     expect(() => parse(schema2, [1, 2])).toThrowError(lengthError);
     expect(() => parse(schema2, [1])).toThrowError(contentError);
-  });
-
-  test('should expose the pipeline', () => {
-    const schema1 = array(string(), [maxLength(5)]);
-    expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({
-        type: 'max_length',
-        requirement: 5,
-        message: 'Invalid length',
-      }),
-    ]);
-
-    const schema2 = array(string());
-    expect(schema2.pipe).toBeUndefined();
   });
 
   test('should expose the metadata', () => {
@@ -154,14 +148,16 @@ describe('array', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
-          origin: 'value',
-          message: 'Invalid length',
+          context: 'min_length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: input[0],
           requirement: 10,
           path: [
             {
               type: 'array',
+              origin: 'value',
               input: input,
               key: 0,
               value: input[0],
@@ -170,14 +166,15 @@ describe('array', () => {
         },
         {
           reason: 'array',
-          validation: 'min_length',
-          origin: 'value',
-          message: 'Invalid length',
+          context: 'min_length',
+          expected: '>=10',
+          received: '1',
+          message: 'Invalid length: Expected >=10 but received 1',
           input: input,
           requirement: 10,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should skip pipe if output is not typed', () => {
@@ -190,13 +187,15 @@ describe('array', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
-          origin: 'value',
-          message: 'Invalid type',
+          context: 'string',
+          expected: 'string',
+          received: '12345',
+          message: 'Invalid type: Expected string but received 12345',
           input: input[0],
           path: [
             {
               type: 'array',
+              origin: 'value',
               input: input,
               key: 0,
               value: input[0],
@@ -204,6 +203,6 @@ describe('array', () => {
           ],
         },
       ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 });

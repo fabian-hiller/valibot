@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
 import { custom, customAsync, length } from '../../validations/index.ts';
-import { string, stringAsync } from '../string/index.ts';
-import { number, numberAsync } from '../number/index.ts';
 import { null_ } from '../null/index.ts';
+import { number, numberAsync } from '../number/index.ts';
+import { string, stringAsync } from '../string/index.ts';
 import { unionAsync } from './unionAsync.ts';
 
 describe('unionAsync', () => {

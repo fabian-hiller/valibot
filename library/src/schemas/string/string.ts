@@ -17,7 +17,7 @@ export type StringSchema<TOutput = string> = BaseSchema<string, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -51,23 +51,24 @@ export function string(
   arg2?: Pipe<string>
 ): StringSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg1, arg2);
+  const [message, pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return string schema
   return {
     type: 'string',
+    expects: 'string',
     async: false,
     message,
     pipe,
     metadata,
-    _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'string') {
-        return schemaIssue(info, 'type', 'string', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return pipe result
+      if (typeof input === 'string') {
+        return pipeResult(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(input, this.pipe, info, 'string');
+      // Otherwise, return schema issue
+      return schemaIssue(this, string, input, config);
     },
   };
 }

@@ -16,6 +16,7 @@ import type { RecordKeyAsync } from './recordAsync.ts';
  */
 export type RecordPathItem = {
   type: 'record';
+  origin: 'key' | 'value';
   input: Record<string | number | symbol, unknown>;
   key: string | number | symbol;
   value: unknown;

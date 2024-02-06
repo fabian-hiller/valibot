@@ -5,7 +5,7 @@ import type {
   Input,
   Output,
 } from '../../types/index.ts';
-import { parseResult } from '../../utils/index.ts';
+import { schemaResult } from '../../utils/index.ts';
 
 /**
  * Nullable schema async type.
@@ -78,24 +78,25 @@ export function nullableAsync<
 ): NullableSchemaAsync<TWrapped, TDefault> {
   return {
     type: 'nullable',
+    expects: `${wrapped.expects} | null`,
     async: true,
     wrapped,
     default: default_ as TDefault,
     get metadata() {
       return this.wrapped.metadata;
     },
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Allow `null` to pass or override it with default value
       if (input === null) {
         const override = await getDefaultAsync(this);
         if (override === undefined) {
-          return parseResult(true, input);
+          return schemaResult(true, input);
         }
         input = override;
       }
 
-      // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      // Otherwise, return result of wrapped schema
+      return this.wrapped._parse(input, config);
     },
   };
 }

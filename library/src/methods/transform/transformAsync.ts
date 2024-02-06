@@ -3,8 +3,8 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
-  ParseInfo,
   PipeAsync,
+  SchemaConfig,
   SchemaResult,
 } from '../../types/index.ts';
 import { pipeResultAsync } from '../../utils/index.ts';
@@ -18,7 +18,7 @@ export type SchemaWithTransformAsync<
   TOutput
 > = Omit<TSchema, 'async' | '_parse' | '_types'> & {
   async: true;
-  _parse(input: unknown, info?: ParseInfo): Promise<SchemaResult<TOutput>>;
+  _parse(input: unknown, config?: SchemaConfig): Promise<SchemaResult<TOutput>>;
   _types?: {
     input: Input<TSchema>;
     output: TOutput;
@@ -83,9 +83,9 @@ export function transformAsync<
   return {
     ...schema,
     async: true,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Parse input with schema
-      const result = await schema._parse(input, info);
+      const result = await schema._parse(input, config);
 
       // If result is typed, transform output
       if (result.typed) {
@@ -99,15 +99,14 @@ export function transformAsync<
         // Otherwise, if a pipe is provided, return pipe result
         if (Array.isArray(arg1)) {
           return pipeResultAsync(
+            { type: typeof result.output, pipe: arg1 },
             result.output,
-            arg1,
-            info,
-            typeof result.output
+            config
           );
         }
 
         // Otherwise, validate output with schema
-        return arg1._parse(result.output, info);
+        return arg1._parse(result.output, config);
       }
 
       // Otherwise, return untyped result

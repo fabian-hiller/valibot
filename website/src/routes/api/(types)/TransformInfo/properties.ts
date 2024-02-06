@@ -10,8 +10,8 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         {
           type: 'custom',
-          name: 'Issues',
-          href: '../Issues/',
+          name: 'SchemaIssues',
+          href: '../SchemaIssues/',
         },
         'undefined',
       ],

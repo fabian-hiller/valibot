@@ -14,8 +14,8 @@ export function coerceAsync<TSchema extends BaseSchemaAsync>(
 ): TSchema {
   return {
     ...schema,
-    async _parse(input, info) {
-      return schema._parse(await action(input), info);
+    async _parse(input, config) {
+      return schema._parse(await action(input), config);
     },
   };
 }

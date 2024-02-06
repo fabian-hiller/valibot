@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { number, object, string, tuple } from '../../schemas/index.ts';
-import { getFallbacks } from './getFallbacks.ts';
 import { fallback } from '../fallback/index.ts';
+import { getFallbacks } from './getFallbacks.ts';
 
 describe('getFallbacks', () => {
   test('should return undefined', () => {

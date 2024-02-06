@@ -3,7 +3,7 @@ import type {
   ErrorMessage,
   ErrorMessageOrMetadata,
 } from '../../types/index.ts';
-import { defaultArgs, parseResult, schemaIssue } from '../../utils/index.ts';
+import { defaultArgs, schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * NaN schema async type.
@@ -19,7 +19,7 @@ export type NanSchemaAsync<TOutput = number> = BaseSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -33,23 +33,21 @@ export function nanAsync(
   messageOrMetadata?: ErrorMessageOrMetadata
 ): NanSchemaAsync {
   // Extract message and metadata
-  const [message = 'Invalid type', , metadata] = defaultArgs(
-    messageOrMetadata,
-    undefined
-  );
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'nan',
+    expects: 'NaN',
     async: true,
     message,
     metadata,
-    async _parse(input, info) {
-      // Check type of input
-      if (!Number.isNaN(input)) {
-        return schemaIssue(info, 'type', 'nan', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return schema result
+      if (Number.isNaN(input)) {
+        return schemaResult(true, input as number);
       }
 
-      // Return parse result
-      return parseResult(true, input as number);
+      // Otherwise, return schema issue
+      return schemaIssue(this, nanAsync, input, config);
     },
   };
 }

@@ -25,7 +25,7 @@ export type NonOptionalSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -47,20 +47,21 @@ export function nonOptionalAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
   );
   return {
     type: 'non_optional',
+    expects: '!undefined',
     async: true,
     wrapped,
     message,
     get metadata() {
       return metadata ?? this.wrapped.metadata;
     },
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Allow `undefined` values not to pass
       if (input === undefined) {
-        return schemaIssue(info, 'type', 'non_optional', this.message, input);
+        return schemaIssue(this, nonOptionalAsync, input, config);
       }
 
-      // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      // Otherwise, return result of wrapped schema
+      return this.wrapped._parse(input, config);
     },
   };
 }

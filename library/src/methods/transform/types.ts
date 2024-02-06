@@ -1,5 +1,5 @@
-import type { Issues } from '../../types/index.ts';
+import type { SchemaIssues } from '../../types/index.ts';
 
 export type TransformInfo = {
-  issues: Issues | undefined;
+  issues: SchemaIssues | undefined;
 };

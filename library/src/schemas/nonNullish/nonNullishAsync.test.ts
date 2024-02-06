@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
-import { null_ } from '../null/index.ts';
-import { number } from '../number/index.ts';
 import { any } from '../any/index.ts';
-import { undefined_ } from '../undefined/index.ts';
+import { null_ } from '../null/index.ts';
 import { nullish } from '../nullish/index.ts';
-import { unionAsync } from '../union/index.ts';
+import { number } from '../number/index.ts';
 import { stringAsync } from '../string/index.ts';
+import { undefined_ } from '../undefined/index.ts';
+import { unionAsync } from '../union/index.ts';
 import { nonNullishAsync } from './nonNullishAsync.ts';
 
 describe('nonNullishAsync', () => {

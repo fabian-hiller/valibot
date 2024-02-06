@@ -3,15 +3,15 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   ErrorMessageOrMetadata,
-  Issues,
   MaybeReadonly,
   PipeAsync,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   defaultArgs,
-  parseResult,
   pipeResultAsync,
   schemaIssue,
+  schemaResult,
 } from '../../utils/index.ts';
 import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
@@ -45,7 +45,7 @@ export type IntersectSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -86,20 +86,21 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
   arg3?: PipeAsync<IntersectInput<TOptions>>
 ): IntersectSchemaAsync<TOptions> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe, metadata] = defaultArgs(arg2, arg3);
+  const [message, pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return intersect schema
   return {
     type: 'intersect',
+    expects: [...new Set(options.map((option) => option.expects))].join(' & '),
     async: true,
     options,
     message,
     pipe,
     metadata,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Create typed, issues, output and outputs
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       let output: any;
       const outputs: any[] = [];
 
@@ -107,11 +108,11 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
       await Promise.all(
         this.options.map(async (schema) => {
           // If not aborted early, continue execution
-          if (!(info?.abortEarly && issues)) {
-            const result = await schema._parse(input, info);
+          if (!(config?.abortEarly && issues)) {
+            const result = await schema._parse(input, config);
 
             // If not aborted early, continue execution
-            if (!(info?.abortEarly && issues)) {
+            if (!(config?.abortEarly && issues)) {
               // If there are issues, capture them
               if (result.issues) {
                 if (issues) {
@@ -123,7 +124,7 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
                 }
 
                 // If necessary, abort early
-                if (info?.abortEarly) {
+                if (config?.abortEarly) {
                   typed = false;
                   throw null;
                 }
@@ -152,19 +153,19 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
 
           // If outputs can't be merged, return issue
           if (result.invalid) {
-            return schemaIssue(info, 'type', 'intersect', this.message, input);
+            return schemaIssue(this, intersectAsync, input, config);
           }
 
           // Otherwise, set merged output
           output = result.output;
         }
 
-        // Execute pipe and return typed parse result
-        return pipeResultAsync(output, this.pipe, info, 'intersect', issues);
+        // Execute pipe and return typed schema result
+        return pipeResultAsync(this, output, config, issues);
       }
 
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      // Otherwise, return untyped schema result
+      return schemaResult(false, output, issues as SchemaIssues);
     },
   };
 }

@@ -23,6 +23,6 @@ describe('maxSize', () => {
     const error = 'Value size is greater than "2"!';
     const value = new Set().add(1).add(2).add(3);
     const validate = maxSize(2, error);
-    expect(validate._parse(value).issues?.[0].message).toBe(error);
+    expect(validate._parse(value).issues?.[0].context.message).toBe(error);
   });
 });

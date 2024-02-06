@@ -21,6 +21,6 @@ describe('minLength', () => {
   test('should return custom error message', () => {
     const error = 'Value length is less than "3"!';
     const validate = minLength(3, error);
-    expect(validate._parse('1').issues?.[0].message).toBe(error);
+    expect(validate._parse('1').issues?.[0].context.message).toBe(error);
   });
 });

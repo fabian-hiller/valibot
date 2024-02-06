@@ -1,11 +1,15 @@
-import type { Issue } from './issues.ts';
-import type { ErrorMessage } from './other.ts';
-import type { ParseInfo } from './schema.ts';
+import type { ErrorMessage } from './config.ts';
+import type { PipeActionIssues } from './issues.ts';
 
 /**
- * Pipe info type.
+ * Pipe action context type.
  */
-export type PipeInfo = ParseInfo & Pick<Issue, 'reason'>;
+export type PipeActionContext = {
+  type: string;
+  expects: string | null;
+  message: ErrorMessage | undefined;
+  requirement: unknown;
+};
 
 /**
  * Valid action result type.
@@ -32,10 +36,7 @@ export type InvalidActionResult = {
   /**
    * The pipe issues.
    */
-  issues: Pick<
-    Issue,
-    'validation' | 'message' | 'input' | 'requirement' | 'path'
-  >[];
+  issues: PipeActionIssues;
 };
 
 /**
@@ -50,19 +51,23 @@ export type PipeActionResult<TOutput> =
  */
 export type BaseValidation<TInput = any> = {
   /**
-   * Whether it's async.
+   * The expected property.
    */
-  async: false;
+  expects: string | null;
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
+  /**
+   * Whether it's async.
+   */
+  async: false;
   /**
    * Parses unknown input based on its requirement.
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
@@ -74,19 +79,23 @@ export type BaseValidation<TInput = any> = {
  */
 export type BaseValidationAsync<TInput = any> = {
   /**
-   * Whether it's async.
+   * The expected property.
    */
-  async: true;
+  expects: string | null;
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
+  /**
+   * Whether it's async.
+   */
+  async: true;
   /**
    * Parses unknown input based on its requirement.
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
@@ -106,7 +115,7 @@ export type BaseTransformation<TInput = any> = {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
@@ -126,7 +135,7 @@ export type BaseTransformationAsync<TInput = any> = {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */

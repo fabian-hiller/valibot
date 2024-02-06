@@ -3,7 +3,7 @@ import type {
   ErrorMessage,
   ErrorMessageOrMetadata,
 } from '../../types/index.ts';
-import { defaultArgs, parseResult, schemaIssue } from '../../utils/index.ts';
+import { defaultArgs, schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * Null schema type.
@@ -16,7 +16,7 @@ export type NullSchema<TOutput = null> = BaseSchema<null, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -28,23 +28,21 @@ export type NullSchema<TOutput = null> = BaseSchema<null, TOutput> & {
  */
 export function null_(messageOrMetadata?: ErrorMessageOrMetadata): NullSchema {
   // Extracts the message and metadata from the input.
-  const [message = 'Invalid type', , metadata] = defaultArgs(
-    messageOrMetadata,
-    undefined
-  );
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'null',
+    expects: 'null',
     async: false,
     message,
     metadata,
-    _parse(input, info) {
-      // Check type of input
-      if (input !== null) {
-        return schemaIssue(info, 'type', 'null', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return schema result
+      if (input === null) {
+        return schemaResult(true, input);
       }
 
-      // Return parse result
-      return parseResult(true, input);
+      // Otherwise, return schema issue
+      return schemaIssue(this, null_, input, config);
     },
   };
 }

@@ -36,25 +36,6 @@ describe('string', () => {
     expect(() => parse(schema2, 'jane@example')).toThrowError(emailError);
   });
 
-  test('should expose the pipeline', () => {
-    const schema1 = string([minLength(2), maxLength(3)]);
-    expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({
-        type: 'min_length',
-        requirement: 2,
-        message: 'Invalid length',
-      }),
-      expect.objectContaining({
-        type: 'max_length',
-        requirement: 3,
-        message: 'Invalid length',
-      }),
-    ]);
-
-    const schema2 = string();
-    expect(schema2.pipe).toBeUndefined();
-  });
-
   test('should expose the metadata', () => {
     const schema1 = string({ description: 'string value' });
     expect(schema1.metadata).toEqual({ description: 'string value' });

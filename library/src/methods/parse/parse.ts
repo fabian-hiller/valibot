@@ -1,21 +1,22 @@
 import { ValiError } from '../../error/index.ts';
-import type { BaseSchema, Output, ParseInfo } from '../../types/index.ts';
+import { getGlobalConfig } from '../../storages/index.ts';
+import type { BaseSchema, Output, SchemaConfig } from '../../types/index.ts';
 
 /**
  * Parses an unknown input based on a schema.
  *
  * @param schema The schema to be used.
  * @param input The input to be parsed.
- * @param info The optional parse info.
+ * @param config The parse configuration.
  *
  * @returns The parsed output.
  */
 export function parse<TSchema extends BaseSchema>(
   schema: TSchema,
   input: unknown,
-  info?: Pick<ParseInfo, 'abortEarly' | 'abortPipeEarly' | 'skipPipe'>
+  config?: SchemaConfig
 ): Output<TSchema> {
-  const result = schema._parse(input, info);
+  const result = schema._parse(input, getGlobalConfig(config));
   if (result.issues) {
     throw new ValiError(result.issues);
   }

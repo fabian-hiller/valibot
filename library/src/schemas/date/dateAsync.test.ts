@@ -48,21 +48,6 @@ describe('dateAsync', () => {
     ).rejects.toThrowError(valueError);
   });
 
-  test('should expose the pipeline', () => {
-    const requirement = new Date(Date.now() + 3600000);
-    const schema1 = dateAsync([maxValue(requirement)]);
-    expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({
-        type: 'max_value',
-        requirement,
-        message: 'Invalid value',
-      }),
-    ]);
-
-    const schema2 = dateAsync();
-    expect(schema2.pipe).toBeUndefined();
-  });
-
   test('should expose the metadata', () => {
     const schema1 = dateAsync({ description: 'date value' });
     expect(schema1.metadata).toEqual({ description: 'date value' });

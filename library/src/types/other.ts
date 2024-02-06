@@ -1,14 +1,4 @@
 import type { ObjectSchema, ObjectSchemaAsync } from '../schemas/index.ts';
-import type { SchemaMetadata } from './schema.ts';
-
-/**
- * Error message type.
- */
-export type ErrorMessage = string | (() => string);
-
-export type ErrorMessageOrMetadata =
-  | ErrorMessage
-  | (SchemaMetadata & { message?: ErrorMessage });
 
 /**
  * Object keys type.

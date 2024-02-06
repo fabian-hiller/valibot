@@ -3,7 +3,12 @@ import type {
   ErrorMessage,
   ErrorMessageOrMetadata,
 } from '../../types/index.ts';
-import { defaultArgs, parseResult, schemaIssue } from '../../utils/index.ts';
+import {
+  defaultArgs,
+  schemaIssue,
+  schemaResult,
+  stringify,
+} from '../../utils/index.ts';
 import type { PicklistOptions } from './types.ts';
 
 /**
@@ -24,7 +29,7 @@ export type PicklistSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -40,24 +45,22 @@ export function picklistAsync<const TOptions extends PicklistOptions>(
   messageOrMetadata?: ErrorMessageOrMetadata
 ): PicklistSchemaAsync<TOptions> {
   // Extracts the message and metadata from the input.
-  const [message = 'Invalid type', , metadata] = defaultArgs(
-    messageOrMetadata,
-    undefined
-  );
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'picklist',
+    expects: options.map(stringify).join(' | '),
     async: true,
     options,
     message,
     metadata,
-    async _parse(input, info) {
-      // Check type of input
-      if (!this.options.includes(input as any)) {
-        return schemaIssue(info, 'type', 'picklist', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return schema result
+      if (this.options.includes(input as any)) {
+        return schemaResult(true, input as TOptions[number]);
       }
 
-      // Return input as output
-      return parseResult(true, input as TOptions[number]);
+      // Otherwise, return schema issue
+      return schemaIssue(this, picklistAsync, input, config);
     },
   };
 }

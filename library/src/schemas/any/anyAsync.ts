@@ -50,11 +50,12 @@ export function anyAsync(
   // Create and return any schema
   return {
     type: 'any',
+    expects: 'any',
     async: true,
     pipe,
     metadata,
-    async _parse(input, info) {
-      return pipeResultAsync(input, this.pipe, info, 'any');
+    async _parse(input, config) {
+      return pipeResultAsync(this, input, config);
     },
   };
 }

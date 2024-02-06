@@ -44,11 +44,12 @@ export function any(
   // Create and return any schema
   return {
     type: 'any',
+    expects: 'any',
     async: false,
     pipe,
     metadata,
-    _parse(input, info) {
-      return pipeResult(input, this.pipe, info, 'any');
+    _parse(input, config) {
+      return pipeResult(this, input, config);
     },
   };
 }
