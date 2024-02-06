@@ -5,7 +5,7 @@ The official i18n translations for Valibot.
 
 | Language        | Pull Request       | Status |
 | --------------- | ------------------ | ------ |
-| English (en)    | –                  | ✅     |  
+| English (en)    | –                  | ✅     |
 | German (de)     | –                  | ✅     |
 | French (fr)     | [#418][pr-418-url] | 🚧     |
 | Chinese (zh)    | [#419][pr-419-url] | 🚧     |
