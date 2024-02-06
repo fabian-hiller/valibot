@@ -23,6 +23,7 @@
     "access": "public"
   },
   "scripts": {
+    "lint": "tsc --noEmit",
     "build": "tsm ./scripts/build.ts",
     "publish": "npm publish"
   },
