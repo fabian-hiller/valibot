@@ -49,6 +49,8 @@ describe('maxLength', () => {
 
   test('should return custom error message', () => {
     const error = 'Value length is greater than "3"!';
-    expect(maxLength(3, error)._parse('test').issues?.[0].message).toBe(error);
+    expect(maxLength(3, error)._parse('test').issues?.[0].context.message).toBe(
+      error
+    );
   });
 });
