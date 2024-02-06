@@ -5,6 +5,61 @@ contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # maxLength
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/maxLength/maxLength.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates a maximum length.
+
+```ts
+const validation = maxLength<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `maxLength` you can validate, if string has length lower then max length or array has number of items lower then max length. If the input is not a valid max length, you can use `message` to customize the error message.
+
+## Returns
+
+- `validation` <Property {...properties.validation} />
+
+## Examples
+
+The following examples show how `maxLength` can be used.
+
+### maxLength schema for string
+
+Schema to validate a maxLength of a string.
+
+```ts
+const maxLengthStringSchema = string([
+  maxLength(3, 'The length of string is higher than the maximum length'),
+]);
+```
+
+### maxLength schema for array
+
+Schema to validate a maxLength of a string.
+
+```ts
+const maxLengthArraySchema = array([
+  maxLength(3, 'The length of array is higher than the maximum length'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `maxLength`.
+
+### Schemas
+
+<ApiList items={['any', 'string', 'array']} />

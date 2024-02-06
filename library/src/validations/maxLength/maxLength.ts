@@ -5,7 +5,7 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
  * Max length validation type.
  */
 export type MaxLengthValidation<
-  TInput extends string | number | any[],
+  TInput extends string | any[],
   TRequirement extends number
 > = BaseValidation<TInput> & {
   /**
@@ -19,7 +19,7 @@ export type MaxLengthValidation<
 };
 
 /**
- * Creates a pipeline validation action that validates the length of a string, number
+ * Creates a pipeline validation action that validates the length of a string
  * or array.
  *
  * @param requirement The maximum length.
@@ -28,7 +28,7 @@ export type MaxLengthValidation<
  * @returns A validation action.
  */
 export function maxLength<
-  TInput extends string | number | any[],
+  TInput extends string | any[],
   TRequirement extends number
 >(
   requirement: TRequirement,
@@ -40,11 +40,7 @@ export function maxLength<
     message,
     requirement,
     _parse(input) {
-      const inputString =
-        typeof input === 'number' || typeof input === 'string'
-          ? input.toString()
-          : (input as any[]);
-      return inputString.length > this.requirement
+      return input.length > this.requirement
         ? actionIssue(this.type, this.message, input, this.requirement)
         : actionOutput(input);
     },
