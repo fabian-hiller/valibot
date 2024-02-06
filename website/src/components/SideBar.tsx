@@ -1,7 +1,7 @@
 import {
   $,
-  Slot,
   component$,
+  Slot,
   useComputed$,
   useSignal,
   useTask$,

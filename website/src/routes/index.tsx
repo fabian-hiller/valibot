@@ -3,8 +3,8 @@ import {
   type DocumentHead,
   Form,
   routeAction$,
-  zod$,
   z,
+  zod$,
 } from '@builder.io/qwik-city';
 import clsx from 'clsx';
 import { ActionButton, ButtonGroup, Expandable, TextLink } from '~/components';
@@ -140,7 +140,7 @@ export default component$(() => {
             {
               emoji: '📦',
               heading: 'Small bundle size',
-              text: 'Due to the modular design of our API the bundle size starts at less than 300 bytes',
+              text: 'Due to the modular design of our API the bundle size starts at less than 600 bytes',
             },
             {
               emoji: '🚧',
@@ -251,7 +251,7 @@ export default component$(() => {
                   biggest difference is the modular design of our API and the
                   ability to reduce the bundle size to a minimum through tree
                   shaking and code splitting. Depending on the schema, Valibot
-                  can reduce the bundle size up to 98% compared to Zod.
+                  can reduce the bundle size up to 95% compared to Zod.
                   Especially for client-side validation of forms, this can be a
                   big advantage.
                 </>

@@ -1,3 +1,10 @@
+import { component$, Slot, useComputed$ } from '@builder.io/qwik';
+import {
+  type ContentMenu,
+  useContent,
+  useDocumentHead,
+  useLocation,
+} from '@builder.io/qwik-city';
 import { ArrowLeftIcon, ArrowRightIcon, GitHubIcon, PenIcon } from '~/icons';
 import {
   AlgoliaLogo,
@@ -6,17 +13,10 @@ import {
   NetlifyLogo,
   PaceLogo,
 } from '~/logos';
+import '../styles/pace.css';
 import { IconButton } from './IconButton';
 import { Navigation } from './Navigation';
 import { SideBar } from './SideBar';
-import {
-  type ContentMenu,
-  useContent,
-  useLocation,
-  useDocumentHead,
-} from '@builder.io/qwik-city';
-import { Slot, component$, useComputed$ } from '@builder.io/qwik';
-import '../styles/pace.css';
 
 type NavItem = ContentMenu & { group: string };
 

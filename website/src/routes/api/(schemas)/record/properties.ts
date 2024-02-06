@@ -41,10 +41,6 @@ export const properties: Record<string, PropertyProps> = {
         'undefined',
       ],
     },
-    default: {
-      type: 'string',
-      value: 'Invalid type',
-    },
   },
   pipe: {
     type: {

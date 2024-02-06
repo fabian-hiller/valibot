@@ -2,8 +2,8 @@ import type { ValiError } from '../../error/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
-  Issues,
   Output,
+  SchemaIssues,
 } from '../../types/index.ts';
 
 /**
@@ -36,7 +36,7 @@ export type SafeParseResult<TSchema extends BaseSchema | BaseSchemaAsync> =
        * @deprecated Please use `.issues` instead.
        */
       error: ValiError;
-      issues: Issues;
+      issues: SchemaIssues;
     }
   | {
       typed: false;
@@ -50,5 +50,5 @@ export type SafeParseResult<TSchema extends BaseSchema | BaseSchemaAsync> =
        * @deprecated Please use `.issues` instead.
        */
       error: ValiError;
-      issues: Issues;
+      issues: SchemaIssues;
     };

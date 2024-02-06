@@ -14,7 +14,7 @@ import { properties } from './properties';
 Parses an unknown input based on a schema.
 
 ```ts
-const result = safeParse<TSchema>(schema, input, info);
+const result = safeParse<TSchema>(schema, input, config);
 ```
 
 ## Generics
@@ -25,7 +25,7 @@ const result = safeParse<TSchema>(schema, input, info);
 
 - `schema` <Property {...properties.schema} />
 - `input` <Property {...properties.input} />
-- `info` <Property {...properties.info} />
+- `config` <Property {...properties.config} />
 
 ## Returns
 

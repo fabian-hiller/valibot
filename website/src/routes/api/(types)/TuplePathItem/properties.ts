@@ -7,6 +7,12 @@ export const properties: Record<string, PropertyProps> = {
       value: 'tuple',
     },
   },
+  origin: {
+    type: {
+      type: 'string',
+      value: 'value',
+    },
+  },
   input: {
     type: {
       type: 'tuple',

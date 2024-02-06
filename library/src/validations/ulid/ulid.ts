@@ -24,17 +24,22 @@ export type UlidValidation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function ulid<TInput extends string>(
-  message: ErrorMessage = 'Invalid ULID'
+  message?: ErrorMessage
 ): UlidValidation<TInput> {
   return {
     type: 'ulid',
+    expects: null,
     async: false,
     message,
     requirement: ULID_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, ulid, input, 'ULID');
     },
   };
 }

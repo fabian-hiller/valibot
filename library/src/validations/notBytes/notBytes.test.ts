@@ -17,6 +17,6 @@ describe('notBytes', () => {
   test('should return custom error message', () => {
     const error = 'Value byte length is "5"!';
     const validate = notBytes(5, error);
-    expect(validate._parse('12345').issues?.[0].message).toBe(error);
+    expect(validate._parse('12345').issues?.[0].context.message).toBe(error);
   });
 });

@@ -25,10 +25,11 @@ export type UnknownSchema<TOutput = unknown> = BaseSchema<unknown, TOutput> & {
 export function unknown(pipe?: Pipe<unknown>): UnknownSchema {
   return {
     type: 'unknown',
+    expects: 'unknown',
     async: false,
     pipe,
-    _parse(input, info) {
-      return pipeResult(input, this.pipe, info, 'unknown');
+    _parse(input, config) {
+      return pipeResult(this, input, config);
     },
   };
 }

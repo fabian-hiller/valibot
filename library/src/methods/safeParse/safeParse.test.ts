@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { ValiError } from '../../error/index.ts';
 import { object, string } from '../../schemas/index.ts';
-import type { Issues } from '../../types/index.ts';
+import type { SchemaIssues } from '../../types/index.ts';
 import { minLength } from '../../validations/index.ts';
 import { safeParse } from './safeParse.ts';
 
@@ -22,17 +22,19 @@ describe('safeParse', () => {
   test('should return typed output with issues', () => {
     const input = { key: 'hello' };
     const result = safeParse(object({ key: string([minLength(10)]) }), input);
-    const issues: Issues = [
+    const issues: SchemaIssues = [
       {
         reason: 'string',
-        validation: 'min_length',
-        origin: 'value',
-        message: 'Invalid length',
+        context: 'min_length',
+        expected: '>=10',
+        received: '5',
+        message: 'Invalid length: Expected >=10 but received 5',
         input: input.key,
         requirement: 10,
         path: [
           {
             type: 'object',
+            origin: 'value',
             input,
             key: 'key',
             value: input.key,
@@ -53,16 +55,18 @@ describe('safeParse', () => {
   test('should return type issues', () => {
     const input = { key: 123 };
     const result = safeParse(object({ key: string() }), input);
-    const issues: Issues = [
+    const issues: SchemaIssues = [
       {
         reason: 'type',
-        validation: 'string',
-        origin: 'value',
-        message: 'Invalid type',
+        context: 'string',
+        expected: 'string',
+        received: '123',
+        message: 'Invalid type: Expected string but received 123',
         input: input.key,
         path: [
           {
             type: 'object',
+            origin: 'value',
             input,
             key: 'key',
             value: input.key,

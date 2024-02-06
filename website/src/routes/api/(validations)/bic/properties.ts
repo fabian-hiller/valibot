@@ -17,10 +17,6 @@ export const properties: Record<string, PropertyProps> = {
         'undefined',
       ],
     },
-    default: {
-      type: 'string',
-      value: 'Invalid bic',
-    },
   },
   validation: {
     type: {

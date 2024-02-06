@@ -1,4 +1,4 @@
-import type { Issues, SchemaResult } from '../../../../types/index.ts';
+import type { SchemaIssues, SchemaResult } from '../../../../types/index.ts';
 
 /**
  * Returns the subissues of the union validation.
@@ -9,8 +9,8 @@ import type { Issues, SchemaResult } from '../../../../types/index.ts';
  */
 export function subissues(
   results: SchemaResult<any>[] | undefined
-): Issues | undefined {
-  let issues: Issues | undefined;
+): SchemaIssues | undefined {
+  let issues: SchemaIssues | undefined;
   if (results) {
     for (const result of results) {
       if (issues) {

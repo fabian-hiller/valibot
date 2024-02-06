@@ -1,26 +1,30 @@
 import { describe, expect, test } from 'vitest';
-import type { Issue, Issues } from '../../types/index.ts';
+import type { SchemaIssue, SchemaIssues } from '../../types/index.ts';
 import { ValiError } from '../ValiError/index.ts';
 import { flatten } from './flatten.ts';
 
 describe('flatten', () => {
-  const rootIssue: Issue = {
+  const rootIssue: SchemaIssue = {
     reason: 'object',
-    validation: 'custom',
-    origin: 'value',
+    context: 'custom',
+    input: { key1: 'test', key2: ['test'] },
+    expected: null,
+    received: 'Object',
     message: 'Custom error',
-    input: { key1: 'test', key2: ['test'] },
   };
 
-  const nestedIssue1: Issue = {
+  const nestedIssue1: SchemaIssue = {
     reason: 'string',
-    validation: 'email',
-    origin: 'value',
+    context: 'email',
+
+    input: { key1: 'test', key2: ['test'] },
+    expected: 'email',
+    received: '"test"',
     message: 'Invalid email',
-    input: { key1: 'test', key2: ['test'] },
     path: [
       {
         type: 'object',
+        origin: 'value',
         input: { key1: 'test', key2: ['test'] },
         key: 'key1',
         value: 'test',
@@ -28,15 +32,17 @@ describe('flatten', () => {
     ],
   };
 
-  const nestedIssue2: Issue = {
+  const nestedIssue2: SchemaIssue = {
     reason: 'string',
-    validation: 'ends_with',
-    origin: 'value',
-    message: 'Invalid end',
+    context: 'ends_with',
     input: { key1: 'test', key2: ['test'] },
+    expected: '"@gmail.com"',
+    received: '"test"',
+    message: 'Invalid end',
     path: [
       {
         type: 'object',
+        origin: 'value',
         input: { key1: 'test', key2: ['test'] },
         key: 'key1',
         value: 'test',
@@ -44,21 +50,24 @@ describe('flatten', () => {
     ],
   };
 
-  const nestedIssue3: Issue = {
+  const nestedIssue3: SchemaIssue = {
     reason: 'type',
-    validation: 'number',
-    origin: 'value',
-    message: 'Invalid type',
+    context: 'number',
     input: { key1: 'test', key2: ['test'] },
+    expected: 'number',
+    received: '"test"',
+    message: 'Invalid type',
     path: [
       {
         type: 'object',
+        origin: 'value',
         input: { key1: 'test', key2: ['test'] },
         key: 'key2',
         value: ['test'],
       },
       {
         type: 'array',
+        origin: 'value',
         input: ['test'],
         key: 0,
         value: 'test',
@@ -67,7 +76,7 @@ describe('flatten', () => {
   };
 
   test('should flatten only root error', () => {
-    const issues: Issues = [rootIssue, rootIssue];
+    const issues: SchemaIssues = [rootIssue, rootIssue];
     const flatError = {
       root: [rootIssue.message, rootIssue.message],
       nested: {},
@@ -82,7 +91,7 @@ describe('flatten', () => {
   });
 
   test('should flatten only nested error', () => {
-    const issues: Issues = [nestedIssue1, nestedIssue2, nestedIssue3];
+    const issues: SchemaIssues = [nestedIssue1, nestedIssue2, nestedIssue3];
     const flatError = {
       nested: {
         key1: [nestedIssue1.message, nestedIssue2.message],
@@ -99,7 +108,7 @@ describe('flatten', () => {
   });
 
   test('should flatten root and nested error', () => {
-    const issues: Issues = [rootIssue, nestedIssue1];
+    const issues: SchemaIssues = [rootIssue, nestedIssue1];
     const flatError = {
       root: [rootIssue.message],
       nested: {

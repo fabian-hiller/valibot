@@ -29,10 +29,11 @@ export function recursive<TGetter extends () => BaseSchema>(
 ): RecursiveSchema<TGetter> {
   return {
     type: 'recursive',
+    expects: 'unknown',
     async: false,
     getter,
-    _parse(input, info) {
-      return this.getter()._parse(input, info);
+    _parse(input, config) {
+      return this.getter()._parse(input, config);
     },
   };
 }

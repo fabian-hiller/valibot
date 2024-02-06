@@ -1,16 +1,16 @@
 import type {
   BaseSchema,
   ErrorMessage,
-  Issues,
   Pipe,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   pipeResult,
-  parseResult,
   restAndDefaultArgs,
   schemaIssue,
+  schemaResult,
 } from '../../utils/index.ts';
-import type { ObjectOutput, ObjectInput, ObjectPathItem } from './types.ts';
+import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 
 /**
  * Object entries type.
@@ -40,7 +40,7 @@ export type ObjectSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -123,7 +123,7 @@ export function object<
   arg4?: Pipe<ObjectOutput<TEntries, TRest>>
 ): ObjectSchema<TEntries, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message = 'Invalid type', pipe] = restAndDefaultArgs<
+  const [rest, message, pipe] = restAndDefaultArgs<
     TRest,
     Pipe<ObjectOutput<TEntries, TRest>>
   >(arg2, arg3, arg4);
@@ -134,132 +134,135 @@ export function object<
   // Create and return object schema
   return {
     type: 'object',
+    expects: 'Object',
     async: false,
     entries,
     rest,
     message,
     pipe,
-    _parse(input, info) {
-      // Check type of input
-      if (!input || typeof input !== 'object') {
-        return schemaIssue(info, 'type', 'object', this.message, input);
-      }
+    _parse(input, config) {
+      // If root type is valid, check nested types
+      if (input && typeof input === 'object') {
+        // Cache object entries lazy
+        cachedEntries = cachedEntries ?? Object.entries(this.entries);
 
-      // Cache object entries lazy
-      cachedEntries = cachedEntries || Object.entries(this.entries);
+        // Create typed, issues and output
+        let typed = true;
+        let issues: SchemaIssues | undefined;
+        const output: Record<string, any> = {};
 
-      // Create typed, issues and output
-      let typed = true;
-      let issues: Issues | undefined;
-      const output: Record<string, any> = {};
+        // Parse schema of each key
+        for (const [key, schema] of cachedEntries) {
+          const value = (input as Record<string, unknown>)[key];
+          const result = schema._parse(value, config);
 
-      // Parse schema of each key
-      for (const [key, schema] of cachedEntries) {
-        const value = (input as Record<string, unknown>)[key];
-        const result = schema._parse(value, info);
+          // If there are issues, capture them
+          if (result.issues) {
+            // Create object path item
+            const pathItem: ObjectPathItem = {
+              type: 'object',
+              origin: 'value',
+              input: input as Record<string, unknown>,
+              key,
+              value,
+            };
 
-        // If there are issues, capture them
-        if (result.issues) {
-          // Create object path item
-          const pathItem: ObjectPathItem = {
-            type: 'object',
-            input: input as Record<string, unknown>,
-            key,
-            value,
-          };
-
-          // Add modified result issues to issues
-          for (const issue of result.issues) {
-            if (issue.path) {
-              issue.path.unshift(pathItem);
-            } else {
-              issue.path = [pathItem];
+            // Add modified result issues to issues
+            for (const issue of result.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                issue.path = [pathItem];
+              }
+              issues?.push(issue);
             }
-            issues?.push(issue);
-          }
-          if (!issues) {
-            issues = result.issues;
-          }
-
-          // If necessary, abort early
-          if (info?.abortEarly) {
-            typed = false;
-            break;
-          }
-        }
-
-        // If not typed, set typed to false
-        if (!result.typed) {
-          typed = false;
-        }
-
-        // Set output of entry if necessary
-        if (result.output !== undefined || key in input) {
-          output[key] = result.output;
-        }
-      }
-
-      // If necessary parse schema of each rest entry
-      if (this.rest && !(info?.abortEarly && issues)) {
-        for (const key in input) {
-          if (!(key in this.entries)) {
-            const value = (input as Record<string, unknown>)[key];
-            const result = this.rest._parse(value, info);
-
-            // If there are issues, capture them
-            if (result.issues) {
-              // Create object path item
-              const pathItem: ObjectPathItem = {
-                type: 'object',
-                input: input as Record<string, unknown>,
-                key,
-                value,
-              };
-
-              // Add modified result issues to issues
-              for (const issue of result.issues) {
-                if (issue.path) {
-                  issue.path.unshift(pathItem);
-                } else {
-                  issue.path = [pathItem];
-                }
-                issues?.push(issue);
-              }
-              if (!issues) {
-                issues = result.issues;
-              }
-
-              // If necessary, abort early
-              if (info?.abortEarly) {
-                typed = false;
-                break;
-              }
+            if (!issues) {
+              issues = result.issues;
             }
 
-            // If not typed, set typed to false
-            if (!result.typed) {
+            // If necessary, abort early
+            if (config?.abortEarly) {
               typed = false;
+              break;
             }
+          }
 
-            // Set output of entry
+          // If not typed, set typed to false
+          if (!result.typed) {
+            typed = false;
+          }
+
+          // Set output of entry if necessary
+          if (result.output !== undefined || key in input) {
             output[key] = result.output;
           }
         }
+
+        // If necessary parse schema of each rest entry
+        if (this.rest && !(config?.abortEarly && issues)) {
+          for (const key in input) {
+            if (!(key in this.entries)) {
+              const value = (input as Record<string, unknown>)[key];
+              const result = this.rest._parse(value, config);
+
+              // If there are issues, capture them
+              if (result.issues) {
+                // Create object path item
+                const pathItem: ObjectPathItem = {
+                  type: 'object',
+                  origin: 'value',
+                  input: input as Record<string, unknown>,
+                  key,
+                  value,
+                };
+
+                // Add modified result issues to issues
+                for (const issue of result.issues) {
+                  if (issue.path) {
+                    issue.path.unshift(pathItem);
+                  } else {
+                    issue.path = [pathItem];
+                  }
+                  issues?.push(issue);
+                }
+                if (!issues) {
+                  issues = result.issues;
+                }
+
+                // If necessary, abort early
+                if (config?.abortEarly) {
+                  typed = false;
+                  break;
+                }
+              }
+
+              // If not typed, set typed to false
+              if (!result.typed) {
+                typed = false;
+              }
+
+              // Set output of entry
+              output[key] = result.output;
+            }
+          }
+        }
+
+        // If output is typed, return pipe result
+        if (typed) {
+          return pipeResult(
+            this,
+            output as ObjectOutput<TEntries, TRest>,
+            config,
+            issues
+          );
+        }
+
+        // Otherwise, return untyped schema result
+        return schemaResult(false, output, issues as SchemaIssues);
       }
 
-      // If output is typed, execute pipe
-      if (typed) {
-        return pipeResult(
-          output as ObjectOutput<TEntries, TRest>,
-          this.pipe,
-          info,
-          'object',
-          issues
-        );
-      }
-
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      // Otherwise, return schema issue
+      return schemaIssue(this, object, input, config);
     },
   };
 }

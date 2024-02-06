@@ -37,6 +37,6 @@ describe('ip', () => {
   test('should return custom error message', () => {
     const error = 'Value is not an IP v4 or v6!';
     const validate = ip(error);
-    expect(validate._parse('test').issues?.[0].message).toBe(error);
+    expect(validate._parse('test').issues?.[0].context.message).toBe(error);
   });
 });
