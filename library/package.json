@@ -1,7 +1,7 @@
 {
   "name": "valibot",
   "description": "The modular and TypeScript-first schema library",
-  "version": "0.27.1",
+  "version": "0.28.0",
   "license": "MIT",
   "author": "Fabian Hiller",
   "homepage": "https://valibot.dev",
