@@ -132,6 +132,21 @@
 - [flatten](/api/flatten/)
 - [ValiError](/api/ValiError/)
 
+## Storages
+
+- [deleteGlobalConfig](/api/deleteGlobalConfig/)
+- [deleteGlobalMessage](/api/deleteGlobalMessage/)
+- [deleteSchemaMessage](/api/deleteSchemaMessage/)
+- [deleteSpecificMessage](/api/deleteSpecificMessage/)
+- [getGlobalConfig](/api/getGlobalConfig/)
+- [getGlobalMessage](/api/getGlobalMessage/)
+- [getSchemaMessage](/api/getSchemaMessage/)
+- [getSpecificMessage](/api/getSpecificMessage/)
+- [setGlobalConfig](/api/setGlobalConfig/)
+- [setGlobalMessage](/api/setGlobalMessage/)
+- [setSchemaMessage](/api/setSchemaMessage/)
+- [setSpecificMessage](/api/setSpecificMessage/)
+
 ## Async
 
 - [anyAsync](/api/anyAsync/)
