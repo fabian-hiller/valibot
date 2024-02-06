@@ -14,7 +14,7 @@ Hello, I am Valibot and I would like to help you validate data easily using a sc
 ## Highlights
 
 - Fully type safe with static type inference
-- Small bundle size starting at less than 300 bytes
+- Small bundle size starting at less than 600 bytes
 - Validate everything from strings to complex objects
 - Open source and fully tested with 100 % coverage
 - Many transformation and validation helpers included
@@ -25,8 +25,9 @@ Hello, I am Valibot and I would like to help you validate data easily using a sc
 
 First you create a schema that describes a structured data set. A schema can be compared to a type definition in TypeScript. The big difference is that TypeScript types are "not executed" and are more or less a DX feature. A schema on the other hand, apart from the inferred type definition, can also be executed at runtime to guarantee type safety of unknown data.
 
+<!-- prettier-ignore -->
 ```ts
-import { email, minLength, object, type Output, parse, string } from 'valibot'; // 1.2 kB
+import { email, minLength, object, type Output, parse, string } from 'valibot'; // 1.54 kB
 
 // Create login schema with email and password
 const LoginSchema = object({
