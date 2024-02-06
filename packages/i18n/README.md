@@ -6,6 +6,8 @@ The official i18n translations for Valibot.
 | ------------ | ------------ | ------ |
 | English (en) | –            | ✅     |
 | German (de)  | –            | ✅     |
+| French (fr)  | #418         | 🚧     |
+| Chinese (zh) | #419         | 🚧     |
 
 ## Getting started
 
