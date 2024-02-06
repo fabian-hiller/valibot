@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Fix bug in `union` and `unionAsync` schema for transformed values (issue #420)
+
 ## v0.28.0 (February 05, 2024)
 
 > Note: The library has been revised and refactored. Therefore, not every change is listed in detail.
