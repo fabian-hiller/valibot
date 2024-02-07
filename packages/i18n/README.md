@@ -1,6 +1,8 @@
 # Valibot i18n
 
-The official i18n translations for Valibot.
+The official i18n translations for Valibot. See the [internationalization guide](https://valibot.dev/guides/internationalization/) for more details.
+
+## Current status
 
 
 | Language        | Pull Request       | Status |
@@ -11,6 +13,7 @@ The official i18n translations for Valibot.
 | Chinese (zh)    | [#419][pr-419-url] | 🚧     |
 | Slovenian (sl)  | [#422] pr-422-url] | 🚧     |
 | Ukrainian (uk)  | [#423][pr-423-url] | 🚧     |
+
 
 [pr-397-url]: https://github.com/fabian-hiller/valibot/pull/397
 [pr-418-url]: https://github.com/fabian-hiller/valibot/pull/418
