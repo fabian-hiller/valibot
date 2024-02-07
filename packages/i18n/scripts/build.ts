@@ -3,6 +3,7 @@ import path from 'node:path';
 import package_ from '../package.json';
 import de from '../src/de';
 import fr from '../src/fr';
+import uk from '../src/uk';
 
 // Start timer
 console.time('build');
@@ -10,7 +11,7 @@ console.time('build');
 // Create languages array
 // Note: The language file `en` does not need to be added as the default
 // messages of Valibot are already in English
-const languages = [de, fr];
+const languages = [de, fr, uk];
 
 // Create root import variables
 let rootModuleImports: string[] = [];
