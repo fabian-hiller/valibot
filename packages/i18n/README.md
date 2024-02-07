@@ -1,6 +1,8 @@
 # Valibot i18n
 
-The official i18n translations for Valibot.
+The official i18n translations for Valibot. See the [internationalization guide](https://valibot.dev/guides/internationalization/) for more details.
+
+## Current status
 
 | Language       | Pull Request       | Status |
 | -------------- | ------------------ | ------ |
