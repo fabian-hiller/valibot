@@ -22,8 +22,8 @@ describe('notSize', () => {
   test('should return custom error message', () => {
     const error = 'Value size is "2"!';
     const validate = notSize(2, error);
-    expect(validate._parse(new Set().add(1).add(2)).issues?.[0].message).toBe(
-      error
-    );
+    expect(
+      validate._parse(new Set().add(1).add(2)).issues?.[0].context.message
+    ).toBe(error);
   });
 });

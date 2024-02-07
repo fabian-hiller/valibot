@@ -67,10 +67,10 @@ describe('intersect', () => {
   test('should throw only first issue', () => {
     const schema = intersect([string(), literal('test')]);
     const input = 123;
-    const info = { abortEarly: true };
-    expect(() => parse(schema, input, info)).toThrowError();
+    const config = { abortEarly: true };
+    expect(() => parse(schema, input, config)).toThrowError();
     try {
-      parse(schema, input, info);
+      parse(schema, input, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }

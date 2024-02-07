@@ -10,6 +10,10 @@ describe('isoTimestamp', () => {
     expect(validate._parse(value2).output).toBe(value2);
     const value3 = '9999-12-31T23:59:59.999Z';
     expect(validate._parse(value3).output).toBe(value3);
+    const value4 = '2024-01-04T17:40:21.157953900Z';
+    expect(validate._parse(value4).output).toBe(value4);
+    const value5 = '2024-01-16T16:00:34Z';
+    expect(validate._parse(value5).output).toBe(value5);
 
     expect(validate._parse('').issues).toBeTruthy();
     expect(validate._parse('2023-07-11T17:26:27.243').issues).toBeTruthy();
@@ -23,11 +27,15 @@ describe('isoTimestamp', () => {
     expect(validate._parse('0000-01-01T01:60:00.000Z').issues).toBeTruthy();
     expect(validate._parse('0000-01-01T01:00:60.000Z').issues).toBeTruthy();
     // FIXME: expect(validate._parse('2023-06-31T00:00:00.000Z').issues).toBeTruthy();
+    expect(validate._parse('0000-01-01T00:00:00.Z').issues).toBeTruthy();
+    expect(
+      validate._parse('0000-01-01T00:00:00.0000000000Z').issues
+    ).toBeTruthy();
   });
 
   test('should return custom error message', () => {
     const error = 'Value is not an ISO timestamp!';
     const validate = isoTimestamp(error);
-    expect(validate._parse('test').issues?.[0].message).toBe(error);
+    expect(validate._parse('test').issues?.[0].context.message).toBe(error);
   });
 });

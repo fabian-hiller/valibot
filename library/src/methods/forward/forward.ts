@@ -34,8 +34,11 @@ export function forward<TInput extends unknown[] | Record<string, unknown>>(
             issue.input = pathValue;
 
             // Create path item for current key
+            // TODO: Check if we can prevent path item from being unknown by
+            // adding context of schema to `._parse`
             const pathItem: PathItem = {
               type: 'unknown',
+              origin: 'value',
               input: pathInput,
               key,
               value: pathValue,

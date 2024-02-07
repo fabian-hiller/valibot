@@ -24,16 +24,17 @@ export type Ipv6Validation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function ipv6<TInput extends string>(
-  message: ErrorMessage = 'Invalid IPv6'
+  message?: ErrorMessage
 ): Ipv6Validation<TInput> {
   return {
     type: 'ipv6',
+    expects: null,
     async: false,
     message,
     requirement: [IPV6_REGEX, isIPv6],
     _parse(input) {
       return !(this.requirement[0].test(input) && this.requirement[1](input))
-        ? actionIssue(this.type, this.message, input, this.requirement)
+        ? actionIssue(this, ipv6, input, 'IPv6');
         : actionOutput(input);
     },
   };

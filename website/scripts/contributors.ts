@@ -1,8 +1,9 @@
-import { fetch } from 'undici';
+import dotenv from 'dotenv';
+import graymatter from 'gray-matter';
 import fs from 'node:fs';
 import path from 'node:path';
-import graymatter from 'gray-matter';
-import dotenv from 'dotenv';
+import { fetch } from 'undici';
+import { findNestedFiles } from './utils/index';
 
 // Load environment variables
 dotenv.config({ path: '.env.local', override: true });
@@ -17,40 +18,6 @@ const GITHUB_PERSONAL_ACCESS_TOKEN = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
 const EXCLUDED_COMMITS = ['2cc351f6db7798cf60276225abcbacbc1ea491db'];
 
 /**
- * Finds all index files in the given directories.
- *
- * @param directories The directories to search in.
- */
-function findIndexFiles(directories: string[]) {
-  // Create file paths list
-  const filePaths: string[] = [];
-
-  // Search for index files in each directory
-  for (const directory of directories) {
-    // Get items of directory
-    const items = fs.readdirSync(directory);
-
-    for (const itemName of items) {
-      // If item is a index file, add it to list
-      if (itemName === 'index.mdx') {
-        filePaths.push(path.join(directory, itemName));
-
-        // Otherwise, search for nested index files
-      } else {
-        const itemPath = path.join(directory, itemName);
-        const itemStat = fs.statSync(itemPath);
-        if (itemStat.isDirectory()) {
-          filePaths.push(...findIndexFiles([itemPath]));
-        }
-      }
-    }
-  }
-
-  // Return file paths list
-  return filePaths;
-}
-
-/**
  * Updates the contributors of the guides and API reference.
  */
 async function updateContributors() {
@@ -60,10 +27,10 @@ async function updateContributors() {
   }
 
   // Find all MDX files of guides and API reference
-  const filePaths = findIndexFiles([
-    path.join('src', 'routes', 'guides'),
-    path.join('src', 'routes', 'api'),
-  ]);
+  const filePaths = findNestedFiles(
+    [path.join('src', 'routes', 'guides'), path.join('src', 'routes', 'api')],
+    (fileName) => fileName === 'index.mdx'
+  );
 
   // Update contributors of each MDX file
   for (const filePath of filePaths) {

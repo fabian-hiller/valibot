@@ -4,6 +4,7 @@ description: >-
   There are two naming conventions that I recommend you to use when working with
   me. In this guide I will explain both of them.
 contributors:
+  - shairez
   - fabian-hiller
 ---
 
@@ -58,7 +59,7 @@ publicUsers.push(
 
 ## Convention 2
 
-The first naming convention can cause naming conflicts with other classes and types. It also causes a problem when you need to export both, the input and output types of a schema.
+The first naming convention can cause naming conflicts with other classes and types. It also causes a problem when you need to export both the input and output types of a schema.
 
 The second naming convention provides a solution. It also follows the [PascalCase](<https://en.wikipedia.org/wiki/Naming_convention_(programming)>) naming convention, but adds an appropriate suffix to each export. Schemas get the suffix `Schema`, input types get the suffix `Input` and output types get the suffix `Output`.
 
@@ -89,7 +90,7 @@ The schema and the input and output types can then be imported and used separate
 
 ```ts
 import * as v from 'valibot';
-import { ImageSchema, ImageInput, ImageOutput } from './types';
+import { ImageInput, ImageOutput, ImageSchema } from './types';
 
 export function createImage(input: ImageInput): ImageOutput {
   return v.parse(ImageSchema, input);

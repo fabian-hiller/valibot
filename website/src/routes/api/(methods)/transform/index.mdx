@@ -1,10 +1,145 @@
 ---
 title: transform
+description: >-
+  Adds a transformation step to a schema, which is executed at the end of
+  parsing and can change the output type.
 source: /methods/transform/transform.ts
 contributors:
+  - HJGreen
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # transform
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/transform/transform.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Adds a transformation step to a schema, which is executed at the end of parsing and can change the output type.
+
+```ts
+// Transform with an optional pipe
+const Schema = transform<TSchema, TOutput>(schema, action, pipe);
+
+// Transform with an optional validation
+const Schema = transform<TSchema, TOutput>(schema, action, validation);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `action` <Property {...properties.action} />
+- `pipe` <Property {...properties.pipe} />
+- `validation` <Property {...properties.validation} />
+
+### Explanation
+
+`transform` can be used to transform data after validation. Compared to the transformations you can perform inside <Link href="/guides/pipelines/">pipelines</Link>, there are no rules here. So the input type can be completely different from the output type.
+
+> To transform the input at the very beginning of the process, before any validation is performed, use the <Link href="../coerce/">`coerce`</Link> method.
+
+The `pipe` and `validation` arguments can optionally be used to validate the output of the transformation.
+
+## Returns
+
+- `Schema` <Property {...properties.SchemaWithTransform} />
+
+## Examples
+
+The following examples show how `transform` can be used.
+
+### Transform to length
+
+Schema that transforms a string to its length.
+
+```ts
+const StringLengthSchema = transform(string(), (input) => input.length);
+```
+
+### Add object entry
+
+Schema that transforms an object to add an entry.
+
+```ts
+const UserSchema = transform(
+  object({ name: string(), age: number() }),
+  (input) => ({
+    ...input,
+    created: new Date().toISOString(),
+  })
+);
+```
+
+## Related
+
+The following APIs can be combined with `transform`.
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'merge',
+    'omit',
+    'parse',
+    'partial',
+    'pick',
+    'required',
+    'safeParse',
+  ]}
+/>
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'recursive',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>

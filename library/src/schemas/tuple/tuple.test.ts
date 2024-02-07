@@ -1,6 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
+import type {
+  Output,
+  TypedSchemaResult,
+  UntypedSchemaResult,
+} from '../../types/index.ts';
 import { maxLength, minLength } from '../../validations/index.ts';
 import { boolean } from '../boolean/index.ts';
 import { never } from '../never/index.ts';
@@ -63,22 +68,22 @@ describe('tuple', () => {
   });
 
   test('should throw only first issue', () => {
-    const info = { abortEarly: true };
+    const config = { abortEarly: true };
 
     const schema1 = tuple([number(), number(), number()]);
     const input1 = ['1', 2, '3'];
-    expect(() => parse(schema1, input1, info)).toThrowError();
+    expect(() => parse(schema1, input1, config)).toThrowError();
     try {
-      parse(schema1, input1, info);
+      parse(schema1, input1, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
 
     const schema2 = tuple([string()], number());
     const input2 = ['hello', 1, '2', 3, '4'];
-    expect(() => parse(schema2, input2, info)).toThrowError();
+    expect(() => parse(schema2, input2, config)).toThrowError();
     try {
-      parse(schema2, input2, info);
+      parse(schema2, input2, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
@@ -91,6 +96,7 @@ describe('tuple', () => {
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'tuple',
+        origin: 'value',
         input: input1,
         key: 1,
         value: input1[1],
@@ -103,12 +109,14 @@ describe('tuple', () => {
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'tuple',
+        origin: 'value',
         input: input2,
         key: 1,
         value: input2[1],
       },
       {
         type: 'object',
+        origin: 'value',
         input: input2[1],
         key: 'key',
         value: input2[1].key,
@@ -121,6 +129,7 @@ describe('tuple', () => {
     expect(result3.issues?.[0].path).toEqual([
       {
         type: 'tuple',
+        origin: 'value',
         input: input3,
         key: 3,
         value: input3[3],
@@ -133,12 +142,14 @@ describe('tuple', () => {
     expect(result4.issues?.[0].path).toEqual([
       {
         type: 'tuple',
+        origin: 'value',
         input: input4,
         key: 2,
         value: input4[2],
       },
       {
         type: 'object',
+        origin: 'value',
         input: input4[2],
         key: 'key',
         value: input4[2].key,
@@ -168,28 +179,9 @@ describe('tuple', () => {
     );
   });
 
-  test('should expose the pipeline', () => {
-    const schema1 = tuple([string()], [minLength(2), maxLength(3)]);
-    expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({
-        type: 'min_length',
-        requirement: 2,
-        message: 'Invalid length',
-      }),
-      expect.objectContaining({
-        type: 'max_length',
-        requirement: 3,
-        message: 'Invalid length',
-      }),
-    ]);
-
-    const schema2 = tuple([string()]);
-    expect(schema2.pipe).toBeUndefined();
-  });
-
   test('should execute pipe if output is typed', () => {
-    const schema = tuple([string([minLength(10)])], number(), [minLength(10)]);
-    const input = ['12345'];
+    const schema = tuple([string([minLength(10)])], number(), [minLength(5)]);
+    const input: [string] = ['12345'];
     const result = schema._parse(input);
     expect(result).toEqual({
       typed: true,
@@ -197,14 +189,16 @@ describe('tuple', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
-          origin: 'value',
-          message: 'Invalid length',
+          context: 'min_length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: input[0],
           requirement: 10,
           path: [
             {
               type: 'tuple',
+              origin: 'value',
               input: input,
               key: 0,
               value: input[0],
@@ -213,19 +207,20 @@ describe('tuple', () => {
         },
         {
           reason: 'tuple',
-          validation: 'min_length',
-          origin: 'value',
-          message: 'Invalid length',
+          context: 'min_length',
+          expected: '>=5',
+          received: '1',
+          message: 'Invalid length: Expected >=5 but received 1',
           input: input,
-          requirement: 10,
+          requirement: 5,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should skip pipe if output is not typed', () => {
     const schema = tuple([string()], number(), [minLength(10)]);
-    const input = [12345];
+    const input: [number] = [12345];
     const result = schema._parse(input);
     expect(result).toEqual({
       typed: false,
@@ -233,13 +228,15 @@ describe('tuple', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
-          origin: 'value',
-          message: 'Invalid type',
+          context: 'string',
+          expected: 'string',
+          received: '12345',
+          message: 'Invalid type: Expected string but received 12345',
           input: input[0],
           path: [
             {
               type: 'tuple',
+              origin: 'value',
               input: input,
               key: 0,
               value: input[0],
@@ -247,6 +244,6 @@ describe('tuple', () => {
           ],
         },
       ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 });

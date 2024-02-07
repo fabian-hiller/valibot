@@ -16,8 +16,8 @@ describe('mimeType', () => {
   test('should return custom error message', () => {
     const error = 'File does not match the MIME type!';
     const validate = mimeType(['image/jepg'], error);
-    expect(validate._parse(new File(['123'], 'test')).issues?.[0].message).toBe(
-      error
-    );
+    expect(
+      validate._parse(new File(['123'], 'test')).issues?.[0].context.message
+    ).toBe(error);
   });
 });

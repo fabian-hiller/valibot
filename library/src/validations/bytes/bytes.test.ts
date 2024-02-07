@@ -19,6 +19,6 @@ describe('bytes', () => {
   test('should return custom error message', () => {
     const error = 'Value byte length is not "10"!';
     const validate = bytes(10, error);
-    expect(validate._parse('test').issues?.[0].message).toBe(error);
+    expect(validate._parse('test').issues?.[0].context.message).toBe(error);
   });
 });

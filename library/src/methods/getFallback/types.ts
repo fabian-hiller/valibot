@@ -1,4 +1,4 @@
-import type { Output } from '../../types/schema.ts';
+import type { Output } from '../../types/index.ts';
 import type { SchemaWithMaybeFallback } from './getFallback.ts';
 import type { SchemaWithMaybeFallbackAsync } from './getFallbackAsync.ts';
 

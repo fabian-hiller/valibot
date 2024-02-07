@@ -23,6 +23,6 @@ describe('minSize', () => {
     const error = 'Value size is less than "2"!';
     const value = new Set().add(1);
     const validate = minSize(2, error);
-    expect(validate._parse(value).issues?.[0].message).toBe(error);
+    expect(validate._parse(value).issues?.[0].context.message).toBe(error);
   });
 });

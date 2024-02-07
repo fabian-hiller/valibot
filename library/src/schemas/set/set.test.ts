@@ -1,6 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parse } from '../../methods/index.ts';
+import type {
+  Output,
+  TypedSchemaResult,
+  UntypedSchemaResult,
+} from '../../types/index.ts';
 import { maxSize, minLength, minSize, size } from '../../validations/index.ts';
 import { date } from '../date/index.ts';
 import { number } from '../number/index.ts';
@@ -53,10 +58,10 @@ describe('set', () => {
   test('should throw only first issue', () => {
     const schema = set(number());
     const input = new Set().add('1').add(2).add('3');
-    const info = { abortEarly: true };
-    expect(() => parse(schema, input, info)).toThrowError();
+    const config = { abortEarly: true };
+    expect(() => parse(schema, input, config)).toThrowError();
     try {
-      parse(schema, input, info);
+      parse(schema, input, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
@@ -69,6 +74,7 @@ describe('set', () => {
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'set',
+        origin: 'value',
         input: input1,
         key: 1,
         value: '2',
@@ -81,12 +87,14 @@ describe('set', () => {
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'set',
+        origin: 'value',
         input: input2,
         key: 1,
         value: { key: 123 },
       },
       {
         type: 'object',
+        origin: 'value',
         input: { key: 123 },
         key: 'key',
         value: 123,
@@ -114,23 +122,9 @@ describe('set', () => {
     expect(() => parse(schema2, new Set().add('1'))).toThrowError(sizeError);
   });
 
-  test('should expose the pipeline', () => {
-    const schema1 = set(number(), [size(1)]);
-    expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({
-        type: 'size',
-        requirement: 1,
-        message: 'Invalid size',
-      }),
-    ]);
-
-    const schema2 = set(number());
-    expect(schema2.pipe).toBeUndefined();
-  });
-
   test('should execute pipe if output is typed', () => {
     const schema = set(string([minLength(10)]), [minSize(10)]);
-    const input = new Set().add('12345');
+    const input = new Set<string>().add('12345');
     const result = schema._parse(input);
     expect(result).toEqual({
       typed: true,
@@ -138,14 +132,16 @@ describe('set', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
-          origin: 'value',
-          message: 'Invalid length',
+          context: 'min_length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: '12345',
           requirement: 10,
           path: [
             {
               type: 'set',
+              origin: 'value',
               input: input,
               key: 0,
               value: '12345',
@@ -154,14 +150,15 @@ describe('set', () => {
         },
         {
           reason: 'set',
-          validation: 'min_size',
-          origin: 'value',
-          message: 'Invalid size',
+          context: 'min_size',
+          expected: '>=10',
+          received: '1',
+          message: 'Invalid size: Expected >=10 but received 1',
           input: input,
           requirement: 10,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should skip pipe if output is not typed', () => {
@@ -174,13 +171,15 @@ describe('set', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
-          origin: 'value',
-          message: 'Invalid type',
+          context: 'string',
+          expected: 'string',
+          received: '12345',
+          message: 'Invalid type: Expected string but received 12345',
           input: 12345,
           path: [
             {
               type: 'set',
+              origin: 'value',
               input: input,
               key: 0,
               value: 12345,
@@ -188,6 +187,6 @@ describe('set', () => {
           ],
         },
       ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 });

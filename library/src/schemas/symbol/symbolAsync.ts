@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * Symbol schema async type.
@@ -15,7 +15,7 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -25,21 +25,20 @@ export type SymbolSchemaAsync<TOutput = symbol> = BaseSchemaAsync<
  *
  * @returns An async symbol schema.
  */
-export function symbolAsync(
-  message: ErrorMessage = 'Invalid type'
-): SymbolSchemaAsync {
+export function symbolAsync(message?: ErrorMessage): SymbolSchemaAsync {
   return {
     type: 'symbol',
+    expects: 'symbol',
     async: true,
     message,
-    async _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'symbol') {
-        return schemaIssue(info, 'type', 'symbol', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return schema result
+      if (typeof input === 'symbol') {
+        return schemaResult(true, input);
       }
 
-      // Return parse result
-      return parseResult(true, input);
+      // Otherwise, return schema issue
+      return schemaIssue(this, symbolAsync, input, config);
     },
   };
 }

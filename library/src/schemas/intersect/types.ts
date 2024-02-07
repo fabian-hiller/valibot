@@ -3,7 +3,7 @@ import type { IntersectOptions } from './intersect.ts';
 import type { IntersectOptionsAsync } from './intersectAsync.ts';
 
 /**
- * Intersect input type.
+ * Intersect input inference type.
  */
 export type IntersectInput<
   TIntersectOptions extends IntersectOptions | IntersectOptionsAsync
@@ -21,7 +21,7 @@ export type IntersectInput<
   : never;
 
 /**
- * Intersect output type.
+ * Intersect output inference type.
  */
 export type IntersectOutput<
   TIntersectOptions extends IntersectOptions | IntersectOptionsAsync

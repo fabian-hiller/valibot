@@ -2,13 +2,12 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   TOptions: {
-    type: [
-      {
-        type: 'custom',
-        name: 'PicklistOptions',
-        href: '../PicklistOptions/',
-      },
-    ],
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'PicklistOptions',
+      href: '../PicklistOptions/',
+    },
   },
   options: {
     type: {
@@ -17,26 +16,29 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
-    default: {
-      type: 'string',
-      value: 'Invalid type',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+        },
+        'undefined',
+      ],
     },
   },
   Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'PicklistSchema',
-        href: '../PicklistSchema/',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'PicklistSchema',
+      href: '../PicklistSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TOptions',
+        },
+      ],
+    },
   },
 };

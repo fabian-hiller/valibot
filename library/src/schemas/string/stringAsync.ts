@@ -23,7 +23,7 @@ export type StringSchemaAsync<TOutput = string> = BaseSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -57,22 +57,23 @@ export function stringAsync(
   arg2?: PipeAsync<string>
 ): StringSchemaAsync {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe] = defaultArgs(arg1, arg2);
 
   // Create and return async string schema
   return {
     type: 'string',
+    expects: 'string',
     async: true,
     message,
     pipe,
-    async _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'string') {
-        return schemaIssue(info, 'type', 'string', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return pipe result
+      if (typeof input === 'string') {
+        return pipeResultAsync(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResultAsync(input, this.pipe, info, 'string');
+      // Otherwise, return schema issue
+      return schemaIssue(this, stringAsync, input, config);
     },
   };
 }

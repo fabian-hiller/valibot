@@ -1,7 +1,7 @@
-import clsx from 'clsx';
+import { component$, Fragment } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 
-type SingleTypeOrValue =
+type DefinitionData =
   | 'string'
   | 'symbol'
   | 'number'
@@ -36,239 +36,263 @@ type SingleTypeOrValue =
   | {
       type: 'object';
       entries: {
-        key: string | { name: string; type: TypeOrValue };
+        key: string | { name: string; type: DefinitionData };
         optional?: boolean;
-        value: TypeOrValue;
+        value: DefinitionData;
       }[];
     }
   | {
       type: 'array';
       spread?: boolean;
-      item: TypeOrValue;
+      item: DefinitionData;
     }
   | {
       type: 'tuple';
-      items: TypeOrValue[];
+      items: DefinitionData[];
     }
   | {
       type: 'function';
-      modifier?: string;
       params: {
         spread?: boolean;
         name: string;
         optional?: boolean;
-        type: TypeOrValue;
+        type: DefinitionData;
       }[];
-      return: TypeOrValue;
+      return: DefinitionData;
+    }
+  | {
+      type: 'union';
+      options: [DefinitionData, DefinitionData, ...DefinitionData[]];
+    }
+  | {
+      type: 'intersect';
+      options: [DefinitionData, DefinitionData, ...DefinitionData[]];
+    }
+  | {
+      type: 'conditional';
+      conditions: {
+        type: DefinitionData;
+        extends: DefinitionData;
+        true: DefinitionData;
+      }[];
+      false: DefinitionData;
     }
   | {
       type: 'custom';
       modifier?: string;
       name: string;
       href?: string;
-      generics?: TypeOrValue[];
-      indexes?: TypeOrValue[];
-      default?: TypeOrValue;
+      generics?: DefinitionData[];
+      indexes?: DefinitionData[];
     };
 
-type TypeOrValue = SingleTypeOrValue | SingleTypeOrValue[];
-
 export type PropertyProps = {
-  type: TypeOrValue;
-  default?: TypeOrValue;
-  padding?: 'none';
+  modifier?: string;
+  type: DefinitionData;
+  default?: DefinitionData;
 };
 
 /**
  * Visually represents the type and default value of a property with syntax
  * highlighting using JSON schema as props.
  */
-export function Property(props: PropertyProps) {
-  const types = Array.isArray(props.type) ? props.type : [props.type];
+export const Property = component$<PropertyProps>(
+  ({ modifier, type, ...props }: PropertyProps) => {
+    return (
+      <code class="!bg-transparent !p-0 !text-slate-600 dark:!text-slate-300">
+        {modifier && (
+          <span class="text-red-600 dark:text-red-400">{modifier} </span>
+        )}
+        <Definition data={type} />
+        {props.default && (
+          <>
+            {' = '}
+            <Definition data={props.default} />
+          </>
+        )}
+      </code>
+    );
+  }
+);
 
-  return (
-    <code
-      class={clsx(
-        '!bg-transparent !p-0 !text-slate-600 dark:!text-slate-300',
-        !props.padding && '!px-2'
-      )}
-    >
-      {types.map((type, index) => (
-        <>
-          <span class="text-red-600 dark:text-red-400">
-            {index > 0 && ' | '}
-          </span>
-          {typeof type === 'string' ? (
-            <span
-              class={{
-                'text-teal-600 dark:text-teal-400':
-                  type === 'string' ||
-                  type === 'symbol' ||
-                  type === 'number' ||
-                  type === 'bigint' ||
-                  type === 'boolean' ||
-                  type === 'null' ||
-                  type === 'undefined' ||
-                  type === 'void' ||
-                  type === 'never' ||
-                  type === 'any' ||
-                  type === 'unknown',
-                'capitalize text-sky-600 dark:text-sky-400':
-                  type === 'object' ||
-                  type === 'array' ||
-                  type === 'tuple' ||
-                  type === 'function',
-              }}
-            >
-              {type}
-            </span>
-          ) : type.type === 'string' ? (
-            <span class="text-yellow-600 dark:text-amber-200">
-              '{type.value}'
-            </span>
-          ) : type.type === 'number' || type.type === 'bigint' ? (
-            <span class="text-purple-600 dark:text-purple-400">
-              {type.value}
-            </span>
-          ) : type.type === 'boolean' ? (
-            <span class="text-teal-600 dark:text-teal-400">
-              {type.value.toString()}
-            </span>
-          ) : type.type === 'object' ? (
-            <span class="text-slate-600 dark:text-slate-400">
-              {'{'}
-              {type.entries.map((entrie, index) => (
+type DefinitionProps = {
+  data: DefinitionData;
+};
+
+const Definition = component$<DefinitionProps>(({ data }) => (
+  <>
+    {typeof data === 'string' ? (
+      <span
+        class={{
+          'text-teal-600 dark:text-teal-400':
+            data === 'string' ||
+            data === 'symbol' ||
+            data === 'number' ||
+            data === 'bigint' ||
+            data === 'boolean' ||
+            data === 'null' ||
+            data === 'undefined' ||
+            data === 'void' ||
+            data === 'never' ||
+            data === 'any' ||
+            data === 'unknown',
+          'capitalize text-sky-600 dark:text-sky-400':
+            data === 'object' ||
+            data === 'array' ||
+            data === 'tuple' ||
+            data === 'function',
+        }}
+      >
+        {data}
+      </span>
+    ) : data.type === 'string' ? (
+      <span class="text-yellow-600 dark:text-amber-200">'{data.value}'</span>
+    ) : data.type === 'number' || data.type === 'bigint' ? (
+      <span class="text-purple-600 dark:text-purple-400">{data.value}</span>
+    ) : data.type === 'boolean' ? (
+      <span class="text-teal-600 dark:text-teal-400">
+        {data.value.toString()}
+      </span>
+    ) : data.type === 'object' ? (
+      <span class="text-slate-600 dark:text-slate-400">
+        {'{'}
+        {data.entries.map((entrie, index) => (
+          <>
+            {index === 0 ? ' ' : ', '}
+            <>
+              {typeof entrie.key === 'string' ? (
+                <span class="text-slate-700 dark:text-slate-300">
+                  {entrie.key}
+                </span>
+              ) : (
                 <>
-                  {index === 0 ? ' ' : ', '}
-                  <>
-                    {typeof entrie.key === 'string' ? (
-                      <span class="text-slate-700 dark:text-slate-300">
-                        {entrie.key}
-                      </span>
-                    ) : (
-                      <>
-                        [
-                        <span class="italic text-orange-500 dark:text-orange-300">
-                          {entrie.key.name}
-                        </span>
-                        <span class="text-red-600 dark:text-red-400">:</span>{' '}
-                        <Property type={entrie.key.type} padding="none" />]
-                      </>
-                    )}
-                  </>
-                  <span class="text-red-600 dark:text-red-400">
-                    {entrie.optional && '?'}:
-                  </span>{' '}
-                  <Property type={entrie.value} padding="none" />
-                  {index === type.entries.length - 1 && ' '}
+                  [
+                  <span class="italic text-orange-500 dark:text-orange-300">
+                    {entrie.key.name}
+                  </span>
+                  <span class="text-red-600 dark:text-red-400">:</span>{' '}
+                  <Definition data={entrie.key.type} />]
                 </>
-              ))}
-              {'}'}
-            </span>
-          ) : type.type === 'array' ? (
+              )}
+            </>
+            <span class="text-red-600 dark:text-red-400">
+              {entrie.optional && '?'}:
+            </span>{' '}
+            <Definition data={entrie.value} />
+            {index === data.entries.length - 1 && ' '}
+          </>
+        ))}
+        {'}'}
+      </span>
+    ) : data.type === 'array' ? (
+      <span>
+        {data.spread && <span class="text-red-600 dark:text-red-400">...</span>}
+        {typeof data.item === 'object' &&
+          (data.item.type === 'union' || data.item.type === 'intersect') &&
+          '('}
+        <Definition data={data.item} />
+        {typeof data.item === 'object' &&
+          (data.item.type === 'union' || data.item.type === 'intersect') &&
+          ')'}
+        <span class="text-slate-600 dark:text-slate-400">[]</span>
+      </span>
+    ) : data.type === 'tuple' ? (
+      <span class="text-slate-600 dark:text-slate-400">
+        [
+        {data.items.map((item, index) => (
+          <>
+            {index > 0 && ', '}
+            <Definition data={item} />
+          </>
+        ))}
+        ]
+      </span>
+    ) : data.type === 'function' ? (
+      <span class="text-slate-600 dark:text-slate-400">
+        {typeof data.return === 'object' &&
+          (data.return.type === 'union' || data.return.type === 'intersect') &&
+          '('}
+        (
+        {data.params.map((param, index) => (
+          <>
             <span>
-              {type.spread && (
+              {index > 0 && ', '}
+              {param.spread && (
                 <span class="text-red-600 dark:text-red-400">...</span>
               )}
-              {Array.isArray(type.item) && type.item.length > 1 && '('}
-              <Property type={type.item} padding="none" />
-              {Array.isArray(type.item) && type.item.length > 1 && ')'}
-              <span class="text-slate-600 dark:text-slate-400">[]</span>
+              <span class="italic text-orange-500 dark:text-orange-300">
+                {param.name}
+              </span>
+              <span class="text-red-600 dark:text-red-400">
+                {param.optional && '?'}:
+              </span>{' '}
             </span>
-          ) : type.type === 'tuple' ? (
-            <span class="text-slate-600 dark:text-slate-400">
-              [
-              {type.items.map((item, index) => (
-                <>
-                  {index > 0 && ', '}
-                  <Property type={item} padding="none" />
-                </>
-              ))}
-              ]
-            </span>
-          ) : type.type === 'function' ? (
-            <span class="text-slate-600 dark:text-slate-400">
-              {type.modifier && (
-                <>
-                  <span class="text-red-600 dark:text-red-400">
-                    {type.modifier}
-                  </span>{' '}
-                </>
-              )}
-              {Array.isArray(type.return) && '('}(
-              {type.params.map((param, index) => (
-                <>
-                  <span>
-                    {index > 0 && ', '}
-                    {param.spread && (
-                      <span class="text-red-600 dark:text-red-400">...</span>
-                    )}
-                    <span class="italic text-orange-500 dark:text-orange-300">
-                      {param.name}
-                    </span>
-                    <span class="text-red-600 dark:text-red-400">
-                      {param.optional && '?'}:
-                    </span>{' '}
-                  </span>
-                  <Property type={param.type} padding="none" />
-                </>
-              ))}
-              ) {'=>'} <Property type={type.return} padding="none" />
-              {Array.isArray(type.return) && ')'}
-            </span>
-          ) : (
-            <>
-              {type.modifier && (
-                <>
-                  <span class="text-red-600 dark:text-red-400">
-                    {type.modifier}
-                  </span>{' '}
-                </>
-              )}
-              {type.href ? (
-                <Link class="text-sky-600 dark:text-sky-400" href={type.href}>
-                  {type.name}
-                </Link>
-              ) : (
-                <span class="text-sky-600 dark:text-sky-400">{type.name}</span>
-              )}
-              {type.default && (
-                <>
-                  <span class="text-slate-600 dark:text-slate-400">
-                    {' = '}
-                  </span>
-                  <Property type={type.default} padding="none" />
-                </>
-              )}
-              {type.generics && (
-                <>
-                  {'<'}
-                  {type.generics.map((generic, index) => (
-                    <>
-                      {index > 0 && ', '}
-                      <Property type={generic} padding="none" />
-                    </>
-                  ))}
-                  {'>'}
-                </>
-              )}
-              {type.indexes?.map((index) => (
-                <>
-                  {'['}
-                  <Property type={index} padding="none" />
-                  {']'}
-                </>
-              ))}
-            </>
-          )}
-        </>
-      ))}
-      {props.default && (
+            <Definition data={param.type} />
+          </>
+        ))}
+        ) {'=>'} <Definition data={data.return} />
+        {typeof data.return === 'object' && data.return.type === 'union' && ')'}
+      </span>
+    ) : data.type === 'union' ? (
+      data.options.map((option, index) => (
         <>
-          {' = '}
-          <Property type={props.default} padding="none" />
+          {index > 0 && <span class="text-red-600 dark:text-red-400"> | </span>}
+          <Definition data={option} />
         </>
-      )}
-    </code>
-  );
-}
+      ))
+    ) : data.type === 'intersect' ? (
+      data.options.map((option, index) => (
+        <>
+          {index > 0 && <span class="text-red-600 dark:text-red-400"> & </span>}
+          <Definition data={option} />
+        </>
+      ))
+    ) : data.type === 'conditional' ? (
+      <>
+        {data.conditions.map((condition, index) => (
+          <Fragment key={index}>
+            <Definition data={condition.type} />
+            <span class="text-red-600 dark:text-red-400"> extends </span>
+            <Definition data={condition.extends} />
+            <span class="text-red-600 dark:text-red-400"> ? </span>
+            <Definition data={condition.true} />
+          </Fragment>
+        ))}
+        <span class="text-red-600 dark:text-red-400"> : </span>
+        <Definition data={data.false} />
+      </>
+    ) : (
+      <>
+        {data.modifier && (
+          <span class="text-red-600 dark:text-red-400">{data.modifier} </span>
+        )}
+        {data.href ? (
+          <Link class="text-sky-600 dark:text-sky-400" href={data.href}>
+            {data.name}
+          </Link>
+        ) : (
+          <span class="text-sky-600 dark:text-sky-400">{data.name}</span>
+        )}
+        {data.generics && (
+          <>
+            {'<'}
+            {data.generics.map((generic, index) => (
+              <>
+                {index > 0 && ', '}
+                <Definition data={generic} />
+              </>
+            ))}
+            {'>'}
+          </>
+        )}
+        {data.indexes?.map((index) => (
+          <>
+            {'['}
+            <Definition data={index} />
+            {']'}
+          </>
+        ))}
+      </>
+    )}
+  </>
+));

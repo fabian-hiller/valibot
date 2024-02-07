@@ -4,6 +4,7 @@ description: >-
   Migrating from Zod to Valibot is very easy in most cases since both APIs have
   a lot of similarities.
 contributors:
+  - morinokami
   - fabian-hiller
 ---
 
@@ -48,7 +49,7 @@ Due to the modular design of Valibot, also all other methods like `.parse` or `.
 const value = z.string().parse('foo');
 
 // To this
-const email = v.parse(v.string(), 'foo');
+const value = v.parse(v.string(), 'foo');
 ```
 
 ## Change names
@@ -64,7 +65,7 @@ Most of the names are the same as in Zod. However, there are some exceptions. Th
 | `datetime`           | <Link href="/api/isoDate/">`isoDate`</Link>, <Link href="/api/isoDateTime/">`isoDateTime`</Link>                                            |
 | `default`            | <Link href="/api/optional/">`optional`</Link>                                                                                               |
 | `discriminatedUnion` | <Link href="/api/variant/">`variant`</Link>                                                                                                 |
-| `element`            | <Link href="/api/item/">`item`</Link>                                                                                                       |
+| `element`            | `item`                                                                                                                                      |
 | `enum`               | <Link href="/api/picklist/">`picklist`</Link>                                                                                               |
 | `extend`             | <Link href="/api/merge/">`merge`</Link>                                                                                                     |
 | `gt`, `gte`          | <Link href="/api/minValue/">`minValue`</Link>                                                                                               |
@@ -89,9 +90,55 @@ Most of the names are the same as in Zod. However, there are some exceptions. Th
 | `refine`             | <Link href="/api/custom/">`custom`</Link>                                                                                                   |
 | `rest`               | <Link href="/api/tuple/">`tuple`</Link>                                                                                                     |
 | `safe`               | <Link href="/api/safeInteger/">`safeInteger`</Link>                                                                                         |
-| `shape`              | <Link href="/api/entries/">`entries`</Link>                                                                                                 |
+| `shape`              | `entries`                                                                                                                                   |
 | `strict`             | <Link href="/api/object/">`object`</Link>                                                                                                   |
 | `strip`              | <Link href="/api/object/">`object`</Link>                                                                                                   |
 | `trim`               | <Link href="/api/toTrimmed/">`toTrimmed`</Link>                                                                                             |
 | `undefined`          | <Link href="/api/undefined_/">`undefined_`</Link>                                                                                           |
 | `void`               | <Link href="/api/void_/">`void_`</Link>                                                                                                     |
+
+## Other details
+
+Below are some more details that may be helpful when migrating from Zod to Valibot.
+
+### Object and tuple
+
+To specify whether <Link href="/api/object/">`object`</Link> or <Link href="/api/tuple/">`tuple`</Link> should allow or prevent unknown values, Valibot uses the `rest` parameter. Zod uses the methods `.passthrough`, `.strict`, `.strip`, `.catchall` and `.rest` instead. See the <Link href="../objects/">objects</Link> and <Link href="../arrays/">arrays</Link> guide for more details.
+
+```ts
+// Change this
+const ObjectSchema = z.object({ key: z.string() }).strict();
+
+// To this
+const ObjectSchema = v.object({ key: v.string() }, v.never());
+```
+
+### Error messages
+
+For individual error messages, you can pass a string or an object to Zod. It also allows you to differentiate between an error message for "required" and "invalid_type". With Valibot you just pass a single string instead.
+
+```ts
+// Change this
+const SchemaSchema = z
+  .string({ invalid_type_error: 'Not a string' })
+  .min(5, { message: 'Too short' });
+
+// To this
+const StringSchema = v.string('Not a string', [v.minLength(5, 'Too short')]);
+```
+
+### Coerce type
+
+To enforce primitive values, you can use a method of the `coerce` object in Zod. In Valibot, <Link href="/api/coerce/">`coerce`</Link> is a function that works similar to <Link href="/api/transform/">`transform`</Link>, but is executed before validation. More information can be found <Link href="../methods/#coerce">here</Link>.
+
+```ts
+// Change this
+const NumberSchema = z.coerce.number();
+
+// To this
+const NumberSchema = v.coerce(v.number(), Number);
+```
+
+### Async validation
+
+Similar to Zod, Valibot support synchronous and asynchronous validation. However, the API is a little bit different. See the <Link href="../async-validation/">async guide</Link> for more details.

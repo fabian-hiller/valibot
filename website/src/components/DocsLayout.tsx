@@ -1,15 +1,22 @@
-import { ArrowLeftIcon, ArrowRightIcon, GitHubIcon, PenIcon } from '~/icons';
-import { IconButton } from './IconButton';
-import { Navigation } from './Navigation';
-import { SideBar } from './SideBar';
+import { component$, Slot, useComputed$ } from '@builder.io/qwik';
 import {
   type ContentMenu,
   useContent,
-  useLocation,
   useDocumentHead,
+  useLocation,
 } from '@builder.io/qwik-city';
-import { Slot, component$, useComputed$ } from '@builder.io/qwik';
+import { ArrowLeftIcon, ArrowRightIcon, GitHubIcon, PenIcon } from '~/icons';
+import {
+  AlgoliaLogo,
+  BuilderLogo,
+  HdmLogo,
+  NetlifyLogo,
+  PaceLogo,
+} from '~/logos';
 import '../styles/pace.css';
+import { IconButton } from './IconButton';
+import { Navigation } from './Navigation';
+import { SideBar } from './SideBar';
 
 type NavItem = ContentMenu & { group: string };
 
@@ -74,54 +81,23 @@ export const DocsLayout = component$(() => {
 
       <main class="relative flex-1 py-12 md:py-20 lg:w-px lg:py-32 lg:pl-9">
         {/* Navigation buttons */}
-        <div class="hidden px-8 lg:absolute lg:right-0 lg:flex lg:space-x-6 lg:px-10">
+        <nav class="hidden px-8 lg:absolute lg:right-0 lg:flex lg:space-x-6 lg:px-10">
           <NavButtons
             pageIndex={navIndex.value}
             sourcePath={documentHead.frontmatter.source}
             prevPage={prevPage.value}
             nextPage={nextPage.value}
           />
-        </div>
+        </nav>
 
         {/* Article */}
         <article class="mdx">
           <Slot />
         </article>
 
-        {/* Contributors */}
-        {contributors.value.length > 0 && (
-          <div class="mx-8 mt-10 border-t-2 pt-10 dark:border-slate-800 md:mt-12 md:pt-12 lg:mx-10 lg:mt-14 lg:pt-14">
-            <h3 class="text-lg font-medium text-slate-900 dark:text-slate-200 md:text-xl lg:text-2xl">
-              Contributors
-            </h3>
-            <p class="mt-3 leading-loose md:mt-4 md:text-lg md:leading-loose lg:mt-5 lg:text-xl lg:leading-loose">
-              Thanks to all the contributors who helped make this documentation
-              better!
-            </p>
-            <ul class="mt-4 flex flex-wrap gap-2 md:mt-5 lg:mt-6 lg:gap-3">
-              {contributors.value.map((contributor) => (
-                <li key={contributor}>
-                  <a
-                    href={`https://github.com/${contributor}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <img
-                      loading="lazy"
-                      src={`https://github.com/${contributor}.png?size=88`}
-                      alt={`GitHub profile picture of ${contributor}`}
-                      class="w-9 rounded-full md:w-10 lg:w-11"
-                    />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
         {currentPage.value?.href && (
-          <div class="mt-10 flex justify-between px-8 md:mt-12 lg:mt-14 lg:px-10">
-            {/* GitHub buttton */}
+          <nav class="mt-10 flex justify-between px-8 md:mt-12 lg:mt-14 lg:px-10">
+            {/* Edit page buttton */}
             <IconButton
               variant="secondary"
               type="link"
@@ -151,8 +127,96 @@ export const DocsLayout = component$(() => {
                 </IconButton>
               </div>
             )}
-          </div>
+          </nav>
         )}
+
+        {/* Credits */}
+        <footer class="mx-8 mt-12 border-t-2 pt-2 dark:border-slate-800 md:mt-16 md:pt-4 lg:mx-10 lg:mt-20 lg:pt-6">
+          {contributors.value.length > 0 && (
+            <>
+              <h3 class="mt-10 text-lg font-medium text-slate-900 dark:text-slate-200 md:mt-12 md:text-xl lg:mt-14 lg:text-2xl">
+                Contributors
+              </h3>
+              <p class="mt-3 leading-loose md:mt-4 md:text-lg md:leading-loose lg:mt-5 lg:text-xl lg:leading-loose">
+                Thanks to all the contributors who helped make this page better!
+              </p>
+              <ul class="mt-4 flex flex-wrap gap-2 md:mt-5 lg:mt-6 lg:gap-3">
+                {contributors.value.map((contributor) => (
+                  <li key={contributor}>
+                    <a
+                      href={`https://github.com/${contributor}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img
+                        loading="lazy"
+                        src={`https://github.com/${contributor}.png?size=88`}
+                        alt={`GitHub profile picture of ${contributor}`}
+                        class="w-9 rounded-full md:w-10 lg:w-11"
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          <h3 class="mt-10 text-lg font-medium text-slate-900 dark:text-slate-200 md:mt-12 md:text-xl lg:mt-14 lg:text-2xl">
+            Partners
+          </h3>
+          <p class="mt-3 leading-loose md:mt-4 md:text-lg md:leading-loose lg:mt-5 lg:text-xl lg:leading-loose">
+            Thanks to our partners who support the project ideally and
+            financially.
+          </p>
+          <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-3 md:mt-5 md:gap-x-8 md:gap-y-4 lg:mt-6 lg:gap-x-10 lg:gap-y-5">
+            {[
+              { Logo: PaceLogo, href: 'https://www.pace.edu' },
+              { Logo: BuilderLogo, href: 'https://www.builder.io' },
+              { Logo: HdmLogo, href: 'https://www.hdm-stuttgart.de' },
+              { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
+              { Logo: AlgoliaLogo, href: 'https://www.algolia.com' },
+            ].map(({ Logo, href }) => (
+              <li key={href}>
+                <a href={href} target="_blank" rel="noreferrer">
+                  <Logo class="h-9 md:h-11 lg:h-12" />
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <h3 class="mt-10 text-lg font-medium text-slate-900 dark:text-slate-200 md:mt-12 md:text-xl lg:mt-14 lg:text-2xl">
+            Sponsors
+          </h3>
+          <p class="mt-3 leading-loose md:mt-4 md:text-lg md:leading-loose lg:mt-5 lg:text-xl lg:leading-loose">
+            Thanks to our GitHub sponsors who support the project financially.
+          </p>
+          <ul class="mt-4 flex flex-wrap gap-2 md:mt-5 lg:mt-6 lg:gap-3">
+            {[
+              'dailydotdev',
+              'ivan-mihalic',
+              'KATT',
+              'osdiab',
+              'Thanaen',
+              'hyunbinseo',
+              'caegdeveloper',
+            ].map((sponsor) => (
+              <li key={sponsor}>
+                <a
+                  href={`https://github.com/${sponsor}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img
+                    loading="lazy"
+                    src={`https://github.com/${sponsor}.png?size=88`}
+                    alt={`GitHub profile picture of ${sponsor}`}
+                    class="w-9 rounded-full md:w-10 lg:w-11"
+                  />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </footer>
       </main>
     </div>
   );

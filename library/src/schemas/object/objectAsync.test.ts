@@ -2,6 +2,11 @@ import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
 import { parseAsync } from '../../methods/index.ts';
 import { toCustom } from '../../transformations/index.ts';
+import type {
+  Output,
+  TypedSchemaResult,
+  UntypedSchemaResult,
+} from '../../types/index.ts';
 import { customAsync, minLength } from '../../validations/index.ts';
 import { never } from '../never/index.ts';
 import { number } from '../number/index.ts';
@@ -69,21 +74,21 @@ describe('objectAsync', () => {
   });
 
   test('should throw only first issue', async () => {
-    const info = { abortEarly: true };
+    const config = { abortEarly: true };
     const schema = objectAsync({ key1: string(), key2: string() }, number());
 
     const input1 = { key1: 1, key2: 2, key3: 3, key4: '4' };
-    await expect(parseAsync(schema, input1, info)).rejects.toThrowError();
+    await expect(parseAsync(schema, input1, config)).rejects.toThrowError();
     try {
-      await parseAsync(schema, input1, info);
+      await parseAsync(schema, input1, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
 
     const input2 = { key1: '1', key2: '2', key3: '3', key4: '4' };
-    await expect(parseAsync(schema, input2, info)).rejects.toThrowError();
+    await expect(parseAsync(schema, input2, config)).rejects.toThrowError();
     try {
-      await parseAsync(schema, input2, info);
+      await parseAsync(schema, input2, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
@@ -96,6 +101,7 @@ describe('objectAsync', () => {
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'object',
+        origin: 'value',
         input: input1,
         key: 'key',
         value: input1.key,
@@ -108,12 +114,14 @@ describe('objectAsync', () => {
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'object',
+        origin: 'value',
         input: input2,
         key: 'nested',
         value: input2.nested,
       },
       {
         type: 'object',
+        origin: 'value',
         input: input2.nested,
         key: 'key',
         value: input2.nested.key,
@@ -126,6 +134,7 @@ describe('objectAsync', () => {
     expect(result3.issues?.[0].path).toEqual([
       {
         type: 'object',
+        origin: 'value',
         input: input3,
         key: 'key2',
         value: input3.key2,
@@ -138,12 +147,14 @@ describe('objectAsync', () => {
     expect(result4.issues?.[0].path).toEqual([
       {
         type: 'object',
+        origin: 'value',
         input: input4,
         key: 'nested',
         value: input4.nested,
       },
       {
         type: 'object',
+        origin: 'value',
         input: input4.nested,
         key: 'key',
         value: input4.nested.key,
@@ -184,14 +195,16 @@ describe('objectAsync', () => {
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
-          origin: 'value',
-          message: 'Invalid length',
+          context: 'min_length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: input.key,
           requirement: 10,
           path: [
             {
               type: 'object',
+              origin: 'value',
               input: input,
               key: 'key',
               value: input.key,
@@ -200,14 +213,15 @@ describe('objectAsync', () => {
         },
         {
           reason: 'object',
-          validation: 'custom',
-          origin: 'value',
-          message: 'Invalid input',
+          context: 'custom',
+          expected: null,
+          received: 'Object',
+          message: 'Invalid input: Received Object',
           input: input,
           requirement,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should skip pipe if output is not typed', async () => {
@@ -222,13 +236,15 @@ describe('objectAsync', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
-          origin: 'value',
-          message: 'Invalid type',
+          context: 'string',
+          expected: 'string',
+          received: '12345',
+          message: 'Invalid type: Expected string but received 12345',
           input: input.key,
           path: [
             {
               type: 'object',
+              origin: 'value',
               input: input,
               key: 'key',
               value: input.key,
@@ -236,6 +252,6 @@ describe('objectAsync', () => {
           ],
         },
       ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 });

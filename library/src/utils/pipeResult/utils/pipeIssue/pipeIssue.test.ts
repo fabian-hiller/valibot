@@ -1,34 +1,90 @@
 import { describe, expect, test } from 'vitest';
-import { pipeInfo } from '../pipeInfo/index.ts';
+import type { SchemaConfig } from '../../../../types/index.ts';
+import type { PipeActionIssue, SchemaIssue } from '../../../../types/issues.ts';
+import { minLength, value } from '../../../../validations/index.ts';
 import { pipeIssue } from './pipeIssue.ts';
 
 describe('pipeIssue', () => {
   test('should return issue object', () => {
-    const pipeInfo1 = pipeInfo({}, 'any');
-    const valiInfo1 = {
-      validation: 'validation',
-      message: 'message',
-      input: 'input',
+    const schemaContext = { type: 'string' } as const;
+    const actionIssue1: PipeActionIssue = {
+      context: {
+        type: 'min_length',
+        expects: '>=10',
+        message: undefined,
+        requirement: 10,
+      },
+      reference: minLength,
+      input: 'hello',
+      label: 'length',
+      received: '5',
+      path: [
+        {
+          type: 'object',
+          origin: 'value',
+          input: { key: 'hello' },
+          key: 'key',
+          value: 'hello',
+        },
+      ],
     };
-    const issue1 = pipeIssue(pipeInfo1, valiInfo1);
-    expect(issue1).toEqual({
-      ...pipeInfo1,
-      ...valiInfo1,
-      origin: pipeInfo1?.origin || 'value',
-    });
 
-    const pipeInfo2 = pipeInfo({ abortEarly: true, origin: 'key' }, 'object');
-    const valiInfo2 = {
-      validation: 'validation',
-      message: 'message',
-      input: 'input',
-      path: [],
+    expect(pipeIssue(schemaContext, undefined, actionIssue1)).toEqual({
+      reason: schemaContext.type,
+      context: actionIssue1.context.type,
+      expected: actionIssue1.context.expects,
+      received: actionIssue1.received!,
+      message: `Invalid ${actionIssue1.label}: Expected ${actionIssue1.context.expects} but received ${actionIssue1.received}`,
+      input: actionIssue1.input,
+      requirement: actionIssue1.context.requirement,
+      path: actionIssue1.path,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+      skipPipe: undefined,
+    } satisfies SchemaIssue);
+
+    const actionIssue2: PipeActionIssue = {
+      context: {
+        type: 'value',
+        expects: '"key"',
+        message: 'Custom message',
+        requirement: 'key',
+      },
+      reference: value,
+      input: 'hello',
+      label: 'value',
+      received: '"hello"',
+      path: [
+        {
+          type: 'record',
+          origin: 'value',
+          input: { hello: 123 },
+          key: 'hello',
+          value: 123,
+        },
+      ],
     };
-    const issue2 = pipeIssue(pipeInfo2, valiInfo2);
-    expect(issue2).toEqual({
-      ...pipeInfo2,
-      ...valiInfo2,
-      origin: pipeInfo2?.origin || 'value',
-    });
+    const schemaConfig: SchemaConfig = {
+      lang: 'en',
+      abortEarly: true,
+      abortPipeEarly: false,
+      skipPipe: false,
+    };
+
+    expect(pipeIssue(schemaContext, schemaConfig, actionIssue2)).toEqual({
+      reason: schemaContext.type,
+      context: actionIssue2.context.type,
+      expected: actionIssue2.context.expects,
+      received: actionIssue2.received!,
+      message: actionIssue2.context.message as string,
+      input: actionIssue2.input,
+      requirement: actionIssue2.context.requirement,
+      path: actionIssue2.path,
+      lang: schemaConfig.lang,
+      abortEarly: schemaConfig.abortEarly,
+      abortPipeEarly: schemaConfig.abortPipeEarly,
+      skipPipe: schemaConfig.skipPipe,
+    } satisfies SchemaIssue);
   });
 });

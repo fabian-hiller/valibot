@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'vitest';
 import { parse } from '../../methods/index.ts';
-import { union } from '../union/index.ts';
-import { string } from '../string/index.ts';
+import { any } from '../any/index.ts';
 import { null_ } from '../null/index.ts';
 import { number } from '../number/index.ts';
-import { any } from '../any/index.ts';
-import { undefined_ } from '../undefined/index.ts';
 import { optional } from '../optional/index.ts';
+import { string } from '../string/index.ts';
+import { undefined_ } from '../undefined/index.ts';
+import { union } from '../union/index.ts';
 import { nonOptional } from './nonOptional.ts';
 
 describe('nonOptional', () => {

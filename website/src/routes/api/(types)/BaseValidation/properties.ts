@@ -1,6 +1,10 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TInput: {
+    modifier: 'extends',
+    type: 'any',
+  },
   BaseValidation: {
     type: {
       type: 'custom',
@@ -9,8 +13,26 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TInput',
-          default: 'unknown',
         },
+      ],
+    },
+  },
+  expects: {
+    type: {
+      type: 'union',
+      options: ['string', 'null'],
+    },
+  },
+  message: {
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+        },
+        'undefined',
       ],
     },
   },
@@ -18,13 +40,6 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'boolean',
       value: false,
-    },
-  },
-  message: {
-    type: {
-      type: 'custom',
-      name: 'ErrorMessage',
-      href: '../ErrorMessage/',
     },
   },
   _parse: {
