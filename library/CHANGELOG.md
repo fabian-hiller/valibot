@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.28.1 (February 06, 2024)
+
+- Fix bug in `union` and `unionAsync` schema for transformed inputs (issue #420)
+
 ## v0.28.0 (February 05, 2024)
 
 > Note: The library has been revised and refactored. Therefore, not every change is listed in detail.

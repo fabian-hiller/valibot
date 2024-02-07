@@ -121,7 +121,7 @@ export function union<TOptions extends UnionOptions>(
 
       // If there is a valid result, return pipe result
       if (validResult) {
-        return pipeResult(this, input, config);
+        return pipeResult(this, validResult.output, config);
       }
 
       // If there are typed results, return pipe result
