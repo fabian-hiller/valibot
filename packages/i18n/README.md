@@ -11,7 +11,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 | German (de)     | –                  | ✅     |
 | French (fr)     | [#418][pr-418-url] | 🚧     |
 | Chinese (zh)    | [#419][pr-419-url] | 🚧     |
-| Slovenian (sl)  | [#422] pr-422-url] | 🚧     |
+| Slovenian (sl)  | [#422] pr-422-url] | ✅     |
 | Ukrainian (uk)  | [#423][pr-423-url] | 🚧     |
 
 
