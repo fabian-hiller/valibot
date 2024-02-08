@@ -34,7 +34,7 @@ export function ipv6<TInput extends string>(
     requirement: [IPV6_REGEX, isIPv6],
     _parse(input) {
       return !(this.requirement[0].test(input) && this.requirement[1](input))
-        ? actionIssue(this, ipv6, input, 'IPv6');
+        ? actionIssue(this, ipv6, input, 'IPv6')
         : actionOutput(input);
     },
   };
