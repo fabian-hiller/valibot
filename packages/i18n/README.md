@@ -4,14 +4,14 @@ The official i18n translations for Valibot. See the [internationalization guide]
 
 ## Current status
 
-| Language       | Pull Request       | Status |
-| -------------- | ------------------ | ------ |
-| Chinese (zh)   | [#419][pr-419-url] | 🚧     |
-| English (en)   | [#397][pr-397-url] | ✅     |
-| German (de)    | [#397][pr-397-url] | ✅     |
-| French (fr)    | [#418][pr-418-url] | ✅     |
-| Slovenian (sl) | [#422][pr-422-url] | 🚧     |
-| Ukrainian (uk) | [#423][pr-423-url] | ✅     |
+| Language        | Pull Request       | Status |
+| --------------- | ------------------ | ------ |
+| Chinese (zh-CN) | [#419][pr-419-url] | ✅     |
+| English (en)    | [#397][pr-397-url] | ✅     |
+| German (de)     | [#397][pr-397-url] | ✅     |
+| French (fr)     | [#418][pr-418-url] | ✅     |
+| Slovenian (sl)  | [#422][pr-422-url] | 🚧     |
+| Ukrainian (uk)  | [#423][pr-423-url] | ✅     |
 
 [pr-397-url]: https://github.com/fabian-hiller/valibot/pull/397
 [pr-418-url]: https://github.com/fabian-hiller/valibot/pull/418
