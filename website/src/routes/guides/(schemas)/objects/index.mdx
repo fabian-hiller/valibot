@@ -72,7 +72,7 @@ const CalculationSchema = v.object(
     sum: v.number(),
   },
   [
-    forward(
+    v.forward(
       v.custom(
         ({ a, b, sum }) => a + b === sum,
         'The calculation is incorrect.'
@@ -119,7 +119,7 @@ To validate the value of an entry based on another entry, you can use <Link href
 import * as v from 'valibot';
 
 const CalculationSchema = v.record(v.picklist(['a', 'b', 'sum']), v.number(), [
-  forward(
+  v.forward(
     v.custom(
       ({ a, b, sum }) => (a || 0) + (b || 0) === (sum || 0),
       'The calculation is incorrect.'

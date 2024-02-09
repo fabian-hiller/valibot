@@ -6,7 +6,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 
 | Language        | Pull Request       | Status |
 | --------------- | ------------------ | ------ |
-| Chinese (zh)    | [#419][pr-419-url] | 🚧     |
+| Chinese (zh-CN) | [#419][pr-419-url] | ✅     |
 | Chinese (zh-TW) | [#427][pr-427-url] | ✅     |
 | English (en)    | [#397][pr-397-url] | ✅     |
 | German (de)     | [#397][pr-397-url] | ✅     |
