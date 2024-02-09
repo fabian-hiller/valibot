@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import package_ from '../package.json';
 import de from '../src/de';
-import sl from '../src/sl';
 import fr from '../src/fr';
+import sl from '../src/sl';
 import uk from '../src/uk';
 
 // Start timer

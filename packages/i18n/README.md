@@ -4,22 +4,22 @@ The official i18n translations for Valibot. See the [internationalization guide]
 
 ## Current status
 
-
 | Language        | Pull Request       | Status |
 | --------------- | ------------------ | ------ |
-| English (en)    | –                  | ✅     |
-| German (de)     | –                  | ✅     |
-| French (fr)     | [#418][pr-418-url] | 🚧     |
-| Chinese (zh)    | [#419][pr-419-url] | 🚧     |
-| Slovenian (sl)  | [#422] pr-422-url] | ✅     |
-| Ukrainian (uk)  | [#423][pr-423-url] | 🚧     |
-
+| Chinese (zh-CN) | [#419][pr-419-url] | ✅     |
+| Chinese (zh-TW) | [#427][pr-427-url] | ✅     |
+| English (en)    | [#397][pr-397-url] | ✅     |
+| German (de)     | [#397][pr-397-url] | ✅     |
+| French (fr)     | [#418][pr-418-url] | ✅     |
+| Slovenian (sl)  | [#422][pr-422-url] | ✅     |
+| Ukrainian (uk)  | [#423][pr-423-url] | ✅     |
 
 [pr-397-url]: https://github.com/fabian-hiller/valibot/pull/397
 [pr-418-url]: https://github.com/fabian-hiller/valibot/pull/418
 [pr-419-url]: https://github.com/fabian-hiller/valibot/pull/419
 [pr-422-url]: https://github.com/fabian-hiller/valibot/pull/422
 [pr-423-url]: https://github.com/fabian-hiller/valibot/pull/423
+[pr-427-url]: https://github.com/fabian-hiller/valibot/pull/427
 
 ## Getting started
 

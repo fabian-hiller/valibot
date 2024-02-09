@@ -1,7 +1,7 @@
 import type { ErrorMessage } from 'valibot';
 
 export type Language = {
-  code: 'de' | 'en' | 'sl' | 'fr' | 'uk';
+  code: 'de' | 'en' | 'fr' | 'sl' | 'uk';
   schema: ErrorMessage;
   specific: {
     bic: ErrorMessage;
