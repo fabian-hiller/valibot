@@ -17,7 +17,7 @@ export type OctalValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a pipeline validation action that validates an [octal](https://en.wikipedia.org/wiki/Octal) string.
+ * Creates a pipeline validation action that validates an [octal](https://en.wikipedia.org/wiki/Octal).
  *
  * @param message The error message.
  *

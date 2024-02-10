@@ -5,24 +5,29 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'string',
   },
-  message: {
+  BaseValidation: {
     type: {
-      type: 'union',
-      options: [
+      type: 'custom',
+      name: 'BaseValidation',
+      href: '../BaseValidation/',
+      generics: [
         {
           type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
+          name: 'TInput',
         },
-        'undefined',
       ],
     },
   },
-  validation: {
+  type: {
+    type: {
+      type: 'string',
+      value: 'octal',
+    },
+  },
+  requirement: {
     type: {
       type: 'custom',
-      name: 'OctalValidation',
-      href: '../OctalValidation/',
+      name: 'RegExp',
     },
   },
 };
