@@ -12,7 +12,7 @@ import { properties } from './properties';
 
 # hexadecimal
 
-Creates a pipeline validation action that validates a [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal).
+Creates a pipeline validation action that validates a [hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal).
 
 ```ts
 const validation = hexadecimal<TInput>(message);
@@ -44,7 +44,7 @@ Schema to validate a Hexadecimal string.
 
 ```ts
 const HexadecimalSchema = string([
-  hexadecimal('The string is badly formatted.'),
+  hexadecimal('The hexadecimal is badly formatted.'),
 ]);
 ```
 

@@ -18,7 +18,7 @@ export type HexadecimalValidation<TInput extends string> =
   };
 
 /**
- * Creates a pipeline validation action that validates a hexadecimal string.
+ * Creates a pipeline validation action that validates a [hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal).
  *
  * @param message The error message.
  *
