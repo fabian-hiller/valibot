@@ -269,6 +269,7 @@
 - [ObjectOutput](/api/ObjectOutput/)
 - [ObjectPathItem](/api/ObjectPathItem/)
 - [ObjectSchema](/api/ObjectSchema/)
+- [OctalValidation](/api/OctalValidation/)
 - [OptionalSchema](/api/OptionalSchema/)
 - [Output](/api/Output/)
 - [PathItem](/api/PathItem/)
