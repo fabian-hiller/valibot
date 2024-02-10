@@ -228,6 +228,7 @@
 - [FallbackInfo](/api/FallbackInfo/)
 - [HashType](/api/HashType/)
 - [HashValidation](/api/HashValidation/)
+- [HexadecimalValidation](/api/HexadecimalValidation/)
 - [HexColorValidation](/api/HexColorValidation/)
 - [Input](/api/Input/)
 - [InstanceSchema](/api/InstanceSchema/)
