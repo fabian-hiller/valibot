@@ -3,7 +3,7 @@ import { Language } from './types';
 // prettier-ignore
 const language: Language = {
   code:             'ru',
-  schema:           (issue) => `Неправильный тип: ожидался ${issue.expected}, получено ${issue.received}`,
+  schema:           (issue) => `Неправильный тип: ожидалось ${issue.expected}, получено ${issue.received}`,
   specific: {
     bic:            (issue) => `Неправильный BIC: получено ${issue.received}`,
     bytes:          (issue) => `Неправильное количество байтов: ожидалось ${issue.expected}, получено ${issue.received}`,
@@ -41,7 +41,7 @@ const language: Language = {
     maxLength:      (issue) => `Неправильная длина: ожидалось ${issue.expected}, получено ${issue.received}`,
     maxSize:        (issue) => `Неправильный размер: ожидалось ${issue.expected}, получено ${issue.received}`,
     maxValue:       (issue) => `Неправильное значение: ожидалось ${issue.expected}, получено ${issue.received}`,
-    mimeType:       (issue) => `Неправильный MIME тип: ожидался ${issue.expected}, получено ${issue.received}`,
+    mimeType:       (issue) => `Неправильный MIME тип: ожидалось ${issue.expected}, получено ${issue.received}`,
     minBytes:       (issue) => `Неправильное количество байтов: ожидалось ${issue.expected}, получено ${issue.received}`,
     minLength:      (issue) => `Неправильная длина: ожидалось ${issue.expected}, получено ${issue.received}`,
     minSize:        (issue) => `Неправильный размер: ожидалось ${issue.expected}, получено ${issue.received}`,
