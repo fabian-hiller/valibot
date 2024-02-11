@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add Japanese (ja) translations (pull request #431)
+
 ## v0.3.0 (February 09, 2024)
 
 - Add Chinese (zh-CN) translations (pull request #419)
