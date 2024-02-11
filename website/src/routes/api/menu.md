@@ -274,6 +274,8 @@
 - [OctalValidation](/api/OctalValidation/)
 - [OptionalSchema](/api/OptionalSchema/)
 - [Output](/api/Output/)
+- [PartialKeySchema](/api/PartialKeySchema/)
+- [PartialObjectEntries](/api/PartialObjectEntries/)
 - [PathItem](/api/PathItem/)
 - [PicklistOptions](/api/PicklistOptions/)
 - [PicklistSchema](/api/PicklistSchema/)
