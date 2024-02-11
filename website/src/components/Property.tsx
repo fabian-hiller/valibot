@@ -36,7 +36,9 @@ type DefinitionData =
   | {
       type: 'object';
       entries: {
-        key: string | { name: string; type: DefinitionData };
+        key:
+          | string
+          | { name: string; modifier?: string; type?: DefinitionData };
         optional?: boolean;
         value: DefinitionData;
       }[];
@@ -167,11 +169,26 @@ const Definition = component$<DefinitionProps>(({ data }) => (
               ) : (
                 <>
                   [
-                  <span class="italic text-orange-500 dark:text-orange-300">
-                    {entrie.key.name}
-                  </span>
-                  <span class="text-red-600 dark:text-red-400">:</span>{' '}
-                  <Definition data={entrie.key.type} />]
+                  {entrie.key.modifier ? (
+                    <>
+                      <span class="text-sky-600 dark:text-sky-400">
+                        {entrie.key.name}
+                      </span>{' '}
+                      <span class="text-red-600 dark:text-red-400">
+                        {entrie.key.modifier}
+                      </span>{' '}
+                    </>
+                  ) : entrie.key.type ? (
+                    <>
+                      <span class="italic text-orange-500 dark:text-orange-300">
+                        {entrie.key.name}
+                      </span>
+                      <span class="text-red-600 dark:text-red-400">:</span>{' '}
+                    </>
+                  ) : (
+                    entrie.key.name
+                  )}
+                  {entrie.key.type && <Definition data={entrie.key.type} />}]
                 </>
               )}
             </>

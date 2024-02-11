@@ -90,7 +90,7 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  SchemaWithTransform: {
+  Schema: {
     type: {
       type: 'custom',
       name: 'SchemaWithTransform',

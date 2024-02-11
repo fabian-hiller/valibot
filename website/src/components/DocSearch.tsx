@@ -286,9 +286,12 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
    * Handles keyboard keydown events.
    */
   const handleKeyDown = $(
-    ({ metaKey, key }: QwikKeyboardEvent<HTMLDivElement>) => {
+    ({ ctrlKey, metaKey, key }: QwikKeyboardEvent<HTMLDivElement>) => {
       // Open or close search
-      if ((metaKey && key === 'k') || (open.value && key === 'Escape')) {
+      if (
+        ((ctrlKey || metaKey) && key === 'k') ||
+        (open.value && key === 'Escape')
+      ) {
         open.value = !open.value;
       }
 

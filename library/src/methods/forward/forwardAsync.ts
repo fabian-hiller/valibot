@@ -2,7 +2,7 @@ import type { BaseValidationAsync, PathItem } from '../../types/index.ts';
 import type { PathList } from './types.ts';
 
 /**
- * Forwards the issues of the passed validation.
+ * Forwards the issues of the passed validation action.
  *
  * @param validation The validation.
  * @param pathList The path list.
