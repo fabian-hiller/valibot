@@ -293,6 +293,7 @@
 - [RecordPathItem](/api/RecordPathItem/)
 - [RecordSchema](/api/RecordSchema/)
 - [RecursiveSchema](/api/RecursiveSchema/)
+- [RequiredObjectEntries](/api/RequiredObjectEntries/)
 - [SafeParseResult](/api/SafeParseResult/)
 - [SchemaConfig](/api/SchemaConfig/)
 - [SchemaIssue](/api/SchemaIssue/)
