@@ -15,7 +15,7 @@ import { properties } from './properties';
 Creates a pipeline validation action that validates a [credit card](https://en.wikipedia.org/wiki/Payment_card_number).
 
 ```ts
-const validation = creditCard<TInput>(message);
+const Validation = creditCard<TInput>(message);
 ```
 
 ## Generics
@@ -34,7 +34,7 @@ With `creditCard` you can validate the formatting of a string. If the input is n
 
 ## Returns
 
-- `validation` <Property {...properties.validation} />
+- `Validation` <Property {...properties.Validation} />
 
 ## Examples
 
@@ -56,4 +56,4 @@ The following APIs can be combined with `creditCard`.
 
 ### Schemas
 
-<ApiList items={['any', 'string', 'unknown']} />
+<ApiList items={['any', 'special', 'string', 'unknown']} />

@@ -15,7 +15,7 @@ import { properties } from './properties';
 Creates a pipeline validation action that validates a [BIC](https://en.wikipedia.org/wiki/ISO_9362).
 
 ```ts
-const validation = bic<TInput>(message);
+const Validation = bic<TInput>(message);
 ```
 
 ## Generics
@@ -32,7 +32,7 @@ With `bic` you can validate the formatting of a string. If the input is not a BI
 
 ## Returns
 
-- `validation` <Property {...properties.validation} />
+- `Validation` <Property {...properties.Validation} />
 
 ## Examples
 
@@ -50,4 +50,4 @@ The following APIs can be combined with `bic`.
 
 ### Schemas
 
-<ApiList items={['any', 'string', 'unknown']} />
+<ApiList items={['any', 'special', 'string', 'unknown']} />

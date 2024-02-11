@@ -15,7 +15,7 @@ import { properties } from './properties';
 Creates a pipeline validation action that validates an [octal](https://en.wikipedia.org/wiki/Octal).
 
 ```ts
-const validation = octal<TInput>(message);
+const Validation = octal<TInput>(message);
 ```
 
 ## Generics
@@ -32,7 +32,7 @@ With `octal` you can validate the formatting of a string. If the input is not an
 
 ## Returns
 
-- `validation` <Property {...properties.validation} />
+- `Validation` <Property {...properties.Validation} />
 
 ## Examples
 
@@ -52,4 +52,4 @@ The following APIs can be combined with `octal`.
 
 ### Schemas
 
-<ApiList items={['any', 'string', 'unknown']} />
+<ApiList items={['any', 'special', 'string', 'unknown']} />

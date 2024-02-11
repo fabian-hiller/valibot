@@ -15,7 +15,7 @@ import { properties } from './properties';
 Creates a pipeline validation action that validates a [hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal).
 
 ```ts
-const validation = hexadecimal<TInput>(message);
+const Validation = hexadecimal<TInput>(message);
 ```
 
 ## Generics
@@ -32,7 +32,7 @@ With `hexadecimal` you can validate the formatting of a string. If the input is 
 
 ## Returns
 
-- `validation` <Property {...properties.validation} />
+- `Validation` <Property {...properties.Validation} />
 
 ## Examples
 
@@ -54,4 +54,4 @@ The following APIs can be combined with `hexadecimal`.
 
 ### Schemas
 
-<ApiList items={['any', 'string', 'unknown']} />
+<ApiList items={['any', 'special', 'string', 'unknown']} />
