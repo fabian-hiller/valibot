@@ -12,7 +12,7 @@ console.time('build');
 // Create languages array
 // Note: The language file `en` does not need to be added as the default
 // messages of Valibot are already in English
-const languages = [de, fr, uk, kr];
+const languages = [de, fr, kr, uk];
 
 // Create root import variables
 let rootModuleImports: string[] = [];
