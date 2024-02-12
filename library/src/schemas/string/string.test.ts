@@ -75,7 +75,6 @@ describe('string', () => {
     const schema1 = string([minLength(2), maxLength(3)]);
 
     test('should expose the pipeline', () => {
-      console.log(schema1.pipe);
       expect(schema1.pipe).toStrictEqual([
         expect.objectContaining({
           type: 'min_length',

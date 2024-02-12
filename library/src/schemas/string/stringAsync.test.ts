@@ -83,17 +83,17 @@ describe('stringAsync', () => {
   describe('schema pipeline', () => {
     const schema1 = stringAsync([minLength(2), maxLength(3)]);
 
-    test('should contain invalid length message, type and requirements', () => {
+    test('should expose the pipeline', () => {
       expect(schema1.pipe).toStrictEqual([
         expect.objectContaining({
           type: 'min_length',
+          expects: '>=2',
           requirement: 2,
-          message: 'Invalid length',
         }),
         expect.objectContaining({
           type: 'max_length',
+          expects: '<=3',
           requirement: 3,
-          message: 'Invalid length',
         }),
       ]);
     });
