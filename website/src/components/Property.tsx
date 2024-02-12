@@ -205,11 +205,15 @@ const Definition = component$<DefinitionProps>(({ data }) => (
       <span>
         {data.spread && <span class="text-red-600 dark:text-red-400">...</span>}
         {typeof data.item === 'object' &&
-          (data.item.type === 'union' || data.item.type === 'intersect') &&
+          (data.item.type === 'union' ||
+            data.item.type === 'intersect' ||
+            (data.item.type === 'custom' && data.item.modifier)) &&
           '('}
         <Definition data={data.item} />
         {typeof data.item === 'object' &&
-          (data.item.type === 'union' || data.item.type === 'intersect') &&
+          (data.item.type === 'union' ||
+            data.item.type === 'intersect' ||
+            (data.item.type === 'custom' && data.item.modifier)) &&
           ')'}
         <span class="text-slate-600 dark:text-slate-400">[]</span>
       </span>
