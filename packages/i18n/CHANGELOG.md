@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add Russian (ru) translations (pull request #434)
+
 ## v0.4.0 (February 11, 2024)
 
 - Add Japanese (ja) translations (pull request #431)
