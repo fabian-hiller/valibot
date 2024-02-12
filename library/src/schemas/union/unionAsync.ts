@@ -3,16 +3,18 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   Input,
-  Issues,
   MaybeReadonly,
   Output,
   PipeAsync,
+  TypedSchemaResult,
+  UntypedSchemaResult,
 } from '../../types/index.ts';
 import {
   defaultArgs,
   pipeResultAsync,
   schemaIssue,
 } from '../../utils/index.ts';
+import { subissues } from './utils/index.ts';
 
 /**
  * Union options async type.
@@ -37,7 +39,7 @@ export type UnionSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -78,58 +80,86 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
   arg3?: PipeAsync<Input<TOptions[number]>>
 ): UnionSchemaAsync<TOptions> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return union schema
   return {
     type: 'union',
+    expects: [...new Set(options.map((option) => option.expects))].join(' | '),
     async: true,
     options,
     message,
     pipe,
-    async _parse(input, info) {
-      // Create issues and output
-      let issues: Issues | undefined;
-      let output: [Output<TOptions[number]>] | undefined;
+    async _parse(input, config) {
+      // Create variables to collect results
+      let validResult: TypedSchemaResult<Output<TOptions[number]>> | undefined;
+      let untypedResults: UntypedSchemaResult[] | undefined;
+      let typedResults:
+        | TypedSchemaResult<Output<TOptions[number]>>[]
+        | undefined;
 
       // Parse schema of each option
       for (const schema of this.options) {
-        const result = await schema._parse(input, info);
+        const result = await schema._parse(input, config);
 
-        // If there are issues, capture them
-        if (result.issues) {
-          if (issues) {
-            for (const issue of result.issues) {
-              issues.push(issue);
-            }
+        // If typed, add valid or typed result
+        if (result.typed) {
+          // If there are no issues, add valid result and break loop
+          if (!result.issues) {
+            validResult = result;
+            break;
+
+            // Otherwise, add typed result
           } else {
-            issues = result.issues;
+            typedResults
+              ? typedResults.push(result)
+              : (typedResults = [result]);
           }
 
-          // Otherwise, set output and break loop
+          // Otherwise, add untyped result
         } else {
-          // Note: Output is nested in array, so that also a falsy value
-          // further down can be recognized as valid value
-          output = [result.output];
-          break;
+          untypedResults
+            ? untypedResults.push(result)
+            : (untypedResults = [result]);
         }
       }
 
-      // If there is an output, execute pipe
-      if (output) {
-        return pipeResultAsync(output[0], this.pipe, info, 'union');
+      // If there is a valid result, return pipe result
+      if (validResult) {
+        return pipeResultAsync(this, validResult.output, config);
+      }
+
+      // If there are typed results, return pipe result
+      if (typedResults?.length) {
+        const firstResult = typedResults[0];
+        return pipeResultAsync(
+          this,
+          firstResult.output,
+          config,
+          // Hint: If there is more than one typed result, we use a general
+          // union issue with subissues because the issues could contradict
+          // each other.
+          typedResults.length === 1
+            ? firstResult.issues
+            : schemaIssue(this, unionAsync, input, config, {
+                reason: 'union',
+                issues: subissues(typedResults),
+              }).issues
+        );
+      }
+
+      // If there is only one untyped result, return it
+      if (untypedResults?.length === 1) {
+        return untypedResults[0];
       }
 
       // Otherwise, return schema issue
-      return schemaIssue(
-        info,
-        'type',
-        'union',
-        this.message,
-        input,
-        undefined,
-        issues
-      );
+      // Hint: If there are zero or more than one untyped results, we use a
+      // general union issue with subissues because the issues could contradict
+      // each other.
+      return schemaIssue(this, unionAsync, input, config, {
+        issues: subissues(untypedResults),
+      });
     },
   };
 }

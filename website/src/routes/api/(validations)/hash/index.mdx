@@ -1,11 +1,59 @@
 ---
 title: hash
+description: Creates a pipeline validation action that validates a hash.
 source: /validations/hash/hash.ts
 contributors:
   - fabian-hiller
   - ariskemper
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # hash
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/hash/hash.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates a hash.
+
+```ts
+const Validation = hash<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `types` <Property {...properties.types} />
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `hash` you can validate the formatting of a string. If the input is not a hash, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `hash` can be used.
+
+### Hash schema
+
+Schema to validate a hash.
+
+```ts
+const HashSchema = string([
+  hash(['md5', 'sha1'], 'The specified hash is invalid.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `hash`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />

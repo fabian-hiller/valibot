@@ -17,24 +17,29 @@ export type OctalValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a pipeline validation action that validates an [octal](https://en.wikipedia.org/wiki/Octal) string.
+ * Creates a pipeline validation action that validates an [octal](https://en.wikipedia.org/wiki/Octal).
  *
  * @param message The error message.
  *
  * @returns A validation action.
  */
 export function octal<TInput extends string>(
-  message: ErrorMessage = 'Invalid octal'
+  message?: ErrorMessage
 ): OctalValidation<TInput> {
   return {
     type: 'octal',
+    expects: null,
     async: false,
     message,
     requirement: OCTAL_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, octal, input, 'octal');
     },
   };
 }

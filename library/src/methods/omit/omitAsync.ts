@@ -8,10 +8,10 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ObjectKeys,
   PipeAsync,
 } from '../../types/index.ts';
 import { restAndDefaultArgs } from '../../utils/index.ts';
-import type { ObjectKeys } from './types.ts';
 
 /**
  * Creates an async object schema that contains only the selected keys of an

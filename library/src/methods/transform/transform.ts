@@ -27,7 +27,7 @@ export type SchemaWithTransform<TSchema extends BaseSchema, TOutput> = Omit<
  */
 export function transform<TSchema extends BaseSchema, TOutput>(
   schema: TSchema,
-  action: (value: Output<TSchema>, info: TransformInfo) => TOutput,
+  action: (input: Output<TSchema>, info: TransformInfo) => TOutput,
   pipe?: Pipe<TOutput>
 ): SchemaWithTransform<TSchema, TOutput>;
 
@@ -37,26 +37,26 @@ export function transform<TSchema extends BaseSchema, TOutput>(
  *
  * @param schema The schema to be used.
  * @param action The transformation action.
- * @param validate A validation schema.
+ * @param validation A validation schema.
  *
  * @returns A transformed schema.
  */
 export function transform<TSchema extends BaseSchema, TOutput>(
   schema: TSchema,
-  action: (value: Output<TSchema>, info: TransformInfo) => TOutput,
-  validate?: BaseSchema<TOutput>
+  action: (input: Output<TSchema>, info: TransformInfo) => TOutput,
+  validation?: BaseSchema<TOutput>
 ): SchemaWithTransform<TSchema, TOutput>;
 
 export function transform<TSchema extends BaseSchema, TOutput>(
   schema: TSchema,
-  action: (value: Output<TSchema>, info: TransformInfo) => TOutput,
+  action: (input: Output<TSchema>, info: TransformInfo) => TOutput,
   arg1?: Pipe<TOutput> | BaseSchema<TOutput>
 ): SchemaWithTransform<TSchema, TOutput> {
   return {
     ...schema,
-    _parse(input, info) {
+    _parse(input, config) {
       // Parse input with schema
-      const result = schema._parse(input, info);
+      const result = schema._parse(input, config);
 
       // If result is typed, transform output
       if (result.typed) {
@@ -69,11 +69,15 @@ export function transform<TSchema extends BaseSchema, TOutput>(
 
         // Otherwise, if a pipe is provided, return pipe result
         if (Array.isArray(arg1)) {
-          return pipeResult(result.output, arg1, info, typeof result.output);
+          return pipeResult(
+            { type: typeof result.output, pipe: arg1 },
+            result.output,
+            config
+          );
         }
 
         // Otherwise, validate output with schema
-        return arg1._parse(result.output, info);
+        return arg1._parse(result.output, config);
       }
 
       // Otherwise, return untyped result

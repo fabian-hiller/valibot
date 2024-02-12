@@ -1,5 +1,5 @@
 import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
 import type { Enum } from './enum.ts';
 
 /**
@@ -20,7 +20,7 @@ export type EnumSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -33,21 +33,26 @@ export type EnumSchemaAsync<
  */
 export function enumAsync<TEnum extends Enum>(
   enum_: TEnum,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage
 ): EnumSchemaAsync<TEnum> {
+  // Get values
+  const values = Object.values(enum_);
+
+  // Create and return enum schema
   return {
     type: 'enum',
+    expects: values.map(stringify).join(' | '),
     async: true,
     enum: enum_,
     message,
-    async _parse(input, info) {
-      // Check type of input
-      if (!Object.values(this.enum).includes(input as any)) {
-        return schemaIssue(info, 'type', 'enum', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return schema result
+      if (values.includes(input as any)) {
+        return schemaResult(true, input as TEnum[keyof TEnum]);
       }
 
-      // Return parse result
-      return parseResult(true, input as TEnum[keyof TEnum]);
+      // Otherwise, return schema issue
+      return schemaIssue(this, enumAsync, input, config);
     },
   };
 }

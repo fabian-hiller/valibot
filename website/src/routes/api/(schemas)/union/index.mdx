@@ -1,11 +1,213 @@
 ---
 title: union
+description: Creates an union schema.
 source: /schemas/union/union.ts
 contributors:
   - fabian-hiller
   - thundermiracle
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # union
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/union/union.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates an union schema.
+
+> I recommend that you read the <Link href="/guides/unions">unions guide</Link> before using this schema function.
+
+```ts
+// Union schema with an optional pipe
+const Schema = union<TOptions>(options, pipe);
+
+// Union schema with an optional message and pipe
+const Schema = union<TOptions>(options, message, pipe);
+```
+
+## Generics
+
+- `TOptions` <Property {...properties.TOptions} />
+
+## Parameters
+
+- `options` <Property {...properties.options} />
+- `message` <Property {...properties.message} />
+- `pipe` <Property {...properties.pipe} />
+
+### Explanation
+
+With `union` you can validate if the input matches one of the given `options`. With `pipe` you can transform and validate the further details of the union. If the input does not match a schema and cannot be clearly assigned to one of the options, you can use `message` to customize the error message.
+
+If a bad input can be uniquely assigned to one of the schemas based on the data type, the result of that schema is returned. Otherwise, a general issue is returned that contains the issues of each schema as subissues. This is a special case within the library, as the issues of `union` can contradict each other.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `union` can be used.
+
+### URL schema
+
+Schema to validate an URL or empty string.
+
+```ts
+const UrlSchema = union([string([url()]), literal('')]);
+```
+
+### Number schema
+
+Schema to validate a number or decimal string.
+
+```ts
+const NumberSchema = union([number(), string([decimal()])]);
+```
+
+### Date schema
+
+Schema to validate a `Date` or ISO timestamp.
+
+```ts
+const DateSchema = union([date(), string([isoTimestamp()])]);
+```
+
+## Related
+
+The following APIs can be combined with `union`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'recursive',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>
+
+### Transformations
+
+<ApiList
+  items={[
+    'toCustom',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toTrimmed',
+    'toTrimmedEnd',
+    'toTrimmedStart',
+    'toUpperCase',
+  ]}
+/>
+
+### Validations
+
+<ApiList
+  items={[
+    'bic',
+    'bytes',
+    'creditCard',
+    'cuid2',
+    'custom',
+    'decimal',
+    'email',
+    'emoji',
+    'endsWith',
+    'excludes',
+    'finite',
+    'hash',
+    'hexadecimal',
+    'hexColor',
+    'imei',
+    'includes',
+    'integer',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'mac',
+    'mac48',
+    'mac64',
+    'maxBytes',
+    'maxLength',
+    'maxSize',
+    'maxValue',
+    'mimeType',
+    'minBytes',
+    'minLength',
+    'minSize',
+    'minValue',
+    'multipleOf',
+    'notBytes',
+    'notLength',
+    'notSize',
+    'notValue',
+    'octal',
+    'regex',
+    'safeInteger',
+    'size',
+    'startsWith',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
+  ]}
+/>

@@ -24,17 +24,22 @@ export type UuidValidation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function uuid<TInput extends string>(
-  message: ErrorMessage = 'Invalid UUID'
+  message?: ErrorMessage
 ): UuidValidation<TInput> {
   return {
     type: 'uuid',
+    expects: null,
     async: false,
     message,
     requirement: UUID_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, uuid, input, 'UUID');
     },
   };
 }

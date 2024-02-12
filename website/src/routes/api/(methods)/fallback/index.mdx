@@ -40,7 +40,7 @@ const Schema = fallback<TSchema, TFallback>(schema, fallback);
 
 ## Returns
 
-- `Schema` <Property {...properties.SchemaWithFallback} />
+- `Schema` <Property {...properties.Schema} />
 
 ## Examples
 
@@ -67,24 +67,6 @@ const FallbackDateSchema = fallback(date(), () => new Date());
 ## Related
 
 The following APIs can be combined with `fallback`.
-
-### Methods
-
-<ApiList
-  items={[
-    'brand',
-    'coerce',
-    'fallback',
-    'getDefault',
-    'getDefaults',
-    'getFallback',
-    'getFallbacks',
-    'is',
-    'parse',
-    'safeParse',
-    'transform',
-  ]}
-/>
 
 ### Schemas
 
@@ -125,5 +107,28 @@ The following APIs can be combined with `fallback`.
     'unknown',
     'variant',
     'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'merge',
+    'omit',
+    'parse',
+    'partial',
+    'pick',
+    'required',
+    'safeParse',
+    'transform',
   ]}
 />

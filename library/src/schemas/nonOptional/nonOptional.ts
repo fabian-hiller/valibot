@@ -1,23 +1,14 @@
-import type {
-  BaseSchema,
-  ErrorMessage,
-  Input,
-  Output,
-} from '../../types/index.ts';
+import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
 import { schemaIssue } from '../../utils/index.ts';
-
-/**
- * Non optional type.
- */
-export type NonOptional<T> = T extends undefined ? never : T;
+import type { NonOptionalInput, NonOptionalOutput } from './types.ts';
 
 /**
  * Non optional schema type.
  */
 export type NonOptionalSchema<
   TWrapped extends BaseSchema,
-  TOutput = NonOptional<Output<TWrapped>>
-> = BaseSchema<NonOptional<Input<TWrapped>>, TOutput> & {
+  TOutput = NonOptionalOutput<TWrapped>
+> = BaseSchema<NonOptionalInput<TWrapped>, TOutput> & {
   /**
    * The schema type.
    */
@@ -29,7 +20,7 @@ export type NonOptionalSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -42,21 +33,22 @@ export type NonOptionalSchema<
  */
 export function nonOptional<TWrapped extends BaseSchema>(
   wrapped: TWrapped,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage
 ): NonOptionalSchema<TWrapped> {
   return {
     type: 'non_optional',
+    expects: '!undefined',
     async: false,
     wrapped,
     message,
-    _parse(input, info) {
-      // Allow `undefined` values not to pass
+    _parse(input, config) {
+      // In input is `undefined`, return schema issue
       if (input === undefined) {
-        return schemaIssue(info, 'type', 'non_optional', this.message, input);
+        return schemaIssue(this, nonOptional, input, config);
       }
 
-      // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      // Otherwise, return result of wrapped schema
+      return this.wrapped._parse(input, config);
     },
   };
 }

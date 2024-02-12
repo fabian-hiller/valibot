@@ -1,0 +1,28 @@
+---
+title: RecordSchema
+description: Record schema type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# RecordSchema
+
+Record schema type.
+
+## Generics
+
+- `TKey` <Property {...properties.TKey} />
+- `TValue` <Property {...properties.TValue} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `RecordSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `key` <Property {...properties.key} />
+  - `value` <Property {...properties.value} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />

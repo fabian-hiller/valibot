@@ -1,64 +1,62 @@
 import type {
-  SchemaResult,
   IssueReason,
-  Issues,
-  ParseInfo,
   PipeAsync,
-  PipeInfo,
+  SchemaConfig,
+  SchemaIssues,
+  SchemaResult,
 } from '../../types/index.ts';
-import { parseResult } from '../parseResult/index.ts';
-import { pipeInfo, pipeIssue } from './utils/index.ts';
+import { schemaResult } from '../schemaResult/index.ts';
+import { pipeIssue } from './utils/index.ts';
+
+/**
+ * The schema context type.
+ */
+type SchemaContext<TValue> = {
+  type: IssueReason;
+  pipe: PipeAsync<TValue> | undefined;
+};
 
 /**
  * Executes the async validation and transformation pipe.
  *
+ * @param context The schema context.
  * @param input The input value.
- * @param pipe The pipe to be executed.
- * @param parseInfo The parse info.
- * @param reason The issue reason.
+ * @param config The parse configuration.
  * @param issues The issues if any.
  *
- * @returns The output value.
+ * @returns The pipe result.
  */
 export async function pipeResultAsync<TValue>(
+  context: SchemaContext<TValue>,
   input: TValue,
-  pipe: PipeAsync<TValue> | undefined,
-  parseInfo: ParseInfo | undefined,
-  reason: IssueReason,
-  issues?: Issues
+  config: SchemaConfig | undefined,
+  issues?: SchemaIssues
 ): Promise<SchemaResult<TValue>> {
-  // Create pipe info and output
-  let info: PipeInfo | undefined;
-  let output: TValue = input;
-
   // Execute any action of pipe if necessary
-  if (pipe?.length && !parseInfo?.skipPipe) {
-    for (const action of pipe) {
-      const result = await action._parse(output);
+  if (context.pipe && !config?.skipPipe) {
+    for (const action of context.pipe) {
+      const result = await action._parse(input);
 
       // If there are issues, capture them
       if (result.issues) {
-        // Cache pipe info lazy
-        info = info || pipeInfo(parseInfo, reason);
-
         // Create each issue and add it to issues
-        for (const issueInfo of result.issues) {
-          const issue = pipeIssue(info, issueInfo);
-          issues ? issues.push(issue) : (issues = [issue]);
+        for (const actionIssue of result.issues) {
+          const schemaIssue = pipeIssue(context, config, actionIssue);
+          issues ? issues.push(schemaIssue) : (issues = [schemaIssue]);
         }
 
         // If necessary, abort early
-        if (info.abortEarly || info.abortPipeEarly) {
+        if (config?.abortEarly || config?.abortPipeEarly) {
           break;
         }
 
-        // Otherwise, overwrite output
+        // Otherwise, overwrite input
       } else {
-        output = result.output;
+        input = result.output;
       }
     }
   }
 
-  // Return final parse result
-  return parseResult(true, output, issues);
+  // Return final schema result
+  return schemaResult(true, input, issues);
 }

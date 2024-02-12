@@ -2,13 +2,13 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  Issues,
   PipeAsync,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
-  parseResult,
   pipeResultAsync,
   schemaIssue,
+  schemaResult,
 } from '../../utils/index.ts';
 import type { EnumSchema, EnumSchemaAsync } from '../enum/index.ts';
 import type { PicklistSchema, PicklistSchemaAsync } from '../picklist/index.ts';
@@ -20,7 +20,7 @@ import { recordArgs } from './utils/index.ts';
 import { BLOCKED_KEYS } from './values.ts';
 
 /**
- * Record key type.
+ * Record key async type.
  */
 export type RecordKeyAsync =
   | EnumSchema<any, string | number | symbol>
@@ -57,7 +57,7 @@ export type RecordSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
@@ -140,7 +140,7 @@ export function recordAsync<
   arg4?: PipeAsync<RecordOutput<TKey, TValue>>
 ): RecordSchemaAsync<TKey, TValue> {
   // Get key, value, message and pipe argument
-  const [key, value, message = 'Invalid type', pipe] = recordArgs<
+  const [key, value, message, pipe] = recordArgs<
     TKey,
     TValue,
     PipeAsync<RecordOutput<TKey, TValue>>
@@ -149,116 +149,113 @@ export function recordAsync<
   // Create and return async record schema
   return {
     type: 'record',
+    expects: 'Object',
     async: true,
     key,
     value,
     message,
     pipe,
-    async _parse(input, info) {
-      // Check type of input
-      if (!input || typeof input !== 'object') {
-        return schemaIssue(info, 'type', 'record', this.message, input);
-      }
+    async _parse(input, config) {
+      // If root type is valid, check nested types
+      if (input && typeof input === 'object') {
+        // Create typed, issues and output
+        let typed = true;
+        let issues: SchemaIssues | undefined;
+        const output: Record<string | number | symbol, any> = {};
 
-      // Create typed, issues and output
-      let typed = true;
-      let issues: Issues | undefined;
-      const output: Record<string | number | symbol, any> = {};
+        // Parse each key and value by schema
+        await Promise.all(
+          // Note: `Object.entries(...)` converts each key to a string
+          Object.entries(input).map(async ([inputKey, inputValue]) => {
+            // Exclude blocked keys to prevent prototype pollutions
+            if (!BLOCKED_KEYS.includes(inputKey)) {
+              // Create path item variable
+              let pathItem: RecordPathItem | undefined;
 
-      // Parse each key and value by schema
-      await Promise.all(
-        // Note: `Object.entries(...)` converts each key to a string
-        Object.entries(input).map(async ([inputKey, inputValue]) => {
-          // Exclude blocked keys to prevent prototype pollutions
-          if (!BLOCKED_KEYS.includes(inputKey)) {
-            // Create path item variable
-            let pathItem: RecordPathItem | undefined;
-
-            // Get parse result of key and value
-            const [keyResult, valueResult] = await Promise.all(
-              (
-                [
-                  { schema: this.key, value: inputKey, origin: 'key' },
-                  { schema: this.value, value: inputValue, origin: 'value' },
-                ] as const
-              ).map(async ({ schema, value, origin }) => {
-                // If not aborted early, continue execution
-                if (!(info?.abortEarly && issues)) {
-                  // Get parse result of value
-                  const result = await schema._parse(value, {
-                    origin,
-                    abortEarly: info?.abortEarly,
-                    abortPipeEarly: info?.abortPipeEarly,
-                    skipPipe: info?.skipPipe,
-                  });
-
+              // Get schema result of key and value
+              const [keyResult, valueResult] = await Promise.all(
+                (
+                  [
+                    { schema: this.key, value: inputKey, origin: 'key' },
+                    { schema: this.value, value: inputValue, origin: 'value' },
+                  ] as const
+                ).map(async ({ schema, value, origin }) => {
                   // If not aborted early, continue execution
-                  if (!(info?.abortEarly && issues)) {
-                    // If there are issues, capture them
-                    if (result.issues) {
-                      // Create record path item
-                      pathItem = pathItem || {
-                        type: 'record',
-                        input: input as Record<
-                          string | number | symbol,
-                          unknown
-                        >,
-                        key: inputKey,
-                        value: inputValue,
-                      };
+                  if (!(config?.abortEarly && issues)) {
+                    // Get schema result of value
+                    const result = await schema._parse(value, config);
 
-                      // Add modified result issues to issues
-                      for (const issue of result.issues) {
-                        if (issue.path) {
-                          issue.path.unshift(pathItem);
-                        } else {
-                          issue.path = [pathItem];
+                    // If not aborted early, continue execution
+                    if (!(config?.abortEarly && issues)) {
+                      // If there are issues, capture them
+                      if (result.issues) {
+                        // Create record path item
+                        pathItem = pathItem ?? {
+                          type: 'record',
+                          origin,
+                          input: input as Record<
+                            string | number | symbol,
+                            unknown
+                          >,
+                          key: inputKey,
+                          value: inputValue,
+                        };
+
+                        // Add modified result issues to issues
+                        for (const issue of result.issues) {
+                          if (issue.path) {
+                            issue.path.unshift(pathItem);
+                          } else {
+                            issue.path = [pathItem];
+                          }
+                          issues?.push(issue);
                         }
-                        issues?.push(issue);
-                      }
-                      if (!issues) {
-                        issues = result.issues;
+                        if (!issues) {
+                          issues = result.issues;
+                        }
+
+                        // If necessary, abort early
+                        if (config?.abortEarly) {
+                          throw null;
+                        }
                       }
 
-                      // If necessary, abort early
-                      if (info?.abortEarly) {
-                        throw null;
-                      }
+                      // Return schema result
+                      return result;
                     }
-
-                    // Return parse result
-                    return result;
                   }
-                }
-              })
-            ).catch(() => []);
+                })
+              ).catch(() => []);
 
-            // If not typed, set typed to false
-            if (!keyResult?.typed || !valueResult?.typed) {
-              typed = false;
+              // If not typed, set typed to false
+              if (!keyResult?.typed || !valueResult?.typed) {
+                typed = false;
+              }
+
+              // If key is typed, set output of entry
+              if (keyResult?.typed && valueResult) {
+                output[keyResult.output] = valueResult.output;
+              }
             }
-
-            // If key is typed, set output of entry
-            if (keyResult?.typed && valueResult) {
-              output[keyResult.output] = valueResult.output;
-            }
-          }
-        })
-      );
-
-      // If output is typed, execute pipe
-      if (typed) {
-        return pipeResultAsync(
-          output as RecordOutput<TKey, TValue>,
-          this.pipe,
-          info,
-          'record',
-          issues
+          })
         );
+
+        // If output is typed, return pipe result
+        if (typed) {
+          return pipeResultAsync(
+            this,
+            output as RecordOutput<TKey, TValue>,
+            config,
+            issues
+          );
+        }
+
+        // Otherwise, return untyped schema result
+        return schemaResult(false, output, issues as SchemaIssues);
       }
 
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      // Otherwise, return schema issue
+      return schemaIssue(this, recordAsync, input, config);
     },
   };
 }

@@ -10,6 +10,7 @@ import type {
  */
 export type SetPathItem = {
   type: 'set';
+  origin: 'value';
   input: Set<unknown>;
   key: number;
   value: unknown;

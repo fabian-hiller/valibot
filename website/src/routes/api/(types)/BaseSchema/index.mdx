@@ -13,9 +13,15 @@ import { properties } from './properties';
 
 Base schema type.
 
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TOutput` <Property {...properties.TOutput} />
+
 ## Definition
 
 - `BaseSchema` <Property {...properties.BaseSchema} />
+  - `expects` <Property type="string" />
   - `async` <Property {...properties.async} />
   - `_parse` {/* prettier-ignore */}<Property {...properties._parse} />
   - `_types` {/* prettier-ignore */}<Property {...properties._types} />

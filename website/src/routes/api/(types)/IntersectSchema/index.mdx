@@ -1,0 +1,26 @@
+---
+title: IntersectSchema
+description: Intersect schema type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# IntersectSchema
+
+Intersect schema type.
+
+## Generics
+
+- `TOptions` <Property {...properties.TOptions} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `IntersectSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `options` <Property {...properties.options} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />

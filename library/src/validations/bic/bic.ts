@@ -17,24 +17,29 @@ export type BicValidation<TInput extends string> = BaseValidation<TInput> & {
 };
 
 /**
- * Creates a pipeline validation action that validates a [BIC](https://en.wikipedia.org/wiki/Universally_unique_identifier).
+ * Creates a pipeline validation action that validates a [BIC](https://en.wikipedia.org/wiki/ISO_9362).
  *
  * @param message The error message.
  *
  * @returns A validation action.
  */
 export function bic<TInput extends string>(
-  message: ErrorMessage = 'Invalid BIC'
+  message?: ErrorMessage
 ): BicValidation<TInput> {
   return {
     type: 'bic',
+    expects: null,
     async: false,
     message,
     requirement: BIC_REGEX,
     _parse(input) {
-      return !this.requirement.test(input.toUpperCase())
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, bic, input, 'BIC');
     },
   };
 }

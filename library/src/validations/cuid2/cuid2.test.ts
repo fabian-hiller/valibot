@@ -25,6 +25,6 @@ describe('cuid2', () => {
   test('should return custom error message', () => {
     const error = 'Value is not an cuid2!';
     const validate = cuid2(error);
-    expect(validate._parse('').issues?.[0].message).toBe(error);
+    expect(validate._parse('').issues?.[0].context.message).toBe(error);
   });
 });

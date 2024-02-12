@@ -1,0 +1,20 @@
+---
+title: NonNullableInput
+description: Non nullable input inference type.
+contributors:
+  - fabian-hiller
+---
+
+# NonNullableInput
+
+Non nullable input inference type.
+
+```ts
+// Create nullable sting schema
+const NullableStringSchema = nullable(
+  transform(string(), (input) => input.length)
+);
+
+// Infer non nullable string input type
+type NonNullableStringInput = NonNullableInput<typeof NullableStringSchema>; // string
+```

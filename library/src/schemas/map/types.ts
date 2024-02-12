@@ -10,6 +10,7 @@ import type {
  */
 export type MapPathItem = {
   type: 'map';
+  origin: 'key' | 'value';
   input: Map<unknown, unknown>;
   key: unknown;
   value: unknown;

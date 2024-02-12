@@ -1,48 +1,58 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  BaseSchema: {
-    type: [
-      {
+  TItem: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+    },
+  },
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+    default: {
+      type: 'array',
+      item: {
         type: 'custom',
-        name: 'BaseSchema',
-        href: '../BaseSchema/',
+        name: 'Output',
+        href: '../Output/',
         generics: [
           {
-            type: 'array',
-            item: {
-              type: 'custom',
-              name: 'Input',
-              href: '../Input/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TItem',
-                },
-              ],
-            },
-          },
-          {
             type: 'custom',
-            name: 'TOutput',
-            default: {
-              type: 'array',
-              item: {
-                type: 'custom',
-                name: 'Output',
-                href: '../Output/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TItem',
-                  },
-                ],
-              },
-            },
+            name: 'TItem',
           },
         ],
       },
-    ],
+    },
+  },
+  BaseSchema: {
+    type: {
+      type: 'custom',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+      generics: [
+        {
+          type: 'array',
+          item: {
+            type: 'custom',
+            name: 'Input',
+            href: '../Input/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TItem',
+              },
+            ],
+          },
+        },
+        {
+          type: 'custom',
+          name: 'TOutput',
+        },
+      ],
+    },
   },
   type: {
     type: {
@@ -51,12 +61,10 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   item: {
-    type: [
-      {
-        type: 'custom',
-        name: 'TItem',
-      },
-    ],
+    type: {
+      type: 'custom',
+      name: 'TItem',
+    },
   },
   message: {
     type: {
@@ -66,28 +74,31 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: [
-          {
-            type: 'array',
-            item: {
-              type: 'custom',
-              name: 'Output',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TItem',
-                },
-              ],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Pipe',
+          href: '../Pipe/',
+          generics: [
+            {
+              type: 'array',
+              item: {
+                type: 'custom',
+                name: 'Output',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'TItem',
+                  },
+                ],
+              },
             },
-          },
-        ],
-      },
-      'undefined',
-    ],
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
 };

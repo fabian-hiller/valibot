@@ -7,14 +7,38 @@ export const properties: Record<string, PropertyProps> = {
       value: 'record',
     },
   },
+  origin: {
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'string',
+          value: 'key',
+        },
+        {
+          type: 'string',
+          value: 'value',
+        },
+      ],
+    },
+  },
   input: {
     type: {
       type: 'custom',
       name: 'Record',
-      generics: [['string', 'number', 'symbol'], 'unknown'],
+      generics: [
+        {
+          type: 'union',
+          options: ['string', 'number', 'symbol'],
+        },
+        'unknown',
+      ],
     },
   },
   key: {
-    type: ['string', 'number', 'symbol'],
+    type: {
+      type: 'union',
+      options: ['string', 'number', 'symbol'],
+    },
   },
 };

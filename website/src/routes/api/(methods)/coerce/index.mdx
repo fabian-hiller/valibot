@@ -1,10 +1,127 @@
 ---
 title: coerce
+description: Coerces the input of a schema to match the required type.
 source: /methods/coerce/coerce.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # coerce
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/coerce/coerce.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Coerces the input of a schema to match the required type.
+
+```ts
+const Schema = coerce<TSchema>(schema, action);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `action` <Property {...properties.action} />
+
+### Explanation
+
+`coerce` can be used to transform an input before it is validated. The function of the `action` argument is executed at the very beginning of the process, before any other validation is performed. It is therefore perfect for enforcing a specific data type using the built-in data type objects like [`Boolean`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean), [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/String), [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number) and [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
+
+> To transform the input at the very end of the process, after all other validations have been performed, use the <Link href="../transform/">`transform`</Link> method.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `coerce` can be used.
+
+### Coerce string input
+
+Schema that coerces a string input.
+
+```ts
+const StringSchema = coerce(string(), String);
+```
+
+### Coerce date input
+
+Schema that coerces a date input.
+
+```ts
+const DateSchema = coerce(date(), (input) => new Date(input));
+```
+
+## Related
+
+The following APIs can be combined with `coerce`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'recursive',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'merge',
+    'omit',
+    'parse',
+    'partial',
+    'pick',
+    'required',
+    'safeParse',
+    'transform',
+  ]}
+/>

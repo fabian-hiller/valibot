@@ -3,23 +3,48 @@ import {
   type DocumentHead,
   Form,
   routeAction$,
-  zod$,
   z,
+  zod$,
 } from '@builder.io/qwik-city';
 import clsx from 'clsx';
 import { ActionButton, ButtonGroup, Expandable, TextLink } from '~/components';
 import { PlusIcon } from '~/icons';
 import { blurredCodeDarkUrl, blurredCodeLightUrl } from '~/images';
 
-export const head: DocumentHead = {
-  title: 'Valibot: The modular and type safe schema library',
-  meta: [
-    {
-      name: 'description',
-      content:
-        'Validate unknown data with Valibot, the open source schema library with bundle size, type safety and developer experience in mind.',
-    },
-  ],
+export const head: DocumentHead = ({ url }) => {
+  const title = 'Valibot: The modular and type safe schema library';
+  const description =
+    'Validate unknown data with Valibot, the open source schema library with bundle size, type safety and developer experience in mind.';
+
+  return {
+    title,
+    meta: [
+      {
+        name: 'description',
+        content: description,
+      },
+      {
+        name: 'og:type',
+        content: 'website',
+      },
+      {
+        name: 'og:url',
+        content: url.href,
+      },
+      {
+        name: 'og:title',
+        content: title,
+      },
+      {
+        name: 'og:description',
+        content: description,
+      },
+      {
+        name: 'og:image',
+        content: `${url.origin}/og-image`,
+      },
+    ],
+  };
 };
 
 /**
@@ -115,7 +140,7 @@ export default component$(() => {
             {
               emoji: '📦',
               heading: 'Small bundle size',
-              text: 'Due to the modular design of our API the bundle size starts at less than 300 bytes',
+              text: 'Due to the modular design of our API the bundle size starts at less than 600 bytes',
             },
             {
               emoji: '🚧',
@@ -226,7 +251,7 @@ export default component$(() => {
                   biggest difference is the modular design of our API and the
                   ability to reduce the bundle size to a minimum through tree
                   shaking and code splitting. Depending on the schema, Valibot
-                  can reduce the bundle size up to 98% compared to Zod.
+                  can reduce the bundle size up to 95% compared to Zod.
                   Especially for client-side validation of forms, this can be a
                   big advantage.
                 </>

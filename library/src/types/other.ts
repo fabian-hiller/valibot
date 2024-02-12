@@ -1,7 +1,11 @@
+import type { ObjectSchema, ObjectSchemaAsync } from '../schemas/index.ts';
+
 /**
- * Error message type.
+ * Object keys type.
  */
-export type ErrorMessage = string | (() => string);
+export type ObjectKeys<
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+> = MaybeReadonly<[keyof TSchema['entries'], ...(keyof TSchema['entries'])[]]>;
 
 /**
  * Maybe readonly type.

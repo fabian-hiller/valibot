@@ -24,6 +24,6 @@ describe('excludes', () => {
   test('should return custom error message', () => {
     const error = 'Value does not exclude "abc"!';
     const validate = excludes('abc', error);
-    expect(validate._parse('abc').issues?.[0].message).toBe(error);
+    expect(validate._parse('abc').issues?.[0].context.message).toBe(error);
   });
 });

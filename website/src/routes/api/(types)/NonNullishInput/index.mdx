@@ -1,0 +1,20 @@
+---
+title: NonNullishInput
+description: Non nullish input inference type.
+contributors:
+  - fabian-hiller
+---
+
+# NonNullishInput
+
+Non nullish input inference type.
+
+```ts
+// Create nullish sting schema
+const NullishStringSchema = nullish(
+  transform(string(), (input) => input.length)
+);
+
+// Infer non nullish string input type
+type NonNullishStringInput = NonNullishInput<typeof NullishStringSchema>; // string
+```

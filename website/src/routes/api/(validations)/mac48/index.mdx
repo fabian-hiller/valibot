@@ -1,11 +1,55 @@
 ---
 title: mac48
+description: Creates a pipeline validation action that validates a 48-bit MAC address.
 source: /validations/mac48/mac48.ts
 contributors:
   - fabian-hiller
   - ariskemper
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # mac48
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/mac48/mac48.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates a 48-bit [MAC address](https://en.wikipedia.org/wiki/MAC_address).
+
+```ts
+const Validation = mac48<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `mac48` you can validate the formatting of a string. If the input is not a 48-bit MAC address, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `mac48` can be used.
+
+### 48-bit MAC schema
+
+Schema to validate a 48-bit MAC address.
+
+```ts
+const Mac48Schema = string([mac48('The MAC address is badly formatted.')]);
+```
+
+## Related
+
+The following APIs can be combined with `mac48`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />

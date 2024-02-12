@@ -2,19 +2,17 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  Input,
-  Output,
 } from '../../types/index.ts';
 import { schemaIssue } from '../../utils/index.ts';
-import type { NonNullish } from './nonNullish.ts';
+import type { NonNullishInput, NonNullishOutput } from './types.ts';
 
 /**
  * Non nullish schema async type.
  */
 export type NonNullishSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TOutput = NonNullish<Output<TWrapped>>
-> = BaseSchemaAsync<NonNullish<Input<TWrapped>>, TOutput> & {
+  TOutput = NonNullishOutput<TWrapped>
+> = BaseSchemaAsync<NonNullishInput<TWrapped>, TOutput> & {
   /**
    * The schema type.
    */
@@ -26,7 +24,7 @@ export type NonNullishSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
 };
 
 /**
@@ -39,21 +37,22 @@ export type NonNullishSchemaAsync<
  */
 export function nonNullishAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
   wrapped: TWrapped,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage
 ): NonNullishSchemaAsync<TWrapped> {
   return {
     type: 'non_nullish',
+    expects: '!null & !undefined',
     async: true,
     wrapped,
     message,
-    async _parse(input, info) {
-      // Allow `null` and `undefined` values not to pass
+    async _parse(input, config) {
+      // In input is `null` or `undefined`, return schema issue
       if (input === null || input === undefined) {
-        return schemaIssue(info, 'type', 'non_nullish', this.message, input);
+        return schemaIssue(this, nonNullishAsync, input, config);
       }
 
-      // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      // Otherwise, return result of wrapped schema
+      return this.wrapped._parse(input, config);
     },
   };
 }

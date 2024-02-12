@@ -1,10 +1,58 @@
 ---
 title: mac
+description: Creates a pipeline validation action that validates a MAC address.
 source: /validations/mac/mac.ts
 contributors:
   - fabian-hiller
+  - ariskemper
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # mac
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/mac/mac.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates a [MAC address](https://en.wikipedia.org/wiki/MAC_address).
+
+> This validation action accepts 48-bit and 64-bit MAC addresses. For a more specific validation, you can also use <Link href="../mac48/">`mac48`</Link> or <Link href="../mac64/">`mac64`</Link>.
+
+```ts
+const Validation = mac<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `mac` you can validate the formatting of a string. If the input is not a MAC address, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `mac` can be used.
+
+### MAC schema
+
+Schema to validate a MAC address.
+
+```ts
+const MacSchema = string([mac('The MAC address is badly formatted.')]);
+```
+
+## Related
+
+The following APIs can be combined with `mac`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />

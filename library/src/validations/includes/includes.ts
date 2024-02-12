@@ -1,5 +1,5 @@
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { actionIssue, actionOutput } from '../../utils/index.ts';
+import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 
 /**
  * Includes validation type.
@@ -32,17 +32,23 @@ export function includes<
   const TRequirement extends TInput extends any[] ? TInput[number] : TInput
 >(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid content'
+  message?: ErrorMessage
 ): IncludesValidation<TInput, TRequirement> {
+  const expects = stringify(requirement);
   return {
     type: 'includes',
+    expects,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return !input.includes(requirement)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (input.includes(this.requirement)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, includes, input, 'content', `!${expects}`);
     },
   };
 }
