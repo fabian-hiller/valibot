@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.5.0 (February 12, 2024)
 
 - Add Russian (ru) translations (pull request #434)
 

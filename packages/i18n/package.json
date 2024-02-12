@@ -1,7 +1,7 @@
 {
   "name": "@valibot/i18n",
   "description": "The official i18n translations for Valibot",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "license": "MIT",
   "author": "Fabian Hiller",
   "homepage": "https://valibot.dev",
@@ -45,6 +45,7 @@
     "fr",
     "ja",
     "kr",
+    "ru",
     "sl",
     "uk",
     "zh-CN",
@@ -2339,6 +2340,576 @@
       "require": {
         "types": "./kr/value.d.cts",
         "default": "./kr/value.cjs"
+      }
+    },
+    "./ru": {
+      "import": {
+        "types": "./ru/index.d.ts",
+        "default": "./ru/index.js"
+      },
+      "require": {
+        "types": "./ru/index.d.cts",
+        "default": "./ru/index.cjs"
+      }
+    },
+    "./ru/schema": {
+      "import": {
+        "types": "./ru/schema.d.ts",
+        "default": "./ru/schema.js"
+      },
+      "require": {
+        "types": "./ru/schema.d.cts",
+        "default": "./ru/schema.cjs"
+      }
+    },
+    "./ru/bic": {
+      "import": {
+        "types": "./ru/bic.d.ts",
+        "default": "./ru/bic.js"
+      },
+      "require": {
+        "types": "./ru/bic.d.cts",
+        "default": "./ru/bic.cjs"
+      }
+    },
+    "./ru/bytes": {
+      "import": {
+        "types": "./ru/bytes.d.ts",
+        "default": "./ru/bytes.js"
+      },
+      "require": {
+        "types": "./ru/bytes.d.cts",
+        "default": "./ru/bytes.cjs"
+      }
+    },
+    "./ru/creditCard": {
+      "import": {
+        "types": "./ru/creditCard.d.ts",
+        "default": "./ru/creditCard.js"
+      },
+      "require": {
+        "types": "./ru/creditCard.d.cts",
+        "default": "./ru/creditCard.cjs"
+      }
+    },
+    "./ru/cuid2": {
+      "import": {
+        "types": "./ru/cuid2.d.ts",
+        "default": "./ru/cuid2.js"
+      },
+      "require": {
+        "types": "./ru/cuid2.d.cts",
+        "default": "./ru/cuid2.cjs"
+      }
+    },
+    "./ru/custom": {
+      "import": {
+        "types": "./ru/custom.d.ts",
+        "default": "./ru/custom.js"
+      },
+      "require": {
+        "types": "./ru/custom.d.cts",
+        "default": "./ru/custom.cjs"
+      }
+    },
+    "./ru/customAsync": {
+      "import": {
+        "types": "./ru/customAsync.d.ts",
+        "default": "./ru/customAsync.js"
+      },
+      "require": {
+        "types": "./ru/customAsync.d.cts",
+        "default": "./ru/customAsync.cjs"
+      }
+    },
+    "./ru/decimal": {
+      "import": {
+        "types": "./ru/decimal.d.ts",
+        "default": "./ru/decimal.js"
+      },
+      "require": {
+        "types": "./ru/decimal.d.cts",
+        "default": "./ru/decimal.cjs"
+      }
+    },
+    "./ru/email": {
+      "import": {
+        "types": "./ru/email.d.ts",
+        "default": "./ru/email.js"
+      },
+      "require": {
+        "types": "./ru/email.d.cts",
+        "default": "./ru/email.cjs"
+      }
+    },
+    "./ru/emoji": {
+      "import": {
+        "types": "./ru/emoji.d.ts",
+        "default": "./ru/emoji.js"
+      },
+      "require": {
+        "types": "./ru/emoji.d.cts",
+        "default": "./ru/emoji.cjs"
+      }
+    },
+    "./ru/endsWith": {
+      "import": {
+        "types": "./ru/endsWith.d.ts",
+        "default": "./ru/endsWith.js"
+      },
+      "require": {
+        "types": "./ru/endsWith.d.cts",
+        "default": "./ru/endsWith.cjs"
+      }
+    },
+    "./ru/equal": {
+      "import": {
+        "types": "./ru/equal.d.ts",
+        "default": "./ru/equal.js"
+      },
+      "require": {
+        "types": "./ru/equal.d.cts",
+        "default": "./ru/equal.cjs"
+      }
+    },
+    "./ru/excludes": {
+      "import": {
+        "types": "./ru/excludes.d.ts",
+        "default": "./ru/excludes.js"
+      },
+      "require": {
+        "types": "./ru/excludes.d.cts",
+        "default": "./ru/excludes.cjs"
+      }
+    },
+    "./ru/finite": {
+      "import": {
+        "types": "./ru/finite.d.ts",
+        "default": "./ru/finite.js"
+      },
+      "require": {
+        "types": "./ru/finite.d.cts",
+        "default": "./ru/finite.cjs"
+      }
+    },
+    "./ru/hash": {
+      "import": {
+        "types": "./ru/hash.d.ts",
+        "default": "./ru/hash.js"
+      },
+      "require": {
+        "types": "./ru/hash.d.cts",
+        "default": "./ru/hash.cjs"
+      }
+    },
+    "./ru/hexColor": {
+      "import": {
+        "types": "./ru/hexColor.d.ts",
+        "default": "./ru/hexColor.js"
+      },
+      "require": {
+        "types": "./ru/hexColor.d.cts",
+        "default": "./ru/hexColor.cjs"
+      }
+    },
+    "./ru/hexadecimal": {
+      "import": {
+        "types": "./ru/hexadecimal.d.ts",
+        "default": "./ru/hexadecimal.js"
+      },
+      "require": {
+        "types": "./ru/hexadecimal.d.cts",
+        "default": "./ru/hexadecimal.cjs"
+      }
+    },
+    "./ru/imei": {
+      "import": {
+        "types": "./ru/imei.d.ts",
+        "default": "./ru/imei.js"
+      },
+      "require": {
+        "types": "./ru/imei.d.cts",
+        "default": "./ru/imei.cjs"
+      }
+    },
+    "./ru/includes": {
+      "import": {
+        "types": "./ru/includes.d.ts",
+        "default": "./ru/includes.js"
+      },
+      "require": {
+        "types": "./ru/includes.d.cts",
+        "default": "./ru/includes.cjs"
+      }
+    },
+    "./ru/integer": {
+      "import": {
+        "types": "./ru/integer.d.ts",
+        "default": "./ru/integer.js"
+      },
+      "require": {
+        "types": "./ru/integer.d.cts",
+        "default": "./ru/integer.cjs"
+      }
+    },
+    "./ru/ip": {
+      "import": {
+        "types": "./ru/ip.d.ts",
+        "default": "./ru/ip.js"
+      },
+      "require": {
+        "types": "./ru/ip.d.cts",
+        "default": "./ru/ip.cjs"
+      }
+    },
+    "./ru/ipv4": {
+      "import": {
+        "types": "./ru/ipv4.d.ts",
+        "default": "./ru/ipv4.js"
+      },
+      "require": {
+        "types": "./ru/ipv4.d.cts",
+        "default": "./ru/ipv4.cjs"
+      }
+    },
+    "./ru/ipv6": {
+      "import": {
+        "types": "./ru/ipv6.d.ts",
+        "default": "./ru/ipv6.js"
+      },
+      "require": {
+        "types": "./ru/ipv6.d.cts",
+        "default": "./ru/ipv6.cjs"
+      }
+    },
+    "./ru/isoDate": {
+      "import": {
+        "types": "./ru/isoDate.d.ts",
+        "default": "./ru/isoDate.js"
+      },
+      "require": {
+        "types": "./ru/isoDate.d.cts",
+        "default": "./ru/isoDate.cjs"
+      }
+    },
+    "./ru/isoDateTime": {
+      "import": {
+        "types": "./ru/isoDateTime.d.ts",
+        "default": "./ru/isoDateTime.js"
+      },
+      "require": {
+        "types": "./ru/isoDateTime.d.cts",
+        "default": "./ru/isoDateTime.cjs"
+      }
+    },
+    "./ru/isoTime": {
+      "import": {
+        "types": "./ru/isoTime.d.ts",
+        "default": "./ru/isoTime.js"
+      },
+      "require": {
+        "types": "./ru/isoTime.d.cts",
+        "default": "./ru/isoTime.cjs"
+      }
+    },
+    "./ru/isoTimeSecond": {
+      "import": {
+        "types": "./ru/isoTimeSecond.d.ts",
+        "default": "./ru/isoTimeSecond.js"
+      },
+      "require": {
+        "types": "./ru/isoTimeSecond.d.cts",
+        "default": "./ru/isoTimeSecond.cjs"
+      }
+    },
+    "./ru/isoTimestamp": {
+      "import": {
+        "types": "./ru/isoTimestamp.d.ts",
+        "default": "./ru/isoTimestamp.js"
+      },
+      "require": {
+        "types": "./ru/isoTimestamp.d.cts",
+        "default": "./ru/isoTimestamp.cjs"
+      }
+    },
+    "./ru/isoWeek": {
+      "import": {
+        "types": "./ru/isoWeek.d.ts",
+        "default": "./ru/isoWeek.js"
+      },
+      "require": {
+        "types": "./ru/isoWeek.d.cts",
+        "default": "./ru/isoWeek.cjs"
+      }
+    },
+    "./ru/length": {
+      "import": {
+        "types": "./ru/length.d.ts",
+        "default": "./ru/length.js"
+      },
+      "require": {
+        "types": "./ru/length.d.cts",
+        "default": "./ru/length.cjs"
+      }
+    },
+    "./ru/mac": {
+      "import": {
+        "types": "./ru/mac.d.ts",
+        "default": "./ru/mac.js"
+      },
+      "require": {
+        "types": "./ru/mac.d.cts",
+        "default": "./ru/mac.cjs"
+      }
+    },
+    "./ru/mac48": {
+      "import": {
+        "types": "./ru/mac48.d.ts",
+        "default": "./ru/mac48.js"
+      },
+      "require": {
+        "types": "./ru/mac48.d.cts",
+        "default": "./ru/mac48.cjs"
+      }
+    },
+    "./ru/mac64": {
+      "import": {
+        "types": "./ru/mac64.d.ts",
+        "default": "./ru/mac64.js"
+      },
+      "require": {
+        "types": "./ru/mac64.d.cts",
+        "default": "./ru/mac64.cjs"
+      }
+    },
+    "./ru/maxBytes": {
+      "import": {
+        "types": "./ru/maxBytes.d.ts",
+        "default": "./ru/maxBytes.js"
+      },
+      "require": {
+        "types": "./ru/maxBytes.d.cts",
+        "default": "./ru/maxBytes.cjs"
+      }
+    },
+    "./ru/maxLength": {
+      "import": {
+        "types": "./ru/maxLength.d.ts",
+        "default": "./ru/maxLength.js"
+      },
+      "require": {
+        "types": "./ru/maxLength.d.cts",
+        "default": "./ru/maxLength.cjs"
+      }
+    },
+    "./ru/maxSize": {
+      "import": {
+        "types": "./ru/maxSize.d.ts",
+        "default": "./ru/maxSize.js"
+      },
+      "require": {
+        "types": "./ru/maxSize.d.cts",
+        "default": "./ru/maxSize.cjs"
+      }
+    },
+    "./ru/maxValue": {
+      "import": {
+        "types": "./ru/maxValue.d.ts",
+        "default": "./ru/maxValue.js"
+      },
+      "require": {
+        "types": "./ru/maxValue.d.cts",
+        "default": "./ru/maxValue.cjs"
+      }
+    },
+    "./ru/mimeType": {
+      "import": {
+        "types": "./ru/mimeType.d.ts",
+        "default": "./ru/mimeType.js"
+      },
+      "require": {
+        "types": "./ru/mimeType.d.cts",
+        "default": "./ru/mimeType.cjs"
+      }
+    },
+    "./ru/minBytes": {
+      "import": {
+        "types": "./ru/minBytes.d.ts",
+        "default": "./ru/minBytes.js"
+      },
+      "require": {
+        "types": "./ru/minBytes.d.cts",
+        "default": "./ru/minBytes.cjs"
+      }
+    },
+    "./ru/minLength": {
+      "import": {
+        "types": "./ru/minLength.d.ts",
+        "default": "./ru/minLength.js"
+      },
+      "require": {
+        "types": "./ru/minLength.d.cts",
+        "default": "./ru/minLength.cjs"
+      }
+    },
+    "./ru/minSize": {
+      "import": {
+        "types": "./ru/minSize.d.ts",
+        "default": "./ru/minSize.js"
+      },
+      "require": {
+        "types": "./ru/minSize.d.cts",
+        "default": "./ru/minSize.cjs"
+      }
+    },
+    "./ru/minValue": {
+      "import": {
+        "types": "./ru/minValue.d.ts",
+        "default": "./ru/minValue.js"
+      },
+      "require": {
+        "types": "./ru/minValue.d.cts",
+        "default": "./ru/minValue.cjs"
+      }
+    },
+    "./ru/multipleOf": {
+      "import": {
+        "types": "./ru/multipleOf.d.ts",
+        "default": "./ru/multipleOf.js"
+      },
+      "require": {
+        "types": "./ru/multipleOf.d.cts",
+        "default": "./ru/multipleOf.cjs"
+      }
+    },
+    "./ru/notBytes": {
+      "import": {
+        "types": "./ru/notBytes.d.ts",
+        "default": "./ru/notBytes.js"
+      },
+      "require": {
+        "types": "./ru/notBytes.d.cts",
+        "default": "./ru/notBytes.cjs"
+      }
+    },
+    "./ru/notLength": {
+      "import": {
+        "types": "./ru/notLength.d.ts",
+        "default": "./ru/notLength.js"
+      },
+      "require": {
+        "types": "./ru/notLength.d.cts",
+        "default": "./ru/notLength.cjs"
+      }
+    },
+    "./ru/notSize": {
+      "import": {
+        "types": "./ru/notSize.d.ts",
+        "default": "./ru/notSize.js"
+      },
+      "require": {
+        "types": "./ru/notSize.d.cts",
+        "default": "./ru/notSize.cjs"
+      }
+    },
+    "./ru/notValue": {
+      "import": {
+        "types": "./ru/notValue.d.ts",
+        "default": "./ru/notValue.js"
+      },
+      "require": {
+        "types": "./ru/notValue.d.cts",
+        "default": "./ru/notValue.cjs"
+      }
+    },
+    "./ru/octal": {
+      "import": {
+        "types": "./ru/octal.d.ts",
+        "default": "./ru/octal.js"
+      },
+      "require": {
+        "types": "./ru/octal.d.cts",
+        "default": "./ru/octal.cjs"
+      }
+    },
+    "./ru/regex": {
+      "import": {
+        "types": "./ru/regex.d.ts",
+        "default": "./ru/regex.js"
+      },
+      "require": {
+        "types": "./ru/regex.d.cts",
+        "default": "./ru/regex.cjs"
+      }
+    },
+    "./ru/safeInteger": {
+      "import": {
+        "types": "./ru/safeInteger.d.ts",
+        "default": "./ru/safeInteger.js"
+      },
+      "require": {
+        "types": "./ru/safeInteger.d.cts",
+        "default": "./ru/safeInteger.cjs"
+      }
+    },
+    "./ru/size": {
+      "import": {
+        "types": "./ru/size.d.ts",
+        "default": "./ru/size.js"
+      },
+      "require": {
+        "types": "./ru/size.d.cts",
+        "default": "./ru/size.cjs"
+      }
+    },
+    "./ru/startsWith": {
+      "import": {
+        "types": "./ru/startsWith.d.ts",
+        "default": "./ru/startsWith.js"
+      },
+      "require": {
+        "types": "./ru/startsWith.d.cts",
+        "default": "./ru/startsWith.cjs"
+      }
+    },
+    "./ru/ulid": {
+      "import": {
+        "types": "./ru/ulid.d.ts",
+        "default": "./ru/ulid.js"
+      },
+      "require": {
+        "types": "./ru/ulid.d.cts",
+        "default": "./ru/ulid.cjs"
+      }
+    },
+    "./ru/url": {
+      "import": {
+        "types": "./ru/url.d.ts",
+        "default": "./ru/url.js"
+      },
+      "require": {
+        "types": "./ru/url.d.cts",
+        "default": "./ru/url.cjs"
+      }
+    },
+    "./ru/uuid": {
+      "import": {
+        "types": "./ru/uuid.d.ts",
+        "default": "./ru/uuid.js"
+      },
+      "require": {
+        "types": "./ru/uuid.d.cts",
+        "default": "./ru/uuid.cjs"
+      }
+    },
+    "./ru/value": {
+      "import": {
+        "types": "./ru/value.d.ts",
+        "default": "./ru/value.js"
+      },
+      "require": {
+        "types": "./ru/value.d.cts",
+        "default": "./ru/value.cjs"
       }
     },
     "./sl": {
