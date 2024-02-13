@@ -71,20 +71,35 @@ describe('string', () => {
     });
   });
 
-  describe('schema pipeline', () => {
-    const schema1 = string([minLength(2), maxLength(3)]);
+  describe('schema', () => {
+    test('should expose properties', async () => {
+      const schema1 = string([minLength(2), maxLength(3)]);
+      expect(schema1).toStrictEqual(
+        expect.objectContaining({
+          type: 'string',
+          expects: 'string',
+          async: false,
+          message: undefined,
+        })
+      );
+    });
 
-    test('should expose the pipeline', () => {
+    test('should expose pipeline', () => {
+      const schema1 = string([minLength(2), maxLength(3)]);
       expect(schema1.pipe).toStrictEqual([
         expect.objectContaining({
           type: 'min_length',
           expects: '>=2',
           requirement: 2,
+          async: false,
+          message: undefined,
         }),
         expect.objectContaining({
           type: 'max_length',
           expects: '<=3',
           requirement: 3,
+          async: false,
+          message: undefined,
         }),
       ]);
     });
