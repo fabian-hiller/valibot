@@ -4,9 +4,19 @@ export const properties: Record<string, PropertyProps> = {
   TWrapped: {
     modifier: 'extends',
     type: {
-      type: 'custom',
-      name: 'BaseSchema',
-      href: '../BaseSchema/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'BaseSchema',
+          href: '../BaseSchema/',
+        },
+        {
+          type: 'custom',
+          name: 'BaseSchemaAsync',
+          href: '../BaseSchemaAsync/',
+        },
+      ],
     },
   },
   TOutput: {
@@ -14,8 +24,8 @@ export const properties: Record<string, PropertyProps> = {
     type: 'any',
     default: {
       type: 'custom',
-      name: 'NonOptionalOutput',
-      href: '../NonOptionalOutput/',
+      name: 'NonNullableOutput',
+      href: '../NonNullableOutput/',
       generics: [
         {
           type: 'custom',
@@ -24,7 +34,7 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  BaseSchema: {
+  BaseSchemaAsync: {
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -32,8 +42,8 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'NonOptionalInput',
-          href: '../NonOptionalInput/',
+          name: 'NonNullableInput',
+          href: '../NonNullableInput/',
           generics: [
             {
               type: 'custom',
@@ -51,7 +61,7 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'non_optional',
+      value: 'non_nullable',
     },
   },
   wrapped: {

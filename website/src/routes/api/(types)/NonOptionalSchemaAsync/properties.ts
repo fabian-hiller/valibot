@@ -4,9 +4,19 @@ export const properties: Record<string, PropertyProps> = {
   TWrapped: {
     modifier: 'extends',
     type: {
-      type: 'custom',
-      name: 'BaseSchema',
-      href: '../BaseSchema/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'BaseSchema',
+          href: '../BaseSchema/',
+        },
+        {
+          type: 'custom',
+          name: 'BaseSchemaAsync',
+          href: '../BaseSchemaAsync/',
+        },
+      ],
     },
   },
   TOutput: {
@@ -24,7 +34,7 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  BaseSchema: {
+  BaseSchemaAsync: {
     type: {
       type: 'custom',
       name: 'BaseSchema',
