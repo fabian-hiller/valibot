@@ -45,6 +45,8 @@ const Schema = required<TSchema, TRest>(schema, rest, message, pipe);
 
 `required` creates a new object schema where the entries of the provided object `schema` are non optional. It is similar to TypeScript's [`Required`](https://www.typescriptlang.org/docs/handbook/utility-types.html#requiredtype) utility type.
 
+> Note that `rest`, `message` and `pipe` of the passed schema are completely ignored and must be added again.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />

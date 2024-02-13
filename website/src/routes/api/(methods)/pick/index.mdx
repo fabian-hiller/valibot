@@ -47,6 +47,8 @@ const Schema = pick<TSchema, TKeys, TRest>(schema, keys, rest, message, pipe);
 
 `pick` creates a new object schema that containing only the selected `keys` of the given object `schema`. It is similar to TypeScript's [`Pick`](https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys) utility type.
 
+> Note that `rest`, `message` and `pipe` of the passed schema are completely ignored and must be added again.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />

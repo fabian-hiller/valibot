@@ -47,6 +47,8 @@ const Schema = omit<TSchema, TKeys, TRest>(schema, keys, rest, message, pipe);
 
 `omit` creates a new object schema that does not contain the selected `keys` of the given object `schema`. It is similar to TypeScript's [`Omit`](https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys) utility type.
 
+> Note that `rest`, `message` and `pipe` of the passed schema are completely ignored and must be added again.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
