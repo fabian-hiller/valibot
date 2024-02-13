@@ -1,10 +1,87 @@
 ---
 title: keyof
+description: Creates a picklist schema of object keys.
 source: /methods/keyof/keyof.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # keyof
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/keyof/keyof.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a picklist schema of object keys.
+
+```ts
+const Schema = keyof<TSchema>(schema);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `keyof` can be used.
+
+### Object key schema
+
+Schema to validate the keys of an object.
+
+```ts
+const ObjectSchema = object({ key1: string(), key2: number() });
+const ObjectKeySchema = keyof(ObjectSchema); // 'key1' | 'key2'
+```
+
+## Related
+
+The following APIs can be combined with `keyof`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'recursive',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>
