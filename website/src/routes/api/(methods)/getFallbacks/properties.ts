@@ -5,8 +5,8 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'SchemaWithMaybeDefault',
-      href: '../SchemaWithMaybeDefault/',
+      name: 'SchemaWithMaybeFallback',
+      href: '../SchemaWithMaybeFallback/',
       generics: [
         {
           type: 'union',
@@ -56,8 +56,8 @@ export const properties: Record<string, PropertyProps> = {
   values: {
     type: {
       type: 'custom',
-      name: 'DefaultValues',
-      href: '../DefaultValues/',
+      name: 'FallbackValues',
+      href: '../FallbackValues/',
       generics: [
         {
           type: 'custom',

@@ -8,8 +8,8 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         {
           type: 'custom',
-          name: 'SchemaWithMaybeDefault',
-          href: '../SchemaWithMaybeDefault/',
+          name: 'SchemaWithMaybeFallback',
+          href: '../SchemaWithMaybeFallback/',
           generics: [
             {
               type: 'union',
@@ -51,8 +51,8 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'SchemaWithMaybeDefaultAsync',
-          href: '../SchemaWithMaybeDefaultAsync/',
+          name: 'SchemaWithMaybeFallbackAsync',
+          href: '../SchemaWithMaybeFallbackAsync/',
           generics: [
             {
               type: 'union',
@@ -95,7 +95,7 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  DefaultValues: {
+  FallbackValues: {
     type: {
       type: 'conditional',
       conditions: [
@@ -130,7 +130,7 @@ export const properties: Record<string, PropertyProps> = {
                 },
                 value: {
                   type: 'custom',
-                  name: 'DefaultValues',
+                  name: 'FallbackValues',
                   generics: [
                     {
                       type: 'custom',
@@ -179,7 +179,7 @@ export const properties: Record<string, PropertyProps> = {
                 },
                 value: {
                   type: 'custom',
-                  name: 'DefaultValues',
+                  name: 'FallbackValues',
                   generics: [
                     {
                       type: 'custom',
@@ -228,7 +228,7 @@ export const properties: Record<string, PropertyProps> = {
                 },
                 value: {
                   type: 'custom',
-                  name: 'DefaultValues',
+                  name: 'FallbackValues',
                   generics: [
                     {
                       type: 'custom',
@@ -277,7 +277,7 @@ export const properties: Record<string, PropertyProps> = {
                 },
                 value: {
                   type: 'custom',
-                  name: 'DefaultValues',
+                  name: 'FallbackValues',
                   generics: [
                     {
                       type: 'custom',
@@ -298,8 +298,8 @@ export const properties: Record<string, PropertyProps> = {
       ],
       false: {
         type: 'custom',
-        name: 'DefaultValue',
-        href: '../DefaultValue/',
+        name: 'FallbackValue',
+        href: '../FallbackValue/',
         generics: [
           {
             type: 'custom',
