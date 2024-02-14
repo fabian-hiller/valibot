@@ -23,6 +23,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'Mac48Validation',
       href: '../Mac48Validation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

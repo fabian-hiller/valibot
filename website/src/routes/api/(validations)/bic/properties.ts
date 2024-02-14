@@ -23,6 +23,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'BicValidation',
       href: '../BicValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

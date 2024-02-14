@@ -44,6 +44,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'HashValidation',
       href: '../HashValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

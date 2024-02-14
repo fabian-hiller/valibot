@@ -23,6 +23,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'HexColorValidation',
       href: '../HexColorValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

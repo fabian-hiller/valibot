@@ -219,6 +219,7 @@
 - [BooleanSchema](/api/BooleanSchema/)
 - [Brand](/api/Brand/)
 - [BrandName](/api/BrandName/)
+- [BytesValidation](/api/BytesValidation/)
 - [Class](/api/Class/)
 - [CreditCardValidation](/api/CreditCardValidation/)
 - [DateSchema](/api/DateSchema/)

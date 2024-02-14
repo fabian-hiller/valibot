@@ -5,30 +5,33 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'string',
   },
-  message: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
+  TRequirement: {
+    modifier: 'extends',
+    type: 'number',
   },
-  Validation: {
+  BaseValidation: {
     type: {
       type: 'custom',
-      name: 'Mac64Validation',
-      href: '../Mac64Validation/',
+      name: 'BaseValidation',
+      href: '../BaseValidation/',
       generics: [
         {
           type: 'custom',
           name: 'TInput',
         },
       ],
+    },
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'bytes',
+    },
+  },
+  requirement: {
+    type: {
+      type: 'custom',
+      name: 'TRequirement',
     },
   },
 };

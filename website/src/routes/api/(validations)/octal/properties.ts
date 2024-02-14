@@ -23,6 +23,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'OctalValidation',
       href: '../OctalValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };
