@@ -225,6 +225,7 @@
 - [Cuid2Validation](/api/Cuid2Validation/)
 - [CustomValidation](/api/CustomValidation/)
 - [DateSchema](/api/DateSchema/)
+- [DecimalValidation](/api/DecimalValidation/)
 - [DefaultValue](/api/DefaultValue/)
 - [DefaultValues](/api/DefaultValues/)
 - [EmailValidation](/api/EmailValidation/)
