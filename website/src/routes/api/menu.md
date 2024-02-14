@@ -222,6 +222,7 @@
 - [BytesValidation](/api/BytesValidation/)
 - [Class](/api/Class/)
 - [CreditCardValidation](/api/CreditCardValidation/)
+- [Cuid2Validation](/api/Cuid2Validation/)
 - [DateSchema](/api/DateSchema/)
 - [DefaultValue](/api/DefaultValue/)
 - [DefaultValues](/api/DefaultValues/)

@@ -21,8 +21,8 @@ export const properties: Record<string, PropertyProps> = {
   Validation: {
     type: {
       type: 'custom',
-      name: 'EmailValidation',
-      href: '../EmailValidation/',
+      name: 'Cuid2Validation',
+      href: '../Cuid2Validation/',
       generics: [
         {
           type: 'custom',
