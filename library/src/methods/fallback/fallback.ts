@@ -30,7 +30,7 @@ export type SchemaWithFallback<
  */
 export function fallback<
   TSchema extends BaseSchema,
-  const TFallback extends
+  const TFallback extends  // TODO: Should we also allow `undefined`
     | Output<TSchema>
     | ((info?: FallbackInfo) => Output<TSchema>)
 >(
