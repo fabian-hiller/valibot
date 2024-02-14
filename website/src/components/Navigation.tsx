@@ -85,7 +85,7 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
             <li key={href}>
               <Link
                 class={clsx(
-                  'focus-ring relative -left-0.5 block border-l-2 border-l-transparent pl-4 transition-colors hover:border-l-slate-400 focus-visible:rounded-md hover:dark:border-l-slate-600',
+                  'focus-ring truncate relative -left-0.5 block border-l-2 border-l-transparent pl-4 transition-colors hover:border-l-slate-400 focus-visible:rounded-md hover:dark:border-l-slate-600',
                   location.url.pathname === href
                     ? 'text-sky-600 dark:text-sky-400'
                     : 'hover:text-slate-800 dark:hover:text-slate-300'

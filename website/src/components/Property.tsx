@@ -277,9 +277,9 @@ const Definition = component$<DefinitionProps>(({ data }) => (
             <Definition data={condition.extends} />
             <span class="text-red-600 dark:text-red-400"> ? </span>
             <Definition data={condition.true} />
+            <span class="text-red-600 dark:text-red-400"> : </span>
           </Fragment>
         ))}
-        <span class="text-red-600 dark:text-red-400"> : </span>
         <Definition data={data.false} />
       </>
     ) : (
