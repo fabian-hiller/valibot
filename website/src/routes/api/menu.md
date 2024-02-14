@@ -223,6 +223,7 @@
 - [Class](/api/Class/)
 - [CreditCardValidation](/api/CreditCardValidation/)
 - [Cuid2Validation](/api/Cuid2Validation/)
+- [CustomValidation](/api/CustomValidation/)
 - [DateSchema](/api/DateSchema/)
 - [DefaultValue](/api/DefaultValue/)
 - [DefaultValues](/api/DefaultValues/)
