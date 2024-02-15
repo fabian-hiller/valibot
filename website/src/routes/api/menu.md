@@ -243,6 +243,7 @@
 - [HashValidation](/api/HashValidation/)
 - [HexadecimalValidation](/api/HexadecimalValidation/)
 - [HexColorValidation](/api/HexColorValidation/)
+- [ImeiValidation](/api/ImeiValidation/)
 - [Input](/api/Input/)
 - [InstanceSchema](/api/InstanceSchema/)
 - [IntersectInput](/api/IntersectInput/)

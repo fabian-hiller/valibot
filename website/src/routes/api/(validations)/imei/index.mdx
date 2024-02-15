@@ -1,11 +1,55 @@
 ---
 title: imei
+description: Creates a pipeline validation action that validates an IMEI.
 source: /validations/imei/imei.ts
 contributors:
   - fabian-hiller
   - Danielwinkelmann
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # imei
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/imei/imei.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates an [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity).
+
+```ts
+const Validation = imei<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `imei` you can validate the formatting of a string. If the input is not an imei, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `imei` can be used.
+
+### Imei schema
+
+Schema to validate an imei.
+
+```ts
+const ImeiSchema = string([imei('The imei is badly formatted.')]);
+```
+
+## Related
+
+The following APIs can be combined with `imei`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
