@@ -230,6 +230,7 @@
 - [DefaultValues](/api/DefaultValues/)
 - [EmailValidation](/api/EmailValidation/)
 - [EmojiValidation](/api/EmojiValidation/)
+- [EndsWithValidation](/api/EndsWithValidation/)
 - [Enum](/api/Enum/)
 - [EnumSchema](/api/EnumSchema/)
 - [EnumSchemaAsync](/api/EnumSchemaAsync/)
