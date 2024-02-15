@@ -238,6 +238,7 @@
 - [FallbackInfo](/api/FallbackInfo/)
 - [FallbackValue](/api/FallbackValue/)
 - [FallbackValues](/api/FallbackValues/)
+- [FiniteValidation](/api/FiniteValidation/)
 - [HashType](/api/HashType/)
 - [HashValidation](/api/HashValidation/)
 - [HexadecimalValidation](/api/HexadecimalValidation/)
