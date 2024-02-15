@@ -246,6 +246,7 @@
 - [ImeiValidation](/api/ImeiValidation/)
 - [Input](/api/Input/)
 - [InstanceSchema](/api/InstanceSchema/)
+- [IntegerValidation](/api/IntegerValidation/)
 - [IntersectInput](/api/IntersectInput/)
 - [IntersectOptions](/api/IntersectOptions/)
 - [IntersectOutput](/api/IntersectOutput/)
