@@ -1,10 +1,56 @@
 ---
 title: isoDate
+description: Creates a pipeline validation action that validates a date.
 source: /validations/isoDate/isoDate.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # isoDate
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/isoDate/isoDate.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates a date.
+
+> The regex used cannot validate the maximum number of days based on year and month. For example, "2023-06-31" is valid although June has only 30 days.
+
+```ts
+const Validation = isoDate<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `isoDate` you can validate the formatting of a string. If the input is not an ISO date, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `isoDate` can be used.
+
+### IsoDate schema
+
+Schema to validate an ISO date.
+
+```ts
+const IsoDateSchema = string([isoDate('The date is badly formatted.')]);
+```
+
+## Related
+
+The following APIs can be combined with `isoDate`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
