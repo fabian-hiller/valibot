@@ -5,6 +5,49 @@ contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # emoji
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/emoji/emoji.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates an emoji.
+
+```ts
+const Validation = emoji<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `emoji` you can validate the formatting of a string. If the input is not an emoji, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `emoji` can be used.
+
+### Emoji schema
+
+Schema to validate an emoji.
+
+```ts
+const EmojiSchema = string([emoji('Please provide a valid emoji.')]);
+```
+
+## Related
+
+The following APIs can be combined with `emoji`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />

@@ -229,6 +229,7 @@
 - [DefaultValue](/api/DefaultValue/)
 - [DefaultValues](/api/DefaultValues/)
 - [EmailValidation](/api/EmailValidation/)
+- [EmojiValidation](/api/EmojiValidation/)
 - [Enum](/api/Enum/)
 - [EnumSchema](/api/EnumSchema/)
 - [EnumSchemaAsync](/api/EnumSchemaAsync/)
