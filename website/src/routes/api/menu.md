@@ -253,6 +253,7 @@
 - [IntersectSchema](/api/IntersectSchema/)
 - [InvalidActionResult](/api/InvalidActionResult/)
 - [Ipv4Validation](/api/Ipv4Validation/)
+- [Ipv6Validation](/api/Ipv6Validation/)
 - [IpValidation](/api/IpValidation/)
 - [IsoDateTimeValidation](/api/IsoDateTimeValidation/)
 - [IsoDateValidation](/api/IsoDateValidation/)
