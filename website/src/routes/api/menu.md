@@ -257,6 +257,7 @@
 - [IpValidation](/api/IpValidation/)
 - [IsoDateTimeValidation](/api/IsoDateTimeValidation/)
 - [IsoDateValidation](/api/IsoDateValidation/)
+- [IsoTimeSecondValidation](/api/IsoTimeSecondValidation/)
 - [IsoTimeValidation](/api/IsoTimeValidation/)
 - [IssuePath](/api/IssuePath/)
 - [IssueReason](/api/IssueReason/)
