@@ -260,6 +260,7 @@
 - [IsoTimeSecondValidation](/api/IsoTimeSecondValidation/)
 - [IsoTimestampValidation](/api/IsoTimestampValidation/)
 - [IsoTimeValidation](/api/IsoTimeValidation/)
+- [IsoWeekValidation](/api/IsoWeekValidation/)
 - [IssuePath](/api/IssuePath/)
 - [IssueReason](/api/IssueReason/)
 - [Literal](/api/Literal/)
