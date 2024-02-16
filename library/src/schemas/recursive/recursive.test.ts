@@ -17,7 +17,7 @@ describe('recursive', () => {
   });
 
   test('should pass the input to the getter function as a parameter', () => {
-    const getter = vi.fn().mockReturnValue({ _parse: string()._parse })
+    const getter = vi.fn().mockReturnValue({ _parse: string()._parse });
     const schema = recursive(getter);
     const input = 'hello';
     parse(schema, input);
