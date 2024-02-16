@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { parse } from '../../methods/index.ts';
 import { minLength } from '../../validations/index.ts';
 import { string } from '../string/index.ts';
@@ -14,5 +14,13 @@ describe('recursive', () => {
     expect(() => parse(schema, 123n)).toThrowError();
     expect(() => parse(schema, null)).toThrowError();
     expect(() => parse(schema, {})).toThrowError();
+  });
+
+  test('should pass the input to the getter function as a parameter', () => {
+    const getter = vi.fn().mockReturnValue({ _parse: string()._parse })
+    const schema = recursive(getter);
+    const input = 'hello';
+    parse(schema, input);
+    expect(getter).toHaveBeenCalledWith(input);
   });
 });
