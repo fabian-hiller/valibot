@@ -1,0 +1,25 @@
+---
+title: NonNullishSchemaAsync
+description: Non nullish schema async type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# NonNullishSchemaAsync
+
+Non nullish schema async type.
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `NonNullishSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `wrapped` <Property {...properties.wrapped} />
+  - `message` <Property {...properties.message} />

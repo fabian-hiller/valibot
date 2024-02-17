@@ -1,0 +1,25 @@
+---
+title: NonNullableSchemaAsync
+description: Non nullable schema async type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# NonNullableSchemaAsync
+
+Non nullable schema async type.
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `NonNullableSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `wrapped` <Property {...properties.wrapped} />
+  - `message` <Property {...properties.message} />

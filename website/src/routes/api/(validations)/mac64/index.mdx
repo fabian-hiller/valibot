@@ -15,7 +15,7 @@ import { properties } from './properties';
 Creates a pipeline validation action that validates a 64-bit [MAC address](https://en.wikipedia.org/wiki/MAC_address).
 
 ```ts
-const validation = mac64<TInput>(message);
+const Validation = mac64<TInput>(message);
 ```
 
 ## Generics
@@ -32,7 +32,7 @@ With `mac64` you can validate the formatting of a string. If the input is not a 
 
 ## Returns
 
-- `validation` <Property {...properties.validation} />
+- `Validation` <Property {...properties.Validation} />
 
 ## Examples
 
@@ -52,4 +52,4 @@ The following APIs can be combined with `mac64`.
 
 ### Schemas
 
-<ApiList items={['any', 'string', 'unknown']} />
+<ApiList items={['any', 'special', 'string', 'unknown']} />

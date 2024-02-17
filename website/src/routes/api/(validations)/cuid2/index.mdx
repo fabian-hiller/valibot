@@ -1,11 +1,54 @@
 ---
 title: cuid2
+description: Creates a pipeline validation action that validates a Cuid2.
 source: /validations/cuid2/cuid2.ts
 contributors:
   - fabian-hiller
-  - samualtnorman
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # cuid2
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/cuid2/cuid2.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates a [Cuid2](https://github.com/paralleldrive/cuid2).
+
+```ts
+const Validation = cuid2<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `cuid2` you can validate the formatting of a string. If the input is not an Cuid2, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `cuid2` can be used.
+
+### Cuid2 schema
+
+Schema to validate an Cuid2.
+
+```ts
+const Cuid2Schema = string([cuid2('The Cuid2 is badly formatted.')]);
+```
+
+## Related
+
+The following APIs can be combined with `cuid2`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
