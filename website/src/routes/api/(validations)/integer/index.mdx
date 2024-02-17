@@ -1,10 +1,56 @@
 ---
 title: integer
+description: >-
+  Creates a pipeline validation action that validates whether a number is an 
+  integer.
 source: /validations/integer/integer.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # integer
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/integer/integer.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates whether a number is an integer.
+
+```ts
+const Validation = integer<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `integer` you can validate the value of a number. If the input is not an integer number, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `integer` can be used.
+
+### Integer schema
+
+Schema to validate an integer.
+
+```ts
+const IntegerSchema = number([integer('The number must be an integer.')]);
+```
+
+## Related
+
+The following APIs can be combined with `integer`.
+
+### Schemas
+
+<ApiList items={['any', 'number', 'special', 'unknown']} />
