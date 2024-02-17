@@ -2,28 +2,18 @@ import type { ErrorMessage } from 'valibot';
 
 export type Language = {
   code:
-    |
     | 'de'
-   
     | 'en'
-   
     | 'fr'
-   
     | 'ja'
-   
     | 'kr'
-   
     | 'nl'
     | 'ru'
-   
     | 'sl'
-   
     | 'uk'
-   
     | 'zh-CN'
-   
     | 'zh-TW'
-    | 'nb-NO';
+    | 'nb';
   schema: ErrorMessage;
   specific: {
     bic: ErrorMessage;

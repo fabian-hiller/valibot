@@ -2,7 +2,7 @@ import { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
-  code:             'nb-NO',
+  code:             'nb',
   schema:           (issue) => `Ugyldig type: Forventet ${issue.expected}, men mottok ${issue.received}`,
   specific: {
     bic:            (issue) => `Ugyldig BIC: Mottok ${issue.received}`,
