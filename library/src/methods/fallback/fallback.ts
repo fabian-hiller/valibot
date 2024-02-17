@@ -8,17 +8,13 @@ import type { FallbackInfo } from './types.ts';
 /**
  * Schema with fallback type.
  */
-export type SchemaWithFallback<
-  TSchema extends BaseSchema = BaseSchema,
-  TFallback extends
-    | Output<TSchema>
-    | ((info?: FallbackInfo) => Output<TSchema>) = Output<TSchema>
-> = TSchema & {
+export interface SchemaWithFallback<TInput = any, TOutput = TInput>
+  extends BaseSchema<TInput, TOutput> {
   /**
    * The fallback value.
    */
-  fallback: TFallback;
-};
+  fallback: TOutput | ((info?: FallbackInfo) => TOutput);
+}
 
 /**
  * Returns a fallback output value when validating the passed schema failed.

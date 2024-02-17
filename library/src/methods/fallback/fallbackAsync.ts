@@ -1,7 +1,18 @@
 import type { BaseSchemaAsync, Output } from '../../types/index.ts';
 import { schemaResult } from '../../utils/index.ts';
 import { getFallbackAsync } from '../getFallback/index.ts';
-import type { FallbackInfo, SchemaWithFallbackAsync } from './types.ts';
+import type { FallbackInfo } from './types.ts';
+
+/**
+ * Schema with fallback async type.
+ */
+export interface SchemaWithFallbackAsync<TInput = any, TOutput = TInput>
+  extends BaseSchemaAsync<TInput, TOutput> {
+  /**
+   * The fallback value.
+   */
+  fallback: TOutput | ((info?: FallbackInfo) => TOutput | Promise<TOutput>);
+}
 
 /**
  * Returns a fallback output value when validating the passed schema failed.
