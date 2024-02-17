@@ -273,6 +273,7 @@
 - [MapOutput](/api/MapOutput/)
 - [MapPathItem](/api/MapPathItem/)
 - [MapSchema](/api/MapSchema/)
+- [MaxBytesValidation](/api/MaxBytesValidation/)
 - [MaybeReadonly](/api/MaybeReadonly/)
 - [NanSchema](/api/NanSchema/)
 - [NeverSchema](/api/NeverSchema/)
