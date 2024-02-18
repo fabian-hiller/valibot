@@ -7,13 +7,13 @@ export type Language = {
     | 'fr'
     | 'ja'
     | 'kr'
+    | 'nb'
     | 'nl'
     | 'ru'
     | 'sl'
     | 'uk'
     | 'zh-CN'
-    | 'zh-TW'
-    | 'nb';
+    | 'zh-TW';
   schema: ErrorMessage;
   specific: {
     bic: ErrorMessage;
