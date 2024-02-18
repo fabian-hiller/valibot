@@ -298,6 +298,7 @@
 - [NonOptionalSchema](/api/NonOptionalSchema/)
 - [NonOptionalSchemaAsync](/api/NonOptionalSchemaAsync/)
 - [NotBytesValidation](/api/NotBytesValidation/)
+- [NotSizeValidation](/api/NotSizeValidation/)
 - [NullableSchema](/api/NullableSchema/)
 - [NullableSchemaAsync](/api/NullableSchemaAsync/)
 - [NullishSchema](/api/NullishSchema/)
