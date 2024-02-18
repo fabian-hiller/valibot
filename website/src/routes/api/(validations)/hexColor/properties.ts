@@ -18,11 +18,17 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  validation: {
+  Validation: {
     type: {
       type: 'custom',
       name: 'HexColorValidation',
       href: '../HexColorValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

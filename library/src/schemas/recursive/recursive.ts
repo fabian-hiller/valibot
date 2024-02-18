@@ -9,7 +9,7 @@ import type {
  * Recursive schema type.
  */
 export type RecursiveSchema<
-  TGetter extends () => BaseSchema,
+  TGetter extends (input: unknown) => BaseSchema,
   TOutput = Output<ReturnType<TGetter>>
 > = BaseSchema<Input<ReturnType<TGetter>>, TOutput> & {
   /**
@@ -30,7 +30,7 @@ export type RecursiveSchema<
  *
  * @returns A recursive schema.
  */
-export function recursive<TGetter extends () => BaseSchema>(
+export function recursive<TGetter extends (input: unknown) => BaseSchema>(
   getter: TGetter,
   metadata?: SchemaMetadata
 ): RecursiveSchema<TGetter> {
@@ -39,11 +39,9 @@ export function recursive<TGetter extends () => BaseSchema>(
     expects: 'unknown',
     async: false,
     getter,
-    get metadata() {
-      return metadata ?? this.getter().metadata;
-    },
+    metadata,
     _parse(input, config) {
-      return this.getter()._parse(input, config);
+      return this.getter(input)._parse(input, config);
     },
   };
 }

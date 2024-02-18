@@ -3,7 +3,7 @@ import type { SchemaWithMaybeDefault } from './getDefault.ts';
 import type { SchemaWithMaybeDefaultAsync } from './getDefaultAsync.ts';
 
 /**
- * Default value type.
+ * Default value inference type.
  */
 export type DefaultValue<
   TSchema extends SchemaWithMaybeDefault | SchemaWithMaybeDefaultAsync

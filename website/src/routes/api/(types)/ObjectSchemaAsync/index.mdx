@@ -1,0 +1,28 @@
+---
+title: ObjectSchemaAsync
+description: Object schema async type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# ObjectSchemaAsync
+
+Object schema async type.
+
+## Generics
+
+- `TEntries` <Property {...properties.TEntries} />
+- `TRest` <Property {...properties.TRest} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `ObjectSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `entries` <Property {...properties.entries} />
+  - `rest` <Property {...properties.rest} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />

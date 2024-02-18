@@ -1,0 +1,26 @@
+---
+title: NullableSchemaAsync
+description: Nullable schema async type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# NullableSchemaAsync
+
+Nullable schema async type.
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+- `TDefault` <Property {...properties.TDefault} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `NullableSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `wrapped` <Property {...properties.wrapped} />
+  - `default` <Property {...properties.default} />

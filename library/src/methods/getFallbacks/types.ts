@@ -16,7 +16,7 @@ import type {
 } from '../getFallback/index.ts';
 
 /**
- * Fallback values type.
+ * Fallback values inference type.
  */
 export type FallbackValues<
   TSchema extends

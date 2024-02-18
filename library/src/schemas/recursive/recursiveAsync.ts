@@ -2,6 +2,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   Input,
+  MaybePromise,
   Output,
   SchemaMetadata,
 } from '../../types/index.ts';
@@ -10,9 +11,11 @@ import type {
  * Recursive schema async type.
  */
 export type RecursiveSchemaAsync<
-  TGetter extends () => BaseSchema | BaseSchemaAsync,
-  TOutput = Output<ReturnType<TGetter>>
-> = BaseSchemaAsync<Input<ReturnType<TGetter>>, TOutput> & {
+  TGetter extends (
+    input: unknown
+  ) => MaybePromise<BaseSchema | BaseSchemaAsync>,
+  TOutput = Output<Awaited<ReturnType<TGetter>>>
+> = BaseSchemaAsync<Input<Awaited<ReturnType<TGetter>>>, TOutput> & {
   /**
    * The schema type.
    */
@@ -32,18 +35,16 @@ export type RecursiveSchemaAsync<
  * @returns An async recursive schema.
  */
 export function recursiveAsync<
-  TGetter extends () => BaseSchema | BaseSchemaAsync
+  TGetter extends (input: unknown) => MaybePromise<BaseSchema | BaseSchemaAsync>
 >(getter: TGetter, metadata?: SchemaMetadata): RecursiveSchemaAsync<TGetter> {
   return {
     type: 'recursive',
     expects: 'unknown',
     async: true,
     getter,
-    get metadata() {
-      return metadata ?? this.getter().metadata;
-    },
+    metadata,
     async _parse(input, config) {
-      return this.getter()._parse(input, config);
+      return (await this.getter(input))._parse(input, config);
     },
   };
 }

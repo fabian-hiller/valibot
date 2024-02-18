@@ -128,7 +128,7 @@ export function unionAsync<TOptions extends UnionOptionsAsync>(
 
       // If there is a valid result, return pipe result
       if (validResult) {
-        return pipeResultAsync(this, input, config);
+        return pipeResultAsync(this, validResult.output, config);
       }
 
       // If there are typed results, return pipe result

@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
 import { minLength } from '../../validations/index.ts';
 import { stringAsync } from '../string/index.ts';
@@ -17,14 +17,17 @@ describe('recursiveAsync', () => {
   });
 
   test('should expose the metadata', () => {
-    const schema1 = recursiveAsync(() =>
-      stringAsync({ description: 'string value' })
-    );
-    expect(schema1.metadata).toEqual({ description: 'string value' });
-
-    const schema2 = recursiveAsync(() => stringAsync(), {
+    const schema = recursiveAsync(() => stringAsync(), {
       description: 'recursive value',
     });
-    expect(schema2.metadata).toEqual({ description: 'recursive value' });
+    expect(schema.metadata).toEqual({ description: 'recursive value' });
+  });
+
+  test('should pass input to getter', async () => {
+    const getter = vi.fn().mockReturnValue({ _parse: stringAsync()._parse });
+    const schema = recursiveAsync(getter);
+    const input = 'hello';
+    await parseAsync(schema, input);
+    expect(getter).toHaveBeenCalledWith(input);
   });
 });

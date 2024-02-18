@@ -1,0 +1,26 @@
+---
+title: NullishSchemaAsync
+description: Nullish schema async type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# NullishSchemaAsync
+
+Nullish schema async type.
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+- `TDefault` <Property {...properties.TDefault} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `Nullish` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `wrapped` <Property {...properties.wrapped} />
+  - `default` <Property {...properties.default} />
