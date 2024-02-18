@@ -379,6 +379,7 @@
 - [UnknownPathItem](/api/UnknownPathItem/)
 - [UnknownSchema](/api/UnknownSchema/)
 - [UntypedSchemaResult](/api/UntypedSchemaResult/)
+- [UuidValidation](/api/UuidValidation/)
 - [ValidActionResult](/api/ValidActionResult/)
 - [VariantOption](/api/VariantOption/)
 - [VariantOptions](/api/VariantOptions/)
