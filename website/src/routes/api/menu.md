@@ -282,6 +282,7 @@
 - [MimeTypeValidation](/api/MimeTypeValidation/)
 - [MinBytesValidation](/api/MinBytesValidation/)
 - [MinSizeValidation](/api/MinSizeValidation/)
+- [MinValueValidation](/api/MinValueValidation/)
 - [NanSchema](/api/NanSchema/)
 - [NeverSchema](/api/NeverSchema/)
 - [NonNullableInput](/api/NonNullableInput/)
