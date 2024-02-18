@@ -361,6 +361,7 @@
 - [SpecialSchemaAsync](/api/SpecialSchemaAsync/)
 - [StringSchema](/api/StringSchema/)
 - [StringSchemaAsync](/api/StringSchemaAsync/)
+- [StartsWithValidation](/api/StartsWithValidation/)
 - [SymbolSchema](/api/SymbolSchema/)
 - [TransformInfo](/api/TransformInfo/)
 - [TupleInput](/api/TupleInput/)
