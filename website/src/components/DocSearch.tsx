@@ -254,7 +254,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
             } catch (_) {
               error.value = true;
             }
-          }, 300);
+          }, 150);
 
           // Set loading to "true"
           loading.value = true;
