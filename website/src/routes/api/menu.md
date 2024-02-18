@@ -356,6 +356,7 @@
 - [SetOutput](/api/SetOutput/)
 - [SetPathItem](/api/SetPathItem/)
 - [SetSchema](/api/SetSchema/)
+- [SizeValidation](/api/SizeValidation/)
 - [SpecialSchema](/api/SpecialSchema/)
 - [SpecialSchemaAsync](/api/SpecialSchemaAsync/)
 - [StringSchema](/api/StringSchema/)
