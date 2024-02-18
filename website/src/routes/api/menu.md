@@ -337,6 +337,7 @@
 - [RecordPathItem](/api/RecordPathItem/)
 - [RecordSchema](/api/RecordSchema/)
 - [RecursiveSchema](/api/RecursiveSchema/)
+- [RegexValidation](/api/RegexValidation/)
 - [RequiredObjectEntries](/api/RequiredObjectEntries/)
 - [SafeParseResult](/api/SafeParseResult/)
 - [SchemaConfig](/api/SchemaConfig/)
