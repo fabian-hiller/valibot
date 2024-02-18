@@ -370,6 +370,7 @@
 - [TuplePathItem](/api/TuplePathItem/)
 - [TupleSchema](/api/TupleSchema/)
 - [TypedSchemaResult](/api/TypedSchemaResult/)
+- [UlidValidation](/api/UlidValidation/)
 - [UndefinedSchema](/api/UndefinedSchema/)
 - [UnionOptions](/api/UnionOptions/)
 - [UnionOptionsAsync](/api/UnionOptionsAsync/)
