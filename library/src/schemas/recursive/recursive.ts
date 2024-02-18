@@ -4,7 +4,7 @@ import type { BaseSchema, Input, Output } from '../../types/index.ts';
  * Recursive schema type.
  */
 export type RecursiveSchema<
-  TGetter extends () => BaseSchema,
+  TGetter extends (input: unknown) => BaseSchema,
   TOutput = Output<ReturnType<TGetter>>
 > = BaseSchema<Input<ReturnType<TGetter>>, TOutput> & {
   /**
@@ -24,7 +24,7 @@ export type RecursiveSchema<
  *
  * @returns A recursive schema.
  */
-export function recursive<TGetter extends () => BaseSchema>(
+export function recursive<TGetter extends (input: unknown) => BaseSchema>(
   getter: TGetter
 ): RecursiveSchema<TGetter> {
   return {
@@ -33,7 +33,7 @@ export function recursive<TGetter extends () => BaseSchema>(
     async: false,
     getter,
     _parse(input, config) {
-      return this.getter()._parse(input, config);
+      return this.getter(input)._parse(input, config);
     },
   };
 }
