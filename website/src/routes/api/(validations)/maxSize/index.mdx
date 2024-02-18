@@ -56,7 +56,9 @@ const BlobSchema = blob([
 Schema to validate a set with a maximum of 8 items.
 
 ```ts
-const SetSchema = set([maxSize(8, 'The set must not exceed 8 items.')]);
+const SetSchema = set(number(), [
+  maxSize(8, 'The set must not exceed 8 numbers.'),
+]);
 ```
 
 ## Related

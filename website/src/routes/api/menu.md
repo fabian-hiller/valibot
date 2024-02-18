@@ -281,6 +281,7 @@
 - [MaybeReadonly](/api/MaybeReadonly/)
 - [MimeTypeValidation](/api/MimeTypeValidation/)
 - [MinBytesValidation](/api/MinBytesValidation/)
+- [MinSizeValidation](/api/MinSizeValidation/)
 - [NanSchema](/api/NanSchema/)
 - [NeverSchema](/api/NeverSchema/)
 - [NonNullableInput](/api/NonNullableInput/)
