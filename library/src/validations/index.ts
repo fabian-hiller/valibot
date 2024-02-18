@@ -8,6 +8,7 @@ export * from './email/index.ts';
 export * from './emoji/index.ts';
 export * from './endsWith/index.ts';
 export * from './equal/index.ts';
+export * from './ethAddress/index.ts';
 export * from './excludes/index.ts';
 export * from './finite/index.ts';
 export * from './hash/index.ts';

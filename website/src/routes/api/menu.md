@@ -71,6 +71,7 @@
 - [email](/api/email/)
 - [emoji](/api/emoji/)
 - [endsWith](/api/endsWith/)
+- [ethAddress](/api/ethAddress/)
 - [excludes](/api/excludes/)
 - [finite](/api/finite/)
 - [hash](/api/hash/)
