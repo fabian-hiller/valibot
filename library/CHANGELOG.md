@@ -4,6 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `every` and `some` pipeline validation action
 - Add `input` of schema to `getter` function of `recursive` and `recursiveAsync` schema (pull request #441)
 
 ## v0.28.1 (February 06, 2024)
