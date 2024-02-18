@@ -280,6 +280,7 @@
 - [MaxValueValidation](/api/MaxValueValidation/)
 - [MaybeReadonly](/api/MaybeReadonly/)
 - [MimeTypeValidation](/api/MimeTypeValidation/)
+- [MinBytesValidation](/api/MinBytesValidation/)
 - [NanSchema](/api/NanSchema/)
 - [NeverSchema](/api/NeverSchema/)
 - [NonNullableInput](/api/NonNullableInput/)

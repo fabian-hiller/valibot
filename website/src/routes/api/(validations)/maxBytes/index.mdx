@@ -45,7 +45,7 @@ The following examples show how `maxBytes` can be used.
 Schema to validate a string with a maximum of 64 bytes.
 
 ```ts
-const BytesSchema = string([
+const MaxBytesSchema = string([
   maxBytes(64, 'The string must not exceed 64 bytes.'),
 ]);
 ```
