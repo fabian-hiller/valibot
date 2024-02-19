@@ -65,11 +65,21 @@ export const properties: Record<string, PropertyProps> = {
       name: 'TFallback',
     },
   },
-  SchemaWithFallback: {
+  Schema: {
     type: {
       type: 'custom',
       name: 'SchemaWithFallback',
       href: '../SchemaWithFallback/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TSchema',
+        },
+        {
+          type: 'custom',
+          name: 'TFallback',
+        },
+      ],
     },
   },
 };

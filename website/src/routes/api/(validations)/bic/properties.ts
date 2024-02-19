@@ -17,16 +17,18 @@ export const properties: Record<string, PropertyProps> = {
         'undefined',
       ],
     },
-    default: {
-      type: 'string',
-      value: 'Invalid bic',
-    },
   },
-  validation: {
+  Validation: {
     type: {
       type: 'custom',
       name: 'BicValidation',
       href: '../BicValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

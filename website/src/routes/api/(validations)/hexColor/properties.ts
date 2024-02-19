@@ -17,16 +17,18 @@ export const properties: Record<string, PropertyProps> = {
         'undefined',
       ],
     },
-    default: {
-      type: 'string',
-      value: 'Invalid hex color',
-    },
   },
-  validation: {
+  Validation: {
     type: {
       type: 'custom',
       name: 'HexColorValidation',
       href: '../HexColorValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

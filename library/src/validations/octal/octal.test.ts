@@ -42,6 +42,6 @@ describe('octal', () => {
   test('should return custom error message', () => {
     const error = 'Value does not match the octal!';
     const validate = octal(error);
-    expect(validate._parse('test').issues?.[0].message).toBe(error);
+    expect(validate._parse('test').issues?.[0].context.message).toBe(error);
   });
 });

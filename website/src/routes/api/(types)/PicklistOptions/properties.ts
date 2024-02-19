@@ -9,7 +9,10 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'array',
-          item: 'string',
+          item: {
+            type: 'union',
+            options: ['string', 'number', 'bigint'],
+          },
         },
       ],
     },

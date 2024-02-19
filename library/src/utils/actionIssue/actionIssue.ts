@@ -1,37 +1,28 @@
 import type {
-  ErrorMessage,
   InvalidActionResult,
-  PathItem,
+  PipeActionContext,
 } from '../../types/index.ts';
-import { errorMessage } from '../errorMessage/index.ts';
 
 /**
  * Returns the pipeline result object with issues.
  *
- * @param validation The validation name.
- * @param message The error message.
- * @param input The input value.
- * @param requirement The requirement.
- * @param path The issue path.
+ * @param context The action context.
+ * @param reference The action reference.
+ * @param input The raw input data.
+ * @param label The issue label.
+ * @param received The received input.
  *
  * @returns The pipeline result object.
  */
 export function actionIssue(
-  validation: string,
-  message: ErrorMessage,
+  context: PipeActionContext,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  reference: Function,
   input: unknown,
-  requirement?: unknown,
-  path?: PathItem[]
+  label: string,
+  received?: string
 ): InvalidActionResult {
   return {
-    issues: [
-      {
-        validation,
-        message: errorMessage(message),
-        input,
-        requirement,
-        path,
-      },
-    ],
+    issues: [{ context, reference, input, label, received }],
   };
 }

@@ -26,17 +26,22 @@ export type ImeiValidation<TInput extends string> = BaseValidation<TInput> & {
  * @returns A validation action.
  */
 export function imei<TInput extends string>(
-  message: ErrorMessage = 'Invalid IMEI'
+  message?: ErrorMessage
 ): ImeiValidation<TInput> {
   return {
     type: 'imei',
+    expects: null,
     async: false,
     message,
     requirement: [IMEI_REGEX, isLuhnAlgo],
     _parse(input) {
-      return !this.requirement[0].test(input) || !this.requirement[1](input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement[0].test(input) && this.requirement[1](input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, imei, input, 'IMEI');
     },
   };
 }

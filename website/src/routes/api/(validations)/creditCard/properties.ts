@@ -17,16 +17,18 @@ export const properties: Record<string, PropertyProps> = {
         'undefined',
       ],
     },
-    default: {
-      type: 'string',
-      value: 'Invalid credit card',
-    },
   },
-  validation: {
+  Validation: {
     type: {
       type: 'custom',
       name: 'CreditCardValidation',
       href: '../CreditCardValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

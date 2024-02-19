@@ -2,7 +2,7 @@ import type { BaseValidation, PathItem } from '../../types/index.ts';
 import type { PathList } from './types.ts';
 
 /**
- * Forwards the issues of the passed validation.
+ * Forwards the issues of the passed validation action.
  *
  * @param validation The validation.
  * @param pathList The path list.
@@ -34,8 +34,11 @@ export function forward<TInput extends unknown[] | Record<string, unknown>>(
             issue.input = pathValue;
 
             // Create path item for current key
+            // TODO: Check if we can prevent path item from being unknown by
+            // adding context of schema to `._parse`
             const pathItem: PathItem = {
               type: 'unknown',
+              origin: 'value',
               input: pathInput,
               key,
               value: pathValue,

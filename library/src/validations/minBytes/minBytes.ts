@@ -19,27 +19,34 @@ export type MinBytesValidation<
 };
 
 /**
- * Creates a pipeline validation action that validates the byte length of a
- * string.
+ * Creates a pipeline validation action that validates the bytes of a string.
  *
- * @param requirement The minimum length in byte.
+ * @param requirement The minimum bytes.
  * @param message The error message.
  *
  * @returns A validation action.
  */
 export function minBytes<TInput extends string, TRequirement extends number>(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid byte length'
+  message?: ErrorMessage
 ): MinBytesValidation<TInput, TRequirement> {
   return {
     type: 'min_bytes',
+    expects: `>=${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return new TextEncoder().encode(input).length < this.requirement
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // Calculate byte length
+      const length = new TextEncoder().encode(input).length;
+
+      // If requirement is fulfilled, return action output
+      if (length >= this.requirement) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, minBytes, input, 'bytes', `${length}`);
     },
   };
 }

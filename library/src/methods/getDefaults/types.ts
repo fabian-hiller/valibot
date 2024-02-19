@@ -1,16 +1,16 @@
 import type {
-  ObjectSchema,
   ObjectEntries,
-  TupleSchema,
-  ObjectSchemaAsync,
   ObjectEntriesAsync,
+  ObjectSchema,
+  ObjectSchemaAsync,
+  TupleSchema,
   TupleSchemaAsync,
 } from '../../schemas/index.ts';
 import type { BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
 import type { DefaultValue } from '../getDefault/index.ts';
 
 /**
- * Default values type.
+ * Default values inference type.
  */
 export type DefaultValues<TSchema extends BaseSchema | BaseSchemaAsync> =
   TSchema extends ObjectSchema<infer TEntries extends ObjectEntries>

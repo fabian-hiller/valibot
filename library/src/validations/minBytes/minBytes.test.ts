@@ -19,6 +19,6 @@ describe('minBytes', () => {
   test('should return custom error message', () => {
     const error = 'Value byte length is lesser than "3"!';
     const validate = minBytes(3, error);
-    expect(validate._parse('ab').issues?.[0].message).toBe(error);
+    expect(validate._parse('ab').issues?.[0].context.message).toBe(error);
   });
 });

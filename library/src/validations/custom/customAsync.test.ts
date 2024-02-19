@@ -11,6 +11,6 @@ describe('customAsync', () => {
   test('should return custom error message', async () => {
     const error = 'Value is not greater than 1!';
     const validate = customAsync<number>(async (input) => input > 0, error);
-    expect((await validate._parse(-1)).issues?.[0].message).toBe(error);
+    expect((await validate._parse(-1)).issues?.[0].context.message).toBe(error);
   });
 });

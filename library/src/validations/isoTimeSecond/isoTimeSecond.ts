@@ -27,17 +27,22 @@ export type IsoTimeSecondValidation<TInput extends string> =
  * @returns A validation action.
  */
 export function isoTimeSecond<TInput extends string>(
-  message: ErrorMessage = 'Invalid time second'
+  message?: ErrorMessage
 ): IsoTimeSecondValidation<TInput> {
   return {
     type: 'iso_time_second',
+    expects: null,
     async: false,
     message,
     requirement: ISO_TIME_SECOND_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, isoTimeSecond, input, 'time second');
     },
   };
 }

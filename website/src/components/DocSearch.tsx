@@ -1,19 +1,16 @@
 import {
   $,
   component$,
+  type QwikKeyboardEvent,
+  type Signal,
   useComputed$,
   useSignal,
   useTask$,
-  type QwikKeyboardEvent,
-  type Signal,
 } from '@builder.io/qwik';
 import { Link, useLocation, useNavigate } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import clsx from 'clsx';
 import { useFocusTrap, useStorageSignal } from '~/hooks';
-import { trackEvent } from '~/utils';
-import { SystemIcon } from './SystemIcon';
-import { TextLink } from './TextLink';
 import {
   AngleRightIcon,
   CloseIcon,
@@ -22,6 +19,9 @@ import {
   SearchIcon,
 } from '~/icons';
 import { AlgoliaLogo } from '~/logos';
+import { trackEvent } from '~/utils';
+import { SystemIcon } from './SystemIcon';
+import { TextLink } from './TextLink';
 
 type HitType = 'lvl2' | 'lvl3' | 'lvl4' | 'lvl5' | 'content';
 
@@ -254,7 +254,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
             } catch (_) {
               error.value = true;
             }
-          }, 300);
+          }, 150);
 
           // Set loading to "true"
           loading.value = true;
@@ -286,9 +286,12 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
    * Handles keyboard keydown events.
    */
   const handleKeyDown = $(
-    ({ metaKey, key }: QwikKeyboardEvent<HTMLDivElement>) => {
+    ({ ctrlKey, metaKey, key }: QwikKeyboardEvent<HTMLDivElement>) => {
       // Open or close search
-      if ((metaKey && key === 'k') || (open.value && key === 'Escape')) {
+      if (
+        ((ctrlKey || metaKey) && key === 'k') ||
+        (open.value && key === 'Escape')
+      ) {
         open.value = !open.value;
       }
 

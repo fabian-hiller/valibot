@@ -1,10 +1,81 @@
 ---
 title: minValue
+description: >-
+  Creates a pipeline validation action that validates the value of a string, 
+  number, boolean or date.
 source: /validations/minValue/minValue.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # minValue
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/minValue/minValue.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates the value of a string, number, boolean or date.
+
+```ts
+const Validation = minValue<TInput, TRequirement>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `minValue` you can validate the value of a string, number, boolean or date. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `minValue` can be used.
+
+### Number schema
+
+Schema to validate a number with a minimum value.
+
+```ts
+const NumberSchema = number([
+  minValue(100, 'The number must be at least 100.'),
+]);
+```
+
+### Date schema
+
+Schema to validate a date with a minimum year.
+
+```ts
+const DateSchema = date([
+  minValue(new Date('2000-01-01'), 'The date must be after the year 1999.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `minValue`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'bigint',
+    'boolean',
+    'date',
+    'number',
+    'special',
+    'string',
+    'unknown',
+  ]}
+/>

@@ -17,16 +17,18 @@ export const properties: Record<string, PropertyProps> = {
         'undefined',
       ],
     },
-    default: {
-      type: 'string',
-      value: 'Invalid 64-bit MAC',
-    },
   },
-  validation: {
+  Validation: {
     type: {
       type: 'custom',
       name: 'Mac64Validation',
       href: '../Mac64Validation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

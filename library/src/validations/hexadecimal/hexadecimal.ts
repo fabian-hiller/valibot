@@ -18,24 +18,29 @@ export type HexadecimalValidation<TInput extends string> =
   };
 
 /**
- * Creates a pipeline validation action that validates a hexadecimal string.
+ * Creates a pipeline validation action that validates a [hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal).
  *
  * @param message The error message.
  *
  * @returns A validation action.
  */
 export function hexadecimal<TInput extends string>(
-  message: ErrorMessage = 'Invalid hexadecimal'
+  message?: ErrorMessage
 ): HexadecimalValidation<TInput> {
   return {
     type: 'hexadecimal',
+    expects: null,
     async: false,
     message,
     requirement: HEXADECIMAL_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, hexadecimal, input, 'hexadecimal');
     },
   };
 }

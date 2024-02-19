@@ -1,14 +1,16 @@
 import { describe, expect, test } from 'vitest';
+import type { SchemaIssue } from '../../types/index.ts';
 import { ValiError } from './ValiError.ts';
 
 describe('ValiError', () => {
   test('should create error instance', () => {
-    const issue = {
-      reason: 'type' as const,
-      validation: 'string',
-      origin: 'value' as const,
-      message: 'Invalid type',
+    const issue: SchemaIssue = {
+      reason: 'type',
+      context: 'string',
       input: 1,
+      expected: 'string',
+      received: 'number',
+      message: 'Invalid type',
     };
     const error = new ValiError([issue, issue]);
     expect(error).toBeInstanceOf(ValiError);

@@ -14,7 +14,7 @@ import { properties } from './properties';
 Parses an unknown input based on a schema.
 
 ```ts
-const result = safeParse<TSchema>(schema, input, info);
+const result = safeParse<TSchema>(schema, input, config);
 ```
 
 ## Generics
@@ -25,7 +25,7 @@ const result = safeParse<TSchema>(schema, input, info);
 
 - `schema` <Property {...properties.schema} />
 - `input` <Property {...properties.input} />
-- `info` <Property {...properties.info} />
+- `config` <Property {...properties.config} />
 
 ## Returns
 
@@ -49,23 +49,6 @@ if (result.success) {
 ## Related
 
 The following APIs can be combined with `safeParse`.
-
-### Methods
-
-<ApiList
-  items={[
-    'brand',
-    'coerce',
-    'fallback',
-    'keyof',
-    'merge',
-    'omit',
-    'partial',
-    'pick',
-    'required',
-    'transform',
-  ]}
-/>
 
 ### Schemas
 
@@ -106,5 +89,23 @@ The following APIs can be combined with `safeParse`.
     'unknown',
     'variant',
     'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'keyof',
+    'merge',
+    'omit',
+    'partial',
+    'pick',
+    'required',
+    'transform',
+    'unwrap',
   ]}
 />

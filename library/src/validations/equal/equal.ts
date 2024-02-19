@@ -1,5 +1,5 @@
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { actionIssue, actionOutput } from '../../utils/index.ts';
+import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 
 /**
  * Equal validation type.
@@ -33,17 +33,22 @@ export function equal<
   TRequirement extends TInput
 >(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid input'
+  message?: ErrorMessage
 ): EqualValidation<TInput, TRequirement> {
   return {
     type: 'equal',
+    expects: stringify(requirement),
     async: false,
     message,
     requirement,
     _parse(input) {
-      return input !== this.requirement
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (input === this.requirement) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, equal, input, 'value');
     },
   };
 }

@@ -1,10 +1,106 @@
 ---
 title: getDefault
+description: Returns the default value of the schema.
 source: /methods/getDefault/getDefault.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # getDefault
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/getDefault/getDefault.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Returns the default value of the schema.
+
+```ts
+const value = getDefault<TSchema>(schema);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+
+## Returns
+
+- `value` <Property {...properties.value} />
+
+## Examples
+
+The following examples show how `getDefault` can be used.
+
+### Optional string schema
+
+Get the default value of an optional string schema.
+
+```ts
+const OptionalStringSchema = optional(string(), "I'm the default!");
+const defaultValue = getDefault(OptionalStringSchema); // "I'm the default!"
+```
+
+## Related
+
+The following APIs can be combined with `getDefault`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'recursive',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'coerce',
+    'fallback',
+    'keyof',
+    'merge',
+    'omit',
+    'partial',
+    'pick',
+    'required',
+    'transform',
+    'unwrap',
+  ]}
+/>

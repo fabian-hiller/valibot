@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { parseAsync } from '../../methods/index.ts';
 import { minLength } from '../../validations/index.ts';
 import { stringAsync } from '../string/index.ts';
@@ -14,5 +14,13 @@ describe('recursiveAsync', () => {
     await expect(parseAsync(schema, 123n)).rejects.toThrowError();
     await expect(parseAsync(schema, null)).rejects.toThrowError();
     await expect(parseAsync(schema, {})).rejects.toThrowError();
+  });
+
+  test('should pass input to getter', async () => {
+    const getter = vi.fn().mockReturnValue({ _parse: stringAsync()._parse });
+    const schema = recursiveAsync(getter);
+    const input = 'hello';
+    await parseAsync(schema, input);
+    expect(getter).toHaveBeenCalledWith(input);
   });
 });

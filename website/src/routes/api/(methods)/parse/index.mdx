@@ -15,7 +15,7 @@ import { properties } from './properties';
 Parses an unknown input based on a schema.
 
 ```ts
-const output = parse<TSchema>(schema, input, info);
+const output = parse<TSchema>(schema, input, config);
 ```
 
 ## Generics
@@ -26,7 +26,7 @@ const output = parse<TSchema>(schema, input, info);
 
 - `schema` <Property {...properties.schema} />
 - `input` <Property {...properties.input} />
-- `info` <Property {...properties.info} />
+- `config` <Property {...properties.config} />
 
 ### Explanation
 
@@ -54,23 +54,6 @@ try {
 ## Related
 
 The following APIs can be combined with `parse`.
-
-### Methods
-
-<ApiList
-  items={[
-    'brand',
-    'coerce',
-    'fallback',
-    'keyof',
-    'merge',
-    'omit',
-    'partial',
-    'pick',
-    'required',
-    'transform',
-  ]}
-/>
 
 ### Schemas
 
@@ -111,5 +94,23 @@ The following APIs can be combined with `parse`.
     'unknown',
     'variant',
     'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'keyof',
+    'merge',
+    'omit',
+    'partial',
+    'pick',
+    'required',
+    'transform',
+    'unwrap',
   ]}
 />

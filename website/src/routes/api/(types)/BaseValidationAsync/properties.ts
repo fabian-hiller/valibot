@@ -17,17 +17,29 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  async: {
+  expects: {
     type: {
-      type: 'boolean',
-      value: true,
+      type: 'union',
+      options: ['string', 'null'],
     },
   },
   message: {
     type: {
-      type: 'custom',
-      name: 'ErrorMessage',
-      href: '../ErrorMessage/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+        },
+        'undefined',
+      ],
+    },
+  },
+  async: {
+    type: {
+      type: 'boolean',
+      value: true,
     },
   },
   _parse: {

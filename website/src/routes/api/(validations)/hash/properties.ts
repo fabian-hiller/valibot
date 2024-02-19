@@ -38,16 +38,18 @@ export const properties: Record<string, PropertyProps> = {
         'undefined',
       ],
     },
-    default: {
-      type: 'string',
-      value: 'Invalid hash',
-    },
   },
-  validation: {
+  Validation: {
     type: {
       type: 'custom',
       name: 'HashValidation',
       href: '../HashValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

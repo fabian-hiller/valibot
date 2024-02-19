@@ -1,12 +1,12 @@
 import type {
-  ObjectSchema,
   ObjectEntries,
-  TupleSchema,
-  ObjectSchemaAsync,
   ObjectEntriesAsync,
-  TupleSchemaAsync,
+  ObjectSchema,
+  ObjectSchemaAsync,
   TupleItems,
   TupleItemsAsync,
+  TupleSchema,
+  TupleSchemaAsync,
 } from '../../schemas/index.ts';
 import type { BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
 import type {
@@ -16,7 +16,7 @@ import type {
 } from '../getFallback/index.ts';
 
 /**
- * Fallback values type.
+ * Fallback values inference type.
  */
 export type FallbackValues<
   TSchema extends
