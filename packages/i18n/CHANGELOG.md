@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.7.0 (February 19, 2024)
 
 - Add Norwegian (nb) translations (pull request #439)
 
