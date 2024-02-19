@@ -4,23 +4,23 @@ import { maxLength } from './maxLength.ts';
 describe('maxLength', () => {
   describe('should pass only valid lengths', () => {
     test('empty string has valid length', () => {
-      const value1 = '';
-      expect(maxLength(3)._parse(value1).output).toBe(value1);
+      const value = '';
+      expect(maxLength(3)._parse(value)).toEqual({ output: value });
     });
 
     test('string of length 2 has valid length', () => {
-      const value2 = '12';
-      expect(maxLength(3)._parse(value2).output).toBe(value2);
+      const value = '12';
+      expect(maxLength(3)._parse(value)).toEqual({ output: value });
     });
 
     test('array of numbers and length 3 has valid length', () => {
-      const value4 = [1, 2, 3];
-      expect(maxLength(3)._parse(value4).output).toBe(value4);
+      const value = [1, 2, 3];
+      expect(maxLength(3)._parse(value)).toEqual({ output: value });
     });
 
     test('array of objects and length 3 has valid length', () => {
-      const value4 = [{}, {}, {}];
-      expect(maxLength(3)._parse(value4).output).toBe(value4);
+      const value = [{}, {}, {}];
+      expect(maxLength(3)._parse(value)).toEqual({ output: value });
     });
   });
 
@@ -42,8 +42,7 @@ describe('maxLength', () => {
     });
 
     test('array of objects with 1 more then maxLength', () => {
-      const value4 = [{}, {}, {}, {}];
-      expect(maxLength(3)._parse(value4).issues).toBeTruthy();
+      expect(maxLength(3)._parse([{}, {}, {}, {}]).issues).toBeTruthy();
     });
   });
 
