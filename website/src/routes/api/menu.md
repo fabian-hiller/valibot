@@ -358,6 +358,7 @@
 - [SetPathItem](/api/SetPathItem/)
 - [SetSchema](/api/SetSchema/)
 - [SizeValidation](/api/SizeValidation/)
+- [SomeValidation](/api/SomeValidation/)
 - [SpecialSchema](/api/SpecialSchema/)
 - [SpecialSchemaAsync](/api/SpecialSchemaAsync/)
 - [StringSchema](/api/StringSchema/)
