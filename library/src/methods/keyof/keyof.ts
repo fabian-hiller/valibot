@@ -29,11 +29,11 @@ type UnionToTuple<T> = UnionToIntersection<
 type TupleOrNever<T> = T extends [string, ...string[]] ? T : never;
 
 /**
- * Creates a enum schema of object keys.
+ * Creates a picklist schema of object keys.
  *
  * @param schema The object schema.
  *
- * @returns A enum schema.
+ * @returns A picklist schema.
  */
 export function keyof<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>

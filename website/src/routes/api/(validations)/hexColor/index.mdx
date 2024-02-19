@@ -15,7 +15,7 @@ import { properties } from './properties';
 Creates a pipeline validation action that validates a hex color.
 
 ```ts
-const validation = hexColor<TInput>(message);
+const Validation = hexColor<TInput>(message);
 ```
 
 ## Generics
@@ -32,7 +32,7 @@ With `hexColor` you can validate the formatting of a string. If the input is not
 
 ## Returns
 
-- `validation` <Property {...properties.validation} />
+- `Validation` <Property {...properties.Validation} />
 
 ## Examples
 
@@ -52,4 +52,4 @@ The following APIs can be combined with `hexColor`.
 
 ### Schemas
 
-<ApiList items={['any', 'string', 'unknown']} />
+<ApiList items={['any', 'special', 'string', 'unknown']} />

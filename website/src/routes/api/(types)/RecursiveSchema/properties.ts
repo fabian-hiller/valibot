@@ -5,7 +5,7 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'function',
-      params: [],
+      params: [{ name: 'input', type: 'unknown' }],
       return: {
         type: 'custom',
         name: 'BaseSchema',

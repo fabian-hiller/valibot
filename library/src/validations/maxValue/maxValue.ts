@@ -20,7 +20,7 @@ export type MaxValueValidation<
 
 /**
  * Creates a pipeline validation action that validates the value of a string,
- * number or date.
+ * number, boolean or date.
  *
  * @param requirement The maximum value.
  * @param message The error message.

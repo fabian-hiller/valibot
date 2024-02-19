@@ -47,7 +47,7 @@ The `pipe` and `validation` arguments can optionally be used to validate the out
 
 ## Returns
 
-- `Schema` <Property {...properties.SchemaWithTransform} />
+- `Schema` <Property {...properties.Schema} />
 
 ## Examples
 
@@ -78,29 +78,6 @@ const UserSchema = transform(
 ## Related
 
 The following APIs can be combined with `transform`.
-
-### Methods
-
-<ApiList
-  items={[
-    'brand',
-    'coerce',
-    'fallback',
-    'getDefault',
-    'getDefaults',
-    'getFallback',
-    'getFallbacks',
-    'is',
-    'keyof',
-    'merge',
-    'omit',
-    'parse',
-    'partial',
-    'pick',
-    'required',
-    'safeParse',
-  ]}
-/>
 
 ### Schemas
 
@@ -141,5 +118,29 @@ The following APIs can be combined with `transform`.
     'unknown',
     'variant',
     'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'merge',
+    'omit',
+    'parse',
+    'partial',
+    'pick',
+    'required',
+    'safeParse',
+    'unwrap',
   ]}
 />

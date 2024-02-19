@@ -3,7 +3,7 @@ import type { SchemaWithMaybeFallback } from './getFallback.ts';
 import type { SchemaWithMaybeFallbackAsync } from './getFallbackAsync.ts';
 
 /**
- * Fallback value type.
+ * Fallback value inference type.
  */
 export type FallbackValue<
   TSchema extends SchemaWithMaybeFallback | SchemaWithMaybeFallbackAsync

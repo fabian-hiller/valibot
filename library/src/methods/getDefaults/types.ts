@@ -10,7 +10,7 @@ import type { BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
 import type { DefaultValue } from '../getDefault/index.ts';
 
 /**
- * Default values type.
+ * Default values inference type.
  */
 export type DefaultValues<TSchema extends BaseSchema | BaseSchemaAsync> =
   TSchema extends ObjectSchema<infer TEntries extends ObjectEntries>

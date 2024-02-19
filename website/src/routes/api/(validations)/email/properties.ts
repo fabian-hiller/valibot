@@ -2,6 +2,7 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   TInput: {
+    modifier: 'extends',
     type: 'string',
   },
   message: {
@@ -17,11 +18,17 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  validation: {
+  Validation: {
     type: {
       type: 'custom',
       name: 'EmailValidation',
       href: '../EmailValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

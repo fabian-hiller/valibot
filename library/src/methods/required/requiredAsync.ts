@@ -24,7 +24,7 @@ type Required<TEntries extends ObjectEntriesAsync> = {
 
 /**
  * Creates an async object schema consisting of all properties of an existing
- * object schema set to none optional.
+ * object schema set to non optional.
  *
  * @param schema The affected schema.
  * @param pipe A validation and transformation pipe.
@@ -40,7 +40,7 @@ export function requiredAsync<
 
 /**
  * Creates an async object schema consisting of all properties of an existing
- * object schema set to none optional.
+ * object schema set to non optional.
  *
  * @param schema The affected schema.
  * @param message The error message.
@@ -58,7 +58,7 @@ export function requiredAsync<
 
 /**
  * Creates an async object schema consisting of all properties of an existing
- * object schema set to none optional.
+ * object schema set to non optional.
  *
  * @param schema The affected schema.
  * @param rest The object rest.
@@ -77,7 +77,7 @@ export function requiredAsync<
 
 /**
  * Creates an async object schema consisting of all properties of an existing
- * object schema set to none optional.
+ * object schema set to non optional.
  *
  * @param schema The affected schema.
  * @param rest The object rest.

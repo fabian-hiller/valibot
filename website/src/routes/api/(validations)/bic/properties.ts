@@ -18,11 +18,17 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  validation: {
+  Validation: {
     type: {
       type: 'custom',
       name: 'BicValidation',
       href: '../BicValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+      ],
     },
   },
 };

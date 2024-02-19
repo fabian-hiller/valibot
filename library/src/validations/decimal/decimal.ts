@@ -18,7 +18,7 @@ export type DecimalValidation<TInput extends string> =
   };
 
 /**
- * Creates a pipeline validation action that validates a decimal string.
+ * Creates a pipeline validation action that validates a [decimal](https://en.wikipedia.org/wiki/Decimal).
  *
  * @param message The error message.
  *

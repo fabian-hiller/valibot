@@ -3,6 +3,8 @@ import { schemaResult } from '../../utils/index.ts';
 import { getFallback } from '../getFallback/index.ts';
 import type { FallbackInfo } from './types.ts';
 
+// TODO: Should we create a Fallback and Default type to simplify the generics?
+
 /**
  * Schema with fallback type.
  */
@@ -28,7 +30,7 @@ export type SchemaWithFallback<
  */
 export function fallback<
   TSchema extends BaseSchema,
-  const TFallback extends
+  const TFallback extends  // TODO: Should we also allow `undefined`
     | Output<TSchema>
     | ((info?: FallbackInfo) => Output<TSchema>)
 >(
