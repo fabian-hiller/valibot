@@ -286,6 +286,7 @@
 - [MinBytesValidation](/api/MinBytesValidation/)
 - [MinSizeValidation](/api/MinSizeValidation/)
 - [MinValueValidation](/api/MinValueValidation/)
+- [MultipleOfValidation](/api/MultipleOfValidation/)
 - [NanSchema](/api/NanSchema/)
 - [NeverSchema](/api/NeverSchema/)
 - [NonNullableInput](/api/NonNullableInput/)
