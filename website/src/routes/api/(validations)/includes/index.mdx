@@ -1,10 +1,72 @@
 ---
 title: includes
+description: >-
+  Creates a pipeline validation action that validates the content of a string
+  or array.
 source: /validations/includes/includes.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # includes
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/includes/includes.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates the content of a string or array.
+
+```ts
+const Validation = includes<TInput, TRequirement>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `includes` you can validate the content of a string or array. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `includes` can be used.
+
+### String schema
+
+Schema to validate that a string contains a specific substring.
+
+```ts
+const StringSchema = string([
+  includes('foo', 'The string must contain "foo".'),
+]);
+```
+
+### Array schema
+
+Schema to validate that an array contains a specific string.
+
+```ts
+const ArraySchema = array(string(), [
+  includes('foo', 'The array must contain "foo".'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `includes`.
+
+### Schemas
+
+<ApiList
+  items={['any', 'array', 'instance', 'special', 'string', 'tuple', 'unknown']}
+/>
