@@ -4,33 +4,23 @@ import { minLength } from './minLength.ts';
 describe('minLength', () => {
   describe('should pass', () => {
     test('valid length of string numbers', () => {
-      const value1 = '123';
-      expect(minLength(3)._parse(value1).output).toBe(value1);
-    });
-
-    test('valid length of numbers', () => {
-      const value1 = 123;
-      expect(minLength(3)._parse(value1).output).toBe(value1);
-    });
-
-    test('valid length of numbers higher then min length', () => {
-      const value1 = 12356;
-      expect(minLength(3)._parse(value1).output).toBe(value1);
+      const value = '123';
+      expect(minLength(3)._parse(value)).toEqual({ output: value });
     });
 
     test('valid length of string numbers higher then min length', () => {
-      const value1 = '12356';
-      expect(minLength(3)._parse(value1).output).toBe(value1);
+      const value = '12356';
+      expect(minLength(3)._parse(value)).toEqual({ output: value });
     });
 
     test('valid length of array of numbers', () => {
-      const value1 = [1, 2, 3];
-      expect(minLength(3)._parse(value1).output).toBe(value1);
+      const value = [1, 2, 3];
+      expect(minLength(3)._parse(value)).toEqual({ output: value });
     });
 
     test('valid length of array of empty objects', () => {
-      const value1 = [{}, {}, {}];
-      expect(minLength(3)._parse(value1).output).toBe(value1);
+      const value = [{}, {}, {}];
+      expect(minLength(3)._parse(value)).toEqual({ output: value });
     });
   });
 

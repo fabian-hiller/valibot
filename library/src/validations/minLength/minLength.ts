@@ -28,7 +28,7 @@ export type MinLengthValidation<
  * @returns A validation action.
  */
 export function minLength<
-  TInput extends string | number | any[],
+  TInput extends string | any[],
   TRequirement extends number
 >(
   requirement: TRequirement,
@@ -40,11 +40,7 @@ export function minLength<
     message,
     requirement,
     _parse(input) {
-      const inputString =
-        typeof input === 'number' || typeof input === 'string'
-          ? input.toString()
-          : (input as any[]);
-      return inputString.length < this.requirement
+      return input.length < this.requirement
         ? actionIssue(this.type, this.message, input, this.requirement)
         : actionOutput(input);
     },

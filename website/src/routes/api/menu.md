@@ -235,6 +235,7 @@
 - [MapPathItem](/api/MapPathItem/)
 - [MapSchema](/api/MapSchema/)
 - [MaybeReadonly](/api/MaybeReadonly/)
+- [MinLengthValidation](/api/MinLengthValidation/)
 - [NanSchema](/api/NanSchema/)
 - [NeverSchema](/api/NeverSchema/)
 - [NonNullableInput](/api/NonNullableInput/)
