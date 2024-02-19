@@ -237,6 +237,7 @@
 - [EnumSchema](/api/EnumSchema/)
 - [EnumSchemaAsync](/api/EnumSchemaAsync/)
 - [ErrorMessage](/api/ErrorMessage/)
+- [EveryValidation](/api/EveryValidation/)
 - [FallbackInfo](/api/FallbackInfo/)
 - [FallbackValue](/api/FallbackValue/)
 - [FallbackValues](/api/FallbackValues/)

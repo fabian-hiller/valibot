@@ -1,10 +1,61 @@
 ---
 title: every
+description: >-
+  Creates a pipeline validation action that validates the items of an array.
 source: /validations/every/every.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # every
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/every/every.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates the items of an array.
+
+```ts
+const Validation = every<TInput>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `every` you can freely validate the items of an array and return `true` if they are valid or `false` otherwise. If not every item matches your `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `every` can be used.
+
+### Sorted array schema
+
+Schema to validate that an array is sorted.
+
+```ts
+const SortedArraySchema = array(number(), [
+  every(
+    (value, index, array) => index === 0 || value >= array[index - 1],
+    'The numbers must be sorted in ascending order.'
+  ),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `every`.
+
+### Schemas
+
+<ApiList items={['any', 'array', 'instance', 'special', 'tuple', 'unknown']} />
