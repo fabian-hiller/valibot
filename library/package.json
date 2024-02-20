@@ -42,7 +42,7 @@
     "access": "public"
   },
   "scripts": {
-    "playground": "tsm ./playground.ts",
+    "play": "tsm ./playground.ts",
     "test": "vitest",
     "coverage": "vitest run --coverage --isolate",
     "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit",
