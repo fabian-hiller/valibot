@@ -7,6 +7,7 @@ All notable changes to the library will be documented in this file.
 - Add `every` and `some` pipeline validation action
 - Add `input` of schema to `getter` function of `recursive` and `recursiveAsync` schema (pull request #441)
 - Change implementation of `transform` and `transformAsync` method to only run transformations if there are no issues (issue #436)
+- Fix bug in `i18n` util when using `setSchemaMessage`
 
 ## v0.28.1 (February 06, 2024)
 

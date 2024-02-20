@@ -13,13 +13,13 @@ import type {
  * The i18n context type.
  */
 type I18nContext = {
-  type: string;
   message: ErrorMessage | undefined;
 };
 
 /**
  * Creates the i18n error message.
  *
+ * @param schema Whether its a schema.
  * @param context The message context.
  * @param reference The identifier reference.
  * @param config The parse configuration.
@@ -28,6 +28,7 @@ type I18nContext = {
  * @returns The error message.
  */
 export function i18n(
+  schema: boolean,
   context: I18nContext,
   // eslint-disable-next-line @typescript-eslint/ban-types
   reference: Function,
@@ -37,7 +38,7 @@ export function i18n(
   const message =
     context.message ??
     getSpecificMessage(reference, issue.lang) ??
-    (context.type === 'type' ? getSchemaMessage(issue.lang) : null) ??
+    (schema ? getSchemaMessage(issue.lang) : null) ??
     config?.message ??
     getGlobalMessage(issue.lang) ??
     issue.message;
