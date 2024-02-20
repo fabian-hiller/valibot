@@ -1,16 +1,16 @@
 import type { BaseSchema, Input, Output } from '../../types/index.ts';
 
 /**
- * Recursive schema type.
+ * Lazy schema type.
  */
-export type RecursiveSchema<
+export type LazySchema<
   TGetter extends (input: unknown) => BaseSchema,
   TOutput = Output<ReturnType<TGetter>>
 > = BaseSchema<Input<ReturnType<TGetter>>, TOutput> & {
   /**
    * The schema type.
    */
-  type: 'recursive';
+  type: 'lazy';
   /**
    * The schema getter.
    */
@@ -18,17 +18,17 @@ export type RecursiveSchema<
 };
 
 /**
- * Creates a recursive schema.
+ * Creates a lazy schema.
  *
  * @param getter The schema getter.
  *
- * @returns A recursive schema.
+ * @returns A lazy schema.
  */
-export function recursive<TGetter extends (input: unknown) => BaseSchema>(
+export function lazy<TGetter extends (input: unknown) => BaseSchema>(
   getter: TGetter
-): RecursiveSchema<TGetter> {
+): LazySchema<TGetter> {
   return {
-    type: 'recursive',
+    type: 'lazy',
     expects: 'unknown',
     async: false,
     getter,
@@ -37,3 +37,10 @@ export function recursive<TGetter extends (input: unknown) => BaseSchema>(
     },
   };
 }
+
+/**
+ * See {@link lazy}
+ *
+ * @deprecated Use `lazy` instead.
+ */
+export const recursive = lazy;

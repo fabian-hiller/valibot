@@ -22,8 +22,8 @@ export const properties: Record<string, PropertyProps> = {
   Schema: {
     type: {
       type: 'custom',
-      name: 'RecursiveSchema',
-      href: '../RecursiveSchema/',
+      name: 'LazySchema',
+      href: '../LazySchema/',
       generics: [
         {
           type: 'custom',

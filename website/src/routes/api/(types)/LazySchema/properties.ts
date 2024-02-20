@@ -67,7 +67,7 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'recursive',
+      value: 'lazy',
     },
   },
   getter: {

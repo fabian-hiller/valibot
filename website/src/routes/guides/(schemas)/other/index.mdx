@@ -2,7 +2,7 @@
 title: Other
 description: >-
   This guide explains other special schema functions such as literal, instance,
-  special and recursive that are not covered in the other guides.
+  special and lazy that are not covered in the other guides.
 contributors:
   - fabian-hiller
 ---
@@ -11,7 +11,7 @@ import { Link } from '@builder.io/qwik-city';
 
 # Other
 
-This guide explains other special schema functions such as <Link href="/api/literal/">`literal`</Link>, <Link href="/api/instance/">`instance`</Link>, <Link href="/api/special/">`special`</Link> and <Link href="/api/recursive/">`recursive`</Link> that are not covered in the other guides.
+This guide explains other special schema functions such as <Link href="/api/literal/">`literal`</Link>, <Link href="/api/instance/">`instance`</Link>, <Link href="/api/special/">`special`</Link> and <Link href="/api/lazy/">`lazy`</Link> that are not covered in the other guides.
 
 ## Literal schema
 
@@ -50,9 +50,9 @@ const PixelStringSchema = v.special<`${number}px`>((val) =>
 );
 ```
 
-## Recursive schema
+## Lazy schema
 
-The <Link href="/api/recursive/">`recursive`</Link> schema function allows you to define recursive schemas. A recursive schema is a schema that references itself. For example, you can use it to define a schema for a tree-like data structure.
+The <Link href="/api/lazy/">`lazy`</Link> schema function allows you to define recursive schemas. A recursive schema is a schema that references itself. For example, you can use it to define a schema for a tree-like data structure.
 
 > Due to a TypeScript limitation, the input and output types cannot be inferred automatically. Therefore, you must explicitly specify these types using <Link href="/api/BaseSchema/">`BaseSchema`</Link>.
 
@@ -67,7 +67,7 @@ type BinaryTree = {
 
 const BinaryTreeSchema: v.BaseSchema<BinaryTree> = v.object({
   element: v.string(),
-  left: v.nullable(v.recursive(() => BinaryTreeSchema)),
-  right: v.nullable(v.recursive(() => BinaryTreeSchema)),
+  left: v.nullable(v.lazy(() => BinaryTreeSchema)),
+  right: v.nullable(v.lazy(() => BinaryTreeSchema)),
 });
 ```
