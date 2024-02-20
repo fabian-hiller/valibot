@@ -30,7 +30,7 @@
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@builder.io/qwik": "1.1.5",
+    "@builder.io/qwik": "1.4.5",
     "@builder.io/qwik-city": "1.1.5",
     "@mapbox/rehype-prism": "^0.8.0",
     "@netlify/edge-functions": "^2.0.0",

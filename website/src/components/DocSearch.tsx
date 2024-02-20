@@ -1,8 +1,8 @@
 import {
   $,
   component$,
-  type QwikKeyboardEvent,
   type Signal,
+  sync$,
   useComputed$,
   useSignal,
   useTask$,
@@ -285,46 +285,44 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
   /**
    * Handles keyboard keydown events.
    */
-  const handleKeyDown = $(
-    ({ ctrlKey, metaKey, key }: QwikKeyboardEvent<HTMLDivElement>) => {
-      // Open or close search
-      if (
-        ((ctrlKey || metaKey) && key === 'k') ||
-        (open.value && key === 'Escape')
-      ) {
-        open.value = !open.value;
+  const handleKeyDown = $(({ ctrlKey, metaKey, key }: KeyboardEvent) => {
+    // Open or close search
+    if (
+      ((ctrlKey || metaKey) && key === 'k') ||
+      (open.value && key === 'Escape')
+    ) {
+      open.value = !open.value;
+    }
+
+    if (open.value) {
+      // Change active index
+      if (key === 'ArrowUp' || key === 'ArrowDown') {
+        const maxIndex = searchItems.value.length - 1;
+        activeIndex.value =
+          key === 'ArrowUp'
+            ? activeIndex.value === 0
+              ? maxIndex
+              : activeIndex.value - 1
+            : activeIndex.value === maxIndex
+            ? 0
+            : activeIndex.value + 1;
       }
 
-      if (open.value) {
-        // Change active index
-        if (key === 'ArrowUp' || key === 'ArrowDown') {
-          const maxIndex = searchItems.value.length - 1;
-          activeIndex.value =
-            key === 'ArrowUp'
-              ? activeIndex.value === 0
-                ? maxIndex
-                : activeIndex.value - 1
-              : activeIndex.value === maxIndex
-              ? 0
-              : activeIndex.value + 1;
-        }
-
-        // Select current active index
-        if (key === 'Enter') {
-          const item = searchItems.value[activeIndex.value];
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          if (item) {
-            if (item.path === location.url.pathname) {
-              open.value = false;
-            } else {
-              navigate(item.path);
-            }
-            clicked.value = item;
+      // Select current active index
+      if (key === 'Enter') {
+        const item = searchItems.value[activeIndex.value];
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (item) {
+          if (item.path === location.url.pathname) {
+            open.value = false;
+          } else {
+            navigate(item.path);
           }
+          clicked.value = item;
         }
       }
     }
-  );
+  });
 
   return (
     <div
@@ -332,7 +330,17 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
         open.value && 'fixed left-0 top-0 z-40 h-screen w-screen lg:p-48'
       )}
       ref={modalElement}
-      window:onKeyDown$={handleKeyDown}
+      window:onKeyDown$={[
+        sync$((e: KeyboardEvent) => {
+          if (
+            ((e.ctrlKey || e.metaKey) && e.key === 'k') ||
+            (open.value && e.key === 'Escape')
+          ) {
+            e.preventDefault();
+          }
+        }),
+        handleKeyDown,
+      ]}
     >
       {open.value && (
         <>
