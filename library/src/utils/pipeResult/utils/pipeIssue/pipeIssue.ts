@@ -48,6 +48,7 @@ export function pipeIssue(
     skipPipe: config?.skipPipe,
   };
   schemaIssue.message = i18n(
+    false,
     issue.context,
     issue.reference,
     config,

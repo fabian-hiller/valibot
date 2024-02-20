@@ -1,6 +1,8 @@
 import type {
   ArraySchema,
   ArraySchemaAsync,
+  LazySchema,
+  LazySchemaAsync,
   MapSchema,
   MapSchemaAsync,
   ObjectEntries,
@@ -9,8 +11,6 @@ import type {
   ObjectSchemaAsync,
   RecordSchema,
   RecordSchemaAsync,
-  RecursiveSchema,
-  RecursiveSchemaAsync,
   SetSchema,
   SetSchemaAsync,
   TupleItems,
@@ -87,11 +87,9 @@ type NestedPath<TSchema extends BaseSchema | BaseSchemaAsync> =
         | RecordSchemaAsync<infer TKey, infer TValue>
     ? DotPath<Input<TKey>, TValue>
     : // Recursive
-    TSchema extends RecursiveSchema<
-        infer TSchemaGetter extends () => BaseSchema
-      >
+    TSchema extends LazySchema<infer TSchemaGetter extends () => BaseSchema>
     ? NestedPath<ReturnType<TSchemaGetter>>
-    : TSchema extends RecursiveSchemaAsync<
+    : TSchema extends LazySchemaAsync<
         infer TSchemaGetter extends () => BaseSchema | BaseSchemaAsync
       >
     ? NestedPath<ReturnType<TSchemaGetter>>

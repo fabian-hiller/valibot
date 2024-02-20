@@ -1,10 +1,57 @@
 ---
 title: startsWith
+description: >-
+  Creates a pipeline validation action that validates the start of a string.
 source: /validations/startsWith/startsWith.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # startsWith
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/startsWith/startsWith.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates the start of a string.
+
+```ts
+const Validation = startsWith<TInput, TRequirement>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `startsWith` you can validate the start of a string. If the start does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `startsWith` can be used.
+
+### HTTPS URL schema
+
+Schema to validate a HTTPS URL.
+
+```ts
+const HttpsUrlSchema = string([url(), startsWith('https://')]);
+```
+
+## Related
+
+The following APIs can be combined with `startsWith`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />

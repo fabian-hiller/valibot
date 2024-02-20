@@ -12,7 +12,6 @@ import type { SchemaIssue } from '../../types/index.ts';
 import { i18n } from './i18n.ts';
 
 describe('i18n', () => {
-  const key = 'type';
   const reference = string;
 
   const contextMessage = 'context message';
@@ -42,7 +41,8 @@ describe('i18n', () => {
     setGlobalMessage(globalMessage);
     expect(
       i18n(
-        { type: key, message: contextMessage },
+        true,
+        { message: contextMessage },
         reference,
         { message: configMessage },
         issue
@@ -54,7 +54,8 @@ describe('i18n', () => {
     setGlobalMessage(() => globalMessage);
     expect(
       i18n(
-        { type: key, message: () => contextMessage },
+        true,
+        { message: () => contextMessage },
         reference,
         { message: () => configMessage },
         issue
@@ -68,7 +69,8 @@ describe('i18n', () => {
     setGlobalMessage(globalMessage);
     expect(
       i18n(
-        { type: key, message: undefined },
+        true,
+        { message: undefined },
         reference,
         { message: configMessage },
         issue
@@ -80,7 +82,8 @@ describe('i18n', () => {
     setGlobalMessage(() => globalMessage);
     expect(
       i18n(
-        { type: key, message: undefined },
+        true,
+        { message: undefined },
         reference,
         { message: () => configMessage },
         issue
@@ -93,7 +96,8 @@ describe('i18n', () => {
     setGlobalMessage(globalMessage);
     expect(
       i18n(
-        { type: key, message: undefined },
+        true,
+        { message: undefined },
         reference,
         { message: configMessage },
         issue
@@ -104,7 +108,8 @@ describe('i18n', () => {
     setGlobalMessage(() => globalMessage);
     expect(
       i18n(
-        { type: key, message: undefined },
+        true,
+        { message: undefined },
         reference,
         { message: () => configMessage },
         issue
@@ -112,11 +117,38 @@ describe('i18n', () => {
     ).toBe(schemaMessage);
   });
 
+  test('should not return schema message', () => {
+    setSchemaMessage(schemaMessage);
+    setGlobalMessage(globalMessage);
+    expect(
+      i18n(
+        false,
+        { message: undefined },
+        reference,
+        { message: configMessage },
+        issue
+      )
+    ).not.toBe(schemaMessage);
+
+    setSchemaMessage(() => schemaMessage);
+    setGlobalMessage(() => globalMessage);
+    expect(
+      i18n(
+        false,
+        { message: undefined },
+        reference,
+        { message: () => configMessage },
+        issue
+      )
+    ).not.toBe(schemaMessage);
+  });
+
   test('should return config message', () => {
     setGlobalMessage(globalMessage);
     expect(
       i18n(
-        { type: key, message: undefined },
+        true,
+        { message: undefined },
         reference,
         { message: configMessage },
         issue
@@ -126,7 +158,8 @@ describe('i18n', () => {
     setGlobalMessage(() => globalMessage);
     expect(
       i18n(
-        { type: key, message: undefined },
+        true,
+        { message: undefined },
         reference,
         { message: () => configMessage },
         issue
@@ -138,7 +171,8 @@ describe('i18n', () => {
     setGlobalMessage(globalMessage);
     expect(
       i18n(
-        { type: key, message: undefined },
+        true,
+        { message: undefined },
         reference,
         { message: undefined },
         issue
@@ -148,7 +182,8 @@ describe('i18n', () => {
     setGlobalMessage(() => globalMessage);
     expect(
       i18n(
-        { type: key, message: undefined },
+        true,
+        { message: undefined },
         reference,
         { message: undefined },
         issue
@@ -159,7 +194,8 @@ describe('i18n', () => {
   test('should return issue message', () => {
     expect(
       i18n(
-        { type: key, message: undefined },
+        true,
+        { message: undefined },
         reference,
         { message: undefined },
         issue
@@ -168,7 +204,8 @@ describe('i18n', () => {
 
     expect(
       i18n(
-        { type: key, message: undefined },
+        true,
+        { message: undefined },
         reference,
         { message: undefined },
         issue

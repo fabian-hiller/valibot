@@ -19,7 +19,7 @@ export type MimeTypeValidation<
 };
 
 /**
- * Creates a pipeline validation action that validates the MIME type of a file.
+ * Creates a pipeline validation action that validates the MIME type of a blob.
  *
  * @param requirement The MIME types.
  * @param message The error message.

@@ -2,9 +2,13 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.29.0 (February 19, 2024)
 
+- Add `every` and `some` pipeline validation action
 - Add `input` of schema to `getter` function of `recursive` and `recursiveAsync` schema (pull request #441)
+- Change implementation of `transform` and `transformAsync` method to only run transformations if there are no issues (issue #436)
+- Rename `recursive` and `recursiveAsync` schema to `lazy` and `lazyAsync` (issue #440)
+- Fix bug in `i18n` util when using `setSchemaMessage`
 
 ## v0.28.1 (February 06, 2024)
 

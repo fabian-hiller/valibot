@@ -66,6 +66,6 @@ export function schemaIssue(
     abortPipeEarly: config?.abortPipeEarly,
     skipPipe: config?.skipPipe,
   };
-  issue.message = i18n(context, reference, config, issue);
+  issue.message = i18n(true, context, reference, config, issue);
   return { typed: false, output: input, issues: [issue] };
 }
