@@ -1,6 +1,6 @@
 import { component$, type HTMLAttributes } from '@builder.io/qwik';
 
-export const HdmLogo = component$<HTMLAttributes<HTMLElement>>((props) => (
+export const HdmLogo = component$<HTMLAttributes<SVGSVGElement>>((props) => (
   <svg
     viewBox="0 0 67 64"
     role="img"

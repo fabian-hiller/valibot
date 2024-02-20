@@ -59,6 +59,7 @@ export const DocsLayout = component$(() => {
 
   // Compute contributors
   const contributors = useComputed$<string[]>(
+    // eslint-disable-next-line qwik/valid-lexical-scope
     () => documentHead.frontmatter.contributors || []
   );
 
@@ -149,6 +150,8 @@ export const DocsLayout = component$(() => {
                       rel="noreferrer"
                     >
                       <img
+                        width="88"
+                        height="88"
                         loading="lazy"
                         src={`https://github.com/${contributor}.png?size=88`}
                         alt={`GitHub profile picture of ${contributor}`}
@@ -207,6 +210,8 @@ export const DocsLayout = component$(() => {
                   rel="noreferrer"
                 >
                   <img
+                    width="88"
+                    height="88"
                     loading="lazy"
                     src={`https://github.com/${sponsor}.png?size=88`}
                     alt={`GitHub profile picture of ${sponsor}`}

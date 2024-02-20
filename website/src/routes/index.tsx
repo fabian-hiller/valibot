@@ -108,7 +108,6 @@ export default component$(() => {
             { theme: 'dark', url: blurredCodeDarkUrl },
             { theme: 'light', url: blurredCodeLightUrl },
           ].map(({ theme, url }) => (
-            // eslint-disable-next-line qwik/jsx-img
             <img
               key={url}
               class={clsx(
@@ -260,7 +259,7 @@ export default component$(() => {
           ].map(({ heading, Text }, index) => {
             const isOpen = index === faqIndex.value;
             return (
-              <li key="heading" class="flex flex-col px-8">
+              <li key={heading} class="flex flex-col px-8">
                 <Form action={faqToggle}>
                   <input type="hidden" name="index" value={index} />
                   <button

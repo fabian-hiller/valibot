@@ -44,6 +44,7 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
   }>();
 
   // Update indicator style when pathname changes
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     // Track URL pathname
     const pathname = track(() => location.url.pathname);

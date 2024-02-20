@@ -1,6 +1,6 @@
 import { component$, type HTMLAttributes } from '@builder.io/qwik';
 
-export const PaceLogo = component$<HTMLAttributes<HTMLElement>>((props) => (
+export const PaceLogo = component$<HTMLAttributes<SVGSVGElement>>((props) => (
   <svg
     viewBox="0 0 95 64"
     role="img"

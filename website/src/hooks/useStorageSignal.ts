@@ -13,6 +13,7 @@ export function useStorageSignal<T>(key: string, initialValue: T) {
   const signal = useSignal<T>(initialValue);
 
   // Get initial value from localStorage
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const value = localStorage.getItem(key);
     if (value) {
@@ -21,6 +22,7 @@ export function useStorageSignal<T>(key: string, initialValue: T) {
   });
 
   // Update localStorage when signal changes
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     const value = track(() => signal.value);
     localStorage.setItem(key, JSON.stringify(value));

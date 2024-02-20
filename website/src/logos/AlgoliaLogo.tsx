@@ -1,7 +1,7 @@
 import { component$, type HTMLAttributes } from '@builder.io/qwik';
 import clsx from 'clsx';
 
-export const AlgoliaLogo = component$<HTMLAttributes<HTMLElement>>(
+export const AlgoliaLogo = component$<HTMLAttributes<SVGSVGElement>>(
   ({ class: className, ...props }) => (
     <svg
       viewBox="0 0 135 64"
