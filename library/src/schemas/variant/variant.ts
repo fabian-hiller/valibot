@@ -14,10 +14,12 @@ import type { ObjectSchema } from '../object/index.ts';
  */
 export type VariantOption<TKey extends string> =
   | ObjectSchema<Record<TKey, BaseSchema>, any>
-  | (BaseSchema & {
-      type: 'variant';
-      options: VariantOptions<TKey>;
-    });
+  | VariantOptionSchema<TKey>;
+
+interface VariantOptionSchema<TKey extends string> extends BaseSchema {
+  type: 'variant';
+  options: VariantOptions<TKey>;
+}
 
 /**
  * Variant options type.

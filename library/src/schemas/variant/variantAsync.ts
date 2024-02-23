@@ -20,10 +20,19 @@ import type { ObjectSchema, ObjectSchemaAsync } from '../object/index.ts';
 export type VariantOptionAsync<TKey extends string> =
   | ObjectSchema<Record<TKey, BaseSchema>, any>
   | ObjectSchemaAsync<Record<TKey, BaseSchema | BaseSchemaAsync>, any>
-  | ((BaseSchema | BaseSchemaAsync) & {
-      type: 'variant';
-      options: VariantOptionsAsync<TKey>;
-    });
+  | VariantOptionAsyncSchema<TKey>
+  | VariantOptionAsyncSchemaAsync<TKey>;
+
+interface VariantOptionAsyncSchema<TKey extends string> extends BaseSchema {
+  type: 'variant';
+  options: VariantOptionsAsync<TKey>;
+}
+
+interface VariantOptionAsyncSchemaAsync<TKey extends string>
+  extends BaseSchemaAsync {
+  type: 'variant';
+  options: VariantOptionsAsync<TKey>;
+}
 
 /**
  * Variant options async type.
