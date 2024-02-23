@@ -4,12 +4,12 @@ import { actionOutput } from '../../utils/index.ts';
 /**
  * To trimmed end transformation type.
  */
-export type ToTrimmedEndTransformation = BaseTransformation<string> & {
+export interface ToTrimmedEndTransformation extends BaseTransformation<string> {
   /**
    * The transformation type.
    */
   type: 'to_trimmed_end';
-};
+}
 
 /**
  * Creates a pipeline transformation action that removes the trailing white

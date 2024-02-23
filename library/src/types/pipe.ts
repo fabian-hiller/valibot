@@ -105,7 +105,7 @@ export type BaseValidationAsync<TInput = any> = {
 /**
  * Base transformation type.
  */
-export type BaseTransformation<TInput = any> = {
+export interface BaseTransformation<TInput = any> {
   /**
    * Whether it's async.
    */
@@ -120,12 +120,12 @@ export type BaseTransformation<TInput = any> = {
    * @internal
    */
   _parse(input: TInput): PipeActionResult<TInput>;
-};
+}
 
 /**
  * Base transformation async type.
  */
-export type BaseTransformationAsync<TInput = any> = {
+export interface BaseTransformationAsync<TInput = any> {
   /**
    * Whether it's async.
    */
@@ -140,7 +140,7 @@ export type BaseTransformationAsync<TInput = any> = {
    * @internal
    */
   _parse(input: TInput): Promise<PipeActionResult<TInput>>;
-};
+}
 
 /**
  * Pipe type.
