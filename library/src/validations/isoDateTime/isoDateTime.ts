@@ -5,17 +5,17 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * ISO date time validation type.
  */
-export type IsoDateTimeValidation<TInput extends string> =
-  BaseValidation<TInput> & {
-    /**
-     * The validation type.
-     */
-    type: 'iso_date_time';
-    /**
-     * The ISO date time regex.
-     */
-    requirement: RegExp;
-  };
+export interface IsoDateTimeValidation<TInput extends string>
+  extends BaseValidation<TInput> {
+  /**
+   * The validation type.
+   */
+  type: 'iso_date_time';
+  /**
+   * The ISO date time regex.
+   */
+  requirement: RegExp;
+}
 
 /**
  * Creates a pipeline validation action that validates a datetime.

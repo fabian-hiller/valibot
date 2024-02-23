@@ -11,10 +11,10 @@ import { pipeIssue } from './utils/index.ts';
 /**
  * The schema context type.
  */
-type SchemaContext<TValue> = {
+interface SchemaContext<TValue> {
   type: IssueReason;
   pipe: PipeAsync<TValue> | undefined;
-};
+}
 
 /**
  * Executes the async validation and transformation pipe.

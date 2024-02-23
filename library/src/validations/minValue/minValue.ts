@@ -4,10 +4,10 @@ import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 /**
  * Min value validation type.
  */
-export type MinValueValidation<
+export interface MinValueValidation<
   TInput extends string | number | bigint | boolean | Date,
   TRequirement extends TInput
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type MinValueValidation<
    * The minimum value.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the value of a string,

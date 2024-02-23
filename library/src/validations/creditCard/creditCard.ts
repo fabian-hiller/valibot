@@ -4,17 +4,17 @@ import { actionIssue, actionOutput, isLuhnAlgo } from '../../utils/index.ts';
 /**
  * Credit card validation type.
  */
-export type CreditCardValidation<TInput extends string> =
-  BaseValidation<TInput> & {
-    /**
-     * The validation type.
-     */
-    type: 'credit_card';
-    /**
-     * The validation function.
-     */
-    requirement: (input: TInput) => boolean;
-  };
+export interface CreditCardValidation<TInput extends string>
+  extends BaseValidation<TInput> {
+  /**
+   * The validation type.
+   */
+  type: 'credit_card';
+  /**
+   * The validation function.
+   */
+  requirement: (input: TInput) => boolean;
+}
 
 /**
  * Sanitize regex.

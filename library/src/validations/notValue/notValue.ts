@@ -4,10 +4,10 @@ import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 /**
  * Not value validation type.
  */
-export type NotValueValidation<
+export interface NotValueValidation<
   TInput extends string | number | bigint | boolean | Date,
   TRequirement extends TInput
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type NotValueValidation<
    * The value.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the value of a string

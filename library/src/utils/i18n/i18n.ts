@@ -12,9 +12,9 @@ import type {
 /**
  * The i18n context type.
  */
-type I18nContext = {
+interface I18nContext {
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates the i18n error message.

@@ -15,7 +15,9 @@ import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 /**
  * Object entries type.
  */
-export type ObjectEntries = Record<string, BaseSchema>;
+export interface ObjectEntries {
+  [K: string]: BaseSchema;
+}
 
 /**
  * Object schema type.

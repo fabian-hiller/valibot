@@ -12,10 +12,8 @@ import {
 /**
  * Number schema async type.
  */
-export type NumberSchemaAsync<TOutput = number> = BaseSchemaAsync<
-  number,
-  TOutput
-> & {
+export interface NumberSchemaAsync<TOutput = number>
+  extends BaseSchemaAsync<number, TOutput> {
   /**
    * The schema type.
    */
@@ -28,7 +26,7 @@ export type NumberSchemaAsync<TOutput = number> = BaseSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<number> | undefined;
-};
+}
 
 /**
  * Creates an async number schema.

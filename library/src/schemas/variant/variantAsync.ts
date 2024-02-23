@@ -37,11 +37,11 @@ export type VariantOptionsAsync<TKey extends string> = [
 /**
  * Variant schema async type.
  */
-export type VariantSchemaAsync<
+export interface VariantSchemaAsync<
   TKey extends string,
   TOptions extends VariantOptionsAsync<TKey>,
   TOutput = Output<TOptions[number]>
-> = BaseSchemaAsync<Input<TOptions[number]>, TOutput> & {
+> extends BaseSchemaAsync<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
    */
@@ -62,7 +62,7 @@ export type VariantSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<Input<TOptions[number]>> | undefined;
-};
+}
 
 /**
  * Creates an async variant (aka discriminated union) schema.

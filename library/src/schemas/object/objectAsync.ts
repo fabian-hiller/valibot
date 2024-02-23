@@ -16,16 +16,18 @@ import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 /**
  * Object entries async type.
  */
-export type ObjectEntriesAsync = Record<string, BaseSchema | BaseSchemaAsync>;
+export interface ObjectEntriesAsync {
+  [K: string]: BaseSchema | BaseSchemaAsync;
+}
 
 /**
  * Object schema async type.
  */
-export type ObjectSchemaAsync<
+export interface ObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
   TOutput = ObjectOutput<TEntries, TRest>
-> = BaseSchemaAsync<ObjectInput<TEntries, TRest>, TOutput> & {
+> extends BaseSchemaAsync<ObjectInput<TEntries, TRest>, TOutput> {
   /**
    * The schema type.
    */
@@ -46,7 +48,7 @@ export type ObjectSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<ObjectOutput<TEntries, TRest>> | undefined;
-};
+}
 
 /**
  * Creates an async object schema.

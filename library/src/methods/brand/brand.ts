@@ -18,9 +18,9 @@ export type BrandName = string | number | symbol;
 /**
  * Brand type.
  */
-export type Brand<TName extends BrandName> = {
+export interface Brand<TName extends BrandName> {
   [BrandSymbol]: { [TValue in TName]: TValue };
-};
+}
 
 /**
  * Schema with brand type.

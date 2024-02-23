@@ -4,10 +4,8 @@ import { schemaIssue, schemaResult } from '../../utils/index.ts';
 /**
  * NaN schema async type.
  */
-export type NanSchemaAsync<TOutput = number> = BaseSchemaAsync<
-  number,
-  TOutput
-> & {
+export interface NanSchemaAsync<TOutput = number>
+  extends BaseSchemaAsync<number, TOutput> {
   /**
    * The schema type.
    */
@@ -16,7 +14,7 @@ export type NanSchemaAsync<TOutput = number> = BaseSchemaAsync<
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates an async NaN schema.

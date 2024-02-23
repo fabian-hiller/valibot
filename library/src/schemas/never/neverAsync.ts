@@ -4,7 +4,7 @@ import { schemaIssue } from '../../utils/index.ts';
 /**
  * Never schema async type.
  */
-export type NeverSchemaAsync = BaseSchemaAsync<never> & {
+export interface NeverSchemaAsync extends BaseSchemaAsync<never> {
   /**
    * The schema type.
    */
@@ -13,7 +13,7 @@ export type NeverSchemaAsync = BaseSchemaAsync<never> & {
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates an async never schema.

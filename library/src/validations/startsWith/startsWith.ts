@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Starts with validation type.
  */
-export type StartsWithValidation<
+export interface StartsWithValidation<
   TInput extends string,
   TRequirement extends string
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type StartsWithValidation<
    * The start string.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the start of a string.

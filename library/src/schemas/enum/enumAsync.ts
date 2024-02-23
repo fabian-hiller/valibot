@@ -5,10 +5,10 @@ import type { Enum } from './enum.ts';
 /**
  * Native enum schema async type.
  */
-export type EnumSchemaAsync<
+export interface EnumSchemaAsync<
   TEnum extends Enum,
   TOutput = TEnum[keyof TEnum]
-> = BaseSchemaAsync<TEnum[keyof TEnum], TOutput> & {
+> extends BaseSchemaAsync<TEnum[keyof TEnum], TOutput> {
   /**
    * The schema type.
    */
@@ -21,7 +21,7 @@ export type EnumSchemaAsync<
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates an async enum schema.

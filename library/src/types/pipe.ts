@@ -4,17 +4,17 @@ import type { PipeActionIssues } from './issues.ts';
 /**
  * Pipe action context type.
  */
-export type PipeActionContext = {
+export interface PipeActionContext {
   type: string;
   expects: string | null;
   message: ErrorMessage | undefined;
   requirement: unknown;
-};
+}
 
 /**
  * Valid action result type.
  */
-export type ValidActionResult<TOutput> = {
+export interface ValidActionResult<TOutput> {
   /**
    * The pipe output.
    */
@@ -23,12 +23,12 @@ export type ValidActionResult<TOutput> = {
    * The pipe issues.
    */
   issues?: undefined;
-};
+}
 
 /**
  * Invalid action result type.
  */
-export type InvalidActionResult = {
+export interface InvalidActionResult {
   /**
    * The pipe output.
    */
@@ -37,7 +37,7 @@ export type InvalidActionResult = {
    * The pipe issues.
    */
   issues: PipeActionIssues;
-};
+}
 
 /**
  * Pipe action result type.
@@ -49,7 +49,7 @@ export type PipeActionResult<TOutput> =
 /**
  * Base validation type.
  */
-export type BaseValidation<TInput = any> = {
+export interface BaseValidation<TInput = any> {
   /**
    * The expected property.
    */
@@ -72,12 +72,12 @@ export type BaseValidation<TInput = any> = {
    * @internal
    */
   _parse(input: TInput): PipeActionResult<TInput>;
-};
+}
 
 /**
  * Base validation async type.
  */
-export type BaseValidationAsync<TInput = any> = {
+export interface BaseValidationAsync<TInput = any> {
   /**
    * The expected property.
    */
@@ -100,7 +100,7 @@ export type BaseValidationAsync<TInput = any> = {
    * @internal
    */
   _parse(input: TInput): Promise<PipeActionResult<TInput>>;
-};
+}
 
 /**
  * Base transformation type.
