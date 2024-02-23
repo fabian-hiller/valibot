@@ -6,7 +6,6 @@ import type {
   ResolveObject,
 } from '../../types/index.ts';
 import type { NeverSchema, NeverSchemaAsync } from '../never/index.ts';
-import type { OptionalSchema, OptionalSchemaAsync } from '../optional/index.ts';
 import type { ObjectEntries } from './object.ts';
 import type { ObjectEntriesAsync } from './objectAsync.ts';
 
@@ -24,34 +23,16 @@ export interface ObjectPathItem {
 /**
  * Required object keys type.
  */
-type RequiredKeys<
-  TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>
-> = {
-  [TKey in keyof TEntries]: TEntries[TKey] extends
-    | OptionalSchema<any, any>
-    | OptionalSchemaAsync<any, any>
-    ? undefined extends TObject[TKey]
-      ? never
-      : TKey
-    : TKey;
-}[keyof TEntries];
+type RequiredKeys<TObject> = {
+  [TKey in keyof TObject]: undefined extends TObject[TKey] ? never : TKey;
+}[keyof TObject];
 
 /**
  * Optional object keys type.
  */
-type OptionalKeys<
-  TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>
-> = {
-  [TKey in keyof TEntries]: TEntries[TKey] extends
-    | OptionalSchema<any, any>
-    | OptionalSchemaAsync<any, any>
-    ? undefined extends TObject[TKey]
-      ? TKey
-      : never
-    : never;
-}[keyof TEntries];
+type OptionalKeys<TObject> = {
+  [TKey in keyof TObject]: undefined extends TObject[TKey] ? TKey : never;
+}[keyof TObject];
 
 /**
  * Entries input inference type.
@@ -70,11 +51,11 @@ type EntriesOutput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
 /**
  * Object with question marks type.
  */
-type WithQuestionMarks<
-  TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>
-> = Pick<TObject, RequiredKeys<TEntries, TObject>> &
-  Partial<Pick<TObject, OptionalKeys<TEntries, TObject>>>;
+type WithQuestionMarks<TObject> = {
+  [K in RequiredKeys<TObject>]: TObject[K];
+} & {
+  [K in OptionalKeys<TObject>]?: TObject[K];
+};
 
 /**
  * Object input inference type.
@@ -83,9 +64,9 @@ export type ObjectInput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined
 > = TRest extends undefined | NeverSchema | NeverSchemaAsync
-  ? ResolveObject<WithQuestionMarks<TEntries, EntriesInput<TEntries>>>
+  ? ResolveObject<WithQuestionMarks<EntriesInput<TEntries>>>
   : TRest extends BaseSchema | BaseSchemaAsync
-  ? ResolveObject<WithQuestionMarks<TEntries, EntriesInput<TEntries>>> &
+  ? ResolveObject<WithQuestionMarks<EntriesInput<TEntries>>> &
       Record<string, Input<TRest>>
   : never;
 
@@ -96,8 +77,8 @@ export type ObjectOutput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined
 > = TRest extends undefined | NeverSchema | NeverSchemaAsync
-  ? ResolveObject<WithQuestionMarks<TEntries, EntriesOutput<TEntries>>>
+  ? ResolveObject<WithQuestionMarks<EntriesOutput<TEntries>>>
   : TRest extends BaseSchema | BaseSchemaAsync
-  ? ResolveObject<WithQuestionMarks<TEntries, EntriesOutput<TEntries>>> &
+  ? ResolveObject<WithQuestionMarks<EntriesOutput<TEntries>>> &
       Record<string, Output<TRest>>
   : never;

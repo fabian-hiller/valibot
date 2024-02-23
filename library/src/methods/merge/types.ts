@@ -5,22 +5,41 @@ import type { ObjectSchema, ObjectSchemaAsync } from '../../schemas/index.ts';
  */
 export type MergeObjects<
   TSchemas extends (ObjectSchema<any, any> | ObjectSchemaAsync<any, any>)[]
-> = TSchemas extends [infer TFirstSchema]
-  ? TFirstSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
-    ? TFirstSchema['entries']
-    : never
-  : TSchemas extends [infer TFirstSchema, ...infer TRestSchemas]
-  ? TFirstSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
-    ? TRestSchemas extends (
+> = TSchemas extends [
+  infer TFirstSchema extends
+    | ObjectSchema<any, any>
+    | ObjectSchemaAsync<any, any>
+]
+  ? TFirstSchema['entries']
+  : TSchemas extends [
+      infer TFirstSchema extends
         | ObjectSchema<any, any>
-        | ObjectSchemaAsync<any, any>
-      )[]
-      ? {
-          [TKey in Exclude<
-            keyof TFirstSchema['entries'],
-            keyof MergeObjects<TRestSchemas>
-          >]: TFirstSchema['entries'][TKey];
-        } & MergeObjects<TRestSchemas>
-      : never
-    : never
+        | ObjectSchemaAsync<any, any>,
+      ...infer TRestSchemas
+    ]
+  ? MergeObjectsInner<TRestSchemas, TFirstSchema['entries']>
+  : never;
+
+type MergeObjectsInner<TSchemas, Result> = TSchemas extends [
+  infer TFirstSchema extends
+    | ObjectSchema<any, any>
+    | ObjectSchemaAsync<any, any>
+]
+  ? TFirstSchema['entries']
+  : TSchemas extends [
+      infer TFirstSchema extends
+        | ObjectSchema<any, any>
+        | ObjectSchemaAsync<any, any>,
+      ...infer TRestSchemas
+    ]
+  ? MergeObjectsInner<
+      TRestSchemas,
+      {
+        [K in
+          | keyof Result
+          | keyof TFirstSchema['entries']]: K extends keyof TFirstSchema['entries']
+          ? TFirstSchema['entries'][K]
+          : Result[K];
+      }
+    >
   : never;
