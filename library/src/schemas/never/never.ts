@@ -4,7 +4,7 @@ import { schemaIssue } from '../../utils/index.ts';
 /**
  * Never schema type.
  */
-export type NeverSchema = BaseSchema<never> & {
+export interface NeverSchema extends BaseSchema<never> {
   /**
    * The schema type.
    */
@@ -13,7 +13,7 @@ export type NeverSchema = BaseSchema<never> & {
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates a never schema.

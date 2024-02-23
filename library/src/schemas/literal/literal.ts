@@ -5,10 +5,8 @@ import type { Literal } from './types.ts';
 /**
  * Literal schema type.
  */
-export type LiteralSchema<
-  TLiteral extends Literal,
-  TOutput = TLiteral
-> = BaseSchema<TLiteral, TOutput> & {
+export interface LiteralSchema<TLiteral extends Literal, TOutput = TLiteral>
+  extends BaseSchema<TLiteral, TOutput> {
   /**
    * The schema type.
    */
@@ -21,7 +19,7 @@ export type LiteralSchema<
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates a literal schema.

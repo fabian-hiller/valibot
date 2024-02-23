@@ -4,7 +4,8 @@ import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 /**
  * String schema type.
  */
-export type StringSchema<TOutput = string> = BaseSchema<string, TOutput> & {
+export interface StringSchema<TOutput = string>
+  extends BaseSchema<string, TOutput> {
   /**
    * The schema type.
    */
@@ -17,7 +18,7 @@ export type StringSchema<TOutput = string> = BaseSchema<string, TOutput> & {
    * The validation and transformation pipeline.
    */
   pipe: Pipe<string> | undefined;
-};
+}
 
 /**
  * Creates a string schema.

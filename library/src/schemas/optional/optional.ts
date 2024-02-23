@@ -5,7 +5,7 @@ import { schemaResult } from '../../utils/index.ts';
 /**
  * Optional schema type.
  */
-export type OptionalSchema<
+export interface OptionalSchema<
   TWrapped extends BaseSchema,
   TDefault extends
     | Input<TWrapped>
@@ -14,7 +14,7 @@ export type OptionalSchema<
   TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
     : Output<TWrapped> | undefined
-> = BaseSchema<Input<TWrapped> | undefined, TOutput> & {
+> extends BaseSchema<Input<TWrapped> | undefined, TOutput> {
   /**
    * The schema type.
    */
@@ -27,7 +27,7 @@ export type OptionalSchema<
    * Returns the default value.
    */
   default: TDefault;
-};
+}
 
 /**
  * Creates a optional schema.

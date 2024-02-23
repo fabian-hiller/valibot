@@ -4,7 +4,8 @@ import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 /**
  * Boolean schema type.
  */
-export type BooleanSchema<TOutput = boolean> = BaseSchema<boolean, TOutput> & {
+export interface BooleanSchema<TOutput = boolean>
+  extends BaseSchema<boolean, TOutput> {
   /**
    * The schema type.
    */
@@ -17,7 +18,7 @@ export type BooleanSchema<TOutput = boolean> = BaseSchema<boolean, TOutput> & {
    * The validation and transformation pipeline.
    */
   pipe: Pipe<boolean> | undefined;
-};
+}
 
 /**
  * Creates a boolean schema.
