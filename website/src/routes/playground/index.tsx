@@ -65,7 +65,7 @@ export default component$(() => {
             [
               event.data.level,
               event.data.args
-                .map((arg) => JSON.stringify(arg, null, 4))
+                .map((arg) => JSON.stringify(arg, null, 2))
                 .join(', '),
             ],
           ];
