@@ -16,7 +16,7 @@ import type { Class } from './types.ts';
  */
 export type InstanceSchemaAsync<
   TClass extends Class,
-  TOutput = InstanceType<TClass>
+  TOutput = InstanceType<TClass>,
 > = BaseSchemaAsync<InstanceType<TClass>, TOutput> & {
   /**
    * The schema type.

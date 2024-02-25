@@ -1,8 +1,8 @@
 import {
   $,
   component$,
-  type QwikKeyboardEvent,
   type Signal,
+  sync$,
   useComputed$,
   useSignal,
   useTask$,
@@ -213,10 +213,10 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
                       hit.type === 'lvl2'
                         ? 'page'
                         : prevItem &&
-                          prevItem.relation !== 'none' &&
-                          prevItem.path.split('#')[0] === path.split('#')[0]
-                        ? 'child'
-                        : 'none',
+                            prevItem.relation !== 'none' &&
+                            prevItem.path.split('#')[0] === path.split('#')[0]
+                          ? 'child'
+                          : 'none',
                     type: hit.type,
                     page: hit._highlightResult.hierarchy.lvl2.value,
                     text:
@@ -285,46 +285,53 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
   /**
    * Handles keyboard keydown events.
    */
-  const handleKeyDown = $(
-    ({ ctrlKey, metaKey, key }: QwikKeyboardEvent<HTMLDivElement>) => {
-      // Open or close search
-      if (
-        ((ctrlKey || metaKey) && key === 'k') ||
-        (open.value && key === 'Escape')
-      ) {
-        open.value = !open.value;
-      }
+  const handleKeyDown = $((event: KeyboardEvent) => {
+    // Open or close search
+    if (
+      ((event.ctrlKey || event.metaKey) && event.key === 'k') ||
+      (open.value && event.key === 'Escape')
+    ) {
+      open.value = !open.value;
+    }
 
-      if (open.value) {
-        // Change active index
-        if (key === 'ArrowUp' || key === 'ArrowDown') {
-          const maxIndex = searchItems.value.length - 1;
-          activeIndex.value =
-            key === 'ArrowUp'
-              ? activeIndex.value === 0
-                ? maxIndex
-                : activeIndex.value - 1
-              : activeIndex.value === maxIndex
+    if (open.value) {
+      // Change active index
+      if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+        const maxIndex = searchItems.value.length - 1;
+        activeIndex.value =
+          event.key === 'ArrowUp'
+            ? activeIndex.value === 0
+              ? maxIndex
+              : activeIndex.value - 1
+            : activeIndex.value === maxIndex
               ? 0
               : activeIndex.value + 1;
-        }
+      }
 
-        // Select current active index
-        if (key === 'Enter') {
-          const item = searchItems.value[activeIndex.value];
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          if (item) {
-            if (item.path === location.url.pathname) {
-              open.value = false;
-            } else {
-              navigate(item.path);
-            }
-            clicked.value = item;
+      // Select current active index
+      if (event.key === 'Enter') {
+        const item = searchItems.value[activeIndex.value];
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (item) {
+          if (item.path === location.url.pathname) {
+            open.value = false;
+          } else {
+            navigate(item.path);
           }
+          clicked.value = item;
         }
       }
     }
-  );
+  });
+
+  /**
+   * Prevents default behavior of keydown events.
+   */
+  const preventDefault = sync$((event: KeyboardEvent) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+      event.preventDefault();
+    }
+  });
 
   return (
     <div
@@ -332,11 +339,11 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
         open.value && 'fixed left-0 top-0 z-40 h-screen w-screen lg:p-48'
       )}
       ref={modalElement}
-      window:onKeyDown$={handleKeyDown}
+      window:onKeyDown$={[preventDefault, handleKeyDown]}
     >
       {open.value && (
         <>
-          <div class="flex h-full w-full flex-col bg-white/90 backdrop-blur-sm dark:bg-gray-900/90 lg:mx-auto lg:h-auto lg:max-h-full lg:max-w-3xl lg:rounded-3xl lg:bg-white lg:backdrop-blur-none lg:dark:bg-gray-900">
+          <div class="flex h-full w-full flex-col bg-white/90 backdrop-blur-sm lg:mx-auto lg:h-auto lg:max-h-full lg:max-w-3xl lg:rounded-3xl lg:bg-white lg:backdrop-blur-none dark:bg-gray-900/90 lg:dark:bg-gray-900">
             {/* Header */}
             <header class="flex h-14 flex-shrink-0 items-center px-2 md:h-16 lg:h-[72px] lg:px-4">
               <form class="flex flex-1" preventdefault:submit>
@@ -349,7 +356,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
                   <SearchIcon class="h-full" />
                 </SystemIcon>
                 <input
-                  class="flex-1 bg-transparent px-2 text-lg text-slate-900 outline-none placeholder:text-slate-500 dark:text-slate-200 md:text-xl"
+                  class="flex-1 bg-transparent px-2 text-lg text-slate-900 outline-none placeholder:text-slate-500 md:text-xl dark:text-slate-200"
                   ref={inputElement}
                   type="search"
                   placeholder="Search docs"
@@ -406,17 +413,17 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
                           : undefined;
                       return (
                         <li
-                          key={item.path}
+                          key={item.path + item.text}
                           class={clsx(
                             index > 0 &&
                               (getGroup()
                                 ? 'mt-9'
                                 : item.relation === 'page' &&
-                                  getPrevItem()?.relation !== 'page'
-                                ? 'mt-6'
-                                : item.relation === 'child'
-                                ? 'border-l-2 border-l-slate-200 pl-2 pt-2.5 dark:border-l-slate-800'
-                                : 'mt-2.5')
+                                    getPrevItem()?.relation !== 'page'
+                                  ? 'mt-6'
+                                  : item.relation === 'child'
+                                    ? 'border-l-2 border-l-slate-200 pl-2 pt-2.5 dark:border-l-slate-800'
+                                    : 'mt-2.5')
                           )}
                         >
                           {getGroup() && (
@@ -440,7 +447,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
                     <div class="text-sm md:text-base">Recent</div>
                     <ul class="mt-6 space-y-2.5">
                       {recent.value.map((item, index) => (
-                        <li key={item.path}>
+                        <li key={item.path + item.text}>
                           <SearchItem
                             {...item}
                             index={index}
@@ -527,7 +534,8 @@ const SearchItem = component$<SearchItemProps>(
         ref={element}
         href={path}
         onMouseEnter$={() => (activeIndex.value = index)}
-        onFocusin$={() => (activeIndex.value = index)}
+        onFocusIn$={() => (activeIndex.value = index)}
+        // eslint-disable-next-line qwik/valid-lexical-scope
         onClick$={onClick$}
       >
         {relation === 'page' ? (

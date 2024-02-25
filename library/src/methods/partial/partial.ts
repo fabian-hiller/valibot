@@ -62,7 +62,7 @@ export function partial<TSchema extends ObjectSchema<any, any>>(
  */
 export function partial<
   TSchema extends ObjectSchema<any, any>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -82,7 +82,7 @@ export function partial<
  */
 export function partial<
   TSchema extends ObjectSchema<any, any>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -92,7 +92,7 @@ export function partial<
 
 export function partial<
   TSchema extends ObjectSchema<any, any>,
-  TRest extends BaseSchema | undefined = undefined
+  TRest extends BaseSchema | undefined = undefined,
 >(
   schema: TSchema,
   arg2?:

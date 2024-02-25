@@ -1,23 +1,26 @@
-import { component$, Slot } from '@builder.io/qwik';
+import { component$, type QRLEventHandlerMulti, Slot } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 
-type LinkProps = {
+export type LinkButtonProps = {
+  class?: string;
   type: 'link';
   href: string;
   download?: boolean | string;
   target?: '_blank';
 };
 
-type ButtonProps = {
+export type NormalButtonProps = {
+  class?: string;
   type: 'button' | 'submit';
   'preventdefault:click'?: boolean;
-  onClick$?: () => any;
+  onClick$?:
+    | ((event: PointerEvent, element: HTMLButtonElement) => any)
+    | QRLEventHandlerMulti<PointerEvent, HTMLButtonElement>;
 };
 
-export type DefaultButtonProps = LinkProps | ButtonProps;
+export type DefaultButtonProps = LinkButtonProps | NormalButtonProps;
 
 type UnstyledButtonProps = DefaultButtonProps & {
-  class?: string;
   'aria-label'?: string;
 };
 

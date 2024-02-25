@@ -16,11 +16,11 @@ export type DefaultValues<TSchema extends BaseSchema | BaseSchemaAsync> =
   TSchema extends ObjectSchema<infer TEntries extends ObjectEntries>
     ? { [TKey in keyof TEntries]: DefaultValues<TEntries[TKey]> }
     : TSchema extends ObjectSchemaAsync<
-        infer TEntries extends ObjectEntriesAsync
-      >
-    ? { [TKey in keyof TEntries]: DefaultValues<TEntries[TKey]> }
-    : TSchema extends TupleSchema<infer TItems>
-    ? { [TKey in keyof TItems]: DefaultValues<TItems[TKey]> }
-    : TSchema extends TupleSchemaAsync<infer TItems>
-    ? { [TKey in keyof TItems]: DefaultValues<TItems[TKey]> }
-    : DefaultValue<TSchema>;
+          infer TEntries extends ObjectEntriesAsync
+        >
+      ? { [TKey in keyof TEntries]: DefaultValues<TEntries[TKey]> }
+      : TSchema extends TupleSchema<infer TItems>
+        ? { [TKey in keyof TItems]: DefaultValues<TItems[TKey]> }
+        : TSchema extends TupleSchemaAsync<infer TItems>
+          ? { [TKey in keyof TItems]: DefaultValues<TItems[TKey]> }
+          : DefaultValue<TSchema>;

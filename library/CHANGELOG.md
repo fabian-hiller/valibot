@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Remove deprecated properties of `safeParse` and `safeParseAsync` method
+
 ## v0.29.0 (February 19, 2024)
 
 - Add `every` and `some` pipeline validation action

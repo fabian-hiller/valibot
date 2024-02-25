@@ -26,7 +26,7 @@ export type ObjectPathItem = {
  */
 type RequiredKeys<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>
+  TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>,
 > = {
   [TKey in keyof TEntries]: TEntries[TKey] extends
     | OptionalSchema<any, any>
@@ -42,7 +42,7 @@ type RequiredKeys<
  */
 type OptionalKeys<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>
+  TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>,
 > = {
   [TKey in keyof TEntries]: TEntries[TKey] extends
     | OptionalSchema<any, any>
@@ -72,7 +72,7 @@ type EntriesOutput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
  */
 type WithQuestionMarks<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>
+  TObject extends EntriesInput<TEntries> | EntriesOutput<TEntries>,
 > = Pick<TObject, RequiredKeys<TEntries, TObject>> &
   Partial<Pick<TObject, OptionalKeys<TEntries, TObject>>>;
 
@@ -81,23 +81,23 @@ type WithQuestionMarks<
  */
 export type ObjectInput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 > = TRest extends undefined | NeverSchema | NeverSchemaAsync
   ? ResolveObject<WithQuestionMarks<TEntries, EntriesInput<TEntries>>>
   : TRest extends BaseSchema | BaseSchemaAsync
-  ? ResolveObject<WithQuestionMarks<TEntries, EntriesInput<TEntries>>> &
-      Record<string, Input<TRest>>
-  : never;
+    ? ResolveObject<WithQuestionMarks<TEntries, EntriesInput<TEntries>>> &
+        Record<string, Input<TRest>>
+    : never;
 
 /**
  * Object output inference type.
  */
 export type ObjectOutput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 > = TRest extends undefined | NeverSchema | NeverSchemaAsync
   ? ResolveObject<WithQuestionMarks<TEntries, EntriesOutput<TEntries>>>
   : TRest extends BaseSchema | BaseSchemaAsync
-  ? ResolveObject<WithQuestionMarks<TEntries, EntriesOutput<TEntries>>> &
-      Record<string, Output<TRest>>
-  : never;
+    ? ResolveObject<WithQuestionMarks<TEntries, EntriesOutput<TEntries>>> &
+        Record<string, Output<TRest>>
+    : never;

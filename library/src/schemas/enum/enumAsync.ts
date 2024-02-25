@@ -16,7 +16,7 @@ import type { Enum } from './enum.ts';
  */
 export type EnumSchemaAsync<
   TEnum extends Enum,
-  TOutput = TEnum[keyof TEnum]
+  TOutput = TEnum[keyof TEnum],
 > = BaseSchemaAsync<TEnum[keyof TEnum], TOutput> & {
   /**
    * The schema type.

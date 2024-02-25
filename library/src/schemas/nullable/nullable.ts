@@ -13,7 +13,7 @@ export type NullableSchema<
     | undefined = undefined,
   TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
-    : Output<TWrapped> | null
+    : Output<TWrapped> | null,
 > = BaseSchema<Input<TWrapped> | null, TOutput> & {
   /**
    * The schema type.
@@ -53,7 +53,7 @@ export function nullable<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
-    | undefined
+    | undefined,
 >(wrapped: TWrapped, default_: TDefault): NullableSchema<TWrapped, TDefault>;
 
 export function nullable<
@@ -61,7 +61,7 @@ export function nullable<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
-    | undefined = undefined
+    | undefined = undefined,
 >(wrapped: TWrapped, default_?: TDefault): NullableSchema<TWrapped, TDefault> {
   return {
     type: 'nullable',

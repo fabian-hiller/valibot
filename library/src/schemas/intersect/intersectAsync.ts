@@ -23,7 +23,7 @@ export type IntersectOptionsAsync = MaybeReadonly<
   [
     BaseSchema | BaseSchemaAsync,
     BaseSchema | BaseSchemaAsync,
-    ...(BaseSchema[] | BaseSchemaAsync[])
+    ...(BaseSchema[] | BaseSchemaAsync[]),
   ]
 >;
 
@@ -32,7 +32,7 @@ export type IntersectOptionsAsync = MaybeReadonly<
  */
 export type IntersectSchemaAsync<
   TOptions extends IntersectOptionsAsync,
-  TOutput = IntersectOutput<TOptions>
+  TOutput = IntersectOutput<TOptions>,
 > = BaseSchemaAsync<IntersectInput<TOptions>, TOutput> & {
   /**
    * The schema type.

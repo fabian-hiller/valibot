@@ -23,7 +23,7 @@ import { restAndDefaultArgs } from '../../utils/index.ts';
  */
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends ObjectKeys<TSchema>
+  TKeys extends ObjectKeys<TSchema>,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -43,7 +43,7 @@ export function pick<
  */
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends ObjectKeys<TSchema>
+  TKeys extends ObjectKeys<TSchema>,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -65,7 +65,7 @@ export function pick<
 export function pick<
   TSchema extends ObjectSchema<any, any>,
   TKeys extends ObjectKeys<TSchema>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -88,7 +88,7 @@ export function pick<
 export function pick<
   TSchema extends ObjectSchema<any, any>,
   TKeys extends ObjectKeys<TSchema>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -100,7 +100,7 @@ export function pick<
 export function pick<
   TSchema extends ObjectSchema<any, any>,
   TKeys extends ObjectKeys<TSchema>,
-  TRest extends BaseSchema | undefined = undefined
+  TRest extends BaseSchema | undefined = undefined,
 >(
   schema: TSchema,
   keys: TKeys,

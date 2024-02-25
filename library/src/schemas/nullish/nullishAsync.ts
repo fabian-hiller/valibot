@@ -20,7 +20,7 @@ export type NullishSchemaAsync<
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
     ? Output<TWrapped>
-    : Output<TWrapped> | null | undefined
+    : Output<TWrapped> | null | undefined,
 > = BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> & {
   /**
    * The schema type.
@@ -60,7 +60,7 @@ export function nullishAsync<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined
+    | undefined,
 >(
   wrapped: TWrapped,
   default_: TDefault
@@ -71,7 +71,7 @@ export function nullishAsync<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined = undefined
+    | undefined = undefined,
 >(
   wrapped: TWrapped,
   default_?: TDefault

@@ -10,7 +10,7 @@ import type { PathList } from './types.ts';
  * @returns The passed validation.
  */
 export function forwardAsync<
-  TInput extends unknown[] | Record<string, unknown>
+  TInput extends unknown[] | Record<string, unknown>,
 >(
   validation: BaseValidationAsync<TInput>,
   pathList: PathList<TInput>

@@ -12,7 +12,7 @@ import type { Class } from './types.ts';
  */
 export type InstanceSchema<
   TClass extends Class,
-  TOutput = InstanceType<TClass>
+  TOutput = InstanceType<TClass>,
 > = BaseSchema<InstanceType<TClass>, TOutput> & {
   /**
    * The schema type.

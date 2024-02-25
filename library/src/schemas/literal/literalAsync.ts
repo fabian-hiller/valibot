@@ -16,7 +16,7 @@ import type { Literal } from './types.ts';
  */
 export type LiteralSchemaAsync<
   TLiteral extends Literal,
-  TOutput = TLiteral
+  TOutput = TLiteral,
 > = BaseSchemaAsync<TLiteral, TOutput> & {
   /**
    * The schema type.

@@ -24,7 +24,7 @@ export type ObjectEntries = Record<string, BaseSchema>;
 export type ObjectSchema<
   TEntries extends ObjectEntries,
   TRest extends BaseSchema | undefined = undefined,
-  TOutput = ObjectOutput<TEntries, TRest>
+  TOutput = ObjectOutput<TEntries, TRest>,
 > = BaseSchema<ObjectInput<TEntries, TRest>, TOutput> & {
   /**
    * The schema type.
@@ -87,7 +87,7 @@ export function object<TEntries extends ObjectEntries>(
  */
 export function object<
   TEntries extends ObjectEntries,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   entries: TEntries,
   rest: TRest,
@@ -106,7 +106,7 @@ export function object<
  */
 export function object<
   TEntries extends ObjectEntries,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   entries: TEntries,
   rest: TRest,
@@ -116,7 +116,7 @@ export function object<
 
 export function object<
   TEntries extends ObjectEntries,
-  TRest extends BaseSchema | undefined = undefined
+  TRest extends BaseSchema | undefined = undefined,
 >(
   entries: TEntries,
   arg2?: Pipe<ObjectOutput<TEntries, TRest>> | ErrorMessageOrMetadata | TRest,

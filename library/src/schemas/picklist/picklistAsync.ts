@@ -16,7 +16,7 @@ import type { PicklistOptions } from './types.ts';
  */
 export type PicklistSchemaAsync<
   TOptions extends PicklistOptions,
-  TOutput = TOptions[number]
+  TOutput = TOptions[number],
 > = BaseSchemaAsync<TOptions[number], TOutput> & {
   /**
    * The schema type.

@@ -10,7 +10,7 @@ import type {
  */
 export type LazySchema<
   TGetter extends (input: unknown) => BaseSchema,
-  TOutput = Output<ReturnType<TGetter>>
+  TOutput = Output<ReturnType<TGetter>>,
 > = BaseSchema<Input<ReturnType<TGetter>>, TOutput> & {
   /**
    * The schema type.

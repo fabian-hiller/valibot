@@ -6,7 +6,7 @@ import { actionOutput } from '../../utils/index.ts';
  */
 export type ToMinValueTransformation<
   TInput extends string | number | bigint | Date,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 > = BaseTransformation<TInput> & {
   /**
    * The transformation type.
@@ -28,7 +28,7 @@ export type ToMinValueTransformation<
  */
 export function toMinValue<
   TInput extends string | number | bigint | Date,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 >(requirement: TRequirement): ToMinValueTransformation<TInput, TRequirement> {
   return {
     type: 'to_min_value',

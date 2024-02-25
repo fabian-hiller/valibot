@@ -13,7 +13,7 @@ export type NullishSchema<
     | undefined = undefined,
   TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
-    : Output<TWrapped> | null | undefined
+    : Output<TWrapped> | null | undefined,
 > = BaseSchema<Input<TWrapped> | null | undefined, TOutput> & {
   /**
    * The schema type.
@@ -53,7 +53,7 @@ export function nullish<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
-    | undefined
+    | undefined,
 >(wrapped: TWrapped, default_: TDefault): NullishSchema<TWrapped, TDefault>;
 
 export function nullish<
@@ -61,7 +61,7 @@ export function nullish<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
-    | undefined = undefined
+    | undefined = undefined,
 >(wrapped: TWrapped, default_?: TDefault): NullishSchema<TWrapped, TDefault> {
   return {
     type: 'nullish',

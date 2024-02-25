@@ -1,6 +1,6 @@
 import { component$, type HTMLAttributes } from '@builder.io/qwik';
 
-export const AngleRightIcon = component$<HTMLAttributes<HTMLElement>>(
+export const AngleRightIcon = component$<HTMLAttributes<SVGSVGElement>>(
   (props) => (
     <svg
       viewBox="0 0 26 48"

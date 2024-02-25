@@ -19,7 +19,7 @@ import type { TupleInput, TupleOutput, TuplePathItem } from './types.ts';
  */
 export type TupleItemsAsync = [
   BaseSchema | BaseSchemaAsync,
-  ...(BaseSchema | BaseSchemaAsync)[]
+  ...(BaseSchema | BaseSchemaAsync)[],
 ];
 
 /**
@@ -28,7 +28,7 @@ export type TupleItemsAsync = [
 export type TupleSchemaAsync<
   TItems extends TupleItemsAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
-  TOutput = TupleOutput<TItems, TRest>
+  TOutput = TupleOutput<TItems, TRest>,
 > = BaseSchemaAsync<TupleInput<TItems, TRest>, TOutput> & {
   /**
    * The schema type.
@@ -91,7 +91,7 @@ export function tupleAsync<TItems extends TupleItemsAsync>(
  */
 export function tupleAsync<
   TItems extends TupleItemsAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   items: TItems,
   rest: TRest,
@@ -110,7 +110,7 @@ export function tupleAsync<
  */
 export function tupleAsync<
   TItems extends TupleItemsAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   items: TItems,
   rest: TRest,
@@ -120,7 +120,7 @@ export function tupleAsync<
 
 export function tupleAsync<
   TItems extends TupleItemsAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
 >(
   items: TItems,
   arg2?: PipeAsync<TupleOutput<TItems, TRest>> | ErrorMessageOrMetadata | TRest,

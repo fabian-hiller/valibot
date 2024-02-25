@@ -19,7 +19,7 @@ import type { MergeObjects } from './types.ts';
 type ObjectSchemas = [
   ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  ...(ObjectSchema<any, any> | ObjectSchemaAsync<any, any>)[]
+  ...(ObjectSchema<any, any> | ObjectSchemaAsync<any, any>)[],
 ];
 
 /**
@@ -64,7 +64,7 @@ export function mergeAsync<TSchemas extends ObjectSchemas>(
  */
 export function mergeAsync<
   TSchemas extends ObjectSchemas,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   schemas: TSchemas,
   rest: TRest,
@@ -84,7 +84,7 @@ export function mergeAsync<
  */
 export function mergeAsync<
   TSchemas extends ObjectSchemas,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   schemas: TSchemas,
   rest: TRest,
@@ -94,7 +94,7 @@ export function mergeAsync<
 
 export function mergeAsync<
   TSchemas extends ObjectSchemas,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
 >(
   schemas: TSchemas,
   arg2?:

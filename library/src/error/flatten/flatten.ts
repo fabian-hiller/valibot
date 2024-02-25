@@ -66,52 +66,60 @@ type NestedPath<TSchema extends BaseSchema | BaseSchemaAsync> =
   TSchema extends ArraySchema<infer TItem extends BaseSchema>
     ? DotPath<number, TItem>
     : TSchema extends ArraySchemaAsync<
-        infer TItem extends BaseSchema | BaseSchemaAsync
-      >
-    ? DotPath<number, TItem>
-    : // Map
-    TSchema extends
-        | MapSchema<infer TKey, infer TValue>
-        | MapSchemaAsync<infer TKey, infer TValue>
-    ? DotPath<Input<TKey>, TValue>
-    : // Object
-    TSchema extends
-        | ObjectSchema<infer TEntries, infer TRest>
-        | ObjectSchemaAsync<infer TEntries, infer TRest>
-    ? TRest extends BaseSchema | BaseSchemaAsync
-      ? ObjectPath<TEntries> | DotPath<string, TRest>
-      : ObjectPath<TEntries>
-    : // Record
-    TSchema extends
-        | RecordSchema<infer TKey, infer TValue>
-        | RecordSchemaAsync<infer TKey, infer TValue>
-    ? DotPath<Input<TKey>, TValue>
-    : // Recursive
-    TSchema extends LazySchema<infer TSchemaGetter extends () => BaseSchema>
-    ? NestedPath<ReturnType<TSchemaGetter>>
-    : TSchema extends LazySchemaAsync<
-        infer TSchemaGetter extends () => BaseSchema | BaseSchemaAsync
-      >
-    ? NestedPath<ReturnType<TSchemaGetter>>
-    : // Set
-    TSchema extends SetSchema<infer TValue> | SetSchemaAsync<infer TValue>
-    ? DotPath<number, TValue>
-    : // Tuple
-    TSchema extends
-        | TupleSchema<infer TItems, infer TRest>
-        | TupleSchemaAsync<infer TItems, infer TRest>
-    ? TRest extends BaseSchema | BaseSchemaAsync
-      ? TuplePath<TItems> | DotPath<number, TRest>
-      : TuplePath<TItems>
-    : // Union
-    TSchema extends UnionSchema<infer TUnionOptions extends UnionOptions>
-    ? NestedPath<TUnionOptions[number]>
-    : TSchema extends UnionSchemaAsync<
-        infer TUnionOptions extends UnionOptionsAsync
-      >
-    ? NestedPath<TUnionOptions[number]>
-    : // Otherwise
-      never;
+          infer TItem extends BaseSchema | BaseSchemaAsync
+        >
+      ? DotPath<number, TItem>
+      : // Map
+        TSchema extends
+            | MapSchema<infer TKey, infer TValue>
+            | MapSchemaAsync<infer TKey, infer TValue>
+        ? DotPath<Input<TKey>, TValue>
+        : // Object
+          TSchema extends
+              | ObjectSchema<infer TEntries, infer TRest>
+              | ObjectSchemaAsync<infer TEntries, infer TRest>
+          ? TRest extends BaseSchema | BaseSchemaAsync
+            ? ObjectPath<TEntries> | DotPath<string, TRest>
+            : ObjectPath<TEntries>
+          : // Record
+            TSchema extends
+                | RecordSchema<infer TKey, infer TValue>
+                | RecordSchemaAsync<infer TKey, infer TValue>
+            ? DotPath<Input<TKey>, TValue>
+            : // Recursive
+              TSchema extends LazySchema<
+                  infer TSchemaGetter extends () => BaseSchema
+                >
+              ? NestedPath<ReturnType<TSchemaGetter>>
+              : TSchema extends LazySchemaAsync<
+                    infer TSchemaGetter extends () =>
+                      | BaseSchema
+                      | BaseSchemaAsync
+                  >
+                ? NestedPath<ReturnType<TSchemaGetter>>
+                : // Set
+                  TSchema extends
+                      | SetSchema<infer TValue>
+                      | SetSchemaAsync<infer TValue>
+                  ? DotPath<number, TValue>
+                  : // Tuple
+                    TSchema extends
+                        | TupleSchema<infer TItems, infer TRest>
+                        | TupleSchemaAsync<infer TItems, infer TRest>
+                    ? TRest extends BaseSchema | BaseSchemaAsync
+                      ? TuplePath<TItems> | DotPath<number, TRest>
+                      : TuplePath<TItems>
+                    : // Union
+                      TSchema extends UnionSchema<
+                          infer TUnionOptions extends UnionOptions
+                        >
+                      ? NestedPath<TUnionOptions[number]>
+                      : TSchema extends UnionSchemaAsync<
+                            infer TUnionOptions extends UnionOptionsAsync
+                          >
+                        ? NestedPath<TUnionOptions[number]>
+                        : // Otherwise
+                          never;
 
 /**
  * Flat errors type.

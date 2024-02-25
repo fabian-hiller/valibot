@@ -16,7 +16,7 @@ import {
 import '../styles/pace.css';
 import { IconButton } from './IconButton';
 import { Navigation } from './Navigation';
-import { SideBar } from './SideBar';
+import { SideBar, useSideBarToggle } from './SideBar';
 
 type NavItem = ContentMenu & { group: string };
 
@@ -24,10 +24,11 @@ type NavItem = ContentMenu & { group: string };
  * Provides the layout for the documentation pages.
  */
 export const DocsLayout = component$(() => {
-  // Use location, content and docuemnt head
+  // Use location, content, docuemnt head and side bar toggle
   const location = useLocation();
   const content = useContent();
   const documentHead = useDocumentHead();
+  const sideBarToggle = useSideBarToggle();
 
   // Compute navigation items
   const navItems = useComputed$(
@@ -59,13 +60,14 @@ export const DocsLayout = component$(() => {
 
   // Compute contributors
   const contributors = useComputed$<string[]>(
+    // eslint-disable-next-line qwik/valid-lexical-scope
     () => documentHead.frontmatter.contributors || []
   );
 
   return (
     <div class="flex w-full max-w-screen-xl flex-1 flex-col-reverse self-center lg:flex-row">
       {/* Side bar navigation */}
-      <SideBar>
+      <SideBar class="lg:max-h-[calc(100vh-70px)]" toggle={sideBarToggle}>
         <div q:slot="buttons" class="mr-4 flex space-x-6 lg:hidden">
           <NavButtons
             pageIndex={navIndex.value}
@@ -74,9 +76,7 @@ export const DocsLayout = component$(() => {
             nextPage={nextPage.value}
           />
         </div>
-        <div class="space-y-9 lg:space-y-12">
-          <Navigation />
-        </div>
+        <Navigation />
       </SideBar>
 
       <main class="relative flex-1 py-12 md:py-20 lg:w-px lg:py-32 lg:pl-9">
@@ -131,10 +131,10 @@ export const DocsLayout = component$(() => {
         )}
 
         {/* Credits */}
-        <footer class="mx-8 mt-12 border-t-2 pt-2 dark:border-slate-800 md:mt-16 md:pt-4 lg:mx-10 lg:mt-20 lg:pt-6">
+        <footer class="mx-8 mt-12 border-t-2 pt-2 md:mt-16 md:pt-4 lg:mx-10 lg:mt-20 lg:pt-6 dark:border-slate-800">
           {contributors.value.length > 0 && (
             <>
-              <h3 class="mt-10 text-lg font-medium text-slate-900 dark:text-slate-200 md:mt-12 md:text-xl lg:mt-14 lg:text-2xl">
+              <h3 class="mt-10 text-lg font-medium text-slate-900 md:mt-12 md:text-xl lg:mt-14 lg:text-2xl dark:text-slate-200">
                 Contributors
               </h3>
               <p class="mt-3 leading-loose md:mt-4 md:text-lg md:leading-loose lg:mt-5 lg:text-xl lg:leading-loose">
@@ -149,6 +149,8 @@ export const DocsLayout = component$(() => {
                       rel="noreferrer"
                     >
                       <img
+                        width="88"
+                        height="88"
                         loading="lazy"
                         src={`https://github.com/${contributor}.png?size=88`}
                         alt={`GitHub profile picture of ${contributor}`}
@@ -161,7 +163,7 @@ export const DocsLayout = component$(() => {
             </>
           )}
 
-          <h3 class="mt-10 text-lg font-medium text-slate-900 dark:text-slate-200 md:mt-12 md:text-xl lg:mt-14 lg:text-2xl">
+          <h3 class="mt-10 text-lg font-medium text-slate-900 md:mt-12 md:text-xl lg:mt-14 lg:text-2xl dark:text-slate-200">
             Partners
           </h3>
           <p class="mt-3 leading-loose md:mt-4 md:text-lg md:leading-loose lg:mt-5 lg:text-xl lg:leading-loose">
@@ -184,7 +186,7 @@ export const DocsLayout = component$(() => {
             ))}
           </ul>
 
-          <h3 class="mt-10 text-lg font-medium text-slate-900 dark:text-slate-200 md:mt-12 md:text-xl lg:mt-14 lg:text-2xl">
+          <h3 class="mt-10 text-lg font-medium text-slate-900 md:mt-12 md:text-xl lg:mt-14 lg:text-2xl dark:text-slate-200">
             Sponsors
           </h3>
           <p class="mt-3 leading-loose md:mt-4 md:text-lg md:leading-loose lg:mt-5 lg:text-xl lg:leading-loose">
@@ -207,6 +209,8 @@ export const DocsLayout = component$(() => {
                   rel="noreferrer"
                 >
                   <img
+                    width="88"
+                    height="88"
                     loading="lazy"
                     src={`https://github.com/${sponsor}.png?size=88`}
                     alt={`GitHub profile picture of ${sponsor}`}

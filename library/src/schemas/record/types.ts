@@ -38,7 +38,7 @@ type PartialKeySchema =
  */
 export type RecordInput<
   TKey extends RecordKey | RecordKeyAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 > = ResolveObject<
   TKey extends PartialKeySchema
     ? Partial<Record<Input<TKey>, Input<TValue>>>
@@ -50,7 +50,7 @@ export type RecordInput<
  */
 export type RecordOutput<
   TKey extends RecordKey | RecordKeyAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 > = ResolveObject<
   TKey extends PartialKeySchema
     ? Partial<Record<Output<TKey>, Output<TValue>>>

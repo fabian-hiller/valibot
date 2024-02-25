@@ -1,3 +1,3 @@
 [build]
 publish = "dist"
-command = "npm run sitemap && npm run build"
+command = "cd ../library && npm run build && cd ../website && npm run sitemap && npm run build"

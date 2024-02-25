@@ -21,7 +21,7 @@ export type MapPathItem = {
  */
 export type MapInput<
   TKey extends BaseSchema | BaseSchemaAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 > = Map<Input<TKey>, Input<TValue>>;
 
 /**
@@ -29,5 +29,5 @@ export type MapInput<
  */
 export type MapOutput<
   TKey extends BaseSchema | BaseSchemaAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 > = Map<Output<TKey>, Output<TValue>>;

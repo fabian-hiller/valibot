@@ -27,7 +27,7 @@ export type UnionOptionsAsync = MaybeReadonly<(BaseSchema | BaseSchemaAsync)[]>;
  */
 export type UnionSchemaAsync<
   TOptions extends UnionOptionsAsync,
-  TOutput = Output<TOptions[number]>
+  TOutput = Output<TOptions[number]>,
 > = BaseSchemaAsync<Input<TOptions[number]>, TOutput> & {
   /**
    * The schema type.

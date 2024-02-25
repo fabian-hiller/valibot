@@ -32,7 +32,7 @@ type Required<TEntries extends ObjectEntriesAsync> = {
  * @returns An async object schema.
  */
 export function requiredAsync<
-  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
 >(
   schema: TSchema,
   pipe?: PipeAsync<ObjectOutput<Required<TSchema['entries']>, undefined>>
@@ -49,7 +49,7 @@ export function requiredAsync<
  * @returns An async object schema.
  */
 export function requiredAsync<
-  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
 >(
   schema: TSchema,
   messageOrMetadata?: ErrorMessageOrMetadata,
@@ -68,7 +68,7 @@ export function requiredAsync<
  */
 export function requiredAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -88,7 +88,7 @@ export function requiredAsync<
  */
 export function requiredAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -98,7 +98,7 @@ export function requiredAsync<
 
 export function requiredAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
 >(
   schema: TSchema,
   arg2?:

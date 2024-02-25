@@ -24,7 +24,7 @@ export type TupleItems = [BaseSchema, ...BaseSchema[]];
 export type TupleSchema<
   TItems extends TupleItems,
   TRest extends BaseSchema | undefined = undefined,
-  TOutput = TupleOutput<TItems, TRest>
+  TOutput = TupleOutput<TItems, TRest>,
 > = BaseSchema<TupleInput<TItems, TRest>, TOutput> & {
   /**
    * The schema type.
@@ -87,7 +87,7 @@ export function tuple<TItems extends TupleItems>(
  */
 export function tuple<
   TItems extends TupleItems,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   items: TItems,
   rest: TRest,
@@ -106,7 +106,7 @@ export function tuple<
  */
 export function tuple<
   TItems extends TupleItems,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   items: TItems,
   rest: TRest,
@@ -116,7 +116,7 @@ export function tuple<
 
 export function tuple<
   TItems extends TupleItems,
-  TRest extends BaseSchema | undefined = undefined
+  TRest extends BaseSchema | undefined = undefined,
 >(
   items: TItems,
   arg2?: Pipe<TupleOutput<TItems, TRest>> | ErrorMessageOrMetadata | TRest,

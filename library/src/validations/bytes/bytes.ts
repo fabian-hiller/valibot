@@ -6,7 +6,7 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
  */
 export type BytesValidation<
   TInput extends string,
-  TRequirement extends number
+  TRequirement extends number,
 > = BaseValidation<TInput> & {
   /**
    * The validation type.

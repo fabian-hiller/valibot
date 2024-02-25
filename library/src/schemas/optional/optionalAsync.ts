@@ -20,7 +20,7 @@ export type OptionalSchemaAsync<
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
     ? Output<TWrapped>
-    : Output<TWrapped> | undefined
+    : Output<TWrapped> | undefined,
 > = BaseSchemaAsync<Input<TWrapped> | undefined, TOutput> & {
   /**
    * The schema type.
@@ -60,7 +60,7 @@ export function optionalAsync<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined
+    | undefined,
 >(
   wrapped: TWrapped,
   default_: TDefault
@@ -71,7 +71,7 @@ export function optionalAsync<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined = undefined
+    | undefined = undefined,
 >(
   wrapped: TWrapped,
   default_?: TDefault

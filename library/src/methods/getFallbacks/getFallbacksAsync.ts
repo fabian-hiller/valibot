@@ -38,7 +38,7 @@ export async function getFallbacksAsync<
         | BaseSchemaAsync
         | ObjectSchemaAsync<ObjectEntriesAsync, any>
         | TupleSchemaAsync<TupleItemsAsync, any>
-      >
+      >,
 >(schema: TSchema): Promise<FallbackValues<TSchema>> {
   // Create fallbacks variable
   let fallbacks: any;

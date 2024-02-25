@@ -14,7 +14,7 @@ import clsx from 'clsx';
 export const Navigation = component$(() => {
   const content = useContent();
   return (
-    <nav class="px-8 lg:w-60 2xl:w-72">
+    <nav class="h-full overflow-auto overscroll-contain px-8 py-9 lg:w-60 lg:py-32 2xl:w-72">
       <ul class="space-y-9 lg:space-y-12">
         {content.menu?.items?.map((item) => (
           <NavItem {...item} key={item.text} />
@@ -44,6 +44,7 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
   }>();
 
   // Update indicator style when pathname changes
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     // Track URL pathname
     const pathname = track(() => location.url.pathname);
@@ -74,7 +75,7 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
         >
           {text}
         </h4>
-        <div class="pointer-events-none absolute -top-8 -z-10 h-24 w-full bg-gradient-to-b from-white via-white to-transparent opacity-90 dark:from-gray-900 dark:via-gray-900 lg:hidden" />
+        <div class="pointer-events-none absolute -top-8 -z-10 h-24 w-full bg-gradient-to-b from-white via-white to-transparent opacity-90 lg:hidden dark:from-gray-900 dark:via-gray-900" />
       </div>
       <div class="relative">
         <ul
@@ -85,7 +86,7 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
             <li key={href}>
               <Link
                 class={clsx(
-                  'focus-ring truncate relative -left-0.5 block border-l-2 border-l-transparent pl-4 transition-colors hover:border-l-slate-400 focus-visible:rounded-md hover:dark:border-l-slate-600',
+                  'focus-ring relative -left-0.5 block truncate border-l-2 border-l-transparent pl-4 transition-colors hover:border-l-slate-400 focus-visible:rounded-md hover:dark:border-l-slate-600',
                   location.url.pathname === href
                     ? 'text-sky-600 dark:text-sky-400'
                     : 'hover:text-slate-800 dark:hover:text-slate-300'
