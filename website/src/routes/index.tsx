@@ -69,9 +69,9 @@ export default component$(() => {
           />
           <ActionButton
             variant="secondary"
-            label="API reference"
+            label="Playground"
             type="link"
-            href="/api/"
+            href="/playground/"
           />
         </ButtonGroup>
       </section>
@@ -286,9 +286,9 @@ export default component$(() => {
         />
         <ActionButton
           variant="secondary"
-          label="API reference"
+          label="Playground"
           type="link"
-          href="/api/"
+          href="/playground/"
         />
       </ButtonGroup>
     </main>
