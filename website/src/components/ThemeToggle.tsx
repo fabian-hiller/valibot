@@ -3,7 +3,7 @@ import { Form } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import { NightIcon, SunIcon } from '~/icons';
 import { useTheme, useThemeToggle } from '~/routes/plugin@theme';
-import { disableTransitions } from '~/utils';
+import { disableTransitions, trackEvent } from '~/utils';
 import { SystemIcon } from './SystemIcon';
 
 type ThemeToggleProps = {
@@ -24,6 +24,9 @@ export const ThemeToggle = component$<ThemeToggleProps>((props) => {
     const isRunning = track(() => themeToggle.isRunning);
     if (isBrowser && !isRunning) {
       disableTransitions();
+
+      // Tracke change theme event
+      trackEvent('change_theme', { theme: theme.value });
     }
   });
 

@@ -24,6 +24,7 @@ import {
 } from '~/components';
 import { useResetSignal } from '~/hooks';
 import { BinIcon, CheckIcon, CopyIcon, PlayIcon, ShareIcon } from '~/icons';
+import { trackEvent } from '~/utils';
 import valibotCode from '../../../../library/dist/index.js?url';
 
 export const head: DocumentHead = {
@@ -200,19 +201,28 @@ const EditorButtons = component$<EditorButtonsProps>(
      * Copies the current code of the editor.
      */
     const copyCode = $(() => {
+      // Copy code to clipboard
       copied.value = true;
       navigator.clipboard.writeText(model.value!.getValue());
+
+      // Track playground event
+      trackEvent('copy_playground_code');
     });
 
     /**
      * Shares the current code of the editor.
      */
     const shareCode = $(async () => {
+      // Add compressed code to search params
       await navigate(
         `?code=${lz.compressToEncodedURIComponent(model.value!.getValue())}`,
         { replaceState: true }
       );
+
+      // Get current URL with search params
       const url = location.url.href;
+
+      // Share URL or copy it to clipboard
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (navigator.share) {
         navigator.share({ title: 'Valibot Playground', url });
@@ -220,20 +230,29 @@ const EditorButtons = component$<EditorButtonsProps>(
         shared.value = true;
         navigator.clipboard.writeText(url);
       }
+
+      // Track playground event
+      trackEvent('share_playground_code');
     });
 
     /**
      * Executes the current code of the editor.
      */
     const executeCode = $(() => {
+      // Open side bar if it's closed
       if (!toggle?.value || toggle.value.state === 'closed') {
         toggle?.submit({ state: 'opened' });
       }
+
+      // Update code of the iFrame
       code.value = `// ${Date.now()}\n${
         transform(model.value!.getValue(), {
           transforms: ['typescript'],
         }).code
       }`;
+
+      // Track playground event
+      trackEvent('execute_playground_code');
     });
 
     return (
