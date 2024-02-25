@@ -18,6 +18,7 @@ import {
 } from '~/components';
 import { useResetSignal } from '~/hooks';
 import { BinIcon, CheckIcon, CopyIcon, PlayIcon } from '~/icons';
+import valibotCode from '../../../../library/dist/index.js?url';
 
 export const head: DocumentHead = {
   title: 'Playground',
@@ -148,7 +149,7 @@ console.log(result);
 <html>
   <body>
     <script type="importmap">
-      { "imports": { "valibot": "https://esm.sh/valibot" } }
+      { "imports": { "valibot": "${valibotCode}" } }
     </script>
     <script type="module">
       console.log = (...args) => window.parent.postMessage({ type: "logs", level: "log", args });
