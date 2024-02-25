@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@builder.io/qwik": "^1.4.5",
-    "@builder.io/qwik-city": "1.1.5",
+    "@builder.io/qwik-city": "^1.4.5",
     "@mapbox/rehype-prism": "^0.9.0",
     "@netlify/edge-functions": "^2.3.1",
     "@types/eslint": "^8.56.2",
@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.0",
+    "lz-string": "^1.5.0",
     "monaco-editor": "^0.46.0",
     "monaco-editor-textmate": "^4.0.0",
     "monaco-textmate": "^3.0.1",
