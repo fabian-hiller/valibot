@@ -21,6 +21,12 @@
     transition: none !important;
   }
 
+  /* Monaco editor */
+  .monaco-editor,
+  .monaco-editor > div {
+    @apply border-0 outline-none lg:rounded-3xl;
+  }
+
   /* Lexend 400 */
   @font-face {
     font-family: 'Lexend';

@@ -58,7 +58,12 @@
     "vite-tsconfig-paths": "^4.3.1"
   },
   "dependencies": {
-    "clsx": "^2.1.0"
+    "clsx": "^2.1.0",
+    "monaco-editor": "^0.46.0",
+    "monaco-editor-textmate": "^4.0.0",
+    "monaco-textmate": "^3.0.1",
+    "onigasm": "^2.2.5",
+    "sucrase": "^3.35.0"
   },
   "engines": {
     "node": ">=15.0.0"

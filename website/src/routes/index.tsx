@@ -11,40 +11,15 @@ import { ActionButton, ButtonGroup, Expandable, TextLink } from '~/components';
 import { PlusIcon } from '~/icons';
 import { blurredCodeDarkUrl, blurredCodeLightUrl } from '~/images';
 
-export const head: DocumentHead = ({ url }) => {
-  const title = 'Valibot: The modular and type safe schema library';
-  const description =
-    'Validate unknown data with Valibot, the open source schema library with bundle size, type safety and developer experience in mind.';
-
-  return {
-    title,
-    meta: [
-      {
-        name: 'description',
-        content: description,
-      },
-      {
-        name: 'og:type',
-        content: 'website',
-      },
-      {
-        name: 'og:url',
-        content: url.href,
-      },
-      {
-        name: 'og:title',
-        content: title,
-      },
-      {
-        name: 'og:description',
-        content: description,
-      },
-      {
-        name: 'og:image',
-        content: `${url.origin}/og-image`,
-      },
-    ],
-  };
+export const head: DocumentHead = {
+  title: 'Valibot: The modular and type safe schema library',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Validate unknown data with Valibot, the open source schema library with bundle size, type safety and developer experience in mind.',
+    },
+  ],
 };
 
 /**
@@ -74,11 +49,11 @@ export default component$(() => {
       <section class="space-y-8 px-4 text-center md:max-w-4xl md:space-y-12 lg:space-y-16">
         <div class="absolute left-0 top-0 -z-10 flex w-full justify-center overflow-x-clip">
           <div class="relative w-full xl:w-0">
-            <div class="absolute -right-[300px] -top-[250px] h-[600px] w-[600px] bg-[radial-gradient(theme(colors.yellow.500/.08),transparent_70%)] dark:bg-[radial-gradient(theme(colors.yellow.300/.08),transparent_70%)] md:-right-[500px] md:-top-[500px] md:h-[1000px] md:w-[1000px] xl:-right-[1100px] xl:-top-[500px]" />
-            <div class="absolute -left-[370px] top-[200px] h-[600px] w-[600px] bg-[radial-gradient(theme(colors.sky.600/.08),transparent_70%)] dark:bg-[radial-gradient(theme(colors.sky.400/.08),transparent_70%)] md:-left-[550px] md:top-[100px] md:h-[1000px] md:w-[1000px] lg:top-[200px] xl:-left-[1100px] xl:top-[300px]" />
+            <div class="absolute -right-[300px] -top-[250px] h-[600px] w-[600px] bg-[radial-gradient(theme(colors.yellow.500/.08),transparent_70%)] md:-right-[500px] md:-top-[500px] md:h-[1000px] md:w-[1000px] xl:-right-[1100px] xl:-top-[500px] dark:bg-[radial-gradient(theme(colors.yellow.300/.08),transparent_70%)]" />
+            <div class="absolute -left-[370px] top-[200px] h-[600px] w-[600px] bg-[radial-gradient(theme(colors.sky.600/.08),transparent_70%)] md:-left-[550px] md:top-[100px] md:h-[1000px] md:w-[1000px] lg:top-[200px] xl:-left-[1100px] xl:top-[300px] dark:bg-[radial-gradient(theme(colors.sky.400/.08),transparent_70%)]" />
           </div>
         </div>
-        <h1 class="font-lexend-exa text-[22px] font-medium text-slate-900 dark:text-slate-200 md:text-3xl lg:text-4xl xl:text-5xl">
+        <h1 class="font-lexend-exa text-[22px] font-medium text-slate-900 md:text-3xl lg:text-4xl xl:text-5xl dark:text-slate-200">
           Validate with Valibot
         </h1>
         <p class="text-center leading-loose md:text-xl md:leading-loose xl:text-2xl xl:leading-loose">
@@ -103,7 +78,7 @@ export default component$(() => {
 
       {/* Video */}
       <section class="w-full px-3 md:max-w-5xl xl:max-w-[1360px] xl:px-10">
-        <div class="relative z-0 flex aspect-video w-full items-center justify-center overflow-hidden rounded-3xl border-[3px] border-slate-200 bg-white dark:border-slate-800 dark:bg-gray-900 md:border-4 lg:rounded-[32px]">
+        <div class="relative z-0 flex aspect-video w-full items-center justify-center overflow-hidden rounded-3xl border-[3px] border-slate-200 bg-white md:border-4 lg:rounded-[32px] dark:border-slate-800 dark:bg-gray-900">
           {[
             { theme: 'dark', url: blurredCodeDarkUrl },
             { theme: 'light', url: blurredCodeLightUrl },
@@ -126,7 +101,7 @@ export default component$(() => {
 
       {/* Highlights */}
       <section class="lg:max-w-6xl">
-        <h2 class="px-4 text-center text-xl font-medium text-slate-900 dark:text-slate-200 md:text-2xl lg:text-3xl xl:text-4xl">
+        <h2 class="px-4 text-center text-xl font-medium text-slate-900 md:text-2xl lg:text-3xl xl:text-4xl dark:text-slate-200">
           Highlights you should not miss
         </h2>
         <ul class="mt-16 flex flex-wrap justify-center gap-16 px-8 md:mt-20 lg:mt-32 xl:mt-36 xl:gap-24">
@@ -170,7 +145,7 @@ export default component$(() => {
                 {emoji}
               </div>
               <div class="max-w-[370px] space-y-4 md:space-y-5">
-                <h3 class="text-lg font-medium text-slate-900 dark:text-slate-200 md:text-xl">
+                <h3 class="text-lg font-medium text-slate-900 md:text-xl dark:text-slate-200">
                   {heading}
                 </h3>
                 <p class="leading-loose md:text-lg md:leading-loose">{text}</p>
@@ -182,7 +157,7 @@ export default component$(() => {
 
       {/* FAQ */}
       <section class="space-y-14 md:max-w-4xl md:space-y-20 lg:space-y-32">
-        <h2 class="px-4 text-center text-xl font-medium text-slate-900 dark:text-slate-200 md:text-2xl lg:text-3xl xl:text-4xl">
+        <h2 class="px-4 text-center text-xl font-medium text-slate-900 md:text-2xl lg:text-3xl xl:text-4xl dark:text-slate-200">
           Frequently asked questions
         </h2>
         <ul class="space-y-12 md:space-y-14 lg:space-y-16">
