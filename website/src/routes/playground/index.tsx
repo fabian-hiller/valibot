@@ -3,11 +3,17 @@ import {
   component$,
   type NoSerialize,
   type Signal,
+  useComputed$,
   useSignal,
   useVisibleTask$,
 } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import {
+  type DocumentHead,
+  useLocation,
+  useNavigate,
+} from '@builder.io/qwik-city';
 import clsx from 'clsx';
+import lz from 'lz-string';
 import type * as monaco from 'monaco-editor';
 import { transform } from 'sucrase';
 import {
@@ -17,7 +23,7 @@ import {
   useSideBarToggle,
 } from '~/components';
 import { useResetSignal } from '~/hooks';
-import { BinIcon, CheckIcon, CopyIcon, PlayIcon } from '~/icons';
+import { BinIcon, CheckIcon, CopyIcon, PlayIcon, ShareIcon } from '~/icons';
 import valibotCode from '../../../../library/dist/index.js?url';
 
 export const head: DocumentHead = {
@@ -40,7 +46,8 @@ type MessageEventData = {
 };
 
 export default component$(() => {
-  // Use side bar toggle
+  // Use location and side bar toggle
+  const location = useLocation();
   const toggle = useSideBarToggle();
 
   // Use model, code and logs signals
@@ -65,6 +72,7 @@ export default component$(() => {
             [
               event.data.level,
               event.data.args
+                // TODO: Colorize JSON string or change rendering
                 .map((arg) => JSON.stringify(arg, null, 2))
                 .join(', '),
             ],
@@ -74,12 +82,12 @@ export default component$(() => {
     );
   });
 
-  return (
-    <main class="flex w-full flex-1 flex-col lg:flex-row lg:space-x-10 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:space-x-14 2xl:self-center">
-      <div class="flex flex-1 lg:relative">
-        <CodeEditor
-          value={`
-import * as v from 'valibot';
+  // Computed initial code of editor
+  const initialCode = useComputed$(() => {
+    const code = location.url.searchParams.get('code');
+    return code
+      ? lz.decompressFromEncodedURIComponent(code)
+      : `import * as v from 'valibot';
 
 const Schema = v.object({
   email: v.string([v.minLength(1), v.email()]),
@@ -91,10 +99,13 @@ const result = v.safeParse(Schema, {
   password: '12345678',
 });
 
-console.log(result);
-          `.trim()}
-          model={model}
-        />
+console.log(result);`;
+  });
+
+  return (
+    <main class="flex w-full flex-1 flex-col lg:flex-row lg:space-x-10 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:space-x-14 2xl:self-center">
+      <div class="flex flex-1 lg:relative">
+        <CodeEditor value={initialCode} model={model} />
         <EditorButtons
           class="!hidden lg:!absolute lg:right-10 lg:top-10 lg:!flex"
           model={model}
@@ -177,15 +188,38 @@ type EditorButtonsProps = {
 
 const EditorButtons = component$<EditorButtonsProps>(
   ({ toggle, code, model, ...props }) => {
-    // Use reset signal
-    const cklicked = useResetSignal(false);
+    // Use navigate and location
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Use copied and shared reset signal
+    const copied = useResetSignal(false);
+    const shared = useResetSignal(false);
 
     /**
      * Copies the current code of the editor.
      */
     const copyCode = $(() => {
-      cklicked.value = true;
+      copied.value = true;
       navigator.clipboard.writeText(model.value!.getValue());
+    });
+
+    /**
+     * Shares the current code of the editor.
+     */
+    const shareCode = $(async () => {
+      await navigate(
+        `?code=${lz.compressToEncodedURIComponent(model.value!.getValue())}`,
+        { replaceState: true }
+      );
+      const url = location.url.href;
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (navigator.share) {
+        navigator.share({ title: 'Valibot Playground', url });
+      } else {
+        shared.value = true;
+        navigator.clipboard.writeText(url);
+      }
     });
 
     /**
@@ -207,11 +241,11 @@ const EditorButtons = component$<EditorButtonsProps>(
         <IconButton
           type="button"
           variant="secondary"
-          label="Run"
+          label="Copy code"
           hideLabel
           onClick$={copyCode}
         >
-          {cklicked.value ? (
+          {copied.value ? (
             <CheckIcon class="h-[18px]" />
           ) : (
             <CopyIcon class="h-[18px]" />
@@ -220,7 +254,20 @@ const EditorButtons = component$<EditorButtonsProps>(
         <IconButton
           type="button"
           variant="secondary"
-          label="Run"
+          label="Share code"
+          hideLabel
+          onClick$={shareCode}
+        >
+          {shared.value ? (
+            <CheckIcon class="h-[18px]" />
+          ) : (
+            <ShareIcon class="h-[18px]" />
+          )}
+        </IconButton>
+        <IconButton
+          type="button"
+          variant="secondary"
+          label="Execute code"
           hideLabel
           onClick$={executeCode}
         >

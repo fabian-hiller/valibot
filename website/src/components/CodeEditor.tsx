@@ -20,7 +20,7 @@ import packageJson from '../../../library/package.json?raw';
 import typescriptTm from '../json/TypeScript.tmLanguage.json';
 
 type CodeEditorProps = {
-  value: string;
+  value: Signal<string>;
   model: Signal<NoSerialize<monaco.editor.ITextModel>>;
 };
 
@@ -68,7 +68,7 @@ export const CodeEditor = component$<CodeEditorProps>(({ value, model }) => {
     // Create model for Monaco editor instance
     model.value = noSerialize(
       monaco.editor.createModel(
-        value,
+        value.value,
         'typescript',
         monaco.Uri.parse('file:///index.ts')
       )
