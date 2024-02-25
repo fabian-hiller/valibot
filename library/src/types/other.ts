@@ -4,7 +4,7 @@ import type { ObjectSchema, ObjectSchemaAsync } from '../schemas/index.ts';
  * Object keys type.
  */
 export type ObjectKeys<
-  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
 > = MaybeReadonly<[keyof TSchema['entries'], ...(keyof TSchema['entries'])[]]>;
 
 /**

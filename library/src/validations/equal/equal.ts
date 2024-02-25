@@ -6,7 +6,7 @@ import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
  */
 export type EqualValidation<
   TInput extends string | number | bigint | boolean,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 > = BaseValidation<TInput> & {
   /**
    * The validation type.
@@ -30,7 +30,7 @@ export type EqualValidation<
  */
 export function equal<
   TInput extends string | number | bigint | boolean,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

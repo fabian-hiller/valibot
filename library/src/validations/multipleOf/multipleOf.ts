@@ -6,7 +6,7 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
  */
 export type MultipleOfValidation<
   TInput extends number,
-  TRequirement extends number
+  TRequirement extends number,
 > = BaseValidation<TInput> & {
   /**
    * The validation type.

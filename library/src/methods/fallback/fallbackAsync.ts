@@ -12,7 +12,7 @@ export type SchemaWithFallbackAsync<
     | Output<TSchema>
     | ((
         info?: FallbackInfo
-      ) => Output<TSchema> | Promise<Output<TSchema>>) = Output<TSchema>
+      ) => Output<TSchema> | Promise<Output<TSchema>>) = Output<TSchema>,
 > = TSchema & {
   /**
    * The fallback value.
@@ -32,7 +32,7 @@ export function fallbackAsync<
   TSchema extends BaseSchemaAsync,
   const TFallback extends
     | Output<TSchema>
-    | ((info?: FallbackInfo) => Output<TSchema> | Promise<Output<TSchema>>)
+    | ((info?: FallbackInfo) => Output<TSchema> | Promise<Output<TSchema>>),
 >(
   schema: TSchema,
   fallback: TFallback

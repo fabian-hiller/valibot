@@ -13,7 +13,7 @@ export type LazySchemaAsync<
   TGetter extends (
     input: unknown
   ) => MaybePromise<BaseSchema | BaseSchemaAsync>,
-  TOutput = Output<Awaited<ReturnType<TGetter>>>
+  TOutput = Output<Awaited<ReturnType<TGetter>>>,
 > = BaseSchemaAsync<Input<Awaited<ReturnType<TGetter>>>, TOutput> & {
   /**
    * The schema type.
@@ -33,7 +33,9 @@ export type LazySchemaAsync<
  * @returns An async lazy schema.
  */
 export function lazyAsync<
-  TGetter extends (input: unknown) => MaybePromise<BaseSchema | BaseSchemaAsync>
+  TGetter extends (
+    input: unknown
+  ) => MaybePromise<BaseSchema | BaseSchemaAsync>,
 >(getter: TGetter): LazySchemaAsync<TGetter> {
   return {
     type: 'lazy',

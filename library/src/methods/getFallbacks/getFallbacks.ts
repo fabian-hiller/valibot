@@ -25,7 +25,7 @@ import type { FallbackValues } from './types.ts';
 export function getFallbacks<
   TSchema extends SchemaWithMaybeFallback<
     BaseSchema | ObjectSchema<ObjectEntries, any> | TupleSchema<TupleItems, any>
-  >
+  >,
 >(schema: TSchema): FallbackValues<TSchema> {
   // Create fallbacks variable
   let fallbacks: any;

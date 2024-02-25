@@ -13,7 +13,7 @@ import type {
  * @returns A object schema.
  */
 export function passthrough<
-  TSchema extends ObjectSchema<ObjectEntries, undefined>
+  TSchema extends ObjectSchema<ObjectEntries, undefined>,
 >(schema: TSchema): TSchema {
   return {
     ...schema,

@@ -13,6 +13,6 @@ export function stringify(input: unknown): string {
   return type === 'string'
     ? `"${input}"`
     : type === 'number' || type === 'bigint' || type === 'boolean'
-    ? `${input}`
-    : type;
+      ? `${input}`
+      : type;
 }

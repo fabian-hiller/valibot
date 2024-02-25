@@ -6,7 +6,7 @@ import { actionOutput } from '../../utils/index.ts';
  */
 export type ToMaxValueTransformation<
   TInput extends string | number | bigint | Date,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 > = BaseTransformation<TInput> & {
   /**
    * The transformation type.
@@ -28,7 +28,7 @@ export type ToMaxValueTransformation<
  */
 export function toMaxValue<
   TInput extends string | number | bigint | Date,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 >(requirement: TRequirement): ToMaxValueTransformation<TInput, TRequirement> {
   return {
     type: 'to_max_value',

@@ -24,7 +24,7 @@ export type ObjectEntriesAsync = Record<string, BaseSchema | BaseSchemaAsync>;
 export type ObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
-  TOutput = ObjectOutput<TEntries, TRest>
+  TOutput = ObjectOutput<TEntries, TRest>,
 > = BaseSchemaAsync<ObjectInput<TEntries, TRest>, TOutput> & {
   /**
    * The schema type.
@@ -87,7 +87,7 @@ export function objectAsync<TEntries extends ObjectEntriesAsync>(
  */
 export function objectAsync<
   TEntries extends ObjectEntriesAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   entries: TEntries,
   rest: TRest,
@@ -106,7 +106,7 @@ export function objectAsync<
  */
 export function objectAsync<
   TEntries extends ObjectEntriesAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   entries: TEntries,
   rest: TRest,
@@ -116,7 +116,7 @@ export function objectAsync<
 
 export function objectAsync<
   TEntries extends ObjectEntriesAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
 >(
   entries: TEntries,
   arg2?: PipeAsync<ObjectOutput<TEntries, TRest>> | ErrorMessage | TRest,

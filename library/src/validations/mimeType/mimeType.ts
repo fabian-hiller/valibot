@@ -6,7 +6,7 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
  */
 export type MimeTypeValidation<
   TInput extends Blob,
-  TRequirement extends `${string}/${string}`[]
+  TRequirement extends `${string}/${string}`[],
 > = BaseValidation<TInput> & {
   /**
    * The validation type.
@@ -28,7 +28,7 @@ export type MimeTypeValidation<
  */
 export function mimeType<
   TInput extends Blob,
-  TRequirement extends `${string}/${string}`[]
+  TRequirement extends `${string}/${string}`[],
 >(
   requirement: TRequirement,
   message?: ErrorMessage

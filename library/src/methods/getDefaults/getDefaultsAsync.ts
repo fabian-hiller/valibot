@@ -38,7 +38,7 @@ export async function getDefaultsAsync<
         | BaseSchemaAsync
         | ObjectSchemaAsync<ObjectEntriesAsync, any>
         | TupleSchemaAsync<TupleItemsAsync, any>
-      >
+      >,
 >(schema: TSchema): Promise<DefaultValues<TSchema>> {
   // Create defaults variable
   let defaults: any;

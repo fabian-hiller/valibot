@@ -25,7 +25,7 @@ import type { DefaultValues } from './types.ts';
 export function getDefaults<
   TSchema extends SchemaWithMaybeDefault<
     BaseSchema | ObjectSchema<ObjectEntries, any> | TupleSchema<TupleItems, any>
-  >
+  >,
 >(schema: TSchema): DefaultValues<TSchema> {
   // Create defaults variable
   let defaults: any;
