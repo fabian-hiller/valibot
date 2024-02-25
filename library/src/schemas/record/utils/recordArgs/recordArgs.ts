@@ -36,7 +36,7 @@ export function recordArgs<
   TValue,
   ErrorMessage | undefined,
   TPipe | undefined,
-  SchemaMetadata | undefined
+  SchemaMetadata | undefined,
 ] {
   if (isSchema(arg2)) {
     const [message, pipe, metadata] = defaultArgs(arg3, arg4);

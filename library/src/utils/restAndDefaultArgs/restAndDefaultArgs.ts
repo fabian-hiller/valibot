@@ -29,7 +29,7 @@ export function restAndDefaultArgs<
   TRest,
   ErrorMessage | undefined,
   TPipe | undefined,
-  SchemaMetadata | undefined
+  SchemaMetadata | undefined,
 ] {
   if (!arg1 || isSchema(arg1)) {
     const [error, pipe, metadata] = defaultArgs(arg2, arg3);
