@@ -225,7 +225,7 @@ const EditorButtons = component$<EditorButtonsProps>(
       // Share URL or copy it to clipboard
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (navigator.share) {
-        navigator.share({ title: 'Valibot Playground', url });
+        navigator.share({ title: 'Playground', url });
       } else {
         shared.value = true;
         navigator.clipboard.writeText(url);
