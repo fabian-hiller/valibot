@@ -27,6 +27,41 @@ import { BinIcon, CheckIcon, CopyIcon, PlayIcon, ShareIcon } from '~/icons';
 import { trackEvent } from '~/utils';
 import valibotCode from '../../../../library/dist/index.min.js?url';
 
+type LogLevel = 'log' | 'info' | 'debug' | 'warn' | 'error';
+
+type MessageEventData = {
+  type: 'log';
+  level: LogLevel;
+  args: unknown[];
+};
+
+type Token =
+  | 'whitespace'
+  | 'brace'
+  | 'bracket'
+  | 'colon'
+  | 'comma'
+  | 'key'
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'null'
+  | 'unknown';
+
+const jsonTokens: [Token, RegExp][] = [
+  ['whitespace', /^\s+/],
+  ['brace', /^[{}]/],
+  ['bracket', /^[[\]]/],
+  ['colon', /^:/],
+  ['comma', /^,/],
+  ['key', /^"(?:\\.|[^"\\])*"(?=:)/],
+  ['string', /^"(?:\\.|[^"\\])*"/],
+  ['number', /^-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/i],
+  ['boolean', /^true|^false/],
+  ['null', /^null/],
+  ['unknown', /^.+/],
+];
+
 export const head: DocumentHead = {
   title: 'Playground',
   meta: [
@@ -36,14 +71,6 @@ export const head: DocumentHead = {
         "Write, run, and test your Valibot schemas instantly. Unleash your creativity with Valibot's online code editor.",
     },
   ],
-};
-
-type LogLevel = 'log' | 'info' | 'debug' | 'warn' | 'error';
-
-type MessageEventData = {
-  type: 'logs';
-  level: LogLevel;
-  args: unknown[];
 };
 
 export default component$(() => {
@@ -63,14 +90,61 @@ export default component$(() => {
       'message',
       (event: MessageEvent<MessageEventData>) => {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (event.data.type === 'logs') {
+        if (event.data.type === 'log') {
           logs.value = [
             ...logs.value,
             [
               event.data.level,
               event.data.args
-                // TODO: Colorize JSON string or change rendering
-                .map((arg) => JSON.stringify(arg, null, 2))
+                .map((arg) => {
+                  // If argument is an error, stringify it
+                  if (arg instanceof Error) {
+                    return arg.stack ?? `${arg.name}: ${arg.message}`;
+                  }
+
+                  // Otherwise, convert argument to JSON string
+                  let jsonString = JSON.stringify(
+                    arg,
+                    (_, value) =>
+                      typeof value === 'bigint' ? Number(value) : value,
+                    2
+                  );
+
+                  // Transform and colorize specific JSON tokens
+                  const output: string[] = [];
+                  while (jsonString) {
+                    for (const [token, regex] of jsonTokens) {
+                      const match = regex.exec(jsonString);
+                      if (match) {
+                        const substring = match[0];
+                        jsonString = jsonString.substring(substring.length);
+                        if (token === 'key') {
+                          output.push(
+                            `<span class="text-slate-700 dark:text-slate-300">${substring.slice(1, -1)}</span>`
+                          );
+                        } else if (token === 'string') {
+                          output.push(
+                            `<span class="text-yellow-600 dark:text-amber-200">${substring}</span>`
+                          );
+                        } else if (token === 'number') {
+                          output.push(
+                            `<span class="text-purple-600 dark:text-purple-400">${substring}</span>`
+                          );
+                        } else if (token === 'boolean' || token === 'null') {
+                          output.push(
+                            `<span class="text-teal-600 dark:text-teal-400">${substring}</span>`
+                          );
+                        } else {
+                          output.push(substring);
+                        }
+                        break;
+                      }
+                    }
+                  }
+
+                  // Return transformed and colorized output
+                  return output.join('');
+                })
                 .join(', '),
             ],
           ];
@@ -132,19 +206,20 @@ console.log(result);`;
           {logs.value.map(([level, message], index) => (
             <li key={index}>
               <pre class="lg:text-lg">
+                [
                 <span
                   class={clsx(
-                    'uppercase',
+                    'font-medium uppercase',
                     level === 'error'
                       ? 'text-red-600 dark:text-red-400'
                       : level === 'warn'
-                        ? 'text-yellow-600 dark:text-amber-200'
+                        ? 'text-yellow-600 dark:text-yellow-400'
                         : 'text-sky-600 dark:text-sky-400'
                   )}
                 >
                   {level}
                 </span>
-                : {message}
+                ]: <span dangerouslySetInnerHTML={message} />
               </pre>
             </li>
           ))}
@@ -163,12 +238,12 @@ console.log(result);`;
     </script>
     <script type="module">
       window.onerror = (...args) => {
-        parent.postMessage({ type: "logs", level: "error", args: [args[4]] }, '*');
+        parent.postMessage({ type: "log", level: "error", args: [args[4]] }, '*');
       }
       ['log', 'info', 'debug', 'warn', 'error'].forEach((level) => {
 				const original = console[level];
 				console[level] = (...args) => {
-          parent.postMessage({ type: "logs", level, args }, '*');
+          parent.postMessage({ type: "log", level, args }, '*');
 					original(...args);
 				};
 			});
