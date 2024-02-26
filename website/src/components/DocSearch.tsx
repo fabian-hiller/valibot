@@ -208,7 +208,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
 
                   // Create search item object
                   const searchItem: SearchItem = {
-                    group: `${hit.hierarchy.lvl0}: ${hit.hierarchy.lvl1}`,
+                    group: `${hit.hierarchy.lvl0}${hit.hierarchy.lvl1 ? `: ${hit.hierarchy.lvl1}` : ''}`,
                     relation:
                       hit.type === 'lvl2'
                         ? 'page'
