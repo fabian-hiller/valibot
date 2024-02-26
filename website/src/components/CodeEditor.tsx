@@ -190,7 +190,7 @@ async function setupMonaco() {
         foreground: '#F87171',
       },
       {
-        token: 'keyword.operator',
+        token: 'keyword.operator.assignment',
         foreground: '#94A3B8',
       },
       {
@@ -200,6 +200,10 @@ async function setupMonaco() {
       {
         token: 'entity',
         foreground: '#34D399',
+      },
+      {
+        token: 'entity.name.type',
+        foreground: '#38BDF8',
       },
       {
         token: 'variable',
@@ -270,7 +274,7 @@ async function setupMonaco() {
         foreground: '#DC2626',
       },
       {
-        token: 'keyword.operator',
+        token: 'keyword.operator.assignment',
         foreground: '#64748B',
       },
       {
@@ -280,6 +284,10 @@ async function setupMonaco() {
       {
         token: 'entity',
         foreground: '#059669',
+      },
+      {
+        token: 'entity.name.type',
+        foreground: '#0284C7',
       },
       {
         token: 'variable',
