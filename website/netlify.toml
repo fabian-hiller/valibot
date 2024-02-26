@@ -1,3 +1,11 @@
+# Netlify build config
 [build]
-publish = "dist"
-command = "cd ../library && npm run build && cd ../website && npm run sitemap && npm run build"
+  publish = "dist"
+  command = "cd ../library && npm run build && cd ../website && npm run sitemap && npm run build"
+
+# Netlify headers config
+[[headers]]
+  # This is a temporary solution to be able to load the Valibot library into the playground iframe
+  for = "/build/*"
+  [headers.values]
+    access-control-allow-origin = "*"

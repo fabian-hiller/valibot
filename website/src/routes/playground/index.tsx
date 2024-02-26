@@ -25,7 +25,7 @@ import {
 import { useResetSignal } from '~/hooks';
 import { BinIcon, CheckIcon, CopyIcon, PlayIcon, ShareIcon } from '~/icons';
 import { trackEvent } from '~/utils';
-import valibotCode from '../../../../library/dist/index.js?url';
+import valibotCode from '../../../../library/dist/index.min.js?url';
 
 export const head: DocumentHead = {
   title: 'Playground',
@@ -56,7 +56,7 @@ export default component$(() => {
   const code = useSignal<string>('');
   const logs = useSignal<[LogLevel, string][]>([]);
 
-  // Capture logs from the iFrame
+  // Capture logs from iframe
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     window.addEventListener(
@@ -64,10 +64,6 @@ export default component$(() => {
       (event: MessageEvent<MessageEventData>) => {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (event.data.type === 'logs') {
-          // Log it to console
-          console[event.data.level](...event.data.args);
-
-          // Add log to current logs
           logs.value = [
             ...logs.value,
             [
@@ -137,12 +133,14 @@ console.log(result);`;
             <li key={index}>
               <pre class="lg:text-lg">
                 <span
-                  class={clsx('uppercase', {
-                    'text-sky-600 dark:text-sky-400':
-                      level === 'log' || level === 'info' || level === 'debug',
-                    'text-yellow-600 dark:text-amber-200': level === 'warn',
-                    'text-red-600 dark:text-red-400': level === 'error',
-                  })}
+                  class={clsx(
+                    'uppercase',
+                    level === 'error'
+                      ? 'text-red-600 dark:text-red-400'
+                      : level === 'warn'
+                        ? 'text-yellow-600 dark:text-amber-200'
+                        : 'text-sky-600 dark:text-sky-400'
+                  )}
                 >
                   {level}
                 </span>
@@ -156,23 +154,29 @@ console.log(result);`;
       {code.value && (
         <iframe
           hidden
-          sandbox="allow-scripts allow-same-origin"
+          sandbox="allow-scripts"
           srcdoc={`
 <html>
-  <body>
+  <head>
     <script type="importmap">
       { "imports": { "valibot": "${valibotCode}" } }
     </script>
     <script type="module">
-      console.log = (...args) => window.parent.postMessage({ type: "logs", level: "log", args });
-      console.info = (...args) => window.parent.postMessage({ type: "logs", level: "info", args });
-      console.debug = (...args) => window.parent.postMessage({ type: "logs", level: "debug", args });
-      console.warn = (...args) => window.parent.postMessage({ type: "logs", level: "warn", args });
-      console.error = (...args) => window.parent.postMessage({ type: "logs", level: "error", args });
+      window.onerror = (...args) => {
+        parent.postMessage({ type: "logs", level: "error", args: [args[4]] }, '*');
+      }
+      ['log', 'info', 'debug', 'warn', 'error'].forEach((level) => {
+				const original = console[level];
+				console[level] = (...args) => {
+          parent.postMessage({ type: "logs", level, args }, '*');
+					original(...args);
+				};
+			});
       ${code.value}
     </script>
-  </body>
-</html
+  </head>
+  <body></body>
+</html>
           `}
         />
       )}
@@ -244,7 +248,7 @@ const EditorButtons = component$<EditorButtonsProps>(
         toggle?.submit({ state: 'opened' });
       }
 
-      // Update code of the iFrame
+      // Update code of iframe
       code.value = `// ${Date.now()}\n${
         transform(model.value!.getValue(), {
           transforms: ['typescript'],
