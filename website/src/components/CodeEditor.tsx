@@ -178,6 +178,10 @@ async function setupMonaco() {
         foreground: '#FDE68A',
       },
       {
+        token: 'string.regex',
+        foreground: '#CBD5E1',
+      },
+      {
         token: 'constant',
         foreground: '#2DD4BF',
       },
@@ -222,6 +226,14 @@ async function setupMonaco() {
         foreground: '#FDE68A',
       },
       {
+        token: 'punctuation.definition.group.regexp',
+        foreground: '#F87171',
+      },
+      {
+        token: 'punctuation.definition.character-class',
+        foreground: '#2DD4BF',
+      },
+      {
         token: 'support',
         foreground: '#2DD4BF',
       },
@@ -260,6 +272,10 @@ async function setupMonaco() {
       {
         token: 'string',
         foreground: '#CA8A04',
+      },
+      {
+        token: 'string.regex',
+        foreground: '#334155',
       },
       {
         token: 'constant',
@@ -304,6 +320,14 @@ async function setupMonaco() {
       {
         token: 'punctuation.definition.string',
         foreground: '#CA8A04',
+      },
+      {
+        token: 'punctuation.definition.group.regexp',
+        foreground: '#DC2626',
+      },
+      {
+        token: 'punctuation.definition.character-class',
+        foreground: '#0D9488',
       },
       {
         token: 'support',
