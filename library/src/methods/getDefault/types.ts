@@ -25,7 +25,7 @@ export interface SchemaWithMaybeDefaultAsync<TInput = any, TOutput = TInput>
 }
 
 /**
- * Default value type.
+ * Default value inference type.
  */
 export type DefaultValue<
   TSchema extends SchemaWithMaybeDefault | SchemaWithMaybeDefaultAsync

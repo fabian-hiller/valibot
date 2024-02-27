@@ -1,0 +1,69 @@
+import type { PropertyProps } from '~/components';
+
+export const properties: Record<string, PropertyProps> = {
+  TSchema: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'SchemaWithMaybeFallback',
+      href: '../SchemaWithMaybeFallback/',
+      generics: [
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'BaseSchema',
+              href: '../BaseSchema/',
+            },
+            {
+              type: 'custom',
+              name: 'ObjectSchema',
+              href: '../ObjectSchema/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'ObjectEntries',
+                  href: '../ObjectEntries/',
+                },
+                'any',
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'TupleSchema',
+              href: '../TupleSchema/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TupleItems',
+                  href: '../TupleItems/',
+                },
+                'any',
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  },
+  schema: {
+    type: {
+      type: 'custom',
+      name: 'TSchema',
+    },
+  },
+  values: {
+    type: {
+      type: 'custom',
+      name: 'FallbackValues',
+      href: '../FallbackValues/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TSchema',
+        },
+      ],
+    },
+  },
+};

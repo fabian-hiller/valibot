@@ -2,7 +2,11 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.28.1 (February 06, 2024)
+
+- Fix bug in `union` and `unionAsync` schema for transformed inputs (issue #420)
+
+## v0.28.0 (February 05, 2024)
 
 > Note: The library has been revised and refactored. Therefore, not every change is listed in detail.
 
@@ -10,18 +14,18 @@ All notable changes to the library will be documented in this file.
 - Add `number` and `bigint` to `PicklistOptions` type (issue #378)
 - Fix missing export of `forwardAsync` method (issue #412)
 
-## v0.27.1 (January 28, 2023)
+## v0.27.1 (January 28, 2024)
 
 - Fix missing file extension for Deno (pull request #387)
 
-## v0.27.0 (January 24, 2023)
+## v0.27.0 (January 24, 2024)
 
 - Remove `NonNullable`, `NonNullish` and `NonOptional` type
 - Add `NonNullableInput`, `NonNullableOutput`, `NonNullishInput`, `NonNullishOutput`, `NonOptionalInput` and `NonOptionalOutput` type
 - Improve type signature of `omit`, `omitAsync`, `pick` and `pickAsync` schema to also allow read-only object keys (issue #380)
 - Fix type of `pipe` argument at `intersect` and `intersectAsync` schema
 
-## v0.26.0 (January 16, 2023)
+## v0.26.0 (January 16, 2024)
 
 - Improve performance of `enum_` and `enumAsync` schema by caching values
 - Change ISO timestamp regex to support timestamps with lower and higher millisecond accuracy (pull request #353)

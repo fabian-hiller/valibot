@@ -1,7 +1,20 @@
 import type { BaseSchema, Output } from '../../types/index.ts';
 import { schemaResult } from '../../utils/index.ts';
 import { getFallback } from '../getFallback/index.ts';
-import type { FallbackInfo, SchemaWithFallback } from './types.ts';
+import type { FallbackInfo } from './types.ts';
+
+// TODO: Should we create a Fallback and Default type to simplify the generics?
+
+/**
+ * Schema with fallback type.
+ */
+export interface SchemaWithFallback<TInput = any, TOutput = TInput>
+  extends BaseSchema<TInput, TOutput> {
+  /**
+   * The fallback value.
+   */
+  fallback: TOutput | ((info?: FallbackInfo) => TOutput);
+}
 
 /**
  * Returns a fallback output value when validating the passed schema failed.
@@ -13,7 +26,7 @@ import type { FallbackInfo, SchemaWithFallback } from './types.ts';
  */
 export function fallback<
   TSchema extends BaseSchema,
-  const TFallback extends
+  const TFallback extends  // TODO: Should we also allow `undefined`
     | Output<TSchema>
     | ((info?: FallbackInfo) => Output<TSchema>)
 >(

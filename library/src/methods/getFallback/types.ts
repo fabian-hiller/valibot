@@ -24,7 +24,7 @@ export interface SchemaWithMaybeFallbackAsync<TInput = any, TOutput = TInput>
 }
 
 /**
- * Fallback value type.
+ * Fallback value inference type.
  */
 export type FallbackValue<
   TSchema extends SchemaWithMaybeFallback | SchemaWithMaybeFallbackAsync
