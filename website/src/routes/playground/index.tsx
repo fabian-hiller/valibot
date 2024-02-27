@@ -162,7 +162,8 @@ export default component$(() => {
         ['colon', /^:/],
         ['comma', /^,/],
         ['key', /^"(?:\\\\.|[^"\\\\])*"(?=:)/],
-        ['instance', /^"\\[\\w+\\]"/i],
+        ['undefined', /^"\\[undefined\\]"/],
+        ['instance', /^"\\[[A-Z]\\w*\\]"/],
         ['string', /^"(?:\\\\.|[^"\\\\])*"/],
         ['number', /^-?\\d+(?:\\.\\d+)?(?:e[+-]?\\d+)?/i],
         ['boolean', /^true|^false/],
@@ -204,6 +205,11 @@ export default component$(() => {
                     return \`[$\{name}]\`;
                   }
                 }
+
+                // If it is undefined, convert it to a string
+                if (value === undefined) {
+                  return '[undefined]';
+                }
       
                 // Otherwise, return value as is
                 return value;
@@ -238,6 +244,10 @@ export default component$(() => {
                   } else if (token === 'boolean' || token === 'null') {
                     output.push(
                       \`<span class="text-teal-600 dark:text-teal-400">$\{substring}</span>\`
+                    );
+                  } else if (token === 'undefined') {
+                    output.push(
+                      \`<span class="text-teal-600 dark:text-teal-400">$\{substring.slice(2, -2)}</span>\`
                     );
                   } else {
                     output.push(substring);

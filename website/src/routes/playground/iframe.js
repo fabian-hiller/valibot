@@ -6,7 +6,8 @@ const jsonTokens = [
   ['colon', /^:/],
   ['comma', /^,/],
   ['key', /^"(?:\\.|[^"\\])*"(?=:)/],
-  ['instance', /^"\[\w+\]"/i],
+  ['undefined', /^"\[undefined\]"/],
+  ['instance', /^"\[[A-Z]\w*\]"/],
   ['string', /^"(?:\\.|[^"\\])*"/],
   ['number', /^-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/i],
   ['boolean', /^true|^false/],
@@ -49,6 +50,11 @@ function stringify(args) {
             }
           }
 
+          // If it is undefined, convert it to a string
+          if (value === undefined) {
+            return '[undefined]';
+          }
+
           // Otherwise, return value as is
           return value;
         },
@@ -82,6 +88,10 @@ function stringify(args) {
             } else if (token === 'boolean' || token === 'null') {
               output.push(
                 `<span class="text-teal-600 dark:text-teal-400">${substring}</span>`
+              );
+            } else if (token === 'undefined') {
+              output.push(
+                `<span class="text-teal-600 dark:text-teal-400">${substring.slice(2, -2)}</span>`
               );
             } else {
               output.push(substring);
