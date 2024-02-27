@@ -76,17 +76,17 @@ export default component$(() => {
       ? lz.decompressFromEncodedURIComponent(code)
       : `import * as v from 'valibot';
 
-    const Schema = v.object({
-      email: v.string([v.minLength(1), v.email()]),
-      password: v.string([v.minLength(1), v.minLength(8)]),
-    });
-    
-    const result = v.safeParse(Schema, {
-      email: 'jane@example.com',
-      password: '12345678',
-    });
-    
-    console.log(result);`;
+const Schema = v.object({
+  email: v.string([v.minLength(1), v.email()]),
+  password: v.string([v.minLength(1), v.minLength(8)]),
+});
+
+const result = v.safeParse(Schema, {
+  email: 'jane@example.com',
+  password: '12345678',
+});
+
+console.log(result);`;
   });
 
   return (
