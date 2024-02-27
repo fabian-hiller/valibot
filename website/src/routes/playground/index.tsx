@@ -42,6 +42,7 @@ type Token =
   | 'colon'
   | 'comma'
   | 'key'
+  | 'instance'
   | 'string'
   | 'number'
   | 'boolean'
@@ -55,6 +56,7 @@ const jsonTokens: [Token, RegExp][] = [
   ['colon', /^:/],
   ['comma', /^,/],
   ['key', /^"(?:\\.|[^"\\])*"(?=:)/],
+  ['instance', /^"\[(?:\\.|[^"\\])*\]"/],
   ['string', /^"(?:\\.|[^"\\])*"/],
   ['number', /^-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/i],
   ['boolean', /^true|^false/],
@@ -105,8 +107,20 @@ export default component$(() => {
                   // Otherwise, convert argument to JSON string
                   let jsonString = JSON.stringify(
                     arg,
-                    (_, value) =>
-                      typeof value === 'bigint' ? Number(value) : value,
+                    (_, value) => {
+                      const type = typeof value;
+                      if (type === 'bigint') {
+                        return Number(value);
+                      }
+                      if (value && type === 'object') {
+                        const name =
+                          Object.getPrototypeOf(value).constructor.name;
+                        if (name !== 'Object' && name !== 'Array') {
+                          return `[${name}]`;
+                        }
+                      }
+                      return value;
+                    },
                     2
                   );
 
@@ -121,6 +135,10 @@ export default component$(() => {
                         if (token === 'key') {
                           output.push(
                             `<span class="text-slate-700 dark:text-slate-300">${substring.slice(1, -1)}</span>`
+                          );
+                        } else if (token === 'instance') {
+                          output.push(
+                            `<span class="text-sky-600 dark:text-sky-400">${substring.slice(2, -2)}</span>`
                           );
                         } else if (token === 'string') {
                           output.push(
