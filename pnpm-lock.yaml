@@ -110,6 +110,9 @@ importers:
       sucrase:
         specifier: ^3.35.0
         version: 3.35.0
+      valibot:
+        specifier: workspace:^
+        version: link:../library
     devDependencies:
       '@builder.io/qwik':
         specifier: ^1.4.5

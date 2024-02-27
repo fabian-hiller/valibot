@@ -63,7 +63,8 @@
     "monaco-editor-textmate": "^4.0.0",
     "monaco-textmate": "^3.0.1",
     "onigasm": "^2.2.5",
-    "sucrase": "^3.35.0"
+    "sucrase": "^3.35.0",
+    "valibot": "workspace:^"
   },
   "engines": {
     "node": ">=15.0.0"
