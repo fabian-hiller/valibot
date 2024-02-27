@@ -68,7 +68,7 @@ export const head: DocumentHead = {
     {
       name: 'description',
       content:
-        "Write, run, and test your Valibot schemas instantly. Unleash your creativity with Valibot's online code editor.",
+        "Write, test, and share your Valibot schemas instantly. Unleash your creativity with Valibot's online code editor.",
     },
   ],
 };
