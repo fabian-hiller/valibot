@@ -1,4 +1,15 @@
-import { isObjectSchema, isTupleSchema } from '../../schemas/index.ts';
+import type {
+  ObjectEntries,
+  ObjectEntriesAsync,
+  ObjectSchema,
+  ObjectSchemaAsync,
+  TupleItems,
+  TupleItemsAsync,
+  TupleSchema,
+  TupleSchemaAsync,
+} from '../../schemas/index.ts';
+import type { BaseSchema, BaseSchemaAsync } from '../../types/schema.ts';
+import { isOfType } from '../../utils/index.ts';
 import {
   getDefaultAsync,
   type SchemaWithMaybeDefault,
@@ -18,7 +29,15 @@ import type { DefaultValues } from './types.ts';
  * @returns The default values.
  */
 export async function getDefaultsAsync<
-  TSchema extends SchemaWithMaybeDefault | SchemaWithMaybeDefaultAsync
+  TSchema extends
+    | (SchemaWithMaybeDefault &
+        (BaseSchema | ObjectSchema<ObjectEntries> | TupleSchema<TupleItems>))
+    | (SchemaWithMaybeDefaultAsync &
+        (
+          | BaseSchemaAsync
+          | ObjectSchemaAsync<ObjectEntriesAsync>
+          | TupleSchemaAsync<TupleItemsAsync>
+        ))
 >(schema: TSchema): Promise<DefaultValues<TSchema> | undefined> {
   // If schema contains a default function, set its default value
   if (schema.default !== undefined) {
@@ -26,7 +45,7 @@ export async function getDefaultsAsync<
   }
   // Otherwise, check if schema is of kind object or tuple
   // If it is an object schema, set object with default value of each entry
-  if (isObjectSchema(schema)) {
+  if (isOfType(schema, 'object')) {
     return Object.fromEntries(
       await Promise.all(
         Object.entries(schema.entries).map(async ([key, value]) => [
@@ -37,7 +56,7 @@ export async function getDefaultsAsync<
     );
   }
   // If it is a tuple schema, set array with default value of each item
-  if (isTupleSchema(schema)) {
+  if (isOfType(schema, 'tuple')) {
     return Promise.all(
       schema.items.map(getDefaultsAsync)
     ) as DefaultValues<TSchema>;

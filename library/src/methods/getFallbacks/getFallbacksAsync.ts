@@ -1,4 +1,15 @@
-import { isObjectSchema, isTupleSchema } from '../../schemas/index.ts';
+import type {
+  ObjectEntries,
+  ObjectEntriesAsync,
+  ObjectSchema,
+  ObjectSchemaAsync,
+  TupleItems,
+  TupleItemsAsync,
+  TupleSchema,
+  TupleSchemaAsync,
+} from '../../schemas/index.ts';
+import type { BaseSchema, BaseSchemaAsync } from '../../types/schema.ts';
+import { isOfType } from '../../utils/index.ts';
 import {
   getFallbackAsync,
   type SchemaWithMaybeFallback,
@@ -18,7 +29,15 @@ import type { FallbackValues } from './types.ts';
  * @returns The fallback values.
  */
 export async function getFallbacksAsync<
-  TSchema extends SchemaWithMaybeFallback | SchemaWithMaybeFallbackAsync
+  TSchema extends
+    | (SchemaWithMaybeFallback &
+        (BaseSchema | ObjectSchema<ObjectEntries> | TupleSchema<TupleItems>))
+    | (SchemaWithMaybeFallbackAsync &
+        (
+          | BaseSchemaAsync
+          | ObjectSchemaAsync<ObjectEntriesAsync>
+          | TupleSchemaAsync<TupleItemsAsync>
+        ))
 >(schema: TSchema): Promise<FallbackValues<TSchema> | undefined> {
   // If schema has a fallback, set its value
   if (schema.fallback !== undefined) {
@@ -26,7 +45,7 @@ export async function getFallbacksAsync<
   }
   // Otherwise, check if schema is of kind object or tuple
   // If it is an object schema, set object with fallback value of each entry
-  if (isObjectSchema(schema)) {
+  if (isOfType(schema, 'object')) {
     return Object.fromEntries(
       await Promise.all(
         Object.entries(schema.entries).map(async ([key, value]) => [
@@ -37,7 +56,7 @@ export async function getFallbacksAsync<
     );
   }
   // If it is a tuple schema, set array with fallback value of each item
-  if (isTupleSchema(schema)) {
+  if (isOfType(schema, 'tuple')) {
     return Promise.all(
       schema.items.map(getFallbacksAsync)
     ) as FallbackValues<TSchema>;
