@@ -2,7 +2,7 @@
 title: maxValue
 description: >-
   Creates a pipeline validation action that validates the value of a string,
-  number, boolean or date.
+  number, bigint, boolean or date.
 source: /validations/maxValue/maxValue.ts
 contributors:
   - fabian-hiller
@@ -13,7 +13,7 @@ import { properties } from './properties';
 
 # maxValue
 
-Creates a pipeline validation action that validates the value of a string, number, boolean or date.
+Creates a pipeline validation action that validates the value of a string, number, bigint, boolean or date.
 
 ```ts
 const Validation = maxValue<TInput, TRequirement>(requirement, message);
@@ -31,7 +31,7 @@ const Validation = maxValue<TInput, TRequirement>(requirement, message);
 
 ### Explanation
 
-With `maxValue` you can validate the value of a string, number, boolean or date. If the input does not match the `requirement`, you can use `message` to customize the error message.
+With `maxValue` you can validate the value of a string, number, bigint, boolean or date. If the input does not match the `requirement`, you can use `message` to customize the error message.
 
 ## Returns
 

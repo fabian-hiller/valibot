@@ -1,16 +1,16 @@
 import type {
   BaseValidation,
+  Comparable,
   ErrorMessage,
-  MinMaxValueIO,
-  ToMinMaxValueIO,
+  ToComparable,
 } from '../../types/index.ts';
 import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 
 /**
  * Min value validation type.
  */
-export type MinValueValidation<TRequirement extends MinMaxValueIO> =
-  BaseValidation<ToMinMaxValueIO<TRequirement>> & {
+export type MinValueValidation<TRequirement extends Comparable> =
+  BaseValidation<ToComparable<TRequirement>> & {
     /**
      * The validation type.
      */
@@ -23,14 +23,14 @@ export type MinValueValidation<TRequirement extends MinMaxValueIO> =
 
 /**
  * Creates a pipeline validation action that validates the value of a string,
- * number or date.
+ * number, bigint, boolean or date.
  *
  * @param requirement The minimum value.
  * @param message The error message.
  *
  * @returns A validation action.
  */
-export function minValue<TRequirement extends MinMaxValueIO>(
+export function minValue<TRequirement extends Comparable>(
   requirement: TRequirement,
   message?: ErrorMessage
 ): MinValueValidation<TRequirement> {
@@ -49,9 +49,9 @@ export function minValue<TRequirement extends MinMaxValueIO>(
       if (
         input >=
         // Removing this type assertion,
-        // or casting it to ToMinMaxValueIO<TRequirement>
+        // or casting it to ToComparable<TRequirement>
         // will cause a weird error
-        (this.requirement as MinMaxValueIO)
+        (this.requirement as Comparable)
       ) {
         return actionOutput(input);
       }

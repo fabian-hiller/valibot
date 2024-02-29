@@ -1,13 +1,17 @@
-import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseValidation,
+  Comparable,
+  ErrorMessage,
+  ToComparable,
+} from '../../types/index.ts';
 import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 
 /**
  * Value validation type.
  */
-export type ValueValidation<
-  TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput,
-> = BaseValidation<TInput> & {
+export type ValueValidation<TRequirement extends Comparable> = BaseValidation<
+  ToComparable<TRequirement>
+> & {
   /**
    * The validation type.
    */
@@ -19,21 +23,18 @@ export type ValueValidation<
 };
 
 /**
- * Creates a pipeline validation action that validates the value of a string
- * or number.
+ * Creates a pipeline validation action that validates the value of a string,
+ * number, boolean or date.
  *
  * @param requirement The value.
  * @param message The error message.
  *
  * @returns A validation action.
  */
-export function value<
-  TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput,
->(
+export function value<TRequirement extends Comparable>(
   requirement: TRequirement,
   message?: ErrorMessage
-): ValueValidation<TInput, TRequirement> {
+): ValueValidation<TRequirement> {
   return {
     type: 'value',
     expects: `${
@@ -45,8 +46,13 @@ export function value<
     message,
     requirement,
     _parse(input) {
-      // If requirement is fulfilled, return action output
-      if (input <= this.requirement && input >= this.requirement) {
+      if (
+        // Removing this type assertion,
+        // or casting it to ToComparable<TRequirement>
+        // will cause a weird error
+        input <= (this.requirement as Comparable) &&
+        input >= (this.requirement as Comparable)
+      ) {
         return actionOutput(input);
       }
 

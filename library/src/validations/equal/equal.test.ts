@@ -14,6 +14,7 @@ describe('equal', () => {
     const value2 = 123;
     expect(validate2._parse(value2).output).toBe(value2);
     expect(validate2._parse(1234).issues).toBeTruthy();
+    // @ts-expect-error: number validator cannot parse string
     expect(validate2._parse('123').issues).toBeTruthy();
   });
 

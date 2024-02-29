@@ -1,39 +1,39 @@
-import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseValidation,
+  Comparable,
+  ErrorMessage,
+  ToComparable,
+} from '../../types/index.ts';
 import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 
 /**
  * Not value validation type.
  */
-export type NotValueValidation<
-  TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput,
-> = BaseValidation<TInput> & {
-  /**
-   * The validation type.
-   */
-  type: 'not_value';
-  /**
-   * The value.
-   */
-  requirement: TRequirement;
-};
+export type NotValueValidation<TRequirement extends Comparable> =
+  BaseValidation<ToComparable<TRequirement>> & {
+    /**
+     * The validation type.
+     */
+    type: 'not_value';
+    /**
+     * The value.
+     */
+    requirement: TRequirement;
+  };
 
 /**
- * Creates a pipeline validation action that validates the value of a string
- * or number.
+ * Creates a pipeline validation action that validates the value of a string,
+ * number, bigint, boolean or date.
  *
  * @param requirement The value.
  * @param message The error message.
  *
  * @returns A validation action.
  */
-export function notValue<
-  TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput,
->(
+export function notValue<TRequirement extends Comparable>(
   requirement: TRequirement,
   message?: ErrorMessage
-): NotValueValidation<TInput, TRequirement> {
+): NotValueValidation<TRequirement> {
   return {
     type: 'not_value',
     expects: `!${
@@ -46,7 +46,13 @@ export function notValue<
     requirement,
     _parse(input) {
       // If requirement is fulfilled, return action output
-      if (input < this.requirement || input > this.requirement) {
+      if (
+        // Removing this type assertion,
+        // or casting it to ToComparable<TRequirement>
+        // will cause a weird error
+        input < (this.requirement as Comparable) ||
+        input > (this.requirement as Comparable)
+      ) {
         return actionOutput(input);
       }
 
