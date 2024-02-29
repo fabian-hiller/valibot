@@ -1,22 +1,25 @@
-import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseValidation,
+  ErrorMessage,
+  MinMaxValueIO,
+  ToMinMaxValueIO,
+} from '../../types/index.ts';
 import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 
 /**
  * Max value validation type.
  */
-export type MaxValueValidation<
-  TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput,
-> = BaseValidation<TInput> & {
-  /**
-   * The validation type.
-   */
-  type: 'max_value';
-  /**
-   * The maximum value.
-   */
-  requirement: TRequirement;
-};
+export type MaxValueValidation<TRequirement extends MinMaxValueIO> =
+  BaseValidation<ToMinMaxValueIO<TRequirement>> & {
+    /**
+     * The validation type.
+     */
+    type: 'max_value';
+    /**
+     * The maximum value.
+     */
+    requirement: TRequirement;
+  };
 
 /**
  * Creates a pipeline validation action that validates the value of a string,
@@ -27,13 +30,10 @@ export type MaxValueValidation<
  *
  * @returns A validation action.
  */
-export function maxValue<
-  TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput,
->(
+export function maxValue<TRequirement extends MinMaxValueIO>(
   requirement: TRequirement,
   message?: ErrorMessage
-): MaxValueValidation<TInput, TRequirement> {
+): MaxValueValidation<TRequirement> {
   return {
     type: 'max_value',
     expects: `<=${
@@ -46,7 +46,13 @@ export function maxValue<
     requirement,
     _parse(input) {
       // If requirement is fulfilled, return action output
-      if (input <= this.requirement) {
+      if (
+        input <=
+        // Removing this type assertion,
+        // or casting it to ToMinMaxValueIO<TRequirement>
+        // will cause a weird error
+        (this.requirement as MinMaxValueIO)
+      ) {
         return actionOutput(input);
       }
 
