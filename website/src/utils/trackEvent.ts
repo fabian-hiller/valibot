@@ -4,7 +4,8 @@ type EventName =
   | 'select_search_item'
   | 'copy_playground_code'
   | 'share_playground_code'
-  | 'execute_playground_code';
+  | 'execute_playground_code'
+  | 'clear_playground_logs';
 type EventData = { [key: string]: string | number | boolean | undefined };
 
 declare global {
