@@ -33,9 +33,7 @@ import type { ValiError } from '../ValiError/index.ts';
 /**
  * Dot path type.
  */
-type DotPath<TKey, TSchema extends BaseSchema | BaseSchemaAsync> = TKey extends
-  | string
-  | number
+type DotPath<TKey, TSchema> = TKey extends string | number
   ? `${TKey}` | `${TKey}.${NestedPath<TSchema>}`
   : never;
 
@@ -61,7 +59,7 @@ type TuplePath<TItems extends TupleItems | TupleItemsAsync> = {
 /**
  * Nested path type.
  */
-type NestedPath<TSchema extends BaseSchema | BaseSchemaAsync> =
+type NestedPath<TSchema> =
   // Array
   TSchema extends ArraySchema<infer TItem extends BaseSchema>
     ? DotPath<number, TItem>
@@ -116,10 +114,12 @@ type NestedPath<TSchema extends BaseSchema | BaseSchemaAsync> =
 /**
  * Flat errors type.
  */
-export type FlatErrors<TSchema extends BaseSchema | BaseSchemaAsync = any> = {
+export interface FlatErrors<
+  TSchema extends BaseSchema | BaseSchemaAsync = any
+> {
   root?: [string, ...string[]];
   nested: Partial<Record<NestedPath<TSchema>, [string, ...string[]]>>;
-};
+}
 
 /**
  * Flatten the error messages of a Vali error.
