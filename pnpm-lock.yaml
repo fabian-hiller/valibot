@@ -171,6 +171,9 @@ importers:
       rehype-external-links:
         specifier: ^3.0.0
         version: 3.0.0
+      sharp:
+        specifier: ^0.33.2
+        version: 0.33.2
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.1
@@ -186,6 +189,9 @@ importers:
       vite:
         specifier: ^5.1.3
         version: 5.1.3(@types/node@20.11.19)
+      vite-imagetools:
+        specifier: ^6.2.9
+        version: 6.2.9
       vite-tsconfig-paths:
         specifier: ^4.3.1
         version: 4.3.1(typescript@5.3.3)(vite@5.1.3)
