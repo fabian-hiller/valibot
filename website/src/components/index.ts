@@ -12,6 +12,8 @@ export * from './Header';
 export * from './IconButton';
 export * from './MainMenuToggle';
 export * from './Navigation';
+export * from './PostCover';
+export * from './PostMeta';
 export * from './Property';
 export * from './RoutingIndicator';
 export * from './SearchToggle';
