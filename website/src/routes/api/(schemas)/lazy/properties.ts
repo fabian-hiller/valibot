@@ -9,7 +9,7 @@ export const properties: Record<string, PropertyProps> = {
       return: {
         type: 'custom',
         name: 'BaseSchema',
-        href: '../../types/index/',
+        href: '../BaseSchema/',
       },
     },
   },
