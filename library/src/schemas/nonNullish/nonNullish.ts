@@ -7,7 +7,7 @@ import type { NonNullishInput, NonNullishOutput } from './types.ts';
  */
 export interface NonNullishSchema<
   TWrapped extends BaseSchema,
-  TOutput = NonNullishOutput<TWrapped>
+  TOutput = NonNullishOutput<TWrapped>,
 > extends BaseSchema<NonNullishInput<TWrapped>, TOutput> {
   /**
    * The schema type.

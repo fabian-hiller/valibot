@@ -23,7 +23,7 @@ export type ObjectEntries = Record<string, BaseSchema>;
 export interface ObjectSchema<
   TEntries extends ObjectEntries,
   TRest extends BaseSchema | undefined = undefined,
-  TOutput = ObjectOutput<TEntries, TRest>
+  TOutput = ObjectOutput<TEntries, TRest>,
 > extends BaseSchema<ObjectInput<TEntries, TRest>, TOutput> {
   /**
    * The schema type.

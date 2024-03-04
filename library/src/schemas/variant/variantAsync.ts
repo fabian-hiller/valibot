@@ -31,7 +31,7 @@ export type VariantOptionAsync<TKey extends string> =
 export type VariantOptionsAsync<TKey extends string> = [
   VariantOptionAsync<TKey>,
   VariantOptionAsync<TKey>,
-  ...VariantOptionAsync<TKey>[]
+  ...VariantOptionAsync<TKey>[],
 ];
 
 /**
@@ -40,7 +40,7 @@ export type VariantOptionsAsync<TKey extends string> = [
 export interface VariantSchemaAsync<
   TKey extends string,
   TOptions extends VariantOptionsAsync<TKey>,
-  TOutput = Output<TOptions[number]>
+  TOutput = Output<TOptions[number]>,
 > extends BaseSchemaAsync<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
@@ -75,7 +75,7 @@ export interface VariantSchemaAsync<
  */
 export function variantAsync<
   TKey extends string,
-  TOptions extends VariantOptionsAsync<TKey>
+  TOptions extends VariantOptionsAsync<TKey>,
 >(
   key: TKey,
   options: TOptions,
@@ -94,7 +94,7 @@ export function variantAsync<
  */
 export function variantAsync<
   TKey extends string,
-  TOptions extends VariantOptionsAsync<TKey>
+  TOptions extends VariantOptionsAsync<TKey>,
 >(
   key: TKey,
   options: TOptions,
@@ -104,7 +104,7 @@ export function variantAsync<
 
 export function variantAsync<
   TKey extends string,
-  TOptions extends VariantOptionsAsync<TKey>
+  TOptions extends VariantOptionsAsync<TKey>,
 >(
   key: TKey,
   options: TOptions,

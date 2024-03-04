@@ -24,7 +24,7 @@ export type ObjectEntriesAsync = Record<string, BaseSchema | BaseSchemaAsync>;
 export interface ObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
-  TOutput = ObjectOutput<TEntries, TRest>
+  TOutput = ObjectOutput<TEntries, TRest>,
 > extends BaseSchemaAsync<ObjectInput<TEntries, TRest>, TOutput> {
   /**
    * The schema type.

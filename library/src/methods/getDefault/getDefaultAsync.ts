@@ -12,7 +12,7 @@ import type {
  * @returns The default value.
  */
 export async function getDefaultAsync<
-  TSchema extends SchemaWithMaybeDefault | SchemaWithMaybeDefaultAsync
+  TSchema extends SchemaWithMaybeDefault | SchemaWithMaybeDefaultAsync,
 >(schema: TSchema): Promise<DefaultValue<TSchema>> {
   return typeof schema.default === 'function'
     ? await schema.default()

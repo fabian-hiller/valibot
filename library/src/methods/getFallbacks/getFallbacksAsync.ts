@@ -37,7 +37,7 @@ export async function getFallbacksAsync<
           | BaseSchemaAsync
           | ObjectSchemaAsync<ObjectEntriesAsync>
           | TupleSchemaAsync<TupleItemsAsync>
-        ))
+        )),
 >(schema: TSchema): Promise<FallbackValues<TSchema> | undefined> {
   // If schema has a fallback, set its value
   if (schema.fallback !== undefined) {

@@ -20,7 +20,7 @@ export interface NullableSchemaAsync<
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
     ? Output<TWrapped>
-    : Output<TWrapped> | null
+    : Output<TWrapped> | null,
 > extends BaseSchemaAsync<Input<TWrapped> | null, TOutput> {
   /**
    * The schema type.
@@ -60,7 +60,7 @@ export function nullableAsync<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined
+    | undefined,
 >(
   wrapped: TWrapped,
   default_: TDefault
@@ -71,7 +71,7 @@ export function nullableAsync<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined = undefined
+    | undefined = undefined,
 >(
   wrapped: TWrapped,
   default_?: TDefault

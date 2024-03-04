@@ -7,7 +7,7 @@ import type { NonOptionalInput, NonOptionalOutput } from './types.ts';
  */
 export interface NonOptionalSchema<
   TWrapped extends BaseSchema,
-  TOutput = NonOptionalOutput<TWrapped>
+  TOutput = NonOptionalOutput<TWrapped>,
 > extends BaseSchema<NonOptionalInput<TWrapped>, TOutput> {
   /**
    * The schema type.

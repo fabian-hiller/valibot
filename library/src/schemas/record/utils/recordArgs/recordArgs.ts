@@ -23,7 +23,7 @@ import type { RecordKeyAsync } from '../../recordAsync.ts';
 export function recordArgs<
   TKey extends RecordKey | RecordKeyAsync,
   TValue extends BaseSchema | BaseSchemaAsync,
-  TPipe extends Pipe<any> | PipeAsync<any>
+  TPipe extends Pipe<any> | PipeAsync<any>,
 >(
   arg1: TValue | TKey,
   arg2: TPipe | ErrorMessage | TValue | undefined,

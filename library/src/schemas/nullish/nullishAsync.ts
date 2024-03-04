@@ -20,7 +20,7 @@ export interface NullishSchemaAsync<
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
     ? Output<TWrapped>
-    : Output<TWrapped> | null | undefined
+    : Output<TWrapped> | null | undefined,
 > extends BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> {
   /**
    * The schema type.

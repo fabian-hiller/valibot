@@ -6,7 +6,7 @@ import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
  */
 export interface ValueValidation<
   TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 > extends BaseValidation<TInput> {
   /**
    * The validation type.

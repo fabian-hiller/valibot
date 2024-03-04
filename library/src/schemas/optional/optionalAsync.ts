@@ -20,7 +20,7 @@ export interface OptionalSchemaAsync<
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
     ? Output<TWrapped>
-    : Output<TWrapped> | undefined
+    : Output<TWrapped> | undefined,
 > extends BaseSchemaAsync<Input<TWrapped> | undefined, TOutput> {
   /**
    * The schema type.

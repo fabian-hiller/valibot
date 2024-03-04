@@ -3,7 +3,7 @@ export * from './actionOutput/index.ts';
 export * from './defaultArgs/index.ts';
 export * from './i18n/index.ts';
 export * from './isLuhnAlgo/index.ts';
-export * from './isOfType.ts';
+export * from './hasType.ts';
 export * from './pipeResult/index.ts';
 export * from './restAndDefaultArgs/index.ts';
 export * from './schemaIssue/index.ts';

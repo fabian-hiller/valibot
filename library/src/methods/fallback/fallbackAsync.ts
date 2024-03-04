@@ -26,7 +26,7 @@ export function fallbackAsync<
   TSchema extends BaseSchemaAsync,
   const TFallback extends
     | Output<TSchema>
-    | ((info?: FallbackInfo) => Output<TSchema> | Promise<Output<TSchema>>)
+    | ((info?: FallbackInfo) => Output<TSchema> | Promise<Output<TSchema>>),
 >(
   schema: TSchema,
   fallback: TFallback

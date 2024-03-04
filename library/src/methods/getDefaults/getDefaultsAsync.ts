@@ -37,7 +37,7 @@ export async function getDefaultsAsync<
           | BaseSchemaAsync
           | ObjectSchemaAsync<ObjectEntriesAsync>
           | TupleSchemaAsync<TupleItemsAsync>
-        ))
+        )),
 >(schema: TSchema): Promise<DefaultValues<TSchema> | undefined> {
   // If schema contains a default function, set its default value
   if (schema.default !== undefined) {

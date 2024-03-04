@@ -6,7 +6,7 @@ import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
  */
 export interface ExcludesValidation<
   TInput extends string | any[],
-  TRequirement extends TInput extends any[] ? TInput[number] : TInput
+  TRequirement extends TInput extends any[] ? TInput[number] : TInput,
 > extends BaseValidation<TInput> {
   /**
    * The validation type.

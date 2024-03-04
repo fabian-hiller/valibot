@@ -6,7 +6,7 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
  */
 export interface EndsWithValidation<
   TInput extends string,
-  TRequirement extends string
+  TRequirement extends string,
 > extends BaseValidation<TInput> {
   /**
    * The validation type.

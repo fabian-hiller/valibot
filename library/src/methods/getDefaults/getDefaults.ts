@@ -25,7 +25,7 @@ import type { DefaultValues } from './types.ts';
  */
 export function getDefaults<
   TSchema extends SchemaWithMaybeDefault &
-    (BaseSchema | ObjectSchema<ObjectEntries> | TupleSchema<TupleItems>)
+    (BaseSchema | ObjectSchema<ObjectEntries> | TupleSchema<TupleItems>),
 >(schema: TSchema): DefaultValues<TSchema> | undefined {
   // If schema contains a default function, set its default value
   if (schema.default !== undefined) {

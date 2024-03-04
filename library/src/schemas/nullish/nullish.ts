@@ -13,7 +13,7 @@ export interface NullishSchema<
     | undefined = undefined,
   TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
-    : Output<TWrapped> | null | undefined
+    : Output<TWrapped> | null | undefined,
 > extends BaseSchema<Input<TWrapped> | null | undefined, TOutput> {
   /**
    * The schema type.

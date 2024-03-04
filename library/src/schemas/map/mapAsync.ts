@@ -20,7 +20,7 @@ import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 export interface MapSchemaAsync<
   TKey extends BaseSchema | BaseSchemaAsync,
   TValue extends BaseSchema | BaseSchemaAsync,
-  TOutput = MapOutput<TKey, TValue>
+  TOutput = MapOutput<TKey, TValue>,
 > extends BaseSchemaAsync<MapInput<TKey, TValue>, TOutput> {
   /**
    * The schema type.
@@ -55,7 +55,7 @@ export interface MapSchemaAsync<
  */
 export function mapAsync<
   TKey extends BaseSchema | BaseSchemaAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 >(
   key: TKey,
   value: TValue,
@@ -74,7 +74,7 @@ export function mapAsync<
  */
 export function mapAsync<
   TKey extends BaseSchema | BaseSchemaAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 >(
   key: TKey,
   value: TValue,
@@ -84,7 +84,7 @@ export function mapAsync<
 
 export function mapAsync<
   TKey extends BaseSchema | BaseSchemaAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 >(
   key: TKey,
   value: TValue,

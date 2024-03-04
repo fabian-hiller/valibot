@@ -25,7 +25,7 @@ export type VariantOption<TKey extends string> =
 export type VariantOptions<TKey extends string> = [
   VariantOption<TKey>,
   VariantOption<TKey>,
-  ...VariantOption<TKey>[]
+  ...VariantOption<TKey>[],
 ];
 
 /**
@@ -34,7 +34,7 @@ export type VariantOptions<TKey extends string> = [
 export interface VariantSchema<
   TKey extends string,
   TOptions extends VariantOptions<TKey>,
-  TOutput = Output<TOptions[number]>
+  TOutput = Output<TOptions[number]>,
 > extends BaseSchema<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
@@ -69,7 +69,7 @@ export interface VariantSchema<
  */
 export function variant<
   TKey extends string,
-  TOptions extends VariantOptions<TKey>
+  TOptions extends VariantOptions<TKey>,
 >(
   key: TKey,
   options: TOptions,
@@ -88,7 +88,7 @@ export function variant<
  */
 export function variant<
   TKey extends string,
-  TOptions extends VariantOptions<TKey>
+  TOptions extends VariantOptions<TKey>,
 >(
   key: TKey,
   options: TOptions,
@@ -98,7 +98,7 @@ export function variant<
 
 export function variant<
   TKey extends string,
-  TOptions extends VariantOptions<TKey>
+  TOptions extends VariantOptions<TKey>,
 >(
   key: TKey,
   options: TOptions,

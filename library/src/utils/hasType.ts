@@ -47,7 +47,7 @@
  */
 export const hasType = <
   U extends { type: string },
-  const T extends string = string
+  const T extends string = string,
 >(
   val: U,
   type: T

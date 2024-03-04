@@ -16,7 +16,7 @@ import type { SafeParseResult } from './types.ts';
  * @returns The parsed output.
  */
 export async function safeParseAsync<
-  TSchema extends BaseSchema | BaseSchemaAsync
+  TSchema extends BaseSchema | BaseSchemaAsync,
 >(
   schema: TSchema,
   input: unknown,

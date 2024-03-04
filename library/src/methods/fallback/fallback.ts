@@ -26,9 +26,8 @@ export interface SchemaWithFallback<TInput = any, TOutput = TInput>
  */
 export function fallback<
   TSchema extends BaseSchema,
-  const TFallback extends  // TODO: Should we also allow `undefined`
-    | Output<TSchema>
-    | ((info?: FallbackInfo) => Output<TSchema>)
+  const TFallback extends // TODO: Should we also allow `undefined`
+    Output<TSchema> | ((info?: FallbackInfo) => Output<TSchema>),
 >(
   schema: TSchema,
   fallback: TFallback
