@@ -1,0 +1,148 @@
+---
+cover: API Design
+title: Should we change Valibot's API?
+description: >-
+  Today I am writing this message to you to discuss the further development of Valibot's API.
+published: 2024-02-29
+authors:
+  - fabian-hiller
+  - Demivan
+  - xcfox
+---
+
+import NpmDownloads from './npm-downloads.jpg?jsx';
+
+Hi folks, I am [Fabian](https://twitter.com/FabianHiller), the creator and maintainer of Valibot. Today I am writing this message to you to discuss the further development of Valibot's API. With currently more than 80,000 weekly downloads, the library is growing into a serious open source project used by thousands of JavaScript and TypeScript developers around the world.
+
+<NpmDownloads alt="Daily downloads from August 2023 to March 2024" />
+
+In the last few days I received two [API proposals](https://github.com/fabian-hiller/valibot/discussions/453) from [@Demivan](https://github.com/Demivan) and [@xcfox](https://github.com/xcfox). Both of them addressed similar pain points of Valibot's current API design. As our v1 release is getting closer and closer, it is important to me to involve the community in such a big decision.
+
+## Current pain points
+
+Valibot's current mental model is divided into schemas, methods, validations, and transformations. Schemas validate data types like strings, numbers and objects. Methods are small utilities that help you use or modify a schema. Validations and transformations are used in the `pipe` argument of a schema. They can make changes to the input and check other details, such as the formatting of a string.
+
+```ts
+// With Valibot's current API
+const EmailSchema = string([toTrimmed(), email(), endsWith('@example.com')]);
+```
+
+A drawback of this API design is that the current pipeline implementation is not modular. This increases the initial bundle size of simple schemas like [`string`](https://valibot.dev/api/string/) by more than 200 bytes. This is almost 30% of the total bundle size.
+
+Another pain point is that the current pipeline implementation does not allow you to transform the data type. This forced me to add a [`transform`](https://valibot.dev/api/transform/) method, resulting in two places where transformations can happen.
+
+```ts
+// With Valibot's current API
+const NumberSchema = transform(string([toTrimmed(), decimal()]), (input) => {
+  return parseInt(input);
+});
+```
+
+Speaking of methods, it can quickly become confusing if you need to apply multiple methods to the same schema, as these functions must always be nested.
+
+```ts
+// With Valibot's current API
+const LengthSchema = brand(
+  transform(optional(string(), ''), (input) => input.length),
+  'Length'
+);
+```
+
+The last pain point that comes to mind is that the current API design gives you less control over the input and output type of a schema. When working with form libraries, it can be useful to have an input type of `string | null` for the initial values, but an output type of just `string` for a required field.
+
+## The `pipe` function
+
+After several design iterations, [@Demivan](https://github.com/Demivan) came up with the idea of a `pipe` function. Similar to the current `pipe` argument, it can be used for validations and transformations. The first argument is always a schema, followed by various actions or schemas.
+
+```ts
+// With the new `pipe` function
+const LoginSchema = object({
+  email: pipe(string(), minLength(1), email()),
+  password: pipe(string(), minLength(8)),
+});
+
+// With Valibot's current API
+const LoginSchema = object({
+  email: string([minLength(1), email()]),
+  password: string([minLength(8)]),
+});
+```
+
+The big difference is that the `pipe` function also allows you to transform the data type. This would allow us to move methods like [`transform`](https://valibot.dev/api/transform/) and [`brand`](https://valibot.dev/api/brand/) into the pipeline. This prevents nesting of functions for these methods and simplifies the mental model.
+
+With the `pipe` function, the mental model is reduced to schemas, methods, and actions. Actions are always used within the `pipe` function to further validate and transform the input and type of a schema.
+
+> Alternative names for `pipe` are `flow` (idea by [@mtt-artis](https://github.com/mtt-artis)), `schema` (idea by [@genki](https://github.com/genki)), `compose` (idea by [@MohammedEsafi](https://github.com/MohammedEsafi)), and `vali` (idea by [@Hugos68](https://github.com/Hugos68)). Please [share](https://github.com/fabian-hiller/valibot/discussions/463) your thoughts.
+
+## The advantages
+
+The `pipe` function makes Valibot even more modular, resulting in a smaller bundle size for very simple schemas without a pipeline. For very complex schemas it reduces function nesting when using [`transform`](https://valibot.dev/api/transform/) and [`brand`](https://valibot.dev/api/brand/).
+
+```ts
+// With the new `pipe` function
+const LengthSchema = pipe(
+  optional(string(), ''),
+  transform((input) => input.length),
+  brand('Length')
+);
+
+// With Valibot's current API
+const LengthSchema = brand(
+  transform(optional(string(), ''), (input) => input.length),
+  'Length'
+);
+```
+
+It also gives you more control over the input and output type, and simplifies the mental model by eliminating the confusion between the [`transform`](https://valibot.dev/api/transform/) method and the pipeline transformations of the current API.
+
+```ts
+// With the new `pipe` function
+const NumberSchema = pipe(
+  string(),
+  toTrimmed(),
+  decimal(),
+  transform(parseInt)
+);
+
+// With Valibot's current API
+const NumberSchema = transform(
+  string([toTrimmed(), decimal()]),
+  parseInt
+);
+```
+
+Besides that, the `pipe` function would also allow us to easily add a [metadata feature](https://github.com/fabian-hiller/valibot/issues/373) to Valibot. This could be interesting when working with databases to define SQL properties like `PRIMARY KEY`.
+
+```ts
+// With the new `pipe` function
+const UserSchema = pipe(
+  object({
+    id: pipe(string(), uuid(), primaryKey()),
+    name: pipe(string(), maxLength(32), unique()),
+    bio: pipe(string(), description('Text ...')),
+  }),
+  table('users')
+);
+```
+
+## The disadvantages
+
+The main disadvantage of the `pipe` function is that it requires a bit more code to write for medium sized schemas, and for more complex schemas you may end up nesting multiple pipelines.
+
+```ts
+// With the new `pipe` function
+const NumberSchema = pipe(
+  union([pipe(string(), decimal()), pipe(number(), integer())]),
+  transform(Number)
+);
+
+// With Valibot's current API
+const NumberSchema = transform(
+  union([string([decimal()]), number([integer()])]),
+  Number
+);
+```
+
+## Let's discuss
+
+Your opinion matters to me. I encourage everyone to share their thoughts. Even quick feedback like "I like this ... and I don't like that ..." is welcome and will help to shape Valibot's future API design. Please discuss with me on [GitHub](https://github.com/fabian-hiller/valibot/discussions/463) or share your thoughts on [Twitter](https://twitter.com/FabianHiller/status/1763253086464639035).

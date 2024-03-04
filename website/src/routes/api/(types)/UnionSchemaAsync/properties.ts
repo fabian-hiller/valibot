@@ -20,7 +20,6 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TOptions',
-          href: '../TOptions/',
           indexes: ['number'],
         },
       ],
@@ -40,7 +39,6 @@ export const properties: Record<string, PropertyProps> = {
             {
               type: 'custom',
               name: 'TOptions',
-              href: '../TOptions/',
               indexes: ['number'],
             },
           ],
@@ -94,7 +92,6 @@ export const properties: Record<string, PropertyProps> = {
                 {
                   type: 'custom',
                   name: 'TOptions',
-                  href: '../TOptions/',
                   indexes: ['number'],
                 },
               ],

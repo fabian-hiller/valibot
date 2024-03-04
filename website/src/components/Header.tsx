@@ -129,7 +129,8 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
         >
           {[
             { label: 'Guides', href: '/guides/' },
-            { label: 'API reference', href: '/api/' },
+            { label: 'API', href: '/api/' },
+            { label: 'Blog', href: '/blog/' },
             { label: 'Playground', href: '/playground/' },
           ].map(({ label, href }) => (
             <Link

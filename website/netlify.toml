@@ -5,7 +5,8 @@
 
 # Netlify headers config
 [[headers]]
-  # This is a temporary solution to be able to load the Valibot library into the playground iframe
   for = "/build/*"
   [headers.values]
+    cache-control = "public, max-age=31536000, s-maxage=31536000, immutable"
+    # This is a temporary solution to be able to load the Valibot library into the playground iframe
     access-control-allow-origin = "*"

@@ -89,6 +89,17 @@ const result = v.safeParse(Schema, {
 console.log(result);`;
   });
 
+  /**
+   * Clears the logs of the playground.
+   */
+  const clearLogs = $(() => {
+    // Reset logs signal
+    logs.value = [];
+
+    // Track playground event
+    trackEvent('clear_playground_logs');
+  });
+
   return (
     <main class="flex w-full flex-1 flex-col lg:flex-row lg:space-x-10 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:space-x-14 2xl:self-center">
       <div class="flex flex-1 lg:relative">
@@ -112,9 +123,9 @@ console.log(result);`;
           class="!absolute right-8 top-8 z-10 lg:right-10 lg:top-10"
           type="button"
           variant="secondary"
-          label="Clear"
+          label="Clear logs"
           hideLabel
-          onClick$={() => (logs.value = [])}
+          onClick$={clearLogs}
         >
           <BinIcon class="h-[18px]" />
         </IconButton>
