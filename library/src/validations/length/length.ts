@@ -29,7 +29,7 @@ export interface LengthValidation<
  */
 export function length<
   TInput extends string | any[],
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

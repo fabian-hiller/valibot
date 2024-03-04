@@ -53,7 +53,7 @@ export function optional<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
-    | undefined
+    | undefined,
 >(wrapped: TWrapped, default_: TDefault): OptionalSchema<TWrapped, TDefault>;
 
 export function optional<
@@ -61,7 +61,7 @@ export function optional<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
-    | undefined = undefined
+    | undefined = undefined,
 >(wrapped: TWrapped, default_?: TDefault): OptionalSchema<TWrapped, TDefault> {
   return {
     type: 'optional',

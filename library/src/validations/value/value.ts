@@ -29,7 +29,7 @@ export interface ValueValidation<
  */
 export function value<
   TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

@@ -29,7 +29,7 @@ export interface NotLengthValidation<
  */
 export function notLength<
   TInput extends string | any[],
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

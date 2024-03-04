@@ -10,7 +10,14 @@ export type ObjectKeys<
 /**
  * Maybe readonly type.
  */
-export type MaybeReadonly<T> = Readonly<T> | T;
+export type MaybeReadonly<T> = T | Readonly<T>;
+
+/**
+ * Maybe promise type.
+ *
+ * TODO: Refactor library with this type.
+ */
+export type MaybePromise<T> = T | Promise<T>;
 
 /**
  * Resolve type.

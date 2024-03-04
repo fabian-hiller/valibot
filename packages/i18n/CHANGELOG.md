@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.7.0 (February 19, 2024)
+
+- Add Norwegian (nb) translations (pull request #439)
+
 ## v0.6.0 (February 16, 2024)
 
 - Add Dutch (nl) translations (pull request #438)

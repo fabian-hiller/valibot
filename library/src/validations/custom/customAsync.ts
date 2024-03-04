@@ -22,7 +22,7 @@ export interface CustomValidationAsync<TInput>
  * @param requirement The async validation function.
  * @param message The error message.
  *
- * @returns A async validation function.
+ * @returns A async validation action.
  */
 export function customAsync<TInput>(
   requirement: (input: TInput) => Promise<boolean>,

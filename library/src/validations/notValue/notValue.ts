@@ -29,7 +29,7 @@ export interface NotValueValidation<
  */
 export function notValue<
   TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

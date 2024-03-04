@@ -29,7 +29,7 @@ export interface MaxLengthValidation<
  */
 export function maxLength<
   TInput extends string | any[],
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

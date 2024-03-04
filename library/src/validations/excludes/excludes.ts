@@ -29,7 +29,7 @@ export interface ExcludesValidation<
  */
 export function excludes<
   TInput extends string | any[],
-  const TRequirement extends TInput extends any[] ? TInput[number] : TInput
+  const TRequirement extends TInput extends any[] ? TInput[number] : TInput,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

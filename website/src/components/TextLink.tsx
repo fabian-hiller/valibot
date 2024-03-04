@@ -1,12 +1,8 @@
 import { component$, Slot } from '@builder.io/qwik';
 import clsx from 'clsx';
-import { UnstyledButton } from './UnstyledButton';
+import { type LinkButtonProps, UnstyledButton } from './UnstyledButton';
 
-type TextLinkProps = {
-  class?: string;
-  href: string;
-  download?: boolean | string;
-  target?: '_blank';
+type TextLinkProps = Omit<LinkButtonProps, 'type'> & {
   colored?: boolean;
   underlined?: boolean;
 };

@@ -5,7 +5,7 @@ import type {
   TypedSchemaResult,
   UntypedSchemaResult,
 } from '../../types/index.ts';
-import { maxValue, minLength, minValue } from '../../validations/index.ts';
+import { maxValue, minLength } from '../../validations/index.ts';
 import { transformAsync } from './transformAsync.ts';
 
 describe('transformAsync', () => {
@@ -62,8 +62,8 @@ describe('transformAsync', () => {
     const input = 'hello';
     const result = await schema._parse(input);
     expect(result).toEqual({
-      typed: true,
-      output: 5,
+      typed: false,
+      output: 'hello',
       issues: [
         {
           reason: 'string',
@@ -75,32 +75,7 @@ describe('transformAsync', () => {
           requirement: 10,
         },
       ],
-    } satisfies TypedSchemaResult<Output<typeof schema>>);
-  });
-
-  test('should skip validation argument', async () => {
-    const schema = transformAsync(
-      string([minLength(10)]),
-      (output) => output.length,
-      number([minValue(10)])
-    );
-    const input = 'hello';
-    const result = await schema._parse(input);
-    expect(result).toEqual({
-      typed: true,
-      output: 5,
-      issues: [
-        {
-          reason: 'string',
-          context: 'min_length',
-          expected: '>=10',
-          received: '5',
-          message: 'Invalid length: Expected >=10 but received 5',
-          input: input,
-          requirement: 10,
-        },
-      ],
-    } satisfies TypedSchemaResult<Output<typeof schema>>);
+    } satisfies UntypedSchemaResult);
   });
 
   test('should validate output with pipe', async () => {

@@ -60,7 +60,7 @@ export function optionalAsync<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined
+    | undefined,
 >(
   wrapped: TWrapped,
   default_: TDefault
@@ -71,7 +71,7 @@ export function optionalAsync<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined = undefined
+    | undefined = undefined,
 >(
   wrapped: TWrapped,
   default_?: TDefault

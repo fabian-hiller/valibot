@@ -29,7 +29,7 @@ export interface MinValueValidation<
  */
 export function minValue<
   TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

@@ -29,7 +29,7 @@ export interface SizeValidation<
  */
 export function size<
   TInput extends Map<any, any> | Set<any> | Blob,
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

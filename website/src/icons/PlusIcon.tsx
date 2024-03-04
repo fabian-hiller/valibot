@@ -1,6 +1,6 @@
 import { component$, type HTMLAttributes } from '@builder.io/qwik';
 
-export const PlusIcon = component$<HTMLAttributes<HTMLElement>>((props) => (
+export const PlusIcon = component$<HTMLAttributes<SVGSVGElement>>((props) => (
   <svg
     viewBox="0 0 40 48"
     role="img"

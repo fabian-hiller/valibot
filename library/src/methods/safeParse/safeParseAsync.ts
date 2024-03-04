@@ -1,4 +1,3 @@
-import { ValiError } from '../../error/index.ts';
 import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseSchema,
@@ -27,9 +26,7 @@ export async function safeParseAsync<
   return {
     typed: result.typed,
     success: !result.issues,
-    data: result.output,
     output: result.output,
-    error: result.issues && new ValiError(result.issues),
     issues: result.issues,
   } as unknown as SafeParseResult<TSchema>;
 }

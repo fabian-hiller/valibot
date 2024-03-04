@@ -19,7 +19,7 @@ export interface MimeTypeValidation<
 }
 
 /**
- * Creates a pipeline validation action that validates the MIME type of a file.
+ * Creates a pipeline validation action that validates the MIME type of a blob.
  *
  * @param requirement The MIME types.
  * @param message The error message.
@@ -28,7 +28,7 @@ export interface MimeTypeValidation<
  */
 export function mimeType<
   TInput extends Blob,
-  TRequirement extends `${string}/${string}`[]
+  TRequirement extends `${string}/${string}`[],
 >(
   requirement: TRequirement,
   message?: ErrorMessage

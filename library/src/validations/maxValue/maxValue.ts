@@ -20,7 +20,7 @@ export interface MaxValueValidation<
 
 /**
  * Creates a pipeline validation action that validates the value of a string,
- * number or date.
+ * number, boolean or date.
  *
  * @param requirement The maximum value.
  * @param message The error message.
@@ -29,7 +29,7 @@ export interface MaxValueValidation<
  */
 export function maxValue<
   TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

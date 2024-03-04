@@ -53,7 +53,7 @@ export function nullish<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
-    | undefined
+    | undefined,
 >(wrapped: TWrapped, default_: TDefault): NullishSchema<TWrapped, TDefault>;
 
 export function nullish<
@@ -61,7 +61,7 @@ export function nullish<
   TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | undefined)
-    | undefined = undefined
+    | undefined = undefined,
 >(wrapped: TWrapped, default_?: TDefault): NullishSchema<TWrapped, TDefault> {
   return {
     type: 'nullish',

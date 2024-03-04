@@ -29,7 +29,7 @@ export interface MinLengthValidation<
  */
 export function minLength<
   TInput extends string | any[],
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

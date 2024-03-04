@@ -29,7 +29,7 @@ export interface MaxSizeValidation<
  */
 export function maxSize<
   TInput extends Map<any, any> | Set<any> | Blob,
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

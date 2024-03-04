@@ -29,7 +29,7 @@ export interface NotSizeValidation<
  */
 export function notSize<
   TInput extends Map<any, any> | Set<any> | Blob,
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage
