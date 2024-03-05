@@ -1,39 +1,39 @@
-import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseValidation,
+  Comparable,
+  ErrorMessage,
+  ToComparable,
+} from '../../types/index.ts';
 import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 
 /**
  * Min value validation type.
  */
-export type MinValueValidation<
-  TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput,
-> = BaseValidation<TInput> & {
-  /**
-   * The validation type.
-   */
-  type: 'min_value';
-  /**
-   * The minimum value.
-   */
-  requirement: TRequirement;
-};
+export type MinValueValidation<TRequirement extends Comparable> =
+  BaseValidation<ToComparable<TRequirement>> & {
+    /**
+     * The validation type.
+     */
+    type: 'min_value';
+    /**
+     * The minimum value.
+     */
+    requirement: TRequirement;
+  };
 
 /**
  * Creates a pipeline validation action that validates the value of a string,
- * number or date.
+ * number, bigint, boolean or date.
  *
  * @param requirement The minimum value.
  * @param message The error message.
  *
  * @returns A validation action.
  */
-export function minValue<
-  TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput,
->(
+export function minValue<TRequirement extends Comparable>(
   requirement: TRequirement,
   message?: ErrorMessage
-): MinValueValidation<TInput, TRequirement> {
+): MinValueValidation<TRequirement> {
   return {
     type: 'min_value',
     expects: `>=${
@@ -46,7 +46,13 @@ export function minValue<
     requirement,
     _parse(input) {
       // If requirement is fulfilled, return action output
-      if (input >= this.requirement) {
+      if (
+        input >=
+        // Removing this type assertion,
+        // or casting it to ToComparable<TRequirement>
+        // will cause a weird error
+        (this.requirement as Comparable)
+      ) {
         return actionOutput(input);
       }
 

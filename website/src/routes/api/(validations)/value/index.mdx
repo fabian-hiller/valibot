@@ -1,5 +1,8 @@
 ---
 title: value
+description: >-
+  Creates a pipeline validation action that validates the value of a string,
+  number, bigint, boolean or date.
 source: /validations/value/value.ts
 contributors:
   - fabian-hiller
@@ -10,7 +13,7 @@ import { properties } from './properties';
 
 # value
 
-Creates a pipeline validation action that validates the value of a string, number, boolean or date.
+Creates a pipeline validation action that validates the value of a string, number, bigint, boolean or date.
 
 ```ts
 const Validation = value<TInput, TRequirement>(requirement, message);
@@ -28,7 +31,7 @@ const Validation = value<TInput, TRequirement>(requirement, message);
 
 ### Explanation
 
-With `value` you can validate the value of a string, number, boolean or date. If the input does not match the `requirement`, you can use `message` to customize the error message.
+With `value` you can validate the value of a string, number, bigint, boolean or date. If the input does not match the `requirement`, you can use `message` to customize the error message.
 
 ## Returns
 

@@ -1,39 +1,39 @@
-import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseValidation,
+  Comparable,
+  ErrorMessage,
+  ToComparable,
+} from '../../types/index.ts';
 import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 
 /**
  * Max value validation type.
  */
-export type MaxValueValidation<
-  TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput,
-> = BaseValidation<TInput> & {
-  /**
-   * The validation type.
-   */
-  type: 'max_value';
-  /**
-   * The maximum value.
-   */
-  requirement: TRequirement;
-};
+export type MaxValueValidation<TRequirement extends Comparable> =
+  BaseValidation<ToComparable<TRequirement>> & {
+    /**
+     * The validation type.
+     */
+    type: 'max_value';
+    /**
+     * The maximum value.
+     */
+    requirement: TRequirement;
+  };
 
 /**
  * Creates a pipeline validation action that validates the value of a string,
- * number, boolean or date.
+ * number, bigint, boolean or date.
  *
  * @param requirement The maximum value.
  * @param message The error message.
  *
  * @returns A validation action.
  */
-export function maxValue<
-  TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput,
->(
+export function maxValue<TRequirement extends Comparable>(
   requirement: TRequirement,
   message?: ErrorMessage
-): MaxValueValidation<TInput, TRequirement> {
+): MaxValueValidation<TRequirement> {
   return {
     type: 'max_value',
     expects: `<=${
@@ -46,7 +46,13 @@ export function maxValue<
     requirement,
     _parse(input) {
       // If requirement is fulfilled, return action output
-      if (input <= this.requirement) {
+      if (
+        input <=
+        // Removing this type assertion,
+        // or casting it to ToComparable<TRequirement>
+        // will cause a weird error
+        (this.requirement as Comparable)
+      ) {
         return actionOutput(input);
       }
 

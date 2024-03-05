@@ -1,22 +1,27 @@
-import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseValidation,
+  Comparable,
+  ErrorMessage,
+  ToComparable,
+} from '../../types/index.ts';
 import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
+
+type EqualComparable = Exclude<Comparable, Date>;
 
 /**
  * Equal validation type.
  */
-export type EqualValidation<
-  TInput extends string | number | bigint | boolean,
-  TRequirement extends TInput,
-> = BaseValidation<TInput> & {
-  /**
-   * The validation type.
-   */
-  type: 'equal';
-  /**
-   * The required value.
-   */
-  requirement: TRequirement;
-};
+export type EqualValidation<TRequirement extends EqualComparable> =
+  BaseValidation<ToComparable<TRequirement>> & {
+    /**
+     * The validation type.
+     */
+    type: 'equal';
+    /**
+     * The required value.
+     */
+    requirement: TRequirement;
+  };
 
 /**
  * Creates a pipeline validation action that checks the value for equality.
@@ -28,13 +33,10 @@ export type EqualValidation<
  *
  * @returns A validation action.
  */
-export function equal<
-  TInput extends string | number | bigint | boolean,
-  TRequirement extends TInput,
->(
+export function equal<TRequirement extends EqualComparable>(
   requirement: TRequirement,
   message?: ErrorMessage
-): EqualValidation<TInput, TRequirement> {
+): EqualValidation<TRequirement> {
   return {
     type: 'equal',
     expects: stringify(requirement),
@@ -43,7 +45,13 @@ export function equal<
     requirement,
     _parse(input) {
       // If requirement is fulfilled, return action output
-      if (input === this.requirement) {
+      if (
+        input ===
+        // Removing this type assertion,
+        // or casting it to ToComparable<TRequirement>
+        // will cause a weird error
+        (this.requirement as EqualComparable)
+      ) {
         return actionOutput(input);
       }
 
