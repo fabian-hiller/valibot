@@ -14,7 +14,7 @@ export type Enum = {
  */
 export type EnumSchema<
   TEnum extends Enum,
-  TOutput = TEnum[keyof TEnum]
+  TOutput = TEnum[keyof TEnum],
 > = BaseSchema<TEnum[keyof TEnum], TOutput> & {
   /**
    * The schema type.

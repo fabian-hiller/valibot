@@ -159,7 +159,7 @@ const Definition = component$<DefinitionProps>(({ data }) => (
       <span class="text-slate-600 dark:text-slate-400">
         {'{'}
         {data.entries.map((entrie, index) => (
-          <>
+          <Fragment key={index}>
             {index === 0 ? ' ' : ', '}
             <>
               {typeof entrie.key === 'string' ? (
@@ -197,7 +197,7 @@ const Definition = component$<DefinitionProps>(({ data }) => (
             </span>{' '}
             <Definition data={entrie.value} />
             {index === data.entries.length - 1 && ' '}
-          </>
+          </Fragment>
         ))}
         {'}'}
       </span>
@@ -221,10 +221,10 @@ const Definition = component$<DefinitionProps>(({ data }) => (
       <span class="text-slate-600 dark:text-slate-400">
         [
         {data.items.map((item, index) => (
-          <>
+          <Fragment key={index}>
             {index > 0 && ', '}
             <Definition data={item} />
-          </>
+          </Fragment>
         ))}
         ]
       </span>
@@ -235,7 +235,7 @@ const Definition = component$<DefinitionProps>(({ data }) => (
           '('}
         (
         {data.params.map((param, index) => (
-          <>
+          <Fragment key={index}>
             <span>
               {index > 0 && ', '}
               {param.spread && (
@@ -249,24 +249,24 @@ const Definition = component$<DefinitionProps>(({ data }) => (
               </span>{' '}
             </span>
             <Definition data={param.type} />
-          </>
+          </Fragment>
         ))}
         ) {'=>'} <Definition data={data.return} />
         {typeof data.return === 'object' && data.return.type === 'union' && ')'}
       </span>
     ) : data.type === 'union' ? (
       data.options.map((option, index) => (
-        <>
+        <Fragment key={index}>
           {index > 0 && <span class="text-red-600 dark:text-red-400"> | </span>}
           <Definition data={option} />
-        </>
+        </Fragment>
       ))
     ) : data.type === 'intersect' ? (
       data.options.map((option, index) => (
-        <>
+        <Fragment key={index}>
           {index > 0 && <span class="text-red-600 dark:text-red-400"> & </span>}
           <Definition data={option} />
-        </>
+        </Fragment>
       ))
     ) : data.type === 'conditional' ? (
       <>
@@ -298,20 +298,20 @@ const Definition = component$<DefinitionProps>(({ data }) => (
           <>
             {'<'}
             {data.generics.map((generic, index) => (
-              <>
+              <Fragment key={index}>
                 {index > 0 && ', '}
                 <Definition data={generic} />
-              </>
+              </Fragment>
             ))}
             {'>'}
           </>
         )}
-        {data.indexes?.map((index) => (
-          <>
+        {data.indexes?.map((data, index) => (
+          <Fragment key={index}>
             {'['}
-            <Definition data={index} />
+            <Definition data={data} />
             {']'}
-          </>
+          </Fragment>
         ))}
       </>
     )}

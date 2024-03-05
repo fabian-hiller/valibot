@@ -1,6 +1,6 @@
 import { component$, type HTMLAttributes } from '@builder.io/qwik';
 
-export const GitHubIcon = component$<HTMLAttributes<HTMLElement>>((props) => (
+export const GitHubIcon = component$<HTMLAttributes<SVGSVGElement>>((props) => (
   <svg
     viewBox="0 0 48 48"
     role="img"

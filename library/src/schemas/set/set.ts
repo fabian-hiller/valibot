@@ -17,7 +17,7 @@ import type { SetInput, SetOutput, SetPathItem } from './types.ts';
  */
 export type SetSchema<
   TValue extends BaseSchema,
-  TOutput = SetOutput<TValue>
+  TOutput = SetOutput<TValue>,
 > = BaseSchema<SetInput<TValue>, TOutput> & {
   /**
    * The schema type.

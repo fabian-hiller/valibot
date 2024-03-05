@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, Fragment } from '@builder.io/qwik';
 import { type DocumentHead, useContent } from '@builder.io/qwik-city';
 import { ApiList } from '~/components';
 
@@ -39,10 +39,10 @@ export default component$(() => {
       {content.menu?.items?.map(
         (item) =>
           item.items && (
-            <>
+            <Fragment key={item.text}>
               <h2>{item.text}</h2>
               <ApiList items={item.items.map((i) => i.text)} />
-            </>
+            </Fragment>
           )
       )}
     </>

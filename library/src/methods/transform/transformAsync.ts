@@ -15,7 +15,7 @@ import type { TransformInfo } from './types.ts';
  */
 export type SchemaWithTransformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 > = Omit<TSchema, 'async' | '_parse' | '_types'> & {
   async: true;
   _parse(input: unknown, config?: SchemaConfig): Promise<SchemaResult<TOutput>>;
@@ -37,7 +37,7 @@ export type SchemaWithTransformAsync<
  */
 export function transformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 >(
   schema: TSchema,
   action: (
@@ -59,7 +59,7 @@ export function transformAsync<
  */
 export function transformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 >(
   schema: TSchema,
   action: (
@@ -71,7 +71,7 @@ export function transformAsync<
 
 export function transformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 >(
   schema: TSchema,
   action: (
@@ -87,29 +87,33 @@ export function transformAsync<
       // Parse input with schema
       const result = await schema._parse(input, config);
 
-      // If result is typed, transform output
-      if (result.typed) {
+      // If there are issues, set typed to false
+      if (result.issues) {
+        result.typed = false;
+
+        // Otherwise, transform output
+      } else {
         result.output = await action(result.output, { issues: result.issues });
 
-        // If there are issues or no validation arg, return result
-        if (result.issues || !arg1) {
-          return result;
-        }
+        // If there is a validation arg, validate output
+        if (arg1) {
+          // If a pipeline is provided, return pipe result
+          // TODO: Investigate whether it simplifies the API to allow only a
+          // schema and not a pipeline
+          if (Array.isArray(arg1)) {
+            return pipeResultAsync(
+              { type: typeof result.output, pipe: arg1 },
+              result.output,
+              config
+            );
+          }
 
-        // Otherwise, if a pipe is provided, return pipe result
-        if (Array.isArray(arg1)) {
-          return pipeResultAsync(
-            { type: typeof result.output, pipe: arg1 },
-            result.output,
-            config
-          );
+          // Otherwise, validate output with schema
+          return arg1._parse(result.output, config);
         }
-
-        // Otherwise, validate output with schema
-        return arg1._parse(result.output, config);
       }
 
-      // Otherwise, return untyped result
+      // Otherwise, return modified schema result
       return result;
     },
   };

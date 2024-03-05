@@ -9,7 +9,7 @@ export const properties: Record<string, PropertyProps> = {
       return: {
         type: 'custom',
         name: 'BaseSchema',
-        href: '../../types/index/',
+        href: '../BaseSchema/',
       },
     },
   },
@@ -67,7 +67,7 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'recursive',
+      value: 'lazy',
     },
   },
   getter: {

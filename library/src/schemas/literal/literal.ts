@@ -7,7 +7,7 @@ import type { Literal } from './types.ts';
  */
 export type LiteralSchema<
   TLiteral extends Literal,
-  TOutput = TLiteral
+  TOutput = TLiteral,
 > = BaseSchema<TLiteral, TOutput> & {
   /**
    * The schema type.

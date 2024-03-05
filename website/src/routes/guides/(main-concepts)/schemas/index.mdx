@@ -138,6 +138,7 @@ Beyond primitive and complex values, I also provide schema functions for more sp
     'enum_',
     'instance',
     'intersect',
+    'lazy',
     'literal',
     'nan',
     'never',
@@ -148,7 +149,6 @@ Beyond primitive and complex values, I also provide schema functions for more sp
     'nullish',
     'optional',
     'picklist',
-    'recursive',
     'special',
     'union',
     'unknown',
@@ -163,6 +163,7 @@ import * as v from 'valibot';
 const AnySchema = v.any(); // any
 const EnumSchema = v.enum_(Direction); // Direction
 const InstanceSchema = v.instance(Error); // Error
+const LazySchema = v.lazy(() => v.string()); // string
 const IntersectSchema = v.intersect([v.string(), v.literal('a')]); // string & 'a'
 const LiteralSchema = v.literal('foo'); // 'foo'
 const NanSchema = v.nan(); // NaN
@@ -174,7 +175,6 @@ const NullableSchema = v.nullable(v.string()); // string | null
 const NullishSchema = v.nullish(v.string()); // string | null | undefined
 const OptionalSchema = v.optional(v.string()); // string | undefined
 const PicklistSchema = v.picklist(['a', 'b']); // 'a' | 'b'
-const RecursiveSchema = v.recursive(() => v.string()); // string
 const SpecialSchema = v.special<`${number}px`>(isPixelString); // `${number}px`
 const UnionSchema = v.union([v.string(), v.number()]); // string | number
 const UnknownSchema = v.unknown(); // unknown

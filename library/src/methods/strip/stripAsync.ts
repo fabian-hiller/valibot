@@ -13,7 +13,7 @@ import type {
  * @returns A object schema.
  */
 export function stripAsync<
-  TSchema extends ObjectSchemaAsync<ObjectEntriesAsync, undefined>
+  TSchema extends ObjectSchemaAsync<ObjectEntriesAsync, undefined>,
 >(schema: TSchema): TSchema {
   // Create cached keys
   let cachedKeys: string[];

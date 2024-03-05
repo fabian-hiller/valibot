@@ -32,7 +32,7 @@ export type PartialObjectEntriesAsync<TEntries extends ObjectEntriesAsync> = {
  * @returns An async object schema.
  */
 export function partialAsync<
-  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
 >(
   schema: TSchema,
   pipe?: PipeAsync<
@@ -51,7 +51,7 @@ export function partialAsync<
  * @returns An async object schema.
  */
 export function partialAsync<
-  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
 >(
   schema: TSchema,
   message?: ErrorMessage,
@@ -72,7 +72,7 @@ export function partialAsync<
  */
 export function partialAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -94,7 +94,7 @@ export function partialAsync<
  */
 export function partialAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -106,7 +106,7 @@ export function partialAsync<
 
 export function partialAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TRest extends BaseSchema | undefined = undefined
+  TRest extends BaseSchema | undefined = undefined,
 >(
   schema: TSchema,
   arg2?:

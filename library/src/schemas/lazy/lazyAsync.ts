@@ -7,18 +7,18 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Recursive schema async type.
+ * Lazy schema async type.
  */
-export type RecursiveSchemaAsync<
+export type LazySchemaAsync<
   TGetter extends (
     input: unknown
   ) => MaybePromise<BaseSchema | BaseSchemaAsync>,
-  TOutput = Output<Awaited<ReturnType<TGetter>>>
+  TOutput = Output<Awaited<ReturnType<TGetter>>>,
 > = BaseSchemaAsync<Input<Awaited<ReturnType<TGetter>>>, TOutput> & {
   /**
    * The schema type.
    */
-  type: 'recursive';
+  type: 'lazy';
   /**
    * The schema getter.
    */
@@ -26,17 +26,19 @@ export type RecursiveSchemaAsync<
 };
 
 /**
- * Creates an async recursive schema.
+ * Creates an async lazy schema.
  *
  * @param getter The schema getter.
  *
- * @returns An async recursive schema.
+ * @returns An async lazy schema.
  */
-export function recursiveAsync<
-  TGetter extends (input: unknown) => MaybePromise<BaseSchema | BaseSchemaAsync>
->(getter: TGetter): RecursiveSchemaAsync<TGetter> {
+export function lazyAsync<
+  TGetter extends (
+    input: unknown
+  ) => MaybePromise<BaseSchema | BaseSchemaAsync>,
+>(getter: TGetter): LazySchemaAsync<TGetter> {
   return {
-    type: 'recursive',
+    type: 'lazy',
     expects: 'unknown',
     async: true,
     getter,
@@ -45,3 +47,10 @@ export function recursiveAsync<
     },
   };
 }
+
+/**
+ * See {@link lazyAsync}
+ *
+ * @deprecated Use `lazyAsync` instead.
+ */
+export const recursiveAsync = lazyAsync;

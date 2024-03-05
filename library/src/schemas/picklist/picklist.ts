@@ -7,7 +7,7 @@ import type { PicklistOptions } from './types.ts';
  */
 export type PicklistSchema<
   TOptions extends PicklistOptions,
-  TOutput = TOptions[number]
+  TOutput = TOptions[number],
 > = BaseSchema<TOptions[number], TOutput> & {
   /**
    * The schema type.

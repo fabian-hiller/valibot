@@ -12,9 +12,7 @@ describe('safeParseAsync', () => {
     expect(result).toEqual({
       typed: true,
       success: true,
-      data: input,
       output: input,
-      error: undefined,
       issues: undefined,
     });
   });
@@ -51,9 +49,7 @@ describe('safeParseAsync', () => {
     expect(result).toEqual({
       typed: true,
       success: false,
-      data: input,
       output: input,
-      error: new ValiError(issues),
       issues,
     });
   });
@@ -86,9 +82,7 @@ describe('safeParseAsync', () => {
     expect(result).toEqual({
       typed: false,
       success: false,
-      data: input,
       output: input,
-      error: new ValiError(issues),
       issues,
     });
   });

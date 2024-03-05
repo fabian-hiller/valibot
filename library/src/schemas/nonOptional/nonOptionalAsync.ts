@@ -11,7 +11,7 @@ import type { NonOptionalInput, NonOptionalOutput } from './types.ts';
  */
 export type NonOptionalSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TOutput = NonOptionalOutput<TWrapped>
+  TOutput = NonOptionalOutput<TWrapped>,
 > = BaseSchemaAsync<NonOptionalInput<TWrapped>, TOutput> & {
   /**
    * The schema type.

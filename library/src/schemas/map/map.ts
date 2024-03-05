@@ -19,7 +19,7 @@ import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 export type MapSchema<
   TKey extends BaseSchema,
   TValue extends BaseSchema,
-  TOutput = MapOutput<TKey, TValue>
+  TOutput = MapOutput<TKey, TValue>,
 > = BaseSchema<MapInput<TKey, TValue>, TOutput> & {
   /**
    * The schema type.

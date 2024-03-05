@@ -5,8 +5,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
  * Min length validation type.
  */
 export type MinLengthValidation<
-  TInput extends string | number | any[],
-  TRequirement extends number
+  TInput extends string | any[],
+  TRequirement extends number,
 > = BaseValidation<TInput> & {
   /**
    * The validation type.
@@ -29,7 +29,7 @@ export type MinLengthValidation<
  */
 export function minLength<
   TInput extends string | any[],
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage
