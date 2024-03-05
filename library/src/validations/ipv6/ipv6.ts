@@ -1,6 +1,6 @@
 import { IPV6_REGEX } from '../../regex.ts';
 import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
-import { actionIssue, actionOutput } from '../../utils/index.ts';
+import { actionIssue, actionOutput, isIPv6 } from '../../utils/index.ts';
 
 /**
  * IPv6 validation type.
@@ -13,7 +13,7 @@ export type Ipv6Validation<TInput extends string> = BaseValidation<TInput> & {
   /**
    * The IPv6 regex.
    */
-  requirement: RegExp;
+  requirement: [RegExp, typeof isIPv6];
 };
 
 /**
@@ -31,15 +31,11 @@ export function ipv6<TInput extends string>(
     expects: null,
     async: false,
     message,
-    requirement: IPV6_REGEX,
+    requirement: [IPV6_REGEX, isIPv6],
     _parse(input) {
-      // If requirement is fulfilled, return action output
-      if (this.requirement.test(input)) {
-        return actionOutput(input);
-      }
-
-      // Otherwise, return action issue
-      return actionIssue(this, ipv6, input, 'IPv6');
+      return !(this.requirement[0].test(input) && this.requirement[1](input))
+        ? actionIssue(this, ipv6, input, 'IPv6')
+        : actionOutput(input);
     },
   };
 }
