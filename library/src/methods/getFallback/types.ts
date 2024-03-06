@@ -1,27 +1,6 @@
-import type { BaseSchema, BaseSchemaAsync, Output } from '../../types/index.ts';
-import type { FallbackInfo } from '../fallback/types.ts';
-
-/**
- * Schema with maybe fallback type.
- */
-export interface SchemaWithMaybeFallback<TInput = any, TOutput = TInput>
-  extends BaseSchema<TInput, TOutput> {
-  /**
-   * The optional fallback value.
-   */
-  fallback?: TOutput | ((info?: FallbackInfo) => TOutput);
-}
-
-/**
- * Schema with maybe fallback async type.
- */
-export interface SchemaWithMaybeFallbackAsync<TInput = any, TOutput = TInput>
-  extends BaseSchemaAsync<TInput, TOutput> {
-  /**
-   * The optional fallback value.
-   */
-  fallback?: TOutput | ((info?: FallbackInfo) => TOutput | Promise<TOutput>);
-}
+import type { Output } from '../../types/index.ts';
+import type { SchemaWithMaybeFallback } from './getFallback.ts';
+import type { SchemaWithMaybeFallbackAsync } from './getFallbackAsync.ts';
 
 /**
  * Fallback value inference type.
