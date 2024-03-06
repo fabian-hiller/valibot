@@ -1,5 +1,5 @@
 import { getDefault } from '../../methods/index.ts';
-import type { BaseSchema, Input, Output } from '../../types/index.ts';
+import type { BaseSchema, Default, Input, Output } from '../../types/index.ts';
 import { schemaResult } from '../../utils/index.ts';
 
 /**
@@ -7,10 +7,7 @@ import { schemaResult } from '../../utils/index.ts';
  */
 export interface OptionalSchema<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined = undefined,
+  TDefault extends Default<TWrapped> = undefined,
   TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
     : Output<TWrapped> | undefined,
@@ -50,18 +47,12 @@ export function optional<TWrapped extends BaseSchema>(
  */
 export function optional<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined,
+  TDefault extends Default<TWrapped>,
 >(wrapped: TWrapped, default_: TDefault): OptionalSchema<TWrapped, TDefault>;
 
 export function optional<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined = undefined,
+  TDefault extends Default<TWrapped> = undefined,
 >(wrapped: TWrapped, default_?: TDefault): OptionalSchema<TWrapped, TDefault> {
   return {
     type: 'optional',

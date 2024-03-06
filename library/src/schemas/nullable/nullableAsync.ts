@@ -2,6 +2,7 @@ import { getDefaultAsync } from '../../methods/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  DefaultAsync,
   Input,
   Output,
 } from '../../types/index.ts';
@@ -12,10 +13,7 @@ import { schemaResult } from '../../utils/index.ts';
  */
 export interface NullableSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined = undefined,
+  TDefault extends DefaultAsync<TWrapped> = undefined,
   TOutput = TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
@@ -57,10 +55,7 @@ export function nullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
  */
 export function nullableAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined,
+  TDefault extends DefaultAsync<TWrapped>,
 >(
   wrapped: TWrapped,
   default_: TDefault
@@ -68,10 +63,7 @@ export function nullableAsync<
 
 export function nullableAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined = undefined,
+  TDefault extends DefaultAsync<TWrapped> = undefined,
 >(
   wrapped: TWrapped,
   default_?: TDefault

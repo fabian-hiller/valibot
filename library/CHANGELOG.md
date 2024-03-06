@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Remove deprecated properties of `safeParse` and `safeParseAsync` method
 - Fix `NestedPath` type of `flatten` for async schemas (issue #456)
+- Add `Default` and `DefaultAsync` type and refactor codebase
 
 ## v0.29.0 (February 19, 2024)
 
