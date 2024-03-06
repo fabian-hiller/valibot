@@ -30,21 +30,23 @@ import type { FallbackValues } from './types.ts';
  */
 export async function getFallbacksAsync<
   TSchema extends
-    | (SchemaWithMaybeFallback &
-        (BaseSchema | ObjectSchema<ObjectEntries> | TupleSchema<TupleItems>))
-    | (SchemaWithMaybeFallbackAsync &
-        (
-          | BaseSchemaAsync
-          | ObjectSchemaAsync<ObjectEntriesAsync>
-          | TupleSchemaAsync<TupleItemsAsync>
-        )),
+    | SchemaWithMaybeFallback<
+        | BaseSchema
+        | ObjectSchema<ObjectEntries, any>
+        | TupleSchema<TupleItems, any>
+      >
+    | SchemaWithMaybeFallbackAsync<
+        | BaseSchemaAsync
+        | ObjectSchemaAsync<ObjectEntriesAsync, any>
+        | TupleSchemaAsync<TupleItemsAsync, any>
+      >,
 >(schema: TSchema): Promise<FallbackValues<TSchema> | undefined> {
-  // If schema has a fallback, set its value
+  // If schema has fallback, return its value
   if (schema.fallback !== undefined) {
     return getFallbackAsync(schema);
   }
-  // Otherwise, check if schema is of kind object or tuple
-  // If it is an object schema, set object with fallback value of each entry
+
+  // If it is an object schema, return fallback of each entry
   if (hasType(schema, 'object')) {
     return Object.fromEntries(
       await Promise.all(
@@ -53,12 +55,16 @@ export async function getFallbacksAsync<
           await getFallbacksAsync(value),
         ])
       )
-    );
+    ) as FallbackValues<TSchema>;
   }
-  // If it is a tuple schema, set array with fallback value of each item
+
+  // If it is a tuple schema, return fallback of each item
   if (hasType(schema, 'tuple')) {
     return Promise.all(
       schema.items.map(getFallbacksAsync)
     ) as FallbackValues<TSchema>;
   }
+
+  // Otherwise, return undefined
+  return undefined;
 }

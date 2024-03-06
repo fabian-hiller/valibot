@@ -24,15 +24,16 @@ import type { DefaultValues } from './types.ts';
  * @returns The default values.
  */
 export function getDefaults<
-  TSchema extends SchemaWithMaybeDefault &
-    (BaseSchema | ObjectSchema<ObjectEntries> | TupleSchema<TupleItems>),
+  TSchema extends SchemaWithMaybeDefault<
+    BaseSchema | ObjectSchema<ObjectEntries, any> | TupleSchema<TupleItems, any>
+  >,
 >(schema: TSchema): DefaultValues<TSchema> | undefined {
-  // If schema contains a default function, set its default value
+  // If schema has default, return its value
   if (schema.default !== undefined) {
     return getDefault(schema);
   }
-  // Otherwise, check if schema is of kind object or tuple
-  // If it is an object schema, set object with default value of each entry
+
+  // If it is an object schema, return default of each entry
   if (hasType(schema, 'object')) {
     return Object.fromEntries(
       Object.entries(schema.entries).map(([key, value]) => [
@@ -41,8 +42,12 @@ export function getDefaults<
       ])
     ) as DefaultValues<TSchema>;
   }
-  // If it is a tuple schema, set array with default value of each item
+
+  // If it is a tuple schema, return default of each item
   if (hasType(schema, 'tuple')) {
     return schema.items.map(getDefaults) as DefaultValues<TSchema>;
   }
+
+  // Otherwise, return undefined
+  return undefined;
 }

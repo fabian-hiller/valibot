@@ -30,21 +30,23 @@ import type { DefaultValues } from './types.ts';
  */
 export async function getDefaultsAsync<
   TSchema extends
-    | (SchemaWithMaybeDefault &
-        (BaseSchema | ObjectSchema<ObjectEntries> | TupleSchema<TupleItems>))
-    | (SchemaWithMaybeDefaultAsync &
-        (
-          | BaseSchemaAsync
-          | ObjectSchemaAsync<ObjectEntriesAsync>
-          | TupleSchemaAsync<TupleItemsAsync>
-        )),
+    | SchemaWithMaybeDefault<
+        | BaseSchema
+        | ObjectSchema<ObjectEntries, any>
+        | TupleSchema<TupleItems, any>
+      >
+    | SchemaWithMaybeDefaultAsync<
+        | BaseSchemaAsync
+        | ObjectSchemaAsync<ObjectEntriesAsync, any>
+        | TupleSchemaAsync<TupleItemsAsync, any>
+      >,
 >(schema: TSchema): Promise<DefaultValues<TSchema> | undefined> {
-  // If schema contains a default function, set its default value
+  // If schema contains default, return its value
   if (schema.default !== undefined) {
     return getDefaultAsync(schema);
   }
-  // Otherwise, check if schema is of kind object or tuple
-  // If it is an object schema, set object with default value of each entry
+
+  // If it is an object schema, return default of each entry
   if (hasType(schema, 'object')) {
     return Object.fromEntries(
       await Promise.all(
@@ -53,12 +55,16 @@ export async function getDefaultsAsync<
           await getDefaultsAsync(value),
         ])
       )
-    );
+    ) as DefaultValues<TSchema>;
   }
-  // If it is a tuple schema, set array with default value of each item
+
+  // If it is a tuple schema, return default of each item
   if (hasType(schema, 'tuple')) {
     return Promise.all(
       schema.items.map(getDefaultsAsync)
     ) as DefaultValues<TSchema>;
   }
+
+  // Otherwise, return undefined
+  return undefined;
 }
