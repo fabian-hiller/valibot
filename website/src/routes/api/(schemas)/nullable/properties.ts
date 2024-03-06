@@ -12,41 +12,14 @@ export const properties: Record<string, PropertyProps> = {
   TDefault: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
+      type: 'custom',
+      name: 'Default',
+      href: '../Default/',
+      generics: [
         {
           type: 'custom',
-          name: 'Input',
-          href: '../Input/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TWrapped',
-            },
-          ],
+          name: 'TWrapped',
         },
-        {
-          type: 'function',
-          params: [],
-          return: {
-            type: 'union',
-            options: [
-              {
-                type: 'custom',
-                name: 'Input',
-                href: '../Input/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TWrapped',
-                  },
-                ],
-              },
-              'undefined',
-            ],
-          },
-        },
-        'undefined',
       ],
     },
   },
