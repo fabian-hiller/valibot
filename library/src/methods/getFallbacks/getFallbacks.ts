@@ -5,7 +5,7 @@ import type {
   TupleSchema,
 } from '../../schemas/index.ts';
 import type { BaseSchema } from '../../types/schema.ts';
-import { hasType } from '../../utils/index.ts';
+import { isOfType } from '../../utils/index.ts';
 import {
   getFallback,
   type SchemaWithMaybeFallback,
@@ -34,7 +34,7 @@ export function getFallbacks<
   }
 
   // If it is an object schema, return fallback of each entry
-  if (hasType(schema, 'object')) {
+  if (isOfType('object', schema)) {
     return Object.fromEntries(
       Object.entries(schema.entries).map(([key, value]) => [
         key,
@@ -44,7 +44,7 @@ export function getFallbacks<
   }
 
   // If it is a tuple schema, return fallback of each item
-  if (hasType(schema, 'tuple')) {
+  if (isOfType('tuple', schema)) {
     return schema.items.map(getFallbacks) as FallbackValues<TSchema>;
   }
 

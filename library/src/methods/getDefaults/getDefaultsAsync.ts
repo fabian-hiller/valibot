@@ -9,7 +9,7 @@ import type {
   TupleSchemaAsync,
 } from '../../schemas/index.ts';
 import type { BaseSchema, BaseSchemaAsync } from '../../types/schema.ts';
-import { hasType } from '../../utils/index.ts';
+import { isOfType } from '../../utils/index.ts';
 import {
   getDefaultAsync,
   type SchemaWithMaybeDefault,
@@ -47,7 +47,7 @@ export async function getDefaultsAsync<
   }
 
   // If it is an object schema, return default of each entry
-  if (hasType(schema, 'object')) {
+  if (isOfType('object', schema)) {
     return Object.fromEntries(
       await Promise.all(
         Object.entries(schema.entries).map(async ([key, value]) => [
@@ -59,7 +59,7 @@ export async function getDefaultsAsync<
   }
 
   // If it is a tuple schema, return default of each item
-  if (hasType(schema, 'tuple')) {
+  if (isOfType('tuple', schema)) {
     return Promise.all(
       schema.items.map(getDefaultsAsync)
     ) as DefaultValues<TSchema>;

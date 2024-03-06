@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Add `Default` and `DefaultAsync` type and refactor codebase
 - Add `Fallback` and `FallbackAsync` type and refactor codebase
+- Add `isOfType` type guard util to check the type of an object
 - Refactor `getDefaults` and `getDefaultsAsync` method (pull request #259)
 - Refactor `getFallbacks` and `getFallbacksAsync` method (pull request #259)
 - Remove deprecated properties of `safeParse` and `safeParseAsync` method

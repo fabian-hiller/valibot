@@ -5,7 +5,7 @@ import type {
   TupleSchema,
 } from '../../schemas/index.ts';
 import type { BaseSchema } from '../../types/schema.ts';
-import { hasType } from '../../utils/index.ts';
+import { isOfType } from '../../utils/index.ts';
 import {
   getDefault,
   type SchemaWithMaybeDefault,
@@ -34,7 +34,7 @@ export function getDefaults<
   }
 
   // If it is an object schema, return default of each entry
-  if (hasType(schema, 'object')) {
+  if (isOfType('object', schema)) {
     return Object.fromEntries(
       Object.entries(schema.entries).map(([key, value]) => [
         key,
@@ -44,7 +44,7 @@ export function getDefaults<
   }
 
   // If it is a tuple schema, return default of each item
-  if (hasType(schema, 'tuple')) {
+  if (isOfType('tuple', schema)) {
     return schema.items.map(getDefaults) as DefaultValues<TSchema>;
   }
 
