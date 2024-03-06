@@ -4,7 +4,8 @@ import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 /**
  * Number schema type.
  */
-export type NumberSchema<TOutput = number> = BaseSchema<number, TOutput> & {
+export interface NumberSchema<TOutput = number>
+  extends BaseSchema<number, TOutput> {
   /**
    * The schema type.
    */
@@ -17,7 +18,7 @@ export type NumberSchema<TOutput = number> = BaseSchema<number, TOutput> & {
    * The validation and transformation pipeline.
    */
   pipe: Pipe<number> | undefined;
-};
+}
 
 /**
  * Creates a number schema.

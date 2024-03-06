@@ -13,10 +13,10 @@ import type { Class } from './types.ts';
 /**
  * Instance schema type.
  */
-export type InstanceSchemaAsync<
+export interface InstanceSchemaAsync<
   TClass extends Class,
   TOutput = InstanceType<TClass>,
-> = BaseSchemaAsync<InstanceType<TClass>, TOutput> & {
+> extends BaseSchemaAsync<InstanceType<TClass>, TOutput> {
   /**
    * The schema type.
    */
@@ -33,7 +33,7 @@ export type InstanceSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<InstanceType<TClass>> | undefined;
-};
+}
 
 /**
  * Creates an async instance schema.

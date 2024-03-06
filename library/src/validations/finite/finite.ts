@@ -4,7 +4,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Finite validation type.
  */
-export type FiniteValidation<TInput extends number> = BaseValidation<TInput> & {
+export interface FiniteValidation<TInput extends number>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -13,7 +14,7 @@ export type FiniteValidation<TInput extends number> = BaseValidation<TInput> & {
    * The validation function.
    */
   requirement: (input: TInput) => boolean;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates whether a number is finite.

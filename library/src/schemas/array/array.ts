@@ -17,10 +17,10 @@ import type { ArrayPathItem } from './types.ts';
 /**
  * Array schema type.
  */
-export type ArraySchema<
+export interface ArraySchema<
   TItem extends BaseSchema,
   TOutput = Output<TItem>[],
-> = BaseSchema<Input<TItem>[], TOutput> & {
+> extends BaseSchema<Input<TItem>[], TOutput> {
   /**
    * The schema type.
    */
@@ -37,7 +37,7 @@ export type ArraySchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<Output<TItem>[]> | undefined;
-};
+}
 
 /**
  * Creates a array schema.

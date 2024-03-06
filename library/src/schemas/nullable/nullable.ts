@@ -1,20 +1,17 @@
 import { getDefault } from '../../methods/index.ts';
-import type { BaseSchema, Input, Output } from '../../types/index.ts';
+import type { BaseSchema, Default, Input, Output } from '../../types/index.ts';
 import { schemaResult } from '../../utils/index.ts';
 
 /**
  * Nullable schema type.
  */
-export type NullableSchema<
+export interface NullableSchema<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined = undefined,
+  TDefault extends Default<TWrapped> = undefined,
   TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
     : Output<TWrapped> | null,
-> = BaseSchema<Input<TWrapped> | null, TOutput> & {
+> extends BaseSchema<Input<TWrapped> | null, TOutput> {
   /**
    * The schema type.
    */
@@ -27,7 +24,7 @@ export type NullableSchema<
    * The default value.
    */
   default: TDefault;
-};
+}
 
 /**
  * Creates a nullable schema.
@@ -50,18 +47,12 @@ export function nullable<TWrapped extends BaseSchema>(
  */
 export function nullable<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined,
+  TDefault extends Default<TWrapped>,
 >(wrapped: TWrapped, default_: TDefault): NullableSchema<TWrapped, TDefault>;
 
 export function nullable<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined = undefined,
+  TDefault extends Default<TWrapped> = undefined,
 >(wrapped: TWrapped, default_?: TDefault): NullableSchema<TWrapped, TDefault> {
   return {
     type: 'nullable',

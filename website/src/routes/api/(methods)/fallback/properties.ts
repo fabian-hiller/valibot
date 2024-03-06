@@ -12,45 +12,9 @@ export const properties: Record<string, PropertyProps> = {
   TFallback: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Output',
-          href: '../Output/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TSchema',
-            },
-          ],
-        },
-        {
-          type: 'function',
-          params: [
-            {
-              type: {
-                type: 'custom',
-                name: 'FallbackInfo',
-                href: '../FallbackInfo/',
-              },
-              name: 'info',
-              optional: true,
-            },
-          ],
-          return: {
-            type: 'custom',
-            name: 'Output',
-            href: '../Output/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'TSchema',
-              },
-            ],
-          },
-        },
-      ],
+      type: 'custom',
+      name: 'Fallback',
+      href: '../Fallback/',
     },
   },
   schema: {

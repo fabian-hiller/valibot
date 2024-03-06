@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { ValiError } from '../../error/index.ts';
 import { object, string } from '../../schemas/index.ts';
 import type { SchemaIssues } from '../../types/index.ts';
 import { minLength } from '../../validations/index.ts';

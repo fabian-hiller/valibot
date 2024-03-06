@@ -17,11 +17,11 @@ import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 /**
  * Map schema async type.
  */
-export type MapSchemaAsync<
+export interface MapSchemaAsync<
   TKey extends BaseSchema | BaseSchemaAsync,
   TValue extends BaseSchema | BaseSchemaAsync,
   TOutput = MapOutput<TKey, TValue>,
-> = BaseSchemaAsync<MapInput<TKey, TValue>, TOutput> & {
+> extends BaseSchemaAsync<MapInput<TKey, TValue>, TOutput> {
   /**
    * The schema type.
    */
@@ -42,7 +42,7 @@ export type MapSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<MapOutput<TKey, TValue>> | undefined;
-};
+}
 
 /**
  * Creates an async map schema.

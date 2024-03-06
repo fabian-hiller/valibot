@@ -8,53 +8,29 @@ export const properties: Record<string, PropertyProps> = {
       name: 'BaseSchema',
       href: '../BaseSchema/',
     },
+    default: {
+      type: 'custom',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+    },
   },
   TFallback: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
+      type: 'custom',
+      name: 'Fallback',
+      href: '../Fallback/',
+      generics: [
         {
           type: 'custom',
-          name: 'Output',
-          href: '../Output/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TSchema',
-            },
-          ],
-        },
-        {
-          type: 'function',
-          params: [
-            {
-              name: 'info',
-              type: {
-                type: 'custom',
-                name: 'FallbackInfo',
-                href: '../FallbackInfo/',
-              },
-            },
-          ],
-          return: {
-            type: 'custom',
-            name: 'Output',
-            href: '../Output/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'TSchema',
-              },
-            ],
-          },
+          name: 'TSchema',
         },
       ],
     },
     default: {
       type: 'custom',
-      name: 'Output',
-      href: '../Output/',
+      name: 'Fallback',
+      href: '../Fallback/',
       generics: [
         {
           type: 'custom',

@@ -5,17 +5,17 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * ISO week validation type.
  */
-export type IsoWeekValidation<TInput extends string> =
-  BaseValidation<TInput> & {
-    /**
-     * The validation type.
-     */
-    type: 'iso_week';
-    /**
-     * The ISO week regex.
-     */
-    requirement: RegExp;
-  };
+export interface IsoWeekValidation<TInput extends string>
+  extends BaseValidation<TInput> {
+  /**
+   * The validation type.
+   */
+  type: 'iso_week';
+  /**
+   * The ISO week regex.
+   */
+  requirement: RegExp;
+}
 
 /**
  * Creates a pipeline validation action that validates a week.

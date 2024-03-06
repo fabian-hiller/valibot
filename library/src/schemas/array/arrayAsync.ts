@@ -18,10 +18,10 @@ import type { ArrayPathItem } from './types.ts';
 /**
  * Array schema async type.
  */
-export type ArraySchemaAsync<
+export interface ArraySchemaAsync<
   TItem extends BaseSchema | BaseSchemaAsync,
   TOutput = Output<TItem>[],
-> = BaseSchemaAsync<Input<TItem>[], TOutput> & {
+> extends BaseSchemaAsync<Input<TItem>[], TOutput> {
   /**
    * The schema type.
    */
@@ -38,7 +38,7 @@ export type ArraySchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<Output<TItem>[]> | undefined;
-};
+}
 
 /**
  * Creates an async array schema.

@@ -4,7 +4,8 @@ import { schemaIssue, schemaResult } from '../../utils/index.ts';
 /**
  * Null schema async type.
  */
-export type NullSchemaAsync<TOutput = null> = BaseSchemaAsync<null, TOutput> & {
+export interface NullSchemaAsync<TOutput = null>
+  extends BaseSchemaAsync<null, TOutput> {
   /**
    * The schema type.
    */
@@ -13,7 +14,7 @@ export type NullSchemaAsync<TOutput = null> = BaseSchemaAsync<null, TOutput> & {
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates an async null schema.

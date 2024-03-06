@@ -16,10 +16,10 @@ import type { SetInput, SetOutput, SetPathItem } from './types.ts';
 /**
  * Set schema async type.
  */
-export type SetSchemaAsync<
+export interface SetSchemaAsync<
   TValue extends BaseSchema | BaseSchemaAsync,
   TOutput = SetOutput<TValue>,
-> = BaseSchemaAsync<SetInput<TValue>, TOutput> & {
+> extends BaseSchemaAsync<SetInput<TValue>, TOutput> {
   /**
    * The schema type.
    */
@@ -36,7 +36,7 @@ export type SetSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<SetOutput<TValue>> | undefined;
-};
+}
 
 /**
  * Creates an async set schema.

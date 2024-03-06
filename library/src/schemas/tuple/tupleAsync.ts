@@ -24,11 +24,11 @@ export type TupleItemsAsync = [
 /**
  * Tuple schema async type.
  */
-export type TupleSchemaAsync<
+export interface TupleSchemaAsync<
   TItems extends TupleItemsAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
   TOutput = TupleOutput<TItems, TRest>,
-> = BaseSchemaAsync<TupleInput<TItems, TRest>, TOutput> & {
+> extends BaseSchemaAsync<TupleInput<TItems, TRest>, TOutput> {
   /**
    * The schema type.
    */
@@ -49,7 +49,7 @@ export type TupleSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<TupleOutput<TItems, TRest>> | undefined;
-};
+}
 
 /**
  * Creates an async tuple schema.

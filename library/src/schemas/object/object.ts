@@ -20,11 +20,11 @@ export type ObjectEntries = Record<string, BaseSchema>;
 /**
  * Object schema type.
  */
-export type ObjectSchema<
+export interface ObjectSchema<
   TEntries extends ObjectEntries,
   TRest extends BaseSchema | undefined = undefined,
   TOutput = ObjectOutput<TEntries, TRest>,
-> = BaseSchema<ObjectInput<TEntries, TRest>, TOutput> & {
+> extends BaseSchema<ObjectInput<TEntries, TRest>, TOutput> {
   /**
    * The schema type.
    */
@@ -45,7 +45,7 @@ export type ObjectSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<ObjectOutput<TEntries, TRest>> | undefined;
-};
+}
 
 /**
  * Creates an object schema.

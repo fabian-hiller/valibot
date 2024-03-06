@@ -31,11 +31,11 @@ export type VariantOptions<TKey extends string> = [
 /**
  * Variant schema type.
  */
-export type VariantSchema<
+export interface VariantSchema<
   TKey extends string,
   TOptions extends VariantOptions<TKey>,
   TOutput = Output<TOptions[number]>,
-> = BaseSchema<Input<TOptions[number]>, TOutput> & {
+> extends BaseSchema<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
    */
@@ -56,7 +56,7 @@ export type VariantSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<Output<TOptions[number]>> | undefined;
-};
+}
 
 /**
  * Creates a variant (aka discriminated union) schema.

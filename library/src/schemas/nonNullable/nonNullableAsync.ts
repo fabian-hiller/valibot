@@ -9,10 +9,10 @@ import type { NonNullableInput, NonNullableOutput } from './types.ts';
 /**
  * Non nullable schema async type.
  */
-export type NonNullableSchemaAsync<
+export interface NonNullableSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
   TOutput = NonNullableOutput<TWrapped>,
-> = BaseSchemaAsync<NonNullableInput<TWrapped>, TOutput> & {
+> extends BaseSchemaAsync<NonNullableInput<TWrapped>, TOutput> {
   /**
    * The schema type.
    */
@@ -25,7 +25,7 @@ export type NonNullableSchemaAsync<
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates an async non nullable schema.

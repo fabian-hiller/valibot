@@ -37,11 +37,11 @@ export type RecordKeyAsync =
 /**
  * Record schema async type.
  */
-export type RecordSchemaAsync<
+export interface RecordSchemaAsync<
   TKey extends RecordKeyAsync,
   TValue extends BaseSchema | BaseSchemaAsync,
   TOutput = RecordOutput<TKey, TValue>,
-> = BaseSchemaAsync<RecordInput<TKey, TValue>, TOutput> & {
+> extends BaseSchemaAsync<RecordInput<TKey, TValue>, TOutput> {
   /**
    * The schema type.
    */
@@ -62,7 +62,7 @@ export type RecordSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<RecordOutput<TKey, TValue>> | undefined;
-};
+}
 
 /**
  * Creates an async record schema.

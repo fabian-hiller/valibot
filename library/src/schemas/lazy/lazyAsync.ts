@@ -9,12 +9,12 @@ import type {
 /**
  * Lazy schema async type.
  */
-export type LazySchemaAsync<
+export interface LazySchemaAsync<
   TGetter extends (
     input: unknown
   ) => MaybePromise<BaseSchema | BaseSchemaAsync>,
   TOutput = Output<Awaited<ReturnType<TGetter>>>,
-> = BaseSchemaAsync<Input<Awaited<ReturnType<TGetter>>>, TOutput> & {
+> extends BaseSchemaAsync<Input<Awaited<ReturnType<TGetter>>>, TOutput> {
   /**
    * The schema type.
    */
@@ -23,7 +23,7 @@ export type LazySchemaAsync<
    * The schema getter.
    */
   getter: TGetter;
-};
+}
 
 /**
  * Creates an async lazy schema.

@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Ends with validation type.
  */
-export type EndsWithValidation<
+export interface EndsWithValidation<
   TInput extends string,
   TRequirement extends string,
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type EndsWithValidation<
    * The end string.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the end of a string.

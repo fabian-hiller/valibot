@@ -27,11 +27,11 @@ export type RecordKey =
 /**
  * Record schema type.
  */
-export type RecordSchema<
+export interface RecordSchema<
   TKey extends RecordKey,
   TValue extends BaseSchema,
   TOutput = RecordOutput<TKey, TValue>,
-> = BaseSchema<RecordInput<TKey, TValue>, TOutput> & {
+> extends BaseSchema<RecordInput<TKey, TValue>, TOutput> {
   /**
    * The schema type.
    */
@@ -52,7 +52,7 @@ export type RecordSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<RecordOutput<TKey, TValue>> | undefined;
-};
+}
 
 /**
  * Creates a record schema.

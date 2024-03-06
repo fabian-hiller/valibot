@@ -4,12 +4,12 @@ import { actionOutput } from '../../utils/index.ts';
 /**
  * To lower case transformation type.
  */
-export type ToLowerCaseTransformation = BaseTransformation<string> & {
+export interface ToLowerCaseTransformation extends BaseTransformation<string> {
   /**
    * The transformation type.
    */
   type: 'to_lower_case';
-};
+}
 
 /**
  * Creates a pipeline transformation action that converts all the alphabetic

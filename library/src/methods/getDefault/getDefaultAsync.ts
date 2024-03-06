@@ -1,4 +1,4 @@
-import type { BaseSchemaAsync, Output } from '../../types/index.ts';
+import type { BaseSchemaAsync, DefaultAsync } from '../../types/index.ts';
 import type { SchemaWithMaybeDefault } from './getDefault.ts';
 import type { DefaultValue } from './types.ts';
 
@@ -7,16 +7,12 @@ import type { DefaultValue } from './types.ts';
  */
 export type SchemaWithMaybeDefaultAsync<
   TSchema extends BaseSchemaAsync = BaseSchemaAsync,
+  TDefault extends DefaultAsync<TSchema> = DefaultAsync<TSchema>,
 > = TSchema & {
   /**
    * The optional default value.
    */
-  default?:
-    | Output<TSchema>
-    | (() =>
-        | Output<TSchema>
-        | Promise<Output<TSchema> | undefined>
-        | undefined);
+  default?: TDefault;
 };
 
 /**

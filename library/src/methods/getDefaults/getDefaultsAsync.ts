@@ -8,7 +8,8 @@ import type {
   TupleSchema,
   TupleSchemaAsync,
 } from '../../schemas/index.ts';
-import type { BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
+import type { BaseSchema, BaseSchemaAsync } from '../../types/schema.ts';
+import { isOfType } from '../../utils/index.ts';
 import {
   getDefaultAsync,
   type SchemaWithMaybeDefault,
@@ -39,32 +40,31 @@ export async function getDefaultsAsync<
         | ObjectSchemaAsync<ObjectEntriesAsync, any>
         | TupleSchemaAsync<TupleItemsAsync, any>
       >,
->(schema: TSchema): Promise<DefaultValues<TSchema>> {
-  // Create defaults variable
-  let defaults: any;
-
-  // If schema contains a default function, set its default value
+>(schema: TSchema): Promise<DefaultValues<TSchema> | undefined> {
+  // If schema contains default, return its value
   if (schema.default !== undefined) {
-    defaults = await getDefaultAsync(schema);
-
-    // Otherwise, check if schema is of kind object or tuple
-  } else if ('type' in schema) {
-    // If it is an object schema, set object with default value of each entry
-    if (schema.type === 'object') {
-      defaults = {};
-      for (const key in schema.entries) {
-        defaults[key] = await getDefaultsAsync(schema.entries[key]);
-      }
-
-      // If it is a tuple schema, set array with default value of each item
-    } else if (schema.type === 'tuple') {
-      defaults = [];
-      for (let key = 0; key < schema.items.length; key++) {
-        defaults.push(await getDefaultsAsync(schema.items[key]));
-      }
-    }
+    return getDefaultAsync(schema);
   }
 
-  // Return default values
-  return defaults;
+  // If it is an object schema, return default of each entry
+  if (isOfType('object', schema)) {
+    return Object.fromEntries(
+      await Promise.all(
+        Object.entries(schema.entries).map(async ([key, value]) => [
+          key,
+          await getDefaultsAsync(value),
+        ])
+      )
+    ) as DefaultValues<TSchema>;
+  }
+
+  // If it is a tuple schema, return default of each item
+  if (isOfType('tuple', schema)) {
+    return Promise.all(
+      schema.items.map(getDefaultsAsync)
+    ) as DefaultValues<TSchema>;
+  }
+
+  // Otherwise, return undefined
+  return undefined;
 }

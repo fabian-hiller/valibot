@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Max size validation type.
  */
-export type MaxSizeValidation<
+export interface MaxSizeValidation<
   TInput extends Map<any, any> | Set<any> | Blob,
   TRequirement extends number,
-> = BaseValidation<TInput> & {
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type MaxSizeValidation<
    * The maximum size.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the size of a map, set
