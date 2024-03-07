@@ -4,6 +4,7 @@ import { forward } from './forward.ts';
 
 describe('forward', () => {
   test('should forward issues to end of path list', () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     type Input = { nested: { key: string } };
     const requirement = () => false;
     const validate = forward<Input>(custom(requirement, 'Custom error'), [
@@ -47,6 +48,7 @@ describe('forward', () => {
   });
 
   test('should stop forwarding if path input is undefined', () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     type Input = { nested: { key: string }[] };
     const requirement = () => false;
     const validate = forward<Input>(custom(requirement, 'Custom error'), [
@@ -91,6 +93,7 @@ describe('forward', () => {
   });
 
   test('should do nothing if there are no issues', () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     type Input = { nested: { key: string } };
     const requirement = () => true;
     const validate = forward<Input>(custom(requirement), ['nested']);
