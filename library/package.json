@@ -46,7 +46,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage --isolate",
     "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit",
-    "eslint:fix": "eslint \"src/**/*.ts*\" --fix",
+    "eslint.fix": "eslint \"src/**/*.ts*\" --fix",
     "format": "prettier --write ./src",
     "format.check": "prettier --check ./src",
     "build": "tsup",
