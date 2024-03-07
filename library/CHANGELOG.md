@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.30.0 (March 06, 2024)
 
 - Add `Default` and `DefaultAsync` type and refactor codebase
 - Add `Fallback` and `FallbackAsync` type and refactor codebase
