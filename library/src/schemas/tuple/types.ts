@@ -11,13 +11,13 @@ import type { TupleItemsAsync } from './tupleAsync.ts';
 /**
  * Tuple path item type.
  */
-export type TuplePathItem = {
+export interface TuplePathItem {
   type: 'tuple';
   origin: 'value';
   input: [unknown, ...unknown[]];
   key: number;
   value: unknown;
-};
+}
 
 /**
  * Tuple input inference type.

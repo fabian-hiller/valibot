@@ -5,7 +5,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * 64-bit MAC validation type.
  */
-export type Mac64Validation<TInput extends string> = BaseValidation<TInput> & {
+export interface Mac64Validation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,7 +15,7 @@ export type Mac64Validation<TInput extends string> = BaseValidation<TInput> & {
    * The 64-bit MAC regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates a 64-bit [MAC address](https://en.wikipedia.org/wiki/MAC_address).

@@ -5,17 +5,17 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Hexadecimal validation type.
  */
-export type HexadecimalValidation<TInput extends string> =
-  BaseValidation<TInput> & {
-    /**
-     * The validation type.
-     */
-    type: 'hexadecimal';
-    /**
-     * The hexadecimal regex.
-     */
-    requirement: RegExp;
-  };
+export interface HexadecimalValidation<TInput extends string>
+  extends BaseValidation<TInput> {
+  /**
+   * The validation type.
+   */
+  type: 'hexadecimal';
+  /**
+   * The hexadecimal regex.
+   */
+  requirement: RegExp;
+}
 
 /**
  * Creates a pipeline validation action that validates a [hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal).

@@ -16,7 +16,9 @@ import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 /**
  * Object entries async type.
  */
-export type ObjectEntriesAsync = Record<string, BaseSchema | BaseSchemaAsync>;
+export interface ObjectEntriesAsync {
+  [key: string]: BaseSchema | BaseSchemaAsync;
+}
 
 /**
  * Object schema async type.

@@ -5,17 +5,17 @@ import { HEX_COLOR_REGEX } from './../../regex.ts';
 /**
  * Hex color validation type.
  */
-export type HexColorValidation<TInput extends string> =
-  BaseValidation<TInput> & {
-    /**
-     * The validation type.
-     */
-    type: 'hex_color';
-    /**
-     * The hex color regex.
-     */
-    requirement: RegExp;
-  };
+export interface HexColorValidation<TInput extends string>
+  extends BaseValidation<TInput> {
+  /**
+   * The validation type.
+   */
+  type: 'hex_color';
+  /**
+   * The hex color regex.
+   */
+  requirement: RegExp;
+}
 
 /**
  * Creates a pipeline validation action that validates hex color.

@@ -9,7 +9,7 @@ All notable changes to the library will be documented in this file.
 - Add `isOfType` type guard util to check the type of an object
 - Refactor `getDefaults` and `getDefaultsAsync` method (pull request #259)
 - Refactor `getFallbacks` and `getFallbacksAsync` method (pull request #259)
-- Change type definitions from `type` to `interface` (pull request #259)
+- Change type definitions from `type` to `interface` (pull request #259, #451)
 - Remove deprecated properties of `safeParse` and `safeParseAsync` method
 - Fix `NestedPath` type of `flatten` for async schemas (issue #456)
 - Fix implementation of `DefaultValue` type for transformed values

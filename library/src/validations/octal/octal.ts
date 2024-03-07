@@ -5,7 +5,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Octal validation type.
  */
-export type OctalValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface OctalValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,7 +15,7 @@ export type OctalValidation<TInput extends string> = BaseValidation<TInput> & {
    * The octal regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates an [octal](https://en.wikipedia.org/wiki/Octal).

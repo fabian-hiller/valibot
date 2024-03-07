@@ -3,7 +3,7 @@ import type { SchemaIssues } from '../../types/index.ts';
 /**
  * Fallback info type.
  */
-export type FallbackInfo = {
+export interface FallbackInfo {
   input: unknown;
   issues: SchemaIssues;
-};
+}

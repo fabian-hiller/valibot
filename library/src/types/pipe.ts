@@ -4,17 +4,17 @@ import type { PipeActionIssues } from './issues.ts';
 /**
  * Pipe action context type.
  */
-export type PipeActionContext = {
+export interface PipeActionContext {
   type: string;
   expects: string | null;
   message: ErrorMessage | undefined;
   requirement: unknown;
-};
+}
 
 /**
  * Valid action result type.
  */
-export type ValidActionResult<TOutput> = {
+export interface ValidActionResult<TOutput> {
   /**
    * The pipe output.
    */
@@ -23,12 +23,12 @@ export type ValidActionResult<TOutput> = {
    * The pipe issues.
    */
   issues?: undefined;
-};
+}
 
 /**
  * Invalid action result type.
  */
-export type InvalidActionResult = {
+export interface InvalidActionResult {
   /**
    * The pipe output.
    */
@@ -37,7 +37,7 @@ export type InvalidActionResult = {
    * The pipe issues.
    */
   issues: PipeActionIssues;
-};
+}
 
 /**
  * Pipe action result type.

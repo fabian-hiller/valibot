@@ -10,9 +10,9 @@ import { stringify } from '../../../stringify/index.ts';
 /**
  * The schema context type.
  */
-type SchemaContext = {
+interface SchemaContext {
   type: IssueReason;
-};
+}
 
 /**
  * Returns the pipe issue data.

@@ -4,7 +4,7 @@ import type { SchemaIssues } from './issues.ts';
 /**
  * Typed schema result type.
  */
-export type TypedSchemaResult<TOutput> = {
+export interface TypedSchemaResult<TOutput> {
   /**
    * Whether is's typed.
    */
@@ -17,12 +17,12 @@ export type TypedSchemaResult<TOutput> = {
    * The parse issues.
    */
   issues?: SchemaIssues;
-};
+}
 
 /**
  * Untyped schema result type.
  */
-export type UntypedSchemaResult = {
+export interface UntypedSchemaResult {
   /**
    * Whether is's typed.
    */
@@ -35,7 +35,7 @@ export type UntypedSchemaResult = {
    * The parse issues.
    */
   issues: SchemaIssues;
-};
+}
 
 /**
  * Schema result type.

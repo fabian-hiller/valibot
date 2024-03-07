@@ -13,13 +13,13 @@ import type { ObjectEntriesAsync } from './objectAsync.ts';
 /**
  * Object path item type.
  */
-export type ObjectPathItem = {
+export interface ObjectPathItem {
   type: 'object';
   origin: 'value';
   input: Record<string, unknown>;
   key: string;
   value: unknown;
-};
+}
 
 /**
  * Required object keys type.

@@ -4,10 +4,10 @@ import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
 /**
  * Enum type.
  */
-export type Enum = {
+export interface Enum {
   [key: string]: string | number;
   [key: number]: string;
-};
+}
 
 /**
  * Native enum schema type.

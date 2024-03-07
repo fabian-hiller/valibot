@@ -5,7 +5,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Bic validation type.
  */
-export type BicValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface BicValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,7 +15,7 @@ export type BicValidation<TInput extends string> = BaseValidation<TInput> & {
    * The BIC regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates a [BIC](https://en.wikipedia.org/wiki/ISO_9362).

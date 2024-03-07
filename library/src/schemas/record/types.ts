@@ -14,13 +14,13 @@ import type { RecordKeyAsync } from './recordAsync.ts';
 /**
  * Record path item type.
  */
-export type RecordPathItem = {
+export interface RecordPathItem {
   type: 'record';
   origin: 'key' | 'value';
   input: Record<string | number | symbol, unknown>;
   key: string | number | symbol;
   value: unknown;
-};
+}
 
 /**
  * Partial key schema type.

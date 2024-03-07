@@ -15,15 +15,30 @@ import {
 import type { ObjectSchema, ObjectSchemaAsync } from '../object/index.ts';
 
 /**
+ * Variant option schema type.
+ */
+interface VariantOptionSchema<TKey extends string> extends BaseSchema {
+  type: 'variant';
+  options: VariantOptionsAsync<TKey>;
+}
+
+/**
+ * Variant option schema async type.
+ */
+interface VariantOptionSchemaAsync<TKey extends string>
+  extends BaseSchemaAsync {
+  type: 'variant';
+  options: VariantOptionsAsync<TKey>;
+}
+
+/**
  * Variant option async type.
  */
 export type VariantOptionAsync<TKey extends string> =
   | ObjectSchema<Record<TKey, BaseSchema>, any>
   | ObjectSchemaAsync<Record<TKey, BaseSchema | BaseSchemaAsync>, any>
-  | ((BaseSchema | BaseSchemaAsync) & {
-      type: 'variant';
-      options: VariantOptionsAsync<TKey>;
-    });
+  | VariantOptionSchema<TKey>
+  | VariantOptionSchemaAsync<TKey>;
 
 /**
  * Variant options async type.

@@ -8,7 +8,7 @@ export type ErrorMessage = string | ((issue: SchemaIssue) => string);
 /**
  * The schema config type.
  */
-export type SchemaConfig = {
+export interface SchemaConfig {
   /**
    * The selected language.
    */
@@ -29,4 +29,4 @@ export type SchemaConfig = {
    * Whether the pipe was skipped.
    */
   skipPipe?: boolean;
-};
+}

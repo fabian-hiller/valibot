@@ -5,17 +5,17 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Decimal validation type.
  */
-export type DecimalValidation<TInput extends string> =
-  BaseValidation<TInput> & {
-    /**
-     * The validation type.
-     */
-    type: 'decimal';
-    /**
-     * The decimal regex.
-     */
-    requirement: RegExp;
-  };
+export interface DecimalValidation<TInput extends string>
+  extends BaseValidation<TInput> {
+  /**
+   * The validation type.
+   */
+  type: 'decimal';
+  /**
+   * The decimal regex.
+   */
+  requirement: RegExp;
+}
 
 /**
  * Creates a pipeline validation action that validates a [decimal](https://en.wikipedia.org/wiki/Decimal).
