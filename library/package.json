@@ -50,7 +50,7 @@
     "format": "prettier --write ./src",
     "format.check": "prettier --check ./src",
     "build": "tsup",
-    "publish": "npm publish"
+    "publish": "npm publish && npx jsr publish"
   },
   "devDependencies": {
     "@types/eslint": "^8.40.2",
