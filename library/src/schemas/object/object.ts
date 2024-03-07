@@ -16,7 +16,7 @@ import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
  * Object entries type.
  */
 export interface ObjectEntries {
-  [K: string]: BaseSchema;
+  [key: string]: BaseSchema;
 }
 
 /**

@@ -101,7 +101,7 @@ export interface FlatErrors<
   TSchema extends BaseSchema | BaseSchemaAsync = any,
 > {
   root?: [string, ...string[]];
-  nested: { [K in NestedPath<TSchema>]?: [string, ...string[]] };
+  nested: Partial<Record<NestedPath<TSchema>, [string, ...string[]]>>;
 }
 
 /**

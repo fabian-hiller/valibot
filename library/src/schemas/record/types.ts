@@ -41,8 +41,8 @@ export type RecordInput<
   TValue extends BaseSchema | BaseSchemaAsync,
 > = ResolveObject<
   TKey extends PartialKeySchema
-    ? { [K in Input<TKey>]?: Input<TValue> }
-    : { [K in Input<TKey>]: Input<TValue> }
+    ? Partial<Record<Input<TKey>, Input<TValue>>>
+    : Record<Input<TKey>, Input<TValue>>
 >;
 
 /**
@@ -53,6 +53,6 @@ export type RecordOutput<
   TValue extends BaseSchema | BaseSchemaAsync,
 > = ResolveObject<
   TKey extends PartialKeySchema
-    ? { [K in Output<TKey>]?: Output<TValue> }
-    : { [K in Output<TKey>]: Output<TValue> }
+    ? Partial<Record<Output<TKey>, Output<TValue>>>
+    : Record<Output<TKey>, Output<TValue>>
 >;

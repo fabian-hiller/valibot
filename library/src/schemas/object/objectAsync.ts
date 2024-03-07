@@ -17,7 +17,7 @@ import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
  * Object entries async type.
  */
 export interface ObjectEntriesAsync {
-  [K: string]: BaseSchema | BaseSchemaAsync;
+  [key: string]: BaseSchema | BaseSchemaAsync;
 }
 
 /**

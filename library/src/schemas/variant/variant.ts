@@ -10,16 +10,19 @@ import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 import type { ObjectSchema } from '../object/index.ts';
 
 /**
+ * Variant option schema type.
+ */
+interface VariantOptionSchema<TKey extends string> extends BaseSchema {
+  type: 'variant';
+  options: VariantOptions<TKey>;
+}
+
+/**
  * Variant option type.
  */
 export type VariantOption<TKey extends string> =
   | ObjectSchema<Record<TKey, BaseSchema>, any>
   | VariantOptionSchema<TKey>;
-
-interface VariantOptionSchema<TKey extends string> extends BaseSchema {
-  type: 'variant';
-  options: VariantOptions<TKey>;
-}
 
 /**
  * Variant options type.
