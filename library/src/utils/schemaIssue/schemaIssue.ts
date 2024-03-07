@@ -13,21 +13,21 @@ import { stringify } from '../stringify/index.ts';
 /**
  * The schema context type.
  */
-type SchemaContext = {
+interface SchemaContext {
   type: string;
   expects: string;
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * The other info type.
  */
-type OtherInfo = Partial<{
-  reason: IssueReason;
-  expected: string;
-  path: IssuePath;
-  issues: SchemaIssues;
-}>;
+interface OtherInfo {
+  reason?: IssueReason;
+  expected?: string;
+  path?: IssuePath;
+  issues?: SchemaIssues;
+}
 
 /**
  * Returns the schema result object with issues.

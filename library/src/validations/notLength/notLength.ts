@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Not length validation type.
  */
-export type NotLengthValidation<
+export interface NotLengthValidation<
   TInput extends string | any[],
-  TRequirement extends number
-> = BaseValidation<TInput> & {
+  TRequirement extends number,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type NotLengthValidation<
    * The length.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the length of a string
@@ -29,7 +29,7 @@ export type NotLengthValidation<
  */
 export function notLength<
   TInput extends string | any[],
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

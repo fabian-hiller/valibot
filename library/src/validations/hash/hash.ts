@@ -29,7 +29,8 @@ export type HashType = keyof typeof HASH_LENGTHS;
 /**
  * Hash validation type.
  */
-export type HashValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface HashValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -38,7 +39,7 @@ export type HashValidation<TInput extends string> = BaseValidation<TInput> & {
    * The hash regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates a hash.

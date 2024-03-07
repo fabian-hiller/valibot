@@ -4,10 +4,10 @@ import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 /**
  * Equal validation type.
  */
-export type EqualValidation<
+export interface EqualValidation<
   TInput extends string | number | bigint | boolean,
-  TRequirement extends TInput
-> = BaseValidation<TInput> & {
+  TRequirement extends TInput,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type EqualValidation<
    * The required value.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that checks the value for equality.
@@ -30,7 +30,7 @@ export type EqualValidation<
  */
 export function equal<
   TInput extends string | number | bigint | boolean,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Not size validation type.
  */
-export type NotSizeValidation<
+export interface NotSizeValidation<
   TInput extends Map<any, any> | Set<any> | Blob,
-  TRequirement extends number
-> = BaseValidation<TInput> & {
+  TRequirement extends number,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type NotSizeValidation<
    * The size.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the size of a map, set
@@ -29,7 +29,7 @@ export type NotSizeValidation<
  */
 export function notSize<
   TInput extends Map<any, any> | Set<any> | Blob,
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

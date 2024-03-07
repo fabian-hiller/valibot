@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Min size validation type.
  */
-export type MinSizeValidation<
+export interface MinSizeValidation<
   TInput extends Map<any, any> | Set<any> | Blob,
-  TRequirement extends number
-> = BaseValidation<TInput> & {
+  TRequirement extends number,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type MinSizeValidation<
    * The minimum size.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the size of a map, set
@@ -29,7 +29,7 @@ export type MinSizeValidation<
  */
 export function minSize<
   TInput extends Map<any, any> | Set<any> | Blob,
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

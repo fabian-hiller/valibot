@@ -1,4 +1,11 @@
-type EventName = 'open_search' | 'select_search_item';
+type EventName =
+  | 'change_theme'
+  | 'open_search'
+  | 'select_search_item'
+  | 'copy_playground_code'
+  | 'share_playground_code'
+  | 'execute_playground_code'
+  | 'clear_playground_logs';
 type EventData = { [key: string]: string | number | boolean | undefined };
 
 declare global {

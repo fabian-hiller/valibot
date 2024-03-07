@@ -16,7 +16,7 @@ import { schemaIssue } from '../../utils/index.ts';
  * @returns A strict object schema.
  */
 export function strictAsync<
-  TSchema extends ObjectSchemaAsync<ObjectEntriesAsync, undefined>
+  TSchema extends ObjectSchemaAsync<ObjectEntriesAsync, undefined>,
 >(schema: TSchema): TSchema {
   return {
     ...schema,

@@ -1,7 +1,7 @@
 {
   "name": "@valibot/i18n",
   "description": "The official i18n translations for Valibot",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "license": "MIT",
   "author": "Fabian Hiller",
   "homepage": "https://valibot.dev",
@@ -34,7 +34,7 @@
     "valibot": "workspace:*"
   },
   "peerDependencies": {
-    "valibot": "^0.28.0"
+    "valibot": ">=0.29.0 <1"
   },
   "files": [
     "index.js",

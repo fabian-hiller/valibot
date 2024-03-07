@@ -5,10 +5,10 @@ import type { NonNullableInput, NonNullableOutput } from './types.ts';
 /**
  * Non nullable schema type.
  */
-export type NonNullableSchema<
+export interface NonNullableSchema<
   TWrapped extends BaseSchema,
-  TOutput = NonNullableOutput<TWrapped>
-> = BaseSchema<NonNullableInput<TWrapped>, TOutput> & {
+  TOutput = NonNullableOutput<TWrapped>,
+> extends BaseSchema<NonNullableInput<TWrapped>, TOutput> {
   /**
    * The schema type.
    */
@@ -21,7 +21,7 @@ export type NonNullableSchema<
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates a non nullable schema.

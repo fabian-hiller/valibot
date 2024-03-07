@@ -9,10 +9,10 @@ import type { NonOptionalInput, NonOptionalOutput } from './types.ts';
 /**
  * Non optional schema async type.
  */
-export type NonOptionalSchemaAsync<
+export interface NonOptionalSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TOutput = NonOptionalOutput<TWrapped>
-> = BaseSchemaAsync<NonOptionalInput<TWrapped>, TOutput> & {
+  TOutput = NonOptionalOutput<TWrapped>,
+> extends BaseSchemaAsync<NonOptionalInput<TWrapped>, TOutput> {
   /**
    * The schema type.
    */
@@ -25,7 +25,7 @@ export type NonOptionalSchemaAsync<
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates an async non optional schema.

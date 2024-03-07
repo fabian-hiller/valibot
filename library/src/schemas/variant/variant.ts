@@ -10,14 +10,19 @@ import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 import type { ObjectSchema } from '../object/index.ts';
 
 /**
+ * Variant option schema type.
+ */
+interface VariantOptionSchema<TKey extends string> extends BaseSchema {
+  type: 'variant';
+  options: VariantOptions<TKey>;
+}
+
+/**
  * Variant option type.
  */
 export type VariantOption<TKey extends string> =
   | ObjectSchema<Record<TKey, BaseSchema>, any>
-  | (BaseSchema & {
-      type: 'variant';
-      options: VariantOptions<TKey>;
-    });
+  | VariantOptionSchema<TKey>;
 
 /**
  * Variant options type.
@@ -25,17 +30,17 @@ export type VariantOption<TKey extends string> =
 export type VariantOptions<TKey extends string> = [
   VariantOption<TKey>,
   VariantOption<TKey>,
-  ...VariantOption<TKey>[]
+  ...VariantOption<TKey>[],
 ];
 
 /**
  * Variant schema type.
  */
-export type VariantSchema<
+export interface VariantSchema<
   TKey extends string,
   TOptions extends VariantOptions<TKey>,
-  TOutput = Output<TOptions[number]>
-> = BaseSchema<Input<TOptions[number]>, TOutput> & {
+  TOutput = Output<TOptions[number]>,
+> extends BaseSchema<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
    */
@@ -56,7 +61,7 @@ export type VariantSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<Output<TOptions[number]>> | undefined;
-};
+}
 
 /**
  * Creates a variant (aka discriminated union) schema.
@@ -69,7 +74,7 @@ export type VariantSchema<
  */
 export function variant<
   TKey extends string,
-  TOptions extends VariantOptions<TKey>
+  TOptions extends VariantOptions<TKey>,
 >(
   key: TKey,
   options: TOptions,
@@ -88,7 +93,7 @@ export function variant<
  */
 export function variant<
   TKey extends string,
-  TOptions extends VariantOptions<TKey>
+  TOptions extends VariantOptions<TKey>,
 >(
   key: TKey,
   options: TOptions,
@@ -98,7 +103,7 @@ export function variant<
 
 export function variant<
   TKey extends string,
-  TOptions extends VariantOptions<TKey>
+  TOptions extends VariantOptions<TKey>,
 >(
   key: TKey,
   options: TOptions,

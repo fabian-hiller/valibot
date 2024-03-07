@@ -4,18 +4,16 @@ import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
 /**
  * Enum type.
  */
-export type Enum = {
+export interface Enum {
   [key: string]: string | number;
   [key: number]: string;
-};
+}
 
 /**
  * Native enum schema type.
  */
-export type EnumSchema<
-  TEnum extends Enum,
-  TOutput = TEnum[keyof TEnum]
-> = BaseSchema<TEnum[keyof TEnum], TOutput> & {
+export interface EnumSchema<TEnum extends Enum, TOutput = TEnum[keyof TEnum]>
+  extends BaseSchema<TEnum[keyof TEnum], TOutput> {
   /**
    * The schema type.
    */
@@ -28,7 +26,7 @@ export type EnumSchema<
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates an enum schema.

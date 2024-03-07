@@ -15,10 +15,10 @@ import type { SetInput, SetOutput, SetPathItem } from './types.ts';
 /**
  * Set schema type.
  */
-export type SetSchema<
+export interface SetSchema<
   TValue extends BaseSchema,
-  TOutput = SetOutput<TValue>
-> = BaseSchema<SetInput<TValue>, TOutput> & {
+  TOutput = SetOutput<TValue>,
+> extends BaseSchema<SetInput<TValue>, TOutput> {
   /**
    * The schema type.
    */
@@ -35,7 +35,7 @@ export type SetSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<SetOutput<TValue>> | undefined;
-};
+}
 
 /**
  * Creates a set schema.

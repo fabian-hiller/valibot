@@ -5,10 +5,10 @@ import type { NonOptionalInput, NonOptionalOutput } from './types.ts';
 /**
  * Non optional schema type.
  */
-export type NonOptionalSchema<
+export interface NonOptionalSchema<
   TWrapped extends BaseSchema,
-  TOutput = NonOptionalOutput<TWrapped>
-> = BaseSchema<NonOptionalInput<TWrapped>, TOutput> & {
+  TOutput = NonOptionalOutput<TWrapped>,
+> extends BaseSchema<NonOptionalInput<TWrapped>, TOutput> {
   /**
    * The schema type.
    */
@@ -21,7 +21,7 @@ export type NonOptionalSchema<
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates a non optional schema.

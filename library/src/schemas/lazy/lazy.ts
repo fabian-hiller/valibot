@@ -3,10 +3,10 @@ import type { BaseSchema, Input, Output } from '../../types/index.ts';
 /**
  * Lazy schema type.
  */
-export type LazySchema<
+export interface LazySchema<
   TGetter extends (input: unknown) => BaseSchema,
-  TOutput = Output<ReturnType<TGetter>>
-> = BaseSchema<Input<ReturnType<TGetter>>, TOutput> & {
+  TOutput = Output<ReturnType<TGetter>>,
+> extends BaseSchema<Input<ReturnType<TGetter>>, TOutput> {
   /**
    * The schema type.
    */
@@ -15,7 +15,7 @@ export type LazySchema<
    * The schema getter.
    */
   getter: TGetter;
-};
+}
 
 /**
  * Creates a lazy schema.

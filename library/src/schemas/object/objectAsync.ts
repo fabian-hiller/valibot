@@ -16,16 +16,18 @@ import type { ObjectInput, ObjectOutput, ObjectPathItem } from './types.ts';
 /**
  * Object entries async type.
  */
-export type ObjectEntriesAsync = Record<string, BaseSchema | BaseSchemaAsync>;
+export interface ObjectEntriesAsync {
+  [key: string]: BaseSchema | BaseSchemaAsync;
+}
 
 /**
  * Object schema async type.
  */
-export type ObjectSchemaAsync<
+export interface ObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,
   TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
-  TOutput = ObjectOutput<TEntries, TRest>
-> = BaseSchemaAsync<ObjectInput<TEntries, TRest>, TOutput> & {
+  TOutput = ObjectOutput<TEntries, TRest>,
+> extends BaseSchemaAsync<ObjectInput<TEntries, TRest>, TOutput> {
   /**
    * The schema type.
    */
@@ -46,7 +48,7 @@ export type ObjectSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<ObjectOutput<TEntries, TRest>> | undefined;
-};
+}
 
 /**
  * Creates an async object schema.
@@ -87,7 +89,7 @@ export function objectAsync<TEntries extends ObjectEntriesAsync>(
  */
 export function objectAsync<
   TEntries extends ObjectEntriesAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   entries: TEntries,
   rest: TRest,
@@ -106,7 +108,7 @@ export function objectAsync<
  */
 export function objectAsync<
   TEntries extends ObjectEntriesAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   entries: TEntries,
   rest: TRest,
@@ -116,7 +118,7 @@ export function objectAsync<
 
 export function objectAsync<
   TEntries extends ObjectEntriesAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
 >(
   entries: TEntries,
   arg2?: PipeAsync<ObjectOutput<TEntries, TRest>> | ErrorMessage | TRest,

@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Multiple of validation type.
  */
-export type MultipleOfValidation<
+export interface MultipleOfValidation<
   TInput extends number,
-  TRequirement extends number
-> = BaseValidation<TInput> & {
+  TRequirement extends number,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type MultipleOfValidation<
    * The divisor.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates whether a number is a

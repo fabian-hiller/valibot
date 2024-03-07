@@ -15,15 +15,30 @@ import {
 import type { ObjectSchema, ObjectSchemaAsync } from '../object/index.ts';
 
 /**
+ * Variant option schema type.
+ */
+interface VariantOptionSchema<TKey extends string> extends BaseSchema {
+  type: 'variant';
+  options: VariantOptionsAsync<TKey>;
+}
+
+/**
+ * Variant option schema async type.
+ */
+interface VariantOptionSchemaAsync<TKey extends string>
+  extends BaseSchemaAsync {
+  type: 'variant';
+  options: VariantOptionsAsync<TKey>;
+}
+
+/**
  * Variant option async type.
  */
 export type VariantOptionAsync<TKey extends string> =
   | ObjectSchema<Record<TKey, BaseSchema>, any>
   | ObjectSchemaAsync<Record<TKey, BaseSchema | BaseSchemaAsync>, any>
-  | ((BaseSchema | BaseSchemaAsync) & {
-      type: 'variant';
-      options: VariantOptionsAsync<TKey>;
-    });
+  | VariantOptionSchema<TKey>
+  | VariantOptionSchemaAsync<TKey>;
 
 /**
  * Variant options async type.
@@ -31,17 +46,17 @@ export type VariantOptionAsync<TKey extends string> =
 export type VariantOptionsAsync<TKey extends string> = [
   VariantOptionAsync<TKey>,
   VariantOptionAsync<TKey>,
-  ...VariantOptionAsync<TKey>[]
+  ...VariantOptionAsync<TKey>[],
 ];
 
 /**
  * Variant schema async type.
  */
-export type VariantSchemaAsync<
+export interface VariantSchemaAsync<
   TKey extends string,
   TOptions extends VariantOptionsAsync<TKey>,
-  TOutput = Output<TOptions[number]>
-> = BaseSchemaAsync<Input<TOptions[number]>, TOutput> & {
+  TOutput = Output<TOptions[number]>,
+> extends BaseSchemaAsync<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
    */
@@ -62,7 +77,7 @@ export type VariantSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<Input<TOptions[number]>> | undefined;
-};
+}
 
 /**
  * Creates an async variant (aka discriminated union) schema.
@@ -75,7 +90,7 @@ export type VariantSchemaAsync<
  */
 export function variantAsync<
   TKey extends string,
-  TOptions extends VariantOptionsAsync<TKey>
+  TOptions extends VariantOptionsAsync<TKey>,
 >(
   key: TKey,
   options: TOptions,
@@ -94,7 +109,7 @@ export function variantAsync<
  */
 export function variantAsync<
   TKey extends string,
-  TOptions extends VariantOptionsAsync<TKey>
+  TOptions extends VariantOptionsAsync<TKey>,
 >(
   key: TKey,
   options: TOptions,
@@ -104,7 +119,7 @@ export function variantAsync<
 
 export function variantAsync<
   TKey extends string,
-  TOptions extends VariantOptionsAsync<TKey>
+  TOptions extends VariantOptionsAsync<TKey>,
 >(
   key: TKey,
   options: TOptions,

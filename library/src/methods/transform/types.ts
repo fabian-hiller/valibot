@@ -1,5 +1,5 @@
 import type { SchemaIssues } from '../../types/index.ts';
 
-export type TransformInfo = {
+export interface TransformInfo {
   issues: SchemaIssues | undefined;
-};
+}

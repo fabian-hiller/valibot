@@ -4,10 +4,10 @@ import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
 /**
  * Includes validation type.
  */
-export type IncludesValidation<
+export interface IncludesValidation<
   TInput extends string | any[],
-  TRequirement extends TInput extends any[] ? TInput[number] : TInput
-> = BaseValidation<TInput> & {
+  TRequirement extends TInput extends any[] ? TInput[number] : TInput,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type IncludesValidation<
    * The required value.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the content of a string
@@ -29,7 +29,7 @@ export type IncludesValidation<
  */
 export function includes<
   TInput extends string | any[],
-  const TRequirement extends TInput extends any[] ? TInput[number] : TInput
+  const TRequirement extends TInput extends any[] ? TInput[number] : TInput,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

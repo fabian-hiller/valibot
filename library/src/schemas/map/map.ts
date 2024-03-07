@@ -16,11 +16,11 @@ import type { MapInput, MapOutput, MapPathItem } from './types.ts';
 /**
  * Map schema type.
  */
-export type MapSchema<
+export interface MapSchema<
   TKey extends BaseSchema,
   TValue extends BaseSchema,
-  TOutput = MapOutput<TKey, TValue>
-> = BaseSchema<MapInput<TKey, TValue>, TOutput> & {
+  TOutput = MapOutput<TKey, TValue>,
+> extends BaseSchema<MapInput<TKey, TValue>, TOutput> {
   /**
    * The schema type.
    */
@@ -41,7 +41,7 @@ export type MapSchema<
    * The validation and transformation pipeline.
    */
   pipe: Pipe<MapOutput<TKey, TValue>> | undefined;
-};
+}
 
 /**
  * Creates a map schema.

@@ -4,7 +4,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Every validation type.
  */
-export type EveryValidation<TInput extends any[]> = BaseValidation<TInput> & {
+export interface EveryValidation<TInput extends any[]>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -17,7 +18,7 @@ export type EveryValidation<TInput extends any[]> = BaseValidation<TInput> & {
     index: number,
     array: TInput[number][]
   ) => boolean;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the items of an array.

@@ -5,10 +5,10 @@ import type { Literal } from './types.ts';
 /**
  * Literal schema async type.
  */
-export type LiteralSchemaAsync<
+export interface LiteralSchemaAsync<
   TLiteral extends Literal,
-  TOutput = TLiteral
-> = BaseSchemaAsync<TLiteral, TOutput> & {
+  TOutput = TLiteral,
+> extends BaseSchemaAsync<TLiteral, TOutput> {
   /**
    * The schema type.
    */
@@ -21,7 +21,7 @@ export type LiteralSchemaAsync<
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates an async literal schema.

@@ -4,7 +4,8 @@ import { schemaIssue, schemaResult } from '../../utils/index.ts';
 /**
  * Void schema async type.
  */
-export type VoidSchemaAsync<TOutput = void> = BaseSchemaAsync<void, TOutput> & {
+export interface VoidSchemaAsync<TOutput = void>
+  extends BaseSchemaAsync<void, TOutput> {
   /**
    * The schema type.
    */
@@ -13,7 +14,7 @@ export type VoidSchemaAsync<TOutput = void> = BaseSchemaAsync<void, TOutput> & {
    * The error message.
    */
   message: ErrorMessage | undefined;
-};
+}
 
 /**
  * Creates an async void schema.

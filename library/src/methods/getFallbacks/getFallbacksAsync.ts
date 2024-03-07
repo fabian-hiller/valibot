@@ -8,7 +8,8 @@ import type {
   TupleSchema,
   TupleSchemaAsync,
 } from '../../schemas/index.ts';
-import type { BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
+import type { BaseSchema, BaseSchemaAsync } from '../../types/schema.ts';
+import { isOfType } from '../../utils/index.ts';
 import {
   getFallbackAsync,
   type SchemaWithMaybeFallback,
@@ -38,33 +39,32 @@ export async function getFallbacksAsync<
         | BaseSchemaAsync
         | ObjectSchemaAsync<ObjectEntriesAsync, any>
         | TupleSchemaAsync<TupleItemsAsync, any>
-      >
->(schema: TSchema): Promise<FallbackValues<TSchema>> {
-  // Create fallbacks variable
-  let fallbacks: any;
-
-  // If schema has a fallback, set its value
+      >,
+>(schema: TSchema): Promise<FallbackValues<TSchema> | undefined> {
+  // If schema has fallback, return its value
   if (schema.fallback !== undefined) {
-    fallbacks = await getFallbackAsync(schema);
-
-    // Otherwise, check if schema is of kind object or tuple
-  } else if ('type' in schema) {
-    if (schema.type === 'object') {
-      fallbacks = {};
-      await Promise.all(
-        Object.entries(schema.entries).map(async ([key, schema]) => {
-          fallbacks[key] = await getFallbacksAsync(schema);
-        })
-      );
-
-      // If it is a tuple schema, set array with fallback value of each item
-    } else if (schema.type === 'tuple') {
-      fallbacks = await Promise.all(
-        schema.items.map((schema) => getFallbacksAsync(schema))
-      );
-    }
+    return getFallbackAsync(schema);
   }
 
-  // Return fallback values
-  return fallbacks;
+  // If it is an object schema, return fallback of each entry
+  if (isOfType('object', schema)) {
+    return Object.fromEntries(
+      await Promise.all(
+        Object.entries(schema.entries).map(async ([key, value]) => [
+          key,
+          await getFallbacksAsync(value),
+        ])
+      )
+    ) as FallbackValues<TSchema>;
+  }
+
+  // If it is a tuple schema, return fallback of each item
+  if (isOfType('tuple', schema)) {
+    return Promise.all(
+      schema.items.map(getFallbacksAsync)
+    ) as FallbackValues<TSchema>;
+  }
+
+  // Otherwise, return undefined
+  return undefined;
 }

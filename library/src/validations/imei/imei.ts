@@ -5,7 +5,8 @@ import { actionIssue, actionOutput, isLuhnAlgo } from '../../utils/index.ts';
 /**
  * IMEI validation type.
  */
-export type ImeiValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface ImeiValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,7 +15,7 @@ export type ImeiValidation<TInput extends string> = BaseValidation<TInput> & {
    * The IMEI regex and luhn algorithm.
    */
   requirement: [RegExp, typeof isLuhnAlgo];
-};
+}
 
 /**
  * Creates a pipeline validation action that validates an [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity).

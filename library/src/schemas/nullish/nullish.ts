@@ -1,20 +1,17 @@
 import { getDefault } from '../../methods/index.ts';
-import type { BaseSchema, Input, Output } from '../../types/index.ts';
+import type { BaseSchema, Default, Input, Output } from '../../types/index.ts';
 import { schemaResult } from '../../utils/index.ts';
 
 /**
  * Nullish schema type.
  */
-export type NullishSchema<
+export interface NullishSchema<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined = undefined,
+  TDefault extends Default<TWrapped> = undefined,
   TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
-    : Output<TWrapped> | null | undefined
-> = BaseSchema<Input<TWrapped> | null | undefined, TOutput> & {
+    : Output<TWrapped> | null | undefined,
+> extends BaseSchema<Input<TWrapped> | null | undefined, TOutput> {
   /**
    * The schema type.
    */
@@ -27,7 +24,7 @@ export type NullishSchema<
    * Returns the default value.
    */
   default: TDefault;
-};
+}
 
 /**
  * Creates a nullish schema.
@@ -50,18 +47,12 @@ export function nullish<TWrapped extends BaseSchema>(
  */
 export function nullish<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined
+  TDefault extends Default<TWrapped>,
 >(wrapped: TWrapped, default_: TDefault): NullishSchema<TWrapped, TDefault>;
 
 export function nullish<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined = undefined
+  TDefault extends Default<TWrapped> = undefined,
 >(wrapped: TWrapped, default_?: TDefault): NullishSchema<TWrapped, TDefault> {
   return {
     type: 'nullish',

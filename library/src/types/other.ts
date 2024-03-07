@@ -1,10 +1,27 @@
 import type { ObjectSchema, ObjectSchemaAsync } from '../schemas/index.ts';
+import type { BaseSchema, BaseSchemaAsync, Input } from './schema.ts';
+
+/**
+ * Default type.
+ */
+export type Default<TSchema extends BaseSchema> =
+  | Input<TSchema>
+  | (() => Input<TSchema> | undefined)
+  | undefined;
+
+/**
+ * Default async type.
+ */
+export type DefaultAsync<TSchema extends BaseSchema | BaseSchemaAsync> =
+  | Input<TSchema>
+  | (() => Input<TSchema> | Promise<Input<TSchema> | undefined> | undefined)
+  | undefined;
 
 /**
  * Object keys type.
  */
 export type ObjectKeys<
-  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
 > = MaybeReadonly<[keyof TSchema['entries'], ...(keyof TSchema['entries'])[]]>;
 
 /**

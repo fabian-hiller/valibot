@@ -40,13 +40,13 @@ export type IssueReason =
 /**
  * Unknown path item type.
  */
-export type UnknownPathItem = {
+export interface UnknownPathItem {
   type: 'unknown';
   origin: 'key' | 'value';
   input: unknown;
   key: unknown;
   value: unknown;
-};
+}
 
 /**
  * Path item type.
@@ -68,7 +68,7 @@ export type IssuePath = [PathItem, ...PathItem[]];
 /**
  * Schema issue type.
  */
-export type SchemaIssue = Omit<SchemaConfig, 'message'> & {
+export interface SchemaIssue extends Omit<SchemaConfig, 'message'> {
   /**
    * The issue reason.
    */
@@ -105,7 +105,7 @@ export type SchemaIssue = Omit<SchemaConfig, 'message'> & {
    * The sub issues.
    */
   issues?: SchemaIssues;
-};
+}
 
 /**
  * Schema issues type.
@@ -115,7 +115,7 @@ export type SchemaIssues = [SchemaIssue, ...SchemaIssue[]];
 /**
  * Pipe action issue type.
  */
-export type PipeActionIssue = {
+export interface PipeActionIssue {
   context: PipeActionContext;
   // eslint-disable-next-line @typescript-eslint/ban-types
   reference: Function;
@@ -123,7 +123,7 @@ export type PipeActionIssue = {
   label: string;
   received?: string;
   path?: IssuePath;
-};
+}
 
 /**
  * Pipe action issues type.

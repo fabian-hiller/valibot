@@ -208,7 +208,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
 
                   // Create search item object
                   const searchItem: SearchItem = {
-                    group: `${hit.hierarchy.lvl0}: ${hit.hierarchy.lvl1}`,
+                    group: `${hit.hierarchy.lvl0}${hit.hierarchy.lvl1 ? `: ${hit.hierarchy.lvl1}` : ''}`,
                     relation:
                       hit.type === 'lvl2'
                         ? 'page'
@@ -343,7 +343,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
     >
       {open.value && (
         <>
-          <div class="flex h-full w-full flex-col bg-white/90 backdrop-blur-sm dark:bg-gray-900/90 lg:mx-auto lg:h-auto lg:max-h-full lg:max-w-3xl lg:rounded-3xl lg:bg-white lg:backdrop-blur-none lg:dark:bg-gray-900">
+          <div class="flex h-full w-full flex-col bg-white/90 backdrop-blur-sm lg:mx-auto lg:h-auto lg:max-h-full lg:max-w-3xl lg:rounded-3xl lg:bg-white lg:backdrop-blur-none dark:bg-gray-900/90 lg:dark:bg-gray-900">
             {/* Header */}
             <header class="flex h-14 flex-shrink-0 items-center px-2 md:h-16 lg:h-[72px] lg:px-4">
               <form class="flex flex-1" preventdefault:submit>
@@ -356,7 +356,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
                   <SearchIcon class="h-full" />
                 </SystemIcon>
                 <input
-                  class="flex-1 bg-transparent px-2 text-lg text-slate-900 outline-none placeholder:text-slate-500 dark:text-slate-200 md:text-xl"
+                  class="flex-1 bg-transparent px-2 text-lg text-slate-900 outline-none placeholder:text-slate-500 md:text-xl dark:text-slate-200"
                   ref={inputElement}
                   type="search"
                   placeholder="Search docs"

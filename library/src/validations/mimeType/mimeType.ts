@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * MIME type validation type.
  */
-export type MimeTypeValidation<
+export interface MimeTypeValidation<
   TInput extends Blob,
-  TRequirement extends `${string}/${string}`[]
-> = BaseValidation<TInput> & {
+  TRequirement extends `${string}/${string}`[],
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type MimeTypeValidation<
    * The MIME types.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the MIME type of a blob.
@@ -28,7 +28,7 @@ export type MimeTypeValidation<
  */
 export function mimeType<
   TInput extends Blob,
-  TRequirement extends `${string}/${string}`[]
+  TRequirement extends `${string}/${string}`[],
 >(
   requirement: TRequirement,
   message?: ErrorMessage

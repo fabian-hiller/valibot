@@ -37,11 +37,11 @@ export type RecordKeyAsync =
 /**
  * Record schema async type.
  */
-export type RecordSchemaAsync<
+export interface RecordSchemaAsync<
   TKey extends RecordKeyAsync,
   TValue extends BaseSchema | BaseSchemaAsync,
-  TOutput = RecordOutput<TKey, TValue>
-> = BaseSchemaAsync<RecordInput<TKey, TValue>, TOutput> & {
+  TOutput = RecordOutput<TKey, TValue>,
+> extends BaseSchemaAsync<RecordInput<TKey, TValue>, TOutput> {
   /**
    * The schema type.
    */
@@ -62,7 +62,7 @@ export type RecordSchemaAsync<
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<RecordOutput<TKey, TValue>> | undefined;
-};
+}
 
 /**
  * Creates an async record schema.
@@ -103,7 +103,7 @@ export function recordAsync<TValue extends BaseSchema | BaseSchemaAsync>(
  */
 export function recordAsync<
   TKey extends RecordKeyAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 >(
   key: TKey,
   value: TValue,
@@ -122,7 +122,7 @@ export function recordAsync<
  */
 export function recordAsync<
   TKey extends RecordKeyAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 >(
   key: TKey,
   value: TValue,
@@ -132,7 +132,7 @@ export function recordAsync<
 
 export function recordAsync<
   TKey extends RecordKeyAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 >(
   arg1: TValue | TKey,
   arg2?: PipeAsync<RecordOutput<TKey, TValue>> | ErrorMessage | TValue,

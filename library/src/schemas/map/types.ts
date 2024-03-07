@@ -8,20 +8,20 @@ import type {
 /**
  * Map path item type.
  */
-export type MapPathItem = {
+export interface MapPathItem {
   type: 'map';
   origin: 'key' | 'value';
   input: Map<unknown, unknown>;
   key: unknown;
   value: unknown;
-};
+}
 
 /**
  * Map input inference type.
  */
 export type MapInput<
   TKey extends BaseSchema | BaseSchemaAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 > = Map<Input<TKey>, Input<TValue>>;
 
 /**
@@ -29,5 +29,5 @@ export type MapInput<
  */
 export type MapOutput<
   TKey extends BaseSchema | BaseSchemaAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 > = Map<Output<TKey>, Output<TValue>>;

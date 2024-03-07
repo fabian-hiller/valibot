@@ -21,6 +21,12 @@
     transition: none !important;
   }
 
+  /* Monaco editor */
+  .monaco-editor,
+  .monaco-editor > div {
+    @apply border-0 outline-none lg:rounded-3xl;
+  }
+
   /* Lexend 400 */
   @font-face {
     font-family: 'Lexend';
@@ -76,6 +82,11 @@
   /* Links */
   .mdx a {
     @apply focus-ring rounded-md text-sky-600 underline decoration-slate-400 decoration-dashed underline-offset-[3px] focus-visible:outline-offset-4 focus-visible:ring-offset-[6px] dark:text-sky-400 dark:decoration-slate-600;
+  }
+
+  /* Images */
+  .mdx img {
+    @apply w-auto rounded-2xl border-2 border-slate-200 lg:rounded-3xl lg:border-[3px] dark:border-slate-800;
   }
 
   /* Lists */
@@ -136,7 +147,7 @@
   .mdx > :is(ul, ol) {
     @apply ml-12 mr-8 lg:ml-14 lg:mr-10;
   }
-  .mdx > :is(pre, .table-wrapper) {
+  .mdx > :is(img, pre, .table-wrapper) {
     @apply mx-3 lg:mx-10 2xl:mx-0;
   }
 

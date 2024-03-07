@@ -2,6 +2,18 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `Default` and `DefaultAsync` type and refactor codebase
+- Add `Fallback` and `FallbackAsync` type and refactor codebase
+- Add `isOfType` type guard util to check the type of an object
+- Refactor `getDefaults` and `getDefaultsAsync` method (pull request #259)
+- Refactor `getFallbacks` and `getFallbacksAsync` method (pull request #259)
+- Change type definitions from `type` to `interface` (pull request #259, #451)
+- Remove deprecated properties of `safeParse` and `safeParseAsync` method
+- Fix `NestedPath` type of `flatten` for async schemas (issue #456)
+- Fix implementation of `DefaultValue` type for transformed values
+
 ## v0.29.0 (February 19, 2024)
 
 - Add `every` and `some` pipeline validation action

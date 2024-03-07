@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Bytes validation type.
  */
-export type BytesValidation<
+export interface BytesValidation<
   TInput extends string,
-  TRequirement extends number
-> = BaseValidation<TInput> & {
+  TRequirement extends number,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,7 +16,7 @@ export type BytesValidation<
    * The byte length.
    */
   requirement: TRequirement;
-};
+}
 
 /**
  * Creates a pipeline validation action that validates the bytes of a string.

@@ -4,7 +4,8 @@ import type {
   TupleItems,
   TupleSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema } from '../../types/index.ts';
+import type { BaseSchema } from '../../types/schema.ts';
+import { isOfType } from '../../utils/index.ts';
 import {
   getDefault,
   type SchemaWithMaybeDefault,
@@ -25,33 +26,28 @@ import type { DefaultValues } from './types.ts';
 export function getDefaults<
   TSchema extends SchemaWithMaybeDefault<
     BaseSchema | ObjectSchema<ObjectEntries, any> | TupleSchema<TupleItems, any>
-  >
->(schema: TSchema): DefaultValues<TSchema> {
-  // Create defaults variable
-  let defaults: any;
-
-  // If schema contains a default function, set its default value
+  >,
+>(schema: TSchema): DefaultValues<TSchema> | undefined {
+  // If schema has default, return its value
   if (schema.default !== undefined) {
-    defaults = getDefault(schema);
-
-    // Otherwise, check if schema is of kind object or tuple
-  } else if ('type' in schema) {
-    // If it is an object schema, set object with default value of each entry
-    if (schema.type === 'object') {
-      defaults = {};
-      for (const key in schema.entries) {
-        defaults[key] = getDefaults(schema.entries[key]);
-      }
-
-      // If it is a tuple schema, set array with default value of each item
-    } else if (schema.type === 'tuple') {
-      defaults = [];
-      for (let key = 0; key < schema.items.length; key++) {
-        defaults.push(getDefaults(schema.items[key]));
-      }
-    }
+    return getDefault(schema);
   }
 
-  // Return default values
-  return defaults;
+  // If it is an object schema, return default of each entry
+  if (isOfType('object', schema)) {
+    return Object.fromEntries(
+      Object.entries(schema.entries).map(([key, value]) => [
+        key,
+        getDefaults(value),
+      ])
+    ) as DefaultValues<TSchema>;
+  }
+
+  // If it is a tuple schema, return default of each item
+  if (isOfType('tuple', schema)) {
+    return schema.items.map(getDefaults) as DefaultValues<TSchema>;
+  }
+
+  // Otherwise, return undefined
+  return undefined;
 }
