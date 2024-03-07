@@ -43,7 +43,7 @@ export function nonNullish<TWrapped extends BaseSchema>(
     message,
     _parse(input, config) {
       // In input is `null` or `undefined`, return schema issue
-      if (input === null || input === undefined) {
+      if (input == null) {
         return schemaIssue(this, nonNullish, input, config);
       }
 

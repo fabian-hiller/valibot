@@ -72,7 +72,7 @@ export function nullish<
     _parse(input, config) {
       // If input is `null` or `undefined`, return typed schema result or
       // override it with default value
-      if (input === null || input === undefined) {
+      if (input == null) {
         const override = getDefault(this);
         if (override === undefined) {
           return schemaResult(true, input);
