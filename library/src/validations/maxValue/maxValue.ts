@@ -61,10 +61,3 @@ export function maxValue<
     },
   };
 }
-
-/**
- * See {@link maxValue}
- *
- * @deprecated Function has been renamed to `maxValue`.
- */
-export const maxRange = maxValue;

@@ -47,10 +47,3 @@ export function lazyAsync<
     },
   };
 }
-
-/**
- * See {@link lazyAsync}
- *
- * @deprecated Use `lazyAsync` instead.
- */
-export const recursiveAsync = lazyAsync;

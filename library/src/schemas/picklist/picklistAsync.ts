@@ -52,10 +52,3 @@ export function picklistAsync<const TOptions extends PicklistOptions>(
     },
   };
 }
-
-/**
- * See {@link picklistAsync}
- *
- * @deprecated Use `picklistAsync` instead.
- */
-export const enumTypeAsync = picklistAsync;

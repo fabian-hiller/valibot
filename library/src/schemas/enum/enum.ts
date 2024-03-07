@@ -61,10 +61,3 @@ export function enum_<TEnum extends Enum>(
     },
   };
 }
-
-/**
- * See {@link enum_}
- *
- * @deprecated Use `enum_` instead.
- */
-export const nativeEnum = enum_;

@@ -39,10 +39,3 @@ export function null_(message?: ErrorMessage): NullSchema {
     },
   };
 }
-
-/**
- * See {@link null_}
- *
- * @deprecated Use `null_` instead.
- */
-export const nullType = null_;

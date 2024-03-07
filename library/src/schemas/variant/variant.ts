@@ -229,10 +229,3 @@ export function variant<
     },
   };
 }
-
-/**
- * See {@link variant}
- *
- * @deprecated Use `variant` instead.
- */
-export const discriminatedUnion = variant;

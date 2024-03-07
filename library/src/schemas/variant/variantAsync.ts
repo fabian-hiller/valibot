@@ -245,10 +245,3 @@ export function variantAsync<
     },
   };
 }
-
-/**
- * See {@link variantAsync}
- *
- * @deprecated Use `variantAsync` instead.
- */
-export const discriminatedUnionAsync = variantAsync;

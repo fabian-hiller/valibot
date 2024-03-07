@@ -7,7 +7,6 @@ export * from './decimal/index.ts';
 export * from './email/index.ts';
 export * from './emoji/index.ts';
 export * from './endsWith/index.ts';
-export * from './equal/index.ts';
 export * from './every/index.ts';
 export * from './excludes/index.ts';
 export * from './finite/index.ts';

@@ -40,10 +40,3 @@ export function nullAsync(message?: ErrorMessage): NullSchemaAsync {
     },
   };
 }
-
-/**
- * See {@link nullAsync}
- *
- * @deprecated Use `nullAsync` instead.
- */
-export const nullTypeAsync = nullAsync;

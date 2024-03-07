@@ -154,10 +154,3 @@ export function intersect<TOptions extends IntersectOptions>(
     },
   };
 }
-
-/**
- * See {@link intersect}
- *
- * @deprecated Use `intersect` instead.
- */
-export const intersection = intersect;

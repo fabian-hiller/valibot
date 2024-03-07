@@ -11,6 +11,7 @@ All notable changes to the library will be documented in this file.
 - Refactor `getFallbacks` and `getFallbacksAsync` method (pull request #259)
 - Change type definitions from `type` to `interface` (pull request #259, #451)
 - Remove deprecated properties of `safeParse` and `safeParseAsync` method
+- Remove any deprecated method, schema and validation functions
 - Fix `NestedPath` type of `flatten` for async schemas (issue #456)
 - Fix implementation of `DefaultValue` type for transformed values
 

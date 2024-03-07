@@ -56,10 +56,3 @@ export function enumAsync<TEnum extends Enum>(
     },
   };
 }
-
-/**
- * See {@link enumAsync}
- *
- * @deprecated Use `enumAsync` instead.
- */
-export const nativeEnumAsync = enumAsync;

@@ -40,10 +40,3 @@ export function voidAsync(message?: ErrorMessage): VoidSchemaAsync {
     },
   };
 }
-
-/**
- * See {@link voidAsync}
- *
- * @deprecated Use `voidAsync` instead.
- */
-export const voidTypeAsync = voidAsync;

@@ -39,10 +39,3 @@ export function void_(message?: ErrorMessage): VoidSchema {
     },
   };
 }
-
-/**
- * See {@link void_}
- *
- * @deprecated Use `void_` instead.
- */
-export const voidType = void_;

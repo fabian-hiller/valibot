@@ -40,10 +40,3 @@ export function undefinedAsync(message?: ErrorMessage): UndefinedSchemaAsync {
     },
   };
 }
-
-/**
- * See {@link undefinedAsync}
- *
- * @deprecated Use `undefinedAsync` instead.
- */
-export const undefinedTypeAsync = undefinedAsync;

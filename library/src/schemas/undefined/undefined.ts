@@ -40,10 +40,3 @@ export function undefined_(message?: ErrorMessage): UndefinedSchema {
     },
   };
 }
-
-/**
- * See {@link undefined_}
- *
- * @deprecated Use `undefined_` instead.
- */
-export const undefinedType = undefined_;

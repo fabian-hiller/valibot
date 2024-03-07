@@ -61,10 +61,3 @@ export function minValue<
     },
   };
 }
-
-/**
- * See {@link minValue}
- *
- * @deprecated Function has been renamed to `minValue`.
- */
-export const minRange = minValue;

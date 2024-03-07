@@ -52,10 +52,3 @@ export function picklist<const TOptions extends PicklistOptions>(
     },
   };
 }
-
-/**
- * See {@link picklist}
- *
- * @deprecated Use `picklist` instead.
- */
-export const enumType = picklist;

@@ -37,10 +37,3 @@ export function lazy<TGetter extends (input: unknown) => BaseSchema>(
     },
   };
 }
-
-/**
- * See {@link lazy}
- *
- * @deprecated Use `lazy` instead.
- */
-export const recursive = lazy;

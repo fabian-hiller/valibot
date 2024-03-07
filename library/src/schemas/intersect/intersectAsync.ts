@@ -167,10 +167,3 @@ export function intersectAsync<TOptions extends IntersectOptionsAsync>(
     },
   };
 }
-
-/**
- * See {@link intersectAsync}
- *
- * @deprecated Use `intersectAsync` instead.
- */
-export const intersectionAsync = intersectAsync;
