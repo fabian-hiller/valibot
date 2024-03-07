@@ -58,7 +58,7 @@ export function required<TSchema extends ObjectSchema<any, any>>(
  */
 export function required<
   TSchema extends ObjectSchema<any, any>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -78,7 +78,7 @@ export function required<
  */
 export function required<
   TSchema extends ObjectSchema<any, any>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -88,7 +88,7 @@ export function required<
 
 export function required<
   TSchema extends ObjectSchema<any, any>,
-  TRest extends BaseSchema | undefined = undefined
+  TRest extends BaseSchema | undefined = undefined,
 >(
   schema: TSchema,
   arg2?:

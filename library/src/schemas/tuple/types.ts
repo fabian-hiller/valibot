@@ -24,35 +24,35 @@ export interface TuplePathItem {
  */
 export type TupleInput<
   TItems extends TupleItems | TupleItemsAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 > = TRest extends undefined | NeverSchema | NeverSchemaAsync
   ? {
       [TKey in keyof TItems]: Input<TItems[TKey]>;
     }
   : TRest extends BaseSchema | BaseSchemaAsync
-  ? [
-      ...{
-        [TKey in keyof TItems]: Input<TItems[TKey]>;
-      },
-      ...Input<TRest>[]
-    ]
-  : never;
+    ? [
+        ...{
+          [TKey in keyof TItems]: Input<TItems[TKey]>;
+        },
+        ...Input<TRest>[],
+      ]
+    : never;
 
 /**
  * Tuple with rest output inference type.
  */
 export type TupleOutput<
   TItems extends TupleItems | TupleItemsAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 > = TRest extends undefined | NeverSchema | NeverSchemaAsync
   ? {
       [TKey in keyof TItems]: Output<TItems[TKey]>;
     }
   : TRest extends BaseSchema | BaseSchemaAsync
-  ? [
-      ...{
-        [TKey in keyof TItems]: Output<TItems[TKey]>;
-      },
-      ...Output<TRest>[]
-    ]
-  : never;
+    ? [
+        ...{
+          [TKey in keyof TItems]: Output<TItems[TKey]>;
+        },
+        ...Output<TRest>[],
+      ]
+    : never;

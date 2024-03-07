@@ -11,7 +11,7 @@ import type { NonNullableInput, NonNullableOutput } from './types.ts';
  */
 export interface NonNullableSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TOutput = NonNullableOutput<TWrapped>
+  TOutput = NonNullableOutput<TWrapped>,
 > extends BaseSchemaAsync<NonNullableInput<TWrapped>, TOutput> {
   /**
    * The schema type.

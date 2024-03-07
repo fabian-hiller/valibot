@@ -21,7 +21,7 @@ export type UnionOptions = MaybeReadonly<BaseSchema[]>;
  */
 export interface UnionSchema<
   TOptions extends UnionOptions,
-  TOutput = Output<TOptions[number]>
+  TOutput = Output<TOptions[number]>,
 > extends BaseSchema<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.

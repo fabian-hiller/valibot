@@ -6,7 +6,7 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
  */
 export interface NotSizeValidation<
   TInput extends Map<any, any> | Set<any> | Blob,
-  TRequirement extends number
+  TRequirement extends number,
 > extends BaseValidation<TInput> {
   /**
    * The validation type.
@@ -29,7 +29,7 @@ export interface NotSizeValidation<
  */
 export function notSize<
   TInput extends Map<any, any> | Set<any> | Blob,
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

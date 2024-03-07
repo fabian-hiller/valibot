@@ -30,7 +30,7 @@ export type RecordKey =
 export interface RecordSchema<
   TKey extends RecordKey,
   TValue extends BaseSchema,
-  TOutput = RecordOutput<TKey, TValue>
+  TOutput = RecordOutput<TKey, TValue>,
 > extends BaseSchema<RecordInput<TKey, TValue>, TOutput> {
   /**
    * The schema type.

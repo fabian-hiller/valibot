@@ -26,7 +26,7 @@ export type IntersectOptions = MaybeReadonly<
  */
 export interface IntersectSchema<
   TOptions extends IntersectOptions,
-  TOutput = IntersectOutput<TOptions>
+  TOutput = IntersectOutput<TOptions>,
 > extends BaseSchema<IntersectInput<TOptions>, TOutput> {
   /**
    * The schema type.

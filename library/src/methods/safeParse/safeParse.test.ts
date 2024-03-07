@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { ValiError } from '../../error/index.ts';
 import { object, string } from '../../schemas/index.ts';
 import type { SchemaIssues } from '../../types/index.ts';
 import { minLength } from '../../validations/index.ts';
@@ -12,9 +11,7 @@ describe('safeParse', () => {
     expect(result).toEqual({
       typed: true,
       success: true,
-      data: input,
       output: input,
-      error: undefined,
       issues: undefined,
     });
   });
@@ -45,9 +42,7 @@ describe('safeParse', () => {
     expect(result).toEqual({
       typed: true,
       success: false,
-      data: input,
       output: input,
-      error: new ValiError(issues),
       issues,
     });
   });
@@ -77,9 +72,7 @@ describe('safeParse', () => {
     expect(result).toEqual({
       typed: false,
       success: false,
-      data: input,
       output: input,
-      error: new ValiError(issues),
       issues,
     });
   });

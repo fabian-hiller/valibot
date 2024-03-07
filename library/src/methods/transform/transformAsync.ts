@@ -15,7 +15,7 @@ import type { TransformInfo } from './types.ts';
  */
 export type SchemaWithTransformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 > = Omit<TSchema, 'async' | '_parse' | '_types'> & {
   async: true;
   _parse(input: unknown, config?: SchemaConfig): Promise<SchemaResult<TOutput>>;
@@ -37,7 +37,7 @@ export type SchemaWithTransformAsync<
  */
 export function transformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 >(
   schema: TSchema,
   action: (
@@ -59,7 +59,7 @@ export function transformAsync<
  */
 export function transformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 >(
   schema: TSchema,
   action: (
@@ -71,7 +71,7 @@ export function transformAsync<
 
 export function transformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 >(
   schema: TSchema,
   action: (

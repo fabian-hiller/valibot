@@ -51,6 +51,10 @@ export type PipeActionResult<TOutput> =
  */
 export interface BaseValidation<TInput = any> {
   /**
+   * The validation type.
+   */
+  type: string;
+  /**
    * The expected property.
    */
   expects: string | null;
@@ -62,6 +66,10 @@ export interface BaseValidation<TInput = any> {
    * Whether it's async.
    */
   async: false;
+  /**
+   * The validation requirement.
+   */
+  requirement: unknown;
   /**
    * Parses unknown input based on its requirement.
    *
@@ -79,6 +87,10 @@ export interface BaseValidation<TInput = any> {
  */
 export interface BaseValidationAsync<TInput = any> {
   /**
+   * The validation type.
+   */
+  type: string;
+  /**
    * The expected property.
    */
   expects: string | null;
@@ -90,6 +102,10 @@ export interface BaseValidationAsync<TInput = any> {
    * Whether it's async.
    */
   async: true;
+  /**
+   * The validation requirement.
+   */
+  requirement: unknown;
   /**
    * Parses unknown input based on its requirement.
    *
@@ -106,6 +122,10 @@ export interface BaseValidationAsync<TInput = any> {
  * Base transformation type.
  */
 export interface BaseTransformation<TInput = any> {
+  /**
+   * The transformation type.
+   */
+  type: string;
   /**
    * Whether it's async.
    */
@@ -126,6 +146,10 @@ export interface BaseTransformation<TInput = any> {
  * Base transformation async type.
  */
 export interface BaseTransformationAsync<TInput = any> {
+  /**
+   * The transformation type.
+   */
+  type: string;
   /**
    * Whether it's async.
    */

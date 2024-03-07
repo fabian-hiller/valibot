@@ -6,7 +6,7 @@ import { actionIssue, actionOutput, stringify } from '../../utils/index.ts';
  */
 export interface NotValueValidation<
   TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 > extends BaseValidation<TInput> {
   /**
    * The validation type.
@@ -29,7 +29,7 @@ export interface NotValueValidation<
  */
 export function notValue<
   TInput extends string | number | bigint | boolean | Date,
-  TRequirement extends TInput
+  TRequirement extends TInput,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

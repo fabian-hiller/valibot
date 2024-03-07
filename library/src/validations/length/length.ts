@@ -6,7 +6,7 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
  */
 export interface LengthValidation<
   TInput extends string | any[],
-  TRequirement extends number
+  TRequirement extends number,
 > extends BaseValidation<TInput> {
   /**
    * The validation type.
@@ -29,7 +29,7 @@ export interface LengthValidation<
  */
 export function length<
   TInput extends string | any[],
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

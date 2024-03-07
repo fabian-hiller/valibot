@@ -40,7 +40,7 @@ export type RecordKeyAsync =
 export interface RecordSchemaAsync<
   TKey extends RecordKeyAsync,
   TValue extends BaseSchema | BaseSchemaAsync,
-  TOutput = RecordOutput<TKey, TValue>
+  TOutput = RecordOutput<TKey, TValue>,
 > extends BaseSchemaAsync<RecordInput<TKey, TValue>, TOutput> {
   /**
    * The schema type.
@@ -103,7 +103,7 @@ export function recordAsync<TValue extends BaseSchema | BaseSchemaAsync>(
  */
 export function recordAsync<
   TKey extends RecordKeyAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 >(
   key: TKey,
   value: TValue,
@@ -122,7 +122,7 @@ export function recordAsync<
  */
 export function recordAsync<
   TKey extends RecordKeyAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 >(
   key: TKey,
   value: TValue,
@@ -132,7 +132,7 @@ export function recordAsync<
 
 export function recordAsync<
   TKey extends RecordKeyAsync,
-  TValue extends BaseSchema | BaseSchemaAsync
+  TValue extends BaseSchema | BaseSchemaAsync,
 >(
   arg1: TValue | TKey,
   arg2?: PipeAsync<RecordOutput<TKey, TValue>> | ErrorMessage | TValue,

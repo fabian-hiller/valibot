@@ -20,7 +20,7 @@ import type { ArrayPathItem } from './types.ts';
  */
 export interface ArraySchemaAsync<
   TItem extends BaseSchema | BaseSchemaAsync,
-  TOutput = Output<TItem>[]
+  TOutput = Output<TItem>[],
 > extends BaseSchemaAsync<Input<TItem>[], TOutput> {
   /**
    * The schema type.

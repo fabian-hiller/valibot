@@ -18,7 +18,7 @@ import type { SetInput, SetOutput, SetPathItem } from './types.ts';
  */
 export interface SetSchemaAsync<
   TValue extends BaseSchema | BaseSchemaAsync,
-  TOutput = SetOutput<TValue>
+  TOutput = SetOutput<TValue>,
 > extends BaseSchemaAsync<SetInput<TValue>, TOutput> {
   /**
    * The schema type.

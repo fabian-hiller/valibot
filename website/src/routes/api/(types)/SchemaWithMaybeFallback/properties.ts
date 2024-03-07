@@ -14,64 +14,46 @@ export const properties: Record<string, PropertyProps> = {
       href: '../BaseSchema/',
     },
   },
-  SchemaWithMaybeFallback: {
+  TFallback: {
+    modifier: 'extends',
     type: {
-      type: 'intersect',
-      options: [
+      type: 'custom',
+      name: 'Fallback',
+      href: '../Fallback/',
+      generics: [
         {
           type: 'custom',
           name: 'TSchema',
         },
+      ],
+    },
+    default: {
+      type: 'custom',
+      name: 'Fallback',
+      href: '../Fallback/',
+      generics: [
         {
-          type: 'object',
-          entries: [
-            {
-              key: 'fallback',
-              optional: true,
-              value: {
-                type: 'union',
-                options: [
-                  {
-                    type: 'custom',
-                    name: 'Output',
-                    href: '../Output/',
-                    generics: [
-                      {
-                        type: 'custom',
-                        name: 'TSchema',
-                      },
-                    ],
-                  },
-                  {
-                    type: 'function',
-                    params: [
-                      {
-                        name: 'info',
-                        optional: true,
-                        type: {
-                          type: 'custom',
-                          name: 'FallbackInfo',
-                          href: '../FallbackInfo/',
-                        },
-                      },
-                    ],
-                    return: {
-                      type: 'custom',
-                      name: 'Output',
-                      href: '../Output/',
-                      generics: [
-                        {
-                          type: 'custom',
-                          name: 'TSchema',
-                        },
-                      ],
-                    },
-                  },
-                ],
-              },
-            },
-          ],
+          type: 'custom',
+          name: 'TSchema',
         },
+      ],
+    },
+  },
+  BaseSchema: {
+    type: {
+      type: 'custom',
+      name: 'TSchema',
+    },
+  },
+  fallback: {
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'TFallback',
+        },
+        'undefined',
       ],
     },
   },

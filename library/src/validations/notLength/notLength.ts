@@ -6,7 +6,7 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
  */
 export interface NotLengthValidation<
   TInput extends string | any[],
-  TRequirement extends number
+  TRequirement extends number,
 > extends BaseValidation<TInput> {
   /**
    * The validation type.
@@ -29,7 +29,7 @@ export interface NotLengthValidation<
  */
 export function notLength<
   TInput extends string | any[],
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
   message?: ErrorMessage

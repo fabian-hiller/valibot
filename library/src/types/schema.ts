@@ -44,7 +44,14 @@ export type SchemaResult<TOutput> =
   | TypedSchemaResult<TOutput>
   | UntypedSchemaResult;
 
+/**
+ * Base schema type.
+ */
 export interface BaseSchema<TInput = any, TOutput = TInput> {
+  /**
+   * The schema type.
+   */
+  type: string;
   /**
    * The expected property.
    */
@@ -76,6 +83,10 @@ export interface BaseSchema<TInput = any, TOutput = TInput> {
  * Base schema async type.
  */
 export interface BaseSchemaAsync<TInput = any, TOutput = TInput> {
+  /**
+   * The schema type.
+   */
+  type: string;
   /**
    * The expected property.
    */
