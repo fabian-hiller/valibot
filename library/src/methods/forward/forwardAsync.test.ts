@@ -5,6 +5,7 @@ import { forwardAsync } from './forwardAsync.ts';
 
 describe('forwardAsync', () => {
   test('should forward issues to end of path list', async () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     type Input = { nested: { key: string } };
     const requirement = async () => false;
     const validate = forwardAsync<Input>(
@@ -48,6 +49,7 @@ describe('forwardAsync', () => {
   });
 
   test('should stop forwarding if path input is undefined', async () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     type Input = { nested: { key: string }[] };
     const requirement = async () => false;
     const validate = forwardAsync<Input>(
@@ -91,6 +93,7 @@ describe('forwardAsync', () => {
   });
 
   test('should do nothing if there are no issues', async () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     type Input = { nested: { key: string } };
     const requirement = async () => true;
     const validate = forwardAsync<Input>(customAsync(requirement), ['nested']);
