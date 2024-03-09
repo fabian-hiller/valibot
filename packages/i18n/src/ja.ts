@@ -15,7 +15,6 @@ const language: Language = {
     email:          (issue) => `無効なメールアドレス: ${issue.received} を受け取りました`,
     emoji:          (issue) => `無効な絵文字: ${issue.received} を受け取りました`,
     endsWith:       (issue) => `無効な末尾: ${issue.expected} を期待しましたが、 ${issue.received} を受け取りました`,
-    equal:          (issue) => `無効な値: ${issue.expected} を期待しましたが、 ${issue.received} を受け取りました`,
     excludes:       (issue) => `無効な内容: ${issue.expected} を期待しましたが、 ${issue.received} を受け取りました`,
     finite:         (issue) => `無効な有限数: ${issue.received} を受け取りました`,
     hash:           (issue) => `無効なハッシュ値: ${issue.received} を受け取りました`,

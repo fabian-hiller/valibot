@@ -5,6 +5,8 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add Romanian (ro) translations (pull request #472)
+- Remove translation for deprecated `equal` validation (issue #474)
+- Change peer dependency to `>=0.30.0 <1`
 
 ## v0.8.0 (March 04, 2024)
 

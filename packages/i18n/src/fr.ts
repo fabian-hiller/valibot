@@ -15,7 +15,6 @@ const language: Language = {
     email:          (issue) => `Email invalide: reçu ${issue.received}`,
     emoji:          (issue) => `Émoji invalide: reçu ${issue.received}`,
     endsWith:       (issue) => `Fin invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
-    equal:          (issue) => `Valeur invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
     excludes:       (issue) => `Contenu invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
     finite:         (issue) => `Entier invalide: reçu ${issue.received}`,
     hash:           (issue) => `Hash invalide: reçu ${issue.received}`,

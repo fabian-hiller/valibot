@@ -15,7 +15,6 @@ const language: Language = {
     email:          (issue) => `無效的電子郵件：輸入為 ${issue.received}`,
     emoji:          (issue) => `無效的表情符號：輸入為 ${issue.received}`,
     endsWith:       (issue) => `無效的結尾：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
-    equal:          (issue) => `無效的值：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
     excludes:       (issue) => `無效的內容：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
     finite:         (issue) => `無效的有限數：輸入為 ${issue.received}`,
     hash:           (issue) => `無效的哈希：輸入為 ${issue.received}`,
@@ -64,4 +63,3 @@ const language: Language = {
 };
 
 export default language;
-

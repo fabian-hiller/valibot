@@ -15,7 +15,6 @@ const language: Language = {
     email:          (issue) => `Ungültige E-Mail: ${issue.received} erhalten`,
     emoji:          (issue) => `Ungültiges Emoji: ${issue.received} erhalten`,
     endsWith:       (issue) => `Ungültiges Ende: ${issue.expected} erwartet aber ${issue.received} erhalten`,
-    equal:          (issue) => `Ungültiger Wert: ${issue.expected} erwartet aber ${issue.received} erhalten`,
     excludes:       (issue) => `Ungültiger Inhalt: ${issue.expected} erwartet aber ${issue.received} erhalten`,
     finite:         (issue) => `Ungültiges Endliche: ${issue.received} erhalten`,
     hash:           (issue) => `Ungültiger Hash: ${issue.received} erhalten`,

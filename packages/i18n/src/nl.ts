@@ -15,7 +15,6 @@ const language: Language = {
     email:          (issue) => `Ongeldige e-mail: ${issue.received} ontvangen`,
     emoji:          (issue) => `Ongeldige emoji: ${issue.received} ontvangen`,
     endsWith:       (issue) => `Ongeldig einde: ${issue.expected} verwacht, maar ${issue.received} ontvangen`,
-    equal:          (issue) => `Ongeldige waarde: ${issue.expected} verwacht, maar ${issue.received} ontvangen`,
     excludes:       (issue) => `Ongeldige inhoud: ${issue.expected} verwacht, maar ${issue.received} ontvangen`,
     finite:         (issue) => `Ongeldige eindige: ${issue.received} ontvangen`,
     hash:           (issue) => `Ongeldige hash: ${issue.received} ontvangen`,

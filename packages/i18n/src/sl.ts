@@ -15,7 +15,6 @@ const language: Language = {
     email:          (issue) => `Neveljaven e-poštni naslov: Prejet ${issue.received}`,
     emoji:          (issue) => `Neveljaven emoji: Prejet ${issue.received}`,
     endsWith:       (issue) => `Neveljaven konec: Pričakovan ${issue.expected}, vendar prejet ${issue.received}`,
-    equal:          (issue) => `Neveljavna vrednost: Pričakovana ${issue.expected}, vendar prejeta ${issue.received}`,
     excludes:       (issue) => `Neveljavna vsebina: Pričakovana ${issue.expected}, vendar prejeta ${issue.received}`,
     finite:         (issue) => `Neveljavno končno število: Prejeto ${issue.received}`,
     hash:           (issue) => `Neveljaven hash: Prejet ${issue.received}`,

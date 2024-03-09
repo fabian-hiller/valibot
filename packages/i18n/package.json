@@ -34,7 +34,7 @@
     "valibot": "workspace:*"
   },
   "peerDependencies": {
-    "valibot": ">=0.29.0 <1"
+    "valibot": ">=0.30.0 <1"
   },
   "files": [
     "index.js",
@@ -183,16 +183,6 @@
       "require": {
         "types": "./de/endsWith.d.cts",
         "default": "./de/endsWith.cjs"
-      }
-    },
-    "./de/equal": {
-      "import": {
-        "types": "./de/equal.d.ts",
-        "default": "./de/equal.js"
-      },
-      "require": {
-        "types": "./de/equal.d.cts",
-        "default": "./de/equal.cjs"
       }
     },
     "./de/excludes": {
@@ -755,16 +745,6 @@
         "default": "./fr/endsWith.cjs"
       }
     },
-    "./fr/equal": {
-      "import": {
-        "types": "./fr/equal.d.ts",
-        "default": "./fr/equal.js"
-      },
-      "require": {
-        "types": "./fr/equal.d.cts",
-        "default": "./fr/equal.cjs"
-      }
-    },
     "./fr/excludes": {
       "import": {
         "types": "./fr/excludes.d.ts",
@@ -1323,16 +1303,6 @@
       "require": {
         "types": "./ja/endsWith.d.cts",
         "default": "./ja/endsWith.cjs"
-      }
-    },
-    "./ja/equal": {
-      "import": {
-        "types": "./ja/equal.d.ts",
-        "default": "./ja/equal.js"
-      },
-      "require": {
-        "types": "./ja/equal.d.cts",
-        "default": "./ja/equal.cjs"
       }
     },
     "./ja/excludes": {
@@ -1895,16 +1865,6 @@
         "default": "./kr/endsWith.cjs"
       }
     },
-    "./kr/equal": {
-      "import": {
-        "types": "./kr/equal.d.ts",
-        "default": "./kr/equal.js"
-      },
-      "require": {
-        "types": "./kr/equal.d.cts",
-        "default": "./kr/equal.cjs"
-      }
-    },
     "./kr/excludes": {
       "import": {
         "types": "./kr/excludes.d.ts",
@@ -2463,16 +2423,6 @@
       "require": {
         "types": "./nb/endsWith.d.cts",
         "default": "./nb/endsWith.cjs"
-      }
-    },
-    "./nb/equal": {
-      "import": {
-        "types": "./nb/equal.d.ts",
-        "default": "./nb/equal.js"
-      },
-      "require": {
-        "types": "./nb/equal.d.cts",
-        "default": "./nb/equal.cjs"
       }
     },
     "./nb/excludes": {
@@ -3035,16 +2985,6 @@
         "default": "./nl/endsWith.cjs"
       }
     },
-    "./nl/equal": {
-      "import": {
-        "types": "./nl/equal.d.ts",
-        "default": "./nl/equal.js"
-      },
-      "require": {
-        "types": "./nl/equal.d.cts",
-        "default": "./nl/equal.cjs"
-      }
-    },
     "./nl/excludes": {
       "import": {
         "types": "./nl/excludes.d.ts",
@@ -3603,16 +3543,6 @@
       "require": {
         "types": "./ro/endsWith.d.cts",
         "default": "./ro/endsWith.cjs"
-      }
-    },
-    "./ro/equal": {
-      "import": {
-        "types": "./ro/equal.d.ts",
-        "default": "./ro/equal.js"
-      },
-      "require": {
-        "types": "./ro/equal.d.cts",
-        "default": "./ro/equal.cjs"
       }
     },
     "./ro/excludes": {
@@ -4175,16 +4105,6 @@
         "default": "./ru/endsWith.cjs"
       }
     },
-    "./ru/equal": {
-      "import": {
-        "types": "./ru/equal.d.ts",
-        "default": "./ru/equal.js"
-      },
-      "require": {
-        "types": "./ru/equal.d.cts",
-        "default": "./ru/equal.cjs"
-      }
-    },
     "./ru/excludes": {
       "import": {
         "types": "./ru/excludes.d.ts",
@@ -4743,16 +4663,6 @@
       "require": {
         "types": "./sl/endsWith.d.cts",
         "default": "./sl/endsWith.cjs"
-      }
-    },
-    "./sl/equal": {
-      "import": {
-        "types": "./sl/equal.d.ts",
-        "default": "./sl/equal.js"
-      },
-      "require": {
-        "types": "./sl/equal.d.cts",
-        "default": "./sl/equal.cjs"
       }
     },
     "./sl/excludes": {
@@ -5315,16 +5225,6 @@
         "default": "./uk/endsWith.cjs"
       }
     },
-    "./uk/equal": {
-      "import": {
-        "types": "./uk/equal.d.ts",
-        "default": "./uk/equal.js"
-      },
-      "require": {
-        "types": "./uk/equal.d.cts",
-        "default": "./uk/equal.cjs"
-      }
-    },
     "./uk/excludes": {
       "import": {
         "types": "./uk/excludes.d.ts",
@@ -5885,16 +5785,6 @@
         "default": "./zh-CN/endsWith.cjs"
       }
     },
-    "./zh-CN/equal": {
-      "import": {
-        "types": "./zh-CN/equal.d.ts",
-        "default": "./zh-CN/equal.js"
-      },
-      "require": {
-        "types": "./zh-CN/equal.d.cts",
-        "default": "./zh-CN/equal.cjs"
-      }
-    },
     "./zh-CN/excludes": {
       "import": {
         "types": "./zh-CN/excludes.d.ts",
@@ -6453,16 +6343,6 @@
       "require": {
         "types": "./zh-TW/endsWith.d.cts",
         "default": "./zh-TW/endsWith.cjs"
-      }
-    },
-    "./zh-TW/equal": {
-      "import": {
-        "types": "./zh-TW/equal.d.ts",
-        "default": "./zh-TW/equal.js"
-      },
-      "require": {
-        "types": "./zh-TW/equal.d.cts",
-        "default": "./zh-TW/equal.cjs"
       }
     },
     "./zh-TW/excludes": {

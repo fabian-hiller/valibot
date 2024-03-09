@@ -15,7 +15,6 @@ const language: Language = {
     email:          (issue) => `Ugyldig e-post: Mottok ${issue.received}`,
     emoji:          (issue) => `Ugyldig emoji: Mottok ${issue.received}`,
     endsWith:       (issue) => `Ugyldig slutt: Forventet ${issue.expected}, men mottok ${issue.received}`,
-    equal:          (issue) => `Ugyldig verdi: Forventet ${issue.expected}, men mottok ${issue.received}`,
     excludes:       (issue) => `Ugyldig innhold: Forventet ${issue.expected}, men mottok ${issue.received}`,
     finite:         (issue) => `Ugyldig endelig: Mottok ${issue.received}`,
     hash:           (issue) => `Ugyldig hash: Mottok ${issue.received}`,

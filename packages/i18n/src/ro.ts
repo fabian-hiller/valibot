@@ -15,7 +15,6 @@ const language: Language = {
     email:          (issue) => `Email incorect: S-a primit ${issue.received}`,
     emoji:          (issue) => `Emoji incorect: S-a primit ${issue.received}`,
     endsWith:       (issue) => `Final incorect: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,
-    equal:          (issue) => `Valoare incorectă: S-a așteptat ${issue.expected}, dar s-a primit ${issue.received}`,
     excludes:       (issue) => `Conținut incorect: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,
     finite:         (issue) => `Valoare finită incorectă: S-a primit ${issue.received}`,
     hash:           (issue) => `Hash incorect: S-a primit ${issue.received}`,

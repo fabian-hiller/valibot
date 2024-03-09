@@ -27,7 +27,6 @@ export type Language = {
     email: ErrorMessage;
     emoji: ErrorMessage;
     endsWith: ErrorMessage;
-    equal: ErrorMessage;
     excludes: ErrorMessage;
     finite: ErrorMessage;
     hash: ErrorMessage;

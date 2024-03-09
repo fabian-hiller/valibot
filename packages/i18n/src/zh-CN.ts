@@ -15,7 +15,6 @@ const language: Language = {
     email:          (issue) => `无效的邮箱地址：输入为 ${issue.received}`,
     emoji:          (issue) => `无效的 emoji：输入为 ${issue.received}`,
     endsWith:       (issue) => `无效的结尾：预期结尾为 ${issue.expected}，而输入为 ${issue.received}`,
-    equal:          (issue) => `无效的值：预期为 ${issue.expected}，而输入为 ${issue.received}`,
     excludes:       (issue) => `无效的内容：预期为 ${issue.expected}，而输入为 ${issue.received}`,
     finite:         (issue) => `无效的有限数：输入为 ${issue.received}`,
     hash:           (issue) => `无效的哈希值：输入为 ${issue.received}`,

@@ -15,7 +15,6 @@ const language: Language = {
     email:          (issue) => `Неправильный email: получено ${issue.received}`,
     emoji:          (issue) => `Неправильный эмодзи: получено ${issue.received}`,
     endsWith:       (issue) => `Неправильный конец: ожидалось ${issue.expected}, получено ${issue.received}`,
-    equal:          (issue) => `Неправильные данные: ожидалось ${issue.expected}, получено ${issue.received}`,
     excludes:       (issue) => `Неправильное вхождение: ожидалось ${issue.expected}, получено ${issue.received}`,
     finite:         (issue) => `Неправильное конечное число: получено ${issue.received}`,
     hash:           (issue) => `Неправильный хеш: получено ${issue.received}`,
@@ -64,4 +63,3 @@ const language: Language = {
 };
 
 export default language;
-

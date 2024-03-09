@@ -15,7 +15,6 @@ const language: Language = {
     email:          (issue) => `유효하지 않은 이메일: ${issue.received} 을(를) 받았습니다`,
     emoji:          (issue) => `유효하지 않은 이모지: ${issue.received} 을(를) 받았습니다`,
     endsWith:       (issue) => `유효하지 않은 끝: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
-    equal:          (issue) => `유효하지 않은 값: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
     excludes:       (issue) => `유효하지 않은 컨텐츠: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
     finite:         (issue) => `유효하지 않은 유한 숫자: ${issue.received} 을(를) 받았습니다`,
     hash:           (issue) => `유효하지 않은 해쉬: ${issue.received} 을(를) 받았습니다`,
