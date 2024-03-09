@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add Romanian (ro) translations (pull request #472)
+
 ## v0.8.0 (March 04, 2024)
 
 - Change peer dependency to `>=0.29.0 <1` (pull request #468)
