@@ -1,9 +1,72 @@
 ---
 title: maxSize
+description: >-
+  Creates a pipeline validation action that validates the size of a map, set or 
+  blob.
+source: /validations/maxSize/maxSize.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # maxSize
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/maxSize/maxSize.ts).
+Creates a pipeline validation action that validates the size of a map, set or blob.
+
+```ts
+const Validation = maxSize<TInput, TRequirement>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `maxSize` you can validate the size of a map, set or blob. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `maxSize` can be used.
+
+### Blob size schema
+
+Schema to validate a blob with a maximum size of 10 MB.
+
+```ts
+const BlobSchema = blob([
+  maxSize(10 * 1024 * 1024, 'The blob must not exceed 10 MB.'),
+]);
+```
+
+### Set size schema
+
+Schema to validate a set with a maximum of 8 numbers.
+
+```ts
+const SetSchema = set(number(), [
+  maxSize(8, 'The set must not exceed 8 numbers.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `maxSize`.
+
+### Schemas
+
+<ApiList
+  items={['any', 'blob', 'instance', 'map', 'set', 'special', 'unknown']}
+/>

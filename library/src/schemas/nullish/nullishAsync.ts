@@ -2,26 +2,24 @@ import { getDefaultAsync } from '../../methods/index.ts';
 import type {
   BaseSchema,
   BaseSchemaAsync,
+  DefaultAsync,
   Input,
   Output,
 } from '../../types/index.ts';
-import { parseResult } from '../../utils/index.ts';
+import { schemaResult } from '../../utils/index.ts';
 
 /**
  * Nullish schema async type.
  */
-export type NullishSchemaAsync<
+export interface NullishSchemaAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined = undefined,
+  TDefault extends DefaultAsync<TWrapped> = undefined,
   TOutput = TDefault extends
     | Input<TWrapped>
     | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
     ? Output<TWrapped>
-    : Output<TWrapped> | null | undefined
-> = BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> & {
+    : Output<TWrapped> | null | undefined,
+> extends BaseSchemaAsync<Input<TWrapped> | null | undefined, TOutput> {
   /**
    * The schema type.
    */
@@ -34,7 +32,7 @@ export type NullishSchemaAsync<
    * Retutns the default value.
    */
   default: TDefault;
-};
+}
 
 /**
  * Creates an async nullish schema.
@@ -57,10 +55,7 @@ export function nullishAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
  */
 export function nullishAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined
+  TDefault extends DefaultAsync<TWrapped>,
 >(
   wrapped: TWrapped,
   default_: TDefault
@@ -68,31 +63,30 @@ export function nullishAsync<
 
 export function nullishAsync<
   TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | Promise<Input<TWrapped> | undefined> | undefined)
-    | undefined = undefined
+  TDefault extends DefaultAsync<TWrapped> = undefined,
 >(
   wrapped: TWrapped,
   default_?: TDefault
 ): NullishSchemaAsync<TWrapped, TDefault> {
   return {
     type: 'nullish',
+    expects: `${wrapped.expects} | null | undefined`,
     async: true,
     wrapped,
     default: default_ as TDefault,
-    async _parse(input, info) {
-      // Allow `null` or `undefined` to pass or override it with default value
+    async _parse(input, config) {
+      // If input is `null` or `undefined`, return typed schema result or
+      // override it with default value
       if (input === null || input === undefined) {
         const override = await getDefaultAsync(this);
         if (override === undefined) {
-          return parseResult(true, input);
+          return schemaResult(true, input);
         }
         input = override;
       }
 
-      // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      // Otherwise, return result of wrapped schema
+      return this.wrapped._parse(input, config);
     },
   };
 }

@@ -13,11 +13,13 @@ I am currently available for Node, Bun and Deno. Below I will show you how to ad
 
 ## General
 
-On this page are examples of individual and wildcard imports. If bundle size is important to you, you should check if your bundler can still split the code if you prefer wildcard imports. In my own testing with [esbuild](https://esbuild.github.io/), code splitting worked.
+It should make no difference whether you use individual imports or a wildcard import. Tree shaking and code splitting should work in both cases.
 
 If you are using TypeScript, I recommend that you enable strict mode in your `tsconfig.json` so that all types are calculated correctly.
 
-```json
+> The minimum required TypeScript version is v5.0.2.
+
+```js
 {
   "compilerOptions": {
     "strict": true

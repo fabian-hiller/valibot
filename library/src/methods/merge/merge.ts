@@ -13,7 +13,7 @@ import type { MergeObjects } from './types.ts';
 type ObjectSchemas = [
   ObjectSchema<any, any>,
   ObjectSchema<any, any>,
-  ...ObjectSchema<any, any>[]
+  ...ObjectSchema<any, any>[],
 ];
 
 /**
@@ -58,7 +58,7 @@ export function merge<TSchemas extends ObjectSchemas>(
  */
 export function merge<
   TSchemas extends ObjectSchemas,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schemas: TSchemas,
   rest: TRest,
@@ -78,7 +78,7 @@ export function merge<
  */
 export function merge<
   TSchemas extends ObjectSchemas,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schemas: TSchemas,
   rest: TRest,
@@ -88,7 +88,7 @@ export function merge<
 
 export function merge<
   TSchemas extends ObjectSchemas,
-  TRest extends BaseSchema | undefined = undefined
+  TRest extends BaseSchema | undefined = undefined,
 >(
   schemas: TSchemas,
   arg2?:

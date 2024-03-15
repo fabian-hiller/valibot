@@ -5,8 +5,8 @@ import {
   ServiceWorkerRegister,
 } from '@builder.io/qwik-city';
 import { Head } from './components';
-import { disableTransitions } from './utils';
 import './styles/root.css';
+import { disableTransitions } from './utils';
 
 export default component$(() => (
   <QwikCityProvider>

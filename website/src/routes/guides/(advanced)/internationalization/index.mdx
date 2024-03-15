@@ -1,0 +1,99 @@
+---
+title: Internationalization
+description: >-
+  Providing error messages in the native language of your users can improve the 
+  user experience and adoption rate of your software.
+contributors:
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+
+# Internationalization
+
+Providing error messages in the native language of your users can improve the user experience and adoption rate of your software. That is why I offer several flexible ways to easily implement i18n.
+
+## Official translations
+
+The fastest way to get started with i18n is to use my official translations. They are provided in a separate package called [`@valibot/i18n`](https://github.com/fabian-hiller/valibot/tree/main/packages/i18n).
+
+> If you are missing a translation, feel free to open an [issue](https://github.com/fabian-hiller/valibot/issues/new) or pull request on GitHub.
+
+### Import translations
+
+Each translation in this package is implemented modularly and exported as a submodule. This allows you to import only the translations you actually need to keep your bundle size small.
+
+{/* prettier-ignore */}
+```ts
+// Import every translation (not recommended)
+import '@valibot/i18n';
+
+// Import every translation for a specific language
+import '@valibot/i18n/de';
+
+// Import only the translation for schema functions
+import '@valibot/i18n/de/schema';
+
+// Import only the translation for a specific pipeline function
+import '@valibot/i18n/de/minLength';
+```
+
+The submodules use sideeffects to load the translations into a global storage that the schema and validation functions access when adding the error message to an issue.
+
+### Select language
+
+The language used is then selected by the `lang` configuration. You can set it globally with <Link href="/api/setGlobalConfig/">`setGlobalConfig`</Link> or locally when parsing unknown data via <Link href="/api/parse/">`parse`</Link> or <Link href="/api/safeParse/">`safeParse`</Link>.
+
+```ts
+import * as v from 'valibot';
+
+// Set the language configuration globally
+v.setGlobalConfig({ lang: 'de' });
+
+// Set the language configuration locally
+v.parse(Schema, input, { lang: 'de' });
+```
+
+## Custom translations
+
+You can use the same APIs as [`@valibot/i18n`](https://github.com/fabian-hiller/valibot/tree/main/packages/i18n) to add your own translations to my global storage. Alternatively, you can also pass them directly to a specific schema or validation function as the first optional argument.
+
+> You can either enter the translations manually or use an i18n library like [Paraglide JS](https://inlang.com/m/gerre34r/library-inlang-paraglideJs).
+
+### Set translations globally
+
+You can add translations with <Link href="/api/setGlobalMessage/">`setGlobalMessage`</Link>, <Link href="/api/setSchemaMessage/">`setSchemaMessage`</Link> and <Link href="/api/setSpecificMessage/">`setSpecificMessage`</Link> in three different hierarchy levels. When creating an issue, I first check if a specific translation is available, then the translation for schema functions, and finally the global translation.
+
+```ts
+import * as v from 'valibot';
+
+// Set the translation globally (can be used as a fallback)
+v.setGlobalMessage((issue) => `Invalid input: ...`, 'en');
+
+// Set the translation globally for every schema functions
+v.setSchemaMessage((issue) => `Invalid type: ...`, 'en');
+
+// Set the translation globally for a specific function
+v.setSpecificMessage(v.minLength, (issue) => `Invalid length: ...`, 'en');
+```
+
+### Set translations locally
+
+If you prefer to define the translations individually, you can pass them as the first optional argument to schema and validation functions. We recommend using an i18n library like [Paraglide JS](https://inlang.com/m/gerre34r/library-inlang-paraglideJs) in this case.
+
+{/* prettier-ignore */}
+```ts
+import * as v from 'valibot';
+import * as m from './paraglide/messages.js';
+
+const LoginSchema = object({
+  email: string([
+    minLength(1, m.emailRequired),
+    email(m.emailInvalid)
+  ]),
+  password: string([
+    minLength(1, m.passwordRequired),
+    minLength(8, m.passwordInvalid),
+  ]),
+});
+```

@@ -1,30 +1,42 @@
 import { describe, expect, test } from 'vitest';
-import {} from '../../schemas/index.ts';
 import { custom } from '../../validations/index.ts';
 import { forward } from './forward.ts';
 
 describe('forward', () => {
   test('should forward issues to end of path list', () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     type Input = { nested: { key: string } };
     const requirement = () => false;
-    const validate = forward<Input>(custom(requirement), ['nested', 'key']);
+    const validate = forward<Input>(custom(requirement, 'Custom error'), [
+      'nested',
+      'key',
+    ]);
     const result = validate._parse({ nested: { key: 'value' } });
     expect(result).toEqual({
       issues: [
         {
-          validation: 'custom',
-          message: 'Invalid input',
+          context: {
+            type: 'custom',
+            expects: null,
+            async: false,
+            message: 'Custom error',
+            requirement,
+            _parse: expect.any(Function),
+          },
+          reference: expect.any(Function),
           input: 'value',
-          requirement,
+          label: 'input',
           path: [
             {
               type: 'unknown',
+              origin: 'value',
               input: { nested: { key: 'value' } },
               key: 'nested',
               value: { key: 'value' },
             },
             {
               type: 'unknown',
+              origin: 'value',
               input: { key: 'value' },
               key: 'key',
               value: 'value',
@@ -36,26 +48,40 @@ describe('forward', () => {
   });
 
   test('should stop forwarding if path input is undefined', () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     type Input = { nested: { key: string }[] };
     const requirement = () => false;
-    const validate = forward<Input>(custom(requirement), ['nested', 10, 'key']);
+    const validate = forward<Input>(custom(requirement, 'Custom error'), [
+      'nested',
+      10,
+      'key',
+    ]);
     const result = validate._parse({ nested: [{ key: 'value' }] });
     expect(result).toEqual({
       issues: [
         {
-          validation: 'custom',
-          message: 'Invalid input',
+          context: {
+            type: 'custom',
+            expects: null,
+            async: false,
+            message: 'Custom error',
+            requirement,
+            _parse: expect.any(Function),
+          },
+          reference: expect.any(Function),
           input: undefined,
-          requirement,
+          label: 'input',
           path: [
             {
               type: 'unknown',
+              origin: 'value',
               input: { nested: [{ key: 'value' }] },
               key: 'nested',
               value: [{ key: 'value' }],
             },
             {
               type: 'unknown',
+              origin: 'value',
               input: [{ key: 'value' }],
               key: 10,
               value: undefined,
@@ -67,6 +93,7 @@ describe('forward', () => {
   });
 
   test('should do nothing if there are no issues', () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     type Input = { nested: { key: string } };
     const requirement = () => true;
     const validate = forward<Input>(custom(requirement), ['nested']);

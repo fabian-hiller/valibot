@@ -10,9 +10,9 @@ const NON_DIGIT_REGEX = /\D/gu;
  *
  * @returns Whether input is valid.
  */
-export function isLuhnAlgo(input: string) {
+export function isLuhnAlgo(input: string): boolean {
   // Remove any non-digit chars
-  const number = input.replaceAll(NON_DIGIT_REGEX, '');
+  const number = input.replace(NON_DIGIT_REGEX, '');
 
   // Create necessary variables
   let length = number.length;

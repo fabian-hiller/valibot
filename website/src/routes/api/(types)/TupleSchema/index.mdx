@@ -1,0 +1,28 @@
+---
+title: TupleSchema
+description: Tuple schema type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# TupleSchema
+
+Tuple schema type.
+
+## Generics
+
+- `TItems` <Property {...properties.TItems} />
+- `TRest` <Property {...properties.TRest} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `TupleSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `items` <Property {...properties.items} />
+  - `rest` <Property {...properties.rest} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />

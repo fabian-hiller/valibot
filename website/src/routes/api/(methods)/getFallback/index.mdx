@@ -1,9 +1,107 @@
 ---
 title: getFallback
+description: Returns the fallback value of the schema.
+source: /methods/getFallback/getFallback.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # getFallback
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/getFallback/getFallback.ts).
+Returns the fallback value of the schema.
+
+```ts
+const value = getFallback<TSchema>(schema, info);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `info` <Property {...properties.info} />
+
+## Returns
+
+- `value` <Property {...properties.value} />
+
+## Examples
+
+The following examples show how `getFallback` can be used.
+
+### Fallback string schema
+
+Get the fallback value of a string schema.
+
+```ts
+const FallbackStringSchema = fallback(string(), "I'm the fallback!");
+const fallbackValue = getFallback(FallbackStringSchema); // "I'm the fallback!"
+```
+
+## Related
+
+The following APIs can be combined with `getFallback`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'coerce',
+    'fallback',
+    'keyof',
+    'merge',
+    'omit',
+    'partial',
+    'pick',
+    'required',
+    'transform',
+    'unwrap',
+  ]}
+/>

@@ -1,9 +1,107 @@
 ---
 title: literal
+description: Creates a literal schema.
+source: /schemas/literal/literal.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # literal
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/literal/literal.ts).
+Creates a literal schema.
+
+```ts
+const Schema = literal<TLiteral>(literal, message);
+```
+
+## Generics
+
+- `TLiteral` <Property {...properties.TLiteral} />
+
+## Parameters
+
+- `literal` <Property {...properties.literal} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `literal` you can validate that the input matches a specified value. If the input is invalid, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `literal` can be used.
+
+### String literal
+
+Schema to validate a string literal.
+
+```ts
+const StringLiteralSchema = literal('foo');
+```
+
+### Number literal
+
+Schema to validate a number literal.
+
+```ts
+const NumberLiteralSchema = literal(26);
+```
+
+### Boolean literal
+
+Schema to validate a boolean literal.
+
+```ts
+const BooleanLiteralSchema = literal(true);
+```
+
+## Related
+
+The following APIs can be combined with `literal`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'safeParse',
+    'transform',
+  ]}
+/>

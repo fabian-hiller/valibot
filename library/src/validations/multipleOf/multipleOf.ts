@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Multiple of validation type.
  */
-export type MultipleOfValidation<
+export interface MultipleOfValidation<
   TInput extends number,
-  TRequirement extends number
-> = BaseValidation<TInput> & {
+  TRequirement extends number,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,29 +16,35 @@ export type MultipleOfValidation<
    * The divisor.
    */
   requirement: TRequirement;
-};
+}
 
 /**
- * Creates a validation function that validates whether a number is a multiple.
+ * Creates a pipeline validation action that validates whether a number is a
+ * multiple.
  *
  * @param requirement The divisor.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function multipleOf<TInput extends number, TRequirement extends number>(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid multiple'
+  message?: ErrorMessage
 ): MultipleOfValidation<TInput, TRequirement> {
   return {
     type: 'multiple_of',
+    expects: `%${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return input % this.requirement !== 0
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (input % this.requirement === 0) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, multipleOf, input, 'multiple', `${input}`);
     },
   };
 }

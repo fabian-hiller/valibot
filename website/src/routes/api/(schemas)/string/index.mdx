@@ -1,12 +1,14 @@
 ---
 title: string
 description: Creates a string schema.
+source: /schemas/string/string.ts
 contributors:
   - fabian-hiller
   - kazizi55
 ---
 
 import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # string
 
@@ -23,7 +25,7 @@ const Schema = string(message, pipe);
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe}/>
+- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
@@ -77,6 +79,28 @@ const UrlSchema = string('A URL must be string.', [
 
 The following APIs can be combined with `string`.
 
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
 ### Methods
 
 <ApiList
@@ -116,12 +140,17 @@ The following APIs can be combined with `string`.
   items={[
     'bic',
     'bytes',
+    'creditCard',
     'cuid2',
     'custom',
+    'decimal',
     'email',
     'emoji',
     'endsWith',
     'excludes',
+    'hash',
+    'hexadecimal',
+    'hexColor',
     'imei',
     'includes',
     'ip',
@@ -146,6 +175,7 @@ The following APIs can be combined with `string`.
     'notBytes',
     'notLength',
     'notValue',
+    'octal',
     'regex',
     'startsWith',
     'ulid',
@@ -154,40 +184,3 @@ The following APIs can be combined with `string`.
     'value',
   ]}
 />
-
-export const properties = {
-  message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
-    default: {
-      type: 'string',
-      value: 'Invalid type',
-    },
-  },
-  pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: ['string'],
-      },
-      'undefined',
-    ],
-  },
-  Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'StringSchema',
-        href: '../StringSchema/',
-      },
-    ],
-  },
-};

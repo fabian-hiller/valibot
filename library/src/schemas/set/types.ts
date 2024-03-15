@@ -8,12 +8,13 @@ import type {
 /**
  * Set path item type.
  */
-export type SetPathItem = {
+export interface SetPathItem {
   type: 'set';
+  origin: 'value';
   input: Set<unknown>;
   key: number;
   value: unknown;
-};
+}
 
 /**
  * Set output inference type.

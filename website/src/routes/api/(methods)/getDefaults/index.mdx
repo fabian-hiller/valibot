@@ -1,9 +1,118 @@
 ---
 title: getDefaults
+description: Returns the default values of the schema.
+source: /methods/getDefaults/getDefaults.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # getDefaults
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/getDefaults/getDefaults.ts).
+Returns the default values of the schema.
+
+> The difference to <Link href='../getDefault/'>`getDefault`</Link> is that for objects and tuples without an explicit default value, this function recursively returns the default values of the subschemas instead of `undefined`.
+
+```ts
+const values = getDefaults<TSchema>(schema);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+
+## Returns
+
+- `values` <Property {...properties.values} />
+
+## Examples
+
+The following examples show how `getDefaults` can be used.
+
+### Object defaults
+
+Get the default values of an object schema.
+
+```ts
+const ObjectSchema = object({ key: optional(string(), "I'm the default!") });
+const defaultValues = getDefaults(ObjectSchema); // { key: "I'm the default!" }
+```
+
+### Tuple defaults
+
+Get the default values of a tuple schema.
+
+```ts
+const TupleSchema = tuple([nullable(number(), 100)]);
+const defaultValues = getDefaults(TupleSchema); // [100]
+```
+
+## Related
+
+The following APIs can be combined with `getDefaults`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'coerce',
+    'fallback',
+    'keyof',
+    'merge',
+    'omit',
+    'partial',
+    'pick',
+    'required',
+    'transform',
+    'unwrap',
+  ]}
+/>

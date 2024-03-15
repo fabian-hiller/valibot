@@ -1,0 +1,27 @@
+---
+title: ArraySchema
+description: Array schema type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# ArraySchema
+
+Array schema type.
+
+## Generics
+
+- `TItem` <Property {...properties.TItem} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `ArraySchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `item` <Property {...properties.item} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />

@@ -1,0 +1,23 @@
+---
+title: SchemaWithMaybeFallback
+description: Schema with maybe fallback type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# SchemaWithMaybeFallback
+
+Schema with maybe fallback type.
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFallback` <Property {...properties.TFallback} />
+
+## Definition
+
+- `SchemaWithMaybeFallback` <Property {...properties.BaseSchema} />
+  - `fallback` <Property {...properties.fallback} />

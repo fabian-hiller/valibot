@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Max length validation type.
  */
-export type MaxLengthValidation<
+export interface MaxLengthValidation<
   TInput extends string | any[],
-  TRequirement extends number
-> = BaseValidation<TInput> & {
+  TRequirement extends number,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,32 +16,38 @@ export type MaxLengthValidation<
    * The maximum length.
    */
   requirement: TRequirement;
-};
+}
 
 /**
- * Creates a validation function that validates the length of a string or array.
+ * Creates a pipeline validation action that validates the length of a string
+ * or array.
  *
  * @param requirement The maximum length.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function maxLength<
   TInput extends string | any[],
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid length'
+  message?: ErrorMessage
 ): MaxLengthValidation<TInput, TRequirement> {
   return {
     type: 'max_length',
+    expects: `<=${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return input.length > this.requirement
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (input.length <= this.requirement) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, maxLength, input, 'length', `${input.length}`);
     },
   };
 }

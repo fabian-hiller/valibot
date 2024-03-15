@@ -1,20 +1,17 @@
 import { getDefault } from '../../methods/index.ts';
-import type { BaseSchema, Input, Output } from '../../types/index.ts';
-import { parseResult } from '../../utils/index.ts';
+import type { BaseSchema, Default, Input, Output } from '../../types/index.ts';
+import { schemaResult } from '../../utils/index.ts';
 
 /**
  * Nullable schema type.
  */
-export type NullableSchema<
+export interface NullableSchema<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined = undefined,
+  TDefault extends Default<TWrapped> = undefined,
   TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
-    : Output<TWrapped> | null
-> = BaseSchema<Input<TWrapped> | null, TOutput> & {
+    : Output<TWrapped> | null,
+> extends BaseSchema<Input<TWrapped> | null, TOutput> {
   /**
    * The schema type.
    */
@@ -27,7 +24,7 @@ export type NullableSchema<
    * The default value.
    */
   default: TDefault;
-};
+}
 
 /**
  * Creates a nullable schema.
@@ -50,36 +47,32 @@ export function nullable<TWrapped extends BaseSchema>(
  */
 export function nullable<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined
+  TDefault extends Default<TWrapped>,
 >(wrapped: TWrapped, default_: TDefault): NullableSchema<TWrapped, TDefault>;
 
 export function nullable<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined = undefined
+  TDefault extends Default<TWrapped> = undefined,
 >(wrapped: TWrapped, default_?: TDefault): NullableSchema<TWrapped, TDefault> {
   return {
     type: 'nullable',
+    expects: `${wrapped.expects} | null`,
     async: false,
     wrapped,
     default: default_ as TDefault,
-    _parse(input, info) {
-      // Allow `null` to pass or override it with default value
+    _parse(input, config) {
+      // If input is `null`, return typed schema result or override it with
+      // default value
       if (input === null) {
         const override = getDefault(this);
         if (override === undefined) {
-          return parseResult(true, input);
+          return schemaResult(true, input);
         }
         input = override;
       }
 
       // Otherwise, return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      return this.wrapped._parse(input, config);
     },
   };
 }

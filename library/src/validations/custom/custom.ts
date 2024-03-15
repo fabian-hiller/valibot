@@ -4,7 +4,7 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Custom validation type.
  */
-export type CustomValidation<TInput> = BaseValidation<TInput> & {
+export interface CustomValidation<TInput> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -13,29 +13,34 @@ export type CustomValidation<TInput> = BaseValidation<TInput> & {
    * The validation function.
    */
   requirement: (input: TInput) => boolean;
-};
+}
 
 /**
- * Creates a custom validation function.
+ * Creates a custom pipeline validation action.
  *
  * @param requirement The validation function.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function custom<TInput>(
   requirement: (input: TInput) => boolean,
-  message: ErrorMessage = 'Invalid input'
+  message?: ErrorMessage
 ): CustomValidation<TInput> {
   return {
     type: 'custom',
+    expects: null,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return !this.requirement(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, custom, input, 'input');
     },
   };
 }

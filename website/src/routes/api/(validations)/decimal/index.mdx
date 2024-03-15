@@ -1,0 +1,54 @@
+---
+title: decimal
+description: Creates a pipeline validation action that validates a decimal.
+source: /validations/decimal/decimal.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# decimal
+
+Creates a pipeline validation action that validates a [decimal](https://en.wikipedia.org/wiki/Decimal).
+
+```ts
+const Validation = decimal<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `decimal` you can validate the formatting of a string. If the input is not a decimal, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `decimal` can be used.
+
+### Decimal schema
+
+Schema to validate a decimal.
+
+```ts
+const DecimalSchema = string([decimal('The decimal is badly formatted.')]);
+```
+
+## Related
+
+The following APIs can be combined with `decimal`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />

@@ -6,10 +6,15 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # TypedSchemaResult
 
 Typed schema result type.
+
+## Generics
+
+- `TOutput` <Property {...properties.TOutput} />
 
 ## Definition
 
@@ -17,40 +22,3 @@ Typed schema result type.
   - `typed` <Property {...properties.typed} />
   - `output` <Property {...properties.output} />
   - `issues` <Property {...properties.issues} />
-
-export const properties = {
-  TypedSchemaResult: {
-    type: {
-      type: 'custom',
-      name: 'Object',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TOutput',
-        },
-      ],
-    },
-  },
-  typed: {
-    type: {
-      type: 'boolean',
-      value: 'true',
-    },
-  },
-  output: {
-    type: {
-      type: 'custom',
-      name: 'TOutput',
-    },
-  },
-  issues: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Issues',
-        href: '../Issues/',
-      },
-      'undefined',
-    ],
-  },
-};

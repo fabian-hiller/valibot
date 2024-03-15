@@ -1,14 +1,14 @@
 import {
   $,
   component$,
+  type Signal,
   useComputed$,
   useSignal,
   useTask$,
-  type Signal,
 } from '@builder.io/qwik';
 import {
-  Link,
   globalAction$,
+  Link,
   useLocation,
   z,
   zod$,
@@ -43,26 +43,26 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
   const windowScrolled = useSignal(false);
 
   // Use main menu toggle and compute open state
-  const mainMenuToggle = useMainMenuToggle();
-  const mainMenuOpen = useComputed$(() =>
-    mainMenuToggle.isRunning
+  const toggle = useMainMenuToggle();
+  const isOpen = useComputed$(() =>
+    toggle.isRunning
       ? // Optimistic UI
-        mainMenuToggle.formData?.get('state') === 'opened'
-      : mainMenuToggle.value?.state === 'opened'
+        toggle.formData?.get('state') === 'opened'
+      : toggle.value?.state === 'opened'
   );
 
   // Use focus trap for main menu
-  useFocusTrap(rootElement, mainMenuOpen);
+  useFocusTrap(rootElement, isOpen);
 
   // Close main menu when location pathname changes
   useTask$(({ track }) => {
     track(() => location.url);
     if (
-      mainMenuOpen.value &&
+      isOpen.value &&
       location.prevUrl &&
       location.url.pathname !== location.prevUrl.pathname
     ) {
-      mainMenuToggle.submit({ state: 'closed' });
+      toggle.submit({ state: 'closed' });
     }
   });
 
@@ -77,7 +77,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
     <header
       class={clsx(
         'sticky top-0 h-14 md:h-16 lg:h-[70px]',
-        mainMenuOpen.value ? 'z-30' : 'z-20'
+        isOpen.value ? 'z-30' : 'z-20'
       )}
       ref={rootElement}
       window:onScroll$={updateWindowScrolled}
@@ -86,8 +86,8 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
       <div
         class={clsx(
           'flex h-full items-center justify-between border-b-2 px-2 backdrop-blur duration-200 lg:px-4',
-          mainMenuOpen.value && 'bg-white dark:bg-gray-900',
-          !mainMenuOpen.value && windowScrolled.value
+          isOpen.value && 'bg-white dark:bg-gray-900',
+          !isOpen.value && windowScrolled.value
             ? 'border-b-slate-200 bg-white/90 dark:border-b-slate-800 dark:bg-gray-900/90'
             : 'border-b-transparent'
         )}
@@ -95,11 +95,11 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
         {/* Website logo */}
         <div class="-m-1 overflow-hidden p-1 lg:w-56">
           <Link
-            class="focus-ring inline-flex w-full items-center rounded-lg p-2 font-medium transition-colors hover:text-slate-900 dark:hover:text-slate-200 md:w-auto md:text-lg lg:text-xl"
+            class="focus-ring inline-flex w-full items-center rounded-lg p-2 font-medium transition-colors hover:text-slate-900 md:w-auto md:text-lg lg:text-xl dark:hover:text-slate-200"
             href="/"
           >
             <LogoIcon class="mr-2 h-8 shrink-0 md:h-9 lg:mr-3 lg:h-10" />
-            <div class="font-lexend-exa truncate bg-gradient-to-br from-slate-800 to-slate-600 bg-clip-text text-lg font-medium text-transparent dark:from-slate-200 dark:to-slate-400 md:text-xl lg:text-2xl">
+            <div class="font-lexend-exa truncate bg-gradient-to-br from-slate-800 to-slate-600 bg-clip-text text-lg font-medium text-transparent md:text-xl lg:text-2xl dark:from-slate-200 dark:to-slate-400">
               Valibot
             </div>
           </Link>
@@ -110,18 +110,18 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
           <GitHubIconLink />
           <ThemeToggle />
           <SearchToggle open={searchOpen} />
-          <MainMenuToggle action={mainMenuToggle} open={mainMenuOpen.value} />
+          <MainMenuToggle action={toggle} open={isOpen.value} />
         </div>
 
         {/* Main menu */}
         <nav
           class={clsx(
             'absolute left-0 top-full flex max-h-[60vh] w-full origin-top flex-col overflow-y-auto border-b-2 pb-8 pt-4 duration-200 lg:static lg:top-auto lg:w-auto lg:translate-y-0 lg:flex-row lg:space-x-10 lg:overflow-visible lg:border-none lg:bg-transparent lg:p-0 lg:dark:bg-transparent',
-            !mainMenuOpen.value &&
-              'invisible scale-y-0 lg:visible lg:scale-y-100',
-            (mainMenuOpen.value && 'bg-white dark:bg-gray-900') ||
+            !isOpen.value && 'invisible scale-y-0 lg:visible lg:scale-y-100',
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            (isOpen.value && 'bg-white dark:bg-gray-900') ||
               (windowScrolled.value && 'bg-white/90  dark:bg-gray-900/90'),
-            mainMenuOpen.value || windowScrolled.value
+            isOpen.value || windowScrolled.value
               ? 'border-b-slate-200 dark:border-b-slate-800'
               : 'border-b-transparent'
           )}
@@ -129,12 +129,14 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
         >
           {[
             { label: 'Guides', href: '/guides/' },
-            { label: 'API reference', href: '/api/' },
+            { label: 'API', href: '/api/' },
+            { label: 'Blog', href: '/blog/' },
+            { label: 'Playground', href: '/playground/' },
           ].map(({ label, href }) => (
             <Link
               key={href}
               class={clsx(
-                'focus-ring mx-4 rounded-lg px-4 py-3 text-lg transition-colors hover:text-slate-900 dark:hover:text-slate-200 lg:px-3 lg:py-2 lg:text-[17px] lg:font-medium',
+                'focus-ring mx-4 rounded-lg px-4 py-3 text-lg transition-colors hover:text-slate-900 lg:px-3 lg:py-2 lg:text-[17px] lg:font-medium dark:hover:text-slate-200',
                 location.url.pathname.startsWith(href) &&
                   'docsearch-lvl0 text-slate-900 dark:text-slate-200'
               )}
@@ -160,12 +162,12 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
       {/* Background overlay */}
       <div
         class={clsx(
-          'absolute top-0 -z-10 h-screen w-full bg-black/10 dark:bg-black/20 lg:hidden',
-          mainMenuOpen.value
+          'absolute top-0 -z-10 h-screen w-full bg-black/10 lg:hidden dark:bg-black/20',
+          isOpen.value
             ? 'delay-75 duration-300'
             : 'invisible opacity-0 duration-75'
         )}
-        onClick$={() => mainMenuToggle.submit({ state: 'closed' })}
+        onClick$={() => toggle.submit({ state: 'closed' })}
       />
     </header>
   );

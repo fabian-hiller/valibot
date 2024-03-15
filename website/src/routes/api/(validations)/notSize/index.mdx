@@ -1,9 +1,72 @@
 ---
 title: notSize
+description: >-
+  Creates a pipeline validation action that validates the size of a map, set or
+  blob.
+source: /validations/notSize/notSize.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # notSize
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/notSize/notSize.ts).
+Creates a pipeline validation action that validates the size of a map, set or blob.
+
+```ts
+const Validation = notSize<TInput, TRequirement>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `notSize` you can validate the size of a map, set or blob. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `notSize` can be used.
+
+### Blob size schema
+
+Schema to validate a blob with less ore more then 10 MB.
+
+```ts
+const BlobSchema = blob([
+  notSize(10 * 1024 * 1024, 'The blob must not be 10 MB in size.'),
+]);
+```
+
+### Set size schema
+
+Schema to validate a set with less ore more then 8 numbers.
+
+```ts
+const SetSchema = set(number(), [
+  notSize(8, 'The set must not contain 8 numbers.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `notSize`.
+
+### Schemas
+
+<ApiList
+  items={['any', 'blob', 'instance', 'map', 'set', 'special', 'unknown']}
+/>

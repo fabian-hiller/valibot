@@ -1,9 +1,126 @@
 ---
 title: brand
+description: Brands the output type of a schema.
+source: /methods/brand/brand.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # brand
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/brand/brand.ts).
+Brands the output type of a schema.
+
+```ts
+const Schema = brand<TSchema, TName>(schema, name);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TName` <Property {...properties.TName} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `name` <Property {...properties.name} />
+
+### Explanation
+
+`brand` allows you to brand the output type of `schema` with `name`. This ensures that data can only be considered valid if it has been validated by a particular branded schema.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `brand` can be used.
+
+### Branded fruit schema
+
+Schema to ensure that only a validated fruit is accepted.
+
+```ts
+// Create schema and infer output type
+const FruitSchema = brand(object({ name: string() }), 'Fruit');
+type FruitOutput = Output<typeof FruitSchema>;
+
+// This works because output is branded
+const apple: FruitOutput = parse(FruitSchema, { name: 'apple' });
+
+// But this will result in a type error
+const banana: FruitOutput = { name: 'banana' };
+```
+
+## Related
+
+The following APIs can be combined with `brand`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'coerce',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'merge',
+    'omit',
+    'parse',
+    'partial',
+    'pick',
+    'required',
+    'safeParse',
+    'transform',
+    'unwrap',
+  ]}
+/>

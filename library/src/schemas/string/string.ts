@@ -4,7 +4,8 @@ import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 /**
  * String schema type.
  */
-export type StringSchema<TOutput = string> = BaseSchema<string, TOutput> & {
+export interface StringSchema<TOutput = string>
+  extends BaseSchema<string, TOutput> {
   /**
    * The schema type.
    */
@@ -12,12 +13,12 @@ export type StringSchema<TOutput = string> = BaseSchema<string, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
   pipe: Pipe<string> | undefined;
-};
+}
 
 /**
  * Creates a string schema.
@@ -46,22 +47,23 @@ export function string(
   arg2?: Pipe<string>
 ): StringSchema {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe] = defaultArgs(arg1, arg2);
 
   // Create and return string schema
   return {
     type: 'string',
+    expects: 'string',
     async: false,
     message,
     pipe,
-    _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'string') {
-        return schemaIssue(info, 'type', 'string', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return pipe result
+      if (typeof input === 'string') {
+        return pipeResult(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(input, this.pipe, info, 'string');
+      // Otherwise, return schema issue
+      return schemaIssue(this, string, input, config);
     },
   };
 }

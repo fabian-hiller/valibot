@@ -3,7 +3,12 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ObjectKeys,
+  Pipe,
+} from '../../types/index.ts';
 import { restAndDefaultArgs } from '../../utils/index.ts';
 
 /**
@@ -18,7 +23,7 @@ import { restAndDefaultArgs } from '../../utils/index.ts';
  */
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TSchema['entries'])[]
+  TKeys extends ObjectKeys<TSchema>,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -38,7 +43,7 @@ export function pick<
  */
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TSchema['entries'])[]
+  TKeys extends ObjectKeys<TSchema>,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -59,8 +64,8 @@ export function pick<
  */
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TSchema['entries'])[],
-  TRest extends BaseSchema | undefined
+  TKeys extends ObjectKeys<TSchema>,
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -82,8 +87,8 @@ export function pick<
  */
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TSchema['entries'])[],
-  TRest extends BaseSchema | undefined
+  TKeys extends ObjectKeys<TSchema>,
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -94,8 +99,8 @@ export function pick<
 
 export function pick<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends (keyof TSchema['entries'])[],
-  TRest extends BaseSchema | undefined = undefined
+  TKeys extends ObjectKeys<TSchema>,
+  TRest extends BaseSchema | undefined = undefined,
 >(
   schema: TSchema,
   keys: TKeys,

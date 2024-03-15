@@ -4,19 +4,20 @@ import { actionOutput } from '../../utils/index.ts';
 /**
  * To custom transformation type.
  */
-export type ToCustomTransformation<TInput> = BaseTransformation<TInput> & {
+export interface ToCustomTransformation<TInput>
+  extends BaseTransformation<TInput> {
   /**
    * The transformation type.
    */
   type: 'to_custom';
-};
+}
 
 /**
- * Creates a custom transformation function.
+ * Creates a custom pipeline transformation action.
  *
  * @param action The transform action.
  *
- * @returns A transformation function.
+ * @returns A transformation action.
  */
 export function toCustom<TInput>(
   action: (input: TInput) => TInput

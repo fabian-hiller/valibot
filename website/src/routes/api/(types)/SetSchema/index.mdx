@@ -1,0 +1,26 @@
+---
+title: SetSchema
+description: Set schema type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# SetSchema
+
+Set schema type.
+
+## Generics
+
+- `TValue` <Property {...properties.TValue} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `SetSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `value` <Property {...properties.value} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />

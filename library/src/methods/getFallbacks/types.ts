@@ -1,12 +1,12 @@
 import type {
-  ObjectSchema,
   ObjectEntries,
-  TupleSchema,
-  ObjectSchemaAsync,
   ObjectEntriesAsync,
-  TupleSchemaAsync,
+  ObjectSchema,
+  ObjectSchemaAsync,
   TupleItems,
   TupleItemsAsync,
+  TupleSchema,
+  TupleSchemaAsync,
 } from '../../schemas/index.ts';
 import type { BaseSchema, BaseSchemaAsync } from '../../types/index.ts';
 import type {
@@ -16,7 +16,7 @@ import type {
 } from '../getFallback/index.ts';
 
 /**
- * Fallback values type.
+ * Fallback values inference type.
  */
 export type FallbackValues<
   TSchema extends
@@ -29,13 +29,16 @@ export type FallbackValues<
         | BaseSchemaAsync
         | ObjectSchemaAsync<ObjectEntriesAsync, any>
         | TupleSchemaAsync<TupleItemsAsync, any>
-      >
-> = TSchema extends ObjectSchema<infer TEntries extends ObjectEntries>
-  ? { [TKey in keyof TEntries]: FallbackValues<TEntries[TKey]> }
-  : TSchema extends ObjectSchemaAsync<infer TEntries extends ObjectEntriesAsync>
-  ? { [TKey in keyof TEntries]: FallbackValues<TEntries[TKey]> }
-  : TSchema extends TupleSchema<infer TItems>
-  ? { [TKey in keyof TItems]: FallbackValues<TItems[TKey]> }
-  : TSchema extends TupleSchemaAsync<infer TItems>
-  ? { [TKey in keyof TItems]: FallbackValues<TItems[TKey]> }
-  : FallbackValue<TSchema>;
+      >,
+> =
+  TSchema extends ObjectSchema<infer TEntries extends ObjectEntries>
+    ? { [TKey in keyof TEntries]: FallbackValues<TEntries[TKey]> }
+    : TSchema extends ObjectSchemaAsync<
+          infer TEntries extends ObjectEntriesAsync
+        >
+      ? { [TKey in keyof TEntries]: FallbackValues<TEntries[TKey]> }
+      : TSchema extends TupleSchema<infer TItems>
+        ? { [TKey in keyof TItems]: FallbackValues<TItems[TKey]> }
+        : TSchema extends TupleSchemaAsync<infer TItems>
+          ? { [TKey in keyof TItems]: FallbackValues<TItems[TKey]> }
+          : FallbackValue<TSchema>;

@@ -1,0 +1,27 @@
+---
+title: NullableSchema
+description: Nullable schema type.
+contributors:
+  - fabian-hiller
+  - sqmasep
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# NullableSchema
+
+Nullable schema type.
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+- `TDefault` <Property {...properties.TDefault} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `NullableSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `wrapped` <Property {...properties.wrapped} />
+  - `default` <Property {...properties.default} />

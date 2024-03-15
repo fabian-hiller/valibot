@@ -5,7 +5,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * IPv4 validation type.
  */
-export type Ipv4Validation<TInput extends string> = BaseValidation<TInput> & {
+export interface Ipv4Validation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,27 +15,32 @@ export type Ipv4Validation<TInput extends string> = BaseValidation<TInput> & {
    * The IPv4 regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
- * Creates a validation function that validates an [IPv4](https://en.wikipedia.org/wiki/IPv4) address.
+ * Creates a pipeline validation action that validates an [IPv4](https://en.wikipedia.org/wiki/IPv4) address.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function ipv4<TInput extends string>(
-  message: ErrorMessage = 'Invalid IPv4'
+  message?: ErrorMessage
 ): Ipv4Validation<TInput> {
   return {
     type: 'ipv4',
+    expects: null,
     async: false,
     message,
     requirement: IPV4_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, ipv4, input, 'IPv4');
     },
   };
 }

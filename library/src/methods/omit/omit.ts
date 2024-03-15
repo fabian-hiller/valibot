@@ -3,9 +3,13 @@ import {
   type ObjectOutput,
   type ObjectSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ObjectKeys,
+  Pipe,
+} from '../../types/index.ts';
 import { restAndDefaultArgs } from '../../utils/index.ts';
-import type { ObjectKeys } from './types.ts';
 
 /**
  * Creates an object schema that contains not the selected keys of an existing
@@ -19,7 +23,7 @@ import type { ObjectKeys } from './types.ts';
  */
 export function omit<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends ObjectKeys<TSchema>
+  TKeys extends ObjectKeys<TSchema>,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -39,7 +43,7 @@ export function omit<
  */
 export function omit<
   TSchema extends ObjectSchema<any, any>,
-  TKeys extends ObjectKeys<TSchema>
+  TKeys extends ObjectKeys<TSchema>,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -61,7 +65,7 @@ export function omit<
 export function omit<
   TSchema extends ObjectSchema<any, any>,
   TKeys extends ObjectKeys<TSchema>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -84,7 +88,7 @@ export function omit<
 export function omit<
   TSchema extends ObjectSchema<any, any>,
   TKeys extends ObjectKeys<TSchema>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -96,7 +100,7 @@ export function omit<
 export function omit<
   TSchema extends ObjectSchema<any, any>,
   TKeys extends ObjectKeys<TSchema>,
-  TRest extends BaseSchema | undefined = undefined
+  TRest extends BaseSchema | undefined = undefined,
 >(
   schema: TSchema,
   keys: TKeys,

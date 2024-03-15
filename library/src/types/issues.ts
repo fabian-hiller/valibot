@@ -6,6 +6,8 @@ import type {
   SetPathItem,
   TuplePathItem,
 } from '../schemas/index.ts';
+import type { SchemaConfig } from './config.ts';
+import type { PipeActionContext } from './pipe.ts';
 
 /**
  * Issue reason type.
@@ -17,6 +19,7 @@ export type IssueReason =
   | 'blob'
   | 'boolean'
   | 'date'
+  | 'intersect'
   | 'function'
   | 'instance'
   | 'map'
@@ -29,23 +32,21 @@ export type IssueReason =
   | 'symbol'
   | 'tuple'
   | 'undefined'
+  | 'union'
   | 'unknown'
+  | 'variant'
   | 'type';
-
-/**
- * Issue origin type.
- */
-export type IssueOrigin = 'key' | 'value';
 
 /**
  * Unknown path item type.
  */
-export type UnknownPathItem = {
+export interface UnknownPathItem {
   type: 'unknown';
+  origin: 'key' | 'value';
   input: unknown;
   key: unknown;
   value: unknown;
-};
+}
 
 /**
  * Path item type.
@@ -60,29 +61,38 @@ export type PathItem =
   | UnknownPathItem;
 
 /**
- * Issue type.
+ * Issue path type.
  */
-export type Issue = {
+export type IssuePath = [PathItem, ...PathItem[]];
+
+/**
+ * Schema issue type.
+ */
+export interface SchemaIssue extends Omit<SchemaConfig, 'message'> {
   /**
    * The issue reason.
    */
   reason: IssueReason;
   /**
-   * The validation name.
+   * The context name.
    */
-  validation: string;
+  context: string;
   /**
-   * The issue origin.
+   * The raw input data.
    */
-  origin: IssueOrigin;
+  input: unknown;
+  /**
+   * The expected input.
+   */
+  expected: string | null;
+  /**
+   * The received input.
+   */
+  received: string;
   /**
    * The error message.
    */
   message: string;
-  /**
-   * The input data.
-   */
-  input: unknown;
   /**
    * The validation requirement
    */
@@ -90,26 +100,32 @@ export type Issue = {
   /**
    * The issue path.
    */
-  path?: PathItem[];
+  path?: IssuePath;
   /**
    * The sub issues.
    */
-  issues?: Issues;
-  /**
-   * Whether it was abort early.
-   */
-  abortEarly?: boolean;
-  /**
-   * Whether the pipe was abort early.
-   */
-  abortPipeEarly?: boolean;
-  /**
-   * Whether the pipe was skipped.
-   */
-  skipPipe?: boolean;
-};
+  issues?: SchemaIssues;
+}
 
 /**
- * Issues type.
+ * Schema issues type.
  */
-export type Issues = [Issue, ...Issue[]];
+export type SchemaIssues = [SchemaIssue, ...SchemaIssue[]];
+
+/**
+ * Pipe action issue type.
+ */
+export interface PipeActionIssue {
+  context: PipeActionContext;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  reference: Function;
+  input: unknown;
+  label: string;
+  received?: string;
+  path?: IssuePath;
+}
+
+/**
+ * Pipe action issues type.
+ */
+export type PipeActionIssues = [PipeActionIssue, ...PipeActionIssue[]];

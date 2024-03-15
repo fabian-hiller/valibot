@@ -6,34 +6,18 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # ValidActionResult
 
 Valid action result type.
+
+## Generics
+
+- `TOutput` <Property {...properties.TOutput} />
 
 ## Definition
 
 - `ValidActionResult` <Property {...properties.ValidActionResult} />
   - `output` <Property {...properties.output} />
   - `issues` <Property type="undefined" />
-
-export const properties = {
-  ValidActionResult: {
-    type: {
-      type: 'custom',
-      name: 'Object',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TOutput',
-        },
-      ],
-    },
-  },
-  output: {
-    type: {
-      type: 'custom',
-      name: 'TOutput',
-    },
-  },
-};

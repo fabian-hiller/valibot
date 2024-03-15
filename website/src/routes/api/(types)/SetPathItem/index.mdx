@@ -7,6 +7,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # SetPathItem
 
@@ -16,22 +17,7 @@ Set path item type.
 
 - `SetPathItem` <Property type="object" />
   - `type` <Property {...properties.type} />
+  - `origin` <Property {...properties.origin} />
   - `input` <Property {...properties.input} />
   - `key` <Property type="number" />
   - `value` <Property type="unknown" />
-
-export const properties = {
-  type: {
-    type: {
-      type: 'string',
-      value: 'set',
-    },
-  },
-  input: {
-    type: {
-      type: 'custom',
-      name: 'Set',
-      generics: ['unknown'],
-    },
-  },
-};

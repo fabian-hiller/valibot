@@ -6,6 +6,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # UnknownPathItem
 
@@ -15,15 +16,7 @@ Unknown path item type.
 
 - `UnknownPathItem` <Property type="object"/>
   - `type` <Property {...properties.type} />
+  - `origin` <Property {...properties.origin} />
   - `input` <Property type="unknown" />
   - `key` <Property type="unknown" />
   - `value` <Property type="unknown" />
-
-export const properties = {
-  type: {
-    type: {
-      type: 'string',
-      value: 'unknown',
-    },
-  },
-};

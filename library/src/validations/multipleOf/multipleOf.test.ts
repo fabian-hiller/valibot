@@ -22,6 +22,6 @@ describe('multipleOf', () => {
   test('should return custom error message', () => {
     const error = 'Value is not a multiple of 3!';
     const validate = multipleOf(3, error);
-    expect(validate._parse(1).issues?.[0].message).toBe(error);
+    expect(validate._parse(1).issues?.[0].context.message).toBe(error);
   });
 });

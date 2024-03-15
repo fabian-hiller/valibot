@@ -2,21 +2,27 @@ import type {
   BaseSchema,
   ErrorMessage,
   Input,
-  Issues,
   Output,
+  Pipe,
+  SchemaResult,
 } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 import type { ObjectSchema } from '../object/index.ts';
+
+/**
+ * Variant option schema type.
+ */
+interface VariantOptionSchema<TKey extends string> extends BaseSchema {
+  type: 'variant';
+  options: VariantOptions<TKey>;
+}
 
 /**
  * Variant option type.
  */
 export type VariantOption<TKey extends string> =
   | ObjectSchema<Record<TKey, BaseSchema>, any>
-  | (BaseSchema & {
-      type: 'variant';
-      options: VariantOptions<TKey>;
-    });
+  | VariantOptionSchema<TKey>;
 
 /**
  * Variant options type.
@@ -24,17 +30,17 @@ export type VariantOption<TKey extends string> =
 export type VariantOptions<TKey extends string> = [
   VariantOption<TKey>,
   VariantOption<TKey>,
-  ...VariantOption<TKey>[]
+  ...VariantOption<TKey>[],
 ];
 
 /**
  * Variant schema type.
  */
-export type VariantSchema<
+export interface VariantSchema<
   TKey extends string,
   TOptions extends VariantOptions<TKey>,
-  TOutput = Output<TOptions[number]>
-> = BaseSchema<Input<TOptions[number]>, TOutput> & {
+  TOutput = Output<TOptions[number]>,
+> extends BaseSchema<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
    */
@@ -50,8 +56,30 @@ export type VariantSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
-};
+  message: ErrorMessage | undefined;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<Output<TOptions[number]>> | undefined;
+}
+
+/**
+ * Creates a variant (aka discriminated union) schema.
+ *
+ * @param key The discriminator key.
+ * @param options The variant options.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A variant schema.
+ */
+export function variant<
+  TKey extends string,
+  TOptions extends VariantOptions<TKey>,
+>(
+  key: TKey,
+  options: TOptions,
+  pipe?: Pipe<Output<TOptions[number]>>
+): VariantSchema<TKey, TOptions>;
 
 /**
  * Creates a variant (aka discriminated union) schema.
@@ -59,97 +87,145 @@ export type VariantSchema<
  * @param key The discriminator key.
  * @param options The variant options.
  * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns A variant schema.
  */
 export function variant<
   TKey extends string,
-  TOptions extends VariantOptions<TKey>
+  TOptions extends VariantOptions<TKey>,
 >(
   key: TKey,
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage,
+  pipe?: Pipe<Output<TOptions[number]>>
+): VariantSchema<TKey, TOptions>;
+
+export function variant<
+  TKey extends string,
+  TOptions extends VariantOptions<TKey>,
+>(
+  key: TKey,
+  options: TOptions,
+  arg3?: Pipe<Output<TOptions[number]>> | ErrorMessage,
+  arg4?: Pipe<Output<TOptions[number]>>
 ): VariantSchema<TKey, TOptions> {
+  // Get message and pipe argument
+  const [message, pipe] = defaultArgs(arg3, arg4);
+
+  // Create cached expected key
+  let cachedExpectedKey: string | undefined;
+
+  // Create and return variant schema
   return {
     type: 'variant',
+    expects: 'Object',
     async: false,
     key,
     options,
     message,
-    _parse(input, info) {
-      // Check type of input
-      if (!input || typeof input !== 'object' || !(this.key in input)) {
-        return schemaIssue(info, 'type', 'variant', this.message, input);
-      }
+    pipe,
+    _parse(input, config) {
+      // If root type is valid, check nested types
+      if (input && typeof input === 'object') {
+        // If key is in input or expected key is not cached, continue
+        if (this.key in input || !cachedExpectedKey) {
+          // Create expected key and variant result
+          let expectedKey: string[] | undefined;
+          let variantResult: SchemaResult<Output<TOptions[number]>> | undefined;
 
-      // Create issues and output
-      let issues: Issues | undefined;
-      let output: [Record<string, any>] | undefined;
+          // Create function to parse options recursively
+          const parseOptions = (options: VariantOptions<TKey>) => {
+            for (const schema of options) {
+              // If it is an object schema, parse discriminator key
+              if (schema.type === 'object') {
+                const keySchema = schema.entries[this.key];
+                const keyResult = keySchema._parse(
+                  (input as Record<TKey, unknown>)[this.key],
+                  config
+                );
 
-      // Create function to parse options recursively
-      const parseOptions = (options: VariantOptions<TKey>) => {
-        for (const schema of options) {
-          // If it is an object schema, parse discriminator key
-          if (schema.type === 'object') {
-            const keyResult = schema.entries[this.key]._parse(
-              (input as Record<TKey, unknown>)[this.key],
-              info
-            );
+                // If expected key is not cached create it
+                if (!cachedExpectedKey) {
+                  expectedKey
+                    ? expectedKey.push(keySchema.expects)
+                    : (expectedKey = [keySchema.expects]);
+                }
 
-            // If right variant option was found, parse it
-            if (!keyResult.issues) {
-              const dataResult = schema._parse(input, info);
+                // If right variant option was found, parse it
+                if (!keyResult.issues) {
+                  const dataResult = schema._parse(input, config);
 
-              // If there are issues, capture them
-              if (dataResult.issues) {
-                issues = dataResult.issues;
+                  // If there are not issues, store result and break loop
+                  if (!dataResult.issues) {
+                    variantResult = dataResult;
+                    break;
+                  }
 
-                // Otherwise, set output
-              } else {
-                // Note: Output is nested in array, so that also a falsy value
-                // further down can be recognized as valid value
-                output = [dataResult.output!];
+                  // Otherwise, replace variant result only if necessary
+                  if (
+                    !variantResult ||
+                    (!variantResult.typed && dataResult.typed)
+                  ) {
+                    variantResult = dataResult;
+                  }
+                }
+
+                // Otherwise, if it is a variant parse its options
+                // recursively
+              } else if (schema.type === 'variant') {
+                parseOptions(schema.options);
+
+                // If variant option was found, break loop to end execution
+                if (variantResult && !variantResult.issues) {
+                  break;
+                }
               }
+            }
+          };
 
-              // Break loop to end execution
-              break;
+          // Parse options recursively
+          parseOptions(this.options);
+
+          // Cache expected key lazy
+          cachedExpectedKey =
+            cachedExpectedKey || [...new Set(expectedKey)].join(' | ');
+
+          // If a variant result is available, process it
+          if (variantResult) {
+            // If result is typed, return pipe result
+            if (variantResult.typed) {
+              return pipeResult(
+                this,
+                variantResult.output,
+                config,
+                variantResult.issues
+              );
             }
 
-            // Otherwise, if it is a variant parse its options
-            // recursively
-          } else if (schema.type === 'variant') {
-            parseOptions(schema.options);
-
-            // If variant option was found, break loop to end execution
-            if (issues || output) {
-              break;
-            }
+            // Otherwise, return variant result
+            return variantResult;
           }
         }
-      };
 
-      // Parse options recursively
-      parseOptions(this.options);
-
-      // If there is an output, return typed parse result
-      if (output) {
-        return parseResult(true, output[0]);
+        // Otherwise, if discriminator key is invalid, return schema issue
+        const value = (input as Record<string, unknown>)[this.key];
+        return schemaIssue(this, variant, value, config, {
+          expected: cachedExpectedKey,
+          path: [
+            {
+              type: 'object',
+              origin: 'value',
+              input: input as Record<string, unknown>,
+              key: this.key,
+              value,
+            },
+          ],
+        });
       }
 
-      // If there are issues, return untyped parse result
-      if (issues) {
-        return parseResult(false, output, issues);
-      }
-
-      // If discriminator key is invalid, return issue
-      return schemaIssue(info, 'type', 'variant', this.message, input);
+      // Otherwise, return default schema issue
+      return schemaIssue(this, variant, input, config);
     },
   };
 }
-
-/**
- * See {@link variant}
- *
- * @deprecated Use `variant` instead.
- */
-export const discriminatedUnion = variant;

@@ -4,18 +4,18 @@ import { actionOutput } from '../../utils/index.ts';
 /**
  * To trimmed end transformation type.
  */
-export type ToTrimmedEndTransformation = BaseTransformation<string> & {
+export interface ToTrimmedEndTransformation extends BaseTransformation<string> {
   /**
    * The transformation type.
    */
   type: 'to_trimmed_end';
-};
+}
 
 /**
- * Creates a transformation function that removes the trailing white space and
- * line terminator characters from a string.
+ * Creates a pipeline transformation action that removes the trailing white
+ * space and line terminator characters from a string.
  *
- * @returns A transformation function.
+ * @returns A transformation action.
  */
 export function toTrimmedEnd(): ToTrimmedEndTransformation {
   return {

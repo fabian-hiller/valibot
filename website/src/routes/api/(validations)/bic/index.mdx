@@ -1,9 +1,55 @@
 ---
 title: bic
+description: Creates a pipeline validation action that validates a BIC.
+source: /validations/bic/bic.ts
 contributors:
+  - fabian-hiller
   - ariskemper
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # bic
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/bic/bic.ts).
+Creates a pipeline validation action that validates a [BIC](https://en.wikipedia.org/wiki/ISO_9362).
+
+```ts
+const Validation = bic<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `bic` you can validate the formatting of a string. If the input is not a BIC, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `bic` can be used.
+
+### BIC schema
+
+Schema to validate a BIC.
+
+```ts
+const BicSchema = string([toUpperCase(), bic('The BIC is badly formatted.')]);
+```
+
+## Related
+
+The following APIs can be combined with `bic`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />

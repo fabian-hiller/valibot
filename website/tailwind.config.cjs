@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 const { fontFamily } = require('tailwindcss/defaultTheme');
 module.exports = {
-  content: ['./src/**/*.{ts,tsx,mdx}'],
+  content: ['./src/**/*.{js,ts,tsx,mdx}'],
   darkMode: 'class',
   future: {
     hoverOnlyWhenSupported: true,

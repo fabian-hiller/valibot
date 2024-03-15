@@ -1,4 +1,4 @@
-import { Slot, component$ } from '@builder.io/qwik';
+import { component$, Slot } from '@builder.io/qwik';
 import clsx from 'clsx';
 
 type ButtonGroupProps = {

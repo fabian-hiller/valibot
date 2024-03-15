@@ -1,11 +1,13 @@
 ---
 title: bigint
 description: Creates a bigint schema.
+source: /schemas/bigint/bigint.ts
 contributors:
   - fabian-hiller
 ---
 
 import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # bigint
 
@@ -22,7 +24,7 @@ const Schema = bigint(message, pipe);
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe}/>
+- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
@@ -56,6 +58,28 @@ const MaxBigintSchema = bigint([maxValue(999n)]);
 
 The following APIs can be combined with `bigint`.
 
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
 ### Methods
 
 <ApiList
@@ -81,40 +105,3 @@ The following APIs can be combined with `bigint`.
 ### Validations
 
 <ApiList items={['custom', 'maxValue', 'minValue', 'notValue', 'value']} />
-
-export const properties = {
-  message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
-    default: {
-      type: 'string',
-      value: 'Invalid type',
-    },
-  },
-  pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: ['bigint'],
-      },
-      'undefined',
-    ],
-  },
-  Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BigintSchema',
-        href: '../BigintSchema/',
-      },
-    ],
-  },
-};

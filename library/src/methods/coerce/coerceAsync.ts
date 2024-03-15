@@ -10,12 +10,12 @@ import type { BaseSchemaAsync } from '../../types/index.ts';
  */
 export function coerceAsync<TSchema extends BaseSchemaAsync>(
   schema: TSchema,
-  action: (value: unknown) => unknown
+  action: (input: unknown) => unknown
 ): TSchema {
   return {
     ...schema,
-    async _parse(input, info) {
-      return schema._parse(await action(input), info);
+    async _parse(input, config) {
+      return schema._parse(await action(input), config);
     },
   };
 }

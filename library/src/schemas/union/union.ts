@@ -2,11 +2,14 @@ import type {
   BaseSchema,
   ErrorMessage,
   Input,
-  Issues,
   MaybeReadonly,
   Output,
+  Pipe,
+  TypedSchemaResult,
+  UntypedSchemaResult,
 } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
+import { subissues } from './utils/index.ts';
 
 /**
  * Union options type.
@@ -16,10 +19,10 @@ export type UnionOptions = MaybeReadonly<BaseSchema[]>;
 /**
  * Union schema type.
  */
-export type UnionSchema<
+export interface UnionSchema<
   TOptions extends UnionOptions,
-  TOutput = Output<TOptions[number]>
-> = BaseSchema<Input<TOptions[number]>, TOutput> & {
+  TOutput = Output<TOptions[number]>,
+> extends BaseSchema<Input<TOptions[number]>, TOutput> {
   /**
    * The schema type.
    */
@@ -31,61 +34,127 @@ export type UnionSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
-};
+  message: ErrorMessage | undefined;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<Output<TOptions[number]>> | undefined;
+}
+
+/**
+ * Creates a union schema.
+ *
+ * @param options The union options.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns A union schema.
+ */
+export function union<TOptions extends UnionOptions>(
+  options: TOptions,
+  pipe?: Pipe<Output<TOptions[number]>>
+): UnionSchema<TOptions>;
 
 /**
  * Creates a union schema.
  *
  * @param options The union options.
  * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns A union schema.
  */
 export function union<TOptions extends UnionOptions>(
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage,
+  pipe?: Pipe<Output<TOptions[number]>>
+): UnionSchema<TOptions>;
+
+export function union<TOptions extends UnionOptions>(
+  options: TOptions,
+  arg2?: Pipe<Output<TOptions[number]>> | ErrorMessage,
+  arg3?: Pipe<Output<TOptions[number]>>
 ): UnionSchema<TOptions> {
+  // Get message and pipe argument
+  const [message, pipe] = defaultArgs(arg2, arg3);
+
+  // Create and return union schema
   return {
     type: 'union',
+    expects: [...new Set(options.map((option) => option.expects))].join(' | '),
     async: false,
     options,
     message,
-    _parse(input, info) {
-      // Create issues and output
-      let issues: Issues | undefined;
-      let output: [Output<TOptions[number]>] | undefined;
+    pipe,
+    _parse(input, config) {
+      // Create variables to collect results
+      let validResult: TypedSchemaResult<Output<TOptions[number]>> | undefined;
+      let untypedResults: UntypedSchemaResult[] | undefined;
+      let typedResults:
+        | TypedSchemaResult<Output<TOptions[number]>>[]
+        | undefined;
 
       // Parse schema of each option
       for (const schema of this.options) {
-        const result = schema._parse(input, info);
+        const result = schema._parse(input, config);
 
-        // If there are issues, capture them
-        if (result.issues) {
-          if (issues) {
-            for (const issue of result.issues) {
-              issues.push(issue);
-            }
+        // If typed, add valid or typed result
+        if (result.typed) {
+          // If there are no issues, add valid result and break loop
+          if (!result.issues) {
+            validResult = result;
+            break;
+
+            // Otherwise, add typed result
           } else {
-            issues = result.issues;
+            typedResults
+              ? typedResults.push(result)
+              : (typedResults = [result]);
           }
 
-          // Otherwise, set output and break loop
+          // Otherwise, add untyped result
         } else {
-          // Note: Output is nested in array, so that also a falsy value
-          // further down can be recognized as valid value
-          output = [result.output];
-          break;
+          untypedResults
+            ? untypedResults.push(result)
+            : (untypedResults = [result]);
         }
       }
 
-      // If there is an output, return parse result
-      if (output) {
-        return parseResult(true, output[0]);
+      // If there is a valid result, return pipe result
+      if (validResult) {
+        return pipeResult(this, validResult.output, config);
+      }
+
+      // If there are typed results, return pipe result
+      if (typedResults?.length) {
+        const firstResult = typedResults[0];
+        return pipeResult(
+          this,
+          firstResult.output,
+          config,
+          // Hint: If there is more than one typed result, we use a general
+          // union issue with subissues because the issues could contradict
+          // each other.
+          typedResults.length === 1
+            ? firstResult.issues
+            : schemaIssue(this, union, input, config, {
+                reason: 'union',
+                issues: subissues(typedResults),
+              }).issues
+        );
+      }
+
+      // If there is only one untyped result, return it
+      if (untypedResults?.length === 1) {
+        return untypedResults[0];
       }
 
       // Otherwise, return schema issue
-      return schemaIssue(info, 'type', 'union', this.message, input, issues);
+      // Hint: If there are zero or more than one untyped results, we use a
+      // general union issue with subissues because the issues could contradict
+      // each other.
+      return schemaIssue(this, union, input, config, {
+        issues: subissues(untypedResults),
+      });
     },
   };
 }

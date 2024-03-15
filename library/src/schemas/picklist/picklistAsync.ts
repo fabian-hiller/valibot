@@ -1,14 +1,14 @@
 import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
 import type { PicklistOptions } from './types.ts';
 
 /**
  * Picklist schema async type.
  */
-export type PicklistSchemaAsync<
+export interface PicklistSchemaAsync<
   TOptions extends PicklistOptions,
-  TOutput = TOptions[number]
-> = BaseSchemaAsync<TOptions[number], TOutput> & {
+  TOutput = TOptions[number],
+> extends BaseSchemaAsync<TOptions[number], TOutput> {
   /**
    * The schema type.
    */
@@ -20,8 +20,8 @@ export type PicklistSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
-};
+  message: ErrorMessage | undefined;
+}
 
 /**
  * Creates an async picklist schema.
@@ -31,33 +31,24 @@ export type PicklistSchemaAsync<
  *
  * @returns An async picklist schema.
  */
-export function picklistAsync<
-  TOption extends string,
-  TOptions extends PicklistOptions<TOption>
->(
+export function picklistAsync<const TOptions extends PicklistOptions>(
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage
 ): PicklistSchemaAsync<TOptions> {
   return {
     type: 'picklist',
+    expects: options.map(stringify).join(' | '),
     async: true,
     options,
     message,
-    async _parse(input, info) {
-      // Check type of input
-      if (!this.options.includes(input as any)) {
-        return schemaIssue(info, 'type', 'picklist', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return schema result
+      if (this.options.includes(input as any)) {
+        return schemaResult(true, input as TOptions[number]);
       }
 
-      // Return input as output
-      return parseResult(true, input as TOptions[number]);
+      // Otherwise, return schema issue
+      return schemaIssue(this, picklistAsync, input, config);
     },
   };
 }
-
-/**
- * See {@link picklistAsync}
- *
- * @deprecated Use `picklistAsync` instead.
- */
-export const enumTypeAsync = picklistAsync;

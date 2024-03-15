@@ -1,16 +1,10 @@
-import type { Issue, Issues } from './issues.ts';
-
-/**
- * Parse info type.
- */
-export type ParseInfo = Partial<
-  Pick<Issue, 'origin' | 'abortEarly' | 'abortPipeEarly' | 'skipPipe'>
->;
+import type { SchemaConfig } from './config.ts';
+import type { SchemaIssues } from './issues.ts';
 
 /**
  * Typed schema result type.
  */
-export type TypedSchemaResult<TOutput> = {
+export interface TypedSchemaResult<TOutput> {
   /**
    * Whether is's typed.
    */
@@ -22,13 +16,13 @@ export type TypedSchemaResult<TOutput> = {
   /**
    * The parse issues.
    */
-  issues?: Issues;
-};
+  issues?: SchemaIssues;
+}
 
 /**
- * Untyped parse result type.
+ * Untyped schema result type.
  */
-export type UntypedSchemaResult = {
+export interface UntypedSchemaResult {
   /**
    * Whether is's typed.
    */
@@ -40,8 +34,8 @@ export type UntypedSchemaResult = {
   /**
    * The parse issues.
    */
-  issues: Issues;
-};
+  issues: SchemaIssues;
+}
 
 /**
  * Schema result type.
@@ -53,7 +47,15 @@ export type SchemaResult<TOutput> =
 /**
  * Base schema type.
  */
-export type BaseSchema<TInput = any, TOutput = TInput> = {
+export interface BaseSchema<TInput = any, TOutput = TInput> {
+  /**
+   * The schema type.
+   */
+  type: string;
+  /**
+   * The expected property.
+   */
+  expects: string;
   /**
    * Whether it's async.
    */
@@ -62,25 +64,33 @@ export type BaseSchema<TInput = any, TOutput = TInput> = {
    * Parses unknown input based on its schema.
    *
    * @param input The input to be parsed.
-   * @param info The parse info.
+   * @param config The parse configuration.
    *
-   * @returns The parse result.
+   * @returns The schema result.
    *
    * @internal
    */
-  _parse(input: unknown, info?: ParseInfo): SchemaResult<TOutput>;
+  _parse(input: unknown, config?: SchemaConfig): SchemaResult<TOutput>;
   /**
    * Input and output type.
    *
    * @internal
    */
   _types?: { input: TInput; output: TOutput };
-};
+}
 
 /**
  * Base schema async type.
  */
-export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
+export interface BaseSchemaAsync<TInput = any, TOutput = TInput> {
+  /**
+   * The schema type.
+   */
+  type: string;
+  /**
+   * The expected property.
+   */
+  expects: string;
   /**
    * Whether it's async.
    */
@@ -89,20 +99,20 @@ export type BaseSchemaAsync<TInput = any, TOutput = TInput> = {
    * Parses unknown input based on its schema.
    *
    * @param input The input to be parsed.
-   * @param info The parse info.
+   * @param config The parse configuration.
    *
-   * @returns The parse result.
+   * @returns The schema result.
    *
    * @internal
    */
-  _parse(input: unknown, info?: ParseInfo): Promise<SchemaResult<TOutput>>;
+  _parse(input: unknown, config?: SchemaConfig): Promise<SchemaResult<TOutput>>;
   /**
    * Input and output type.
    *
    * @internal
    */
   _types?: { input: TInput; output: TOutput };
-};
+}
 
 /**
  * Input inference type.

@@ -1,9 +1,59 @@
 ---
 title: mimeType
+description: >-
+  Creates a pipeline validation action that validates the MIME type of a blob.
+source: /validations/mimeType/mimeType.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # mimeType
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/mimeType/mimeType.ts).
+Creates a pipeline validation action that validates the MIME type of a blob.
+
+```ts
+const Validation = mimeType<TInput, TRequirement>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `mimeType` you can validate the MIME type of a blob. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `mimeType` can be used.
+
+### Image schema
+
+Schema to validate an image file.
+
+```ts
+const ImageSchema = blob([
+  mimeType(['image/jpeg', 'image/png'], 'Please select a JPEG or PNG file.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `mimeType`.
+
+### Schemas
+
+<ApiList items={['any', 'blob', 'instance', 'special', 'unknown']} />

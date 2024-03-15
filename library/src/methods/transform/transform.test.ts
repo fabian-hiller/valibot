@@ -1,6 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import { number, object, string } from '../../schemas/index.ts';
-import { maxValue, minLength, minValue } from '../../validations/index.ts';
+import type {
+  Output,
+  TypedSchemaResult,
+  UntypedSchemaResult,
+} from '../../types/index.ts';
+import { maxValue, minLength } from '../../validations/index.ts';
 import { transform } from './transform.ts';
 
 describe('transform', () => {
@@ -39,13 +44,14 @@ describe('transform', () => {
       issues: [
         {
           reason: 'type',
-          validation: 'string',
-          origin: 'value',
-          message: 'Invalid type',
+          context: 'string',
+          expected: 'string',
+          received: '123',
+          message: 'Invalid type: Expected string but received 123',
           input: input,
         },
       ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 
   test('should return string issue', () => {
@@ -56,43 +62,20 @@ describe('transform', () => {
     const input = 'hello';
     const result = schema._parse(input);
     expect(result).toEqual({
-      typed: true,
-      output: 5,
+      typed: false,
+      output: 'hello',
       issues: [
         {
           reason: 'string',
-          validation: 'min_length',
-          origin: 'value',
-          message: 'Invalid length',
+          context: 'min_length',
+          expected: '>=10',
+          received: '5',
+          message: 'Invalid length: Expected >=10 but received 5',
           input: input,
           requirement: 10,
         },
       ],
-    });
-  });
-
-  test('should skip validation argument', () => {
-    const schema = transform(
-      string([minLength(10)]),
-      (output) => output.length,
-      number([minValue(10)])
-    );
-    const input = 'hello';
-    const result = schema._parse(input);
-    expect(result).toEqual({
-      typed: true,
-      output: 5,
-      issues: [
-        {
-          reason: 'string',
-          validation: 'min_length',
-          origin: 'value',
-          message: 'Invalid length',
-          input: input,
-          requirement: 10,
-        },
-      ],
-    });
+    } satisfies UntypedSchemaResult);
   });
 
   test('should validate output with pipe', () => {
@@ -107,14 +90,15 @@ describe('transform', () => {
       issues: [
         {
           reason: 'number',
-          validation: 'max_value',
-          origin: 'value',
-          message: 'Invalid value',
+          context: 'max_value',
+          expected: '<=5',
+          received: '6',
+          message: 'Invalid value: Expected <=5 but received 6',
           input: 6,
           requirement: 5,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 
   test('should validate output with schema', () => {
@@ -131,13 +115,14 @@ describe('transform', () => {
       issues: [
         {
           reason: 'number',
-          validation: 'max_value',
-          origin: 'value',
-          message: 'Invalid value',
+          context: 'max_value',
+          expected: '<=5',
+          received: '6',
+          message: 'Invalid value: Expected <=5 but received 6',
           input: 6,
           requirement: 5,
         },
       ],
-    });
+    } satisfies TypedSchemaResult<Output<typeof schema>>);
   });
 });

@@ -1,9 +1,151 @@
 ---
 title: omit
+description: >-
+  Creates an object schema that contains not the selected keys of an existing
+  schema.
+source: /methods/omit/omit.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # omit
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/omit/omit.ts).
+Creates an object schema that contains not the selected keys of an existing schema.
+
+```ts
+// Object schema with an optional pipe
+const Schema = omit<TSchema, TKeys>(schema, keys, pipe);
+
+// Object schema with an optional message and pipe
+const Schema = omit<TSchema, TKeys>(schema, keys, message, pipe);
+
+// Object schema with rest and optional pipe
+const Schema = omit<TSchema, TKeys, TRest>(schema, keys, rest, pipe);
+
+// Object schema with rest and optional message and pipe
+const Schema = omit<TSchema, TKeys, TRest>(schema, keys, rest, message, pipe);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TKeys` <Property {...properties.TKeys} />
+- `TRest` <Property {...properties.TRest} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `keys` <Property {...properties.keys} />
+- `rest` <Property {...properties.rest} />
+- `message` <Property {...properties.message} />
+- `pipe` <Property {...properties.pipe} />
+
+### Explanation
+
+`omit` creates a new object schema that does not contain the selected `keys` of the given object `schema`. It is similar to TypeScript's [`Omit`](https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys) utility type.
+
+> Note that `rest`, `message` and `pipe` of the passed schema are completely ignored and must be added again.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `omit` can be used.
+
+### Omit specific keys
+
+Schema that does not contain the selected keys of an existing schema.
+
+```ts
+const ObjectSchema = object({
+  key1: string(),
+  key2: number(),
+  key3: boolean(),
+});
+
+const OmitSchema = omit(ObjectSchema, ['key1', 'key2']);
+```
+
+## Related
+
+The following APIs can be combined with `omit`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'record',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'forward',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'merge',
+    'parse',
+    'partial',
+    'pick',
+    'required',
+    'safeParse',
+    'transform',
+    'unwrap',
+  ]}
+/>
+
+### Transformations
+
+<ApiList items={['toCustom']} />
+
+### Validations
+
+<ApiList items={['custom']} />

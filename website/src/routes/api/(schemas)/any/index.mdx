@@ -1,12 +1,14 @@
 ---
 title: any
 description: Creates an any schema.
+source: /schemas/any/any.ts
 contributors:
   - fabian-hiller
 ---
 
 import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # any
 
@@ -20,7 +22,7 @@ const Schema = any(pipe);
 
 ## Parameters
 
-- `pipe` <Property {...properties.pipe}/>
+- `pipe` <Property {...properties.pipe} />
 
 ## Returns
 
@@ -29,6 +31,28 @@ const Schema = any(pipe);
 ## Related
 
 The following APIs can be combined with `any`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
 
 ### Methods
 
@@ -69,13 +93,19 @@ The following APIs can be combined with `any`.
   items={[
     'bic',
     'bytes',
+    'creditCard',
     'cuid2',
     'custom',
+    'decimal',
     'email',
     'emoji',
     'endsWith',
+    'every',
     'excludes',
     'finite',
+    'hash',
+    'hexadecimal',
+    'hexColor',
     'imei',
     'includes',
     'integer',
@@ -106,9 +136,11 @@ The following APIs can be combined with `any`.
     'notLength',
     'notSize',
     'notValue',
+    'octal',
     'regex',
     'safeInteger',
     'size',
+    'some',
     'startsWith',
     'ulid',
     'url',
@@ -116,26 +148,3 @@ The following APIs can be combined with `any`.
     'value',
   ]}
 />
-
-export const properties = {
-  pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: ['any'],
-      },
-      'undefined',
-    ],
-  },
-  Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'AnySchema',
-        href: '../AnySchema/',
-      },
-    ],
-  },
-};

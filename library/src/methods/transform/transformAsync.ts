@@ -3,8 +3,8 @@ import type {
   BaseSchemaAsync,
   Input,
   Output,
-  ParseInfo,
   PipeAsync,
+  SchemaConfig,
   SchemaResult,
 } from '../../types/index.ts';
 import { pipeResultAsync } from '../../utils/index.ts';
@@ -15,10 +15,10 @@ import type { TransformInfo } from './types.ts';
  */
 export type SchemaWithTransformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 > = Omit<TSchema, 'async' | '_parse' | '_types'> & {
   async: true;
-  _parse(input: unknown, info?: ParseInfo): Promise<SchemaResult<TOutput>>;
+  _parse(input: unknown, config?: SchemaConfig): Promise<SchemaResult<TOutput>>;
   _types?: {
     input: Input<TSchema>;
     output: TOutput;
@@ -37,11 +37,11 @@ export type SchemaWithTransformAsync<
  */
 export function transformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 >(
   schema: TSchema,
   action: (
-    value: Output<TSchema>,
+    input: Output<TSchema>,
     info: TransformInfo
   ) => TOutput | Promise<TOutput>,
   pipe?: PipeAsync<TOutput>
@@ -53,29 +53,29 @@ export function transformAsync<
  *
  * @param schema The schema to be used.
  * @param action The transformation action.
- * @param validate A validation schema.
+ * @param validation A validation schema.
  *
  * @returns A transformed schema.
  */
 export function transformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 >(
   schema: TSchema,
   action: (
-    value: Output<TSchema>,
+    input: Output<TSchema>,
     info: TransformInfo
   ) => TOutput | Promise<TOutput>,
-  validate?: BaseSchema<TOutput> | BaseSchemaAsync<TOutput>
+  validation?: BaseSchema<TOutput> | BaseSchemaAsync<TOutput>
 ): SchemaWithTransformAsync<TSchema, TOutput>;
 
 export function transformAsync<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TOutput
+  TOutput,
 >(
   schema: TSchema,
   action: (
-    value: Output<TSchema>,
+    input: Output<TSchema>,
     info: TransformInfo
   ) => TOutput | Promise<TOutput>,
   arg1?: PipeAsync<TOutput> | BaseSchema<TOutput> | BaseSchemaAsync<TOutput>
@@ -83,34 +83,37 @@ export function transformAsync<
   return {
     ...schema,
     async: true,
-    async _parse(input, info) {
+    async _parse(input, config) {
       // Parse input with schema
-      const result = await schema._parse(input, info);
+      const result = await schema._parse(input, config);
 
-      // If result is typed, transform output
-      if (result.typed) {
+      // If there are issues, set typed to false
+      if (result.issues) {
+        result.typed = false;
+
+        // Otherwise, transform output
+      } else {
         result.output = await action(result.output, { issues: result.issues });
 
-        // If there are issues or no validation arg, return result
-        if (result.issues || !arg1) {
-          return result;
-        }
+        // If there is a validation arg, validate output
+        if (arg1) {
+          // If a pipeline is provided, return pipe result
+          // TODO: Investigate whether it simplifies the API to allow only a
+          // schema and not a pipeline
+          if (Array.isArray(arg1)) {
+            return pipeResultAsync(
+              { type: typeof result.output, pipe: arg1 },
+              result.output,
+              config
+            );
+          }
 
-        // Otherwise, if a pipe is provided, return pipe result
-        if (Array.isArray(arg1)) {
-          return pipeResultAsync(
-            result.output,
-            arg1,
-            info,
-            typeof result.output
-          );
+          // Otherwise, validate output with schema
+          return arg1._parse(result.output, config);
         }
-
-        // Otherwise, validate output with schema
-        return arg1._parse(result.output, info);
       }
 
-      // Otherwise, return untyped result
+      // Otherwise, return modified schema result
       return result;
     },
   };

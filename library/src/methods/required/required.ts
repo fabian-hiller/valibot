@@ -18,7 +18,7 @@ type Required<TEntries extends ObjectEntries> = {
 
 /**
  * Creates an object schema consisting of all properties of an existing object
- * schema set to none optional.
+ * schema set to non optional.
  *
  * @param schema The affected schema.
  * @param pipe A validation and transformation pipe.
@@ -32,7 +32,7 @@ export function required<TSchema extends ObjectSchema<any, any>>(
 
 /**
  * Creates an object schema consisting of all properties of an existing object
- * schema set to none optional.
+ * schema set to non optional.
  *
  * @param schema The affected schema.
  * @param message The error message.
@@ -48,7 +48,7 @@ export function required<TSchema extends ObjectSchema<any, any>>(
 
 /**
  * Creates an object schema consisting of all properties of an existing object
- * schema set to none optional.
+ * schema set to non optional.
  *
  * @param schema The affected schema.
  * @param rest The object rest.
@@ -58,7 +58,7 @@ export function required<TSchema extends ObjectSchema<any, any>>(
  */
 export function required<
   TSchema extends ObjectSchema<any, any>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -67,7 +67,7 @@ export function required<
 
 /**
  * Creates an object schema consisting of all properties of an existing object
- * schema set to none optional.
+ * schema set to non optional.
  *
  * @param schema The affected schema.
  * @param rest The object rest.
@@ -78,7 +78,7 @@ export function required<
  */
 export function required<
   TSchema extends ObjectSchema<any, any>,
-  TRest extends BaseSchema | undefined
+  TRest extends BaseSchema | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -88,7 +88,7 @@ export function required<
 
 export function required<
   TSchema extends ObjectSchema<any, any>,
-  TRest extends BaseSchema | undefined = undefined
+  TRest extends BaseSchema | undefined = undefined,
 >(
   schema: TSchema,
   arg2?:

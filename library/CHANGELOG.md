@@ -2,6 +2,68 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.30.0 (March 06, 2024)
+
+- Add `Default` and `DefaultAsync` type and refactor codebase
+- Add `Fallback` and `FallbackAsync` type and refactor codebase
+- Add `isOfType` type guard util to check the type of an object
+- Refactor `getDefaults` and `getDefaultsAsync` method (pull request #259)
+- Refactor `getFallbacks` and `getFallbacksAsync` method (pull request #259)
+- Change type definitions from `type` to `interface` (pull request #259, #451)
+- Remove deprecated properties of `safeParse` and `safeParseAsync` method
+- Remove any deprecated method, schema and validation functions
+- Fix `NestedPath` type of `flatten` for async schemas (issue #456)
+- Fix implementation of `DefaultValue` type for transformed values
+
+## v0.29.0 (February 19, 2024)
+
+- Add `every` and `some` pipeline validation action
+- Add `input` of schema to `getter` function of `recursive` and `recursiveAsync` schema (pull request #441)
+- Change implementation of `transform` and `transformAsync` method to only run transformations if there are no issues (issue #436)
+- Rename `recursive` and `recursiveAsync` schema to `lazy` and `lazyAsync` (issue #440)
+- Fix bug in `i18n` util when using `setSchemaMessage`
+
+## v0.28.1 (February 06, 2024)
+
+- Fix bug in `union` and `unionAsync` schema for transformed inputs (issue #420)
+
+## v0.28.0 (February 05, 2024)
+
+> Note: The library has been revised and refactored. Therefore, not every change is listed in detail.
+
+- Add i18n feature, global configurations and improve error messages (pull request #397)
+- Add `number` and `bigint` to `PicklistOptions` type (issue #378)
+- Fix missing export of `forwardAsync` method (issue #412)
+
+## v0.27.1 (January 28, 2024)
+
+- Fix missing file extension for Deno (pull request #387)
+
+## v0.27.0 (January 24, 2024)
+
+- Remove `NonNullable`, `NonNullish` and `NonOptional` type
+- Add `NonNullableInput`, `NonNullableOutput`, `NonNullishInput`, `NonNullishOutput`, `NonOptionalInput` and `NonOptionalOutput` type
+- Improve type signature of `omit`, `omitAsync`, `pick` and `pickAsync` schema to also allow read-only object keys (issue #380)
+- Fix type of `pipe` argument at `intersect` and `intersectAsync` schema
+
+## v0.26.0 (January 16, 2024)
+
+- Improve performance of `enum_` and `enumAsync` schema by caching values
+- Change ISO timestamp regex to support timestamps with lower and higher millisecond accuracy (pull request #353)
+- Change issue handling of `union`, `unionAsync`, `variant` and `variantAsync` schema to improve developer experience
+- Fix bug in `getDefaults`, `getDefaultsAsync`, `getFallbacks` and `getFallbacksAsync` schema for falsy but not `undefined` values (issue #356)
+- Fix type of `pipe` argument at `union`, `unionAsync`, `variant` and `variantAsync` schema
+- Fix bug that broke pipeline execution in `union`, `unionAsync`, `variant` and `variantAsync` schema (issue #364)
+- Fix typo in type name of `startsWith` validation action (pull request #375)
+
+## v0.25.0 (December 26, 2023)
+
+- Add `creditCard`, `decimal`, `hash`, `hexadecimal`, `hexColor` and `octal` pipeline validation action (pull request #292, #304, #307, #308, #309)
+- Add `pipe` parameter to `intersect`, `intersectAsync`, `union`, `unionAsync`, `variant` and `variantAsync` schema (discussion #297)
+- Add support for multiple variant options with same discriminator key to `variant` and `variantAsync` schema (issue #310)
+- Add path to issues if discriminator key of `variant` and `variantAsync` schema is missing (issue #235, #303)
+- Change `PicklistOptions` type and generics of `picklist` and `picklistAsync` schema
+
 ## v0.24.1 (December 11, 2023)
 
 - Fix output type of optional `object` and `objectAsync` entries with default value (issue #286)

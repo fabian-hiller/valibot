@@ -4,7 +4,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Finite validation type.
  */
-export type FiniteValidation<TInput extends number> = BaseValidation<TInput> & {
+export interface FiniteValidation<TInput extends number>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -13,27 +14,32 @@ export type FiniteValidation<TInput extends number> = BaseValidation<TInput> & {
    * The validation function.
    */
   requirement: (input: TInput) => boolean;
-};
+}
 
 /**
- * Creates a validation function that validates whether a number is finite.
+ * Creates a pipeline validation action that validates whether a number is finite.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function finite<TInput extends number>(
-  message: ErrorMessage = 'Invalid finite number'
+  message?: ErrorMessage
 ): FiniteValidation<TInput> {
   return {
     type: 'finite',
+    expects: null,
     async: false,
     message,
     requirement: Number.isFinite,
-    _parse(input: TInput) {
-      return !this.requirement(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+    _parse(input) {
+      // If requirement is fulfilled, return action output
+      if (this.requirement(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, finite, input, 'finite');
     },
   };
 }

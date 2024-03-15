@@ -4,7 +4,7 @@ import { pipeResult } from '../../utils/index.ts';
 /**
  * Any schema type.
  */
-export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
+export interface AnySchema<TOutput = any> extends BaseSchema<any, TOutput> {
   /**
    * The schema type.
    */
@@ -13,7 +13,7 @@ export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
    * The validation and transformation pipeline.
    */
   pipe: Pipe<any> | undefined;
-};
+}
 
 /**
  * Creates an any schema.
@@ -25,10 +25,11 @@ export type AnySchema<TOutput = any> = BaseSchema<any, TOutput> & {
 export function any(pipe?: Pipe<any>): AnySchema {
   return {
     type: 'any',
+    expects: 'any',
     async: false,
     pipe,
-    _parse(input, info) {
-      return pipeResult(input, this.pipe, info, 'any');
+    _parse(input, config) {
+      return pipeResult(this, input, config);
     },
   };
 }

@@ -1,4 +1,4 @@
-import { Slot, component$ } from '@builder.io/qwik';
+import { component$, Slot } from '@builder.io/qwik';
 import clsx from 'clsx';
 import { type DefaultButtonProps, UnstyledButton } from './UnstyledButton';
 
@@ -16,12 +16,13 @@ type IconButtonProps = DefaultButtonProps & {
 export const IconButton = component$<IconButtonProps>(
   ({ label, variant, align, hideLabel, ...props }) => (
     <UnstyledButton
+      {...props}
       class={clsx(
-        'focus-ring group flex items-center rounded-xl',
-        align === 'right' && 'flex-row-reverse'
+        'focus-ring group flex items-center rounded-xl backdrop-blur',
+        align === 'right' && 'flex-row-reverse',
+        props.class
       )}
       aria-label={label}
-      {...props}
     >
       <div
         class={clsx(
@@ -37,7 +38,7 @@ export const IconButton = component$<IconButtonProps>(
       {!hideLabel && (
         <div
           class={clsx(
-            'mx-4 transition-colors group-hover:text-slate-700 dark:group-hover:text-slate-200 md:mx-6 md:text-lg lg:mx-8 lg:text-xl'
+            'mx-4 transition-colors group-hover:text-slate-700 md:mx-6 md:text-lg lg:mx-8 lg:text-xl dark:group-hover:text-slate-200'
           )}
         >
           {label}

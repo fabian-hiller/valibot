@@ -21,13 +21,19 @@
     transition: none !important;
   }
 
+  /* Monaco editor */
+  .monaco-editor,
+  .monaco-editor > div {
+    @apply border-0 outline-none lg:rounded-3xl;
+  }
+
   /* Lexend 400 */
   @font-face {
     font-family: 'Lexend';
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url(../fonts/lexend-400.woff2) format('woff2');
+    src: url(/fonts/lexend-400.woff2) format('woff2');
   }
 
   /* Lexend 500 */
@@ -36,7 +42,7 @@
     font-style: normal;
     font-weight: 500;
     font-display: swap;
-    src: url(../fonts/lexend-500.woff2) format('woff2');
+    src: url(/fonts/lexend-500.woff2) format('woff2');
   }
 
   /* Lexend Exa 500 */
@@ -45,18 +51,18 @@
     font-style: normal;
     font-weight: 500;
     font-display: swap;
-    src: url(../fonts/lexend-exa-500.woff2) format('woff2');
+    src: url(/fonts/lexend-exa-500.woff2) format('woff2');
   }
 
   /* Typography */
   .mdx :is(h1, h2, h3, h4) {
-    @apply scroll-mt-24 font-medium leading-normal text-slate-900 dark:text-slate-200 md:scroll-mt-32 md:leading-normal lg:scroll-mt-48 lg:leading-normal;
+    @apply scroll-mt-24 font-medium leading-normal text-slate-900 md:scroll-mt-32 md:leading-normal lg:scroll-mt-48 lg:leading-normal dark:text-slate-200;
   }
   .mdx h1 {
     @apply text-2xl md:text-3xl lg:text-4xl;
   }
   .mdx h2 {
-    @apply border-b-2 border-b-slate-200 pb-4 text-xl dark:border-b-slate-800 md:pb-6 md:text-2xl lg:pb-8 lg:text-3xl;
+    @apply border-b-2 border-b-slate-200 pb-4 text-xl md:pb-6 md:text-2xl lg:pb-8 lg:text-3xl dark:border-b-slate-800;
   }
   .mdx h3 {
     @apply text-lg md:text-xl lg:text-2xl;
@@ -70,12 +76,17 @@
 
   /* Blockquote */
   .mdx blockquote p {
-    @apply border-l-4 border-l-yellow-600 pl-6 dark:border-l-yellow-400 lg:pl-8;
+    @apply border-l-4 border-l-yellow-600 pl-6 lg:pl-8 dark:border-l-yellow-400;
   }
 
   /* Links */
   .mdx a {
     @apply focus-ring rounded-md text-sky-600 underline decoration-slate-400 decoration-dashed underline-offset-[3px] focus-visible:outline-offset-4 focus-visible:ring-offset-[6px] dark:text-sky-400 dark:decoration-slate-600;
+  }
+
+  /* Images */
+  .mdx img {
+    @apply w-auto rounded-2xl border-2 border-slate-200 lg:rounded-3xl lg:border-[3px] dark:border-slate-800;
   }
 
   /* Lists */
@@ -97,13 +108,13 @@
 
   /* Table */
   .mdx .table-wrapper {
-    @apply overflow-x-auto rounded-2xl border-2 border-slate-200 px-5 py-2.5 dark:border-slate-800 lg:rounded-3xl lg:border-[3px] lg:px-10 lg:py-7;
+    @apply overflow-x-auto rounded-2xl border-2 border-slate-200 px-5 py-2.5 lg:rounded-3xl lg:border-[3px] lg:px-10 lg:py-7 dark:border-slate-800;
   }
   .mdx table {
     @apply w-full md:text-lg lg:text-xl;
   }
   .mdx tbody tr {
-    @apply border-t-[1px] border-t-slate-200 dark:border-t-slate-800 lg:border-t-2;
+    @apply border-t-[1px] border-t-slate-200 lg:border-t-2 dark:border-t-slate-800;
   }
   .mdx th {
     @apply text-left font-medium text-slate-700 dark:text-slate-300;
@@ -120,7 +131,7 @@
 
   /* Code */
   .mdx pre {
-    @apply overflow-x-auto rounded-2xl border-2 border-slate-200 p-5 leading-relaxed text-slate-700 dark:border-slate-800 dark:text-slate-300 md:text-lg md:leading-relaxed lg:rounded-3xl lg:border-[3px] lg:p-10 lg:text-xl lg:leading-relaxed;
+    @apply overflow-x-auto rounded-2xl border-2 border-slate-200 p-5 leading-relaxed text-slate-700 md:text-lg md:leading-relaxed lg:rounded-3xl lg:border-[3px] lg:p-10 lg:text-xl lg:leading-relaxed dark:border-slate-800 dark:text-slate-300;
   }
   .mdx :not(pre) > code {
     @apply rounded-lg bg-slate-100 px-2 py-1 text-slate-700 dark:bg-gray-800 dark:text-slate-300;
@@ -136,7 +147,7 @@
   .mdx > :is(ul, ol) {
     @apply ml-12 mr-8 lg:ml-14 lg:mr-10;
   }
-  .mdx > :is(pre, .table-wrapper) {
+  .mdx > :is(img, pre, .table-wrapper) {
     @apply mx-3 lg:mx-10 2xl:mx-0;
   }
 

@@ -16,33 +16,33 @@ Another cool feature that my schemas allow you to do is to infer the input and o
 
 ## Infer input types
 
-The input type of a schema corresponds to the TypeScript type that the incoming data of a schema must match to be valid. To extract this type you use the utility type <Link href="/api/Input/">`Input`</Link> that I provide.
+The input type of a schema corresponds to the TypeScript type that the incoming data of a schema must match to be valid. To extract this type you use the utility type <Link href="/api/Input/">`Input`</Link>.
 
 > You are probably interested in input type only in special cases. I recommend you to use the output type in most cases.
 
 ```ts
-import { type Input, object, string } from 'valibot'; // 0.86 kB
+import * as v from 'valibot';
 
-const LoginSchema = object({
-  email: string(),
-  password: string(),
+const LoginSchema = v.object({
+  email: v.string(),
+  password: v.string(),
 });
 
-type LoginInput = Input<typeof LoginSchema>; // { email: string; password: string }
+type LoginInput = v.Input<typeof LoginSchema>; // { email: string; password: string }
 ```
 
 ## Infer output types
 
-The output type differs from the input type only if you use <Link href="/api/transform/">`transform`</Link> to transform the input of a schema after validation. The output type always corresponds to the return value of the <Link href="/api/parse/">`parse`</Link> method. To infer it, you use the utility type <Link href="/api/Output/">`Output`</Link>.
+The output type differs from the input type only if you use <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link> or <Link href="/api/nullish/">`nullish`</Link> with a default value or <Link href="/api/transform/">`transform`</Link> to transform the input of a schema after validation. The output type corresponds to the output of <Link href="/api/parse/">`parse`</Link> and <Link href="/api/safeParse/">`safeParse`</Link>. To infer it, you use the utility type <Link href="/api/Output/">`Output`</Link>.
 
 ```ts
-import { object, type Output, string, transform } from 'valibot'; // 0.93 kB
+import * as v from 'valibot';
 import { hashPassword } from '~/utils';
 
-const LoginSchema = transform(
-  object({
-    email: string(),
-    password: transform(string(), hashPassword),
+const LoginSchema = v.transform(
+  v.object({
+    email: v.string(),
+    password: v.transform(v.string(), hashPassword),
   }),
   (input) => {
     return {
@@ -52,5 +52,5 @@ const LoginSchema = transform(
   }
 );
 
-type LoginOutput = Output<typeof LoginSchema>; // { email: string; password: string; timestamp: string }
+type LoginOutput = v.Output<typeof LoginSchema>; // { email: string; password: string; timestamp: string }
 ```

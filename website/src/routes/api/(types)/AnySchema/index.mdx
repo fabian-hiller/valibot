@@ -6,50 +6,18 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # AnySchema
 
 Any schema type.
+
+## Generics
+
+- `TOutput` <Property {...properties.TOutput} />
 
 ## Definition
 
 - `AnySchema` <Property {...properties.BaseSchema} />
   - `type` <Property {...properties.type} />
   - `pipe` <Property {...properties.pipe} />
-
-export const properties = {
-  BaseSchema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'BaseSchema',
-        href: '../BaseSchema/',
-        generics: [
-          'any',
-          {
-            type: 'custom',
-            name: 'TOutput',
-            default: 'any',
-          },
-        ],
-      },
-    ],
-  },
-  type: {
-    type: {
-      type: 'string',
-      value: 'any',
-    },
-  },
-  pipe: {
-    type: [
-      {
-        type: 'custom',
-        name: 'Pipe',
-        href: '../Pipe/',
-        generics: ['any'],
-      },
-      'undefined',
-    ],
-  },
-};

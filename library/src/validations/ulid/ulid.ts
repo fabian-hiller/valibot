@@ -5,7 +5,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * ULID validation type.
  */
-export type UlidValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface UlidValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,27 +15,32 @@ export type UlidValidation<TInput extends string> = BaseValidation<TInput> & {
    * The ULID regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
- * Creates a validation function that validates a [ULID](https://github.com/ulid/spec).
+ * Creates a pipeline validation action that validates a [ULID](https://github.com/ulid/spec).
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function ulid<TInput extends string>(
-  message: ErrorMessage = 'Invalid ULID'
+  message?: ErrorMessage
 ): UlidValidation<TInput> {
   return {
     type: 'ulid',
+    expects: null,
     async: false,
     message,
     requirement: ULID_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, ulid, input, 'ULID');
     },
   };
 }

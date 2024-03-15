@@ -1,20 +1,17 @@
 import { getDefault } from '../../methods/index.ts';
-import type { BaseSchema, Input, Output } from '../../types/index.ts';
-import { parseResult } from '../../utils/index.ts';
+import type { BaseSchema, Default, Input, Output } from '../../types/index.ts';
+import { schemaResult } from '../../utils/index.ts';
 
 /**
  * Optional schema type.
  */
-export type OptionalSchema<
+export interface OptionalSchema<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined = undefined,
+  TDefault extends Default<TWrapped> = undefined,
   TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
     ? Output<TWrapped>
-    : Output<TWrapped> | undefined
-> = BaseSchema<Input<TWrapped> | undefined, TOutput> & {
+    : Output<TWrapped> | undefined,
+> extends BaseSchema<Input<TWrapped> | undefined, TOutput> {
   /**
    * The schema type.
    */
@@ -27,7 +24,7 @@ export type OptionalSchema<
    * Returns the default value.
    */
   default: TDefault;
-};
+}
 
 /**
  * Creates a optional schema.
@@ -50,36 +47,32 @@ export function optional<TWrapped extends BaseSchema>(
  */
 export function optional<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined
+  TDefault extends Default<TWrapped>,
 >(wrapped: TWrapped, default_: TDefault): OptionalSchema<TWrapped, TDefault>;
 
 export function optional<
   TWrapped extends BaseSchema,
-  TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | undefined)
-    | undefined = undefined
+  TDefault extends Default<TWrapped> = undefined,
 >(wrapped: TWrapped, default_?: TDefault): OptionalSchema<TWrapped, TDefault> {
   return {
     type: 'optional',
+    expects: `${wrapped.expects} | undefined`,
     async: false,
     wrapped,
     default: default_ as TDefault,
-    _parse(input, info) {
-      // Allow `undefined` to pass or override it with default value
+    _parse(input, config) {
+      // If input is `undefined`, return typed schema result or override it
+      // with default value
       if (input === undefined) {
         const override = getDefault(this);
         if (override === undefined) {
-          return parseResult(true, input);
+          return schemaResult(true, input);
         }
         input = override;
       }
 
       // Otherwise, return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      return this.wrapped._parse(input, config);
     },
   };
 }

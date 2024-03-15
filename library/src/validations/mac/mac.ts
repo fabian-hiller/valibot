@@ -5,37 +5,43 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * MAC validation type.
  */
-export type MacValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface MacValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
   type: 'mac';
   /**
-   * The MAC 48 and 64 bit regex.
+   * The 48-bit and 64-bit MAC regex.
    */
   requirement: [RegExp, RegExp];
-};
+}
 
 /**
- * Creates a validation function that validates a [MAC](https://en.wikipedia.org/wiki/MAC_address).
+ * Creates a pipeline validation action that validates a [MAC address](https://en.wikipedia.org/wiki/MAC_address).
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function mac<TInput extends string>(
-  message: ErrorMessage = 'Invalid MAC'
+  message?: ErrorMessage
 ): MacValidation<TInput> {
   return {
     type: 'mac',
+    expects: null,
     async: false,
     message,
+    // TODO: It is strange that we have an OR relationship between requirements
     requirement: [MAC48_REGEX, MAC64_REGEX],
     _parse(input) {
-      return !this.requirement[0].test(input) &&
-        !this.requirement[1].test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement[0].test(input) || this.requirement[1].test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, mac, input, 'MAC');
     },
   };
 }

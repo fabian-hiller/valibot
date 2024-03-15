@@ -1,6 +1,6 @@
 import { component$, type HTMLAttributes } from '@builder.io/qwik';
 
-export const ArrowRightIcon = component$<HTMLAttributes<HTMLElement>>(
+export const ArrowRightIcon = component$<HTMLAttributes<SVGSVGElement>>(
   (props) => (
     <svg
       viewBox="0 0 45 48"

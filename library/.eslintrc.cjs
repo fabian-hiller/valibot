@@ -28,6 +28,9 @@ module.exports = {
     'regexp/require-unicode-regexp': 'error', // /u flag is faster and enables regexp strict mode
     'regexp/prefer-regexp-exec': 'error', // Enforce that RegExp#exec is used instead of String#match if no global flag is provided, as exec is faster
 
+    // TypeScript
+    '@typescript-eslint/consistent-type-definitions': 'error', // Enforce declaring types using `interface` keyword for better TS performance.
+
     // Redos detector
     'redos-detector/no-unsafe-regex': ['error', { ignoreError: true }], // Prevent DoS regexps
 

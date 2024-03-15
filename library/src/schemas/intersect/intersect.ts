@@ -1,10 +1,16 @@
 import type {
   BaseSchema,
   ErrorMessage,
-  Issues,
   MaybeReadonly,
+  Pipe,
+  SchemaIssues,
 } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import {
+  defaultArgs,
+  pipeResult,
+  schemaIssue,
+  schemaResult,
+} from '../../utils/index.ts';
 import type { IntersectInput, IntersectOutput } from './types.ts';
 import { mergeOutputs } from './utils/index.ts';
 
@@ -18,10 +24,10 @@ export type IntersectOptions = MaybeReadonly<
 /**
  * Intersect schema type.
  */
-export type IntersectSchema<
+export interface IntersectSchema<
   TOptions extends IntersectOptions,
-  TOutput = IntersectOutput<TOptions>
-> = BaseSchema<IntersectInput<TOptions>, TOutput> & {
+  TOutput = IntersectOutput<TOptions>,
+> extends BaseSchema<IntersectInput<TOptions>, TOutput> {
   /**
    * The schema type.
    */
@@ -33,36 +39,67 @@ export type IntersectSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
-};
+  message: ErrorMessage | undefined;
+  /**
+   * The validation and transformation pipeline.
+   */
+  pipe: Pipe<IntersectOutput<TOptions>> | undefined;
+}
+
+/**
+ * Creates an intersect schema.
+ *
+ * @param options The intersect options.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An intersect schema.
+ */
+export function intersect<TOptions extends IntersectOptions>(
+  options: TOptions,
+  pipe?: Pipe<IntersectOutput<TOptions>>
+): IntersectSchema<TOptions>;
 
 /**
  * Creates an intersect schema.
  *
  * @param options The intersect options.
  * @param message The error message.
+ * @param pipe A validation and transformation pipe.
  *
  * @returns An intersect schema.
  */
 export function intersect<TOptions extends IntersectOptions>(
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage,
+  pipe?: Pipe<IntersectOutput<TOptions>>
+): IntersectSchema<TOptions>;
+
+export function intersect<TOptions extends IntersectOptions>(
+  options: TOptions,
+  arg2?: Pipe<IntersectOutput<TOptions>> | ErrorMessage,
+  arg3?: Pipe<IntersectOutput<TOptions>>
 ): IntersectSchema<TOptions> {
+  // Get message and pipe argument
+  const [message, pipe] = defaultArgs(arg2, arg3);
+
+  // Create and return intersect schema
   return {
     type: 'intersect',
+    expects: [...new Set(options.map((option) => option.expects))].join(' & '),
     async: false,
     options,
     message,
-    _parse(input, info) {
+    pipe,
+    _parse(input, config) {
       // Create typed, issues, output and outputs
       let typed = true;
-      let issues: Issues | undefined;
+      let issues: SchemaIssues | undefined;
       let output: any;
       const outputs: any[] = [];
 
       // Parse schema of each option
       for (const schema of this.options) {
-        const result = schema._parse(input, info);
+        const result = schema._parse(input, config);
 
         // If there are issues, capture them
         if (result.issues) {
@@ -75,7 +112,7 @@ export function intersect<TOptions extends IntersectOptions>(
           }
 
           // If necessary, abort early
-          if (info?.abortEarly) {
+          if (config?.abortEarly) {
             typed = false;
             break;
           }
@@ -101,26 +138,19 @@ export function intersect<TOptions extends IntersectOptions>(
 
           // If outputs can't be merged, return issue
           if (result.invalid) {
-            return schemaIssue(info, 'type', 'intersect', this.message, input);
+            return schemaIssue(this, intersect, input, config);
           }
 
           // Otherwise, set merged output
           output = result.output;
         }
 
-        // Return typed parse result
-        return parseResult(true, output, issues);
+        // Execute pipe and return typed schema result
+        return pipeResult(this, output, config, issues);
       }
 
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      // Otherwise, return untyped schema result
+      return schemaResult(false, output, issues as SchemaIssues);
     },
   };
 }
-
-/**
- * See {@link intersect}
- *
- * @deprecated Use `intersect` instead.
- */
-export const intersection = intersect;

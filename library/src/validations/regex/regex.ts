@@ -4,7 +4,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Regex validation type.
  */
-export type RegexValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface RegexValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -13,29 +14,34 @@ export type RegexValidation<TInput extends string> = BaseValidation<TInput> & {
    * The regex pattern.
    */
   requirement: RegExp;
-};
+}
 
 /**
- * Creates a validation function that validates a string with a regex.
+ * Creates a pipeline validation action that validates a string with a regex.
  *
  * @param requirement The regex pattern.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function regex<TInput extends string>(
   requirement: RegExp,
-  message: ErrorMessage = 'Invalid regex'
+  message?: ErrorMessage
 ): RegexValidation<TInput> {
   return {
     type: 'regex',
+    expects: `${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, regex, input, 'format');
     },
   };
 }

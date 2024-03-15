@@ -5,7 +5,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * IP validation type.
  */
-export type IpValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface IpValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,29 +15,34 @@ export type IpValidation<TInput extends string> = BaseValidation<TInput> & {
    * The IPv4 and IPv6 regex.
    */
   requirement: [RegExp, RegExp];
-};
+}
 
 /**
- * Creates a validation function that validates an [IPv4](https://en.wikipedia.org/wiki/IPv4)
+ * Creates a pipeline validation action that validates an [IPv4](https://en.wikipedia.org/wiki/IPv4)
  * or [IPv6](https://en.wikipedia.org/wiki/IPv6) address.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function ip<TInput extends string>(
-  message: ErrorMessage = 'Invalid IP'
+  message?: ErrorMessage
 ): IpValidation<TInput> {
   return {
     type: 'ip',
+    expects: null,
     async: false,
     message,
+    // TODO: It is strange that we have an OR relationship between requirements
     requirement: [IPV4_REGEX, IPV6_REGEX],
     _parse(input) {
-      return !this.requirement[0].test(input) &&
-        !this.requirement[1].test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement[0].test(input) || this.requirement[1].test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, ip, input, 'IP');
     },
   };
 }

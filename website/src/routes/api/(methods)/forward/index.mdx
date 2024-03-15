@@ -1,9 +1,106 @@
 ---
 title: forward
+description: Forwards the issues of the passed validation action.
+source: /methods/forward/forward.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # forward
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/forward/forward.ts).
+Forwards the issues of the passed validation action.
+
+```ts
+const Validation = forward<TInput>(validation, pathList);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `validation` <Property {...properties.validation} />
+- `pathList` <Property {...properties.pathList} />
+
+### Explanation
+
+`forward` allows you to forward the issues of the passed `validation` action via a `pathList` to a nested field of a schema.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `forward` can be used.
+
+### Password schema
+
+Schema that ensures that the two passwords match.
+
+```ts
+const PasswordSchema = object(
+  {
+    password1: string([
+      minLength(1, 'Please enter your password.'),
+      minLength(8, 'Your password must have 8 characters or more.'),
+    ]),
+    password2: string(),
+  },
+  [
+    forward(
+      custom(
+        (input) => input.password1 === input.password2,
+        'The two passwords do not match.'
+      ),
+      ['password2']
+    ),
+  ]
+);
+```
+
+## Related
+
+The following APIs can be combined with `forward`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'object',
+    'record',
+    'special',
+    'tuple',
+    'union',
+    'unknown',
+    'variant',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={['merge', 'omit', 'partial', 'pick', 'required', 'transform']}
+/>
+
+### Validations
+
+<ApiList
+  items={[
+    'custom',
+    'every',
+    'excludes',
+    'includes',
+    'length',
+    'maxLength',
+    'minLength',
+    'notLength',
+    'some',
+  ]}
+/>

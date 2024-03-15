@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 
 type ApiListProps = {
-  label: string;
+  label?: string;
   items: string[];
 };
 

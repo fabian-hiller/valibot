@@ -12,7 +12,8 @@ import {
 /**
  * Date schema async type.
  */
-export type DateSchemaAsync<TOutput = Date> = BaseSchemaAsync<Date, TOutput> & {
+export interface DateSchemaAsync<TOutput = Date>
+  extends BaseSchemaAsync<Date, TOutput> {
   /**
    * The schema type.
    */
@@ -20,12 +21,12 @@ export type DateSchemaAsync<TOutput = Date> = BaseSchemaAsync<Date, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<Date> | undefined;
-};
+}
 
 /**
  * Creates an async date schema.
@@ -54,22 +55,23 @@ export function dateAsync(
   arg2?: PipeAsync<Date>
 ): DateSchemaAsync {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe] = defaultArgs(arg1, arg2);
 
   // Create and return async date schema
   return {
     type: 'date',
+    expects: 'Date',
     async: true,
     message,
     pipe,
-    async _parse(input, info) {
-      // Check type of input
-      if (!(input instanceof Date) || isNaN(input.getTime())) {
-        return schemaIssue(info, 'type', 'date', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return pipe result
+      if (input instanceof Date && !isNaN(input.getTime())) {
+        return pipeResultAsync(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResultAsync(input, this.pipe, info, 'date');
+      // Otherwise, return schema issue
+      return schemaIssue(this, dateAsync, input, config);
     },
   };
 }

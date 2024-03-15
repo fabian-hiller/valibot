@@ -18,7 +18,7 @@ import { defaultArgs } from '../defaultArgs/index.ts';
  */
 export function restAndDefaultArgs<
   TRest extends BaseSchema | BaseSchemaAsync | undefined,
-  TPipe extends Pipe<any> | PipeAsync<any>
+  TPipe extends Pipe<any> | PipeAsync<any>,
 >(
   arg1: TPipe | ErrorMessage | TRest | undefined,
   arg2: TPipe | ErrorMessage | undefined,

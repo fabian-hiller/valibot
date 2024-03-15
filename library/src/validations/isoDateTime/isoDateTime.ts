@@ -5,20 +5,20 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * ISO date time validation type.
  */
-export type IsoDateTimeValidation<TInput extends string> =
-  BaseValidation<TInput> & {
-    /**
-     * The validation type.
-     */
-    type: 'iso_date_time';
-    /**
-     * The ISO date time regex.
-     */
-    requirement: RegExp;
-  };
+export interface IsoDateTimeValidation<TInput extends string>
+  extends BaseValidation<TInput> {
+  /**
+   * The validation type.
+   */
+  type: 'iso_date_time';
+  /**
+   * The ISO date time regex.
+   */
+  requirement: RegExp;
+}
 
 /**
- * Creates a validation function that validates a datetime.
+ * Creates a pipeline validation action that validates a datetime.
  *
  * Format: yyyy-mm-ddThh:mm
  *
@@ -28,20 +28,25 @@ export type IsoDateTimeValidation<TInput extends string> =
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function isoDateTime<TInput extends string>(
-  message: ErrorMessage = 'Invalid date-time'
+  message?: ErrorMessage
 ): IsoDateTimeValidation<TInput> {
   return {
     type: 'iso_date_time',
+    expects: null,
     async: false,
     message,
     requirement: ISO_DATE_TIME_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, isoDateTime, input, 'date-time');
     },
   };
 }

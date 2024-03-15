@@ -1,11 +1,13 @@
 ---
 title: enum_
 description: Creates an enum schema.
+source: /schemas/enum/enum.ts
 contributors:
   - fabian-hiller
 ---
 
 import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # enum\_
 
@@ -21,7 +23,7 @@ const Schema = enum_<TEnum>(enum_, message);
 
 ## Parameters
 
-- `enum_` {/* prettier-ignore */}<Property {...properties.enum_}/>
+- `enum_` {/* prettier-ignore */}<Property {...properties.enum_} />
 - `message` <Property {...properties.message} />
 
 ### Explanation
@@ -53,6 +55,28 @@ const DirectionSchema = enum_(Direction, 'Invalid direction');
 
 The following APIs can be combined with `enum_`.
 
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'optional',
+    'record',
+    'set',
+    'tuple',
+    'union',
+  ]}
+/>
+
 ### Methods
 
 <ApiList
@@ -70,42 +94,3 @@ The following APIs can be combined with `enum_`.
     'transform',
   ]}
 />
-
-export const properties = {
-  TEnum: {
-    type: {
-      type: 'custom',
-      name: 'Enum',
-      href: '../Enum/',
-    },
-  },
-  enum_: {
-    type: {
-      type: 'custom',
-      name: 'TEnum',
-    },
-  },
-  message: {
-    type: [
-      {
-        type: 'custom',
-        name: 'ErrorMessage',
-        href: '../ErrorMessage/',
-      },
-      'undefined',
-    ],
-    default: {
-      type: 'string',
-      value: 'Invalid type',
-    },
-  },
-  Schema: {
-    type: [
-      {
-        type: 'custom',
-        name: 'EnumSchema',
-        href: '../EnumSchema/',
-      },
-    ],
-  },
-};

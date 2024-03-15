@@ -1,12 +1,12 @@
 /* Important */
-code.language-bash *,
-code .imports * {
+code.language-bash * {
   @apply text-slate-700 dark:text-slate-300 !important;
 }
 
 /* Gray */
 code .script,
-code .spread {
+code .spread,
+code .imports span {
   @apply text-slate-700 dark:text-slate-300;
 }
 code .operator,
@@ -42,7 +42,9 @@ code .tag .script .function {
 
 /* Teal */
 code .keyword,
-code .builtin {
+code .builtin,
+code .boolean,
+code .imports .operator {
   @apply text-teal-600 dark:text-teal-400;
 }
 

@@ -26,6 +26,6 @@ describe('integer', () => {
   test('should return custom error message', () => {
     const error = 'Value is not an integer!';
     const validate = integer(error);
-    expect(validate._parse(3.14).issues?.[0].message).toBe(error);
+    expect(validate._parse(3.14).issues?.[0].context.message).toBe(error);
   });
 });

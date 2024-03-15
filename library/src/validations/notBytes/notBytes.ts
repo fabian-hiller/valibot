@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Not bytes validation type.
  */
-export type NotBytesValidation<
+export interface NotBytesValidation<
   TInput extends string,
-  TRequirement extends number
-> = BaseValidation<TInput> & {
+  TRequirement extends number,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,29 +16,37 @@ export type NotBytesValidation<
    * The byte length.
    */
   requirement: TRequirement;
-};
+}
 
 /**
- * Creates a validation function that validates the byte length of a string.
+ * Creates a pipeline validation action that validates the bytes of a string.
  *
- * @param requirement The byte length.
+ * @param requirement The bytes.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function notBytes<TInput extends string, TRequirement extends number>(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid byte length'
+  message?: ErrorMessage
 ): NotBytesValidation<TInput, TRequirement> {
   return {
     type: 'not_bytes',
+    expects: `!${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return new TextEncoder().encode(input).length === this.requirement
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // Calculate byte length
+      const length = new TextEncoder().encode(input).length;
+
+      // If requirement is fulfilled, return action output
+      if (length !== this.requirement) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, notBytes, input, 'bytes', `${length}`);
     },
   };
 }

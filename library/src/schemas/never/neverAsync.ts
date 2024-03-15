@@ -4,7 +4,7 @@ import { schemaIssue } from '../../utils/index.ts';
 /**
  * Never schema async type.
  */
-export type NeverSchemaAsync = BaseSchemaAsync<never> & {
+export interface NeverSchemaAsync extends BaseSchemaAsync<never> {
   /**
    * The schema type.
    */
@@ -12,8 +12,8 @@ export type NeverSchemaAsync = BaseSchemaAsync<never> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
-};
+  message: ErrorMessage | undefined;
+}
 
 /**
  * Creates an async never schema.
@@ -22,15 +22,14 @@ export type NeverSchemaAsync = BaseSchemaAsync<never> & {
  *
  * @returns An async never schema.
  */
-export function neverAsync(
-  message: ErrorMessage = 'Invalid type'
-): NeverSchemaAsync {
+export function neverAsync(message?: ErrorMessage): NeverSchemaAsync {
   return {
     type: 'never',
+    expects: 'never',
     async: true,
     message,
-    async _parse(input, info) {
-      return schemaIssue(info, 'type', 'never', this.message, input);
+    async _parse(input, config) {
+      return schemaIssue(this, neverAsync, input, config);
     },
   };
 }

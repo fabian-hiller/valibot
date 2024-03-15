@@ -4,8 +4,8 @@ description: >-
   Even though my API resembles other solutions at first glance, the
   implementation and structure of the source code is very different.
 contributors:
-  - nikolailehbrink
   - fabian-hiller
+  - nikolailehbrink
   - Neon-20
 ---
 
@@ -23,8 +23,9 @@ However, perhaps the biggest advantage is that a bundler can use the import stat
 
 This can make a big difference, especially for client-side validation, as it reduces the bundle size and, depending on the framework, speeds up the startup time.
 
+{/* prettier-ignore */}
 ```ts
-import { email, minLength, object, string } from 'valibot'; // 1.06 kB
+import { email, minLength, object, string } from 'valibot'; // 1.4 kB
 
 const LoginSchema = object({
   email: string([
@@ -40,8 +41,9 @@ const LoginSchema = object({
 
 ### Comparison with Zod
 
-For example, to validate a simple login form, [Zod](https://zod.dev/) requires [11.8 kB](https://bundlejs.com/?q=zod&treeshake=%5B%7B+object%2Cstring+%7D%5D) whereas I require only [1.06 kB](https://bundlejs.com/?q=valibot&treeshake=%5B%7B+email%2CminLength%2Cobject%2Cstring+%7D%5D). That's a 91 % reduction in bundle size. This is due to the fact that Zod's functions have several methods with additional functionalities, that cannot be easily removed by current bundlers when they are not executed in your source code.
+For example, to validate a simple login form, [Zod](https://zod.dev/) requires [11.8 kB](https://bundlejs.com/?q=zod&treeshake=%5B%7B+object%2Cstring+%7D%5D) whereas I require only [1.4 kB](https://bundlejs.com/?q=valibot&treeshake=%5B%7B+email%2CminLength%2Cobject%2Cstring+%7D%5D). That's a 88 % reduction in bundle size. This is due to the fact that Zod's functions have several methods with additional functionalities, that cannot be easily removed by current bundlers when they are not executed in your source code.
 
+{/* prettier-ignore */}
 ```ts
 import { object, string } from 'zod'; // 11.8 kB
 
@@ -55,17 +57,10 @@ const LoginSchema = object({
 });
 ```
 
-## Bundle size
+## Performance
 
-Besides the individual bundle size, my overall size is also significantly smaller. This is due to the fact that my source code is simpler in structure, less complicated and optimized for compression. To be fair, in the following comparison you must take into account that the functionality between the listed libraries is different and this can have a big impact on the final numbers.
+With a schema library, a distinction must be made between startup performance and runtime performance. Startup performance describes the time required to load and initialize the library. This benchmark is mainly influenced by the bundle size and the amount of work required to create a schema. Runtime performance describes the time required to validate unknown data using a schema.
 
-| Library     | Minified size | Gzipped size | Compression rate |
-| ----------- | ------------- | ------------ | ---------------- |
-| Superstruct | 11.5 kB       | 3.4 kB       | 70.43 %          |
-| io-ts       | 20.5 kB       | 5.2 kB       | 74.63 %          |
-| Runtypes    | 30.6 kB       | 7.4 kB       | 75.82 %          |
-| **Valibot** | **46.7 kB**   | **7.5 kB**   | **83.94 %**      |
-| Yup         | 40.08 kB      | 12.4 kB      | 69.06 %          |
-| Zod         | 57 kB         | 13.2 kB      | 76.84 %          |
-| Ajv         | 119.6 kB      | 35.2 kB      | 70.57 %          |
-| Joi         | 151.1 kB      | 43 kB        | 71.54 %          |
+Since my implementation is optimized to minimize the bundle size and the effort of initialization, there is hardly a library that performs better in a [TTI](https://web.dev/articles/tti) benchmark than I do. In terms of runtime performance, I am in the midfield. Roughly speaking, I am about twice as fast as [Zod](https://zod.dev/), but much slower than [Typia](https://typia.io/) and [TypeBox](https://github.com/sinclairzx81/typebox), because I don't yet use a compiler that can generate optimal code, and my implementation doesn't allow the use of the [`Function`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/Function) constructor.
+
+> Further details on performance can be found in the [bachelor's thesis](/thesis.pdf) I am based on.

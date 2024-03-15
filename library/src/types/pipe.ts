@@ -1,16 +1,20 @@
-import type { Issue } from './issues.ts';
-import type { ErrorMessage } from './other.ts';
-import type { ParseInfo } from './schema.ts';
+import type { ErrorMessage } from './config.ts';
+import type { PipeActionIssues } from './issues.ts';
 
 /**
- * Pipe info type.
+ * Pipe action context type.
  */
-export type PipeInfo = ParseInfo & Pick<Issue, 'reason'>;
+export interface PipeActionContext {
+  type: string;
+  expects: string | null;
+  message: ErrorMessage | undefined;
+  requirement: unknown;
+}
 
 /**
  * Valid action result type.
  */
-export type ValidActionResult<TOutput> = {
+export interface ValidActionResult<TOutput> {
   /**
    * The pipe output.
    */
@@ -19,12 +23,12 @@ export type ValidActionResult<TOutput> = {
    * The pipe issues.
    */
   issues?: undefined;
-};
+}
 
 /**
  * Invalid action result type.
  */
-export type InvalidActionResult = {
+export interface InvalidActionResult {
   /**
    * The pipe output.
    */
@@ -32,11 +36,8 @@ export type InvalidActionResult = {
   /**
    * The pipe issues.
    */
-  issues: Pick<
-    Issue,
-    'validation' | 'message' | 'input' | 'requirement' | 'path'
-  >[];
-};
+  issues: PipeActionIssues;
+}
 
 /**
  * Pipe action result type.
@@ -48,55 +49,83 @@ export type PipeActionResult<TOutput> =
 /**
  * Base validation type.
  */
-export type BaseValidation<TInput = any> = {
+export interface BaseValidation<TInput = any> {
+  /**
+   * The validation type.
+   */
+  type: string;
+  /**
+   * The expected property.
+   */
+  expects: string | null;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage | undefined;
   /**
    * Whether it's async.
    */
   async: false;
   /**
-   * The error message.
+   * The validation requirement.
    */
-  message: ErrorMessage;
+  requirement: unknown;
   /**
    * Parses unknown input based on its requirement.
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
   _parse(input: TInput): PipeActionResult<TInput>;
-};
+}
 
 /**
  * Base validation async type.
  */
-export type BaseValidationAsync<TInput = any> = {
+export interface BaseValidationAsync<TInput = any> {
+  /**
+   * The validation type.
+   */
+  type: string;
+  /**
+   * The expected property.
+   */
+  expects: string | null;
+  /**
+   * The error message.
+   */
+  message: ErrorMessage | undefined;
   /**
    * Whether it's async.
    */
   async: true;
   /**
-   * The error message.
+   * The validation requirement.
    */
-  message: ErrorMessage;
+  requirement: unknown;
   /**
    * Parses unknown input based on its requirement.
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
   _parse(input: TInput): Promise<PipeActionResult<TInput>>;
-};
+}
 
 /**
  * Base transformation type.
  */
-export type BaseTransformation<TInput = any> = {
+export interface BaseTransformation<TInput = any> {
+  /**
+   * The transformation type.
+   */
+  type: string;
   /**
    * Whether it's async.
    */
@@ -106,17 +135,21 @@ export type BaseTransformation<TInput = any> = {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
   _parse(input: TInput): PipeActionResult<TInput>;
-};
+}
 
 /**
  * Base transformation async type.
  */
-export type BaseTransformationAsync<TInput = any> = {
+export interface BaseTransformationAsync<TInput = any> {
+  /**
+   * The transformation type.
+   */
+  type: string;
   /**
    * Whether it's async.
    */
@@ -126,12 +159,12 @@ export type BaseTransformationAsync<TInput = any> = {
    *
    * @param input The input to be parsed.
    *
-   * @returns The parse result.
+   * @returns The pipe action result.
    *
    * @internal
    */
   _parse(input: TInput): Promise<PipeActionResult<TInput>>;
-};
+}
 
 /**
  * Pipe type.

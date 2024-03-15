@@ -5,7 +5,8 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Emoji validation type.
  */
-export type EmojiValidation<TInput extends string> = BaseValidation<TInput> & {
+export interface EmojiValidation<TInput extends string>
+  extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -14,27 +15,32 @@ export type EmojiValidation<TInput extends string> = BaseValidation<TInput> & {
    * The emoji regex.
    */
   requirement: RegExp;
-};
+}
 
 /**
- * Creates a validation function that validates an emoji.
+ * Creates a pipeline validation action that validates an emoji.
  *
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function emoji<TInput extends string>(
-  message: ErrorMessage = 'Invalid emoji'
+  message?: ErrorMessage
 ): EmojiValidation<TInput> {
   return {
     type: 'emoji',
+    expects: null,
     async: false,
     message,
     requirement: EMOJI_REGEX,
     _parse(input) {
-      return !this.requirement.test(input)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (this.requirement.test(input)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, emoji, input, 'emoji');
     },
   };
 }

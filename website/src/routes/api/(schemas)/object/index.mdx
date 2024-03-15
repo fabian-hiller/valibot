@@ -1,9 +1,197 @@
 ---
 title: object
+description: Creates an object schema.
+source: /schemas/object/object.ts
 contributors:
   - fabian-hiller
+  - kazizi55
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # object
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/object/object.ts).
+Creates an object schema.
+
+```ts
+// Object schema with an optional pipe
+const Schema = object<TEntries>(entries, pipe);
+
+// Object schema with an optional message and pipe
+const Schema = object<TEntries>(entries, message, pipe);
+
+// Object schema with rest and optional pipe
+const Schema = object<TEntries, TRest>(entries, rest, pipe);
+
+// Object schema with rest and optional message and pipe
+const Schema = object<TEntries, TRest>(entries, rest, message, pipe);
+```
+
+## Generics
+
+- `TEntries` <Property {...properties.TEntries} />
+- `TRest` <Property {...properties.TRest} />
+
+## Parameters
+
+- `entries` <Property {...properties.entries} />
+- `rest` <Property {...properties.rest} />
+- `message` <Property {...properties.message} />
+- `pipe` <Property {...properties.pipe}/>
+
+### Explanation
+
+With `object` you can validate the data type of the input and whether the content matches `entries` and `rest`. With `pipe` you can transform and validate the further details of the object. If the input is not an object, you can use `message` to customize the error message.
+
+> By default, `object` removes unknown entries from the input. You can change and control this behavior with `rest`. Read more <Link href="/guides/objects/#rest-argument">here</Link>.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `object` can be used. Please see the <Link href="/guides/objects/">object guide</Link> for more examples and explanations.
+
+### Simple object schema
+
+Schema to validate an object with two keys.
+
+```ts
+const SimpleObjectSchema = object({
+  key1: string(),
+  key2: number(),
+});
+```
+
+### Object schema with rest
+
+Schema to validate an object with generic rest entries.
+
+```ts
+const ObjectSchemaWithRest = object(
+  {
+    key1: string(),
+    key2: number(),
+  },
+  boolean()
+);
+```
+
+### Strict object schema
+
+Schema to validate a strict object that prevent unknown entries.
+
+```ts
+const StrictObjectSchema = object(
+  {
+    key1: string(),
+    key2: number(),
+  },
+  never()
+);
+```
+
+### Merge objects
+
+Schema that merges the entries of two object schemas.
+
+```ts
+const MergedObjectSchema = merge([
+  object({ key1: string() }),
+  object({ key2: number() }),
+]);
+```
+
+### Partial object schema
+
+Schema to validate an object with partial entries.
+
+```ts
+const PartialObjectSchema = partial(
+  object({
+    key1: string(),
+    key2: number(),
+  })
+);
+```
+
+## Related
+
+The following APIs can be combined with `object`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'optional',
+    'picklist',
+    'record',
+    'set',
+    'special',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'brand',
+    'coerce',
+    'fallback',
+    'forward',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'merge',
+    'omit',
+    'parse',
+    'partial',
+    'pick',
+    'required',
+    'safeParse',
+    'transform',
+  ]}
+/>
+
+### Transformations
+
+<ApiList items={['toCustom']} />
+
+### Validations
+
+<ApiList items={['custom']} />

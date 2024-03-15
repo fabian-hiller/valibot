@@ -8,15 +8,15 @@ import {
   pipeResultAsync,
   schemaIssue,
 } from '../../utils/index.ts';
-import { type Class } from './instance.ts';
+import type { Class } from './types.ts';
 
 /**
  * Instance schema type.
  */
-export type InstanceSchemaAsync<
+export interface InstanceSchemaAsync<
   TClass extends Class,
-  TOutput = InstanceType<TClass>
-> = BaseSchemaAsync<InstanceType<TClass>, TOutput> & {
+  TOutput = InstanceType<TClass>,
+> extends BaseSchemaAsync<InstanceType<TClass>, TOutput> {
   /**
    * The schema type.
    */
@@ -28,12 +28,12 @@ export type InstanceSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<InstanceType<TClass>> | undefined;
-};
+}
 
 /**
  * Creates an async instance schema.
@@ -69,23 +69,24 @@ export function instanceAsync<TClass extends Class>(
   arg3?: PipeAsync<InstanceType<TClass>>
 ): InstanceSchemaAsync<TClass> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
     type: 'instance',
+    expects: class_.name,
     async: true,
     class: class_,
     message,
     pipe,
-    async _parse(input, info) {
-      // Check type of input
-      if (!(input instanceof this.class)) {
-        return schemaIssue(info, 'type', 'instance', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return pipe result
+      if (input instanceof this.class) {
+        return pipeResultAsync(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResultAsync(input, this.pipe, info, 'instance');
+      // Otherwise, return schema issue
+      return schemaIssue(this, instanceAsync, input, config);
     },
   };
 }

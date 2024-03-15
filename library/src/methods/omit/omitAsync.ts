@@ -8,10 +8,10 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ObjectKeys,
   PipeAsync,
 } from '../../types/index.ts';
 import { restAndDefaultArgs } from '../../utils/index.ts';
-import type { ObjectKeys } from './types.ts';
 
 /**
  * Creates an async object schema that contains only the selected keys of an
@@ -25,7 +25,7 @@ import type { ObjectKeys } from './types.ts';
  */
 export function omitAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends ObjectKeys<TSchema>
+  TKeys extends ObjectKeys<TSchema>,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -47,7 +47,7 @@ export function omitAsync<
  */
 export function omitAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TKeys extends ObjectKeys<TSchema>
+  TKeys extends ObjectKeys<TSchema>,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -71,7 +71,7 @@ export function omitAsync<
 export function omitAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   TKeys extends ObjectKeys<TSchema>,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -94,7 +94,7 @@ export function omitAsync<
 export function omitAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   TKeys extends ObjectKeys<TSchema>,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   schema: TSchema,
   keys: TKeys,
@@ -106,7 +106,7 @@ export function omitAsync<
 export function omitAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
   TKeys extends ObjectKeys<TSchema>,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
 >(
   schema: TSchema,
   keys: TKeys,

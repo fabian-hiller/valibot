@@ -1,14 +1,14 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
 import type { PicklistOptions } from './types.ts';
 
 /**
  * Picklist schema type.
  */
-export type PicklistSchema<
+export interface PicklistSchema<
   TOptions extends PicklistOptions,
-  TOutput = TOptions[number]
-> = BaseSchema<TOptions[number], TOutput> & {
+  TOutput = TOptions[number],
+> extends BaseSchema<TOptions[number], TOutput> {
   /**
    * The schema type.
    */
@@ -20,8 +20,8 @@ export type PicklistSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
-};
+  message: ErrorMessage | undefined;
+}
 
 /**
  * Creates a picklist schema.
@@ -31,33 +31,24 @@ export type PicklistSchema<
  *
  * @returns A picklist schema.
  */
-export function picklist<
-  TOption extends string,
-  TOptions extends PicklistOptions<TOption>
->(
+export function picklist<const TOptions extends PicklistOptions>(
   options: TOptions,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage
 ): PicklistSchema<TOptions> {
   return {
     type: 'picklist',
+    expects: options.map(stringify).join(' | '),
     async: false,
     options,
     message,
-    _parse(input, info) {
-      // Check type of input
-      if (!this.options.includes(input as any)) {
-        return schemaIssue(info, 'type', 'picklist', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return schema result
+      if (this.options.includes(input as any)) {
+        return schemaResult(true, input as TOptions[number]);
       }
 
-      // Return input as output
-      return parseResult(true, input as TOptions[number]);
+      // Otherwise, return schema issue
+      return schemaIssue(this, picklist, input, config);
     },
   };
 }
-
-/**
- * See {@link picklist}
- *
- * @deprecated Use `picklist` instead.
- */
-export const enumType = picklist;

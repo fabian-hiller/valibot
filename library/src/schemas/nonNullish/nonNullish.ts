@@ -1,23 +1,14 @@
-import type {
-  BaseSchema,
-  ErrorMessage,
-  Input,
-  Output,
-} from '../../types/index.ts';
+import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
 import { schemaIssue } from '../../utils/index.ts';
-
-/**
- * Non nullish type.
- */
-export type NonNullish<T> = T extends null | undefined ? never : T;
+import type { NonNullishInput, NonNullishOutput } from './types.ts';
 
 /**
  * Non nullish schema type.
  */
-export type NonNullishSchema<
+export interface NonNullishSchema<
   TWrapped extends BaseSchema,
-  TOutput = NonNullish<Output<TWrapped>>
-> = BaseSchema<NonNullish<Input<TWrapped>>, TOutput> & {
+  TOutput = NonNullishOutput<TWrapped>,
+> extends BaseSchema<NonNullishInput<TWrapped>, TOutput> {
   /**
    * The schema type.
    */
@@ -29,8 +20,8 @@ export type NonNullishSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
-};
+  message: ErrorMessage | undefined;
+}
 
 /**
  * Creates a non nullish schema.
@@ -42,21 +33,22 @@ export type NonNullishSchema<
  */
 export function nonNullish<TWrapped extends BaseSchema>(
   wrapped: TWrapped,
-  message: ErrorMessage = 'Invalid type'
+  message?: ErrorMessage
 ): NonNullishSchema<TWrapped> {
   return {
     type: 'non_nullish',
+    expects: '!null & !undefined',
     async: false,
     wrapped,
     message,
-    _parse(input, info) {
-      // Allow `null` and `undefined` values not to pass
+    _parse(input, config) {
+      // In input is `null` or `undefined`, return schema issue
       if (input === null || input === undefined) {
-        return schemaIssue(info, 'type', 'non_nullish', this.message, input);
+        return schemaIssue(this, nonNullish, input, config);
       }
 
-      // Return result of wrapped schema
-      return this.wrapped._parse(input, info);
+      // Otherwise, return result of wrapped schema
+      return this.wrapped._parse(input, config);
     },
   };
 }

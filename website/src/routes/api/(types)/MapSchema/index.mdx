@@ -1,0 +1,28 @@
+---
+title: MapSchema
+description: Map schema type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# MapSchema
+
+Map schema type.
+
+## Generics
+
+- `TKey` <Property {...properties.TKey} />
+- `TValue` <Property {...properties.TValue} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `MapSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `key` <Property {...properties.key} />
+  - `value` <Property {...properties.value} />
+  - `message` <Property {...properties.message} />
+  - `pipe` <Property {...properties.pipe} />

@@ -4,41 +4,52 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Starts with validation type.
  */
-export type StartsWithValidation<
+export interface StartsWithValidation<
   TInput extends string,
-  TRequirement extends string
-> = BaseValidation<TInput> & {
+  TRequirement extends string,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
-  type: 'stars_with';
+  type: 'starts_with';
   /**
    * The start string.
    */
   requirement: TRequirement;
-};
+}
 
 /**
- * Creates a validation function that validates the start of a string.
+ * Creates a pipeline validation action that validates the start of a string.
  *
  * @param requirement The start string.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function startsWith<TInput extends string, TRequirement extends string>(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid start'
+  message?: ErrorMessage
 ): StartsWithValidation<TInput, TRequirement> {
   return {
-    type: 'stars_with',
+    type: 'starts_with',
+    expects: `"${requirement}"`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return !input.startsWith(this.requirement)
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (input.startsWith(this.requirement)) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(
+        this,
+        startsWith,
+        input,
+        'start',
+        `"${input.slice(0, this.requirement.length)}"`
+      );
     },
   };
 }

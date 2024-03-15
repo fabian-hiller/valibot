@@ -1,10 +1,11 @@
 import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * Symbol schema type.
  */
-export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
+export interface SymbolSchema<TOutput = symbol>
+  extends BaseSchema<symbol, TOutput> {
   /**
    * The schema type.
    */
@@ -12,8 +13,8 @@ export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
   /**
    * The error message.
    */
-  message: ErrorMessage;
-};
+  message: ErrorMessage | undefined;
+}
 
 /**
  * Creates a symbol schema.
@@ -22,19 +23,20 @@ export type SymbolSchema<TOutput = symbol> = BaseSchema<symbol, TOutput> & {
  *
  * @returns A symbol schema.
  */
-export function symbol(message: ErrorMessage = 'Invalid type'): SymbolSchema {
+export function symbol(message?: ErrorMessage): SymbolSchema {
   return {
     type: 'symbol',
+    expects: 'symbol',
     async: false,
     message,
-    _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'symbol') {
-        return schemaIssue(info, 'type', 'symbol', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return schema result
+      if (typeof input === 'symbol') {
+        return schemaResult(true, input);
       }
 
-      // Return parse result
-      return parseResult(true, input);
+      // Otherwise, return schema issue
+      return schemaIssue(this, symbol, input, config);
     },
   };
 }

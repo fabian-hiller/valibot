@@ -6,68 +6,20 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # BaseValidation
 
 Base validation type.
 
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
 ## Definition
 
 - `BaseValidation` <Property {...properties.BaseValidation} />
-  - `async` <Property {...properties.async} />
+  - `expects` <Property {...properties.expects} />
   - `message` <Property {...properties.message} />
+  - `async` <Property {...properties.async} />
   - `_parse` {/* prettier-ignore */}<Property {...properties._parse} />
-
-export const properties = {
-  BaseValidation: {
-    type: {
-      type: 'custom',
-      name: 'Object',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TInput',
-          default: 'unknown',
-        },
-      ],
-    },
-  },
-  async: {
-    type: {
-      type: 'boolean',
-      value: false,
-    },
-  },
-  message: {
-    type: {
-      type: 'custom',
-      name: 'ErrorMessage',
-      href: '../ErrorMessage/',
-    },
-  },
-  _parse: {
-    type: {
-      type: 'function',
-      params: [
-        {
-          name: 'input',
-          type: {
-            type: 'custom',
-            name: 'TInput',
-          },
-        },
-      ],
-      return: {
-        type: 'custom',
-        name: 'PipeActionResult',
-        href: '../PipeActionResult/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'TInput',
-          },
-        ],
-      },
-    },
-  },
-};

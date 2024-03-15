@@ -7,6 +7,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # RecordPathItem
 
@@ -16,25 +17,7 @@ Record path item type.
 
 - `RecordPathItem` <Property type="object" />
   - `type` <Property {...properties.type} />
+  - `origin` <Property {...properties.origin} />
   - `input` <Property {...properties.input} />
   - `key` <Property {...properties.key} />
   - `value` <Property type="unknown" />
-
-export const properties = {
-  type: {
-    type: {
-      type: 'string',
-      value: 'record',
-    },
-  },
-  input: {
-    type: {
-      type: 'custom',
-      name: 'Record',
-      generics: [['string', 'number', 'symbol'], 'unknown'],
-    },
-  },
-  key: {
-    type: ['string', 'number', 'symbol'],
-  },
-};

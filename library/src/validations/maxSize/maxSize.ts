@@ -4,10 +4,10 @@ import { actionIssue, actionOutput } from '../../utils/index.ts';
 /**
  * Max size validation type.
  */
-export type MaxSizeValidation<
+export interface MaxSizeValidation<
   TInput extends Map<any, any> | Set<any> | Blob,
-  TRequirement extends number
-> = BaseValidation<TInput> & {
+  TRequirement extends number,
+> extends BaseValidation<TInput> {
   /**
    * The validation type.
    */
@@ -16,32 +16,38 @@ export type MaxSizeValidation<
    * The maximum size.
    */
   requirement: TRequirement;
-};
+}
 
 /**
- * Creates a validation function that validates the size of a map, set or blob.
+ * Creates a pipeline validation action that validates the size of a map, set
+ * or blob.
  *
  * @param requirement The maximum size.
  * @param message The error message.
  *
- * @returns A validation function.
+ * @returns A validation action.
  */
 export function maxSize<
   TInput extends Map<any, any> | Set<any> | Blob,
-  TRequirement extends number
+  TRequirement extends number,
 >(
   requirement: TRequirement,
-  message: ErrorMessage = 'Invalid size'
+  message?: ErrorMessage
 ): MaxSizeValidation<TInput, TRequirement> {
   return {
     type: 'max_size',
+    expects: `<=${requirement}`,
     async: false,
     message,
     requirement,
     _parse(input) {
-      return input.size > this.requirement
-        ? actionIssue(this.type, this.message, input, this.requirement)
-        : actionOutput(input);
+      // If requirement is fulfilled, return action output
+      if (input.size <= this.requirement) {
+        return actionOutput(input);
+      }
+
+      // Otherwise, return action issue
+      return actionIssue(this, maxSize, input, 'size', `${input.size}`);
     },
   };
 }

@@ -1,13 +1,11 @@
 import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { parseResult, schemaIssue } from '../../utils/index.ts';
+import { schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * Undefined schema async type.
  */
-export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
-  undefined,
-  TOutput
-> & {
+export interface UndefinedSchemaAsync<TOutput = undefined>
+  extends BaseSchemaAsync<undefined, TOutput> {
   /**
    * The schema type.
    */
@@ -15,8 +13,8 @@ export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
-};
+  message: ErrorMessage | undefined;
+}
 
 /**
  * Creates an async undefined schema.
@@ -25,28 +23,20 @@ export type UndefinedSchemaAsync<TOutput = undefined> = BaseSchemaAsync<
  *
  * @returns An async undefined schema.
  */
-export function undefinedAsync(
-  message: ErrorMessage = 'Invalid type'
-): UndefinedSchemaAsync {
+export function undefinedAsync(message?: ErrorMessage): UndefinedSchemaAsync {
   return {
     type: 'undefined',
+    expects: 'undefined',
     async: true,
     message,
-    async _parse(input, info) {
-      // Check type of input
-      if (typeof input !== 'undefined') {
-        return schemaIssue(info, 'type', 'undefined', this.message, input);
+    async _parse(input, config) {
+      // If type is valid, return schema result
+      if (input === undefined) {
+        return schemaResult(true, input);
       }
 
-      // Return parse result
-      return parseResult(true, input);
+      // Otherwise, return schema issue
+      return schemaIssue(this, undefinedAsync, input, config);
     },
   };
 }
-
-/**
- * See {@link undefinedAsync}
- *
- * @deprecated Use `undefinedAsync` instead.
- */
-export const undefinedTypeAsync = undefinedAsync;

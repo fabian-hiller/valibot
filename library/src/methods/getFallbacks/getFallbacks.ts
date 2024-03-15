@@ -4,7 +4,8 @@ import type {
   TupleItems,
   TupleSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema } from '../../types/index.ts';
+import type { BaseSchema } from '../../types/schema.ts';
+import { isOfType } from '../../utils/index.ts';
 import {
   getFallback,
   type SchemaWithMaybeFallback,
@@ -25,33 +26,28 @@ import type { FallbackValues } from './types.ts';
 export function getFallbacks<
   TSchema extends SchemaWithMaybeFallback<
     BaseSchema | ObjectSchema<ObjectEntries, any> | TupleSchema<TupleItems, any>
-  >
->(schema: TSchema): FallbackValues<TSchema> {
-  // Create fallbacks variable
-  let fallbacks: any;
-
-  // If schema has a fallback, set its value
-  if (schema.fallback) {
-    fallbacks = getFallback(schema);
-
-    // Otherwise, check if schema is of kind object or tuple
-  } else if ('type' in schema) {
-    // If it is an object schema, set object with fallback value of each entry
-    if (schema.type === 'object') {
-      fallbacks = {};
-      for (const key in schema.entries) {
-        fallbacks[key] = getFallbacks(schema.entries[key]);
-      }
-
-      // If it is a tuple schema, set array with fallback value of each item
-    } else if (schema.type === 'tuple') {
-      fallbacks = [];
-      for (let key = 0; key < schema.items.length; key++) {
-        fallbacks.push(getFallbacks(schema.items[key]));
-      }
-    }
+  >,
+>(schema: TSchema): FallbackValues<TSchema> | undefined {
+  // If schema has fallback, return its value
+  if (schema.fallback !== undefined) {
+    return getFallback(schema);
   }
 
-  // Return fallback values
-  return fallbacks;
+  // If it is an object schema, return fallback of each entry
+  if (isOfType('object', schema)) {
+    return Object.fromEntries(
+      Object.entries(schema.entries).map(([key, value]) => [
+        key,
+        getFallbacks(value),
+      ])
+    ) as FallbackValues<TSchema>;
+  }
+
+  // If it is a tuple schema, return fallback of each item
+  if (isOfType('tuple', schema)) {
+    return schema.items.map(getFallbacks) as FallbackValues<TSchema>;
+  }
+
+  // Otherwise, return undefined
+  return undefined;
 }

@@ -18,16 +18,16 @@ export type BrandName = string | number | symbol;
 /**
  * Brand type.
  */
-export type Brand<TName extends BrandName> = {
+export interface Brand<TName extends BrandName> {
   [BrandSymbol]: { [TValue in TName]: TValue };
-};
+}
 
 /**
  * Schema with brand type.
  */
 export type SchemaWithBrand<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TName extends BrandName
+  TName extends BrandName,
 > = Omit<TSchema, '_types'> & {
   _types?: {
     input: Input<TSchema>;
@@ -45,7 +45,7 @@ export type SchemaWithBrand<
  */
 export function brand<
   TSchema extends BaseSchema | BaseSchemaAsync,
-  TName extends BrandName
+  TName extends BrandName,
 >(
   schema: TSchema,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

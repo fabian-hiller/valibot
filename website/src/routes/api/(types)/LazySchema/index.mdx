@@ -1,0 +1,24 @@
+---
+title: LazySchema
+description: Lazy schema type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# LazySchema
+
+Lazy schema type.
+
+## Generics
+
+- `TGetter` <Property {...properties.TGetter} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `LazySchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `getter` <Property {...properties.getter} />

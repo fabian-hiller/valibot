@@ -3,25 +3,25 @@ import type {
   BaseSchemaAsync,
   ErrorMessage,
   Input,
-  Issues,
   Output,
   PipeAsync,
+  SchemaIssues,
 } from '../../types/index.ts';
 import {
   defaultArgs,
-  parseResult,
   pipeResultAsync,
   schemaIssue,
+  schemaResult,
 } from '../../utils/index.ts';
 import type { ArrayPathItem } from './types.ts';
 
 /**
  * Array schema async type.
  */
-export type ArraySchemaAsync<
+export interface ArraySchemaAsync<
   TItem extends BaseSchema | BaseSchemaAsync,
-  TOutput = Output<TItem>[]
-> = BaseSchemaAsync<Input<TItem>[], TOutput> & {
+  TOutput = Output<TItem>[],
+> extends BaseSchemaAsync<Input<TItem>[], TOutput> {
   /**
    * The schema type.
    */
@@ -33,12 +33,12 @@ export type ArraySchemaAsync<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
   pipe: PipeAsync<Output<TItem>[]> | undefined;
-};
+}
 
 /**
  * Creates an async array schema.
@@ -74,91 +74,93 @@ export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
   arg3?: PipeAsync<Output<TItem>[]>
 ): ArraySchemaAsync<TItem> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return async array schema
   return {
     type: 'array',
+    expects: 'Array',
     async: true,
     item,
     message,
     pipe,
-    async _parse(input, info) {
-      // Check type of input
-      if (!Array.isArray(input)) {
-        return schemaIssue(info, 'type', 'array', this.message, input);
-      }
+    async _parse(input, config) {
+      // If root type is valid, check nested types
+      if (Array.isArray(input)) {
+        // Create typed, issues and output
+        let typed = true;
+        let issues: SchemaIssues | undefined;
+        const output: any[] = [];
 
-      // Create typed, issues and output
-      let typed = true;
-      let issues: Issues | undefined;
-      const output: any[] = [];
-
-      // Parse schema of each array item
-      await Promise.all(
-        input.map(async (value, key) => {
-          // If not aborted early, continue execution
-          if (!(info?.abortEarly && issues)) {
-            // Parse schema of array item
-            const result = await this.item._parse(value, info);
-
+        // Parse schema of each array item
+        await Promise.all(
+          input.map(async (value, key) => {
             // If not aborted early, continue execution
-            if (!(info?.abortEarly && issues)) {
-              // If there are issues, capture them
-              if (result.issues) {
-                // Create array path item
-                const pathItem: ArrayPathItem = {
-                  type: 'array',
-                  input,
-                  key,
-                  value,
-                };
+            if (!(config?.abortEarly && issues)) {
+              // Parse schema of array item
+              const result = await this.item._parse(value, config);
 
-                // Add modified result issues to issues
-                for (const issue of result.issues) {
-                  if (issue.path) {
-                    issue.path.unshift(pathItem);
-                  } else {
-                    issue.path = [pathItem];
+              // If not aborted early, continue execution
+              if (!(config?.abortEarly && issues)) {
+                // If there are issues, capture them
+                if (result.issues) {
+                  // Create array path item
+                  const pathItem: ArrayPathItem = {
+                    type: 'array',
+                    origin: 'value',
+                    input,
+                    key,
+                    value,
+                  };
+
+                  // Add modified result issues to issues
+                  for (const issue of result.issues) {
+                    if (issue.path) {
+                      issue.path.unshift(pathItem);
+                    } else {
+                      issue.path = [pathItem];
+                    }
+                    issues?.push(issue);
                   }
-                  issues?.push(issue);
-                }
-                if (!issues) {
-                  issues = result.issues;
+                  if (!issues) {
+                    issues = result.issues;
+                  }
+
+                  // If necessary, abort early
+                  if (config?.abortEarly) {
+                    typed = false;
+                    throw null;
+                  }
                 }
 
-                // If necessary, abort early
-                if (info?.abortEarly) {
+                // If not typed, set typed to false
+                if (!result.typed) {
                   typed = false;
-                  throw null;
                 }
-              }
 
-              // If not typed, set typed to false
-              if (!result.typed) {
-                typed = false;
+                // Set output of item
+                output[key] = result.output;
               }
-
-              // Set output of item
-              output[key] = result.output;
             }
-          }
-        })
-      ).catch(() => null);
+          })
+        ).catch(() => null);
 
-      // If output is typed, execute pipe
-      if (typed) {
-        return pipeResultAsync(
-          output as Output<TItem>[],
-          this.pipe,
-          info,
-          'array',
-          issues
-        );
+        // If output is typed, return pipe result
+        if (typed) {
+          return pipeResultAsync(
+            this,
+            output as Output<TItem>[],
+            config,
+            issues
+          );
+        }
+
+        // Otherwise, return untyped schema result
+        return schemaResult(false, output, issues as SchemaIssues);
       }
 
-      // Otherwise, return untyped parse result
-      return parseResult(false, output, issues as Issues);
+      // Otherwise, return schema issue
+      return schemaIssue(this, arrayAsync, input, config);
     },
   };
 }

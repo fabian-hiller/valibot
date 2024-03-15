@@ -1,9 +1,9 @@
-import type { Issues } from '../../types/index.ts';
+import type { SchemaIssues } from '../../types/index.ts';
 
 /**
  * Fallback info type.
  */
-export type FallbackInfo = {
+export interface FallbackInfo {
   input: unknown;
-  issues: Issues;
-};
+  issues: SchemaIssues;
+}

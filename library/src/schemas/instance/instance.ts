@@ -1,18 +1,14 @@
 import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
 import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
-
-/**
- * Class enum type.
- */
-export type Class = abstract new (...args: any) => any;
+import type { Class } from './types.ts';
 
 /**
  * Instance schema type.
  */
-export type InstanceSchema<
+export interface InstanceSchema<
   TClass extends Class,
-  TOutput = InstanceType<TClass>
-> = BaseSchema<InstanceType<TClass>, TOutput> & {
+  TOutput = InstanceType<TClass>,
+> extends BaseSchema<InstanceType<TClass>, TOutput> {
   /**
    * The schema type.
    */
@@ -24,12 +20,12 @@ export type InstanceSchema<
   /**
    * The error message.
    */
-  message: ErrorMessage;
+  message: ErrorMessage | undefined;
   /**
    * The validation and transformation pipeline.
    */
   pipe: Pipe<InstanceType<TClass>> | undefined;
-};
+}
 
 /**
  * Creates an instance schema.
@@ -65,23 +61,24 @@ export function instance<TClass extends Class>(
   arg3?: Pipe<InstanceType<TClass>>
 ): InstanceSchema<TClass> {
   // Get message and pipe argument
-  const [message = 'Invalid type', pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
     type: 'instance',
+    expects: class_.name,
     async: false,
     class: class_,
     message,
     pipe,
-    _parse(input, info) {
-      // Check type of input
-      if (!(input instanceof this.class)) {
-        return schemaIssue(info, 'type', 'instance', this.message, input);
+    _parse(input, config) {
+      // If type is valid, return pipe result
+      if (input instanceof this.class) {
+        return pipeResult(this, input, config);
       }
 
-      // Execute pipe and return result
-      return pipeResult(input, this.pipe, info, 'instance');
+      // Otherwise, return schema issue
+      return schemaIssue(this, instance, input, config);
     },
   };
 }

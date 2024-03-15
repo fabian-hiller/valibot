@@ -24,7 +24,7 @@ type Required<TEntries extends ObjectEntriesAsync> = {
 
 /**
  * Creates an async object schema consisting of all properties of an existing
- * object schema set to none optional.
+ * object schema set to non optional.
  *
  * @param schema The affected schema.
  * @param pipe A validation and transformation pipe.
@@ -32,7 +32,7 @@ type Required<TEntries extends ObjectEntriesAsync> = {
  * @returns An async object schema.
  */
 export function requiredAsync<
-  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
 >(
   schema: TSchema,
   pipe?: PipeAsync<ObjectOutput<Required<TSchema['entries']>, undefined>>
@@ -40,7 +40,7 @@ export function requiredAsync<
 
 /**
  * Creates an async object schema consisting of all properties of an existing
- * object schema set to none optional.
+ * object schema set to non optional.
  *
  * @param schema The affected schema.
  * @param message The error message.
@@ -49,7 +49,7 @@ export function requiredAsync<
  * @returns An async object schema.
  */
 export function requiredAsync<
-  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>
+  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
 >(
   schema: TSchema,
   message?: ErrorMessage,
@@ -58,7 +58,7 @@ export function requiredAsync<
 
 /**
  * Creates an async object schema consisting of all properties of an existing
- * object schema set to none optional.
+ * object schema set to non optional.
  *
  * @param schema The affected schema.
  * @param rest The object rest.
@@ -68,7 +68,7 @@ export function requiredAsync<
  */
 export function requiredAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -77,7 +77,7 @@ export function requiredAsync<
 
 /**
  * Creates an async object schema consisting of all properties of an existing
- * object schema set to none optional.
+ * object schema set to non optional.
  *
  * @param schema The affected schema.
  * @param rest The object rest.
@@ -88,7 +88,7 @@ export function requiredAsync<
  */
 export function requiredAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined,
 >(
   schema: TSchema,
   rest: TRest,
@@ -98,7 +98,7 @@ export function requiredAsync<
 
 export function requiredAsync<
   TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined
+  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
 >(
   schema: TSchema,
   arg2?:

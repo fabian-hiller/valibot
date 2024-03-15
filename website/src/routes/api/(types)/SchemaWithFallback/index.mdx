@@ -1,0 +1,24 @@
+---
+title: SchemaWithFallback
+description: Schema with fallback type.
+contributors:
+  - fabian-hiller
+  - sqmasep
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# SchemaWithFallback
+
+Schema with fallback type.
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFallback` <Property {...properties.TFallback} />
+
+## Definition
+
+- `SchemaWithFallback` <Property {...properties.BaseSchema} />
+  - `fallback` <Property {...properties.fallback} />

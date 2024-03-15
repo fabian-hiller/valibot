@@ -7,6 +7,7 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # IssueReason
 
@@ -14,31 +15,4 @@ Issue reason type.
 
 ## Definition
 
-- `IssueReason` <Property {...properties.reason} />
-
-export const properties = {
-  reason: {
-    type: [
-      { type: 'string', value: 'any' },
-      { type: 'string', value: 'array' },
-      { type: 'string', value: 'bigint' },
-      { type: 'string', value: 'blob' },
-      { type: 'string', value: 'boolean' },
-      { type: 'string', value: 'date' },
-      { type: 'string', value: 'function' },
-      { type: 'string', value: 'instance' },
-      { type: 'string', value: 'map' },
-      { type: 'string', value: 'number' },
-      { type: 'string', value: 'object' },
-      { type: 'string', value: 'record' },
-      { type: 'string', value: 'set' },
-      { type: 'string', value: 'special' },
-      { type: 'string', value: 'string' },
-      { type: 'string', value: 'symbol' },
-      { type: 'string', value: 'tuple' },
-      { type: 'string', value: 'undefined' },
-      { type: 'string', value: 'unknown' },
-      { type: 'string', value: 'type' },
-    ],
-  },
-};
+- `IssueReason` <Property {...properties.IssueReason} />

@@ -1,9 +1,72 @@
 ---
 title: excludes
+description: >-
+  Creates a pipeline validation action that validates the content of a string
+  or array.
+source: /validations/excludes/excludes.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # excludes
 
-> The content of this page is not yet ready. Until then just use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/excludes/excludes.ts).
+Creates a pipeline validation action that validates the content of a string or array.
+
+```ts
+const Validation = excludes<TInput, TRequirement>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `excludes` you can validate the content of a string or array. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `excludes` can be used.
+
+### String schema
+
+Schema to validate that a string does not contain a specific substring.
+
+```ts
+const StringSchema = string([
+  excludes('foo', 'The string must not contain "foo".'),
+]);
+```
+
+### Array schema
+
+Schema to validate that an array does not contain a specific string.
+
+```ts
+const ArraySchema = array(string(), [
+  excludes('foo', 'The array must not contain "foo".'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `excludes`.
+
+### Schemas
+
+<ApiList
+  items={['any', 'array', 'instance', 'special', 'string', 'tuple', 'unknown']}
+/>

@@ -33,7 +33,7 @@ export function unwrap<
     | NonNullableSchema<any>
     | NonNullableSchemaAsync<any>
     | NonNullishSchema<any>
-    | NonNullishSchemaAsync<any>
+    | NonNullishSchemaAsync<any>,
 >(schema: TSchema): TSchema['wrapped'] {
   return schema.wrapped;
 }

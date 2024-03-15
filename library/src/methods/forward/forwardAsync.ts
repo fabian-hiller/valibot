@@ -2,7 +2,7 @@ import type { BaseValidationAsync, PathItem } from '../../types/index.ts';
 import type { PathList } from './types.ts';
 
 /**
- * Forwards the issues of the passed validation.
+ * Forwards the issues of the passed validation action.
  *
  * @param validation The validation.
  * @param pathList The path list.
@@ -10,7 +10,7 @@ import type { PathList } from './types.ts';
  * @returns The passed validation.
  */
 export function forwardAsync<
-  TInput extends unknown[] | Record<string, unknown>
+  TInput extends unknown[] | Record<string, unknown>,
 >(
   validation: BaseValidationAsync<TInput>,
   pathList: PathList<TInput>
@@ -36,8 +36,11 @@ export function forwardAsync<
             issue.input = pathValue;
 
             // Create path item for current key
+            // TODO: Check if we can prevent path item from being unknown by
+            // adding context of schema to `._parse`
             const pathItem: PathItem = {
               type: 'unknown',
+              origin: 'value',
               input: pathInput,
               key,
               value: pathValue,

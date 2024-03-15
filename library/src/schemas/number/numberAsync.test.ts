@@ -40,18 +40,4 @@ describe('numberAsync', () => {
       valueError
     );
   });
-
-  test('should expose the pipeline', () => {
-    const schema1 = numberAsync([maxValue(5, 'custom')]);
-    expect(schema1.pipe).toStrictEqual([
-      expect.objectContaining({
-        type: 'max_value',
-        requirement: 5,
-        message: 'custom',
-      }),
-    ]);
-
-    const schema2 = numberAsync();
-    expect(schema2.pipe).toBeUndefined();
-  });
 });

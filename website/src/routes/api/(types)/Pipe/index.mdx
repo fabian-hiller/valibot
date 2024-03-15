@@ -7,43 +7,16 @@ contributors:
 ---
 
 import { Property } from '~/components';
+import { properties } from './properties';
 
 # Pipe
 
 Pipe type.
 
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
 ## Definition
 
 - `Pipe` <Property {...properties.Pipe} />
-
-export const properties = {
-  Pipe: {
-    type: {
-      type: 'array',
-      item: [
-        {
-          type: 'custom',
-          name: 'BaseValidation',
-          href: '../BaseValidation/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TInput',
-            },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'BaseTransformation',
-          href: '../BaseTransformation/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TInput',
-            },
-          ],
-        },
-      ],
-    },
-  },
-};
