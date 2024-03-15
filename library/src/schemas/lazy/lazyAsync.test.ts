@@ -17,7 +17,9 @@ describe('lazyAsync', () => {
   });
 
   test('should pass input to getter', async () => {
-    const getter = vi.fn().mockReturnValue({ _parse: stringAsync()._parse }) as any;
+    const getter = vi
+      .fn()
+      .mockReturnValue({ _parse: stringAsync()._parse }) as any;
     const schema = lazyAsync(getter);
     const input = 'hello';
     await parseAsync(schema, input);
