@@ -1,7 +1,7 @@
 {
   "lock": false,
   "tasks": {
-    "test": "deno test --allow-read"
+    "test": "deno test --allow-read --parallel"
   },
   "imports": {
     "vitest": "./src/testUtils/denoVitestPolyfill.ts"
