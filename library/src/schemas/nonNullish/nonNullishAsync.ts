@@ -47,7 +47,7 @@ export function nonNullishAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
     message,
     async _parse(input, config) {
       // In input is `null` or `undefined`, return schema issue
-      if (input === null || input === undefined) {
+      if (input == null) {
         return schemaIssue(this, nonNullishAsync, input, config);
       }
 
