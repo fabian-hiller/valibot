@@ -1,6 +1,7 @@
 import type {
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   PipeAsync,
 } from '../../types/index.ts';
 import {
@@ -49,24 +50,24 @@ export function specialAsync<TInput>(
  * Creates a special schema.
  *
  * @param check The type check function.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A special schema.
  */
 export function specialAsync<TInput>(
   check: (input: unknown) => boolean | Promise<boolean>,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<TInput>
 ): SpecialSchemaAsync<TInput>;
 
 export function specialAsync<TInput>(
   check: (input: unknown) => boolean | Promise<boolean>,
-  arg2?: PipeAsync<TInput> | ErrorMessage,
+  arg2?: PipeAsync<TInput> | ErrorMessageOrMetadata,
   arg3?: PipeAsync<TInput>
 ): SpecialSchemaAsync<TInput> {
   // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return string schema
   return {
@@ -76,6 +77,7 @@ export function specialAsync<TInput>(
     check,
     message,
     pipe,
+    metadata,
     async _parse(input, config) {
       // If check is fulfilled, return pipe output
       if (await this.check(input)) {

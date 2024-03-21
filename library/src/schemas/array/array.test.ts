@@ -40,8 +40,10 @@ describe('array', () => {
 
   test('should throw custom error', () => {
     const error = 'Value is not an array!';
-    const schema = array(number(), error);
-    expect(() => parse(schema, 123)).toThrowError(error);
+    const schema1 = array(number(), error);
+    expect(() => parse(schema1, 123)).toThrowError(error);
+    const schema2 = array(number(), { message: error });
+    expect(() => parse(schema2, 123)).toThrowError(error);
   });
 
   test('should throw every issue', () => {
@@ -119,6 +121,21 @@ describe('array', () => {
     expect(output2).toEqual(input2);
     expect(() => parse(schema2, [1, 2])).toThrowError(lengthError);
     expect(() => parse(schema2, [1])).toThrowError(contentError);
+  });
+
+  test('should expose the metadata', () => {
+    const schema1 = array(string(), { description: 'array value' });
+    expect(schema1.metadata).toEqual({ description: 'array value' });
+
+    const schema2 = array(string(), {
+      description: 'array value',
+      message: 'Value is not an array!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'array value' });
+    expect(schema2.message).toEqual('Value is not an array!');
+
+    const schema3 = array(string());
+    expect(schema3.metadata).toBeUndefined();
   });
 
   test('should execute pipe if output is typed', () => {

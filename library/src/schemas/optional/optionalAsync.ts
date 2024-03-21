@@ -74,6 +74,9 @@ export function optionalAsync<
     async: true,
     wrapped,
     default: default_ as TDefault,
+    get metadata() {
+      return this.wrapped.metadata;
+    },
     async _parse(input, config) {
       // If input is `undefined`, return typed schema result or override it
       // with default value

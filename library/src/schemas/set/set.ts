@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Pipe,
   SchemaIssues,
 } from '../../types/index.ts';
@@ -54,24 +55,24 @@ export function set<TValue extends BaseSchema>(
  * Creates a set schema.
  *
  * @param value The value schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A set schema.
  */
 export function set<TValue extends BaseSchema>(
   value: TValue,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<SetOutput<TValue>>
 ): SetSchema<TValue>;
 
 export function set<TValue extends BaseSchema>(
   value: TValue,
-  arg2?: Pipe<SetOutput<TValue>> | ErrorMessage,
+  arg2?: Pipe<SetOutput<TValue>> | ErrorMessageOrMetadata,
   arg3?: Pipe<SetOutput<TValue>>
 ): SetSchema<TValue> {
   // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return set schema
   return {
@@ -81,6 +82,7 @@ export function set<TValue extends BaseSchema>(
     value,
     message,
     pipe,
+    metadata,
     _parse(input, config) {
       // If root type is valid, check nested types
       if (input instanceof Set) {

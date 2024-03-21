@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Input,
   Output,
   Pipe,
@@ -86,7 +87,7 @@ export function variant<
  *
  * @param key The discriminator key.
  * @param options The variant options.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A variant schema.
@@ -97,7 +98,7 @@ export function variant<
 >(
   key: TKey,
   options: TOptions,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<Output<TOptions[number]>>
 ): VariantSchema<TKey, TOptions>;
 
@@ -107,11 +108,11 @@ export function variant<
 >(
   key: TKey,
   options: TOptions,
-  arg3?: Pipe<Output<TOptions[number]>> | ErrorMessage,
+  arg3?: Pipe<Output<TOptions[number]>> | ErrorMessageOrMetadata,
   arg4?: Pipe<Output<TOptions[number]>>
 ): VariantSchema<TKey, TOptions> {
   // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg3, arg4);
+  const [message, pipe, metadata] = defaultArgs(arg3, arg4);
 
   // Create cached expected key
   let cachedExpectedKey: string | undefined;
@@ -125,6 +126,7 @@ export function variant<
     options,
     message,
     pipe,
+    metadata,
     _parse(input, config) {
       // If root type is valid, check nested types
       if (input && typeof input === 'object') {

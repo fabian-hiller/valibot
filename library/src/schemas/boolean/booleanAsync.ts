@@ -1,6 +1,7 @@
 import type {
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   PipeAsync,
 } from '../../types/index.ts';
 import {
@@ -40,22 +41,22 @@ export function booleanAsync(pipe?: PipeAsync<boolean>): BooleanSchemaAsync;
 /**
  * Creates an async boolean schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async boolean schema.
  */
 export function booleanAsync(
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<boolean>
 ): BooleanSchemaAsync;
 
 export function booleanAsync(
-  arg1?: ErrorMessage | PipeAsync<boolean>,
+  arg1?: ErrorMessageOrMetadata | PipeAsync<boolean>,
   arg2?: PipeAsync<boolean>
 ): BooleanSchemaAsync {
   // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return async boolean schema
   return {
@@ -64,6 +65,7 @@ export function booleanAsync(
     async: true,
     message,
     pipe,
+    metadata,
     async _parse(input, config) {
       // If type is valid, return pipe result
       if (typeof input === 'boolean') {

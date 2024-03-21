@@ -1,5 +1,14 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import {
+  defaultArgs,
+  schemaIssue,
+  schemaResult,
+  stringify,
+} from '../../utils/index.ts';
 
 /**
  * Enum type.
@@ -32,16 +41,19 @@ export interface EnumSchema<TEnum extends Enum, TOutput = TEnum[keyof TEnum]>
  * Creates an enum schema.
  *
  * @param enum__ The enum value.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns An enum schema.
  */
 export function enum_<TEnum extends Enum>(
   enum__: TEnum,
-  message?: ErrorMessage
+  messageOrMetadata?: ErrorMessageOrMetadata
 ): EnumSchema<TEnum> {
   // Get values
   const values = Object.values(enum__);
+
+  // Extract message and metadata
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
 
   // Create and return enum schema
   return {
@@ -50,6 +62,7 @@ export function enum_<TEnum extends Enum>(
     async: false,
     enum: enum__,
     message,
+    metadata,
     _parse(input, config) {
       // If type is valid, return schema result
       if (values.includes(input as any)) {

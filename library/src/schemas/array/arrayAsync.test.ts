@@ -123,6 +123,21 @@ describe('array', () => {
     await expect(parseAsync(schema2, [1])).rejects.toThrowError(contentError);
   });
 
+  test('should expose the metadata', () => {
+    const schema1 = arrayAsync(string(), { description: 'array value' });
+    expect(schema1.metadata).toEqual({ description: 'array value' });
+
+    const schema2 = arrayAsync(string(), {
+      description: 'array value',
+      message: 'Value is not an array!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'array value' });
+    expect(schema2.message).toEqual('Value is not an array!');
+
+    const schema3 = arrayAsync(string());
+    expect(schema3.metadata).toBeUndefined();
+  });
+
   test('should execute pipe if output is typed', async () => {
     const schema = arrayAsync(string([minLength(10)]), [minLength(10)]);
     const input = ['12345'];

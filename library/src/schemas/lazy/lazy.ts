@@ -1,4 +1,9 @@
-import type { BaseSchema, Input, Output } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  Input,
+  Output,
+  SchemaMetadata,
+} from '../../types/index.ts';
 
 /**
  * Lazy schema type.
@@ -21,17 +26,20 @@ export interface LazySchema<
  * Creates a lazy schema.
  *
  * @param getter The schema getter.
+ * @param metadata The schema metadata.
  *
  * @returns A lazy schema.
  */
 export function lazy<TGetter extends (input: unknown) => BaseSchema>(
-  getter: TGetter
+  getter: TGetter,
+  metadata?: SchemaMetadata
 ): LazySchema<TGetter> {
   return {
     type: 'lazy',
     expects: 'unknown',
     async: false,
     getter,
+    metadata,
     _parse(input, config) {
       return this.getter(input)._parse(input, config);
     },

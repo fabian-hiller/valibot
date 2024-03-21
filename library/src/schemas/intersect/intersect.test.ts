@@ -102,4 +102,28 @@ describe('intersect', () => {
       equalError
     );
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = intersect(
+      [object({ foo: string() }), object({ bar: string() })],
+      { description: 'intersect value' }
+    );
+    expect(schema1.metadata).toEqual({ description: 'intersect value' });
+
+    const schema2 = intersect(
+      [object({ foo: string() }), object({ bar: string() })],
+      {
+        description: 'intersect value',
+        message: 'Value is not a intersect!',
+      }
+    );
+    expect(schema2.metadata).toEqual({ description: 'intersect value' });
+    expect(schema2.message).toEqual('Value is not a intersect!');
+
+    const schema3 = intersect([
+      object({ foo: string() }),
+      object({ bar: string() }),
+    ]);
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

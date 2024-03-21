@@ -31,4 +31,9 @@ describe('nullishAsync', () => {
     expect(await parseAsync(schema2, null)).toBe(default_);
     expect(await parseAsync(schema2, undefined)).toBe(default_);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = nullishAsync(string({ description: 'nullish string' }));
+    expect(schema1.metadata).toEqual({ description: 'nullish string' });
+  });
 });

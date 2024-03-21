@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+  Pipe,
+} from '../../types/index.ts';
 import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
@@ -32,22 +37,22 @@ export function bigint(pipe?: Pipe<bigint>): BigintSchema;
 /**
  * Creates a bigint schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A bigint schema.
  */
 export function bigint(
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<bigint>
 ): BigintSchema;
 
 export function bigint(
-  arg1?: ErrorMessage | Pipe<bigint>,
+  arg1?: ErrorMessageOrMetadata | Pipe<bigint>,
   arg2?: Pipe<bigint>
 ): BigintSchema {
   // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return bigint schema
   return {
@@ -56,6 +61,7 @@ export function bigint(
     async: false,
     message,
     pipe,
+    metadata,
     _parse(input, config) {
       // If type is valid, return pipe result
       if (typeof input === 'bigint') {

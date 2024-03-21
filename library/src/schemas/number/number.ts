@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+  Pipe,
+} from '../../types/index.ts';
 import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
@@ -32,22 +37,22 @@ export function number(pipe?: Pipe<number>): NumberSchema;
 /**
  * Creates a number schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A number schema.
  */
 export function number(
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<number>
 ): NumberSchema;
 
 export function number(
-  arg1?: ErrorMessage | Pipe<number>,
+  arg1?: ErrorMessageOrMetadata | Pipe<number>,
   arg2?: Pipe<number>
 ): NumberSchema {
   // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return number schema
   return {
@@ -56,6 +61,7 @@ export function number(
     async: false,
     message,
     pipe,
+    metadata,
     _parse(input, config) {
       // If type is valid, return pipe result
       if (typeof input === 'number' && !isNaN(input)) {

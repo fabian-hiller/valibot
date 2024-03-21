@@ -1,5 +1,9 @@
-import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult } from '../../utils/index.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * Symbol schema async type.
@@ -19,16 +23,21 @@ export interface SymbolSchemaAsync<TOutput = symbol>
 /**
  * Creates an async symbol schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns An async symbol schema.
  */
-export function symbolAsync(message?: ErrorMessage): SymbolSchemaAsync {
+export function symbolAsync(
+  messageOrMetadata?: ErrorMessageOrMetadata
+): SymbolSchemaAsync {
+  // Extracts the message and metadata from the input.
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'symbol',
     expects: 'symbol',
     async: true,
     message,
+    metadata,
     async _parse(input, config) {
       // If type is valid, return schema result
       if (typeof input === 'symbol') {

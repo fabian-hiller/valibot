@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Input,
   MaybeReadonly,
   Output,
@@ -58,24 +59,24 @@ export function union<TOptions extends UnionOptions>(
  * Creates a union schema.
  *
  * @param options The union options.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A union schema.
  */
 export function union<TOptions extends UnionOptions>(
   options: TOptions,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<Output<TOptions[number]>>
 ): UnionSchema<TOptions>;
 
 export function union<TOptions extends UnionOptions>(
   options: TOptions,
-  arg2?: Pipe<Output<TOptions[number]>> | ErrorMessage,
+  arg2?: Pipe<Output<TOptions[number]>> | ErrorMessageOrMetadata,
   arg3?: Pipe<Output<TOptions[number]>>
 ): UnionSchema<TOptions> {
   // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg2, arg3);
+  const [message, pipe, metadata] = defaultArgs(arg2, arg3);
 
   // Create and return union schema
   return {
@@ -85,6 +86,7 @@ export function union<TOptions extends UnionOptions>(
     options,
     message,
     pipe,
+    metadata,
     _parse(input, config) {
       // Create variables to collect results
       let validResult: TypedSchemaResult<Output<TOptions[number]>> | undefined;

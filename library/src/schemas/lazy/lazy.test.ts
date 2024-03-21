@@ -16,6 +16,13 @@ describe('lazy', () => {
     expect(() => parse(schema, {})).toThrowError();
   });
 
+  test('should expose the metadata', () => {
+    const schema = lazy(() => string(), {
+      description: 'recursive value',
+    });
+    expect(schema.metadata).toEqual({ description: 'recursive value' });
+  });
+
   test('should pass the input to the getter function as a parameter', () => {
     const getter = vi.fn().mockReturnValue({ _parse: string()._parse });
     const schema = lazy(getter);

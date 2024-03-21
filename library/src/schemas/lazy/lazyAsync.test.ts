@@ -16,6 +16,13 @@ describe('lazyAsync', () => {
     await expect(parseAsync(schema, {})).rejects.toThrowError();
   });
 
+  test('should expose the metadata', () => {
+    const schema = lazyAsync(() => stringAsync(), {
+      description: 'recursive value',
+    });
+    expect(schema.metadata).toEqual({ description: 'recursive value' });
+  });
+
   test('should pass input to getter', async () => {
     const getter = vi.fn().mockReturnValue({ _parse: stringAsync()._parse });
     const schema = lazyAsync(getter);

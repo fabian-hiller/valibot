@@ -36,4 +36,19 @@ describe('number', () => {
     expect(output2).toBe(input2);
     expect(() => parse(schema2, 12346789)).toThrowError(valueError);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = number({ description: 'number value' });
+    expect(schema1.metadata).toEqual({ description: 'number value' });
+
+    const schema2 = number({
+      description: 'number value',
+      message: 'Value is not a number!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'number value' });
+    expect(schema2.message).toEqual('Value is not a number!');
+
+    const schema3 = number();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

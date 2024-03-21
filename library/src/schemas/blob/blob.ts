@@ -1,4 +1,9 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+  Pipe,
+} from '../../types/index.ts';
 import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
 
 /**
@@ -31,19 +36,22 @@ export function blob(pipe?: Pipe<Blob>): BlobSchema;
 /**
  * Creates a blob schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A blob schema.
  */
-export function blob(message?: ErrorMessage, pipe?: Pipe<Blob>): BlobSchema;
+export function blob(
+  messageOrMetadata?: ErrorMessageOrMetadata,
+  pipe?: Pipe<Blob>
+): BlobSchema;
 
 export function blob(
-  arg1?: ErrorMessage | Pipe<Blob>,
+  arg1?: ErrorMessageOrMetadata | Pipe<Blob>,
   arg2?: Pipe<Blob>
 ): BlobSchema {
   // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return blob schema
   return {
@@ -52,6 +60,7 @@ export function blob(
     async: false,
     message,
     pipe,
+    metadata,
     _parse(input, config) {
       // If type is valid, return pipe result
       if (input instanceof Blob) {

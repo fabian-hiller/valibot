@@ -1,5 +1,9 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * Symbol schema type.
@@ -19,16 +23,21 @@ export interface SymbolSchema<TOutput = symbol>
 /**
  * Creates a symbol schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns A symbol schema.
  */
-export function symbol(message?: ErrorMessage): SymbolSchema {
+export function symbol(
+  messageOrMetadata?: ErrorMessageOrMetadata
+): SymbolSchema {
+  // Extracts the message and metadata from the input.
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'symbol',
     expects: 'symbol',
     async: false,
     message,
+    metadata,
     _parse(input, config) {
       // If type is valid, return schema result
       if (typeof input === 'symbol') {

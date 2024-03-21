@@ -1,5 +1,9 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, schemaIssue } from '../../utils/index.ts';
 
 /**
  * Never schema type.
@@ -18,16 +22,22 @@ export interface NeverSchema extends BaseSchema<never> {
 /**
  * Creates a never schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns A never schema.
  */
-export function never(message?: ErrorMessage): NeverSchema {
+export function never(messageOrMetadata?: ErrorMessageOrMetadata): NeverSchema {
+  // Extracts the message and metadata from the input.
+  const [message = 'Invalid type', , metadata] = defaultArgs(
+    messageOrMetadata,
+    undefined
+  );
   return {
     type: 'never',
     expects: 'never',
     async: false,
     message,
+    metadata,
     _parse(input, config) {
       return schemaIssue(this, never, input, config);
     },

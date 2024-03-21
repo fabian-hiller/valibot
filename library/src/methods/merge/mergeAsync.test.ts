@@ -63,4 +63,25 @@ describe('mergeAsync', () => {
     expect(output1).toEqual(transformInput());
     expect(output2).toEqual(transformInput());
   });
+
+  test('should expose the metadata', async () => {
+    const schema1 = mergeAsync(
+      [objectAsync({ key1: string() }), object({ key2: number() })],
+      { description: 'a simple object' }
+    );
+    expect(schema1.metadata).toEqual({ description: 'a simple object' });
+    const schema2 = mergeAsync(
+      [objectAsync({ key1: string() }), object({ key2: number() })],
+      number(),
+      { description: 'an object with a rest' }
+    );
+    expect(schema2.metadata).toEqual({ description: 'an object with a rest' });
+
+    const schema3 = mergeAsync(
+      [object({ key1: string() }), object({ key2: number() })],
+      { description: 'a simple object', message: 'Value is not an object!' }
+    );
+    expect(schema3.metadata).toEqual({ description: 'a simple object' });
+    expect(schema3.message).toEqual('Value is not an object!');
+  });
 });

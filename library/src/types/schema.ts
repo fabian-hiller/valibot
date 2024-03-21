@@ -45,6 +45,16 @@ export type SchemaResult<TOutput> =
   | UntypedSchemaResult;
 
 /**
+ * Schema metadata interface.
+ */
+export interface SchemaMetadata {
+  /**
+   * description of the schema
+   */
+  description?: string;
+}
+
+/**
  * Base schema type.
  */
 export interface BaseSchema<TInput = any, TOutput = TInput> {
@@ -60,6 +70,12 @@ export interface BaseSchema<TInput = any, TOutput = TInput> {
    * Whether it's async.
    */
   async: false;
+
+  /**
+   * Schema metadata.
+   */
+  metadata?: SchemaMetadata;
+
   /**
    * Parses unknown input based on its schema.
    *
@@ -95,6 +111,10 @@ export interface BaseSchemaAsync<TInput = any, TOutput = TInput> {
    * Whether it's async.
    */
   async: true;
+  /**
+   * Schema metadata.
+   */
+  metadata?: SchemaMetadata;
   /**
    * Parses unknown input based on its schema.
    *

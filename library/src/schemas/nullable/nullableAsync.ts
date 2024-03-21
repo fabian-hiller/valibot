@@ -74,9 +74,11 @@ export function nullableAsync<
     async: true,
     wrapped,
     default: default_ as TDefault,
+    get metadata() {
+      return this.wrapped.metadata;
+    },
     async _parse(input, config) {
-      // If input is `null`, return typed schema result or override it with
-      // default value
+      // Allow `null` to pass or override it with default value
       if (input === null) {
         const override = await getDefaultAsync(this);
         if (override === undefined) {
