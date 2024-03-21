@@ -82,6 +82,7 @@ export const Credits = component$(() => {
           'KATT',
           'osdiab',
           'Thanaen',
+          'ruiaraujo012',
           'hyunbinseo',
           'caegdeveloper',
         ].map((sponsor) => (
