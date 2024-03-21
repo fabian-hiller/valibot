@@ -117,6 +117,7 @@
 - [url](/api/url/)
 - [uuid](/api/uuid/)
 - [value](/api/value/)
+- [videoUrl](/api/videoUrl/)
 
 ## Transformations
 
