@@ -287,6 +287,7 @@
 - [MaxSizeValidation](/api/MaxSizeValidation/)
 - [MaxValueValidation](/api/MaxValueValidation/)
 - [MaybeReadonly](/api/MaybeReadonly/)
+- [MinLengthValidation](/api/MinLengthValidation/)
 - [MimeTypeValidation](/api/MimeTypeValidation/)
 - [MinBytesValidation](/api/MinBytesValidation/)
 - [MinSizeValidation](/api/MinSizeValidation/)
