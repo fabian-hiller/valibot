@@ -20,7 +20,12 @@ export interface IsoTimestampValidation<TInput extends string>
 /**
  * Creates a pipeline validation action that validates a timestamp.
  *
- * Format: yyyy-mm-ddThh:mm:ss.sssZ
+ * Formats:
+ *
+ * - yyyy-mm-ddThh:mm:ss.sssZ
+ * - yyyy-mm-ddThh:mm:ss.sss±hh:mm
+ * - yyyy-mm-ddThh:mm:ss.sss±hhmm
+ * - yyyy-mm-ddThh:mm:ss.sss±hh
  *
  * Hint: To support timestamps with lower or higher accuracy, the millisecond
  * specification can be removed or contain up to 9 digits.

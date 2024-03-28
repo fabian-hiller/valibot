@@ -15,6 +15,25 @@ describe('isoTimestamp', () => {
     const value5 = '2024-01-16T16:00:34Z';
     expect(validate._parse(value5).output).toBe(value5);
 
+    const timestampsWithOffset = [
+      // '+hh:mm'
+      '0000-01-01T00:00:00.000+00:00',
+      // '+hhmm'
+      '0000-01-01T00:00:00.000+0000',
+      // '+hh'
+      '0000-01-01T00:00:00.000+00',
+      // '-hh:mm'
+      '0000-01-01T00:00:00.000-00:00',
+      // '-hhmm'
+      '0000-01-01T00:00:00.000-0000',
+      // '-hh'
+      '0000-01-01T00:00:00.000-00',
+    ];
+
+    for (const value of timestampsWithOffset) {
+      expect(validate._parse(value).output).toBe(value);
+    }
+
     expect(validate._parse('').issues).toBeTruthy();
     expect(validate._parse('2023-07-11T17:26:27.243').issues).toBeTruthy();
     expect(validate._parse('2023-07-1117:26:27.243Z').issues).toBeTruthy();
@@ -31,6 +50,14 @@ describe('isoTimestamp', () => {
     expect(
       validate._parse('0000-01-01T00:00:00.0000000000Z').issues
     ).toBeTruthy();
+    expect(validate._parse('0000-01-01T00:00:00.000+00:0').issues).toBeTruthy();
+    expect(validate._parse('0000-01-01T00:00:00.000+0:00').issues).toBeTruthy();
+    expect(validate._parse('0000-01-01T00:00:00.000+000').issues).toBeTruthy();
+    expect(
+      validate._parse('0000-01-01T00:00:00.000+00::00').issues
+    ).toBeTruthy();
+    expect(validate._parse('0000-01-01T00:00:00.000+00:').issues).toBeTruthy();
+    expect(validate._parse('0000-01-01T00:00:00.000+').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
