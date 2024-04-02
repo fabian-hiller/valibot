@@ -31,6 +31,8 @@ describe('isoTimestamp', () => {
     expect(
       validate._parse('0000-01-01T00:00:00.0000000000Z').issues
     ).toBeTruthy();
+    expect(validate._parse('0000-01-01T01:00:60.000-05:00').issues).toBeTruthy();
+    expect(validate._parse('0000-01-01T01:00:60.000+09:00').issues).toBeTruthy();
   });
 
   test('should return custom error message', () => {
