@@ -1,29 +1,46 @@
 import type {
+  BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
-  Output,
-  SchemaIssues,
+  InferIssue,
+  InferOutput,
 } from '../../types/index.ts';
 
 /**
  * Safe parse result type.
  */
-export type SafeParseResult<TSchema extends BaseSchema | BaseSchemaAsync> =
+export type SafeParseResult<
+  TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+> =
   | {
-      typed: true;
-      success: true;
-      output: Output<TSchema>;
-      issues: undefined;
+      /**
+       * Whether is's typed.
+       */
+      readonly typed: true;
+      /**
+       * Whether it's successful.
+       */
+      readonly success: true;
+      /**
+       * The output value.
+       */
+      readonly output: InferOutput<TSchema>;
+      /**
+       * The issues if any.
+       */
+      readonly issues: undefined;
     }
   | {
-      typed: true;
-      success: false;
-      output: Output<TSchema>;
-      issues: SchemaIssues;
+      readonly typed: true;
+      readonly success: false;
+      readonly output: InferOutput<TSchema>;
+      readonly issues: [InferIssue<TSchema>, ...InferIssue<TSchema>[]];
     }
   | {
-      typed: false;
-      success: false;
-      output: unknown;
-      issues: SchemaIssues;
+      readonly typed: false;
+      readonly success: false;
+      readonly output: unknown;
+      readonly issues: [InferIssue<TSchema>, ...InferIssue<TSchema>[]];
     };

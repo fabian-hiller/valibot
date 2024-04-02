@@ -1,8 +1,21 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import type { ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  ErrorMessage,
+  FunctionReference,
+  InferIssue,
+  PipeItemAsync,
+} from '../../types/index.ts';
 
 // Create specific message store
-let store: Map<Function, Map<string | undefined, ErrorMessage>> | undefined;
+let store:
+  | Map<
+      FunctionReference<
+        unknown[],
+        PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+      >,
+      Map<string | undefined, ErrorMessage<BaseIssue<unknown>>>
+    >
+  | undefined;
 
 /**
  * Sets a specific error message.
@@ -11,9 +24,14 @@ let store: Map<Function, Map<string | undefined, ErrorMessage>> | undefined;
  * @param message The error message.
  * @param lang The language of the message.
  */
-export function setSpecificMessage(
-  reference: Function,
-  message: ErrorMessage,
+export function setSpecificMessage<
+  const TReference extends FunctionReference<
+    unknown[],
+    PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+  >,
+>(
+  reference: TReference,
+  message: ErrorMessage<InferIssue<ReturnType<TReference>>>,
   lang?: string
 ): void {
   if (!store) store = new Map();
@@ -29,10 +47,15 @@ export function setSpecificMessage(
  *
  * @returns The error message.
  */
-export function getSpecificMessage(
-  reference: Function,
+export function getSpecificMessage<
+  const TReference extends FunctionReference<
+    unknown[],
+    PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+  >,
+>(
+  reference: TReference,
   lang?: string
-): ErrorMessage | undefined {
+): ErrorMessage<InferIssue<ReturnType<TReference>>> | undefined {
   return store?.get(reference)?.get(lang);
 }
 
@@ -43,7 +66,10 @@ export function getSpecificMessage(
  * @param lang The language of the message.
  */
 export function deleteSpecificMessage(
-  reference: Function,
+  reference: FunctionReference<
+    unknown[],
+    PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+  >,
   lang?: string
 ): void {
   store?.get(reference)?.delete(lang);

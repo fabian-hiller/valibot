@@ -1,10 +1,12 @@
 import { ValiError } from '../../error/index.ts';
 import { getGlobalConfig } from '../../storages/index.ts';
 import type {
+  BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
-  Output,
-  SchemaConfig,
+  Config,
+  InferIssue,
+  InferOutput,
 } from '../../types/index.ts';
 
 /**
@@ -14,16 +16,23 @@ import type {
  * @param input The input to be parsed.
  * @param config The parse configuration.
  *
- * @returns The parsed output.
+ * @returns The parsed input.
  */
-export async function parseAsync<TSchema extends BaseSchema | BaseSchemaAsync>(
+export async function parseAsync<
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+>(
   schema: TSchema,
   input: unknown,
-  config?: SchemaConfig
-): Promise<Output<TSchema>> {
-  const result = await schema._parse(input, getGlobalConfig(config));
-  if (result.issues) {
-    throw new ValiError(result.issues);
+  config?: Omit<Config<InferIssue<TSchema>>, 'skipPipe'>
+): Promise<InferOutput<TSchema>> {
+  const dataset = await schema._run(
+    { typed: false, value: input },
+    getGlobalConfig(config)
+  );
+  if (dataset.issues) {
+    throw new ValiError(dataset.issues);
   }
-  return result.output;
+  return dataset.value;
 }

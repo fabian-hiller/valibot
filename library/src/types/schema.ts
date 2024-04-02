@@ -1,129 +1,81 @@
-import type { SchemaConfig } from './config.ts';
-import type { SchemaIssues } from './issues.ts';
-
-/**
- * Typed schema result type.
- */
-export interface TypedSchemaResult<TOutput> {
-  /**
-   * Whether is's typed.
-   */
-  typed: true;
-  /**
-   * The parse output.
-   */
-  output: TOutput;
-  /**
-   * The parse issues.
-   */
-  issues?: SchemaIssues;
-}
-
-/**
- * Untyped schema result type.
- */
-export interface UntypedSchemaResult {
-  /**
-   * Whether is's typed.
-   */
-  typed: false;
-  /**
-   * The parse output.
-   */
-  output: unknown;
-  /**
-   * The parse issues.
-   */
-  issues: SchemaIssues;
-}
-
-/**
- * Schema result type.
- */
-export type SchemaResult<TOutput> =
-  | TypedSchemaResult<TOutput>
-  | UntypedSchemaResult;
+import type { Config } from './config.ts';
+import type { Dataset } from './dataset.ts';
+import type { BaseIssue } from './issue.ts';
 
 /**
  * Base schema type.
  */
-export interface BaseSchema<TInput = any, TOutput = TInput> {
+export interface BaseSchema<
+  TInput,
+  TOutput,
+  TIssue extends BaseIssue<unknown>,
+> {
+  /**
+   * The object kind.
+   */
+  readonly kind: 'schema';
   /**
    * The schema type.
    */
-  type: string;
+  readonly type: string;
   /**
    * The expected property.
    */
-  expects: string;
+  readonly expects: string;
   /**
    * Whether it's async.
    */
-  async: false;
+  readonly async: false;
   /**
-   * Parses unknown input based on its schema.
+   * Parses unknown input.
    *
-   * @param input The input to be parsed.
-   * @param config The parse configuration.
+   * @param dataset The input dataset.
+   * @param config The configuration.
    *
-   * @returns The schema result.
+   * @returns The output dataset.
    *
    * @internal
    */
-  _parse(input: unknown, config?: SchemaConfig): SchemaResult<TOutput>;
+  _run(
+    dataset: Dataset<unknown, never>,
+    config: Config<TIssue>
+  ): Dataset<TOutput, TIssue>;
   /**
-   * Input and output type.
+   * Input, output and issue type.
    *
    * @internal
    */
-  _types?: { input: TInput; output: TOutput };
+  readonly _types?: {
+    readonly input: TInput;
+    readonly output: TOutput;
+    readonly issue: TIssue;
+  };
 }
 
 /**
  * Base schema async type.
  */
-export interface BaseSchemaAsync<TInput = any, TOutput = TInput> {
-  /**
-   * The schema type.
-   */
-  type: string;
-  /**
-   * The expected property.
-   */
-  expects: string;
+export interface BaseSchemaAsync<
+  TInput,
+  TOutput,
+  TIssue extends BaseIssue<unknown>,
+> extends Omit<BaseSchema<TInput, TOutput, TIssue>, 'async' | '_run'> {
   /**
    * Whether it's async.
    */
-  async: true;
+  readonly async: true;
   /**
-   * Parses unknown input based on its schema.
+   * Parses unknown input.
    *
-   * @param input The input to be parsed.
-   * @param config The parse configuration.
+   * @param dataset The input dataset.
+   * @param config The configuration.
    *
-   * @returns The schema result.
+   * @returns The output dataset.
    *
    * @internal
    */
-  _parse(input: unknown, config?: SchemaConfig): Promise<SchemaResult<TOutput>>;
-  /**
-   * Input and output type.
-   *
-   * @internal
-   */
-  _types?: { input: TInput; output: TOutput };
+  _run(
+    dataset: Dataset<unknown, never>,
+    config: Config<TIssue>
+  ): Promise<Dataset<TOutput, TIssue>>;
 }
-
-/**
- * Input inference type.
- */
-export type Input<TSchema extends BaseSchema | BaseSchemaAsync> = NonNullable<
-  TSchema['_types']
->['input'];
-
-/**
- * Output inference type.
- */
-export type Output<TSchema extends BaseSchema | BaseSchemaAsync> = NonNullable<
-  TSchema['_types']
->['output'];

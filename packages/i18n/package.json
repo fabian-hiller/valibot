@@ -28,9 +28,9 @@
     "publish": "npm publish"
   },
   "devDependencies": {
-    "@types/node": "^20.11.8",
+    "@types/node": "^20.12.2",
     "tsm": "^2.3.0",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.3",
     "valibot": "workspace:*"
   },
   "peerDependencies": {

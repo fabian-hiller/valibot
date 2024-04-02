@@ -43,7 +43,7 @@
   },
   "scripts": {
     "play": "tsm ./playground.ts",
-    "test": "vitest",
+    "test": "vitest --typecheck",
     "coverage": "vitest run --coverage --isolate",
     "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit",
     "eslint.fix": "eslint \"src/**/*.ts*\" --fix",
@@ -53,21 +53,21 @@
     "publish": "npm publish && npx jsr publish"
   },
   "devDependencies": {
-    "@types/eslint": "^8.40.2",
-    "@typescript-eslint/eslint-plugin": "^5.60.0",
-    "@typescript-eslint/parser": "^5.60.0",
-    "@vitest/coverage-v8": "^0.33.0",
-    "eslint": "^8.43.0",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-jsdoc": "^46.8.2",
-    "eslint-plugin-redos-detector": "^2.1.1",
-    "eslint-plugin-regexp": "^1.15.0",
-    "eslint-plugin-security": "^1.7.1",
-    "jsdom": "^22.1.0",
+    "@types/eslint": "^8.56.7",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
+    "@typescript-eslint/parser": "^7.5.0",
+    "@vitest/coverage-v8": "^1.4.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsdoc": "^48.2.2",
+    "eslint-plugin-redos-detector": "^2.4.0",
+    "eslint-plugin-regexp": "^2.4.0",
+    "eslint-plugin-security": "^2.1.1",
+    "jsdom": "^24.0.0",
     "tsm": "^2.3.0",
-    "tsup": "^8.0.1",
-    "typescript": "^5.3.3",
-    "vite": "^4.4.6",
-    "vitest": "^0.33.0"
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.7",
+    "vitest": "1.4.0"
   }
 }

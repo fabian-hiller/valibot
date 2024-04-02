@@ -1,9 +1,9 @@
-import type { SchemaConfig } from '../../types/index.ts';
+import type { BaseIssue, Config } from '../../types/index.ts';
 
 /**
  * The global config type.
  */
-export type GlobalConfig = Omit<SchemaConfig, 'message'>;
+export type GlobalConfig = Omit<Config<never>, 'message' | 'skipPipe'>;
 
 // Create global configuration store
 let store: GlobalConfig | undefined;
@@ -24,7 +24,9 @@ export function setGlobalConfig(config: GlobalConfig) {
  *
  * @returns The configuration.
  */
-export function getGlobalConfig(config?: SchemaConfig): SchemaConfig {
+export function getGlobalConfig<const TIssue extends BaseIssue<unknown>>(
+  config?: Config<TIssue>
+): Config<TIssue> {
   // Note: The configuration is deliberately not constructed with the spread
   // operator for performance reasons
   return {
@@ -32,7 +34,7 @@ export function getGlobalConfig(config?: SchemaConfig): SchemaConfig {
     message: config?.message,
     abortEarly: config?.abortEarly ?? store?.abortEarly,
     abortPipeEarly: config?.abortPipeEarly ?? store?.abortPipeEarly,
-    skipPipe: config?.skipPipe ?? store?.skipPipe,
+    skipPipe: config?.skipPipe,
   };
 }
 

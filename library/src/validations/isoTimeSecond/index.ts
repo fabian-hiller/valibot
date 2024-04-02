@@ -1,1 +1,0 @@
-export * from './isoTimeSecond.ts';
