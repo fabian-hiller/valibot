@@ -20,6 +20,9 @@ describe('config', () => {
   test('should set and get global config', () => {
     setGlobalConfig(config);
     expect(getGlobalConfig()).toEqual(config);
+  });
+
+  test('should merge config argument', () => {
     expect(getGlobalConfig({ lang: 'de' })).toEqual({ ...config, lang: 'de' });
   });
 
