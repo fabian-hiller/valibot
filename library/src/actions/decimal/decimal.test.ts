@@ -42,6 +42,13 @@ describe('decimal', () => {
   describe('should return no issue', () => {
     const action = decimal();
 
+    test('for untyped inputs', () => {
+      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+        typed: false,
+        value: null,
+      });
+    });
+
     test('for a single digit', () => {
       const values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
       expectNoActionIssue(action, values);
