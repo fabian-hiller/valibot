@@ -17,12 +17,9 @@ describe('object', () => {
     type Entries = { key: StringSchema<undefined> };
 
     test('with undefined message', () => {
-      expectTypeOf(object(entries)).toEqualTypeOf<
-        ObjectSchema<Entries, undefined>
-      >();
-      expectTypeOf(object(entries, undefined)).toEqualTypeOf<
-        ObjectSchema<Entries, undefined>
-      >();
+      type Schema = ObjectSchema<Entries, undefined>;
+      expectTypeOf(object(entries)).toEqualTypeOf<Schema>();
+      expectTypeOf(object(entries, undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with object message', () => {

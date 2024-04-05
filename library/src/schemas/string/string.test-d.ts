@@ -5,8 +5,9 @@ import { string, type StringIssue, type StringSchema } from './string.ts';
 describe('string', () => {
   describe('should return schema object', () => {
     test('with undefined message', () => {
-      expectTypeOf(string()).toEqualTypeOf<StringSchema<undefined>>();
-      expectTypeOf(string(undefined)).toEqualTypeOf<StringSchema<undefined>>();
+      type Schema = StringSchema<undefined>;
+      expectTypeOf(string()).toEqualTypeOf<Schema>();
+      expectTypeOf(string(undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with string message', () => {

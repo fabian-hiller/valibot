@@ -5,8 +5,9 @@ import { date, type DateIssue, type DateSchema } from './date.ts';
 describe('date', () => {
   describe('should return schema object', () => {
     test('with undefined message', () => {
-      expectTypeOf(date()).toEqualTypeOf<DateSchema<undefined>>();
-      expectTypeOf(date(undefined)).toEqualTypeOf<DateSchema<undefined>>();
+      type Schema = DateSchema<undefined>;
+      expectTypeOf(date()).toEqualTypeOf<Schema>();
+      expectTypeOf(date(undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with string message', () => {

@@ -5,8 +5,9 @@ import { number, type NumberIssue, type NumberSchema } from './number.ts';
 describe('number', () => {
   describe('should return schema object', () => {
     test('with undefined message', () => {
-      expectTypeOf(number()).toEqualTypeOf<NumberSchema<undefined>>();
-      expectTypeOf(number(undefined)).toEqualTypeOf<NumberSchema<undefined>>();
+      type Schema = NumberSchema<undefined>;
+      expectTypeOf(number()).toEqualTypeOf<Schema>();
+      expectTypeOf(number(undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with string message', () => {
