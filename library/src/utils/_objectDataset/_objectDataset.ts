@@ -1,4 +1,6 @@
 import type {
+  LooseObjectIssue,
+  LooseObjectSchema,
   NeverIssue,
   ObjectIssue,
   ObjectSchema,
@@ -75,6 +77,10 @@ export function _objectDataset<
     | StrictObjectSchema<
         ObjectEntries,
         ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      >
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
       >,
 >(
   context: TSchema,
@@ -91,6 +97,14 @@ export function _objectDataset<
         ObjectEntries,
         BaseSchema<unknown, unknown, BaseIssue<unknown>>,
         ErrorMessage<ObjectWithRestIssue> | undefined
+      >
+    | StrictObjectSchema<
+        ObjectEntries,
+        ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      >
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
       >,
 >(
   context: TSchema,

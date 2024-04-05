@@ -6,24 +6,24 @@ import type {
   InferObjectOutput,
   ObjectEntriesAsync,
 } from '../../types/index.ts';
-import type { NeverIssue, NeverSchema } from '../never/index.ts';
-import type { StrictObjectIssue } from './strictObject.ts';
+import type { UnknownSchema } from '../unknown/index.ts';
+import type { LooseObjectIssue } from './looseObject.ts';
 
 /**
  * Object schema async type.
  */
-export interface StrictObjectSchemaAsync<
+export interface LooseObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,
-  TMessage extends ErrorMessage<StrictObjectIssue | NeverIssue> | undefined,
+  TMessage extends ErrorMessage<LooseObjectIssue> | undefined,
 > extends BaseSchemaAsync<
-    InferObjectInput<TEntries, NeverSchema<TMessage>>,
-    InferObjectOutput<TEntries, NeverSchema<TMessage>>,
-    StrictObjectIssue | InferObjectIssue<TEntries, NeverSchema<TMessage>>
+    InferObjectInput<TEntries, UnknownSchema>,
+    InferObjectOutput<TEntries, UnknownSchema>,
+    LooseObjectIssue | InferObjectIssue<TEntries, UnknownSchema>
   > {
   /**
    * The schema type.
    */
-  readonly type: 'strict_object';
+  readonly type: 'loose_object';
   /**
    * The object entries.
    */
@@ -31,7 +31,7 @@ export interface StrictObjectSchemaAsync<
   /**
    * The rest schema.
    */
-  readonly rest: NeverSchema<TMessage>;
+  readonly rest: UnknownSchema;
   /**
    * The expected property.
    */
