@@ -1,9 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type {
-  InferIssue,
-  ObjectEntries,
-  UntypedDataset,
-} from '../../types/index.ts';
+import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { nullish } from '../nullish/nullish.ts';
 import { number, type NumberIssue } from '../number/index.ts';
@@ -13,7 +9,9 @@ import { object, type ObjectIssue, type ObjectSchema } from './object.ts';
 
 describe('object', () => {
   describe('should return schema object', () => {
-    const baseSchema: Omit<ObjectSchema<ObjectEntries, never>, 'message'> = {
+    const entries = { key: string() };
+    type Entries = typeof entries;
+    const baseSchema: Omit<ObjectSchema<Entries, never>, 'message'> = {
       kind: 'schema',
       type: 'object',
       expects: 'Object',
@@ -23,27 +21,27 @@ describe('object', () => {
     };
 
     test('with undefined message', () => {
-      const schema: ObjectSchema<ObjectEntries, undefined> = {
+      const schema: ObjectSchema<Entries, undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(object({ key: string() })).toStrictEqual(schema);
-      expect(object({ key: string() }, undefined)).toStrictEqual(schema);
+      expect(object(entries)).toStrictEqual(schema);
+      expect(object(entries, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(object({ key: string() }, 'message')).toStrictEqual({
+      expect(object(entries, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies ObjectSchema<ObjectEntries, string>);
+      } satisfies ObjectSchema<Entries, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(object({ key: string() }, message)).toStrictEqual({
+      expect(object(entries, message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies ObjectSchema<ObjectEntries, typeof message>);
+      } satisfies ObjectSchema<Entries, typeof message>);
     });
   });
 
@@ -52,13 +50,22 @@ describe('object', () => {
       expectNoSchemaIssue(object({}), [{}]);
     });
 
+    test('for simple object', () => {
+      expectNoSchemaIssue(object({ key1: string(), key2: number() }), [
+        { key1: 'foo', key2: 123 },
+      ]);
+    });
+
     test('for unknown entries', () => {
       expect(
-        object({})._run(
+        object({ key1: string() })._run(
           { typed: false, value: { key1: 'foo', key2: 123, key3: null } },
           {}
         )
-      ).toStrictEqual({ typed: true, value: {} });
+      ).toStrictEqual({
+        typed: true,
+        value: { key1: 'foo' },
+      });
     });
   });
 

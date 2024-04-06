@@ -25,7 +25,7 @@ describe('date', () => {
       expect(date('message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies DateSchema<string>);
+      } satisfies DateSchema<'message'>);
     });
 
     test('with function message', () => {

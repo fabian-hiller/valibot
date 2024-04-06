@@ -25,7 +25,7 @@ describe('string', () => {
       expect(string('message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies StringSchema<string>);
+      } satisfies StringSchema<'message'>);
     });
 
     test('with function message', () => {

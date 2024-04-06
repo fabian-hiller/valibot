@@ -25,7 +25,7 @@ describe('never', () => {
       expect(never('message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies NeverSchema<string>);
+      } satisfies NeverSchema<'message'>);
     });
 
     test('with function message', () => {
