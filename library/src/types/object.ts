@@ -193,8 +193,9 @@ export type InferObjectInput<
   : TRest extends
         | BaseSchema<unknown, unknown, BaseIssue<unknown>>
         | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-    ? ResolveObject<WithQuestionMarks<TEntries, EntriesInput<TEntries>>> &
-        Record<string, InferInput<TRest>>
+    ? ResolveObject<WithQuestionMarks<TEntries, EntriesInput<TEntries>>> & {
+        [key: string]: InferInput<TRest>;
+      }
     : never;
 
 /**
@@ -211,8 +212,9 @@ export type InferObjectOutput<
   : TRest extends
         | BaseSchema<unknown, unknown, BaseIssue<unknown>>
         | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-    ? ResolveObject<WithQuestionMarks<TEntries, EntriesOutput<TEntries>>> &
-        Record<string, InferOutput<TRest>>
+    ? ResolveObject<WithQuestionMarks<TEntries, EntriesOutput<TEntries>>> & {
+        [key: string]: InferOutput<TRest>;
+      }
     : never;
 
 /**
