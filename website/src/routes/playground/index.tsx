@@ -78,7 +78,7 @@ export default component$(() => {
 
 const Schema = v.object({
   email: v.string([v.minLength(1), v.email()]),
-  password: v.string([v.minLength(1), v.minLength(8)]),
+  password: v.string([v.minLength(1), v.maxLength(8)]),
 });
 
 const result = v.safeParse(Schema, {
