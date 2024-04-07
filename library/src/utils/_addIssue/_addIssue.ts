@@ -46,7 +46,7 @@ export function _addIssue<
   context: TContext,
   reference: FunctionReference<unknown[], TContext>,
   label: string,
-  dataset: Dataset<unknown, BaseIssue<InferInput<TContext>>>,
+  dataset: Dataset<unknown, BaseIssue<unknown>>,
   config: Config<InferIssue<TContext>>,
   other?: Other<InferInput<TContext>>
 ): void {
@@ -64,7 +64,7 @@ export function _addIssue<
     expected,
     received,
     message: `Invalid ${label}: ${
-      context.expects ? `Expected ${context.expects} but r` : 'R'
+      expected ? `Expected ${expected} but r` : 'R'
     }eceived ${received}`,
     // @ts-expect-error
     requirement: context.requirement,
