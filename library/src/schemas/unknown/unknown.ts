@@ -26,6 +26,7 @@ export function unknown(): UnknownSchema {
     expects: 'unknown',
     async: false,
     _run(dataset) {
+      dataset.typed = true;
       return dataset;
     },
   };
