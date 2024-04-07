@@ -1,3 +1,4 @@
+export * from './any/index.ts';
 export * from './array/index.ts';
 export * from './boolean/index.ts';
 export * from './date/index.ts';
