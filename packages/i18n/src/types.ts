@@ -9,6 +9,7 @@ export type Language = {
     | 'kr'
     | 'nb'
     | 'nl'
+    | 'pt'
     | 'ro'
     | 'ru'
     | 'sl'
