@@ -1,4 +1,6 @@
 import type {
+  LooseObjectIssue,
+  LooseObjectSchema,
   NeverIssue,
   ObjectWithRestIssue,
   ObjectWithRestSchema,
@@ -37,6 +39,10 @@ export function _addObjectRestIssues<
     | StrictObjectSchema<
         ObjectEntries,
         ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      >
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
       >,
 >(
   context: TSchema,
