@@ -173,7 +173,7 @@ describe('object', () => {
       abortEarly: undefined,
       abortPipeEarly: undefined,
       skipPipe: undefined,
-    } as const;
+    };
 
     const stringIssue: StringIssue = {
       ...baseInfo,

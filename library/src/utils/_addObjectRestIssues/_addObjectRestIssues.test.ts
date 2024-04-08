@@ -43,7 +43,7 @@ describe('_addObjectRestIssues', () => {
         origin: 'value',
         input,
         key: 'key2',
-        value: input['key2'],
+        value: input.key2,
       },
     ],
   };
@@ -58,7 +58,7 @@ describe('_addObjectRestIssues', () => {
         origin: 'value',
         input,
         key: 'key4',
-        value: input['key4'],
+        value: input.key4,
       },
     ],
   };
