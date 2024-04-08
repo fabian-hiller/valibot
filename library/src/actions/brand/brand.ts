@@ -26,6 +26,10 @@ export interface BrandAction<TInput, TName extends BrandName>
    * The action type.
    */
   readonly type: 'brand';
+  /**
+   * The brand name.
+   */
+  readonly name: TName;
 }
 
 /**
@@ -42,6 +46,7 @@ export function brand<TInput, TName extends BrandName>(
   return {
     kind: 'transformation',
     type: 'brand',
+    name,
     async: false,
     _run(dataset) {
       return dataset as TypedDataset<TInput & Brand<TName>, never>;

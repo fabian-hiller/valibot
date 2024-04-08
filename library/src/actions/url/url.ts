@@ -34,7 +34,7 @@ export interface UrlIssue<TInput extends string> extends BaseIssue<TInput> {
 /**
  * URL validation type.
  */
-export interface UrlValidation<
+export interface UrlAction<
   TInput extends string,
   TMessage extends ErrorMessage<UrlIssue<TInput>> | undefined,
 > extends BaseValidation<TInput, TInput, UrlIssue<TInput>> {
@@ -64,7 +64,7 @@ export interface UrlValidation<
  *
  * @returns A validation action.
  */
-export function url<TInput extends string>(): UrlValidation<TInput, undefined>;
+export function url<TInput extends string>(): UrlAction<TInput, undefined>;
 
 /**
  * Creates a pipeline validation action that validates a URL.
@@ -79,11 +79,11 @@ export function url<TInput extends string>(): UrlValidation<TInput, undefined>;
 export function url<
   TInput extends string,
   const TMessage extends ErrorMessage<UrlIssue<TInput>> | undefined,
->(message: TMessage): UrlValidation<TInput, TMessage>;
+>(message: TMessage): UrlAction<TInput, TMessage>;
 
 export function url(
   message?: ErrorMessage<UrlIssue<string>> | undefined
-): UrlValidation<string, ErrorMessage<UrlIssue<string>> | undefined> {
+): UrlAction<string, ErrorMessage<UrlIssue<string>> | undefined> {
   return {
     kind: 'validation',
     type: 'url',

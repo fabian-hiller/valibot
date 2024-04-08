@@ -1,30 +1,30 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { decimal, type DecimalAction, type DecimalIssue } from './decimal.ts';
+import { url, type UrlAction, type UrlIssue } from './url.ts';
 
-describe('decimal', () => {
+describe('url', () => {
   describe('should return action object', () => {
     test('with undefined message', () => {
-      type Action = DecimalAction<string, undefined>;
-      expectTypeOf(decimal()).toEqualTypeOf<Action>();
-      expectTypeOf(decimal(undefined)).toEqualTypeOf<Action>();
+      type Action = UrlAction<string, undefined>;
+      expectTypeOf(url()).toEqualTypeOf<Action>();
+      expectTypeOf(url(undefined)).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
-      expectTypeOf(decimal('message')).toEqualTypeOf<
-        DecimalAction<string, 'message'>
+      expectTypeOf(url('message')).toEqualTypeOf<
+        UrlAction<string, 'message'>
       >();
     });
 
     test('with function message', () => {
-      expectTypeOf(decimal(() => 'message')).toEqualTypeOf<
-        DecimalAction<string, () => string>
+      expectTypeOf(url(() => 'message')).toEqualTypeOf<
+        UrlAction<string, () => string>
       >();
     });
   });
 
   describe('should infer correct types', () => {
-    type Action = DecimalAction<string, undefined>;
+    type Action = UrlAction<string, undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<string>();
@@ -35,7 +35,7 @@ describe('decimal', () => {
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<DecimalIssue<string>>();
+      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<UrlIssue<string>>();
     });
   });
 });

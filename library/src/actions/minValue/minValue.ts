@@ -34,7 +34,7 @@ export interface MinValueIssue<
 /**
  * Min value validation type.
  */
-export interface MinValueValidation<
+export interface MinValueAction<
   TInput extends ValueInput,
   TRequirement extends TInput,
   TMessage extends
@@ -70,9 +70,7 @@ export interface MinValueValidation<
 export function minValue<
   TInput extends ValueInput,
   const TRequirement extends TInput,
->(
-  requirement: TRequirement
-): MinValueValidation<TInput, TRequirement, undefined>;
+>(requirement: TRequirement): MinValueAction<TInput, TRequirement, undefined>;
 
 /**
  * Creates a pipeline validation action that validates the value of a string,
@@ -92,12 +90,12 @@ export function minValue<
 >(
   requirement: TRequirement,
   message: TMessage
-): MinValueValidation<TInput, TRequirement, TMessage>;
+): MinValueAction<TInput, TRequirement, TMessage>;
 
 export function minValue(
   requirement: ValueInput,
   message?: ErrorMessage<MinValueIssue<ValueInput, ValueInput>>
-): MinValueValidation<
+): MinValueAction<
   ValueInput,
   ValueInput,
   ErrorMessage<MinValueIssue<ValueInput, ValueInput>> | undefined

@@ -34,7 +34,7 @@ export interface MaxValueIssue<
 /**
  * Max value validation type.
  */
-export interface MaxValueValidation<
+export interface MaxValueAction<
   TInput extends ValueInput,
   TRequirement extends TInput,
   TMessage extends
@@ -70,9 +70,7 @@ export interface MaxValueValidation<
 export function maxValue<
   TInput extends ValueInput,
   const TRequirement extends TInput,
->(
-  requirement: TRequirement
-): MaxValueValidation<TInput, TRequirement, undefined>;
+>(requirement: TRequirement): MaxValueAction<TInput, TRequirement, undefined>;
 
 /**
  * Creates a pipeline validation action that validates the value of a string,
@@ -92,12 +90,12 @@ export function maxValue<
 >(
   requirement: TRequirement,
   message: TMessage
-): MaxValueValidation<TInput, TRequirement, TMessage>;
+): MaxValueAction<TInput, TRequirement, TMessage>;
 
 export function maxValue(
   requirement: ValueInput,
   message?: ErrorMessage<MaxValueIssue<ValueInput, ValueInput>>
-): MaxValueValidation<
+): MaxValueAction<
   ValueInput,
   ValueInput,
   ErrorMessage<MaxValueIssue<ValueInput, ValueInput>> | undefined
