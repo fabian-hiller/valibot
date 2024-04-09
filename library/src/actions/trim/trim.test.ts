@@ -11,7 +11,7 @@ describe('trim', () => {
     } satisfies TrimAction);
   });
 
-  describe('should trim input string', () => {
+  describe('should trim string', () => {
     const action = trim();
 
     test('for empty string', () => {

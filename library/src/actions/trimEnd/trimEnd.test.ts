@@ -11,7 +11,7 @@ describe('trimEnd', () => {
     } satisfies TrimEndAction);
   });
 
-  describe('should trim input string', () => {
+  describe('should trim end of string', () => {
     const action = trimEnd();
 
     test('for empty string', () => {
@@ -30,6 +30,13 @@ describe('trimEnd', () => {
         typed: true,
         value: 'foo',
       });
+    });
+  });
+
+  test('should not trim start of string', () => {
+    expect(trimEnd()._run({ typed: true, value: '  foo' }, {})).toStrictEqual({
+      typed: true,
+      value: '  foo',
     });
   });
 });
