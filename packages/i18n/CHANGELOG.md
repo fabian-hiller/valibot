@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add Portuguese (pt) translations (pull request #509)
+
 ## v0.9.0 (March 09, 2024)
 
 - Add Romanian (ro) translations (pull request #472)
