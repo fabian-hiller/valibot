@@ -34,9 +34,8 @@ describe('trimStart', () => {
   });
 
   test('should not trim end of string', () => {
-    expect(trimStart()._run({ typed: true, value: 'foo  ' }, {})).toStrictEqual({
-      typed: true,
-      value: 'foo  ',
-    });
+    expect(trimStart()._run({ typed: true, value: 'foo  ' }, {})).toStrictEqual(
+      { typed: true, value: 'foo  ' }
+    );
   });
 });
