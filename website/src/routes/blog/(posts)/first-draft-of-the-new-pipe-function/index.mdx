@@ -1,0 +1,151 @@
+---
+cover: First Draft
+title: First draft of the new pipe function
+description: >-
+  Text
+published: 2024-04-02
+authors:
+  - fabian-hiller
+  - Demivan
+contributors:
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+import TypeSafeIssues from './type-safe-issues.jpg?jsx';
+
+One month after I published my <Link href="../should-we-change-valibots-api/">last post</Link> to discuss Valibot's API, it is finally time to share a first draft with you. I have not only implemented the `pipe` functions. In the end, I basically rewrote the whole library. I improved many things while keeping performance, bundle size and developer experience in mind.
+
+> Except for the `pipe` function, the basic API remains the same. However, to make the migration as smooth as possible for you, we plan to partner with [Codemod](https://codemod.com/) to automatically migrate most of the changes with a single CLI command.
+
+## `pipe` function
+
+First of all, thank you for your feedback! It was amazing to see how the Valibot community came together to discuss this change. In total, my post on X got more than 15,000 impressions and more than 70 developers participated on GitHub.
+
+### Better mental model
+
+The `pipe` function reduces the mental model of Valibot to schemas, methods and actions. Schemas validate data types like strings, numbers and objects. Methods are small utilities that help you use or modify a schema. For example, the `pipe` function is a "method" that adds a pipeline to a schema. Actions are used exclusively within a pipeline to further validate or transform a particular data type.
+
+### Simplified source code
+
+By moving the pipeline into its own function, we made Valibot even more modular. This has several advantages. The most obvious is that it reduces the bundle size if your schemas do not require this feature. But even if you use the pipe function, you can expect an average 15-20% reduction in bundle size with the new implementation.
+
+Another great benefit is that we were able to simplify the schema functions by removing the `pipe` argument. Schema functions are now more independent and only cover the validation of their data type. This allows us to simplify the unit tests, making the library even safer to use.
+
+Furthermore, for any primitive data type schema such as `string`, we could remove its async `stringAsync` implementation, since this was only necessary to support async validation within the `pipe` argument. This will further reduce the overall bundle size of the library.
+
+### More flexibility and control
+
+The `pipe` function also adds flexibility to the library and gives you more control over your schemas. Previously, it was very difficult to extend the pipeline of a schema with additional validations or transformations. This changes with the `pipe` functions because they can be nested, making your code more composable.
+
+```ts
+import * as v from 'valibot';
+
+const EmailSchema = v.pipe(v.string(), v.email());
+const GmailSchema = v.pipe(EmailSchema, v.endsWith('@gmail.com'));
+```
+
+Another great benefit is that pipelines now support data type transformations. There is no longer any confusion between a transformation method and pipeline transformations. You can even add another schema function after a transformation to validate its output.
+
+```ts
+import * as v from 'valibot';
+
+const PixelSchema = v.pipe(
+  v.string(),
+  v.regex(/^\d+px$/),
+  v.transform(parseInt),
+  v.number(),
+  v.maxValue(100)
+);
+```
+
+When building forms, this also gives you more control over the input and output type of a schema. It is now possible for a field to have an input type of `string | null` but an output type of `string` without specifying a default value.
+
+```ts
+import * as v from 'valibot';
+
+// This schema
+const ProfileSchema = v.object({
+  name: v.string(),
+  age: v.pipe(v.nullable(v.number()), v.number()),
+  bio: v.pipe(v.nullable(v.string()), v.string()),
+});
+
+// Has this input type
+type ProfileInput = {
+  name: string;
+  age: number | null;
+  bio: string | null;
+};
+
+// But this output type
+type ProfileOutput = {
+  name: string;
+  age: number;
+  bio: string;
+};
+```
+
+## `object` schema
+
+Another major change is that I have removed the `rest` argument from the `object` schema. This reduces the bundle size by up to 150 bytes if you don't need this functionality. If you do need it, you can use the newly added `objectWithRest` schema, and to allow or not allow unknown entries, there is now a special `looseObject` and `strictObject` schema for a better developer experience.
+
+```ts
+import * as v from 'valibot';
+
+const NormalObjectSchema = v.object({ ... });
+const ObjectWithRestSchema = v.objectWithRest({ ... }, v.string());
+const LooseObjectSchema = v.looseObject({ ... });
+const StrictObjectSchema = v.strictObject({ ... });
+```
+
+> I also plan to remove the `rest` argument from the `tuple` schema and provide a `tupleWithRest`, `looseTuple` and `strictTuple` schema.
+
+## Type safety
+
+I am happy to announce that I have been able to drastically improve the type safety of the library. Previously, like many other libraries out there, less important parts were only generally typed.
+
+A concrete example is the issues that Valibot returns when the data does not match your schema. Even though each issue contains very specific data depending on the schema and validation function, they were all previously typed with a generic `SchemaIssue` type.
+
+With this rewrite, each schema and validation function brings its own issues type. This way each schema knows exactly what kind of issues can occur. We also added the `isOfKind` and `isOfType` util functions to filter and handle specific objects in a type-safe way.
+
+<TypeSafeIssues alt="Code example of a type safe issue" />
+
+## Unit tests
+
+Valibot was kind of my first project that came with unit testing. When I implemented the first tests, I had very little experience with testing. Even though the current tests cover 100% of the library, I don't feel comfortable releasing v1 before rewriting them and making them perfect. Also, we have had some type issues in the past. That's why I'm also planning to add type testing to ensure the developer experience when using TypeScript.
+
+It is important to me to ensure the functionality of the library and to make sure that no unexpected bugs occur when changes are made to the code in the future. Developers should be able to fully rely on Valibot. If you are a testing expert, please have a look and review the `string` and `object` schema tests.
+
+## Next steps
+
+I created [this draft PR](https://github.com/fabian-hiller/valibot/pull/502) for two reasons. One is to get feedback from the community before rewriting the entire library. I have already discussed a lot of details with [@Demivan](https://github.com/Demivan) and think we are on a good path, but maybe we missed something. Feel free to investigate the source code and reach out via the comments.
+
+With the following commands you can clone, bundle and play with the new source code in advance:
+
+```bash
+# Clone repository
+git clone git@github.com:fabian-hiller/valibot.git
+
+# Switch branch
+git switch rewrite-with-pipe
+
+# Install dependencies
+cd ./valibot && pnpm install
+
+# Bundle library
+cd ./library && pnpm build
+
+# Modify `playground.ts`
+
+# Run playground
+pnpm play
+```
+
+On the other hand, I created [this PR](https://github.com/fabian-hiller/valibot/pull/502) also to ask you to help me implement the missing parts. If you are passionate about open source and want to join an exponentially growing open source project, now might be the time.
+
+Starting April 8, everyone is welcome to take over the implementation of a schema or action function. I recommend starting with a simple function like `minBytes`, where you only have to copy and modify the `minLength` action, and maybe look at the previous implementation of the same function.
+
+To participate, just add a comment to [this PR](https://github.com/fabian-hiller/valibot/pull/502) with the part you want to take over. Please only add a comment if you are able to do the implementation within 3 days, to not block the rewrite. After you get my thumbs up, you can create a PR that merges your changes into the `rewrite-with-pipe` branch.
+
+The goal is to have everything implemented this month. ⚡️
