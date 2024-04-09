@@ -6,4 +6,6 @@ export * from './minLength/index.ts';
 export * from './minValue/index.ts';
 export * from './transform/index.ts';
 export * from './trim/index.ts';
+export * from './trimEnd/index.ts';
+export * from './trimStart/index.ts';
 export * from './url/index.ts';
