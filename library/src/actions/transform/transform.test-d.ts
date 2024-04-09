@@ -3,7 +3,7 @@ import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import { transform, type TransformAction } from './transform.ts';
 
 describe('transform', () => {
-  type Action = TransformAction<(input: string) => number>;
+  type Action = TransformAction<string, number>;
 
   test('should return action object', () => {
     expectTypeOf(

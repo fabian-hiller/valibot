@@ -10,7 +10,7 @@ describe('transform', () => {
       async: false,
       action: action.action,
       _run: expect.any(Function),
-    } satisfies TransformAction<(input: string) => number>);
+    } satisfies TransformAction<string, number>);
   });
 
   describe('should transform input', () => {
