@@ -7,13 +7,12 @@ import {
   object,
   objectWithRest,
   string,
-  type StringIssue,
 } from '../../schemas/index.ts';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue } from '../../vitest/index.ts';
-import { pick } from './pick.ts';
+import { omit } from './omit.ts';
 
-describe('pick', () => {
+describe('omit', () => {
   const entries = {
     key1: string(),
     key2: number(),
@@ -31,7 +30,7 @@ describe('pick', () => {
   } as const;
 
   describe('object', () => {
-    const schema = pick(object(entries), ['key1', 'key3']);
+    const schema = omit(object(entries), ['key1', 'key3']);
 
     test('should return schema object', () => {
       expect(schema).toStrictEqual({
@@ -39,8 +38,8 @@ describe('pick', () => {
         type: 'object',
         expects: 'Object',
         entries: {
-          key1: { ...string(), _run: expect.any(Function) },
-          key3: { ...string(), _run: expect.any(Function) },
+          key2: { ...number(), _run: expect.any(Function) },
+          key4: { ...number(), _run: expect.any(Function) },
         },
         message: undefined,
         async: false,
@@ -49,8 +48,8 @@ describe('pick', () => {
     });
 
     describe('should return no nested issues', () => {
-      test('if picked keys are specified', () => {
-        expectNoSchemaIssue(schema, [{ key1: 'foo', key3: 'bar' }]);
+      test('if not omitted keys are specified', () => {
+        expectNoSchemaIssue(schema, [{ key2: 123, key4: 456 }]);
       });
 
       test('for unknown entries', () => {
@@ -58,86 +57,24 @@ describe('pick', () => {
           schema._run(
             {
               typed: false,
-              value: { key1: 'foo', key2: 123, key3: 'bar', other: null },
+              value: { key1: 'foo', key2: 123, key4: 456, other: null },
             },
             {}
           )
         ).toStrictEqual({
           typed: true,
-          value: { key1: 'foo', key3: 'bar' },
+          value: { key2: 123, key4: 456 },
         });
       });
     });
 
     describe('should return nested issues', () => {
-      test('if a picked key is missing', () => {
+      test('if a not omitted key is missing', () => {
         expect(
-          schema._run({ typed: false, value: { key3: 'bar' } }, {})
+          schema._run({ typed: false, value: { key2: 123 } }, {})
         ).toStrictEqual({
           typed: false,
-          value: { key3: 'bar' },
-          issues: [
-            {
-              ...baseInfo,
-              kind: 'schema',
-              type: 'string',
-              input: undefined,
-              expected: 'string',
-              received: 'undefined',
-              path: [
-                {
-                  type: 'object',
-                  origin: 'value',
-                  input: { key3: 'bar' },
-                  key: 'key1',
-                  value: undefined,
-                },
-              ],
-            } satisfies StringIssue,
-          ],
-        } satisfies UntypedDataset<InferIssue<typeof schema>>);
-      });
-    });
-  });
-
-  describe('objectWithRest', () => {
-    const schema = pick(objectWithRest(entries, boolean()), ['key2', 'key3']);
-
-    test('should return schema object', () => {
-      expect(schema).toStrictEqual({
-        kind: 'schema',
-        type: 'object_with_rest',
-        expects: 'Object',
-        entries: {
-          key2: { ...number(), _run: expect.any(Function) },
-          key3: { ...string(), _run: expect.any(Function) },
-        },
-        rest: { ...boolean(), _run: expect.any(Function) },
-        message: undefined,
-        async: false,
-        _run: expect.any(Function),
-      } satisfies typeof schema);
-    });
-
-    describe('should return no nested issues', () => {
-      test('if picked keys are specified', () => {
-        // @ts-expect-error
-        expectNoSchemaIssue(schema, [{ key2: 123, key3: 'bar' }]);
-      });
-
-      test('if not picked key matches rest', () => {
-        // @ts-expect-error
-        expectNoSchemaIssue(schema, [{ key1: false, key2: 123, key3: 'bar' }]);
-      });
-    });
-
-    describe('should return nested issues', () => {
-      test('if a picked key is missing', () => {
-        expect(
-          schema._run({ typed: false, value: { key3: 'foo' } }, {})
-        ).toStrictEqual({
-          typed: false,
-          value: { key3: 'foo' },
+          value: { key2: 123 },
           issues: [
             {
               ...baseInfo,
@@ -150,8 +87,70 @@ describe('pick', () => {
                 {
                   type: 'object',
                   origin: 'value',
-                  input: { key3: 'foo' },
-                  key: 'key2',
+                  input: { key2: 123 },
+                  key: 'key4',
+                  value: undefined,
+                },
+              ],
+            } satisfies NumberIssue,
+          ],
+        } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      });
+    });
+  });
+
+  describe('objectWithRest', () => {
+    const schema = omit(objectWithRest(entries, boolean()), ['key2', 'key3']);
+
+    test('should return schema object', () => {
+      expect(schema).toStrictEqual({
+        kind: 'schema',
+        type: 'object_with_rest',
+        expects: 'Object',
+        entries: {
+          key1: { ...string(), _run: expect.any(Function) },
+          key4: { ...number(), _run: expect.any(Function) },
+        },
+        rest: { ...boolean(), _run: expect.any(Function) },
+        message: undefined,
+        async: false,
+        _run: expect.any(Function),
+      } satisfies typeof schema);
+    });
+
+    describe('should return no nested issues', () => {
+      test('if not omitted keys are specified', () => {
+        // @ts-expect-error
+        expectNoSchemaIssue(schema, [{ key1: 'foo', key4: 456 }]);
+      });
+
+      test('if omitted key matches rest', () => {
+        // @ts-expect-error
+        expectNoSchemaIssue(schema, [{ key1: 'foo', key2: true, key4: 456 }]);
+      });
+    });
+
+    describe('should return nested issues', () => {
+      test('if a not omitted key is missing', () => {
+        expect(
+          schema._run({ typed: false, value: { key1: 'foo' } }, {})
+        ).toStrictEqual({
+          typed: false,
+          value: { key1: 'foo' },
+          issues: [
+            {
+              ...baseInfo,
+              kind: 'schema',
+              type: 'number',
+              input: undefined,
+              expected: 'number',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'value',
+                  input: { key1: 'foo' },
+                  key: 'key4',
                   value: undefined,
                 },
               ],
@@ -160,30 +159,30 @@ describe('pick', () => {
         } satisfies UntypedDataset<InferIssue<typeof schema>>);
       });
 
-      test('if a not picked key does not match rest', () => {
+      test('if an omitted key does not match rest', () => {
         expect(
           schema._run(
-            { typed: false, value: { key1: 'foo', key2: 123, key3: 'foo' } },
+            { typed: false, value: { key1: 'foo', key2: null, key4: 456 } },
             {}
           )
         ).toStrictEqual({
           typed: false,
-          value: { key1: 'foo', key2: 123, key3: 'foo' },
+          value: { key1: 'foo', key2: null, key4: 456 },
           issues: [
             {
               ...baseInfo,
               kind: 'schema',
               type: 'boolean',
-              input: 'foo',
+              input: null,
               expected: 'boolean',
-              received: '"foo"',
+              received: 'null',
               path: [
                 {
                   type: 'object',
                   origin: 'value',
-                  input: { key1: 'foo', key2: 123, key3: 'foo' },
-                  key: 'key1',
-                  value: 'foo',
+                  input: { key1: 'foo', key2: null, key4: 456 },
+                  key: 'key2',
+                  value: null,
                 },
               ],
             } satisfies BooleanIssue,

@@ -17,11 +17,11 @@ import {
   type StringSchema,
 } from '../../schemas/index.ts';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { pick, type SchemaWithPick } from './pick.ts';
+import { omit, type SchemaWithOmit } from './omit.ts';
 
-describe('pick', () => {
+describe('omit', () => {
   describe('object', () => {
-    type Schema = SchemaWithPick<
+    type Schema = SchemaWithOmit<
       ObjectSchema<
         {
           readonly key1: StringSchema<undefined>;
@@ -36,7 +36,7 @@ describe('pick', () => {
 
     test('should return schema object', () => {
       expectTypeOf(
-        pick(
+        omit(
           object({
             key1: string(),
             key2: number(),
@@ -51,28 +51,28 @@ describe('pick', () => {
     describe('should infer correct types', () => {
       test('of input', () => {
         expectTypeOf<InferInput<Schema>>().toEqualTypeOf<{
-          key1: string;
-          key3: string;
+          key2: number;
+          key4: number;
         }>();
       });
 
       test('of output', () => {
         expectTypeOf<InferOutput<Schema>>().toEqualTypeOf<{
-          key1: string;
-          key3: string;
+          key2: number;
+          key4: number;
         }>();
       });
 
       test('of issue', () => {
         expectTypeOf<InferIssue<Schema>>().toEqualTypeOf<
-          ObjectIssue | StringIssue
+          ObjectIssue | NumberIssue
         >();
       });
     });
   });
 
   describe('objectWithRest', () => {
-    type Schema = SchemaWithPick<
+    type Schema = SchemaWithOmit<
       ObjectWithRestSchema<
         {
           readonly key1: StringSchema<undefined>;
@@ -88,7 +88,7 @@ describe('pick', () => {
 
     test('should return schema object', () => {
       expectTypeOf(
-        pick(
+        omit(
           objectWithRest(
             { key1: string(), key2: number(), key3: string(), key4: number() },
             boolean()
@@ -101,13 +101,13 @@ describe('pick', () => {
     describe('should infer correct types', () => {
       test('of input', () => {
         expectTypeOf<InferInput<Schema>>().toEqualTypeOf<
-          { key2: number; key3: string } & { [key: string]: boolean }
+          { key1: string; key4: number } & { [key: string]: boolean }
         >();
       });
 
       test('of output', () => {
         expectTypeOf<InferOutput<Schema>>().toEqualTypeOf<
-          { key2: number; key3: string } & { [key: string]: boolean }
+          { key1: string; key4: number } & { [key: string]: boolean }
         >();
       });
 
