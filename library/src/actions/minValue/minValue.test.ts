@@ -38,7 +38,7 @@ describe('minValue', () => {
     });
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     test('for untyped inputs', () => {
       expect(minValue(1)._run({ typed: false, value: null }, {})).toStrictEqual(
         { typed: false, value: null }
@@ -72,7 +72,7 @@ describe('minValue', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const baseInfo = {
       kind: 'validation',
       type: 'min_value',

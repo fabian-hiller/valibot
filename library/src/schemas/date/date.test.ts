@@ -37,7 +37,7 @@ describe('date', () => {
     });
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     const schema = date();
 
     test('for current date', () => {
@@ -53,7 +53,7 @@ describe('date', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const schema = date('message');
     const baseIssue: Omit<DateIssue, 'input' | 'received'> = {
       kind: 'schema',

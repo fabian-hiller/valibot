@@ -37,7 +37,7 @@ describe('string', () => {
     });
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     const schema = string();
 
     test('for empty strings', () => {
@@ -57,7 +57,7 @@ describe('string', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const schema = string('message');
     const baseIssue: Omit<StringIssue, 'input' | 'received'> = {
       kind: 'schema',

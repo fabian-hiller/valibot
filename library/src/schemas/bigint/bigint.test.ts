@@ -37,7 +37,7 @@ describe('bigint', () => {
     });
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     const schema = bigint();
 
     test('for bigint zero', () => {
@@ -53,7 +53,7 @@ describe('bigint', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const schema = bigint('message');
     const baseIssue: Omit<BigintIssue, 'input' | 'received'> = {
       kind: 'schema',

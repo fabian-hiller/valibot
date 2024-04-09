@@ -39,7 +39,7 @@ describe('decimal', () => {
     });
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     const action = decimal();
 
     test('for untyped inputs', () => {
@@ -63,7 +63,7 @@ describe('decimal', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const action = decimal('message');
     const baseIssue: Omit<DecimalIssue<string>, 'input' | 'received'> = {
       kind: 'validation',

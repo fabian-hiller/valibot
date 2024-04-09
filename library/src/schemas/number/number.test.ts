@@ -37,7 +37,7 @@ describe('number', () => {
     });
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     const schema = number();
 
     test('for number zero', () => {
@@ -65,7 +65,7 @@ describe('number', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const schema = number('message');
     const baseIssue: Omit<NumberIssue, 'input' | 'received'> = {
       kind: 'schema',

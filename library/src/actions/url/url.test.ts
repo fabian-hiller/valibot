@@ -38,7 +38,7 @@ describe('url', () => {
     });
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     const action = url();
 
     test('for untyped inputs', () => {
@@ -73,7 +73,7 @@ describe('url', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const action = url('message');
     const baseIssue: Omit<UrlIssue<string>, 'input' | 'received'> = {
       kind: 'validation',

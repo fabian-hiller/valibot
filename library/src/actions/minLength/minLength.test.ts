@@ -42,7 +42,7 @@ describe('minLength', () => {
     });
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     const action = minLength(5);
 
     test('for untyped inputs', () => {
@@ -61,7 +61,7 @@ describe('minLength', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const action = minLength(5, 'message');
     const baseIssue: Omit<MinLengthIssue<string, 5>, 'input' | 'received'> = {
       kind: 'validation',

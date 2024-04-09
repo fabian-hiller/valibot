@@ -37,7 +37,7 @@ describe('never', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const schema = never('message');
     const baseIssue: Omit<NeverIssue, 'input' | 'received'> = {
       kind: 'schema',

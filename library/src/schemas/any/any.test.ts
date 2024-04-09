@@ -13,7 +13,7 @@ describe('any', () => {
     } satisfies AnySchema);
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     const schema = any();
 
     // Primitive types

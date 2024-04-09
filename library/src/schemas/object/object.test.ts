@@ -45,7 +45,7 @@ describe('object', () => {
     });
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     test('for empty object', () => {
       expectNoSchemaIssue(object({}), [{}]);
     });
@@ -69,7 +69,7 @@ describe('object', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const schema = object({}, 'message');
     const baseIssue: Omit<ObjectIssue, 'input' | 'received'> = {
       kind: 'schema',

@@ -37,7 +37,7 @@ describe('boolean', () => {
     });
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     const schema = boolean();
 
     test('for true boolean', () => {
@@ -49,7 +49,7 @@ describe('boolean', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const schema = boolean('message');
     const baseIssue: Omit<BooleanIssue, 'input' | 'received'> = {
       kind: 'schema',

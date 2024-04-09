@@ -13,7 +13,7 @@ describe('unknown', () => {
     } satisfies UnknownSchema);
   });
 
-  describe('should return no issue', () => {
+  describe('should return dataset without issues', () => {
     const schema = unknown();
 
     // Primitive types
