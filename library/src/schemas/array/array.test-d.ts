@@ -19,7 +19,7 @@ describe('array', () => {
       expectTypeOf(array(item, undefined)).toEqualTypeOf<Schema>();
     });
 
-    test('with array message', () => {
+    test('with string message', () => {
       expectTypeOf(array(item, 'message')).toEqualTypeOf<
         ArraySchema<Item, 'message'>
       >();

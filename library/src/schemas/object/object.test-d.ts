@@ -21,7 +21,7 @@ describe('object', () => {
       expectTypeOf(object(entries, undefined)).toEqualTypeOf<Schema>();
     });
 
-    test('with object message', () => {
+    test('with string message', () => {
       expectTypeOf(object(entries, 'message')).toEqualTypeOf<
         ObjectSchema<Entries, 'message'>
       >();
