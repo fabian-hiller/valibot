@@ -1,5 +1,6 @@
 export * from './brand/index.ts';
 export * from './decimal/index.ts';
+export * from './lowerCase/index.ts';
 export * from './maxLength/index.ts';
 export * from './maxValue/index.ts';
 export * from './minLength/index.ts';
