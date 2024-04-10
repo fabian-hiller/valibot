@@ -102,7 +102,7 @@ describe('array', () => {
     });
   });
 
-  describe('should return no nested issues', () => {
+  describe('should return dataset without nested issues', () => {
     test('for simple array', () => {
       expectNoSchemaIssue(array(string()), [['foo', 'bar', 'baz']]);
     });
@@ -112,7 +112,7 @@ describe('array', () => {
     });
   });
 
-  describe('should return nested issues', () => {
+  describe('should return dataset with nested issues', () => {
     const schema = array(string());
 
     const baseInfo = {

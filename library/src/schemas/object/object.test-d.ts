@@ -13,8 +13,7 @@ import { object, type ObjectIssue, type ObjectSchema } from './object.ts';
 describe('object', () => {
   describe('should return schema object', () => {
     const entries = { key: string() };
-    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-    type Entries = { key: StringSchema<undefined> };
+    type Entries = typeof entries;
 
     test('with undefined message', () => {
       type Schema = ObjectSchema<Entries, undefined>;
@@ -39,7 +38,7 @@ describe('object', () => {
     type Schema = ObjectSchema<
       {
         key1: StringSchema<undefined>;
-        key2: OptionalSchema<StringSchema<undefined>, undefined>;
+        key2: OptionalSchema<StringSchema<undefined>, 'foo'>;
         key3: NullishSchema<StringSchema<undefined>, undefined>;
         key4: ObjectSchema<{ key: NumberSchema<undefined> }, undefined>;
       },
@@ -58,7 +57,7 @@ describe('object', () => {
     test('of output', () => {
       expectTypeOf<InferOutput<Schema>>().toEqualTypeOf<{
         key1: string;
-        key2?: string | undefined;
+        key2: string;
         key3?: string | null | undefined;
         key4: { key: number };
       }>();

@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
-import { nullish } from '../nullish/nullish.ts';
+import { nullish } from '../nullish/index.ts';
 import { number, type NumberIssue } from '../number/index.ts';
-import { optional } from '../optional/optional.ts';
+import { optional } from '../optional/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
 import { object, type ObjectIssue, type ObjectSchema } from './object.ts';
 
@@ -119,7 +119,7 @@ describe('object', () => {
     });
   });
 
-  describe('should return no nested issues', () => {
+  describe('should return dataset without nested issues', () => {
     test('for simple object', () => {
       expectNoSchemaIssue(object({ key1: string(), key2: number() }), [
         { key1: 'foo', key2: 123 },
@@ -162,7 +162,7 @@ describe('object', () => {
     });
   });
 
-  describe('should return nested issues', () => {
+  describe('should return dataset with nested issues', () => {
     const schema = object({ key: string(), nested: object({ key: number() }) });
 
     const baseInfo = {
