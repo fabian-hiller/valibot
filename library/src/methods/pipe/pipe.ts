@@ -608,11 +608,11 @@ export function pipe<
         if (
           config.skipPipe ||
           (dataset.issues &&
-            // TODO: This behavior must be documented!
-            (nextAction?.kind === 'schema' ||
-              nextAction?.kind === 'transformation' ||
-              config.abortEarly ||
-              config.abortPipeEarly))
+            (config.abortEarly ||
+              config.abortPipeEarly ||
+              // TODO: This behavior must be documented!
+              nextAction?.kind === 'schema' ||
+              nextAction?.kind === 'transformation'))
         ) {
           dataset.typed = false;
           break;
