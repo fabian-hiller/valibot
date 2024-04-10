@@ -22,7 +22,7 @@ export function lowerCase(): LowerCaseAction {
     type: 'lower_case',
     async: false,
     _run(dataset) {
-      dataset.value = dataset.value.toLocaleLowerCase();
+      dataset.value = dataset.value.toLowerCase();
       return dataset;
     },
   };
