@@ -9,4 +9,5 @@ export * from './transform/index.ts';
 export * from './trim/index.ts';
 export * from './trimEnd/index.ts';
 export * from './trimStart/index.ts';
+export * from './upperCase/index.ts';
 export * from './url/index.ts';
