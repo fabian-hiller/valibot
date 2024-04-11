@@ -77,7 +77,7 @@ describe('minBytes', () => {
       expectActionIssue(
         action,
         baseIssue,
-        ['', 'not'],
+        ['', 'not', 'four'],
         (value) => `${getBytesLength(value)}`
       );
     });
