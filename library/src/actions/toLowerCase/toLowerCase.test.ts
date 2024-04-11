@@ -1,18 +1,18 @@
 import { describe, expect, test } from 'vitest';
-import { lowerCase, type LowerCaseAction } from './lowerCase.ts';
+import { toLowerCase, type ToLowerCaseAction } from './toLowerCase.ts';
 
-describe('lowerCase', () => {
+describe('toLowerCase', () => {
   test('should return action object', () => {
-    expect(lowerCase()).toStrictEqual({
+    expect(toLowerCase()).toStrictEqual({
       kind: 'transformation',
-      type: 'lower_case',
+      type: 'to_lower_case',
       async: false,
       _run: expect.any(Function),
-    } satisfies LowerCaseAction);
+    } satisfies ToLowerCaseAction);
   });
 
   describe('should transform to lower case', () => {
-    const action = lowerCase();
+    const action = toLowerCase();
 
     test('for string', () => {
       expect(action._run({ typed: true, value: 'TeSt' }, {})).toStrictEqual({

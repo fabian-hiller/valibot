@@ -1,18 +1,18 @@
 import { describe, expect, test } from 'vitest';
-import { upperCase, type UpperCaseAction } from './upperCase.ts';
+import { toUpperCase, type ToUpperCaseAction } from './toUpperCase.ts';
 
-describe('upperCase', () => {
+describe('toUpperCase', () => {
   test('should return action object', () => {
-    expect(upperCase()).toStrictEqual({
+    expect(toUpperCase()).toStrictEqual({
       kind: 'transformation',
-      type: 'upper_case',
+      type: 'to_upper_case',
       async: false,
       _run: expect.any(Function),
-    } satisfies UpperCaseAction);
+    } satisfies ToUpperCaseAction);
   });
 
   describe('should transform to upper case', () => {
-    const action = upperCase();
+    const action = toUpperCase();
 
     test('for string', () => {
       expect(action._run({ typed: true, value: 'TeSt' }, {})).toStrictEqual({
