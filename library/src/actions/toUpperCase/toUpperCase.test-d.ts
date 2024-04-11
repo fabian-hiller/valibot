@@ -1,23 +1,23 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { upperCase, type UpperCaseAction } from './upperCase.ts';
+import { toUpperCase, type ToUpperCaseAction } from './toUpperCase.ts';
 
-describe('upperCase', () => {
+describe('toUpperCase', () => {
   test('should return action object', () => {
-    expectTypeOf(upperCase()).toEqualTypeOf<UpperCaseAction>();
+    expectTypeOf(toUpperCase()).toEqualTypeOf<ToUpperCaseAction>();
   });
 
   describe('should infer correct types', () => {
     test('of input', () => {
-      expectTypeOf<InferInput<UpperCaseAction>>().toEqualTypeOf<string>();
+      expectTypeOf<InferInput<ToUpperCaseAction>>().toEqualTypeOf<string>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<UpperCaseAction>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<ToUpperCaseAction>>().toEqualTypeOf<string>();
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<UpperCaseAction>>().toEqualTypeOf<never>();
+      expectTypeOf<InferIssue<ToUpperCaseAction>>().toEqualTypeOf<never>();
     });
   });
 });

@@ -1,25 +1,25 @@
 import type { BaseTransformation } from '../../types/index.ts';
 
 /**
- * Upper case transformation action type.
+ * To upper case transformation action type.
  */
-export interface UpperCaseAction
+export interface ToUpperCaseAction
   extends BaseTransformation<string, string, never> {
   /**
    * The action type.
    */
-  readonly type: 'upper_case';
+  readonly type: 'to_upper_case';
 }
 
 /**
- * Creates a upper case transformation action.
+ * Creates a to upper case transformation action.
  *
- * @returns A upper case action.
+ * @returns A to upper case action.
  */
-export function upperCase(): UpperCaseAction {
+export function toUpperCase(): ToUpperCaseAction {
   return {
     kind: 'transformation',
-    type: 'upper_case',
+    type: 'to_upper_case',
     async: false,
     _run(dataset) {
       dataset.value = dataset.value.toUpperCase();

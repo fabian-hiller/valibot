@@ -1,23 +1,23 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { lowerCase, type LowerCaseAction } from './lowerCase.ts';
+import { toLowerCase, type ToLowerCaseAction } from './toLowerCase.ts';
 
-describe('lowerCase', () => {
+describe('toLowerCase', () => {
   test('should return action object', () => {
-    expectTypeOf(lowerCase()).toEqualTypeOf<LowerCaseAction>();
+    expectTypeOf(toLowerCase()).toEqualTypeOf<ToLowerCaseAction>();
   });
 
   describe('should infer correct types', () => {
     test('of input', () => {
-      expectTypeOf<InferInput<LowerCaseAction>>().toEqualTypeOf<string>();
+      expectTypeOf<InferInput<ToLowerCaseAction>>().toEqualTypeOf<string>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<LowerCaseAction>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<ToLowerCaseAction>>().toEqualTypeOf<string>();
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<LowerCaseAction>>().toEqualTypeOf<never>();
+      expectTypeOf<InferIssue<ToLowerCaseAction>>().toEqualTypeOf<never>();
     });
   });
 });
