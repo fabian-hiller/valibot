@@ -54,10 +54,9 @@ export interface SafeIntegerAction<
 }
 
 /**
- * Creates a pipeline validation action that validates whether a number is a safe
- * integer.
+ * Creates a safe integer validation action.
  *
- * @returns A validation action.
+ * @returns A safe integer action.
  */
 export function safeInteger<TInput extends number>(): SafeIntegerAction<
   TInput,
@@ -65,12 +64,11 @@ export function safeInteger<TInput extends number>(): SafeIntegerAction<
 >;
 
 /**
- * Creates a pipeline validation action that validates whether a number is a safe
- * integer.
+ * Creates a safe integer validation action.
  *
  * @param message The error message.
  *
- * @returns A validation action.
+ * @returns A safe integer action.
  */
 export function safeInteger<
   TInput extends number,

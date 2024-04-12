@@ -53,10 +53,9 @@ export interface IntegerAction<
 }
 
 /**
- * Creates a pipeline validation action that validates whether a number is an
- * integer.
+ * Creates a integer validation action.
  *
- * @returns A validation action.
+ * @returns A integer action.
  */
 export function integer<TInput extends number>(): IntegerAction<
   TInput,
@@ -64,12 +63,11 @@ export function integer<TInput extends number>(): IntegerAction<
 >;
 
 /**
- * Creates a pipeline validation action that validates whether a number is an
- * integer.
+ * Creates a integer validation action.
  *
  * @param message The error message.
  *
- * @returns A validation action.
+ * @returns A integer action.
  */
 export function integer<
   TInput extends number,

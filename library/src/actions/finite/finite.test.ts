@@ -51,14 +51,10 @@ describe('finite', () => {
     test('for finite numbers', () => {
       expectNoActionIssue(action, [
         0,
-        1,
-        -500,
-        9007199254740992,
-        5.5,
-        -0.000001,
-        Math.PI,
-        Number.MAX_SAFE_INTEGER,
-        Number.MIN_SAFE_INTEGER,
+        1234,
+        12.34,
+        Number.MAX_VALUE,
+        Number.MIN_VALUE,
       ]);
     });
   });
@@ -73,8 +69,12 @@ describe('finite', () => {
       requirement: expect.any(Function),
     };
 
-    test('for infinity and NaN', () => {
-      expectActionIssue(action, baseIssue, [Infinity, -Infinity, NaN]);
+    test('for infinite numbers', () => {
+      expectActionIssue(action, baseIssue, [Infinity, -Infinity]);
+    });
+
+    test('for not a number', () => {
+      expectActionIssue(action, baseIssue, [NaN]);
     });
   });
 });

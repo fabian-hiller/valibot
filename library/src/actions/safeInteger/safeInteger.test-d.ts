@@ -28,20 +28,19 @@ describe('safeInteger', () => {
   });
 
   describe('should infer correct types', () => {
-    type Input = 1 | 2 | 3;
-    type Action = SafeIntegerAction<Input, undefined>;
+    type Action = SafeIntegerAction<number, undefined>;
 
     test('of input', () => {
-      expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
+      expectTypeOf<InferInput<Action>>().toEqualTypeOf<number>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<Input>();
+      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<number>();
     });
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
-        SafeIntegerIssue<Input>
+        SafeIntegerIssue<number>
       >();
     });
   });

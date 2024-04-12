@@ -24,19 +24,18 @@ describe('finite', () => {
   });
 
   describe('should infer correct types', () => {
-    type Input = 1 | 2 | 3;
-    type Action = FiniteAction<Input, undefined>;
+    type Action = FiniteAction<number, undefined>;
 
     test('of input', () => {
-      expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
+      expectTypeOf<InferInput<Action>>().toEqualTypeOf<number>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<Input>();
+      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<number>();
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<FiniteIssue<Input>>();
+      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<FiniteIssue<number>>();
     });
   });
 });

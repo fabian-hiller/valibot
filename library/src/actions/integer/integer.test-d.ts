@@ -24,19 +24,18 @@ describe('integer', () => {
   });
 
   describe('should infer correct types', () => {
-    type Input = 1 | 2 | 3;
-    type Action = IntegerAction<Input, undefined>;
+    type Action = IntegerAction<number, undefined>;
 
     test('of input', () => {
-      expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
+      expectTypeOf<InferInput<Action>>().toEqualTypeOf<number>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<Input>();
+      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<number>();
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<IntegerIssue<Input>>();
+      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<IntegerIssue<number>>();
     });
   });
 });

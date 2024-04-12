@@ -51,9 +51,8 @@ describe('integer', () => {
     test('for integer numbers', () => {
       expectNoActionIssue(action, [
         0,
-        1,
-        -500,
-        9007199254740992,
+        123456789,
+        -123456789,
         Number.MAX_SAFE_INTEGER,
         Number.MIN_SAFE_INTEGER,
       ]);
@@ -70,12 +69,16 @@ describe('integer', () => {
       requirement: expect.any(Function),
     };
 
-    test('for fractional and irrational numbers', () => {
-      expectActionIssue(action, baseIssue, [5.5, -0.000001, Math.PI]);
+    test('for floating point numbers', () => {
+      expectActionIssue(action, baseIssue, [0.1, 12.34, -1 / 3, Math.PI]);
     });
 
-    test('for infinity and NaN', () => {
-      expectActionIssue(action, baseIssue, [Infinity, -Infinity, NaN]);
+    test('for infinite numbers', () => {
+      expectActionIssue(action, baseIssue, [Infinity, -Infinity]);
+    });
+
+    test('for not a number', () => {
+      expectActionIssue(action, baseIssue, [NaN]);
     });
   });
 });

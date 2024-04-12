@@ -53,9 +53,9 @@ export interface FiniteAction<
 }
 
 /**
- * Creates a pipeline validation action that validates whether a number is finite.
+ * Creates a finite validation action.
  *
- * @returns A validation action.
+ * @returns A finite action.
  */
 export function finite<TInput extends number>(): FiniteAction<
   TInput,
@@ -63,11 +63,11 @@ export function finite<TInput extends number>(): FiniteAction<
 >;
 
 /**
- * Creates a pipeline validation action that validates whether a number is finite.
+ * Creates a finite validation action.
  *
  * @param message The error message.
  *
- * @returns A validation action.
+ * @returns A finite action.
  */
 export function finite<
   TInput extends number,
