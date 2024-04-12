@@ -64,7 +64,7 @@ export interface MinLengthAction<
 }
 
 /**
- * Creates an min length validation action.
+ * Creates a min length validation action.
  *
  * @param requirement The minimum length.
  *
@@ -76,7 +76,7 @@ export function minLength<
 >(requirement: TRequirement): MinLengthAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates an min length validation action.
+ * Creates a min length validation action.
  *
  * @param requirement The minimum length.
  * @param message The error message.

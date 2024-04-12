@@ -6,9 +6,9 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Min bytes issue type.
+ * Not bytes issue type.
  */
-export interface MinBytesIssue<
+export interface NotBytesIssue<
   TInput extends string,
   TRequirement extends number,
 > extends BaseIssue<TInput> {
@@ -19,41 +19,41 @@ export interface MinBytesIssue<
   /**
    * The issue type.
    */
-  readonly type: 'min_bytes';
+  readonly type: 'not_bytes';
   /**
    * The expected input.
    */
-  readonly expected: `>=${TRequirement}`;
+  readonly expected: `!${TRequirement}`;
   /**
    * The received input.
    */
   readonly received: `${number}`;
   /**
-   * The minimum bytes.
+   * The not required bytes.
    */
   readonly requirement: TRequirement;
 }
 
 /**
- * Min bytes action type.
+ * Not bytes action type.
  */
-export interface MinBytesAction<
+export interface NotBytesAction<
   TInput extends string,
   TRequirement extends number,
   TMessage extends
-    | ErrorMessage<MinBytesIssue<TInput, TRequirement>>
+    | ErrorMessage<NotBytesIssue<TInput, TRequirement>>
     | undefined,
-> extends BaseValidation<TInput, TInput, MinBytesIssue<TInput, TRequirement>> {
+> extends BaseValidation<TInput, TInput, NotBytesIssue<TInput, TRequirement>> {
   /**
    * The action type.
    */
-  readonly type: 'min_bytes';
+  readonly type: 'not_bytes';
   /**
    * The expected property.
    */
-  readonly expects: `>=${TRequirement}`;
+  readonly expects: `!${TRequirement}`;
   /**
-   * The minimum bytes.
+   * The not required bytes.
    */
   readonly requirement: TRequirement;
   /**
@@ -63,56 +63,56 @@ export interface MinBytesAction<
 }
 
 /**
- * Creates a min bytes validation action.
+ * Creates a not bytes validation action.
  *
- * @param requirement The minimum bytes.
+ * @param requirement The not required bytes.
  *
- * @returns A min bytes action.
+ * @returns A not bytes action.
  */
-export function minBytes<
+export function notBytes<
   TInput extends string,
   const TRequirement extends number,
->(requirement: TRequirement): MinBytesAction<TInput, TRequirement, undefined>;
+>(requirement: TRequirement): NotBytesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a min bytes validation action.
+ * Creates a not bytes validation action.
  *
- * @param requirement The minimum bytes.
+ * @param requirement The not required bytes.
  * @param message The error message.
  *
- * @returns A min bytes action.
+ * @returns A not bytes action.
  */
-export function minBytes<
+export function notBytes<
   TInput extends string,
   const TRequirement extends number,
   const TMessage extends
-    | ErrorMessage<MinBytesIssue<TInput, TRequirement>>
+    | ErrorMessage<NotBytesIssue<TInput, TRequirement>>
     | undefined,
 >(
   requirement: TRequirement,
   message: TMessage
-): MinBytesAction<TInput, TRequirement, TMessage>;
+): NotBytesAction<TInput, TRequirement, TMessage>;
 
-export function minBytes(
+export function notBytes(
   requirement: number,
-  message?: ErrorMessage<MinBytesIssue<string, number>>
-): MinBytesAction<
+  message?: ErrorMessage<NotBytesIssue<string, number>>
+): NotBytesAction<
   string,
   number,
-  ErrorMessage<MinBytesIssue<string, number>> | undefined
+  ErrorMessage<NotBytesIssue<string, number>> | undefined
 > {
   return {
     kind: 'validation',
-    type: 'min_bytes',
-    expects: `>=${requirement}`,
+    type: 'not_bytes',
+    expects: `!${requirement}`,
     async: false,
     message,
     requirement,
     _run(dataset, config) {
       if (dataset.typed) {
         const length = new TextEncoder().encode(dataset.value).length;
-        if (length < this.requirement) {
-          _addIssue(this, minBytes, 'bytes', dataset, config, {
+        if (length === this.requirement) {
+          _addIssue(this, notBytes, 'bytes', dataset, config, {
             received: `${length}`,
           });
         }

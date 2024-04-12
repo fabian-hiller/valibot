@@ -64,7 +64,7 @@ export interface IncludesAction<
  *
  * @param requirement The content to be included.
  *
- * @returns A includes action.
+ * @returns An includes action.
  */
 export function includes<
   TInput extends ContentInput,
@@ -77,7 +77,7 @@ export function includes<
  * @param requirement The content to be included.
  * @param message The error message.
  *
- * @returns A includes action.
+ * @returns An includes action.
  */
 export function includes<
   TInput extends ContentInput,

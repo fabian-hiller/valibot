@@ -64,7 +64,7 @@ export interface MaxLengthAction<
 }
 
 /**
- * Creates an max length validation action.
+ * Creates a max length validation action.
  *
  * @param requirement The maximum length.
  *
@@ -76,7 +76,7 @@ export function maxLength<
 >(requirement: TRequirement): MaxLengthAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates an max length validation action.
+ * Creates a max length validation action.
  *
  * @param requirement The maximum length.
  * @param message The error message.
