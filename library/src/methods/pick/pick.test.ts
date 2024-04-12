@@ -48,7 +48,7 @@ describe('pick', () => {
       } satisfies typeof schema);
     });
 
-    describe('should return no nested issues', () => {
+    describe('should return dataset without nested issues', () => {
       test('if picked keys are specified', () => {
         expectNoSchemaIssue(schema, [{ key1: 'foo', key3: 'bar' }]);
       });
@@ -69,7 +69,7 @@ describe('pick', () => {
       });
     });
 
-    describe('should return nested issues', () => {
+    describe('should return dataset with nested issues', () => {
       test('if a picked key is missing', () => {
         expect(
           schema._run({ typed: false, value: { key3: 'bar' } }, {})
@@ -119,7 +119,7 @@ describe('pick', () => {
       } satisfies typeof schema);
     });
 
-    describe('should return no nested issues', () => {
+    describe('should return dataset without nested issues', () => {
       test('if picked keys are specified', () => {
         // @ts-expect-error
         expectNoSchemaIssue(schema, [{ key2: 123, key3: 'bar' }]);
@@ -131,7 +131,7 @@ describe('pick', () => {
       });
     });
 
-    describe('should return nested issues', () => {
+    describe('should return dataset with nested issues', () => {
       test('if a picked key is missing', () => {
         expect(
           schema._run({ typed: false, value: { key3: 'foo' } }, {})

@@ -47,7 +47,7 @@ describe('omit', () => {
       } satisfies typeof schema);
     });
 
-    describe('should return no nested issues', () => {
+    describe('should return dataset without nested issues', () => {
       test('if not omitted keys are specified', () => {
         expectNoSchemaIssue(schema, [{ key2: 123, key4: 456 }]);
       });
@@ -68,7 +68,7 @@ describe('omit', () => {
       });
     });
 
-    describe('should return nested issues', () => {
+    describe('should return dataset with nested issues', () => {
       test('if a not omitted key is missing', () => {
         expect(
           schema._run({ typed: false, value: { key2: 123 } }, {})
@@ -118,7 +118,7 @@ describe('omit', () => {
       } satisfies typeof schema);
     });
 
-    describe('should return no nested issues', () => {
+    describe('should return dataset without nested issues', () => {
       test('if not omitted keys are specified', () => {
         // @ts-expect-error
         expectNoSchemaIssue(schema, [{ key1: 'foo', key4: 456 }]);
@@ -130,7 +130,7 @@ describe('omit', () => {
       });
     });
 
-    describe('should return nested issues', () => {
+    describe('should return dataset with nested issues', () => {
       test('if a not omitted key is missing', () => {
         expect(
           schema._run({ typed: false, value: { key1: 'foo' } }, {})
