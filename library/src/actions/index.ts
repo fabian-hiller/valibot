@@ -1,7 +1,9 @@
 export * from './bytes/index.ts';
 export * from './brand/index.ts';
 export * from './decimal/index.ts';
+export * from './finite/index.ts';
 export * from './includes/includes.ts';
+export * from './integer/index.ts';
 export * from './maxBytes/index.ts';
 export * from './maxLength/index.ts';
 export * from './maxValue/index.ts';
@@ -9,6 +11,7 @@ export * from './minBytes/index.ts';
 export * from './minLength/index.ts';
 export * from './minValue/index.ts';
 export * from './notBytes/index.ts';
+export * from './safeInteger/index.ts';
 export * from './toLowerCase/index.ts';
 export * from './toUpperCase/index.ts';
 export * from './transform/index.ts';
