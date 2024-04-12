@@ -53,15 +53,15 @@ describe('notBytes', () => {
     });
 
     test('for valid strings', () => {
-      expectNoActionIssue(
-        action, 
-        [
-          '',
-          '🤖', // in UTF-8, '🤖' is 4 bytes
-          '1234',
-          'hello!',
-          'hi1234'
-        ]);
+      expectNoActionIssue(action, ['', '1234', '123456', '123456789']);
+    });
+
+    test('for valid chars', () => {
+      expectNoActionIssue(action, [
+        'あ', // 'あ' is 3 bytes
+        '🤖', // '🤖' is 4 bytes
+        'あい', // 'あい' is 6 bytes
+      ]);
     });
   });
 
@@ -75,12 +75,22 @@ describe('notBytes', () => {
       requirement: 5,
     };
 
+    const getReceived = (value: string) =>
+      `${new TextEncoder().encode(value).length}`;
+
     test('for invalid strings', () => {
+      expectActionIssue(action, baseIssue, ['12345', 'abcde'], getReceived);
+    });
+
+    test('for invalid chars', () => {
       expectActionIssue(
         action,
         baseIssue,
-        ['12あ', '🤖!', 'hi123'], // Make sure all of the strings in this array have a byte length of 5
-        () => '5'
+        [
+          '12あ', // 'あ' is 3 bytes
+          '🤖!', // '🤖' is 4 bytes
+        ],
+        getReceived
       );
     });
   });

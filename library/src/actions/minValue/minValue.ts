@@ -60,7 +60,7 @@ export interface MinValueAction<
 }
 
 /**
- * Creates an min value validation action.
+ * Creates a min value validation action.
  *
  * @param requirement The minimum value.
  *
@@ -72,7 +72,7 @@ export function minValue<
 >(requirement: TRequirement): MinValueAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates an min value validation action.
+ * Creates a min value validation action.
  *
  * @param requirement The minimum value.
  * @param message The error message.

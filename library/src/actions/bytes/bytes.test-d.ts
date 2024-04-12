@@ -1,10 +1,6 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import {
-  bytes,
-  type BytesAction,
-  type BytesIssue,
-} from './bytes.ts';
+import { bytes, type BytesAction, type BytesIssue } from './bytes.ts';
 
 describe('bytes', () => {
   describe('should return action object', () => {
@@ -17,9 +13,9 @@ describe('bytes', () => {
     });
 
     test('with string message', () => {
-      expectTypeOf(
-        bytes<string, 10, 'message'>(10, 'message')
-      ).toEqualTypeOf<BytesAction<string, 10, 'message'>>();
+      expectTypeOf(bytes<string, 10, 'message'>(10, 'message')).toEqualTypeOf<
+        BytesAction<string, 10, 'message'>
+      >();
     });
 
     test('with function message', () => {

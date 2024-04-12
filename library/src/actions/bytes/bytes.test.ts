@@ -1,10 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
-import {
-  bytes,
-  type BytesAction,
-  type BytesIssue,
-} from './bytes.ts';
+import { bytes, type BytesAction, type BytesIssue } from './bytes.ts';
 
 describe('bytes', () => {
   describe('should return action object', () => {
@@ -53,13 +49,14 @@ describe('bytes', () => {
     });
 
     test('for valid strings', () => {
-      expectNoActionIssue(
-        action, 
-        [
-          '12あ', // in UTF-8, 'あ' is 3 bytes 
-          'hi123', 
-          '🤖!' // in UTF-8, '🤖' is 4 bytes
-        ]);
+      expectNoActionIssue(action, ['12345', 'abcde']);
+    });
+
+    test('for valid chars', () => {
+      expectNoActionIssue(action, [
+        '12あ', // 'あ' is 3 bytes
+        '🤖!', // '🤖' is 4 bytes
+      ]);
     });
   });
 
@@ -73,21 +70,28 @@ describe('bytes', () => {
       requirement: 5,
     };
 
-    test('for invalid strings', () => {
-      const inputToBytesReceived = new Map([
-        ['', 0],
-        ['🤖', 4],
-        ['1234', 4],
-        ['hello!', 6],
-        ['hi1234', 6]
-      ]);
+    const getReceived = (value: string) =>
+      `${new TextEncoder().encode(value).length}`;
 
+    test('for invalid strings', () => {
       expectActionIssue(
         action,
         baseIssue,
-        [...inputToBytesReceived.keys()],
-        // If the function below returns '-1', test setup is incorrect, fix it.
-        (input) => `${inputToBytesReceived.get(input) ?? -1}`
+        ['', '1234', '123456', '123456789'],
+        getReceived
+      );
+    });
+
+    test('for invalid chars', () => {
+      expectActionIssue(
+        action,
+        baseIssue,
+        [
+          'あ', // 'あ' is 3 bytes
+          '🤖', // '🤖' is 4 bytes
+          'あい', // 'あい' is 6 bytes
+        ],
+        getReceived
       );
     });
   });

@@ -1,14 +1,16 @@
-import type { BaseIssue, BaseValidation, ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  BaseValidation,
+  ErrorMessage,
+} from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
-
-type NotBytesType = 'not_bytes';
 
 /**
  * Not bytes issue type.
  */
 export interface NotBytesIssue<
   TInput extends string,
-  TRequirement extends number
+  TRequirement extends number,
 > extends BaseIssue<TInput> {
   /**
    * The issue kind.
@@ -17,17 +19,17 @@ export interface NotBytesIssue<
   /**
    * The issue type.
    */
-  readonly type: NotBytesType;
+  readonly type: 'not_bytes';
   /**
    * The expected input.
-   */ 
+   */
   readonly expected: `!${TRequirement}`;
   /**
    * The received input.
    */
   readonly received: `${number}`;
   /**
-   * The byte length.
+   * The not required bytes.
    */
   readonly requirement: TRequirement;
 }
@@ -45,13 +47,13 @@ export interface NotBytesAction<
   /**
    * The action type.
    */
-  readonly type: NotBytesType;
+  readonly type: 'not_bytes';
   /**
    * The expected property.
    */
   readonly expects: `!${TRequirement}`;
   /**
-   * The byte length.
+   * The not required bytes.
    */
   readonly requirement: TRequirement;
   /**
@@ -61,24 +63,24 @@ export interface NotBytesAction<
 }
 
 /**
- * Creates a pipeline validation action that validates the bytes of a string.
+ * Creates a not bytes validation action.
  *
- * @param requirement The byte length.
+ * @param requirement The not required bytes.
  *
- * @returns A validation action.
+ * @returns A not bytes action.
  */
 export function notBytes<
   TInput extends string,
-  const TRequirement extends number
+  const TRequirement extends number,
 >(requirement: TRequirement): NotBytesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a pipeline validation action that validates the bytes of a string.
+ * Creates a not bytes validation action.
  *
- * @param requirement The byte length.
+ * @param requirement The not required bytes.
  * @param message The error message.
- * 
- * @returns A validation action.
+ *
+ * @returns A not bytes action.
  */
 export function notBytes<
   TInput extends string,
@@ -108,12 +110,10 @@ export function notBytes(
     requirement,
     _run(dataset, config) {
       if (dataset.typed) {
-        // Calculate byte length
-        const length = (new TextEncoder()).encode(dataset.value).length;
-        // If requirement is not fulfilled, add an issue
+        const length = new TextEncoder().encode(dataset.value).length;
         if (length === this.requirement) {
           _addIssue(this, notBytes, 'bytes', dataset, config, {
-            received: `${length}`
+            received: `${length}`,
           });
         }
       }

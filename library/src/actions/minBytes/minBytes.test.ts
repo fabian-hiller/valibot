@@ -57,7 +57,9 @@ describe('minBytes', () => {
     });
 
     test('for valid chars', () => {
-      expectNoActionIssue(action, ['あい']); // 6 bytes
+      expectNoActionIssue(action, [
+        'あい', // 'あい' is 6 bytes
+      ]);
     });
   });
 
@@ -79,7 +81,15 @@ describe('minBytes', () => {
     });
 
     test('for invalid chars', () => {
-      expectActionIssue(action, baseIssue, ['あ', 'い'], getReceived);
+      expectActionIssue(
+        action,
+        baseIssue,
+        [
+          'あ', // 'あ' is 3 bytes
+          '🤖', // '🤖' is 4 bytes
+        ],
+        getReceived
+      );
     });
   });
 });

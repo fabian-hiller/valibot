@@ -1,15 +1,15 @@
-import type { BaseIssue, BaseValidation, ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  BaseValidation,
+  ErrorMessage,
+} from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
-
-type BytesType = 'bytes';
 
 /**
  * Bytes issue type.
  */
-export interface BytesIssue<
-  TInput extends string,
-  TRequirement extends number
-> extends BaseIssue<TInput> {
+export interface BytesIssue<TInput extends string, TRequirement extends number>
+  extends BaseIssue<TInput> {
   /**
    * The issue kind.
    */
@@ -17,17 +17,17 @@ export interface BytesIssue<
   /**
    * The issue type.
    */
-  readonly type: BytesType;
+  readonly type: 'bytes';
   /**
    * The expected input.
-   */ 
+   */
   readonly expected: `${TRequirement}`;
   /**
    * The received input.
    */
   readonly received: `${number}`;
   /**
-   * The byte length.
+   * The required bytes.
    */
   readonly requirement: TRequirement;
 }
@@ -38,20 +38,18 @@ export interface BytesIssue<
 export interface BytesAction<
   TInput extends string,
   TRequirement extends number,
-  TMessage extends
-    | ErrorMessage<BytesIssue<TInput, TRequirement>>
-    | undefined,
+  TMessage extends ErrorMessage<BytesIssue<TInput, TRequirement>> | undefined,
 > extends BaseValidation<TInput, TInput, BytesIssue<TInput, TRequirement>> {
   /**
    * The action type.
    */
-  readonly type: BytesType;
+  readonly type: 'bytes';
   /**
    * The expected property.
    */
   readonly expects: `${TRequirement}`;
   /**
-   * The byte length.
+   * The required bytes.
    */
   readonly requirement: TRequirement;
   /**
@@ -61,24 +59,23 @@ export interface BytesAction<
 }
 
 /**
- * Creates a pipeline validation action that validates the bytes of a string.
+ * Creates a bytes validation action.
  *
- * @param requirement The byte length.
+ * @param requirement The required bytes.
  *
- * @returns A validation action.
+ * @returns A bytes action.
  */
-export function bytes<
-  TInput extends string,
-  const TRequirement extends number
->(requirement: TRequirement): BytesAction<TInput, TRequirement, undefined>;
+export function bytes<TInput extends string, const TRequirement extends number>(
+  requirement: TRequirement
+): BytesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a pipeline validation action that validates the bytes of a string.
+ * Creates a bytes validation action.
  *
- * @param requirement The byte length.
+ * @param requirement The required bytes.
  * @param message The error message.
- * 
- * @returns A validation action.
+ *
+ * @returns A bytes action.
  */
 export function bytes<
   TInput extends string,
@@ -108,12 +105,10 @@ export function bytes(
     requirement,
     _run(dataset, config) {
       if (dataset.typed) {
-        // Calculate byte length
-        const length = (new TextEncoder()).encode(dataset.value).length;
-        // If requirement is not fulfilled, add an issue
+        const length = new TextEncoder().encode(dataset.value).length;
         if (length !== this.requirement) {
           _addIssue(this, bytes, 'bytes', dataset, config, {
-            received: `${length}`
+            received: `${length}`,
           });
         }
       }

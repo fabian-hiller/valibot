@@ -60,7 +60,7 @@ export interface MaxValueAction<
 }
 
 /**
- * Creates an max value validation action.
+ * Creates a max value validation action.
  *
  * @param requirement The maximum value.
  *
@@ -72,7 +72,7 @@ export function maxValue<
 >(requirement: TRequirement): MaxValueAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates an max value validation action.
+ * Creates a max value validation action.
  *
  * @param requirement The maximum value.
  * @param message The error message.

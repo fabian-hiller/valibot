@@ -63,7 +63,7 @@ export interface MinBytesAction<
 }
 
 /**
- * Creates an min bytes validation action.
+ * Creates a min bytes validation action.
  *
  * @param requirement The minimum bytes.
  *
@@ -75,7 +75,7 @@ export function minBytes<
 >(requirement: TRequirement): MinBytesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates an min bytes validation action.
+ * Creates a min bytes validation action.
  *
  * @param requirement The minimum bytes.
  * @param message The error message.
@@ -110,10 +110,10 @@ export function minBytes(
     requirement,
     _run(dataset, config) {
       if (dataset.typed) {
-        const bytes = new TextEncoder().encode(dataset.value).length;
-        if (bytes < this.requirement) {
+        const length = new TextEncoder().encode(dataset.value).length;
+        if (length < this.requirement) {
           _addIssue(this, minBytes, 'bytes', dataset, config, {
-            received: `${bytes}`,
+            received: `${length}`,
           });
         }
       }
