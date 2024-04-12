@@ -64,12 +64,11 @@ export interface MinLengthAction<
 }
 
 /**
- * Creates a pipeline validation action that validates the length of a string
- * or array.
+ * Creates a min length validation action.
  *
  * @param requirement The minimum length.
  *
- * @returns A validation action.
+ * @returns A min length action.
  */
 export function minLength<
   TInput extends LengthInput,
@@ -77,13 +76,12 @@ export function minLength<
 >(requirement: TRequirement): MinLengthAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a pipeline validation action that validates the length of a string
- * or array.
+ * Creates a min length validation action.
  *
  * @param requirement The minimum length.
  * @param message The error message.
  *
- * @returns A validation action.
+ * @returns A min length action.
  */
 export function minLength<
   TInput extends LengthInput,

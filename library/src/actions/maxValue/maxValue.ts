@@ -60,12 +60,11 @@ export interface MaxValueAction<
 }
 
 /**
- * Creates a pipeline validation action that validates the value of a string,
- * number, boolean or date.
+ * Creates a max value validation action.
  *
  * @param requirement The maximum value.
  *
- * @returns A validation action.
+ * @returns A max value action.
  */
 export function maxValue<
   TInput extends ValueInput,
@@ -73,13 +72,12 @@ export function maxValue<
 >(requirement: TRequirement): MaxValueAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a pipeline validation action that validates the value of a string,
- * number, boolean or date.
+ * Creates a max value validation action.
  *
  * @param requirement The maximum value.
  * @param message The error message.
  *
- * @returns A validation action.
+ * @returns A max value action.
  */
 export function maxValue<
   TInput extends ValueInput,

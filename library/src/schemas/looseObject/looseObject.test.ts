@@ -2,78 +2,79 @@ import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { nullish } from '../nullish/index.ts';
-import { number, type NumberIssue } from '../number/index.ts';
+import { number } from '../number/index.ts';
+import { object } from '../object/index.ts';
 import { optional } from '../optional/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import { object, type ObjectIssue, type ObjectSchema } from './object.ts';
+import { unknown } from '../unknown/index.ts';
+import {
+  looseObject,
+  type LooseObjectIssue,
+  type LooseObjectSchema,
+} from './looseObject.ts';
 
-describe('object', () => {
+describe('looseObject', () => {
   describe('should return schema object', () => {
     const entries = { key: string() };
     type Entries = typeof entries;
-    const baseSchema: Omit<ObjectSchema<Entries, never>, 'message'> = {
+    const baseSchema: Omit<LooseObjectSchema<Entries, never>, 'message'> = {
       kind: 'schema',
-      type: 'object',
+      type: 'loose_object',
       expects: 'Object',
       entries: { key: { ...string(), _run: expect.any(Function) } },
+      rest: { ...unknown(), _run: expect.any(Function) },
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: ObjectSchema<Entries, undefined> = {
+      const schema: LooseObjectSchema<Entries, undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(object(entries)).toStrictEqual(schema);
-      expect(object(entries, undefined)).toStrictEqual(schema);
+      expect(looseObject(entries)).toStrictEqual(schema);
+      expect(looseObject(entries, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(object(entries, 'message')).toStrictEqual({
+      expect(looseObject(entries, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies ObjectSchema<Entries, 'message'>);
+      } satisfies LooseObjectSchema<Entries, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(object(entries, message)).toStrictEqual({
+      expect(looseObject(entries, message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies ObjectSchema<Entries, typeof message>);
+      } satisfies LooseObjectSchema<Entries, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
     test('for empty object', () => {
-      expectNoSchemaIssue(object({}), [{}]);
+      expectNoSchemaIssue(looseObject({}), [{}]);
     });
 
     test('for simple object', () => {
-      expectNoSchemaIssue(object({ key1: string(), key2: number() }), [
+      expectNoSchemaIssue(looseObject({ key1: string(), key2: number() }), [
         { key1: 'foo', key2: 123 },
       ]);
     });
 
     test('for unknown entries', () => {
-      expect(
-        object({ key1: string() })._run(
-          { typed: false, value: { key1: 'foo', key2: 123, key3: null } },
-          {}
-        )
-      ).toStrictEqual({
-        typed: true,
-        value: { key1: 'foo' },
-      });
+      expectNoSchemaIssue(looseObject({ key1: string(), key2: number() }), [
+        { key1: 'foo', key2: 123, other1: 'bar', other2: null },
+      ]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = object({}, 'message');
-    const baseIssue: Omit<ObjectIssue, 'input' | 'received'> = {
+    const schema = looseObject({}, 'message');
+    const baseIssue: Omit<LooseObjectIssue, 'input' | 'received'> = {
       kind: 'schema',
-      type: 'object',
+      type: 'loose_object',
       expected: 'Object',
       message: 'message',
     };
@@ -121,19 +122,19 @@ describe('object', () => {
 
   describe('should return dataset without nested issues', () => {
     test('for simple object', () => {
-      expectNoSchemaIssue(object({ key1: string(), key2: number() }), [
+      expectNoSchemaIssue(looseObject({ key1: string(), key2: number() }), [
         { key1: 'foo', key2: 123 },
       ]);
     });
 
     test('for nested object', () => {
-      expectNoSchemaIssue(object({ nested: object({ key: string() }) }), [
+      expectNoSchemaIssue(looseObject({ nested: object({ key: string() }) }), [
         { nested: { key: 'foo' } },
       ]);
     });
 
     test('for optional entry', () => {
-      expectNoSchemaIssue(object({ key: optional(string()) }), [
+      expectNoSchemaIssue(looseObject({ key: optional(string()) }), [
         {},
         { key: undefined },
         { key: 'foo' },
@@ -141,7 +142,7 @@ describe('object', () => {
     });
 
     test('for nullish entry', () => {
-      expectNoSchemaIssue(object({ key: nullish(number()) }), [
+      expectNoSchemaIssue(looseObject({ key: nullish(number()) }), [
         {},
         { key: undefined },
         { key: null },
@@ -150,20 +151,17 @@ describe('object', () => {
     });
 
     test('for unknown entries', () => {
-      expect(
-        object({ key1: string() })._run(
-          { typed: false, value: { key1: 'foo', key2: 123, key3: null } },
-          {}
-        )
-      ).toStrictEqual({
-        typed: true,
-        value: { key1: 'foo' },
-      });
+      expectNoSchemaIssue(looseObject({ key1: string(), key2: number() }), [
+        { key1: 'foo', key2: 123, other1: 'bar', other2: null },
+      ]);
     });
   });
 
   describe('should return dataset with nested issues', () => {
-    const schema = object({ key: string(), nested: object({ key: number() }) });
+    const schema = looseObject({
+      key: string(),
+      nested: object({ key: number() }),
+    });
 
     const baseInfo = {
       message: expect.any(String),
@@ -193,64 +191,64 @@ describe('object', () => {
       ],
     };
 
-    const objectIssue: ObjectIssue = {
-      ...baseInfo,
-      kind: 'schema',
-      type: 'object',
-      input: undefined,
-      expected: 'Object',
-      received: 'undefined',
-      path: [
-        {
-          type: 'object',
-          origin: 'value',
-          input: {},
-          key: 'nested',
-          value: undefined,
-        },
-      ],
-    };
-
-    const numberIssue: NumberIssue = {
-      ...baseInfo,
-      kind: 'schema',
-      type: 'number',
-      input: undefined,
-      expected: 'number',
-      received: 'undefined',
-      path: [
-        {
-          type: 'object',
-          origin: 'value',
-          input: { key: 'value', nested: {} },
-          key: 'nested',
-          value: {},
-        },
-        {
-          type: 'object',
-          origin: 'value',
-          input: {},
-          key: 'key',
-          value: undefined,
-        },
-      ],
-    };
-
     test('for missing entries', () => {
       expect(schema._run({ typed: false, value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
-        issues: [stringIssue, objectIssue],
+        issues: [
+          stringIssue,
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: 'Object',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input: {},
+                key: 'nested',
+                value: undefined,
+              },
+            ],
+          },
+        ],
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
     test('for missing nested entries', () => {
-      expect(
-        schema._run({ typed: false, value: { key: 'value', nested: {} } }, {})
-      ).toStrictEqual({
+      const input = { key: 'value', nested: {} };
+      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
         typed: false,
-        value: { key: 'value', nested: {} },
-        issues: [numberIssue],
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: undefined,
+            expected: 'number',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input: { key: 'value', nested: {} },
+                key: 'nested',
+                value: {},
+              },
+              {
+                type: 'object',
+                origin: 'value',
+                input: {},
+                key: 'key',
+                value: undefined,
+              },
+            ],
+          },
+        ],
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
