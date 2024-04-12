@@ -64,7 +64,14 @@ describe('minBytes', () => {
 
   describe('should return dataset with issues', () => {
     const action = minBytes(5, 'message');
-    const getBytesLength = (value: string) => new TextEncoder().encode(value).length;
+    const expectedValues: Record<string, number> = {
+      '': 0,
+      'not': 3,
+      'four': 4,
+      'あ': 3,
+      'い': 3,
+    };
+
     const baseIssue: Omit<MinBytesIssue<string, 5>, 'input' | 'received'> = {
       kind: 'validation',
       type: 'min_bytes',
@@ -78,7 +85,7 @@ describe('minBytes', () => {
         action,
         baseIssue,
         ['', 'not', 'four'],
-        (value) => `${getBytesLength(value)}`
+        (value) => `${expectedValues[value]}`
       );
     });
 
@@ -87,7 +94,7 @@ describe('minBytes', () => {
         action,
         baseIssue,
         ['あ', 'い'],
-        (value) => `${getBytesLength(value)}`
+        (value) => `${expectedValues[value]}`
       );
     });
 
