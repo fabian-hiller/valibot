@@ -1,6 +1,15 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  ErrorMessage,
+  MaybeReadonly,
+} from '../../types/index.ts';
 import { _schemaDataset, _stringify } from '../../utils/index.ts';
-import type { PicklistOptions } from './types.ts';
+
+/**
+ * Picklist options type.
+ */
+export type PicklistOptions = MaybeReadonly<(string | number | bigint)[]>;
 
 /**
  * Picklist issue type.
