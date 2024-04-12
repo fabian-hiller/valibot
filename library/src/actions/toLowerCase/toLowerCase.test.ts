@@ -11,13 +11,15 @@ describe('toLowerCase', () => {
     } satisfies ToLowerCaseAction);
   });
 
-  describe('should transform to lower case', () => {
+  describe('should lower case string', () => {
     const action = toLowerCase();
 
     test('for string', () => {
-      expect(action._run({ typed: true, value: 'TeSt' }, {})).toStrictEqual({
+      expect(
+        action._run({ typed: true, value: ' TeSt123 ' }, {})
+      ).toStrictEqual({
         typed: true,
-        value: 'test',
+        value: ' test123 ',
       });
     });
   });

@@ -11,13 +11,15 @@ describe('toUpperCase', () => {
     } satisfies ToUpperCaseAction);
   });
 
-  describe('should transform to upper case', () => {
+  describe('should upper case string', () => {
     const action = toUpperCase();
 
     test('for string', () => {
-      expect(action._run({ typed: true, value: 'TeSt' }, {})).toStrictEqual({
+      expect(
+        action._run({ typed: true, value: ' TeSt123 ' }, {})
+      ).toStrictEqual({
         typed: true,
-        value: 'TEST',
+        value: ' TEST123 ',
       });
     });
   });
