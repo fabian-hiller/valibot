@@ -1,41 +1,47 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
+import type { NeverIssue } from '../never/index.ts';
 import type { NullishSchema } from '../nullish/index.ts';
-import type { NumberIssue, NumberSchema } from '../number/index.ts';
+import { type NumberIssue, type NumberSchema } from '../number/index.ts';
+import type { ObjectIssue, ObjectSchema } from '../object/index.ts';
 import type { OptionalSchema } from '../optional/index.ts';
 import {
   string,
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
-import { object, type ObjectIssue, type ObjectSchema } from './object.ts';
+import {
+  strictObject,
+  type StrictObjectIssue,
+  type StrictObjectSchema,
+} from './strictObject.ts';
 
-describe('object', () => {
+describe('strictObject', () => {
   describe('should return schema object', () => {
     const entries = { key: string() };
     type Entries = typeof entries;
 
     test('with undefined message', () => {
-      type Schema = ObjectSchema<Entries, undefined>;
-      expectTypeOf(object(entries)).toEqualTypeOf<Schema>();
-      expectTypeOf(object(entries, undefined)).toEqualTypeOf<Schema>();
+      type Schema = StrictObjectSchema<Entries, undefined>;
+      expectTypeOf(strictObject(entries)).toEqualTypeOf<Schema>();
+      expectTypeOf(strictObject(entries, undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with string message', () => {
-      expectTypeOf(object(entries, 'message')).toEqualTypeOf<
-        ObjectSchema<Entries, 'message'>
+      expectTypeOf(strictObject(entries, 'message')).toEqualTypeOf<
+        StrictObjectSchema<Entries, 'message'>
       >();
     });
 
     test('with function message', () => {
-      expectTypeOf(object(entries, () => 'message')).toEqualTypeOf<
-        ObjectSchema<Entries, () => string>
+      expectTypeOf(strictObject(entries, () => 'message')).toEqualTypeOf<
+        StrictObjectSchema<Entries, () => string>
       >();
     });
   });
 
   describe('should infer correct types', () => {
-    type Schema = ObjectSchema<
+    type Schema = StrictObjectSchema<
       {
         key1: StringSchema<undefined>;
         key2: OptionalSchema<StringSchema<undefined>, 'foo'>;
@@ -65,7 +71,7 @@ describe('object', () => {
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Schema>>().toEqualTypeOf<
-        ObjectIssue | StringIssue | NumberIssue
+        StrictObjectIssue | ObjectIssue | StringIssue | NumberIssue | NeverIssue
       >();
     });
   });

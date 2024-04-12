@@ -64,12 +64,11 @@ export interface MaxLengthAction<
 }
 
 /**
- * Creates a pipeline validation action that validates the length of a string
- * or array.
+ * Creates an max length validation action.
  *
  * @param requirement The maximum length.
  *
- * @returns A validation action.
+ * @returns A max length action.
  */
 export function maxLength<
   TInput extends LengthInput,
@@ -77,13 +76,12 @@ export function maxLength<
 >(requirement: TRequirement): MaxLengthAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a pipeline validation action that validates the length of a string
- * or array.
+ * Creates an max length validation action.
  *
  * @param requirement The maximum length.
  * @param message The error message.
  *
- * @returns A validation action.
+ * @returns A max length action.
  */
 export function maxLength<
   TInput extends LengthInput,

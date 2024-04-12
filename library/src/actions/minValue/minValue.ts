@@ -60,12 +60,11 @@ export interface MinValueAction<
 }
 
 /**
- * Creates a pipeline validation action that validates the value of a string,
- * number, boolean or date.
+ * Creates an min value validation action.
  *
  * @param requirement The minimum value.
  *
- * @returns A validation action.
+ * @returns A min value action.
  */
 export function minValue<
   TInput extends ValueInput,
@@ -73,13 +72,12 @@ export function minValue<
 >(requirement: TRequirement): MinValueAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a pipeline validation action that validates the value of a string,
- * number, boolean or date.
+ * Creates an min value validation action.
  *
  * @param requirement The minimum value.
  * @param message The error message.
  *
- * @returns A validation action.
+ * @returns A min value action.
  */
 export function minValue<
   TInput extends ValueInput,
