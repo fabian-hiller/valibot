@@ -60,12 +60,11 @@ export interface IncludesAction<
 }
 
 /**
- * Creates a pipeline validation action that validates the content of a string
- * or array.
+ * Creates an includes validation action.
  *
  * @param requirement The content to be included.
  *
- * @returns A validation action.
+ * @returns A includes action.
  */
 export function includes<
   TInput extends ContentInput,
@@ -73,13 +72,12 @@ export function includes<
 >(requirement: TRequirement): IncludesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a pipeline validation action that validates the content of a string
- * or array.
+ * Creates an includes validation action.
  *
  * @param requirement The content to be included.
  * @param message The error message.
  *
- * @returns A validation action.
+ * @returns A includes action.
  */
 export function includes<
   TInput extends ContentInput,
