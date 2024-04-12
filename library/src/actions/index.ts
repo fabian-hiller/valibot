@@ -2,6 +2,7 @@ export * from './bytes/index.ts';
 export * from './brand/index.ts';
 export * from './decimal/index.ts';
 export * from './includes/includes.ts';
+export * from './maxBytes/index.ts';
 export * from './maxLength/index.ts';
 export * from './maxValue/index.ts';
 export * from './minBytes/index.ts';

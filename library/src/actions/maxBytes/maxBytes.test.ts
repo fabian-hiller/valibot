@@ -1,49 +1,49 @@
 import { describe, expect, test } from 'vitest';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import {
-  minBytes,
-  type MinBytesAction,
-  type MinBytesIssue,
-} from './minBytes.ts';
+  maxBytes,
+  type MaxBytesAction,
+  type MaxBytesIssue,
+} from './maxBytes.ts';
 
-describe('minBytes', () => {
+describe('maxBytes', () => {
   describe('should return action object', () => {
-    const baseAction: Omit<MinBytesAction<string, 5, never>, 'message'> = {
+    const baseAction: Omit<MaxBytesAction<string, 5, never>, 'message'> = {
       kind: 'validation',
-      type: 'min_bytes',
-      expects: '>=5',
+      type: 'max_bytes',
+      expects: '<=5',
       requirement: 5,
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const action: MinBytesAction<string, 5, undefined> = {
+      const action: MaxBytesAction<string, 5, undefined> = {
         ...baseAction,
         message: undefined,
       };
-      expect(minBytes(5)).toStrictEqual(action);
-      expect(minBytes(5, undefined)).toStrictEqual(action);
+      expect(maxBytes(5)).toStrictEqual(action);
+      expect(maxBytes(5, undefined)).toStrictEqual(action);
     });
 
     test('with string message', () => {
-      expect(minBytes(5, 'message')).toStrictEqual({
+      expect(maxBytes(5, 'message')).toStrictEqual({
         ...baseAction,
         message: 'message',
-      } satisfies MinBytesAction<string, 5, string>);
+      } satisfies MaxBytesAction<string, 5, string>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(minBytes(5, message)).toStrictEqual({
+      expect(maxBytes(5, message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies MinBytesAction<string, 5, typeof message>);
+      } satisfies MaxBytesAction<string, 5, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    const action = minBytes(5);
+    const action = maxBytes(5);
 
     test('for untyped inputs', () => {
       expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
@@ -53,23 +53,23 @@ describe('minBytes', () => {
     });
 
     test('for valid strings', () => {
-      expectNoActionIssue(action, ['12345', '123456', 'foobarbaz123']);
+      expectNoActionIssue(action, ['', '1', '1234', '12345']);
     });
 
     test('for valid chars', () => {
       expectNoActionIssue(action, [
+        'あ', // 'あ' is 3 bytes
         '🤖!', // '🤖' is 4 bytes
-        'あい', // 'あい' is 6 bytes
       ]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const action = minBytes(5, 'message');
-    const baseIssue: Omit<MinBytesIssue<string, 5>, 'input' | 'received'> = {
+    const action = maxBytes(5, 'message');
+    const baseIssue: Omit<MaxBytesIssue<string, 5>, 'input' | 'received'> = {
       kind: 'validation',
-      type: 'min_bytes',
-      expected: '>=5',
+      type: 'max_bytes',
+      expected: '<=5',
       message: 'message',
       requirement: 5,
     };
@@ -78,7 +78,12 @@ describe('minBytes', () => {
       `${new TextEncoder().encode(value).length}`;
 
     test('for invalid strings', () => {
-      expectActionIssue(action, baseIssue, ['', '1', '1234'], getReceived);
+      expectActionIssue(
+        action,
+        baseIssue,
+        ['123456', 'foobarbaz123'],
+        getReceived
+      );
     });
 
     test('for invalid chars', () => {
@@ -86,8 +91,7 @@ describe('minBytes', () => {
         action,
         baseIssue,
         [
-          'あ', // 'あ' is 3 bytes
-          '🤖', // '🤖' is 4 bytes
+          'あい', // 'あい' is 6 bytes
         ],
         getReceived
       );
