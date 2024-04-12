@@ -1,11 +1,17 @@
 import type {
+  LooseObjectIssue,
+  LooseObjectSchema,
+  LooseObjectSchemaAsync,
   NeverIssue,
   ObjectIssue,
   ObjectSchema,
+  ObjectSchemaAsync,
   ObjectWithRestIssue,
   ObjectWithRestSchema,
+  ObjectWithRestSchemaAsync,
   StrictObjectIssue,
   StrictObjectSchema,
+  StrictObjectSchemaAsync,
 } from '../../schemas/index.ts';
 import type {
   BaseIssue,
@@ -20,6 +26,7 @@ import type {
   InferObjectRest,
   NoPipe,
   ObjectEntries,
+  ObjectEntriesAsync,
   ObjectKeys,
 } from '../../types/index.ts';
 
@@ -29,14 +36,35 @@ import type {
 export type SchemaWithPick<
   TSchema extends NoPipe<
     | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
+    | ObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<ObjectIssue> | undefined
+      >
     | ObjectWithRestSchema<
         ObjectEntries,
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<ObjectWithRestIssue> | undefined
+      >
+    | ObjectWithRestSchemaAsync<
+        ObjectEntriesAsync,
         BaseSchema<unknown, unknown, BaseIssue<unknown>>,
         ErrorMessage<ObjectWithRestIssue> | undefined
       >
     | StrictObjectSchema<
         ObjectEntries,
         ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      >
+    | StrictObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      >
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
+    | LooseObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<LooseObjectIssue> | undefined
       >
   >,
   TKeys extends ObjectKeys<TSchema>,
@@ -109,14 +137,35 @@ export type SchemaWithPick<
 export function pick<
   TSchema extends NoPipe<
     | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
+    | ObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<ObjectIssue> | undefined
+      >
     | ObjectWithRestSchema<
         ObjectEntries,
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<ObjectWithRestIssue> | undefined
+      >
+    | ObjectWithRestSchemaAsync<
+        ObjectEntriesAsync,
         BaseSchema<unknown, unknown, BaseIssue<unknown>>,
         ErrorMessage<ObjectWithRestIssue> | undefined
       >
     | StrictObjectSchema<
         ObjectEntries,
         ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      >
+    | StrictObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      >
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
+    | LooseObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<LooseObjectIssue> | undefined
       >
   >,
   TKeys extends ObjectKeys<TSchema>,

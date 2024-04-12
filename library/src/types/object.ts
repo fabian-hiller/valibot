@@ -1,4 +1,7 @@
 import type {
+  LooseObjectIssue,
+  LooseObjectSchema,
+  LooseObjectSchemaAsync,
   NeverIssue,
   NeverSchema,
   NullishSchema,
@@ -66,7 +69,7 @@ export type ObjectKeys<
         ErrorMessage<ObjectWithRestIssue> | undefined
       >
     | ObjectWithRestSchemaAsync<
-        ObjectEntries,
+        ObjectEntriesAsync,
         BaseSchema<unknown, unknown, BaseIssue<unknown>>,
         ErrorMessage<ObjectWithRestIssue> | undefined
       >
@@ -75,8 +78,16 @@ export type ObjectKeys<
         ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
       >
     | StrictObjectSchemaAsync<
-        ObjectEntries,
+        ObjectEntriesAsync,
         ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      >
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
+    | LooseObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<LooseObjectIssue> | undefined
       >,
 > = MaybeReadonly<[keyof TSchema['entries'], ...(keyof TSchema['entries'])[]]>;
 
@@ -238,14 +249,35 @@ export type InferObjectIssue<
 export type InferObjectRest<
   TSchema extends
     | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
+    | ObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<ObjectIssue> | undefined
+      >
     | ObjectWithRestSchema<
         ObjectEntries,
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<ObjectWithRestIssue> | undefined
+      >
+    | ObjectWithRestSchemaAsync<
+        ObjectEntriesAsync,
         BaseSchema<unknown, unknown, BaseIssue<unknown>>,
         ErrorMessage<ObjectWithRestIssue> | undefined
       >
     | StrictObjectSchema<
         ObjectEntries,
         ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      >
+    | StrictObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      >
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
+    | LooseObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<LooseObjectIssue> | undefined
       >,
 > = TSchema extends
   | ObjectWithRestSchema<
