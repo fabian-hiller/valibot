@@ -56,22 +56,13 @@ describe('minBytes', () => {
       expectNoActionIssue(action, ['12345', '123456', 'foobarbaz123']);
     });
 
-    test('for UTF-8 characters', () => {
-      const value3 = 'あい'; // in UTF-8, 'あい' is 6 bytes
-      expectNoActionIssue(action, [value3]);
+    test('for valid chars', () => {
+      expectNoActionIssue(action, ['あい']); // 6 bytes
     });
   });
 
   describe('should return dataset with issues', () => {
     const action = minBytes(5, 'message');
-    const expectedValues: Record<string, number> = {
-      '': 0,
-      'not': 3,
-      'four': 4,
-      'あ': 3,
-      'い': 3,
-    };
-
     const baseIssue: Omit<MinBytesIssue<string, 5>, 'input' | 'received'> = {
       kind: 'validation',
       type: 'min_bytes',
@@ -80,23 +71,15 @@ describe('minBytes', () => {
       requirement: 5,
     };
 
+    const getReceived = (value: string) =>
+      `${new TextEncoder().encode(value).length}`;
+
     test('for invalid strings', () => {
-      expectActionIssue(
-        action,
-        baseIssue,
-        ['', 'not', 'four'],
-        (value) => `${expectedValues[value]}`
-      );
+      expectActionIssue(action, baseIssue, ['', '1', '1234'], getReceived);
     });
 
-    test('for invalid UTF-8 characters', () => {
-      expectActionIssue(
-        action,
-        baseIssue,
-        ['あ', 'い'],
-        (value) => `${expectedValues[value]}`
-      );
+    test('for invalid chars', () => {
+      expectActionIssue(action, baseIssue, ['あ', 'い'], getReceived);
     });
-
   });
 });

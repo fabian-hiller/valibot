@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Min length issue type.
+ * Min bytes issue type.
  */
 export interface MinBytesIssue<
   TInput extends string,
@@ -29,13 +29,13 @@ export interface MinBytesIssue<
    */
   readonly received: `${number}`;
   /**
-   * The minimum length.
+   * The minimum bytes.
    */
   readonly requirement: TRequirement;
 }
 
 /**
- * Min length action type.
+ * Min bytes action type.
  */
 export interface MinBytesAction<
   TInput extends string,
@@ -53,7 +53,7 @@ export interface MinBytesAction<
    */
   readonly expects: `>=${TRequirement}`;
   /**
-   * The minimum length.
+   * The minimum bytes.
    */
   readonly requirement: TRequirement;
   /**
@@ -63,12 +63,11 @@ export interface MinBytesAction<
 }
 
 /**
- * Creates a pipeline validation action that validates the length of a string
- * or array.
+ * Creates an min bytes validation action.
  *
- * @param requirement The minimum length.
+ * @param requirement The minimum bytes.
  *
- * @returns A validation action.
+ * @returns A min bytes action.
  */
 export function minBytes<
   TInput extends string,
@@ -76,13 +75,12 @@ export function minBytes<
 >(requirement: TRequirement): MinBytesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a pipeline validation action that validates the length of a string
- * or array.
+ * Creates an min bytes validation action.
  *
- * @param requirement The minimum length.
+ * @param requirement The minimum bytes.
  * @param message The error message.
  *
- * @returns A validation action.
+ * @returns A min bytes action.
  */
 export function minBytes<
   TInput extends string,
@@ -111,12 +109,13 @@ export function minBytes(
     message,
     requirement,
     _run(dataset, config) {
-      const getBytesLength = (value: string) => new TextEncoder().encode(value).length;
-
-      if (dataset.typed && getBytesLength(dataset.value) < this.requirement) {
-        _addIssue(this, minBytes, 'bytes', dataset, config, {
-          received: `${getBytesLength(dataset.value)}`,
-        });
+      if (dataset.typed) {
+        const bytes = new TextEncoder().encode(dataset.value).length;
+        if (bytes < this.requirement) {
+          _addIssue(this, minBytes, 'bytes', dataset, config, {
+            received: `${bytes}`,
+          });
+        }
       }
       return dataset;
     },
