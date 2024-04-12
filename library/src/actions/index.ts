@@ -10,3 +10,4 @@ export * from './trimEnd/index.ts';
 export * from './trimStart/index.ts';
 export * from './url/index.ts';
 export * from "./includes/includes.ts";
+export * from './bytes/index.ts';
