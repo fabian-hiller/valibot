@@ -1,6 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import type { ContentRequirement } from '../types.ts';
 import {
   includes,
   type IncludesAction,
@@ -45,12 +44,6 @@ describe('includes', () => {
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
         IncludesIssue<Input, 123>
-      >();
-    });
-
-    test('of requirement', () => {
-      expectTypeOf<Action['requirement']>().toMatchTypeOf<
-        ContentRequirement<Input>
       >();
     });
   });
