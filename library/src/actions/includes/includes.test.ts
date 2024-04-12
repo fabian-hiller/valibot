@@ -1,50 +1,50 @@
 import { describe, expect, test } from 'vitest';
-import { 
-  includes,
-  type IncludesIssue, 
-  type IncludesAction 
-} from './includes.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
+import {
+  includes,
+  type IncludesAction,
+  type IncludesIssue,
+} from './includes.ts';
 
 describe('includes', () => {
   describe('should return action object', () => {
-    const baseAction: Omit<IncludesAction<string, 'hello', never>, 'message'> = {
+    const baseAction: Omit<IncludesAction<string, 'foo', never>, 'message'> = {
       kind: 'validation',
       type: 'includes',
-      expects: `"hello"`,
-      requirement: 'hello',
+      expects: '"foo"',
+      requirement: 'foo',
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const action: IncludesAction<string, 'hello', undefined> = {
+      const action: IncludesAction<string, 'foo', undefined> = {
         ...baseAction,
         message: undefined,
       };
-      expect(includes('hello')).toStrictEqual(action);
-      expect(includes('hello', undefined)).toStrictEqual(action);
+      expect(includes('foo')).toStrictEqual(action);
+      expect(includes('foo', undefined)).toStrictEqual(action);
     });
 
     test('with string message', () => {
       const message = 'message';
-      expect(includes('hello', message)).toStrictEqual({
+      expect(includes('foo', message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies IncludesAction<string, 'hello', string>);
+      } satisfies IncludesAction<string, 'foo', string>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(includes('hello', message)).toStrictEqual({
+      expect(includes('foo', message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies IncludesAction<string, 'hello', typeof message>);
+      } satisfies IncludesAction<string, 'foo', typeof message>);
     });
   });
 
-  describe('should return no issue', () => {
-    const action = includes('foobar');
+  describe('should return dataset without issues', () => {
+    const action = includes('foo');
 
     test('for untyped inputs', () => {
       expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
@@ -54,34 +54,37 @@ describe('includes', () => {
     });
 
     test('for valid strings', () => {
-      expectNoActionIssue(action, ['foobar', '123foobar45', '123456foobar', 'foobarbaz123']);
+      expectNoActionIssue(action, ['foo', 'foobar', '123foo']);
     });
 
     test('for valid arrays', () => {
-      expectNoActionIssue(action, [['123', 'test', 'foobar', '456'], ['test123', 'foobar'], ['foobar'], ['foobar', 'hello']]);
+      expectNoActionIssue(action, [
+        ['foo'],
+        [123, 'foo'],
+        [null, 123, 'foo', true, 'foo'],
+      ]);
     });
   });
 
-  describe('should return an issue', () => {
-    const actionRequirement = 'test123';
-    const actionMessage = 'message';
-    const action = includes(actionRequirement, actionMessage);
-    const baseIssue: Omit<IncludesIssue<string, 'test123'>, 'input' | 'received'> = {
+  describe('should return dataset with issues', () => {
+    const action = includes('foo', 'message');
+    const baseIssue: Omit<
+      IncludesIssue<string, 'foo'>,
+      'input' | 'received'
+    > = {
       kind: 'validation',
       type: 'includes',
-      expected: `"${actionRequirement}"`,
-      message: actionMessage,
-      requirement: actionRequirement,
+      expected: '"foo"',
+      message: 'message',
+      requirement: 'foo',
     };
-
-    const issueGetReceived = () => `!"${actionRequirement}"`;
 
     test('for invalid strings', () => {
       expectActionIssue(
         action,
         baseIssue,
-        ['', 'foo', '1234'],
-        issueGetReceived
+        ['', 'fo', 'fobar', '123fo'],
+        () => '!"foo"'
       );
     });
 
@@ -89,8 +92,8 @@ describe('includes', () => {
       expectActionIssue(
         action,
         baseIssue,
-        [[], ['foo', 'bar'], [1, 2, 3, 4]],
-        issueGetReceived
+        [[], ['fo'], [123, 'fobar'], [null, 123, true]],
+        () => '!"foo"'
       );
     });
   });
