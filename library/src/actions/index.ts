@@ -1,5 +1,6 @@
 export * from './bytes/index.ts';
 export * from './brand/index.ts';
+export * from './creditCard/index.ts';
 export * from './decimal/index.ts';
 export * from './finite/index.ts';
 export * from './includes/includes.ts';
