@@ -6,8 +6,8 @@ import {
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
-import type { ArrayIssue } from './array.ts';
 import { arrayAsync, type ArraySchemaAsync } from './arrayAsync.ts';
+import type { ArrayIssue } from './types.ts';
 
 describe('arrayAsync', () => {
   describe('should return schema arrayAsync', () => {

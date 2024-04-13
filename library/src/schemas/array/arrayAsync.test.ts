@@ -2,8 +2,8 @@ import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import type { ArrayIssue } from './array.ts';
 import { arrayAsync, type ArraySchemaAsync } from './arrayAsync.ts';
+import type { ArrayIssue } from './types.ts';
 
 describe('array', () => {
   describe('should return schema array', () => {

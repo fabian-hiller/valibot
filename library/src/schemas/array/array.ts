@@ -8,25 +8,7 @@ import type {
   InferOutput,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
-import type { ArrayPathItem } from './types.ts';
-
-/**
- * Array issue type.
- */
-export interface ArrayIssue extends BaseIssue<unknown> {
-  /**
-   * The issue kind.
-   */
-  readonly kind: 'schema';
-  /**
-   * The issue type.
-   */
-  readonly type: 'array';
-  /**
-   * The expected input.
-   */
-  readonly expected: 'Array';
-}
+import type { ArrayIssue, ArrayPathItem } from './types.ts';
 
 /**
  * Array schema type.

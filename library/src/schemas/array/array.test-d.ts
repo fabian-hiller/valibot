@@ -6,7 +6,8 @@ import {
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
-import { array, type ArrayIssue, type ArraySchema } from './array.ts';
+import { array, type ArraySchema } from './array.ts';
+import type { ArrayIssue } from './types.ts';
 
 describe('array', () => {
   describe('should return schema array', () => {
