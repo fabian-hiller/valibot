@@ -1,5 +1,10 @@
 import { expect } from 'vitest';
-import type { BaseIssue, BaseSchema, InferInput } from '../types';
+import type {
+  BaseIssue,
+  BaseSchema,
+  BaseSchemaAsync,
+  InferInput,
+} from '../types';
 
 /**
  * Expect no schema issue to be returned.
@@ -7,11 +12,13 @@ import type { BaseIssue, BaseSchema, InferInput } from '../types';
  * @param schema The schema to test.
  * @param values The values to test.
  */
-export function expectNoSchemaIssue<
-  TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
->(schema: TSchema, values: InferInput<TSchema>[]): void {
+export async function expectNoSchemaIssue<
+  TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+>(schema: TSchema, values: InferInput<TSchema>[]): Promise<void> {
   for (const value of values) {
-    expect(schema._run({ typed: false, value }, {})).toStrictEqual({
+    expect(await schema._run({ typed: false, value }, {})).toStrictEqual({
       typed: true,
       value,
     });

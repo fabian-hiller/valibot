@@ -6,7 +6,9 @@ import {
 import type {
   BaseIssue,
   BaseSchema,
+  BaseSchemaAsync,
   BaseValidation,
+  BaseValidationAsync,
   Config,
   Dataset,
   FunctionReference,
@@ -41,7 +43,9 @@ interface Other<TInput> {
 export function _addIssue<
   const TContext extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-    | BaseValidation<unknown, unknown, BaseIssue<unknown>>,
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+    | BaseValidation<unknown, unknown, BaseIssue<unknown>>
+    | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>,
 >(
   context: TContext,
   reference: FunctionReference<unknown[], TContext>,

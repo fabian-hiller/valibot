@@ -54,23 +54,23 @@ export interface ArraySchema<
 }
 
 /**
- * Creates a array schema.
+ * Creates an array schema.
  *
  * @param item The item schema.
  *
- * @returns A array schema.
+ * @returns An array schema.
  */
 export function array<
   const TItem extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(item: TItem): ArraySchema<TItem, undefined>;
 
 /**
- * Creates a array schema.
+ * Creates an array schema.
  *
  * @param item The item schema.
  * @param message The error message.
  *
- * @returns A array schema.
+ * @returns An array schema.
  */
 export function array<
   const TItem extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
