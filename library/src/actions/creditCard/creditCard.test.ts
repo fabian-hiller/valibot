@@ -65,10 +65,9 @@ describe('creditCard', () => {
         '3020 4169 3226 43',
         '3021 8047 1965 57',
         '30218047196557',
-        ]
+      ];
       expectNoActionIssue(action, validCreditCards);
     });
-
   });
 
   describe('should return dataset with issues', () => {
@@ -82,8 +81,11 @@ describe('creditCard', () => {
     };
 
     test('for invalid credit Cards', () => {
-      expectActionIssue(action, baseIssue, ['1234', 'Not a credit Card', '3530 1113 3330']);
+      expectActionIssue(action, baseIssue, [
+        '1234',
+        'Not a credit Card',
+        '3530 1113 3330',
+      ]);
     });
-
   });
 });

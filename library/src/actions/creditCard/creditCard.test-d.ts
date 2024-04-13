@@ -17,9 +17,9 @@ describe('creditCard', () => {
     });
 
     test('with string message', () => {
-      expectTypeOf(
-        creditCard<string, 'message'>('message')
-      ).toEqualTypeOf<CreditCardAction<string, 'message'>>();
+      expectTypeOf(creditCard<string, 'message'>('message')).toEqualTypeOf<
+        CreditCardAction<string, 'message'>
+      >();
     });
 
     test('with function message', () => {

@@ -3,14 +3,13 @@ import type {
   BaseValidation,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset, _isLuhnAlgo } from '../../utils/index.ts';
+import { _isLuhnAlgo, _validationDataset } from '../../utils/index.ts';
 
 /**
  * Credit card issue type.
  */
-export interface CreditCardIssue<
-  TInput extends string,
-> extends BaseIssue<TInput> {
+export interface CreditCardIssue<TInput extends string>
+  extends BaseIssue<TInput> {
   /**
    * The issue kind.
    */
@@ -38,9 +37,7 @@ export interface CreditCardIssue<
  */
 export interface CreditCardAction<
   TInput extends string,
-  TMessage extends
-    | ErrorMessage<CreditCardIssue<TInput>>
-    | undefined,
+  TMessage extends ErrorMessage<CreditCardIssue<TInput>> | undefined,
 > extends BaseValidation<TInput, TInput, CreditCardIssue<TInput>> {
   /**
    * The action type.
@@ -90,9 +87,10 @@ const PROVIDER_REGEX_LIST = [
  *
  * @returns A Credit card action.
  */
-export function creditCard<
-  TInput extends string,
->(): CreditCardAction<TInput, undefined>;
+export function creditCard<TInput extends string>(): CreditCardAction<
+  TInput,
+  undefined
+>;
 
 /**
  * Creates a credit card validation action.
@@ -103,20 +101,12 @@ export function creditCard<
  */
 export function creditCard<
   TInput extends string,
-  const TMessage extends
-    | ErrorMessage<CreditCardIssue<TInput>>
-    | undefined,
->(
-  message: TMessage
-): CreditCardAction<TInput, TMessage>;
-
+  const TMessage extends ErrorMessage<CreditCardIssue<TInput>> | undefined,
+>(message: TMessage): CreditCardAction<TInput, TMessage>;
 
 export function creditCard(
   message?: ErrorMessage<CreditCardIssue<string>>
-): CreditCardAction<
-  string,
-  ErrorMessage<CreditCardIssue<string>> | undefined
-> {
+): CreditCardAction<string, ErrorMessage<CreditCardIssue<string>> | undefined> {
   return {
     kind: 'validation',
     type: 'credit_card',
@@ -125,10 +115,12 @@ export function creditCard(
     message,
     requirement(input) {
       const sanitized = input.replace(SANITIZE_REGEX, '');
-      const hasACreditCardFormat = PROVIDER_REGEX_LIST.some(regex => regex.test(sanitized))
+      const hasACreditCardFormat = PROVIDER_REGEX_LIST.some((regex) =>
+        regex.test(sanitized)
+      );
       const passLuhnAlgorithm = _isLuhnAlgo(sanitized);
 
-      return hasACreditCardFormat && passLuhnAlgorithm
+      return hasACreditCardFormat && passLuhnAlgorithm;
     },
     _run(dataset, config) {
       return _validationDataset(
