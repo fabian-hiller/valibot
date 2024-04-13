@@ -41,6 +41,17 @@ export type PipeItemAsync<TInput, TOutput, TIssue extends BaseIssue<unknown>> =
   | PipeActionAsync<TInput, TOutput, TIssue>;
 
 /**
+ * Pipe schema async type.
+ */
+export type PipeSchemaAsync<
+  TInput,
+  TOutput,
+  TIssue extends BaseIssue<unknown>,
+> =
+  | BaseSchema<TInput, TOutput, TIssue>
+  | BaseSchemaAsync<TInput, TOutput, TIssue>;
+
+/**
  * No pipe type.
  */
 export type NoPipe<
