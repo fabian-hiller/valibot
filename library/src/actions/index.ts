@@ -13,6 +13,8 @@ export * from './minValue/index.ts';
 export * from './notBytes/index.ts';
 export * from './safeInteger/index.ts';
 export * from './toLowerCase/index.ts';
+export * from './toMaxValue/index.ts';
+export * from './toMinValue/index.ts';
 export * from './toUpperCase/index.ts';
 export * from './transform/index.ts';
 export * from './trim/index.ts';
