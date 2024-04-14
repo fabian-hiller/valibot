@@ -23,13 +23,9 @@ export interface Cuid2Issue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The Cuid2 regex.
    */
-  readonly received: `${number}`;
-  /**
-   * The minimum bytes.
-   */
-  readonly requirement: (input: string) => boolean;
+  readonly requirement: RegExp;
 }
 
 /**
@@ -48,9 +44,9 @@ export interface Cuid2Action<
    */
   readonly expects: null;
   /**
-   * The minimum bytes.
+   * The Cuid2 regex.
    */
-  readonly requirement: (input: string) => boolean;
+  readonly requirement: RegExp;
   /**
    * The error message.
    */
@@ -84,16 +80,14 @@ export function cuid2(
     type: 'cuid2',
     expects: null,
     async: false,
+    requirement: CUID2_REGEX,
     message,
-    requirement(input) {
-      return CUID2_REGEX.test(input);
-    },
     _run(dataset, config) {
       return _validationDataset(
         this,
         cuid2,
         'cuid2',
-        dataset.typed && !this.requirement(dataset.value),
+        dataset.typed && !this.requirement.test(dataset.value),
         dataset,
         config
       );

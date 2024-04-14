@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { CUID2_REGEX } from '../../regex.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { cuid2, type Cuid2Action, type Cuid2Issue } from './cuid2.ts';
 
@@ -8,7 +9,7 @@ describe('cuid2', () => {
       kind: 'validation',
       type: 'cuid2',
       expects: null,
-      requirement: expect.any(Function),
+      requirement: CUID2_REGEX,
       async: false,
       _run: expect.any(Function),
     };
@@ -48,15 +49,26 @@ describe('cuid2', () => {
       });
     });
 
-    test('for valid cuid2', () => {
-      const validCuid2s = [
+    test('for single lowercase letters', () => {
+      expectNoActionIssue(action, ['a', 'b', 'y', 'z']);
+    });
+
+    test('for two lowercase letters', () => {
+      expectNoActionIssue(action, ['ab', 'cd', 'wx', 'yz']);
+    });
+
+    test('for letter plus digit', () => {
+      expectNoActionIssue(action, ['a1', 'b2', 'y8', 'z9']);
+    });
+
+    test('for very long Cuid2s', () => {
+      expectNoActionIssue(action, [
         'o2dyrckf0vbqhftbcx8ex7r8',
         'pj17j4wheabtydu00x2yuo8s',
         'vkydd2qpoediyioixyeh8zyo',
         'ja3j1arc87i80ys1zxk8iyiv',
         'pbe6zw7wikj83vv5knjk1wx8',
-      ];
-      expectNoActionIssue(action, validCuid2s);
+      ]);
     });
   });
 
@@ -67,17 +79,28 @@ describe('cuid2', () => {
       type: 'cuid2',
       expected: null,
       message: 'message',
-      requirement: expect.any(Function),
+      requirement: CUID2_REGEX,
     };
 
-    test('for invalid cuid2', () => {
-      expectActionIssue(action, baseIssue, [
-        '',
-        'w#@%^',
-        'o2dyrcKf0vbqhftBcx8ex7r8',
-        '1vx6pa5rqog2tqdztxaa0xgw',
-        'Not a CUID2',
-      ]);
+    test('for empty strings', () => {
+      expectActionIssue(action, baseIssue, ['', ' ']);
+    });
+
+    test('for string with spaces', () => {
+      expectActionIssue(action, baseIssue, [' o2dyr', 'o2dyr ', 'o2d yr']);
+    });
+
+    test('for digit as first char', () => {
+      expectActionIssue(action, baseIssue, ['1', '9', '1a', '9z']);
+    });
+
+    test('for uppercase letters', () => {
+      expectActionIssue(action, baseIssue, ['A', 'Bc', 'De', 'F1', 'o2Dyr']);
+    });
+
+    test('for special chars', () => {
+      expectActionIssue(action, baseIssue, ['@', '#', '$', '%', '&']);
+      expectActionIssue(action, baseIssue, ['a@', 'b#', 'x$', 'z%', 'y&']);
     });
   });
 });
