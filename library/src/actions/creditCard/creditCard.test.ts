@@ -52,21 +52,59 @@ describe('creditCard', () => {
       });
     });
 
-    test('for valid credit cards', () => {
-      const validCreditCards = [
-        '4539 1488 0343 6467',
-        '4539 1488 0343 6467',
-        '5555 5555 5555 4444',
-        '3714 4963 5398 431',
-        '3530 1113 3330 0000',
-        '4701 3222 1111 1234',
-        '4001 9192 5753 7193',
-        '4005 5500 0000 0001',
-        '3020 4169 3226 43',
-        '3021 8047 1965 57',
-        '30218047196557',
-      ];
-      expectNoActionIssue(action, validCreditCards);
+    test('for American Express', () => {
+      expectNoActionIssue(action, ['378282246310005', '371449635398431']);
+    });
+
+    test('for Diners Club', () => {
+      expectNoActionIssue(action, ['3056930009020004', '36227206271667']);
+    });
+
+    test('for Discover', () => {
+      expectNoActionIssue(action, [
+        '6011111111111117',
+        '6011000990139424',
+        '6011981111111113',
+      ]);
+    });
+
+    test('for JCB', () => {
+      expectNoActionIssue(action, ['3530111333300000', '3566002020360505']);
+    });
+
+    test('for Mastercard', () => {
+      expectNoActionIssue(action, [
+        '5555555555554444',
+        '2223003122003222',
+        '5200828282828210',
+        '5105105105105100',
+      ]);
+    });
+
+    test('for UnionPay', () => {
+      expectNoActionIssue(action, [
+        '6200000000000005',
+        '6200000000000047',
+        '6205500000000000004',
+      ]);
+    });
+
+    test('for Visa', () => {
+      expectNoActionIssue(action, ['4242424242424242', '4000056655665556']);
+    });
+
+    test('with space dividers', () => {
+      expectNoActionIssue(action, [
+        '4000 0025 0000 1001',
+        '5555 5525 0000 1001',
+      ]);
+    });
+
+    test('with dashe dividers', () => {
+      expectNoActionIssue(action, [
+        '4000-0503-6000-0001',
+        '5555-0503-6000-0080',
+      ]);
     });
   });
 
@@ -80,11 +118,53 @@ describe('creditCard', () => {
       requirement: expect.any(Function),
     };
 
-    test('for invalid credit Cards', () => {
+    test('for empty strings', () => {
+      expectActionIssue(action, baseIssue, ['', ' ']);
+    });
+
+    test('for included letters', () => {
       expectActionIssue(action, baseIssue, [
-        '1234',
-        'Not a credit Card',
-        '3530 1113 3330',
+        'DE6200000000000005',
+        '6011000A90139424',
+        '37828224631000E',
+      ]);
+    });
+
+    test('for mixed divider', () => {
+      expectActionIssue(action, baseIssue, [
+        '40000025 0000-1001',
+        '5555-55250000 1001',
+        '5555 55555555-4444',
+      ]);
+    });
+
+    test('for double divider', () => {
+      expectActionIssue(action, baseIssue, [
+        '4000  0025 0000 1001',
+        '5555-0503--6000-0080',
+      ]);
+    });
+
+    test('for too short numbers', () => {
+      expectActionIssue(action, baseIssue, ['3782822463100', '3622720627166']);
+    });
+
+    test('for too long numbers', () => {
+      expectActionIssue(action, baseIssue, ['62055000000000000040']);
+    });
+
+    test('for invalid providers', () => {
+      expectActionIssue(action, baseIssue, [
+        '7530111333300000',
+        '1105105105105100',
+        '9000056655665556',
+      ]);
+    });
+
+    test('for invalid checksum', () => {
+      expectActionIssue(action, baseIssue, [
+        '5200828282828211',
+        '371449635398434',
       ]);
     });
   });

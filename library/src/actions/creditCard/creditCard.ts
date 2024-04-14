@@ -25,9 +25,9 @@ export interface CreditCardIssue<TInput extends string>
   /**
    * The received input.
    */
-  readonly received: `${number}`;
+  readonly received: `"${string}"`;
   /**
-   * The minimum bytes.
+   * The validation function.
    */
   readonly requirement: (input: string) => boolean;
 }
@@ -48,7 +48,7 @@ export interface CreditCardAction<
    */
   readonly expects: null;
   /**
-   * The minimum bytes.
+   * The validation function.
    */
   readonly requirement: (input: string) => boolean;
   /**
@@ -58,9 +58,15 @@ export interface CreditCardAction<
 }
 
 /**
+ * Credit card regex.
+ */
+const CREDIT_CARD_REGEX =
+  /^(?:\d{14,19}|\d{4}(?: \d{3,6}){2,4}|\d{4}(?:-\d{3,6}){2,4})$/u;
+
+/**
  * Sanitize regex.
  */
-const SANITIZE_REGEX = /[- ]+/gu;
+const SANITIZE_REGEX = /[- ]/gu;
 
 /**
  * Provider regex list.
@@ -69,15 +75,15 @@ const PROVIDER_REGEX_LIST = [
   // American Express
   /^3[47]\d{13}$/u,
   // Diners Club
-  /^3(?:0[0-5]|[68]\d)\d{11}$/u,
+  /^3(?:0[0-5]|[68]\d)\d{11,13}$/u,
   // Discover
   /^6(?:011|5\d{2})\d{12,15}$/u,
   // JCB
   /^(?:2131|1800|35\d{3})\d{11}$/u,
   // Mastercard
-  /^5[1-5]\d{2}|(222\d|22[3-9]\d|2[3-6]\d{2}|27[01]\d|2720)\d{12}$/u,
+  /^5[1-5]\d{2}|(?:222\d|22[3-9]\d|2[3-6]\d{2}|27[01]\d|2720)\d{12}$/u,
   // UnionPay
-  /^(6[27]\d{14}|81\d{14,17})$/u,
+  /^(?:6[27]\d{14,17}|81\d{14,17})$/u,
   // Visa
   /^4\d{12}(?:\d{3,6})?$/u,
 ];
@@ -114,19 +120,20 @@ export function creditCard(
     async: false,
     message,
     requirement(input) {
-      const sanitized = input.replace(SANITIZE_REGEX, '');
-      const hasACreditCardFormat = PROVIDER_REGEX_LIST.some((regex) =>
-        regex.test(sanitized)
-      );
-      const passLuhnAlgorithm = _isLuhnAlgo(sanitized);
-
-      return hasACreditCardFormat && passLuhnAlgorithm;
+      let sanitized: string | undefined;
+      return (CREDIT_CARD_REGEX.test(input) &&
+        // Remove any hyphens and blanks
+        (sanitized = input.replace(SANITIZE_REGEX, '')) &&
+        // Check if it matches a provider
+        PROVIDER_REGEX_LIST.some((regex) => regex.test(sanitized)) &&
+        // Check if passes luhn algorithm
+        _isLuhnAlgo(sanitized)) as boolean;
     },
     _run(dataset, config) {
       return _validationDataset(
         this,
         creditCard,
-        'credit_card',
+        'credit card',
         dataset.typed && !this.requirement(dataset.value),
         dataset,
         config
