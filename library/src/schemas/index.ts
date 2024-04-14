@@ -23,3 +23,4 @@ export * from './string/index.ts';
 export * from './symbol/index.ts';
 export * from './undefined/index.ts';
 export * from './unknown/index.ts';
+export * from './void/index.ts';
