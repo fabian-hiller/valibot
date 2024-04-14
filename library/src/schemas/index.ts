@@ -3,6 +3,7 @@ export * from './array/index.ts';
 export * from './bigint/index.ts';
 export * from './blob/index.ts';
 export * from './boolean/index.ts';
+export * from './custom/index.ts';
 export * from './date/index.ts';
 export * from './enum/index.ts';
 export * from './instance/index.ts';

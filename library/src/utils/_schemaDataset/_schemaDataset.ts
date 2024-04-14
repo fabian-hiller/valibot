@@ -26,7 +26,8 @@ export function _schemaDataset<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(
   context: TSchema,
-  reference: FunctionReference<unknown[], TSchema>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  reference: FunctionReference<any[], TSchema>,
   typed: boolean,
   dataset: Dataset<unknown, never>,
   config: Config<InferIssue<TSchema>>

@@ -5,7 +5,7 @@ import { _schemaDataset } from '../../utils/index.ts';
  * Class type.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Class = new (...args: any) => any;
+export type Class = new (...args: any[]) => any;
 
 /**
  * Instance issue type.
