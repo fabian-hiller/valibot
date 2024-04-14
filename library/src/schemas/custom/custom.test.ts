@@ -1,69 +1,68 @@
 import { describe, expect, test } from 'vitest';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
-import {
-  picklist,
-  type PicklistIssue,
-  type PicklistSchema,
-} from './picklist.ts';
+import { custom, type CustomIssue, type CustomSchema } from './custom.ts';
 
-describe('picklist', () => {
-  const options = ['foo', 'bar', 'baz'] as const;
-  type Options = typeof options;
+describe('custom', () => {
+  type PixelString = `${number}px`;
+  const isPixelString = (input: unknown) =>
+    typeof input === 'string' && /^\d+px$/u.test(input);
 
   describe('should return schema object', () => {
-    const baseSchema: Omit<PicklistSchema<Options, never>, 'message'> = {
+    const baseSchema: Omit<CustomSchema<PixelString, never>, 'message'> = {
       kind: 'schema',
-      type: 'picklist',
-      expects: '"foo" | "bar" | "baz"',
-      options,
+      type: 'custom',
+      expects: 'unknown',
+      check: isPixelString,
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: PicklistSchema<Options, undefined> = {
+      const schema: CustomSchema<PixelString, undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(picklist(options)).toStrictEqual(schema);
-      expect(picklist(options, undefined)).toStrictEqual(schema);
+      expect(custom(isPixelString)).toStrictEqual(schema);
+      expect(custom(isPixelString, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(picklist(options, 'message')).toStrictEqual({
+      expect(custom(isPixelString, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies PicklistSchema<Options, 'message'>);
+      } satisfies CustomSchema<PixelString, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(picklist(options, message)).toStrictEqual({
+      expect(custom(isPixelString, message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies PicklistSchema<Options, typeof message>);
+      } satisfies CustomSchema<PixelString, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    test('for valid options', () => {
-      expectNoSchemaIssue(picklist(options), ['foo', 'bar', 'baz']);
+    const schema = custom<PixelString>(isPixelString);
+
+    test('for pixel strings', () => {
+      expectNoSchemaIssue(schema, ['0px', '123px', '456789px']);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = picklist(options, 'message');
-    const baseIssue: Omit<PicklistIssue, 'input' | 'received'> = {
+    const schema = custom<PixelString>(isPixelString, 'message');
+    const baseIssue: Omit<CustomIssue, 'input' | 'received'> = {
       kind: 'schema',
-      type: 'picklist',
-      expected: '"foo" | "bar" | "baz"',
+      type: 'custom',
+      expected: 'unknown',
       message: 'message',
     };
 
     // Special values
 
-    test('for invalid options', () => {
-      expectSchemaIssue(schema, baseIssue, ['fo', 'fooo', 'foobar']);
+    test('for invalid pixel strings', () => {
+      expectSchemaIssue(schema, baseIssue, ['0', '0p', '0pxl', 'px', 'px0']);
     });
 
     // Primitive types
@@ -89,7 +88,7 @@ describe('picklist', () => {
     });
 
     test('for strings', () => {
-      expectSchemaIssue(schema, baseIssue, ['', 'hello', '123']);
+      expectSchemaIssue(schema, baseIssue, ['', 'foo', '123']);
     });
 
     test('for symbols', () => {

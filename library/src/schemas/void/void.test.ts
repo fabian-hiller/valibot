@@ -1,70 +1,58 @@
 import { describe, expect, test } from 'vitest';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
-import {
-  picklist,
-  type PicklistIssue,
-  type PicklistSchema,
-} from './picklist.ts';
+import { void_, type VoidIssue, type VoidSchema } from './void.ts';
 
-describe('picklist', () => {
-  const options = ['foo', 'bar', 'baz'] as const;
-  type Options = typeof options;
-
+describe('void', () => {
   describe('should return schema object', () => {
-    const baseSchema: Omit<PicklistSchema<Options, never>, 'message'> = {
+    const baseSchema: Omit<VoidSchema<never>, 'message'> = {
       kind: 'schema',
-      type: 'picklist',
-      expects: '"foo" | "bar" | "baz"',
-      options,
+      type: 'void',
+      expects: 'void',
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: PicklistSchema<Options, undefined> = {
+      const schema: VoidSchema<undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(picklist(options)).toStrictEqual(schema);
-      expect(picklist(options, undefined)).toStrictEqual(schema);
+      expect(void_()).toStrictEqual(schema);
+      expect(void_(undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(picklist(options, 'message')).toStrictEqual({
+      expect(void_('message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies PicklistSchema<Options, 'message'>);
+      } satisfies VoidSchema<'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(picklist(options, message)).toStrictEqual({
+      expect(void_(message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies PicklistSchema<Options, typeof message>);
+      } satisfies VoidSchema<typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    test('for valid options', () => {
-      expectNoSchemaIssue(picklist(options), ['foo', 'bar', 'baz']);
+    const schema = void_();
+
+    test('for undefined', () => {
+      expectNoSchemaIssue(schema, [undefined]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = picklist(options, 'message');
-    const baseIssue: Omit<PicklistIssue, 'input' | 'received'> = {
+    const schema = void_('message');
+    const baseIssue: Omit<VoidIssue, 'input' | 'received'> = {
       kind: 'schema',
-      type: 'picklist',
-      expected: '"foo" | "bar" | "baz"',
+      type: 'void',
+      expected: 'void',
       message: 'message',
     };
-
-    // Special values
-
-    test('for invalid options', () => {
-      expectSchemaIssue(schema, baseIssue, ['fo', 'fooo', 'foobar']);
-    });
 
     // Primitive types
 
@@ -76,20 +64,16 @@ describe('picklist', () => {
       expectSchemaIssue(schema, baseIssue, [true, false]);
     });
 
-    test('for null', () => {
-      expectSchemaIssue(schema, baseIssue, [null]);
-    });
-
     test('for numbers', () => {
       expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
     });
 
-    test('for undefined', () => {
-      expectSchemaIssue(schema, baseIssue, [undefined]);
+    test('for null', () => {
+      expectSchemaIssue(schema, baseIssue, [null]);
     });
 
     test('for strings', () => {
-      expectSchemaIssue(schema, baseIssue, ['', 'hello', '123']);
+      expectSchemaIssue(schema, baseIssue, ['', 'foo', '123']);
     });
 
     test('for symbols', () => {

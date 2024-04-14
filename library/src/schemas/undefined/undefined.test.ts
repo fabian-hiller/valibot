@@ -1,70 +1,62 @@
 import { describe, expect, test } from 'vitest';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import {
-  picklist,
-  type PicklistIssue,
-  type PicklistSchema,
-} from './picklist.ts';
+  undefined_,
+  type UndefinedIssue,
+  type UndefinedSchema,
+} from './undefined.ts';
 
-describe('picklist', () => {
-  const options = ['foo', 'bar', 'baz'] as const;
-  type Options = typeof options;
-
+describe('undefined', () => {
   describe('should return schema object', () => {
-    const baseSchema: Omit<PicklistSchema<Options, never>, 'message'> = {
+    const baseSchema: Omit<UndefinedSchema<never>, 'message'> = {
       kind: 'schema',
-      type: 'picklist',
-      expects: '"foo" | "bar" | "baz"',
-      options,
+      type: 'undefined',
+      expects: 'undefined',
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: PicklistSchema<Options, undefined> = {
+      const schema: UndefinedSchema<undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(picklist(options)).toStrictEqual(schema);
-      expect(picklist(options, undefined)).toStrictEqual(schema);
+      expect(undefined_()).toStrictEqual(schema);
+      expect(undefined_(undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(picklist(options, 'message')).toStrictEqual({
+      expect(undefined_('message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies PicklistSchema<Options, 'message'>);
+      } satisfies UndefinedSchema<'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(picklist(options, message)).toStrictEqual({
+      expect(undefined_(message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies PicklistSchema<Options, typeof message>);
+      } satisfies UndefinedSchema<typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    test('for valid options', () => {
-      expectNoSchemaIssue(picklist(options), ['foo', 'bar', 'baz']);
+    const schema = undefined_();
+
+    test('for undefined', () => {
+      expectNoSchemaIssue(schema, [undefined]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = picklist(options, 'message');
-    const baseIssue: Omit<PicklistIssue, 'input' | 'received'> = {
+    const schema = undefined_('message');
+    const baseIssue: Omit<UndefinedIssue, 'input' | 'received'> = {
       kind: 'schema',
-      type: 'picklist',
-      expected: '"foo" | "bar" | "baz"',
+      type: 'undefined',
+      expected: 'undefined',
       message: 'message',
     };
-
-    // Special values
-
-    test('for invalid options', () => {
-      expectSchemaIssue(schema, baseIssue, ['fo', 'fooo', 'foobar']);
-    });
 
     // Primitive types
 
@@ -76,20 +68,16 @@ describe('picklist', () => {
       expectSchemaIssue(schema, baseIssue, [true, false]);
     });
 
-    test('for null', () => {
-      expectSchemaIssue(schema, baseIssue, [null]);
-    });
-
     test('for numbers', () => {
       expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
     });
 
-    test('for undefined', () => {
-      expectSchemaIssue(schema, baseIssue, [undefined]);
+    test('for null', () => {
+      expectSchemaIssue(schema, baseIssue, [null]);
     });
 
     test('for strings', () => {
-      expectSchemaIssue(schema, baseIssue, ['', 'hello', '123']);
+      expectSchemaIssue(schema, baseIssue, ['', 'foo', '123']);
     });
 
     test('for symbols', () => {

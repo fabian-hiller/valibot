@@ -15,6 +15,11 @@ export type ContentRequirement<TInput extends ContentInput> =
 export type LengthInput = string | unknown[];
 
 /**
+ * Size input type.
+ */
+export type SizeInput = Map<unknown, unknown> | Set<unknown> | Blob;
+
+/**
  * Value input type.
  */
 export type ValueInput = string | number | bigint | boolean | Date;
