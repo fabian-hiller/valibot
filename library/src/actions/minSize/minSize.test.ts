@@ -81,17 +81,16 @@ describe('minSize', () => {
 
     test('for valid blobs', () => {
       expectNoActionIssue(action, [
-        new Blob(['o', 'n', 'e'], { type: 'text/plain' }),
-        new Blob([new Blob(['hi!'], { type: 'text/plain' })], {
-          type: 'text/plain',
-        }),
+        new Blob(['123']),
+        new Blob(['1', '2', '3'], { type: 'text/plain' }),
         new Blob(
           [
-            new Uint8Array([72, 101, 108, 108, 111]), // 'hello' in base 10 number system
+            new Uint8Array([72, 101, 108, 108, 111]), // 'Hello'
             new Blob(['!'], { type: 'text/plain' }),
           ],
           { type: 'text/plain' }
         ),
+        new Blob(['foobarbaz123']),
       ]);
     });
   });
@@ -118,7 +117,7 @@ describe('minSize', () => {
           new Map([[1, 'one']]),
           new Map([
             ['one', 1],
-            [null, 2],
+            ['two', 2],
           ]),
         ],
         (value) => `${value.size}`
@@ -139,11 +138,10 @@ describe('minSize', () => {
         action,
         baseIssue,
         [
-          new Blob([], { type: 'text/plain' }),
-          new Blob(['h'], { type: 'text/plain' }),
-          new Blob(['h', new Blob(['i'], { type: 'text/plain' })], {
-            type: 'text/plain',
-          }),
+          new Blob([]),
+          new Blob(['1']),
+          new Blob(['hi'], { type: 'text/plain' }),
+          new Blob([new Uint8Array([72, 105])]), // 'Hi'
         ],
         (value) => `${value.size}`
       );

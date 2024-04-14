@@ -75,14 +75,10 @@ describe('maxSize', () => {
 
     test('for valid blobs', () => {
       expectNoActionIssue(action, [
-        new Blob([], { type: 'text/plain' }),
-        new Blob([new Blob(['hi'], { type: 'text/plain' })], {
-          type: 'text/plain',
-        }),
-        new Blob(
-          [new Uint8Array([72, 101]), new Blob(['!'], { type: 'text/plain' })],
-          { type: 'text/plain' }
-        ),
+        new Blob([]),
+        new Blob(['1']),
+        new Blob(['hi'], { type: 'text/plain' }),
+        new Blob([new Uint8Array([72, 101, 121])]), // 'Hey'
       ]);
     });
   });
@@ -111,11 +107,14 @@ describe('maxSize', () => {
             [3, 'three'],
             [4, 'four'],
           ]),
-          new Map<number | string | boolean, string | null>([
-            [1, 'one'],
-            ['2', null],
-            [true, null],
-            [4, 'four'],
+          new Map<string, unknown>([
+            ['one', 'foo'],
+            ['two', 123],
+            ['three', true],
+            ['four', null],
+            ['five', undefined],
+            ['six', {}],
+            ['seven', []],
           ]),
         ],
         (value) => `${value.size}`
@@ -126,7 +125,10 @@ describe('maxSize', () => {
       expectActionIssue(
         action,
         baseIssue,
-        [new Set([1, 2, 3, 4]), new Set([1, null, '3', true])],
+        [
+          new Set([1, 2, 3, 4]),
+          new Set([1, null, '3', true, undefined, [], {}]),
+        ],
         (value) => `${value.size}`
       );
     });
@@ -136,14 +138,12 @@ describe('maxSize', () => {
         action,
         baseIssue,
         [
-          new Blob(['hello'], { type: 'text/plain' }),
-          new Blob([new Blob(['hello'], { type: 'text/plain' })], {
-            type: 'text/plain',
-          }),
+          new Blob(['Hey!'], { type: 'text/plain' }),
           new Blob(
-            [new Uint8Array([72, 101, 108, 108, 111])], // 'hello' in base 10 number system
+            [new Uint8Array([72, 101, 108, 108, 111])], // 'Hello'
             { type: 'text/plain' }
           ),
+          new Blob(['foobarbaz123']),
         ],
         (value) => `${value.size}`
       );
