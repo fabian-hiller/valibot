@@ -21,4 +21,5 @@ export * from './picklist/index.ts';
 export * from './strictObject/index.ts';
 export * from './string/index.ts';
 export * from './symbol/index.ts';
+export * from './undefined/index.ts';
 export * from './unknown/index.ts';
