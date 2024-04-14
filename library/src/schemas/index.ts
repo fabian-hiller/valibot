@@ -6,6 +6,7 @@ export * from './boolean/index.ts';
 export * from './date/index.ts';
 export * from './enum/index.ts';
 export * from './instance/index.ts';
+export * from './lazy/index.ts';
 export * from './looseObject/index.ts';
 export * from './never/index.ts';
 export * from './nullable/index.ts';
