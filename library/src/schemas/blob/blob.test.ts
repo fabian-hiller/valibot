@@ -1,70 +1,62 @@
 import { describe, expect, test } from 'vitest';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
-import {
-  picklist,
-  type PicklistIssue,
-  type PicklistSchema,
-} from './picklist.ts';
+import { blob, type BlobIssue, type BlobSchema } from './blob.ts';
 
-describe('picklist', () => {
-  const options = ['foo', 'bar', 'baz'] as const;
-  type Options = typeof options;
-
+describe('blob', () => {
   describe('should return schema object', () => {
-    const baseSchema: Omit<PicklistSchema<Options, never>, 'message'> = {
+    const baseSchema: Omit<BlobSchema<never>, 'message'> = {
       kind: 'schema',
-      type: 'picklist',
-      expects: '"foo" | "bar" | "baz"',
-      options,
+      type: 'blob',
+      expects: 'Blob',
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: PicklistSchema<Options, undefined> = {
+      const schema: BlobSchema<undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(picklist(options)).toStrictEqual(schema);
-      expect(picklist(options, undefined)).toStrictEqual(schema);
+      expect(blob()).toStrictEqual(schema);
+      expect(blob(undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(picklist(options, 'message')).toStrictEqual({
+      expect(blob('message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies PicklistSchema<Options, 'message'>);
+      } satisfies BlobSchema<'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(picklist(options, message)).toStrictEqual({
+      expect(blob(message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies PicklistSchema<Options, typeof message>);
+      } satisfies BlobSchema<typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    test('for valid options', () => {
-      expectNoSchemaIssue(picklist(options), ['foo', 'bar', 'baz']);
+    const schema = blob();
+
+    test('for Blob objects', () => {
+      expectNoSchemaIssue(schema, [new Blob(), new Blob(['foo'])]);
+    });
+
+    test('for File objects', () => {
+      expectNoSchemaIssue(schema, [new File(['foo'], 'foo.jpg')]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = picklist(options, 'message');
-    const baseIssue: Omit<PicklistIssue, 'input' | 'received'> = {
+    const schema = blob('message');
+    const baseIssue: Omit<BlobIssue, 'input' | 'received'> = {
       kind: 'schema',
-      type: 'picklist',
-      expected: '"foo" | "bar" | "baz"',
+      type: 'blob',
+      expected: 'Blob',
       message: 'message',
     };
-
-    // Special values
-
-    test('for invalid options', () => {
-      expectSchemaIssue(schema, baseIssue, ['fo', 'fooo', 'foobar']);
-    });
 
     // Primitive types
 
@@ -89,7 +81,7 @@ describe('picklist', () => {
     });
 
     test('for strings', () => {
-      expectSchemaIssue(schema, baseIssue, ['', 'hello', '123']);
+      expectSchemaIssue(schema, baseIssue, ['', 'foo', '123']);
     });
 
     test('for symbols', () => {

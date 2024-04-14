@@ -1,68 +1,77 @@
 import { describe, expect, test } from 'vitest';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
-import {
-  picklist,
-  type PicklistIssue,
-  type PicklistSchema,
-} from './picklist.ts';
+import { enum_, type EnumIssue, type EnumSchema } from './enum.ts';
 
-describe('picklist', () => {
-  const options = ['foo', 'bar', 'baz'] as const;
+describe('enum_', () => {
+  enum options {
+    option1 = 'foo',
+    option2 = 'bar',
+    option3 = 'baz',
+  }
   type Options = typeof options;
 
   describe('should return schema object', () => {
-    const baseSchema: Omit<PicklistSchema<Options, never>, 'message'> = {
+    const baseSchema: Omit<EnumSchema<Options, never>, 'message'> = {
       kind: 'schema',
-      type: 'picklist',
+      type: 'enum',
       expects: '"foo" | "bar" | "baz"',
-      options,
+      enum: options,
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: PicklistSchema<Options, undefined> = {
+      const schema: EnumSchema<Options, undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(picklist(options)).toStrictEqual(schema);
-      expect(picklist(options, undefined)).toStrictEqual(schema);
+      expect(enum_(options)).toStrictEqual(schema);
+      expect(enum_(options, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(picklist(options, 'message')).toStrictEqual({
+      expect(enum_(options, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies PicklistSchema<Options, 'message'>);
+      } satisfies EnumSchema<Options, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(picklist(options, message)).toStrictEqual({
+      expect(enum_(options, message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies PicklistSchema<Options, typeof message>);
+      } satisfies EnumSchema<Options, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
     test('for valid options', () => {
-      expectNoSchemaIssue(picklist(options), ['foo', 'bar', 'baz']);
+      expectNoSchemaIssue(enum_(options), [
+        options.option1,
+        options.option2,
+        options.option3,
+      ]);
+    });
+
+    test('for valid values', () => {
+      // @ts-expect-error
+      expectNoSchemaIssue(enum_(options), ['foo', 'bar', 'baz']);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = picklist(options, 'message');
-    const baseIssue: Omit<PicklistIssue, 'input' | 'received'> = {
+    const schema = enum_(options, 'message');
+    const baseIssue: Omit<EnumIssue, 'input' | 'received'> = {
       kind: 'schema',
-      type: 'picklist',
+      type: 'enum',
       expected: '"foo" | "bar" | "baz"',
       message: 'message',
     };
 
     // Special values
 
-    test('for invalid options', () => {
+    test('for invalid values', () => {
       expectSchemaIssue(schema, baseIssue, ['fo', 'fooo', 'foobar']);
     });
 

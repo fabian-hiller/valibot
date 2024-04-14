@@ -1,70 +1,66 @@
 import { describe, expect, test } from 'vitest';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import {
-  picklist,
-  type PicklistIssue,
-  type PicklistSchema,
-} from './picklist.ts';
+  instance,
+  type InstanceIssue,
+  type InstanceSchema,
+} from './instance.ts';
 
-describe('picklist', () => {
-  const options = ['foo', 'bar', 'baz'] as const;
-  type Options = typeof options;
-
+describe('instance', () => {
   describe('should return schema object', () => {
-    const baseSchema: Omit<PicklistSchema<Options, never>, 'message'> = {
+    const baseSchema: Omit<
+      InstanceSchema<DateConstructor, never>,
+      'message'
+    > = {
       kind: 'schema',
-      type: 'picklist',
-      expects: '"foo" | "bar" | "baz"',
-      options,
+      type: 'instance',
+      expects: 'Date',
+      class: Date,
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: PicklistSchema<Options, undefined> = {
+      const schema: InstanceSchema<DateConstructor, undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(picklist(options)).toStrictEqual(schema);
-      expect(picklist(options, undefined)).toStrictEqual(schema);
+      expect(instance(Date)).toStrictEqual(schema);
+      expect(instance(Date, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(picklist(options, 'message')).toStrictEqual({
+      expect(instance(Date, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies PicklistSchema<Options, 'message'>);
+      } satisfies InstanceSchema<DateConstructor, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(picklist(options, message)).toStrictEqual({
+      expect(instance(Date, message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies PicklistSchema<Options, typeof message>);
+      } satisfies InstanceSchema<DateConstructor, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    test('for valid options', () => {
-      expectNoSchemaIssue(picklist(options), ['foo', 'bar', 'baz']);
+    const schema = instance(Date);
+
+    test('for valid instances', () => {
+      expectNoSchemaIssue(schema, [new Date(), new Date(123456789)]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = picklist(options, 'message');
-    const baseIssue: Omit<PicklistIssue, 'input' | 'received'> = {
+    const schema = instance(Date, 'message');
+    const baseIssue: Omit<InstanceIssue, 'input' | 'received'> = {
       kind: 'schema',
-      type: 'picklist',
-      expected: '"foo" | "bar" | "baz"',
+      type: 'instance',
+      expected: 'Date',
       message: 'message',
     };
-
-    // Special values
-
-    test('for invalid options', () => {
-      expectSchemaIssue(schema, baseIssue, ['fo', 'fooo', 'foobar']);
-    });
 
     // Primitive types
 
@@ -89,7 +85,7 @@ describe('picklist', () => {
     });
 
     test('for strings', () => {
-      expectSchemaIssue(schema, baseIssue, ['', 'hello', '123']);
+      expectSchemaIssue(schema, baseIssue, ['', 'foo', '123']);
     });
 
     test('for symbols', () => {
