@@ -23,6 +23,10 @@ export interface SafeIntegerIssue<TInput extends number>
    */
   readonly expected: null;
   /**
+   * The received input.
+   */
+  readonly received: `${number}`;
+  /**
    * The validation function.
    */
   readonly requirement: (input: number) => boolean;
