@@ -101,20 +101,18 @@ export function excludes(
   | ErrorMessage<ExcludesIssue<ContentInput, ContentRequirement<ContentInput>>>
   | undefined
 > {
-  const stringifiedRequirement = _stringify(requirement);
+  const received = _stringify(requirement);
   return {
     kind: 'validation',
     type: 'excludes',
     async: false,
-    expects: `!${stringifiedRequirement}`,
+    expects: `!${received}`,
     message,
     requirement,
     _run(dataset, config) {
       // @ts-expect-error
       if (dataset.typed && dataset.value.includes(this.requirement)) {
-        _addIssue(this, excludes, 'content', dataset, config, {
-          received: stringifiedRequirement,
-        });
+        _addIssue(this, excludes, 'content', dataset, config, { received });
       }
       return dataset;
     },
