@@ -2,6 +2,7 @@ export * from './bytes/index.ts';
 export * from './brand/index.ts';
 export * from './cuid2/index.ts';
 export * from './decimal/index.ts';
+export * from './excludes/index.ts';
 export * from './finite/index.ts';
 export * from './includes/includes.ts';
 export * from './integer/index.ts';
