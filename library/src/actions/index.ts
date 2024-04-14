@@ -9,6 +9,7 @@ export * from './maxLength/index.ts';
 export * from './maxValue/index.ts';
 export * from './minBytes/index.ts';
 export * from './minLength/index.ts';
+export * from './minSize/index.ts';
 export * from './minValue/index.ts';
 export * from './notBytes/index.ts';
 export * from './safeInteger/index.ts';
