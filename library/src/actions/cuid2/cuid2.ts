@@ -23,6 +23,10 @@ export interface Cuid2Issue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly expected: null;
   /**
+   * The received input.
+   */
+  readonly received: `"${string}"`;
+  /**
    * The Cuid2 regex.
    */
   readonly requirement: RegExp;
