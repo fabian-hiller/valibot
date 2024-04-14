@@ -6,6 +6,7 @@ export * from './includes/includes.ts';
 export * from './integer/index.ts';
 export * from './maxBytes/index.ts';
 export * from './maxLength/index.ts';
+export * from './maxSize/index.ts';
 export * from './maxValue/index.ts';
 export * from './minBytes/index.ts';
 export * from './minLength/index.ts';
