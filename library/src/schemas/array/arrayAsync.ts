@@ -80,9 +80,9 @@ export function arrayAsync(
     kind: 'schema',
     type: 'array',
     expects: 'Array',
+    async: true,
     item,
     message,
-    async: true,
     async _run(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
