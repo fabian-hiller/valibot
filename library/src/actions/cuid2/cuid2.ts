@@ -17,7 +17,7 @@ export interface Cuid2Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
    * The issue type.
    */
-  readonly type: 'credit_card';
+  readonly type: 'cuid2';
   /**
    * The expected input.
    */
@@ -42,7 +42,7 @@ export interface Cuid2Action<
   /**
    * The action type.
    */
-  readonly type: 'credit_card';
+  readonly type: 'cuid2';
   /**
    * The expected property.
    */
@@ -81,7 +81,7 @@ export function cuid2(
 ): Cuid2Action<string, ErrorMessage<Cuid2Issue<string>> | undefined> {
   return {
     kind: 'validation',
-    type: 'credit_card',
+    type: 'cuid2',
     expects: null,
     async: false,
     message,
@@ -92,7 +92,7 @@ export function cuid2(
       return _validationDataset(
         this,
         cuid2,
-        'credit_card',
+        'cuid2',
         dataset.typed && !this.requirement(dataset.value),
         dataset,
         config

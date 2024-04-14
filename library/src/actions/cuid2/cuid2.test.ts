@@ -6,7 +6,7 @@ describe('cuid2', () => {
   describe('should return action object', () => {
     const baseAction: Omit<Cuid2Action<string, never>, 'message'> = {
       kind: 'validation',
-      type: 'credit_card',
+      type: 'cuid2',
       expects: null,
       requirement: expect.any(Function),
       async: false,
@@ -64,7 +64,7 @@ describe('cuid2', () => {
     const action = cuid2('message');
     const baseIssue: Omit<Cuid2Issue<string>, 'input' | 'received'> = {
       kind: 'validation',
-      type: 'credit_card',
+      type: 'cuid2',
       expected: null,
       message: 'message',
       requirement: expect.any(Function),
