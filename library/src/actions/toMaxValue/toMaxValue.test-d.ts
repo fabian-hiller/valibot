@@ -11,6 +11,7 @@ describe('toMaxValue', () => {
 
   describe('should infer correct types', () => {
     type Action = ToMaxValueAction<number, 10>;
+
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<number>();
     });

@@ -11,6 +11,7 @@ describe('toMinValue', () => {
 
   describe('should infer correct types', () => {
     type Action = ToMinValueAction<number, 10>;
+
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<number>();
     });

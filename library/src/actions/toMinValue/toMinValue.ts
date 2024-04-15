@@ -1,21 +1,21 @@
 import type { BaseTransformation } from '../../types/index.ts';
+import type { ValueInput } from '../types.ts';
 
 /**
- * To min value transformation action type.
+ * To min value action type.
  */
 export interface ToMinValueAction<
-  TInput extends string | number | bigint | Date,
+  TInput extends ValueInput,
   TRequirement extends TInput,
 > extends BaseTransformation<TInput, TInput, never> {
   /**
    * The action type.
    */
   readonly type: 'to_min_value';
-
   /**
    * The minimum value.
    */
-  requirement: TRequirement;
+  readonly requirement: TRequirement;
 }
 
 /**
@@ -26,8 +26,8 @@ export interface ToMinValueAction<
  * @returns A to min value action.
  */
 export function toMinValue<
-  TInput extends string | number | bigint | Date,
-  TRequirement extends TInput,
+  TInput extends ValueInput,
+  const TRequirement extends TInput,
 >(requirement: TRequirement): ToMinValueAction<TInput, TRequirement> {
   return {
     kind: 'transformation',

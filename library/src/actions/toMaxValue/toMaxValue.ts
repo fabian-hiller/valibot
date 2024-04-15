@@ -1,21 +1,21 @@
 import type { BaseTransformation } from '../../types/index.ts';
+import type { ValueInput } from '../types.ts';
 
 /**
- * To max value transformation action type.
+ * To max value action type.
  */
 export interface ToMaxValueAction<
-  TInput extends string | number | bigint | Date,
+  TInput extends ValueInput,
   TRequirement extends TInput,
 > extends BaseTransformation<TInput, TInput, never> {
   /**
    * The action type.
    */
   readonly type: 'to_max_value';
-
   /**
    * The maximum value.
    */
-  requirement: TRequirement;
+  readonly requirement: TRequirement;
 }
 
 /**
@@ -26,8 +26,8 @@ export interface ToMaxValueAction<
  * @returns A to max value action.
  */
 export function toMaxValue<
-  TInput extends string | number | bigint | Date,
-  TRequirement extends TInput,
+  TInput extends ValueInput,
+  const TRequirement extends TInput,
 >(requirement: TRequirement): ToMaxValueAction<TInput, TRequirement> {
   return {
     kind: 'transformation',
