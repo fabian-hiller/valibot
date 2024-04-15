@@ -1,10 +1,72 @@
 ---
 title: minLength
+description: >-
+  Creates a pipeline validation action that validates the length of a string.
 source: /validations/minLength/minLength.ts
 contributors:
   - fabian-hiller
+  - depsimon
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # minLength
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/minLength/minLength.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates the length of a string or an array.
+
+```ts
+const Validation = minLength<TInput, TRequirement>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `minLength` you can validate the length of a string. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `minLength` can be used.
+
+### String schema
+
+Schema to validate a string with a minimum of 8 characters.
+
+```ts
+const StringSchema = string([
+  minLength(8, 'The string must contain at least 8 characters.'),
+]);
+```
+
+### Array schema
+
+Schema to validate an array with a minimum of 100 numbers.
+
+```ts
+const ArraySchema = array(string(), [
+  minLength(64, 'The array must contain at least 100 numbers.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `minLength`.
+
+### Schemas
+
+<ApiList
+  items={['any', 'array', 'instance', 'special', 'string', 'tuple', 'unknown']}
+/>

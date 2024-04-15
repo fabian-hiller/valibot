@@ -1,10 +1,72 @@
 ---
 title: maxLength
+description: >-
+  Creates a pipeline validation action that validates the length of a string.
 source: /validations/maxLength/maxLength.ts
 contributors:
   - fabian-hiller
+  - depsimon
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # maxLength
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/validations/maxLength/maxLength.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a pipeline validation action that validates the length of a string or an array.
+
+```ts
+const Validation = maxLength<TInput, TRequirement>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `maxLength` you can validate the length of a string. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `maxLength` can be used.
+
+### String schema
+
+Schema to validate a string with a maximum of 16 characters.
+
+```ts
+const StringSchema = string([
+  maxLength(16, 'The string must not exceed 16 characters.'),
+]);
+```
+
+### Array schema
+
+Schema to validate an array with a maximum of 100 numbers.
+
+```ts
+const ArraySchema = array(string(), [
+  maxLength(64, 'The array must not exceed 100 numbers.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `maxLength`.
+
+### Schemas
+
+<ApiList
+  items={['any', 'array', 'instance', 'special', 'string', 'tuple', 'unknown']}
+/>
