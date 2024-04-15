@@ -44,12 +44,14 @@ describe('array', () => {
   });
 
   describe('should return dataset without issues', () => {
+    const schema = array(string());
+
     test('for empty array', () => {
-      expectNoSchemaIssue(array(string()), [[]]);
+      expectNoSchemaIssue(schema, [[]]);
     });
 
     test('for simple array', () => {
-      expectNoSchemaIssue(array(string()), [['foo', 'bar', 'baz']]);
+      expectNoSchemaIssue(schema, [['foo', 'bar', 'baz']]);
     });
   });
 
@@ -104,12 +106,14 @@ describe('array', () => {
   });
 
   describe('should return dataset without nested issues', () => {
+    const schema = array(string());
+
     test('for simple array', () => {
-      expectNoSchemaIssue(array(string()), [['foo', 'bar', 'baz']]);
+      expectNoSchemaIssue(schema, [['foo', 'bar', 'baz']]);
     });
 
     test('for nested array', () => {
-      expectNoSchemaIssue(array(array(string())), [[['foo', 'bar'], ['baz']]]);
+      expectNoSchemaIssue(array(schema), [[['foo', 'bar'], ['baz']]]);
     });
   });
 

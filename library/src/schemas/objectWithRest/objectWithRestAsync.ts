@@ -29,6 +29,10 @@ export interface ObjectWithRestSchemaAsync<
    */
   readonly type: 'object_with_rest';
   /**
+   * The expected property.
+   */
+  readonly expects: 'Object';
+  /**
    * The object entries.
    */
   readonly entries: TEntries;
@@ -36,10 +40,6 @@ export interface ObjectWithRestSchemaAsync<
    * The rest schema.
    */
   readonly rest: TRest;
-  /**
-   * The expected property.
-   */
-  readonly expects: 'Object';
   /**
    * The error message.
    */

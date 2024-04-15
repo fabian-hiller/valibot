@@ -25,6 +25,10 @@ export interface StrictObjectSchemaAsync<
    */
   readonly type: 'strict_object';
   /**
+   * The expected property.
+   */
+  readonly expects: 'Object';
+  /**
    * The object entries.
    */
   readonly entries: TEntries;
@@ -32,10 +36,6 @@ export interface StrictObjectSchemaAsync<
    * The rest schema.
    */
   readonly rest: NeverSchema<TMessage>;
-  /**
-   * The expected property.
-   */
-  readonly expects: 'Object';
   /**
    * The error message.
    */

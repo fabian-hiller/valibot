@@ -44,6 +44,10 @@ export interface LooseObjectSchema<
    */
   readonly type: 'loose_object';
   /**
+   * The expected property.
+   */
+  readonly expects: 'Object';
+  /**
    * The object entries.
    */
   readonly entries: TEntries;
@@ -51,10 +55,6 @@ export interface LooseObjectSchema<
    * The rest schema.
    */
   readonly rest: UnknownSchema;
-  /**
-   * The expected property.
-   */
-  readonly expects: 'Object';
   /**
    * The error message.
    */

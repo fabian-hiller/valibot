@@ -1,4 +1,4 @@
-import type { ArrayPathItem } from '../schemas/index.ts';
+import type { ArrayPathItem, SetPathItem } from '../schemas/index.ts';
 import type { Config } from './config.ts';
 import type { ObjectPathItem } from './object.ts';
 
@@ -24,7 +24,7 @@ export type IssuePathItem =
   // | MapPathItem
   | ObjectPathItem
   // | RecordPathItem
-  // | SetPathItem
+  | SetPathItem
   // | TuplePathItem
   | UnknownPathItem;
 

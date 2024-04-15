@@ -2,65 +2,65 @@ import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import { arrayAsync, type ArraySchemaAsync } from './arrayAsync.ts';
-import type { ArrayIssue } from './types.ts';
+import { set, type SetSchema } from './set.ts';
+import type { SetIssue } from './types.ts';
 
-describe('array', () => {
-  describe('should return schema array', () => {
-    const item = string();
-    type Item = typeof item;
-    const baseSchema: Omit<ArraySchemaAsync<Item, never>, 'message'> = {
+describe('set', () => {
+  describe('should return schema set', () => {
+    const value = string();
+    type Value = typeof value;
+    const baseSchema: Omit<SetSchema<Value, never>, 'message'> = {
       kind: 'schema',
-      type: 'array',
-      expects: 'Array',
-      item: { ...string(), _run: expect.any(Function) },
-      async: true,
+      type: 'set',
+      expects: 'Set',
+      value: { ...string(), _run: expect.any(Function) },
+      async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: ArraySchemaAsync<Item, undefined> = {
+      const schema: SetSchema<Value, undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(arrayAsync(item)).toStrictEqual(schema);
-      expect(arrayAsync(item, undefined)).toStrictEqual(schema);
+      expect(set(value)).toStrictEqual(schema);
+      expect(set(value, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(arrayAsync(item, 'message')).toStrictEqual({
+      expect(set(value, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies ArraySchemaAsync<Item, 'message'>);
+      } satisfies SetSchema<Value, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(arrayAsync(item, message)).toStrictEqual({
+      expect(set(value, message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies ArraySchemaAsync<Item, typeof message>);
+      } satisfies SetSchema<Value, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    const schema = arrayAsync(string());
+    const schema = set(string());
 
-    test('for empty array', () => {
-      expectNoSchemaIssue(schema, [[]]);
+    test('for empty set', () => {
+      expectNoSchemaIssue(schema, [new Set()]);
     });
 
-    test('for simple array', () => {
-      expectNoSchemaIssue(schema, [['foo', 'bar', 'baz']]);
+    test('for simple set', () => {
+      expectNoSchemaIssue(schema, [new Set(['foo', 'bar', 'baz'])]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = arrayAsync(string(), 'message');
-    const baseIssue: Omit<ArrayIssue, 'input' | 'received'> = {
+    const schema = set(string(), 'message');
+    const baseIssue: Omit<SetIssue, 'input' | 'received'> = {
       kind: 'schema',
-      type: 'array',
-      expected: 'Array',
+      type: 'set',
+      expected: 'Set',
       message: 'message',
     };
 
@@ -96,6 +96,10 @@ describe('array', () => {
 
     // Complex types
 
+    test('for arrays', () => {
+      expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    });
+
     test('for functions', () => {
       expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
     });
@@ -106,19 +110,21 @@ describe('array', () => {
   });
 
   describe('should return dataset without nested issues', () => {
-    const schema = arrayAsync(string());
+    const schema = set(string());
 
-    test('for simple array', () => {
-      expectNoSchemaIssue(schema, [['foo', 'bar', 'baz']]);
+    test('for simple set', () => {
+      expectNoSchemaIssue(schema, [new Set(['foo', 'bar', 'baz'])]);
     });
 
-    test('for nested array', () => {
-      expectNoSchemaIssue(arrayAsync(schema), [[['foo', 'bar'], ['baz']]]);
+    test('for nested set', () => {
+      expectNoSchemaIssue(set(schema), [
+        new Set([new Set(['foo', 'bar']), new Set(['baz'])]),
+      ]);
     });
   });
 
   describe('should return dataset with nested issues', () => {
-    const schema = arrayAsync(string());
+    const schema = set(string());
 
     const baseInfo = {
       message: expect.any(String),
@@ -139,24 +145,24 @@ describe('array', () => {
       received: '123',
       path: [
         {
-          type: 'array',
+          type: 'set',
           origin: 'value',
-          input: ['foo', 123, 'baz', null],
+          input: new Set(['foo', 123, 'baz', null]),
           key: 1,
           value: 123,
         },
       ],
     };
 
-    test('for wrong items', async () => {
+    test('for wrong values', () => {
       expect(
-        await schema._run(
-          { typed: false, value: ['foo', 123, 'baz', null] },
+        schema._run(
+          { typed: false, value: new Set(['foo', 123, 'baz', null]) },
           {}
         )
       ).toStrictEqual({
         typed: false,
-        value: ['foo', 123, 'baz', null],
+        value: new Set(['foo', 123, 'baz', null]),
         issues: [
           stringIssue1,
           {
@@ -168,9 +174,9 @@ describe('array', () => {
             received: 'null',
             path: [
               {
-                type: 'array',
+                type: 'set',
                 origin: 'value',
-                input: ['foo', 123, 'baz', null],
+                input: new Set(['foo', 123, 'baz', null]),
                 key: 3,
                 value: null,
               },
@@ -180,47 +186,33 @@ describe('array', () => {
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
-    test('with abort early', async () => {
+    test('with abort early', () => {
       expect(
-        await schema._run(
-          { typed: false, value: ['foo', 123, 'baz', null] },
+        schema._run(
+          { typed: false, value: new Set(['foo', 123, 'baz', null]) },
           { abortEarly: true }
         )
       ).toStrictEqual({
         typed: false,
-        value: [],
+        value: new Set(['foo']),
         issues: [{ ...stringIssue1, abortEarly: true }],
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
-    test('for wrong nested items', async () => {
-      const nestedSchema = arrayAsync(schema);
+    test('for wrong nested values', () => {
+      const nestedSchema = set(schema);
       expect(
-        await nestedSchema._run(
-          { typed: false, value: [[123, 'foo'], 'bar', []] },
+        nestedSchema._run(
+          {
+            typed: false,
+            value: new Set([new Set([123, 'foo']), 'bar', new Set()]),
+          },
           {}
         )
       ).toStrictEqual({
         typed: false,
-        value: [[123, 'foo'], 'bar', []],
+        value: new Set([new Set([123, 'foo']), 'bar', new Set()]),
         issues: [
-          {
-            ...baseInfo,
-            kind: 'schema',
-            type: 'array',
-            input: 'bar',
-            expected: 'Array',
-            received: '"bar"',
-            path: [
-              {
-                type: 'array',
-                origin: 'value',
-                input: [[123, 'foo'], 'bar', []],
-                key: 1,
-                value: 'bar',
-              },
-            ],
-          },
           {
             ...baseInfo,
             kind: 'schema',
@@ -230,18 +222,35 @@ describe('array', () => {
             received: '123',
             path: [
               {
-                type: 'array',
+                type: 'set',
                 origin: 'value',
-                input: [[123, 'foo'], 'bar', []],
+                input: new Set([new Set([123, 'foo']), 'bar', new Set()]),
                 key: 0,
-                value: [123, 'foo'],
+                value: new Set([123, 'foo']),
               },
               {
-                type: 'array',
+                type: 'set',
                 origin: 'value',
-                input: [123, 'foo'],
+                input: new Set([123, 'foo']),
                 key: 0,
                 value: 123,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'set',
+            input: 'bar',
+            expected: 'Set',
+            received: '"bar"',
+            path: [
+              {
+                type: 'set',
+                origin: 'value',
+                input: new Set([new Set([123, 'foo']), 'bar', new Set()]),
+                key: 1,
+                value: 'bar',
               },
             ],
           },

@@ -26,6 +26,10 @@ export interface ArraySchema<
    */
   readonly type: 'array';
   /**
+   * The expected property.
+   */
+  readonly expects: 'Array';
+  /**
    * The array item schema.
    */
   readonly item: TItem;

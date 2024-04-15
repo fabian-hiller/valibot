@@ -44,6 +44,10 @@ export interface StrictObjectSchema<
    */
   readonly type: 'strict_object';
   /**
+   * The expected property.
+   */
+  readonly expects: 'Object';
+  /**
    * The object entries.
    */
   readonly entries: TEntries;
@@ -51,10 +55,6 @@ export interface StrictObjectSchema<
    * The rest schema.
    */
   readonly rest: NeverSchema<TMessage>;
-  /**
-   * The expected property.
-   */
-  readonly expects: 'Object';
   /**
    * The error message.
    */
