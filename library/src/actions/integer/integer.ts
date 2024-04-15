@@ -22,6 +22,10 @@ export interface IntegerIssue<TInput extends number> extends BaseIssue<TInput> {
    */
   readonly expected: null;
   /**
+   * The received input.
+   */
+  readonly received: `${number}`;
+  /**
    * The validation function.
    */
   readonly requirement: (input: number) => boolean;
