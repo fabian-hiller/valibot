@@ -8,6 +8,7 @@ export * from './date/index.ts';
 export * from './enum/index.ts';
 export * from './instance/index.ts';
 export * from './lazy/index.ts';
+export * from './literal/index.ts';
 export * from './looseObject/index.ts';
 export * from './nan/index.ts';
 export * from './never/index.ts';
