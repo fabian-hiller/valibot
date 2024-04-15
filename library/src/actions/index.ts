@@ -1,3 +1,4 @@
+export * from './bic/index.ts';
 export * from './bytes/index.ts';
 export * from './brand/index.ts';
 export * from './cuid2/index.ts';

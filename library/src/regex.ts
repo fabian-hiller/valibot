@@ -1,5 +1,5 @@
 /**
- * [BIC] (https://en.wikipedia.org/wiki/ISO_9362) regex.
+ * [BIC](https://en.wikipedia.org/wiki/ISO_9362) regex.
  */
 export const BIC_REGEX = /^[A-Z]{6}(?!00)[A-Z\d]{2}(?:[A-Z\d]{3})?$/u;
 

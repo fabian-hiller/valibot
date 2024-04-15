@@ -1,3 +1,4 @@
+import { BIC_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
@@ -26,13 +27,13 @@ export interface BicIssue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly received: `"${string}"`;
   /**
-   * The validation function.
+   * The BIC regex.
    */
-  readonly requirement: (input: string) => boolean;
+  readonly requirement: RegExp;
 }
 
 /**
- * Credit card action type.
+ * BIC action type.
  */
 export interface BicAction<
   TInput extends string,
@@ -47,9 +48,9 @@ export interface BicAction<
    */
   readonly expects: null;
   /**
-   * The validation function.
+   * The BIC regex.
    */
-  readonly requirement: (input: string) => boolean;
+  readonly requirement: RegExp;
   /**
    * The error message.
    */
@@ -57,19 +58,14 @@ export interface BicAction<
 }
 
 /**
- * [BIC] (https://en.wikipedia.org/wiki/ISO_9362) regex.
- */
-export const BIC_REGEX = /^[A-Z]{6}(?!00)[A-Z\d]{2}(?:[A-Z\d]{3})?$/u;
-
-/**
- * Creates an ISO 9362 BIC validation action.
+ * Creates a [BIC](https://en.wikipedia.org/wiki/ISO_9362) validation action.
  *
  * @returns A BIC action.
  */
 export function bic<TInput extends string>(): BicAction<TInput, undefined>;
 
 /**
- * Creates an ISO 9362 BIC validation action.
+ * Creates a [BIC](https://en.wikipedia.org/wiki/ISO_9362) validation action.
  *
  * @param message The error message.
  *
@@ -86,18 +82,16 @@ export function bic(
   return {
     kind: 'validation',
     type: 'bic',
-    expects: null,
     async: false,
+    expects: null,
+    requirement: BIC_REGEX,
     message,
-    requirement(input) {
-      return BIC_REGEX.test(input);
-    },
     _run(dataset, config) {
       return _validationDataset(
         this,
         bic,
         'BIC',
-        dataset.typed && !this.requirement(dataset.value),
+        dataset.typed && !this.requirement.test(dataset.value),
         dataset,
         config
       );

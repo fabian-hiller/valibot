@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { BIC_REGEX } from '../../regex.ts';
 import { expectActionIssue } from '../../vitest/expectActionIssue.ts';
 import { expectNoActionIssue } from '../../vitest/expectNoActionIssue.ts';
 import type { BicIssue } from './bic.ts';
@@ -10,7 +11,7 @@ describe('bic', () => {
       kind: 'validation',
       type: 'bic',
       expects: null,
-      requirement: expect.any(Function),
+      requirement: BIC_REGEX,
       async: false,
       _run: expect.any(Function),
     };
@@ -50,8 +51,14 @@ describe('bic', () => {
       });
     });
 
-    test('for valid inputs', () => {
-      expectNoActionIssue(action, ['DEUTDEFF', 'DEUTDEFF400', 'NEDSZAJJXXX']);
+    test('for valid BICs', () => {
+      expectNoActionIssue(action, [
+        'DEUTDEFF',
+        'DEUTDEFF400',
+        'NEDSZAJJXXX',
+        'MLCOUS33',
+        'EBATFRPPEB1',
+      ]);
     });
   });
 
@@ -62,27 +69,56 @@ describe('bic', () => {
       type: 'bic',
       expected: null,
       message: 'message',
-      requirement: expect.any(Function),
+      requirement: BIC_REGEX,
     };
 
     test('for empty strings', () => {
       expectActionIssue(action, baseIssue, ['', ' ']);
     });
 
-    test('for lowercase strings', () => {
-      expectActionIssue(action, baseIssue, ['deutdeff', 'deutdeff400']);
+    test('for lowercase letters', () => {
+      expectActionIssue(action, baseIssue, [
+        'deutdeff',
+        'DEUtDEFF400',
+        'nEDSZAJJXXX',
+        'MLcouS33',
+        'EBATFRPPEb1',
+      ]);
     });
 
-    test('for malformed BIC', () => {
+    test('for digit in first 6 chars', () => {
       expectActionIssue(action, baseIssue, [
-        'DEUTFF',
-        'DEUT5EFF',
-        'DE1TDEFF',
-        'DEUTDE00',
-        'DEUTDEFFXX',
-        'D_UTDEFF',
-        'DEUTDEDEDEED',
-        'DEUTDEFFF',
+        'DE8TDEFF',
+        '3EUTDEFF400',
+        'NEDSZ8JJXXX',
+        'M2COUS33',
+        'EBAT4RPPEB1',
+      ]);
+    });
+
+    test('for too short BICs', () => {
+      expectActionIssue(action, baseIssue, ['DEUTDEF', 'MLCOUS']);
+    });
+
+    test('for too long BICs', () => {
+      expectActionIssue(action, baseIssue, [
+        'DEUTDEFF4000',
+        'NEDSZAJJXXXX',
+        'EBATFRPPEB123',
+      ]);
+    });
+
+    test('for test BICs', () => {
+      expectActionIssue(action, baseIssue, ['DEUTDE00', 'NEDSZA00XXX']);
+    });
+
+    test('for special chars', () => {
+      expectActionIssue(action, baseIssue, [
+        'DEU@DEFF',
+        'DEUTDEFF$00',
+        'NEDSZAJJXX%',
+        'MLCOU€33',
+        'EB#TFRPPEB1',
       ]);
     });
   });
