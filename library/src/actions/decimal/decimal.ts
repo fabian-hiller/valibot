@@ -85,10 +85,10 @@ export function decimal(
   return {
     kind: 'validation',
     type: 'decimal',
-    expects: null,
-    message,
-    requirement: DECIMAL_REGEX,
     async: false,
+    expects: null,
+    requirement: DECIMAL_REGEX,
+    message,
     _run(dataset, config) {
       return _validationDataset(
         this,

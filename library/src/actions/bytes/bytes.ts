@@ -99,10 +99,10 @@ export function bytes(
   return {
     kind: 'validation',
     type: 'bytes',
-    expects: `${requirement}`,
     async: false,
-    message,
+    expects: `${requirement}`,
     requirement,
+    message,
     _run(dataset, config) {
       if (dataset.typed) {
         const length = new TextEncoder().encode(dataset.value).length;

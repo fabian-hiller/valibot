@@ -105,8 +105,8 @@ export function maxSize(
     type: 'max_size',
     async: false,
     expects: `<=${requirement}`,
-    message,
     requirement,
+    message,
     _run(dataset, config) {
       if (dataset.typed && dataset.value.size > this.requirement) {
         _addIssue(this, maxSize, 'size', dataset, config, {

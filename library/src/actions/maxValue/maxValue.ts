@@ -101,14 +101,14 @@ export function maxValue(
   return {
     kind: 'validation',
     type: 'max_value',
+    async: false,
     expects: `<=${
       requirement instanceof Date
         ? requirement.toJSON()
         : _stringify(requirement)
     }`,
-    async: false,
-    message,
     requirement,
+    message,
     _run(dataset, config) {
       if (dataset.typed && dataset.value > this.requirement) {
         _addIssue(this, maxValue, 'value', dataset, config, {

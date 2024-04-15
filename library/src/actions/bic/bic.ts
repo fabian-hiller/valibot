@@ -1,4 +1,4 @@
-import { CUID2_REGEX } from '../../regex.ts';
+import { BIC_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
@@ -7,9 +7,9 @@ import type {
 import { _validationDataset } from '../../utils/index.ts';
 
 /**
- * Cuid2 issue type.
+ * BIC issue type.
  */
-export interface Cuid2Issue<TInput extends string> extends BaseIssue<TInput> {
+export interface BicIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
    * The issue kind.
    */
@@ -17,7 +17,7 @@ export interface Cuid2Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
    * The issue type.
    */
-  readonly type: 'cuid2';
+  readonly type: 'bic';
   /**
    * The expected input.
    */
@@ -27,28 +27,28 @@ export interface Cuid2Issue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly received: `"${string}"`;
   /**
-   * The Cuid2 regex.
+   * The BIC regex.
    */
   readonly requirement: RegExp;
 }
 
 /**
- * Cuid2 action type.
+ * BIC action type.
  */
-export interface Cuid2Action<
+export interface BicAction<
   TInput extends string,
-  TMessage extends ErrorMessage<Cuid2Issue<TInput>> | undefined,
-> extends BaseValidation<TInput, TInput, Cuid2Issue<TInput>> {
+  TMessage extends ErrorMessage<BicIssue<TInput>> | undefined,
+> extends BaseValidation<TInput, TInput, BicIssue<TInput>> {
   /**
    * The action type.
    */
-  readonly type: 'cuid2';
+  readonly type: 'bic';
   /**
    * The expected property.
    */
   readonly expects: null;
   /**
-   * The Cuid2 regex.
+   * The BIC regex.
    */
   readonly requirement: RegExp;
   /**
@@ -58,39 +58,39 @@ export interface Cuid2Action<
 }
 
 /**
- * Creates a Cuid2 validation action.
+ * Creates a [BIC](https://en.wikipedia.org/wiki/ISO_9362) validation action.
  *
- * @returns A Cuid2 action.
+ * @returns A BIC action.
  */
-export function cuid2<TInput extends string>(): Cuid2Action<TInput, undefined>;
+export function bic<TInput extends string>(): BicAction<TInput, undefined>;
 
 /**
- * Creates a Cuid2 validation action.
+ * Creates a [BIC](https://en.wikipedia.org/wiki/ISO_9362) validation action.
  *
  * @param message The error message.
  *
- * @returns A Cuid2 action.
+ * @returns A BIC action.
  */
-export function cuid2<
+export function bic<
   TInput extends string,
-  const TMessage extends ErrorMessage<Cuid2Issue<TInput>> | undefined,
->(message: TMessage): Cuid2Action<TInput, TMessage>;
+  const TMessage extends ErrorMessage<BicIssue<TInput>> | undefined,
+>(message: TMessage): BicAction<TInput, TMessage>;
 
-export function cuid2(
-  message?: ErrorMessage<Cuid2Issue<string>>
-): Cuid2Action<string, ErrorMessage<Cuid2Issue<string>> | undefined> {
+export function bic(
+  message?: ErrorMessage<BicIssue<string>>
+): BicAction<string, ErrorMessage<BicIssue<string>> | undefined> {
   return {
     kind: 'validation',
-    type: 'cuid2',
+    type: 'bic',
     async: false,
     expects: null,
-    requirement: CUID2_REGEX,
+    requirement: BIC_REGEX,
     message,
     _run(dataset, config) {
       return _validationDataset(
         this,
-        cuid2,
-        'cuid2',
+        bic,
+        'BIC',
         dataset.typed && !this.requirement.test(dataset.value),
         dataset,
         config

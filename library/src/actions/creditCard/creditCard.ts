@@ -116,9 +116,8 @@ export function creditCard(
   return {
     kind: 'validation',
     type: 'credit_card',
-    expects: null,
     async: false,
-    message,
+    expects: null,
     requirement(input) {
       let sanitized: string | undefined;
       return (CREDIT_CARD_REGEX.test(input) &&
@@ -129,6 +128,7 @@ export function creditCard(
         // Check if passes luhn algorithm
         _isLuhnAlgo(sanitized)) as boolean;
     },
+    message,
     _run(dataset, config) {
       return _validationDataset(
         this,

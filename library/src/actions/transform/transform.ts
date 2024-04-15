@@ -28,8 +28,8 @@ export function transform<TInput, TOutput>(
   return {
     kind: 'transformation',
     type: 'transform',
-    action,
     async: false,
+    action,
     _run(dataset) {
       // @ts-expect-error
       dataset.value = action(dataset.value);

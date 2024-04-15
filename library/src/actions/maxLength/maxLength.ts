@@ -105,10 +105,10 @@ export function maxLength(
   return {
     kind: 'validation',
     type: 'max_length',
-    expects: `<=${requirement}`,
     async: false,
-    message,
+    expects: `<=${requirement}`,
     requirement,
+    message,
     _run(dataset, config) {
       if (dataset.typed && dataset.value.length > this.requirement) {
         _addIssue(this, maxLength, 'length', dataset, config, {

@@ -84,10 +84,10 @@ export function finite(
   return {
     kind: 'validation',
     type: 'finite',
-    expects: null,
     async: false,
-    message,
+    expects: null,
     requirement: Number.isFinite,
+    message,
     _run(dataset, config) {
       return _validationDataset(
         this,

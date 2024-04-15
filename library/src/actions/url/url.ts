@@ -87,9 +87,8 @@ export function url(
   return {
     kind: 'validation',
     type: 'url',
-    expects: null,
     async: false,
-    message,
+    expects: null,
     requirement(input) {
       try {
         new URL(input);
@@ -98,6 +97,7 @@ export function url(
         return false;
       }
     },
+    message,
     _run(dataset, config) {
       return _validationDataset(
         this,

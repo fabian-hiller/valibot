@@ -104,10 +104,10 @@ export function maxBytes(
   return {
     kind: 'validation',
     type: 'max_bytes',
-    expects: `<=${requirement}`,
     async: false,
-    message,
+    expects: `<=${requirement}`,
     requirement,
+    message,
     _run(dataset, config) {
       if (dataset.typed) {
         const length = new TextEncoder().encode(dataset.value).length;
