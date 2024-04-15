@@ -13,7 +13,7 @@ describe('array', () => {
       kind: 'schema',
       type: 'array',
       expects: 'Array',
-      item: { ...string(), _run: expect.any(Function) },
+      item,
       async: false,
       _run: expect.any(Function),
     };

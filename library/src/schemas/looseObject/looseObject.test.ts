@@ -21,7 +21,7 @@ describe('looseObject', () => {
       kind: 'schema',
       type: 'loose_object',
       expects: 'Object',
-      entries: { key: { ...string(), _run: expect.any(Function) } },
+      entries,
       rest: { ...unknown(), _run: expect.any(Function) },
       async: false,
       _run: expect.any(Function),

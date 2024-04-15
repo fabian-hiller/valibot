@@ -24,7 +24,7 @@ describe('strictObject', () => {
       kind: 'schema',
       type: 'strict_object',
       expects: 'Object',
-      entries: { key: { ...string(), _run: expect.any(Function) } },
+      entries,
       async: false,
       _run: expect.any(Function),
     };

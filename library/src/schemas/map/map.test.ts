@@ -1,66 +1,76 @@
 import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { number } from '../number/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import { set, type SetSchema } from './set.ts';
-import type { SetIssue } from './types.ts';
+import { map, type MapSchema } from './map.ts';
+import type { MapIssue } from './types.ts';
 
-describe('set', () => {
-  describe('should return schema set', () => {
+describe('map', () => {
+  describe('should return schema map', () => {
+    const key = number();
+    type Key = typeof key;
     const value = string();
     type Value = typeof value;
-    const baseSchema: Omit<SetSchema<Value, never>, 'message'> = {
+    const baseSchema: Omit<MapSchema<Key, Value, never>, 'message'> = {
       kind: 'schema',
-      type: 'set',
-      expects: 'Set',
+      type: 'map',
+      expects: 'Map',
+      key,
       value,
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: SetSchema<Value, undefined> = {
+      const schema: MapSchema<Key, Value, undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(set(value)).toStrictEqual(schema);
-      expect(set(value, undefined)).toStrictEqual(schema);
+      expect(map(key, value)).toStrictEqual(schema);
+      expect(map(key, value, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(set(value, 'message')).toStrictEqual({
+      expect(map(key, value, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies SetSchema<Value, 'message'>);
+      } satisfies MapSchema<Key, Value, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(set(value, message)).toStrictEqual({
+      expect(map(key, value, message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies SetSchema<Value, typeof message>);
+      } satisfies MapSchema<Key, Value, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    const schema = set(string());
+    const schema = map(number(), string());
 
-    test('for empty set', () => {
-      expectNoSchemaIssue(schema, [new Set()]);
+    test('for empty map', () => {
+      expectNoSchemaIssue(schema, [new Map()]);
     });
 
-    test('for simple set', () => {
-      expectNoSchemaIssue(schema, [new Set(['foo', 'bar', 'baz'])]);
+    test('for simple map', () => {
+      expectNoSchemaIssue(schema, [
+        new Map([
+          [0, 'foo'],
+          [1, 'bar'],
+          [2, 'baz'],
+        ]),
+      ]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = set(string(), 'message');
-    const baseIssue: Omit<SetIssue, 'input' | 'received'> = {
+    const schema = map(number(), string(), 'message');
+    const baseIssue: Omit<MapIssue, 'input' | 'received'> = {
       kind: 'schema',
-      type: 'set',
-      expected: 'Set',
+      type: 'map',
+      expected: 'Map',
       message: 'message',
     };
 
@@ -110,21 +120,35 @@ describe('set', () => {
   });
 
   describe('should return dataset without nested issues', () => {
-    const schema = set(string());
+    const schema = map(number(), string());
 
-    test('for simple set', () => {
-      expectNoSchemaIssue(schema, [new Set(['foo', 'bar', 'baz'])]);
+    test('for simple map', () => {
+      expectNoSchemaIssue(schema, [
+        new Map([
+          [0, 'foo'],
+          [1, 'bar'],
+          [2, 'baz'],
+        ]),
+      ]);
     });
 
-    test('for nested set', () => {
-      expectNoSchemaIssue(set(schema), [
-        new Set([new Set(['foo', 'bar']), new Set(['baz'])]),
+    test('for nested map', () => {
+      expectNoSchemaIssue(map(schema, schema), [
+        new Map([
+          [
+            new Map([
+              [0, 'foo'],
+              [1, 'bar'],
+            ]),
+            new Map([[3, 'baz']]),
+          ],
+        ]),
       ]);
     });
   });
 
   describe('should return dataset with nested issues', () => {
-    const schema = set(string());
+    const schema = map(number(), string());
 
     const baseInfo = {
       message: expect.any(String),
@@ -145,9 +169,14 @@ describe('set', () => {
       received: '123',
       path: [
         {
-          type: 'set',
+          type: 'map',
           origin: 'value',
-          input: new Set(['foo', 123, 'baz', null]),
+          input: new Map<unknown, unknown>([
+            [0, 'foo'],
+            [1, 123],
+            [2, 'baz'],
+            [null, 'bar'],
+          ]),
           key: 1,
           value: 123,
         },
@@ -155,30 +184,31 @@ describe('set', () => {
     };
 
     test('for wrong values', () => {
-      expect(
-        schema._run(
-          { typed: false, value: new Set(['foo', 123, 'baz', null]) },
-          {}
-        )
-      ).toStrictEqual({
+      const input = new Map<unknown, unknown>([
+        [0, 'foo'],
+        [1, 123],
+        [2, 'baz'],
+        [null, 'bar'],
+      ]);
+      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
         typed: false,
-        value: new Set(['foo', 123, 'baz', null]),
+        value: input,
         issues: [
           stringIssue1,
           {
             ...baseInfo,
             kind: 'schema',
-            type: 'string',
+            type: 'number',
             input: null,
-            expected: 'string',
+            expected: 'number',
             received: 'null',
             path: [
               {
-                type: 'set',
-                origin: 'value',
-                input: new Set(['foo', 123, 'baz', null]),
-                key: 3,
-                value: null,
+                type: 'map',
+                origin: 'key',
+                input,
+                key: null,
+                value: 'bar',
               },
             ],
           },
@@ -189,19 +219,36 @@ describe('set', () => {
     test('with abort early', () => {
       expect(
         schema._run(
-          { typed: false, value: new Set(['foo', 123, 'baz', null]) },
+          {
+            typed: false,
+            value: new Map<unknown, unknown>([
+              [0, 'foo'],
+              [1, 123],
+              [2, 'baz'],
+              [null, 'bar'],
+            ]),
+          },
           { abortEarly: true }
         )
       ).toStrictEqual({
         typed: false,
-        value: new Set(['foo']),
+        value: new Map([[0, 'foo']]),
         issues: [{ ...stringIssue1, abortEarly: true }],
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
     test('for wrong nested values', () => {
-      const nestedSchema = set(schema);
-      const input = new Set([new Set([123, 'foo']), 'bar', new Set()]);
+      const nestedSchema = map(schema, schema);
+      const input = new Map<unknown, unknown>([
+        [
+          new Map<unknown, unknown>([
+            [0, 123],
+            [1, 'foo'],
+          ]),
+          new Map(),
+        ],
+        [new Map(), 'bar'],
+      ]);
       expect(
         nestedSchema._run(
           {
@@ -223,16 +270,22 @@ describe('set', () => {
             received: '123',
             path: [
               {
-                type: 'set',
-                origin: 'value',
+                type: 'map',
+                origin: 'key',
                 input,
-                key: 0,
-                value: new Set([123, 'foo']),
+                key: new Map<unknown, unknown>([
+                  [0, 123],
+                  [1, 'foo'],
+                ]),
+                value: new Map(),
               },
               {
-                type: 'set',
+                type: 'map',
                 origin: 'value',
-                input: new Set([123, 'foo']),
+                input: new Map<unknown, unknown>([
+                  [0, 123],
+                  [1, 'foo'],
+                ]),
                 key: 0,
                 value: 123,
               },
@@ -241,16 +294,16 @@ describe('set', () => {
           {
             ...baseInfo,
             kind: 'schema',
-            type: 'set',
+            type: 'map',
             input: 'bar',
-            expected: 'Set',
+            expected: 'Map',
             received: '"bar"',
             path: [
               {
-                type: 'set',
+                type: 'map',
                 origin: 'value',
                 input,
-                key: 1,
+                key: new Map(),
                 value: 'bar',
               },
             ],

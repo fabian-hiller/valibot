@@ -15,7 +15,7 @@ describe('object', () => {
       kind: 'schema',
       type: 'object',
       expects: 'Object',
-      entries: { key: { ...string(), _run: expect.any(Function) } },
+      entries,
       async: false,
       _run: expect.any(Function),
     };

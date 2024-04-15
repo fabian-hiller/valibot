@@ -28,8 +28,8 @@ describe('objectWithRest', () => {
       kind: 'schema',
       type: 'object_with_rest',
       expects: 'Object',
-      entries: { key: { ...string(), _run: expect.any(Function) } },
-      rest: { ...number(), _run: expect.any(Function) },
+      entries,
+      rest,
       async: false,
       _run: expect.any(Function),
     };
