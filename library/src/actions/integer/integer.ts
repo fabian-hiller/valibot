@@ -84,10 +84,10 @@ export function integer(
   return {
     kind: 'validation',
     type: 'integer',
-    expects: null,
     async: false,
-    message,
+    expects: null,
     requirement: Number.isInteger,
+    message,
     _run(dataset, config) {
       return _validationDataset(
         this,

@@ -88,10 +88,10 @@ export function safeInteger(
   return {
     kind: 'validation',
     type: 'safe_integer',
-    expects: null,
     async: false,
-    message,
+    expects: null,
     requirement: Number.isSafeInteger,
+    message,
     _run(dataset, config) {
       return _validationDataset(
         this,

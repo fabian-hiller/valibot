@@ -107,8 +107,8 @@ export function includes(
     type: 'includes',
     async: false,
     expects,
-    message,
     requirement,
+    message,
     _run(dataset, config) {
       // @ts-expect-error
       if (dataset.typed && !dataset.value.includes(this.requirement)) {

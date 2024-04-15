@@ -105,10 +105,10 @@ export function minLength(
   return {
     kind: 'validation',
     type: 'min_length',
-    expects: `>=${requirement}`,
     async: false,
-    message,
+    expects: `>=${requirement}`,
     requirement,
+    message,
     _run(dataset, config) {
       if (dataset.typed && dataset.value.length < this.requirement) {
         _addIssue(this, minLength, 'length', dataset, config, {

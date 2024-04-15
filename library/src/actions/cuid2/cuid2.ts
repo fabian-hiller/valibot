@@ -82,8 +82,8 @@ export function cuid2(
   return {
     kind: 'validation',
     type: 'cuid2',
-    expects: null,
     async: false,
+    expects: null,
     requirement: CUID2_REGEX,
     message,
     _run(dataset, config) {
