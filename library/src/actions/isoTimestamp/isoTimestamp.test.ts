@@ -62,6 +62,23 @@ describe('isoTimestamp', () => {
         '2024-01-04T17:40:21.157953900Z',
       ]);
     });
+
+    test('for valid inputs with offset', () => {
+      expectNoActionIssue(action, [
+        // '+hh:mm'
+        '0000-01-01T00:00:00.000+00:00',
+        // '+hhmm'
+        '0000-01-01T00:00:00.000+0000',
+        // '+hh'
+        '0000-01-01T00:00:00.000+00',
+        // '-hh:mm'
+        '0000-01-01T00:00:00.000-00:00',
+        // '-hhmm'
+        '0000-01-01T00:00:00.000-0000',
+        // '-hh'
+        '0000-01-01T00:00:00.000-00',
+      ]);
+    });
   });
 
   describe('should return dataset with issues', () => {
@@ -82,6 +99,17 @@ describe('isoTimestamp', () => {
       expectActionIssue(action, baseIssue, [
         '2023-07-11T17:26:27.243',
         '9999-12-31T00:00:00.000',
+      ]);
+    });
+
+    test('for timestamps with broken offsets', () => {
+      expectActionIssue(action, baseIssue, [
+        '0000-01-01T00:00:00.000+00:0', // minutes
+        '0000-01-01T00:00:00.000+0:00', // hours
+        '0000-01-01T00:00:00.000+00::00', // double colon
+        '0000-01-01T00:00:00.000+000', // no colon
+        '0000-01-01T00:00:00.000+00:', // no minutes
+        '0000-01-01T00:00:00.000+', // sign but no offset
       ]);
     });
 

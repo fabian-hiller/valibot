@@ -62,7 +62,12 @@ export interface IsoTimestampAction<
  * Creates a [ISO Timestamp](https://en.wikipedia.org/wiki/ISO_8601) validation
  * action.
  *
- * Format: `yyyy-mm-ddThh:mm:ss.sssZ`
+ * Formats:
+ *
+ * - yyyy-mm-ddThh:mm:ss.sssZ
+ * - yyyy-mm-ddThh:mm:ss.sss±hh:mm
+ * - yyyy-mm-ddThh:mm:ss.sss±hhmm
+ * - yyyy-mm-ddThh:mm:ss.sss±hh
  *
  * Hint: To support timestamps with lower or higher accuracy, the millisecond
  * specification can be removed or contain up to 9 digits.
@@ -82,7 +87,12 @@ export function isoTimestamp<TInput extends string>(): IsoTimestampAction<
  * Creates a [ISO Timestamp](https://en.wikipedia.org/wiki/ISO_8601) validation
  * action.
  *
- * Format: `yyyy-mm-ddThh:mm:ss.sssZ`
+ * Formats:
+ *
+ * - yyyy-mm-ddThh:mm:ss.sssZ
+ * - yyyy-mm-ddThh:mm:ss.sss±hh:mm
+ * - yyyy-mm-ddThh:mm:ss.sss±hhmm
+ * - yyyy-mm-ddThh:mm:ss.sss±hh
  *
  * Hint: To support timestamps with lower or higher accuracy, the millisecond
  * specification can be removed or contain up to 9 digits.
