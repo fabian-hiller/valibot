@@ -26,9 +26,9 @@ export interface Mac48Issue<TInput extends string> extends BaseIssue<TInput> {
    * The received input.
    */
   readonly received: `"${string}"`;
-    /**
-     * The 48-bit MAC regex.
-     */
+  /**
+   * The 48-bit MAC regex.
+   */
   readonly requirement: RegExp;
 }
 
@@ -47,9 +47,9 @@ export interface Mac48Action<
    * The expected property.
    */
   readonly expects: null;
-   /**
-    * The 48-bit MAC regex.
-    */
+  /**
+   * The 48-bit MAC regex.
+   */
   readonly requirement: RegExp;
   /**
    * The error message.

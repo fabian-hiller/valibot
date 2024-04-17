@@ -54,7 +54,7 @@ describe('mac48', () => {
         'b6:05:20:67:f9:58',
         'b6-05-20-67-f9-58',
         'b605.2067.f958',
-        ]);
+      ]);
     });
   });
 
@@ -78,7 +78,7 @@ describe('mac48', () => {
         '00-1A-2B-3C-4D-5E-6F-70',
         '0025.96FF.FE12.3456',
         '0025:96FF:FE12:3456',
-        ]);
+      ]);
     });
 
     test('for invalid mac formats', () => {
@@ -95,7 +95,7 @@ describe('mac48', () => {
         '001122334455',
         '00:1A:2B:3C:4D:5E:6F:70:ZZ',
         'GHIJ:KLNM:OPQR',
-        ]
+      ];
       expectActionIssue(action, baseIssue, invalidMacs);
     });
   });

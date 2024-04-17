@@ -54,7 +54,7 @@ describe('mac', () => {
         'b6:05:20:67:f9:58',
         'b6-05-20-67-f9-58',
         'b605.2067.f958',
-        ]);
+      ]);
     });
 
     test('for mac64 address', () => {
@@ -63,7 +63,7 @@ describe('mac', () => {
         '00-1A-2B-3C-4D-5E-6F-70',
         '0025.96FF.FE12.3456',
         '0025:96FF:FE12:3456',
-        ]);
+      ]);
     });
   });
 
@@ -95,7 +95,7 @@ describe('mac', () => {
         '001122334455',
         '00:1A:2B:3C:4D:5E:6F:70:ZZ',
         'GHIJ:KLNM:OPQR',
-        ]
+      ];
       expectActionIssue(action, baseIssue, invalidMacs);
     });
   });

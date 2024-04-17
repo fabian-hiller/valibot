@@ -26,9 +26,9 @@ export interface MacIssue<TInput extends string> extends BaseIssue<TInput> {
    * The received input.
    */
   readonly received: `"${string}"`;
-    /**
-     * The 48-bit and 64-bit MAC regex.
-     */
+  /**
+   * The 48-bit and 64-bit MAC regex.
+   */
   readonly requirement: [RegExp, RegExp];
 }
 
@@ -47,9 +47,9 @@ export interface MacAction<
    * The expected property.
    */
   readonly expects: null;
-   /**
-    * The 48-bit and 64-bit MAC regex.
-    */
+  /**
+   * The 48-bit and 64-bit MAC regex.
+   */
   readonly requirement: [RegExp, RegExp];
   /**
    * The error message.
@@ -88,12 +88,12 @@ export function mac(
     message,
     _run(dataset, config) {
       if (dataset.typed) {
-        const isMac48 = this.requirement[0].test(dataset.value)
+        const isMac48 = this.requirement[0].test(dataset.value);
 
-        const isMac64 = this.requirement[1].test(dataset.value)
+        const isMac64 = this.requirement[1].test(dataset.value);
 
         if (!isMac48 && !isMac64) {
-          _addIssue(this, mac, 'mac', dataset, config)
+          _addIssue(this, mac, 'mac', dataset, config);
         }
       }
       return dataset;
