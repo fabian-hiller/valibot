@@ -2,6 +2,7 @@ import type { ErrorMessage } from 'valibot';
 
 export type Language = {
   code:
+      'ar',
     | 'de'
     | 'en'
     | 'fr'
