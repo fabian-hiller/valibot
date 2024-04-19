@@ -1,5 +1,6 @@
 import type {
   ArrayPathItem,
+  FormDataPathItem,
   MapPathItem,
   ObjectPathItem,
   RecordPathItem,
@@ -19,6 +20,7 @@ export type IssueReason =
   | 'blob'
   | 'boolean'
   | 'date'
+  | 'formData'
   | 'intersect'
   | 'function'
   | 'instance'
@@ -53,6 +55,7 @@ export interface UnknownPathItem {
  */
 export type PathItem =
   | ArrayPathItem
+  | FormDataPathItem
   | MapPathItem
   | ObjectPathItem
   | RecordPathItem
