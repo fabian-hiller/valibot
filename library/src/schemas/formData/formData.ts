@@ -82,10 +82,12 @@ function decode(
   switch (schema.type) {
     case 'array': {
       let arrayOutput: any[] | undefined;
-      const itemSchema = (schema as ArraySchema<BaseSchema>).item;
-      if (input.get(key) !== null) {
+      const arraySchema = schema as ArraySchema<BaseSchema>;
+      const itemSchema = arraySchema.item;
+      const items = input.getAll(key);
+      if (items.length > 0) {
         arrayOutput = [];
-        for (const item of input.getAll(key)) {
+        for (const item of items) {
           const value = decodeEntry(itemSchema, item);
           const result = itemSchema._parse(value, config);
           if (result.issues) {
@@ -105,18 +107,6 @@ function decode(
           const arrayKey = `${key}.${index}`;
           result = decode(itemSchema, input, arrayKey, config);
           if (result.issues) {
-            const pathItem: FormDataPathItem = {
-              type: 'formData',
-              origin: 'value',
-              input,
-              key: arrayKey,
-              value: result.output ?? input.get(arrayKey),
-            };
-            for (const issue of result.issues) {
-              if (issue.path) issue.path.unshift(pathItem);
-              else issue.path = [pathItem];
-              issues?.push(issue);
-            }
             if (!issues) issues = result.issues;
             if (config?.abortEarly) {
               typed = false;
@@ -129,7 +119,12 @@ function decode(
             arrayOutput.push(result.output);
           }
           index++;
-        } while (result.output !== undefined);
+        } while (result.output !== undefined && !result.issues);
+      }
+      if (!arrayOutput) {
+        issues = schemaIssue(arraySchema, formData, arrayOutput, config, {
+          issues,
+        }).issues;
       }
       output = arrayOutput;
       break;
@@ -169,6 +164,15 @@ function decode(
           }
         }
         if (!result.typed) typed = false;
+      }
+      if (!objectOutput) {
+        if (key) {
+          issues = schemaIssue(objectSchema, formData, objectOutput, config, {
+            issues,
+          }).issues;
+        } else {
+          objectOutput = {};
+        }
       }
       output = objectOutput;
       break;
@@ -242,7 +246,7 @@ export function formData<TEntries extends ObjectEntries>(
         if (result.typed) {
           return pipeResult(
             this,
-            (result.output || {}) as ObjectOutput<TEntries, undefined>,
+            result.output as ObjectOutput<TEntries, undefined>,
             config,
             result.issues
           );

@@ -1,105 +1,109 @@
 import { describe, expect, test } from 'vitest';
 import { type ValiError } from '../../error/index.ts';
-import { parse } from '../../methods/index.ts';
+import { parseAsync } from '../../methods/index.ts';
 import type {
   Output,
   TypedSchemaResult,
   UntypedSchemaResult,
 } from '../../types/index.ts';
 import { custom, minLength } from '../../validations/index.ts';
-import { array } from '../array/array.ts';
-import { boolean } from '../boolean/boolean.ts';
-import { date } from '../date/date.ts';
-import { instance } from '../instance/instance.ts';
-import { nullable } from '../nullable/nullable.ts';
-import { number } from '../number/number.ts';
-import { object } from '../object/object.ts';
-import { optional } from '../optional/optional.ts';
-import { string } from '../string/string.ts';
-import { formData } from './formData.ts';
+import { arrayAsync } from '../array/arrayAsync.ts';
+import { booleanAsync } from '../boolean/booleanAsync.ts';
+import { dateAsync } from '../date/dateAsync.ts';
+import { instanceAsync } from '../instance/instanceAsync.ts';
+import { nullableAsync } from '../nullable/nullableAsync.ts';
+import { numberAsync } from '../number/numberAsync.ts';
+import { objectAsync } from '../object/objectAsync.ts';
+import { optionalAsync } from '../optional/optionalAsync.ts';
+import { stringAsync } from '../string/stringAsync.ts';
+import { formDataAsync } from './formDataAsync.ts';
 
 describe('formData', () => {
-  test('should pass only FormData', () => {
-    const schema = formData({ foo: string() });
+  test('should pass only FormData', async () => {
+    const schema = formDataAsync({ foo: stringAsync() });
     const input = new FormData();
     input.append('foo', 'bar');
-    const output = parse(schema, input);
+    const output = await parseAsync(schema, input);
     expect(output).toEqual({ foo: 'bar' });
 
-    expect(() => parse(schema, {})).toThrowError();
-    expect(() => parse(schema, 123)).toThrowError();
+    expect(parseAsync(schema, {})).rejects.toThrowError();
+    expect(parseAsync(schema, 123)).rejects.toThrowError();
   });
 
-  test('should throw custom error', () => {
+  test('should throw custom error', async () => {
     const error = 'Value is not a FormData!';
-    const schema = formData({ n: number() }, error);
-    expect(() => parse(schema, 123)).toThrowError(error);
+    const schema = formDataAsync({ n: numberAsync() }, error);
+    expect(parseAsync(schema, 123)).rejects.toThrowError(error);
   });
 
-  test('should throw every issue', () => {
-    const schema = formData({
-      a: string(),
-      b: number(),
-      c: array(number()),
-      d: object({ e: number() }),
+  test('should throw every issue', async () => {
+    const schema = formDataAsync({
+      a: stringAsync(),
+      b: numberAsync(),
+      c: arrayAsync(numberAsync()),
+      d: objectAsync({ e: numberAsync() }),
     });
     const input = new FormData();
     input.append('a', 'x');
     input.append('b', 'x');
     input.append('c', 'x');
     input.append('d.e', 'x');
-    expect(() => parse(schema, input)).toThrowError();
+    expect(parseAsync(schema, input)).rejects.toThrowError();
     try {
-      parse(schema, input);
+      await parseAsync(schema, input);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(3);
     }
   });
 
-  test('should throw only first issue', () => {
-    const schema1 = formData({ a: number(), b: string(), c: number() });
+  test('should throw only first issue', async () => {
+    const schema1 = formDataAsync({
+      a: numberAsync(),
+      b: stringAsync(),
+      c: numberAsync(),
+    });
     const input1 = new FormData();
     input1.append('a', 'x');
     input1.append('b', 'y');
     input1.append('c', 'z');
     const config = { abortEarly: true };
-    expect(() => parse(schema1, input1, config)).toThrowError();
+    expect(parseAsync(schema1, input1, config)).rejects.toThrowError();
     try {
-      parse(schema1, input1, config);
+      await parseAsync(schema1, input1, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
 
-    const schema2 = formData({ a: array(number()) });
+    const schema2 = formDataAsync({ a: arrayAsync(numberAsync()) });
     const input2 = new FormData();
     input2.append('a', '1');
     input2.append('a', '2');
     input2.append('a', 'x');
-    expect(() => parse(schema2, input2, config)).toThrowError();
+    expect(parseAsync(schema2, input2, config)).rejects.toThrowError();
     try {
-      parse(schema2, input2, config);
+      await parseAsync(schema2, input2, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
 
-    const schema3 = formData({ a: array(number()) });
+    const schema3 = formDataAsync({ a: arrayAsync(numberAsync()) });
     const input3 = new FormData();
     input3.append('a.0', '1');
     input3.append('a.1', '2');
     input3.append('a.2', 'x');
-    expect(() => parse(schema3, input3, config)).toThrowError();
+    expect(parseAsync(schema3, input3, config)).rejects.toThrowError();
     try {
-      parse(schema3, input3, config);
+      await parseAsync(schema3, input3, config);
     } catch (error) {
       expect((error as ValiError).issues.length).toBe(1);
     }
   });
 
-  test('should return issue path', () => {
-    const schema1 = formData({ a: number() });
+  test('should return issue path', async () => {
+    const schema1 = formDataAsync({ a: numberAsync() });
     const input1 = new FormData();
     input1.append('a', 'x');
-    const result1 = schema1._parse(input1);
+    const result1 = await schema1._parse(input1);
     expect(result1.issues?.[0].path).toEqual([
       {
         type: 'formData',
@@ -110,10 +114,12 @@ describe('formData', () => {
       },
     ]);
 
-    const schema2 = formData({ a: object({ b: string(), c: number() }) });
+    const schema2 = formDataAsync({
+      a: objectAsync({ b: stringAsync(), c: numberAsync() }),
+    });
     const input2 = new FormData();
     input2.append('a.b', 'x');
-    const result2 = schema2._parse(input2);
+    const result2 = await schema2._parse(input2);
     expect(result2.issues?.[0].path).toEqual([
       {
         type: 'formData',
@@ -132,43 +138,44 @@ describe('formData', () => {
     ]);
   });
 
-  test('should execute pipe', () => {
+  test('should execute pipe', async () => {
     const inputError = 'Invalid input';
 
-    const schema1 = formData({ a: optional(string()), b: optional(string()) }, [
-      custom((input) => Object.keys(input).length === 1),
-    ]);
+    const schema1 = formDataAsync(
+      { a: optionalAsync(stringAsync()), b: optionalAsync(stringAsync()) },
+      [custom((input) => Object.keys(input).length === 1)]
+    );
     const input1 = new FormData();
     input1.append('a', 'x');
     const input2 = new FormData();
     const input3 = new FormData();
     input3.append('a', 'x');
     input3.append('b', 'y');
-    const output1 = parse(schema1, input1);
+    const output1 = await parseAsync(schema1, input1);
     expect(output1).toEqual({ a: 'x' });
-    expect(() => parse(schema1, input2)).toThrowError(inputError);
-    expect(() => parse(schema1, input3)).toThrowError(inputError);
+    expect(parseAsync(schema1, input2)).rejects.toThrowError(inputError);
+    expect(parseAsync(schema1, input3)).rejects.toThrowError(inputError);
 
-    const schema2 = formData(
-      { a: optional(string()), b: optional(string()) },
+    const schema2 = formDataAsync(
+      { a: optionalAsync(stringAsync()), b: optionalAsync(stringAsync()) },
       'Error',
       [custom((input) => Object.keys(input).length === 1)]
     );
-    const output2 = parse(schema2, input1);
+    const output2 = await parseAsync(schema2, input1);
     expect(output2).toEqual({ a: 'x' });
-    expect(() => parse(schema2, input2)).toThrowError(inputError);
-    expect(() => parse(schema2, input3)).toThrowError(inputError);
+    expect(parseAsync(schema2, input2)).rejects.toThrowError(inputError);
+    expect(parseAsync(schema2, input3)).rejects.toThrowError(inputError);
   });
 
-  test('should execute pipe if output is typed', () => {
+  test('should execute pipe if output is typed', async () => {
     const requirement1 = (input: { a: string }) =>
       Object.keys(input).length > 10;
-    const schema1 = formData({ a: string([minLength(10)]) }, [
+    const schema1 = formDataAsync({ a: stringAsync([minLength(10)]) }, [
       custom(requirement1),
     ]);
     const input1 = new FormData();
     input1.append('a', '12345');
-    const result1 = schema1._parse(input1);
+    const result1 = await schema1._parse(input1);
     expect(result1).toEqual({
       typed: true,
       output: { a: '12345' },
@@ -205,14 +212,15 @@ describe('formData', () => {
 
     const requirement2 = (input: { a: string[] }) =>
       Object.keys(input).length > 10;
-    const schema2 = formData({ a: array(string([minLength(10)])) }, [
-      custom(requirement2),
-    ]);
+    const schema2 = formDataAsync(
+      { a: arrayAsync(stringAsync([minLength(10)])) },
+      [custom(requirement2)]
+    );
     const input2 = new FormData();
     input2.append('a', '123');
     input2.append('a', '12345');
     input2.append('a', '1234567890=');
-    const result2 = schema2._parse(input2);
+    const result2 = await schema2._parse(input2);
     expect(result2).toEqual({
       typed: true,
       output: { a: ['123', '12345', '1234567890='] },
@@ -248,13 +256,13 @@ describe('formData', () => {
     } satisfies TypedSchemaResult<Output<typeof schema2>>);
   });
 
-  test('should skip pipe if output is not typed', () => {
-    const schema1 = formData({ a: number() }, [
+  test('should skip pipe if output is not typed', async () => {
+    const schema1 = formDataAsync({ a: numberAsync() }, [
       custom((input) => Object.keys(input).length > 10),
     ]);
     const input1 = new FormData();
     input1.append('a', '$12345');
-    const result1 = schema1._parse(input1);
+    const result1 = await schema1._parse(input1);
     expect(result1).toEqual({
       typed: false,
       output: { a: '$12345' },
@@ -279,14 +287,14 @@ describe('formData', () => {
       ],
     } satisfies UntypedSchemaResult);
 
-    const schema2 = formData({ a: array(number()) }, [
+    const schema2 = formDataAsync({ a: arrayAsync(numberAsync()) }, [
       custom((input) => Object.keys(input).length > 10),
     ]);
     const input2 = new FormData();
     input2.append('a', '123');
     input2.append('a', '$12345');
     input2.append('a', '$1234567890=');
-    const result2 = schema2._parse(input2);
+    const result2 = await schema2._parse(input2);
     expect(result2).toEqual({
       typed: false,
       output: { a: [123, '$12345', '$1234567890='] },
@@ -312,31 +320,33 @@ describe('formData', () => {
     } satisfies UntypedSchemaResult);
   });
 
-  test('should output object', () => {
-    const schema = formData({ a: optional(string()) });
+  test('should output object', async () => {
+    const schema = formDataAsync({ a: optionalAsync(stringAsync()) });
     const input = new FormData();
-    const result = schema._parse(input);
+    const result = await schema._parse(input);
     expect(result.output).toEqual({});
-    expect(parse(schema, input)).toEqual({});
+    expect(parseAsync(schema, input)).resolves.toEqual({});
   });
 
-  test('should accept object schema', () => {
-    const schema = formData(object({ a: object({ b: number() }) }));
+  test('should accept object schema', async () => {
+    const schema = formDataAsync(
+      objectAsync({ a: objectAsync({ b: numberAsync() }) })
+    );
     const input = new FormData();
     input.append('a.b', '123');
-    const result = schema._parse(input);
+    const result = await schema._parse(input);
     expect(result.output).toEqual({ a: { b: 123 } });
   });
 
-  test('should decode array', () => {
-    const schema1 = formData({
-      a: array(number()),
-      b: array(number()),
-      c: array(array(number())),
-      d: array(object({ x: array(number()) })),
-      e: array(object({ x: array(number()) })),
-      f: nullable(array(number())),
-      g: optional(array(number())),
+  test('should decode array', async () => {
+    const schema1 = formDataAsync({
+      a: arrayAsync(numberAsync()),
+      b: arrayAsync(numberAsync()),
+      c: arrayAsync(arrayAsync(numberAsync())),
+      d: arrayAsync(objectAsync({ x: arrayAsync(numberAsync()) })),
+      e: arrayAsync(objectAsync({ x: arrayAsync(numberAsync()) })),
+      f: nullableAsync(arrayAsync(numberAsync())),
+      g: optionalAsync(arrayAsync(numberAsync())),
     });
     const input1 = new FormData();
     input1.append('a', '1');
@@ -350,7 +360,7 @@ describe('formData', () => {
     input1.append('d.0.x', '9');
     input1.append('e.0.x.0', '10');
     input1.append('f', '');
-    const result1 = schema1._parse(input1);
+    const result1 = await schema1._parse(input1);
     expect(result1.output).toEqual({
       a: [1, 2],
       b: [3, 4],
@@ -364,157 +374,164 @@ describe('formData', () => {
     });
   });
 
-  test('should require array', () => {
-    const schema = formData({
-      a: string(),
-      b: array(optional(string()), 'array is required'),
-      c: optional(array(string(), 'array is optional')),
+  test('should require array', async () => {
+    const schema = formDataAsync({
+      a: stringAsync(),
+      b: arrayAsync(optionalAsync(stringAsync()), 'array is required'),
+      c: optionalAsync(arrayAsync(stringAsync(), 'array is optional')),
     });
     const input = new FormData();
     input.append('a', 'x');
-    expect(() => parse(schema, input)).toThrowError('array is required');
+    expect(parseAsync(schema, input)).rejects.toThrowError('array is required');
   });
 
-  test('should decode boolean', () => {
-    const schema1 = formData({
-      a: boolean(),
-      b: boolean(),
-      c: nullable(boolean()),
-      d: optional(boolean()),
+  test('should decode boolean', async () => {
+    const schema1 = formDataAsync({
+      a: booleanAsync(),
+      b: booleanAsync(),
+      c: nullableAsync(booleanAsync()),
+      d: optionalAsync(booleanAsync()),
     });
     const input1 = new FormData();
     input1.append('a', 'true');
     input1.append('b', 'false');
     input1.append('c', '');
-    const result1 = schema1._parse(input1);
+    const result1 = await schema1._parse(input1);
     expect(result1.output).toEqual({ a: true, b: false, c: null });
 
-    const schema2 = formData({ a: boolean() });
+    const schema2 = formDataAsync({ a: booleanAsync() });
     const input2 = new FormData();
     input2.append('a', 'x');
-    expect(() => parse(schema2, input2)).toThrowError(
+    expect(parseAsync(schema2, input2)).rejects.toThrowError(
       'Invalid type: Expected boolean but received "x"'
     );
   });
 
-  test('should decode date', () => {
-    const schema1 = formData({
-      a: date(),
-      b: date(),
-      c: nullable(date()),
-      d: optional(date()),
+  test('should decode date', async () => {
+    const schema1 = formDataAsync({
+      a: dateAsync(),
+      b: dateAsync(),
+      c: nullableAsync(dateAsync()),
+      d: optionalAsync(dateAsync()),
     });
     const input1 = new FormData();
     input1.append('a', '2021-01-01T00:00:00Z');
     input1.append('b', '1609459200000');
     input1.append('c', '');
-    const result1 = schema1._parse(input1);
+    const result1 = await schema1._parse(input1);
     expect(result1.output).toEqual({
       a: new Date('2021-01-01T00:00:00Z'),
       b: new Date('2021-01-01T00:00:00Z'),
       c: null,
     });
 
-    const schema2 = formData({ a: date() });
+    const schema2 = formDataAsync({ a: dateAsync() });
     const input2 = new FormData();
     input2.append('a', 'x');
-    expect(() => parse(schema2, input2)).toThrowError(
+    expect(parseAsync(schema2, input2)).rejects.toThrowError(
       'Invalid type: Expected Date but received "x"'
     );
   });
 
-  test('should decode file', () => {
+  test('should decode file', async () => {
     const value = new File(['foo'], 'bar.txt', { type: 'text/plain' });
-    const schema1 = formData({ a: instance(File) });
+    const schema1 = formDataAsync({ a: instanceAsync(File) });
     const input1 = new FormData();
     input1.append('a', new Blob(['123']));
-    const result1 = schema1._parse(input1);
+    const result1 = await schema1._parse(input1);
     expect(result1.output).toEqual({ a: value });
 
-    const schema2 = formData({ a: instance(File) });
+    const schema2 = formDataAsync({ a: instanceAsync(File) });
     const input2 = new FormData();
     input2.append('a', 'x');
-    expect(() => parse(schema2, input2)).toThrowError(
+    expect(parseAsync(schema2, input2)).rejects.toThrowError(
       'Invalid type: Expected File but received "x"'
     );
   });
 
-  test('should decode number', () => {
-    const schema1 = formData({
-      a: number(),
-      b: number(),
-      c: nullable(number()),
-      d: optional(number()),
+  test('should decode number', async () => {
+    const schema1 = formDataAsync({
+      a: numberAsync(),
+      b: numberAsync(),
+      c: nullableAsync(numberAsync()),
+      d: optionalAsync(numberAsync()),
     });
     const input1 = new FormData();
     input1.append('a', '123');
     input1.append('b', '-4.56');
     input1.append('c', '');
-    const result1 = schema1._parse(input1);
+    const result1 = await schema1._parse(input1);
     expect(result1.output).toEqual({ a: 123, b: -4.56, c: null });
 
-    const schema2 = formData({ a: number() });
+    const schema2 = formDataAsync({ a: numberAsync() });
     const input2 = new FormData();
     input2.append('a', 'x');
-    expect(() => parse(schema2, input2)).toThrowError(
+    expect(parseAsync(schema2, input2)).rejects.toThrowError(
       'Invalid type: Expected number but received "x"'
     );
 
-    const schema3 = formData({ a: number() });
+    const schema3 = formDataAsync({ a: numberAsync() });
     const input3 = new FormData();
     input3.append('a', 'NaN');
-    expect(() => parse(schema3, input3)).toThrowError(
+    expect(parseAsync(schema3, input3)).rejects.toThrowError(
       'Invalid type: Expected number but received "NaN"'
     );
   });
 
-  test('should decode object', () => {
-    const schema1 = formData({
-      a: object({ a: string() }),
-      b: object({ b: object({ b: string() }) }),
-      c: nullable(object({ c: string() })),
-      d: optional(object({ d: string() })),
+  test('should decode object', async () => {
+    const schema1 = formDataAsync({
+      a: objectAsync({ a: stringAsync() }),
+      b: objectAsync({ b: objectAsync({ b: stringAsync() }) }),
+      c: nullableAsync(objectAsync({ c: stringAsync() })),
+      d: optionalAsync(objectAsync({ d: stringAsync() })),
     });
     const input1 = new FormData();
     input1.append('a.a', 'x');
     input1.append('b.b.b', 'x');
     input1.append('c', '');
-    const result1 = schema1._parse(input1);
+    const result1 = await schema1._parse(input1);
     expect(result1.output).toEqual({
       a: { a: 'x' },
       b: { b: { b: 'x' } },
       c: null,
     });
 
-    const schema2 = formData({ a: object({ b: string() }) });
+    const schema2 = formDataAsync({ a: objectAsync({ b: stringAsync() }) });
     const input2 = new FormData();
     input2.append('a', 'x');
-    expect(() => parse(schema2, input2)).toThrowError(
+    expect(parseAsync(schema2, input2)).rejects.toThrowError(
       'Invalid type: Expected Object but received undefined'
     );
   });
 
-  test('should require object', () => {
-    const schema = formData({
-      a: string(),
-      b: object({ foo: optional(string()) }, 'object is required'),
-      c: optional(object({ bar: string() }, 'object is optional')),
+  test('should require object', async () => {
+    const schema = formDataAsync({
+      a: stringAsync(),
+      b: objectAsync(
+        { foo: optionalAsync(stringAsync()) },
+        'object is required'
+      ),
+      c: optionalAsync(
+        objectAsync({ bar: stringAsync() }, 'object is optional')
+      ),
     });
     const input = new FormData();
     input.append('a', 'x');
-    expect(() => parse(schema, input)).toThrowError('object is required');
+    expect(parseAsync(schema, input)).rejects.toThrowError(
+      'object is required'
+    );
   });
 
-  test('should decode string', () => {
-    const schema1 = formData({
-      a: string(),
-      b: string(),
-      c: string(),
-      d: string(),
-      e: string(),
-      f: string(),
-      g: nullable(string()),
-      h: optional(string()),
+  test('should decode string', async () => {
+    const schema1 = formDataAsync({
+      a: stringAsync(),
+      b: stringAsync(),
+      c: stringAsync(),
+      d: stringAsync(),
+      e: stringAsync(),
+      f: stringAsync(),
+      g: nullableAsync(stringAsync()),
+      h: optionalAsync(stringAsync()),
     });
     const input1 = new FormData();
     input1.append('a', 'x');
@@ -524,7 +541,7 @@ describe('formData', () => {
     input1.append('e', 'null');
     input1.append('f', 'undefined');
     input1.append('g', '');
-    const result1 = schema1._parse(input1);
+    const result1 = await schema1._parse(input1);
     expect(result1.output).toEqual({
       a: 'x',
       b: '0',
@@ -535,10 +552,10 @@ describe('formData', () => {
       g: null,
     });
 
-    const schema2 = formData({ a: string() });
+    const schema2 = formDataAsync({ a: stringAsync() });
     const input2 = new FormData();
     input2.append('a', new File(['foo'], 'bar.txt', { type: 'text/plain' }));
-    expect(() => parse(schema2, input2)).toThrowError(
+    expect(parseAsync(schema2, input2)).rejects.toThrowError(
       'Invalid type: Expected string but received File'
     );
   });
