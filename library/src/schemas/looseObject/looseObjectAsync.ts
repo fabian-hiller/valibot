@@ -6,7 +6,6 @@ import type {
   InferObjectOutput,
   ObjectEntriesAsync,
 } from '../../types/index.ts';
-import type { UnknownSchema } from '../unknown/index.ts';
 import type { LooseObjectIssue } from './looseObject.ts';
 
 /**

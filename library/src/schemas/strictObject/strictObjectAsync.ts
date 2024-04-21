@@ -6,7 +6,7 @@ import type {
   InferObjectOutput,
   ObjectEntriesAsync,
 } from '../../types/index.ts';
-import type { NeverIssue, NeverSchema } from '../never/index.ts';
+import type { NeverIssue } from '../never/index.ts';
 import type { StrictObjectIssue } from './strictObject.ts';
 
 /**
