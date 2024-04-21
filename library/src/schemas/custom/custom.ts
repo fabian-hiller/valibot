@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Check type.
@@ -35,6 +40,10 @@ export interface CustomSchema<
    * The schema type.
    */
   readonly type: 'custom';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof custom;
   /**
    * The expected property.
    */
@@ -80,14 +89,18 @@ export function custom<TInput>(
   return {
     kind: 'schema',
     type: 'custom',
+    reference: custom,
     expects: 'unknown',
     async: false,
     check,
     message,
     _run(dataset, config) {
-      return _schemaDataset<
-        CustomSchema<TInput, ErrorMessage<CustomIssue> | undefined>
-      >(this, custom, this.check(dataset.value), dataset, config);
+      if (this.check(dataset.value)) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<TInput, CustomIssue>;
     },
   };
 }

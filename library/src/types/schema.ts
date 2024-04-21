@@ -1,6 +1,7 @@
 import type { Config } from './config.ts';
 import type { Dataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
+import type { FunctionReference } from './other.ts';
 
 /**
  * Base schema type.
@@ -18,6 +19,14 @@ export interface BaseSchema<
    * The schema type.
    */
   readonly type: string;
+  /**
+   * The schema reference.
+   */
+  readonly reference: FunctionReference<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any[],
+    BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  >;
   /**
    * The expected property.
    */
@@ -59,7 +68,19 @@ export interface BaseSchemaAsync<
   TInput,
   TOutput,
   TIssue extends BaseIssue<unknown>,
-> extends Omit<BaseSchema<TInput, TOutput, TIssue>, 'async' | '_run'> {
+> extends Omit<
+    BaseSchema<TInput, TOutput, TIssue>,
+    'reference' | 'async' | '_run'
+  > {
+  /**
+   * The schema reference.
+   */
+  readonly reference: FunctionReference<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any[],
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+  >;
   /**
    * Whether it's async.
    */

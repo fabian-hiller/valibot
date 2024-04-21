@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Boolean issue type.
@@ -29,6 +34,10 @@ export interface BooleanSchema<
    * The schema type.
    */
   readonly type: 'boolean';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof boolean;
   /**
    * The expected property.
    */
@@ -63,17 +72,17 @@ export function boolean(
   return {
     kind: 'schema',
     type: 'boolean',
+    reference: boolean,
     expects: 'boolean',
     async: false,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        boolean,
-        typeof dataset.value === 'boolean',
-        dataset,
-        config
-      );
+      if (typeof dataset.value === 'boolean') {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<boolean, BooleanIssue>;
     },
   };
 }

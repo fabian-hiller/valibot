@@ -36,6 +36,7 @@ describe('omit', () => {
       expect(schema).toStrictEqual({
         kind: 'schema',
         type: 'object',
+        reference: object,
         expects: 'Object',
         entries: {
           key2: { ...number(), _run: expect.any(Function) },
@@ -106,6 +107,7 @@ describe('omit', () => {
       expect(schema).toStrictEqual({
         kind: 'schema',
         type: 'object_with_rest',
+        reference: objectWithRest,
         expects: 'Object',
         entries: {
           key1: { ...string(), _run: expect.any(Function) },

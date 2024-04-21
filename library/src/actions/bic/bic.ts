@@ -2,9 +2,10 @@ import { BIC_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * BIC issue type.
@@ -44,6 +45,10 @@ export interface BicAction<
    */
   readonly type: 'bic';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof bic;
+  /**
    * The expected property.
    */
   readonly expects: null;
@@ -82,19 +87,16 @@ export function bic(
   return {
     kind: 'validation',
     type: 'bic',
+    reference: bic,
     async: false,
     expects: null,
     requirement: BIC_REGEX,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        bic,
-        'BIC',
-        dataset.typed && !this.requirement.test(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, 'BIC', dataset, config);
+      }
+      return dataset as Dataset<string, BicIssue<string>>;
     },
   };
 }

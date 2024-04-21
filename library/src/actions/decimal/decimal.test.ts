@@ -8,6 +8,7 @@ describe('decimal', () => {
     const baseAction: Omit<DecimalAction<string, never>, 'message'> = {
       kind: 'validation',
       type: 'decimal',
+      reference: decimal,
       expects: null,
       requirement: DECIMAL_REGEX,
       async: false,

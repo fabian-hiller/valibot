@@ -16,9 +16,9 @@ export interface StrictObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,
   TMessage extends ErrorMessage<StrictObjectIssue | NeverIssue> | undefined,
 > extends BaseSchemaAsync<
-    InferObjectInput<TEntries, NeverSchema<TMessage>>,
-    InferObjectOutput<TEntries, NeverSchema<TMessage>>,
-    StrictObjectIssue | InferObjectIssue<TEntries, NeverSchema<TMessage>>
+    InferObjectInput<TEntries>,
+    InferObjectOutput<TEntries>,
+    StrictObjectIssue | InferObjectIssue<TEntries>
   > {
   /**
    * The schema type.
@@ -32,10 +32,6 @@ export interface StrictObjectSchemaAsync<
    * The object entries.
    */
   readonly entries: TEntries;
-  /**
-   * The rest schema.
-   */
-  readonly rest: NeverSchema<TMessage>;
   /**
    * The error message.
    */

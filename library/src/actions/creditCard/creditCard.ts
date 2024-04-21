@@ -1,9 +1,10 @@
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _isLuhnAlgo, _validationDataset } from '../../utils/index.ts';
+import { _addIssue, _isLuhnAlgo } from '../../utils/index.ts';
 
 /**
  * Credit card issue type.
@@ -43,6 +44,10 @@ export interface CreditCardAction<
    * The action type.
    */
   readonly type: 'credit_card';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof creditCard;
   /**
    * The expected property.
    */
@@ -116,6 +121,7 @@ export function creditCard(
   return {
     kind: 'validation',
     type: 'credit_card',
+    reference: creditCard,
     async: false,
     expects: null,
     requirement(input) {
@@ -130,14 +136,10 @@ export function creditCard(
     },
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        creditCard,
-        'credit card',
-        dataset.typed && !this.requirement(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement(dataset.value)) {
+        _addIssue(this, 'credit card', dataset, config);
+      }
+      return dataset as Dataset<string, CreditCardIssue<string>>;
     },
   };
 }

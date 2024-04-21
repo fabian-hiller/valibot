@@ -11,7 +11,6 @@ import type {
   BaseValidationAsync,
   Config,
   Dataset,
-  FunctionReference,
   InferInput,
   InferIssue,
   IssuePathItem,
@@ -22,8 +21,9 @@ import { _stringify } from '../_stringify/index.ts';
  * The other type.
  */
 interface Other<TInput> {
-  received?: string;
+  input?: unknown;
   expected?: string;
+  received?: string;
   path?: [IssuePathItem, ...IssuePathItem[]];
   issues?: [BaseIssue<TInput>, ...BaseIssue<TInput>[]];
 }
@@ -32,7 +32,6 @@ interface Other<TInput> {
  * Adds an issue to the dataset.
  *
  * @param context The issue context.
- * @param reference The issue reference.
  * @param label The issue label.
  * @param dataset The input dataset.
  * @param config The configuration.
@@ -48,15 +47,15 @@ export function _addIssue<
     | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>,
 >(
   context: TContext,
-  reference: FunctionReference<unknown[], TContext>,
   label: string,
   dataset: Dataset<unknown, BaseIssue<unknown>>,
   config: Config<InferIssue<TContext>>,
   other?: Other<InferInput<TContext>>
 ): void {
   // Get expected and received string
+  const input = other && 'input' in other ? other.input : dataset.value;
   const expected = other?.expected ?? context.expects;
-  const received = other?.received ?? _stringify(dataset.value);
+  const received = other?.received ?? _stringify(input);
 
   // Create issue object
   // Note: The issue is deliberately not constructed with the spread operator
@@ -64,7 +63,7 @@ export function _addIssue<
   const issue: BaseIssue<unknown> = {
     kind: context.kind,
     type: context.type,
-    input: dataset.value,
+    input,
     expected,
     received,
     message: `Invalid ${label}: ${
@@ -87,7 +86,7 @@ export function _addIssue<
   const message =
     // @ts-expect-error
     context.message ??
-    getSpecificMessage(reference, issue.lang) ??
+    getSpecificMessage(context.reference, issue.lang) ??
     (isSchema ? getSchemaMessage(issue.lang) : null) ??
     config.message ??
     getGlobalMessage(issue.lang);

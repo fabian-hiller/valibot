@@ -32,7 +32,7 @@ export interface MinValueIssue<
 }
 
 /**
- * Min value validation type.
+ * Min value action type.
  */
 export interface MinValueAction<
   TInput extends ValueInput,
@@ -42,9 +42,13 @@ export interface MinValueAction<
     | undefined,
 > extends BaseValidation<TInput, TInput, MinValueIssue<TInput, TRequirement>> {
   /**
-   * The validation type.
+   * The action type.
    */
   readonly type: 'min_value';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof minValue;
   /**
    * The expected property.
    */
@@ -101,6 +105,7 @@ export function minValue(
   return {
     kind: 'validation',
     type: 'min_value',
+    reference: minValue,
     async: false,
     expects: `>=${
       requirement instanceof Date
@@ -111,7 +116,7 @@ export function minValue(
     message,
     _run(dataset, config) {
       if (dataset.typed && dataset.value < this.requirement) {
-        _addIssue(this, minValue, 'value', dataset, config, {
+        _addIssue(this, 'value', dataset, config, {
           received:
             dataset.value instanceof Date
               ? dataset.value.toJSON()

@@ -13,6 +13,7 @@ describe('lazy', () => {
     expect(lazy(getter)).toStrictEqual({
       kind: 'schema',
       type: 'lazy',
+      reference: lazy,
       expects: 'unknown',
       getter,
       async: false,

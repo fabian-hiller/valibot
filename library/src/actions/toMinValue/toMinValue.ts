@@ -13,6 +13,10 @@ export interface ToMinValueAction<
    */
   readonly type: 'to_min_value';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof toMinValue;
+  /**
    * The minimum value.
    */
   readonly requirement: TRequirement;
@@ -32,6 +36,7 @@ export function toMinValue<
   return {
     kind: 'transformation',
     type: 'to_min_value',
+    reference: toMinValue,
     async: false,
     requirement,
     _run(dataset) {

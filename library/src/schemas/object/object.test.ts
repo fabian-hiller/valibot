@@ -14,6 +14,7 @@ describe('object', () => {
     const baseSchema: Omit<ObjectSchema<Entries, never>, 'message'> = {
       kind: 'schema',
       type: 'object',
+      reference: object,
       expects: 'Object',
       entries,
       async: false,

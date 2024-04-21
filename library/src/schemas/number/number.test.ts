@@ -7,6 +7,7 @@ describe('number', () => {
     const baseSchema: Omit<NumberSchema<never>, 'message'> = {
       kind: 'schema',
       type: 'number',
+      reference: number,
       expects: 'number',
       async: false,
       _run: expect.any(Function),

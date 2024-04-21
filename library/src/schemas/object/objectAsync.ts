@@ -15,9 +15,9 @@ export interface ObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,
   TMessage extends ErrorMessage<ObjectIssue> | undefined,
 > extends BaseSchemaAsync<
-    InferObjectInput<TEntries, undefined>,
-    InferObjectOutput<TEntries, undefined>,
-    ObjectIssue | InferObjectIssue<TEntries, undefined>
+    InferObjectInput<TEntries>,
+    InferObjectOutput<TEntries>,
+    ObjectIssue | InferObjectIssue<TEntries>
   > {
   /**
    * The schema type.

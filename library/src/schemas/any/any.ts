@@ -10,6 +10,10 @@ export interface AnySchema extends BaseSchema<any, any, never> {
    */
   readonly type: 'any';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof any;
+  /**
    * The expected property.
    */
   readonly expects: 'any';
@@ -28,6 +32,7 @@ export function any(): AnySchema {
   return {
     kind: 'schema',
     type: 'any',
+    reference: any,
     expects: 'any',
     async: false,
     _run(dataset) {

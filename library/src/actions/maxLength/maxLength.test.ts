@@ -11,6 +11,7 @@ describe('maxLength', () => {
     const baseAction: Omit<MaxLengthAction<string, 5, never>, 'message'> = {
       kind: 'validation',
       type: 'max_length',
+      reference: maxLength,
       expects: '<=5',
       requirement: 5,
       async: false,

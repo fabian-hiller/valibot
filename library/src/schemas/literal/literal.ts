@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset, _stringify } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue, _stringify } from '../../utils/index.ts';
 
 /**
  * Literal type.
@@ -35,6 +40,10 @@ export interface LiteralSchema<
    * The schema type.
    */
   readonly type: 'literal';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof literal;
   /**
    * The literal value.
    */
@@ -76,18 +85,18 @@ export function literal(
   return {
     kind: 'schema',
     type: 'literal',
+    reference: literal,
     expects: _stringify(literal_),
     async: false,
     literal: literal_,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        literal,
-        dataset.value === this.literal,
-        dataset,
-        config
-      );
+      if (dataset.value === this.literal) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<Literal, LiteralIssue>;
     },
   };
 }

@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
-import { never } from '../never/index.ts';
 import { nullish } from '../nullish/index.ts';
 import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
@@ -23,6 +22,7 @@ describe('strictObject', () => {
     > = {
       kind: 'schema',
       type: 'strict_object',
+      reference: strictObject,
       expects: 'Object',
       entries,
       async: false,
@@ -33,7 +33,6 @@ describe('strictObject', () => {
       const schema: StrictObjectSchema<Entries, undefined> = {
         ...baseSchema,
         message: undefined,
-        rest: { ...never(undefined), _run: expect.any(Function) },
       };
       expect(strictObject(entries)).toStrictEqual(schema);
       expect(strictObject(entries, undefined)).toStrictEqual(schema);
@@ -43,7 +42,6 @@ describe('strictObject', () => {
       expect(strictObject(entries, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-        rest: { ...never('message'), _run: expect.any(Function) },
       } satisfies StrictObjectSchema<Entries, 'message'>);
     });
 
@@ -52,7 +50,6 @@ describe('strictObject', () => {
       expect(strictObject(entries, message)).toStrictEqual({
         ...baseSchema,
         message,
-        rest: { ...never(message), _run: expect.any(Function) },
       } satisfies StrictObjectSchema<Entries, typeof message>);
     });
   });
@@ -264,39 +261,22 @@ describe('strictObject', () => {
       };
       expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
         typed: false,
-        value: input,
+        value: { key: input.key, nested: input.nested },
         issues: [
           {
             ...baseInfo,
             kind: 'schema',
-            type: 'never',
-            input: 'foo',
+            type: 'strict_object',
+            input: 'other1',
             expected: 'never',
-            received: '"foo"',
+            received: '"other1"',
             path: [
               {
                 type: 'object',
-                origin: 'value',
+                origin: 'key',
                 input,
                 key: 'other1',
                 value: input.other1,
-              },
-            ],
-          },
-          {
-            ...baseInfo,
-            kind: 'schema',
-            type: 'never',
-            input: 123,
-            expected: 'never',
-            received: '123',
-            path: [
-              {
-                type: 'object',
-                origin: 'value',
-                input,
-                key: 'other2',
-                value: input.other2,
               },
             ],
           },

@@ -9,6 +9,10 @@ export interface ToLowerCaseAction
    * The action type.
    */
   readonly type: 'to_lower_case';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof toLowerCase;
 }
 
 /**
@@ -20,6 +24,7 @@ export function toLowerCase(): ToLowerCaseAction {
   return {
     kind: 'transformation',
     type: 'to_lower_case',
+    reference: toLowerCase,
     async: false,
     _run(dataset) {
       dataset.value = dataset.value.toLowerCase();

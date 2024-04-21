@@ -10,6 +10,10 @@ export interface TransformAction<TInput, TOutput>
    */
   readonly type: 'transform';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof transform;
+  /**
    * The transformation action.
    */
   readonly action: (input: TInput) => TOutput;
@@ -28,6 +32,7 @@ export function transform<TInput, TOutput>(
   return {
     kind: 'transformation',
     type: 'transform',
+    reference: transform,
     async: false,
     action,
     _run(dataset) {
