@@ -1,6 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import type { NeverIssue } from '../never/index.ts';
 import type { NullishSchema } from '../nullish/index.ts';
 import { type NumberIssue, type NumberSchema } from '../number/index.ts';
 import type { ObjectIssue, ObjectSchema } from '../object/index.ts';
@@ -71,7 +70,7 @@ describe('strictObject', () => {
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Schema>>().toEqualTypeOf<
-        StrictObjectIssue | ObjectIssue | StringIssue | NumberIssue | NeverIssue
+        StrictObjectIssue | ObjectIssue | StringIssue | NumberIssue
       >();
     });
   });

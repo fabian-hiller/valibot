@@ -11,6 +11,7 @@ describe('excludes', () => {
     const baseAction: Omit<ExcludesAction<string, 'foo', never>, 'message'> = {
       kind: 'validation',
       type: 'excludes',
+      reference: excludes,
       expects: `!"foo"`,
       requirement: 'foo',
       async: false,

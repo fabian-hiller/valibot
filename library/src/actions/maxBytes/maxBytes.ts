@@ -49,6 +49,10 @@ export interface MaxBytesAction<
    */
   readonly type: 'max_bytes';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof maxBytes;
+  /**
    * The expected property.
    */
   readonly expects: `<=${TRequirement}`;
@@ -104,6 +108,7 @@ export function maxBytes(
   return {
     kind: 'validation',
     type: 'max_bytes',
+    reference: maxBytes,
     async: false,
     expects: `<=${requirement}`,
     requirement,
@@ -112,7 +117,7 @@ export function maxBytes(
       if (dataset.typed) {
         const length = new TextEncoder().encode(dataset.value).length;
         if (length > this.requirement) {
-          _addIssue(this, maxBytes, 'bytes', dataset, config, {
+          _addIssue(this, 'bytes', dataset, config, {
             received: `${length}`,
           });
         }

@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * NaN issue type.
@@ -28,6 +33,10 @@ export interface NanSchema<TMessage extends ErrorMessage<NanIssue> | undefined>
    * The schema type.
    */
   readonly type: 'nan';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof nan;
   /**
    * The expected property.
    */
@@ -62,17 +71,17 @@ export function nan(
   return {
     kind: 'schema',
     type: 'nan',
+    reference: nan,
     expects: 'NaN',
     async: false,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        nan,
-        Number.isNaN(dataset.value),
-        dataset,
-        config
-      );
+      if (Number.isNaN(dataset.value)) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<number, NanIssue>;
     },
   };
 }

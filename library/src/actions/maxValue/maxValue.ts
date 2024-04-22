@@ -32,7 +32,7 @@ export interface MaxValueIssue<
 }
 
 /**
- * Max value validation type.
+ * Max value action type.
  */
 export interface MaxValueAction<
   TInput extends ValueInput,
@@ -42,9 +42,13 @@ export interface MaxValueAction<
     | undefined,
 > extends BaseValidation<TInput, TInput, MaxValueIssue<TInput, TRequirement>> {
   /**
-   * The validation type.
+   * The action type.
    */
   readonly type: 'max_value';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof maxValue;
   /**
    * The expected property.
    */
@@ -101,6 +105,7 @@ export function maxValue(
   return {
     kind: 'validation',
     type: 'max_value',
+    reference: maxValue,
     async: false,
     expects: `<=${
       requirement instanceof Date
@@ -111,7 +116,7 @@ export function maxValue(
     message,
     _run(dataset, config) {
       if (dataset.typed && dataset.value > this.requirement) {
-        _addIssue(this, maxValue, 'value', dataset, config, {
+        _addIssue(this, 'value', dataset, config, {
           received:
             dataset.value instanceof Date
               ? dataset.value.toJSON()

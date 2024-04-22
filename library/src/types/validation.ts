@@ -1,6 +1,7 @@
-import type { Config } from './config';
-import type { Dataset } from './dataset';
-import type { BaseIssue } from './issue';
+import type { Config } from './config.ts';
+import type { Dataset } from './dataset.ts';
+import type { BaseIssue } from './issue.ts';
+import type { FunctionReference } from './other.ts';
 
 /**
  * Base validation type.
@@ -18,6 +19,14 @@ export interface BaseValidation<
    * The validation type.
    */
   readonly type: string;
+  /**
+   * The validation reference.
+   */
+  readonly reference: FunctionReference<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any[],
+    BaseValidation<unknown, unknown, BaseIssue<unknown>>
+  >;
   /**
    * The expected property.
    */
@@ -59,7 +68,19 @@ export interface BaseValidationAsync<
   TInput,
   TOutput,
   TIssue extends BaseIssue<unknown>,
-> extends Omit<BaseValidation<TInput, TOutput, TIssue>, 'async' | '_run'> {
+> extends Omit<
+    BaseValidation<TInput, TOutput, TIssue>,
+    'reference' | 'async' | '_run'
+  > {
+  /**
+   * The validation reference.
+   */
+  readonly reference: FunctionReference<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any[],
+    | BaseValidation<unknown, unknown, BaseIssue<unknown>>
+    | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
+  >;
   /**
    * Whether it's async.
    */

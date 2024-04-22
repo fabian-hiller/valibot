@@ -11,6 +11,7 @@ describe('notBytes', () => {
     const baseAction: Omit<NotBytesAction<string, 5, never>, 'message'> = {
       kind: 'validation',
       type: 'not_bytes',
+      reference: notBytes,
       expects: '!5',
       requirement: 5,
       async: false,
