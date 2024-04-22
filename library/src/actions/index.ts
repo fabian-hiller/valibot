@@ -19,6 +19,7 @@ export * from './minSize/index.ts';
 export * from './minValue/index.ts';
 export * from './notBytes/index.ts';
 export * from './safeInteger/index.ts';
+export * from './some/index.ts';
 export * from './toLowerCase/index.ts';
 export * from './toMaxValue/index.ts';
 export * from './toMinValue/index.ts';
