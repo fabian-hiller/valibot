@@ -8,6 +8,7 @@ export * from './excludes/index.ts';
 export * from './finite/index.ts';
 export * from './includes/includes.ts';
 export * from './integer/index.ts';
+export * from './isoTime/index.ts';
 export * from './maxBytes/index.ts';
 export * from './maxLength/index.ts';
 export * from './maxSize/index.ts';
