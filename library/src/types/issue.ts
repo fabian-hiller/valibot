@@ -1,5 +1,6 @@
 import type {
   ArrayPathItem,
+  FormDataPathItem,
   MapPathItem,
   SetPathItem,
 } from '../schemas/index.ts';
@@ -25,6 +26,7 @@ export interface UnknownPathItem {
  */
 export type IssuePathItem =
   | ArrayPathItem
+  | FormDataPathItem
   | MapPathItem
   | ObjectPathItem
   // | RecordPathItem
