@@ -2,14 +2,14 @@ import { describe, expect, test } from 'vitest';
 import { ISO_TIME_REGEX } from '../../regex.ts';
 import { expectActionIssue } from '../../vitest/expectActionIssue.ts';
 import { expectNoActionIssue } from '../../vitest/expectNoActionIssue.ts';
-import type { IsoTimeAction, IsoTimeIssue } from './isoTime.ts';
-import { isoTime } from './isoTime.ts';
+import { isoTime, type IsoTimeAction, type IsoTimeIssue } from './isoTime.ts';
 
 describe('isoTime', () => {
   describe('should return action object', () => {
     const baseAction: Omit<IsoTimeAction<string, never>, 'message'> = {
       kind: 'validation',
       type: 'iso_time',
+      reference: isoTime,
       expects: null,
       requirement: ISO_TIME_REGEX,
       async: false,
@@ -51,8 +51,8 @@ describe('isoTime', () => {
       });
     });
 
-    test('for valid inputs', () => {
-      expectNoActionIssue(action, ['19:34', '00:00', '23:59']);
+    test('for valid ISO times', () => {
+      expectNoActionIssue(action, ['00:00', '12:34', '23:59']);
     });
   });
 
@@ -70,25 +70,33 @@ describe('isoTime', () => {
       expectActionIssue(action, baseIssue, ['', ' ']);
     });
 
-    test('for less that two digits on either side', () => {
-      expectActionIssue(action, baseIssue, ['1:34', '12:4', '0:00', '00:0']);
+    test('for missing separator', () => {
+      expectActionIssue(action, baseIssue, ['0000', '1234', '2359']);
     });
 
-    test('for more that two digits on either side', () => {
+    test('for mathematical signs', () => {
+      expectActionIssue(action, baseIssue, ['+00:00', '-12:34', '+23:59']);
+    });
+
+    test('for missing digits', () => {
+      expectActionIssue(action, baseIssue, ['0:00', '00:0', '1:23', '12:3']);
+    });
+
+    test('for too many digits', () => {
       expectActionIssue(action, baseIssue, [
-        '12:345',
-        '123:45',
         '00:000',
         '000:00',
+        '12:345',
+        '123:45',
       ]);
     });
 
-    test('for minutes outside of 00-59', () => {
-      expectActionIssue(action, baseIssue, ['01:60', '99:99']);
+    test('for hours greater than 23', () => {
+      expectActionIssue(action, baseIssue, ['24:00', '99:00']);
     });
 
-    test('for hours outside of 00-23', () => {
-      expectActionIssue(action, baseIssue, ['24:00', '99:99']);
+    test('for minutes greater than 59', () => {
+      expectActionIssue(action, baseIssue, ['00:60', '00:99']);
     });
   });
 });

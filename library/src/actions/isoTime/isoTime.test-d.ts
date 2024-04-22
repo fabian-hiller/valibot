@@ -1,7 +1,6 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import type { IsoTimeAction, IsoTimeIssue } from './isoTime.ts';
-import { isoTime } from './isoTime.ts';
+import { isoTime, type IsoTimeAction, type IsoTimeIssue } from './isoTime.ts';
 
 describe('isoTime', () => {
   describe('should return action object', () => {

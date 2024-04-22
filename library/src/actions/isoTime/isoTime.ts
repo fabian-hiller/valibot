@@ -2,12 +2,13 @@ import { ISO_TIME_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
- * ISO Time issue type.
+ * ISO time issue type.
  */
 export interface IsoTimeIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -27,13 +28,13 @@ export interface IsoTimeIssue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly received: `"${string}"`;
   /**
-   * The ISO Time regex.
+   * The ISO time regex.
    */
   readonly requirement: RegExp;
 }
 
 /**
- * ISO Time action type.
+ * ISO time action type.
  */
 export interface IsoTimeAction<
   TInput extends string,
@@ -44,11 +45,15 @@ export interface IsoTimeAction<
    */
   readonly type: 'iso_time';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof isoTime;
+  /**
    * The expected property.
    */
   readonly expects: null;
   /**
-   * The ISO Time regex.
+   * The ISO time regex.
    */
   readonly requirement: RegExp;
   /**
@@ -58,9 +63,9 @@ export interface IsoTimeAction<
 }
 
 /**
- * Creates a [ISO Time](https://en.wikipedia.org/wiki/ISO_8601) validation action.
+ * Creates an [ISO time](https://en.wikipedia.org/wiki/ISO_8601) validation action.
  *
- * @returns An ISO Time action.
+ * @returns An ISO time action.
  */
 export function isoTime<TInput extends string>(): IsoTimeAction<
   TInput,
@@ -68,11 +73,11 @@ export function isoTime<TInput extends string>(): IsoTimeAction<
 >;
 
 /**
- * Creates a [ISO Time](https://en.wikipedia.org/wiki/ISO_8601) validation action.
+ * Creates an [ISO time](https://en.wikipedia.org/wiki/ISO_8601) validation action.
  *
  * @param message The error message.
  *
- * @returns An ISO Time action.
+ * @returns An ISO time action.
  */
 export function isoTime<
   TInput extends string,
@@ -85,19 +90,16 @@ export function isoTime(
   return {
     kind: 'validation',
     type: 'iso_time',
+    reference: isoTime,
     async: false,
     expects: null,
     requirement: ISO_TIME_REGEX,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        isoTime,
-        'ISO Time',
-        dataset.typed && !this.requirement.test(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, 'time', dataset, config);
+      }
+      return dataset as Dataset<string, IsoTimeIssue<string>>;
     },
   };
 }
