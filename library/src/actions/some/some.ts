@@ -6,6 +6,15 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
+ * Requirement type.
+ */
+type Requirement<TInput extends unknown[]> = (
+  element: TInput[number],
+  index: number,
+  array: TInput
+) => boolean;
+
+/**
  * Some issue type.
  */
 export interface SomeIssue<TInput extends unknown[]> extends BaseIssue<TInput> {
@@ -24,11 +33,7 @@ export interface SomeIssue<TInput extends unknown[]> extends BaseIssue<TInput> {
   /**
    * The validation function.
    */
-  readonly requirement: (
-    element: TInput[number],
-    index: number,
-    array: TInput
-  ) => boolean;
+  readonly requirement: Requirement<TInput>;
 }
 
 /**
@@ -53,11 +58,7 @@ export interface SomeAction<
   /**
    * The validation function.
    */
-  readonly requirement: (
-    element: TInput[number],
-    index: number,
-    array: TInput
-  ) => boolean;
+  readonly requirement: Requirement<TInput>;
   /**
    * The error message.
    */
@@ -72,11 +73,7 @@ export interface SomeAction<
  * @returns A some action.
  */
 export function some<TInput extends unknown[]>(
-  requirement: (
-    element: TInput[number],
-    index: number,
-    array: TInput
-  ) => boolean
+  requirement: Requirement<TInput>
 ): SomeAction<TInput, undefined>;
 
 /**
@@ -91,29 +88,25 @@ export function some<
   TInput extends unknown[],
   const TMessage extends ErrorMessage<SomeIssue<TInput>> | undefined,
 >(
-  requirement: (
-    element: TInput[number],
-    index: number,
-    array: TInput
-  ) => boolean,
+  requirement: Requirement<TInput>,
   message: TMessage
 ): SomeAction<TInput, TMessage>;
 
 export function some(
-  requirement: (element: unknown, index: number, array: unknown[]) => boolean,
+  requirement: Requirement<unknown[]>,
   message?: ErrorMessage<SomeIssue<unknown[]>>
 ): SomeAction<unknown[], ErrorMessage<SomeIssue<unknown[]>> | undefined> {
   return {
     kind: 'validation',
     type: 'some',
-    async: false,
     reference: some,
+    async: false,
     expects: null,
-    message,
     requirement,
+    message,
     _run(dataset, config) {
       if (dataset.typed && !dataset.value.some(this.requirement)) {
-        _addIssue(this, 'input', dataset, config);
+        _addIssue(this, 'content', dataset, config);
       }
       return dataset;
     },

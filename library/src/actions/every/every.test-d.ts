@@ -7,23 +7,29 @@ describe('every', () => {
     test('with undefined message', () => {
       type Action = EveryAction<string[], undefined>;
       expectTypeOf(
-        every<string[]>((element) => !!element)
+        every<string[]>((element: string) => Boolean(element))
       ).toEqualTypeOf<Action>();
       expectTypeOf(
-        every<string[], undefined>((element) => !!element, undefined)
+        every<string[], undefined>(
+          (element: string) => Boolean(element),
+          undefined
+        )
       ).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
       expectTypeOf(
-        every<string[], 'message'>((element) => !!element, 'message')
+        every<string[], 'message'>(
+          (element: string) => Boolean(element),
+          'message'
+        )
       ).toEqualTypeOf<EveryAction<string[], 'message'>>();
     });
 
     test('with function message', () => {
       expectTypeOf(
         every<string[], () => string>(
-          (element) => !!element,
+          (element: string) => Boolean(element),
           () => 'message'
         )
       ).toEqualTypeOf<EveryAction<string[], () => string>>();

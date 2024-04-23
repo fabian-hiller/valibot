@@ -4,12 +4,13 @@ import { every, type EveryAction, type EveryIssue } from './every.ts';
 
 describe('every', () => {
   describe('should return action object', () => {
+    const requirement = (element: string) => element.startsWith('DE');
     const baseAction: Omit<EveryAction<string[], never>, 'message'> = {
       kind: 'validation',
       type: 'every',
       reference: every,
       expects: null,
-      requirement: expect.any(Function),
+      requirement,
       async: false,
       _run: expect.any(Function),
     };
@@ -19,21 +20,25 @@ describe('every', () => {
         ...baseAction,
         message: undefined,
       };
-      expect(every(() => true)).toStrictEqual(action);
-      expect(every(() => true, undefined)).toStrictEqual(action);
+      expect(every<string[]>(requirement)).toStrictEqual(action);
+      expect(every<string[], undefined>(requirement, undefined)).toStrictEqual(
+        action
+      );
     });
 
     test('with string message', () => {
       const message = 'message';
-      expect(every(() => true, message)).toStrictEqual({
+      expect(every<string[], 'message'>(requirement, message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies EveryAction<string[], string>);
+      } satisfies EveryAction<string[], 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(every(() => true, message)).toStrictEqual({
+      expect(
+        every<string[], typeof message>(requirement, message)
+      ).toStrictEqual({
         ...baseAction,
         message,
       } satisfies EveryAction<string[], typeof message>);
@@ -41,7 +46,7 @@ describe('every', () => {
   });
 
   describe('should return dataset without issues', () => {
-    const action = every<number[]>((element) => element > 9);
+    const action = every<number[]>((element: number) => element > 9);
 
     test('for untyped inputs', () => {
       expect(action._run({ typed: false, value: null }, {})).toStrictEqual({

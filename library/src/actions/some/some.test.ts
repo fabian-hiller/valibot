@@ -4,12 +4,13 @@ import { some, type SomeAction, type SomeIssue } from './some.ts';
 
 describe('some', () => {
   describe('should return action object', () => {
+    const requirement = (element: string) => element.startsWith('DE');
     const baseAction: Omit<SomeAction<string[], never>, 'message'> = {
       kind: 'validation',
       type: 'some',
       reference: some,
       expects: null,
-      requirement: expect.any(Function),
+      requirement,
       async: false,
       _run: expect.any(Function),
     };
@@ -19,21 +20,25 @@ describe('some', () => {
         ...baseAction,
         message: undefined,
       };
-      expect(some(() => true)).toStrictEqual(action);
-      expect(some(() => true, undefined)).toStrictEqual(action);
+      expect(some<string[]>(requirement)).toStrictEqual(action);
+      expect(some<string[], undefined>(requirement, undefined)).toStrictEqual(
+        action
+      );
     });
 
     test('with string message', () => {
       const message = 'message';
-      expect(some(() => true, message)).toStrictEqual({
+      expect(some<string[], 'message'>(requirement, message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies SomeAction<string[], string>);
+      } satisfies SomeAction<string[], 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(some(() => true, message)).toStrictEqual({
+      expect(
+        some<string[], typeof message>(requirement, message)
+      ).toStrictEqual({
         ...baseAction,
         message,
       } satisfies SomeAction<string[], typeof message>);
@@ -52,11 +57,10 @@ describe('some', () => {
 
     test('for valid typed inputs', () => {
       expectNoActionIssue(action, [
-        [12],
-        [3, 12],
-        [10, 9],
-        [10, 9, 11],
-        [12, 21, 11],
+        [10],
+        [-1, 10],
+        [10, 11, 12],
+        [1, 2, 3, 4, 99, 6],
       ]);
     });
   });
@@ -64,6 +68,7 @@ describe('some', () => {
   describe('should return an issue', () => {
     const requirement = (element: number) => element > 9;
     const action = some<number[], 'message'>(requirement, 'message');
+
     const baseIssue: Omit<SomeIssue<number[]>, 'input' | 'received'> = {
       kind: 'validation',
       type: 'some',
@@ -72,13 +77,16 @@ describe('some', () => {
       requirement,
     };
 
+    test('for empty array', () => {
+      expectActionIssue(action, baseIssue, [[]]);
+    });
+
     test('for invalid typed inputs', () => {
-      expectActionIssue(
-        action,
-        baseIssue,
-        [[], [9], [7, 8, 9], [1, 2, 3, 4]],
-        () => 'Array'
-      );
+      expectActionIssue(action, baseIssue, [
+        [9],
+        [7, 8, 9],
+        [-1, 0, 1, 2, 3, 4],
+      ]);
     });
   });
 });
