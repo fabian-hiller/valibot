@@ -1,13 +1,16 @@
 import { describe, expect, test } from 'vitest';
 import { IPV4_REGEX } from '../../regex.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
-import { ipv4, type IpV4Action, type IpV4Issue } from './ipv4.ts';
+import { ipv4, type Ipv4Action, type Ipv4Issue } from './ipv4.ts';
+
+// TODO: Improve tests to cover all possible scenarios based on the regex used.
 
 describe('ipv4', () => {
   describe('should return action object', () => {
-    const baseAction: Omit<IpV4Action<string, never>, 'message'> = {
+    const baseAction: Omit<Ipv4Action<string, never>, 'message'> = {
       kind: 'validation',
       type: 'ipv4',
+      reference: ipv4,
       expects: null,
       requirement: IPV4_REGEX,
       async: false,
@@ -15,7 +18,7 @@ describe('ipv4', () => {
     };
 
     test('with undefined message', () => {
-      const action: IpV4Action<string, undefined> = {
+      const action: Ipv4Action<string, undefined> = {
         ...baseAction,
         message: undefined,
       };
@@ -27,7 +30,7 @@ describe('ipv4', () => {
       expect(ipv4('message')).toStrictEqual({
         ...baseAction,
         message: 'message',
-      } satisfies IpV4Action<string, string>);
+      } satisfies Ipv4Action<string, string>);
     });
 
     test('with function message', () => {
@@ -35,7 +38,7 @@ describe('ipv4', () => {
       expect(ipv4(message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies IpV4Action<string, typeof message>);
+      } satisfies Ipv4Action<string, typeof message>);
     });
   });
 
@@ -49,7 +52,7 @@ describe('ipv4', () => {
       });
     });
 
-    test('for ipv4 address', () => {
+    test('for IPv4 address', () => {
       expectNoActionIssue(action, [
         '192.168.1.1',
         '127.0.0.1',
@@ -61,7 +64,7 @@ describe('ipv4', () => {
 
   describe('should return dataset with issues', () => {
     const action = ipv4('message');
-    const baseIssue: Omit<IpV4Issue<string>, 'input' | 'received'> = {
+    const baseIssue: Omit<Ipv4Issue<string>, 'input' | 'received'> = {
       kind: 'validation',
       type: 'ipv4',
       expected: null,
@@ -73,8 +76,8 @@ describe('ipv4', () => {
       expectActionIssue(action, baseIssue, ['', ' ']);
     });
 
-    test('for invalid ip formats', () => {
-      const invalidips = [
+    test('for invalid IPv4 address', () => {
+      expectActionIssue(action, baseIssue, [
         '1',
         '-1.0.0.0',
         '0..0.0.0',
@@ -82,12 +85,11 @@ describe('ipv4', () => {
         '256.256.256.256',
         '1.2.3',
         '0.0.0.0.0',
-        'test:test:test:test:test:test:test:test',
-      ];
-      expectActionIssue(action, baseIssue, invalidips);
+        'a.a.a.a',
+      ]);
     });
 
-    test('for ipv6 address', () => {
+    test('for IPv6 address', () => {
       expectActionIssue(action, baseIssue, [
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
         'FE80:0000:0000:0000:0202:B3FF:FE1E:8329',

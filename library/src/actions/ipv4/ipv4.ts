@@ -2,14 +2,15 @@ import { IPV4_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
- * IPV4 issue type.
+ * IPv4 issue type.
  */
-export interface IpV4Issue<TInput extends string> extends BaseIssue<TInput> {
+export interface Ipv4Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
    * The issue kind.
    */
@@ -33,16 +34,20 @@ export interface IpV4Issue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * IPV4 action type.
+ * IPv4 action type.
  */
-export interface IpV4Action<
+export interface Ipv4Action<
   TInput extends string,
-  TMessage extends ErrorMessage<IpV4Issue<TInput>> | undefined,
-> extends BaseValidation<TInput, TInput, IpV4Issue<TInput>> {
+  TMessage extends ErrorMessage<Ipv4Issue<TInput>> | undefined,
+> extends BaseValidation<TInput, TInput, Ipv4Issue<TInput>> {
   /**
    * The action type.
    */
   readonly type: 'ipv4';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof ipv4;
   /**
    * The expected property.
    */
@@ -58,43 +63,40 @@ export interface IpV4Action<
 }
 
 /**
- * Creates a [IPv4](https://en.wikipedia.org/wiki/IPv4) address validation action.
+ * Creates an [IPv4](https://en.wikipedia.org/wiki/IPv4) address validation action.
  *
- * @returns A IPV4 action.
+ * @returns An IPv4 action.
  */
-export function ipv4<TInput extends string>(): IpV4Action<TInput, undefined>;
+export function ipv4<TInput extends string>(): Ipv4Action<TInput, undefined>;
 
 /**
- * Creates a [IPv4](https://en.wikipedia.org/wiki/IPv4) address validation action.
+ * Creates an [IPv4](https://en.wikipedia.org/wiki/IPv4) address validation action.
  *
  * @param message The error message.
  *
- * @returns A IPV4 action.
+ * @returns An IPv4 action.
  */
 export function ipv4<
   TInput extends string,
-  const TMessage extends ErrorMessage<IpV4Issue<TInput>> | undefined,
->(message: TMessage): IpV4Action<TInput, TMessage>;
+  const TMessage extends ErrorMessage<Ipv4Issue<TInput>> | undefined,
+>(message: TMessage): Ipv4Action<TInput, TMessage>;
 
 export function ipv4(
-  message?: ErrorMessage<IpV4Issue<string>>
-): IpV4Action<string, ErrorMessage<IpV4Issue<string>> | undefined> {
+  message?: ErrorMessage<Ipv4Issue<string>>
+): Ipv4Action<string, ErrorMessage<Ipv4Issue<string>> | undefined> {
   return {
     kind: 'validation',
     type: 'ipv4',
+    reference: ipv4,
     async: false,
     expects: null,
     requirement: IPV4_REGEX,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        ipv4,
-        'ipv4',
-        dataset.typed && !this.requirement.test(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, 'IPv4', dataset, config);
+      }
+      return dataset as Dataset<string, Ipv4Issue<string>>;
     },
   };
 }

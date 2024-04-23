@@ -1,15 +1,18 @@
 import { describe, expect, test } from 'vitest';
-import { IPV4_REGEX, IPV6_REGEX } from '../../regex.ts';
+import { IP_REGEX } from '../../regex.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { ip, type IpAction, type IpIssue } from './ip.ts';
+
+// TODO: Improve tests to cover all possible scenarios based on the regex used.
 
 describe('ip', () => {
   describe('should return action object', () => {
     const baseAction: Omit<IpAction<string, never>, 'message'> = {
       kind: 'validation',
       type: 'ip',
+      reference: ip,
       expects: null,
-      requirement: [IPV4_REGEX, IPV6_REGEX],
+      requirement: IP_REGEX,
       async: false,
       _run: expect.any(Function),
     };
@@ -49,7 +52,7 @@ describe('ip', () => {
       });
     });
 
-    test('for ipv4 address', () => {
+    test('for IPv4 address', () => {
       expectNoActionIssue(action, [
         '192.168.1.1',
         '127.0.0.1',
@@ -58,7 +61,7 @@ describe('ip', () => {
       ]);
     });
 
-    test('for ipv6 address', () => {
+    test('for IPv6 address', () => {
       expectNoActionIssue(action, [
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
         'FE80:0000:0000:0000:0202:B3FF:FE1E:8329',
@@ -75,15 +78,15 @@ describe('ip', () => {
       type: 'ip',
       expected: null,
       message: 'message',
-      requirement: [IPV4_REGEX, IPV6_REGEX],
+      requirement: IP_REGEX,
     };
 
     test('for empty strings', () => {
       expectActionIssue(action, baseIssue, ['', ' ']);
     });
 
-    test('for invalid ip formats', () => {
-      const invalidips = [
+    test('for invalid IPv4 address', () => {
+      expectActionIssue(action, baseIssue, [
         '1',
         '-1.0.0.0',
         '0..0.0.0',
@@ -91,9 +94,19 @@ describe('ip', () => {
         '256.256.256.256',
         '1.2.3',
         '0.0.0.0.0',
+        'a.a.a.a',
+      ]);
+    });
+
+    test('for invalid IPv6 address', () => {
+      expectActionIssue(action, baseIssue, [
+        'd329:1be4:25b4:db47:a9d1:dc71:4926:992c:14af',
+        'd5e7:7214:2b78::3906:85e6:53cc:709:32ba',
+        '8f69::c757:395e:976e::3441',
+        '54cb::473f:d516:0.255.256.22',
+        '54cb::473f:d516:192.168.1',
         'test:test:test:test:test:test:test:test',
-      ];
-      expectActionIssue(action, baseIssue, invalidips);
+      ]);
     });
   });
 });

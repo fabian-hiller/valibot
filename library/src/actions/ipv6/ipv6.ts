@@ -2,14 +2,15 @@ import { IPV6_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
- * IPV6 issue type.
+ * IPv6 issue type.
  */
-export interface IpV6Issue<TInput extends string> extends BaseIssue<TInput> {
+export interface Ipv6Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
    * The issue kind.
    */
@@ -33,16 +34,20 @@ export interface IpV6Issue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * IPV6 action type.
+ * IPv6 action type.
  */
-export interface IpV6Action<
+export interface Ipv6Action<
   TInput extends string,
-  TMessage extends ErrorMessage<IpV6Issue<TInput>> | undefined,
-> extends BaseValidation<TInput, TInput, IpV6Issue<TInput>> {
+  TMessage extends ErrorMessage<Ipv6Issue<TInput>> | undefined,
+> extends BaseValidation<TInput, TInput, Ipv6Issue<TInput>> {
   /**
    * The action type.
    */
   readonly type: 'ipv6';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof ipv6;
   /**
    * The expected property.
    */
@@ -58,43 +63,40 @@ export interface IpV6Action<
 }
 
 /**
- * Creates a [IPv6](https://en.wikipedia.org/wiki/IPv6) address validation action.
+ * Creates an [IPv6](https://en.wikipedia.org/wiki/IPv6) address validation action.
  *
- * @returns A IPV6 action.
+ * @returns An IPv6 action.
  */
-export function ipv6<TInput extends string>(): IpV6Action<TInput, undefined>;
+export function ipv6<TInput extends string>(): Ipv6Action<TInput, undefined>;
 
 /**
- * Creates a [IPv6](https://en.wikipedia.org/wiki/IPv6) address validation action.
+ * Creates an [IPv6](https://en.wikipedia.org/wiki/IPv6) address validation action.
  *
  * @param message The error message.
  *
- * @returns A IPV6 action.
+ * @returns An IPv6 action.
  */
 export function ipv6<
   TInput extends string,
-  const TMessage extends ErrorMessage<IpV6Issue<TInput>> | undefined,
->(message: TMessage): IpV6Action<TInput, TMessage>;
+  const TMessage extends ErrorMessage<Ipv6Issue<TInput>> | undefined,
+>(message: TMessage): Ipv6Action<TInput, TMessage>;
 
 export function ipv6(
-  message?: ErrorMessage<IpV6Issue<string>>
-): IpV6Action<string, ErrorMessage<IpV6Issue<string>> | undefined> {
+  message?: ErrorMessage<Ipv6Issue<string>>
+): Ipv6Action<string, ErrorMessage<Ipv6Issue<string>> | undefined> {
   return {
     kind: 'validation',
     type: 'ipv6',
+    reference: ipv6,
     async: false,
     expects: null,
     requirement: IPV6_REGEX,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        ipv6,
-        'ipv6',
-        dataset.typed && !this.requirement.test(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, 'IPv6', dataset, config);
+      }
+      return dataset as Dataset<string, Ipv6Issue<string>>;
     },
   };
 }
