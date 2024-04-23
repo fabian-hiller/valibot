@@ -6,6 +6,15 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
+ * Requirement type.
+ */
+type Requirement<TInput extends unknown[]> = (
+  element: TInput[number],
+  index: number,
+  array: TInput
+) => boolean;
+
+/**
  * Every issue type.
  */
 export interface EveryIssue<TInput extends unknown[]>
@@ -25,11 +34,7 @@ export interface EveryIssue<TInput extends unknown[]>
   /**
    * The validation function.
    */
-  readonly requirement: (
-    element: TInput[number],
-    index: number,
-    array: TInput
-  ) => boolean;
+  readonly requirement: Requirement<TInput>;
 }
 
 /**
@@ -54,11 +59,7 @@ export interface EveryAction<
   /**
    * The validation function.
    */
-  readonly requirement: (
-    element: TInput[number],
-    index: number,
-    array: TInput
-  ) => boolean;
+  readonly requirement: Requirement<TInput>;
   /**
    * The error message.
    */
@@ -73,11 +74,7 @@ export interface EveryAction<
  * @returns An every action.
  */
 export function every<TInput extends unknown[]>(
-  requirement: (
-    element: TInput[number],
-    index: number,
-    array: TInput
-  ) => boolean
+  requirement: Requirement<TInput>
 ): EveryAction<TInput, undefined>;
 
 /**
@@ -92,29 +89,25 @@ export function every<
   TInput extends unknown[],
   const TMessage extends ErrorMessage<EveryIssue<TInput>> | undefined,
 >(
-  requirement: (
-    element: TInput[number],
-    index: number,
-    array: TInput
-  ) => boolean,
+  requirement: Requirement<TInput>,
   message: TMessage
 ): EveryAction<TInput, TMessage>;
 
 export function every(
-  requirement: (element: unknown, index: number, array: unknown[]) => boolean,
+  requirement: Requirement<unknown[]>,
   message?: ErrorMessage<EveryIssue<unknown[]>>
 ): EveryAction<unknown[], ErrorMessage<EveryIssue<unknown[]>> | undefined> {
   return {
     kind: 'validation',
     type: 'every',
-    async: false,
     reference: every,
+    async: false,
     expects: null,
-    message,
     requirement,
+    message,
     _run(dataset, config) {
       if (dataset.typed && !dataset.value.every(this.requirement)) {
-        _addIssue(this, 'input', dataset, config);
+        _addIssue(this, 'content', dataset, config);
       }
       return dataset;
     },

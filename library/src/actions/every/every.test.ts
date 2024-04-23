@@ -41,7 +41,7 @@ describe('every', () => {
   });
 
   describe('should return dataset without issues', () => {
-    const action = every<number[]>((element: number) => element > 9);
+    const action = every<number[]>((element) => element > 9);
 
     test('for untyped inputs', () => {
       expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
@@ -50,14 +50,19 @@ describe('every', () => {
       });
     });
 
-    test('for valid typed inputs', () => {
-      expectNoActionIssue(action, [[12, 21, 11, 10], [21], [10, 11], []]);
+    test('for empty array', () => {
+      expectNoActionIssue(action, [[]]);
+    });
+
+    test('for valid content', () => {
+      expectNoActionIssue(action, [[10, 11, 12, 13, 99]]);
     });
   });
 
   describe('should return an issue', () => {
     const requirement = (element: number) => element > 9;
     const action = every<number[], 'message'>(requirement, 'message');
+
     const baseIssue: Omit<EveryIssue<number[]>, 'input' | 'received'> = {
       kind: 'validation',
       type: 'every',
@@ -66,13 +71,12 @@ describe('every', () => {
       requirement,
     };
 
-    test('for invalid typed inputs', () => {
-      expectActionIssue(
-        action,
-        baseIssue,
-        [[9], [10, 9], [10, 9, 11], [7], [1, 2, 3], [7, 8, 9]],
-        () => 'Array'
-      );
+    test('for invalid content', () => {
+      expectActionIssue(action, baseIssue, [
+        [9],
+        [1, 2, 3],
+        [10, 11, -12, 13, 99],
+      ]);
     });
   });
 });
