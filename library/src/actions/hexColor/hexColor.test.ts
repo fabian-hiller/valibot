@@ -12,6 +12,7 @@ describe('hexColor', () => {
     const baseAction: Omit<HexColorAction<string, never>, 'message'> = {
       kind: 'validation',
       type: 'hex_color',
+      reference: hexColor,
       expects: null,
       requirement: HEX_COLOR_REGEX,
       async: false,
@@ -53,19 +54,52 @@ describe('hexColor', () => {
       });
     });
 
-    test('for valid inputs', () => {
-      const values = [
-        '#FFFFFF',
+    test('for 3 digits', () => {
+      expectNoActionIssue(action, [
+        '#000',
+        '#FFF',
+        '#F00',
+        '#0F0',
+        '#00F',
+        '#123',
+        '#abc',
+      ]);
+    });
+
+    test('for 4 digits', () => {
+      expectNoActionIssue(action, [
+        '#0000',
+        '#FFFF',
+        '#F00F',
+        '#0F0F',
+        '#00FF',
+        '#1234',
+        '#abcd',
+      ]);
+    });
+
+    test('for 6 digits', () => {
+      expectNoActionIssue(action, [
         '#000000',
-        '#FF5733',
-        '#FF5',
-        '#336699',
-        '#abcdef',
+        '#FFFFFF',
+        '#FF0000',
+        '#00FF00',
+        '#0000FF',
         '#123456',
-        '#123ABC',
-        '#000000ff',
-      ];
-      expectNoActionIssue(action, values);
+        '#abcdef',
+      ]);
+    });
+
+    test('for 8 digits', () => {
+      expectNoActionIssue(action, [
+        '#00000000',
+        '#FFFFFFFF',
+        '#FF0000FF',
+        '#00FF00FF',
+        '#0000FFFF',
+        '#12345678',
+        '#abcdefab',
+      ]);
     });
   });
 
@@ -79,22 +113,82 @@ describe('hexColor', () => {
       requirement: HEX_COLOR_REGEX,
     };
 
-    test('for invalid inputs', () => {
-      const values = [
-        '',
-        '#',
-        'test',
-        '123456',
-        '#GHIJKL',
+    test('for empty strings', () => {
+      expectActionIssue(action, baseIssue, ['', ' ']);
+    });
+
+    test('for missing # symbol', () => {
+      expectActionIssue(action, baseIssue, [
+        'FFF',
+        'FFFF',
+        'FFFFFF',
+        'FFFFFFFF',
+      ]);
+    });
+
+    test('for two # symbols', () => {
+      expectActionIssue(action, baseIssue, [
+        '##FFF',
+        '##FFFF',
+        '##FFFFFF',
+        '##FFFFFFFF',
+      ]);
+    });
+
+    test('for missing digits', () => {
+      expectActionIssue(action, baseIssue, ['#']);
+    });
+
+    test('for blank spaces', () => {
+      expectActionIssue(action, baseIssue, [' #FFF', '#FFF ', '#FFF FFF']);
+    });
+
+    test('for 1 digit', () => {
+      expectActionIssue(action, baseIssue, ['#0', '#F', '#1', '#a']);
+    });
+
+    test('for 2 digits', () => {
+      expectActionIssue(action, baseIssue, ['#00', '#FF', '#12', '#ab']);
+    });
+
+    test('for 5 digits', () => {
+      expectActionIssue(action, baseIssue, [
+        '#00000',
+        '#FFFFF',
         '#12345',
+        '#abcde',
+      ]);
+    });
+
+    test('for 7 digits', () => {
+      expectActionIssue(action, baseIssue, [
+        '#0000000',
+        '#FFFFFFF',
+        '#1234567',
+        '#abcdefa',
+      ]);
+    });
+
+    test('for 9 digits', () => {
+      expectActionIssue(action, baseIssue, [
+        '#000000000',
+        '#FFFFFFFFF',
         '#123456789',
-        '#00 00FF',
-        '##0000FF',
-        '#000FFZ',
-        '#12345G',
-        '#!23456',
-      ];
-      expectActionIssue(action, baseIssue, values);
+        '#abcdefabc',
+      ]);
+    });
+
+    test('for non hex chars', () => {
+      expectActionIssue(action, baseIssue, [
+        '#GGG',
+        '#zzz',
+        '#GGGG',
+        '#zzzz',
+        '#GGGGGG',
+        '#zzzzzz',
+        '#GGGGGGGG',
+        '#zzzzzzzz',
+      ]);
     });
   });
 });

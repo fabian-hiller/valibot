@@ -2,9 +2,10 @@ import { HEX_COLOR_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Hex color issue type.
@@ -44,6 +45,10 @@ export interface HexColorAction<
    * The action type.
    */
   readonly type: 'hex_color';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof hexColor;
   /**
    * The expected property.
    */
@@ -86,19 +91,16 @@ export function hexColor(
   return {
     kind: 'validation',
     type: 'hex_color',
+    reference: hexColor,
     async: false,
     expects: null,
     requirement: HEX_COLOR_REGEX,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        hexColor,
-        'hex color',
-        dataset.typed && !this.requirement.test(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, 'hex color', dataset, config);
+      }
+      return dataset as Dataset<string, HexColorIssue<string>>;
     },
   };
 }
