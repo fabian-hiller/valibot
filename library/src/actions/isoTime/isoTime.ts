@@ -65,6 +65,8 @@ export interface IsoTimeAction<
 /**
  * Creates an [ISO time](https://en.wikipedia.org/wiki/ISO_8601) validation action.
  *
+ * Format: hh:mm
+ *
  * @returns An ISO time action.
  */
 export function isoTime<TInput extends string>(): IsoTimeAction<
@@ -74,6 +76,8 @@ export function isoTime<TInput extends string>(): IsoTimeAction<
 
 /**
  * Creates an [ISO time](https://en.wikipedia.org/wiki/ISO_8601) validation action.
+ *
+ * Format: hh:mm
  *
  * @param message The error message.
  *
