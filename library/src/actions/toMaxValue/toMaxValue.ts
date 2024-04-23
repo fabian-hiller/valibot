@@ -13,6 +13,10 @@ export interface ToMaxValueAction<
    */
   readonly type: 'to_max_value';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof toMaxValue;
+  /**
    * The maximum value.
    */
   readonly requirement: TRequirement;
@@ -32,6 +36,7 @@ export function toMaxValue<
   return {
     kind: 'transformation',
     type: 'to_max_value',
+    reference: toMaxValue,
     async: false,
     requirement,
     _run(dataset) {

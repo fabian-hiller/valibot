@@ -46,6 +46,10 @@ export interface IncludesAction<
    */
   readonly type: 'includes';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof includes;
+  /**
    * The expected property.
    */
   readonly expects: string;
@@ -105,6 +109,7 @@ export function includes(
   return {
     kind: 'validation',
     type: 'includes',
+    reference: includes,
     async: false,
     expects,
     requirement,
@@ -112,7 +117,7 @@ export function includes(
     _run(dataset, config) {
       // @ts-expect-error
       if (dataset.typed && !dataset.value.includes(this.requirement)) {
-        _addIssue(this, includes, 'content', dataset, config, {
+        _addIssue(this, 'content', dataset, config, {
           received: `!${expects}`,
         });
       }

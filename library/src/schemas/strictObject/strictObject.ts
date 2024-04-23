@@ -1,14 +1,15 @@
 import type {
   BaseIssue,
   BaseSchema,
+  Dataset,
   ErrorMessage,
   InferObjectInput,
   InferObjectIssue,
   InferObjectOutput,
   ObjectEntries,
+  ObjectPathItem,
 } from '../../types/index.ts';
-import { _addObjectRestIssues, _objectDataset } from '../../utils/index.ts';
-import { never, type NeverIssue, type NeverSchema } from '../never/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Strict object issue type.
@@ -25,7 +26,7 @@ export interface StrictObjectIssue extends BaseIssue<unknown> {
   /**
    * The expected input.
    */
-  readonly expected: 'Object';
+  readonly expected: 'Object' | 'never';
 }
 
 /**
@@ -33,16 +34,20 @@ export interface StrictObjectIssue extends BaseIssue<unknown> {
  */
 export interface StrictObjectSchema<
   TEntries extends ObjectEntries,
-  TMessage extends ErrorMessage<StrictObjectIssue | NeverIssue> | undefined,
+  TMessage extends ErrorMessage<StrictObjectIssue> | undefined,
 > extends BaseSchema<
-    InferObjectInput<TEntries, NeverSchema<TMessage>>,
-    InferObjectOutput<TEntries, NeverSchema<TMessage>>,
-    StrictObjectIssue | InferObjectIssue<TEntries, NeverSchema<TMessage>>
+    InferObjectInput<TEntries>,
+    InferObjectOutput<TEntries>,
+    StrictObjectIssue | InferObjectIssue<TEntries>
   > {
   /**
    * The schema type.
    */
   readonly type: 'strict_object';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof strictObject;
   /**
    * The expected property.
    */
@@ -51,10 +56,6 @@ export interface StrictObjectSchema<
    * The object entries.
    */
   readonly entries: TEntries;
-  /**
-   * The rest schema.
-   */
-  readonly rest: NeverSchema<TMessage>;
   /**
    * The error message.
    */
@@ -82,34 +83,135 @@ export function strictObject<const TEntries extends ObjectEntries>(
  */
 export function strictObject<
   const TEntries extends ObjectEntries,
-  const TMessage extends
-    | ErrorMessage<StrictObjectIssue | NeverIssue>
-    | undefined,
+  const TMessage extends ErrorMessage<StrictObjectIssue> | undefined,
 >(entries: TEntries, message: TMessage): StrictObjectSchema<TEntries, TMessage>;
 
 export function strictObject(
   entries: ObjectEntries,
-  message?: ErrorMessage<StrictObjectIssue | NeverIssue>
+  message?: ErrorMessage<StrictObjectIssue>
 ): StrictObjectSchema<
   ObjectEntries,
-  ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+  ErrorMessage<StrictObjectIssue> | undefined
 > {
   return {
     kind: 'schema',
     type: 'strict_object',
+    reference: strictObject,
     expects: 'Object',
     async: false,
     entries,
-    rest: never(message),
     message,
     _run(dataset, config) {
-      return _objectDataset(
-        this,
-        strictObject,
-        dataset,
-        config,
-        _addObjectRestIssues
-      );
+      // Get input value from dataset
+      const input = dataset.value;
+
+      // If root type is valid, check nested types
+      if (input && typeof input === 'object' && input.constructor === Object) {
+        // Set typed to true and value to blank object
+        dataset.typed = true;
+        dataset.value = {};
+
+        // Parse schema of each entry
+        for (const key in this.entries) {
+          // TODO: We should document that missing keys do not cause issues
+          // when `undefined` passes the schema. The reason for this decision
+          // is that it reduces the bundle size, and we also expect that most
+          // users will expect this behavior.
+
+          // Get and parse value of key
+          const value = input[key as keyof typeof input];
+          const valueDataset = this.entries[key]._run(
+            { typed: false, value },
+            config
+          );
+
+          // If there are issues, capture them
+          if (valueDataset.issues) {
+            // Create object path item
+            const pathItem: ObjectPathItem = {
+              type: 'object',
+              origin: 'value',
+              input: input as Record<string, unknown>,
+              key,
+              value,
+            };
+
+            // Add modified entry dataset issues to issues
+            for (const issue of valueDataset.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                // @ts-expect-error
+                issue.path = [pathItem];
+              }
+              // @ts-expect-error
+              dataset.issues?.push(issue);
+            }
+            if (!dataset.issues) {
+              // @ts-expect-error
+              dataset.issues = valueDataset.issues;
+            }
+
+            // If necessary, abort early
+            if (config.abortEarly) {
+              dataset.typed = false;
+              break;
+            }
+          }
+
+          // If not typed, set typed to false
+          if (!valueDataset.typed) {
+            dataset.typed = false;
+          }
+
+          // Add entry to dataset if necessary
+          if (valueDataset.value !== undefined || key in input) {
+            // @ts-expect-error
+            dataset.value[key] = valueDataset.value;
+          }
+        }
+
+        // Check input for unknown keys if necessary
+        if (!dataset.issues || !config.abortEarly) {
+          for (const key in input) {
+            if (!(key in this.entries)) {
+              _addIssue(this, 'type', dataset, config, {
+                input: key,
+                expected: 'never',
+                path: [
+                  {
+                    type: 'object',
+                    origin: 'key',
+                    input: input as Record<string, unknown>,
+                    key,
+                    value: input[key as keyof typeof input],
+                  },
+                ],
+              });
+
+              // TODO: We need to document why we only add one issue for
+              // unknown keys.
+
+              // Note: We intentionally break the loop after the first unknown
+              // key. Otherwise, attackers could send large objects to exhaust
+              // device resources. If you want an issue for every unknown key,
+              // use the `objectWithRest` schema with `never` for the `rest'
+              // argument.
+              break;
+            }
+          }
+        }
+
+        // Otherwise, add object issue
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+
+      // Return output dataset
+      return dataset as Dataset<
+        InferObjectOutput<ObjectEntries>,
+        StrictObjectIssue | InferObjectIssue<ObjectEntries>
+      >;
     },
   };
 }

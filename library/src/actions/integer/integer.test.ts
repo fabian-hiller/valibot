@@ -7,6 +7,7 @@ describe('integer', () => {
     const baseAction: Omit<IntegerAction<number, never>, 'message'> = {
       kind: 'validation',
       type: 'integer',
+      reference: integer,
       expects: null,
       requirement: expect.any(Function),
       async: false,

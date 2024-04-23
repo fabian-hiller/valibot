@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * String issue type.
@@ -29,6 +34,10 @@ export interface StringSchema<
    * The schema type.
    */
   readonly type: 'string';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof string;
   /**
    * The expected property.
    */
@@ -63,17 +72,17 @@ export function string(
   return {
     kind: 'schema',
     type: 'string',
+    reference: string,
     expects: 'string',
     async: false,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        string,
-        typeof dataset.value === 'string',
-        dataset,
-        config
-      );
+      if (typeof dataset.value === 'string') {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<string, StringIssue>;
     },
   };
 }

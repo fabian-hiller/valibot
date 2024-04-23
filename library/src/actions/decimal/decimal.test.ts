@@ -8,6 +8,7 @@ describe('decimal', () => {
     const baseAction: Omit<DecimalAction<string, never>, 'message'> = {
       kind: 'validation',
       type: 'decimal',
+      reference: decimal,
       expects: null,
       requirement: DECIMAL_REGEX,
       async: false,
@@ -77,6 +78,10 @@ describe('decimal', () => {
       expectActionIssue(action, baseIssue, ['', ' ']);
     });
 
+    test('for blank spaces', () => {
+      expectActionIssue(action, baseIssue, [' 1', '1 ', ' 1 ', '1 2']);
+    });
+
     test('for number seperators', () => {
       expectActionIssue(action, baseIssue, ['1,000', '1_000', '1 000']);
     });
@@ -98,7 +103,18 @@ describe('decimal', () => {
     });
 
     test('for special chars', () => {
-      expectActionIssue(action, baseIssue, ['-', '+', '#', '$', '%']);
+      expectActionIssue(action, baseIssue, [
+        '-',
+        '-1',
+        '+',
+        '+1',
+        '#',
+        '#1',
+        '$',
+        '$1',
+        '%',
+        '1%',
+      ]);
     });
   });
 });

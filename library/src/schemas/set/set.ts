@@ -29,6 +29,10 @@ export interface SetSchema<
    */
   readonly type: 'set';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof set;
+  /**
    * The expected property.
    */
   readonly expects: 'Set';
@@ -76,6 +80,7 @@ export function set(
   return {
     kind: 'schema',
     type: 'set',
+    reference: set,
     expects: 'Set',
     async: false,
     value,
@@ -86,14 +91,11 @@ export function set(
 
       // If root type is valid, check nested types
       if (input instanceof Set) {
-        // Create key variable
-        let key = 0;
-
         // Set typed to true and value to empty set
         dataset.typed = true;
         dataset.value = new Set();
 
-        // Parse schema of each set item
+        // Parse schema of each set value
         for (const inputValue of input) {
           const valueDataset = this.value._run(
             { typed: false, value: inputValue },
@@ -107,7 +109,6 @@ export function set(
               type: 'set',
               origin: 'value',
               input,
-              key,
               value: inputValue,
             };
 
@@ -142,20 +143,17 @@ export function set(
           // Add value to dataset
           // @ts-expect-error
           dataset.value.add(valueDataset.value);
-
-          // Increment key
-          key++;
         }
 
         // Otherwise, add set issue
       } else {
-        _addIssue(this, set, 'type', dataset, config);
+        _addIssue(this, 'type', dataset, config);
       }
 
       // Return output dataset
       return dataset as Dataset<
         InferSetOutput<BaseSchema<unknown, unknown, BaseIssue<unknown>>>,
-        SetIssue | InferIssue<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
+        SetIssue | BaseIssue<unknown>
       >;
     },
   };

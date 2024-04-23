@@ -1,14 +1,15 @@
 import type {
   BaseIssue,
   BaseSchema,
+  Dataset,
   ErrorMessage,
   InferObjectInput,
   InferObjectIssue,
   InferObjectOutput,
   ObjectEntries,
+  ObjectPathItem,
 } from '../../types/index.ts';
-import { _addObjectRestIssues, _objectDataset } from '../../utils/index.ts';
-import { unknown, type UnknownSchema } from '../unknown/index.ts';
+import { _addIssue, _isAllowedObjectKey } from '../../utils/index.ts';
 
 /**
  * Strict object issue type.
@@ -35,14 +36,18 @@ export interface LooseObjectSchema<
   TEntries extends ObjectEntries,
   TMessage extends ErrorMessage<LooseObjectIssue> | undefined,
 > extends BaseSchema<
-    InferObjectInput<TEntries, UnknownSchema>,
-    InferObjectOutput<TEntries, UnknownSchema>,
-    LooseObjectIssue | InferObjectIssue<TEntries, UnknownSchema>
+    InferObjectInput<TEntries> & { [key: string]: unknown },
+    InferObjectOutput<TEntries> & { [key: string]: unknown },
+    LooseObjectIssue | InferObjectIssue<TEntries>
   > {
   /**
    * The schema type.
    */
   readonly type: 'loose_object';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof looseObject;
   /**
    * The expected property.
    */
@@ -51,10 +56,6 @@ export interface LooseObjectSchema<
    * The object entries.
    */
   readonly entries: TEntries;
-  /**
-   * The rest schema.
-   */
-  readonly rest: UnknownSchema;
   /**
    * The error message.
    */
@@ -95,19 +96,101 @@ export function looseObject(
   return {
     kind: 'schema',
     type: 'loose_object',
+    reference: looseObject,
     expects: 'Object',
     async: false,
     entries,
-    rest: unknown(),
     message,
     _run(dataset, config) {
-      return _objectDataset(
-        this,
-        looseObject,
-        dataset,
-        config,
-        _addObjectRestIssues
-      );
+      // Get input value from dataset
+      const input = dataset.value;
+
+      // If root type is valid, check nested types
+      if (input && typeof input === 'object' && input.constructor === Object) {
+        // Set typed to true and value to blank object
+        dataset.typed = true;
+        dataset.value = {};
+
+        // Copy input object to dataset value
+        for (const key in input) {
+          // TODO: We should document that we exclude specific keys for
+          // security reasons.
+          if (_isAllowedObjectKey(key)) {
+            // @ts-expect-error
+            dataset.value[key] = input[key];
+          }
+        }
+
+        // Parse schema of each entry
+        for (const key in this.entries) {
+          // TODO: We should document that missing keys do not cause issues
+          // when `undefined` passes the schema. The reason for this decision
+          // is that it reduces the bundle size, and we also expect that most
+          // users will expect this behavior.
+
+          // Get and parse value of key
+          const value = input[key as keyof typeof input];
+          const valueDataset = this.entries[key]._run(
+            { typed: false, value },
+            config
+          );
+
+          // If there are issues, capture them
+          if (valueDataset.issues) {
+            // Create object path item
+            const pathItem: ObjectPathItem = {
+              type: 'object',
+              origin: 'value',
+              input: input as Record<string, unknown>,
+              key,
+              value,
+            };
+
+            // Add modified entry dataset issues to issues
+            for (const issue of valueDataset.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                // @ts-expect-error
+                issue.path = [pathItem];
+              }
+              // @ts-expect-error
+              dataset.issues?.push(issue);
+            }
+            if (!dataset.issues) {
+              // @ts-expect-error
+              dataset.issues = valueDataset.issues;
+            }
+
+            // If necessary, abort early
+            if (config.abortEarly) {
+              dataset.typed = false;
+              break;
+            }
+          }
+
+          // If not typed, set typed to false
+          if (!valueDataset.typed) {
+            dataset.typed = false;
+          }
+
+          // Add entry to dataset if necessary
+          if (valueDataset.value !== undefined || key in input) {
+            // @ts-expect-error
+            dataset.value[key] = valueDataset.value;
+          }
+        }
+
+        // Otherwise, add object issue
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+
+      // Return output dataset
+      return dataset as Dataset<
+        InferObjectOutput<ObjectEntries> & { [key: string]: unknown },
+        LooseObjectIssue | InferObjectIssue<ObjectEntries>
+      >;
     },
   };
 }

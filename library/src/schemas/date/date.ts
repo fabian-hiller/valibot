@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Date issue type.
@@ -29,6 +34,10 @@ export interface DateSchema<
    * The schema type.
    */
   readonly type: 'date';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof date;
   /**
    * The expected property.
    */
@@ -63,17 +72,17 @@ export function date(
   return {
     kind: 'schema',
     type: 'date',
+    reference: date,
     expects: 'Date',
     async: false,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        date,
-        dataset.value instanceof Date && !isNaN(dataset.value.getTime()),
-        dataset,
-        config
-      );
+      if (dataset.value instanceof Date && !isNaN(dataset.value.getTime())) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<Date, DateIssue>;
     },
   };
 }

@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Undefined issue type.
@@ -29,6 +34,10 @@ export interface UndefinedSchema<
    * The schema type.
    */
   readonly type: 'undefined';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof undefined_;
   /**
    * The expected property.
    */
@@ -63,17 +72,17 @@ export function undefined_(
   return {
     kind: 'schema',
     type: 'undefined',
+    reference: undefined_,
     expects: 'undefined',
     async: false,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        undefined_,
-        dataset.value === undefined,
-        dataset,
-        config
-      );
+      if (dataset.value === undefined) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<undefined, UndefinedIssue>;
     },
   };
 }

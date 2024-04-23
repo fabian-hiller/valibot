@@ -26,6 +26,10 @@ export interface NullishSchema<
    */
   readonly type: 'nullish';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof nullish;
+  /**
    * The expected property.
    */
   readonly expects: `${TWrapped['expects']} | null | undefined`;
@@ -73,6 +77,7 @@ export function nullish(
   return {
     kind: 'schema',
     type: 'nullish',
+    reference: nullish,
     expects: `${wrapped.expects} | null | undefined`,
     async: false,
     wrapped,

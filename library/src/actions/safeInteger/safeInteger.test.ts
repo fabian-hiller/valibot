@@ -11,6 +11,7 @@ describe('safeInteger', () => {
     const baseAction: Omit<SafeIntegerAction<number, never>, 'message'> = {
       kind: 'validation',
       type: 'safe_integer',
+      reference: safeInteger,
       expects: null,
       requirement: expect.any(Function),
       async: false,

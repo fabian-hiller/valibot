@@ -27,6 +27,7 @@ describe('objectWithRest', () => {
     > = {
       kind: 'schema',
       type: 'object_with_rest',
+      reference: objectWithRest,
       expects: 'Object',
       entries,
       rest,

@@ -8,6 +8,7 @@ describe('toMinValue', () => {
     expect(action).toStrictEqual({
       kind: 'transformation',
       type: 'to_min_value',
+      reference: toMinValue,
       requirement: 10,
       async: false,
       _run: expect.any(Function),

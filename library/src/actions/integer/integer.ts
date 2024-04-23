@@ -1,9 +1,10 @@
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Integer issue type.
@@ -32,16 +33,20 @@ export interface IntegerIssue<TInput extends number> extends BaseIssue<TInput> {
 }
 
 /**
- * Integer validation type.
+ * Integer action type.
  */
 export interface IntegerAction<
   TInput extends number,
   TMessage extends ErrorMessage<IntegerIssue<TInput>> | undefined,
 > extends BaseValidation<TInput, TInput, IntegerIssue<TInput>> {
   /**
-   * The validation type.
+   * The action type.
    */
   readonly type: 'integer';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof integer;
   /**
    * The expected property.
    */
@@ -84,19 +89,16 @@ export function integer(
   return {
     kind: 'validation',
     type: 'integer',
+    reference: integer,
     async: false,
     expects: null,
     requirement: Number.isInteger,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        integer,
-        'integer',
-        dataset.typed && !this.requirement(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement(dataset.value)) {
+        _addIssue(this, 'integer', dataset, config);
+      }
+      return dataset as Dataset<number, IntegerIssue<number>>;
     },
   };
 }

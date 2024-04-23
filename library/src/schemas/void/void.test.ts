@@ -7,6 +7,7 @@ describe('void', () => {
     const baseSchema: Omit<VoidSchema<never>, 'message'> = {
       kind: 'schema',
       type: 'void',
+      reference: void_,
       expects: 'void',
       async: false,
       _run: expect.any(Function),

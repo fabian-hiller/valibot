@@ -7,6 +7,7 @@ describe('null', () => {
     const baseSchema: Omit<NullSchema<never>, 'message'> = {
       kind: 'schema',
       type: 'null',
+      reference: null_,
       expects: 'null',
       async: false,
       _run: expect.any(Function),
