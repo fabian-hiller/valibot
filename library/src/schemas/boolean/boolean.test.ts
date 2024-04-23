@@ -7,6 +7,7 @@ describe('boolean', () => {
     const baseSchema: Omit<BooleanSchema<never>, 'message'> = {
       kind: 'schema',
       type: 'boolean',
+      reference: boolean,
       expects: 'boolean',
       async: false,
       _run: expect.any(Function),

@@ -3,7 +3,7 @@ import type { BaseTransformation, TypedDataset } from '../../types/index.ts';
 /**
  * Brand symbol.
  */
-export const BrandSymbol = Symbol('brand');
+export const BrandSymbol = Symbol();
 
 /**
  * Brand name type.
@@ -27,6 +27,10 @@ export interface BrandAction<TInput, TName extends BrandName>
    */
   readonly type: 'brand';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof brand;
+  /**
    * The brand name.
    */
   readonly name: TName;
@@ -46,6 +50,7 @@ export function brand<TInput, TName extends BrandName>(
   return {
     kind: 'transformation',
     type: 'brand',
+    reference: brand,
     async: false,
     name,
     _run(dataset) {

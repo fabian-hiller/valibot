@@ -7,6 +7,7 @@ describe('url', () => {
     const baseAction: Omit<UrlAction<string, never>, 'message'> = {
       kind: 'validation',
       type: 'url',
+      reference: url,
       expects: null,
       requirement: expect.any(Function),
       async: false,

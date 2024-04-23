@@ -1,9 +1,10 @@
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Safe integer issue type.
@@ -33,16 +34,20 @@ export interface SafeIntegerIssue<TInput extends number>
 }
 
 /**
- * Safe integer validation type.
+ * Safe integer action type.
  */
 export interface SafeIntegerAction<
   TInput extends number,
   TMessage extends ErrorMessage<SafeIntegerIssue<TInput>> | undefined,
 > extends BaseValidation<TInput, TInput, SafeIntegerIssue<TInput>> {
   /**
-   * The validation type.
+   * The action type.
    */
   readonly type: 'safe_integer';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof safeInteger;
   /**
    * The expected property.
    */
@@ -88,19 +93,16 @@ export function safeInteger(
   return {
     kind: 'validation',
     type: 'safe_integer',
+    reference: safeInteger,
     async: false,
     expects: null,
     requirement: Number.isSafeInteger,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        safeInteger,
-        'safeInteger',
-        dataset.typed && !this.requirement(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement(dataset.value)) {
+        _addIssue(this, 'safe integer', dataset, config);
+      }
+      return dataset as Dataset<number, SafeIntegerIssue<number>>;
     },
   };
 }

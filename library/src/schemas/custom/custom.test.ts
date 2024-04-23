@@ -11,6 +11,7 @@ describe('custom', () => {
     const baseSchema: Omit<CustomSchema<PixelString, never>, 'message'> = {
       kind: 'schema',
       type: 'custom',
+      reference: custom,
       expects: 'unknown',
       check: isPixelString,
       async: false,

@@ -2,9 +2,10 @@ import { CUID2_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Cuid2 issue type.
@@ -44,6 +45,10 @@ export interface Cuid2Action<
    */
   readonly type: 'cuid2';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof cuid2;
+  /**
    * The expected property.
    */
   readonly expects: null;
@@ -82,19 +87,16 @@ export function cuid2(
   return {
     kind: 'validation',
     type: 'cuid2',
+    reference: cuid2,
     async: false,
     expects: null,
     requirement: CUID2_REGEX,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        cuid2,
-        'cuid2',
-        dataset.typed && !this.requirement.test(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, 'Cuid2', dataset, config);
+      }
+      return dataset as Dataset<string, Cuid2Issue<string>>;
     },
   };
 }

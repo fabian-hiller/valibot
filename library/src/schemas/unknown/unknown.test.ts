@@ -7,6 +7,7 @@ describe('unknown', () => {
     expect(unknown()).toStrictEqual({
       kind: 'schema',
       type: 'unknown',
+      reference: unknown,
       expects: 'unknown',
       async: false,
       _run: expect.any(Function),

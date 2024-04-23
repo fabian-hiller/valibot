@@ -26,6 +26,10 @@ export interface ArraySchema<
    */
   readonly type: 'array';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof array;
+  /**
    * The expected property.
    */
   readonly expects: 'Array';
@@ -73,6 +77,7 @@ export function array(
   return {
     kind: 'schema',
     type: 'array',
+    reference: array,
     expects: 'Array',
     async: false,
     item,
@@ -138,15 +143,11 @@ export function array(
 
         // Otherwise, add array issue
       } else {
-        _addIssue(this, array, 'type', dataset, config);
+        _addIssue(this, 'type', dataset, config);
       }
 
       // Return output dataset
-      return dataset as Dataset<
-        InferOutput<BaseSchema<unknown, unknown, BaseIssue<unknown>>>[],
-        | ArrayIssue
-        | InferIssue<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
-      >;
+      return dataset as Dataset<unknown[], ArrayIssue | BaseIssue<unknown>>;
     },
   };
 }

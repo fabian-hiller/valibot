@@ -49,6 +49,10 @@ export interface MinBytesAction<
    */
   readonly type: 'min_bytes';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof minBytes;
+  /**
    * The expected property.
    */
   readonly expects: `>=${TRequirement}`;
@@ -104,6 +108,7 @@ export function minBytes(
   return {
     kind: 'validation',
     type: 'min_bytes',
+    reference: minBytes,
     async: false,
     expects: `>=${requirement}`,
     requirement,
@@ -112,7 +117,7 @@ export function minBytes(
       if (dataset.typed) {
         const length = new TextEncoder().encode(dataset.value).length;
         if (length < this.requirement) {
-          _addIssue(this, minBytes, 'bytes', dataset, config, {
+          _addIssue(this, 'bytes', dataset, config, {
             received: `${length}`,
           });
         }

@@ -14,6 +14,7 @@ describe('picklist', () => {
     const baseSchema: Omit<PicklistSchema<Options, never>, 'message'> = {
       kind: 'schema',
       type: 'picklist',
+      reference: picklist,
       expects: '"foo" | "bar" | "baz"',
       options,
       async: false,

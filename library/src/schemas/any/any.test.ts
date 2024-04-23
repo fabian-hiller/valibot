@@ -7,6 +7,7 @@ describe('any', () => {
     expect(any()).toStrictEqual({
       kind: 'schema',
       type: 'any',
+      reference: any,
       expects: 'any',
       async: false,
       _run: expect.any(Function),

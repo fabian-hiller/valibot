@@ -11,6 +11,7 @@ describe('creditCard', () => {
     const baseAction: Omit<CreditCardAction<string, never>, 'message'> = {
       kind: 'validation',
       type: 'credit_card',
+      reference: creditCard,
       expects: null,
       requirement: expect.any(Function),
       async: false,

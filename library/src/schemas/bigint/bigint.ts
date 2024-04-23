@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Bigint issue type.
@@ -29,6 +34,10 @@ export interface BigintSchema<
    * The schema type.
    */
   readonly type: 'bigint';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof bigint;
   /**
    * The expected property.
    */
@@ -63,17 +72,17 @@ export function bigint(
   return {
     kind: 'schema',
     type: 'bigint',
+    reference: bigint,
     expects: 'bigint',
     async: false,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        bigint,
-        typeof dataset.value === 'bigint',
-        dataset,
-        config
-      );
+      if (typeof dataset.value === 'bigint') {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<bigint, BigintIssue>;
     },
   };
 }

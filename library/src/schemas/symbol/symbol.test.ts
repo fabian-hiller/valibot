@@ -7,6 +7,7 @@ describe('symbol', () => {
     const baseSchema: Omit<SymbolSchema<never>, 'message'> = {
       kind: 'schema',
       type: 'symbol',
+      reference: symbol,
       expects: 'symbol',
       async: false,
       _run: expect.any(Function),
