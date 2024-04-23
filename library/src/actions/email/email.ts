@@ -2,9 +2,10 @@ import { EMAIL_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Email issue type.
@@ -44,6 +45,10 @@ export interface EmailAction<
    */
   readonly type: 'email';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof email;
+  /**
    * The expected property.
    */
   readonly expects: null;
@@ -80,21 +85,18 @@ export function email(
   message?: ErrorMessage<EmailIssue<string>>
 ): EmailAction<string, ErrorMessage<EmailIssue<string>> | undefined> {
   return {
-    type: 'email',
     kind: 'validation',
-    async: false,
-    message,
+    type: 'email',
+    reference: email,
     expects: null,
+    async: false,
     requirement: EMAIL_REGEX,
+    message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        email,
-        'email',
-        dataset.typed && !this.requirement.test(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, 'email', dataset, config);
+      }
+      return dataset as Dataset<string, EmailIssue<string>>;
     },
   };
 }
