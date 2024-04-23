@@ -10,8 +10,10 @@ import type {
 import { expectSchemaIssue } from '../../vitest/index.ts';
 import type { ArrayIssue } from '../array/index.ts';
 import { array } from '../array/index.ts';
+import { bigint } from '../bigint/bigint.ts';
 import { boolean } from '../boolean/index.ts';
 import { date } from '../date/index.ts';
+import { instance } from '../instance/index.ts';
 import { nullable } from '../nullable/index.ts';
 import { nullish } from '../nullish/index.ts';
 import type { NumberIssue } from '../number/index.ts';
@@ -82,6 +84,26 @@ describe('formData', () => {
       expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
         typed: true,
         value: { key1: 'foo', key2: 123 },
+      } satisfies TypedDataset<
+        InferOutput<typeof schema>,
+        InferIssue<typeof schema>
+      >);
+    });
+
+    test('for bigints', () => {
+      const schema = formData({
+        key1: bigint(),
+        key2: bigint(),
+        key3: nullish(bigint()),
+        key4: optional(bigint()),
+      });
+      const input = new FormData();
+      input.append('key1', '2147483647');
+      input.append('key2', '-9223372036854775807');
+      input.append('key3', '');
+      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+        typed: true,
+        value: { key1: 2147483647n, key2: -9223372036854775807n, key3: null },
       } satisfies TypedDataset<
         InferOutput<typeof schema>,
         InferIssue<typeof schema>
@@ -169,6 +191,25 @@ describe('formData', () => {
         InferIssue<typeof schema>
       >);
     });
+
+    test('for files', () => {
+      const value = new File(['foo'], 'bar.txt', { type: 'text/plain' });
+      const schema = formData({
+        key1: instance(File),
+        key2: nullish(instance(File)),
+        key3: optional(instance(File)),
+      });
+      const input = new FormData();
+      input.append('key1', value);
+      input.append('key2', '');
+      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+        typed: true,
+        value: { key1: value, key2: null },
+      } satisfies TypedDataset<
+        InferOutput<typeof schema>,
+        InferIssue<typeof schema>
+      >);
+    });
   });
 
   describe('should return dataset with issues', () => {
@@ -221,6 +262,14 @@ describe('formData', () => {
     // Primitive types
 
     test('for bigints', () => {
+      const schema = formData({ key: bigint() }, 'message');
+      const input = new FormData();
+      input.append('key', 'invalid bigint');
+      expectFormDataSchemaIssue(schema, input, {
+        key: 'key',
+        type: 'bigint',
+        value: 'invalid bigint',
+      });
       expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
     });
 
@@ -351,6 +400,30 @@ describe('formData', () => {
         InferIssue<typeof schema>
       >);
     });
+
+    // test('for optional object', () => {
+    //   const schema = formData({ key: optional(object({ key: string() })) });
+    //   const input = new FormData();
+    //   expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+    //     typed: true,
+    //     value: {},
+    //   } satisfies TypedDataset<
+    //     InferOutput<typeof schema>,
+    //     InferIssue<typeof schema>
+    //   >);
+    // });
+
+    // test('for optional array', () => {
+    //   const schema = formData({ key: optional(array(string())) });
+    //   const input = new FormData();
+    //   expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+    //     typed: true,
+    //     value: {},
+    //   } satisfies TypedDataset<
+    //     InferOutput<typeof schema>,
+    //     InferIssue<typeof schema>
+    //   >);
+    // });
 
     test('for optional entry', () => {
       const schema = formData({ key: optional(string()) });

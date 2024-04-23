@@ -117,8 +117,19 @@ function _formDataEntry(
   // Value is null when FormData entry is an empty string
   if (value === '') return null;
 
+  // Return value as is if schema is not a string
+  if (typeof value !== 'string') return value;
+
   // Parse value based on schema type
   switch (schema.type) {
+    case 'bigint': {
+      // Parse bigint value
+      try {
+        return BigInt(value);
+      } catch {
+        return value;
+      }
+    }
     case 'boolean': {
       // Parse boolean value
       if (value === 'true') return true;
@@ -129,7 +140,7 @@ function _formDataEntry(
       // Parse date value
       const number = Number(value);
       if (!isNaN(number)) return new Date(number);
-      const date = new Date(String(value));
+      const date = new Date(value);
       return isNaN(date.getTime()) ? value : date;
     }
     case 'number': {
@@ -157,7 +168,7 @@ function _formDataEntry(
  *
  * @internal
  */
-function _formDataset<
+function _formDataDataset<
   const TContext extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(
   context: TContext & {
@@ -168,24 +179,21 @@ function _formDataset<
   data: FormData,
   entry: string
 ): Dataset<InferOutput<TContext>, InferIssue<TContext>> {
-  // Unwrap array and object schemas
+  // Unwrap original schema
   let schema = context;
   while (schema.wrapped) {
     schema = schema.wrapped as TContext;
-    if (schema.type === 'array' || schema.type === 'object') {
-      context = schema;
-    }
   }
 
   // Parse schema based on type
-  switch (context.type) {
+  switch (schema.type) {
     case 'array': {
       // Get array and item schemas
-      const arraySchema = context as unknown as ArraySchema<
+      const arraySchema = schema as unknown as ArraySchema<
         BaseSchema<unknown, unknown, BaseIssue<unknown>>,
         ErrorMessage<ArrayIssue> | undefined
       >;
-      const schema = arraySchema.item as TContext;
+      const itemSchema = arraySchema.item as TContext;
 
       // Get input value from dataset
       const input = dataset.value;
@@ -199,8 +207,8 @@ function _formDataset<
       if (items.length > 0) {
         // Parse schema of each array item
         for (let key = 0; key < items.length; key++) {
-          const value = _formDataEntry(schema, items[key]);
-          const entryDataset = schema._run({ typed: false, value }, config);
+          const value = _formDataEntry(itemSchema, items[key]);
+          const entryDataset = itemSchema._run({ typed: false, value }, config);
 
           // Add item to dataset
           // @ts-expect-error
@@ -233,22 +241,22 @@ function _formDataset<
       } else {
         for (let key = 0; ; key++) {
           const entryKey = `${entry}.${key}`;
-          const entryDataset = _formDataset(
-            schema,
+          const entryDataset = _formDataDataset(
+            itemSchema,
             { typed: false, value: input },
             config,
             data,
             entryKey
           );
 
-          // Add item to dataset
+          // Abort early if value is undefined
           if (entryDataset.value === undefined) {
             break;
-          } else {
-            // Add item to dataset
-            // @ts-expect-error
-            dataset.value.push(entryDataset.value);
           }
+
+          // Add item to dataset
+          // @ts-expect-error
+          dataset.value.push(entryDataset.value);
 
           // If there are issues, capture them
           if (entryDataset.issues) {
@@ -291,7 +299,7 @@ function _formDataset<
     }
     case 'object': {
       // Get object schema
-      const objectSchema = context as unknown as ObjectSchema<
+      const objectSchema = schema as unknown as ObjectSchema<
         ObjectEntries,
         ErrorMessage<ObjectIssue> | undefined
       >;
@@ -314,7 +322,7 @@ function _formDataset<
       let total = 0;
       for (const [key, schema] of entries) {
         const entryKey = entry ? `${entry}.${key}` : key;
-        const entryDataset = _formDataset(
+        const entryDataset = _formDataDataset(
           schema as TContext,
           { typed: false, value: input },
           config,
@@ -369,7 +377,7 @@ function _formDataset<
     }
     default: {
       // Get entry value from FormData
-      const value = _formDataEntry(context, data.get(entry));
+      const value = _formDataEntry(schema, data.get(entry));
 
       // Parse schema
       return context._run({ typed: false, value }, config);
@@ -426,7 +434,7 @@ export function formData(
           this.entries.kind === 'schema'
             ? (this.entries as BaseSchema<unknown, unknown, BaseIssue<unknown>>)
             : object(this.entries as ObjectEntries);
-        _formDataset(context, dataset, config, dataset.value, '');
+        _formDataDataset(context, dataset, config, dataset.value, '');
 
         // Otherwise, add formData issue
       } else {
