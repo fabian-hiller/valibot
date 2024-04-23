@@ -4,6 +4,7 @@ export * from './brand/index.ts';
 export * from './creditCard/index.ts';
 export * from './cuid2/index.ts';
 export * from './decimal/index.ts';
+export * from './email/index.ts';
 export * from './excludes/index.ts';
 export * from './finite/index.ts';
 export * from './includes/includes.ts';
