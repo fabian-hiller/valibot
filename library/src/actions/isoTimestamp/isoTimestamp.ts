@@ -2,12 +2,13 @@ import { ISO_TIMESTAMP_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
- * ISO Timestamp issue type.
+ * ISO timestamp issue type.
  */
 export interface IsoTimestampIssue<TInput extends string>
   extends BaseIssue<TInput> {
@@ -28,13 +29,13 @@ export interface IsoTimestampIssue<TInput extends string>
    */
   readonly received: `"${string}"`;
   /**
-   * The ISO Timestamp regex.
+   * The ISO timestamp regex.
    */
   readonly requirement: RegExp;
 }
 
 /**
- * ISO Timestamp action type.
+ * ISO timestamp action type.
  */
 export interface IsoTimestampAction<
   TInput extends string,
@@ -45,11 +46,15 @@ export interface IsoTimestampAction<
    */
   readonly type: 'iso_timestamp';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof isoTimestamp;
+  /**
    * The expected property.
    */
   readonly expects: null;
   /**
-   * The ISO Timestamp regex.
+   * The ISO timestamp regex.
    */
   readonly requirement: RegExp;
   /**
@@ -59,15 +64,13 @@ export interface IsoTimestampAction<
 }
 
 /**
- * Creates a [ISO Timestamp](https://en.wikipedia.org/wiki/ISO_8601) validation
+ * Creates an [ISO timestamp](https://en.wikipedia.org/wiki/ISO_8601) validation
  * action.
  *
  * Formats:
- *
  * - yyyy-mm-ddThh:mm:ss.sssZ
  * - yyyy-mm-ddThh:mm:ss.sss±hh:mm
  * - yyyy-mm-ddThh:mm:ss.sss±hhmm
- * - yyyy-mm-ddThh:mm:ss.sss±hh
  *
  * Hint: To support timestamps with lower or higher accuracy, the millisecond
  * specification can be removed or contain up to 9 digits.
@@ -76,7 +79,7 @@ export interface IsoTimestampAction<
  * year and month. For example, `"2023-06-31T00:00:00.000Z"` is valid although
  * June has only 30 days.
  *
- * @returns An ISO Timestamp action.
+ * @returns An ISO timestamp action.
  */
 export function isoTimestamp<TInput extends string>(): IsoTimestampAction<
   TInput,
@@ -84,11 +87,10 @@ export function isoTimestamp<TInput extends string>(): IsoTimestampAction<
 >;
 
 /**
- * Creates a [ISO Timestamp](https://en.wikipedia.org/wiki/ISO_8601) validation
+ * Creates an [ISO timestamp](https://en.wikipedia.org/wiki/ISO_8601) validation
  * action.
  *
  * Formats:
- *
  * - yyyy-mm-ddThh:mm:ss.sssZ
  * - yyyy-mm-ddThh:mm:ss.sss±hh:mm
  * - yyyy-mm-ddThh:mm:ss.sss±hhmm
@@ -103,7 +105,7 @@ export function isoTimestamp<TInput extends string>(): IsoTimestampAction<
  *
  * @param message The error message.
  *
- * @returns An ISO Timestamp action.
+ * @returns An ISO timestamp action.
  */
 export function isoTimestamp<
   TInput extends string,
@@ -119,19 +121,16 @@ export function isoTimestamp(
   return {
     kind: 'validation',
     type: 'iso_timestamp',
+    reference: isoTimestamp,
     async: false,
     expects: null,
     requirement: ISO_TIMESTAMP_REGEX,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        isoTimestamp,
-        'ISO Timestamp',
-        dataset.typed && !this.requirement.test(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, 'timestamp', dataset, config);
+      }
+      return dataset as Dataset<string, IsoTimestampIssue<string>>;
     },
   };
 }
