@@ -9,6 +9,10 @@ export interface TrimStartAction
    * The action type.
    */
   readonly type: 'trim_start';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof trimStart;
 }
 
 /**
@@ -20,6 +24,7 @@ export function trimStart(): TrimStartAction {
   return {
     kind: 'transformation',
     type: 'trim_start',
+    reference: trimStart,
     async: false,
     _run(dataset) {
       dataset.value = dataset.value.trimStart();

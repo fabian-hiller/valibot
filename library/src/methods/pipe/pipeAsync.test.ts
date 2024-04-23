@@ -19,6 +19,7 @@ describe('pipeAsync', () => {
     expect(schema).toStrictEqual({
       kind: 'schema',
       type: 'string',
+      reference: string,
       expects: 'string',
       message: undefined,
       pipe: [

@@ -7,6 +7,7 @@ describe('bigint', () => {
     const baseSchema: Omit<BigintSchema<never>, 'message'> = {
       kind: 'schema',
       type: 'bigint',
+      reference: bigint,
       expects: 'bigint',
       async: false,
       _run: expect.any(Function),

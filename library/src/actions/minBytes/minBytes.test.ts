@@ -11,6 +11,7 @@ describe('minBytes', () => {
     const baseAction: Omit<MinBytesAction<string, 5, never>, 'message'> = {
       kind: 'validation',
       type: 'min_bytes',
+      reference: minBytes,
       expects: '>=5',
       requirement: 5,
       async: false,

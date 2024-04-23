@@ -9,6 +9,10 @@ export interface UnknownSchema extends BaseSchema<unknown, unknown, never> {
    */
   readonly type: 'unknown';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof unknown;
+  /**
    * The expected property.
    */
   readonly expects: 'unknown';
@@ -23,6 +27,7 @@ export function unknown(): UnknownSchema {
   return {
     kind: 'schema',
     type: 'unknown',
+    reference: unknown,
     expects: 'unknown',
     async: false,
     _run(dataset) {

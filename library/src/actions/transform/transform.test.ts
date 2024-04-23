@@ -7,6 +7,7 @@ describe('transform', () => {
     expect(action).toStrictEqual({
       kind: 'transformation',
       type: 'transform',
+      reference: transform,
       async: false,
       action: action.action,
       _run: expect.any(Function),

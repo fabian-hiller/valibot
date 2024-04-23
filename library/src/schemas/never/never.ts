@@ -35,6 +35,10 @@ export interface NeverSchema<
    */
   readonly type: 'never';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof never;
+  /**
    * The expected property.
    */
   readonly expects: 'never';
@@ -68,11 +72,12 @@ export function never(
   return {
     kind: 'schema',
     type: 'never',
+    reference: never,
     expects: 'never',
     async: false,
     message,
     _run(dataset, config) {
-      _addIssue(this, never, 'type', dataset, config);
+      _addIssue(this, 'type', dataset, config);
       return dataset as Dataset<never, NeverIssue>;
     },
   };

@@ -6,6 +6,7 @@ describe('brand', () => {
     expect(brand('foo')).toStrictEqual({
       kind: 'transformation',
       type: 'brand',
+      reference: brand,
       name: 'foo',
       async: false,
       _run: expect.any(Function),

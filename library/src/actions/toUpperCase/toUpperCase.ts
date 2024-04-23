@@ -9,6 +9,10 @@ export interface ToUpperCaseAction
    * The action type.
    */
   readonly type: 'to_upper_case';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof toUpperCase;
 }
 
 /**
@@ -20,6 +24,7 @@ export function toUpperCase(): ToUpperCaseAction {
   return {
     kind: 'transformation',
     type: 'to_upper_case',
+    reference: toUpperCase,
     async: false,
     _run(dataset) {
       dataset.value = dataset.value.toUpperCase();

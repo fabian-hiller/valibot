@@ -50,6 +50,10 @@ export interface MaxLengthAction<
    */
   readonly type: 'max_length';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof maxLength;
+  /**
    * The expected property.
    */
   readonly expects: `<=${TRequirement}`;
@@ -105,13 +109,14 @@ export function maxLength(
   return {
     kind: 'validation',
     type: 'max_length',
+    reference: maxLength,
     async: false,
     expects: `<=${requirement}`,
     requirement,
     message,
     _run(dataset, config) {
       if (dataset.typed && dataset.value.length > this.requirement) {
-        _addIssue(this, maxLength, 'length', dataset, config, {
+        _addIssue(this, 'length', dataset, config, {
           received: `${dataset.value.length}`,
         });
       }

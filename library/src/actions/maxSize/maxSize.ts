@@ -48,6 +48,10 @@ export interface MaxSizeAction<
    */
   readonly type: 'max_size';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof maxSize;
+  /**
    * The expected property.
    */
   readonly expects: `<=${TRequirement}`;
@@ -103,13 +107,14 @@ export function maxSize(
   return {
     kind: 'validation',
     type: 'max_size',
+    reference: maxSize,
     async: false,
     expects: `<=${requirement}`,
     requirement,
     message,
     _run(dataset, config) {
       if (dataset.typed && dataset.value.size > this.requirement) {
-        _addIssue(this, maxSize, 'size', dataset, config, {
+        _addIssue(this, 'size', dataset, config, {
           received: `${dataset.value.size}`,
         });
       }

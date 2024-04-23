@@ -27,6 +27,10 @@ export interface LazySchema<TGetter extends Getter>
    */
   readonly type: 'lazy';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof lazy;
+  /**
    * The expected property.
    */
   readonly expects: 'unknown';
@@ -49,6 +53,7 @@ export function lazy<TGetter extends Getter>(
   return {
     kind: 'schema',
     type: 'lazy',
+    reference: lazy,
     expects: 'unknown',
     async: false,
     getter,

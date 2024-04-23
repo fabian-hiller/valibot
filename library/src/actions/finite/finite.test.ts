@@ -7,6 +7,7 @@ describe('finite', () => {
     const baseAction: Omit<FiniteAction<number, never>, 'message'> = {
       kind: 'validation',
       type: 'finite',
+      reference: finite,
       expects: null,
       requirement: expect.any(Function),
       async: false,

@@ -7,6 +7,7 @@ describe('bytes', () => {
     const baseAction: Omit<BytesAction<string, 5, never>, 'message'> = {
       kind: 'validation',
       type: 'bytes',
+      reference: bytes,
       expects: '5',
       requirement: 5,
       async: false,

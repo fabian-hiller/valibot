@@ -7,6 +7,7 @@ describe('maxSize', () => {
     const baseAction: Omit<MaxSizeAction<Blob, 5, never>, 'message'> = {
       kind: 'validation',
       type: 'max_size',
+      reference: maxSize,
       expects: '<=5',
       requirement: 5,
       async: false,

@@ -7,6 +7,7 @@ describe('never', () => {
     const baseSchema: Omit<NeverSchema<never>, 'message'> = {
       kind: 'schema',
       type: 'never',
+      reference: never,
       expects: 'never',
       async: false,
       _run: expect.any(Function),
