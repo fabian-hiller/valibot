@@ -6,6 +6,7 @@ describe('toLowerCase', () => {
     expect(toLowerCase()).toStrictEqual({
       kind: 'transformation',
       type: 'to_lower_case',
+      reference: toLowerCase,
       async: false,
       _run: expect.any(Function),
     } satisfies ToLowerCaseAction);

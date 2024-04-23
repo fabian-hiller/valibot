@@ -8,6 +8,10 @@ export interface TrimAction extends BaseTransformation<string, string, never> {
    * The action type.
    */
   readonly type: 'trim';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof trim;
 }
 
 /**
@@ -19,6 +23,7 @@ export function trim(): TrimAction {
   return {
     kind: 'transformation',
     type: 'trim',
+    reference: trim,
     async: false,
     _run(dataset) {
       dataset.value = dataset.value.trim();

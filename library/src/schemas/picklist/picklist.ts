@@ -1,10 +1,11 @@
 import type {
   BaseIssue,
   BaseSchema,
+  Dataset,
   ErrorMessage,
   MaybeReadonly,
 } from '../../types/index.ts';
-import { _schemaDataset, _stringify } from '../../utils/index.ts';
+import { _addIssue, _stringify } from '../../utils/index.ts';
 
 /**
  * Picklist options type.
@@ -40,6 +41,10 @@ export interface PicklistSchema<
    * The schema type.
    */
   readonly type: 'picklist';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof picklist;
   /**
    * The picklist options.
    */
@@ -81,19 +86,19 @@ export function picklist(
   return {
     kind: 'schema',
     type: 'picklist',
+    reference: picklist,
     expects: options.map(_stringify).join(' | '),
     async: false,
     options,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        picklist,
-        // @ts-expect-error
-        this.options.includes(dataset.value),
-        dataset,
-        config
-      );
+      // @ts-expect-error
+      if (this.options.includes(dataset.value)) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<PicklistOptions[number], PicklistIssue>;
     },
   };
 }

@@ -7,6 +7,7 @@ describe('blob', () => {
     const baseSchema: Omit<BlobSchema<never>, 'message'> = {
       kind: 'schema',
       type: 'blob',
+      reference: blob,
       expects: 'Blob',
       async: false,
       _run: expect.any(Function),

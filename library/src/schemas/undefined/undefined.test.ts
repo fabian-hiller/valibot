@@ -11,6 +11,7 @@ describe('undefined', () => {
     const baseSchema: Omit<UndefinedSchema<never>, 'message'> = {
       kind: 'schema',
       type: 'undefined',
+      reference: undefined_,
       expects: 'undefined',
       async: false,
       _run: expect.any(Function),

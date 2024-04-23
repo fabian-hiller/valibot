@@ -6,7 +6,6 @@ import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
 import { optional } from '../optional/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import { unknown } from '../unknown/index.ts';
 import {
   looseObject,
   type LooseObjectIssue,
@@ -20,9 +19,9 @@ describe('looseObject', () => {
     const baseSchema: Omit<LooseObjectSchema<Entries, never>, 'message'> = {
       kind: 'schema',
       type: 'loose_object',
+      reference: looseObject,
       expects: 'Object',
       entries,
-      rest: { ...unknown(), _run: expect.any(Function) },
       async: false,
       _run: expect.any(Function),
     };

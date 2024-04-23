@@ -13,6 +13,10 @@ export interface TransformActionAsync<TInput, TOutput>
    */
   readonly type: 'transform';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof transformAsync;
+  /**
    * The transformation action.
    */
   readonly action: (input: TInput) => Promise<TOutput>;
@@ -31,6 +35,7 @@ export function transformAsync<TInput, TOutput>(
   return {
     kind: 'transformation',
     type: 'transform',
+    reference: transformAsync,
     async: true,
     action,
     async _run(dataset) {

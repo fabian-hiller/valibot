@@ -7,6 +7,7 @@ describe('date', () => {
     const baseSchema: Omit<DateSchema<never>, 'message'> = {
       kind: 'schema',
       type: 'date',
+      reference: date,
       expects: 'Date',
       async: false,
       _run: expect.any(Function),

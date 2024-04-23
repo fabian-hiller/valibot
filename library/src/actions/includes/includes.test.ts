@@ -11,6 +11,7 @@ describe('includes', () => {
     const baseAction: Omit<IncludesAction<string, 'foo', never>, 'message'> = {
       kind: 'validation',
       type: 'includes',
+      reference: includes,
       expects: '"foo"',
       requirement: 'foo',
       async: false,

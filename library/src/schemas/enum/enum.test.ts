@@ -14,8 +14,13 @@ describe('enum_', () => {
     const baseSchema: Omit<EnumSchema<Options, never>, 'message'> = {
       kind: 'schema',
       type: 'enum',
+      reference: enum_,
       expects: '"foo" | "bar" | "baz"',
       enum: options,
+      // @ts-expect-error
+      options: Object.entries(options)
+        .filter(([key]) => isNaN(+key))
+        .map(([, value]) => value),
       async: false,
       _run: expect.any(Function),
     };

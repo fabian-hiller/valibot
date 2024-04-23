@@ -26,6 +26,10 @@ export interface NullableSchema<
    */
   readonly type: 'nullable';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof nullable;
+  /**
    * The expected property.
    */
   readonly expects: `${TWrapped['expects']} | null`;
@@ -73,6 +77,7 @@ export function nullable(
   return {
     kind: 'schema',
     type: 'nullable',
+    reference: nullable,
     expects: `${wrapped.expects} | null`,
     async: false,
     wrapped,

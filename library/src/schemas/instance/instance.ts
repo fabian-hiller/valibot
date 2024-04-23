@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Class type.
@@ -41,6 +46,10 @@ export interface InstanceSchema<
    */
   readonly type: 'instance';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof instance;
+  /**
    * The class of the instance.
    */
   readonly class: TClass;
@@ -81,18 +90,18 @@ export function instance(
   return {
     kind: 'schema',
     type: 'instance',
+    reference: instance,
     expects: class_.name,
     async: false,
     class: class_,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        instance,
-        dataset.value instanceof this.class,
-        dataset,
-        config
-      );
+      if (dataset.value instanceof this.class) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<InstanceType<Class>, InstanceIssue>;
     },
   };
 }

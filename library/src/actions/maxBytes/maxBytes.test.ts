@@ -11,6 +11,7 @@ describe('maxBytes', () => {
     const baseAction: Omit<MaxBytesAction<string, 5, never>, 'message'> = {
       kind: 'validation',
       type: 'max_bytes',
+      reference: maxBytes,
       expects: '<=5',
       requirement: 5,
       async: false,

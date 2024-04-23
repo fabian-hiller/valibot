@@ -46,6 +46,10 @@ export interface ExcludesAction<
    */
   readonly type: 'excludes';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof excludes;
+  /**
    * The expected property.
    */
   readonly expects: string;
@@ -105,6 +109,7 @@ export function excludes(
   return {
     kind: 'validation',
     type: 'excludes',
+    reference: excludes,
     async: false,
     expects: `!${received}`,
     requirement,
@@ -112,7 +117,7 @@ export function excludes(
     _run(dataset, config) {
       // @ts-expect-error
       if (dataset.typed && dataset.value.includes(this.requirement)) {
-        _addIssue(this, excludes, 'content', dataset, config, { received });
+        _addIssue(this, 'content', dataset, config, { received });
       }
       return dataset;
     },

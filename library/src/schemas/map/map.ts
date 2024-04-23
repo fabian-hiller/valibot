@@ -30,6 +30,10 @@ export interface MapSchema<
    */
   readonly type: 'map';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof map;
+  /**
    * The expected property.
    */
   readonly expects: 'Map';
@@ -91,6 +95,7 @@ export function map(
   return {
     kind: 'schema',
     type: 'map',
+    reference: map,
     expects: 'Map',
     async: false,
     key,
@@ -106,8 +111,8 @@ export function map(
         dataset.typed = true;
         dataset.value = new Map();
 
-        // Parse schema of each map item
-        for (const [inputKey, inputValue] of input.entries()) {
+        // Parse schema of each map entry
+        for (const [inputKey, inputValue] of input) {
           // Get dataset of key schema
           const keyDataset = this.key._run(
             { typed: false, value: inputKey },
@@ -200,7 +205,7 @@ export function map(
 
         // Otherwise, add map issue
       } else {
-        _addIssue(this, map, 'type', dataset, config);
+        _addIssue(this, 'type', dataset, config);
       }
 
       // Return output dataset
@@ -209,7 +214,7 @@ export function map(
           BaseSchema<unknown, unknown, BaseIssue<unknown>>,
           BaseSchema<unknown, unknown, BaseIssue<unknown>>
         >,
-        MapIssue | InferIssue<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
+        MapIssue | BaseIssue<unknown>
       >;
     },
   };
