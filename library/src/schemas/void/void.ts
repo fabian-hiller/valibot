@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Void issue type.
@@ -29,6 +34,10 @@ export interface VoidSchema<
    * The schema type.
    */
   readonly type: 'void';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof void_;
   /**
    * The expected property.
    */
@@ -63,17 +72,17 @@ export function void_(
   return {
     kind: 'schema',
     type: 'void',
+    reference: void_,
     expects: 'void',
     async: false,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        void_,
-        dataset.value === undefined,
-        dataset,
-        config
-      );
+      if (dataset.value === undefined) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<void, VoidIssue>;
     },
   };
 }

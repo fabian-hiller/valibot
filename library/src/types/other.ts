@@ -1,3 +1,9 @@
+import type {
+  NullishSchema,
+  NullishSchemaAsync,
+  OptionalSchema,
+  OptionalSchemaAsync,
+} from '../schemas/index.ts';
 import type { InferInput } from './infer.ts';
 import type { BaseIssue } from './issue.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
@@ -36,3 +42,32 @@ export type DefaultAsync<
   | InferInput<TSchema>
   | (() => MaybePromise<InferInput<TSchema> | undefined>)
   | undefined;
+
+/**
+ * Question mark schema type.
+ */
+export type QuestionMarkSchema =
+  | NullishSchema<
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
+    >
+  | NullishSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      DefaultAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+      >
+    >
+  | OptionalSchema<
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
+    >
+  | OptionalSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      DefaultAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+      >
+    >;

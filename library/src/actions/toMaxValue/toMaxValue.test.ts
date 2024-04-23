@@ -8,6 +8,7 @@ describe('toMaxValue', () => {
     expect(action).toStrictEqual({
       kind: 'transformation',
       type: 'to_max_value',
+      reference: toMaxValue,
       requirement: 10,
       async: false,
       _run: expect.any(Function),

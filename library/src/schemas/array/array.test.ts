@@ -12,6 +12,7 @@ describe('array', () => {
     const baseSchema: Omit<ArraySchema<Item, never>, 'message'> = {
       kind: 'schema',
       type: 'array',
+      reference: array,
       expects: 'Array',
       item,
       async: false,

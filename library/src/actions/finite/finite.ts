@@ -1,9 +1,10 @@
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Finite issue type.
@@ -32,16 +33,20 @@ export interface FiniteIssue<TInput extends number> extends BaseIssue<TInput> {
 }
 
 /**
- * Finite validation type.
+ * Finite action type.
  */
 export interface FiniteAction<
   TInput extends number,
   TMessage extends ErrorMessage<FiniteIssue<TInput>> | undefined,
 > extends BaseValidation<TInput, TInput, FiniteIssue<TInput>> {
   /**
-   * The validation type.
+   * The action type.
    */
   readonly type: 'finite';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof finite;
   /**
    * The expected property.
    */
@@ -84,19 +89,16 @@ export function finite(
   return {
     kind: 'validation',
     type: 'finite',
+    reference: finite,
     async: false,
     expects: null,
     requirement: Number.isFinite,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        finite,
-        'finite',
-        dataset.typed && !this.requirement(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement(dataset.value)) {
+        _addIssue(this, 'finite', dataset, config);
+      }
+      return dataset as Dataset<number, FiniteIssue<number>>;
     },
   };
 }

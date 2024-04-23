@@ -1,13 +1,18 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset, _stringify } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue, _stringify } from '../../utils/index.ts';
 
 /**
  * Enum type.
  */
 export interface Enum {
   [key: string]: string | number;
-  [key: number]: string;
 }
+
 /**
  * Enum issue type.
  */
@@ -38,9 +43,17 @@ export interface EnumSchema<
    */
   readonly type: 'enum';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof enum_;
+  /**
    * The enum object.
    */
   readonly enum: TEnum;
+  /**
+   * The enum options.
+   */
+  readonly options: (keyof TEnum)[];
   /**
    * The error message.
    */
@@ -75,23 +88,26 @@ export function enum_(
   enum__: Enum,
   message?: ErrorMessage<EnumIssue>
 ): EnumSchema<Enum, ErrorMessage<EnumIssue> | undefined> {
-  const values = Object.values(enum__);
+  const options = Object.entries(enum__)
+    .filter(([key]) => isNaN(+key))
+    .map(([, value]) => value);
   return {
     kind: 'schema',
     type: 'enum',
-    expects: values.map(_stringify).join(' | '),
+    reference: enum_,
+    expects: options.map(_stringify).join(' | '),
     async: false,
     enum: enum__,
+    options,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        enum_,
-        // @ts-expect-error
-        values.includes(dataset.value),
-        dataset,
-        config
-      );
+      // @ts-expect-error
+      if (this.options.includes(dataset.value)) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<string | number, EnumIssue>;
     },
   };
 }

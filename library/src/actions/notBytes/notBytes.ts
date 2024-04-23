@@ -49,6 +49,10 @@ export interface NotBytesAction<
    */
   readonly type: 'not_bytes';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof notBytes;
+  /**
    * The expected property.
    */
   readonly expects: `!${TRequirement}`;
@@ -104,6 +108,7 @@ export function notBytes(
   return {
     kind: 'validation',
     type: 'not_bytes',
+    reference: notBytes,
     async: false,
     expects: `!${requirement}`,
     requirement,
@@ -112,7 +117,7 @@ export function notBytes(
       if (dataset.typed) {
         const length = new TextEncoder().encode(dataset.value).length;
         if (length === this.requirement) {
-          _addIssue(this, notBytes, 'bytes', dataset, config, {
+          _addIssue(this, 'bytes', dataset, config, {
             received: `${length}`,
           });
         }

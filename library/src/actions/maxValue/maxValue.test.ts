@@ -7,6 +7,7 @@ describe('maxValue', () => {
     const baseAction: Omit<MaxValueAction<number, 5, never>, 'message'> = {
       kind: 'validation',
       type: 'max_value',
+      reference: maxValue,
       expects: '<=5',
       requirement: 5,
       async: false,

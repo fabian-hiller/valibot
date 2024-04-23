@@ -7,6 +7,7 @@ describe('minValue', () => {
     const baseAction: Omit<MinValueAction<number, 5, never>, 'message'> = {
       kind: 'validation',
       type: 'min_value',
+      reference: minValue,
       expects: '>=5',
       requirement: 5,
       async: false,

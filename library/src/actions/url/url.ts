@@ -1,9 +1,10 @@
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Url issue type.
@@ -32,16 +33,20 @@ export interface UrlIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * URL validation type.
+ * URL action type.
  */
 export interface UrlAction<
   TInput extends string,
   TMessage extends ErrorMessage<UrlIssue<TInput>> | undefined,
 > extends BaseValidation<TInput, TInput, UrlIssue<TInput>> {
   /**
-   * The validation type.
+   * The action type.
    */
   readonly type: 'url';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof url;
   /**
    * The expected property.
    */
@@ -87,6 +92,7 @@ export function url(
   return {
     kind: 'validation',
     type: 'url',
+    reference: url,
     async: false,
     expects: null,
     requirement(input) {
@@ -99,14 +105,10 @@ export function url(
     },
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        url,
-        'URL',
-        dataset.typed && !this.requirement(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement(dataset.value)) {
+        _addIssue(this, 'URL', dataset, config);
+      }
+      return dataset as Dataset<string, UrlIssue<string>>;
     },
   };
 }

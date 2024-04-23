@@ -7,6 +7,7 @@ describe('literal', () => {
     const baseSchema: Omit<LiteralSchema<123, never>, 'message'> = {
       kind: 'schema',
       type: 'literal',
+      reference: literal,
       literal: 123,
       expects: '123',
       async: false,

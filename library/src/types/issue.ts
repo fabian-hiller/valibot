@@ -1,6 +1,7 @@
 import type {
   ArrayPathItem,
   MapPathItem,
+  RecordPathItem,
   SetPathItem,
 } from '../schemas/index.ts';
 import type { Config } from './config.ts';
@@ -27,7 +28,7 @@ export type IssuePathItem =
   | ArrayPathItem
   | MapPathItem
   | ObjectPathItem
-  // | RecordPathItem
+  | RecordPathItem
   | SetPathItem
   // | TuplePathItem
   | UnknownPathItem;

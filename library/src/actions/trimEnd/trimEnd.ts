@@ -9,6 +9,10 @@ export interface TrimEndAction
    * The action type.
    */
   readonly type: 'trim_end';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof trimEnd;
 }
 
 /**
@@ -20,6 +24,7 @@ export function trimEnd(): TrimEndAction {
   return {
     kind: 'transformation',
     type: 'trim_end',
+    reference: trimEnd,
     async: false,
     _run(dataset) {
       dataset.value = dataset.value.trimEnd();

@@ -8,6 +8,7 @@ describe('cuid2', () => {
     const baseAction: Omit<Cuid2Action<string, never>, 'message'> = {
       kind: 'validation',
       type: 'cuid2',
+      reference: cuid2,
       expects: null,
       requirement: CUID2_REGEX,
       async: false,

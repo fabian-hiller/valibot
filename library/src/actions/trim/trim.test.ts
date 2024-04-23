@@ -6,6 +6,7 @@ describe('trim', () => {
     expect(trim()).toStrictEqual({
       kind: 'transformation',
       type: 'trim',
+      reference: trim,
       async: false,
       _run: expect.any(Function),
     } satisfies TrimAction);

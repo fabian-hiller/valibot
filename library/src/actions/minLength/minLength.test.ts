@@ -11,6 +11,7 @@ describe('minLength', () => {
     const baseAction: Omit<MinLengthAction<string, 5, never>, 'message'> = {
       kind: 'validation',
       type: 'min_length',
+      reference: minLength,
       expects: '>=5',
       requirement: 5,
       async: false,

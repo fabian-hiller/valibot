@@ -7,6 +7,7 @@ describe('nan', () => {
     const baseSchema: Omit<NanSchema<never>, 'message'> = {
       kind: 'schema',
       type: 'nan',
+      reference: nan,
       expects: 'NaN',
       async: false,
       _run: expect.any(Function),
