@@ -45,6 +45,10 @@ export interface BytesAction<
    */
   readonly type: 'bytes';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof bytes;
+  /**
    * The expected property.
    */
   readonly expects: `${TRequirement}`;
@@ -99,6 +103,7 @@ export function bytes(
   return {
     kind: 'validation',
     type: 'bytes',
+    reference: bytes,
     async: false,
     expects: `${requirement}`,
     requirement,
@@ -107,7 +112,7 @@ export function bytes(
       if (dataset.typed) {
         const length = new TextEncoder().encode(dataset.value).length;
         if (length !== this.requirement) {
-          _addIssue(this, bytes, 'bytes', dataset, config, {
+          _addIssue(this, 'bytes', dataset, config, {
             received: `${length}`,
           });
         }

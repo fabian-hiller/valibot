@@ -29,6 +29,10 @@ export interface ArraySchemaAsync<
    */
   readonly type: 'array';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof arrayAsync;
+  /**
    * The expected property.
    */
   readonly expects: 'Array';
@@ -83,6 +87,7 @@ export function arrayAsync(
   return {
     kind: 'schema',
     type: 'array',
+    reference: arrayAsync,
     expects: 'Array',
     async: true,
     item,
@@ -153,21 +158,11 @@ export function arrayAsync(
 
         // Otherwise, add array issue
       } else {
-        _addIssue(this, arrayAsync, 'type', dataset, config);
+        _addIssue(this, 'type', dataset, config);
       }
 
       // Return output dataset
-      return dataset as Dataset<
-        InferOutput<
-          | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-          | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-        >[],
-        | ArrayIssue
-        | InferIssue<
-            | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-            | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-          >
-      >;
+      return dataset as Dataset<unknown[], ArrayIssue | BaseIssue<unknown>>;
     },
   };
 }

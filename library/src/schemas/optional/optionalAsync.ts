@@ -32,6 +32,10 @@ export interface OptionalSchemaAsync<
    */
   readonly type: 'optional';
   /**
+   * The schema reference.
+   */
+  readonly reference: typeof optionalAsync;
+  /**
    * The expected property.
    */
   readonly expects: `${TWrapped['expects']} | undefined`;
@@ -95,6 +99,7 @@ export function optionalAsync(
   return {
     kind: 'schema',
     type: 'optional',
+    reference: optionalAsync,
     expects: `${wrapped.expects} | undefined`,
     async: true,
     wrapped,

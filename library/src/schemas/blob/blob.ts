@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Blob issue type.
@@ -29,6 +34,10 @@ export interface BlobSchema<
    * The schema type.
    */
   readonly type: 'blob';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof blob;
   /**
    * The expected property.
    */
@@ -63,17 +72,17 @@ export function blob(
   return {
     kind: 'schema',
     type: 'blob',
+    reference: blob,
     expects: 'Blob',
     async: false,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        blob,
-        dataset.value instanceof Blob,
-        dataset,
-        config
-      );
+      if (dataset.value instanceof Blob) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<Blob, BlobIssue>;
     },
   };
 }

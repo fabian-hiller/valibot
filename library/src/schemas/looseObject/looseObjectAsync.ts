@@ -6,7 +6,6 @@ import type {
   InferObjectOutput,
   ObjectEntriesAsync,
 } from '../../types/index.ts';
-import type { UnknownSchema } from '../unknown/index.ts';
 import type { LooseObjectIssue } from './looseObject.ts';
 
 /**
@@ -16,9 +15,9 @@ export interface LooseObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,
   TMessage extends ErrorMessage<LooseObjectIssue> | undefined,
 > extends BaseSchemaAsync<
-    InferObjectInput<TEntries, UnknownSchema>,
-    InferObjectOutput<TEntries, UnknownSchema>,
-    LooseObjectIssue | InferObjectIssue<TEntries, UnknownSchema>
+    InferObjectInput<TEntries> & { [key: string]: unknown },
+    InferObjectOutput<TEntries> & { [key: string]: unknown },
+    LooseObjectIssue | InferObjectIssue<TEntries>
   > {
   /**
    * The schema type.
@@ -32,10 +31,6 @@ export interface LooseObjectSchemaAsync<
    * The object entries.
    */
   readonly entries: TEntries;
-  /**
-   * The rest schema.
-   */
-  readonly rest: UnknownSchema;
   /**
    * The error message.
    */

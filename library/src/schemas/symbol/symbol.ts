@@ -1,5 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { _schemaDataset } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Symbol issue type.
@@ -29,6 +34,10 @@ export interface SymbolSchema<
    * The schema type.
    */
   readonly type: 'symbol';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof symbol;
   /**
    * The expected property.
    */
@@ -63,17 +72,17 @@ export function symbol(
   return {
     kind: 'schema',
     type: 'symbol',
+    reference: symbol,
     expects: 'symbol',
     async: false,
     message,
     _run(dataset, config) {
-      return _schemaDataset(
-        this,
-        symbol,
-        typeof dataset.value === 'symbol',
-        dataset,
-        config
-      );
+      if (typeof dataset.value === 'symbol') {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
+      }
+      return dataset as Dataset<symbol, SymbolIssue>;
     },
   };
 }

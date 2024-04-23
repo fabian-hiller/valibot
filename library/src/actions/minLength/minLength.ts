@@ -50,6 +50,10 @@ export interface MinLengthAction<
    */
   readonly type: 'min_length';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof minLength;
+  /**
    * The expected property.
    */
   readonly expects: `>=${TRequirement}`;
@@ -105,13 +109,14 @@ export function minLength(
   return {
     kind: 'validation',
     type: 'min_length',
+    reference: minLength,
     async: false,
     expects: `>=${requirement}`,
     requirement,
     message,
     _run(dataset, config) {
       if (dataset.typed && dataset.value.length < this.requirement) {
-        _addIssue(this, minLength, 'length', dataset, config, {
+        _addIssue(this, 'length', dataset, config, {
           received: `${dataset.value.length}`,
         });
       }

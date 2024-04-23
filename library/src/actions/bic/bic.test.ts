@@ -10,6 +10,7 @@ describe('bic', () => {
     const baseAction: Omit<BicAction<string, never>, 'message'> = {
       kind: 'validation',
       type: 'bic',
+      reference: bic,
       expects: null,
       requirement: BIC_REGEX,
       async: false,

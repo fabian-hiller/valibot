@@ -15,6 +15,7 @@ describe('map', () => {
     const baseSchema: Omit<MapSchema<Key, Value, never>, 'message'> = {
       kind: 'schema',
       type: 'map',
+      reference: map,
       expects: 'Map',
       key,
       value,

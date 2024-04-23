@@ -59,14 +59,7 @@ describe('_addIssue', () => {
     > = { typed: true, value: '' };
 
     test('for issue one', () => {
-      _addIssue(
-        minLength(1),
-        minLength,
-        'length',
-        dataset,
-        {},
-        { received: '0' }
-      );
+      _addIssue(minLength(1), 'length', dataset, {}, { received: '0' });
       expect(dataset).toStrictEqual({
         typed: true,
         value: '',
@@ -86,7 +79,7 @@ describe('_addIssue', () => {
     };
 
     test('for issue two', () => {
-      _addIssue(decimal(), decimal, 'decimal', dataset, {});
+      _addIssue(decimal(), 'decimal', dataset, {});
       expect(dataset).toStrictEqual({
         typed: true,
         value: '',
@@ -101,7 +94,7 @@ describe('_addIssue', () => {
         typed: false,
         value: null,
       };
-      _addIssue(string(), string, 'type', dataset, {});
+      _addIssue(string(), 'type', dataset, {});
       expect(dataset.issues?.[0].message).toBe(
         'Invalid type: Expected string but received null'
       );
@@ -112,7 +105,7 @@ describe('_addIssue', () => {
         typed: true,
         value: 'foo',
       };
-      _addIssue(url(), url, 'URL', dataset, {});
+      _addIssue(url(), 'URL', dataset, {});
       expect(dataset.issues?.[0].message).toBe('Invalid URL: Received "foo"');
     });
   });
@@ -138,7 +131,7 @@ describe('_addIssue', () => {
         typed: false,
         value: null,
       };
-      _addIssue(string(contextMessage), string, 'type', dataset, {
+      _addIssue(string(contextMessage), 'type', dataset, {
         message: () => configMessage,
       });
       expect(dataset.issues?.[0].message).toBe(contextMessage);
@@ -152,7 +145,7 @@ describe('_addIssue', () => {
         typed: false,
         value: null,
       };
-      _addIssue(string(), string, 'type', dataset, {
+      _addIssue(string(), 'type', dataset, {
         message: () => configMessage,
       });
       expect(dataset.issues?.[0].message).toBe(specificMessage);
@@ -165,7 +158,7 @@ describe('_addIssue', () => {
         typed: false,
         value: null,
       };
-      _addIssue(string(), string, 'type', dataset, {
+      _addIssue(string(), 'type', dataset, {
         message: () => configMessage,
       });
       expect(dataset.issues?.[0].message).toBe(schemaMessage);
@@ -178,7 +171,7 @@ describe('_addIssue', () => {
         typed: true,
         value: 'foo',
       };
-      _addIssue(url(), url, 'type', dataset, {
+      _addIssue(url(), 'type', dataset, {
         message: () => configMessage,
       });
       expect(dataset.issues?.[0].message).not.toBe(schemaMessage);
@@ -190,7 +183,7 @@ describe('_addIssue', () => {
         typed: false,
         value: null,
       };
-      _addIssue(string(), string, 'type', dataset, {
+      _addIssue(string(), 'type', dataset, {
         message: () => configMessage,
       });
       expect(dataset.issues?.[0].message).toBe(configMessage);
@@ -202,7 +195,7 @@ describe('_addIssue', () => {
         typed: false,
         value: null,
       };
-      _addIssue(string(), string, 'type', dataset, {});
+      _addIssue(string(), 'type', dataset, {});
       expect(dataset.issues?.[0].message).toBe(globalMessage);
     });
   });
@@ -218,7 +211,7 @@ describe('_addIssue', () => {
       abortPipeEarly: true,
       skipPipe: true,
     };
-    _addIssue(string(), string, 'type', dataset, config);
+    _addIssue(string(), 'type', dataset, config);
     expect(dataset.issues?.[0]).toMatchObject(config);
   });
 
@@ -250,7 +243,7 @@ describe('_addIssue', () => {
         },
       ] satisfies [BaseIssue<string>],
     };
-    _addIssue(string(), string, 'type', dataset, {}, other);
+    _addIssue(string(), 'type', dataset, {}, other);
     expect(dataset.issues?.[0]).toMatchObject({
       ...other,
       message: 'Invalid type: Expected "bar" but received "foo"',
@@ -262,7 +255,7 @@ describe('_addIssue', () => {
       typed: true,
       value: NaN,
     };
-    _addIssue(number(), number, 'type', dataset, {});
+    _addIssue(number(), 'type', dataset, {});
     expect(dataset).toStrictEqual({
       typed: false,
       value: NaN,

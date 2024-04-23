@@ -14,6 +14,7 @@ describe('instance', () => {
     > = {
       kind: 'schema',
       type: 'instance',
+      reference: instance,
       expects: 'Date',
       class: Date,
       async: false,

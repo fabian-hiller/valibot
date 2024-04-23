@@ -2,9 +2,10 @@ import { DECIMAL_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Decimal issue type.
@@ -43,6 +44,10 @@ export interface DecimalAction<
    * The action type.
    */
   readonly type: 'decimal';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof decimal;
   /**
    * The expected property.
    */
@@ -85,19 +90,16 @@ export function decimal(
   return {
     kind: 'validation',
     type: 'decimal',
+    reference: decimal,
     async: false,
     expects: null,
     requirement: DECIMAL_REGEX,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        decimal,
-        'decimal',
-        dataset.typed && !this.requirement.test(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, 'decimal', dataset, config);
+      }
+      return dataset as Dataset<string, DecimalIssue<string>>;
     },
   };
 }
