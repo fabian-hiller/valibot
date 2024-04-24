@@ -68,7 +68,7 @@ describe('excludes', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const action = excludes('foo', 'message');
     const baseIssue: Omit<
       ExcludesIssue<string, 'foo'>,

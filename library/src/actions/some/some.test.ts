@@ -65,7 +65,7 @@ describe('some', () => {
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const requirement = (element: number) => element > 9;
     const action = some<number[], 'message'>(requirement, 'message');
 
