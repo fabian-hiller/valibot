@@ -55,28 +55,25 @@ describe('check', () => {
       });
     });
 
-    test('for valid content', () => {
-      expectNoActionIssue(action, [1, Infinity]);
+    test('for valid inputs', () => {
+      expectNoActionIssue(action, [1, 12345, Infinity]);
     });
   });
 
-  describe('should return an issue', () => {
+  describe('should return dataset with issues', () => {
     const requirement = (input: number) => input > 0;
-    const action = check<number, 'Value is not greater than 1'>(
-      requirement,
-      'Value is not greater than 1'
-    );
+    const action = check<number, 'message'>(requirement, 'message');
 
     const baseIssue: Omit<CheckIssue<number>, 'input' | 'received'> = {
       kind: 'validation',
       type: 'check',
       expected: null,
-      message: 'Value is not greater than 1',
+      message: 'message',
       requirement,
     };
 
-    test('for invalid content', () => {
-      expectActionIssue(action, baseIssue, [0, -1, -Infinity]);
+    test('for invalid inputs', () => {
+      expectActionIssue(action, baseIssue, [0, -1, -12345, -Infinity]);
     });
   });
 });
