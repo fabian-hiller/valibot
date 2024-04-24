@@ -107,6 +107,15 @@ export const MAC64_REGEX =
   /^(?:[\da-f]{2}:){7}[\da-f]{2}$|^(?:[\da-f]{2}-){7}[\da-f]{2}$|^(?:[\da-f]{4}\.){3}[\da-f]{4}$|^(?:[\da-f]{4}:){3}[\da-f]{4}$/iu;
 
 /**
+ * [MAC](https://en.wikipedia.org/wiki/MAC_address) regex.
+ */
+// eslint-disable-next-line security/detect-non-literal-regexp
+export const MAC_REGEX = new RegExp(
+  `${MAC48_REGEX.source}|${MAC64_REGEX.source}`,
+  'iu'
+);
+
+/**
  * [Octal](https://en.wikipedia.org/wiki/Octal) regex.
  */
 export const OCTAL_REGEX = /^(?:0o)?[0-7]+$/iu;
