@@ -3,11 +3,14 @@ import { MAC48_REGEX } from '../../regex.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { mac48, type Mac48Action, type Mac48Issue } from './mac48.ts';
 
+// TODO: Improve tests to cover all possible scenarios based on the regex used.
+
 describe('mac48', () => {
   describe('should return action object', () => {
     const baseAction: Omit<Mac48Action<string, never>, 'message'> = {
       kind: 'validation',
       type: 'mac48',
+      reference: mac48,
       expects: null,
       requirement: MAC48_REGEX,
       async: false,
@@ -49,7 +52,7 @@ describe('mac48', () => {
       });
     });
 
-    test('for mac48 address', () => {
+    test('for 48-bit MAC address', () => {
       expectNoActionIssue(action, [
         'b6:05:20:67:f9:58',
         'b6-05-20-67-f9-58',
@@ -72,7 +75,7 @@ describe('mac48', () => {
       expectActionIssue(action, baseIssue, ['', ' ']);
     });
 
-    test('for correct mac64 address', () => {
+    test('for 64-bit MAC address', () => {
       expectActionIssue(action, baseIssue, [
         '00:25:96:FF:FE:12:34:56',
         '00-1A-2B-3C-4D-5E-6F-70',
@@ -81,8 +84,8 @@ describe('mac48', () => {
       ]);
     });
 
-    test('for invalid mac formats', () => {
-      const invalidMacs = [
+    test('for invalid 48-bit MAC address', () => {
+      expectActionIssue(action, baseIssue, [
         '00:1G:2B:3C:4D:5E',
         '00:1A:2B:3C:4D',
         '00:1A:2B:3C:4D:5E:6F',
@@ -95,8 +98,7 @@ describe('mac48', () => {
         '001122334455',
         '00:1A:2B:3C:4D:5E:6F:70:ZZ',
         'GHIJ:KLNM:OPQR',
-      ];
-      expectActionIssue(action, baseIssue, invalidMacs);
+      ]);
     });
   });
 });

@@ -2,9 +2,10 @@ import { MAC64_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * 64-bit MAC issue type.
@@ -44,6 +45,10 @@ export interface Mac64Action<
    */
   readonly type: 'mac64';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof mac64;
+  /**
    * The expected property.
    */
   readonly expects: null;
@@ -60,7 +65,7 @@ export interface Mac64Action<
 /**
  * Creates a 64-bit [MAC address](https://en.wikipedia.org/wiki/MAC_address) validation action.
  *
- * @returns A MAC action.
+ * @returns A 64-bit MAC action.
  */
 export function mac64<TInput extends string>(): Mac64Action<TInput, undefined>;
 
@@ -69,7 +74,7 @@ export function mac64<TInput extends string>(): Mac64Action<TInput, undefined>;
  *
  * @param message The error message.
  *
- * @returns A MAC action.
+ * @returns A 64-bit MAC action.
  */
 export function mac64<
   TInput extends string,
@@ -82,19 +87,16 @@ export function mac64(
   return {
     kind: 'validation',
     type: 'mac64',
+    reference: mac64,
     async: false,
     expects: null,
     requirement: MAC64_REGEX,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        mac64,
-        'mac64',
-        dataset.typed && !this.requirement.test(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, '64-bit MAC', dataset, config);
+      }
+      return dataset as Dataset<string, Mac64Issue<string>>;
     },
   };
 }

@@ -1,7 +1,8 @@
-import { MAC48_REGEX, MAC64_REGEX } from '../../regex.ts';
+import { MAC_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
@@ -27,9 +28,9 @@ export interface MacIssue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly received: `"${string}"`;
   /**
-   * The 48-bit and 64-bit MAC regex.
+   * The MAC regex.
    */
-  readonly requirement: [RegExp, RegExp];
+  readonly requirement: RegExp;
 }
 
 /**
@@ -44,13 +45,17 @@ export interface MacAction<
    */
   readonly type: 'mac';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof mac;
+  /**
    * The expected property.
    */
   readonly expects: null;
   /**
-   * The 48-bit and 64-bit MAC regex.
+   * The MAC regex.
    */
-  readonly requirement: [RegExp, RegExp];
+  readonly requirement: RegExp;
   /**
    * The error message.
    */
@@ -82,21 +87,16 @@ export function mac(
   return {
     kind: 'validation',
     type: 'mac',
+    reference: mac,
     async: false,
     expects: null,
-    requirement: [MAC48_REGEX, MAC64_REGEX],
+    requirement: MAC_REGEX,
     message,
     _run(dataset, config) {
-      if (dataset.typed) {
-        const isMac48 = this.requirement[0].test(dataset.value);
-
-        const isMac64 = this.requirement[1].test(dataset.value);
-
-        if (!isMac48 && !isMac64) {
-          _addIssue(this, mac, 'mac', dataset, config);
-        }
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, 'MAC', dataset, config);
       }
-      return dataset;
+      return dataset as Dataset<string, MacIssue<string>>;
     },
   };
 }

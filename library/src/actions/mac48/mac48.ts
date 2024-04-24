@@ -2,9 +2,10 @@ import { MAC48_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
+  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _validationDataset } from '../../utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 
 /**
  * 48-bit MAC issue type.
@@ -44,6 +45,10 @@ export interface Mac48Action<
    */
   readonly type: 'mac48';
   /**
+   * The action reference.
+   */
+  readonly reference: typeof mac48;
+  /**
    * The expected property.
    */
   readonly expects: null;
@@ -60,7 +65,7 @@ export interface Mac48Action<
 /**
  * Creates a 48-bit [MAC address](https://en.wikipedia.org/wiki/MAC_address) validation action.
  *
- * @returns A MAC action.
+ * @returns A 48-bit MAC action.
  */
 export function mac48<TInput extends string>(): Mac48Action<TInput, undefined>;
 
@@ -69,7 +74,7 @@ export function mac48<TInput extends string>(): Mac48Action<TInput, undefined>;
  *
  * @param message The error message.
  *
- * @returns A MAC action.
+ * @returns A 48-bit MAC action.
  */
 export function mac48<
   TInput extends string,
@@ -82,19 +87,16 @@ export function mac48(
   return {
     kind: 'validation',
     type: 'mac48',
+    reference: mac48,
     async: false,
     expects: null,
     requirement: MAC48_REGEX,
     message,
     _run(dataset, config) {
-      return _validationDataset(
-        this,
-        mac48,
-        'mac48',
-        dataset.typed && !this.requirement.test(dataset.value),
-        dataset,
-        config
-      );
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, '48-bit MAC', dataset, config);
+      }
+      return dataset as Dataset<string, Mac48Issue<string>>;
     },
   };
 }
