@@ -163,8 +163,8 @@ importers:
         specifier: ^17.16.4
         version: 17.16.4(@types/node@20.11.19)
       og-img:
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: ^0.2.1
+        version: 0.2.1
       postcss:
         specifier: ^8.4.35
         version: 8.4.35
@@ -2372,8 +2372,8 @@ packages:
       config-chain: 1.1.13
     dev: true
 
-  /@resvg/resvg-wasm@2.6.0:
-    resolution: {integrity: sha512-iDkBM6Ivex8nULtBu8cX670/lfsGxq8U1cuqE+qS9xFpPQP1enPdVm/33Kq3+B+bAldA+AHNZnCgpmlHo/fZrQ==}
+  /@resvg/resvg-wasm@2.6.2:
+    resolution: {integrity: sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw==}
     engines: {node: '>= 10'}
     dev: true
 
@@ -9574,11 +9574,11 @@ packages:
       ufo: 1.4.0
     dev: true
 
-  /og-img@0.2.0:
-    resolution: {integrity: sha512-TI6k25NV++e3HCYOrXFAZtWCr2wtjnvSAibrqDjlDZZZywBr6PmDPIRcQq+e/KO8ao0O7xq+7Enpdm9WE4O0iA==}
+  /og-img@0.2.1:
+    resolution: {integrity: sha512-hX13CeCoKlFcls9MSyA2IB06q9KNKYhnTJlVYqBnW53h//hQkVBZb3kwfCL1+o1I5zbh7JhIbsgTTrpWxckpgQ==}
     dependencies:
-      '@resvg/resvg-wasm': 2.6.0
-      satori: 0.10.11
+      '@resvg/resvg-wasm': 2.6.2
+      satori: 0.10.13
       satori-html: 0.3.2
     dev: true
 
@@ -10906,8 +10906,8 @@ packages:
       ultrahtml: 1.5.2
     dev: true
 
-  /satori@0.10.11:
-    resolution: {integrity: sha512-yLm1xPRPZUaKcBZJ6nmezoJjHB4MqV8x7Mu0PyZUJodRWRDD27UbeMwzuY9LEGG57WYLO4CQsGPlbHWV1Ex9TQ==}
+  /satori@0.10.13:
+    resolution: {integrity: sha512-klCwkVYMQ/ZN5inJLHzrUmGwoRfsdP7idB5hfpJ1jfiJk1ErDitK8Hkc6Kll1+Ox2WtqEuGecSZLnmup3CGzvQ==}
     engines: {node: '>=16'}
     dependencies:
       '@shuding/opentype.js': 1.4.0-beta.0

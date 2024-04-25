@@ -46,7 +46,7 @@
     "eslint-plugin-qwik": "^1.4.5",
     "gray-matter": "^4.0.3",
     "netlify-cli": "^17.16.4",
-    "og-img": "^0.2.0",
+    "og-img": "^0.2.1",
     "postcss": "^8.4.35",
     "rehype-external-links": "^3.0.0",
     "sharp": "^0.33.2",
