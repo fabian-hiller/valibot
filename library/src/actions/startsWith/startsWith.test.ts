@@ -83,6 +83,7 @@ describe('startsWith', () => {
           'a',
           'ab',
           ' abc',
+          'Abc',
           'a123',
           'ab123',
           'abdef',
