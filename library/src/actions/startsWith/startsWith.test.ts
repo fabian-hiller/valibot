@@ -78,7 +78,18 @@ describe('startsWith', () => {
       expectActionIssue(
         action,
         baseIssue,
-        ['', ' abc', 'a123', 'ab123', 'abdef', 'aabc', 'zabc', 'zabcdef'],
+        [
+          '',
+          'a',
+          'ab',
+          ' abc',
+          'a123',
+          'ab123',
+          'abdef',
+          'aabc',
+          'zabc',
+          'zabcdef',
+        ],
         (value) => `"${value.slice(0, 'abc'.length)}"`
       );
     });
