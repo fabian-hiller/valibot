@@ -19,6 +19,7 @@ export * from './ipv4/index.ts';
 export * from './ipv6/index.ts';
 export * from './isoTime/index.ts';
 export * from './isoTimestamp/index.ts';
+export * from './length/index.ts';
 export * from './mac/index.ts';
 export * from './mac48/index.ts';
 export * from './mac64/index.ts';
