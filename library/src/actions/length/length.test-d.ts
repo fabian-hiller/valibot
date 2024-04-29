@@ -26,24 +26,19 @@ describe('length', () => {
   });
 
   describe('should infer correct types', () => {
-    type Action = LengthAction<[1, 'two', { value: 'three' }], 3, undefined>;
+    type Input = [1, 'two', { value: 'three' }];
+    type Action = LengthAction<Input, 3, undefined>;
 
     test('of input', () => {
-      expectTypeOf<InferInput<Action>>().toEqualTypeOf<
-        [1, 'two', { value: 'three' }]
-      >();
+      expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<
-        [1, 'two', { value: 'three' }]
-      >();
+      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<Input>();
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
-        LengthIssue<[1, 'two', { value: 'three' }], 3>
-      >();
+      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<LengthIssue<Input, 3>>();
     });
   });
 });
