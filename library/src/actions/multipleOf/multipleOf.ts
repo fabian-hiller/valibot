@@ -119,9 +119,7 @@ export function multipleOf(
     message,
     _run(dataset, config) {
       if (dataset.typed && dataset.value % this.requirement !== 0) {
-        _addIssue(this, 'multiple', dataset, config, {
-          received: `${dataset.value}`,
-        });
+        _addIssue(this, 'multiple', dataset, config);
       }
       return dataset;
     },

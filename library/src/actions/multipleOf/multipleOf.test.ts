@@ -53,7 +53,7 @@ describe('multipleOf', () => {
       });
     });
 
-    test('for valid inputs', () => {
+    test('for valid numbers', () => {
       expectNoActionIssue(action, [-15, -10, -5, 0, 5, 10, 15]);
     });
   });
@@ -68,13 +68,16 @@ describe('multipleOf', () => {
       requirement: 5,
     };
 
-    test('for invalid inputs', () => {
-      expectActionIssue(
-        action,
-        baseIssue,
-        [-Infinity, -14, -9, -4, 1, 3, 6, 11, Infinity, NaN],
-        (value) => `${value}`
-      );
+    test('for invalid numbers', () => {
+      expectActionIssue(action, baseIssue, [-14, -9, -4, 1, 3, 6, 11]);
+    });
+
+    test('for infinity', () => {
+      expectActionIssue(action, baseIssue, [-Infinity, Infinity]);
+    });
+
+    test('for NaN', () => {
+      expectActionIssue(action, baseIssue, [NaN]);
     });
   });
 });
