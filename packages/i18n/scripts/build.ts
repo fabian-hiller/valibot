@@ -11,7 +11,7 @@ import pt from '../src/pt';
 import ro from '../src/ro';
 import ru from '../src/ru';
 import sl from '../src/sl';
-import tur from '../src/tur';
+import tr from '../src/tr';
 import uk from '../src/uk';
 import zhCN from '../src/zh-CN';
 import zhTW from '../src/zh-TW';
@@ -22,7 +22,7 @@ console.time('build');
 // Create languages array
 // Note: The language file `en` does not need to be added as the default
 // messages of Valibot are already in English
-const languages = [de, fr, ja, kr, nb, nl, pt, ro, ru, sl, tur, uk, zhCN, zhTW];
+const languages = [de, fr, ja, kr, nb, nl, pt, ro, ru, sl, tr, uk, zhCN, zhTW];
 
 // Create root import variables
 let rootModuleImports: string[] = [];
