@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (April 15, 2024)
+## v0.11.0 (April 30, 2024)
 
 - Add Arabic (ar) translations (pull request #527)
 - Add Turkish (tr) translations (pull request #549)
