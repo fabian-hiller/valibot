@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (April 15, 2024)
+
+- Added Arabic (ar) translations (pull request #527)
+
 ## v0.10.0 (April 09, 2024)
 
 - Add Portuguese (pt) translations (pull request #509)
