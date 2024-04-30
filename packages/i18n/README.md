@@ -6,6 +6,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 
 | Language        | Pull Request       | Status |
 | --------------- | ------------------ | ------ |
+| Arabic (ar)     | [#527][pr-527-url] | ✅     |
 | Chinese (zh-CN) | [#419][pr-419-url] | ✅     |
 | Chinese (zh-TW) | [#427][pr-427-url] | ✅     |
 | Dutch (nl)      | [#438][pr-438-url] | ✅     |
@@ -19,8 +20,8 @@ The official i18n translations for Valibot. See the [internationalization guide]
 | Romanian (ro)   | [#472][pr-472-url] | ✅     |
 | Russian (ru)    | [#434][pr-434-url] | ✅     |
 | Slovenian (sl)  | [#422][pr-422-url] | ✅     |
+| Turkish (tr)    | [#549][pr-549-url] | ✅     |
 | Ukrainian (uk)  | [#423][pr-423-url] | ✅     |
-| Arabic (ar)     | [#527][pr-527-url] | ✅     |
 
 [pr-397-url]: https://github.com/fabian-hiller/valibot/pull/397
 [pr-418-url]: https://github.com/fabian-hiller/valibot/pull/418
@@ -36,6 +37,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 [pr-472-url]: https://github.com/fabian-hiller/valibot/pull/472
 [pr-509-url]: https://github.com/fabian-hiller/valibot/pull/509
 [pr-527-url]: https://github.com/fabian-hiller/valibot/pull/527
+[pr-549-url]: https://github.com/fabian-hiller/valibot/pull/549
 
 ## Getting started
 
