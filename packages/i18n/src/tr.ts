@@ -2,7 +2,7 @@ import { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
-  code:             'tur',
+  code:             'tr',
   schema:           (issue) => `Geçersiz tip: ${issue.expected} bekleniyordu ancak ${issue.received} alındı`,
   specific: {
     bic:            (issue) => `Geçersiz BIC: ${issue.received} alındı`,
