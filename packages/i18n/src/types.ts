@@ -14,6 +14,7 @@ export type Language = {
     | 'ro'
     | 'ru'
     | 'sl'
+    | 'tr'
     | 'uk'
     | 'zh-CN'
     | 'zh-TW';
