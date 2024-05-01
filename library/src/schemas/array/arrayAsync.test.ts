@@ -189,7 +189,7 @@ describe('array', () => {
         )
       ).toStrictEqual({
         typed: false,
-        value: [],
+        value: ['foo'],
         issues: [{ ...stringIssue1, abortEarly: true }],
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
@@ -205,23 +205,6 @@ describe('array', () => {
         typed: false,
         value: [[123, 'foo'], 'bar', []],
         issues: [
-          {
-            ...baseInfo,
-            kind: 'schema',
-            type: 'array',
-            input: 'bar',
-            expected: 'Array',
-            received: '"bar"',
-            path: [
-              {
-                type: 'array',
-                origin: 'value',
-                input: [[123, 'foo'], 'bar', []],
-                key: 1,
-                value: 'bar',
-              },
-            ],
-          },
           {
             ...baseInfo,
             kind: 'schema',
@@ -243,6 +226,23 @@ describe('array', () => {
                 input: [123, 'foo'],
                 key: 0,
                 value: 123,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'array',
+            input: 'bar',
+            expected: 'Array',
+            received: '"bar"',
+            path: [
+              {
+                type: 'array',
+                origin: 'value',
+                input: [[123, 'foo'], 'bar', []],
+                key: 1,
+                value: 'bar',
               },
             ],
           },

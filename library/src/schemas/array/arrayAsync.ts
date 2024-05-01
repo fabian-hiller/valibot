@@ -100,61 +100,61 @@ export function arrayAsync(
       if (Array.isArray(input)) {
         // Set typed to true and value to empty array
         dataset.typed = true;
+        dataset.value = [];
 
-        // Parse schema of each array item
-        dataset.value = await Promise.all(
-          input.map(async (value, key) => {
-            const itemDataset = await this.item._run(
-              { typed: false, value },
-              config
-            );
+        // Parse schema of each item async
+        const itemDatasets = await Promise.all(
+          input.map((value) => this.item._run({ typed: false, value }, config))
+        );
 
-            // If not aborted early, continue execution
-            if (!config.abortEarly || !dataset.issues) {
-              // If there are issues, capture them
-              if (itemDataset.issues) {
-                // Create array path item
-                const pathItem: ArrayPathItem = {
-                  type: 'array',
-                  origin: 'value',
-                  input,
-                  key,
-                  value,
-                };
+        // Process each item dataset
+        for (let key = 0; key < itemDatasets.length; key++) {
+          // Get item dataset
+          const itemDataset = itemDatasets[key];
 
-                // Add modified item dataset issues to issues
-                for (const issue of itemDataset.issues) {
-                  if (issue.path) {
-                    issue.path.unshift(pathItem);
-                  } else {
-                    // @ts-expect-error
-                    issue.path = [pathItem];
-                  }
-                  // @ts-expect-error
-                  dataset.issues?.push(issue);
-                }
-                if (!dataset.issues) {
-                  // @ts-expect-error
-                  dataset.issues = itemDataset.issues;
-                }
+          // If there are issues, capture them
+          if (itemDataset.issues) {
+            // Create array path item
+            const pathItem: ArrayPathItem = {
+              type: 'array',
+              origin: 'value',
+              input,
+              key,
+              value: input[key],
+            };
 
-                // If necessary, abort early
-                if (config.abortEarly) {
-                  dataset.typed = false;
-                  throw null;
-                }
+            // Add modified item dataset issues to issues
+            for (const issue of itemDataset.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                // @ts-expect-error
+                issue.path = [pathItem];
               }
-
-              // If not typed, set typed to false
-              if (!itemDataset.typed) {
-                dataset.typed = false;
-              }
-
-              // Add item to dataset
-              return itemDataset.value;
+              // @ts-expect-error
+              dataset.issues?.push(issue);
             }
-          })
-        ).catch(() => []);
+            if (!dataset.issues) {
+              // @ts-expect-error
+              dataset.issues = itemDataset.issues;
+            }
+
+            // If necessary, abort early
+            if (config.abortEarly) {
+              dataset.typed = false;
+              break;
+            }
+          }
+
+          // If not typed, set typed to false
+          if (!itemDataset.typed) {
+            dataset.typed = false;
+          }
+
+          // Add item to dataset
+          // @ts-expect-error
+          dataset.value.push(itemDataset.value);
+        }
 
         // Otherwise, add array issue
       } else {
