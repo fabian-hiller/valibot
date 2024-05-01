@@ -55,11 +55,8 @@ export const IPV6_REGEX =
 /**
  * [IP](https://en.wikipedia.org/wiki/IP_address) regex.
  */
-// eslint-disable-next-line security/detect-non-literal-regexp
-export const IP_REGEX = new RegExp(
-  `${IPV4_REGEX.source}|${IPV6_REGEX.source}`,
-  'iu'
-);
+export const IP_REGEX =
+  /^(?:(?:[1-9]|1\d|2[0-4])?\d|25[0-5])(?:\.(?:(?:[1-9]|1\d|2[0-4])?\d|25[0-5])){3}$|^(?:(?:[\da-f]{1,4}:){7}[\da-f]{1,4}|(?:[\da-f]{1,4}:){1,7}:|(?:[\da-f]{1,4}:){1,6}:[\da-f]{1,4}|(?:[\da-f]{1,4}:){1,5}(?::[\da-f]{1,4}){1,2}|(?:[\da-f]{1,4}:){1,4}(?::[\da-f]{1,4}){1,3}|(?:[\da-f]{1,4}:){1,3}(?::[\da-f]{1,4}){1,4}|(?:[\da-f]{1,4}:){1,2}(?::[\da-f]{1,4}){1,5}|[\da-f]{1,4}:(?::[\da-f]{1,4}){1,6}|:(?:(?::[\da-f]{1,4}){1,7}|:)|fe80:(?::[\da-f]{0,4}){0,4}%[\da-z]+|::(?:f{4}(?::0{1,4})?:)?(?:(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\.){3}(?:25[0-5]|(?:2[0-4]|1?\d)?\d)|(?:[\da-f]{1,4}:){1,4}:(?:(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\.){3}(?:25[0-5]|(?:2[0-4]|1?\d)?\d))$/iu;
 
 /**
  * [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date regex.
@@ -109,11 +106,8 @@ export const MAC64_REGEX =
 /**
  * [MAC](https://en.wikipedia.org/wiki/MAC_address) regex.
  */
-// eslint-disable-next-line security/detect-non-literal-regexp
-export const MAC_REGEX = new RegExp(
-  `${MAC48_REGEX.source}|${MAC64_REGEX.source}`,
-  'iu'
-);
+export const MAC_REGEX =
+  /^(?:[\da-f]{2}:){5}[\da-f]{2}$|^(?:[\da-f]{2}-){5}[\da-f]{2}$|^(?:[\da-f]{4}\.){2}[\da-f]{4}$|^(?:[\da-f]{2}:){7}[\da-f]{2}$|^(?:[\da-f]{2}-){7}[\da-f]{2}$|^(?:[\da-f]{4}\.){3}[\da-f]{4}$|^(?:[\da-f]{4}:){3}[\da-f]{4}$/iu;
 
 /**
  * [Octal](https://en.wikipedia.org/wiki/Octal) regex.
