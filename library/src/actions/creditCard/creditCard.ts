@@ -130,7 +130,7 @@ export function creditCard(
         // Remove any hyphens and blanks
         (sanitized = input.replace(SANITIZE_REGEX, '')) &&
         // Check if it matches a provider
-        PROVIDER_REGEX_LIST.some((regex) => regex.test(sanitized)) &&
+        PROVIDER_REGEX_LIST.some((regex) => regex.test(sanitized!)) &&
         // Check if passes luhn algorithm
         _isLuhnAlgo(sanitized)) as boolean;
     },
