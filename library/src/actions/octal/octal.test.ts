@@ -116,31 +116,26 @@ describe('octal', () => {
       expectActionIssue(action, baseIssue, ['1e-3', '1e+3']);
     });
 
-    test('for invalid word chars', () => {
+    test('for invalid digits', () => {
       expectActionIssue(action, baseIssue, [
         '8',
         '9',
+        '012345678',
+        '012384567',
+        '901234567',
+      ]);
+    });
+
+    test('for invalid letters', () => {
+      expectActionIssue(action, baseIssue, [
         'a',
         'A',
         'b',
         'B',
-        'c',
-        'C',
-        'o',
-        'O',
+        'y',
+        'Y',
         'z',
         'Z',
-        '0o',
-        '0O',
-        '0h',
-        '0H',
-        '0b',
-        '0B',
-        '012345678',
-        '012384567',
-        '901234567',
-        'o1234567',
-        'O1234567',
         '012345abc67',
         '012345ABC68789',
         '01234568789abc',
@@ -149,6 +144,19 @@ describe('octal', () => {
         'XYZ012345abc68789',
         '123456789abcdefghijklmnopqrstuvwxyz',
         '123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      ]);
+    });
+
+    test('for only prefix', () => {
+      expectActionIssue(action, baseIssue, ['0o', '0O']);
+    });
+
+    test('for invalid prefix', () => {
+      expectActionIssue(action, baseIssue, [
+        '0h01234567',
+        '0H01234567',
+        '0x01234567',
+        '0X01234567',
       ]);
     });
 

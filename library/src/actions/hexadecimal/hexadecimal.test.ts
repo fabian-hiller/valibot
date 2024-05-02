@@ -143,7 +143,7 @@ describe('hexadecimal', () => {
       expectActionIssue(action, baseIssue, ['1e-3', '1e+3']);
     });
 
-    test('for invalid word chars', () => {
+    test('for invalid letters', () => {
       expectActionIssue(action, baseIssue, [
         'g',
         'G',
