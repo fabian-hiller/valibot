@@ -6,6 +6,7 @@ import type {
 } from '../schemas/index.ts';
 import type { Config } from './config.ts';
 import type { ObjectPathItem } from './object.ts';
+import type { TuplePathItem } from './tuple.ts';
 
 /**
  * Unknown path item type.
@@ -30,7 +31,7 @@ export type IssuePathItem =
   | ObjectPathItem
   | RecordPathItem
   | SetPathItem
-  // | TuplePathItem
+  | TuplePathItem
   | UnknownPathItem;
 
 /**

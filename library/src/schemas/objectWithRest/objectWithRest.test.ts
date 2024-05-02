@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { array } from '../array/array.ts';
+import type { ArrayIssue } from '../array/types.ts';
 import { boolean } from '../boolean/index.ts';
 import { never } from '../never/index.ts';
 import { nullish } from '../nullish/index.ts';
@@ -9,11 +10,8 @@ import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
 import { optional } from '../optional/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import {
-  objectWithRest,
-  type ObjectWithRestIssue,
-  type ObjectWithRestSchema,
-} from './objectWithRest.ts';
+import { objectWithRest, type ObjectWithRestSchema } from './objectWithRest.ts';
+import type { ObjectWithRestIssue } from './types.ts';
 
 describe('objectWithRest', () => {
   describe('should return schema object', () => {
@@ -269,6 +267,29 @@ describe('objectWithRest', () => {
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
+    const arrayIssue: ArrayIssue = {
+      ...baseInfo,
+      kind: 'schema',
+      type: 'array',
+      input: null,
+      expected: 'Array',
+      received: 'null',
+      path: [
+        {
+          type: 'object',
+          origin: 'value',
+          input: {
+            key: 'foo',
+            nested: { key: 123 },
+            other1: null,
+            other2: 'bar',
+          },
+          key: 'other1',
+          value: null,
+        },
+      ],
+    };
+
     test('for wrong rest', () => {
       const input = {
         key: 'foo',
@@ -280,23 +301,7 @@ describe('objectWithRest', () => {
         typed: false,
         value: input,
         issues: [
-          {
-            ...baseInfo,
-            kind: 'schema',
-            type: 'array',
-            input: null,
-            expected: 'Array',
-            received: 'null',
-            path: [
-              {
-                type: 'object',
-                origin: 'value',
-                input,
-                key: 'other1',
-                value: input.other1,
-              },
-            ],
-          },
+          arrayIssue,
           {
             ...baseInfo,
             kind: 'schema',
@@ -315,6 +320,30 @@ describe('objectWithRest', () => {
             ],
           },
         ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for worng rest with abort early', () => {
+      expect(
+        schema._run(
+          {
+            typed: false,
+            value: {
+              key: 'foo',
+              nested: { key: 123 },
+              other1: null,
+              other2: 'bar',
+            },
+          },
+          { abortEarly: true }
+        )
+      ).toStrictEqual({
+        typed: false,
+        value: {
+          key: 'foo',
+          nested: { key: 123 },
+        },
+        issues: [{ ...arrayIssue, abortEarly: true }],
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 

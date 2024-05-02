@@ -161,7 +161,7 @@ describe('map', () => {
       skipPipe: undefined,
     };
 
-    const stringIssue1: StringIssue = {
+    const stringIssue: StringIssue = {
       ...baseInfo,
       kind: 'schema',
       type: 'string',
@@ -195,7 +195,7 @@ describe('map', () => {
         typed: false,
         value: input,
         issues: [
-          stringIssue1,
+          stringIssue,
           {
             ...baseInfo,
             kind: 'schema',
@@ -234,7 +234,7 @@ describe('map', () => {
       ).toStrictEqual({
         typed: false,
         value: new Map([[0, 'foo']]),
-        issues: [{ ...stringIssue1, abortEarly: true }],
+        issues: [{ ...stringIssue, abortEarly: true }],
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 

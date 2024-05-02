@@ -2,10 +2,11 @@ import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { nullish } from '../nullish/index.ts';
-import { number, type NumberIssue } from '../number/index.ts';
+import { number } from '../number/index.ts';
 import { optional } from '../optional/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import { object, type ObjectIssue, type ObjectSchema } from './object.ts';
+import { object, type ObjectSchema } from './object.ts';
+import type { ObjectIssue } from './types.ts';
 
 describe('object', () => {
   describe('should return schema object', () => {
@@ -194,54 +195,30 @@ describe('object', () => {
       ],
     };
 
-    const objectIssue: ObjectIssue = {
-      ...baseInfo,
-      kind: 'schema',
-      type: 'object',
-      input: undefined,
-      expected: 'Object',
-      received: 'undefined',
-      path: [
-        {
-          type: 'object',
-          origin: 'value',
-          input: {},
-          key: 'nested',
-          value: undefined,
-        },
-      ],
-    };
-
-    const numberIssue: NumberIssue = {
-      ...baseInfo,
-      kind: 'schema',
-      type: 'number',
-      input: undefined,
-      expected: 'number',
-      received: 'undefined',
-      path: [
-        {
-          type: 'object',
-          origin: 'value',
-          input: { key: 'value', nested: {} },
-          key: 'nested',
-          value: {},
-        },
-        {
-          type: 'object',
-          origin: 'value',
-          input: {},
-          key: 'key',
-          value: undefined,
-        },
-      ],
-    };
-
     test('for missing entries', () => {
       expect(schema._run({ typed: false, value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
-        issues: [stringIssue, objectIssue],
+        issues: [
+          stringIssue,
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: 'Object',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input: {},
+                key: 'nested',
+                value: undefined,
+              },
+            ],
+          },
+        ],
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
@@ -251,7 +228,32 @@ describe('object', () => {
       ).toStrictEqual({
         typed: false,
         value: { key: 'value', nested: {} },
-        issues: [numberIssue],
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: undefined,
+            expected: 'number',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input: { key: 'value', nested: {} },
+                key: 'nested',
+                value: {},
+              },
+              {
+                type: 'object',
+                origin: 'value',
+                input: {},
+                key: 'key',
+                value: undefined,
+              },
+            ],
+          },
+        ],
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 

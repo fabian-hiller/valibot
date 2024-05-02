@@ -8,7 +8,8 @@ import {
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
-import { object, type ObjectIssue, type ObjectSchema } from './object.ts';
+import { object, type ObjectSchema } from './object.ts';
+import type { ObjectIssue } from './types.ts';
 
 describe('object', () => {
   describe('should return schema object', () => {

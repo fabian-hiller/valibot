@@ -1,5 +1,4 @@
 import type {
-  BaseIssue,
   BaseSchema,
   Dataset,
   ErrorMessage,
@@ -10,27 +9,10 @@ import type {
   ObjectPathItem,
 } from '../../types/index.ts';
 import { _addIssue, _isAllowedObjectKey } from '../../utils/index.ts';
+import type { LooseObjectIssue } from './types.ts';
 
 /**
- * Strict object issue type.
- */
-export interface LooseObjectIssue extends BaseIssue<unknown> {
-  /**
-   * The issue kind.
-   */
-  readonly kind: 'schema';
-  /**
-   * The issue type.
-   */
-  readonly type: 'loose_object';
-  /**
-   * The expected input.
-   */
-  readonly expected: 'Object';
-}
-
-/**
- * Strict object schema type.
+ * Loose object schema type.
  */
 export interface LooseObjectSchema<
   TEntries extends ObjectEntries,
@@ -53,7 +35,7 @@ export interface LooseObjectSchema<
    */
   readonly expects: 'Object';
   /**
-   * The object entries.
+   * The entries schema.
    */
   readonly entries: TEntries;
   /**
@@ -65,7 +47,7 @@ export interface LooseObjectSchema<
 /**
  * Creates a loose object schema.
  *
- * @param entries The object entries.
+ * @param entries The entries schema.
  *
  * @returns A loose object schema.
  */
@@ -76,7 +58,7 @@ export function looseObject<const TEntries extends ObjectEntries>(
 /**
  * Creates a loose object schema.
  *
- * @param entries The object entries.
+ * @param entries The entries schema.
  * @param message The error message.
  *
  * @returns A loose object schema.
@@ -110,16 +92,6 @@ export function looseObject(
         // Set typed to true and value to blank object
         dataset.typed = true;
         dataset.value = {};
-
-        // Copy input object to dataset value
-        for (const key in input) {
-          // TODO: We should document that we exclude specific keys for
-          // security reasons.
-          if (_isAllowedObjectKey(key)) {
-            // @ts-expect-error
-            dataset.value[key] = input[key];
-          }
-        }
 
         // Parse schema of each entry
         for (const key in this.entries) {
@@ -178,6 +150,18 @@ export function looseObject(
           if (valueDataset.value !== undefined || key in input) {
             // @ts-expect-error
             dataset.value[key] = valueDataset.value;
+          }
+        }
+
+        // Add rest to dataset if necessary
+        if (!dataset.issues || !config.abortEarly) {
+          for (const key in input) {
+            // TODO: We should document that we exclude specific keys for
+            // security reasons.
+            if (_isAllowedObjectKey(key) && !(key in this.entries)) {
+              // @ts-expect-error
+              dataset.value[key] = input[key];
+            }
           }
         }
 

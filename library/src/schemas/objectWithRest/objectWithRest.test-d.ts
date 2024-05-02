@@ -14,11 +14,8 @@ import {
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
-import {
-  objectWithRest,
-  type ObjectWithRestIssue,
-  type ObjectWithRestSchema,
-} from './objectWithRest.ts';
+import { objectWithRest, type ObjectWithRestSchema } from './objectWithRest.ts';
+import type { ObjectWithRestIssue } from './types.ts';
 
 describe('objectWithRest', () => {
   describe('should return schema object', () => {

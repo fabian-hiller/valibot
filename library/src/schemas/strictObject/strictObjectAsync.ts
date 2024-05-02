@@ -7,7 +7,7 @@ import type {
   ObjectEntriesAsync,
 } from '../../types/index.ts';
 import type { NeverIssue } from '../never/index.ts';
-import type { StrictObjectIssue } from './strictObject.ts';
+import type { StrictObjectIssue } from './types.ts';
 
 /**
  * Object schema async type.
@@ -24,12 +24,16 @@ export interface StrictObjectSchemaAsync<
    * The schema type.
    */
   readonly type: 'strict_object';
+  // /**
+  //  * The schema reference.
+  //  */
+  // readonly reference: typeof strictObjectAsync;
   /**
    * The expected property.
    */
   readonly expects: 'Object';
   /**
-   * The object entries.
+   * The entries schema.
    */
   readonly entries: TEntries;
   /**

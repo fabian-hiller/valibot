@@ -7,5 +7,6 @@ export * from './other.ts';
 export * from './pipe.ts';
 export * from './schema.ts';
 export * from './transformation.ts';
+export * from './tuple.ts';
 export * from './utils.ts';
 export * from './validation.ts';

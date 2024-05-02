@@ -9,11 +9,8 @@ import {
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
-import {
-  looseObject,
-  type LooseObjectIssue,
-  type LooseObjectSchema,
-} from './looseObject.ts';
+import { looseObject, type LooseObjectSchema } from './looseObject.ts';
+import type { LooseObjectIssue } from './types.ts';
 
 describe('looseObject', () => {
   describe('should return schema object', () => {
