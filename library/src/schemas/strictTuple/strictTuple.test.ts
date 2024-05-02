@@ -1,66 +1,70 @@
 import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { boolean } from '../boolean/index.ts';
+import { number } from '../number/index.ts';
+import { optional } from '../optional/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import { array, type ArraySchema } from './array.ts';
-import type { ArrayIssue } from './types.ts';
+import { strictTuple, type StrictTupleSchema } from './strictTuple.ts';
+import type { StrictTupleIssue } from './types.ts';
 
-describe('array', () => {
+describe('strictTuple', () => {
   describe('should return schema object', () => {
-    const item = string();
-    type Item = typeof item;
-    const baseSchema: Omit<ArraySchema<Item, never>, 'message'> = {
+    const items = [optional(string()), number()] as const;
+    type Items = typeof items;
+    const baseSchema: Omit<StrictTupleSchema<Items, never>, 'message'> = {
       kind: 'schema',
-      type: 'array',
-      reference: array,
+      type: 'strict_tuple',
+      reference: strictTuple,
       expects: 'Array',
-      item,
+      items,
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: ArraySchema<Item, undefined> = {
+      const schema: StrictTupleSchema<Items, undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(array(item)).toStrictEqual(schema);
-      expect(array(item, undefined)).toStrictEqual(schema);
+      expect(strictTuple(items)).toStrictEqual(schema);
+      expect(strictTuple(items, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(array(item, 'message')).toStrictEqual({
+      expect(strictTuple(items, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies ArraySchema<Item, 'message'>);
+      } satisfies StrictTupleSchema<Items, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(array(item, message)).toStrictEqual({
+      expect(strictTuple(items, message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies ArraySchema<Item, typeof message>);
+      } satisfies StrictTupleSchema<Items, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    const schema = array(string());
-
-    test('for empty array', () => {
-      expectNoSchemaIssue(schema, [[]]);
+    test('for empty tuple', () => {
+      expectNoSchemaIssue(strictTuple([]), [[]]);
     });
 
-    test('for simple array', () => {
-      expectNoSchemaIssue(schema, [['foo', 'bar', 'baz']]);
+    test('for simple tuple', () => {
+      expectNoSchemaIssue(strictTuple([optional(string()), number()]), [
+        ['foo', 123],
+        [undefined, 123],
+      ]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = array(string(), 'message');
-    const baseIssue: Omit<ArrayIssue, 'input' | 'received'> = {
+    const schema = strictTuple([optional(string()), number()], 'message');
+    const baseIssue: Omit<StrictTupleIssue, 'input' | 'received'> = {
       kind: 'schema',
-      type: 'array',
+      type: 'strict_tuple',
       expected: 'Array',
       message: 'message',
     };
@@ -107,19 +111,27 @@ describe('array', () => {
   });
 
   describe('should return dataset without nested issues', () => {
-    const schema = array(string());
+    const schema = strictTuple([optional(string()), number()]);
 
-    test('for simple array', () => {
-      expectNoSchemaIssue(schema, [['foo', 'bar', 'baz']]);
+    test('for simple tuple', () => {
+      expectNoSchemaIssue(schema, [
+        ['foo', 123],
+        [undefined, 123],
+      ]);
     });
 
-    test('for nested array', () => {
-      expectNoSchemaIssue(array(schema), [[['foo', 'bar'], ['baz']]]);
+    test('for nested tuple', () => {
+      expectNoSchemaIssue(strictTuple([schema, schema]), [
+        [
+          ['foo', 123],
+          [undefined, 123],
+        ],
+      ]);
     });
   });
 
   describe('should return dataset with nested issues', () => {
-    const schema = array(string());
+    const schema = strictTuple([string(), number(), boolean()]);
 
     const baseInfo = {
       message: expect.any(String),
@@ -140,37 +152,36 @@ describe('array', () => {
       received: '123',
       path: [
         {
-          type: 'array',
+          type: 'tuple',
           origin: 'value',
-          input: ['foo', 123, 'baz', null],
-          key: 1,
+          input: [123, 456, 'true'],
+          key: 0,
           value: 123,
         },
       ],
     };
 
     test('for wrong items', () => {
-      expect(
-        schema._run({ typed: false, value: ['foo', 123, 'baz', null] }, {})
-      ).toStrictEqual({
+      const input = [123, 456, 'true'];
+      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
         typed: false,
-        value: ['foo', 123, 'baz', null],
+        value: input,
         issues: [
           stringIssue,
           {
             ...baseInfo,
             kind: 'schema',
-            type: 'string',
-            input: null,
-            expected: 'string',
-            received: 'null',
+            type: 'boolean',
+            input: 'true',
+            expected: 'boolean',
+            received: '"true"',
             path: [
               {
-                type: 'array',
+                type: 'tuple',
                 origin: 'value',
-                input: ['foo', 123, 'baz', null],
-                key: 3,
-                value: null,
+                input: input,
+                key: 2,
+                value: input[2],
               },
             ],
           },
@@ -181,70 +192,98 @@ describe('array', () => {
     test('with abort early', () => {
       expect(
         schema._run(
-          { typed: false, value: ['foo', 123, 'baz', null] },
+          { typed: false, value: [123, 456, 'true'] },
           { abortEarly: true }
         )
       ).toStrictEqual({
         typed: false,
-        value: ['foo'],
+        value: [],
         issues: [{ ...stringIssue, abortEarly: true }],
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
     test('for wrong nested items', () => {
-      const nestedSchema = array(schema);
+      const nestedSchema = strictTuple([schema, schema]);
+      const input: [[string, string, boolean], null] = [
+        ['foo', '123', false],
+        null,
+      ];
       expect(
-        nestedSchema._run(
-          { typed: false, value: [[123, 'foo'], 'bar', []] },
-          {}
-        )
+        nestedSchema._run({ typed: false, value: input }, {})
       ).toStrictEqual({
         typed: false,
-        value: [[123, 'foo'], 'bar', []],
+        value: input,
         issues: [
           {
             ...baseInfo,
             kind: 'schema',
-            type: 'string',
-            input: 123,
-            expected: 'string',
-            received: '123',
+            type: 'number',
+            input: '123',
+            expected: 'number',
+            received: '"123"',
             path: [
               {
-                type: 'array',
+                type: 'tuple',
                 origin: 'value',
-                input: [[123, 'foo'], 'bar', []],
+                input: input,
                 key: 0,
-                value: [123, 'foo'],
+                value: input[0],
               },
               {
-                type: 'array',
+                type: 'tuple',
                 origin: 'value',
-                input: [123, 'foo'],
-                key: 0,
-                value: 123,
+                input: input[0],
+                key: 1,
+                value: input[0][1],
               },
             ],
           },
           {
             ...baseInfo,
             kind: 'schema',
-            type: 'array',
-            input: 'bar',
+            type: 'strict_tuple',
+            input: null,
             expected: 'Array',
-            received: '"bar"',
+            received: 'null',
             path: [
               {
-                type: 'array',
+                type: 'tuple',
                 origin: 'value',
-                input: [[123, 'foo'], 'bar', []],
+                input: input,
                 key: 1,
-                value: 'bar',
+                value: input[1],
               },
             ],
           },
         ],
       } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+    });
+
+    test('for unknown items', () => {
+      const input = ['foo', 123, true, null, undefined];
+      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+        typed: false,
+        value: ['foo', 123, true],
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'strict_tuple',
+            input: null,
+            expected: 'never',
+            received: 'null',
+            path: [
+              {
+                type: 'tuple',
+                origin: 'value',
+                input,
+                key: 3,
+                value: input[3],
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
   });
 });

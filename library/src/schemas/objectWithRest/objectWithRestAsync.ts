@@ -11,7 +11,7 @@ import type {
   InferOutput,
   ObjectEntriesAsync,
 } from '../../types/index.ts';
-import type { ObjectWithRestIssue } from './objectWithRest.ts';
+import type { ObjectWithRestIssue } from './types.ts';
 
 /**
  * Object schema async type.
@@ -31,12 +31,16 @@ export interface ObjectWithRestSchemaAsync<
    * The schema type.
    */
   readonly type: 'object_with_rest';
+  // /**
+  //  * The schema reference.
+  //  */
+  // readonly reference: typeof objectWithRestAsync;
   /**
    * The expected property.
    */
   readonly expects: 'Object';
   /**
-   * The object entries.
+   * The entries schema.
    */
   readonly entries: TEntries;
   /**

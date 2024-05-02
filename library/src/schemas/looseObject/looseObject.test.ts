@@ -6,11 +6,8 @@ import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
 import { optional } from '../optional/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import {
-  looseObject,
-  type LooseObjectIssue,
-  type LooseObjectSchema,
-} from './looseObject.ts';
+import { looseObject, type LooseObjectSchema } from './looseObject.ts';
+import type { LooseObjectIssue } from './types.ts';
 
 describe('looseObject', () => {
   describe('should return schema object', () => {

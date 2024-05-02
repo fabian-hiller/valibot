@@ -10,7 +10,7 @@ import { arrayAsync, type ArraySchemaAsync } from './arrayAsync.ts';
 import type { ArrayIssue } from './types.ts';
 
 describe('arrayAsync', () => {
-  describe('should return schema arrayAsync', () => {
+  describe('should return schema object', () => {
     const item = string();
     type Item = typeof item;
 

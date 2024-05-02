@@ -9,11 +9,8 @@ import {
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
-import {
-  strictObject,
-  type StrictObjectIssue,
-  type StrictObjectSchema,
-} from './strictObject.ts';
+import { strictObject, type StrictObjectSchema } from './strictObject.ts';
+import type { StrictObjectIssue } from './types.ts';
 
 describe('strictObject', () => {
   describe('should return schema object', () => {

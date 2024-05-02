@@ -6,11 +6,8 @@ import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
 import { optional } from '../optional/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import {
-  strictObject,
-  type StrictObjectIssue,
-  type StrictObjectSchema,
-} from './strictObject.ts';
+import { strictObject, type StrictObjectSchema } from './strictObject.ts';
+import type { StrictObjectIssue } from './types.ts';
 
 describe('strictObject', () => {
   describe('should return schema object', () => {
@@ -267,13 +264,13 @@ describe('strictObject', () => {
             ...baseInfo,
             kind: 'schema',
             type: 'strict_object',
-            input: 'other1',
+            input: input.other1,
             expected: 'never',
-            received: '"other1"',
+            received: `"${input.other1}"`,
             path: [
               {
                 type: 'object',
-                origin: 'key',
+                origin: 'value',
                 input,
                 key: 'other1',
                 value: input.other1,

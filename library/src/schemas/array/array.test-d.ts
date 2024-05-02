@@ -10,7 +10,7 @@ import { array, type ArraySchema } from './array.ts';
 import type { ArrayIssue } from './types.ts';
 
 describe('array', () => {
-  describe('should return schema array', () => {
+  describe('should return schema object', () => {
     const item = string();
     type Item = typeof item;
 

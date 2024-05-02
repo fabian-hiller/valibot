@@ -6,7 +6,7 @@ import { arrayAsync, type ArraySchemaAsync } from './arrayAsync.ts';
 import type { ArrayIssue } from './types.ts';
 
 describe('array', () => {
-  describe('should return schema array', () => {
+  describe('should return schema object', () => {
     const item = string();
     type Item = typeof item;
     const baseSchema: Omit<ArraySchemaAsync<Item, never>, 'message'> = {
@@ -131,7 +131,7 @@ describe('array', () => {
       skipPipe: undefined,
     };
 
-    const stringIssue1: StringIssue = {
+    const stringIssue: StringIssue = {
       ...baseInfo,
       kind: 'schema',
       type: 'string',
@@ -159,7 +159,7 @@ describe('array', () => {
         typed: false,
         value: ['foo', 123, 'baz', null],
         issues: [
-          stringIssue1,
+          stringIssue,
           {
             ...baseInfo,
             kind: 'schema',
@@ -190,7 +190,7 @@ describe('array', () => {
       ).toStrictEqual({
         typed: false,
         value: ['foo'],
-        issues: [{ ...stringIssue1, abortEarly: true }],
+        issues: [{ ...stringIssue, abortEarly: true }],
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 

@@ -13,24 +13,7 @@ import type {
   ObjectPathItem,
 } from '../../types/index.ts';
 import { _addIssue, _isAllowedObjectKey } from '../../utils/index.ts';
-
-/**
- * Object with rest issue type.
- */
-export interface ObjectWithRestIssue extends BaseIssue<unknown> {
-  /**
-   * The issue kind.
-   */
-  readonly kind: 'schema';
-  /**
-   * The issue type.
-   */
-  readonly type: 'object_with_rest';
-  /**
-   * The expected input.
-   */
-  readonly expected: 'Object';
-}
+import type { ObjectWithRestIssue } from './types.ts';
 
 /**
  * Object with rest schema type.
@@ -57,7 +40,7 @@ export interface ObjectWithRestSchema<
    */
   readonly expects: 'Object';
   /**
-   * The object entries.
+   * The entries schema.
    */
   readonly entries: TEntries;
   /**
@@ -73,7 +56,7 @@ export interface ObjectWithRestSchema<
 /**
  * Creates an object schema.
  *
- * @param entries The object entries.
+ * @param entries The entries schema.
  * @param rest The rest schema.
  *
  * @returns An object schema.
@@ -89,7 +72,7 @@ export function objectWithRest<
 /**
  * Creates an object schema.
  *
- * @param entries The object entries.
+ * @param entries The entries schema.
  * @param rest The rest schema.
  * @param message The error message.
  *

@@ -1,5 +1,4 @@
 import type {
-  BaseIssue,
   BaseSchema,
   Dataset,
   ErrorMessage,
@@ -10,24 +9,7 @@ import type {
   ObjectPathItem,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
-
-/**
- * Object issue type.
- */
-export interface ObjectIssue extends BaseIssue<unknown> {
-  /**
-   * The issue kind.
-   */
-  readonly kind: 'schema';
-  /**
-   * The issue type.
-   */
-  readonly type: 'object';
-  /**
-   * The expected input.
-   */
-  readonly expected: 'Object';
-}
+import type { ObjectIssue } from './types.ts';
 
 /**
  * Object schema type.
@@ -53,7 +35,7 @@ export interface ObjectSchema<
    */
   readonly expects: 'Object';
   /**
-   * The object entries.
+   * The entries schema.
    */
   readonly entries: TEntries;
   /**
@@ -65,7 +47,7 @@ export interface ObjectSchema<
 /**
  * Creates an object schema.
  *
- * @param entries The object entries.
+ * @param entries The entries schema.
  *
  * @returns An object schema.
  */
@@ -76,7 +58,7 @@ export function object<const TEntries extends ObjectEntries>(
 /**
  * Creates an object schema.
  *
- * @param entries The object entries.
+ * @param entries The entries schema.
  * @param message The error message.
  *
  * @returns An object schema.
