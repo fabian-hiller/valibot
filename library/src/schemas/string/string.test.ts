@@ -42,7 +42,7 @@ describe('string', () => {
     const schema = string();
 
     test('for empty strings', () => {
-      expectNoSchemaIssue(schema, ['', ' ']);
+      expectNoSchemaIssue(schema, ['', ' ', '\n']);
     });
 
     test('for single char', () => {
