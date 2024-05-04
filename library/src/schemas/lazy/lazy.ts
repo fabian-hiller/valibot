@@ -7,20 +7,14 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Getter type.
- */
-export type Getter = (
-  input: unknown
-) => BaseSchema<unknown, unknown, BaseIssue<unknown>>;
-
-/**
  * Lazy schema type.
  */
-export interface LazySchema<TGetter extends Getter>
-  extends BaseSchema<
-    InferInput<ReturnType<TGetter>>,
-    InferOutput<ReturnType<TGetter>>,
-    InferIssue<ReturnType<TGetter>>
+export interface LazySchema<
+  TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+> extends BaseSchema<
+    InferInput<TSchema>,
+    InferOutput<TSchema>,
+    InferIssue<TSchema>
   > {
   /**
    * The schema type.
@@ -37,7 +31,7 @@ export interface LazySchema<TGetter extends Getter>
   /**
    * The schema getter.
    */
-  readonly getter: TGetter;
+  readonly getter: (input: unknown) => TSchema;
 }
 
 /**
@@ -47,9 +41,9 @@ export interface LazySchema<TGetter extends Getter>
  *
  * @returns A lazy schema.
  */
-export function lazy<TGetter extends Getter>(
-  getter: TGetter
-): LazySchema<TGetter> {
+export function lazy<
+  const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(getter: (input: unknown) => TSchema): LazySchema<TSchema> {
   return {
     kind: 'schema',
     type: 'lazy',

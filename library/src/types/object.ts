@@ -15,7 +15,11 @@ import type {
 } from '../schemas/index.ts';
 import type { InferInput, InferIssue, InferOutput } from './infer.ts';
 import type { BaseIssue } from './issue.ts';
-import type { ErrorMessage, QuestionMarkSchema } from './other.ts';
+import type {
+  ErrorMessage,
+  QuestionMarkSchema,
+  QuestionMarkSchemaAsync,
+} from './other.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type { MaybeReadonly, ResolveObject } from './utils.ts';
 
@@ -105,7 +109,9 @@ type RequiredKeys<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
   TObject extends InferEntriesInput<TEntries> | InferEntriesOutput<TEntries>,
 > = {
-  [TKey in keyof TEntries]: TEntries[TKey] extends QuestionMarkSchema
+  [TKey in keyof TEntries]: TEntries[TKey] extends
+    | QuestionMarkSchema
+    | QuestionMarkSchemaAsync
     ? undefined extends TObject[TKey]
       ? never
       : TKey
@@ -119,7 +125,9 @@ type OptionalKeys<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
   TObject extends InferEntriesInput<TEntries> | InferEntriesOutput<TEntries>,
 > = {
-  [TKey in keyof TEntries]: TEntries[TKey] extends QuestionMarkSchema
+  [TKey in keyof TEntries]: TEntries[TKey] extends
+    | QuestionMarkSchema
+    | QuestionMarkSchemaAsync
     ? undefined extends TObject[TKey]
       ? TKey
       : never
