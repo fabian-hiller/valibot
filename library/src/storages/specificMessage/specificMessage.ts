@@ -1,20 +1,33 @@
 import type {
   BaseIssue,
+  BaseSchema,
+  BaseSchemaAsync,
+  BaseTransformation,
+  BaseTransformationAsync,
+  BaseValidation,
+  BaseValidationAsync,
   ErrorMessage,
   FunctionReference,
   InferIssue,
-  PipeItemAsync,
 } from '../../types/index.ts';
+
+/**
+ * Reference type.
+ */
+type Reference = FunctionReference<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any[],
+  | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+  | BaseValidation<unknown, unknown, BaseIssue<unknown>>
+  | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
+  | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
+  | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>
+>;
 
 // Create specific message store
 let store:
-  | Map<
-      FunctionReference<
-        unknown[],
-        PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
-      >,
-      Map<string | undefined, ErrorMessage<BaseIssue<unknown>>>
-    >
+  | Map<Reference, Map<string | undefined, ErrorMessage<BaseIssue<unknown>>>>
   | undefined;
 
 /**
@@ -24,12 +37,7 @@ let store:
  * @param message The error message.
  * @param lang The language of the message.
  */
-export function setSpecificMessage<
-  const TReference extends FunctionReference<
-    unknown[],
-    PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
-  >,
->(
+export function setSpecificMessage<const TReference extends Reference>(
   reference: TReference,
   message: ErrorMessage<InferIssue<ReturnType<TReference>>>,
   lang?: string
@@ -47,12 +55,7 @@ export function setSpecificMessage<
  *
  * @returns The error message.
  */
-export function getSpecificMessage<
-  const TReference extends FunctionReference<
-    unknown[],
-    PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
-  >,
->(
+export function getSpecificMessage<const TReference extends Reference>(
   reference: TReference,
   lang?: string
 ): ErrorMessage<InferIssue<ReturnType<TReference>>> | undefined {
@@ -66,10 +69,7 @@ export function getSpecificMessage<
  * @param lang The language of the message.
  */
 export function deleteSpecificMessage(
-  reference: FunctionReference<
-    unknown[],
-    PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
-  >,
+  reference: Reference,
   lang?: string
 ): void {
   store?.get(reference)?.delete(lang);
