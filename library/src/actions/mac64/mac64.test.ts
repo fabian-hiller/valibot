@@ -73,7 +73,7 @@ describe('mac64', () => {
     };
 
     test('for empty strings', () => {
-      expectActionIssue(action, baseIssue, ['', ' ']);
+      expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
     test('for 48-bit MAC address', () => {

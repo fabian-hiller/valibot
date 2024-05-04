@@ -82,7 +82,7 @@ describe('ip', () => {
     };
 
     test('for empty strings', () => {
-      expectActionIssue(action, baseIssue, ['', ' ']);
+      expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
     test('for invalid IPv4 address', () => {
