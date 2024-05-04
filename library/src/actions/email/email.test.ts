@@ -160,7 +160,7 @@ describe('email', () => {
     // General tests
 
     test('for empty strings', () => {
-      expectActionIssue(action, baseIssue, ['', ' ']);
+      expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
     test('for simple strings', () => {

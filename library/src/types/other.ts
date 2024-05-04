@@ -1,4 +1,9 @@
 import type {
+  LazySchema,
+  LazySchemaAsync,
+  NonNullableIssue,
+  NonNullableSchema,
+  NonNullableSchemaAsync,
   NullishSchema,
   NullishSchemaAsync,
   OptionalSchema,
@@ -44,13 +49,35 @@ export type DefaultAsync<
   | undefined;
 
 /**
- * Question mark schema type.
+ * Base question mark schema type.
  */
-export type QuestionMarkSchema =
+type BaseQuestionMarkSchema =
   | NullishSchema<
       BaseSchema<unknown, unknown, BaseIssue<unknown>>,
       Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
     >
+  | OptionalSchema<
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
+    >;
+
+/**
+ * Question mark schema type.
+ */
+export type QuestionMarkSchema =
+  | BaseQuestionMarkSchema
+  // @ts-expect-error
+  | LazySchema<QuestionMarkSchema>
+  | NonNullableSchema<
+      // @ts-expect-error
+      QuestionMarkSchema,
+      ErrorMessage<NonNullableIssue> | undefined
+    >;
+
+/**
+ * Base question mark schema async type.
+ */
+type BaseQuestionMarkSchemaAsync =
   | NullishSchemaAsync<
       | BaseSchema<unknown, unknown, BaseIssue<unknown>>
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
@@ -59,10 +86,6 @@ export type QuestionMarkSchema =
         | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
       >
     >
-  | OptionalSchema<
-      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-      Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
-    >
   | OptionalSchemaAsync<
       | BaseSchema<unknown, unknown, BaseIssue<unknown>>
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
@@ -70,4 +93,17 @@ export type QuestionMarkSchema =
         | BaseSchema<unknown, unknown, BaseIssue<unknown>>
         | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
       >
+    >;
+
+/**
+ * Question mark schema async type.
+ */
+export type QuestionMarkSchemaAsync =
+  | BaseQuestionMarkSchemaAsync
+  // @ts-expect-error
+  | LazySchemaAsync<QuestionMarkSchema | QuestionMarkSchemaAsync>
+  | NonNullableSchemaAsync<
+      // @ts-expect-error
+      QuestionMarkSchema | QuestionMarkSchemaAsync,
+      ErrorMessage<NonNullableIssue> | undefined
     >;

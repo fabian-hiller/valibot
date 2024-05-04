@@ -21,7 +21,6 @@ export type PipeActionAsync<
   TOutput,
   TIssue extends BaseIssue<unknown>,
 > =
-  | PipeAction<TInput, TOutput, TIssue>
   | BaseValidationAsync<TInput, TOutput, TIssue>
   | BaseTransformationAsync<TInput, TOutput, TIssue>;
 
@@ -36,20 +35,8 @@ export type PipeItem<TInput, TOutput, TIssue extends BaseIssue<unknown>> =
  * Pipe item async type.
  */
 export type PipeItemAsync<TInput, TOutput, TIssue extends BaseIssue<unknown>> =
-  | PipeItem<TInput, TOutput, TIssue>
   | BaseSchemaAsync<TInput, TOutput, TIssue>
   | PipeActionAsync<TInput, TOutput, TIssue>;
-
-/**
- * Pipe schema async type.
- */
-export type PipeSchemaAsync<
-  TInput,
-  TOutput,
-  TIssue extends BaseIssue<unknown>,
-> =
-  | BaseSchema<TInput, TOutput, TIssue>
-  | BaseSchemaAsync<TInput, TOutput, TIssue>;
 
 /**
  * No pipe type.

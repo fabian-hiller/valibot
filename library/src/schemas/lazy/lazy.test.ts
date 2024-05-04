@@ -18,7 +18,7 @@ describe('lazy', () => {
       getter,
       async: false,
       _run: expect.any(Function),
-    } satisfies LazySchema<() => StringSchema<undefined>>);
+    } satisfies LazySchema<StringSchema<undefined>>);
   });
 
   describe('should return dataset without issues', () => {

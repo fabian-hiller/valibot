@@ -1,5 +1,7 @@
 import type {
   BaseIssue,
+  BaseSchema,
+  BaseSchemaAsync,
   Config,
   Dataset,
   FirstTupleItem,
@@ -7,9 +9,10 @@ import type {
   InferIssue,
   InferOutput,
   LastTupleItem,
+  PipeAction,
   PipeActionAsync,
+  PipeItem,
   PipeItemAsync,
-  PipeSchemaAsync,
 } from '../../types/index.ts';
 
 /**
@@ -17,8 +20,14 @@ import type {
  */
 export type SchemaWithPipeAsync<
   TPipe extends [
-    PipeSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-    ...PipeItemAsync<unknown, unknown, BaseIssue<unknown>>[],
+    (
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+    ),
+    ...(
+      | PipeItem<unknown, unknown, BaseIssue<unknown>>
+      | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+    )[],
   ],
 > = Omit<FirstTupleItem<TPipe>, 'async' | '_run' | '_types'> & {
   /**
@@ -66,16 +75,17 @@ export type SchemaWithPipeAsync<
  * @returns A schema with a pipeline.
  */
 export function pipeAsync<
-  const TSchema extends PipeSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TItem1 extends PipeItemAsync<
-    InferOutput<TSchema>,
-    unknown,
-    BaseIssue<unknown>
-  >,
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TItem1 extends
+    | PipeItem<InferOutput<TSchema>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TSchema>, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
   item1:
     | TItem1
+    | PipeAction<InferOutput<TSchema>, InferOutput<TItem1>, InferIssue<TItem1>>
     | PipeActionAsync<
         InferOutput<TSchema>,
         InferOutput<TItem1>,
@@ -93,21 +103,20 @@ export function pipeAsync<
  * @returns A schema with a pipeline.
  */
 export function pipeAsync<
-  const TSchema extends PipeSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TItem1 extends PipeItemAsync<
-    InferOutput<TSchema>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem2 extends PipeItemAsync<
-    InferOutput<TItem1>,
-    unknown,
-    BaseIssue<unknown>
-  >,
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TItem1 extends
+    | PipeItem<InferOutput<TSchema>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TSchema>, unknown, BaseIssue<unknown>>,
+  const TItem2 extends
+    | PipeItem<InferOutput<TItem1>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem1>, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
   item1:
     | TItem1
+    | PipeAction<InferOutput<TSchema>, InferOutput<TItem1>, InferIssue<TItem1>>
     | PipeActionAsync<
         InferOutput<TSchema>,
         InferOutput<TItem1>,
@@ -115,6 +124,7 @@ export function pipeAsync<
       >,
   item2:
     | TItem2
+    | PipeAction<InferOutput<TItem1>, InferOutput<TItem2>, InferIssue<TItem2>>
     | PipeActionAsync<
         InferOutput<TItem1>,
         InferOutput<TItem2>,
@@ -133,26 +143,23 @@ export function pipeAsync<
  * @returns A schema with a pipeline.
  */
 export function pipeAsync<
-  const TSchema extends PipeSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TItem1 extends PipeItemAsync<
-    InferOutput<TSchema>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem2 extends PipeItemAsync<
-    InferOutput<TItem1>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem3 extends PipeItemAsync<
-    InferOutput<TItem2>,
-    unknown,
-    BaseIssue<unknown>
-  >,
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TItem1 extends
+    | PipeItem<InferOutput<TSchema>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TSchema>, unknown, BaseIssue<unknown>>,
+  const TItem2 extends
+    | PipeItem<InferOutput<TItem1>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem1>, unknown, BaseIssue<unknown>>,
+  const TItem3 extends
+    | PipeItem<InferOutput<TItem2>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem2>, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
   item1:
     | TItem1
+    | PipeAction<InferOutput<TSchema>, InferOutput<TItem1>, InferIssue<TItem1>>
     | PipeActionAsync<
         InferOutput<TSchema>,
         InferOutput<TItem1>,
@@ -160,6 +167,7 @@ export function pipeAsync<
       >,
   item2:
     | TItem2
+    | PipeAction<InferOutput<TItem1>, InferOutput<TItem2>, InferIssue<TItem2>>
     | PipeActionAsync<
         InferOutput<TItem1>,
         InferOutput<TItem2>,
@@ -167,6 +175,7 @@ export function pipeAsync<
       >,
   item3:
     | TItem3
+    | PipeAction<InferOutput<TItem2>, InferOutput<TItem3>, InferIssue<TItem3>>
     | PipeActionAsync<
         InferOutput<TItem2>,
         InferOutput<TItem3>,
@@ -186,31 +195,26 @@ export function pipeAsync<
  * @returns A schema with a pipeline.
  */
 export function pipeAsync<
-  const TSchema extends PipeSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TItem1 extends PipeItemAsync<
-    InferOutput<TSchema>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem2 extends PipeItemAsync<
-    InferOutput<TItem1>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem3 extends PipeItemAsync<
-    InferOutput<TItem2>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem4 extends PipeItemAsync<
-    InferOutput<TItem3>,
-    unknown,
-    BaseIssue<unknown>
-  >,
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TItem1 extends
+    | PipeItem<InferOutput<TSchema>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TSchema>, unknown, BaseIssue<unknown>>,
+  const TItem2 extends
+    | PipeItem<InferOutput<TItem1>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem1>, unknown, BaseIssue<unknown>>,
+  const TItem3 extends
+    | PipeItem<InferOutput<TItem2>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem2>, unknown, BaseIssue<unknown>>,
+  const TItem4 extends
+    | PipeItem<InferOutput<TItem3>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem3>, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
   item1:
     | TItem1
+    | PipeAction<InferOutput<TSchema>, InferOutput<TItem1>, InferIssue<TItem1>>
     | PipeActionAsync<
         InferOutput<TSchema>,
         InferOutput<TItem1>,
@@ -218,6 +222,7 @@ export function pipeAsync<
       >,
   item2:
     | TItem2
+    | PipeAction<InferOutput<TItem1>, InferOutput<TItem2>, InferIssue<TItem2>>
     | PipeActionAsync<
         InferOutput<TItem1>,
         InferOutput<TItem2>,
@@ -225,6 +230,7 @@ export function pipeAsync<
       >,
   item3:
     | TItem3
+    | PipeAction<InferOutput<TItem2>, InferOutput<TItem3>, InferIssue<TItem3>>
     | PipeActionAsync<
         InferOutput<TItem2>,
         InferOutput<TItem3>,
@@ -232,6 +238,7 @@ export function pipeAsync<
       >,
   item4:
     | TItem4
+    | PipeAction<InferOutput<TItem3>, InferOutput<TItem4>, InferIssue<TItem4>>
     | PipeActionAsync<
         InferOutput<TItem3>,
         InferOutput<TItem4>,
@@ -252,36 +259,29 @@ export function pipeAsync<
  * @returns A schema with a pipeline.
  */
 export function pipeAsync<
-  const TSchema extends PipeSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TItem1 extends PipeItemAsync<
-    InferOutput<TSchema>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem2 extends PipeItemAsync<
-    InferOutput<TItem1>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem3 extends PipeItemAsync<
-    InferOutput<TItem2>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem4 extends PipeItemAsync<
-    InferOutput<TItem3>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem5 extends PipeItemAsync<
-    InferOutput<TItem4>,
-    unknown,
-    BaseIssue<unknown>
-  >,
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TItem1 extends
+    | PipeItem<InferOutput<TSchema>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TSchema>, unknown, BaseIssue<unknown>>,
+  const TItem2 extends
+    | PipeItem<InferOutput<TItem1>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem1>, unknown, BaseIssue<unknown>>,
+  const TItem3 extends
+    | PipeItem<InferOutput<TItem2>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem2>, unknown, BaseIssue<unknown>>,
+  const TItem4 extends
+    | PipeItem<InferOutput<TItem3>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem3>, unknown, BaseIssue<unknown>>,
+  const TItem5 extends
+    | PipeItem<InferOutput<TItem4>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem4>, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
   item1:
     | TItem1
+    | PipeAction<InferOutput<TSchema>, InferOutput<TItem1>, InferIssue<TItem1>>
     | PipeActionAsync<
         InferOutput<TSchema>,
         InferOutput<TItem1>,
@@ -289,6 +289,7 @@ export function pipeAsync<
       >,
   item2:
     | TItem2
+    | PipeAction<InferOutput<TItem1>, InferOutput<TItem2>, InferIssue<TItem2>>
     | PipeActionAsync<
         InferOutput<TItem1>,
         InferOutput<TItem2>,
@@ -296,6 +297,7 @@ export function pipeAsync<
       >,
   item3:
     | TItem3
+    | PipeAction<InferOutput<TItem2>, InferOutput<TItem3>, InferIssue<TItem3>>
     | PipeActionAsync<
         InferOutput<TItem2>,
         InferOutput<TItem3>,
@@ -303,6 +305,7 @@ export function pipeAsync<
       >,
   item4:
     | TItem4
+    | PipeAction<InferOutput<TItem3>, InferOutput<TItem4>, InferIssue<TItem4>>
     | PipeActionAsync<
         InferOutput<TItem3>,
         InferOutput<TItem4>,
@@ -310,6 +313,7 @@ export function pipeAsync<
       >,
   item5:
     | TItem5
+    | PipeAction<InferOutput<TItem4>, InferOutput<TItem5>, InferIssue<TItem5>>
     | PipeActionAsync<
         InferOutput<TItem4>,
         InferOutput<TItem5>,
@@ -331,41 +335,32 @@ export function pipeAsync<
  * @returns A schema with a pipeline.
  */
 export function pipeAsync<
-  const TSchema extends PipeSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TItem1 extends PipeItemAsync<
-    InferOutput<TSchema>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem2 extends PipeItemAsync<
-    InferOutput<TItem1>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem3 extends PipeItemAsync<
-    InferOutput<TItem2>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem4 extends PipeItemAsync<
-    InferOutput<TItem3>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem5 extends PipeItemAsync<
-    InferOutput<TItem4>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem6 extends PipeItemAsync<
-    InferOutput<TItem5>,
-    unknown,
-    BaseIssue<unknown>
-  >,
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TItem1 extends
+    | PipeItem<InferOutput<TSchema>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TSchema>, unknown, BaseIssue<unknown>>,
+  const TItem2 extends
+    | PipeItem<InferOutput<TItem1>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem1>, unknown, BaseIssue<unknown>>,
+  const TItem3 extends
+    | PipeItem<InferOutput<TItem2>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem2>, unknown, BaseIssue<unknown>>,
+  const TItem4 extends
+    | PipeItem<InferOutput<TItem3>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem3>, unknown, BaseIssue<unknown>>,
+  const TItem5 extends
+    | PipeItem<InferOutput<TItem4>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem4>, unknown, BaseIssue<unknown>>,
+  const TItem6 extends
+    | PipeItem<InferOutput<TItem5>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem5>, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
   item1:
     | TItem1
+    | PipeAction<InferOutput<TSchema>, InferOutput<TItem1>, InferIssue<TItem1>>
     | PipeActionAsync<
         InferOutput<TSchema>,
         InferOutput<TItem1>,
@@ -373,6 +368,7 @@ export function pipeAsync<
       >,
   item2:
     | TItem2
+    | PipeAction<InferOutput<TItem1>, InferOutput<TItem2>, InferIssue<TItem2>>
     | PipeActionAsync<
         InferOutput<TItem1>,
         InferOutput<TItem2>,
@@ -380,6 +376,7 @@ export function pipeAsync<
       >,
   item3:
     | TItem3
+    | PipeAction<InferOutput<TItem2>, InferOutput<TItem3>, InferIssue<TItem3>>
     | PipeActionAsync<
         InferOutput<TItem2>,
         InferOutput<TItem3>,
@@ -387,6 +384,7 @@ export function pipeAsync<
       >,
   item4:
     | TItem4
+    | PipeAction<InferOutput<TItem3>, InferOutput<TItem4>, InferIssue<TItem4>>
     | PipeActionAsync<
         InferOutput<TItem3>,
         InferOutput<TItem4>,
@@ -394,6 +392,7 @@ export function pipeAsync<
       >,
   item5:
     | TItem5
+    | PipeAction<InferOutput<TItem4>, InferOutput<TItem5>, InferIssue<TItem5>>
     | PipeActionAsync<
         InferOutput<TItem4>,
         InferOutput<TItem5>,
@@ -401,6 +400,7 @@ export function pipeAsync<
       >,
   item6:
     | TItem6
+    | PipeAction<InferOutput<TItem5>, InferOutput<TItem6>, InferIssue<TItem6>>
     | PipeActionAsync<
         InferOutput<TItem5>,
         InferOutput<TItem6>,
@@ -425,46 +425,35 @@ export function pipeAsync<
  * @returns A schema with a pipeline.
  */
 export function pipeAsync<
-  const TSchema extends PipeSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TItem1 extends PipeItemAsync<
-    InferOutput<TSchema>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem2 extends PipeItemAsync<
-    InferOutput<TItem1>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem3 extends PipeItemAsync<
-    InferOutput<TItem2>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem4 extends PipeItemAsync<
-    InferOutput<TItem3>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem5 extends PipeItemAsync<
-    InferOutput<TItem4>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem6 extends PipeItemAsync<
-    InferOutput<TItem5>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem7 extends PipeItemAsync<
-    InferOutput<TItem6>,
-    unknown,
-    BaseIssue<unknown>
-  >,
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TItem1 extends
+    | PipeItem<InferOutput<TSchema>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TSchema>, unknown, BaseIssue<unknown>>,
+  const TItem2 extends
+    | PipeItem<InferOutput<TItem1>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem1>, unknown, BaseIssue<unknown>>,
+  const TItem3 extends
+    | PipeItem<InferOutput<TItem2>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem2>, unknown, BaseIssue<unknown>>,
+  const TItem4 extends
+    | PipeItem<InferOutput<TItem3>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem3>, unknown, BaseIssue<unknown>>,
+  const TItem5 extends
+    | PipeItem<InferOutput<TItem4>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem4>, unknown, BaseIssue<unknown>>,
+  const TItem6 extends
+    | PipeItem<InferOutput<TItem5>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem5>, unknown, BaseIssue<unknown>>,
+  const TItem7 extends
+    | PipeItem<InferOutput<TItem6>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem6>, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
   item1:
     | TItem1
+    | PipeAction<InferOutput<TSchema>, InferOutput<TItem1>, InferIssue<TItem1>>
     | PipeActionAsync<
         InferOutput<TSchema>,
         InferOutput<TItem1>,
@@ -472,6 +461,7 @@ export function pipeAsync<
       >,
   item2:
     | TItem2
+    | PipeAction<InferOutput<TItem1>, InferOutput<TItem2>, InferIssue<TItem2>>
     | PipeActionAsync<
         InferOutput<TItem1>,
         InferOutput<TItem2>,
@@ -479,6 +469,7 @@ export function pipeAsync<
       >,
   item3:
     | TItem3
+    | PipeAction<InferOutput<TItem2>, InferOutput<TItem3>, InferIssue<TItem3>>
     | PipeActionAsync<
         InferOutput<TItem2>,
         InferOutput<TItem3>,
@@ -486,6 +477,7 @@ export function pipeAsync<
       >,
   item4:
     | TItem4
+    | PipeAction<InferOutput<TItem3>, InferOutput<TItem4>, InferIssue<TItem4>>
     | PipeActionAsync<
         InferOutput<TItem3>,
         InferOutput<TItem4>,
@@ -493,6 +485,7 @@ export function pipeAsync<
       >,
   item5:
     | TItem5
+    | PipeAction<InferOutput<TItem4>, InferOutput<TItem5>, InferIssue<TItem5>>
     | PipeActionAsync<
         InferOutput<TItem4>,
         InferOutput<TItem5>,
@@ -500,6 +493,7 @@ export function pipeAsync<
       >,
   item6:
     | TItem6
+    | PipeAction<InferOutput<TItem5>, InferOutput<TItem6>, InferIssue<TItem6>>
     | PipeActionAsync<
         InferOutput<TItem5>,
         InferOutput<TItem6>,
@@ -507,6 +501,7 @@ export function pipeAsync<
       >,
   item7:
     | TItem7
+    | PipeAction<InferOutput<TItem6>, InferOutput<TItem7>, InferIssue<TItem7>>
     | PipeActionAsync<
         InferOutput<TItem6>,
         InferOutput<TItem7>,
@@ -532,51 +527,38 @@ export function pipeAsync<
  * @returns A schema with a pipeline.
  */
 export function pipeAsync<
-  const TSchema extends PipeSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TItem1 extends PipeItemAsync<
-    InferOutput<TSchema>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem2 extends PipeItemAsync<
-    InferOutput<TItem1>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem3 extends PipeItemAsync<
-    InferOutput<TItem2>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem4 extends PipeItemAsync<
-    InferOutput<TItem3>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem5 extends PipeItemAsync<
-    InferOutput<TItem4>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem6 extends PipeItemAsync<
-    InferOutput<TItem5>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem7 extends PipeItemAsync<
-    InferOutput<TItem6>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem8 extends PipeItemAsync<
-    InferOutput<TItem7>,
-    unknown,
-    BaseIssue<unknown>
-  >,
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TItem1 extends
+    | PipeItem<InferOutput<TSchema>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TSchema>, unknown, BaseIssue<unknown>>,
+  const TItem2 extends
+    | PipeItem<InferOutput<TItem1>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem1>, unknown, BaseIssue<unknown>>,
+  const TItem3 extends
+    | PipeItem<InferOutput<TItem2>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem2>, unknown, BaseIssue<unknown>>,
+  const TItem4 extends
+    | PipeItem<InferOutput<TItem3>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem3>, unknown, BaseIssue<unknown>>,
+  const TItem5 extends
+    | PipeItem<InferOutput<TItem4>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem4>, unknown, BaseIssue<unknown>>,
+  const TItem6 extends
+    | PipeItem<InferOutput<TItem5>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem5>, unknown, BaseIssue<unknown>>,
+  const TItem7 extends
+    | PipeItem<InferOutput<TItem6>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem6>, unknown, BaseIssue<unknown>>,
+  const TItem8 extends
+    | PipeItem<InferOutput<TItem7>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem7>, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
   item1:
     | TItem1
+    | PipeAction<InferOutput<TSchema>, InferOutput<TItem1>, InferIssue<TItem1>>
     | PipeActionAsync<
         InferOutput<TSchema>,
         InferOutput<TItem1>,
@@ -584,6 +566,7 @@ export function pipeAsync<
       >,
   item2:
     | TItem2
+    | PipeAction<InferOutput<TItem1>, InferOutput<TItem2>, InferIssue<TItem2>>
     | PipeActionAsync<
         InferOutput<TItem1>,
         InferOutput<TItem2>,
@@ -591,6 +574,7 @@ export function pipeAsync<
       >,
   item3:
     | TItem3
+    | PipeAction<InferOutput<TItem2>, InferOutput<TItem3>, InferIssue<TItem3>>
     | PipeActionAsync<
         InferOutput<TItem2>,
         InferOutput<TItem3>,
@@ -598,6 +582,7 @@ export function pipeAsync<
       >,
   item4:
     | TItem4
+    | PipeAction<InferOutput<TItem3>, InferOutput<TItem4>, InferIssue<TItem4>>
     | PipeActionAsync<
         InferOutput<TItem3>,
         InferOutput<TItem4>,
@@ -605,6 +590,7 @@ export function pipeAsync<
       >,
   item5:
     | TItem5
+    | PipeAction<InferOutput<TItem4>, InferOutput<TItem5>, InferIssue<TItem5>>
     | PipeActionAsync<
         InferOutput<TItem4>,
         InferOutput<TItem5>,
@@ -612,6 +598,7 @@ export function pipeAsync<
       >,
   item6:
     | TItem6
+    | PipeAction<InferOutput<TItem5>, InferOutput<TItem6>, InferIssue<TItem6>>
     | PipeActionAsync<
         InferOutput<TItem5>,
         InferOutput<TItem6>,
@@ -619,6 +606,7 @@ export function pipeAsync<
       >,
   item7:
     | TItem7
+    | PipeAction<InferOutput<TItem6>, InferOutput<TItem7>, InferIssue<TItem7>>
     | PipeActionAsync<
         InferOutput<TItem6>,
         InferOutput<TItem7>,
@@ -626,6 +614,7 @@ export function pipeAsync<
       >,
   item8:
     | TItem8
+    | PipeAction<InferOutput<TItem7>, InferOutput<TItem8>, InferIssue<TItem8>>
     | PipeActionAsync<
         InferOutput<TItem7>,
         InferOutput<TItem8>,
@@ -652,56 +641,41 @@ export function pipeAsync<
  * @returns A schema with a pipeline.
  */
 export function pipeAsync<
-  const TSchema extends PipeSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TItem1 extends PipeItemAsync<
-    InferOutput<TSchema>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem2 extends PipeItemAsync<
-    InferOutput<TItem1>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem3 extends PipeItemAsync<
-    InferOutput<TItem2>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem4 extends PipeItemAsync<
-    InferOutput<TItem3>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem5 extends PipeItemAsync<
-    InferOutput<TItem4>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem6 extends PipeItemAsync<
-    InferOutput<TItem5>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem7 extends PipeItemAsync<
-    InferOutput<TItem6>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem8 extends PipeItemAsync<
-    InferOutput<TItem7>,
-    unknown,
-    BaseIssue<unknown>
-  >,
-  const TItem9 extends PipeItemAsync<
-    InferOutput<TItem8>,
-    unknown,
-    BaseIssue<unknown>
-  >,
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TItem1 extends
+    | PipeItem<InferOutput<TSchema>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TSchema>, unknown, BaseIssue<unknown>>,
+  const TItem2 extends
+    | PipeItem<InferOutput<TItem1>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem1>, unknown, BaseIssue<unknown>>,
+  const TItem3 extends
+    | PipeItem<InferOutput<TItem2>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem2>, unknown, BaseIssue<unknown>>,
+  const TItem4 extends
+    | PipeItem<InferOutput<TItem3>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem3>, unknown, BaseIssue<unknown>>,
+  const TItem5 extends
+    | PipeItem<InferOutput<TItem4>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem4>, unknown, BaseIssue<unknown>>,
+  const TItem6 extends
+    | PipeItem<InferOutput<TItem5>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem5>, unknown, BaseIssue<unknown>>,
+  const TItem7 extends
+    | PipeItem<InferOutput<TItem6>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem6>, unknown, BaseIssue<unknown>>,
+  const TItem8 extends
+    | PipeItem<InferOutput<TItem7>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem7>, unknown, BaseIssue<unknown>>,
+  const TItem9 extends
+    | PipeItem<InferOutput<TItem8>, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<InferOutput<TItem8>, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
   item1:
     | TItem1
+    | PipeAction<InferOutput<TSchema>, InferOutput<TItem1>, InferIssue<TItem1>>
     | PipeActionAsync<
         InferOutput<TSchema>,
         InferOutput<TItem1>,
@@ -709,6 +683,7 @@ export function pipeAsync<
       >,
   item2:
     | TItem2
+    | PipeAction<InferOutput<TItem1>, InferOutput<TItem2>, InferIssue<TItem2>>
     | PipeActionAsync<
         InferOutput<TItem1>,
         InferOutput<TItem2>,
@@ -716,6 +691,7 @@ export function pipeAsync<
       >,
   item3:
     | TItem3
+    | PipeAction<InferOutput<TItem2>, InferOutput<TItem3>, InferIssue<TItem3>>
     | PipeActionAsync<
         InferOutput<TItem2>,
         InferOutput<TItem3>,
@@ -723,6 +699,7 @@ export function pipeAsync<
       >,
   item4:
     | TItem4
+    | PipeAction<InferOutput<TItem3>, InferOutput<TItem4>, InferIssue<TItem4>>
     | PipeActionAsync<
         InferOutput<TItem3>,
         InferOutput<TItem4>,
@@ -730,6 +707,7 @@ export function pipeAsync<
       >,
   item5:
     | TItem5
+    | PipeAction<InferOutput<TItem4>, InferOutput<TItem5>, InferIssue<TItem5>>
     | PipeActionAsync<
         InferOutput<TItem4>,
         InferOutput<TItem5>,
@@ -737,6 +715,7 @@ export function pipeAsync<
       >,
   item6:
     | TItem6
+    | PipeAction<InferOutput<TItem5>, InferOutput<TItem6>, InferIssue<TItem6>>
     | PipeActionAsync<
         InferOutput<TItem5>,
         InferOutput<TItem6>,
@@ -744,6 +723,7 @@ export function pipeAsync<
       >,
   item7:
     | TItem7
+    | PipeAction<InferOutput<TItem6>, InferOutput<TItem7>, InferIssue<TItem7>>
     | PipeActionAsync<
         InferOutput<TItem6>,
         InferOutput<TItem7>,
@@ -751,6 +731,7 @@ export function pipeAsync<
       >,
   item8:
     | TItem8
+    | PipeAction<InferOutput<TItem7>, InferOutput<TItem8>, InferIssue<TItem8>>
     | PipeActionAsync<
         InferOutput<TItem7>,
         InferOutput<TItem8>,
@@ -758,6 +739,7 @@ export function pipeAsync<
       >,
   item9:
     | TItem9
+    | PipeAction<InferOutput<TItem8>, InferOutput<TItem9>, InferIssue<TItem9>>
     | PipeActionAsync<
         InferOutput<TItem8>,
         InferOutput<TItem9>,
@@ -779,8 +761,13 @@ export function pipeAsync<
 >;
 
 export function pipeAsync<
-  const TSchema extends PipeSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TItems extends PipeItemAsync<unknown, unknown, BaseIssue<unknown>>[],
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TItems extends (
+    | PipeItem<unknown, unknown, BaseIssue<unknown>>
+    | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+  )[],
 >(...pipe: [TSchema, ...TItems]): SchemaWithPipeAsync<[TSchema, ...TItems]> {
   return {
     ...pipe[0],

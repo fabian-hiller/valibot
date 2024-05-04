@@ -97,7 +97,7 @@ describe('octal', () => {
     };
 
     test('for empty strings', () => {
-      expectActionIssue(action, baseIssue, ['', ' ']);
+      expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
     test('for blank spaces', () => {
