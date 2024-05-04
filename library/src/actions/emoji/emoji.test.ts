@@ -52,40 +52,31 @@ describe('emoji', () => {
 
     test('for emoji chars (not exhaustive)', () => {
       expectNoActionIssue(action, [
+        '🙂',
         '🤖',
-        '\uD83D\uDE0D', // surrogate pair of - 😍
+        '\uD83D\uDE0D', // 😍
         '🔥',
         '💯',
-        '#',
-        '*',
-        '0',
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
+        '2️⃣',
+        '🔟',
+        '🇺🇸',
+        '👋🏼',
+        '🫨',
       ]);
     });
 
     test('for two chars', () => {
       expectNoActionIssue(action, [
-        '1🤖',
-        '🤖#',
-        '🤖\uD83D\uDE0D',
-        '*#',
-        '#1',
-        '1*2',
+        '🙂🤖',
+        '\uD83D\uDE0D🔥', // 😍🔥
+        '2️⃣🔟',
+        '🇺🇸👋🏼',
       ]);
     });
 
     test('for multiple chars', () => {
       expectNoActionIssue(action, [
-        '0123456789',
-        '0123456789*#',
+        '🧩🙌🏁💅🎬',
         '🤖\uD83D\uDE0D🔥💯',
         '🤖😍🔥💯',
       ]);
@@ -103,51 +94,44 @@ describe('emoji', () => {
     };
 
     test('for empty strings', () => {
-      expectActionIssue(action, baseIssue, ['', ' ']);
+      expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
     test('for blank spaces', () => {
       expectActionIssue(action, baseIssue, [' 🤖', '🤖 ', ' 🤖 ', '🤖 😍']);
     });
 
-    test('for number signs', () => {
-      expectActionIssue(action, baseIssue, ['+1', '-1', '+123', '-123']);
-    });
-
-    test('for float numbers', () => {
-      expectActionIssue(action, baseIssue, ['0.1', '123.456']);
-    });
-
-    test('for exponential numbers', () => {
-      expectActionIssue(action, baseIssue, ['1e-3', '1e+3']);
-    });
-
-    test('for special characters', () => {
+    test('for word chars', () => {
       expectActionIssue(action, baseIssue, [
-        '\n',
-        '\t',
-        '\r',
-        '\\',
-        '\v',
-        '\f',
-        '\b',
-        '\r\n',
-        '\t\t\n',
+        'emoji',
+        '😀emoji',
+        'emoji😀',
+        'hi',
+        'hi👋🏼',
+        '👋🏼hi',
       ]);
     });
 
-    test('for composite characters', () => {
+    test('for numbers', () => {
       expectActionIssue(action, baseIssue, [
-        'S\u0307', // Ṡ
-        'S\u0307\u0323', // Ṩ
-        '\u1e68', // Ṩ
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '0123456789',
       ]);
     });
 
-    test('for invalid symbols (not exhaustive)', () => {
+    test('for special chars', () => {
       expectActionIssue(action, baseIssue, [
-        '~',
-        '`',
+        '#',
+        '*',
         '!',
         '@',
         '$',
@@ -156,39 +140,35 @@ describe('emoji', () => {
         '&',
         '-',
         '+',
-        '(',
-        ')',
-        '/',
-        '@#',
-        '&&',
-        '||',
-        '!!',
-        '@#$',
+        '~',
       ]);
     });
 
-    test('for emojis with invalid characters', () => {
+    test('for escape chars', () => {
       expectActionIssue(action, baseIssue, [
-        'emoji😀',
-        '😀emoji',
-        '😀hi👋🏼',
-        '@👋🏼',
-        '👋🏼@',
-        '👋🏼@👋🏼',
+        '\n',
+        '\t',
+        '\r',
+        '\\',
+        '\v',
+        '\f',
+        '\b',
       ]);
     });
 
-    test('for invalid codepoints', () => {
+    test('for composite chars', () => {
       expectActionIssue(action, baseIssue, [
-        '\uD83D', // First part of the surrogate pair that represents - 😀
-        '\uD83D👋🏼',
-        '👋🏼\uD83D',
-        '\uDE00', // Second part of the surrogate pair that represents - 😀
-        '\uDE00👋🏼',
-        '👋🏼\uDE00',
-        '\uDE00\uD83D', // Reverse of the surrogate pair that respresents - 😀
-        '\uDE00\uD83D👋🏼',
-        '👋🏼\uDE00\uD83D',
+        'S\u0307', // Ṡ
+        'S\u0307\u0323', // Ṩ
+        '\u1e68', // Ṩ
+      ]);
+    });
+
+    test('for wrong emoji parts', () => {
+      expectActionIssue(action, baseIssue, [
+        '\uD83D', // First part of 😍
+        '\uDE0D', // Second part of 😍
+        '\uDE0D\uD83D', // Twisted parts of 😍
       ]);
     });
   });

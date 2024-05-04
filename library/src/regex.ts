@@ -22,7 +22,7 @@ export const EMAIL_REGEX =
 /**
  * Emoji regex.
  */
-export const EMOJI_REGEX = /^[\p{Extended_Pictographic}\p{Emoji_Component}]+$/u;
+export const EMOJI_REGEX = /^\p{RGI_Emoji}+$/v;
 
 /**
  * [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) regex.
