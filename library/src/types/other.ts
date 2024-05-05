@@ -50,6 +50,10 @@ export type DefaultAsync<
 
 /**
  * Base question mark schema type.
+ *
+ * TODO: Document that for simplicity and bundle size, we currently do not
+ * distinguish between `undefined` and missing keys when using `optional` and
+ * `nullish`.
  */
 type BaseQuestionMarkSchema =
   | NullishSchema<
