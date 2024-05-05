@@ -62,7 +62,7 @@ describe('uuid', () => {
       ]);
     });
 
-    test('for UUIDv4 ', () => {
+    test('for valid UUIDv4', () => {
       expectNoActionIssue(action, [
         'c1e12793-2e77-4611-874d-a4f9cc727e1e',
         '95d9d16b-feba-495d-ab7b-07e4212ff3d0',
