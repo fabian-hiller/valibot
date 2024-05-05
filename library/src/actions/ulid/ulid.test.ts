@@ -65,7 +65,7 @@ describe('ulid', () => {
         '01ARZ3NDEKTSV4RRFFQ69G5FAv',
         '01arz3ndektsv4rrffq69g5fav',
       ]);
-    })
+    });
   });
 
   describe('should return dataset with issues', () => {
