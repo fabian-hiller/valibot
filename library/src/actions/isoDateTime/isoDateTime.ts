@@ -19,7 +19,7 @@ export interface IsoDateTimeIssue<TInput extends string>
   /**
    * The issue type.
    */
-  readonly type: 'iso_datetime';
+  readonly type: 'iso_date_time';
   /**
    * The expected input.
    */
@@ -44,7 +44,7 @@ export interface IsoDateTimeAction<
   /**
    * The action type.
    */
-  readonly type: 'iso_datetime';
+  readonly type: 'iso_date_time';
   /**
    * The action reference.
    */
@@ -68,6 +68,10 @@ export interface IsoDateTimeAction<
  *
  * Format: yyyy-mm-ddThh:mm
  *
+ * Hint: The regex used cannot validate the maximum number of days based on
+ * year and month. For example, "2023-06-31T00:00" is valid although June has only
+ * 30 days.
+ *
  * @returns An ISO date time action.
  */
 export function isoDateTime<TInput extends string>(): IsoDateTimeAction<
@@ -79,6 +83,10 @@ export function isoDateTime<TInput extends string>(): IsoDateTimeAction<
  * Creates an [ISO date time](https://en.wikipedia.org/wiki/ISO_8601) validation action.
  *
  * Format: yyyy-mm-ddThh:mm
+ *
+ * Hint: The regex used cannot validate the maximum number of days based on
+ * year and month. For example, "2023-06-31T00:00" is valid although June has only
+ * 30 days.
  *
  * @param message The error message.
  *
@@ -97,7 +105,7 @@ export function isoDateTime(
 > {
   return {
     kind: 'validation',
-    type: 'iso_datetime',
+    type: 'iso_date_time',
     reference: isoDateTime,
     async: false,
     expects: null,
@@ -105,7 +113,7 @@ export function isoDateTime(
     message,
     _run(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
-        _addIssue(this, 'time', dataset, config);
+        _addIssue(this, 'date-time', dataset, config);
       }
       return dataset as Dataset<string, IsoDateTimeIssue<string>>;
     },
