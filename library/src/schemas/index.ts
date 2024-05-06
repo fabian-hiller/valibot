@@ -34,5 +34,6 @@ export * from './symbol/index.ts';
 export * from './tuple/index.ts';
 export * from './tupleWithRest/index.ts';
 export * from './undefined/index.ts';
+export * from './union/index.ts';
 export * from './unknown/index.ts';
 export * from './void/index.ts';
