@@ -63,14 +63,14 @@ export interface UuidAction<
 }
 
 /**
- * Creates an [UUID address](https://en.wikuuidedia.org/wiki/UUID_address) validation action.
+ * Creates an [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) validation action.
  *
  * @returns An UUID action.
  */
 export function uuid<TInput extends string>(): UuidAction<TInput, undefined>;
 
 /**
- * Creates an [UUID address](https://en.wikuuidedia.org/wiki/UUID_address) validation action.
+ * Creates an [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) validation action.
  *
  * @param message The error message.
  *

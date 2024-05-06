@@ -3,8 +3,6 @@ import { UUID_REGEX } from '../../regex.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { uuid, type UuidAction, type UuidIssue } from './uuid.ts';
 
-// TODO: Improve tests to cover all possible scenarios based on the regex used.
-
 describe('uuid', () => {
   describe('should return action object', () => {
     const baseAction: Omit<UuidAction<string, never>, 'message'> = {
@@ -52,7 +50,7 @@ describe('uuid', () => {
       });
     });
 
-    test('for valid UUIDv1', () => {
+    test('for valid UUID v1', () => {
       expectNoActionIssue(action, [
         'a6021db4-0b07-11ef-9262-0242ac120002',
         'bf576dbe-0b07-11ef-9262-0242ac120002',
@@ -62,7 +60,7 @@ describe('uuid', () => {
       ]);
     });
 
-    test('for valid UUIDv4', () => {
+    test('for valid UUID v4', () => {
       expectNoActionIssue(action, [
         'c1e12793-2e77-4611-874d-a4f9cc727e1e',
         '95d9d16b-feba-495d-ab7b-07e4212ff3d0',
@@ -70,6 +68,20 @@ describe('uuid', () => {
         '6f66b7d5-8400-4e48-99f9-ae94ba418069',
         '779c2294-cb0a-4347-9587-61d4509d32db',
       ]);
+    });
+
+    test('for valid UUID v7', () => {
+      expectNoActionIssue(action, [
+        '018f4f48-1658-7538-8aa9-e3b64526bb43',
+        '018f4f48-9a53-72b6-8ee6-91c47cd95f6f',
+        '018f4f48-b0a1-75bc-ab3f-11081dfb40b8',
+        '018f4f48-cecc-7bfc-b0bc-a77fe4d77d66',
+        '018f4f48-e99c-7008-adbe-e3b7e7497ed8',
+      ]);
+    });
+
+    test('for special nil UUID', () => {
+      expectNoActionIssue(action, ['00000000-0000-0000-0000-000000000000']);
     });
   });
 
@@ -87,11 +99,23 @@ describe('uuid', () => {
       expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
-    test('for invalid length UUIDs', () => {
+    test('for too short UUIDs', () => {
       expectActionIssue(action, baseIssue, [
-        'a6021db4-0b07-11ef-9262-0242ac1200020',
-        '95d9d16b-feba-495d-ab7b-07e4212ff3d',
-        '95d9d16b-feba-495d-ab7b',
+        'e05717b-1020-4f83-8dce-f33dcac6c101',
+        'e057f17b-100-4f83-8dce-f33dcac6c101',
+        'e057f17b-1020-f83-8dce-f33dcac6c101',
+        'e057f17b-1020-4f83-8de-f33dcac6c101',
+        'e057f17b-1020-4f83-8dce-f3dcac6c101',
+      ]);
+    });
+
+    test('for too long UUIDs', () => {
+      expectActionIssue(action, baseIssue, [
+        'e057f147b-1020-4f83-8dce-f33dcac6c101',
+        'e057f17b-10220-4f83-8dce-f33dcac6c101',
+        'e057f17b-1020-4f873-8dce-f33dcac6c101',
+        'e057f17b-1020-4f83-8dc2e-f33dcac6c101',
+        'e057f17b-1020-4f83-8dce-f33d3cac6c101',
       ]);
     });
 
@@ -109,6 +133,17 @@ describe('uuid', () => {
         'a6021db4-0b07-11ef-9262-0242ac120002-0',
         '95d9d16b-feba-495d-ab7b-07e4212ff3d-0',
         'c1e1279-32e77-4611-874d-a4f9cc727e1e',
+      ]);
+    });
+
+    test('for invalid letters', () => {
+      expectActionIssue(action, baseIssue, [
+        'd8600862-9dea-4g51-b261-ff899d608069',
+        'd8600862-9dea-4d51-b261-hf899d608069',
+        'd8600862-9dea-4d51-k261-ff899d608069',
+        'd8600862-9dea-4d51-b261-zf899d608069',
+        'd8600862-9dta-4d51-b261-ff899d608069',
+        'd8600862-9dex-4d51-b261-ff899d608069',
       ]);
     });
   });

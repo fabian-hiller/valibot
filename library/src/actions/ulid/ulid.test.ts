@@ -3,8 +3,6 @@ import { ULID_REGEX } from '../../regex.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { ulid, type UlidAction, type UlidIssue } from './ulid.ts';
 
-// TODO: Improve tests to cover all possible scenarios based on the regex used.
-
 describe('ulid', () => {
   describe('should return action object', () => {
     const baseAction: Omit<UlidAction<string, never>, 'message'> = {
@@ -55,15 +53,9 @@ describe('ulid', () => {
     test('for valid ULIDs', () => {
       expectNoActionIssue(action, [
         '01ARZ3NDEKTSV4RRFFQ69G5FAV',
-        '01BX5ZZKBKACTAV9WEVGEMMVRY',
-      ]);
-    });
-
-    test('for case insensitive ULIDs', () => {
-      expectNoActionIssue(action, [
-        '01ARZ3NDEKTSV4RRFFQ69G5FAV',
-        '01ARZ3NDEKTSV4RRFFQ69G5FAv',
-        '01arz3ndektsv4rrffq69g5fav',
+        '01bx5zzkbkactav9wevgemmvry',
+        '0123456789abcdefghjkmnpqrs',
+        'ABCDEFGHJKMNPQRSTVWXYZ0123',
       ]);
     });
   });
@@ -82,22 +74,30 @@ describe('ulid', () => {
       expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
-    test('for invalid length ULIDs', () => {
+    test('for too short ULIDs', () => {
       expectActionIssue(action, baseIssue, [
-        '01ARZ3NDEKTSV4RRFFQ69G5F',
-        '1BX5ZZKBKACTAV9WEVGEMMVRZ',
-        '01BX5ZZKBKACTAV9WEVGEMMVRY1',
-        '01ARZ3NDEKTSV4RRFFQ69G5FAV12',
-        '01ARZ3NDEKTSV4RRFFQ69G5FAV123',
+        '01ARZ3NDEKTSV4RRFFQ69G5FA',
+        '01bx5zzkbkactav9',
       ]);
     });
 
-    test('for non-Base32 occurrences in ULIDs', () => {
+    test('for too long ULIDs', () => {
       expectActionIssue(action, baseIssue, [
-        '01ARZ3NDEKTSV4RRFFQ69G5FAV-',
-        '01ARZ3NDEKTSV4RRFFQ69G5FAV#',
-        '01ARZ3NDE!KTSV4RRFFQ69G5FAV',
-        '01ARZ3NDEKT*SV4RRFFQ69G5FAV',
+        '01ARZ3NDEKTSV4RRFFQ69G5FAV1',
+        '01bx5zzkbkactav9wevgemmvry123456789',
+      ]);
+    });
+
+    test('for invalid letters', () => {
+      expectActionIssue(action, baseIssue, [
+        '01ARZ3NDIKTSV4RRFFQ69G5FAV',
+        '01bx5zikbkactav9wevgemmvry',
+        'L1ARZ3NDEKTSV4RRFFQ69G5FAV',
+        'l1bx5zzkbkactav9wevgemmvry',
+        '01ARZ3NDEKTSV4RRFFQ69G5OAV',
+        '01bx5zzkbkactav9wevgemmory',
+        '01ARZ3NDEKTSV4RRFFQ69G5FAU',
+        '01bx5zzkbkactav9wevgemmvru',
       ]);
     });
   });

@@ -63,14 +63,14 @@ export interface UlidAction<
 }
 
 /**
- * Creates an [ULID address](https://en.wikulidedia.org/wiki/ULID_address) validation action.
+ * Creates an [ULID](https://github.com/ulid/spec) validation action.
  *
  * @returns An ULID action.
  */
 export function ulid<TInput extends string>(): UlidAction<TInput, undefined>;
 
 /**
- * Creates an [ULID address](https://en.wikulidedia.org/wiki/ULID_address) validation action.
+ * Creates an [ULID](https://github.com/ulid/spec) validation action.
  *
  * @param message The error message.
  *
