@@ -97,7 +97,7 @@ export function _addIssue<
     issue.message = typeof message === 'function' ? message(issue) : message;
   }
 
-  // If context is a schema, set typed to false
+  // If context is a schema, set typed to `false`
   if (isSchema) {
     dataset.typed = false;
   }

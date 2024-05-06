@@ -58,7 +58,7 @@ export interface PicklistSchema<
 /**
  * Creates a picklist schema.
  *
- * @param options The picklist value.
+ * @param options The picklist options.
  *
  * @returns A picklist schema.
  */
@@ -69,7 +69,7 @@ export function picklist<const TOptions extends PicklistOptions>(
 /**
  * Creates a picklist schema.
  *
- * @param options The picklist value.
+ * @param options The picklist options.
  * @param message The error message.
  *
  * @returns A picklist schema.
