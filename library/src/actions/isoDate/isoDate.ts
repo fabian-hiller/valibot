@@ -67,6 +67,10 @@ export interface IsoDateAction<
  *
  * Format: yyyy-mm-dd
  *
+ * Hint: The regex used cannot validate the maximum number of days based on
+ * year and month. For example, "2023-06-31" is valid although June has only
+ * 30 days.
+ *
  * @returns An ISO date action.
  */
 export function isoDate<TInput extends string>(): IsoDateAction<
@@ -78,6 +82,10 @@ export function isoDate<TInput extends string>(): IsoDateAction<
  * Creates an [ISO date](https://en.wikipedia.org/wiki/ISO_8601) validation action.
  *
  * Format: yyyy-mm-dd
+ *
+ * Hint: The regex used cannot validate the maximum number of days based on
+ * year and month. For example, "2023-06-31" is valid although June has only
+ * 30 days.
  *
  * @param message The error message.
  *

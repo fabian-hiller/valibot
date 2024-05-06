@@ -70,53 +70,70 @@ describe('isoDate', () => {
       expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
+    test('for blank spaces', () => {
+      expectActionIssue(action, baseIssue, [
+        ' 0000-01-01',
+        '0000-01-01 ',
+        ' 0000-01-01 ',
+      ]);
+    });
+
     test('for missing separator', () => {
       expectActionIssue(action, baseIssue, [
+        '0000-0101',
+        '000001-01',
         '00000101',
-        '99991231',
-        '20240506',
       ]);
     });
 
-    test('for missing digits', () => {
+    test('for double separators', () => {
       expectActionIssue(action, baseIssue, [
-        '000-01-01',
-        '0000-1-01',
-        '0000-01-1',
-        '999-12-31',
-        '2024-5-6',
+        '0000--01-01',
+        '0000-01--01',
+        '0000--01--01',
       ]);
     });
 
-    test('for too many digits', () => {
+    test('for wrong separators', () => {
       expectActionIssue(action, baseIssue, [
-        '00000-01-01',
-        '0000-001-01',
-        '0000-01-001',
-        '9999-012-31',
-        '9999-12-031',
+        '0000 01 01',
+        '0000_01_01',
+        '0000/01/01',
+        '0000–01–01',
+        '0000:01:01',
       ]);
     });
 
-    test('for months lower than 1', () => {
-      expectActionIssue(action, baseIssue, ['0000-00-01', '9999-00-31']);
+    test('for invalid year', () => {
+      expectActionIssue(action, baseIssue, [
+        '-01-01', // missing digits
+        '0-01-01', // 1 digit
+        '00-01-01', // 2 digit
+        '000-01-01', // 3 digits
+        '00000-01-01', // 5 digits
+      ]);
     });
 
-    test('for months greater than 12', () => {
-      expectActionIssue(action, baseIssue, ['0000-13-01', '9999-99-31']);
+    test('for invalid month', () => {
+      expectActionIssue(action, baseIssue, [
+        '0000-01', // missing digits
+        '0000-1-01', // 1 digit
+        '0000-010-01', // 3 digits
+        '0000-00-01', // 00
+        '0000-13-01', // 13
+        '0000-99-01', // 99
+      ]);
     });
 
-    test('for days lower than 1', () => {
-      expectActionIssue(action, baseIssue, ['0000-01-00', '9999-12-00']);
-    });
-
-    test('for days greater than 31', () => {
-      expectActionIssue(action, baseIssue, ['0000-01-32', '9999-12-99']);
-    });
-
-    // FIXME: this would require more complex validation
-    test.skip('for non-existent dates', () => {
-      expectActionIssue(action, baseIssue, ['2023-06-31', '2024-02-30']);
+    test('for invalid day', () => {
+      expectActionIssue(action, baseIssue, [
+        '0000-01', // missing digits
+        '0000-01-1', // 1 digit
+        '0000-01-010', // 3 digits
+        '0000-01-00', // 00
+        '0000-01-32', // 32
+        '0000-01-99', // 99
+      ]);
     });
   });
 });

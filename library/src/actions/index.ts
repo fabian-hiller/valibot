@@ -19,6 +19,7 @@ export * from './integer/index.ts';
 export * from './ip/index.ts';
 export * from './ipv4/index.ts';
 export * from './ipv6/index.ts';
+export * from './isoDate/index.ts';
 export * from './isoTime/index.ts';
 export * from './isoTimestamp/index.ts';
 export * from './length/index.ts';
