@@ -38,6 +38,7 @@ export * from './multipleOf/index.ts';
 export * from './notBytes/index.ts';
 export * from './octal/index.ts';
 export * from './safeInteger/index.ts';
+export * from './size/index.ts';
 export * from './some/index.ts';
 export * from './startsWith/index.ts';
 export * from './toLowerCase/index.ts';
