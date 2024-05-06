@@ -70,8 +70,23 @@ describe('isoTime', () => {
       expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
+    test('for blank spaces', () => {
+      expectActionIssue(action, baseIssue, [' 00:00', '00:00 ', ' 00:00 ']);
+    });
+
     test('for missing separator', () => {
       expectActionIssue(action, baseIssue, ['0000', '1234', '2359']);
+    });
+
+    test('for invalid separators', () => {
+      expectActionIssue(action, baseIssue, [
+        '00 00',
+        '00-00',
+        '00_00',
+        '00–00',
+        '00/00',
+        '00.00',
+      ]);
     });
 
     test('for mathematical signs', () => {
