@@ -30,7 +30,7 @@ export interface SizeIssue<
    */
   readonly received: `${number}`;
   /**
-   * The size.
+   * The required size.
    */
   readonly requirement: TRequirement;
 }
@@ -56,7 +56,7 @@ export interface SizeAction<
    */
   readonly expects: `${TRequirement}`;
   /**
-   * The size.
+   * The required size.
    */
   readonly requirement: TRequirement;
   /**
@@ -68,7 +68,7 @@ export interface SizeAction<
 /**
  * Creates a size validation action.
  *
- * @param requirement The size.
+ * @param requirement The required size.
  *
  * @returns A size action.
  */
@@ -80,7 +80,7 @@ export function size<
 /**
  * Creates a size validation action.
  *
- * @param requirement The size.
+ * @param requirement The required size.
  * @param message The error message.
  *
  * @returns A size action.
