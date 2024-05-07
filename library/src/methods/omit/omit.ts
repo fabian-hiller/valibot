@@ -2,7 +2,6 @@ import type {
   LooseObjectIssue,
   LooseObjectSchema,
   LooseObjectSchemaAsync,
-  NeverIssue,
   ObjectIssue,
   ObjectSchema,
   ObjectSchemaAsync,
@@ -53,11 +52,11 @@ export type SchemaWithOmit<
       >
     | StrictObjectSchema<
         ObjectEntries,
-        ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+        ErrorMessage<StrictObjectIssue> | undefined
       >
     | StrictObjectSchemaAsync<
         ObjectEntriesAsync,
-        ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+        ErrorMessage<StrictObjectIssue> | undefined
       >
     | LooseObjectSchema<
         ObjectEntries,
@@ -74,11 +73,11 @@ export type SchemaWithOmit<
   | ObjectSchemaAsync<ObjectEntriesAsync, ErrorMessage<ObjectIssue> | undefined>
   | StrictObjectSchema<
       ObjectEntries,
-      ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      ErrorMessage<StrictObjectIssue> | undefined
     >
   | StrictObjectSchemaAsync<
       ObjectEntriesAsync,
-      ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+      ErrorMessage<StrictObjectIssue> | undefined
     >
   ? Omit<TSchema, 'entries' | '_run' | '_types'> & {
       /**
@@ -265,11 +264,11 @@ export function omit<
       >
     | StrictObjectSchema<
         ObjectEntries,
-        ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+        ErrorMessage<StrictObjectIssue> | undefined
       >
     | StrictObjectSchemaAsync<
         ObjectEntriesAsync,
-        ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+        ErrorMessage<StrictObjectIssue> | undefined
       >
     | LooseObjectSchema<
         ObjectEntries,

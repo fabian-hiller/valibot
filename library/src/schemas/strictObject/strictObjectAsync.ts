@@ -6,7 +6,6 @@ import type {
   InferObjectOutput,
   ObjectEntriesAsync,
 } from '../../types/index.ts';
-import type { NeverIssue } from '../never/index.ts';
 import type { StrictObjectIssue } from './types.ts';
 
 /**
@@ -14,7 +13,7 @@ import type { StrictObjectIssue } from './types.ts';
  */
 export interface StrictObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,
-  TMessage extends ErrorMessage<StrictObjectIssue | NeverIssue> | undefined,
+  TMessage extends ErrorMessage<StrictObjectIssue> | undefined,
 > extends BaseSchemaAsync<
     InferObjectInput<TEntries>,
     InferObjectOutput<TEntries>,

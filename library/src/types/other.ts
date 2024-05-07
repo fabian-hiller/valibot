@@ -49,13 +49,13 @@ export type DefaultAsync<
   | undefined;
 
 /**
- * Base question mark schema type.
+ * Question mark schema type.
  *
  * TODO: Document that for simplicity and bundle size, we currently do not
  * distinguish between `undefined` and missing keys when using `optional` and
  * `nullish`.
  */
-type BaseQuestionMarkSchema =
+export type QuestionMarkSchema =
   | NullishSchema<
       BaseSchema<unknown, unknown, BaseIssue<unknown>>,
       Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
@@ -63,13 +63,7 @@ type BaseQuestionMarkSchema =
   | OptionalSchema<
       BaseSchema<unknown, unknown, BaseIssue<unknown>>,
       Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
-    >;
-
-/**
- * Question mark schema type.
- */
-export type QuestionMarkSchema =
-  | BaseQuestionMarkSchema
+    >
   // @ts-expect-error
   | LazySchema<QuestionMarkSchema>
   | NonNullableSchema<
@@ -79,9 +73,9 @@ export type QuestionMarkSchema =
     >;
 
 /**
- * Base question mark schema async type.
+ * Question mark schema async type.
  */
-type BaseQuestionMarkSchemaAsync =
+export type QuestionMarkSchemaAsync =
   | NullishSchemaAsync<
       | BaseSchema<unknown, unknown, BaseIssue<unknown>>
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
@@ -97,13 +91,7 @@ type BaseQuestionMarkSchemaAsync =
         | BaseSchema<unknown, unknown, BaseIssue<unknown>>
         | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
       >
-    >;
-
-/**
- * Question mark schema async type.
- */
-export type QuestionMarkSchemaAsync =
-  | BaseQuestionMarkSchemaAsync
+    >
   // @ts-expect-error
   | LazySchemaAsync<QuestionMarkSchema | QuestionMarkSchemaAsync>
   | NonNullableSchemaAsync<

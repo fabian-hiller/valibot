@@ -2,7 +2,6 @@ import type {
   LooseObjectIssue,
   LooseObjectSchema,
   LooseObjectSchemaAsync,
-  NeverIssue,
   ObjectIssue,
   ObjectSchema,
   ObjectSchemaAsync,
@@ -55,6 +54,14 @@ export interface ObjectEntriesAsync {
  */
 export type ObjectKeys<
   TSchema extends
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
+    | LooseObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
     | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
     | ObjectSchemaAsync<
         ObjectEntriesAsync,
@@ -72,19 +79,11 @@ export type ObjectKeys<
       >
     | StrictObjectSchema<
         ObjectEntries,
-        ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
+        ErrorMessage<StrictObjectIssue> | undefined
       >
     | StrictObjectSchemaAsync<
         ObjectEntriesAsync,
-        ErrorMessage<StrictObjectIssue | NeverIssue> | undefined
-      >
-    | LooseObjectSchema<
-        ObjectEntries,
-        ErrorMessage<LooseObjectIssue> | undefined
-      >
-    | LooseObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<LooseObjectIssue> | undefined
+        ErrorMessage<StrictObjectIssue> | undefined
       >,
 > = MaybeReadonly<[keyof TSchema['entries'], ...(keyof TSchema['entries'])[]]>;
 
