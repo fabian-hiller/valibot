@@ -55,4 +55,4 @@ export type InferNonNullableIssue<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> = NonNullableIssue | Exclude<InferIssue<TWrapped>, { type: 'null' }>;
+> = Exclude<InferIssue<TWrapped>, { type: 'null' }>;

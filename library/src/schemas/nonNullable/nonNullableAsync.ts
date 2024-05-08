@@ -23,7 +23,7 @@ export interface NonNullableSchemaAsync<
 > extends BaseSchemaAsync<
     InferNonNullableInput<TWrapped>,
     InferNonNullableOutput<TWrapped>,
-    InferNonNullableIssue<TWrapped>
+    NonNullableIssue | InferNonNullableIssue<TWrapped>
   > {
   /**
    * The schema type.

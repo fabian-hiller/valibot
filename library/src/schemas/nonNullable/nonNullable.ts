@@ -16,7 +16,7 @@ export interface NonNullableSchema<
 > extends BaseSchema<
     InferNonNullableInput<TWrapped>,
     InferNonNullableOutput<TWrapped>,
-    InferNonNullableIssue<TWrapped>
+    NonNullableIssue | InferNonNullableIssue<TWrapped>
   > {
   /**
    * The schema type.

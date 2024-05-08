@@ -23,7 +23,7 @@ export interface NonOptionalSchemaAsync<
 > extends BaseSchemaAsync<
     InferNonOptionalInput<TWrapped>,
     InferNonOptionalOutput<TWrapped>,
-    InferNonOptionalIssue<TWrapped>
+    NonOptionalIssue | InferNonOptionalIssue<TWrapped>
   > {
   /**
    * The schema type.

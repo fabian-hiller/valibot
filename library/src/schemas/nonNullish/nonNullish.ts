@@ -16,7 +16,7 @@ export interface NonNullishSchema<
 > extends BaseSchema<
     InferNonNullishInput<TWrapped>,
     InferNonNullishOutput<TWrapped>,
-    InferNonNullishIssue<TWrapped>
+    NonNullishIssue | InferNonNullishIssue<TWrapped>
   > {
   /**
    * The schema type.

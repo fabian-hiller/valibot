@@ -55,4 +55,4 @@ export type InferNonOptionalIssue<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> = NonOptionalIssue | Exclude<InferIssue<TWrapped>, { type: 'undefined' }>;
+> = Exclude<InferIssue<TWrapped>, { type: 'undefined' }>;
