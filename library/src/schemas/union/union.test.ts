@@ -150,7 +150,6 @@ describe('union', () => {
 
     test('with single untyped issue', () => {
       const schema = union([literal('foo')]);
-      type Schema = typeof schema;
       expect(schema._run({ typed: false, value: 'bar' }, {})).toStrictEqual({
         typed: false,
         value: 'bar',
@@ -164,12 +163,11 @@ describe('union', () => {
             received: '"bar"',
           },
         ],
-      } satisfies UntypedDataset<InferIssue<Schema>>);
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
     test('with multiple typed issues', () => {
       const schema = union([string(), number()]);
-      type Schema = typeof schema;
       expect(schema._run({ typed: false, value: null }, {})).toStrictEqual({
         typed: false,
         value: null,
@@ -201,7 +199,7 @@ describe('union', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<Schema>>);
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
   });
 });
