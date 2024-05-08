@@ -49,16 +49,34 @@ import { … } from 'valibot';
 import * as v from 'valibot';
 ```
 
-## From Deno
+## From jsr
 
-With Deno, you can reference me directly through my deno.land/x URL.
+For Node, Deno and Bun, you can add me to your project with a single command via your favorite package manager.
+
+```bash
+deno add @valibot/valibot          # deno
+npx jsr add @valibot/valibot       # npm
+yarn dlx jsr add @valibot/valibot  # yarn
+pnpm dlx jsr add @valibot/valibot  # pnpm
+bunx jsr add @valibot/valibot      # bun
+```
+
+After that you can import me into any JavaScript or TypeScript file.
 
 ```ts
 // With individual imports
-import { … } from 'https://deno.land/x/valibot/mod.ts';
+import { … } from '@valibot/valibot';
 
 // With a wildcard import
-import * as v from 'https://deno.land/x/valibot/mod.ts';
+import * as v from '@valibot/valibot';
 ```
 
-> The rest of this documentation assumes that you are using npm for the import statements in the code examples.
+In Deno, you can also directly reference me using `jsr:` specifiers.
+
+```ts
+// With individual imports
+import { … } from 'jsr:@valibot/valibot';
+
+// With a wildcard import
+import * as v from 'jsr:@valibot/valibot';
+```
