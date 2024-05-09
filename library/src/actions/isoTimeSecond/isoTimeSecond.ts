@@ -8,7 +8,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * ISO time with seconds issue type.
+ * ISO time second issue type.
  */
 export interface IsoTimeSecondIssue<TInput extends string>
   extends BaseIssue<TInput> {
@@ -35,7 +35,7 @@ export interface IsoTimeSecondIssue<TInput extends string>
 }
 
 /**
- * ISO time with seconds action type.
+ * ISO time second action type.
  */
 export interface IsoTimeSecondAction<
   TInput extends string,
@@ -54,7 +54,7 @@ export interface IsoTimeSecondAction<
    */
   readonly expects: null;
   /**
-   * The ISO time with seconds regex.
+   * The ISO time second regex.
    */
   readonly requirement: RegExp;
   /**
@@ -64,11 +64,11 @@ export interface IsoTimeSecondAction<
 }
 
 /**
- * Creates an [ISO time with seconds](https://en.wikipedia.org/wiki/ISO_8601) validation action.
+ * Creates an [ISO time second](https://en.wikipedia.org/wiki/ISO_8601) validation action.
  *
  * Format: hh:mm:ss
  *
- * @returns An ISO time with seconds action.
+ * @returns An ISO time second action.
  */
 export function isoTimeSecond<TInput extends string>(): IsoTimeSecondAction<
   TInput,
@@ -76,13 +76,13 @@ export function isoTimeSecond<TInput extends string>(): IsoTimeSecondAction<
 >;
 
 /**
- * Creates an [ISO time with seconds](https://en.wikipedia.org/wiki/ISO_8601) validation action.
+ * Creates an [ISO time second](https://en.wikipedia.org/wiki/ISO_8601) validation action.
  *
  * Format: hh:mm:ss
  *
  * @param message The error message.
  *
- * @returns An ISO time with seconds action.
+ * @returns An ISO time second action.
  */
 export function isoTimeSecond<
   TInput extends string,

@@ -55,7 +55,7 @@ describe('isoTimeSecond', () => {
       });
     });
 
-    test('for valid ISO times', () => {
+    test('for valid ISO time seconds', () => {
       expectNoActionIssue(action, ['00:00:00', '12:34:56', '23:59:59']);
     });
   });

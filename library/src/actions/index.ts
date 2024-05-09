@@ -22,6 +22,7 @@ export * from './ipv6/index.ts';
 export * from './isoDate/index.ts';
 export * from './isoDateTime/index.ts';
 export * from './isoTime/index.ts';
+export * from './isoTimeSecond/index.ts';
 export * from './isoTimestamp/index.ts';
 export * from './length/index.ts';
 export * from './mac/index.ts';
