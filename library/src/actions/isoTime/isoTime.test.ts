@@ -93,25 +93,24 @@ describe('isoTime', () => {
       expectActionIssue(action, baseIssue, ['+00:00', '-12:34', '+23:59']);
     });
 
-    test('for missing digits', () => {
-      expectActionIssue(action, baseIssue, ['0:00', '00:0', '1:23', '12:3']);
-    });
-
-    test('for too many digits', () => {
+    test('for invalid hour', () => {
       expectActionIssue(action, baseIssue, [
-        '00:000',
-        '000:00',
-        '12:345',
-        '123:45',
+        ':00', // missing digits
+        '0:00', // 1 digit
+        '000:00', // 3 digits
+        '24:00', // 24
+        '99:00', // 99
       ]);
     });
 
-    test('for hours greater than 23', () => {
-      expectActionIssue(action, baseIssue, ['24:00', '99:00']);
-    });
-
-    test('for minutes greater than 59', () => {
-      expectActionIssue(action, baseIssue, ['00:60', '00:99']);
+    test('for invalid minute', () => {
+      expectActionIssue(action, baseIssue, [
+        '00:', // missing digits
+        '00:0', // 1 digit
+        '00:000', // 3 digits
+        '00:60', // 60
+        '00:99', // 99
+      ]);
     });
   });
 });
