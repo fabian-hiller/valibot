@@ -65,11 +65,10 @@ export interface IsoWeekAction<
 /**
  * Creates an [ISO week](https://en.wikipedia.org/wiki/ISO_8601) validation action.
  *
- * Format: yyyy-mm-ddThh:mm
+ * Format: yyyy-Www
  *
- * Hint: The regex used cannot validate the maximum number of days based on
- * year and month. For example, "2023-06-31T00:00" is valid although June has only
- * 30 days.
+ * Hint: The regex used cannot validate the maximum number of weeks based on
+ * the year. For example, "2021W53" is valid although 2021 has only 52 weeks.
  *
  * @returns An ISO week action.
  */
@@ -83,8 +82,8 @@ export function isoWeek<TInput extends string>(): IsoWeekAction<
  *
  * Format: yyyy-Www
  *
- * Hint: The regex used cannot validate the maximum number of weeks in a year.
- * For example, "2021W53" is valid although 2023 has only 52 weeks.
+ * Hint: The regex used cannot validate the maximum number of weeks based on
+ * the year. For example, "2021W53" is valid although 2021 has only 52 weeks.
  *
  * @param message The error message.
  *
@@ -108,7 +107,7 @@ export function isoWeek(
     message,
     _run(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
-        _addIssue(this, 'date-time', dataset, config);
+        _addIssue(this, 'week', dataset, config);
       }
       return dataset as Dataset<string, IsoWeekIssue<string>>;
     },

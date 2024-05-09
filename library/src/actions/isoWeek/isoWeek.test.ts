@@ -56,7 +56,7 @@ describe('isoWeek', () => {
     });
 
     test('for valid ISO date times', () => {
-      expectNoActionIssue(action, ['0000-W01', '9999-W24', '2023-W53']);
+      expectNoActionIssue(action, ['0000-W01', '2023-W29', '9999-W53']);
     });
   });
 
@@ -88,12 +88,15 @@ describe('isoWeek', () => {
 
     test('for wrong separators', () => {
       expectActionIssue(action, baseIssue, [
+        '0000- 01',
         '0000-A01',
         '0000-Z01',
         '0000-w01',
         '0000.W01',
+        '0000–W01',
+        '0000 W01',
         '0000/W01',
-        '0000__01',
+        '0000_W01',
       ]);
     });
 
@@ -113,7 +116,7 @@ describe('isoWeek', () => {
         '0000-W0', // 1 digit
         '0000-W000', // 3 digits
         '0000-W00', // 00
-        '0000-W54', // 54 FIXME: - 2012 had 54 distinct weeks
+        '0000-W54', // 54
         '0000-W99', // 99
       ]);
     });
