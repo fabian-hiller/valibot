@@ -91,7 +91,7 @@ export function set(
 
       // If root type is valid, check nested types
       if (input instanceof Set) {
-        // Set typed to true and value to empty set
+        // Set typed to `true` and value to empty set
         dataset.typed = true;
         dataset.value = new Set();
 
@@ -135,7 +135,7 @@ export function set(
             }
           }
 
-          // If not typed, set typed to false
+          // If not typed, set typed to `false`
           if (!valueDataset.typed) {
             dataset.typed = false;
           }

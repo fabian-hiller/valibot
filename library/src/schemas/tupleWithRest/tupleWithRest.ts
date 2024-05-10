@@ -109,7 +109,7 @@ export function tupleWithRest(
 
       // If root type is valid, check nested types
       if (Array.isArray(input)) {
-        // Set typed to true and value to empty array
+        // Set typed to `true` and value to empty array
         dataset.typed = true;
         dataset.value = [];
 
@@ -155,7 +155,7 @@ export function tupleWithRest(
             }
           }
 
-          // If not typed, set typed to false
+          // If not typed, set typed to `false`
           if (!itemDataset.typed) {
             dataset.typed = false;
           }
@@ -205,7 +205,7 @@ export function tupleWithRest(
               }
             }
 
-            // If not typed, set typed to false
+            // If not typed, set typed to `false`
             if (!itemDataset.typed) {
               dataset.typed = false;
             }

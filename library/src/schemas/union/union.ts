@@ -184,7 +184,7 @@ export function union(
       } else if (untypedDatasets?.length === 1) {
         return untypedDatasets[0];
 
-        // Oterwise, add issue with untyped subissues
+        // Otherwise, add issue with untyped subissues
       } else {
         // Hint: If there are zero or more than one untyped results, we use a
         // general union issue with subissues because the issues could

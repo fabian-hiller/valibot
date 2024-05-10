@@ -107,7 +107,7 @@ export function map(
 
       // If root type is valid, check nested types
       if (input instanceof Map) {
-        // Set typed to true and value to empty map
+        // Set typed to `true` and value to empty map
         dataset.typed = true;
         dataset.value = new Map();
 
@@ -193,7 +193,7 @@ export function map(
             }
           }
 
-          // If not typed, map typed to false
+          // If not typed, map typed to `false`
           if (!keyDataset.typed || !valueDataset.typed) {
             dataset.typed = false;
           }

@@ -89,7 +89,7 @@ export function strictObject(
 
       // If root type is valid, check nested types
       if (input && typeof input === 'object' && input.constructor === Object) {
-        // Set typed to true and value to blank object
+        // Set typed to `true` and value to blank object
         dataset.typed = true;
         dataset.value = {};
 
@@ -141,7 +141,7 @@ export function strictObject(
             }
           }
 
-          // If not typed, set typed to false
+          // If not typed, set typed to `false`
           if (!valueDataset.typed) {
             dataset.typed = false;
           }

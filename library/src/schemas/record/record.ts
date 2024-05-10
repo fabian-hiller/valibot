@@ -115,7 +115,7 @@ export function record(
 
       // If root type is valid, check nested types
       if (input && typeof input === 'object' && input.constructor === Object) {
-        // Set typed to true and value to empty object
+        // Set typed to `true` and value to empty object
         dataset.typed = true;
         dataset.value = {};
 
@@ -205,7 +205,7 @@ export function record(
               }
             }
 
-            // If not typed, set typed to false
+            // If not typed, set typed to `false`
             if (!keyDataset.typed || !valueDataset.typed) {
               dataset.typed = false;
             }

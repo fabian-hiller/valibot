@@ -53,7 +53,7 @@ describe('union', () => {
   });
 
   describe('should return dataset without issues', () => {
-    test('for valid options', () => {
+    test('for valid values', () => {
       expectNoSchemaIssue(union([literal('foo'), literal('bar'), number()]), [
         'foo',
         'bar',

@@ -87,7 +87,7 @@ export function strictTuple(
 
       // If root type is valid, check nested types
       if (Array.isArray(input)) {
-        // Set typed to true and value to empty array
+        // Set typed to `true` and value to empty array
         dataset.typed = true;
         dataset.value = [];
 
@@ -133,7 +133,7 @@ export function strictTuple(
             }
           }
 
-          // If not typed, set typed to false
+          // If not typed, set typed to `false`
           if (!itemDataset.typed) {
             dataset.typed = false;
           }
