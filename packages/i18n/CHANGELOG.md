@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add Hungarian (hu) translations (pull request #560)
+
 ## v0.11.0 (April 30, 2024)
 
 - Add Arabic (ar) translations (pull request #527)

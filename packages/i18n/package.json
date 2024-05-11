@@ -44,6 +44,7 @@
     "ar",
     "de",
     "fr",
+    "hu",
     "ja",
     "kr",
     "nb",
@@ -1746,6 +1747,566 @@
       "require": {
         "types": "./fr/value.d.cts",
         "default": "./fr/value.cjs"
+      }
+    },
+    "./hu": {
+      "import": {
+        "types": "./hu/index.d.ts",
+        "default": "./hu/index.js"
+      },
+      "require": {
+        "types": "./hu/index.d.cts",
+        "default": "./hu/index.cjs"
+      }
+    },
+    "./hu/schema": {
+      "import": {
+        "types": "./hu/schema.d.ts",
+        "default": "./hu/schema.js"
+      },
+      "require": {
+        "types": "./hu/schema.d.cts",
+        "default": "./hu/schema.cjs"
+      }
+    },
+    "./hu/bic": {
+      "import": {
+        "types": "./hu/bic.d.ts",
+        "default": "./hu/bic.js"
+      },
+      "require": {
+        "types": "./hu/bic.d.cts",
+        "default": "./hu/bic.cjs"
+      }
+    },
+    "./hu/bytes": {
+      "import": {
+        "types": "./hu/bytes.d.ts",
+        "default": "./hu/bytes.js"
+      },
+      "require": {
+        "types": "./hu/bytes.d.cts",
+        "default": "./hu/bytes.cjs"
+      }
+    },
+    "./hu/creditCard": {
+      "import": {
+        "types": "./hu/creditCard.d.ts",
+        "default": "./hu/creditCard.js"
+      },
+      "require": {
+        "types": "./hu/creditCard.d.cts",
+        "default": "./hu/creditCard.cjs"
+      }
+    },
+    "./hu/cuid2": {
+      "import": {
+        "types": "./hu/cuid2.d.ts",
+        "default": "./hu/cuid2.js"
+      },
+      "require": {
+        "types": "./hu/cuid2.d.cts",
+        "default": "./hu/cuid2.cjs"
+      }
+    },
+    "./hu/custom": {
+      "import": {
+        "types": "./hu/custom.d.ts",
+        "default": "./hu/custom.js"
+      },
+      "require": {
+        "types": "./hu/custom.d.cts",
+        "default": "./hu/custom.cjs"
+      }
+    },
+    "./hu/customAsync": {
+      "import": {
+        "types": "./hu/customAsync.d.ts",
+        "default": "./hu/customAsync.js"
+      },
+      "require": {
+        "types": "./hu/customAsync.d.cts",
+        "default": "./hu/customAsync.cjs"
+      }
+    },
+    "./hu/decimal": {
+      "import": {
+        "types": "./hu/decimal.d.ts",
+        "default": "./hu/decimal.js"
+      },
+      "require": {
+        "types": "./hu/decimal.d.cts",
+        "default": "./hu/decimal.cjs"
+      }
+    },
+    "./hu/email": {
+      "import": {
+        "types": "./hu/email.d.ts",
+        "default": "./hu/email.js"
+      },
+      "require": {
+        "types": "./hu/email.d.cts",
+        "default": "./hu/email.cjs"
+      }
+    },
+    "./hu/emoji": {
+      "import": {
+        "types": "./hu/emoji.d.ts",
+        "default": "./hu/emoji.js"
+      },
+      "require": {
+        "types": "./hu/emoji.d.cts",
+        "default": "./hu/emoji.cjs"
+      }
+    },
+    "./hu/endsWith": {
+      "import": {
+        "types": "./hu/endsWith.d.ts",
+        "default": "./hu/endsWith.js"
+      },
+      "require": {
+        "types": "./hu/endsWith.d.cts",
+        "default": "./hu/endsWith.cjs"
+      }
+    },
+    "./hu/excludes": {
+      "import": {
+        "types": "./hu/excludes.d.ts",
+        "default": "./hu/excludes.js"
+      },
+      "require": {
+        "types": "./hu/excludes.d.cts",
+        "default": "./hu/excludes.cjs"
+      }
+    },
+    "./hu/finite": {
+      "import": {
+        "types": "./hu/finite.d.ts",
+        "default": "./hu/finite.js"
+      },
+      "require": {
+        "types": "./hu/finite.d.cts",
+        "default": "./hu/finite.cjs"
+      }
+    },
+    "./hu/hash": {
+      "import": {
+        "types": "./hu/hash.d.ts",
+        "default": "./hu/hash.js"
+      },
+      "require": {
+        "types": "./hu/hash.d.cts",
+        "default": "./hu/hash.cjs"
+      }
+    },
+    "./hu/hexColor": {
+      "import": {
+        "types": "./hu/hexColor.d.ts",
+        "default": "./hu/hexColor.js"
+      },
+      "require": {
+        "types": "./hu/hexColor.d.cts",
+        "default": "./hu/hexColor.cjs"
+      }
+    },
+    "./hu/hexadecimal": {
+      "import": {
+        "types": "./hu/hexadecimal.d.ts",
+        "default": "./hu/hexadecimal.js"
+      },
+      "require": {
+        "types": "./hu/hexadecimal.d.cts",
+        "default": "./hu/hexadecimal.cjs"
+      }
+    },
+    "./hu/imei": {
+      "import": {
+        "types": "./hu/imei.d.ts",
+        "default": "./hu/imei.js"
+      },
+      "require": {
+        "types": "./hu/imei.d.cts",
+        "default": "./hu/imei.cjs"
+      }
+    },
+    "./hu/includes": {
+      "import": {
+        "types": "./hu/includes.d.ts",
+        "default": "./hu/includes.js"
+      },
+      "require": {
+        "types": "./hu/includes.d.cts",
+        "default": "./hu/includes.cjs"
+      }
+    },
+    "./hu/integer": {
+      "import": {
+        "types": "./hu/integer.d.ts",
+        "default": "./hu/integer.js"
+      },
+      "require": {
+        "types": "./hu/integer.d.cts",
+        "default": "./hu/integer.cjs"
+      }
+    },
+    "./hu/ip": {
+      "import": {
+        "types": "./hu/ip.d.ts",
+        "default": "./hu/ip.js"
+      },
+      "require": {
+        "types": "./hu/ip.d.cts",
+        "default": "./hu/ip.cjs"
+      }
+    },
+    "./hu/ipv4": {
+      "import": {
+        "types": "./hu/ipv4.d.ts",
+        "default": "./hu/ipv4.js"
+      },
+      "require": {
+        "types": "./hu/ipv4.d.cts",
+        "default": "./hu/ipv4.cjs"
+      }
+    },
+    "./hu/ipv6": {
+      "import": {
+        "types": "./hu/ipv6.d.ts",
+        "default": "./hu/ipv6.js"
+      },
+      "require": {
+        "types": "./hu/ipv6.d.cts",
+        "default": "./hu/ipv6.cjs"
+      }
+    },
+    "./hu/isoDate": {
+      "import": {
+        "types": "./hu/isoDate.d.ts",
+        "default": "./hu/isoDate.js"
+      },
+      "require": {
+        "types": "./hu/isoDate.d.cts",
+        "default": "./hu/isoDate.cjs"
+      }
+    },
+    "./hu/isoDateTime": {
+      "import": {
+        "types": "./hu/isoDateTime.d.ts",
+        "default": "./hu/isoDateTime.js"
+      },
+      "require": {
+        "types": "./hu/isoDateTime.d.cts",
+        "default": "./hu/isoDateTime.cjs"
+      }
+    },
+    "./hu/isoTime": {
+      "import": {
+        "types": "./hu/isoTime.d.ts",
+        "default": "./hu/isoTime.js"
+      },
+      "require": {
+        "types": "./hu/isoTime.d.cts",
+        "default": "./hu/isoTime.cjs"
+      }
+    },
+    "./hu/isoTimeSecond": {
+      "import": {
+        "types": "./hu/isoTimeSecond.d.ts",
+        "default": "./hu/isoTimeSecond.js"
+      },
+      "require": {
+        "types": "./hu/isoTimeSecond.d.cts",
+        "default": "./hu/isoTimeSecond.cjs"
+      }
+    },
+    "./hu/isoTimestamp": {
+      "import": {
+        "types": "./hu/isoTimestamp.d.ts",
+        "default": "./hu/isoTimestamp.js"
+      },
+      "require": {
+        "types": "./hu/isoTimestamp.d.cts",
+        "default": "./hu/isoTimestamp.cjs"
+      }
+    },
+    "./hu/isoWeek": {
+      "import": {
+        "types": "./hu/isoWeek.d.ts",
+        "default": "./hu/isoWeek.js"
+      },
+      "require": {
+        "types": "./hu/isoWeek.d.cts",
+        "default": "./hu/isoWeek.cjs"
+      }
+    },
+    "./hu/length": {
+      "import": {
+        "types": "./hu/length.d.ts",
+        "default": "./hu/length.js"
+      },
+      "require": {
+        "types": "./hu/length.d.cts",
+        "default": "./hu/length.cjs"
+      }
+    },
+    "./hu/mac": {
+      "import": {
+        "types": "./hu/mac.d.ts",
+        "default": "./hu/mac.js"
+      },
+      "require": {
+        "types": "./hu/mac.d.cts",
+        "default": "./hu/mac.cjs"
+      }
+    },
+    "./hu/mac48": {
+      "import": {
+        "types": "./hu/mac48.d.ts",
+        "default": "./hu/mac48.js"
+      },
+      "require": {
+        "types": "./hu/mac48.d.cts",
+        "default": "./hu/mac48.cjs"
+      }
+    },
+    "./hu/mac64": {
+      "import": {
+        "types": "./hu/mac64.d.ts",
+        "default": "./hu/mac64.js"
+      },
+      "require": {
+        "types": "./hu/mac64.d.cts",
+        "default": "./hu/mac64.cjs"
+      }
+    },
+    "./hu/maxBytes": {
+      "import": {
+        "types": "./hu/maxBytes.d.ts",
+        "default": "./hu/maxBytes.js"
+      },
+      "require": {
+        "types": "./hu/maxBytes.d.cts",
+        "default": "./hu/maxBytes.cjs"
+      }
+    },
+    "./hu/maxLength": {
+      "import": {
+        "types": "./hu/maxLength.d.ts",
+        "default": "./hu/maxLength.js"
+      },
+      "require": {
+        "types": "./hu/maxLength.d.cts",
+        "default": "./hu/maxLength.cjs"
+      }
+    },
+    "./hu/maxSize": {
+      "import": {
+        "types": "./hu/maxSize.d.ts",
+        "default": "./hu/maxSize.js"
+      },
+      "require": {
+        "types": "./hu/maxSize.d.cts",
+        "default": "./hu/maxSize.cjs"
+      }
+    },
+    "./hu/maxValue": {
+      "import": {
+        "types": "./hu/maxValue.d.ts",
+        "default": "./hu/maxValue.js"
+      },
+      "require": {
+        "types": "./hu/maxValue.d.cts",
+        "default": "./hu/maxValue.cjs"
+      }
+    },
+    "./hu/mimeType": {
+      "import": {
+        "types": "./hu/mimeType.d.ts",
+        "default": "./hu/mimeType.js"
+      },
+      "require": {
+        "types": "./hu/mimeType.d.cts",
+        "default": "./hu/mimeType.cjs"
+      }
+    },
+    "./hu/minBytes": {
+      "import": {
+        "types": "./hu/minBytes.d.ts",
+        "default": "./hu/minBytes.js"
+      },
+      "require": {
+        "types": "./hu/minBytes.d.cts",
+        "default": "./hu/minBytes.cjs"
+      }
+    },
+    "./hu/minLength": {
+      "import": {
+        "types": "./hu/minLength.d.ts",
+        "default": "./hu/minLength.js"
+      },
+      "require": {
+        "types": "./hu/minLength.d.cts",
+        "default": "./hu/minLength.cjs"
+      }
+    },
+    "./hu/minSize": {
+      "import": {
+        "types": "./hu/minSize.d.ts",
+        "default": "./hu/minSize.js"
+      },
+      "require": {
+        "types": "./hu/minSize.d.cts",
+        "default": "./hu/minSize.cjs"
+      }
+    },
+    "./hu/minValue": {
+      "import": {
+        "types": "./hu/minValue.d.ts",
+        "default": "./hu/minValue.js"
+      },
+      "require": {
+        "types": "./hu/minValue.d.cts",
+        "default": "./hu/minValue.cjs"
+      }
+    },
+    "./hu/multipleOf": {
+      "import": {
+        "types": "./hu/multipleOf.d.ts",
+        "default": "./hu/multipleOf.js"
+      },
+      "require": {
+        "types": "./hu/multipleOf.d.cts",
+        "default": "./hu/multipleOf.cjs"
+      }
+    },
+    "./hu/notBytes": {
+      "import": {
+        "types": "./hu/notBytes.d.ts",
+        "default": "./hu/notBytes.js"
+      },
+      "require": {
+        "types": "./hu/notBytes.d.cts",
+        "default": "./hu/notBytes.cjs"
+      }
+    },
+    "./hu/notLength": {
+      "import": {
+        "types": "./hu/notLength.d.ts",
+        "default": "./hu/notLength.js"
+      },
+      "require": {
+        "types": "./hu/notLength.d.cts",
+        "default": "./hu/notLength.cjs"
+      }
+    },
+    "./hu/notSize": {
+      "import": {
+        "types": "./hu/notSize.d.ts",
+        "default": "./hu/notSize.js"
+      },
+      "require": {
+        "types": "./hu/notSize.d.cts",
+        "default": "./hu/notSize.cjs"
+      }
+    },
+    "./hu/notValue": {
+      "import": {
+        "types": "./hu/notValue.d.ts",
+        "default": "./hu/notValue.js"
+      },
+      "require": {
+        "types": "./hu/notValue.d.cts",
+        "default": "./hu/notValue.cjs"
+      }
+    },
+    "./hu/octal": {
+      "import": {
+        "types": "./hu/octal.d.ts",
+        "default": "./hu/octal.js"
+      },
+      "require": {
+        "types": "./hu/octal.d.cts",
+        "default": "./hu/octal.cjs"
+      }
+    },
+    "./hu/regex": {
+      "import": {
+        "types": "./hu/regex.d.ts",
+        "default": "./hu/regex.js"
+      },
+      "require": {
+        "types": "./hu/regex.d.cts",
+        "default": "./hu/regex.cjs"
+      }
+    },
+    "./hu/safeInteger": {
+      "import": {
+        "types": "./hu/safeInteger.d.ts",
+        "default": "./hu/safeInteger.js"
+      },
+      "require": {
+        "types": "./hu/safeInteger.d.cts",
+        "default": "./hu/safeInteger.cjs"
+      }
+    },
+    "./hu/size": {
+      "import": {
+        "types": "./hu/size.d.ts",
+        "default": "./hu/size.js"
+      },
+      "require": {
+        "types": "./hu/size.d.cts",
+        "default": "./hu/size.cjs"
+      }
+    },
+    "./hu/startsWith": {
+      "import": {
+        "types": "./hu/startsWith.d.ts",
+        "default": "./hu/startsWith.js"
+      },
+      "require": {
+        "types": "./hu/startsWith.d.cts",
+        "default": "./hu/startsWith.cjs"
+      }
+    },
+    "./hu/ulid": {
+      "import": {
+        "types": "./hu/ulid.d.ts",
+        "default": "./hu/ulid.js"
+      },
+      "require": {
+        "types": "./hu/ulid.d.cts",
+        "default": "./hu/ulid.cjs"
+      }
+    },
+    "./hu/url": {
+      "import": {
+        "types": "./hu/url.d.ts",
+        "default": "./hu/url.js"
+      },
+      "require": {
+        "types": "./hu/url.d.cts",
+        "default": "./hu/url.cjs"
+      }
+    },
+    "./hu/uuid": {
+      "import": {
+        "types": "./hu/uuid.d.ts",
+        "default": "./hu/uuid.js"
+      },
+      "require": {
+        "types": "./hu/uuid.d.cts",
+        "default": "./hu/uuid.cjs"
+      }
+    },
+    "./hu/value": {
+      "import": {
+        "types": "./hu/value.d.ts",
+        "default": "./hu/value.js"
+      },
+      "require": {
+        "types": "./hu/value.d.cts",
+        "default": "./hu/value.cjs"
       }
     },
     "./ja": {
