@@ -1,7 +1,7 @@
 {
   "name": "@valibot/i18n",
   "description": "The official i18n translations for Valibot",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "license": "MIT",
   "author": "Fabian Hiller",
   "homepage": "https://valibot.dev",
@@ -24,8 +24,10 @@
   },
   "scripts": {
     "lint": "tsc --noEmit",
-    "build": "tsm ./scripts/build.ts",
-    "publish": "npm publish"
+    "build-npm": "tsm ./scripts/build-npm.ts",
+    "build-jsr": "tsm ./scripts/build-jsr.ts",
+    "publish-npm": "npm publish",
+    "publish-jsr": "npx jsr publish"
   },
   "devDependencies": {
     "@types/node": "^20.11.8",
@@ -37,6 +39,7 @@
     "valibot": ">=0.30.0 <1"
   },
   "files": [
+    "index.ts",
     "index.js",
     "index.cjs",
     "index.d.ts",

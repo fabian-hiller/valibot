@@ -72,7 +72,7 @@ cd ../packages/i18n
 1. Add ISO code to `src/types.ts` in line 4
 2. Duplicate `src/en.ts` and change file name to ISO code
 3. Change ISO code and translate messages in new file
-4. Import new language file in `scripts/build.ts`
+4. Import new language file in `scripts/build-npm.ts` and `scripts/build-jsr.ts`
 5. Add new import to `languages` array
 
 ## Build library
@@ -80,5 +80,6 @@ cd ../packages/i18n
 Execute build script
 
 ```bash
-pnpm build
+pnpm build-npm      # for npm
+pnpm build-jsr      # for JSR
 ```

@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.12.0 (May 11, 2024)
 
 - Add Hungarian (hu) translations (pull request #560)
 

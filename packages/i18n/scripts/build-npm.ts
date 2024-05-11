@@ -44,11 +44,17 @@ const languages = [
 ];
 
 // Create root import variables
-let rootModuleImports: string[] = [];
-let rootCommonImports: string[] = ['"use strict";'];
+const rootModuleImports: string[] = [];
+const rootCommonImports: string[] = ['"use strict";'];
 
 // Create files array
-const files: string[] = ['index.js', 'index.cjs', 'index.d.ts', 'index.d.cts'];
+const files: string[] = [
+  'index.ts',
+  'index.js',
+  'index.cjs',
+  'index.d.ts',
+  'index.d.cts',
+];
 
 /**
  * Exports type.
@@ -113,8 +119,8 @@ for (const language of languages) {
   );
 
   // Create language import variables
-  let languageModuleImports: string[] = [];
-  let languageCommonImports: string[] = ['"use strict";'];
+  const languageModuleImports: string[] = [];
+  const languageCommonImports: string[] = ['"use strict";'];
 
   // Add schema files to exports
   exports[`./${language.code}/schema`] = {
