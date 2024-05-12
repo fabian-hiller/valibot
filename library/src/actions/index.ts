@@ -55,3 +55,4 @@ export * from './trimStart/index.ts';
 export * from './ulid/index.ts';
 export * from './url/index.ts';
 export * from './uuid/index.ts';
+export * from './value/index.ts';
