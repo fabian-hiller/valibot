@@ -29,4 +29,9 @@ describe('optionalAsync', () => {
     expect(await parseAsync(schema2, input)).toBe(input);
     expect(await parseAsync(schema2, undefined)).toBe(default_);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = optionalAsync(string({ description: 'optional string' }));
+    expect(schema1.metadata).toEqual({ description: 'optional string' });
+  });
 });

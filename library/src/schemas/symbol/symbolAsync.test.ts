@@ -20,4 +20,19 @@ describe('symbolAsync', () => {
       error
     );
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = symbolAsync({ description: 'symbol value' });
+    expect(schema1.metadata).toEqual({ description: 'symbol value' });
+
+    const schema2 = symbolAsync({
+      description: 'symbol value',
+      message: 'Value is not a symbol!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'symbol value' });
+    expect(schema2.message).toEqual('Value is not a symbol!');
+
+    const schema3 = symbolAsync();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

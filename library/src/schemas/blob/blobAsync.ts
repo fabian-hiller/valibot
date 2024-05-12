@@ -1,6 +1,7 @@
 import type {
   BaseSchemaAsync,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   PipeAsync,
 } from '../../types/index.ts';
 import {
@@ -40,22 +41,22 @@ export function blobAsync(pipe?: PipeAsync<Blob>): BlobSchemaAsync;
 /**
  * Creates an async blob schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async blob schema.
  */
 export function blobAsync(
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<Blob>
 ): BlobSchemaAsync;
 
 export function blobAsync(
-  arg1?: ErrorMessage | PipeAsync<Blob>,
+  arg1?: ErrorMessageOrMetadata | PipeAsync<Blob>,
   arg2?: PipeAsync<Blob>
 ): BlobSchemaAsync {
   // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg1, arg2);
+  const [message, pipe, metadata] = defaultArgs(arg1, arg2);
 
   // Create and return async blob schema
   return {
@@ -64,6 +65,7 @@ export function blobAsync(
     async: true,
     message,
     pipe,
+    metadata,
     async _parse(input, config) {
       // If type is valid, return pipe result
       if (input instanceof Blob) {

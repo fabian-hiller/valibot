@@ -1,5 +1,5 @@
-import type { BaseSchema, Pipe } from '../../types/index.ts';
-import { pipeResult } from '../../utils/index.ts';
+import type { BaseSchema, Pipe, SchemaMetadata } from '../../types/index.ts';
+import { defaultArgs, pipeResult } from '../../utils/index.ts';
 
 /**
  * Any schema type.
@@ -22,12 +22,32 @@ export interface AnySchema<TOutput = any> extends BaseSchema<any, TOutput> {
  *
  * @returns An any schema.
  */
-export function any(pipe?: Pipe<any>): AnySchema {
+export function any(pipe?: Pipe<any>): AnySchema;
+
+/**
+ * Creates an any schema.
+ *
+ * @param metadata Schema metadata.
+ * @param pipe A validation and transformation pipe.
+ *
+ * @returns An any schema.
+ */
+export function any(metadata?: SchemaMetadata, pipe?: Pipe<any>): AnySchema;
+
+export function any(
+  arg1?: SchemaMetadata | Pipe<any>,
+  arg2?: Pipe<any>
+): AnySchema {
+  // Get pipe and metadata argument
+  const [, pipe, metadata] = defaultArgs<Pipe<any>>(arg1, arg2);
+
+  // Create and return any schema
   return {
     type: 'any',
     expects: 'any',
     async: false,
     pipe,
+    metadata,
     _parse(input, config) {
       return pipeResult(this, input, config);
     },

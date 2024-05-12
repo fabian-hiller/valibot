@@ -7,7 +7,7 @@ import {
 import type {
   BaseSchema,
   BaseSchemaAsync,
-  ErrorMessage,
+  ErrorMessageOrMetadata,
   PipeAsync,
 } from '../../types/index.ts';
 import { restAndDefaultArgs } from '../../utils/index.ts';
@@ -41,14 +41,14 @@ export function mergeAsync<TSchemas extends ObjectSchemas>(
  * entries overwrite the previous ones.
  *
  * @param schemas The schemas to be merged.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
  */
 export function mergeAsync<TSchemas extends ObjectSchemas>(
   schemas: TSchemas,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, undefined>>
 ): ObjectSchemaAsync<MergeObjects<TSchemas>>;
 
@@ -77,7 +77,7 @@ export function mergeAsync<
  *
  * @param schemas The schemas to be merged.
  * @param rest The object rest.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns An async object schema.
@@ -88,7 +88,7 @@ export function mergeAsync<
 >(
   schemas: TSchemas,
   rest: TRest,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
 ): ObjectSchemaAsync<MergeObjects<TSchemas>, TRest>;
 
@@ -99,13 +99,15 @@ export function mergeAsync<
   schemas: TSchemas,
   arg2?:
     | PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
-    | ErrorMessage
+    | ErrorMessageOrMetadata
     | TRest,
-  arg3?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>> | ErrorMessage,
+  arg3?:
+    | PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
+    | ErrorMessageOrMetadata,
   arg4?: PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
 ): ObjectSchemaAsync<MergeObjects<TSchemas>, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = restAndDefaultArgs<
+  const [rest, message, pipe, metadata] = restAndDefaultArgs<
     TRest,
     PipeAsync<ObjectOutput<MergeObjects<TSchemas>, TRest>>
   >(arg2, arg3, arg4);
@@ -117,7 +119,7 @@ export function mergeAsync<
       {}
     ) as MergeObjects<TSchemas>,
     rest,
-    message,
+    metadata === undefined ? message : { message, ...metadata },
     pipe
   );
 }

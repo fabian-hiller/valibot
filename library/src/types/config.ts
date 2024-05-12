@@ -1,10 +1,17 @@
 import type { SchemaIssue } from './issues.ts';
+import type { SchemaMetadata } from './schema.ts';
 
 /**
  * Error message type.
  */
 export type ErrorMessage = string | ((issue: SchemaIssue) => string);
 
+/**
+ * Error message or metadata type.
+ */
+export type ErrorMessageOrMetadata =
+  | ErrorMessage
+  | (SchemaMetadata & { message?: ErrorMessage });
 /**
  * The schema config type.
  */

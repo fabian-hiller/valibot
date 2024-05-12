@@ -1,6 +1,7 @@
 import type {
   BaseSchema,
   ErrorMessage,
+  ErrorMessageOrMetadata,
   Pipe,
   SchemaIssues,
 } from '../../types/index.ts';
@@ -64,14 +65,14 @@ export function tuple<TItems extends TupleItems>(
  * Creates a tuple schema.
  *
  * @param items The items schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A tuple schema.
  */
 export function tuple<TItems extends TupleItems>(
   items: TItems,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<TupleOutput<TItems, undefined>>
 ): TupleSchema<TItems>;
 
@@ -98,7 +99,7 @@ export function tuple<
  *
  * @param items The items schema.
  * @param rest The rest schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  * @param pipe A validation and transformation pipe.
  *
  * @returns A tuple schema.
@@ -109,7 +110,7 @@ export function tuple<
 >(
   items: TItems,
   rest: TRest,
-  message?: ErrorMessage,
+  messageOrMetadata?: ErrorMessageOrMetadata,
   pipe?: Pipe<TupleOutput<TItems, TRest>>
 ): TupleSchema<TItems, TRest>;
 
@@ -118,12 +119,12 @@ export function tuple<
   TRest extends BaseSchema | undefined = undefined,
 >(
   items: TItems,
-  arg2?: Pipe<TupleOutput<TItems, TRest>> | ErrorMessage | TRest,
-  arg3?: Pipe<TupleOutput<TItems, TRest>> | ErrorMessage,
+  arg2?: Pipe<TupleOutput<TItems, TRest>> | ErrorMessageOrMetadata | TRest,
+  arg3?: Pipe<TupleOutput<TItems, TRest>> | ErrorMessageOrMetadata,
   arg4?: Pipe<TupleOutput<TItems, TRest>>
 ): TupleSchema<TItems, TRest> {
   // Get rest, message and pipe argument
-  const [rest, message, pipe] = restAndDefaultArgs<
+  const [rest, message, pipe, metadata] = restAndDefaultArgs<
     TRest,
     Pipe<TupleOutput<TItems, TRest>>
   >(arg2, arg3, arg4);
@@ -137,6 +138,7 @@ export function tuple<
     rest,
     message,
     pipe,
+    metadata,
     _parse(input, config) {
       // If root type is valid, check nested types
       if (Array.isArray(input)) {

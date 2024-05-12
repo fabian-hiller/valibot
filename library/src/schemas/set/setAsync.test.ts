@@ -41,7 +41,7 @@ describe('setAsync', () => {
   });
 
   test('should throw custom error', async () => {
-    const error = 'Value is not an set!';
+    const error = 'Value is not a set!';
     const schema = setAsync(number(), error);
     await expect(parseAsync(schema, 'test')).rejects.toThrowError(error);
   });
@@ -196,5 +196,20 @@ describe('setAsync', () => {
         },
       ],
     } satisfies UntypedSchemaResult);
+  });
+
+  test('should expose the metadata', () => {
+    const schema1 = setAsync(number(), { description: 'set value' });
+    expect(schema1.metadata).toEqual({ description: 'set value' });
+
+    const schema2 = setAsync(number(), {
+      description: 'set value',
+      message: 'Value is not a set!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'set value' });
+    expect(schema2.message).toEqual('Value is not a set!');
+
+    const schema3 = setAsync(number());
+    expect(schema3.metadata).toBeUndefined();
   });
 });

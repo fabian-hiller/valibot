@@ -48,4 +48,21 @@ describe('specialAsync', () => {
     expect(output2).toBe(input2);
     await expect(parseAsync(schema2, '10px')).rejects.toThrowError(inputError);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = specialAsync<PixelString>(isPixelString, {
+      description: 'special value',
+    });
+    expect(schema1.metadata).toEqual({ description: 'special value' });
+
+    const schema2 = specialAsync<PixelString>(isPixelString, {
+      description: 'special value',
+      message: 'Value is not a special!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'special value' });
+    expect(schema2.message).toEqual('Value is not a special!');
+
+    const schema3 = specialAsync<PixelString>(isPixelString);
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

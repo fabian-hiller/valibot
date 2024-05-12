@@ -59,6 +59,9 @@ export function optional<
     expects: `${wrapped.expects} | undefined`,
     async: false,
     wrapped,
+    get metadata() {
+      return this.wrapped.metadata;
+    },
     default: default_ as TDefault,
     _parse(input, config) {
       // If input is `undefined`, return typed schema result or override it

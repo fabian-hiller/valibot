@@ -59,6 +59,9 @@ export function nullable<
     expects: `${wrapped.expects} | null`,
     async: false,
     wrapped,
+    get metadata() {
+      return this.wrapped.metadata;
+    },
     default: default_ as TDefault,
     _parse(input, config) {
       // If input is `null`, return typed schema result or override it with

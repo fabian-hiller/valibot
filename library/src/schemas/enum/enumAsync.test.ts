@@ -27,4 +27,19 @@ describe('enumAsync', () => {
       parseAsync(enumAsync(Direction, error), 'test')
     ).rejects.toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = enumAsync(Direction, { description: 'enum value' });
+    expect(schema1.metadata).toEqual({ description: 'enum value' });
+
+    const schema2 = enumAsync(Direction, {
+      description: 'enum value',
+      message: 'Value is not a enum!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'enum value' });
+    expect(schema2.message).toEqual('Value is not a enum!');
+
+    const schema3 = enumAsync(Direction);
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

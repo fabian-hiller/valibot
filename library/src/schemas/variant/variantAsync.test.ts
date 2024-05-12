@@ -123,4 +123,36 @@ describe('variantAsync', () => {
       parseAsync(schema2, { type: 'b', b: 123 })
     ).rejects.toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = variantAsync(
+      'type',
+      [
+        object({ type: literal('a'), a: string() }),
+        object({ type: literal('b'), b: number() }),
+      ],
+      { description: 'variant value' }
+    );
+    expect(schema1.metadata).toEqual({ description: 'variant value' });
+
+    const schema2 = variantAsync(
+      'type',
+      [
+        object({ type: literal('a'), a: string() }),
+        object({ type: literal('b'), b: number() }),
+      ],
+      {
+        description: 'variant value',
+        message: 'Value is not a variant!',
+      }
+    );
+    expect(schema2.metadata).toEqual({ description: 'variant value' });
+    expect(schema2.message).toEqual('Value is not a variant!');
+
+    const schema3 = variantAsync('type', [
+      object({ type: literal('a'), a: string() }),
+      object({ type: literal('b'), b: number() }),
+    ]);
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

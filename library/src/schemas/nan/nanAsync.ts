@@ -1,5 +1,9 @@
-import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult } from '../../utils/index.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * NaN schema async type.
@@ -19,16 +23,21 @@ export interface NanSchemaAsync<TOutput = number>
 /**
  * Creates an async NaN schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns An async NaN schema.
  */
-export function nanAsync(message?: ErrorMessage): NanSchemaAsync {
+export function nanAsync(
+  messageOrMetadata?: ErrorMessageOrMetadata
+): NanSchemaAsync {
+  // Extract message and metadata
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'nan',
     expects: 'NaN',
     async: true,
     message,
+    metadata,
     async _parse(input, config) {
       // If type is valid, return schema result
       if (Number.isNaN(input)) {

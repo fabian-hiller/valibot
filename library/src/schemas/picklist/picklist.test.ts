@@ -22,4 +22,19 @@ describe('picklist', () => {
       error
     );
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = picklist(['value_1'], { description: 'picklist value' });
+    expect(schema1.metadata).toEqual({ description: 'picklist value' });
+
+    const schema2 = picklist(['value_1'], {
+      description: 'picklist value',
+      message: 'Value is not a picklist value!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'picklist value' });
+    expect(schema2.message).toEqual('Value is not a picklist value!');
+
+    const schema3 = picklist(['value_1']);
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

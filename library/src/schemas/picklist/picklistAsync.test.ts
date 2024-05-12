@@ -22,4 +22,21 @@ describe('picklistAsync', () => {
       parseAsync(picklistAsync(['value_1'], error), 'test')
     ).rejects.toThrowError(error);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = picklistAsync(['value_1'], {
+      description: 'picklist value',
+    });
+    expect(schema1.metadata).toEqual({ description: 'picklist value' });
+
+    const schema2 = picklistAsync(['value_1'], {
+      description: 'picklist value',
+      message: 'Value is not a picklist value!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'picklist value' });
+    expect(schema2.message).toEqual('Value is not a picklist value!');
+
+    const schema3 = picklistAsync(['value_1']);
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

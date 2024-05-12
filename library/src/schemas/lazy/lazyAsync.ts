@@ -4,6 +4,7 @@ import type {
   Input,
   MaybePromise,
   Output,
+  SchemaMetadata,
 } from '../../types/index.ts';
 
 /**
@@ -29,6 +30,7 @@ export interface LazySchemaAsync<
  * Creates an async lazy schema.
  *
  * @param getter The schema getter.
+ * @param metadata The schema metadata.
  *
  * @returns An async lazy schema.
  */
@@ -36,12 +38,13 @@ export function lazyAsync<
   TGetter extends (
     input: unknown
   ) => MaybePromise<BaseSchema | BaseSchemaAsync>,
->(getter: TGetter): LazySchemaAsync<TGetter> {
+>(getter: TGetter, metadata?: SchemaMetadata): LazySchemaAsync<TGetter> {
   return {
     type: 'lazy',
     expects: 'unknown',
     async: true,
     getter,
+    metadata,
     async _parse(input, config) {
       return (await this.getter(input))._parse(input, config);
     },

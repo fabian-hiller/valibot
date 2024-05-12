@@ -29,4 +29,19 @@ describe('boolean', () => {
     const output2 = parse(boolean('Error', [toCustom(transformInput)]), true);
     expect(output2).toBe(transformInput());
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = boolean({ description: 'boolean value' });
+    expect(schema1.metadata).toEqual({ description: 'boolean value' });
+
+    const schema2 = boolean({
+      description: 'boolean value',
+      message: 'Value is not a boolean!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'boolean value' });
+    expect(schema2.message).toEqual('Value is not a boolean!');
+
+    const schema3 = boolean();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

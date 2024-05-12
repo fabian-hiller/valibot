@@ -60,6 +60,9 @@ export function nullish<
     async: false,
     wrapped,
     default: default_ as TDefault,
+    get metadata() {
+      return this.wrapped.metadata;
+    },
     _parse(input, config) {
       // If input is `null` or `undefined`, return typed schema result or
       // override it with default value

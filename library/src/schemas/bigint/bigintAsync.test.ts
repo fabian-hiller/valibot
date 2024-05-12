@@ -39,4 +39,19 @@ describe('bigintAsync', () => {
       valueError
     );
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = bigintAsync({ description: 'bigint value' });
+    expect(schema1.metadata).toEqual({ description: 'bigint value' });
+
+    const schema2 = bigintAsync({
+      description: 'bigint value',
+      message: 'Value is not a bigint!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'bigint value' });
+    expect(schema2.message).toEqual('Value is not a bigint!');
+
+    const schema3 = bigintAsync();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

@@ -1,5 +1,9 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * NaN schema type.
@@ -19,16 +23,19 @@ export interface NanSchema<TOutput = number>
 /**
  * Creates a NaN schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns A NaN schema.
  */
-export function nan(message?: ErrorMessage): NanSchema {
+export function nan(messageOrMetadata?: ErrorMessageOrMetadata): NanSchema {
+  // Extract message and metadata
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'nan',
     expects: 'NaN',
     async: false,
     message,
+    metadata,
     _parse(input, config) {
       // If type is valid, return schema result
       if (Number.isNaN(input)) {

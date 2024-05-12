@@ -1,5 +1,9 @@
-import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult } from '../../utils/index.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, schemaIssue, schemaResult } from '../../utils/index.ts';
 
 /**
  * Undefined schema async type.
@@ -19,16 +23,21 @@ export interface UndefinedSchemaAsync<TOutput = undefined>
 /**
  * Creates an async undefined schema.
  *
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns An async undefined schema.
  */
-export function undefinedAsync(message?: ErrorMessage): UndefinedSchemaAsync {
+export function undefinedAsync(
+  messageOrMetadata?: ErrorMessageOrMetadata
+): UndefinedSchemaAsync {
+  // Extracts the message and metadata from the input.
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'undefined',
     expects: 'undefined',
     async: true,
     message,
+    metadata,
     async _parse(input, config) {
       // If type is valid, return schema result
       if (input === undefined) {

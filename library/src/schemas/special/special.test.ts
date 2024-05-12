@@ -48,4 +48,21 @@ describe('special', () => {
     expect(output2).toBe(input2);
     expect(() => parse(schema2, '10px')).toThrowError(inputError);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = special<PixelString>(isPixelString, {
+      description: 'special value',
+    });
+    expect(schema1.metadata).toEqual({ description: 'special value' });
+
+    const schema2 = special<PixelString>(isPixelString, {
+      description: 'special value',
+      message: 'Value is not a special!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'special value' });
+    expect(schema2.message).toEqual('Value is not a special!');
+
+    const schema3 = special<PixelString>(isPixelString);
+    expect(schema3.metadata).toBeUndefined();
+  });
 });

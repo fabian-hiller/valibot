@@ -29,4 +29,9 @@ describe('optional', () => {
     expect(parse(schema2, input)).toBe(input);
     expect(parse(schema2, undefined)).toBe(default_);
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = optional(string({ description: 'optional string' }));
+    expect(schema1.metadata).toEqual({ description: 'optional string' });
+  });
 });

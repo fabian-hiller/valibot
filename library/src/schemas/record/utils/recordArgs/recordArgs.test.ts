@@ -10,17 +10,20 @@ describe('recordArgs', () => {
       comparable(string()),
       undefined,
       undefined,
+      undefined,
     ]);
     expect(recordArgs(string(), [], undefined, undefined)).toEqual([
       comparable(string()),
       comparable(string()),
       undefined,
       [],
+      undefined,
     ]);
     expect(recordArgs(string(), 'error', undefined, undefined)).toEqual([
       comparable(string()),
       comparable(string()),
       'error',
+      undefined,
       undefined,
     ]);
     expect(recordArgs(string(), 'error', [], undefined)).toEqual([
@@ -28,10 +31,12 @@ describe('recordArgs', () => {
       comparable(string()),
       'error',
       [],
+      undefined,
     ]);
     expect(recordArgs(string(), string(), undefined, undefined)).toEqual([
       comparable(string()),
       comparable(string()),
+      undefined,
       undefined,
       undefined,
     ]);
@@ -40,11 +45,13 @@ describe('recordArgs', () => {
       comparable(string()),
       undefined,
       [],
+      undefined,
     ]);
     expect(recordArgs(string(), string(), 'error', undefined)).toEqual([
       comparable(string()),
       comparable(string()),
       'error',
+      undefined,
       undefined,
     ]);
     expect(recordArgs(string(), string(), 'error', [])).toEqual([
@@ -52,6 +59,7 @@ describe('recordArgs', () => {
       comparable(string()),
       'error',
       [],
+      undefined,
     ]);
   });
 });

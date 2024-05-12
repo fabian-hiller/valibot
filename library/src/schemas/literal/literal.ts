@@ -1,5 +1,14 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import {
+  defaultArgs,
+  schemaIssue,
+  schemaResult,
+  stringify,
+} from '../../utils/index.ts';
 import type { Literal } from './types.ts';
 
 /**
@@ -25,20 +34,23 @@ export interface LiteralSchema<TLiteral extends Literal, TOutput = TLiteral>
  * Creates a literal schema.
  *
  * @param literal_ The literal value.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns A literal schema.
  */
 export function literal<TLiteral extends Literal>(
   literal_: TLiteral,
-  message?: ErrorMessage
+  messageOrMetadata?: ErrorMessageOrMetadata
 ): LiteralSchema<TLiteral> {
+  // Extract message and metadata
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'literal',
     expects: stringify(literal_),
     async: false,
     literal: literal_,
     message,
+    metadata,
     _parse(input, config) {
       // If type is valid, return schema result
       if (input === this.literal) {

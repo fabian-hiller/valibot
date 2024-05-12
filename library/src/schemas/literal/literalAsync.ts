@@ -1,5 +1,14 @@
-import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import {
+  defaultArgs,
+  schemaIssue,
+  schemaResult,
+  stringify,
+} from '../../utils/index.ts';
 import type { Literal } from './types.ts';
 
 /**
@@ -27,20 +36,23 @@ export interface LiteralSchemaAsync<
  * Creates an async literal schema.
  *
  * @param literal The literal value.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns An async literal schema.
  */
 export function literalAsync<TLiteral extends Literal>(
   literal: TLiteral,
-  message?: ErrorMessage
+  messageOrMetadata?: ErrorMessageOrMetadata
 ): LiteralSchemaAsync<TLiteral> {
+  // Extract message and metadata
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'literal',
     expects: stringify(literal),
     async: true,
     literal,
     message,
+    metadata,
     async _parse(input, config) {
       // If type is valid, return schema result
       if (input === this.literal) {

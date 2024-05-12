@@ -9,9 +9,11 @@ describe('restAndDefaultArgs', () => {
       undefined,
       undefined,
       undefined,
+      undefined,
     ]);
     expect(restAndDefaultArgs(string(), undefined, undefined)).toEqual([
       comparable(string()),
+      undefined,
       undefined,
       undefined,
     ]);
@@ -19,41 +21,49 @@ describe('restAndDefaultArgs', () => {
       comparable(string()),
       undefined,
       [],
+      undefined,
     ]);
     expect(restAndDefaultArgs(string(), 'error', undefined)).toEqual([
       comparable(string()),
       'error',
+      undefined,
       undefined,
     ]);
     expect(restAndDefaultArgs(string(), 'error', [])).toEqual([
       comparable(string()),
       'error',
       [],
+      undefined,
     ]);
     expect(restAndDefaultArgs([], undefined, undefined)).toEqual([
       undefined,
       undefined,
       [],
+      undefined,
     ]);
     expect(restAndDefaultArgs('error', undefined, undefined)).toEqual([
       undefined,
       'error',
+      undefined,
       undefined,
     ]);
     expect(restAndDefaultArgs('error', [], undefined)).toEqual([
       undefined,
       'error',
       [],
+      undefined,
     ]);
     expect(restAndDefaultArgs(undefined, 'error', undefined)).toEqual([
       undefined,
       'error',
+      undefined,
       undefined,
     ]);
     expect(restAndDefaultArgs(undefined, 'error', [])).toEqual([
       undefined,
       'error',
       [],
+      undefined,
     ]);
   });
 });

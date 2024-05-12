@@ -1,5 +1,9 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue } from '../../utils/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import { defaultArgs, schemaIssue } from '../../utils/index.ts';
 import type { NonNullableInput, NonNullableOutput } from './types.ts';
 
 /**
@@ -27,20 +31,25 @@ export interface NonNullableSchema<
  * Creates a non nullable schema.
  *
  * @param wrapped The wrapped schema.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns A non nullable schema.
  */
 export function nonNullable<TWrapped extends BaseSchema>(
   wrapped: TWrapped,
-  message?: ErrorMessage
+  messageOrMetadata?: ErrorMessageOrMetadata
 ): NonNullableSchema<TWrapped> {
+  // Extracts the message and metadata from the input.
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
   return {
     type: 'non_nullable',
     expects: '!null',
     async: false,
     wrapped,
     message,
+    get metadata() {
+      return metadata ?? this.wrapped.metadata;
+    },
     _parse(input, config) {
       // In input is `null`, return schema issue
       if (input === null) {

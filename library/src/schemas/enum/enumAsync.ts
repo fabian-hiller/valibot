@@ -1,5 +1,14 @@
-import type { BaseSchemaAsync, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
+import type {
+  BaseSchemaAsync,
+  ErrorMessage,
+  ErrorMessageOrMetadata,
+} from '../../types/index.ts';
+import {
+  defaultArgs,
+  schemaIssue,
+  schemaResult,
+  stringify,
+} from '../../utils/index.ts';
 import type { Enum } from './enum.ts';
 
 /**
@@ -27,16 +36,19 @@ export interface EnumSchemaAsync<
  * Creates an async enum schema.
  *
  * @param enum_ The enum value.
- * @param message The error message.
+ * @param messageOrMetadata The error message or schema metadata.
  *
  * @returns An async enum schema.
  */
 export function enumAsync<TEnum extends Enum>(
   enum_: TEnum,
-  message?: ErrorMessage
+  messageOrMetadata?: ErrorMessageOrMetadata
 ): EnumSchemaAsync<TEnum> {
   // Get values
   const values = Object.values(enum_);
+
+  // Extract message and metadata
+  const [message, , metadata] = defaultArgs(messageOrMetadata, undefined);
 
   // Create and return enum schema
   return {
@@ -45,6 +57,7 @@ export function enumAsync<TEnum extends Enum>(
     async: true,
     enum: enum_,
     message,
+    metadata,
     async _parse(input, config) {
       // If type is valid, return schema result
       if (values.includes(input as any)) {

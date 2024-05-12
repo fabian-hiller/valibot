@@ -19,4 +19,19 @@ describe('undefinedAsync', () => {
       error
     );
   });
+
+  test('should expose the metadata', () => {
+    const schema1 = undefinedAsync({ description: 'undefined value' });
+    expect(schema1.metadata).toEqual({ description: 'undefined value' });
+
+    const schema2 = undefinedAsync({
+      description: 'undefined value',
+      message: 'Value is not undefined!',
+    });
+    expect(schema2.metadata).toEqual({ description: 'undefined value' });
+    expect(schema2.message).toEqual('Value is not undefined!');
+
+    const schema3 = undefinedAsync();
+    expect(schema3.metadata).toBeUndefined();
+  });
 });
