@@ -37,7 +37,7 @@ export type SchemaWithPipeAsync<
   /**
    * Whether it's async.
    */
-  async: true;
+  readonly async: true;
   /**
    * Parses unknown input.
    *

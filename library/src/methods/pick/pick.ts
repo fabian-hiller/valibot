@@ -35,6 +35,14 @@ import type {
  */
 export type SchemaWithPick<
   TSchema extends NoPipe<
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
+    | LooseObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
     | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
     | ObjectSchemaAsync<
         ObjectEntriesAsync,
@@ -57,14 +65,6 @@ export type SchemaWithPick<
     | StrictObjectSchemaAsync<
         ObjectEntriesAsync,
         ErrorMessage<StrictObjectIssue> | undefined
-      >
-    | LooseObjectSchema<
-        ObjectEntries,
-        ErrorMessage<LooseObjectIssue> | undefined
-      >
-    | LooseObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<LooseObjectIssue> | undefined
       >
   >,
   TKeys extends ObjectKeys<TSchema>,
