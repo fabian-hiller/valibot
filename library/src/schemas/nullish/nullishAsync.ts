@@ -1,4 +1,4 @@
-import { getDefaultAsync } from '../../methods/index.ts';
+import { getDefault } from '../../methods/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -74,7 +74,7 @@ export function nullishAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TDefault extends DefaultAsync<TWrapped>,
+  TDefault extends DefaultAsync<TWrapped>,
 >(
   wrapped: TWrapped,
   default_: TDefault
@@ -108,7 +108,8 @@ export function nullishAsync(
       // If value is `null` or `undefined`, return dataset or override it with
       // default
       if (dataset.value === null || dataset.value === undefined) {
-        const override = await getDefaultAsync(this);
+        // Note: `await` is necessary here because `default_` could be async
+        const override = await getDefault(this);
         if (override === undefined) {
           dataset.typed = true;
           return dataset;

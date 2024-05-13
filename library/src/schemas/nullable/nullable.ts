@@ -64,7 +64,7 @@ export function nullable<
  */
 export function nullable<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  const TDefault extends Default<TWrapped>,
+  TDefault extends Default<TWrapped>,
 >(wrapped: TWrapped, default_: TDefault): NullableSchema<TWrapped, TDefault>;
 
 export function nullable(

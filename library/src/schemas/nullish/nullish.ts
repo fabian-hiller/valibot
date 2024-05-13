@@ -64,7 +64,7 @@ export function nullish<
  */
 export function nullish<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  const TDefault extends Default<TWrapped>,
+  TDefault extends Default<TWrapped>,
 >(wrapped: TWrapped, default_: TDefault): NullishSchema<TWrapped, TDefault>;
 
 export function nullish(

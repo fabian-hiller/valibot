@@ -1,4 +1,4 @@
-import { getDefaultAsync } from '../../methods/index.ts';
+import { getDefault } from '../../methods/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -74,7 +74,7 @@ export function nullableAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TDefault extends DefaultAsync<TWrapped>,
+  TDefault extends DefaultAsync<TWrapped>,
 >(
   wrapped: TWrapped,
   default_: TDefault
@@ -107,7 +107,8 @@ export function nullableAsync(
     async _run(dataset, config) {
       // If value is `null`, return dataset or override it with default
       if (dataset.value === null) {
-        const override = await getDefaultAsync(this);
+        // Note: `await` is necessary here because `default_` could be async
+        const override = await getDefault(this);
         if (override === undefined) {
           dataset.typed = true;
           return dataset;

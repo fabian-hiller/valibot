@@ -1,10 +1,13 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import {
   nullable,
+  nullableAsync,
   nullish,
+  nullishAsync,
   number,
   object,
   optional,
+  optionalAsync,
   string,
 } from '../../schemas/index.ts';
 import { getDefault } from './getDefault.ts';
@@ -25,6 +28,9 @@ describe('getDefault', () => {
       expectTypeOf(
         getDefault(optional(string(), () => undefined))
       ).toEqualTypeOf<undefined>();
+      expectTypeOf(
+        getDefault(optionalAsync(string(), async () => undefined))
+      ).toEqualTypeOf<Promise<undefined>>();
     });
 
     test('for direct value', () => {
@@ -38,6 +44,12 @@ describe('getDefault', () => {
         getDefault(optional(string(), () => 'foo' as const))
       ).toEqualTypeOf<'foo'>();
     });
+
+    test('for async value getter', () => {
+      expectTypeOf(
+        getDefault(optionalAsync(string(), async () => 'foo' as const))
+      ).toEqualTypeOf<Promise<'foo'>>();
+    });
   });
 
   describe('should return nullable default', () => {
@@ -49,6 +61,9 @@ describe('getDefault', () => {
       expectTypeOf(
         getDefault(nullable(string(), () => undefined))
       ).toEqualTypeOf<undefined>();
+      expectTypeOf(
+        getDefault(nullableAsync(string(), async () => undefined))
+      ).toEqualTypeOf<Promise<undefined>>();
     });
 
     test('for direct value', () => {
@@ -62,6 +77,12 @@ describe('getDefault', () => {
         getDefault(nullable(string(), () => 'foo' as const))
       ).toEqualTypeOf<'foo'>();
     });
+
+    test('for async value getter', () => {
+      expectTypeOf(
+        getDefault(nullableAsync(string(), async () => 'foo' as const))
+      ).toEqualTypeOf<Promise<'foo'>>();
+    });
   });
 
   describe('should return nullish default', () => {
@@ -73,6 +94,9 @@ describe('getDefault', () => {
       expectTypeOf(
         getDefault(nullish(string(), () => undefined))
       ).toEqualTypeOf<undefined>();
+      expectTypeOf(
+        getDefault(nullishAsync(string(), async () => undefined))
+      ).toEqualTypeOf<Promise<undefined>>();
     });
 
     test('for direct value', () => {
@@ -83,6 +107,12 @@ describe('getDefault', () => {
       expectTypeOf(
         getDefault(nullish(string(), () => 'foo' as const))
       ).toEqualTypeOf<'foo'>();
+    });
+
+    test('for async value getter', () => {
+      expectTypeOf(
+        getDefault(nullishAsync(string(), async () => 'foo' as const))
+      ).toEqualTypeOf<Promise<'foo'>>();
     });
   });
 });
