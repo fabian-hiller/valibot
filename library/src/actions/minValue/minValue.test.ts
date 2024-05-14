@@ -2,6 +2,8 @@ import { describe, expect, test } from 'vitest';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { minValue, type MinValueAction } from './minValue.ts';
 
+// TODO: Add tests for "non-..." cases (see `value.test.ts`)
+
 describe('minValue', () => {
   describe('should return action object', () => {
     const baseAction: Omit<MinValueAction<number, 5, never>, 'message'> = {
