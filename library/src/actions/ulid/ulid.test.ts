@@ -74,6 +74,14 @@ describe('ulid', () => {
       expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
+    test('for blank spaces', () => {
+      expectActionIssue(action, baseIssue, [
+        ' 01ARZ3NDEKTSV4RRFFQ69G5FAV',
+        '01ARZ3NDEKTSV4RRFFQ69G5FAV ',
+        ' 01ARZ3NDEKTSV4RRFFQ69G5FAV ',
+      ]);
+    });
+
     test('for too short ULIDs', () => {
       expectActionIssue(action, baseIssue, [
         '01ARZ3NDEKTSV4RRFFQ69G5FA',
