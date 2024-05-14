@@ -26,7 +26,7 @@ export interface ValueIssue<
    */
   readonly expected: string;
   /**
-   * The value.
+   * The required value.
    */
   readonly requirement: TRequirement;
 }
@@ -52,7 +52,7 @@ export interface ValueAction<
    */
   readonly expects: string;
   /**
-   * The value.
+   * The required value.
    */
   readonly requirement: TRequirement;
   /**
@@ -64,7 +64,7 @@ export interface ValueAction<
 /**
  * Creates a value validation action.
  *
- * @param requirement The value.
+ * @param requirement The required value.
  *
  * @returns A value action.
  */
@@ -76,7 +76,7 @@ export function value<
 /**
  * Creates a value validation action.
  *
- * @param requirement The value.
+ * @param requirement The required value.
  * @param message The error message.
  *
  * @returns A value action.
@@ -115,7 +115,7 @@ export function value(
       if (
         dataset.typed &&
         !(
-          dataset.value <= this.requirement && dataset.value >= this.requirement
+          this.requirement <= dataset.value && this.requirement >= dataset.value
         )
       ) {
         _addIssue(this, 'value', dataset, config, {

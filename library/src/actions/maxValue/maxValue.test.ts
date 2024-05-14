@@ -2,6 +2,8 @@ import { describe, expect, test } from 'vitest';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { maxValue, type MaxValueAction } from './maxValue.ts';
 
+// TODO: Add tests for "non-..." cases (see `value.test.ts`)
+
 describe('maxValue', () => {
   describe('should return action object', () => {
     const baseAction: Omit<MaxValueAction<number, 5, never>, 'message'> = {
