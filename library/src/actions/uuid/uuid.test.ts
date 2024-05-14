@@ -99,6 +99,14 @@ describe('uuid', () => {
       expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
+    test('for blank spaces', () => {
+      expectActionIssue(action, baseIssue, [
+        ' c1e12793-2e77-4611-874d-a4f9cc727e1e',
+        'c1e12793-2e77-4611-874d-a4f9cc727e1e ',
+        ' c1e12793-2e77-4611-874d-a4f9cc727e1e ',
+      ]);
+    });
+
     test('for too short UUIDs', () => {
       expectActionIssue(action, baseIssue, [
         'e05717b-1020-4f83-8dce-f33dcac6c101',
