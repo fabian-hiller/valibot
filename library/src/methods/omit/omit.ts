@@ -279,7 +279,7 @@ export function omit<
         ErrorMessage<LooseObjectIssue> | undefined
       >
   >,
-  TKeys extends ObjectKeys<TSchema>,
+  const TKeys extends ObjectKeys<TSchema>,
 >(schema: TSchema, keys: TKeys): SchemaWithOmit<TSchema, TKeys> {
   // @ts-expect-error
   const entries: Omit<TSchema['entries'], TKeys[number]> = {

@@ -69,11 +69,8 @@ export function nullable<
 
 export function nullable(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  default_?: Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
-): NullableSchema<
-  BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
-> {
+  default_?: unknown
+): NullableSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown> {
   return {
     kind: 'schema',
     type: 'nullable',

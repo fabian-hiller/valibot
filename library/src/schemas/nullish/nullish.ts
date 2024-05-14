@@ -69,11 +69,8 @@ export function nullish<
 
 export function nullish(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  default_?: Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
-): NullishSchema<
-  BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
-> {
+  default_?: unknown
+): NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown> {
   return {
     kind: 'schema',
     type: 'nullish',

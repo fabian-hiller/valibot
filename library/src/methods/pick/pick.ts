@@ -279,7 +279,7 @@ export function pick<
         ErrorMessage<LooseObjectIssue> | undefined
       >
   >,
-  TKeys extends ObjectKeys<TSchema>,
+  const TKeys extends ObjectKeys<TSchema>,
 >(schema: TSchema, keys: TKeys): SchemaWithPick<TSchema, TKeys> {
   // @ts-expect-error
   const entries: Pick<TSchema['entries'], TKeys[number]> = {};

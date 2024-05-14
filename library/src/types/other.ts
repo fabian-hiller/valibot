@@ -56,14 +56,8 @@ export type DefaultAsync<
  * `nullish`.
  */
 export type QuestionMarkSchema =
-  | NullishSchema<
-      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-      Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
-    >
-  | OptionalSchema<
-      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-      Default<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
-    >
+  | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
+  | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
   // @ts-expect-error
   | LazySchema<QuestionMarkSchema>
   | NonNullableSchema<
@@ -79,18 +73,12 @@ export type QuestionMarkSchemaAsync =
   | NullishSchemaAsync<
       | BaseSchema<unknown, unknown, BaseIssue<unknown>>
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-      DefaultAsync<
-        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-      >
+      unknown
     >
   | OptionalSchemaAsync<
       | BaseSchema<unknown, unknown, BaseIssue<unknown>>
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-      DefaultAsync<
-        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-      >
+      unknown
     >
   // @ts-expect-error
   | LazySchemaAsync<QuestionMarkSchema | QuestionMarkSchemaAsync>

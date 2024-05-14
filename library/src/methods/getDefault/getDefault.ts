@@ -23,17 +23,20 @@ export type InferDefault<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
     | NullableSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
     | NullableSchemaAsync<
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
         unknown
       >
     | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
     | NullishSchemaAsync<
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
         unknown
       >
     | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
     | OptionalSchemaAsync<
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
         unknown
       >,
 > = TSchema extends
@@ -42,7 +45,8 @@ export type InferDefault<
       infer TDefault
     >
   | NullableSchemaAsync<
-      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       infer TDefault
     >
   | NullishSchema<
@@ -50,7 +54,8 @@ export type InferDefault<
       infer TDefault
     >
   | NullishSchemaAsync<
-      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       infer TDefault
     >
   | OptionalSchema<
@@ -58,7 +63,8 @@ export type InferDefault<
       infer TDefault
     >
   | OptionalSchemaAsync<
-      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       infer TDefault
     >
   ? TDefault extends InferInput<TSchema> | undefined
