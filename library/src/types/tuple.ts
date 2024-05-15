@@ -7,11 +7,26 @@ import type { MaybeReadonly } from './utils.ts';
  * Tuple path item type.
  */
 export interface TuplePathItem {
-  type: 'tuple';
-  origin: 'value';
-  input: unknown[];
-  key: number;
-  value: unknown;
+  /**
+   * The path item type.
+   */
+  readonly type: 'tuple';
+  /**
+   * The path item origin.
+   */
+  readonly origin: 'value';
+  /**
+   * The path item input.
+   */
+  readonly input: unknown[];
+  /**
+   * The path item key.
+   */
+  readonly key: number;
+  /**
+   * The path item value.
+   */
+  readonly value: unknown;
 }
 
 /**

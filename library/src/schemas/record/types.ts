@@ -30,11 +30,26 @@ export interface RecordIssue extends BaseIssue<unknown> {
  * Record path item type.
  */
 export interface RecordPathItem {
-  type: 'record';
-  origin: 'key' | 'value';
-  input: Record<string, unknown>;
-  key: string;
-  value: unknown;
+  /**
+   * The path item type.
+   */
+  readonly type: 'record';
+  /**
+   * The path item origin.
+   */
+  readonly origin: 'key' | 'value';
+  /**
+   * The path item input.
+   */
+  readonly input: Record<string, unknown>;
+  /**
+   * The path item key.
+   */
+  readonly key: string;
+  /**
+   * The path item value.
+   */
+  readonly value: unknown;
 }
 
 /**

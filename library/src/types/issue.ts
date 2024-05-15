@@ -12,10 +12,25 @@ import type { TuplePathItem } from './tuple.ts';
  * Unknown path item type.
  */
 export interface UnknownPathItem {
+  /**
+   * The path item type.
+   */
   readonly type: 'unknown';
+  /**
+   * The path item origin.
+   */
   readonly origin: 'key' | 'value';
+  /**
+   * The path item input.
+   */
   readonly input: unknown;
+  /**
+   * The path item key.
+   */
   readonly key: unknown;
+  /**
+   * The path item value.
+   */
   readonly value: unknown;
 }
 

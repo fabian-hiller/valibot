@@ -26,11 +26,26 @@ import type { MaybeReadonly, ResolveObject } from './utils.ts';
  * Object path item type.
  */
 export interface ObjectPathItem {
-  type: 'object';
-  origin: 'value';
-  input: Record<string, unknown>;
-  key: string;
-  value: unknown;
+  /**
+   * The path item type.
+   */
+  readonly type: 'object';
+  /**
+   * The path item origin.
+   */
+  readonly origin: 'value';
+  /**
+   * The path item input.
+   */
+  readonly input: Record<string, unknown>;
+  /**
+   * The path item key.
+   */
+  readonly key: string;
+  /**
+   * The path item value.
+   */
+  readonly value: unknown;
 }
 
 /**

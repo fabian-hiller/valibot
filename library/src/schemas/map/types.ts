@@ -28,11 +28,26 @@ export interface MapIssue extends BaseIssue<unknown> {
  * Map path item type.
  */
 export interface MapPathItem {
-  type: 'map';
-  origin: 'key' | 'value';
-  input: Map<unknown, unknown>;
-  key: unknown;
-  value: unknown;
+  /**
+   * The path item type.
+   */
+  readonly type: 'map';
+  /**
+   * The path item origin.
+   */
+  readonly origin: 'key' | 'value';
+  /**
+   * The path item input.
+   */
+  readonly input: Map<unknown, unknown>;
+  /**
+   * The path item key.
+   */
+  readonly key: unknown;
+  /**
+   * The path item value.
+   */
+  readonly value: unknown;
 }
 
 /**
