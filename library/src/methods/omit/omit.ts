@@ -31,42 +31,41 @@ import type {
 } from '../../types/index.ts';
 
 /**
+ * Schema type.
+ */
+type Schema = NoPipe<
+  | LooseObjectSchema<ObjectEntries, ErrorMessage<LooseObjectIssue> | undefined>
+  | LooseObjectSchemaAsync<
+      ObjectEntriesAsync,
+      ErrorMessage<LooseObjectIssue> | undefined
+    >
+  | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
+  | ObjectSchemaAsync<ObjectEntriesAsync, ErrorMessage<ObjectIssue> | undefined>
+  | ObjectWithRestSchema<
+      ObjectEntries,
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      ErrorMessage<ObjectWithRestIssue> | undefined
+    >
+  | ObjectWithRestSchemaAsync<
+      ObjectEntriesAsync,
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      ErrorMessage<ObjectWithRestIssue> | undefined
+    >
+  | StrictObjectSchema<
+      ObjectEntries,
+      ErrorMessage<StrictObjectIssue> | undefined
+    >
+  | StrictObjectSchemaAsync<
+      ObjectEntriesAsync,
+      ErrorMessage<StrictObjectIssue> | undefined
+    >
+>;
+
+/**
  * Schema with omit type.
  */
 export type SchemaWithOmit<
-  TSchema extends NoPipe<
-    | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
-    | ObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<ObjectIssue> | undefined
-      >
-    | ObjectWithRestSchema<
-        ObjectEntries,
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-        ErrorMessage<ObjectWithRestIssue> | undefined
-      >
-    | ObjectWithRestSchemaAsync<
-        ObjectEntriesAsync,
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-        ErrorMessage<ObjectWithRestIssue> | undefined
-      >
-    | StrictObjectSchema<
-        ObjectEntries,
-        ErrorMessage<StrictObjectIssue> | undefined
-      >
-    | StrictObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<StrictObjectIssue> | undefined
-      >
-    | LooseObjectSchema<
-        ObjectEntries,
-        ErrorMessage<LooseObjectIssue> | undefined
-      >
-    | LooseObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<LooseObjectIssue> | undefined
-      >
-  >,
+  TSchema extends Schema,
   TKeys extends ObjectKeys<TSchema>,
 > = TSchema extends
   | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
@@ -246,39 +245,7 @@ export type SchemaWithOmit<
  * @returns An object schema.
  */
 export function omit<
-  TSchema extends NoPipe<
-    | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
-    | ObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<ObjectIssue> | undefined
-      >
-    | ObjectWithRestSchema<
-        ObjectEntries,
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-        ErrorMessage<ObjectWithRestIssue> | undefined
-      >
-    | ObjectWithRestSchemaAsync<
-        ObjectEntriesAsync,
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-        ErrorMessage<ObjectWithRestIssue> | undefined
-      >
-    | StrictObjectSchema<
-        ObjectEntries,
-        ErrorMessage<StrictObjectIssue> | undefined
-      >
-    | StrictObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<StrictObjectIssue> | undefined
-      >
-    | LooseObjectSchema<
-        ObjectEntries,
-        ErrorMessage<LooseObjectIssue> | undefined
-      >
-    | LooseObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<LooseObjectIssue> | undefined
-      >
-  >,
+  TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,
 >(schema: TSchema, keys: TKeys): SchemaWithOmit<TSchema, TKeys> {
   // @ts-expect-error

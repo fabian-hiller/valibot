@@ -5,6 +5,7 @@ export * from './getDefaults/index.ts';
 export * from './getFallback/index.ts';
 export * from './getFallbacks/index.ts';
 export * from './is/index.ts';
+export * from './keyof/index.ts';
 export * from './omit/index.ts';
 export * from './parse/index.ts';
 export * from './pick/index.ts';

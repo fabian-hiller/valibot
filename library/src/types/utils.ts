@@ -38,3 +38,22 @@ export type LastTupleItem<T extends [unknown, ...unknown[]]> = T[T extends [
 ]
   ? Rest['length']
   : never];
+
+/**
+ * Converts union to intersection type.
+ */
+export type UnionToIntersect<TUnion> = (
+  TUnion extends unknown ? (arg: TUnion) => void : never
+) extends (arg: infer Intersect) => void
+  ? Intersect
+  : never;
+
+/**
+ * Converts union to tuple type.
+ */
+export type UnionToTuple<TUnion> =
+  UnionToIntersect<
+    TUnion extends never ? never : () => TUnion
+  > extends () => infer TLast
+    ? [...UnionToTuple<Exclude<TUnion, TLast>>, TLast]
+    : [];

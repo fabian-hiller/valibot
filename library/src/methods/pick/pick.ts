@@ -30,43 +30,39 @@ import type {
   ObjectKeys,
 } from '../../types/index.ts';
 
+type Schema = NoPipe<
+  | LooseObjectSchema<ObjectEntries, ErrorMessage<LooseObjectIssue> | undefined>
+  | LooseObjectSchemaAsync<
+      ObjectEntriesAsync,
+      ErrorMessage<LooseObjectIssue> | undefined
+    >
+  | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
+  | ObjectSchemaAsync<ObjectEntriesAsync, ErrorMessage<ObjectIssue> | undefined>
+  | ObjectWithRestSchema<
+      ObjectEntries,
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      ErrorMessage<ObjectWithRestIssue> | undefined
+    >
+  | ObjectWithRestSchemaAsync<
+      ObjectEntriesAsync,
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      ErrorMessage<ObjectWithRestIssue> | undefined
+    >
+  | StrictObjectSchema<
+      ObjectEntries,
+      ErrorMessage<StrictObjectIssue> | undefined
+    >
+  | StrictObjectSchemaAsync<
+      ObjectEntriesAsync,
+      ErrorMessage<StrictObjectIssue> | undefined
+    >
+>;
+
 /**
  * Schema with pick type.
  */
 export type SchemaWithPick<
-  TSchema extends NoPipe<
-    | LooseObjectSchema<
-        ObjectEntries,
-        ErrorMessage<LooseObjectIssue> | undefined
-      >
-    | LooseObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<LooseObjectIssue> | undefined
-      >
-    | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
-    | ObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<ObjectIssue> | undefined
-      >
-    | ObjectWithRestSchema<
-        ObjectEntries,
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-        ErrorMessage<ObjectWithRestIssue> | undefined
-      >
-    | ObjectWithRestSchemaAsync<
-        ObjectEntriesAsync,
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-        ErrorMessage<ObjectWithRestIssue> | undefined
-      >
-    | StrictObjectSchema<
-        ObjectEntries,
-        ErrorMessage<StrictObjectIssue> | undefined
-      >
-    | StrictObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<StrictObjectIssue> | undefined
-      >
-  >,
+  TSchema extends Schema,
   TKeys extends ObjectKeys<TSchema>,
 > = TSchema extends
   | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
@@ -246,39 +242,7 @@ export type SchemaWithPick<
  * @returns An object schema.
  */
 export function pick<
-  TSchema extends NoPipe<
-    | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
-    | ObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<ObjectIssue> | undefined
-      >
-    | ObjectWithRestSchema<
-        ObjectEntries,
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-        ErrorMessage<ObjectWithRestIssue> | undefined
-      >
-    | ObjectWithRestSchemaAsync<
-        ObjectEntriesAsync,
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-        ErrorMessage<ObjectWithRestIssue> | undefined
-      >
-    | StrictObjectSchema<
-        ObjectEntries,
-        ErrorMessage<StrictObjectIssue> | undefined
-      >
-    | StrictObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<StrictObjectIssue> | undefined
-      >
-    | LooseObjectSchema<
-        ObjectEntries,
-        ErrorMessage<LooseObjectIssue> | undefined
-      >
-    | LooseObjectSchemaAsync<
-        ObjectEntriesAsync,
-        ErrorMessage<LooseObjectIssue> | undefined
-      >
-  >,
+  TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,
 >(schema: TSchema, keys: TKeys): SchemaWithPick<TSchema, TKeys> {
   // @ts-expect-error

@@ -63,6 +63,14 @@ describe('picklist', () => {
 
     // Special values
 
+    test('for empty options', () => {
+      expectSchemaIssue(
+        picklist([], 'message'),
+        { ...baseIssue, expected: 'never' },
+        ['foo', 'bar', 'baz']
+      );
+    });
+
     test('for invalid options', () => {
       expectSchemaIssue(schema, baseIssue, ['fo', 'fooo', 'foobar']);
     });

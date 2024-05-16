@@ -1,37 +1,42 @@
 import { describe, expectTypeOf, test } from 'vitest';
-import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import {
-  picklist,
+  null_,
+  number,
+  object,
   type PicklistIssue,
   type PicklistSchema,
-} from './picklist.ts';
+  string,
+} from '../../schemas/index.ts';
+import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
+import { keyof } from './keyof.ts';
 
-describe('picklist', () => {
-  const options = ['foo', 'bar', 'baz'] as const;
-  type Options = typeof options;
+describe('keyof', () => {
+  const objectSchema = object({ foo: string(), bar: number(), baz: null_() });
+  type Options = ['foo', 'bar', 'baz'];
 
   describe('should return schema object', () => {
     test('with undefined message', () => {
       type Schema = PicklistSchema<Options, undefined>;
-      expectTypeOf(picklist(options)).toEqualTypeOf<Schema>();
-      expectTypeOf(picklist(options, undefined)).toEqualTypeOf<Schema>();
+      expectTypeOf(keyof(objectSchema)).toEqualTypeOf<Schema>();
+      expectTypeOf(keyof(objectSchema, undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with string message', () => {
-      expectTypeOf(picklist(options, 'message')).toEqualTypeOf<
+      expectTypeOf(keyof(objectSchema, 'message')).toEqualTypeOf<
         PicklistSchema<Options, 'message'>
       >();
     });
 
     test('with function message', () => {
-      expectTypeOf(picklist(options, () => 'message')).toEqualTypeOf<
+      expectTypeOf(keyof(objectSchema, () => 'message')).toEqualTypeOf<
         PicklistSchema<Options, () => string>
       >();
     });
   });
 
   describe('should infer correct types', () => {
-    type Schema = PicklistSchema<Options, undefined>;
+    const schema = keyof(objectSchema);
+    type Schema = typeof schema;
 
     test('of input', () => {
       expectTypeOf<InferInput<Schema>>().toEqualTypeOf<'foo' | 'bar' | 'baz'>();
