@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { ValiError } from '../../error/index.ts';
 import type { StringIssue } from '../../schemas/index.ts';
+import { ValiError } from '../../utils/index.ts';
 import { isValiError } from './isValiError.ts';
 
 describe('isValiError', () => {

@@ -1,4 +1,3 @@
-import { ValiError } from '../../error/index.ts';
 import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
@@ -8,6 +7,7 @@ import type {
   InferIssue,
   InferOutput,
 } from '../../types/index.ts';
+import { ValiError } from '../../utils/index.ts';
 
 /**
  * Parses an unknown input based on a schema.

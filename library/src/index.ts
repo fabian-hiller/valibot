@@ -1,5 +1,4 @@
 export * from './actions/index.ts';
-export * from './error/index.ts';
 export * from './methods/index.ts';
 export * from './regex.ts';
 export * from './schemas/index.ts';
