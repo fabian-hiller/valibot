@@ -1,4 +1,6 @@
 import { describe, expectTypeOf, test } from 'vitest';
+import type { ReadonlyAction } from '../../actions/index.ts';
+import type { SchemaWithPipe } from '../../methods/index.ts';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import type { NullishSchema } from '../nullish/index.ts';
 import { type NumberIssue, type NumberSchema } from '../number/index.ts';
@@ -43,6 +45,7 @@ describe('looseObject', () => {
         key2: OptionalSchema<StringSchema<undefined>, 'foo'>;
         key3: NullishSchema<StringSchema<undefined>, undefined>;
         key4: ObjectSchema<{ key: NumberSchema<undefined> }, undefined>;
+        key5: SchemaWithPipe<[StringSchema<undefined>, ReadonlyAction<string>]>;
       },
       undefined
     >;
@@ -54,6 +57,7 @@ describe('looseObject', () => {
           key2?: string | undefined;
           key3?: string | null | undefined;
           key4: { key: number };
+          key5: string;
         } & { [key: string]: unknown }
       >();
     });
@@ -65,6 +69,7 @@ describe('looseObject', () => {
           key2: string;
           key3?: string | null | undefined;
           key4: { key: number };
+          readonly key5: string;
         } & { [key: string]: unknown }
       >();
     });
