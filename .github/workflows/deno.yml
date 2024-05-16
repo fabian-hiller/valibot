@@ -1,0 +1,27 @@
+name: Deno CI
+
+on:
+  push:
+    branches: main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: "1.41.1"
+
+      - name: Run Deno Test in library
+        run: deno task test
+        working-directory: library
+
+      - name: Run Deno Check in library
+        run: deno check mod.ts $(find src -name '*.ts')
+        working-directory: library
