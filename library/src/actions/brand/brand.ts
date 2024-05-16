@@ -3,7 +3,7 @@ import type { BaseTransformation, TypedDataset } from '../../types/index.ts';
 /**
  * Brand symbol.
  */
-export const BrandSymbol = Symbol();
+export declare const BrandSymbol: unique symbol;
 
 /**
  * Brand name type.

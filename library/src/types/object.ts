@@ -22,7 +22,7 @@ import type {
 } from './other.ts';
 import type { PipeItem, PipeItemAsync } from './pipe.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
-import type { MaybeReadonly, ResolveObject } from './utils.ts';
+import type { MarkOptional, MaybeReadonly, Prettify } from './utils.ts';
 
 /**
  * Object path item type.
@@ -119,14 +119,6 @@ type InferEntriesOutput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
 };
 
 /**
- * Add question marks type.
- */
-type AddQuestionMarks<
-  TObject extends Record<string, unknown>,
-  TKeys extends keyof TObject,
-> = Omit<TObject, TKeys> & Partial<Pick<TObject, TKeys>>;
-
-/**
  * Optional keys type.
  */
 type OptionalKeys<
@@ -148,7 +140,7 @@ type OptionalKeys<
 type WithQuestionMarks<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
   TObject extends InferEntriesInput<TEntries> | InferEntriesOutput<TEntries>,
-> = AddQuestionMarks<TObject, OptionalKeys<TEntries, TObject>>;
+> = MarkOptional<TObject, OptionalKeys<TEntries, TObject>>;
 
 /**
  * Readonly keys type.
@@ -179,8 +171,6 @@ type ReadonlyKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
     : never;
 }[keyof TEntries];
 
-// type A = 'a' extends never ? true : false;
-
 /**
  * With readonly type.
  */
@@ -195,14 +185,14 @@ type WithReadonly<
  */
 export type InferObjectInput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-> = ResolveObject<WithQuestionMarks<TEntries, InferEntriesInput<TEntries>>>;
+> = Prettify<WithQuestionMarks<TEntries, InferEntriesInput<TEntries>>>;
 
 /**
  * Infer object output type.
  */
 export type InferObjectOutput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-> = ResolveObject<
+> = Prettify<
   WithReadonly<
     TEntries,
     WithQuestionMarks<TEntries, InferEntriesOutput<TEntries>>

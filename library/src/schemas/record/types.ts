@@ -9,9 +9,10 @@ import type {
   BaseSchemaAsync,
   InferInput,
   InferOutput,
+  MarkOptional,
   PipeItem,
   PipeItemAsync,
-  ResolveObject,
+  Prettify,
 } from '../../types/index.ts';
 
 /**
@@ -72,14 +73,6 @@ type IsLiteral<TKey extends string | number | symbol> = string extends TKey
         : true;
 
 /**
- * Add question marks type.
- */
-type AddQuestionMarks<
-  TObject extends Record<string | number | symbol, unknown>,
-  TKeys extends keyof TObject,
-> = Omit<TObject, TKeys> & Partial<Pick<TObject, TKeys>>;
-
-/**
  * Optional keys type.
  */
 type OptionalKeys<TObject extends Record<string | number | symbol, unknown>> = {
@@ -102,7 +95,7 @@ type OptionalKeys<TObject extends Record<string | number | symbol, unknown>> = {
  */
 type WithQuestionMarks<
   TObject extends Record<string | number | symbol, unknown>,
-> = AddQuestionMarks<TObject, OptionalKeys<TObject>>;
+> = MarkOptional<TObject, OptionalKeys<TObject>>;
 
 /**
  * With readonly type.
@@ -144,9 +137,7 @@ export type InferRecordInput<
   TValue extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> = ResolveObject<
-  WithQuestionMarks<Record<InferInput<TKey>, InferInput<TValue>>>
->;
+> = Prettify<WithQuestionMarks<Record<InferInput<TKey>, InferInput<TValue>>>>;
 
 /**
  * Infer record output type.
@@ -156,7 +147,7 @@ export type InferRecordOutput<
   TValue extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> = ResolveObject<
+> = Prettify<
   WithReadonly<
     TValue,
     WithQuestionMarks<Record<InferOutput<TKey>, InferOutput<TValue>>>

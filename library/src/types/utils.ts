@@ -1,52 +1,52 @@
 /**
- * Maybe readonly type.
+ * Constructs a type that is maybe readonly.
  */
-export type MaybeReadonly<T> = T | Readonly<T>;
+export type MaybeReadonly<TValue> = TValue | Readonly<TValue>;
 
 /**
- * Maybe promise type.
+ * Constructs a type that is maybe a promise.
  */
-export type MaybePromise<T> = T | Promise<T>;
+export type MaybePromise<TValue> = TValue | Promise<TValue>;
 
 /**
- * Resolve type.
+ * Flattens a type for better readability.
  *
  * Hint: This type has no effect and is only used so that TypeScript displays
  * the final type in the preview instead of the utility types used.
  */
-type Resolve<T> = T;
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type Prettify<TObject> = { [TKey in keyof TObject]: TObject[TKey] } & {};
 
 /**
- * Resolve object type.
- *
- * Hint: This type has no effect and is only used so that TypeScript displays
- * the final type in the preview instead of the utility types used.
+ * Marks specific keys as optional.
  */
-export type ResolveObject<T> = Resolve<{ [k in keyof T]: T[k] }>;
+export type MarkOptional<TObject, TKeys extends keyof TObject> = Omit<
+  TObject,
+  TKeys
+> &
+  Partial<Pick<TObject, TKeys>>;
 
 /**
  * Extracts first tuple item.
  */
-export type FirstTupleItem<T extends [unknown, ...unknown[]]> = T[0];
+export type FirstTupleItem<TTuple extends [unknown, ...unknown[]]> = TTuple[0];
 
 /**
  * Extracts last tuple item.
  */
-export type LastTupleItem<T extends [unknown, ...unknown[]]> = T[T extends [
-  unknown,
-  ...infer Rest,
-]
-  ? Rest['length']
-  : never];
+export type LastTupleItem<TTuple extends [unknown, ...unknown[]]> =
+  TTuple[TTuple extends [unknown, ...infer TRest] ? TRest['length'] : never];
 
 /**
  * Converts union to intersection type.
  */
-export type UnionToIntersect<TUnion> = (
-  TUnion extends unknown ? (arg: TUnion) => void : never
-) extends (arg: infer Intersect) => void
-  ? Intersect
-  : never;
+export type UnionToIntersect<TUnion> =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (TUnion extends any ? (arg: TUnion) => void : never) extends (
+    arg: infer Intersect
+  ) => void
+    ? Intersect
+    : never;
 
 /**
  * Converts union to tuple type.
