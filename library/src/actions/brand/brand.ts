@@ -44,7 +44,6 @@ export interface BrandAction<TInput, TName extends BrandName>
  * @returns A brand action.
  */
 export function brand<TInput, TName extends BrandName>(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   name: TName
 ): BrandAction<TInput, TName> {
   return {

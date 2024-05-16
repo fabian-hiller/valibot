@@ -1,3 +1,4 @@
+import type { SchemaWithPipe, SchemaWithPipeAsync } from '../methods/index.ts';
 import type {
   LooseObjectIssue,
   LooseObjectSchema,
@@ -19,6 +20,7 @@ import type {
   QuestionMarkSchema,
   QuestionMarkSchemaAsync,
 } from './other.ts';
+import type { PipeItem, PipeItemAsync } from './pipe.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type { MaybeReadonly, ResolveObject } from './utils.ts';
 
@@ -117,20 +119,12 @@ type InferEntriesOutput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
 };
 
 /**
- * Required keys type.
+ * Add question marks type.
  */
-type RequiredKeys<
-  TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObject extends InferEntriesInput<TEntries> | InferEntriesOutput<TEntries>,
-> = {
-  [TKey in keyof TEntries]: TEntries[TKey] extends
-    | QuestionMarkSchema
-    | QuestionMarkSchemaAsync
-    ? undefined extends TObject[TKey]
-      ? never
-      : TKey
-    : TKey;
-}[keyof TEntries];
+type AddQuestionMarks<
+  TObject extends Record<string, unknown>,
+  TKeys extends keyof TObject,
+> = Omit<TObject, TKeys> & Partial<Pick<TObject, TKeys>>;
 
 /**
  * Optional keys type.
@@ -154,24 +148,66 @@ type OptionalKeys<
 type WithQuestionMarks<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
   TObject extends InferEntriesInput<TEntries> | InferEntriesOutput<TEntries>,
-> = ResolveObject<
-  Pick<TObject, RequiredKeys<TEntries, TObject>> &
-    Partial<Pick<TObject, OptionalKeys<TEntries, TObject>>>
->;
+> = AddQuestionMarks<TObject, OptionalKeys<TEntries, TObject>>;
+
+/**
+ * Readonly keys type.
+ */
+type ReadonlyKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
+  [TKey in keyof TEntries]: TEntries[TKey] extends
+    | SchemaWithPipe<
+        [
+          BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+          ...PipeItem<unknown, unknown, BaseIssue<unknown>>[],
+        ]
+      >
+    | SchemaWithPipeAsync<
+        [
+          (
+            | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+            | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+          ),
+          ...(
+            | PipeItem<unknown, unknown, BaseIssue<unknown>>
+            | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+          )[],
+        ]
+      >
+    ? 'readonly' extends TEntries[TKey]['pipe'][number]['type']
+      ? TKey
+      : never
+    : never;
+}[keyof TEntries];
+
+// type A = 'a' extends never ? true : false;
+
+/**
+ * With readonly type.
+ */
+type WithReadonly<
+  TEntries extends ObjectEntries | ObjectEntriesAsync,
+  TObject extends WithQuestionMarks<TEntries, InferEntriesOutput<TEntries>>,
+> = Readonly<TObject> &
+  Pick<TObject, Exclude<keyof TObject, ReadonlyKeys<TEntries>>>;
 
 /**
  * Infer object input type.
  */
 export type InferObjectInput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-> = WithQuestionMarks<TEntries, InferEntriesInput<TEntries>>;
+> = ResolveObject<WithQuestionMarks<TEntries, InferEntriesInput<TEntries>>>;
 
 /**
  * Infer object output type.
  */
 export type InferObjectOutput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-> = WithQuestionMarks<TEntries, InferEntriesOutput<TEntries>>;
+> = ResolveObject<
+  WithReadonly<
+    TEntries,
+    WithQuestionMarks<TEntries, InferEntriesOutput<TEntries>>
+  >
+>;
 
 /**
  * Infer object issue type.

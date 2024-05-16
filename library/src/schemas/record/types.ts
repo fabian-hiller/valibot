@@ -1,10 +1,16 @@
 import type { Brand } from '../../actions/index.ts';
 import type {
+  SchemaWithPipe,
+  SchemaWithPipeAsync,
+} from '../../methods/index.ts';
+import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
   InferInput,
   InferOutput,
+  PipeItem,
+  PipeItemAsync,
   ResolveObject,
 } from '../../types/index.ts';
 
@@ -66,11 +72,12 @@ type IsLiteral<TKey extends string | number | symbol> = string extends TKey
         : true;
 
 /**
- * Required keys type.
+ * Add question marks type.
  */
-type RequiredKeys<TObject extends Record<string | number | symbol, unknown>> = {
-  [TKey in keyof TObject]: IsLiteral<TKey> extends true ? never : TKey;
-}[keyof TObject];
+type AddQuestionMarks<
+  TObject extends Record<string | number | symbol, unknown>,
+  TKeys extends keyof TObject,
+> = Omit<TObject, TKeys> & Partial<Pick<TObject, TKeys>>;
 
 /**
  * Optional keys type.
@@ -95,10 +102,39 @@ type OptionalKeys<TObject extends Record<string | number | symbol, unknown>> = {
  */
 type WithQuestionMarks<
   TObject extends Record<string | number | symbol, unknown>,
-> = ResolveObject<
-  Pick<TObject, RequiredKeys<TObject>> &
-    Partial<Pick<TObject, OptionalKeys<TObject>>>
->;
+> = AddQuestionMarks<TObject, OptionalKeys<TObject>>;
+
+/**
+ * With readonly type.
+ */
+type WithReadonly<
+  TValue extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  TObject extends WithQuestionMarks<Record<string | number | symbol, unknown>>,
+> = TValue extends
+  | SchemaWithPipe<
+      [
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        ...PipeItem<unknown, unknown, BaseIssue<unknown>>[],
+      ]
+    >
+  | SchemaWithPipeAsync<
+      [
+        (
+          | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+          | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+        ),
+        ...(
+          | PipeItem<unknown, unknown, BaseIssue<unknown>>
+          | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+        )[],
+      ]
+    >
+  ? 'readonly' extends TValue['pipe'][number]['type']
+    ? Readonly<TObject>
+    : TObject
+  : TObject;
 
 /**
  * Infer record input type.
@@ -108,7 +144,9 @@ export type InferRecordInput<
   TValue extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> = WithQuestionMarks<Record<InferInput<TKey>, InferInput<TValue>>>;
+> = ResolveObject<
+  WithQuestionMarks<Record<InferInput<TKey>, InferInput<TValue>>>
+>;
 
 /**
  * Infer record output type.
@@ -118,4 +156,9 @@ export type InferRecordOutput<
   TValue extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> = WithQuestionMarks<Record<InferOutput<TKey>, InferOutput<TValue>>>;
+> = ResolveObject<
+  WithReadonly<
+    TValue,
+    WithQuestionMarks<Record<InferOutput<TKey>, InferOutput<TValue>>>
+  >
+>;
