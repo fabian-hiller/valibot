@@ -19,7 +19,7 @@ export interface MinLengthValidation<
 }
 
 /**
- * Creates a pipeline validation action that validates the length of a string
+ * Creates a pipeline validation action that validates the length of a string, number
  * or array.
  *
  * @param requirement The minimum length.
