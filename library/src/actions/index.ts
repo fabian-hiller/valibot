@@ -42,6 +42,7 @@ export * from './multipleOf/index.ts';
 export * from './notBytes/index.ts';
 export * from './notLength/index.ts';
 export * from './notSize/index.ts';
+export * from './notValue/index.ts';
 export * from './octal/index.ts';
 export * from './readonly/index.ts';
 export * from './safeInteger/index.ts';
