@@ -96,3 +96,21 @@ export interface BaseTransformationAsync<
     config: Config<TIssue>
   ): Promise<TypedDataset<TOutput, TIssue>>;
 }
+
+/**
+ * Generic transformation type.
+ */
+export interface GenericTransformation<
+  TInput = unknown,
+  TOutput = TInput,
+  TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
+> extends BaseTransformation<TInput, TOutput, TIssue> {}
+
+/**
+ * Generic transformation async type.
+ */
+export interface GenericTransformationAsync<
+  TInput = unknown,
+  TOutput = TInput,
+  TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
+> extends BaseTransformationAsync<TInput, TOutput, TIssue> {}
