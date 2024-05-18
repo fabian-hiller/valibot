@@ -38,7 +38,7 @@ describe('size', () => {
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
-      NotSizeIssue<Map<string, number>, 10>
+        NotSizeIssue<Map<string, number>, 10>
       >();
     });
   });

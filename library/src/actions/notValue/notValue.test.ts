@@ -42,10 +42,12 @@ describe('notValue', () => {
 
   describe('should return dataset with issues', () => {
     test('for untyped inputs', () => {
-      expect(notValue(1)._run({ typed: false, value: null }, {})).toStrictEqual({
-        typed: false,
-        value: null,
-      });
+      expect(notValue(1)._run({ typed: false, value: null }, {})).toStrictEqual(
+        {
+          typed: false,
+          value: null,
+        }
+      );
     });
 
     test('for valid bigints', () => {
@@ -146,7 +148,7 @@ describe('notValue', () => {
       const nextDate = new Date(+date + 1);
       expectNoActionIssue(notValue(date), [
         new Date(+date - 1),
-        new Date(+date + 1), 
+        new Date(+date + 1),
         new Date(+date + 999999),
         nextDate,
         new Date(nextDate.getTime()),
@@ -376,7 +378,7 @@ describe('notValue', () => {
       expectActionIssue(
         notValue(10, 'message'),
         { ...baseInfo, expected: '!10', requirement: 10 },
-        [10, 10.0],
+        [10, 10.0]
       );
     });
 
@@ -384,7 +386,7 @@ describe('notValue', () => {
       expectActionIssue(
         notValue(10, 'message'),
         { ...baseInfo, expected: '!10', requirement: 10 },
-        [ '10', '10.0', new Date(10), 10n],
+        ['10', '10.0', new Date(10), 10n],
         getReceived
       );
     });

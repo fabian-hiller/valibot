@@ -37,7 +37,9 @@ export interface NotValueIssue<
 export interface NotValueAction<
   TInput extends ValueInput,
   TRequirement extends TInput,
-  TMessage extends ErrorMessage<NotValueIssue<TInput, TRequirement>> | undefined,
+  TMessage extends
+    | ErrorMessage<NotValueIssue<TInput, TRequirement>>
+    | undefined,
 > extends BaseValidation<TInput, TInput, NotValueIssue<TInput, TRequirement>> {
   /**
    * The action type.
@@ -114,9 +116,8 @@ export function notValue(
     _run(dataset, config) {
       if (
         dataset.typed &&
-        (
-          this.requirement <= dataset.value && this.requirement >= dataset.value
-        )
+        this.requirement <= dataset.value &&
+        this.requirement >= dataset.value
       ) {
         _addIssue(this, 'value', dataset, config, {
           received:

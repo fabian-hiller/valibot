@@ -1,6 +1,10 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { notValue, type NotValueAction, type NotValueIssue } from './notValue.ts';
+import {
+  notValue,
+  type NotValueAction,
+  type NotValueIssue,
+} from './notValue.ts';
 
 describe('value', () => {
   describe('should return action object', () => {
@@ -13,9 +17,9 @@ describe('value', () => {
     });
 
     test('with string message', () => {
-      expectTypeOf(notValue<number, 10, 'message'>(10, 'message')).toEqualTypeOf<
-        NotValueAction<number, 10, 'message'>
-      >();
+      expectTypeOf(
+        notValue<number, 10, 'message'>(10, 'message')
+      ).toEqualTypeOf<NotValueAction<number, 10, 'message'>>();
     });
 
     test('with function message', () => {
@@ -38,7 +42,7 @@ describe('value', () => {
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
-      NotValueIssue<number, 10>
+        NotValueIssue<number, 10>
       >();
     });
   });

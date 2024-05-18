@@ -1,6 +1,10 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { notLength, type NotLengthAction, type NotLengthIssue } from './notLength.ts';
+import {
+  notLength,
+  type NotLengthAction,
+  type NotLengthIssue,
+} from './notLength.ts';
 
 describe('length', () => {
   describe('should return action object', () => {
@@ -13,9 +17,9 @@ describe('length', () => {
     });
 
     test('with string message', () => {
-      expectTypeOf(notLength<string, 10, 'message'>(10, 'message')).toEqualTypeOf<
-        NotLengthAction<string, 10, 'message'>
-      >();
+      expectTypeOf(
+        notLength<string, 10, 'message'>(10, 'message')
+      ).toEqualTypeOf<NotLengthAction<string, 10, 'message'>>();
     });
 
     test('with function message', () => {
@@ -38,7 +42,9 @@ describe('length', () => {
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<NotLengthIssue<Input, 3>>();
+      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
+        NotLengthIssue<Input, 3>
+      >();
     });
   });
 });

@@ -1,6 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
-import { notLength, type NotLengthAction, type NotLengthIssue } from './notLength.ts';
+import {
+  notLength,
+  type NotLengthAction,
+  type NotLengthIssue,
+} from './notLength.ts';
 
 describe('notLength', () => {
   describe('should return action object', () => {
@@ -43,44 +47,37 @@ describe('notLength', () => {
     const action = notLength(3);
 
     test('for valid strings', () => {
-      expectNoActionIssue(
-        action,
-        [
-          '',
-          ' ',
-          '  ',
-          '\n',
-          '\n\t',
-          'あ', // 'あ' is 3 bytes
-          'ab',
-          'abcd',
-          '1',
-          '12',
-          '1234',
-          '@',
-          '@#',
-          '@#$%',
-        ]
-      );
+      expectNoActionIssue(action, [
+        '',
+        ' ',
+        '  ',
+        '\n',
+        '\n\t',
+        'あ', // 'あ' is 3 bytes
+        'ab',
+        'abcd',
+        '1',
+        '12',
+        '1234',
+        '@',
+        '@#',
+        '@#$%',
+      ]);
     });
 
     test('for valid arrays', () => {
-      expectNoActionIssue(
-        action,
-        [
-          [],
-          [1],
-          ['1', '2'],
-          [1, '2', 3, '4'],
-          [[1, 2, 3]],
-          [[1, 2], ['3']],
-          [{ 1: 'one', 2: 'two', 3: 'three' }],
-          [[1], [2], null, [{ value: 3 }]],
-        ]
-      );
+      expectNoActionIssue(action, [
+        [],
+        [1],
+        ['1', '2'],
+        [1, '2', 3, '4'],
+        [[1, 2, 3]],
+        [[1, 2], ['3']],
+        [{ 1: 'one', 2: 'two', 3: 'three' }],
+        [[1], [2], null, [{ value: 3 }]],
+      ]);
     });
   });
-
 
   describe('should return dataset with issues', () => {
     const action = notLength(3, 'message');
@@ -100,30 +97,37 @@ describe('notLength', () => {
     });
 
     test('for invalid strings', () => {
-      expectActionIssue(action, baseIssue, [
-        '   ',
-        ' \n\n',
-        '\n\n\t',
-        'abc',
-        'ABC',
-        '123',
-        'あああ', // 'あ' is 3 bytes but the total length of the string is 3
-        '@#$',
-      ],
-      (value) => `${value.length}`
+      expectActionIssue(
+        action,
+        baseIssue,
+        [
+          '   ',
+          ' \n\n',
+          '\n\n\t',
+          'abc',
+          'ABC',
+          '123',
+          'あああ', // 'あ' is 3 bytes but the total length of the string is 3
+          '@#$',
+        ],
+        (value) => `${value.length}`
       );
     });
 
     test('for invalid arrays', () => {
-      expectActionIssue(action, baseIssue, [
-        [1, 2, 3],
-        ['foo', 'bar', 'baz'],
-        [1, null, undefined],
-        [[1, 2, 3, 4], [5], [6, 7]],
-        [{ value: 1 }, { value: 2 }, { value: 3 }],
-        ['1', 2, { value: 3 }],
-      ],
-      (value) => `${value.length}`);
+      expectActionIssue(
+        action,
+        baseIssue,
+        [
+          [1, 2, 3],
+          ['foo', 'bar', 'baz'],
+          [1, null, undefined],
+          [[1, 2, 3, 4], [5], [6, 7]],
+          [{ value: 1 }, { value: 2 }, { value: 3 }],
+          ['1', 2, { value: 3 }],
+        ],
+        (value) => `${value.length}`
+      );
     });
   });
 });
