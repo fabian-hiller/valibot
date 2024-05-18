@@ -1,7 +1,7 @@
 import { expect } from 'vitest';
 import type {
   BaseIssue,
-  BaseSchema,
+  BaseSchemaAsync,
   InferIssue,
   UntypedDataset,
 } from '../types/index.ts';
@@ -14,15 +14,15 @@ import { _stringify } from '../utils/index.ts';
  * @param baseIssue The base issue data.
  * @param values The values to test.
  */
-export function expectSchemaIssue<
-  TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+export async function expectSchemaIssueAsync<
+  TSchema extends BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
   baseIssue: Omit<InferIssue<TSchema>, 'input' | 'received'>,
   values: unknown[]
-): void {
+): Promise<void> {
   for (const value of values) {
-    expect(schema._run({ typed: false, value }, {})).toStrictEqual({
+    expect(await schema._run({ typed: false, value }, {})).toStrictEqual({
       typed: false,
       value,
       issues: [
