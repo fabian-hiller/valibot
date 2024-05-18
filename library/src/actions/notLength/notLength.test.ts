@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { notLength, type NotLengthAction, type NotLengthIssue } from './notLength.ts';
 
-describe('length', () => {
+describe('notLength', () => {
   describe('should return action object', () => {
     const baseAction: Omit<NotLengthAction<string, 5, never>, 'message'> = {
       kind: 'validation',
@@ -40,7 +40,7 @@ describe('length', () => {
   });
 
   describe('should return dataset without issues', () => {
-    const action = notLength(3, 'message');
+    const action = notLength(3);
 
     test('for valid strings', () => {
       expectNoActionIssue(
