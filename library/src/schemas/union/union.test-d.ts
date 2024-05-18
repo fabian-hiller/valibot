@@ -2,7 +2,8 @@ import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import { literal, type LiteralIssue } from '../literal/index.ts';
 import { number, type NumberIssue } from '../number/index.ts';
-import { union, type UnionIssue, type UnionSchema } from './union.ts';
+import type { UnionIssue } from './types.ts';
+import { union, type UnionSchema } from './union.ts';
 
 describe('union', () => {
   const options = [literal('foo'), literal('bar'), number()] as const;

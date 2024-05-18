@@ -133,7 +133,9 @@ type WithReadonly<
  * Infer record input type.
  */
 export type InferRecordInput<
-  TKey extends BaseSchema<string, string | number | symbol, BaseIssue<unknown>>,
+  TKey extends
+    | BaseSchema<string, string | number | symbol, BaseIssue<unknown>>
+    | BaseSchemaAsync<string, string | number | symbol, BaseIssue<unknown>>,
   TValue extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
@@ -143,7 +145,9 @@ export type InferRecordInput<
  * Infer record output type.
  */
 export type InferRecordOutput<
-  TKey extends BaseSchema<string, string | number | symbol, BaseIssue<unknown>>,
+  TKey extends
+    | BaseSchema<string, string | number | symbol, BaseIssue<unknown>>
+    | BaseSchemaAsync<string, string | number | symbol, BaseIssue<unknown>>,
   TValue extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
