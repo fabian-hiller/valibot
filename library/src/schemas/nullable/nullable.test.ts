@@ -6,7 +6,7 @@ import { nullable, type NullableSchema } from './nullable.ts';
 describe('nullable', () => {
   describe('should return schema object', () => {
     const baseSchema: Omit<
-      NullableSchema<StringSchema<undefined>, never>,
+      NullableSchema<StringSchema<undefined>, string>,
       'default'
     > = {
       kind: 'schema',
@@ -18,18 +18,23 @@ describe('nullable', () => {
       _run: expect.any(Function),
     };
 
-    test('with undefined default', () => {
-      const schema: NullableSchema<StringSchema<undefined>, undefined> = {
+    test('with never default', () => {
+      expect(nullable(string())).toStrictEqual(baseSchema);
+    });
+
+    test('with null default', () => {
+      expect(nullable(string(), null)).toStrictEqual({
         ...baseSchema,
-        default: undefined,
-      };
-      expect(nullable(string())).toStrictEqual(schema);
-      expect(nullable(string(), undefined)).toStrictEqual(schema);
-      const getter = () => undefined;
+        default: null,
+      } satisfies NullableSchema<StringSchema<undefined>, null>);
+    });
+
+    test('with null getter default', () => {
+      const getter = () => null;
       expect(nullable(string(), getter)).toStrictEqual({
         ...baseSchema,
         default: getter,
-      } satisfies NullableSchema<StringSchema<undefined>, () => undefined>);
+      } satisfies NullableSchema<StringSchema<undefined>, typeof getter>);
     });
 
     test('with value default', () => {
@@ -40,7 +45,7 @@ describe('nullable', () => {
     });
 
     test('with value getter default', () => {
-      const getter = () => 'message';
+      const getter = () => 'foo';
       expect(nullable(string(), getter)).toStrictEqual({
         ...baseSchema,
         default: getter,
@@ -69,10 +74,25 @@ describe('nullable', () => {
   });
 
   describe('should return dataset with default', () => {
-    const schema = nullable(string(), 'foo');
+    const schema1 = nullable(string(), null);
+    const schema2 = nullable(string(), 'foo');
+    const schema3 = nullable(string(), () => null);
+    const schema4 = nullable(string(), () => 'foo');
 
     test('for null', () => {
-      expect(schema._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema1._run({ typed: false, value: null }, {})).toStrictEqual({
+        typed: true,
+        value: null,
+      });
+      expect(schema2._run({ typed: false, value: null }, {})).toStrictEqual({
+        typed: true,
+        value: 'foo',
+      });
+      expect(schema3._run({ typed: false, value: null }, {})).toStrictEqual({
+        typed: true,
+        value: null,
+      });
+      expect(schema4._run({ typed: false, value: null }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });

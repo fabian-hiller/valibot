@@ -6,7 +6,7 @@ import { optional, type OptionalSchema } from './optional.ts';
 describe('optional', () => {
   describe('should return schema object', () => {
     const baseSchema: Omit<
-      OptionalSchema<StringSchema<undefined>, never>,
+      OptionalSchema<StringSchema<undefined>, string>,
       'default'
     > = {
       kind: 'schema',
@@ -18,18 +18,23 @@ describe('optional', () => {
       _run: expect.any(Function),
     };
 
+    test('with never default', () => {
+      expect(optional(string())).toStrictEqual(baseSchema);
+    });
+
     test('with undefined default', () => {
-      const schema: OptionalSchema<StringSchema<undefined>, undefined> = {
+      expect(optional(string(), undefined)).toStrictEqual({
         ...baseSchema,
         default: undefined,
-      };
-      expect(optional(string())).toStrictEqual(schema);
-      expect(optional(string(), undefined)).toStrictEqual(schema);
+      } satisfies OptionalSchema<StringSchema<undefined>, undefined>);
+    });
+
+    test('with undefined getter default', () => {
       const getter = () => undefined;
       expect(optional(string(), getter)).toStrictEqual({
         ...baseSchema,
         default: getter,
-      } satisfies OptionalSchema<StringSchema<undefined>, () => undefined>);
+      } satisfies OptionalSchema<StringSchema<undefined>, typeof getter>);
     });
 
     test('with value default', () => {
@@ -40,7 +45,7 @@ describe('optional', () => {
     });
 
     test('with value getter default', () => {
-      const getter = () => 'message';
+      const getter = () => 'foo';
       expect(optional(string(), getter)).toStrictEqual({
         ...baseSchema,
         default: getter,
@@ -69,12 +74,36 @@ describe('optional', () => {
   });
 
   describe('should return dataset with default', () => {
-    const schema = optional(string(), 'foo');
+    const schema1 = optional(string(), undefined);
+    const schema2 = optional(string(), 'foo');
+    const schema3 = optional(string(), () => undefined);
+    const schema4 = optional(string(), () => 'foo');
 
     test('for undefined', () => {
-      expect(schema._run({ typed: false, value: undefined }, {})).toStrictEqual(
-        { typed: true, value: 'foo' }
-      );
+      expect(
+        schema1._run({ typed: false, value: undefined }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: undefined,
+      });
+      expect(
+        schema2._run({ typed: false, value: undefined }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: 'foo',
+      });
+      expect(
+        schema3._run({ typed: false, value: undefined }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: undefined,
+      });
+      expect(
+        schema4._run({ typed: false, value: undefined }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: 'foo',
+      });
     });
   });
 });

@@ -1,4 +1,21 @@
 /**
+ * Extracts `null` from a type.
+ */
+export type NonNullable<TValue> = TValue extends null ? never : TValue;
+
+/**
+ * Extracts `null` and `undefined` from a type.
+ */
+export type NonNullish<TValue> = TValue extends null | undefined
+  ? never
+  : TValue;
+
+/**
+ * Extracts `undefined` from a type.
+ */
+export type NonOptional<TValue> = TValue extends undefined ? never : TValue;
+
+/**
  * Constructs a type that is maybe readonly.
  */
 export type MaybeReadonly<TValue> = TValue | Readonly<TValue>;

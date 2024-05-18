@@ -10,7 +10,10 @@ import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
+  Config,
+  Dataset,
   InferInput,
+  InferIssue,
   MaybePromise,
 } from '../../types/index.ts';
 
@@ -67,17 +70,19 @@ export type InferDefault<
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       infer TDefault
     >
-  ? TDefault extends InferInput<TSchema> | undefined
-    ? TDefault
-    : TDefault extends () => MaybePromise<InferInput<TSchema> | undefined>
+  ? [TDefault] extends [never]
+    ? undefined
+    : TDefault extends () => MaybePromise<InferInput<TSchema>>
       ? ReturnType<TDefault>
-      : never
+      : TDefault
   : undefined;
 
 /**
  * Returns the default value of the schema.
  *
  * @param schema The schema to get it from.
+ * @param dataset The input dataset if available.
+ * @param config The config if available.
  *
  * @returns The default value.
  */
@@ -85,11 +90,15 @@ export function getDefault<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(schema: TSchema): InferDefault<TSchema> {
+>(
+  schema: TSchema,
+  dataset?: Dataset<null | undefined, never>,
+  config?: Config<InferIssue<TSchema>>
+): InferDefault<TSchema> {
   // @ts-expect-error
   return typeof schema.default === 'function'
     ? // @ts-expect-error
-      schema.default()
+      schema.default(dataset, config)
     : // @ts-expect-error
       schema.default;
 }

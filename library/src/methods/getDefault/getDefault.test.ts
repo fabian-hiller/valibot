@@ -49,11 +49,14 @@ describe('getDefault', () => {
   describe('should return nullable default', () => {
     test('for undefined value', async () => {
       expect(getDefault(nullable(string()))).toBeUndefined();
-      expect(getDefault(nullable(string(), undefined))).toBeUndefined();
-      expect(getDefault(nullable(string(), () => undefined))).toBeUndefined();
+    });
+
+    test('for null value', async () => {
+      expect(getDefault(nullable(string(), null))).toBeNull();
+      expect(getDefault(nullable(string(), () => null))).toBeNull();
       expect(
-        await getDefault(nullableAsync(string(), async () => undefined))
-      ).toBeUndefined();
+        await getDefault(nullableAsync(string(), async () => null))
+      ).toBeNull();
     });
 
     test('for direct value', () => {
@@ -81,6 +84,14 @@ describe('getDefault', () => {
       expect(
         await getDefault(nullishAsync(string(), async () => undefined))
       ).toBeUndefined();
+    });
+
+    test('for null value', async () => {
+      expect(getDefault(nullish(string(), null))).toBeNull();
+      expect(getDefault(nullish(string(), () => null))).toBeNull();
+      expect(
+        await getDefault(nullishAsync(string(), async () => null))
+      ).toBeNull();
     });
 
     test('for direct value', () => {

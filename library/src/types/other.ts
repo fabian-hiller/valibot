@@ -9,7 +9,9 @@ import type {
   OptionalSchema,
   OptionalSchemaAsync,
 } from '../schemas/index.ts';
-import type { InferInput } from './infer.ts';
+import type { Config } from './config.ts';
+import type { Dataset } from './dataset.ts';
+import type { InferInput, InferIssue } from './infer.ts';
 import type { BaseIssue } from './issue.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type { MaybePromise } from './utils.ts';
@@ -33,20 +35,64 @@ export type FunctionReference<TArgs extends any[], TReturn> = (
  * Default type.
  */
 export type Default<
-  TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-> = InferInput<TSchema> | (() => InferInput<TSchema> | undefined) | undefined;
+  TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  TInput extends null | undefined,
+> =
+  | InferInput<TWrapped>
+  | TInput
+  | ((
+      dataset?: Dataset<TInput, never>,
+      config?: Config<InferIssue<TWrapped>>
+    ) => InferInput<TWrapped> | TInput);
 
 /**
  * Default async type.
  */
 export type DefaultAsync<
-  TSchema extends
+  TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  TInput extends null | undefined,
 > =
-  | InferInput<TSchema>
-  | (() => MaybePromise<InferInput<TSchema> | undefined>)
-  | undefined;
+  | InferInput<TWrapped>
+  | TInput
+  | ((
+      dataset?: Dataset<TInput, never>,
+      config?: Config<InferIssue<TWrapped>>
+    ) => MaybePromise<InferInput<TWrapped> | TInput>);
+
+/**
+ * Default value type.
+ */
+export type DefaultValue<
+  TDefault extends
+    | Default<
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        null | undefined
+      >
+    | DefaultAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        null | undefined
+      >,
+> =
+  TDefault extends Default<
+    infer TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+    infer TInput
+  >
+    ? TDefault extends () => InferInput<TWrapped> | TInput
+      ? ReturnType<TDefault>
+      : TDefault
+    : TDefault extends DefaultAsync<
+          infer TWrapped extends
+            | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+            | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+          infer TInput
+        >
+      ? TDefault extends () => MaybePromise<InferInput<TWrapped> | TInput>
+        ? Awaited<ReturnType<TDefault>>
+        : TDefault
+      : never;
 
 /**
  * Question mark schema type.
