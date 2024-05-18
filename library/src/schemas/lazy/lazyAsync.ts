@@ -12,13 +12,13 @@ import type {
  * Lazy schema async type.
  */
 export interface LazySchemaAsync<
-  TSchema extends
+  TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > extends BaseSchemaAsync<
-    InferInput<TSchema>,
-    InferOutput<TSchema>,
-    InferIssue<TSchema>
+    InferInput<TWrapped>,
+    InferOutput<TWrapped>,
+    InferIssue<TWrapped>
   > {
   /**
    * The schema type.
@@ -35,7 +35,7 @@ export interface LazySchemaAsync<
   /**
    * The schema getter.
    */
-  readonly getter: (input: unknown) => MaybePromise<TSchema>;
+  readonly getter: (input: unknown) => MaybePromise<TWrapped>;
 }
 
 /**
@@ -46,10 +46,10 @@ export interface LazySchemaAsync<
  * @returns An async lazy schema.
  */
 export function lazyAsync<
-  const TSchema extends
+  const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(getter: (input: unknown) => TSchema): LazySchemaAsync<TSchema> {
+>(getter: (input: unknown) => TWrapped): LazySchemaAsync<TWrapped> {
   return {
     kind: 'schema',
     type: 'lazy',

@@ -1,4 +1,5 @@
 export * from './fallback/index.ts';
+export * from './flatten/index.ts';
 export * from './forward/index.ts';
 export * from './getDefault/index.ts';
 export * from './getDefaults/index.ts';
