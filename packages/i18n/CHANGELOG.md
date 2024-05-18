@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.13.0 (May 18, 2024)
+
+- Add Spanish (es) translations (pull request #581)
+
 ## v0.12.0 (May 11, 2024)
 
 - Add Hungarian (hu) translations (pull request #560)
