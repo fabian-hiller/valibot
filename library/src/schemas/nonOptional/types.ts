@@ -8,7 +8,13 @@ import type {
   InferOutput,
   NonOptional,
 } from '../../types/index.ts';
-import type { UnionIssue, UnionOptions, UnionSchema } from '../union/index.ts';
+import type {
+  UnionIssue,
+  UnionOptions,
+  UnionOptionsAsync,
+  UnionSchema,
+  UnionSchemaAsync,
+} from '../union/index.ts';
 
 /**
  * Non optional issue type.
@@ -56,12 +62,16 @@ export type InferNonOptionalIssue<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> =
-  TWrapped extends UnionSchema<
-    UnionOptions,
-    ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
-  >
-    ?
-        | Exclude<InferIssue<TWrapped>, { type: 'undefined' | 'union' }>
-        | UnionIssue<InferNonOptionalIssue<TWrapped['options'][number]>>
-    : Exclude<InferIssue<TWrapped>, { type: 'undefined' }>;
+> = TWrapped extends
+  | UnionSchema<
+      UnionOptions,
+      ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
+    >
+  | UnionSchemaAsync<
+      UnionOptionsAsync,
+      ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
+    >
+  ?
+      | Exclude<InferIssue<TWrapped>, { type: 'undefined' | 'union' }>
+      | UnionIssue<InferNonOptionalIssue<TWrapped['options'][number]>>
+  : Exclude<InferIssue<TWrapped>, { type: 'undefined' }>;

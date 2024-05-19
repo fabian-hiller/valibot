@@ -30,6 +30,7 @@ export function expectActionIssue<
       value,
       issues: [
         {
+          requirement: undefined,
           path: undefined,
           issues: undefined,
           lang: undefined,

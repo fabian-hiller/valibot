@@ -1,6 +1,9 @@
 import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
-import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
 import { arrayAsync, type ArraySchemaAsync } from './arrayAsync.ts';
 import type { ArrayIssue } from './types.ts';
@@ -47,12 +50,12 @@ describe('array', () => {
   describe('should return dataset without issues', () => {
     const schema = arrayAsync(string());
 
-    test('for empty array', () => {
-      expectNoSchemaIssue(schema, [[]]);
+    test('for empty array', async () => {
+      await expectNoSchemaIssueAsync(schema, [[]]);
     });
 
-    test('for simple array', () => {
-      expectNoSchemaIssue(schema, [['foo', 'bar', 'baz']]);
+    test('for simple array', async () => {
+      await expectNoSchemaIssueAsync(schema, [['foo', 'bar', 'baz']]);
     });
   });
 
@@ -67,54 +70,62 @@ describe('array', () => {
 
     // Primitive types
 
-    test('for bigints', () => {
-      expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
+    test('for bigints', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1n, 0n, 123n]);
     });
 
-    test('for booleans', () => {
-      expectSchemaIssue(schema, baseIssue, [true, false]);
+    test('for booleans', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [true, false]);
     });
 
-    test('for null', () => {
-      expectSchemaIssue(schema, baseIssue, [null]);
+    test('for null', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [null]);
     });
 
-    test('for numbers', () => {
-      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    test('for numbers', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1, 0, 123, 45.67]);
     });
 
-    test('for undefined', () => {
-      expectSchemaIssue(schema, baseIssue, [undefined]);
+    test('for undefined', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
     });
 
-    test('for strings', () => {
-      expectSchemaIssue(schema, baseIssue, ['', 'abc', '123']);
+    test('for strings', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, ['', 'abc', '123']);
     });
 
-    test('for symbols', () => {
-      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    test('for symbols', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        Symbol(),
+        Symbol('foo'),
+      ]);
     });
 
     // Complex types
 
-    test('for functions', () => {
-      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    test('for functions', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        () => {},
+        function () {},
+      ]);
     });
 
-    test('for objects', () => {
-      expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    test('for objects', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [{}, { key: 'value' }]);
     });
   });
 
   describe('should return dataset without nested issues', () => {
     const schema = arrayAsync(string());
 
-    test('for simple array', () => {
-      expectNoSchemaIssue(schema, [['foo', 'bar', 'baz']]);
+    test('for simple array', async () => {
+      await expectNoSchemaIssueAsync(schema, [['foo', 'bar', 'baz']]);
     });
 
-    test('for nested array', () => {
-      expectNoSchemaIssue(arrayAsync(schema), [[['foo', 'bar'], ['baz']]]);
+    test('for nested array', async () => {
+      await expectNoSchemaIssueAsync(arrayAsync(schema), [
+        [['foo', 'bar'], ['baz']],
+      ]);
     });
   });
 

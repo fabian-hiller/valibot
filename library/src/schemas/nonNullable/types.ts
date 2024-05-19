@@ -8,7 +8,13 @@ import type {
   InferOutput,
   NonNullable,
 } from '../../types/index.ts';
-import type { UnionIssue, UnionOptions, UnionSchema } from '../union/index.ts';
+import type {
+  UnionIssue,
+  UnionOptions,
+  UnionOptionsAsync,
+  UnionSchema,
+  UnionSchemaAsync,
+} from '../union/index.ts';
 
 /**
  * Non nullable issue type.
@@ -56,12 +62,16 @@ export type InferNonNullableIssue<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> =
-  TWrapped extends UnionSchema<
-    UnionOptions,
-    ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
-  >
-    ?
-        | Exclude<InferIssue<TWrapped>, { type: 'null' | 'union' }>
-        | UnionIssue<InferNonNullableIssue<TWrapped['options'][number]>>
-    : Exclude<InferIssue<TWrapped>, { type: 'null' }>;
+> = TWrapped extends
+  | UnionSchema<
+      UnionOptions,
+      ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
+    >
+  | UnionSchemaAsync<
+      UnionOptionsAsync,
+      ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
+    >
+  ?
+      | Exclude<InferIssue<TWrapped>, { type: 'null' | 'union' }>
+      | UnionIssue<InferNonNullableIssue<TWrapped['options'][number]>>
+  : Exclude<InferIssue<TWrapped>, { type: 'null' }>;

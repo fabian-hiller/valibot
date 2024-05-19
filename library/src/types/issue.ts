@@ -90,3 +90,8 @@ export interface BaseIssue<TInput> extends Config<BaseIssue<TInput>> {
    */
   readonly issues?: [BaseIssue<TInput>, ...BaseIssue<TInput>[]];
 }
+
+/**
+ * Generic issue type.
+ */
+export interface GenericIssue<TInput = unknown> extends BaseIssue<TInput> {}

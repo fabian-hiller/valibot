@@ -10,11 +10,11 @@ import type {
  * Lazy schema type.
  */
 export interface LazySchema<
-  TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 > extends BaseSchema<
-    InferInput<TSchema>,
-    InferOutput<TSchema>,
-    InferIssue<TSchema>
+    InferInput<TWrapped>,
+    InferOutput<TWrapped>,
+    InferIssue<TWrapped>
   > {
   /**
    * The schema type.
@@ -31,7 +31,7 @@ export interface LazySchema<
   /**
    * The schema getter.
    */
-  readonly getter: (input: unknown) => TSchema;
+  readonly getter: (input: unknown) => TWrapped;
 }
 
 /**
@@ -42,8 +42,8 @@ export interface LazySchema<
  * @returns A lazy schema.
  */
 export function lazy<
-  const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
->(getter: (input: unknown) => TSchema): LazySchema<TSchema> {
+  const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(getter: (input: unknown) => TWrapped): LazySchema<TWrapped> {
   return {
     kind: 'schema',
     type: 'lazy',

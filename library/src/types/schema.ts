@@ -100,3 +100,21 @@ export interface BaseSchemaAsync<
     config: Config<TIssue>
   ): Promise<Dataset<TOutput, TIssue>>;
 }
+
+/**
+ * Generic schema type.
+ */
+export interface GenericSchema<
+  TInput = unknown,
+  TOutput = TInput,
+  TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
+> extends BaseSchema<TInput, TOutput, TIssue> {}
+
+/**
+ * Generic schema async type.
+ */
+export interface GenericSchemaAsync<
+  TInput = unknown,
+  TOutput = TInput,
+  TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
+> extends BaseSchemaAsync<TInput, TOutput, TIssue> {}
