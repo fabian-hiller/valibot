@@ -55,15 +55,16 @@ describe('getDefault', () => {
   describe('should return nullable default', () => {
     test('for undefined value', () => {
       expectTypeOf(getDefault(nullable(string()))).toEqualTypeOf<undefined>();
+    });
+
+    test('for null value', () => {
+      expectTypeOf(getDefault(nullable(string(), null))).toEqualTypeOf<null>();
       expectTypeOf(
-        getDefault(nullable(string(), undefined))
-      ).toEqualTypeOf<undefined>();
+        getDefault(nullable(string(), () => null))
+      ).toEqualTypeOf<null>();
       expectTypeOf(
-        getDefault(nullable(string(), () => undefined))
-      ).toEqualTypeOf<undefined>();
-      expectTypeOf(
-        getDefault(nullableAsync(string(), async () => undefined))
-      ).toEqualTypeOf<Promise<undefined>>();
+        getDefault(nullableAsync(string(), async () => null))
+      ).toEqualTypeOf<Promise<null>>();
     });
 
     test('for direct value', () => {
@@ -97,6 +98,16 @@ describe('getDefault', () => {
       expectTypeOf(
         getDefault(nullishAsync(string(), async () => undefined))
       ).toEqualTypeOf<Promise<undefined>>();
+    });
+
+    test('for null value', () => {
+      expectTypeOf(getDefault(nullish(string(), null))).toEqualTypeOf<null>();
+      expectTypeOf(
+        getDefault(nullish(string(), () => null))
+      ).toEqualTypeOf<null>();
+      expectTypeOf(
+        getDefault(nullishAsync(string(), async () => null))
+      ).toEqualTypeOf<Promise<null>>();
     });
 
     test('for direct value', () => {

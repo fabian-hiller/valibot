@@ -76,7 +76,16 @@ describe('enum_', () => {
 
     // Special values
 
-    test('for invalid values', () => {
+    test('for empty options', () => {
+      enum Empty {}
+      expectSchemaIssue(
+        enum_(Empty, 'message'),
+        { ...baseIssue, expected: 'never' },
+        ['foo', 'bar', 'baz']
+      );
+    });
+
+    test('for invalid options', () => {
       expectSchemaIssue(schema, baseIssue, ['fo', 'fooo', 'foobar']);
     });
 

@@ -5,6 +5,7 @@ import type {
   InferInput,
   InferOutput,
   MaybeReadonly,
+  UnionToIntersect,
 } from '../../types/index.ts';
 
 /**
@@ -41,15 +42,6 @@ export type IntersectOptionsAsync = MaybeReadonly<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
   )[]
 >;
-
-/**
- * Union to intersect type.
- */
-type UnionToIntersect<TUnion> = (
-  TUnion extends unknown ? (arg: TUnion) => void : never
-) extends (arg: infer Intersect) => void
-  ? Intersect
-  : never;
 
 /**
  * Infer intersect input type.

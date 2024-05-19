@@ -2,10 +2,13 @@ import { getDefault } from '../../methods/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
+  Dataset,
   Default,
+  DefaultValue,
   InferInput,
   InferIssue,
   InferOutput,
+  NonNullish,
 } from '../../types/index.ts';
 
 /**
@@ -13,12 +16,14 @@ import type {
  */
 export interface NullishSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends Default<TWrapped>,
+  TDefault extends Default<TWrapped, null | undefined>,
 > extends BaseSchema<
     InferInput<TWrapped> | null | undefined,
-    TDefault extends InferInput<TWrapped> | (() => InferInput<TWrapped>)
-      ? InferOutput<TWrapped>
-      : InferOutput<TWrapped> | null | undefined,
+    [TDefault] extends [never]
+      ? InferOutput<TWrapped> | null | undefined
+      : // FIXME: For schemas that transform the input to `null` or `undefined`,
+        // this implementation may result in an incorrect output type
+        NonNullish<InferOutput<TWrapped>> | DefaultValue<TDefault>,
     InferIssue<TWrapped>
   > {
   /**
@@ -38,7 +43,7 @@ export interface NullishSchema<
    */
   readonly wrapped: TWrapped;
   /**
-   * Returns the default value.
+   * The default value.
    */
   readonly default: TDefault;
 }
@@ -52,7 +57,7 @@ export interface NullishSchema<
  */
 export function nullish<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
->(wrapped: TWrapped): NullishSchema<TWrapped, undefined>;
+>(wrapped: TWrapped): NullishSchema<TWrapped, never>;
 
 /**
  * Creates a nullish schema.
@@ -64,35 +69,56 @@ export function nullish<
  */
 export function nullish<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends Default<TWrapped>,
+  TDefault extends Default<TWrapped, null | undefined>,
 >(wrapped: TWrapped, default_: TDefault): NullishSchema<TWrapped, TDefault>;
 
 export function nullish(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  default_?: unknown
+  ...args: unknown[]
 ): NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown> {
-  return {
+  // Create schema object
+  // @ts-expect-error
+  const schema: NullishSchema<
+    BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+    unknown
+  > = {
     kind: 'schema',
     type: 'nullish',
     reference: nullish,
     expects: `${wrapped.expects} | null | undefined`,
     async: false,
     wrapped,
-    default: default_,
     _run(dataset, config) {
-      // If value is `null` or `undefined`, return dataset or override it with
-      // default
+      // If value is `null` or `undefined`, override it with default or return
+      // dataset
       if (dataset.value === null || dataset.value === undefined) {
-        const override = getDefault(this);
-        if (override === undefined) {
+        // If default is specified, override value of dataset
+        if ('default' in this) {
+          dataset.value = getDefault(
+            this,
+            dataset as Dataset<null | undefined, never>,
+            config
+          );
+        }
+
+        // If value is still `null` or `undefined`, return dataset
+        if (dataset.value === null || dataset.value === undefined) {
           dataset.typed = true;
           return dataset;
         }
-        dataset.value = override;
       }
 
       // Otherwise, return dataset of wrapped schema
       return this.wrapped._run(dataset, config);
     },
   };
+
+  // Add default if specified
+  if (0 in args) {
+    // @ts-expect-error
+    schema.default = args[0];
+  }
+
+  // Return schema object
+  return schema;
 }

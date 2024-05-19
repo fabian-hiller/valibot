@@ -100,3 +100,21 @@ export interface BaseValidationAsync<
     config: Config<TIssue>
   ): Promise<Dataset<TOutput, BaseIssue<TInput> | TIssue>>;
 }
+
+/**
+ * Generic validation type.
+ */
+export interface GenericValidation<
+  TInput = unknown,
+  TOutput = TInput,
+  TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
+> extends BaseValidation<TInput, TOutput, TIssue> {}
+
+/**
+ * Generic validation async type.
+ */
+export interface GenericValidationAsync<
+  TInput = unknown,
+  TOutput = TInput,
+  TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
+> extends BaseValidationAsync<TInput, TOutput, TIssue> {}

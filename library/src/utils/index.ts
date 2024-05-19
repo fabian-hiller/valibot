@@ -6,3 +6,4 @@ export * from './entriesFromList/index.ts';
 export * from './isOfKind/index.ts';
 export * from './isOfType/index.ts';
 export * from './isValiError/index.ts';
+export * from './ValiError/index.ts';

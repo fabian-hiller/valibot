@@ -7,7 +7,7 @@ import {
 } from './picklist.ts';
 
 describe('picklist', () => {
-  const options = ['foo', 'bar'] as const;
+  const options = ['foo', 'bar', 'baz'] as const;
   type Options = typeof options;
 
   describe('should return schema object', () => {
@@ -34,11 +34,13 @@ describe('picklist', () => {
     type Schema = PicklistSchema<Options, undefined>;
 
     test('of input', () => {
-      expectTypeOf<InferInput<Schema>>().toEqualTypeOf<'foo' | 'bar'>();
+      expectTypeOf<InferInput<Schema>>().toEqualTypeOf<'foo' | 'bar' | 'baz'>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<Schema>>().toEqualTypeOf<'foo' | 'bar'>();
+      expectTypeOf<InferOutput<Schema>>().toEqualTypeOf<
+        'foo' | 'bar' | 'baz'
+      >();
     });
 
     test('of issue', () => {

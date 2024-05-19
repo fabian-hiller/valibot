@@ -2,10 +2,19 @@ import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
+  ErrorMessage,
   InferInput,
   InferIssue,
   InferOutput,
+  NonOptional,
 } from '../../types/index.ts';
+import type {
+  UnionIssue,
+  UnionOptions,
+  UnionOptionsAsync,
+  UnionSchema,
+  UnionSchemaAsync,
+} from '../union/index.ts';
 
 /**
  * Non optional issue type.
@@ -26,11 +35,6 @@ export interface NonOptionalIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Non optional type.
- */
-type NonOptional<T> = T extends undefined ? never : T;
-
-/**
  * Infer non optional input type.
  */
 export type InferNonOptionalInput<
@@ -46,7 +50,10 @@ export type InferNonOptionalOutput<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> = NonOptional<InferOutput<TWrapped>>;
+> =
+  // FIXME: For schemas that transform the input to `undefined`, this
+  // implementation may result in an incorrect output type
+  NonOptional<InferOutput<TWrapped>>;
 
 /**
  * Infer non optional issue type.
@@ -55,4 +62,16 @@ export type InferNonOptionalIssue<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> = Exclude<InferIssue<TWrapped>, { type: 'undefined' }>;
+> = TWrapped extends
+  | UnionSchema<
+      UnionOptions,
+      ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
+    >
+  | UnionSchemaAsync<
+      UnionOptionsAsync,
+      ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
+    >
+  ?
+      | Exclude<InferIssue<TWrapped>, { type: 'undefined' | 'union' }>
+      | UnionIssue<InferNonOptionalIssue<TWrapped['options'][number]>>
+  : Exclude<InferIssue<TWrapped>, { type: 'undefined' }>;

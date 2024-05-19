@@ -95,7 +95,7 @@ export function enum_(
     kind: 'schema',
     type: 'enum',
     reference: enum_,
-    expects: options.map(_stringify).join(' | '),
+    expects: options.map(_stringify).join(' | ') || 'never',
     async: false,
     enum: enum__,
     options,

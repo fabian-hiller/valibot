@@ -2,10 +2,13 @@ import { getDefault } from '../../methods/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
+  Dataset,
   Default,
+  DefaultValue,
   InferInput,
   InferIssue,
   InferOutput,
+  NonNullable,
 } from '../../types/index.ts';
 
 /**
@@ -13,12 +16,14 @@ import type {
  */
 export interface NullableSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends Default<TWrapped>,
+  TDefault extends Default<TWrapped, null>,
 > extends BaseSchema<
     InferInput<TWrapped> | null,
-    TDefault extends InferInput<TWrapped> | (() => InferInput<TWrapped>)
-      ? InferOutput<TWrapped>
-      : InferOutput<TWrapped> | null,
+    [TDefault] extends [never]
+      ? InferOutput<TWrapped> | null
+      : // FIXME: For schemas that transform the input to `null`, this
+        // implementation may result in an incorrect output type
+        NonNullable<InferOutput<TWrapped>> | DefaultValue<TDefault>,
     InferIssue<TWrapped>
   > {
   /**
@@ -52,7 +57,7 @@ export interface NullableSchema<
  */
 export function nullable<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
->(wrapped: TWrapped): NullableSchema<TWrapped, undefined>;
+>(wrapped: TWrapped): NullableSchema<TWrapped, never>;
 
 /**
  * Creates a nullable schema.
@@ -64,34 +69,55 @@ export function nullable<
  */
 export function nullable<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends Default<TWrapped>,
+  TDefault extends Default<TWrapped, null>,
 >(wrapped: TWrapped, default_: TDefault): NullableSchema<TWrapped, TDefault>;
 
 export function nullable(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  default_?: unknown
+  ...args: unknown[]
 ): NullableSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown> {
-  return {
+  // Create schema object
+  // @ts-expect-error
+  const schema: NullableSchema<
+    BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+    unknown
+  > = {
     kind: 'schema',
     type: 'nullable',
     reference: nullable,
     expects: `${wrapped.expects} | null`,
     async: false,
     wrapped,
-    default: default_,
     _run(dataset, config) {
-      // If value is `null`, return dataset or override it with default
+      // If value is `null`, override it with default or return dataset
       if (dataset.value === null) {
-        const override = getDefault(this);
-        if (override === undefined) {
+        // If default is specified, override value of dataset
+        if ('default' in this) {
+          dataset.value = getDefault(
+            this,
+            dataset as Dataset<null, never>,
+            config
+          );
+        }
+
+        // If value is still `null`, return dataset
+        if (dataset.value === null) {
           dataset.typed = true;
           return dataset;
         }
-        dataset.value = override;
       }
 
       // Otherwise, return dataset of wrapped schema
       return this.wrapped._run(dataset, config);
     },
   };
+
+  // Add default if specified
+  if (0 in args) {
+    // @ts-expect-error
+    schema.default = args[0];
+  }
+
+  // Return schema object
+  return schema;
 }

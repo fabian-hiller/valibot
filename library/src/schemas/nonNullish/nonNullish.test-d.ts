@@ -1,11 +1,14 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
+import type { NullSchema } from '../null/index.ts';
 import { nullish, type NullishSchema } from '../nullish/index.ts';
 import {
   string,
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
+import type { UndefinedSchema } from '../undefined/index.ts';
+import type { UnionIssue, UnionSchema } from '../union/index.ts';
 import { nonNullish, type NonNullishSchema } from './nonNullish.ts';
 import type { NonNullishIssue } from './types.ts';
 
@@ -13,7 +16,7 @@ describe('nonNullish', () => {
   describe('should return schema object', () => {
     test('with undefined message', () => {
       type Schema = NonNullishSchema<
-        NullishSchema<StringSchema<undefined>, undefined>,
+        NullishSchema<StringSchema<undefined>, never>,
         undefined
       >;
       expectTypeOf(nonNullish(nullish(string()))).toEqualTypeOf<Schema>();
@@ -25,7 +28,7 @@ describe('nonNullish', () => {
     test('with string message', () => {
       expectTypeOf(nonNullish(nullish(string()), 'message')).toEqualTypeOf<
         NonNullishSchema<
-          NullishSchema<StringSchema<undefined>, undefined>,
+          NullishSchema<StringSchema<undefined>, never>,
           'message'
         >
       >();
@@ -36,7 +39,7 @@ describe('nonNullish', () => {
         nonNullish(nullish(string()), () => 'message')
       ).toEqualTypeOf<
         NonNullishSchema<
-          NullishSchema<StringSchema<undefined>, undefined>,
+          NullishSchema<StringSchema<undefined>, never>,
           () => string
         >
       >();
@@ -45,7 +48,7 @@ describe('nonNullish', () => {
 
   describe('should infer correct types', () => {
     type Schema = NonNullishSchema<
-      NullishSchema<StringSchema<undefined>, undefined>,
+      NullishSchema<StringSchema<undefined>, never>,
       undefined
     >;
 
@@ -57,11 +60,26 @@ describe('nonNullish', () => {
       expectTypeOf<InferOutput<Schema>>().toEqualTypeOf<string>();
     });
 
-    // TODO: Add test with union schema to make sure `NullIssue` and
-    // `UndefinedIssue` are not included
     test('of issue', () => {
       expectTypeOf<InferIssue<Schema>>().toEqualTypeOf<
         NonNullishIssue | StringIssue
+      >();
+      expectTypeOf<
+        InferIssue<
+          NonNullishSchema<
+            UnionSchema<
+              [
+                StringSchema<undefined>,
+                NullSchema<undefined>,
+                UndefinedSchema<undefined>,
+              ],
+              undefined
+            >,
+            undefined
+          >
+        >
+      >().toEqualTypeOf<
+        NonNullishIssue | StringIssue | UnionIssue<StringIssue>
       >();
     });
   });

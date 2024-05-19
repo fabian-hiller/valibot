@@ -22,9 +22,24 @@ export interface ArrayIssue extends BaseIssue<unknown> {
  * Array path item type.
  */
 export interface ArrayPathItem {
-  type: 'array';
-  origin: 'value';
-  input: unknown[];
-  key: number;
-  value: unknown;
+  /**
+   * The path item type.
+   */
+  readonly type: 'array';
+  /**
+   * The path item origin.
+   */
+  readonly origin: 'value';
+  /**
+   * The path item input.
+   */
+  readonly input: unknown[];
+  /**
+   * The path item key.
+   */
+  readonly key: number;
+  /**
+   * The path item value.
+   */
+  readonly value: unknown;
 }

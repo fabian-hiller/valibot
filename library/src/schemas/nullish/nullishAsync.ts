@@ -3,11 +3,13 @@ import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
+  Dataset,
   DefaultAsync,
+  DefaultValue,
   InferInput,
   InferIssue,
   InferOutput,
-  MaybePromise,
+  NonNullish,
 } from '../../types/index.ts';
 
 /**
@@ -17,14 +19,14 @@ export interface NullishSchemaAsync<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends DefaultAsync<TWrapped>,
+  TDefault extends DefaultAsync<TWrapped, null | undefined>,
 > extends BaseSchemaAsync<
     InferInput<TWrapped> | null | undefined,
-    TDefault extends
-      | InferInput<TWrapped>
-      | (() => MaybePromise<InferInput<TWrapped>>)
-      ? InferOutput<TWrapped>
-      : InferOutput<TWrapped> | null | undefined,
+    [TDefault] extends [never]
+      ? InferOutput<TWrapped> | null | undefined
+      : // FIXME: For schemas that transform the input to `null` or `undefined`,
+        // this implementation may result in an incorrect output type
+        NonNullish<InferOutput<TWrapped>> | DefaultValue<TDefault>,
     InferIssue<TWrapped>
   > {
   /**
@@ -44,7 +46,7 @@ export interface NullishSchemaAsync<
    */
   readonly wrapped: TWrapped;
   /**
-   * Retutns the default value.
+   * The default value.
    */
   readonly default: TDefault;
 }
@@ -60,7 +62,7 @@ export function nullishAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(wrapped: TWrapped): NullishSchemaAsync<TWrapped, undefined>;
+>(wrapped: TWrapped): NullishSchemaAsync<TWrapped, never>;
 
 /**
  * Creates an async nullish schema.
@@ -74,7 +76,7 @@ export function nullishAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends DefaultAsync<TWrapped>,
+  TDefault extends DefaultAsync<TWrapped, null | undefined>,
 >(
   wrapped: TWrapped,
   default_: TDefault
@@ -84,35 +86,56 @@ export function nullishAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  default_?: unknown
+  ...args: unknown[]
 ): NullishSchemaAsync<
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   unknown
 > {
-  return {
+  // Create schema object
+  // @ts-expect-error
+  const schema: NullishSchemaAsync<
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+    unknown
+  > = {
     kind: 'schema',
     type: 'nullish',
     reference: nullishAsync,
     expects: `${wrapped.expects} | null | undefined`,
     async: true,
     wrapped,
-    default: default_,
     async _run(dataset, config) {
-      // If value is `null` or `undefined`, return dataset or override it with
-      // default
+      // If value is `null` or `undefined`, override it with default or return
+      // dataset
       if (dataset.value === null || dataset.value === undefined) {
-        // Note: `await` is necessary here because `default_` could be async
-        const override = await getDefault(this);
-        if (override === undefined) {
+        // If default is specified, override value of dataset
+        if ('default' in this) {
+          dataset.value = await getDefault(
+            this,
+            dataset as Dataset<null | undefined, never>,
+            config
+          );
+        }
+
+        // If value is still `null` or `undefined`, return dataset
+        if (dataset.value === null || dataset.value === undefined) {
           dataset.typed = true;
           return dataset;
         }
-        dataset.value = override;
       }
 
       // Otherwise, return dataset of wrapped schema
       return this.wrapped._run(dataset, config);
     },
   };
+
+  // Add default if specified
+  if (0 in args) {
+    // @ts-expect-error
+    schema.default = args[0];
+  }
+
+  // Return schema object
+  return schema;
 }

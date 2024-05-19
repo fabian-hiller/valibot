@@ -87,7 +87,7 @@ export function picklist(
     kind: 'schema',
     type: 'picklist',
     reference: picklist,
-    expects: options.map(_stringify).join(' | '),
+    expects: options.map(_stringify).join(' | ') || 'never',
     async: false,
     options,
     message,
