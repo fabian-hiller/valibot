@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { SizeInput } from '../types.ts';
 
 /**
- * Size issue type.
+ * Not size issue type.
  */
 export interface NotSizeIssue<
   TInput extends SizeInput,
@@ -22,21 +22,21 @@ export interface NotSizeIssue<
    */
   readonly type: 'not_size';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: `!${TRequirement}`;
   /**
-   * The received input.
+   * The received property.
    */
-  readonly received: `${number}`;
+  readonly received: `${TRequirement}`;
   /**
-   * The required size.
+   * The not required size.
    */
   readonly requirement: TRequirement;
 }
 
 /**
- * Size action type.
+ * Not size action type.
  */
 export interface NotSizeAction<
   TInput extends SizeInput,
@@ -56,7 +56,7 @@ export interface NotSizeAction<
    */
   readonly expects: `!${TRequirement}`;
   /**
-   * The required size.
+   * The not required size.
    */
   readonly requirement: TRequirement;
   /**
@@ -66,11 +66,11 @@ export interface NotSizeAction<
 }
 
 /**
- * Creates a size validation action.
+ * Creates a not size validation action.
  *
- * @param requirement The required size.
+ * @param requirement The not required size.
  *
- * @returns A size action.
+ * @returns A not size action.
  */
 export function notSize<
   TInput extends SizeInput,
@@ -78,12 +78,12 @@ export function notSize<
 >(requirement: TRequirement): NotSizeAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a size validation action.
+ * Creates a not size validation action.
  *
- * @param requirement The required size.
+ * @param requirement The not required size.
  * @param message The error message.
  *
- * @returns A size action.
+ * @returns A not size action.
  */
 export function notSize<
   TInput extends SizeInput,

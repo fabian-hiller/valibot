@@ -19,7 +19,7 @@ export interface MapIssue extends BaseIssue<unknown> {
    */
   readonly type: 'map';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Map';
 }

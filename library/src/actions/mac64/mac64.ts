@@ -20,11 +20,11 @@ export interface Mac64Issue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly type: 'mac64';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `"${string}"`;
   /**

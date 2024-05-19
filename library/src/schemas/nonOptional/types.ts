@@ -23,7 +23,7 @@ export interface NonOptionalIssue extends BaseIssue<unknown> {
    */
   readonly type: 'non_optional';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: '!undefined';
 }

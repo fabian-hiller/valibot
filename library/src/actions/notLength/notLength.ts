@@ -22,15 +22,15 @@ export interface NotLengthIssue<
    */
   readonly type: 'not_length';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: `!${TRequirement}`;
   /**
-   * The received input.
+   * The received property.
    */
-  readonly received: `${number}`;
+  readonly received: `${TRequirement}`;
   /**
-   * The length.
+   * The not required length.
    */
   readonly requirement: TRequirement;
 }
@@ -58,7 +58,7 @@ export interface NotLengthAction<
    */
   readonly expects: `!${TRequirement}`;
   /**
-   * The length.
+   * The not required length.
    */
   readonly requirement: TRequirement;
   /**
@@ -68,11 +68,11 @@ export interface NotLengthAction<
 }
 
 /**
- * Creates a length validation action.
+ * Creates a not length validation action.
  *
- * @param requirement The length.
+ * @param requirement The not required length.
  *
- * @returns A length action.
+ * @returns A not length action.
  */
 export function notLength<
   TInput extends LengthInput,
@@ -80,12 +80,12 @@ export function notLength<
 >(requirement: TRequirement): NotLengthAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a length validation action.
+ * Creates a not length validation action.
  *
- * @param requirement The length.
+ * @param requirement The not required length.
  * @param message The error message.
  *
- * @returns A length action.
+ * @returns A not length action.
  */
 export function notLength<
   TInput extends LengthInput,

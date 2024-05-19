@@ -13,7 +13,7 @@ export interface ObjectIssue extends BaseIssue<unknown> {
    */
   readonly type: 'object';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Object';
 }

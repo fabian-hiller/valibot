@@ -23,7 +23,7 @@ export interface NonNullishIssue extends BaseIssue<unknown> {
    */
   readonly type: 'non_nullish';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: '!null & !undefined';
 }

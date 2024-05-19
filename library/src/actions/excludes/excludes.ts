@@ -22,7 +22,7 @@ export interface ExcludesIssue<
    */
   readonly type: 'excludes';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: string;
   /**

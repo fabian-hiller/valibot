@@ -66,11 +66,11 @@ export interface BaseIssue<TInput> extends Config<BaseIssue<TInput>> {
    */
   readonly input: TInput;
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: string | null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: string;
   /**

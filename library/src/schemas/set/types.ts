@@ -19,7 +19,7 @@ export interface SetIssue extends BaseIssue<unknown> {
    */
   readonly type: 'set';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Set';
 }

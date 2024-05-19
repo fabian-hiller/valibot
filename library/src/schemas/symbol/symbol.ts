@@ -19,7 +19,7 @@ export interface SymbolIssue extends BaseIssue<unknown> {
    */
   readonly type: 'symbol';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'symbol';
 }

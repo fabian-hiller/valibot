@@ -22,7 +22,7 @@ export interface ValueIssue<
    */
   readonly type: 'value';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: string;
   /**

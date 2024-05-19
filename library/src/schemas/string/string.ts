@@ -19,7 +19,7 @@ export interface StringIssue extends BaseIssue<unknown> {
    */
   readonly type: 'string';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'string';
 }

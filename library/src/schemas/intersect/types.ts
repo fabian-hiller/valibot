@@ -21,7 +21,7 @@ export interface IntersectIssue extends BaseIssue<unknown> {
    */
   readonly type: 'intersect';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: string;
 }

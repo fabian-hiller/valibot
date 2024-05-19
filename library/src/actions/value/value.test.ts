@@ -207,7 +207,34 @@ describe('value', () => {
       expectActionIssue(
         value(10n, 'message'),
         { ...baseInfo, expected: '10', requirement: 10n },
-        [9, 9.0, '9', '9.0', '', ' ', new Date(9), true, false],
+        [
+          9,
+          11,
+          9.0,
+          11.0,
+          '9',
+          '11',
+          '9.0',
+          '11.0',
+          '',
+          ' ',
+          new Date(9),
+          new Date(11),
+          true,
+          false,
+        ],
+        getReceived
+      );
+      expectActionIssue(
+        value(1n, 'message'),
+        { ...baseInfo, expected: '1', requirement: 1n },
+        [0, 0.0, '0', ' 0 ', '', ' ', false, new Date(0)],
+        getReceived
+      );
+      expectActionIssue(
+        value(0n, 'message'),
+        { ...baseInfo, expected: '0', requirement: 0n },
+        [1, 1.0, '1', ' 1 ', true, new Date(1)],
         getReceived
       );
     });
@@ -229,7 +256,7 @@ describe('value', () => {
       expectActionIssue(
         value(true, 'message'),
         { ...baseInfo, expected: 'true', requirement: true },
-        [0n, 0, 0.0, '0', '0.0', '', ' ', new Date(0)],
+        [0n, 0, 0.0, '0', '0.0', ' 0 ', '', ' ', new Date(0)],
         getReceived
       );
       expectActionIssue(
@@ -241,7 +268,7 @@ describe('value', () => {
       expectActionIssue(
         value(false, 'message'),
         { ...baseInfo, expected: 'false', requirement: false },
-        [1n, 1, 1.0, '1', '1.0', new Date(1)],
+        [1n, 1, 1.0, '1', '1.0', ' 1 ', new Date(1)],
         getReceived
       );
       expectActionIssue(
@@ -263,11 +290,40 @@ describe('value', () => {
     });
 
     test('for invalid non-dates', () => {
-      const date = new Date(10);
+      const date1 = new Date(10);
       expectActionIssue(
-        value(date, 'message'),
-        { ...baseInfo, expected: date.toJSON(), requirement: date },
-        [9n, 9, 9.0, '9', '9.0', '', ' ', true, false],
+        value(date1, 'message'),
+        { ...baseInfo, expected: date1.toJSON(), requirement: date1 },
+        [
+          9n,
+          11n,
+          9,
+          11,
+          9.0,
+          11.0,
+          '9',
+          '11',
+          '9.0',
+          '11.0',
+          '',
+          ' ',
+          true,
+          false,
+        ],
+        getReceived
+      );
+      const date2 = new Date(1);
+      expectActionIssue(
+        value(date2, 'message'),
+        { ...baseInfo, expected: date2.toJSON(), requirement: date2 },
+        [0, 0.0, 0n, '0', '0.0', ' 0 ', '', ' ', false],
+        getReceived
+      );
+      const date3 = new Date(0);
+      expectActionIssue(
+        value(date3, 'message'),
+        { ...baseInfo, expected: date3.toJSON(), requirement: date3 },
+        [1, 1.0, 1n, '1', '1.0', ' 1 ', true],
         getReceived
       );
     });
@@ -295,7 +351,19 @@ describe('value', () => {
       expectActionIssue(
         value(10, 'message'),
         { ...baseInfo, expected: '10', requirement: 10 },
-        [9n, '9', '9.0', '', ' ', new Date(9), true, false],
+        [9n, 11n, '9', '11', '9.0', '11.0', '', ' ', new Date(9), true, false],
+        getReceived
+      );
+      expectActionIssue(
+        value(1, 'message'),
+        { ...baseInfo, expected: '1', requirement: 1 },
+        [0n, '0', '0.0', ' 0 ', '', ' ', false, new Date(0)],
+        getReceived
+      );
+      expectActionIssue(
+        value(0, 'message'),
+        { ...baseInfo, expected: '0', requirement: 0 },
+        [1n, '1', '1.0', ' 1 ', true, new Date(1)],
         getReceived
       );
     });
@@ -323,7 +391,19 @@ describe('value', () => {
       expectActionIssue(
         value('10', 'message'),
         { ...baseInfo, expected: '"10"', requirement: '10' },
-        [9n, 9, 9.0, new Date(9), true, false],
+        [9n, 11n, 9, 11, 9.0, 11.0, new Date(9), new Date(11), true, false],
+        getReceived
+      );
+      expectActionIssue(
+        value('1', 'message'),
+        { ...baseInfo, expected: '"1"', requirement: '1' },
+        [0n, 0, 0.0, false, new Date(0)],
+        getReceived
+      );
+      expectActionIssue(
+        value('0', 'message'),
+        { ...baseInfo, expected: '"0"', requirement: '0' },
+        [1n, 1, 1.0, true, new Date(1)],
         getReceived
       );
     });

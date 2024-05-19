@@ -20,11 +20,11 @@ export interface OctalIssue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly type: 'octal';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `"${string}"`;
   /**

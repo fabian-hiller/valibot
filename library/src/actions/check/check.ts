@@ -18,7 +18,7 @@ export interface CheckIssue<TInput> extends BaseIssue<TInput> {
    */
   readonly type: 'check';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**

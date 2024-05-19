@@ -6,7 +6,7 @@ import {
   type NotValueIssue,
 } from './notValue.ts';
 
-describe('value', () => {
+describe('notValue', () => {
   describe('should return action object', () => {
     test('with undefined message', () => {
       type Action = NotValueAction<number, 10, undefined>;

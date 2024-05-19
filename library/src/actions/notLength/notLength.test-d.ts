@@ -6,7 +6,7 @@ import {
   type NotLengthIssue,
 } from './notLength.ts';
 
-describe('length', () => {
+describe('notLength', () => {
   describe('should return action object', () => {
     test('with undefined message', () => {
       type Action = NotLengthAction<string, 10, undefined>;

@@ -22,17 +22,17 @@ export interface NotValueIssue<
    */
   readonly type: 'not_value';
   /**
-   * The expected input.
+   * The expected property.
    */
-  readonly expected: string;
+  readonly expected: `!${string}`;
   /**
-   * The required value.
+   * The not required value.
    */
   readonly requirement: TRequirement;
 }
 
 /**
- * Value action type.
+ * Not value action type.
  */
 export interface NotValueAction<
   TInput extends ValueInput,
@@ -52,9 +52,9 @@ export interface NotValueAction<
   /**
    * The expected property.
    */
-  readonly expects: string;
+  readonly expects: `!${string}`;
   /**
-   * The required value.
+   * The not required value.
    */
   readonly requirement: TRequirement;
   /**
@@ -64,11 +64,11 @@ export interface NotValueAction<
 }
 
 /**
- * Creates a value validation action.
+ * Creates a not value validation action.
  *
- * @param requirement The required value.
+ * @param requirement The not required value.
  *
- * @returns A value action.
+ * @returns A not value action.
  */
 export function notValue<
   TInput extends ValueInput,
@@ -76,12 +76,12 @@ export function notValue<
 >(requirement: TRequirement): NotValueAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a value validation action.
+ * Creates a not value validation action.
  *
- * @param requirement The required value.
+ * @param requirement The not required value.
  * @param message The error message.
  *
- * @returns A value action.
+ * @returns A not value action.
  */
 export function notValue<
   TInput extends ValueInput,
@@ -122,7 +122,7 @@ export function notValue(
         _addIssue(this, 'value', dataset, config, {
           received:
             dataset.value instanceof Date
-              ? `${dataset.value.toJSON()}`
+              ? dataset.value.toJSON()
               : _stringify(dataset.value),
         });
       }

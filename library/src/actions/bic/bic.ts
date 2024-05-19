@@ -20,11 +20,11 @@ export interface BicIssue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly type: 'bic';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `"${string}"`;
   /**

@@ -24,7 +24,7 @@ export interface CustomIssue extends BaseIssue<unknown> {
    */
   readonly type: 'custom';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'unknown';
 }

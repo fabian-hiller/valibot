@@ -21,11 +21,11 @@ export interface HexadecimalIssue<TInput extends string>
    */
   readonly type: 'hexadecimal';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `"${string}"`;
   /**

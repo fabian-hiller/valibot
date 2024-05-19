@@ -46,6 +46,13 @@ describe('notLength', () => {
   describe('should return dataset without issues', () => {
     const action = notLength(3);
 
+    test('for untyped inputs', () => {
+      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+        typed: false,
+        value: null,
+      });
+    });
+
     test('for valid strings', () => {
       expectNoActionIssue(action, [
         '',
@@ -88,13 +95,6 @@ describe('notLength', () => {
       message: 'message',
       requirement: 3,
     };
-
-    test('for untyped inputs', () => {
-      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
-        typed: false,
-        value: null,
-      });
-    });
 
     test('for invalid strings', () => {
       expectActionIssue(

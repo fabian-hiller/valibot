@@ -33,7 +33,7 @@ export interface VariantIssue extends BaseIssue<unknown> {
    */
   readonly type: 'variant';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: string;
 }

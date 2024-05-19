@@ -33,7 +33,7 @@ export interface UnionIssue<TSubIssue extends BaseIssue<unknown>>
    */
   readonly type: 'union';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: string;
   /**

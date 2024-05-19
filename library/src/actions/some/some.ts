@@ -27,7 +27,7 @@ export interface SomeIssue<TInput extends unknown[]> extends BaseIssue<TInput> {
    */
   readonly type: 'some';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**

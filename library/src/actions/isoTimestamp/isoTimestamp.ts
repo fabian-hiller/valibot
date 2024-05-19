@@ -21,11 +21,11 @@ export interface IsoTimestampIssue<TInput extends string>
    */
   readonly type: 'iso_timestamp';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `"${string}"`;
   /**

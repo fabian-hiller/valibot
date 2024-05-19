@@ -19,11 +19,11 @@ export interface BytesIssue<TInput extends string, TRequirement extends number>
    */
   readonly type: 'bytes';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: `${TRequirement}`;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `${number}`;
   /**

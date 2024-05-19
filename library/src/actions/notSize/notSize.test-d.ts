@@ -2,7 +2,7 @@ import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import { notSize, type NotSizeAction, type NotSizeIssue } from './notSize.ts';
 
-describe('size', () => {
+describe('notSize', () => {
   describe('should return action object', () => {
     test('with undefined message', () => {
       type Action = NotSizeAction<Blob, 10, undefined>;

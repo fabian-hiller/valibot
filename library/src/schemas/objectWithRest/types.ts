@@ -13,7 +13,7 @@ export interface ObjectWithRestIssue extends BaseIssue<unknown> {
    */
   readonly type: 'object_with_rest';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Object';
 }

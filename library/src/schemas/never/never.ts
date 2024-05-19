@@ -19,7 +19,7 @@ export interface NeverIssue extends BaseIssue<unknown> {
    */
   readonly type: 'never';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'never';
 }

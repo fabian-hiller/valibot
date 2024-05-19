@@ -20,11 +20,11 @@ export interface IsoWeekIssue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly type: 'iso_week';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `"${string}"`;
   /**

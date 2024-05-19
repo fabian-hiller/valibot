@@ -19,7 +19,7 @@ export interface NullIssue extends BaseIssue<unknown> {
    */
   readonly type: 'null';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'null';
 }

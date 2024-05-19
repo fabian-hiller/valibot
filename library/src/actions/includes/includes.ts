@@ -22,7 +22,7 @@ export interface IncludesIssue<
    */
   readonly type: 'includes';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: string;
   /**
