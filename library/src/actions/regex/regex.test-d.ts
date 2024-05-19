@@ -8,22 +8,20 @@ describe('regex', () => {
 
     test('with undefined message', () => {
       type Action = RegexAction<string, undefined>;
-      expectTypeOf(regex<string>(requirement)).toEqualTypeOf<Action>();
-      expectTypeOf(
-        regex<string, undefined>(requirement, undefined)
-      ).toEqualTypeOf<Action>();
+      expectTypeOf(regex(requirement)).toEqualTypeOf<Action>();
+      expectTypeOf(regex(requirement, undefined)).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
-      expectTypeOf(
-        regex<string, 'message'>(requirement, 'message')
-      ).toEqualTypeOf<RegexAction<string, 'message'>>();
+      expectTypeOf(regex(requirement, 'message')).toEqualTypeOf<
+        RegexAction<string, 'message'>
+      >();
     });
 
     test('with function message', () => {
-      expectTypeOf(
-        regex<string, () => string>(requirement, () => 'message')
-      ).toEqualTypeOf<RegexAction<string, () => string>>();
+      expectTypeOf(regex(requirement, () => 'message')).toEqualTypeOf<
+        RegexAction<string, () => string>
+      >();
     });
   });
 
