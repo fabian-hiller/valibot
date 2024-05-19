@@ -19,7 +19,7 @@ export interface DateIssue extends BaseIssue<unknown> {
    */
   readonly type: 'date';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Date';
 }

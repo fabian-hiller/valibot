@@ -22,11 +22,11 @@ export interface MaxSizeIssue<
    */
   readonly type: 'max_size';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: `<=${TRequirement}`;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `${number}`;
   /**

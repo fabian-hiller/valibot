@@ -19,7 +19,7 @@ export interface NanIssue extends BaseIssue<unknown> {
    */
   readonly type: 'nan';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'NaN';
 }

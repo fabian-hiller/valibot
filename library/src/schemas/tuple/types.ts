@@ -13,7 +13,7 @@ export interface TupleIssue extends BaseIssue<unknown> {
    */
   readonly type: 'tuple';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Array';
 }

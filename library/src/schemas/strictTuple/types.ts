@@ -13,7 +13,7 @@ export interface StrictTupleIssue extends BaseIssue<unknown> {
    */
   readonly type: 'strict_tuple';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Array' | 'never';
 }

@@ -19,11 +19,11 @@ export interface FiniteIssue<TInput extends number> extends BaseIssue<TInput> {
    */
   readonly type: 'finite';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `${number}`;
   /**

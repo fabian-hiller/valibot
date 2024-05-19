@@ -20,11 +20,11 @@ export interface EmailIssue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly type: 'email';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `"${string}"`;
   /**

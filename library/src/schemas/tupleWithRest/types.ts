@@ -13,7 +13,7 @@ export interface TupleWithRestIssue extends BaseIssue<unknown> {
    */
   readonly type: 'tuple_with_rest';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Array';
 }

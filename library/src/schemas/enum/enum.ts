@@ -26,7 +26,7 @@ export interface EnumIssue extends BaseIssue<unknown> {
    */
   readonly type: 'enum';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: string;
 }

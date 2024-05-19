@@ -25,7 +25,7 @@ export interface InstanceIssue extends BaseIssue<unknown> {
    */
   readonly type: 'instance';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: string;
 }

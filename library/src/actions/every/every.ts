@@ -28,7 +28,7 @@ export interface EveryIssue<TInput extends unknown[]>
    */
   readonly type: 'every';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**

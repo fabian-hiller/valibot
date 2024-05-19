@@ -22,7 +22,7 @@ export interface MaxValueIssue<
    */
   readonly type: 'max_value';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: `<=${string}`;
   /**

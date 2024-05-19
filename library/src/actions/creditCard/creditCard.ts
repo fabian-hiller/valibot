@@ -20,11 +20,11 @@ export interface CreditCardIssue<TInput extends string>
    */
   readonly type: 'credit_card';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `"${string}"`;
   /**

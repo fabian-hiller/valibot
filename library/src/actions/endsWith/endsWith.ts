@@ -21,11 +21,11 @@ export interface EndsWithIssue<
    */
   readonly type: 'ends_with';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: `"${TRequirement}"`;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `"${string}"`;
   /**

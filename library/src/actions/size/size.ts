@@ -22,11 +22,11 @@ export interface SizeIssue<
    */
   readonly type: 'size';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: `${TRequirement}`;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `${number}`;
   /**

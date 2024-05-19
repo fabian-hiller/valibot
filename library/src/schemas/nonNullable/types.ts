@@ -29,7 +29,7 @@ export interface NonNullableIssue extends BaseIssue<unknown> {
    */
   readonly type: 'non_nullable';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: '!null';
 }

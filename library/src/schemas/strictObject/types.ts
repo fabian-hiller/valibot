@@ -13,7 +13,7 @@ export interface StrictObjectIssue extends BaseIssue<unknown> {
    */
   readonly type: 'strict_object';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Object' | 'never';
 }

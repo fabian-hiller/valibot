@@ -19,7 +19,7 @@ export interface VoidIssue extends BaseIssue<unknown> {
    */
   readonly type: 'void';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'void';
 }

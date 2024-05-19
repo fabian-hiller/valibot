@@ -25,7 +25,7 @@ export interface PicklistIssue extends BaseIssue<unknown> {
    */
   readonly type: 'picklist';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: string;
 }

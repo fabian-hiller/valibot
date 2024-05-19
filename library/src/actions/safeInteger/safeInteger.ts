@@ -20,11 +20,11 @@ export interface SafeIntegerIssue<TInput extends number>
    */
   readonly type: 'safe_integer';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `${number}`;
   /**

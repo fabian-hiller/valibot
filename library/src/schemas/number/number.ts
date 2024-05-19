@@ -19,7 +19,7 @@ export interface NumberIssue extends BaseIssue<unknown> {
    */
   readonly type: 'number';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'number';
 }

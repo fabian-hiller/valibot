@@ -13,7 +13,7 @@ export interface LooseObjectIssue extends BaseIssue<unknown> {
    */
   readonly type: 'loose_object';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Object';
 }

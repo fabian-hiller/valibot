@@ -22,15 +22,15 @@ export interface LengthIssue<
    */
   readonly type: 'length';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: `${TRequirement}`;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `${number}`;
   /**
-   * The length.
+   * The required length.
    */
   readonly requirement: TRequirement;
 }
@@ -56,7 +56,7 @@ export interface LengthAction<
    */
   readonly expects: `${TRequirement}`;
   /**
-   * The length.
+   * The required length.
    */
   readonly requirement: TRequirement;
   /**
@@ -68,7 +68,7 @@ export interface LengthAction<
 /**
  * Creates a length validation action.
  *
- * @param requirement The length.
+ * @param requirement The required length.
  *
  * @returns A length action.
  */
@@ -80,7 +80,7 @@ export function length<
 /**
  * Creates a length validation action.
  *
- * @param requirement The length.
+ * @param requirement The required length.
  * @param message The error message.
  *
  * @returns A length action.

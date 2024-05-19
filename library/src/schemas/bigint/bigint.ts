@@ -19,7 +19,7 @@ export interface BigintIssue extends BaseIssue<unknown> {
    */
   readonly type: 'bigint';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'bigint';
 }

@@ -22,7 +22,7 @@ export interface MinValueIssue<
    */
   readonly type: 'min_value';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: `>=${string}`;
   /**

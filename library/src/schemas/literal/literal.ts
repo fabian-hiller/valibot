@@ -24,7 +24,7 @@ export interface LiteralIssue extends BaseIssue<unknown> {
    */
   readonly type: 'literal';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: string;
 }

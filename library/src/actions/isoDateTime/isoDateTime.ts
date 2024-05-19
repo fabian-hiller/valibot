@@ -21,11 +21,11 @@ export interface IsoDateTimeIssue<TInput extends string>
    */
   readonly type: 'iso_date_time';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `"${string}"`;
   /**

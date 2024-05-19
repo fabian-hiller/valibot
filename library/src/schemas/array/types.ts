@@ -13,7 +13,7 @@ export interface ArrayIssue extends BaseIssue<unknown> {
    */
   readonly type: 'array';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Array';
 }

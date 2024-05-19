@@ -19,7 +19,7 @@ export interface BlobIssue extends BaseIssue<unknown> {
    */
   readonly type: 'blob';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Blob';
 }

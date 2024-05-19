@@ -19,7 +19,7 @@ export interface BooleanIssue extends BaseIssue<unknown> {
    */
   readonly type: 'boolean';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'boolean';
 }

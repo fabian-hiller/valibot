@@ -28,7 +28,7 @@ export interface RecordIssue extends BaseIssue<unknown> {
    */
   readonly type: 'record';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'Object';
 }

@@ -19,7 +19,7 @@ export interface UndefinedIssue extends BaseIssue<unknown> {
    */
   readonly type: 'undefined';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: 'undefined';
 }

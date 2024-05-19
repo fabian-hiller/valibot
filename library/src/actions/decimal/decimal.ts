@@ -20,11 +20,11 @@ export interface DecimalIssue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly type: 'decimal';
   /**
-   * The expected input.
+   * The expected property.
    */
   readonly expected: null;
   /**
-   * The received input.
+   * The received property.
    */
   readonly received: `"${string}"`;
   /**
