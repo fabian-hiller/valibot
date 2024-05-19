@@ -1,36 +1,36 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { check, type CheckAction } from './check.ts';
+import { type CheckActionAsync, checkAsync } from './checkAsync.ts';
 import type { CheckIssue } from './types.ts';
 
-describe('check', () => {
+describe('checkAsync', () => {
   describe('should return action object', () => {
-    const requirement = (input: string) => Boolean(input);
+    const requirement = async (input: string) => Boolean(input);
 
     test('with undefined message', () => {
-      type Action = CheckAction<string, undefined>;
-      expectTypeOf(check<string>(requirement)).toEqualTypeOf<Action>();
+      type Action = CheckActionAsync<string, undefined>;
+      expectTypeOf(checkAsync<string>(requirement)).toEqualTypeOf<Action>();
       expectTypeOf(
-        check<string, undefined>(requirement, undefined)
+        checkAsync<string, undefined>(requirement, undefined)
       ).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
       expectTypeOf(
-        check<string, 'message'>(requirement, 'message')
-      ).toEqualTypeOf<CheckAction<string, 'message'>>();
+        checkAsync<string, 'message'>(requirement, 'message')
+      ).toEqualTypeOf<CheckActionAsync<string, 'message'>>();
     });
 
     test('with function message', () => {
       expectTypeOf(
-        check<string, () => string>(requirement, () => 'message')
-      ).toEqualTypeOf<CheckAction<string, () => string>>();
+        checkAsync<string, () => string>(requirement, () => 'message')
+      ).toEqualTypeOf<CheckActionAsync<string, () => string>>();
     });
   });
 
   describe('should infer correct types', () => {
     type Input = ['foo', 123, true];
-    type Action = CheckAction<Input, undefined>;
+    type Action = CheckActionAsync<Input, undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();

@@ -1,14 +1,18 @@
-import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseValidationAsync,
+  ErrorMessage,
+  MaybePromise,
+} from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { CheckIssue } from './types.ts';
 
 /**
- * Check action type.
+ * Check action async type.
  */
-export interface CheckAction<
+export interface CheckActionAsync<
   TInput,
   TMessage extends ErrorMessage<CheckIssue<TInput>> | undefined,
-> extends BaseValidation<TInput, TInput, CheckIssue<TInput>> {
+> extends BaseValidationAsync<TInput, TInput, CheckIssue<TInput>> {
   /**
    * The action type.
    */
@@ -16,7 +20,7 @@ export interface CheckAction<
   /**
    * The action reference.
    */
-  readonly reference: typeof check;
+  readonly reference: typeof checkAsync;
   /**
    * The expected property.
    */
@@ -24,7 +28,7 @@ export interface CheckAction<
   /**
    * The validation function.
    */
-  readonly requirement: (input: TInput) => boolean;
+  readonly requirement: (input: TInput) => MaybePromise<boolean>;
   /**
    * The error message.
    */
@@ -38,9 +42,9 @@ export interface CheckAction<
  *
  * @returns A check action.
  */
-export function check<TInput>(
-  requirement: (input: TInput) => boolean
-): CheckAction<TInput, undefined>;
+export function checkAsync<TInput>(
+  requirement: (input: TInput) => MaybePromise<boolean>
+): CheckActionAsync<TInput, undefined>;
 
 /**
  * Creates a check validation action.
@@ -50,28 +54,28 @@ export function check<TInput>(
  *
  * @returns A check action.
  */
-export function check<
+export function checkAsync<
   TInput,
   const TMessage extends ErrorMessage<CheckIssue<TInput>> | undefined,
 >(
-  requirement: (input: TInput) => boolean,
+  requirement: (input: TInput) => MaybePromise<boolean>,
   message: TMessage
-): CheckAction<TInput, TMessage>;
+): CheckActionAsync<TInput, TMessage>;
 
-export function check(
-  requirement: (input: unknown) => boolean,
+export function checkAsync(
+  requirement: (input: unknown) => MaybePromise<boolean>,
   message?: ErrorMessage<CheckIssue<unknown>>
-): CheckAction<unknown, ErrorMessage<CheckIssue<unknown>> | undefined> {
+): CheckActionAsync<unknown, ErrorMessage<CheckIssue<unknown>> | undefined> {
   return {
     kind: 'validation',
     type: 'check',
-    reference: check,
-    async: false,
+    reference: checkAsync,
+    async: true,
     expects: null,
     requirement,
     message,
-    _run(dataset, config) {
-      if (dataset.typed && !this.requirement(dataset.value)) {
+    async _run(dataset, config) {
+      if (dataset.typed && !(await this.requirement(dataset.value))) {
         _addIssue(this, 'input', dataset, config);
       }
       return dataset;

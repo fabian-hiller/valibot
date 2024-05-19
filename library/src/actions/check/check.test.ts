@@ -1,10 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
-import { check, type CheckAction, type CheckIssue } from './check.ts';
+import { check, type CheckAction } from './check.ts';
+import type { CheckIssue } from './types.ts';
 
 describe('check', () => {
   describe('should return action object', () => {
-    const requirement = (element: string) => element.includes('foo');
+    const requirement = (input: string) => input.includes('foo');
     const baseAction: Omit<CheckAction<string, never>, 'message'> = {
       kind: 'validation',
       type: 'check',
