@@ -7,45 +7,31 @@ import {
 } from './mimeType.ts';
 
 describe('mimeType', () => {
+  const requirement = ['text/html', 'image/png'] as const;
+  type Requirement = typeof requirement;
+
   describe('should return action object', () => {
     test('with undefined message', () => {
-      type Action = MimeTypeAction<Blob, ['text/html', 'image/png'], undefined>;
-      expectTypeOf(
-        mimeType<Blob, ['text/html', 'image/png']>(['text/html', 'image/png'])
-      ).toEqualTypeOf<Action>();
-      expectTypeOf(
-        mimeType<Blob, ['text/html', 'image/png'], undefined>(
-          ['text/html', 'image/png'],
-          undefined
-        )
-      ).toEqualTypeOf<Action>();
+      type Action = MimeTypeAction<Blob, Requirement, undefined>;
+      expectTypeOf(mimeType(requirement)).toEqualTypeOf<Action>();
+      expectTypeOf(mimeType(requirement, undefined)).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
-      expectTypeOf(
-        mimeType<Blob, ['text/html', 'image/png'], 'message'>(
-          ['text/html', 'image/png'],
-          'message'
-        )
-      ).toEqualTypeOf<
-        MimeTypeAction<Blob, ['text/html', 'image/png'], 'message'>
+      expectTypeOf(mimeType(requirement, 'message')).toEqualTypeOf<
+        MimeTypeAction<Blob, Requirement, 'message'>
       >();
     });
 
     test('with function message', () => {
-      expectTypeOf(
-        mimeType<Blob, ['text/html', 'image/png'], () => string>(
-          ['text/html', 'image/png'],
-          () => 'message'
-        )
-      ).toEqualTypeOf<
-        MimeTypeAction<Blob, ['text/html', 'image/png'], () => string>
+      expectTypeOf(mimeType(requirement, () => 'message')).toEqualTypeOf<
+        MimeTypeAction<Blob, Requirement, () => string>
       >();
     });
   });
 
   describe('should infer correct types', () => {
-    type Action = MimeTypeAction<Blob, ['image/png'], undefined>;
+    type Action = MimeTypeAction<Blob, Requirement, undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<Blob>();
@@ -57,7 +43,7 @@ describe('mimeType', () => {
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
-        MimeTypeIssue<Blob, ['image/png']>
+        MimeTypeIssue<Blob, Requirement>
       >();
     });
   });

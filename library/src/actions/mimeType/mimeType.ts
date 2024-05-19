@@ -2,15 +2,21 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
+  MaybeReadonly,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
+
+/**
+ * Requirement type.
+ */
+type Requirement = MaybeReadonly<`${string}/${string}`[]>;
 
 /**
  * MIME type issue type.
  */
 export interface MimeTypeIssue<
   TInput extends Blob,
-  TRequirement extends `${string}/${string}`[],
+  TRequirement extends Requirement,
 > extends BaseIssue<TInput> {
   /**
    * The issue kind.
@@ -25,6 +31,10 @@ export interface MimeTypeIssue<
    */
   readonly expected: string;
   /**
+   * The received input.
+   */
+  readonly received: `"${string}"`;
+  /**
    * The MIME types.
    */
   readonly requirement: TRequirement;
@@ -35,7 +45,7 @@ export interface MimeTypeIssue<
  */
 export interface MimeTypeAction<
   TInput extends Blob,
-  TRequirement extends `${string}/${string}`[],
+  TRequirement extends Requirement,
   TMessage extends
     | ErrorMessage<MimeTypeIssue<TInput, TRequirement>>
     | undefined,
@@ -63,7 +73,7 @@ export interface MimeTypeAction<
 }
 
 /**
- * Creates a MIME type validation action.
+ * Creates a [MIME type](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/MIME_types) validation action.
  *
  * @param requirement The MIME types.
  *
@@ -71,11 +81,11 @@ export interface MimeTypeAction<
  */
 export function mimeType<
   TInput extends Blob,
-  const TRequirement extends `${string}/${string}`[],
+  const TRequirement extends Requirement,
 >(requirement: TRequirement): MimeTypeAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a MIME type validation action.
+ * Creates a [MIME type](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/MIME_types) validation action.
  *
  * @param requirement The MIME types.
  * @param message The error message.
@@ -84,7 +94,7 @@ export function mimeType<
  */
 export function mimeType<
   TInput extends Blob,
-  const TRequirement extends `${string}/${string}`[],
+  const TRequirement extends Requirement,
   const TMessage extends
     | ErrorMessage<MimeTypeIssue<TInput, TRequirement>>
     | undefined,
@@ -94,19 +104,19 @@ export function mimeType<
 ): MimeTypeAction<TInput, TRequirement, TMessage>;
 
 export function mimeType(
-  requirement: `${string}/${string}`[],
-  message?: ErrorMessage<MimeTypeIssue<Blob, `${string}/${string}`[]>>
+  requirement: Requirement,
+  message?: ErrorMessage<MimeTypeIssue<Blob, Requirement>>
 ): MimeTypeAction<
   Blob,
-  `${string}/${string}`[],
-  ErrorMessage<MimeTypeIssue<Blob, `${string}/${string}`[]>> | undefined
+  Requirement,
+  ErrorMessage<MimeTypeIssue<Blob, Requirement>> | undefined
 > {
   return {
     kind: 'validation',
     type: 'mime_type',
     reference: mimeType,
     async: false,
-    expects: requirement.map((option) => `"${option}"`).join(' | '),
+    expects: requirement.map((option) => `"${option}"`).join(' | ') || 'never',
     requirement,
     message,
     _run(dataset, config) {
@@ -114,7 +124,9 @@ export function mimeType(
         dataset.typed &&
         !this.requirement.includes(dataset.value.type as `${string}/${string}`)
       ) {
-        _addIssue(this, 'MIME type', dataset, config);
+        _addIssue(this, 'MIME type', dataset, config, {
+          received: `"${dataset.value.type}"`,
+        });
       }
       return dataset;
     },
