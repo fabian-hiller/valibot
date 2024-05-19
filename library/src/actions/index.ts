@@ -16,7 +16,7 @@ export * from './hash/index.ts';
 export * from './hexadecimal/index.ts';
 export * from './hexColor/index.ts';
 export * from './imei/index.ts';
-export * from './includes/includes.ts';
+export * from './includes/index.ts';
 export * from './integer/index.ts';
 export * from './ip/index.ts';
 export * from './ipv4/index.ts';
