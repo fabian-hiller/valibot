@@ -23,6 +23,10 @@ export interface RegexIssue<TInput extends string> extends BaseIssue<TInput> {
    */
   readonly expected: string;
   /**
+   * The received input.
+   */
+  readonly received: `"${string}"`;
+  /**
    * The regex pattern.
    */
   readonly requirement: RegExp;
