@@ -66,12 +66,11 @@ module.exports = {
     // Disable rules ----------------------------------------------------------
 
     // TypeScript
-    // '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
 
     // Imports
-    // 'no-duplicate-imports': 'off',
+    'no-duplicate-imports': 'off',
 
     // Security
     'security/detect-object-injection': 'off', // Too many false positives
