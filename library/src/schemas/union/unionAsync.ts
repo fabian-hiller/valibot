@@ -7,8 +7,12 @@ import type {
   InferIssue,
   InferOutput,
   MaybeReadonly,
+  TypedDataset,
+  UntypedDataset,
 } from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
 import type { UnionIssue } from './types.ts';
+import { _subIssues } from './utils/index.ts';
 
 /**
  * Union options async type.
@@ -37,10 +41,10 @@ export interface UnionSchemaAsync<
    * The schema type.
    */
   readonly type: 'union';
-  // /**
-  //  * The schema reference.
-  //  */
-  // readonly reference: typeof unionAsync;
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof unionAsync;
   /**
    * The union options.
    */
@@ -49,4 +53,131 @@ export interface UnionSchemaAsync<
    * The error message.
    */
   readonly message: TMessage;
+}
+
+/**
+ * Creates an union schema.
+ *
+ * @param options The union options.
+ *
+ * @returns An union schema.
+ */
+export function unionAsync<const TOptions extends UnionOptionsAsync>(
+  options: TOptions
+): UnionSchemaAsync<TOptions, undefined>;
+
+/**
+ * Creates an union schema.
+ *
+ * @param options The union options.
+ * @param message The error message.
+ *
+ * @returns An union schema.
+ */
+export function unionAsync<
+  const TOptions extends UnionOptionsAsync,
+  const TMessage extends
+    | ErrorMessage<UnionIssue<InferIssue<TOptions[number]>>>
+    | undefined,
+>(options: TOptions, message: TMessage): UnionSchemaAsync<TOptions, TMessage>;
+
+export function unionAsync(
+  options: UnionOptionsAsync,
+  message?: ErrorMessage<UnionIssue<BaseIssue<unknown>>>
+): UnionSchemaAsync<
+  UnionOptionsAsync,
+  ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
+> {
+  return {
+    kind: 'schema',
+    type: 'union',
+    reference: unionAsync,
+    expects:
+      [...new Set(options.map((option) => option.expects))].join(' | ') ||
+      'never',
+    async: true,
+    options,
+    message,
+    async _run(dataset, config) {
+      // Create variables to collect datasets
+      let validDataset: TypedDataset<unknown, BaseIssue<unknown>> | undefined;
+      let typedDatasets:
+        | TypedDataset<unknown, BaseIssue<unknown>>[]
+        | undefined;
+      let untypedDatasets: UntypedDataset<BaseIssue<unknown>>[] | undefined;
+
+      // Parse schema of each option and collect datasets
+      for (const schema of this.options) {
+        const optionDataset = await schema._run(
+          { typed: false, value: dataset.value },
+          config
+        );
+
+        // If typed, add it to valid or typed datasets
+        if (optionDataset.typed) {
+          // If there are issues, add it to typed datasets
+          if (optionDataset.issues) {
+            if (typedDatasets) {
+              typedDatasets.push(optionDataset);
+            } else {
+              typedDatasets = [optionDataset];
+            }
+
+            // Otherwise, add it as valid dataset and break loop
+          } else {
+            validDataset = optionDataset;
+            break;
+          }
+
+          // Otherwise, add it to untyped datasets
+        } else {
+          if (untypedDatasets) {
+            untypedDatasets.push(optionDataset);
+          } else {
+            untypedDatasets = [optionDataset];
+          }
+        }
+      }
+
+      // If there is a valid dataset, return it
+      if (validDataset) {
+        return validDataset;
+      }
+
+      // If there are typed datasets process only those
+      if (typedDatasets) {
+        // If there is only one typed dataset, return it
+        if (typedDatasets.length === 1) {
+          return typedDatasets[0];
+        }
+
+        // Otherwise, add issue with typed subissues
+        // Hint: If there is more than one typed dataset, we use a general
+        // union issue with subissues because the issues could contradict
+        // each other.
+        _addIssue(this, 'type', dataset, config, {
+          issues: _subIssues(typedDatasets),
+        });
+
+        // And set typed to `true`
+        dataset.typed = true;
+
+        // Otherwise, if there is exactly one untyped dataset, return it
+      } else if (untypedDatasets?.length === 1) {
+        return untypedDatasets[0];
+
+        // Otherwise, add issue with untyped subissues
+      } else {
+        // Hint: If there are zero or more than one untyped results, we use a
+        // general union issue with subissues because the issues could
+        // contradict each other.
+        _addIssue(this, 'type', dataset, config, {
+          issues: _subIssues(untypedDatasets),
+        });
+      }
+
+      // Return output dataset
+      return dataset;
+    },
+  };
 }

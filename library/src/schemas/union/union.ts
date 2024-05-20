@@ -73,7 +73,7 @@ export function union<const TOptions extends UnionOptions>(
 export function union<
   const TOptions extends UnionOptions,
   const TMessage extends
-    | ErrorMessage<UnionIssue<BaseIssue<unknown>>>
+    | ErrorMessage<UnionIssue<InferIssue<TOptions[number]>>>
     | undefined,
 >(options: TOptions, message: TMessage): UnionSchema<TOptions, TMessage>;
 

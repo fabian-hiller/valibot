@@ -107,7 +107,7 @@ export function setAsync(
 
         // Parse schema of each set value
         const valueDatasets = await Promise.all(
-          Array.from(input).map(
+          [...input].map(
             async (inputValue) =>
               [
                 inputValue,
