@@ -1,37 +1,39 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { custom, type CustomSchema } from './custom.ts';
+import { customAsync, type CustomSchemaAsync } from './customAsync.ts';
 import type { CustomIssue } from './types.ts';
 
-describe('custom', () => {
+describe('customAsync', () => {
   type PixelString = `${number}px`;
-  const isPixelString = (input: unknown) =>
+  const isPixelString = async (input: unknown) =>
     typeof input === 'string' && /^\d+px$/u.test(input);
 
   describe('should return schema object', () => {
     test('with undefined message', () => {
-      type Schema = CustomSchema<PixelString, undefined>;
-      expectTypeOf(custom<PixelString>(isPixelString)).toEqualTypeOf<Schema>();
+      type Schema = CustomSchemaAsync<PixelString, undefined>;
       expectTypeOf(
-        custom<PixelString, undefined>(isPixelString, undefined)
+        customAsync<PixelString>(isPixelString)
+      ).toEqualTypeOf<Schema>();
+      expectTypeOf(
+        customAsync<PixelString, undefined>(isPixelString, undefined)
       ).toEqualTypeOf<Schema>();
     });
 
     test('with string message', () => {
       expectTypeOf(
-        custom<PixelString, 'message'>(isPixelString, 'message')
-      ).toEqualTypeOf<CustomSchema<PixelString, 'message'>>();
+        customAsync<PixelString, 'message'>(isPixelString, 'message')
+      ).toEqualTypeOf<CustomSchemaAsync<PixelString, 'message'>>();
     });
 
     test('with function message', () => {
       expectTypeOf(
-        custom<PixelString, () => string>(isPixelString, () => 'message')
-      ).toEqualTypeOf<CustomSchema<PixelString, () => string>>();
+        customAsync<PixelString, () => string>(isPixelString, () => 'message')
+      ).toEqualTypeOf<CustomSchemaAsync<PixelString, () => string>>();
     });
   });
 
   describe('should infer correct types', () => {
-    type Schema = CustomSchema<PixelString, undefined>;
+    type Schema = CustomSchemaAsync<PixelString, undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Schema>>().toEqualTypeOf<PixelString>();

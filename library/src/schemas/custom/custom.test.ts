@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
-import { custom, type CustomIssue, type CustomSchema } from './custom.ts';
+import { custom, type CustomSchema } from './custom.ts';
+import type { CustomIssue } from './types.ts';
 
 describe('custom', () => {
   type PixelString = `${number}px`;

@@ -1,19 +1,24 @@
-import type { BaseSchema, Dataset, ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseSchemaAsync,
+  Dataset,
+  ErrorMessage,
+  MaybePromise,
+} from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { CustomIssue } from './types.ts';
 
 /**
- * Check type.
+ * Check async type.
  */
-type Check = (input: unknown) => boolean;
+type CheckAsync = (input: unknown) => MaybePromise<boolean>;
 
 /**
- * Custom schema type.
+ * Custom schema async type.
  */
-export interface CustomSchema<
+export interface CustomSchemaAsync<
   TInput,
   TMessage extends ErrorMessage<CustomIssue> | undefined,
-> extends BaseSchema<TInput, TInput, CustomIssue> {
+> extends BaseSchemaAsync<TInput, TInput, CustomIssue> {
   /**
    * The schema type.
    */
@@ -21,7 +26,7 @@ export interface CustomSchema<
   /**
    * The schema reference.
    */
-  readonly reference: typeof custom;
+  readonly reference: typeof customAsync;
   /**
    * The expected property.
    */
@@ -29,7 +34,7 @@ export interface CustomSchema<
   /**
    * The type check function.
    */
-  readonly check: Check;
+  readonly check: CheckAsync;
   /**
    * The error message.
    */
@@ -43,7 +48,9 @@ export interface CustomSchema<
  *
  * @returns A custom schema.
  */
-export function custom<TInput>(check: Check): CustomSchema<TInput, undefined>;
+export function customAsync<TInput>(
+  check: CheckAsync
+): CustomSchemaAsync<TInput, undefined>;
 
 /**
  * Creates a custom schema.
@@ -53,27 +60,27 @@ export function custom<TInput>(check: Check): CustomSchema<TInput, undefined>;
  *
  * @returns A custom schema.
  */
-export function custom<
+export function customAsync<
   TInput,
   const TMessage extends ErrorMessage<CustomIssue> | undefined =
     | ErrorMessage<CustomIssue>
     | undefined,
->(check: Check, message: TMessage): CustomSchema<TInput, TMessage>;
+>(check: CheckAsync, message: TMessage): CustomSchemaAsync<TInput, TMessage>;
 
-export function custom<TInput>(
-  check: Check,
+export function customAsync<TInput>(
+  check: CheckAsync,
   message?: ErrorMessage<CustomIssue>
-): CustomSchema<TInput, ErrorMessage<CustomIssue> | undefined> {
+): CustomSchemaAsync<TInput, ErrorMessage<CustomIssue> | undefined> {
   return {
     kind: 'schema',
     type: 'custom',
-    reference: custom,
+    reference: customAsync,
     expects: 'unknown',
-    async: false,
+    async: true,
     check,
     message,
-    _run(dataset, config) {
-      if (this.check(dataset.value)) {
+    async _run(dataset, config) {
+      if (await this.check(dataset.value)) {
         dataset.typed = true;
       } else {
         _addIssue(this, 'type', dataset, config);
