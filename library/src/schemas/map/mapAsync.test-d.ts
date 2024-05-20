@@ -5,16 +5,16 @@ import {
   type NumberIssue,
   type NumberSchema,
 } from '../number/index.ts';
-import type { OptionalSchema } from '../optional/index.ts';
+import type { OptionalSchema, OptionalSchemaAsync } from '../optional/index.ts';
 import {
   string,
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
-import { map, type MapSchema } from './map.ts';
+import { mapAsync, type MapSchemaAsync } from './mapAsync.ts';
 import type { MapIssue } from './types.ts';
 
-describe('map', () => {
+describe('mapAsync', () => {
   describe('should return schema object', () => {
     const key = number();
     type Key = typeof key;
@@ -22,28 +22,28 @@ describe('map', () => {
     type Value = typeof value;
 
     test('with undefined message', () => {
-      type Schema = MapSchema<Key, Value, undefined>;
-      expectTypeOf(map(key, value)).toEqualTypeOf<Schema>();
-      expectTypeOf(map(key, value, undefined)).toEqualTypeOf<Schema>();
+      type Schema = MapSchemaAsync<Key, Value, undefined>;
+      expectTypeOf(mapAsync(key, value)).toEqualTypeOf<Schema>();
+      expectTypeOf(mapAsync(key, value, undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with string message', () => {
-      expectTypeOf(map(key, value, 'message')).toEqualTypeOf<
-        MapSchema<Key, Value, 'message'>
+      expectTypeOf(mapAsync(key, value, 'message')).toEqualTypeOf<
+        MapSchemaAsync<Key, Value, 'message'>
       >();
     });
 
     test('with function message', () => {
-      expectTypeOf(map(key, value, () => 'message')).toEqualTypeOf<
-        MapSchema<Key, Value, () => string>
+      expectTypeOf(mapAsync(key, value, () => 'message')).toEqualTypeOf<
+        MapSchemaAsync<Key, Value, () => string>
       >();
     });
   });
 
   describe('should infer correct types', () => {
-    type Schema = MapSchema<
+    type Schema = MapSchemaAsync<
       OptionalSchema<NumberSchema<undefined>, 123>,
-      OptionalSchema<StringSchema<undefined>, 'foo'>,
+      OptionalSchemaAsync<StringSchema<undefined>, 'foo'>,
       undefined
     >;
 

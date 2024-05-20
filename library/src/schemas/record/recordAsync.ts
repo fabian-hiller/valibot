@@ -138,7 +138,7 @@ export function recordAsync(
             // TODO: We should document that we exclude specific keys for
             // security reasons.
             .filter(([key]) => _isAllowedObjectKey(key))
-            .map(async ([entryKey, entryValue]) =>
+            .map(([entryKey, entryValue]) =>
               Promise.all([
                 entryKey,
                 entryValue,

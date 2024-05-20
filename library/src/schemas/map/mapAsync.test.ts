@@ -1,62 +1,65 @@
 import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
-import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
 import { number } from '../number/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import { map, type MapSchema } from './map.ts';
+import { mapAsync, type MapSchemaAsync } from './mapAsync.ts';
 import type { MapIssue } from './types.ts';
 
-describe('map', () => {
+describe('mapAsync', () => {
   describe('should return schema object', () => {
     const key = number();
     type Key = typeof key;
     const value = string();
     type Value = typeof value;
-    const baseSchema: Omit<MapSchema<Key, Value, never>, 'message'> = {
+    const baseSchema: Omit<MapSchemaAsync<Key, Value, never>, 'message'> = {
       kind: 'schema',
       type: 'map',
-      reference: map,
+      reference: mapAsync,
       expects: 'Map',
       key,
       value,
-      async: false,
+      async: true,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: MapSchema<Key, Value, undefined> = {
+      const schema: MapSchemaAsync<Key, Value, undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(map(key, value)).toStrictEqual(schema);
-      expect(map(key, value, undefined)).toStrictEqual(schema);
+      expect(mapAsync(key, value)).toStrictEqual(schema);
+      expect(mapAsync(key, value, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(map(key, value, 'message')).toStrictEqual({
+      expect(mapAsync(key, value, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies MapSchema<Key, Value, 'message'>);
+      } satisfies MapSchemaAsync<Key, Value, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(map(key, value, message)).toStrictEqual({
+      expect(mapAsync(key, value, message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies MapSchema<Key, Value, typeof message>);
+      } satisfies MapSchemaAsync<Key, Value, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    const schema = map(number(), string());
+    const schema = mapAsync(number(), string());
 
-    test('for empty map', () => {
-      expectNoSchemaIssue(schema, [new Map()]);
+    test('for empty mapAsync', async () => {
+      await expectNoSchemaIssueAsync(schema, [new Map()]);
     });
 
-    test('for simple map', () => {
-      expectNoSchemaIssue(schema, [
+    test('for simple mapAsync', async () => {
+      await expectNoSchemaIssueAsync(schema, [
         new Map([
           [0, 'foo'],
           [1, 'bar'],
@@ -67,7 +70,7 @@ describe('map', () => {
   });
 
   describe('should return dataset with issues', () => {
-    const schema = map(number(), string(), 'message');
+    const schema = mapAsync(number(), string(), 'message');
     const baseIssue: Omit<MapIssue, 'input' | 'received'> = {
       kind: 'schema',
       type: 'map',
@@ -77,54 +80,60 @@ describe('map', () => {
 
     // Primitive types
 
-    test('for bigints', () => {
-      expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
+    test('for bigints', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1n, 0n, 123n]);
     });
 
-    test('for booleans', () => {
-      expectSchemaIssue(schema, baseIssue, [true, false]);
+    test('for booleans', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [true, false]);
     });
 
-    test('for null', () => {
-      expectSchemaIssue(schema, baseIssue, [null]);
+    test('for null', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [null]);
     });
 
-    test('for numbers', () => {
-      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    test('for numbers', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1, 0, 123, 45.67]);
     });
 
-    test('for undefined', () => {
-      expectSchemaIssue(schema, baseIssue, [undefined]);
+    test('for undefined', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
     });
 
-    test('for strings', () => {
-      expectSchemaIssue(schema, baseIssue, ['', 'abc', '123']);
+    test('for strings', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, ['', 'abc', '123']);
     });
 
-    test('for symbols', () => {
-      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    test('for symbols', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        Symbol(),
+        Symbol('foo'),
+      ]);
     });
 
     // Complex types
 
-    test('for arrays', () => {
-      expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    test('for arrays', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [[], ['value']]);
     });
 
-    test('for functions', () => {
-      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    test('for functions', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        () => {},
+        function () {},
+      ]);
     });
 
-    test('for objects', () => {
-      expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    test('for objects', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [{}, { key: 'value' }]);
     });
   });
 
   describe('should return dataset without nested issues', () => {
-    const schema = map(number(), string());
+    const schema = mapAsync(number(), string());
 
-    test('for simple map', () => {
-      expectNoSchemaIssue(schema, [
+    test('for simple mapAsync', async () => {
+      await expectNoSchemaIssueAsync(schema, [
         new Map([
           [0, 'foo'],
           [1, 'bar'],
@@ -133,8 +142,8 @@ describe('map', () => {
       ]);
     });
 
-    test('for nested map', () => {
-      expectNoSchemaIssue(map(schema, schema), [
+    test('for nested mapAsync', async () => {
+      await expectNoSchemaIssueAsync(mapAsync(schema, schema), [
         new Map([
           [
             new Map([
@@ -149,7 +158,7 @@ describe('map', () => {
   });
 
   describe('should return dataset with nested issues', () => {
-    const schema = map(number(), string());
+    const schema = mapAsync(number(), string());
 
     const baseInfo = {
       message: expect.any(String),
@@ -184,14 +193,16 @@ describe('map', () => {
       ],
     };
 
-    test('for wrong values', () => {
+    test('for wrong values', async () => {
       const input = new Map<unknown, unknown>([
         [0, 'foo'],
         [1, 123],
         [2, 'baz'],
         [null, 'bar'],
       ]);
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -217,9 +228,9 @@ describe('map', () => {
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
-    test('with abort early', () => {
+    test('with abort early', async () => {
       expect(
-        schema._run(
+        await schema._run(
           {
             typed: false,
             value: new Map<unknown, unknown>([
@@ -238,8 +249,8 @@ describe('map', () => {
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
-    test('for wrong nested values', () => {
-      const nestedSchema = map(schema, schema);
+    test('for wrong nested values', async () => {
+      const nestedSchema = mapAsync(schema, schema);
       const input = new Map<unknown, unknown>([
         [
           new Map<unknown, unknown>([
@@ -251,7 +262,7 @@ describe('map', () => {
         [new Map(), 'bar'],
       ]);
       expect(
-        nestedSchema._run(
+        await nestedSchema._run(
           {
             typed: false,
             value: input,

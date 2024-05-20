@@ -210,10 +210,7 @@ export function map(
 
       // Return output dataset
       return dataset as Dataset<
-        InferMapOutput<
-          BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-          BaseSchema<unknown, unknown, BaseIssue<unknown>>
-        >,
+        Map<unknown, unknown>,
         MapIssue | BaseIssue<unknown>
       >;
     },
