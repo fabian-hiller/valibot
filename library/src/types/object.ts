@@ -91,7 +91,8 @@ export type ObjectKeys<
       >
     | ObjectWithRestSchemaAsync<
         ObjectEntriesAsync,
-        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
         ErrorMessage<ObjectWithRestIssue> | undefined
       >
     | StrictObjectSchema<
