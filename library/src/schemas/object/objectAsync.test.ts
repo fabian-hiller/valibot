@@ -12,7 +12,7 @@ import { objectAsync, type ObjectSchemaAsync } from './objectAsync.ts';
 import type { ObjectIssue } from './types.ts';
 
 describe('objectAsync', () => {
-  describe('should return schema objectAsync', () => {
+  describe('should return schema object', () => {
     const entries = { key: string() };
     type Entries = typeof entries;
     const baseSchema: Omit<ObjectSchemaAsync<Entries, never>, 'message'> = {
@@ -51,11 +51,11 @@ describe('objectAsync', () => {
   });
 
   describe('should return dataset without issues', () => {
-    test('for empty objectAsync', async () => {
+    test('for empty object', async () => {
       await expectNoSchemaIssueAsync(objectAsync({}), [{}]);
     });
 
-    test('for simple objectAsync', async () => {
+    test('for simple object', async () => {
       await expectNoSchemaIssueAsync(
         objectAsync({ key1: string(), key2: number() }),
         [{ key1: 'foo', key2: 123 }]
@@ -132,14 +132,14 @@ describe('objectAsync', () => {
   });
 
   describe('should return dataset without nested issues', () => {
-    test('for simple objectAsync', async () => {
+    test('for simple object', async () => {
       await expectNoSchemaIssueAsync(
         objectAsync({ key1: string(), key2: number() }),
         [{ key1: 'foo', key2: 123 }]
       );
     });
 
-    test('for nested objectAsync', async () => {
+    test('for nested object', async () => {
       await expectNoSchemaIssueAsync(
         objectAsync({ nested: objectAsync({ key: string() }) }),
         [{ nested: { key: 'foo' } }]

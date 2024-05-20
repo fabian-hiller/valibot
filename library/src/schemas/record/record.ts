@@ -119,7 +119,7 @@ export function record(
         dataset.typed = true;
         dataset.value = {};
 
-        // Parse schema of each record item
+        // Parse schema of each record entry
         // Note: for...in loop always returns keys as strings
         for (const entryKey in input) {
           // Exclude blocked keys to prevent prototype pollutions
@@ -225,10 +225,7 @@ export function record(
 
       // Return output dataset
       return dataset as Dataset<
-        InferRecordOutput<
-          BaseSchema<string, string | number | symbol, BaseIssue<unknown>>,
-          BaseSchema<unknown, unknown, BaseIssue<unknown>>
-        >,
+        Record<string | number | symbol, unknown>,
         RecordIssue | BaseIssue<unknown>
       >;
     },
