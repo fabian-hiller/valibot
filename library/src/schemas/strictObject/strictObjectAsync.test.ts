@@ -1,67 +1,77 @@
 import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
-import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
 import { nullish } from '../nullish/index.ts';
 import { number } from '../number/index.ts';
-import { object } from '../object/index.ts';
+import { objectAsync } from '../object/index.ts';
 import { optional } from '../optional/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import { strictObject, type StrictObjectSchema } from './strictObject.ts';
+import {
+  strictObjectAsync,
+  type StrictObjectSchemaAsync,
+} from './strictObjectAsync.ts';
 import type { StrictObjectIssue } from './types.ts';
 
-describe('strictObject', () => {
+describe('strictObjectAsync', () => {
   describe('should return schema object', () => {
     const entries = { key: string() };
     type Entries = typeof entries;
-    const baseSchema: Omit<StrictObjectSchema<Entries, never>, 'message'> = {
+    const baseSchema: Omit<
+      StrictObjectSchemaAsync<Entries, never>,
+      'message'
+    > = {
       kind: 'schema',
       type: 'strict_object',
-      reference: strictObject,
+      reference: strictObjectAsync,
       expects: 'Object',
       entries,
-      async: false,
+      async: true,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: StrictObjectSchema<Entries, undefined> = {
+      const schema: StrictObjectSchemaAsync<Entries, undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(strictObject(entries)).toStrictEqual(schema);
-      expect(strictObject(entries, undefined)).toStrictEqual(schema);
+      expect(strictObjectAsync(entries)).toStrictEqual(schema);
+      expect(strictObjectAsync(entries, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(strictObject(entries, 'message')).toStrictEqual({
+      expect(strictObjectAsync(entries, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies StrictObjectSchema<Entries, 'message'>);
+      } satisfies StrictObjectSchemaAsync<Entries, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(strictObject(entries, message)).toStrictEqual({
+      expect(strictObjectAsync(entries, message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies StrictObjectSchema<Entries, typeof message>);
+      } satisfies StrictObjectSchemaAsync<Entries, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    test('for empty object', () => {
-      expectNoSchemaIssue(strictObject({}), [{}]);
+    test('for empty object', async () => {
+      await expectNoSchemaIssueAsync(strictObjectAsync({}), [{}]);
     });
 
-    test('for simple object', () => {
-      expectNoSchemaIssue(strictObject({ key1: string(), key2: number() }), [
-        { key1: 'foo', key2: 123 },
-      ]);
+    test('for simple object', async () => {
+      await expectNoSchemaIssueAsync(
+        strictObjectAsync({ key1: string(), key2: number() }),
+        [{ key1: 'foo', key2: 123 }]
+      );
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = strictObject({}, 'message');
+    const schema = strictObjectAsync({}, 'message');
     const baseIssue: Omit<StrictObjectIssue, 'input' | 'received'> = {
       kind: 'schema',
       type: 'strict_object',
@@ -71,80 +81,85 @@ describe('strictObject', () => {
 
     // Primitive types
 
-    test('for bigints', () => {
-      expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
+    test('for bigints', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1n, 0n, 123n]);
     });
 
-    test('for booleans', () => {
-      expectSchemaIssue(schema, baseIssue, [true, false]);
+    test('for booleans', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [true, false]);
     });
 
-    test('for null', () => {
-      expectSchemaIssue(schema, baseIssue, [null]);
+    test('for null', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [null]);
     });
 
-    test('for numbers', () => {
-      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    test('for numbers', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1, 0, 123, 45.67]);
     });
 
-    test('for undefined', () => {
-      expectSchemaIssue(schema, baseIssue, [undefined]);
+    test('for undefined', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
     });
 
-    test('for strings', () => {
-      expectSchemaIssue(schema, baseIssue, ['', 'abc', '123']);
+    test('for strings', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, ['', 'abc', '123']);
     });
 
-    test('for symbols', () => {
-      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    test('for symbols', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        Symbol(),
+        Symbol('foo'),
+      ]);
     });
 
     // Complex types
 
-    test('for arrays', () => {
-      expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    test('for arrays', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [[], ['value']]);
     });
 
-    test('for functions', () => {
-      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    test('for functions', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        () => {},
+        function () {},
+      ]);
     });
   });
 
   describe('should return dataset without nested issues', () => {
-    test('for simple object', () => {
-      expectNoSchemaIssue(strictObject({ key1: string(), key2: number() }), [
-        { key1: 'foo', key2: 123 },
-      ]);
+    test('for simple object', async () => {
+      await expectNoSchemaIssueAsync(
+        strictObjectAsync({ key1: string(), key2: number() }),
+        [{ key1: 'foo', key2: 123 }]
+      );
     });
 
-    test('for nested object', () => {
-      expectNoSchemaIssue(strictObject({ nested: object({ key: string() }) }), [
-        { nested: { key: 'foo' } },
-      ]);
+    test('for nested object', async () => {
+      await expectNoSchemaIssueAsync(
+        strictObjectAsync({ nested: objectAsync({ key: string() }) }),
+        [{ nested: { key: 'foo' } }]
+      );
     });
 
-    test('for optional entry', () => {
-      expectNoSchemaIssue(strictObject({ key: optional(string()) }), [
-        {},
-        { key: undefined },
-        { key: 'foo' },
-      ]);
+    test('for optional entry', async () => {
+      await expectNoSchemaIssueAsync(
+        strictObjectAsync({ key: optional(string()) }),
+        [{}, { key: undefined }, { key: 'foo' }]
+      );
     });
 
-    test('for nullish entry', () => {
-      expectNoSchemaIssue(strictObject({ key: nullish(number()) }), [
-        {},
-        { key: undefined },
-        { key: null },
-        { key: 123 },
-      ]);
+    test('for nullish entry', async () => {
+      await expectNoSchemaIssueAsync(
+        strictObjectAsync({ key: nullish(number()) }),
+        [{}, { key: undefined }, { key: null }, { key: 123 }]
+      );
     });
   });
 
   describe('should return dataset with nested issues', () => {
-    const schema = strictObject({
+    const schema = strictObjectAsync({
       key: string(),
-      nested: object({ key: number() }),
+      nested: objectAsync({ key: number() }),
     });
 
     const baseInfo = {
@@ -175,8 +190,8 @@ describe('strictObject', () => {
       ],
     };
 
-    test('for missing entries', () => {
-      expect(schema._run({ typed: false, value: {} }, {})).toStrictEqual({
+    test('for missing entries', async () => {
+      expect(await schema._run({ typed: false, value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
         issues: [
@@ -202,9 +217,11 @@ describe('strictObject', () => {
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
-    test('for missing nested entries', () => {
+    test('for missing nested entries', async () => {
       const input = { key: 'value', nested: {} };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -236,9 +253,9 @@ describe('strictObject', () => {
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
-    test('with abort early', () => {
+    test('with abort early', async () => {
       expect(
-        schema._run({ typed: false, value: {} }, { abortEarly: true })
+        await schema._run({ typed: false, value: {} }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: {},
@@ -246,14 +263,16 @@ describe('strictObject', () => {
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
-    test('for unknown entries', () => {
+    test('for unknown entries', async () => {
       const input = {
         key: 'foo',
         nested: { key: 123 },
         other1: 'foo',
         other2: 123,
       };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
         typed: false,
         value: { key: input.key, nested: input.nested },
         issues: [
