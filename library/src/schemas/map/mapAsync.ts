@@ -132,7 +132,7 @@ export function mapAsync(
 
         // Parse schema of each map entry
         const datasets = await Promise.all(
-          Array.from(input.entries()).map(([inputKey, inputValue]) =>
+          Array.from(input).map(([inputKey, inputValue]) =>
             Promise.all([
               inputKey,
               inputValue,

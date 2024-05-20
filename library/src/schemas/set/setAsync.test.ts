@@ -1,63 +1,66 @@
 import { describe, expect, test } from 'vitest';
 import type { InferIssue, UntypedDataset } from '../../types/index.ts';
-import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
-import { set, type SetSchema } from './set.ts';
+import { setAsync, type SetSchemaAsync } from './setAsync.ts';
 import type { SetIssue } from './types.ts';
 
-describe('set', () => {
+describe('setAsync', () => {
   describe('should return schema object', () => {
     const value = string();
     type Value = typeof value;
-    const baseSchema: Omit<SetSchema<Value, never>, 'message'> = {
+    const baseSchema: Omit<SetSchemaAsync<Value, never>, 'message'> = {
       kind: 'schema',
       type: 'set',
-      reference: set,
+      reference: setAsync,
       expects: 'Set',
       value,
-      async: false,
+      async: true,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const schema: SetSchema<Value, undefined> = {
+      const schema: SetSchemaAsync<Value, undefined> = {
         ...baseSchema,
         message: undefined,
       };
-      expect(set(value)).toStrictEqual(schema);
-      expect(set(value, undefined)).toStrictEqual(schema);
+      expect(setAsync(value)).toStrictEqual(schema);
+      expect(setAsync(value, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(set(value, 'message')).toStrictEqual({
+      expect(setAsync(value, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
-      } satisfies SetSchema<Value, 'message'>);
+      } satisfies SetSchemaAsync<Value, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(set(value, message)).toStrictEqual({
+      expect(setAsync(value, message)).toStrictEqual({
         ...baseSchema,
         message,
-      } satisfies SetSchema<Value, typeof message>);
+      } satisfies SetSchemaAsync<Value, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    const schema = set(string());
+    const schema = setAsync(string());
 
-    test('for empty set', () => {
-      expectNoSchemaIssue(schema, [new Set()]);
+    test('for empty setAsync', async () => {
+      await expectNoSchemaIssueAsync(schema, [new Set()]);
     });
 
-    test('for simple set', () => {
-      expectNoSchemaIssue(schema, [new Set(['foo', 'bar', 'baz'])]);
+    test('for simple setAsync', async () => {
+      await expectNoSchemaIssueAsync(schema, [new Set(['foo', 'bar', 'baz'])]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = set(string(), 'message');
+    const schema = setAsync(string(), 'message');
     const baseIssue: Omit<SetIssue, 'input' | 'received'> = {
       kind: 'schema',
       type: 'set',
@@ -67,65 +70,71 @@ describe('set', () => {
 
     // Primitive types
 
-    test('for bigints', () => {
-      expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
+    test('for bigints', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1n, 0n, 123n]);
     });
 
-    test('for booleans', () => {
-      expectSchemaIssue(schema, baseIssue, [true, false]);
+    test('for booleans', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [true, false]);
     });
 
-    test('for null', () => {
-      expectSchemaIssue(schema, baseIssue, [null]);
+    test('for null', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [null]);
     });
 
-    test('for numbers', () => {
-      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    test('for numbers', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1, 0, 123, 45.67]);
     });
 
-    test('for undefined', () => {
-      expectSchemaIssue(schema, baseIssue, [undefined]);
+    test('for undefined', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
     });
 
-    test('for strings', () => {
-      expectSchemaIssue(schema, baseIssue, ['', 'abc', '123']);
+    test('for strings', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, ['', 'abc', '123']);
     });
 
-    test('for symbols', () => {
-      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    test('for symbols', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        Symbol(),
+        Symbol('foo'),
+      ]);
     });
 
     // Complex types
 
-    test('for arrays', () => {
-      expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    test('for arrays', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [[], ['value']]);
     });
 
-    test('for functions', () => {
-      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    test('for functions', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        () => {},
+        function () {},
+      ]);
     });
 
-    test('for objects', () => {
-      expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    test('for objects', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [{}, { key: 'value' }]);
     });
   });
 
   describe('should return dataset without nested issues', () => {
-    const schema = set(string());
+    const schema = setAsync(string());
 
-    test('for simple set', () => {
-      expectNoSchemaIssue(schema, [new Set(['foo', 'bar', 'baz'])]);
+    test('for simple setAsync', async () => {
+      await expectNoSchemaIssueAsync(schema, [new Set(['foo', 'bar', 'baz'])]);
     });
 
-    test('for nested set', () => {
-      expectNoSchemaIssue(set(schema), [
+    test('for nested setAsync', async () => {
+      await expectNoSchemaIssueAsync(setAsync(schema), [
         new Set([new Set(['foo', 'bar']), new Set(['baz'])]),
       ]);
     });
   });
 
   describe('should return dataset with nested issues', () => {
-    const schema = set(string());
+    const schema = setAsync(string());
 
     const baseInfo = {
       message: expect.any(String),
@@ -154,9 +163,9 @@ describe('set', () => {
       ],
     };
 
-    test('for wrong values', () => {
+    test('for wrong values', async () => {
       expect(
-        schema._run(
+        await schema._run(
           { typed: false, value: new Set(['foo', 123, 'baz', null]) },
           {}
         )
@@ -185,9 +194,9 @@ describe('set', () => {
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
-    test('with abort early', () => {
+    test('with abort early', async () => {
       expect(
-        schema._run(
+        await schema._run(
           { typed: false, value: new Set(['foo', 123, 'baz', null]) },
           { abortEarly: true }
         )
@@ -198,11 +207,11 @@ describe('set', () => {
       } satisfies UntypedDataset<InferIssue<typeof schema>>);
     });
 
-    test('for wrong nested values', () => {
-      const nestedSchema = set(schema);
+    test('for wrong nested values', async () => {
+      const nestedSchema = setAsync(schema);
       const input = new Set([new Set([123, 'foo']), 'bar', new Set()]);
       expect(
-        nestedSchema._run(
+        await nestedSchema._run(
           {
             typed: false,
             value: input,

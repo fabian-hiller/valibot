@@ -151,10 +151,7 @@ export function set(
       }
 
       // Return output dataset
-      return dataset as Dataset<
-        InferSetOutput<BaseSchema<unknown, unknown, BaseIssue<unknown>>>,
-        SetIssue | BaseIssue<unknown>
-      >;
+      return dataset as Dataset<Set<unknown>, SetIssue | BaseIssue<unknown>>;
     },
   };
 }

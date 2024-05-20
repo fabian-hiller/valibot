@@ -6,35 +6,35 @@ import {
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
-import { set, type SetSchema } from './set.ts';
+import { setAsync, type SetSchemaAsync } from './setAsync.ts';
 import type { SetIssue } from './types.ts';
 
-describe('set', () => {
+describe('setAsync', () => {
   describe('should return schema object', () => {
     const value = string();
     type Value = typeof value;
 
     test('with undefined message', () => {
-      type Schema = SetSchema<Value, undefined>;
-      expectTypeOf(set(value)).toEqualTypeOf<Schema>();
-      expectTypeOf(set(value, undefined)).toEqualTypeOf<Schema>();
+      type Schema = SetSchemaAsync<Value, undefined>;
+      expectTypeOf(setAsync(value)).toEqualTypeOf<Schema>();
+      expectTypeOf(setAsync(value, undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with string message', () => {
-      expectTypeOf(set(value, 'message')).toEqualTypeOf<
-        SetSchema<Value, 'message'>
+      expectTypeOf(setAsync(value, 'message')).toEqualTypeOf<
+        SetSchemaAsync<Value, 'message'>
       >();
     });
 
     test('with function message', () => {
-      expectTypeOf(set(value, () => 'message')).toEqualTypeOf<
-        SetSchema<Value, () => string>
+      expectTypeOf(setAsync(value, () => 'message')).toEqualTypeOf<
+        SetSchemaAsync<Value, () => string>
       >();
     });
   });
 
   describe('should infer correct types', () => {
-    type Schema = SetSchema<
+    type Schema = SetSchemaAsync<
       OptionalSchema<StringSchema<undefined>, 'foo'>,
       undefined
     >;
