@@ -48,11 +48,11 @@ export interface NonNullableSchemaAsync<
 }
 
 /**
- * Creates an async non nullable schema.
+ * Creates a non nullable schema.
  *
  * @param wrapped The wrapped schema.
  *
- * @returns An async non nullable schema.
+ * @returns A non nullable schema.
  */
 export function nonNullableAsync<
   const TWrapped extends
@@ -61,12 +61,12 @@ export function nonNullableAsync<
 >(wrapped: TWrapped): NonNullableSchemaAsync<TWrapped, undefined>;
 
 /**
- * Creates an async non nullable schema.
+ * Creates a non nullable schema.
  *
  * @param wrapped The wrapped schema.
  * @param message The error message.
  *
- * @returns An async non nullable schema.
+ * @returns A non nullable schema.
  */
 export function nonNullableAsync<
   const TWrapped extends

@@ -48,11 +48,11 @@ export interface NonNullishSchemaAsync<
 }
 
 /**
- * Creates an async non nullish schema.
+ * Creates a non nullish schema.
  *
  * @param wrapped The wrapped schema.
  *
- * @returns An async non nullish schema.
+ * @returns A non nullish schema.
  */
 export function nonNullishAsync<
   const TWrapped extends
@@ -61,12 +61,12 @@ export function nonNullishAsync<
 >(wrapped: TWrapped): NonNullishSchemaAsync<TWrapped, undefined>;
 
 /**
- * Creates an async non nullish schema.
+ * Creates a non nullish schema.
  *
  * @param wrapped The wrapped schema.
  * @param message The error message.
  *
- * @returns An async non nullish schema.
+ * @returns A non nullish schema.
  */
 export function nonNullishAsync<
   const TWrapped extends

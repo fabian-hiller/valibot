@@ -52,11 +52,11 @@ export interface OptionalSchemaAsync<
 }
 
 /**
- * Creates an async optional schema.
+ * Creates an optional schema.
  *
  * @param wrapped The wrapped schema.
  *
- * @returns An async optional schema.
+ * @returns An optional schema.
  */
 export function optionalAsync<
   const TWrapped extends
@@ -65,12 +65,12 @@ export function optionalAsync<
 >(wrapped: TWrapped): OptionalSchemaAsync<TWrapped, never>;
 
 /**
- * Creates an async optional schema.
+ * Creates an optional schema.
  *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
  *
- * @returns An async optional schema.
+ * @returns An optional schema.
  */
 export function optionalAsync<
   const TWrapped extends

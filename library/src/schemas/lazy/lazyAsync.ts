@@ -39,17 +39,19 @@ export interface LazySchemaAsync<
 }
 
 /**
- * Creates an async lazy schema.
+ * Creates a lazy schema.
  *
  * @param getter The schema getter.
  *
- * @returns An async lazy schema.
+ * @returns A lazy schema.
  */
 export function lazyAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(getter: (input: unknown) => TWrapped): LazySchemaAsync<TWrapped> {
+>(
+  getter: (input: unknown) => MaybePromise<TWrapped>
+): LazySchemaAsync<TWrapped> {
   return {
     kind: 'schema',
     type: 'lazy',

@@ -52,11 +52,11 @@ export interface NullableSchemaAsync<
 }
 
 /**
- * Creates an async nullable schema.
+ * Creates a nullable schema.
  *
  * @param wrapped The wrapped schema.
  *
- * @returns An async nullable schema.
+ * @returns A nullable schema.
  */
 export function nullableAsync<
   const TWrapped extends
@@ -65,12 +65,12 @@ export function nullableAsync<
 >(wrapped: TWrapped): NullableSchemaAsync<TWrapped, never>;
 
 /**
- * Creates an async nullable schema.
+ * Creates a nullable schema.
  *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
  *
- * @returns An async nullable schema.
+ * @returns A nullable schema.
  */
 export function nullableAsync<
   const TWrapped extends

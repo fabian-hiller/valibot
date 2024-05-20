@@ -48,11 +48,11 @@ export interface NonOptionalSchemaAsync<
 }
 
 /**
- * Creates an async non optional schema.
+ * Creates a non optional schema.
  *
  * @param wrapped The wrapped schema.
  *
- * @returns An async non optional schema.
+ * @returns A non optional schema.
  */
 export function nonOptionalAsync<
   const TWrapped extends
@@ -61,12 +61,12 @@ export function nonOptionalAsync<
 >(wrapped: TWrapped): NonOptionalSchemaAsync<TWrapped, undefined>;
 
 /**
- * Creates an async non optional schema.
+ * Creates a non optional schema.
  *
  * @param wrapped The wrapped schema.
  * @param message The error message.
  *
- * @returns An async non optional schema.
+ * @returns A non optional schema.
  */
 export function nonOptionalAsync<
   const TWrapped extends
