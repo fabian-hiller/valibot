@@ -1,4 +1,4 @@
-import type { VariantOptions } from '../../types.ts';
+import type { VariantOptions, VariantOptionsAsync } from '../../types.ts';
 
 /**
  * Returns the expected discriminators of a variant schema.
@@ -13,7 +13,7 @@ import type { VariantOptions } from '../../types.ts';
  */
 export function _discriminators(
   key: string,
-  options: VariantOptions<string>,
+  options: VariantOptions<string> | VariantOptionsAsync<string>,
   set: Set<string> = new Set<string>()
 ): Set<string> {
   for (const schema of options) {

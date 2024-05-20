@@ -58,6 +58,9 @@ import type {
   UnionIssue,
   UnionSchema,
   UnionSchemaAsync,
+  VariantIssue,
+  VariantSchema,
+  VariantSchemaAsync,
 } from '../../schemas/index.ts';
 import type {
   BaseIssue,
@@ -86,7 +89,8 @@ type DotPath<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > = TKey extends string | number
-  ? `${TKey}` | `${TKey}.${NestedPath<TSchema>}`
+  ? // @ts-expect-error
+    `${TKey}` | `${TKey}.${NestedPath<TSchema>}`
   : never;
 
 /**
@@ -125,7 +129,7 @@ type NestedPath<
     | ArraySchema<infer TItem, ErrorMessage<ArrayIssue> | undefined>
     | ArraySchemaAsync<infer TItem, ErrorMessage<ArrayIssue> | undefined>
     ? DotPath<number, TItem>
-    : // Intersect or Union
+    : // Intersect, Union or Variant
       TSchema extends
           | IntersectSchema<
               infer TOptions,
@@ -142,6 +146,16 @@ type NestedPath<
           | UnionSchemaAsync<
               infer TOptions,
               ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
+            >
+          | VariantSchema<
+              string,
+              infer TOptions,
+              ErrorMessage<VariantIssue> | undefined
+            >
+          | VariantSchemaAsync<
+              string,
+              infer TOptions,
+              ErrorMessage<VariantIssue> | undefined
             >
       ? NestedPath<TOptions[number]>
       : // Map or Record
