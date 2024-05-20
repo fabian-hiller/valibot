@@ -3,44 +3,52 @@ import {
   boolean,
   type BooleanIssue,
   type NonOptionalIssue,
-  nullish,
+  nullishAsync,
   number,
   type NumberIssue,
-  object,
+  objectAsync,
   type ObjectIssue,
-  objectWithRest,
+  objectWithRestAsync,
   type ObjectWithRestIssue,
   optional,
+  optionalAsync,
   string,
   type StringIssue,
 } from '../../schemas/index.ts';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { required, type SchemaWithRequired } from './required.ts';
+import {
+  requiredAsync,
+  type SchemaWithRequiredAsync,
+} from './requiredAsync.ts';
 
-describe('required', () => {
+describe('requiredAsync', () => {
   const entries = {
     key1: optional(string()),
     key2: optional(number()),
-    key3: optional(string()),
-    key4: nullish(number(), () => 123),
+    key3: optionalAsync(string()),
+    key4: nullishAsync(number(), async () => 123),
   };
 
-  describe('object', () => {
-    const wrapped = object(entries);
+  describe('objectAsync', () => {
+    const wrapped = objectAsync(entries);
     type Wrapped = typeof wrapped;
-    type Schema1 = SchemaWithRequired<Wrapped, undefined, undefined>;
-    type Schema2 = SchemaWithRequired<Wrapped, ['key1', 'key3'], undefined>;
+    type Schema1 = SchemaWithRequiredAsync<Wrapped, undefined, undefined>;
+    type Schema2 = SchemaWithRequiredAsync<
+      Wrapped,
+      ['key1', 'key3'],
+      undefined
+    >;
 
-    describe('should return schema object', () => {
+    describe('should return schema objectAsync', () => {
       // TODO: Add test for every overload signature
 
       test('with undefined keys', () => {
-        expectTypeOf(required(wrapped)).toEqualTypeOf<Schema1>();
+        expectTypeOf(requiredAsync(wrapped)).toEqualTypeOf<Schema1>();
       });
 
       test('with specific keys', () => {
         expectTypeOf(
-          required(wrapped, ['key1', 'key3'])
+          requiredAsync(wrapped, ['key1', 'key3'])
         ).toEqualTypeOf<Schema2>();
       });
     });
@@ -87,22 +95,26 @@ describe('required', () => {
     });
   });
 
-  describe('objectWithRest', () => {
-    const wrapped = objectWithRest(entries, boolean());
+  describe('objectWithRestAsync', () => {
+    const wrapped = objectWithRestAsync(entries, boolean());
     type Wrapped = typeof wrapped;
-    type Schema1 = SchemaWithRequired<Wrapped, undefined, undefined>;
-    type Schema2 = SchemaWithRequired<Wrapped, ['key2', 'key3'], undefined>;
+    type Schema1 = SchemaWithRequiredAsync<Wrapped, undefined, undefined>;
+    type Schema2 = SchemaWithRequiredAsync<
+      Wrapped,
+      ['key2', 'key3'],
+      undefined
+    >;
 
-    describe('should return schema object', () => {
+    describe('should return schema objectAsync', () => {
       // TODO: Add test for every overload signature
 
       test('with undefined keys', () => {
-        expectTypeOf(required(wrapped)).toEqualTypeOf<Schema1>();
+        expectTypeOf(requiredAsync(wrapped)).toEqualTypeOf<Schema1>();
       });
 
       test('with specific keys', () => {
         expectTypeOf(
-          required(wrapped, ['key2', 'key3'])
+          requiredAsync(wrapped, ['key2', 'key3'])
         ).toEqualTypeOf<Schema2>();
       });
     });

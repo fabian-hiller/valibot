@@ -1,19 +1,20 @@
 import {
   type LooseObjectIssue,
-  type LooseObjectSchema,
-  nonOptional,
+  type LooseObjectSchemaAsync,
+  nonOptionalAsync,
   type NonOptionalIssue,
-  type NonOptionalSchema,
+  type NonOptionalSchemaAsync,
   type ObjectIssue,
-  type ObjectSchema,
+  type ObjectSchemaAsync,
   type ObjectWithRestIssue,
-  type ObjectWithRestSchema,
+  type ObjectWithRestSchemaAsync,
   type StrictObjectIssue,
-  type StrictObjectSchema,
+  type StrictObjectSchemaAsync,
 } from '../../schemas/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
+  BaseSchemaAsync,
   Config,
   Dataset,
   ErrorMessage,
@@ -24,7 +25,7 @@ import type {
   InferOutput,
   MaybeReadonly,
   NoPipe,
-  ObjectEntries,
+  ObjectEntriesAsync,
   ObjectKeys,
 } from '../../types/index.ts';
 
@@ -32,15 +33,19 @@ import type {
  * Schema type.
  */
 type Schema = NoPipe<
-  | LooseObjectSchema<ObjectEntries, ErrorMessage<LooseObjectIssue> | undefined>
-  | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
-  | ObjectWithRestSchema<
-      ObjectEntries,
-      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  | LooseObjectSchemaAsync<
+      ObjectEntriesAsync,
+      ErrorMessage<LooseObjectIssue> | undefined
+    >
+  | ObjectSchemaAsync<ObjectEntriesAsync, ErrorMessage<ObjectIssue> | undefined>
+  | ObjectWithRestSchemaAsync<
+      ObjectEntriesAsync,
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       ErrorMessage<ObjectWithRestIssue> | undefined
     >
-  | StrictObjectSchema<
-      ObjectEntries,
+  | StrictObjectSchemaAsync<
+      ObjectEntriesAsync,
       ErrorMessage<StrictObjectIssue> | undefined
     >
 >;
@@ -49,27 +54,27 @@ type Schema = NoPipe<
  * Required entries type.
  */
 type RequiredEntries<
-  TEntries extends ObjectEntries,
+  TEntries extends ObjectEntriesAsync,
   TKeys extends MaybeReadonly<(keyof TEntries)[]> | undefined,
   TMessage extends ErrorMessage<NonOptionalIssue> | undefined,
 > = {
   [TKey in keyof TEntries]: TKeys extends MaybeReadonly<(keyof TEntries)[]>
     ? TKey extends TKeys[number]
-      ? NonOptionalSchema<TEntries[TKey], TMessage>
+      ? NonOptionalSchemaAsync<TEntries[TKey], TMessage>
       : TEntries[TKey]
-    : NonOptionalSchema<TEntries[TKey], TMessage>;
+    : NonOptionalSchemaAsync<TEntries[TKey], TMessage>;
 };
 
 /**
  * Schema with required type.
  */
-export type SchemaWithRequired<
+export type SchemaWithRequiredAsync<
   TSchema extends Schema,
   TKeys extends ObjectKeys<TSchema> | undefined,
   TMessage extends ErrorMessage<NonOptionalIssue> | undefined,
 > = TSchema extends
-  | ObjectSchema<infer TEntries, ErrorMessage<ObjectIssue> | undefined>
-  | StrictObjectSchema<
+  | ObjectSchemaAsync<infer TEntries, ErrorMessage<ObjectIssue> | undefined>
+  | StrictObjectSchemaAsync<
       infer TEntries,
       ErrorMessage<StrictObjectIssue> | undefined
     >
@@ -91,9 +96,11 @@ export type SchemaWithRequired<
       _run(
         dataset: Dataset<unknown, never>,
         config: Config<InferIssue<TSchema>>
-      ): Dataset<
-        InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>>,
-        NonOptionalIssue | InferIssue<TSchema>
+      ): Promise<
+        Dataset<
+          InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>>,
+          NonOptionalIssue | InferIssue<TSchema>
+        >
       >;
       /**
        * Input, output and issue type.
@@ -110,7 +117,7 @@ export type SchemaWithRequired<
         readonly issue: NonOptionalIssue | InferIssue<TSchema>;
       };
     }
-  : TSchema extends LooseObjectSchema<
+  : TSchema extends LooseObjectSchemaAsync<
         infer TEntries,
         ErrorMessage<LooseObjectIssue> | undefined
       >
@@ -132,11 +139,13 @@ export type SchemaWithRequired<
         _run(
           dataset: Dataset<unknown, never>,
           config: Config<InferIssue<TSchema>>
-        ): Dataset<
-          InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
-            [key: string]: unknown;
-          },
-          NonOptionalIssue | InferIssue<TSchema>
+        ): Promise<
+          Dataset<
+            InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
+              [key: string]: unknown;
+            },
+            NonOptionalIssue | InferIssue<TSchema>
+          >
         >;
         /**
          * Input, output and issue type.
@@ -157,7 +166,7 @@ export type SchemaWithRequired<
           readonly issue: NonOptionalIssue | InferIssue<TSchema>;
         };
       }
-    : TSchema extends ObjectWithRestSchema<
+    : TSchema extends ObjectWithRestSchemaAsync<
           infer TEntries,
           infer TRest,
           ErrorMessage<ObjectWithRestIssue> | undefined
@@ -180,11 +189,13 @@ export type SchemaWithRequired<
           _run(
             dataset: Dataset<unknown, never>,
             config: Config<InferIssue<TSchema>>
-          ): Dataset<
-            InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
-              [key: string]: InferOutput<TRest>;
-            },
-            NonOptionalIssue | InferIssue<TSchema>
+          ): Promise<
+            Dataset<
+              InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
+                [key: string]: InferOutput<TRest>;
+              },
+              NonOptionalIssue | InferIssue<TSchema>
+            >
           >;
           /**
            * Input, output and issue type.
@@ -214,9 +225,9 @@ export type SchemaWithRequired<
  */
 // @ts-expect-error FIXME: TypeScript incorrectly claims that the overload
 // signature is not compatible with the implementation signature
-export function required<const TSchema extends Schema>(
+export function requiredAsync<const TSchema extends Schema>(
   schema: TSchema
-): SchemaWithRequired<TSchema, undefined, undefined>;
+): SchemaWithRequiredAsync<TSchema, undefined, undefined>;
 
 /**
  * Creates a modified copy that marks all entries as required.
@@ -226,13 +237,13 @@ export function required<const TSchema extends Schema>(
  *
  * @returns An object schema.
  */
-export function required<
+export function requiredAsync<
   const TSchema extends Schema,
   const TMessage extends ErrorMessage<NonOptionalIssue> | undefined,
 >(
   schema: TSchema,
   message: TMessage
-): SchemaWithRequired<TSchema, undefined, TMessage>;
+): SchemaWithRequiredAsync<TSchema, undefined, TMessage>;
 
 /**
  * Creates a modified copy that marks the selected entries as required.
@@ -242,10 +253,13 @@ export function required<
  *
  * @returns An object schema.
  */
-export function required<
+export function requiredAsync<
   const TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,
->(schema: TSchema, keys: TKeys): SchemaWithRequired<TSchema, TKeys, undefined>;
+>(
+  schema: TSchema,
+  keys: TKeys
+): SchemaWithRequiredAsync<TSchema, TKeys, undefined>;
 
 /**
  * Creates a modified copy that marks the selected entries as required.
@@ -256,7 +270,7 @@ export function required<
  *
  * @returns An object schema.
  */
-export function required<
+export function requiredAsync<
   const TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,
   const TMessage extends ErrorMessage<NonOptionalIssue> | undefined,
@@ -264,13 +278,13 @@ export function required<
   schema: TSchema,
   keys: TKeys,
   message: TMessage
-): SchemaWithRequired<TSchema, TKeys, TMessage>;
+): SchemaWithRequiredAsync<TSchema, TKeys, TMessage>;
 
-export function required(
+export function requiredAsync(
   schema: Schema,
   arg2?: ErrorMessage<NonOptionalIssue> | ObjectKeys<Schema>,
   arg3?: ErrorMessage<NonOptionalIssue>
-): SchemaWithRequired<
+): SchemaWithRequiredAsync<
   Schema,
   ObjectKeys<Schema> | undefined,
   ErrorMessage<NonOptionalIssue> | undefined
@@ -283,7 +297,7 @@ export function required(
 
   // Create modified object entries
   const entries: RequiredEntries<
-    ObjectEntries,
+    ObjectEntriesAsync,
     ObjectKeys<Schema>,
     ErrorMessage<NonOptionalIssue> | undefined
   > = {};
@@ -291,7 +305,7 @@ export function required(
     // @ts-expect-error
     entries[key] =
       !keys || keys.includes(key)
-        ? nonOptional(schema.entries[key], message)
+        ? nonOptionalAsync(schema.entries[key], message)
         : schema.entries[key];
   }
 
