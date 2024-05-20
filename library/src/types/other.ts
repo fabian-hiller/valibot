@@ -76,23 +76,19 @@ export type DefaultValue<
         null | undefined
       >,
 > =
-  TDefault extends Default<
-    infer TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  TDefault extends DefaultAsync<
+    infer TWrapped extends
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
     infer TInput
   >
-    ? TDefault extends () => InferInput<TWrapped> | TInput
-      ? ReturnType<TDefault>
+    ? TDefault extends (
+        dataset?: Dataset<TInput, never>,
+        config?: Config<InferIssue<TWrapped>>
+      ) => MaybePromise<InferInput<TWrapped> | TInput>
+      ? Awaited<ReturnType<TDefault>>
       : TDefault
-    : TDefault extends DefaultAsync<
-          infer TWrapped extends
-            | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-            | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-          infer TInput
-        >
-      ? TDefault extends () => MaybePromise<InferInput<TWrapped> | TInput>
-        ? Awaited<ReturnType<TDefault>>
-        : TDefault
-      : never;
+    : never;
 
 /**
  * Question mark schema type.

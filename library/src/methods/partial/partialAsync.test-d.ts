@@ -2,41 +2,41 @@ import { describe, expectTypeOf, test } from 'vitest';
 import {
   boolean,
   type BooleanIssue,
-  nullish,
+  nullishAsync,
   number,
   type NumberIssue,
-  object,
+  objectAsync,
   type ObjectIssue,
-  objectWithRest,
+  objectWithRestAsync,
   type ObjectWithRestIssue,
   string,
   type StringIssue,
 } from '../../schemas/index.ts';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { partial, type SchemaWithPartial } from './partial.ts';
+import { partialAsync, type SchemaWithPartialAsync } from './partialAsync.ts';
 
-describe('partial', () => {
+describe('partialAsync', () => {
   const entries = {
     key1: string(),
     key2: number(),
     key3: string(),
-    key4: nullish(number(), () => 123),
+    key4: nullishAsync(number(), async () => 123),
   };
 
-  describe('object', () => {
-    const wrapped = object(entries);
+  describe('objectAsync', () => {
+    const wrapped = objectAsync(entries);
     type Wrapped = typeof wrapped;
-    type Schema1 = SchemaWithPartial<Wrapped, undefined>;
-    type Schema2 = SchemaWithPartial<Wrapped, ['key1', 'key3']>;
+    type Schema1 = SchemaWithPartialAsync<Wrapped, undefined>;
+    type Schema2 = SchemaWithPartialAsync<Wrapped, ['key1', 'key3']>;
 
-    describe('should return schema object', () => {
+    describe('should return schema objectAsync', () => {
       test('with undefined keys', () => {
-        expectTypeOf(partial(wrapped)).toEqualTypeOf<Schema1>();
+        expectTypeOf(partialAsync(wrapped)).toEqualTypeOf<Schema1>();
       });
 
       test('with specific keys', () => {
         expectTypeOf(
-          partial(wrapped, ['key1', 'key3'])
+          partialAsync(wrapped, ['key1', 'key3'])
         ).toEqualTypeOf<Schema2>();
       });
     });
@@ -83,20 +83,20 @@ describe('partial', () => {
     });
   });
 
-  describe('objectWithRest', () => {
-    const wrapped = objectWithRest(entries, boolean());
+  describe('objectWithRestAsync', () => {
+    const wrapped = objectWithRestAsync(entries, boolean());
     type Wrapped = typeof wrapped;
-    type Schema1 = SchemaWithPartial<Wrapped, undefined>;
-    type Schema2 = SchemaWithPartial<Wrapped, ['key2', 'key3']>;
+    type Schema1 = SchemaWithPartialAsync<Wrapped, undefined>;
+    type Schema2 = SchemaWithPartialAsync<Wrapped, ['key2', 'key3']>;
 
-    describe('should return schema object', () => {
+    describe('should return schema objectAsync', () => {
       test('with undefined keys', () => {
-        expectTypeOf(partial(wrapped)).toEqualTypeOf<Schema1>();
+        expectTypeOf(partialAsync(wrapped)).toEqualTypeOf<Schema1>();
       });
 
       test('with specific keys', () => {
         expectTypeOf(
-          partial(wrapped, ['key2', 'key3'])
+          partialAsync(wrapped, ['key2', 'key3'])
         ).toEqualTypeOf<Schema2>();
       });
     });

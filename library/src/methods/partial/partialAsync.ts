@@ -1,18 +1,19 @@
 import {
   type LooseObjectIssue,
-  type LooseObjectSchema,
+  type LooseObjectSchemaAsync,
   type ObjectIssue,
-  type ObjectSchema,
+  type ObjectSchemaAsync,
   type ObjectWithRestIssue,
-  type ObjectWithRestSchema,
-  optional,
-  type OptionalSchema,
+  type ObjectWithRestSchemaAsync,
+  optionalAsync,
+  type OptionalSchemaAsync,
   type StrictObjectIssue,
-  type StrictObjectSchema,
+  type StrictObjectSchemaAsync,
 } from '../../schemas/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
+  BaseSchemaAsync,
   Config,
   Dataset,
   ErrorMessage,
@@ -23,7 +24,7 @@ import type {
   InferOutput,
   MaybeReadonly,
   NoPipe,
-  ObjectEntries,
+  ObjectEntriesAsync,
   ObjectKeys,
 } from '../../types/index.ts';
 
@@ -31,15 +32,19 @@ import type {
  * Schema type.
  */
 type Schema = NoPipe<
-  | LooseObjectSchema<ObjectEntries, ErrorMessage<LooseObjectIssue> | undefined>
-  | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
-  | ObjectWithRestSchema<
-      ObjectEntries,
-      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  | LooseObjectSchemaAsync<
+      ObjectEntriesAsync,
+      ErrorMessage<LooseObjectIssue> | undefined
+    >
+  | ObjectSchemaAsync<ObjectEntriesAsync, ErrorMessage<ObjectIssue> | undefined>
+  | ObjectWithRestSchemaAsync<
+      ObjectEntriesAsync,
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       ErrorMessage<ObjectWithRestIssue> | undefined
     >
-  | StrictObjectSchema<
-      ObjectEntries,
+  | StrictObjectSchemaAsync<
+      ObjectEntriesAsync,
       ErrorMessage<StrictObjectIssue> | undefined
     >
 >;
@@ -48,25 +53,25 @@ type Schema = NoPipe<
  * Partial entries type.
  */
 type PartialEntries<
-  TEntries extends ObjectEntries,
+  TEntries extends ObjectEntriesAsync,
   TKeys extends MaybeReadonly<(keyof TEntries)[]> | undefined,
 > = {
   [TKey in keyof TEntries]: TKeys extends MaybeReadonly<(keyof TEntries)[]>
     ? TKey extends TKeys[number]
-      ? OptionalSchema<TEntries[TKey], never>
+      ? OptionalSchemaAsync<TEntries[TKey], never>
       : TEntries[TKey]
-    : OptionalSchema<TEntries[TKey], never>;
+    : OptionalSchemaAsync<TEntries[TKey], never>;
 };
 
 /**
  * Schema with partial type.
  */
-export type SchemaWithPartial<
+export type SchemaWithPartialAsync<
   TSchema extends Schema,
   TKeys extends ObjectKeys<TSchema> | undefined,
 > = TSchema extends
-  | ObjectSchema<infer TEntries, ErrorMessage<ObjectIssue> | undefined>
-  | StrictObjectSchema<
+  | ObjectSchemaAsync<infer TEntries, ErrorMessage<ObjectIssue> | undefined>
+  | StrictObjectSchemaAsync<
       infer TEntries,
       ErrorMessage<StrictObjectIssue> | undefined
     >
@@ -88,9 +93,11 @@ export type SchemaWithPartial<
       _run(
         dataset: Dataset<unknown, never>,
         config: Config<InferIssue<TSchema>>
-      ): Dataset<
-        InferObjectOutput<PartialEntries<TEntries, TKeys>>,
-        InferIssue<TSchema>
+      ): Promise<
+        Dataset<
+          InferObjectOutput<PartialEntries<TEntries, TKeys>>,
+          InferIssue<TSchema>
+        >
       >;
       /**
        * Input, output and issue type.
@@ -103,7 +110,7 @@ export type SchemaWithPartial<
         readonly issue: InferIssue<TSchema>;
       };
     }
-  : TSchema extends LooseObjectSchema<
+  : TSchema extends LooseObjectSchemaAsync<
         infer TEntries,
         ErrorMessage<LooseObjectIssue> | undefined
       >
@@ -125,11 +132,13 @@ export type SchemaWithPartial<
         _run(
           dataset: Dataset<unknown, never>,
           config: Config<InferIssue<TSchema>>
-        ): Dataset<
-          InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
-            [key: string]: unknown;
-          },
-          InferIssue<TSchema>
+        ): Promise<
+          Dataset<
+            InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
+              [key: string]: unknown;
+            },
+            InferIssue<TSchema>
+          >
         >;
         /**
          * Input, output and issue type.
@@ -148,7 +157,7 @@ export type SchemaWithPartial<
           readonly issue: InferIssue<TSchema>;
         };
       }
-    : TSchema extends ObjectWithRestSchema<
+    : TSchema extends ObjectWithRestSchemaAsync<
           infer TEntries,
           infer TRest,
           ErrorMessage<ObjectWithRestIssue> | undefined
@@ -171,11 +180,13 @@ export type SchemaWithPartial<
           _run(
             dataset: Dataset<unknown, never>,
             config: Config<InferIssue<TSchema>>
-          ): Dataset<
-            InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
-              [key: string]: InferOutput<TRest>;
-            },
-            InferIssue<TSchema>
+          ): Promise<
+            Dataset<
+              InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
+                [key: string]: InferOutput<TRest>;
+              },
+              InferIssue<TSchema>
+            >
           >;
           /**
            * Input, output and issue type.
@@ -203,9 +214,9 @@ export type SchemaWithPartial<
  *
  * @returns An object schema.
  */
-export function partial<const TSchema extends Schema>(
+export function partialAsync<const TSchema extends Schema>(
   schema: TSchema
-): SchemaWithPartial<TSchema, undefined>;
+): SchemaWithPartialAsync<TSchema, undefined>;
 
 /**
  * Creates a modified copy that marks the selected entries as optional.
@@ -215,22 +226,22 @@ export function partial<const TSchema extends Schema>(
  *
  * @returns An object schema.
  */
-export function partial<
+export function partialAsync<
   const TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,
->(schema: TSchema, keys: TKeys): SchemaWithPartial<TSchema, TKeys>;
+>(schema: TSchema, keys: TKeys): SchemaWithPartialAsync<TSchema, TKeys>;
 
-export function partial(
+export function partialAsync(
   schema: Schema,
   keys?: ObjectKeys<Schema>
-): SchemaWithPartial<Schema, ObjectKeys<Schema> | undefined> {
+): SchemaWithPartialAsync<Schema, ObjectKeys<Schema> | undefined> {
   // Create modified object entries
-  const entries: PartialEntries<ObjectEntries, ObjectKeys<Schema>> = {};
+  const entries: PartialEntries<ObjectEntriesAsync, ObjectKeys<Schema>> = {};
   for (const key in schema.entries) {
     // @ts-expect-error
     entries[key] =
       !keys || keys.includes(key)
-        ? optional(schema.entries[key])
+        ? optionalAsync(schema.entries[key])
         : schema.entries[key];
   }
 
