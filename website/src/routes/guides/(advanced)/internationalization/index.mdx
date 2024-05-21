@@ -87,13 +87,15 @@ import * as v from 'valibot';
 import * as m from './paraglide/messages.js';
 
 const LoginSchema = v.object({
-  email: v.string([
+  email: v.pipe(
+    v.string(),
     v.minLength(1, m.emailRequired),
     v.email(m.emailInvalid)
-  ]),
-  password: v.string([
+  ),
+  password: v.pipe(
+    v.string(),
     v.minLength(1, m.passwordRequired),
-    v.minLength(8, m.passwordInvalid),
-  ]),
+    v.minLength(8, m.passwordInvalid)
+  ),
 });
 ```
