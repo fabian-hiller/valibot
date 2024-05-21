@@ -77,8 +77,8 @@ export default component$(() => {
       : `import * as v from 'valibot';
 
 const Schema = v.object({
-  email: v.string([v.minLength(1), v.email()]),
-  password: v.string([v.minLength(1), v.minLength(8)]),
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
 });
 
 const result = v.safeParse(Schema, {
