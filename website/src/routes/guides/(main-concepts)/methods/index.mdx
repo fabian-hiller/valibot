@@ -1,8 +1,7 @@
 ---
 title: Methods
 description: >-
-  Apart from `parse` and `safeParse` I offer you some more methods to add
-  additional features to your schemas.
+  Apart from `parse`, `safeParse` and `is`, I offer some more methods to make working with your schemas easier.
 contributors:
   - fabian-hiller
   - estubmo
@@ -15,18 +14,17 @@ import { ApiList } from '~/components';
 
 # Methods
 
-Apart from <Link href="/api/parse/">`parse`</Link>, <Link href="/api/safeParse/">`safeParse`</Link> and <Link href="/api/is/">`is`</Link> I offer some more methods to add additional features to your schemas. I distinguish in the following between schema, object and pipeline methods.
+Apart from <Link href="/api/parse/">`parse`</Link>, <Link href="/api/safeParse/">`safeParse`</Link> and <Link href="/api/is/">`is`</Link>, I offer some more methods to make working with your schemas easier. In the following I distinguish between schema, object and pipeline methods.
 
 ## Schema methods
 
-My schema methods either add additional functionality, simplify the handling or help you to use a schema, for example for validation.
+My schema methods either add additional functionality, simplify the handling or help you to use a schema, for example for validation or to extract specific information.
 
 <ApiList
   label="Schema methods"
   items={[
-    'brand',
-    'coerce',
     'fallback',
+    'flatten',
     'getDefault',
     'getDefaults',
     'getFallback',
@@ -34,47 +32,12 @@ My schema methods either add additional functionality, simplify the handling or 
     'is',
     'parse',
     'safeParse',
-    'transform',
+    'pipe',
     'unwrap',
   ]}
 />
 
-> For more on methods for validation, see the <Link href="/guides/parse-data/">parse data</Link> guide.
-
-### Coerce
-
-‎<Link href="/api/coerce/">`coerce`</Link> can be used to transform an input before it is validated. It is therefore perfect for enforcing a specific data type using the built-in data type objects like [`Boolean`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean), [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/String), [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number) and [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date).
-
-```ts
-import * as v from 'valibot';
-
-const BooleanSchema = v.coerce(v.boolean(), Boolean);
-const booleanOutput = v.parse(BooleanSchema, null); // false
-
-const StringSchema = v.coerce(v.string(), String);
-const stringOutput = v.parse(StringSchema, 1234); // '1234'
-
-const NumberSchema = v.coerce(v.number(), Number);
-const numberOutput = v.parse(NumberSchema, '1234'); // 1234
-
-const DateSchema = v.coerce(v.date(), (i) => new Date(i));
-const dateOutput = v.parse(DateSchema, '2023-07-31'); // Date
-```
-
-### Transform
-
-‎<Link href="/api/transform/">`transform`</Link> can be used to transform data after validation. Compared to the transformations you can perform inside <Link href="/guides/pipelines/">pipelines</Link>, there are no rules here. So the input type can be completely different from the output type.
-
-```ts
-import * as v from 'valibot';
-
-const StringSchema = v.transform(v.string(), (input) => input.length);
-
-type StringInput = v.Input<typeof StringSchema>; // string
-type StringOutput = v.Output<typeof StringSchema>; // number
-
-const stringOutput = v.parse(StringSchema, 'hello'); // 5
-```
+> For more information on <Link href="/api/pipe/">`pipe`</Link>, see the <Link href="/guides/pipelines/">pipelines</Link> guide, for more information on validation methods, see the <Link href="/guides/parse-data/">parse data</Link> guide and for more information on <Link href="/api/flatten/">`flatten`</Link>, see the <Link href="/guides/issues/#formatting">issues</Link> guide.
 
 ### Fallback
 
@@ -93,12 +56,12 @@ My object methods make it easier for you to work with object schemas. They are s
 
 <ApiList
   label="Object methods"
-  items={['keyof', 'merge', 'omit', 'partial', 'pick', 'required']}
+  items={['keyof', 'omit', 'partial', 'pick', 'required']}
 />
 
 ### TypeScript similarities
 
-I offer almost the same options as TypeScript. For example, you can make the values of an object optional with <Link href="/api/partial/">`partial`</Link> or make them required with <Link href="/api/required/">`required`</Link>. With <Link href="/api/merge/">`merge`</Link>, you can join multiple object schemas and with <Link href="/api/pick/">`pick`</Link> or <Link href="/api/omit/">`omit`</Link>, you can include or exclude certain values of an existing schema.
+I offer almost the same options as TypeScript. For example, you can make the values of an object optional with <Link href="/api/partial/">`partial`</Link> or make them required with <Link href="/api/required/">`required`</Link> and with <Link href="/api/pick/">`pick`</Link> or <Link href="/api/omit/">`omit`</Link>, you can include or exclude certain values of an existing schema.
 
 ```ts
 import * as v from 'valibot';
@@ -131,26 +94,26 @@ My pipeline methods help you to modify the results of validations and transforma
 ```ts
 import * as v from 'valibot';
 
-const RegisterSchema = v.object(
-  {
-    email: v.string([
+const RegisterSchema = v.pipe(
+  v.object({
+    email: v.pipe(
+      v.string(),
       v.minLength(1, 'Please enter your email.'),
-      v.email('The email address is badly formatted.'),
-    ]),
-    password1: v.string([
-      v.minLength(1, 'Please enter your password.'),
-      v.minLength(8, 'Your password must have 8 characters or more.'),
-    ]),
-    password2: v.string(),
-  },
-  [
-    v.forward(
-      v.custom(
-        (input) => input.password1 === input.password2,
-        'The two passwords do not match.'
-      ),
-      ['password2']
+      v.email('The email address is badly formatted.')
     ),
-  ]
+    password1: v.pipe(
+      v.string(),
+      v.minLength(1, 'Please enter your password.'),
+      v.minLength(8, 'Your password must have 8 characters or more.')
+    ),
+    password2: v.string(),
+  }),
+  v.forward(
+    v.check(
+      (input) => input.password1 === input.password2,
+      'The two passwords do not match.'
+    ),
+    ['password2']
+  )
 );
 ```
