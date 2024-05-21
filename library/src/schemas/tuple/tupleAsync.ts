@@ -48,11 +48,10 @@ export interface TupleSchemaAsync<
 /**
  * Creates a tuple schema.
  *
- * Hint: This schema ignores and excludes unknown items. The output will
- * include only the items you specify. To include unknown items, use the
- * `looseTupleAsync` schema. To return an issue for unknown items, use the
- * `strictTupleAsync` schema. To include and validate unknown items, use the
- * `tupleWithRestAsync` schema.
+ * Hint: This schema removes unknown items. The output will only include the
+ * items you specify. To include unknown items, use `looseTupleAsync`. To
+ * return an issue for unknown items, use `strictTupleAsync`. To include and
+ * validate unknown items, use `tupleWithRestAsync`.
  *
  * @param items The items schema.
  *
@@ -65,11 +64,10 @@ export function tupleAsync<const TItems extends TupleItemsAsync>(
 /**
  * Creates a tuple schema.
  *
- * Hint: This schema ignores and excludes unknown items. The output will
- * include only the items you specify. To include unknown items, use the
- * `looseTupleAsync` schema. To return an issue for unknown items, use the
- * `strictTupleAsync` schema. To include and validate unknown items, use the
- * `tupleWithRestAsync` schema.
+ * Hint: This schema removes unknown items. The output will only include the
+ * items you specify. To include unknown items, use `looseTupleAsync`. To
+ * return an issue for unknown items, use `strictTupleAsync`. To include and
+ * validate unknown items, use `tupleWithRestAsync`.
  *
  * @param items The items schema.
  * @param message The error message.

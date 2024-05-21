@@ -48,11 +48,10 @@ export interface TupleSchema<
 /**
  * Creates a tuple schema.
  *
- * Hint: This schema ignores and excludes unknown items. The output will
- * include only the items you specify. To include unknown items, use the
- * `looseTuple` schema. To return an issue for unknown items, use the
- * `strictTuple` schema. To include and validate unknown items, use the
- * `tupleWithRest` schema.
+ * Hint: This schema removes unknown items. The output will only include the
+ * items you specify. To include unknown items, use `looseTuple`. To
+ * return an issue for unknown items, use `strictTuple`. To include and
+ * validate unknown items, use `tupleWithRest`.
  *
  * @param items The items schema.
  *
@@ -65,11 +64,10 @@ export function tuple<const TItems extends TupleItems>(
 /**
  * Creates a tuple schema.
  *
- * Hint: This schema ignores and excludes unknown items. The output will
- * include only the items you specify. To include unknown items, use the
- * `looseTuple` schema. To return an issue for unknown items, use the
- * `strictTuple` schema. To include and validate unknown items, use the
- * `tupleWithRest` schema.
+ * Hint: This schema removes unknown items. The output will only include the
+ * items you specify. To include unknown items, use `looseTuple`. To
+ * return an issue for unknown items, use `strictTuple`. To include and
+ * validate unknown items, use `tupleWithRest`.
  *
  * @param items The items schema.
  * @param message The error message.

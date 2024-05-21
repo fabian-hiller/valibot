@@ -47,11 +47,10 @@ export interface ObjectSchemaAsync<
 /**
  * Creates an object schema.
  *
- * Hint: This schema ignores and excludes unknown entries. The output will
- * include only the entries you specify. To include unknown entries, use the
- * `looseObjectAsync` schema. To return an issue for unknown entries, use the
- * `strictObjectAsync` schema. To include and validate unknown entries, use the
- * `objectWithRestAsync` schema.
+ * Hint: This schema removes unknown entries. The output will only include the
+ * entries you specify. To include unknown entries, use `looseObjectAsync`. To
+ * return an issue for unknown entries, use `strictObjectAsync`. To include and
+ * validate unknown entries, use `objectWithRestAsync`.
  *
  * @param entries The entries schema.
  *
@@ -64,11 +63,10 @@ export function objectAsync<const TEntries extends ObjectEntriesAsync>(
 /**
  * Creates an object schema.
  *
- * Hint: This schema ignores and excludes unknown entries. The output will
- * include only the entries you specify. To include unknown entries, use the
- * `looseObjectAsync` schema. To return an issue for unknown entries, use the
- * `strictObjectAsync` schema. To include and validate unknown entries, use the
- * `objectWithRestAsync` schema.
+ * Hint: This schema removes unknown entries. The output will only include the
+ * entries you specify. To include unknown entries, use `looseObjectAsync`. To
+ * return an issue for unknown entries, use `strictObjectAsync`. To include and
+ * validate unknown entries, use `objectWithRestAsync`.
  *
  * @param entries The entries schema.
  * @param message The error message.

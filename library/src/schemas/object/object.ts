@@ -47,11 +47,10 @@ export interface ObjectSchema<
 /**
  * Creates an object schema.
  *
- * Hint: This schema ignores and excludes unknown entries. The output will
- * include only the entries you specify. To include unknown entries, use the
- * `looseObject` schema. To return an issue for unknown entries, use the
- * `strictObject` schema. To include and validate unknown entries, use the
- * `objectWithRest` schema.
+ * Hint: This schema removes unknown entries. The output will only include the
+ * entries you specify. To include unknown entries, use `looseObject`. To
+ * return an issue for unknown entries, use `strictObject`. To include and
+ * validate unknown entries, use `objectWithRest`.
  *
  * @param entries The entries schema.
  *
@@ -64,11 +63,10 @@ export function object<const TEntries extends ObjectEntries>(
 /**
  * Creates an object schema.
  *
- * Hint: This schema ignores and excludes unknown entries. The output will
- * include only the entries you specify. To include unknown entries, use the
- * `looseObject` schema. To return an issue for unknown entries, use the
- * `strictObject` schema. To include and validate unknown entries, use the
- * `objectWithRest` schema.
+ * Hint: This schema removes unknown entries. The output will only include the
+ * entries you specify. To include unknown entries, use `looseObject`. To
+ * return an issue for unknown entries, use `strictObject`. To include and
+ * validate unknown entries, use `objectWithRest`.
  *
  * @param entries The entries schema.
  * @param message The error message.
