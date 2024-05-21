@@ -1,15 +1,19 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import package_ from '../package.json';
+import ar from '../src/ar';
 import de from '../src/de';
 import fr from '../src/fr';
+import hu from '../src/hu';
 import ja from '../src/ja';
 import kr from '../src/kr';
 import nb from '../src/nb';
 import nl from '../src/nl';
+import pt from '../src/pt';
 import ro from '../src/ro';
 import ru from '../src/ru';
 import sl from '../src/sl';
+import tr from '../src/tr';
 import uk from '../src/uk';
 import zhCN from '../src/zh-CN';
 import zhTW from '../src/zh-TW';
@@ -20,14 +24,37 @@ console.time('build');
 // Create languages array
 // Note: The language file `en` does not need to be added as the default
 // messages of Valibot are already in English
-const languages = [de, fr, ja, kr, nb, nl, ro, ru, sl, uk, zhCN, zhTW];
+const languages = [
+  ar,
+  de,
+  fr,
+  hu,
+  ja,
+  kr,
+  nb,
+  nl,
+  pt,
+  ro,
+  ru,
+  sl,
+  tr,
+  uk,
+  zhCN,
+  zhTW,
+];
 
 // Create root import variables
-let rootModuleImports: string[] = [];
-let rootCommonImports: string[] = ['"use strict";'];
+const rootModuleImports: string[] = [];
+const rootCommonImports: string[] = ['"use strict";'];
 
 // Create files array
-const files: string[] = ['index.js', 'index.cjs', 'index.d.ts', 'index.d.cts'];
+const files: string[] = [
+  'index.ts',
+  'index.js',
+  'index.cjs',
+  'index.d.ts',
+  'index.d.cts',
+];
 
 /**
  * Exports type.
@@ -92,8 +119,8 @@ for (const language of languages) {
   );
 
   // Create language import variables
-  let languageModuleImports: string[] = [];
-  let languageCommonImports: string[] = ['"use strict";'];
+  const languageModuleImports: string[] = [];
+  const languageCommonImports: string[] = ['"use strict";'];
 
   // Add schema files to exports
   exports[`./${language.code}/schema`] = {

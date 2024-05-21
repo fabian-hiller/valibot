@@ -2,6 +2,19 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.12.0 (May 11, 2024)
+
+- Add Hungarian (hu) translations (pull request #560)
+
+## v0.11.0 (April 30, 2024)
+
+- Add Arabic (ar) translations (pull request #527)
+- Add Turkish (tr) translations (pull request #549)
+
+## v0.10.0 (April 09, 2024)
+
+- Add Portuguese (pt) translations (pull request #509)
+
 ## v0.9.0 (March 09, 2024)
 
 - Add Romanian (ro) translations (pull request #472)
