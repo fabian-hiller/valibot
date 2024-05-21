@@ -28,13 +28,13 @@ In the following example, a schema is created for a user object. In order to fol
 import * as v from 'valibot';
 
 export const PublicUser = v.object({
-  name: v.string([v.maxLength(30)]),
-  email: v.string([v.email()]),
+  name: v.pipe(v.string(), v.maxLength(30)),
+  email: v.pipe(v.string(), v.email()),
   avatar: v.nullable(v.blob()),
-  bio: v.string([v.maxLength(1000)]),
+  bio: v.pipe(v.string(), v.maxLength(1000)),
 });
 
-export type PublicUser = v.Output<typeof PublicUser>;
+export type PublicUser = v.InferOutput<typeof PublicUser>;
 ```
 
 The schema and type can then be imported and used together.
@@ -77,13 +77,13 @@ import * as v from 'valibot';
 export const ImageSchema = v.object({
   status: v.optional(v.picklist(['public', 'private']), 'private'),
   created: v.optional(v.date(), () => new Date()),
-  title: v.string([v.maxLength(100)]),
-  source: v.string([v.url()]),
-  size: v.number([v.minValue(0)]),
+  title: v.pipe(v.string(), v.maxLength(100)),
+  source: v.pipe(v.string(), v.url()),
+  size: v.pipe(v.number(), v.minValue(0)),
 });
 
-export type ImageInput = v.Input<typeof ImageSchema>;
-export type ImageOutput = v.Output<typeof ImageSchema>;
+export type ImageInput = v.InferInput<typeof ImageSchema>;
+export type ImageOutput = v.InferOutput<typeof ImageSchema>;
 ```
 
 The schema and the input and output types can then be imported and used separately.
