@@ -32,14 +32,14 @@ const Schema = v.object({ key: v.string() });
 
 ## Restructure code
 
-One of the biggest differences between Zod and Valibot is the way you further validate a given type. In Zod, you chain methods like `.email` and `.endsWith`. In Valibot you use <Link href="../pipelines/">pipelines</Link> to do the same thing. This is an array of validation and transformation actions defined as the last argument of a schema function.
+One of the biggest differences between Zod and Valibot is the way you further validate a given type. In Zod, you chain methods like `.email` and `.endsWith`. In Valibot you use <Link href="../pipelines/">pipelines</Link> to do the same thing. This is a function that starts with a schema and is followed by up to 9 validation or transformation actions.
 
 ```ts
 // Change this
 const Schema = z.string().email().endsWith('@example.com');
 
 // To this
-const Schema = v.string([v.email(), v.endsWith('@example.com')]);
+const Schema = v.pipe(v.string(), v.email(), v.endsWith('@example.com'));
 ```
 
 Due to the modular design of Valibot, also all other methods like `.parse` or `.safeParse` have to be used a little bit differently. Instead of chaining them, you usually pass the schema as the first argument and move any existing arguments one position to the right.
@@ -60,18 +60,18 @@ Most of the names are the same as in Zod. However, there are some exceptions. Th
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `and`                | <Link href="/api/intersect/">`intersect`</Link>                                                                                             |
 | `catch`              | <Link href="/api/fallback/">`fallback`</Link>                                                                                               |
-| `catchall`           | <Link href="/api/object/">`object`</Link>                                                                                                   |
-| `custom`             | <Link href="/api/special/">`special`</Link>                                                                                                 |
+| `catchall`           | <Link href="/api/objectWithRest/">`objectWithRest`</Link>                                                                                   |
+| `coerce`             | <Link href="/api/pipe/">`pipe`</Link>, <Link href="/api/unknown/">`unknown`</Link> and <Link href="/api/transform/">`transform`</Link>      |
 | `datetime`           | <Link href="/api/isoDate/">`isoDate`</Link>, <Link href="/api/isoDateTime/">`isoDateTime`</Link>                                            |
 | `default`            | <Link href="/api/optional/">`optional`</Link>                                                                                               |
 | `discriminatedUnion` | <Link href="/api/variant/">`variant`</Link>                                                                                                 |
 | `element`            | `item`                                                                                                                                      |
 | `enum`               | <Link href="/api/picklist/">`picklist`</Link>                                                                                               |
-| `extend`             | <Link href="/api/merge/">`merge`</Link>                                                                                                     |
+| `extend`             | <Link href="../intersections/#merge-objects">Object merging</Link>                                                                          |
 | `gt`, `gte`          | <Link href="/api/minValue/">`minValue`</Link>                                                                                               |
-| `infer`              | <Link href="/api/Output/">`Output`</Link>                                                                                                   |
+| `infer`              | <Link href="/api/InferOutput/">`InferOutput`</Link>                                                                                         |
 | `int`                | <Link href="/api/integer/">`integer`</Link>                                                                                                 |
-| `input`              | <Link href="/api/Input/">`Input`</Link>                                                                                                     |
+| `input`              | <Link href="/api/InferInput/">`InferInput`</Link>                                                                                           |
 | `instanceof`         | <Link href="/api/instance/">`instance`</Link>                                                                                               |
 | `intersection`       | <Link href="/api/intersect/">`intersect`</Link>                                                                                             |
 | `lt`, `lte`          | <Link href="/api/maxValue/">`maxValue`</Link>                                                                                               |
@@ -83,16 +83,15 @@ Most of the names are the same as in Zod. However, there are some exceptions. Th
 | `nonpositive`        | <Link href="/api/maxValue/">`maxValue`</Link>                                                                                               |
 | `null`               | <Link href="/api/null_/">`null_`</Link>                                                                                                     |
 | `or`                 | <Link href="/api/union/">`union`</Link>                                                                                                     |
-| `output`             | <Link href="/api/Output/">`Output`</Link>                                                                                                   |
-| `passthrough`        | <Link href="/api/object/">`object`</Link>                                                                                                   |
+| `output`             | <Link href="/api/InferOutput/">`InferOutput`</Link>                                                                                         |
+| `passthrough`        | <Link href="/api/looseObject/">`looseObject`</Link>                                                                                         |
 | `positive`           | <Link href="/api/minValue/">`minValue`</Link>                                                                                               |
-| `refine`             | <Link href="/api/custom/">`custom`</Link>                                                                                                   |
+| `refine`             | <Link href="/api/check/">`check`</Link>                                                                                                     |
 | `rest`               | <Link href="/api/tuple/">`tuple`</Link>                                                                                                     |
 | `safe`               | <Link href="/api/safeInteger/">`safeInteger`</Link>                                                                                         |
 | `shape`              | `entries`                                                                                                                                   |
-| `strict`             | <Link href="/api/object/">`object`</Link>                                                                                                   |
+| `strict`             | <Link href="/api/strictObject/">`strictObject`</Link>                                                                                       |
 | `strip`              | <Link href="/api/object/">`object`</Link>                                                                                                   |
-| `trim`               | <Link href="/api/toTrimmed/">`toTrimmed`</Link>                                                                                             |
 | `undefined`          | <Link href="/api/undefined_/">`undefined_`</Link>                                                                                           |
 | `void`               | <Link href="/api/void_/">`void_`</Link>                                                                                                     |
 
@@ -102,14 +101,14 @@ Below are some more details that may be helpful when migrating from Zod to Valib
 
 ### Object and tuple
 
-To specify whether <Link href="/api/object/">`object`</Link> or <Link href="/api/tuple/">`tuple`</Link> should allow or prevent unknown values, Valibot uses the `rest` parameter. Zod uses the methods `.passthrough`, `.strict`, `.strip`, `.catchall` and `.rest` instead. See the <Link href="../objects/">objects</Link> and <Link href="../arrays/">arrays</Link> guide for more details.
+To specify whether objects or tuples should allow or prevent unknown values, Valibot uses different schema functions. Zod uses the methods `.passthrough`, `.strict`, `.strip`, `.catchall` and `.rest` instead. See the <Link href="../objects/">objects</Link> and <Link href="../arrays/">arrays</Link> guide for more details.
 
 ```ts
 // Change this
 const ObjectSchema = z.object({ key: z.string() }).strict();
 
 // To this
-const ObjectSchema = v.object({ key: v.string() }, v.never());
+const ObjectSchema = v.strictObject({ key: v.string() });
 ```
 
 ### Error messages
@@ -123,19 +122,22 @@ const SchemaSchema = z
   .min(5, { message: 'Too short' });
 
 // To this
-const StringSchema = v.string('Not a string', [v.minLength(5, 'Too short')]);
+const StringSchema = v.pipe(
+  v.string('Not a string'),
+  v.minLength(5, 'Too short')
+);
 ```
 
 ### Coerce type
 
-To enforce primitive values, you can use a method of the `coerce` object in Zod. In Valibot, <Link href="/api/coerce/">`coerce`</Link> is a function that works similar to <Link href="/api/transform/">`transform`</Link>, but is executed before validation. More information can be found <Link href="../methods/#coerce">here</Link>.
+To enforce primitive values, you can use a method of the `coerce` object in Zod. There is no such object or function in Valibot. Instead, you use a pipeline with a <Link href="/api/transform/">`transform`</Link> action as the second argument. This forces you to explicitly define the input, resulting in safer code.
 
 ```ts
 // Change this
 const NumberSchema = z.coerce.number();
 
 // To this
-const NumberSchema = v.coerce(v.number(), Number);
+const NumberSchema = v.pipe(v.unknown(), v.transform(Number));
 ```
 
 ### Async validation
