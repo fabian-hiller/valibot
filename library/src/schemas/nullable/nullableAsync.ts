@@ -1,92 +1,140 @@
-import { getDefaultAsync } from '../../methods/index.ts';
+import { getDefault } from '../../methods/index.ts';
 import type {
+  BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
+  Dataset,
   DefaultAsync,
-  Input,
-  Output,
+  DefaultValue,
+  InferInput,
+  InferIssue,
+  InferOutput,
+  NonNullable,
 } from '../../types/index.ts';
-import { schemaResult } from '../../utils/index.ts';
 
 /**
  * Nullable schema async type.
  */
 export interface NullableSchemaAsync<
-  TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends DefaultAsync<TWrapped> = undefined,
-  TOutput = TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
-    ? Output<TWrapped>
-    : Output<TWrapped> | null,
-> extends BaseSchemaAsync<Input<TWrapped> | null, TOutput> {
+  TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  TDefault extends DefaultAsync<TWrapped, null>,
+> extends BaseSchemaAsync<
+    InferInput<TWrapped> | null,
+    [TDefault] extends [never]
+      ? InferOutput<TWrapped> | null
+      : // FIXME: For schemas that transform the input to `null`, this
+        // implementation may result in an incorrect output type
+        NonNullable<InferOutput<TWrapped>> | DefaultValue<TDefault>,
+    InferIssue<TWrapped>
+  > {
   /**
    * The schema type.
    */
-  type: 'nullable';
+  readonly type: 'nullable';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof nullableAsync;
+  /**
+   * The expected property.
+   */
+  readonly expects: `${TWrapped['expects']} | null`;
   /**
    * The wrapped schema.
    */
-  wrapped: TWrapped;
+  readonly wrapped: TWrapped;
   /**
-   * Returns the default value.
+   * The default value.
    */
-  default: TDefault;
+  readonly default: TDefault;
 }
 
 /**
- * Creates an async nullable schema.
+ * Creates a nullable schema.
  *
  * @param wrapped The wrapped schema.
  *
- * @returns An async nullable schema.
+ * @returns A nullable schema.
  */
-export function nullableAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
-  wrapped: TWrapped
-): NullableSchemaAsync<TWrapped>;
+export function nullableAsync<
+  const TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+>(wrapped: TWrapped): NullableSchemaAsync<TWrapped, never>;
 
 /**
- * Creates an async nullable schema.
+ * Creates a nullable schema.
  *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
  *
- * @returns An async nullable schema.
+ * @returns A nullable schema.
  */
 export function nullableAsync<
-  TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends DefaultAsync<TWrapped>,
+  const TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  TDefault extends DefaultAsync<TWrapped, null>,
 >(
   wrapped: TWrapped,
   default_: TDefault
 ): NullableSchemaAsync<TWrapped, TDefault>;
 
-export function nullableAsync<
-  TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends DefaultAsync<TWrapped> = undefined,
->(
-  wrapped: TWrapped,
-  default_?: TDefault
-): NullableSchemaAsync<TWrapped, TDefault> {
-  return {
+export function nullableAsync(
+  wrapped:
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  ...args: unknown[]
+): NullableSchemaAsync<
+  | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  unknown
+> {
+  // Create schema object
+  // @ts-expect-error
+  const schema: NullableSchemaAsync<
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+    unknown
+  > = {
+    kind: 'schema',
     type: 'nullable',
+    reference: nullableAsync,
     expects: `${wrapped.expects} | null`,
     async: true,
     wrapped,
-    default: default_ as TDefault,
-    async _parse(input, config) {
-      // If input is `null`, return typed schema result or override it with
-      // default value
-      if (input === null) {
-        const override = await getDefaultAsync(this);
-        if (override === undefined) {
-          return schemaResult(true, input);
+    async _run(dataset, config) {
+      // If value is `null`, override it with default or return dataset
+      if (dataset.value === null) {
+        // If default is specified, override value of dataset
+        if ('default' in this) {
+          dataset.value = await getDefault(
+            this,
+            dataset as Dataset<null, never>,
+            config
+          );
         }
-        input = override;
+
+        // If value is still `null`, return dataset
+        if (dataset.value === null) {
+          dataset.typed = true;
+          return dataset;
+        }
       }
 
-      // Otherwise, return result of wrapped schema
-      return this.wrapped._parse(input, config);
+      // Otherwise, return dataset of wrapped schema
+      return this.wrapped._run(dataset, config);
     },
   };
+
+  // Add default if specified
+  if (0 in args) {
+    // @ts-expect-error
+    schema.default = args[0];
+  }
+
+  // Return schema object
+  return schema;
 }

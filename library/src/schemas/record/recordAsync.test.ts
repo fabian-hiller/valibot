@@ -1,245 +1,307 @@
 import { describe, expect, test } from 'vitest';
-import { type ValiError } from '../../error/index.ts';
-import { parseAsync } from '../../methods/index.ts';
-import { toCustom } from '../../transformations/index.ts';
-import type {
-  Output,
-  TypedSchemaResult,
-  UntypedSchemaResult,
-} from '../../types/index.ts';
-import { custom, maxLength, minLength } from '../../validations/index.ts';
-import { any } from '../any/index.ts';
-import { number, numberAsync } from '../number/index.ts';
-import { object } from '../object/index.ts';
-import { string, stringAsync } from '../string/index.ts';
-import { unionAsync } from '../union/index.ts';
-import { recordAsync } from './recordAsync.ts';
+import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
+import { number, type NumberIssue } from '../number/index.ts';
+import { optionalAsync } from '../optional/index.ts';
+import { picklist } from '../picklist/index.ts';
+import { string } from '../string/index.ts';
+import { recordAsync, type RecordSchemaAsync } from './recordAsync.ts';
+import type { RecordIssue } from './types.ts';
 
 describe('recordAsync', () => {
-  test('should pass only objects', async () => {
-    const schema1 = recordAsync(number());
-    const input1 = { key1: 1, key2: 2 };
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toEqual(input1);
-    await expect(parseAsync(schema1, { test: 'hello' })).rejects.toThrowError();
-    await expect(parseAsync(schema1, 'test')).rejects.toThrowError();
-    await expect(parseAsync(schema1, 123)).rejects.toThrowError();
+  describe('should return schema record', () => {
+    const key = string();
+    type Key = typeof key;
+    const value = number();
+    type Value = typeof value;
+    const baseSchema: Omit<RecordSchemaAsync<Key, Value, never>, 'message'> = {
+      kind: 'schema',
+      type: 'record',
+      reference: recordAsync,
+      expects: 'Object',
+      key,
+      value,
+      async: true,
+      _run: expect.any(Function),
+    };
 
-    const schema2 = recordAsync(
-      stringAsync([minLength(3)]),
-      unionAsync([string(), numberAsync()])
+    test('with undefined message', () => {
+      const schema: RecordSchemaAsync<Key, Value, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(recordAsync(key, value)).toStrictEqual(schema);
+      expect(recordAsync(key, value, undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(recordAsync(key, value, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies RecordSchemaAsync<Key, Value, 'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(recordAsync(key, value, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies RecordSchemaAsync<Key, Value, typeof message>);
+    });
+  });
+
+  describe('should return dataset without issues', () => {
+    const schema = recordAsync(string(), number());
+
+    test('for empty record', async () => {
+      await expectNoSchemaIssueAsync(schema, [{}]);
+    });
+
+    test('for simple record', async () => {
+      await expectNoSchemaIssueAsync(schema, [{ foo: 1, bar: 2, baz: 3 }]);
+    });
+  });
+
+  describe('should return dataset with issues', () => {
+    const schema = recordAsync(string(), number(), 'message');
+    const baseIssue: Omit<RecordIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'record',
+      expected: 'Object',
+      message: 'message',
+    };
+
+    // Primitive types
+
+    test('for bigints', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1n, 0n, 123n]);
+    });
+
+    test('for booleans', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [true, false]);
+    });
+
+    test('for null', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [null]);
+    });
+
+    test('for numbers', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
+    });
+
+    test('for strings', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, ['', 'abc', '123']);
+    });
+
+    test('for symbols', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        Symbol(),
+        Symbol('foo'),
+      ]);
+    });
+
+    // Complex types
+
+    test('for arrays', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [[], ['value']]);
+    });
+
+    test('for functions', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        () => {},
+        function () {},
+      ]);
+    });
+  });
+
+  describe('should return dataset without nested issues', () => {
+    const schema = recordAsync(
+      picklist(['foo', 'bar', 'baz']),
+      optionalAsync(number())
     );
-    const input2 = { 1234: 1234, test: 'hello' };
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toEqual(input2);
-    await expect(parseAsync(schema2, { a: 'test' })).rejects.toThrowError();
-    await expect(parseAsync(schema2, { test: null })).rejects.toThrowError();
-    await expect(parseAsync(schema2, 'test')).rejects.toThrowError();
-    await expect(parseAsync(schema2, 123)).rejects.toThrowError();
+
+    test('for simple record', async () => {
+      await expectNoSchemaIssueAsync(schema, [{ foo: 1, bar: 2, baz: 3 }]);
+    });
+
+    test('for nested record', async () => {
+      await expectNoSchemaIssueAsync(recordAsync(string(), schema), [
+        { foo: { foo: 1, bar: 2 }, bar: { baz: 3 } },
+      ]);
+    });
   });
 
-  test('should throw custom error', async () => {
-    const error = 'Value is not an object!';
-    const schema = recordAsync(string(), error);
-    await expect(parseAsync(schema, 123)).rejects.toThrowError(error);
-  });
-
-  test('should throw every issue', async () => {
-    const schema1 = recordAsync(number());
-    const input1 = { 1: '1', 2: 2, 3: '3', 4: '4' };
-    await expect(parseAsync(schema1, input1)).rejects.toThrowError();
-    try {
-      await parseAsync(schema1, input1);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(3);
-    }
-
-    const schema2 = recordAsync(string([minLength(2)]), number());
-    const input2 = { '1': '1', 2: 2, 3: '3' };
-    await expect(parseAsync(schema2, input2)).rejects.toThrowError();
-    try {
-      await parseAsync(schema2, input2);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(5);
-    }
-  });
-
-  test('should throw only first issue', async () => {
-    const config = { abortEarly: true };
-
-    const schema1 = recordAsync(number());
-    const input1 = { 1: '1', 2: 2, 3: '3' };
-    await expect(parseAsync(schema1, input1, config)).rejects.toThrowError();
-    try {
-      await parseAsync(schema1, input1, config);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].path?.[0].origin).toBe('value');
-    }
-
-    const schema2 = recordAsync(string([minLength(2)]), number());
-    const input2 = { '1': '1', 2: 2, 3: '3' };
-    await expect(parseAsync(schema2, input2, config)).rejects.toThrowError();
-    try {
-      await parseAsync(schema2, input2, config);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].path?.[0].origin).toBe('key');
-    }
-  });
-
-  test('should return issue path', async () => {
-    const schema1 = recordAsync(number());
-    const input1 = { a: 1, b: '2', c: 3 };
-    const result1 = await schema1._parse(input1);
-    expect(result1.issues?.[0].path).toEqual([
-      {
-        type: 'record',
-        origin: 'value',
-        input: input1,
-        key: 'b',
-        value: input1.b,
-      },
-    ]);
-
-    const schema2 = recordAsync(object({ key: string() }));
-    const input2 = { a: { key: 'test' }, b: { key: 123 } };
-    const result2 = await schema2._parse(input2);
-    expect(result2.issues?.[0].path).toEqual([
-      {
-        type: 'record',
-        origin: 'value',
-        input: input2,
-        key: 'b',
-        value: input2.b,
-      },
-      {
-        type: 'object',
-        origin: 'value',
-        input: input2.b,
-        key: 'key',
-        value: input2.b.key,
-      },
-    ]);
-
-    const schema3 = recordAsync(string([maxLength(1)]), number());
-    const input3 = { a: 1, bb: 2, c: 3 };
-    const result3 = await schema3._parse(input3);
-    expect(result3.issues?.[0].path).toEqual([
-      {
-        type: 'record',
-        origin: 'key',
-        input: input3,
-        key: 'bb',
-        value: input3.bb,
-      },
-    ]);
-  });
-
-  test('should execute pipe', async () => {
-    const input = { key1: 1, key2: 1 };
-    const transformInput = (): Record<string, number> => ({ key1: 2, key2: 2 });
-    const output1 = await parseAsync(
-      recordAsync(number(), [toCustom(transformInput)]),
-      input
+  describe('should return dataset with nested issues', () => {
+    const schema = recordAsync(
+      picklist(['foo', 'bar', 'baz']),
+      optionalAsync(number())
     );
-    const output2 = await parseAsync(
-      recordAsync(string(), number(), [toCustom(transformInput)]),
-      input
-    );
-    const output3 = await parseAsync(
-      recordAsync(number(), 'Error', [toCustom(transformInput)]),
-      input
-    );
-    const output4 = await parseAsync(
-      recordAsync(string(), number(), 'Error', [toCustom(transformInput)]),
-      input
-    );
-    expect(output1).toEqual(transformInput());
-    expect(output2).toEqual(transformInput());
-    expect(output3).toEqual(transformInput());
-    expect(output4).toEqual(transformInput());
-  });
 
-  test('should prevent prototype pollution', async () => {
-    const schema = recordAsync(string(), any());
-    const input = JSON.parse('{"__proto__":{"polluted":"yes"}}');
-    expect(input.__proto__.polluted).toBe('yes');
-    expect(({} as any).polluted).toBeUndefined();
-    const output = await parseAsync(schema, input);
-    expect(output.__proto__.polluted).toBeUndefined();
-    expect(output.polluted).toBeUndefined();
-  });
+    const baseInfo = {
+      message: expect.any(String),
+      requirement: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+      skipPipe: undefined,
+    };
 
-  test('should execute pipe if output is typed', async () => {
-    const requirement = (value: Record<string, string>) =>
-      value.key.length >= 10;
-    const schema = recordAsync(string([minLength(10)]), [custom(requirement)]);
-    const input = { key: '12345' };
-    const result = await schema._parse(input);
-    expect(result).toEqual({
-      typed: true,
-      output: input,
-      issues: [
+    const numberIssue1: NumberIssue = {
+      ...baseInfo,
+      kind: 'schema',
+      type: 'number',
+      input: '2',
+      expected: 'number',
+      received: '"2"',
+      path: [
         {
-          reason: 'string',
-          context: 'min_length',
-          expected: '>=10',
-          received: '5',
-          message: 'Invalid length: Expected >=10 but received 5',
-          input: input.key,
-          requirement: 10,
-          path: [
-            {
-              type: 'record',
-              origin: 'value',
-              input: input,
-              key: 'key',
-              value: input.key,
-            },
-          ],
-        },
-        {
-          reason: 'record',
-          context: 'custom',
-          expected: null,
-          received: 'Object',
-          message: 'Invalid input: Received Object',
-          input: input,
-          requirement,
+          type: 'record',
+          origin: 'value',
+          input: {
+            foo: 1,
+            bar: '2',
+            baz: undefined,
+            other: 4,
+          },
+          key: 'bar',
+          value: '2',
         },
       ],
-    } satisfies TypedSchemaResult<Output<typeof schema>>);
-  });
+    };
 
-  test('should skip pipe if output is not typed', async () => {
-    const schema = recordAsync(string(), [
-      custom((value) => value.key.length >= 10),
-    ]);
-    const input = { key: 12345 };
-    const result = await schema._parse(input);
-    expect(result).toEqual({
-      typed: false,
-      output: input,
-      issues: [
-        {
-          reason: 'type',
-          context: 'string',
-          expected: 'string',
-          received: '12345',
-          message: 'Invalid type: Expected string but received 12345',
-          input: input.key,
-          path: [
-            {
-              type: 'record',
-              origin: 'value',
-              input: input,
-              key: 'key',
-              value: input.key,
-            },
-          ],
+    test('for wrong values', async () => {
+      const input = {
+        foo: 1,
+        bar: '2',
+        baz: undefined,
+        other: 4,
+      };
+      expect(
+        await schema._run(
+          {
+            typed: false,
+            value: input,
+          },
+          {}
+        )
+      ).toStrictEqual({
+        typed: false,
+        value: {
+          foo: input.foo,
+          bar: input.bar,
+          baz: input.baz,
         },
-      ],
-    } satisfies UntypedSchemaResult);
+        issues: [
+          numberIssue1,
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'picklist',
+            input: 'other',
+            expected: '"foo" | "bar" | "baz"',
+            received: '"other"',
+            path: [
+              {
+                type: 'record',
+                origin: 'key',
+                input,
+                key: 'other',
+                value: 4,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('with abort early', async () => {
+      expect(
+        await schema._run(
+          {
+            typed: false,
+            value: {
+              foo: 1,
+              bar: '2',
+              baz: undefined,
+              other: 4,
+            },
+          },
+          { abortEarly: true }
+        )
+      ).toStrictEqual({
+        typed: false,
+        value: { foo: 1 },
+        issues: [{ ...numberIssue1, abortEarly: true }],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for wrong nested values', async () => {
+      const nestedSchema = recordAsync(string(), schema);
+      const input = {
+        key1: {
+          foo: 1,
+          bar: '2',
+          baz: undefined,
+        },
+        key2: 123,
+      };
+      expect(
+        await nestedSchema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: input.key1.bar,
+            expected: 'number',
+            received: '"2"',
+            path: [
+              {
+                type: 'record',
+                origin: 'value',
+                input,
+                key: 'key1',
+                value: input.key1,
+              },
+              {
+                type: 'record',
+                origin: 'value',
+                input: input.key1,
+                key: 'bar',
+                value: input.key1.bar,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'record',
+            input: input.key2,
+            expected: 'Object',
+            received: '123',
+            path: [
+              {
+                type: 'record',
+                origin: 'value',
+                input,
+                key: 'key2',
+                value: input.key2,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+    });
   });
 });

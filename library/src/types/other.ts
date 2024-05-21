@@ -1,53 +1,131 @@
-import type { ObjectSchema, ObjectSchemaAsync } from '../schemas/index.ts';
-import type { BaseSchema, BaseSchemaAsync, Input } from './schema.ts';
+import type {
+  LazySchema,
+  LazySchemaAsync,
+  NonNullableIssue,
+  NonNullableSchema,
+  NonNullableSchemaAsync,
+  NullishSchema,
+  NullishSchemaAsync,
+  OptionalSchema,
+  OptionalSchemaAsync,
+} from '../schemas/index.ts';
+import type { Config } from './config.ts';
+import type { Dataset } from './dataset.ts';
+import type { InferInput, InferIssue } from './infer.ts';
+import type { BaseIssue } from './issue.ts';
+import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
+import type { MaybePromise } from './utils.ts';
+
+/**
+ * Error message type.
+ */
+export type ErrorMessage<TIssue extends BaseIssue<unknown>> =
+  | ((issue: TIssue) => string)
+  | string;
+
+/**
+ * Function reference type.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type FunctionReference<TArgs extends any[], TReturn> = (
+  ...args: TArgs
+) => TReturn;
 
 /**
  * Default type.
  */
-export type Default<TSchema extends BaseSchema> =
-  | Input<TSchema>
-  | (() => Input<TSchema> | undefined)
-  | undefined;
+export type Default<
+  TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  TInput extends null | undefined,
+> =
+  | InferInput<TWrapped>
+  | TInput
+  | ((
+      dataset?: Dataset<TInput, never>,
+      config?: Config<InferIssue<TWrapped>>
+    ) => InferInput<TWrapped> | TInput);
 
 /**
  * Default async type.
  */
-export type DefaultAsync<TSchema extends BaseSchema | BaseSchemaAsync> =
-  | Input<TSchema>
-  | (() => Input<TSchema> | Promise<Input<TSchema> | undefined> | undefined)
-  | undefined;
+export type DefaultAsync<
+  TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  TInput extends null | undefined,
+> =
+  | InferInput<TWrapped>
+  | TInput
+  | ((
+      dataset?: Dataset<TInput, never>,
+      config?: Config<InferIssue<TWrapped>>
+    ) => MaybePromise<InferInput<TWrapped> | TInput>);
 
 /**
- * Object keys type.
+ * Default value type.
  */
-export type ObjectKeys<
-  TSchema extends ObjectSchema<any, any> | ObjectSchemaAsync<any, any>,
-> = MaybeReadonly<[keyof TSchema['entries'], ...(keyof TSchema['entries'])[]]>;
+export type DefaultValue<
+  TDefault extends
+    | Default<
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        null | undefined
+      >
+    | DefaultAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        null | undefined
+      >,
+> =
+  TDefault extends DefaultAsync<
+    infer TWrapped extends
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+    infer TInput
+  >
+    ? TDefault extends (
+        dataset?: Dataset<TInput, never>,
+        config?: Config<InferIssue<TWrapped>>
+      ) => MaybePromise<InferInput<TWrapped> | TInput>
+      ? Awaited<ReturnType<TDefault>>
+      : TDefault
+    : never;
 
 /**
- * Maybe readonly type.
- */
-export type MaybeReadonly<T> = T | Readonly<T>;
-
-/**
- * Maybe promise type.
+ * Question mark schema type.
  *
- * TODO: Refactor library with this type.
+ * TODO: Document that for simplicity and bundle size, we currently do not
+ * distinguish between `undefined` and missing keys when using `optional` and
+ * `nullish`.
  */
-export type MaybePromise<T> = T | Promise<T>;
+export type QuestionMarkSchema =
+  | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
+  | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
+  // @ts-expect-error
+  | LazySchema<QuestionMarkSchema>
+  | NonNullableSchema<
+      // @ts-expect-error
+      QuestionMarkSchema,
+      ErrorMessage<NonNullableIssue> | undefined
+    >;
 
 /**
- * Resolve type.
- *
- * Hint: This type has no effect and is only used so that TypeScript displays
- * the final type in the preview instead of the utility types used.
+ * Question mark schema async type.
  */
-type Resolve<T> = T;
-
-/**
- * Resolve object type.
- *
- * Hint: This type has no effect and is only used so that TypeScript displays
- * the final type in the preview instead of the utility types used.
- */
-export type ResolveObject<T> = Resolve<{ [k in keyof T]: T[k] }>;
+export type QuestionMarkSchemaAsync =
+  | NullishSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      unknown
+    >
+  | OptionalSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      unknown
+    >
+  // @ts-expect-error
+  | LazySchemaAsync<QuestionMarkSchema | QuestionMarkSchemaAsync>
+  | NonNullableSchemaAsync<
+      // @ts-expect-error
+      QuestionMarkSchema | QuestionMarkSchemaAsync,
+      ErrorMessage<NonNullableIssue> | undefined
+    >;

@@ -1,74 +1,125 @@
 import { describe, expect, test } from 'vitest';
 import {
+  boolean,
   number,
-  numberAsync,
   object,
-  objectAsync,
+  strictObject,
+  strictTuple,
   string,
-  stringAsync,
   tuple,
-  tupleAsync,
 } from '../../schemas/index.ts';
 import { fallback, fallbackAsync } from '../fallback/index.ts';
 import { getFallbacksAsync } from './getFallbacksAsync.ts';
 
-describe('getFallbacksAsync', () => {
+describe('await getFallbacksAsync', () => {
   test('should return undefined', async () => {
-    expect(await getFallbacksAsync(stringAsync())).toBeUndefined();
+    expect(await getFallbacksAsync(string())).toBeUndefined();
+    expect(await getFallbacksAsync(number())).toBeUndefined();
+    expect(await getFallbacksAsync(boolean())).toBeUndefined();
   });
 
-  test('should return fallbackAsync value', async () => {
-    expect(await getFallbacksAsync(fallbackAsync(stringAsync(), ''))).toBe('');
-    expect(await getFallbacksAsync(fallbackAsync(numberAsync(), 0))).toBe(0);
-    expect(await getFallbacksAsync(fallbackAsync(stringAsync(), 'test'))).toBe(
-      'test'
+  test('should return default', async () => {
+    expect(await getFallbacksAsync(fallback(string(), 'foo' as const))).toBe(
+      'foo'
     );
     expect(
+      await getFallbacksAsync(fallback(number(), () => 123 as const))
+    ).toBe(123);
+    expect(
       await getFallbacksAsync(
-        fallbackAsync(objectAsync({ key: stringAsync() }), { key: 'test' })
+        fallbackAsync(boolean(), async () => false as const)
       )
-    ).toEqual({
-      key: 'test',
+    ).toBe(false);
+  });
+
+  describe('should return object defaults', () => {
+    test('for empty object', async () => {
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      expect(await getFallbacksAsync(object({}))).toStrictEqual({});
+    });
+
+    test('for simple object', async () => {
+      expect(
+        await getFallbacksAsync(
+          // TODO: Switch this to `objectAsync`
+          object({
+            key1: fallback(string(), 'foo' as const),
+            key2: fallback(number(), () => 123 as const),
+            // TODO: Switch this to `fallbackAsync`
+            key3: fallback(boolean(), false as const),
+            key4: string(),
+          })
+        )
+      ).toStrictEqual({
+        key1: 'foo',
+        key2: 123,
+        key3: false,
+        key4: undefined,
+      });
+    });
+
+    test('for nested object', async () => {
+      expect(
+        await getFallbacksAsync(
+          // TODO: Switch this to `objectAsync`
+          object({
+            // TODO: Switch this to `strictObjectAsync`
+            nested: strictObject({
+              key1: fallback(string(), 'foo' as const),
+              key2: fallback(number(), () => 123 as const),
+              // TODO: Switch this to `fallbackAsync`
+              key3: fallback(boolean(), false as const),
+            }),
+            other: string(),
+          })
+        )
+      ).toStrictEqual({
+        nested: {
+          key1: 'foo',
+          key2: 123,
+          key3: false,
+        },
+        other: undefined,
+      });
     });
   });
 
-  test('should return objectAsync fallbacks', async () => {
-    expect(await getFallbacksAsync(objectAsync({}))).toEqual({});
-    expect(
-      await getFallbacksAsync(
-        objectAsync({
-          key1: stringAsync(),
-          key2: fallbackAsync(stringAsync(), 'test'),
-          key3: fallbackAsync(numberAsync(), 0),
-          nested: object({
-            key1: string(),
-            key2: fallback(string(), 'test'),
-            key3: fallback(number(), 0),
-          }),
-        })
-      )
-    ).toEqual({
-      key1: undefined,
-      key2: 'test',
-      key3: 0,
-      nested: {
-        key1: undefined,
-        key2: 'test',
-        key3: 0,
-      },
+  describe('should return tuple defaults', () => {
+    test('for empty tuple', async () => {
+      expect(await getFallbacksAsync(tuple([]))).toStrictEqual([]);
     });
-  });
 
-  test('should return tuple fallbacks', async () => {
-    expect(
-      await getFallbacksAsync(
-        tupleAsync([
-          stringAsync(),
-          fallbackAsync(stringAsync(), 'test'),
-          fallbackAsync(numberAsync(), 0),
-          tuple([string(), fallback(string(), 'test'), fallback(number(), 0)]),
-        ])
-      )
-    ).toEqual([undefined, 'test', 0, [undefined, 'test', 0]]);
+    test('for simple tuple', async () => {
+      expect(
+        await getFallbacksAsync(
+          // TODO: Switch this to `tupleAsync`
+          tuple([
+            fallback(string(), 'foo' as const),
+            fallback(number(), () => 123 as const),
+            // TODO: Switch this to `fallbackAsync`
+            fallback(boolean(), false as const),
+            string(),
+          ])
+        )
+      ).toStrictEqual(['foo', 123, false, undefined]);
+    });
+
+    test('for nested tuple', async () => {
+      expect(
+        await getFallbacksAsync(
+          // TODO: Switch this to `tupleAsync`
+          tuple([
+            // TODO: Switch this to `strictTupleAsync`
+            strictTuple([
+              fallback(string(), 'foo' as const),
+              fallback(number(), () => 123 as const),
+              // TODO: Switch this to `fallbackAsync`
+              fallback(boolean(), false as const),
+            ]),
+            string(),
+          ])
+        )
+      ).toStrictEqual([['foo', 123, false], undefined]);
+    });
   });
 });

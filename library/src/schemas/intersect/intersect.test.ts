@@ -1,105 +1,240 @@
 import { describe, expect, test } from 'vitest';
-import type { ValiError } from '../../error/index.ts';
-import { parse, transform } from '../../methods/index.ts';
-import { custom } from '../../validations/index.ts';
-import { literal } from '../literal/index.ts';
+import { minLength, minValue, transform } from '../../actions/index.ts';
+import { pipe } from '../../methods/index.ts';
+import type {
+  InferIssue,
+  InferOutput,
+  TypedDataset,
+  UntypedDataset,
+} from '../../types/index.ts';
+import { expectNoSchemaIssue } from '../../vitest/index.ts';
+import { array } from '../array/array.ts';
+import { date } from '../date/index.ts';
+import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
-import { record } from '../record/index.ts';
 import { string } from '../string/index.ts';
-import { unknown } from '../unknown/index.ts';
-import { intersect, type IntersectOptions } from './intersect.ts';
+import { intersect, type IntersectSchema } from './intersect.ts';
 
 describe('intersect', () => {
-  test('should pass only intersect values', () => {
-    const schema1 = intersect([string(), literal('test')]);
-    const input1 = 'test';
-    const output1 = parse(schema1, input1);
-    expect(output1).toBe(input1);
-    expect(() => parse(schema1, 'foo')).toThrowError();
-    expect(() => parse(schema1, undefined)).toThrowError();
-    expect(() => parse(schema1, {})).toThrowError();
-    expect(() => parse(schema1, [])).toThrowError();
-
-    const schema2 = intersect([
-      object({ foo: string() }),
-      object({ bar: string() }),
-    ]);
-    const input2 = { foo: 'test', bar: 'test' };
-    const output2 = parse(schema2, input2);
-    expect(output2).toEqual(input2);
-    expect(() => parse(schema2, { foo: 'test' })).toThrowError();
-    expect(() => parse(schema2, { bar: 'test' })).toThrowError();
-
-    const schema3 = intersect([
+  describe('should return schema object', () => {
+    const options = [
       object({ key1: string() }),
-      record(string(), unknown()),
-    ]);
-    const input3 = { key1: 'test', keyX: 123 };
-    const output3 = parse(schema3, input3);
-    expect(output3).toEqual(input3);
-    expect(() => parse(schema3, { keyX: 123 })).toThrowError();
-    expect(() => parse(schema3, {})).toThrowError();
+      object({ key2: number() }),
+    ] as const;
+    type Options = typeof options;
+    const baseSchema: Omit<IntersectSchema<Options, never>, 'message'> = {
+      kind: 'schema',
+      type: 'intersect',
+      reference: intersect,
+      expects: 'Object',
+      options,
+      async: false,
+      _run: expect.any(Function),
+    };
+
+    test('with undefined message', () => {
+      const schema: IntersectSchema<Options, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(intersect(options)).toStrictEqual(schema);
+      expect(intersect(options, undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(intersect(options, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies IntersectSchema<Options, 'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(intersect(options, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies IntersectSchema<Options, typeof message>);
+    });
   });
 
-  test('should throw custom error', () => {
-    const error = 'Value is not an intersect!';
-    const options: IntersectOptions = [
-      string(),
-      transform(string(), (input) => input.length),
-    ];
-    expect(() => parse(intersect(options), 'test')).toThrowError(
-      'Invalid type'
-    );
-    expect(() => parse(intersect(options, error), 'test')).toThrowError(error);
+  describe('should return dataset without issues', () => {
+    test('for valid values', () => {
+      expectNoSchemaIssue(
+        intersect([
+          array(object({ key1: string(), key2: number() })),
+          array(object({ key3: date(), key4: array(string()) })),
+        ]),
+        [
+          [
+            { key1: 'foo', key2: 123, key3: new Date(), key4: ['foo', 'bar'] },
+            { key1: 'bar', key2: -456, key3: new Date(), key4: ['baz'] },
+          ],
+        ]
+      );
+    });
   });
 
-  test('should throw every issue', () => {
-    const schema = intersect([string(), literal('test')]);
-    const input = 123;
-    expect(() => parse(schema, input)).toThrowError();
-    try {
-      parse(schema, input);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(2);
-    }
-  });
+  describe('should return dataset with issues', () => {
+    const baseInfo = {
+      message: expect.any(String),
+      requirement: undefined,
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+      skipPipe: undefined,
+    };
 
-  test('should throw only first issue', () => {
-    const schema = intersect([string(), literal('test')]);
-    const input = 123;
-    const config = { abortEarly: true };
-    expect(() => parse(schema, input, config)).toThrowError();
-    try {
-      parse(schema, input, config);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(1);
-    }
-  });
+    test('for empty options', () => {
+      const schema = intersect([]);
+      const input = 'foo';
+      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'intersect',
+            input,
+            expected: 'never',
+            received: `"${input}"`,
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
 
-  test('should execute pipe', () => {
-    const equalError = 'Keys not equal';
+    test('with untyped output', () => {
+      const schema = intersect([string(), number()]);
+      const input = 'foo';
+      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input,
+            expected: 'number',
+            received: `"${input}"`,
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
 
-    const schema1 = intersect(
-      [object({ foo: string() }), object({ bar: string() })],
-      [custom((input) => input.foo === input.bar, equalError)]
-    );
-    const input1 = { foo: 'test', bar: 'test' };
-    const output1 = parse(schema1, input1);
-    expect(output1).toEqual(input1);
-    expect(() => parse(schema1, { foo: 'abc', bar: '123' })).toThrowError(
-      equalError
-    );
+    test('with typed output', () => {
+      const schema = intersect([
+        object({ key1: pipe(string(), minLength(10)) }),
+        object({ key2: pipe(number(), minValue(100)) }),
+      ]);
+      type Schema = typeof schema;
+      const input = { key1: 'foo', key2: -123 };
+      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+        typed: true,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'validation',
+            type: 'min_length',
+            input: input.key1,
+            expected: '>=10',
+            received: '3',
+            requirement: 10,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key1',
+                value: input.key1,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'validation',
+            type: 'min_value',
+            input: input.key2,
+            expected: '>=100',
+            received: '-123',
+            requirement: 100,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key2',
+                value: input.key2,
+              },
+            ],
+          },
+        ],
+      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+    });
 
-    const schema2 = intersect(
-      [object({ foo: string() }), object({ bar: string() })],
-      'Error',
-      [custom((input) => input.foo === input.bar, equalError)]
-    );
-    const input2 = { foo: 'test', bar: 'test' };
-    const output2 = parse(schema2, input2);
-    expect(output2).toEqual(input2);
-    expect(() => parse(schema2, { foo: 'abc', bar: '123' })).toThrowError(
-      equalError
-    );
+    test('with abort early', () => {
+      const schema = intersect([
+        object({ key1: pipe(string(), minLength(10)) }),
+        object({ key2: pipe(number(), minValue(100)) }),
+      ]);
+      const input = { key1: 'foo', key2: -123 };
+      expect(
+        schema._run({ typed: false, value: input }, { abortEarly: true })
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            abortEarly: true,
+            kind: 'validation',
+            type: 'min_length',
+            input: input.key1,
+            expected: '>=10',
+            received: '3',
+            requirement: 10,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key1',
+                value: input.key1,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for merge error', () => {
+      const schema = intersect([
+        object({ key: string() }),
+        object({
+          key: pipe(
+            string(),
+            transform((input) => input.length)
+          ),
+        }),
+      ]);
+      const input = { key: 'foo' };
+      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'intersect',
+            input: input,
+            expected: 'Object',
+            received: 'unknown',
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
   });
 });

@@ -1,41 +1,92 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods/index.ts';
-import { any } from '../any/index.ts';
-import { null_ } from '../null/index.ts';
-import { nullish } from '../nullish/index.ts';
-import { number } from '../number/index.ts';
-import { stringAsync } from '../string/index.ts';
-import { undefined_ } from '../undefined/index.ts';
-import { unionAsync } from '../union/index.ts';
-import { nonNullishAsync } from './nonNullishAsync.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
+import { nullishAsync, type NullishSchemaAsync } from '../nullish/index.ts';
+import { string, type StringSchema } from '../string/index.ts';
+import {
+  nonNullishAsync,
+  type NonNullishSchemaAsync,
+} from './nonNullishAsync.ts';
+import type { NonNullishIssue } from './types.ts';
 
 describe('nonNullishAsync', () => {
-  test('should not pass null or undefined', async () => {
-    const schema1 = nonNullishAsync(
-      unionAsync([stringAsync(), null_(), undefined_()])
-    );
-    const input1 = 'test';
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toBe(input1);
-    await expect(parseAsync(schema1, null)).rejects.toThrowError();
-    await expect(parseAsync(schema1, undefined)).rejects.toThrowError();
-    await expect(parseAsync(schema1, 123)).rejects.toThrowError();
-    await expect(parseAsync(schema1, {})).rejects.toThrowError();
+  describe('should return schema object', () => {
+    const wrapped = nullishAsync(string());
+    const baseSchema: Omit<
+      NonNullishSchemaAsync<
+        NullishSchemaAsync<StringSchema<undefined>, undefined>,
+        never
+      >,
+      'message'
+    > = {
+      kind: 'schema',
+      type: 'non_nullish',
+      reference: nonNullishAsync,
+      expects: '!null & !undefined',
+      wrapped,
+      async: true,
+      _run: expect.any(Function),
+    };
 
-    const schema2 = nonNullishAsync(nullish(number()));
-    const input2 = 123;
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toBe(input2);
-    await expect(parseAsync(schema2, null)).rejects.toThrowError();
-    await expect(parseAsync(schema2, undefined)).rejects.toThrowError();
-    await expect(parseAsync(schema2, 'test')).rejects.toThrowError();
-    await expect(parseAsync(schema2, {})).rejects.toThrowError();
+    test('with undefined message', () => {
+      const schema: NonNullishSchemaAsync<
+        NullishSchemaAsync<StringSchema<undefined>, undefined>,
+        undefined
+      > = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(nonNullishAsync(wrapped)).toStrictEqual(schema);
+      expect(nonNullishAsync(wrapped, undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(nonNullishAsync(wrapped, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies NonNullishSchemaAsync<
+        NullishSchemaAsync<StringSchema<undefined>, undefined>,
+        'message'
+      >);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(nonNullishAsync(wrapped, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies NonNullishSchemaAsync<
+        NullishSchemaAsync<StringSchema<undefined>, undefined>,
+        typeof message
+      >);
+    });
   });
 
-  test('should throw custom error', async () => {
-    const error = 'Value is not non nullish!';
-    await expect(
-      parseAsync(nonNullishAsync(any(), error), null)
-    ).rejects.toThrowError(error);
+  describe('should return dataset without issues', () => {
+    const schema = nonNullishAsync(nullishAsync(string()));
+
+    test('for valid wrapped types', async () => {
+      await expectNoSchemaIssueAsync(schema, ['', 'foo', '#$%']);
+    });
+  });
+
+  describe('should return dataset with issues', () => {
+    const schema = nonNullishAsync(nullishAsync(string()), 'message');
+    const baseIssue: Omit<NonNullishIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'non_nullish',
+      expected: '!null & !undefined',
+      message: 'message',
+    };
+
+    test('for null', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [null]);
+    });
+
+    test('for undefined', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
+    });
   });
 });

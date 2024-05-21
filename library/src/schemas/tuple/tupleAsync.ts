@@ -1,279 +1,173 @@
 import type {
-  BaseSchema,
+  BaseIssue,
   BaseSchemaAsync,
+  Dataset,
   ErrorMessage,
-  PipeAsync,
-  SchemaIssues,
+  InferTupleInput,
+  InferTupleIssue,
+  InferTupleOutput,
+  TupleItemsAsync,
+  TuplePathItem,
 } from '../../types/index.ts';
-import {
-  pipeResultAsync,
-  restAndDefaultArgs,
-  schemaIssue,
-  schemaResult,
-} from '../../utils/index.ts';
-import type { TupleInput, TupleOutput, TuplePathItem } from './types.ts';
-
-/**
- * Tuple shape async type.
- */
-export type TupleItemsAsync = [
-  BaseSchema | BaseSchemaAsync,
-  ...(BaseSchema | BaseSchemaAsync)[],
-];
+import { _addIssue } from '../../utils/index.ts';
+import type { TupleIssue } from './types.ts';
 
 /**
  * Tuple schema async type.
  */
 export interface TupleSchemaAsync<
   TItems extends TupleItemsAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
-  TOutput = TupleOutput<TItems, TRest>,
-> extends BaseSchemaAsync<TupleInput<TItems, TRest>, TOutput> {
+  TMessage extends ErrorMessage<TupleIssue> | undefined,
+> extends BaseSchemaAsync<
+    InferTupleInput<TItems>,
+    InferTupleOutput<TItems>,
+    TupleIssue | InferTupleIssue<TItems>
+  > {
   /**
    * The schema type.
    */
-  type: 'tuple';
+  readonly type: 'tuple';
   /**
-   * The tuple items schema.
+   * The schema reference.
    */
-  items: TItems;
+  readonly reference: typeof tupleAsync;
   /**
-   * The tuple rest schema.
+   * The expected property.
    */
-  rest: TRest;
+  readonly expects: 'Array';
+  /**
+   * The items schema.
+   */
+  readonly items: TItems;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
-  /**
-   * The validation and transformation pipeline.
-   */
-  pipe: PipeAsync<TupleOutput<TItems, TRest>> | undefined;
+  readonly message: TMessage;
 }
 
 /**
- * Creates an async tuple schema.
+ * Creates a tuple schema.
+ *
+ * Hint: This schema ignores and excludes unknown items. The output will
+ * include only the items you specify. To include unknown items, use the
+ * `looseTupleAsync` schema. To return an issue for unknown items, use the
+ * `strictTupleAsync` schema. To include and validate unknown items, use the
+ * `tupleWithRestAsync` schema.
  *
  * @param items The items schema.
- * @param pipe A validation and transformation pipe.
  *
- * @returns An async tuple schema.
+ * @returns A tuple schema.
  */
-export function tupleAsync<TItems extends TupleItemsAsync>(
-  items: TItems,
-  pipe?: PipeAsync<TupleOutput<TItems, undefined>>
-): TupleSchemaAsync<TItems>;
+export function tupleAsync<const TItems extends TupleItemsAsync>(
+  items: TItems
+): TupleSchemaAsync<TItems, undefined>;
 
 /**
- * Creates an async tuple schema.
+ * Creates a tuple schema.
+ *
+ * Hint: This schema ignores and excludes unknown items. The output will
+ * include only the items you specify. To include unknown items, use the
+ * `looseTupleAsync` schema. To return an issue for unknown items, use the
+ * `strictTupleAsync` schema. To include and validate unknown items, use the
+ * `tupleWithRestAsync` schema.
  *
  * @param items The items schema.
  * @param message The error message.
- * @param pipe A validation and transformation pipe.
  *
- * @returns An async tuple schema.
- */
-export function tupleAsync<TItems extends TupleItemsAsync>(
-  items: TItems,
-  message?: ErrorMessage,
-  pipe?: PipeAsync<TupleOutput<TItems, undefined>>
-): TupleSchemaAsync<TItems>;
-
-/**
- * Creates an async tuple schema.
- *
- * @param items The items schema.
- * @param rest The rest schema.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async tuple schema.
+ * @returns A tuple schema.
  */
 export function tupleAsync<
-  TItems extends TupleItemsAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined,
->(
-  items: TItems,
-  rest: TRest,
-  pipe?: PipeAsync<TupleOutput<TItems, TRest>>
-): TupleSchemaAsync<TItems, TRest>;
+  const TItems extends TupleItemsAsync,
+  const TMessage extends ErrorMessage<TupleIssue> | undefined,
+>(items: TItems, message: TMessage): TupleSchemaAsync<TItems, TMessage>;
 
-/**
- * Creates an async tuple schema.
- *
- * @param items The items schema.
- * @param rest The rest schema.
- * @param message The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns An async tuple schema.
- */
-export function tupleAsync<
-  TItems extends TupleItemsAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined,
->(
-  items: TItems,
-  rest: TRest,
-  message?: ErrorMessage,
-  pipe?: PipeAsync<TupleOutput<TItems, TRest>>
-): TupleSchemaAsync<TItems, TRest>;
-
-export function tupleAsync<
-  TItems extends TupleItemsAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined = undefined,
->(
-  items: TItems,
-  arg2?: PipeAsync<TupleOutput<TItems, TRest>> | ErrorMessage | TRest,
-  arg3?: PipeAsync<TupleOutput<TItems, TRest>> | ErrorMessage,
-  arg4?: PipeAsync<TupleOutput<TItems, TRest>>
-): TupleSchemaAsync<TItems, TRest> {
-  // Get rest, message and pipe argument
-  const [rest, message, pipe] = restAndDefaultArgs<
-    TRest,
-    PipeAsync<TupleOutput<TItems, TRest>>
-  >(arg2, arg3, arg4);
-
-  // Create and return async tuple schema
+export function tupleAsync(
+  items: TupleItemsAsync,
+  message?: ErrorMessage<TupleIssue>
+): TupleSchemaAsync<TupleItemsAsync, ErrorMessage<TupleIssue> | undefined> {
   return {
+    kind: 'schema',
     type: 'tuple',
+    reference: tupleAsync,
     expects: 'Array',
     async: true,
     items,
-    rest,
     message,
-    pipe,
-    async _parse(input, config) {
+    async _run(dataset, config) {
+      // Get input value from dataset
+      const input = dataset.value;
+
       // If root type is valid, check nested types
       if (Array.isArray(input)) {
-        // Create typed, issues and output
-        let typed = true;
-        let issues: SchemaIssues | undefined;
-        const output: any[] = [];
+        // Set typed to `true` and value to empty array
+        dataset.typed = true;
+        dataset.value = [];
 
-        await Promise.all([
-          // Parse schema of each tuple item
-          Promise.all(
-            this.items.map(async (schema, key) => {
-              // If not aborted early, continue execution
-              if (!(config?.abortEarly && issues)) {
-                const value = input[key];
-                const result = await schema._parse(value, config);
+        // Parse schema of each tuple item
+        const itemDatasets = await Promise.all(
+          items.map(async (item, key) => {
+            const value = input[key];
+            return [
+              key,
+              value,
+              await item._run({ typed: false, value }, config),
+            ] as const;
+          })
+        );
 
-                // If not aborted early, continue execution
-                if (!(config?.abortEarly && issues)) {
-                  // If there are issues, capture them
-                  if (result.issues) {
-                    // Create tuple path item
-                    const pathItem: TuplePathItem = {
-                      type: 'tuple',
-                      origin: 'value',
-                      input: input as [any, ...any[]],
-                      key,
-                      value,
-                    };
+        // Process each tuple item dataset
+        for (const [key, value, itemDataset] of itemDatasets) {
+          // If there are issues, capture them
+          if (itemDataset.issues) {
+            // Create tuple path item
+            const pathItem: TuplePathItem = {
+              type: 'tuple',
+              origin: 'value',
+              input,
+              key,
+              value,
+            };
 
-                    // Add modified result issues to issues
-                    for (const issue of result.issues) {
-                      if (issue.path) {
-                        issue.path.unshift(pathItem);
-                      } else {
-                        issue.path = [pathItem];
-                      }
-                      issues?.push(issue);
-                    }
-                    if (!issues) {
-                      issues = result.issues;
-                    }
-
-                    // If necessary, abort early
-                    if (config?.abortEarly) {
-                      typed = false;
-                      throw null;
-                    }
-                  }
-
-                  // If not typed, set typed to false
-                  if (!result.typed) {
-                    typed = false;
-                  }
-
-                  // Set output of item
-                  output[key] = result.output;
-                }
+            // Add modified item dataset issues to issues
+            for (const issue of itemDataset.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                // @ts-expect-error
+                issue.path = [pathItem];
               }
-            })
-          ),
+              // @ts-expect-error
+              dataset.issues?.push(issue);
+            }
+            if (!dataset.issues) {
+              // @ts-expect-error
+              dataset.issues = itemDataset.issues;
+            }
 
-          // If necessary parse schema of each rest item
-          this.rest &&
-            Promise.all(
-              input.slice(this.items.length).map(async (value, index) => {
-                // If not aborted early, continue execution
-                if (!(config?.abortEarly && issues)) {
-                  const key = this.items.length + index;
-                  const result = await this.rest!._parse(value, config);
+            // If necessary, abort early
+            if (config.abortEarly) {
+              dataset.typed = false;
+              break;
+            }
+          }
 
-                  // If not aborted early, continue execution
-                  if (!(config?.abortEarly && issues)) {
-                    // If there are issues, capture them
-                    if (result.issues) {
-                      // Create tuple path item
-                      const pathItem: TuplePathItem = {
-                        type: 'tuple',
-                        origin: 'value',
-                        input: input as [any, ...any[]],
-                        key,
-                        value,
-                      };
+          // If not typed, set typed to `false`
+          if (!itemDataset.typed) {
+            dataset.typed = false;
+          }
 
-                      // Add modified result issues to issues
-                      for (const issue of result.issues) {
-                        if (issue.path) {
-                          issue.path.unshift(pathItem);
-                        } else {
-                          issue.path = [pathItem];
-                        }
-                        issues?.push(issue);
-                      }
-                      if (!issues) {
-                        issues = result.issues;
-                      }
-
-                      // If necessary, abort early
-                      if (config?.abortEarly) {
-                        typed = false;
-                        throw null;
-                      }
-                    }
-
-                    // If not typed, set typed to false
-                    if (!result.typed) {
-                      typed = false;
-                    }
-
-                    // Set output of item
-                    output[key] = result.output;
-                  }
-                }
-              })
-            ),
-        ]).catch(() => null);
-
-        // If output is typed, return pipe result
-        if (typed) {
-          return pipeResultAsync(
-            this,
-            output as TupleOutput<TItems, TRest>,
-            config,
-            issues
-          );
+          // Add item to dataset
+          // @ts-expect-error
+          dataset.value.push(itemDataset.value);
         }
 
-        // Otherwise, return untyped schema result
-        return schemaResult(false, output, issues as SchemaIssues);
+        // Otherwise, add tuple issue
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
 
-      // Otherwise, return schema issue
-      return schemaIssue(this, tupleAsync, input, config);
+      // Return output dataset
+      return dataset as Dataset<unknown[], TupleIssue | BaseIssue<unknown>>;
     },
   };
 }

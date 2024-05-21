@@ -1,48 +1,116 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
-import { maxValue, minValue } from '../../validations/index.ts';
-import { date } from './date.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { date, type DateIssue, type DateSchema } from './date.ts';
 
 describe('date', () => {
-  test('should pass only dates', () => {
+  describe('should return schema object', () => {
+    const baseSchema: Omit<DateSchema<never>, 'message'> = {
+      kind: 'schema',
+      type: 'date',
+      reference: date,
+      expects: 'Date',
+      async: false,
+      _run: expect.any(Function),
+    };
+
+    test('with undefined message', () => {
+      const schema: DateSchema<undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(date()).toStrictEqual(schema);
+      expect(date(undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(date('message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies DateSchema<'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(date(message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies DateSchema<typeof message>);
+    });
+  });
+
+  describe('should return dataset without issues', () => {
     const schema = date();
-    const input = new Date();
-    const output = parse(schema, input);
-    expect(output).toEqual(input);
-    expect(() => parse(schema, 2023)).toThrowError();
-    expect(() => parse(schema, '2023-07-10')).toThrowError();
-    expect(() => parse(schema, new Date('Invalid Date'))).toThrowError();
-    expect(() => parse(schema, {})).toThrowError();
+
+    test('for current date', () => {
+      expectNoSchemaIssue(schema, [new Date()]);
+    });
+
+    test('for past date', () => {
+      expectNoSchemaIssue(schema, [new Date(0)]);
+    });
+
+    test('for future date', () => {
+      expectNoSchemaIssue(schema, [new Date(8640000000000000)]);
+    });
   });
 
-  test('should throw custom error', () => {
-    const error = 'Value is not a date!';
-    expect(() => parse(date(error), 123)).toThrowError(error);
-  });
+  describe('should return dataset with issues', () => {
+    const schema = date('message');
+    const baseIssue: Omit<DateIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'date',
+      expected: 'Date',
+      message: 'message',
+    };
 
-  test('should execute pipe', () => {
-    const valueError = 'Invalid value';
+    // Special values
 
-    const schema1 = date([
-      minValue(new Date(Date.now() - 3600000)),
-      maxValue(new Date(Date.now() + 3600000)),
-    ]);
-    const input1 = new Date();
-    const output1 = parse(schema1, input1);
-    expect(output1).toEqual(input1);
-    expect(() => parse(schema1, new Date(Date.now() - 4000000))).toThrowError(
-      valueError
-    );
-    expect(() => parse(schema1, new Date(Date.now() + 4000000))).toThrowError(
-      valueError
-    );
+    test('for invalid dates', () => {
+      expectSchemaIssue(schema, baseIssue, [new Date('foo')]);
+    });
 
-    const schema2 = date('Error', [maxValue(new Date())]);
-    const input2 = new Date(Date.now() - 120000);
-    const output2 = parse(schema2, input2);
-    expect(output2).toEqual(input2);
-    expect(() => parse(schema2, new Date(Date.now() + 1))).toThrowError(
-      valueError
-    );
+    // Primitive types
+
+    test('for bigints', () => {
+      expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
+    });
+
+    test('for booleans', () => {
+      expectSchemaIssue(schema, baseIssue, [true, false]);
+    });
+
+    test('for null', () => {
+      expectSchemaIssue(schema, baseIssue, [null]);
+    });
+
+    test('for numbers', () => {
+      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', () => {
+      expectSchemaIssue(schema, baseIssue, [undefined]);
+    });
+
+    test('for strings', () => {
+      expectSchemaIssue(schema, baseIssue, ['', 'foo', '123']);
+    });
+
+    test('for symbols', () => {
+      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    });
+
+    // Complex types
+
+    test('for arrays', () => {
+      expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    });
+
+    test('for functions', () => {
+      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    });
+
+    test('for objects', () => {
+      expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    });
   });
 });

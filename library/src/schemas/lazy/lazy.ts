@@ -1,20 +1,37 @@
-import type { BaseSchema, Input, Output } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  InferInput,
+  InferIssue,
+  InferOutput,
+} from '../../types/index.ts';
 
 /**
  * Lazy schema type.
  */
 export interface LazySchema<
-  TGetter extends (input: unknown) => BaseSchema,
-  TOutput = Output<ReturnType<TGetter>>,
-> extends BaseSchema<Input<ReturnType<TGetter>>, TOutput> {
+  TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+> extends BaseSchema<
+    InferInput<TWrapped>,
+    InferOutput<TWrapped>,
+    InferIssue<TWrapped>
+  > {
   /**
    * The schema type.
    */
-  type: 'lazy';
+  readonly type: 'lazy';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof lazy;
+  /**
+   * The expected property.
+   */
+  readonly expects: 'unknown';
   /**
    * The schema getter.
    */
-  getter: TGetter;
+  readonly getter: (input: unknown) => TWrapped;
 }
 
 /**
@@ -24,16 +41,18 @@ export interface LazySchema<
  *
  * @returns A lazy schema.
  */
-export function lazy<TGetter extends (input: unknown) => BaseSchema>(
-  getter: TGetter
-): LazySchema<TGetter> {
+export function lazy<
+  const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(getter: (input: unknown) => TWrapped): LazySchema<TWrapped> {
   return {
+    kind: 'schema',
     type: 'lazy',
+    reference: lazy,
     expects: 'unknown',
     async: false,
     getter,
-    _parse(input, config) {
-      return this.getter(input)._parse(input, config);
+    _run(dataset, config) {
+      return this.getter(dataset.value)._run(dataset, config);
     },
   };
 }

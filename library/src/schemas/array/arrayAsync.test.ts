@@ -1,193 +1,264 @@
 import { describe, expect, test } from 'vitest';
-import { type ValiError } from '../../error/index.ts';
-import { parseAsync } from '../../methods/index.ts';
-import type {
-  Output,
-  TypedSchemaResult,
-  UntypedSchemaResult,
-} from '../../types/index.ts';
+import type { InferIssue, UntypedDataset } from '../../types/index.ts';
 import {
-  includes,
-  length,
-  maxLength,
-  minLength,
-} from '../../validations/index.ts';
-import { number, numberAsync } from '../number/index.ts';
-import { object } from '../object/index.ts';
-import { string } from '../string/index.ts';
-import { arrayAsync } from './arrayAsync.ts';
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
+import { string, type StringIssue } from '../string/index.ts';
+import { arrayAsync, type ArraySchemaAsync } from './arrayAsync.ts';
+import type { ArrayIssue } from './types.ts';
 
 describe('array', () => {
-  test('should pass only arrays', async () => {
-    const schema1 = arrayAsync(numberAsync());
-    const input1 = [1, 2, 3];
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toEqual(input1);
+  describe('should return schema object', () => {
+    const item = string();
+    type Item = typeof item;
+    const baseSchema: Omit<ArraySchemaAsync<Item, never>, 'message'> = {
+      kind: 'schema',
+      type: 'array',
+      reference: arrayAsync,
+      expects: 'Array',
+      item: { ...string(), _run: expect.any(Function) },
+      async: true,
+      _run: expect.any(Function),
+    };
 
-    const schema2 = arrayAsync(schema1);
-    const input2 = [input1, input1, input1];
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toEqual(input2);
+    test('with undefined message', () => {
+      const schema: ArraySchemaAsync<Item, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(arrayAsync(item)).toStrictEqual(schema);
+      expect(arrayAsync(item, undefined)).toStrictEqual(schema);
+    });
 
-    const input3: number[] = [];
-    const output3 = await parseAsync(schema2, input3);
-    expect(output3).toEqual(input3);
+    test('with string message', () => {
+      expect(arrayAsync(item, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies ArraySchemaAsync<Item, 'message'>);
+    });
 
-    await expect(parseAsync(schema1, {})).rejects.toThrowError();
-    await expect(parseAsync(schema1, 123)).rejects.toThrowError();
-    await expect(parseAsync(schema2, input1)).rejects.toThrowError();
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(arrayAsync(item, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies ArraySchemaAsync<Item, typeof message>);
+    });
   });
 
-  test('should throw custom error', async () => {
-    const error = 'Value is not an array!';
-    const schema = arrayAsync(number(), error);
-    await expect(parseAsync(schema, 123)).rejects.toThrowError(error);
+  describe('should return dataset without issues', () => {
+    const schema = arrayAsync(string());
+
+    test('for empty array', async () => {
+      await expectNoSchemaIssueAsync(schema, [[]]);
+    });
+
+    test('for simple array', async () => {
+      await expectNoSchemaIssueAsync(schema, [['foo', 'bar', 'baz']]);
+    });
   });
 
-  test('should throw every issue', async () => {
-    const schema = arrayAsync(number());
-    const input = ['1', 2, '3'];
-    await expect(parseAsync(schema, input)).rejects.toThrowError();
-    try {
-      await parseAsync(schema, input);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(2);
-    }
+  describe('should return dataset with issues', () => {
+    const schema = arrayAsync(string(), 'message');
+    const baseIssue: Omit<ArrayIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'array',
+      expected: 'Array',
+      message: 'message',
+    };
+
+    // Primitive types
+
+    test('for bigints', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1n, 0n, 123n]);
+    });
+
+    test('for booleans', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [true, false]);
+    });
+
+    test('for null', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [null]);
+    });
+
+    test('for numbers', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
+    });
+
+    test('for strings', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, ['', 'abc', '123']);
+    });
+
+    test('for symbols', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        Symbol(),
+        Symbol('foo'),
+      ]);
+    });
+
+    // Complex types
+
+    test('for functions', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        () => {},
+        function () {},
+      ]);
+    });
+
+    test('for objects', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [{}, { key: 'value' }]);
+    });
   });
 
-  test('should throw only first issue', async () => {
-    const schema = arrayAsync(number());
-    const input = ['1', 2, '3'];
-    const config = { abortEarly: true };
-    await expect(parseAsync(schema, input, config)).rejects.toThrowError();
-    try {
-      await parseAsync(schema, input, config);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(1);
-    }
+  describe('should return dataset without nested issues', () => {
+    const schema = arrayAsync(string());
+
+    test('for simple array', async () => {
+      await expectNoSchemaIssueAsync(schema, [['foo', 'bar', 'baz']]);
+    });
+
+    test('for nested array', async () => {
+      await expectNoSchemaIssueAsync(arrayAsync(schema), [
+        [['foo', 'bar'], ['baz']],
+      ]);
+    });
   });
 
-  test('should return issue path', async () => {
-    const schema1 = arrayAsync(number());
-    const input1 = [1, 2, '3', 4];
-    const result1 = await schema1._parse(input1);
-    expect(result1.issues?.[0].path).toEqual([
-      {
-        type: 'array',
-        origin: 'value',
-        input: input1,
-        key: 2,
-        value: input1[2],
-      },
-    ]);
+  describe('should return dataset with nested issues', () => {
+    const schema = arrayAsync(string());
 
-    const schema2 = arrayAsync(object({ key: string() }));
-    const input2 = [{ key: '1' }, { key: 2 }, { key: '3' }];
-    const result2 = await schema2._parse(input2);
-    expect(result2.issues?.[0].path).toEqual([
-      {
-        type: 'array',
-        origin: 'value',
-        input: input2,
-        key: 1,
-        value: input2[1],
-      },
-      {
-        type: 'object',
-        origin: 'value',
-        input: input2[1],
-        key: 'key',
-        value: input2[1].key,
-      },
-    ]);
-  });
+    const baseInfo = {
+      message: expect.any(String),
+      requirement: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+      skipPipe: undefined,
+    };
 
-  test('should execute pipe', async () => {
-    const lengthError = 'Invalid length';
-    const contentError = 'Invalid content';
-
-    const schema1 = arrayAsync(number(), [minLength(1), maxLength(3)]);
-    const input1 = [1, 2];
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toEqual(input1);
-    await expect(parseAsync(schema1, [])).rejects.toThrowError(lengthError);
-    await expect(parseAsync(schema1, [1, 2, 3, 4])).rejects.toThrowError(
-      lengthError
-    );
-
-    const schema2 = arrayAsync(number(), 'Error', [length(1), includes(123)]);
-    const input2 = [123];
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toEqual(input2);
-    await expect(parseAsync(schema2, [1, 2])).rejects.toThrowError(lengthError);
-    await expect(parseAsync(schema2, [1])).rejects.toThrowError(contentError);
-  });
-
-  test('should execute pipe if output is typed', async () => {
-    const schema = arrayAsync(string([minLength(10)]), [minLength(10)]);
-    const input = ['12345'];
-    const result = await schema._parse(input);
-    expect(result).toEqual({
-      typed: true,
-      output: input,
-      issues: [
+    const stringIssue: StringIssue = {
+      ...baseInfo,
+      kind: 'schema',
+      type: 'string',
+      input: 123,
+      expected: 'string',
+      received: '123',
+      path: [
         {
-          reason: 'string',
-          context: 'min_length',
-          expected: '>=10',
-          received: '5',
-          message: 'Invalid length: Expected >=10 but received 5',
-          input: input[0],
-          requirement: 10,
-          path: [
-            {
-              type: 'array',
-              origin: 'value',
-              input: input,
-              key: 0,
-              value: input[0],
-            },
-          ],
-        },
-        {
-          reason: 'array',
-          context: 'min_length',
-          expected: '>=10',
-          received: '1',
-          message: 'Invalid length: Expected >=10 but received 1',
-          input: input,
-          requirement: 10,
-        },
-      ],
-    } satisfies TypedSchemaResult<Output<typeof schema>>);
-  });
-
-  test('should skip pipe if output is not typed', async () => {
-    const schema = arrayAsync(string(), [minLength(10)]);
-    const input = [12345];
-    const result = await schema._parse(input);
-    expect(result).toEqual({
-      typed: false,
-      output: input,
-      issues: [
-        {
-          reason: 'type',
-          context: 'string',
-          expected: 'string',
-          received: '12345',
-          message: 'Invalid type: Expected string but received 12345',
-          input: input[0],
-          path: [
-            {
-              type: 'array',
-              origin: 'value',
-              input: input,
-              key: 0,
-              value: input[0],
-            },
-          ],
+          type: 'array',
+          origin: 'value',
+          input: ['foo', 123, 'baz', null],
+          key: 1,
+          value: 123,
         },
       ],
-    } satisfies UntypedSchemaResult);
+    };
+
+    test('for wrong items', async () => {
+      expect(
+        await schema._run(
+          { typed: false, value: ['foo', 123, 'baz', null] },
+          {}
+        )
+      ).toStrictEqual({
+        typed: false,
+        value: ['foo', 123, 'baz', null],
+        issues: [
+          stringIssue,
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: null,
+            expected: 'string',
+            received: 'null',
+            path: [
+              {
+                type: 'array',
+                origin: 'value',
+                input: ['foo', 123, 'baz', null],
+                key: 3,
+                value: null,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('with abort early', async () => {
+      expect(
+        await schema._run(
+          { typed: false, value: ['foo', 123, 'baz', null] },
+          { abortEarly: true }
+        )
+      ).toStrictEqual({
+        typed: false,
+        value: ['foo'],
+        issues: [{ ...stringIssue, abortEarly: true }],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for wrong nested items', async () => {
+      const nestedSchema = arrayAsync(schema);
+      expect(
+        await nestedSchema._run(
+          { typed: false, value: [[123, 'foo'], 'bar', []] },
+          {}
+        )
+      ).toStrictEqual({
+        typed: false,
+        value: [[123, 'foo'], 'bar', []],
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: 123,
+            expected: 'string',
+            received: '123',
+            path: [
+              {
+                type: 'array',
+                origin: 'value',
+                input: [[123, 'foo'], 'bar', []],
+                key: 0,
+                value: [123, 'foo'],
+              },
+              {
+                type: 'array',
+                origin: 'value',
+                input: [123, 'foo'],
+                key: 0,
+                value: 123,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'array',
+            input: 'bar',
+            expected: 'Array',
+            received: '"bar"',
+            path: [
+              {
+                type: 'array',
+                origin: 'value',
+                input: [[123, 'foo'], 'bar', []],
+                key: 1,
+                value: 'bar',
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+    });
   });
 });

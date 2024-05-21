@@ -1,32 +1,102 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
-import { toCustom } from '../../transformations/index.ts';
-import { boolean } from './boolean.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { boolean, type BooleanIssue, type BooleanSchema } from './boolean.ts';
 
 describe('boolean', () => {
-  test('should pass only booleans', () => {
+  describe('should return schema object', () => {
+    const baseSchema: Omit<BooleanSchema<never>, 'message'> = {
+      kind: 'schema',
+      type: 'boolean',
+      reference: boolean,
+      expects: 'boolean',
+      async: false,
+      _run: expect.any(Function),
+    };
+
+    test('with undefined message', () => {
+      const schema: BooleanSchema<undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(boolean()).toStrictEqual(schema);
+      expect(boolean(undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(boolean('message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies BooleanSchema<'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(boolean(message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies BooleanSchema<typeof message>);
+    });
+  });
+
+  describe('should return dataset without issues', () => {
     const schema = boolean();
-    const input1 = true;
-    const output1 = parse(schema, input1);
-    expect(output1).toBe(input1);
-    const input2 = false;
-    const output2 = parse(schema, input2);
-    expect(output2).toBe(input2);
-    expect(() => parse(schema, 123)).toThrowError();
-    expect(() => parse(schema, 'true')).toThrowError();
-    expect(() => parse(schema, {})).toThrowError();
+
+    test('for true boolean', () => {
+      expectNoSchemaIssue(schema, [true]);
+    });
+
+    test('for false boolean', () => {
+      expectNoSchemaIssue(schema, [false]);
+    });
   });
 
-  test('should throw custom error', () => {
-    const error = 'Value is not a boolean!';
-    expect(() => parse(boolean(error), 'test')).toThrowError(error);
-  });
+  describe('should return dataset with issues', () => {
+    const schema = boolean('message');
+    const baseIssue: Omit<BooleanIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'boolean',
+      expected: 'boolean',
+      message: 'message',
+    };
 
-  test('should execute pipe', () => {
-    const transformInput = () => false;
-    const output1 = parse(boolean([toCustom(transformInput)]), true);
-    expect(output1).toBe(transformInput());
-    const output2 = parse(boolean('Error', [toCustom(transformInput)]), true);
-    expect(output2).toBe(transformInput());
+    // Primitive types
+
+    test('for bigints', () => {
+      expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
+    });
+
+    test('for null', () => {
+      expectSchemaIssue(schema, baseIssue, [null]);
+    });
+
+    test('for numbers', () => {
+      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', () => {
+      expectSchemaIssue(schema, baseIssue, [undefined]);
+    });
+
+    test('for strings', () => {
+      expectSchemaIssue(schema, baseIssue, ['', '0', 'true', 'false']);
+    });
+
+    test('for symbols', () => {
+      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    });
+
+    // Complex types
+
+    test('for arrays', () => {
+      expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    });
+
+    test('for functions', () => {
+      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    });
+
+    test('for objects', () => {
+      expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    });
   });
 });

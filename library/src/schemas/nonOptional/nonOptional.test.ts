@@ -1,39 +1,82 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
-import { any } from '../any/index.ts';
-import { null_ } from '../null/index.ts';
-import { number } from '../number/index.ts';
-import { optional } from '../optional/index.ts';
-import { string } from '../string/index.ts';
-import { undefined_ } from '../undefined/index.ts';
-import { union } from '../union/index.ts';
-import { nonOptional } from './nonOptional.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { nullish, type NullishSchema } from '../nullish/index.ts';
+import { string, type StringSchema } from '../string/index.ts';
+import { nonOptional, type NonOptionalSchema } from './nonOptional.ts';
+import type { NonOptionalIssue } from './types.ts';
 
 describe('nonOptional', () => {
-  test('should not pass undefined', () => {
-    const schema1 = nonOptional(union([string(), null_(), undefined_()]));
-    const input1 = 'test';
-    const output1 = parse(schema1, input1);
-    expect(output1).toBe(input1);
-    expect(parse(schema1, null)).toBeNull();
-    expect(() => parse(schema1, undefined)).toThrowError();
-    expect(() => parse(schema1, 123)).toThrowError();
-    expect(() => parse(schema1, {})).toThrowError();
+  describe('should return schema object', () => {
+    const wrapped = nullish(string());
+    const baseSchema: Omit<
+      NonOptionalSchema<
+        NullishSchema<StringSchema<undefined>, undefined>,
+        never
+      >,
+      'message'
+    > = {
+      kind: 'schema',
+      type: 'non_optional',
+      reference: nonOptional,
+      expects: '!undefined',
+      wrapped,
+      async: false,
+      _run: expect.any(Function),
+    };
 
-    const schema2 = nonOptional(optional(number()));
-    const input2 = 123;
-    const output2 = parse(schema2, input2);
-    expect(output2).toBe(input2);
-    expect(() => parse(schema2, null)).toThrowError();
-    expect(() => parse(schema2, undefined)).toThrowError();
-    expect(() => parse(schema2, 'test')).toThrowError();
-    expect(() => parse(schema2, {})).toThrowError();
+    test('with undefined message', () => {
+      const schema: NonOptionalSchema<
+        NullishSchema<StringSchema<undefined>, undefined>,
+        undefined
+      > = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(nonOptional(wrapped)).toStrictEqual(schema);
+      expect(nonOptional(wrapped, undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(nonOptional(wrapped, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies NonOptionalSchema<
+        NullishSchema<StringSchema<undefined>, undefined>,
+        'message'
+      >);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(nonOptional(wrapped, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies NonOptionalSchema<
+        NullishSchema<StringSchema<undefined>, undefined>,
+        typeof message
+      >);
+    });
   });
 
-  test('should throw custom error', () => {
-    const error = 'Value is not non optional!';
-    expect(() => parse(nonOptional(any(), error), undefined)).toThrowError(
-      error
-    );
+  describe('should return dataset without issues', () => {
+    const schema = nonOptional(nullish(string()));
+
+    test('for valid wrapped types', () => {
+      expectNoSchemaIssue(schema, ['', 'foo', '#$%', null]);
+    });
+  });
+
+  describe('should return dataset with issues', () => {
+    const schema = nonOptional(nullish(string()), 'message');
+    const baseIssue: Omit<NonOptionalIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'non_optional',
+      expected: '!undefined',
+      message: 'message',
+    };
+
+    test('for undefined', () => {
+      expectSchemaIssue(schema, baseIssue, [undefined]);
+    });
   });
 });

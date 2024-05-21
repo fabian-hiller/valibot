@@ -1,29 +1,51 @@
 import { getDefault } from '../../methods/index.ts';
-import type { BaseSchema, Default, Input, Output } from '../../types/index.ts';
-import { schemaResult } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  Default,
+  DefaultValue,
+  InferInput,
+  InferIssue,
+  InferOutput,
+  NonNullable,
+} from '../../types/index.ts';
 
 /**
  * Nullable schema type.
  */
 export interface NullableSchema<
-  TWrapped extends BaseSchema,
-  TDefault extends Default<TWrapped> = undefined,
-  TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
-    ? Output<TWrapped>
-    : Output<TWrapped> | null,
-> extends BaseSchema<Input<TWrapped> | null, TOutput> {
+  TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  TDefault extends Default<TWrapped, null>,
+> extends BaseSchema<
+    InferInput<TWrapped> | null,
+    [TDefault] extends [never]
+      ? InferOutput<TWrapped> | null
+      : // FIXME: For schemas that transform the input to `null`, this
+        // implementation may result in an incorrect output type
+        NonNullable<InferOutput<TWrapped>> | DefaultValue<TDefault>,
+    InferIssue<TWrapped>
+  > {
   /**
    * The schema type.
    */
-  type: 'nullable';
+  readonly type: 'nullable';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof nullable;
+  /**
+   * The expected property.
+   */
+  readonly expects: `${TWrapped['expects']} | null`;
   /**
    * The wrapped schema.
    */
-  wrapped: TWrapped;
+  readonly wrapped: TWrapped;
   /**
    * The default value.
    */
-  default: TDefault;
+  readonly default: TDefault;
 }
 
 /**
@@ -33,9 +55,9 @@ export interface NullableSchema<
  *
  * @returns A nullable schema.
  */
-export function nullable<TWrapped extends BaseSchema>(
-  wrapped: TWrapped
-): NullableSchema<TWrapped>;
+export function nullable<
+  const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(wrapped: TWrapped): NullableSchema<TWrapped, never>;
 
 /**
  * Creates a nullable schema.
@@ -46,33 +68,56 @@ export function nullable<TWrapped extends BaseSchema>(
  * @returns A nullable schema.
  */
 export function nullable<
-  TWrapped extends BaseSchema,
-  TDefault extends Default<TWrapped>,
+  const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  TDefault extends Default<TWrapped, null>,
 >(wrapped: TWrapped, default_: TDefault): NullableSchema<TWrapped, TDefault>;
 
-export function nullable<
-  TWrapped extends BaseSchema,
-  TDefault extends Default<TWrapped> = undefined,
->(wrapped: TWrapped, default_?: TDefault): NullableSchema<TWrapped, TDefault> {
-  return {
+export function nullable(
+  wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  ...args: unknown[]
+): NullableSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown> {
+  // Create schema object
+  // @ts-expect-error
+  const schema: NullableSchema<
+    BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+    unknown
+  > = {
+    kind: 'schema',
     type: 'nullable',
+    reference: nullable,
     expects: `${wrapped.expects} | null`,
     async: false,
     wrapped,
-    default: default_ as TDefault,
-    _parse(input, config) {
-      // If input is `null`, return typed schema result or override it with
-      // default value
-      if (input === null) {
-        const override = getDefault(this);
-        if (override === undefined) {
-          return schemaResult(true, input);
+    _run(dataset, config) {
+      // If value is `null`, override it with default or return dataset
+      if (dataset.value === null) {
+        // If default is specified, override value of dataset
+        if ('default' in this) {
+          dataset.value = getDefault(
+            this,
+            dataset as Dataset<null, never>,
+            config
+          );
         }
-        input = override;
+
+        // If value is still `null`, return dataset
+        if (dataset.value === null) {
+          dataset.typed = true;
+          return dataset;
+        }
       }
 
-      // Otherwise, return result of wrapped schema
-      return this.wrapped._parse(input, config);
+      // Otherwise, return dataset of wrapped schema
+      return this.wrapped._run(dataset, config);
     },
   };
+
+  // Add default if specified
+  if (0 in args) {
+    // @ts-expect-error
+    schema.default = args[0];
+  }
+
+  // Return schema object
+  return schema;
 }

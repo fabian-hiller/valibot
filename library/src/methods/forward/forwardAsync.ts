@@ -1,44 +1,53 @@
-import type { BaseValidationAsync, PathItem } from '../../types/index.ts';
-import type { PathList } from './types.ts';
+import type {
+  BaseIssue,
+  BaseValidation,
+  BaseValidationAsync,
+  IssuePathItem,
+} from '../../types/index.ts';
+import type { PathKeys } from './types.ts';
+
+// TODO: We should try to find a better way to type this function without
+// breaking the type inference, as the current implementation loses some type
+// information by returning a `BaseValidation` instead of the original type.
 
 /**
  * Forwards the issues of the passed validation action.
  *
- * @param validation The validation.
- * @param pathList The path list.
+ * @param action The validation action.
+ * @param pathKeys The path keys.
  *
- * @returns The passed validation.
+ * @returns The modified action.
  */
 export function forwardAsync<
-  TInput extends unknown[] | Record<string, unknown>,
+  TInput extends Record<string, unknown> | unknown[],
+  TIssue extends BaseIssue<unknown>,
 >(
-  validation: BaseValidationAsync<TInput>,
-  pathList: PathList<TInput>
-): BaseValidationAsync<TInput> {
+  action:
+    | BaseValidation<TInput, TInput, TIssue>
+    | BaseValidationAsync<TInput, TInput, TIssue>,
+  pathKeys: PathKeys<TInput>
+): BaseValidationAsync<TInput, TInput, TIssue> {
   return {
-    ...validation,
-    async _parse(input) {
-      // Get validation result
-      const result = await validation._parse(input);
+    ...action,
+    async: true,
+    async _run(dataset, config) {
+      // Run validation action
+      await action._run(dataset, config);
 
-      // If issues occurred, try to forward them
-      if (result.issues) {
-        for (const issue of result.issues) {
+      // If dataset contains issues, forward them
+      if (dataset.issues) {
+        for (const issue of dataset.issues) {
           // Create path input variable
-          let pathInput: any = input;
+          let pathInput: unknown = dataset.value;
 
           // Try to forward issue to end of path list
-          for (const key of pathList) {
+          for (const key of pathKeys) {
             // Create path value variable
-            const pathValue = pathInput[key];
-
-            // Overwrite issue input with path value
-            issue.input = pathValue;
+            // @ts-expect-error
+            const pathValue: unknown = pathInput[key];
 
             // Create path item for current key
-            // TODO: Check if we can prevent path item from being unknown by
-            // adding context of schema to `._parse`
-            const pathItem: PathItem = {
+            const pathItem: IssuePathItem = {
               type: 'unknown',
               origin: 'value',
               input: pathInput,
@@ -47,7 +56,12 @@ export function forwardAsync<
             };
 
             // Forward issue by adding path item
-            issue.path ? issue.path.push(pathItem) : (issue.path = [pathItem]);
+            if (issue.path) {
+              issue.path.push(pathItem);
+            } else {
+              // @ts-expect-error
+              issue.path = [pathItem];
+            }
 
             // If path value is undefined, stop forwarding
             if (!pathValue) {
@@ -60,8 +74,8 @@ export function forwardAsync<
         }
       }
 
-      // Return validation result
-      return result;
+      // Return output dataset
+      return dataset;
     },
   };
 }

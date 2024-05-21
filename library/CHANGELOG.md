@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.31.0 (Month DD, YYYY)
+
+- More details will follow soon
+
 ## v0.30.0 (March 06, 2024)
 
 - Add `Default` and `DefaultAsync` type and refactor codebase

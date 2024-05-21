@@ -1,19 +1,59 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
+
+/**
+ * Void issue type.
+ */
+export interface VoidIssue extends BaseIssue<unknown> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'schema';
+  /**
+   * The issue type.
+   */
+  readonly type: 'void';
+  /**
+   * The expected property.
+   */
+  readonly expected: 'void';
+}
 
 /**
  * Void schema type.
  */
-export interface VoidSchema<TOutput = void> extends BaseSchema<void, TOutput> {
+export interface VoidSchema<
+  TMessage extends ErrorMessage<VoidIssue> | undefined,
+> extends BaseSchema<void, void, VoidIssue> {
   /**
    * The schema type.
    */
-  type: 'void';
+  readonly type: 'void';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof void_;
+  /**
+   * The expected property.
+   */
+  readonly expects: 'void';
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
+  readonly message: TMessage;
 }
+
+/**
+ * Creates a void schema.
+ *
+ * @returns A void schema.
+ */
+export function void_(): VoidSchema<undefined>;
 
 /**
  * Creates a void schema.
@@ -22,20 +62,27 @@ export interface VoidSchema<TOutput = void> extends BaseSchema<void, TOutput> {
  *
  * @returns A void schema.
  */
-export function void_(message?: ErrorMessage): VoidSchema {
+export function void_<
+  const TMessage extends ErrorMessage<VoidIssue> | undefined,
+>(message: TMessage): VoidSchema<TMessage>;
+
+export function void_(
+  message?: ErrorMessage<VoidIssue>
+): VoidSchema<ErrorMessage<VoidIssue> | undefined> {
   return {
+    kind: 'schema',
     type: 'void',
+    reference: void_,
     expects: 'void',
     async: false,
     message,
-    _parse(input, config) {
-      // If type is valid, return schema result
-      if (input === undefined) {
-        return schemaResult(true, input);
+    _run(dataset, config) {
+      if (dataset.value === undefined) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
-
-      // Otherwise, return schema issue
-      return schemaIssue(this, void_, input, config);
+      return dataset as Dataset<void, VoidIssue>;
     },
   };
 }

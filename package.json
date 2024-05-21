@@ -1,6 +1,6 @@
 {
   "name": "valibot",
-  "description": "The modular and TypeScript-first schema library",
+  "description": "The modular and type safe schema library for validating structural data ",
   "version": "0.0.0",
   "license": "MIT",
   "author": "Fabian Hiller",
@@ -13,7 +13,7 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.11",
-    "typescript": "5.3.3"
+    "prettier-plugin-tailwindcss": "^0.5.13",
+    "typescript": "5.4.3"
   }
 }

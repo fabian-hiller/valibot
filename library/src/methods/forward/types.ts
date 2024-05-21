@@ -8,20 +8,20 @@ type PathTuple<TValue, TKey extends keyof TValue> = TKey extends TKey
         0: [];
         1: [] | PathTuple<TValue[TKey], keyof TValue[TKey] & number>;
         2: [] | PathTuple<TValue[TKey], keyof TValue[TKey]>;
-      }[TValue[TKey] extends Blob | Date | Map<any, any> | Set<any>
+      }[TValue[TKey] extends Blob | Date | Map<unknown, unknown> | Set<unknown>
         ? 0
-        : TValue[TKey] extends any[]
+        : TValue[TKey] extends unknown[]
           ? 1
-          : TValue[TKey] extends Record<string, any>
+          : TValue[TKey] extends Record<string, unknown>
             ? 2
             : 0],
     ]
   : never;
 
 /**
- * Path list type.
+ * Path keys type.
  */
-export type PathList<TInput extends unknown[] | Record<string, unknown>> =
-  TInput extends any[]
+export type PathKeys<TInput extends Record<string, unknown> | unknown[]> =
+  TInput extends unknown[]
     ? PathTuple<TInput, number>
     : PathTuple<TInput, keyof TInput>;

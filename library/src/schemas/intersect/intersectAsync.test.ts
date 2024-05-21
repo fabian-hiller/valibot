@@ -1,110 +1,249 @@
 import { describe, expect, test } from 'vitest';
-import type { ValiError } from '../../error/index.ts';
-import { parseAsync, transform } from '../../methods/index.ts';
-import { custom, customAsync } from '../../validations/index.ts';
-import { literal } from '../literal/index.ts';
-import { object } from '../object/index.ts';
-import { record } from '../record/index.ts';
+import { minLength, minValue, transform } from '../../actions/index.ts';
+import { pipe } from '../../methods/index.ts';
+import type {
+  InferIssue,
+  InferOutput,
+  TypedDataset,
+  UntypedDataset,
+} from '../../types/index.ts';
+import { expectNoSchemaIssueAsync } from '../../vitest/index.ts';
+import { array } from '../array/array.ts';
+import { arrayAsync } from '../array/arrayAsync.ts';
+import { date } from '../date/index.ts';
+import { number } from '../number/index.ts';
+import { object, objectAsync } from '../object/index.ts';
 import { string } from '../string/index.ts';
-import { unknown } from '../unknown/index.ts';
-import {
-  intersectAsync,
-  type IntersectOptionsAsync,
-} from './intersectAsync.ts';
+import { intersectAsync, type IntersectSchemaAsync } from './intersectAsync.ts';
 
 describe('intersectAsync', () => {
-  test('should pass only intersect values', async () => {
-    const schema1 = intersectAsync([string(), literal('test')]);
-    const input1 = 'test';
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toBe(input1);
-    await expect(parseAsync(schema1, 'foo')).rejects.toThrowError();
-    await expect(parseAsync(schema1, undefined)).rejects.toThrowError();
-    await expect(parseAsync(schema1, {})).rejects.toThrowError();
-    await expect(parseAsync(schema1, [])).rejects.toThrowError();
-
-    const schema2 = intersectAsync([
-      object({ foo: string() }),
-      object({ bar: string() }),
-    ]);
-    const input2 = { foo: 'test', bar: 'test' };
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toEqual(input2);
-    await expect(parseAsync(schema2, { foo: 'test' })).rejects.toThrowError();
-    await expect(parseAsync(schema2, { bar: 'test' })).rejects.toThrowError();
-
-    const schema3 = intersectAsync([
+  describe('should return schema object', () => {
+    const options = [
       object({ key1: string() }),
-      record(string(), unknown()),
-    ]);
-    const input3 = { key1: 'test', keyX: 123 };
-    const output3 = await parseAsync(schema3, input3);
-    expect(output3).toEqual(input3);
-    await expect(parseAsync(schema3, { keyX: 123 })).rejects.toThrowError();
-    await expect(parseAsync(schema3, {})).rejects.toThrowError();
+      objectAsync({ key2: number() }),
+    ] as const;
+    type Options = typeof options;
+    const baseSchema: Omit<IntersectSchemaAsync<Options, never>, 'message'> = {
+      kind: 'schema',
+      type: 'intersect',
+      reference: intersectAsync,
+      expects: 'Object',
+      options,
+      async: true,
+      _run: expect.any(Function),
+    };
+
+    test('with undefined message', () => {
+      const schema: IntersectSchemaAsync<Options, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(intersectAsync(options)).toStrictEqual(schema);
+      expect(intersectAsync(options, undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(intersectAsync(options, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies IntersectSchemaAsync<Options, 'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(intersectAsync(options, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies IntersectSchemaAsync<Options, typeof message>);
+    });
   });
 
-  test('should throw custom error', async () => {
-    const error = 'Value is not an intersect!';
-    const options: IntersectOptionsAsync = [
-      string(),
-      transform(string(), (input) => input.length),
-    ];
-    await expect(
-      parseAsync(intersectAsync(options), 'test')
-    ).rejects.toThrowError('Invalid type');
-    await expect(
-      parseAsync(intersectAsync(options, error), 'test')
-    ).rejects.toThrowError(error);
+  describe('should return dataset without issues', () => {
+    test('for valid values', async () => {
+      await expectNoSchemaIssueAsync(
+        intersectAsync([
+          array(object({ key1: string(), key2: number() })),
+          arrayAsync(objectAsync({ key3: date(), key4: array(string()) })),
+        ]),
+        [
+          [
+            { key1: 'foo', key2: 123, key3: new Date(), key4: ['foo', 'bar'] },
+            { key1: 'bar', key2: -456, key3: new Date(), key4: ['baz'] },
+          ],
+        ]
+      );
+    });
   });
 
-  test('should throw every issue', async () => {
-    const schema = intersectAsync([string(), literal('test')]);
-    const input = 123;
-    await expect(parseAsync(schema, input)).rejects.toThrowError();
-    try {
-      await parseAsync(schema, input);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(2);
-    }
-  });
+  describe('should return dataset with issues', () => {
+    const baseInfo = {
+      message: expect.any(String),
+      requirement: undefined,
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+      skipPipe: undefined,
+    };
 
-  test('should throw only first issue', async () => {
-    const schema = intersectAsync([string(), literal('test')]);
-    const input = 123;
-    const config = { abortEarly: true };
-    await expect(parseAsync(schema, input, config)).rejects.toThrowError();
-    try {
-      await parseAsync(schema, input, config);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(1);
-    }
-  });
+    test('for empty options', async () => {
+      const schema = intersectAsync([]);
+      const input = 'foo';
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'intersect',
+            input,
+            expected: 'never',
+            received: `"${input}"`,
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
 
-  test('should execute pipe', async () => {
-    const equalError = 'Keys not equal';
+    test('with untyped output', async () => {
+      const schema = intersectAsync([string(), number()]);
+      const input = 'foo';
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input,
+            expected: 'number',
+            received: `"${input}"`,
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
 
-    const schema1 = intersectAsync(
-      [object({ foo: string() }), object({ bar: string() })],
-      [custom((input) => input.foo === input.bar, equalError)]
-    );
-    const input1 = { foo: 'test', bar: 'test' };
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toEqual(input1);
-    await expect(
-      parseAsync(schema1, { foo: 'abc', bar: '123' })
-    ).rejects.toThrowError(equalError);
+    test('with typed output', async () => {
+      const schema = intersectAsync([
+        object({ key1: pipe(string(), minLength(10)) }),
+        objectAsync({ key2: pipe(number(), minValue(100)) }),
+      ]);
+      type Schema = typeof schema;
+      const input = { key1: 'foo', key2: -123 };
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'validation',
+            type: 'min_length',
+            input: input.key1,
+            expected: '>=10',
+            received: '3',
+            requirement: 10,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key1',
+                value: input.key1,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'validation',
+            type: 'min_value',
+            input: input.key2,
+            expected: '>=100',
+            received: '-123',
+            requirement: 100,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key2',
+                value: input.key2,
+              },
+            ],
+          },
+        ],
+      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+    });
 
-    const schema2 = intersectAsync(
-      [object({ foo: string() }), object({ bar: string() })],
-      'Error',
-      [customAsync(async (input) => input.foo === input.bar, equalError)]
-    );
-    const input2 = { foo: 'test', bar: 'test' };
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toEqual(input2);
-    await expect(
-      parseAsync(schema2, { foo: 'abc', bar: '123' })
-    ).rejects.toThrowError(equalError);
+    test('with abort early', async () => {
+      const schema = intersectAsync([
+        object({ key1: pipe(string(), minLength(10)) }),
+        objectAsync({ key2: pipe(number(), minValue(100)) }),
+      ]);
+      const input = { key1: 'foo', key2: -123 };
+      expect(
+        await schema._run({ typed: false, value: input }, { abortEarly: true })
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            abortEarly: true,
+            kind: 'validation',
+            type: 'min_length',
+            input: input.key1,
+            expected: '>=10',
+            received: '3',
+            requirement: 10,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key1',
+                value: input.key1,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for merge error', async () => {
+      const schema = intersectAsync([
+        object({ key: string() }),
+        objectAsync({
+          key: pipe(
+            string(),
+            transform((input) => input.length)
+          ),
+        }),
+      ]);
+      const input = { key: 'foo' };
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'intersect',
+            input: input,
+            expected: 'Object',
+            received: 'unknown',
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
   });
 });

@@ -1,257 +1,299 @@
 import { describe, expect, test } from 'vitest';
-import { type ValiError } from '../../error/index.ts';
-import { parseAsync } from '../../methods/index.ts';
-import type {
-  Output,
-  TypedSchemaResult,
-  UntypedSchemaResult,
-} from '../../types/index.ts';
-import { maxLength, minLength } from '../../validations/index.ts';
-import { booleanAsync } from '../boolean/index.ts';
-import { never } from '../never/index.ts';
-import { number, numberAsync } from '../number/index.ts';
-import { object } from '../object/index.ts';
-import { string } from '../string/index.ts';
-import { tupleAsync } from './tupleAsync.ts';
+import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
+import { boolean } from '../boolean/boolean.ts';
+import { number } from '../number/index.ts';
+import { optionalAsync } from '../optional/index.ts';
+import { string, type StringIssue } from '../string/index.ts';
+import { tupleAsync, type TupleSchemaAsync } from './tupleAsync.ts';
+import type { TupleIssue } from './types.ts';
 
 describe('tupleAsync', () => {
-  test('should pass only tuples', async () => {
-    const schema1 = tupleAsync([number(), string()]);
-    const input1 = [1, 'test'];
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toEqual(input1);
-    const input2 = [1, 'test', null];
-    const output2 = await parseAsync(schema1, input2);
-    expect(output2).toEqual([1, 'test']);
-    await expect(parseAsync(schema1, [])).rejects.toThrowError();
-    await expect(parseAsync(schema1, [1])).rejects.toThrowError();
-    await expect(parseAsync(schema1, [1, 2])).rejects.toThrowError();
-    await expect(parseAsync(schema1, 123)).rejects.toThrowError();
-    await expect(parseAsync(schema1, null)).rejects.toThrowError();
-    await expect(parseAsync(schema1, {})).rejects.toThrowError();
+  describe('should return schema object', () => {
+    const items = [optionalAsync(string()), number()] as const;
+    type Items = typeof items;
+    const baseSchema: Omit<TupleSchemaAsync<Items, never>, 'message'> = {
+      kind: 'schema',
+      type: 'tuple',
+      reference: tupleAsync,
+      expects: 'Array',
+      items,
+      async: true,
+      _run: expect.any(Function),
+    };
 
-    const schema2 = tupleAsync([string()], numberAsync());
-    const input3 = ['test'];
-    const output3 = await parseAsync(schema2, input3);
-    expect(output3).toEqual(input3);
-    const input4 = ['test', 1];
-    const output4 = await parseAsync(schema2, input4);
-    expect(output4).toEqual(input4);
-    const input5 = ['test', 1, 2];
-    const output5 = await parseAsync(schema2, input5);
-    expect(output5).toEqual(input5);
-    await expect(parseAsync(schema2, ['test', 'test'])).rejects.toThrowError();
-    await expect(parseAsync(schema2, [1, 2])).rejects.toThrowError();
+    test('with undefined message', () => {
+      const schema: TupleSchemaAsync<Items, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(tupleAsync(items)).toStrictEqual(schema);
+      expect(tupleAsync(items, undefined)).toStrictEqual(schema);
+    });
 
-    const schema3 = tupleAsync([string()], never());
-    const input6 = ['test'];
-    const output6 = await parseAsync(schema3, input6);
-    expect(output6).toEqual(input6);
-    await expect(parseAsync(schema2, ['test', 'test'])).rejects.toThrowError();
-    await expect(parseAsync(schema2, ['test', null])).rejects.toThrowError();
+    test('with string message', () => {
+      expect(tupleAsync(items, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies TupleSchemaAsync<Items, 'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(tupleAsync(items, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies TupleSchemaAsync<Items, typeof message>);
+    });
   });
 
-  test('should throw custom error', async () => {
-    const error = 'Value is not a tuple!';
-    await expect(
-      parseAsync(tupleAsync([number()], error), null)
-    ).rejects.toThrowError(error);
+  describe('should return dataset without issues', () => {
+    test('for empty tuple', async () => {
+      await await expectNoSchemaIssueAsync(tupleAsync([]), [[]]);
+    });
+
+    const schema = tupleAsync([optionalAsync(string()), number()]);
+
+    test('for simple tuple', async () => {
+      await await expectNoSchemaIssueAsync(schema, [
+        ['foo', 123],
+        [undefined, 123],
+      ]);
+    });
+
+    test('for unknown items', async () => {
+      expect(
+        await schema._run(
+          { typed: false, value: ['foo', 123, null, true, undefined] },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: ['foo', 123],
+      });
+    });
   });
 
-  test('should throw every issue', async () => {
-    const schema = tupleAsync([string(), string(), string()], number());
-    const input = [1, '2', 3, '4', 5, '6'];
-    await expect(parseAsync(schema, input)).rejects.toThrowError();
-    try {
-      await parseAsync(schema, input);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(4);
-    }
+  describe('should return dataset with issues', () => {
+    const schema = tupleAsync([optionalAsync(string()), number()], 'message');
+    const baseIssue: Omit<TupleIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'tuple',
+      expected: 'Array',
+      message: 'message',
+    };
+
+    // Primitive types
+
+    test('for bigints', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1n, 0n, 123n]);
+    });
+
+    test('for booleans', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [true, false]);
+    });
+
+    test('for null', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [null]);
+    });
+
+    test('for numbers', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
+    });
+
+    test('for strings', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, ['', 'abc', '123']);
+    });
+
+    test('for symbols', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        Symbol(),
+        Symbol('foo'),
+      ]);
+    });
+
+    // Complex types
+
+    test('for functions', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        () => {},
+        function () {},
+      ]);
+    });
+
+    test('for objects', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [{}, { key: 'value' }]);
+    });
   });
 
-  test('should throw only first issue', async () => {
-    const config = { abortEarly: true };
+  describe('should return dataset without nested issues', () => {
+    const schema = tupleAsync([optionalAsync(string()), number()]);
 
-    const schema1 = tupleAsync([number(), number(), number()]);
-    const input1 = ['1', 2, '3'];
-    await expect(parseAsync(schema1, input1, config)).rejects.toThrowError();
-    try {
-      await parseAsync(schema1, input1, config);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(1);
-    }
+    test('for simple tuple', async () => {
+      await expectNoSchemaIssueAsync(schema, [
+        ['foo', 123],
+        [undefined, 123],
+      ]);
+    });
 
-    const schema2 = tupleAsync([string()], number());
-    const input2 = ['hello', 1, '2', 3, '4'];
-    await expect(parseAsync(schema2, input2, config)).rejects.toThrowError();
-    try {
-      await parseAsync(schema2, input2, config);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(1);
-    }
+    test('for nested tuple', async () => {
+      await expectNoSchemaIssueAsync(tupleAsync([schema, schema]), [
+        [
+          ['foo', 123],
+          [undefined, 123],
+        ],
+      ]);
+    });
+
+    test('for unknown items', async () => {
+      expect(
+        await schema._run(
+          { typed: false, value: ['foo', 123, null, true, undefined] },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: ['foo', 123],
+      });
+    });
   });
 
-  test('should return issue path', async () => {
-    const schema1 = tupleAsync([number(), string(), number()]);
-    const input1 = [1, 2, 3];
-    const result1 = await schema1._parse(input1);
-    expect(result1.issues?.[0].path).toEqual([
-      {
-        type: 'tuple',
-        origin: 'value',
-        input: input1,
-        key: 1,
-        value: input1[1],
-      },
-    ]);
+  describe('should return dataset with nested issues', () => {
+    const schema = tupleAsync([string(), number(), boolean()]);
 
-    const schema2 = tupleAsync([number(), object({ key: string() })]);
-    const input2 = [123, { key: 123 }] as const;
-    const result2 = await schema2._parse(input2);
-    expect(result2.issues?.[0].path).toEqual([
-      {
-        type: 'tuple',
-        origin: 'value',
-        input: input2,
-        key: 1,
-        value: input2[1],
-      },
-      {
-        type: 'object',
-        origin: 'value',
-        input: input2[1],
-        key: 'key',
-        value: input2[1].key,
-      },
-    ]);
+    const baseInfo = {
+      message: expect.any(String),
+      requirement: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+      skipPipe: undefined,
+    };
 
-    const schema3 = tupleAsync([number(), number()], string());
-    const input3 = [1, 2, 'test', 123, 'abc'];
-    const result3 = await schema3._parse(input3);
-    expect(result3.issues?.[0].path).toEqual([
-      {
-        type: 'tuple',
-        origin: 'value',
-        input: input3,
-        key: 3,
-        value: input3[3],
-      },
-    ]);
-
-    const schema4 = tupleAsync([number(), number()], object({ key: string() }));
-    const input4 = [1, 2, { key: 123 }] as const;
-    const result4 = await schema4._parse(input4);
-    expect(result4.issues?.[0].path).toEqual([
-      {
-        type: 'tuple',
-        origin: 'value',
-        input: input4,
-        key: 2,
-        value: input4[2],
-      },
-      {
-        type: 'object',
-        origin: 'value',
-        input: input4[2],
-        key: 'key',
-        value: input4[2].key,
-      },
-    ]);
-  });
-
-  test('should execute pipe', async () => {
-    const lengthError = 'Invalid length';
-
-    const schema1 = tupleAsync([string()], number(), [maxLength(3)]);
-    const input1 = ['test', 1, 2];
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toEqual(input1);
-    await expect(parseAsync(schema1, ['test', 1, 2, 3])).rejects.toThrowError(
-      lengthError
-    );
-
-    const schema2 = tupleAsync([string()], booleanAsync(), 'Error', [
-      minLength(2),
-      maxLength(3),
-    ]);
-    const input2 = ['test', true, false];
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toEqual(input2);
-    await expect(parseAsync(schema2, ['test'])).rejects.toThrowError(
-      lengthError
-    );
-    await expect(
-      parseAsync(schema2, ['test', true, false, true])
-    ).rejects.toThrowError(lengthError);
-  });
-
-  test('should execute pipe if output is typed', async () => {
-    const schema = tupleAsync([string([minLength(10)])], number(), [
-      minLength(5),
-    ]);
-    const input: [string] = ['12345'];
-    const result = await schema._parse(input);
-    expect(result).toEqual({
-      typed: true,
-      output: input,
-      issues: [
+    const stringIssue: StringIssue = {
+      ...baseInfo,
+      kind: 'schema',
+      type: 'string',
+      input: 123,
+      expected: 'string',
+      received: '123',
+      path: [
         {
-          reason: 'string',
-          context: 'min_length',
-          expected: '>=10',
-          received: '5',
-          message: 'Invalid length: Expected >=10 but received 5',
-          input: input[0],
-          requirement: 10,
-          path: [
-            {
-              type: 'tuple',
-              origin: 'value',
-              input: input,
-              key: 0,
-              value: input[0],
-            },
-          ],
-        },
-        {
-          reason: 'tuple',
-          context: 'min_length',
-          expected: '>=5',
-          received: '1',
-          message: 'Invalid length: Expected >=5 but received 1',
-          input: input,
-          requirement: 5,
+          type: 'tuple',
+          origin: 'value',
+          input: [123, 456, 'true'],
+          key: 0,
+          value: 123,
         },
       ],
-    } satisfies TypedSchemaResult<Output<typeof schema>>);
-  });
+    };
 
-  test('should skip pipe if output is not typed', async () => {
-    const schema = tupleAsync([string()], number(), [minLength(10)]);
-    const input: [number] = [12345];
-    const result = await schema._parse(input);
-    expect(result).toEqual({
-      typed: false,
-      output: input,
-      issues: [
-        {
-          reason: 'type',
-          context: 'string',
-          expected: 'string',
-          received: '12345',
-          message: 'Invalid type: Expected string but received 12345',
-          input: input[0],
-          path: [
-            {
-              type: 'tuple',
-              origin: 'value',
-              input: input,
-              key: 0,
-              value: input[0],
-            },
-          ],
-        },
-      ],
-    } satisfies UntypedSchemaResult);
+    test('for wrong items', async () => {
+      const input = [123, 456, 'true'];
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          stringIssue,
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'boolean',
+            input: 'true',
+            expected: 'boolean',
+            received: '"true"',
+            path: [
+              {
+                type: 'tuple',
+                origin: 'value',
+                input: input,
+                key: 2,
+                value: input[2],
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('with abort early', async () => {
+      expect(
+        await schema._run(
+          { typed: false, value: [123, 456, 'true'] },
+          { abortEarly: true }
+        )
+      ).toStrictEqual({
+        typed: false,
+        value: [],
+        issues: [{ ...stringIssue, abortEarly: true }],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for wrong nested items', async () => {
+      const nestedSchema = tupleAsync([schema, schema]);
+      const input: [[string, string, boolean], null] = [
+        ['foo', '123', false],
+        null,
+      ];
+      expect(
+        await nestedSchema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: '123',
+            expected: 'number',
+            received: '"123"',
+            path: [
+              {
+                type: 'tuple',
+                origin: 'value',
+                input: input,
+                key: 0,
+                value: input[0],
+              },
+              {
+                type: 'tuple',
+                origin: 'value',
+                input: input[0],
+                key: 1,
+                value: input[0][1],
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'tuple',
+            input: null,
+            expected: 'Array',
+            received: 'null',
+            path: [
+              {
+                type: 'tuple',
+                origin: 'value',
+                input: input,
+                key: 1,
+                value: input[1],
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+    });
   });
 });

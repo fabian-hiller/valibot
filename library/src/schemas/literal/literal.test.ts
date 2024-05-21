@@ -1,45 +1,175 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
-import { literal } from './literal.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { literal, type LiteralIssue, type LiteralSchema } from './literal.ts';
 
 describe('literal', () => {
-  test('should pass only the literal', () => {
-    const input1 = 'value_1';
-    const schema1 = literal(input1);
-    const output1 = parse(schema1, input1);
-    expect(output1).toBe(input1);
-    expect(() => parse(schema1, 123)).toThrowError();
-    expect(() => parse(schema1, false)).toThrowError();
-    expect(() => parse(schema1, 'value_2')).toThrowError();
-    expect(() => parse(schema1, {})).toThrowError();
+  describe('should return schema object', () => {
+    const baseSchema: Omit<LiteralSchema<123, never>, 'message'> = {
+      kind: 'schema',
+      type: 'literal',
+      reference: literal,
+      literal: 123,
+      expects: '123',
+      async: false,
+      _run: expect.any(Function),
+    };
 
-    const input2 = 123;
-    const schema2 = literal(input2);
-    const output2 = parse(schema2, input2);
-    expect(output2).toBe(input2);
-    expect(() => parse(schema2, 1234)).toThrowError();
-    expect(() => parse(schema2, 'test')).toThrowError();
-    expect(() => parse(schema2, {})).toThrowError();
+    test('with undefined message', () => {
+      const schema: LiteralSchema<123, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(literal(123)).toStrictEqual(schema);
+      expect(literal(123, undefined)).toStrictEqual(schema);
+    });
 
-    const input3 = 123n;
-    const schema3 = literal(input3);
-    const output3 = parse(schema3, input3);
-    expect(output3).toBe(input3);
-    expect(() => parse(schema3, 1234n)).toThrowError();
-    expect(() => parse(schema3, true)).toThrowError();
-    expect(() => parse(schema3, {})).toThrowError();
+    test('with string message', () => {
+      expect(literal(123, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies LiteralSchema<123, 'message'>);
+    });
 
-    const input4 = false;
-    const schema4 = literal(input4);
-    const output4 = parse(schema4, input4);
-    expect(output4).toBe(input4);
-    expect(() => parse(schema4, true)).toThrowError();
-    expect(() => parse(schema4, 'test')).toThrowError();
-    expect(() => parse(schema4, {})).toThrowError();
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(literal(123, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies LiteralSchema<123, typeof message>);
+    });
   });
 
-  test('should throw custom error', () => {
-    const error = 'Value is not the literal!';
-    expect(() => parse(literal('value_1', error), 'test')).toThrowError(error);
+  describe('should return dataset without issues', () => {
+    test('for valid bigint literal', () => {
+      expectNoSchemaIssue(literal(-1n), [-1n]);
+      expectNoSchemaIssue(literal(0n), [0n]);
+      expectNoSchemaIssue(literal(123n), [123n]);
+    });
+
+    test('for valid boolean literal', () => {
+      expectNoSchemaIssue(literal(true), [true]);
+      expectNoSchemaIssue(literal(false), [false]);
+    });
+
+    test('for valid number literal', () => {
+      expectNoSchemaIssue(literal(-1), [-1]);
+      expectNoSchemaIssue(literal(0), [0]);
+      expectNoSchemaIssue(literal(123), [123]);
+      expectNoSchemaIssue(literal(45.67), [45.67]);
+    });
+
+    test('for valid string literal', () => {
+      expectNoSchemaIssue(literal(''), ['']);
+      expectNoSchemaIssue(literal('foo'), ['foo']);
+      expectNoSchemaIssue(literal('123'), ['123']);
+    });
+
+    test('for valid symbol literal', () => {
+      const symbol1 = Symbol();
+      expectNoSchemaIssue(literal(symbol1), [symbol1]);
+      const symbol2 = Symbol('foo');
+      expectNoSchemaIssue(literal(symbol2), [symbol2]);
+    });
+  });
+
+  describe('should return dataset with issues', () => {
+    const baseIssue: Omit<LiteralIssue, 'input' | 'expected' | 'received'> = {
+      kind: 'schema',
+      type: 'literal',
+      message: 'message',
+    };
+
+    test('for invalid bigint literal', () => {
+      expectSchemaIssue(
+        literal(123n, 'message'),
+        { ...baseIssue, expected: '123' },
+        [
+          -1n,
+          0n,
+          132n,
+          true,
+          false,
+          null,
+          123,
+          undefined,
+          '123',
+          Symbol('123'),
+          {},
+          [],
+          () => {},
+        ]
+      );
+    });
+
+    test('for invalid boolean literal', () => {
+      expectSchemaIssue(
+        literal(false, 'message'),
+        { ...baseIssue, expected: 'false' },
+        [0n, true, null, 0, undefined, '', Symbol(), {}, [], () => {}]
+      );
+    });
+
+    test('for invalid number literal', () => {
+      expectSchemaIssue(
+        literal(123, 'message'),
+        { ...baseIssue, expected: '123' },
+        [
+          123n,
+          true,
+          false,
+          null,
+          -123,
+          0,
+          45.67,
+          undefined,
+          '123',
+          Symbol('123'),
+          {},
+          [],
+          () => {},
+        ]
+      );
+    });
+
+    test('for invalid string literal', () => {
+      expectSchemaIssue(
+        literal('123', 'message'),
+        { ...baseIssue, expected: '"123"' },
+        [
+          123n,
+          true,
+          false,
+          null,
+          -123,
+          undefined,
+          '',
+          'foo',
+          Symbol('123'),
+          {},
+          [],
+          () => {},
+        ]
+      );
+    });
+
+    test('for invalid symbol literal', () => {
+      expectSchemaIssue(
+        literal(Symbol('123'), 'message'),
+        { ...baseIssue, expected: 'symbol' },
+        [
+          123n,
+          true,
+          false,
+          null,
+          -123,
+          undefined,
+          '123',
+          Symbol(),
+          {},
+          [],
+          () => {},
+        ]
+      );
+    });
   });
 });

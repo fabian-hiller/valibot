@@ -1,159 +1,176 @@
 import type {
+  BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
+  Dataset,
   ErrorMessage,
-  PipeAsync,
-  SchemaIssues,
+  InferIssue,
 } from '../../types/index.ts';
-import {
-  defaultArgs,
-  pipeResultAsync,
-  schemaIssue,
-  schemaResult,
-} from '../../utils/index.ts';
-import type { SetInput, SetOutput, SetPathItem } from './types.ts';
+import { _addIssue } from '../../utils/index.ts';
+import type {
+  InferSetInput,
+  InferSetOutput,
+  SetIssue,
+  SetPathItem,
+} from './types.ts';
 
 /**
  * Set schema async type.
  */
 export interface SetSchemaAsync<
-  TValue extends BaseSchema | BaseSchemaAsync,
-  TOutput = SetOutput<TValue>,
-> extends BaseSchemaAsync<SetInput<TValue>, TOutput> {
+  TValue extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  TMessage extends ErrorMessage<SetIssue> | undefined,
+> extends BaseSchemaAsync<
+    InferSetInput<TValue>,
+    InferSetOutput<TValue>,
+    SetIssue | InferIssue<TValue>
+  > {
   /**
    * The schema type.
    */
-  type: 'set';
+  readonly type: 'set';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof setAsync;
+  /**
+   * The expected property.
+   */
+  readonly expects: 'Set';
   /**
    * The set value schema.
    */
-  value: TValue;
+  readonly value: TValue;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
-  /**
-   * The validation and transformation pipeline.
-   */
-  pipe: PipeAsync<SetOutput<TValue>> | undefined;
+  readonly message: TMessage;
 }
 
 /**
- * Creates an async set schema.
+ * Creates a set schema.
  *
  * @param value The value schema.
- * @param pipe A validation and transformation pipe.
  *
- * @returns An async set schema.
+ * @returns A set schema.
  */
-export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
-  value: TValue,
-  pipe?: PipeAsync<SetOutput<TValue>>
-): SetSchemaAsync<TValue>;
+export function setAsync<
+  const TValue extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+>(value: TValue): SetSchemaAsync<TValue, undefined>;
 
 /**
- * Creates an async set schema.
+ * Creates a set schema.
  *
  * @param value The value schema.
  * @param message The error message.
- * @param pipe A validation and transformation pipe.
  *
- * @returns An async set schema.
+ * @returns A set schema.
  */
-export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
-  value: TValue,
-  message?: ErrorMessage,
-  pipe?: PipeAsync<SetOutput<TValue>>
-): SetSchemaAsync<TValue>;
+export function setAsync<
+  const TValue extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TMessage extends ErrorMessage<SetIssue> | undefined,
+>(value: TValue, message: TMessage): SetSchemaAsync<TValue, TMessage>;
 
-export function setAsync<TValue extends BaseSchema | BaseSchemaAsync>(
-  value: TValue,
-  arg2?: PipeAsync<SetOutput<TValue>> | ErrorMessage,
-  arg3?: PipeAsync<SetOutput<TValue>>
-): SetSchemaAsync<TValue> {
-  // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg2, arg3);
-
-  // Create and return async set schema
+export function setAsync(
+  value:
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  message?: ErrorMessage<SetIssue>
+): SetSchemaAsync<
+  | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  ErrorMessage<SetIssue> | undefined
+> {
   return {
+    kind: 'schema',
     type: 'set',
+    reference: setAsync,
     expects: 'Set',
     async: true,
     value,
     message,
-    pipe,
-    async _parse(input, config) {
+    async _run(dataset, config) {
+      // Get input value from dataset
+      const input = dataset.value;
+
       // If root type is valid, check nested types
       if (input instanceof Set) {
-        // Create typed, index, output and issues
-        let typed = true;
-        let issues: SchemaIssues | undefined;
-        const output: SetOutput<TValue> = new Set();
+        // Set typed to `true` and value to empty set
+        dataset.typed = true;
+        dataset.value = new Set();
 
-        // Parse each value by schema
-        await Promise.all(
-          Array.from(input.values()).map(async (inputValue, key) => {
-            // If not aborted early, continue execution
-            if (!(config?.abortEarly && issues)) {
-              // Get schema result of input value
-              const result = await this.value._parse(inputValue, config);
+        // Parse schema of each set value
+        const valueDatasets = await Promise.all(
+          [...input].map(
+            async (inputValue) =>
+              [
+                inputValue,
+                await this.value._run(
+                  { typed: false, value: inputValue },
+                  config
+                ),
+              ] as const
+          )
+        );
 
-              // If not aborted early, continue execution
-              if (!(config?.abortEarly && issues)) {
-                // If there are issues, capture them
-                if (result.issues) {
-                  // Create set path item
-                  const pathItem: SetPathItem = {
-                    type: 'set',
-                    origin: 'value',
-                    input,
-                    key,
-                    value: inputValue,
-                  };
+        // Process dataset of each set value
+        for (const [inputValue, valueDataset] of valueDatasets) {
+          // If there are issues, capture them
+          if (valueDataset.issues) {
+            // Create set path item
+            const pathItem: SetPathItem = {
+              type: 'set',
+              origin: 'value',
+              input,
+              value: inputValue,
+            };
 
-                  // Add modified result issues to issues
-                  for (const issue of result.issues) {
-                    if (issue.path) {
-                      issue.path.unshift(pathItem);
-                    } else {
-                      issue.path = [pathItem];
-                    }
-                    issues?.push(issue);
-                  }
-                  if (!issues) {
-                    issues = result.issues;
-                  }
-
-                  // If necessary, abort early
-                  if (config?.abortEarly) {
-                    typed = false;
-                    throw null;
-                  }
-                }
-
-                // If not typed, set typed to false
-                if (!result.typed) {
-                  typed = false;
-                }
-
-                // Set output of entry if necessary
-                output.add(result.output);
+            // Add modified item dataset issues to issues
+            for (const issue of valueDataset.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                // @ts-expect-error
+                issue.path = [pathItem];
               }
+              // @ts-expect-error
+              dataset.issues?.push(issue);
             }
-          })
-        ).catch(() => null);
+            if (!dataset.issues) {
+              // @ts-expect-error
+              dataset.issues = valueDataset.issues;
+            }
 
-        // If output is typed, return pipe result
-        if (typed) {
-          return pipeResultAsync(this, output, config, issues);
+            // If necessary, abort early
+            if (config.abortEarly) {
+              dataset.typed = false;
+              break;
+            }
+          }
+
+          // If not typed, set typed to `false`
+          if (!valueDataset.typed) {
+            dataset.typed = false;
+          }
+
+          // Add value to dataset
+          // @ts-expect-error
+          dataset.value.add(valueDataset.value);
         }
 
-        // Otherwise, return untyped schema result
-        return schemaResult(false, output, issues as SchemaIssues);
+        // Otherwise, add set issue
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
 
-      // Otherwise, return schema issue
-      return schemaIssue(this, setAsync, input, config);
+      // Return output dataset
+      return dataset as Dataset<Set<unknown>, SetIssue | BaseIssue<unknown>>;
     },
   };
 }
