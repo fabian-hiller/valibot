@@ -34,7 +34,7 @@ The <Link href="/api/looseObject/">`looseObject`</Link> schema allows unknown en
 
 ### Object with specific rest
 
-Alternatively, you can also use the <Link href="/api/objectWithRest/">`objectWithRest`</Link> schema to define a specific schema for unknown entries. Any entries not defined in the first argument are then validated against the schema in the second argument.
+Alternatively, you can also use the <Link href="/api/objectWithRest/">`objectWithRest`</Link> schema to define a specific schema for unknown entries. Any entries not defined in the first argument are then validated against the schema of the second argument.
 
 ```ts
 import * as v from 'valibot';
@@ -48,7 +48,7 @@ const ObjectSchema = v.objectWithRest(
 );
 ```
 
-### Complex object validation
+### Pipeline validation
 
 To validate the value of an entry based on another entry, you can wrap you schema with the <Link href="/api/check/">`check`</Link> validation action in a pipeline. You can also use <Link href="/api/forward/">`forward`</Link> to assign the issue to a specific object key in the event of an error.
 
@@ -96,7 +96,7 @@ import * as v from 'valibot';
 const RecordSchema = v.object(v.entriesFromList(['key1', 'key2'], v.number())); // { key1: number; key2: number }
 ```
 
-### Complex record validation
+### Pipeline validation
 
 To validate the value of an entry based on another entry, you can wrap you schema with the <Link href="/api/check/">`check`</Link> validation action in a pipeline. You can also use <Link href="/api/forward/">`forward`</Link> to assign the issue to a specific record key in the event of an error.
 
