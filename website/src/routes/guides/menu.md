@@ -35,6 +35,7 @@
 
 ## Migration
 
+- [From v0.30.0](/guides/migrate-from-v0.30.0/)
 - [From Zod](/guides/migrate-from-zod/)
 - [From Ajv](/guides/migrate-from-ajv/)
 - [From Joi](/guides/migrate-from-joi/)
