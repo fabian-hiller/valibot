@@ -1,0 +1,55 @@
+---
+title: ip
+description: >-
+  Creates a pipeline validation action that validates an IPv4 or IPv6 address.
+source: /actions/ip/ip.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# ip
+
+Creates a pipeline validation action that validates an [IPv4](https://en.wikipedia.org/wiki/IPv4) or [IPv6](https://en.wikipedia.org/wiki/IPv6) address.
+
+```ts
+const Validation = ip<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `ip` you can validate the formatting of a string. If the input is not an IP address, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `ip` can be used.
+
+### IP address schema
+
+Schema to validate an IP address.
+
+```ts
+const IpAddressSchema = string([ip('The IP address is badly formatted.')]);
+```
+
+## Related
+
+The following APIs can be combined with `ip`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />

@@ -1,0 +1,76 @@
+---
+title: value
+source: /actions/value/value.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# value
+
+Creates a pipeline validation action that validates the value of a string, number, boolean or date.
+
+```ts
+const Validation = value<TInput, TRequirement>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `value` you can validate the value of a string, number, boolean or date. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `value` can be used.
+
+### Number schema
+
+Schema to validate a number with a specific value.
+
+```ts
+const NumberSchema = number([value(100, 'The number must be 100.')]);
+```
+
+### Date schema
+
+Schema to validate a date with a specific value.
+
+```ts
+const DateSchema = date([
+  value(new Date('2000-01-01'), 'The date must be the first day of 2000.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `value`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'bigint',
+    'boolean',
+    'date',
+    'number',
+    'special',
+    'string',
+    'unknown',
+  ]}
+/>

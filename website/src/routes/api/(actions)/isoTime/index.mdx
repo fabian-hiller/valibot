@@ -1,0 +1,54 @@
+---
+title: isoTime
+description: Creates a pipeline validation action that validates a time.
+source: /actions/isoTime/isoTime.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# isoTime
+
+Creates a pipeline validation action that validates a time.
+
+```ts
+const Validation = isoTime<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `isoTime` you can validate the formatting of a string. If the input is not an ISO time, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `isoTime` can be used.
+
+### ISO time schema
+
+Schema to validate an ISO time.
+
+```ts
+const IsoTimeSchema = string([isoTime('The time is badly formatted.')]);
+```
+
+## Related
+
+The following APIs can be combined with `isoTime`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />

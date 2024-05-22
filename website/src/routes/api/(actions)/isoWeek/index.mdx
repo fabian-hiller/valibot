@@ -1,0 +1,54 @@
+---
+title: isoWeek
+description: Creates a pipeline validation action that validates a week.
+source: /actions/isoWeek/isoWeek.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# isoWeek
+
+Creates a pipeline validation action that validates a week.
+
+```ts
+const Validation = isoWeek<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `isoWeek` you can validate the formatting of a string. If the input is not an ISO week, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `isoWeek` can be used.
+
+### ISO week schema
+
+Schema to validate an ISO week.
+
+```ts
+const IsoWeekSchema = string([isoWeek('The week is badly formatted.')]);
+```
+
+## Related
+
+The following APIs can be combined with `isoWeek`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />

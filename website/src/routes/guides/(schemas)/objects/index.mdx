@@ -88,7 +88,7 @@ import * as v from 'valibot';
 const RecordSchema = v.record(v.picklist(['key1', 'key2']), v.number()); // { key1?: number; key2?: number }
 ```
 
-Note that <Link href="/api/record/">`record`</Link> marks all literal keys as optional in this case. If you want to make them required, you can use the <Link href="/api/object/">`object`</Link> schema with the `entriesFromList` util instead.
+Note that <Link href="/api/record/">`record`</Link> marks all literal keys as optional in this case. If you want to make them required, you can use the <Link href="/api/object/">`object`</Link> schema with the <Link href="/api/entriesFromList/">`entriesFromList`</Link> util instead.
 
 ```ts
 import * as v from 'valibot';
