@@ -1,7 +1,7 @@
 import type { BaseIssue } from './issue.ts';
 
 /**
- * The typed dataset type.
+ * Typed dataset type.
  */
 export interface TypedDataset<TValue, TIssue extends BaseIssue<unknown>> {
   /**
@@ -19,7 +19,7 @@ export interface TypedDataset<TValue, TIssue extends BaseIssue<unknown>> {
 }
 
 /**
- * The untyped dataset type.
+ * Untyped dataset type.
  */
 export interface UntypedDataset<TIssue extends BaseIssue<unknown>> {
   /**

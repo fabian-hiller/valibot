@@ -2,7 +2,7 @@ import type { BaseIssue } from './issue';
 import type { ErrorMessage } from './other';
 
 /**
- * The schema config type.
+ * Config type.
  */
 export interface Config<TIssue extends BaseIssue<unknown>> {
   /**

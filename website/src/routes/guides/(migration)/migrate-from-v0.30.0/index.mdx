@@ -13,7 +13,7 @@ import { Link } from '@builder.io/qwik-city';
 
 Migrating Valibot from v0.30.0 to a newer version isn't complicated. Except for the new <Link href="/api/pipe/">`pipe`</Link> method, most things remain the same. The following guide will help you migrate step by step and also point out important differences.
 
-> We are aware that migrating large schemas can be annoying and time consuming. Therefore, we plan to release a codemode soon that will automate the following steps for you.
+> We are aware that migrating large schemas can be annoying and time consuming. Therefore, we plan to release a codemod soon that will automate the following steps for you.
 
 ## Restructure code
 
@@ -40,6 +40,7 @@ Most of the names are the same as before. However, there are some exceptions. Th
 | `BaseSchema`     | <Link href="/api/GenericSchema/">`GenericSchema`</Link>                                                                                |
 | `Input`          | <Link href="/api/InferInput/">`InferInput`</Link>                                                                                      |
 | `Output`         | <Link href="/api/InferOutput/">`InferOutput`</Link>                                                                                    |
+| `SchemaConfig`   | <Link href="/api/Config/">`Config`</Link>                                                                                              |
 | `special`        | <Link href="/api/custom/">`custom`</Link>                                                                                              |
 | `toCustom`       | <Link href="/api/transform/">`transform`</Link>                                                                                        |
 | `toTrimmed`      | <Link href="/api/trim/">`trim`</Link>                                                                                                  |
