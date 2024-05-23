@@ -3,6 +3,7 @@ import path from 'node:path';
 import package_ from '../package.json';
 import ar from '../src/ar';
 import de from '../src/de';
+import es from '../src/es';
 import fr from '../src/fr';
 import hu from '../src/hu';
 import ja from '../src/ja';
@@ -27,6 +28,7 @@ console.time('build');
 const languages = [
   ar,
   de,
+  es,
   fr,
   hu,
   ja,

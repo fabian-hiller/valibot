@@ -5,6 +5,7 @@ export type Language = {
     | 'ar'
     | 'de'
     | 'en'
+    | 'es'
     | 'fr'
     | 'hu'
     | 'ja'
