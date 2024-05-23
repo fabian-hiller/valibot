@@ -4,12 +4,10 @@ import type {
   BaseSchema,
   Dataset,
   Default,
-  DefaultValue,
   InferInput,
   InferIssue,
-  InferOutput,
-  NonOptional,
 } from '../../types/index.ts';
+import type { InferOptionalOutput } from './types.ts';
 
 /**
  * Optional schema type.
@@ -19,11 +17,7 @@ export interface OptionalSchema<
   TDefault extends Default<TWrapped, undefined>,
 > extends BaseSchema<
     InferInput<TWrapped> | undefined,
-    [TDefault] extends [never]
-      ? InferOutput<TWrapped> | undefined
-      : // FIXME: For schemas that transform the input to `undefined`, this
-        // implementation may result in an incorrect output type
-        NonOptional<InferOutput<TWrapped>> | DefaultValue<TDefault>,
+    InferOptionalOutput<TWrapped, TDefault>,
     InferIssue<TWrapped>
   > {
   /**
@@ -69,7 +63,7 @@ export function optional<
  */
 export function optional<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends Default<TWrapped, undefined>,
+  const TDefault extends Default<TWrapped, undefined>,
 >(wrapped: TWrapped, default_: TDefault): OptionalSchema<TWrapped, TDefault>;
 
 export function optional(

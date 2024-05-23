@@ -5,12 +5,10 @@ import type {
   BaseSchemaAsync,
   Dataset,
   DefaultAsync,
-  DefaultValue,
   InferInput,
   InferIssue,
-  InferOutput,
-  NonOptional,
 } from '../../types/index.ts';
+import type { InferOptionalOutput } from './types.ts';
 
 /**
  * Optional schema async type.
@@ -22,11 +20,7 @@ export interface OptionalSchemaAsync<
   TDefault extends DefaultAsync<TWrapped, undefined>,
 > extends BaseSchemaAsync<
     InferInput<TWrapped> | undefined,
-    [TDefault] extends [never]
-      ? InferOutput<TWrapped> | undefined
-      : // FIXME: For schemas that transform the input to `undefined`, this
-        // implementation may result in an incorrect output type
-        NonOptional<InferOutput<TWrapped>> | DefaultValue<TDefault>,
+    InferOptionalOutput<TWrapped, TDefault>,
     InferIssue<TWrapped>
   > {
   /**
@@ -76,7 +70,7 @@ export function optionalAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends DefaultAsync<TWrapped, undefined>,
+  const TDefault extends DefaultAsync<TWrapped, undefined>,
 >(
   wrapped: TWrapped,
   default_: TDefault
