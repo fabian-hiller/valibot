@@ -4,12 +4,10 @@ import type {
   BaseSchema,
   Dataset,
   Default,
-  DefaultValue,
   InferInput,
   InferIssue,
-  InferOutput,
-  NonNullable,
 } from '../../types/index.ts';
+import type { InferNullableOutput } from './types.ts';
 
 /**
  * Nullable schema type.
@@ -19,11 +17,7 @@ export interface NullableSchema<
   TDefault extends Default<TWrapped, null>,
 > extends BaseSchema<
     InferInput<TWrapped> | null,
-    [TDefault] extends [never]
-      ? InferOutput<TWrapped> | null
-      : // FIXME: For schemas that transform the input to `null`, this
-        // implementation may result in an incorrect output type
-        NonNullable<InferOutput<TWrapped>> | DefaultValue<TDefault>,
+    InferNullableOutput<TWrapped, TDefault>,
     InferIssue<TWrapped>
   > {
   /**
@@ -69,7 +63,7 @@ export function nullable<
  */
 export function nullable<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends Default<TWrapped, null>,
+  const TDefault extends Default<TWrapped, null>,
 >(wrapped: TWrapped, default_: TDefault): NullableSchema<TWrapped, TDefault>;
 
 export function nullable(

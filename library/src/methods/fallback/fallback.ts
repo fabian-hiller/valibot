@@ -43,7 +43,7 @@ export type SchemaWithFallback<
  */
 export function fallback<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  TFallback extends Fallback<TSchema>,
+  const TFallback extends Fallback<TSchema>,
 >(
   schema: TSchema,
   fallback: TFallback

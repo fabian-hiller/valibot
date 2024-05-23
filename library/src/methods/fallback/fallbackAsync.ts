@@ -69,7 +69,7 @@ export function fallbackAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  TFallback extends FallbackAsync<TSchema>,
+  const TFallback extends FallbackAsync<TSchema>,
 >(
   schema: TSchema,
   fallback: TFallback

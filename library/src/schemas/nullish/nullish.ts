@@ -4,12 +4,10 @@ import type {
   BaseSchema,
   Dataset,
   Default,
-  DefaultValue,
   InferInput,
   InferIssue,
-  InferOutput,
-  NonNullish,
 } from '../../types/index.ts';
+import type { InferNullishOutput } from './types.ts';
 
 /**
  * Nullish schema type.
@@ -19,11 +17,7 @@ export interface NullishSchema<
   TDefault extends Default<TWrapped, null | undefined>,
 > extends BaseSchema<
     InferInput<TWrapped> | null | undefined,
-    [TDefault] extends [never]
-      ? InferOutput<TWrapped> | null | undefined
-      : // FIXME: For schemas that transform the input to `null` or `undefined`,
-        // this implementation may result in an incorrect output type
-        NonNullish<InferOutput<TWrapped>> | DefaultValue<TDefault>,
+    InferNullishOutput<TWrapped, TDefault>,
     InferIssue<TWrapped>
   > {
   /**
@@ -69,7 +63,7 @@ export function nullish<
  */
 export function nullish<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends Default<TWrapped, null | undefined>,
+  const TDefault extends Default<TWrapped, null | undefined>,
 >(wrapped: TWrapped, default_: TDefault): NullishSchema<TWrapped, TDefault>;
 
 export function nullish(

@@ -5,12 +5,10 @@ import type {
   BaseSchemaAsync,
   Dataset,
   DefaultAsync,
-  DefaultValue,
   InferInput,
   InferIssue,
-  InferOutput,
-  NonNullish,
 } from '../../types/index.ts';
+import type { InferNullishOutput } from './types.ts';
 
 /**
  * Nullish schema async type.
@@ -22,11 +20,7 @@ export interface NullishSchemaAsync<
   TDefault extends DefaultAsync<TWrapped, null | undefined>,
 > extends BaseSchemaAsync<
     InferInput<TWrapped> | null | undefined,
-    [TDefault] extends [never]
-      ? InferOutput<TWrapped> | null | undefined
-      : // FIXME: For schemas that transform the input to `null` or `undefined`,
-        // this implementation may result in an incorrect output type
-        NonNullish<InferOutput<TWrapped>> | DefaultValue<TDefault>,
+    InferNullishOutput<TWrapped, TDefault>,
     InferIssue<TWrapped>
   > {
   /**
@@ -76,7 +70,7 @@ export function nullishAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends DefaultAsync<TWrapped, null | undefined>,
+  const TDefault extends DefaultAsync<TWrapped, null | undefined>,
 >(
   wrapped: TWrapped,
   default_: TDefault

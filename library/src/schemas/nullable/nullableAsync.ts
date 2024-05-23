@@ -5,12 +5,10 @@ import type {
   BaseSchemaAsync,
   Dataset,
   DefaultAsync,
-  DefaultValue,
   InferInput,
   InferIssue,
-  InferOutput,
-  NonNullable,
 } from '../../types/index.ts';
+import type { InferNullableOutput } from './types.ts';
 
 /**
  * Nullable schema async type.
@@ -22,11 +20,7 @@ export interface NullableSchemaAsync<
   TDefault extends DefaultAsync<TWrapped, null>,
 > extends BaseSchemaAsync<
     InferInput<TWrapped> | null,
-    [TDefault] extends [never]
-      ? InferOutput<TWrapped> | null
-      : // FIXME: For schemas that transform the input to `null`, this
-        // implementation may result in an incorrect output type
-        NonNullable<InferOutput<TWrapped>> | DefaultValue<TDefault>,
+    InferNullableOutput<TWrapped, TDefault>,
     InferIssue<TWrapped>
   > {
   /**
@@ -76,7 +70,7 @@ export function nullableAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends DefaultAsync<TWrapped, null>,
+  const TDefault extends DefaultAsync<TWrapped, null>,
 >(
   wrapped: TWrapped,
   default_: TDefault
