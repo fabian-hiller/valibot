@@ -5,15 +5,14 @@ The official i18n translations for Valibot. See the [internationalization guide]
 ## Current status
 
 | Language        | Pull Request       | Status |
-|-----------------|--------------------|--------|
+| --------------- | ------------------ | ------ |
 | Arabic (ar)     | [#527][pr-527-url] | ✅     |
 | Chinese (zh-CN) | [#419][pr-419-url] | ✅     |
 | Chinese (zh-TW) | [#427][pr-427-url] | ✅     |
 | Dutch (nl)      | [#438][pr-438-url] | ✅     |
 | English (en)    | [#397][pr-397-url] | ✅     |
-| Spanish (es)    | [#581][pr-581-url] | ✅     |
-| German (de)     | [#397][pr-397-url] | ✅     |
 | French (fr)     | [#418][pr-418-url] | ✅     |
+| German (de)     | [#397][pr-397-url] | ✅     |
 | Hungarian (hu)  | [#560][pr-560-url] | ✅     |
 | Japanese (ja)   | [#431][pr-431-url] | ✅     |
 | Korean (kr)     | [#429][pr-429-url] | ✅     |
@@ -22,6 +21,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 | Romanian (ro)   | [#472][pr-472-url] | ✅     |
 | Russian (ru)    | [#434][pr-434-url] | ✅     |
 | Slovenian (sl)  | [#422][pr-422-url] | ✅     |
+| Spanish (es)    | [#581][pr-581-url] | ✅     |
 | Turkish (tr)    | [#549][pr-549-url] | ✅     |
 | Ukrainian (uk)  | [#423][pr-423-url] | ✅     |
 
@@ -41,6 +41,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 [pr-527-url]: https://github.com/fabian-hiller/valibot/pull/527
 [pr-549-url]: https://github.com/fabian-hiller/valibot/pull/549
 [pr-560-url]: https://github.com/fabian-hiller/valibot/pull/560
+[pr-581-url]: https://github.com/fabian-hiller/valibot/pull/581
 
 ## Getting started
 
