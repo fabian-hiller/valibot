@@ -22,7 +22,11 @@ export const EMAIL_REGEX =
 /**
  * Emoji regex.
  */
-export const EMOJI_REGEX = /^\p{RGI_Emoji}+$/v;
+export const EMOJI_REGEX = /^[\p{Extended_Pictographic}\p{Emoji_Component}]+$/u;
+
+// This emoji regex is not supported in Node.js v18 and older browsers.
+// Therefore, we are postponing the switch to this regex to a later date.
+// export const EMOJI_REGEX = /^\p{RGI_Emoji}+$/v;
 
 /**
  * [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) regex.
