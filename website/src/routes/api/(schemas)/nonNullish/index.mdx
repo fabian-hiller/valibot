@@ -17,12 +17,13 @@ Creates a non nullish schema.
 > This schema function can be used to override the behavior of <Link href="../nullish/">`nullish`</Link>.
 
 ```ts
-const Schema = nonNullish<TWrapped>(wrapped, message);
+const Schema = nonNullish<TWrapped, TMessage>(wrapped, message);
 ```
 
 ## Generics
 
 - `TWrapped` <Property {...properties.TWrapped} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -43,10 +44,10 @@ The following examples show how `nonNullish` can be used.
 
 ### Non nullish string
 
-Schema that does not accept `null`.
+Schema that does not accept `null` and `undefined`.
 
 ```ts
-const NonNullishStringSchema = nonNullish(nullish(string()));
+const NonNullishStringSchema = v.nonNullish(v.nullish(v.string()));
 ```
 
 ### Unwrap non nullish
@@ -54,8 +55,8 @@ const NonNullishStringSchema = nonNullish(nullish(string()));
 Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `nonNullish`.
 
 ```ts
-const NonNullishNumberSchema = nonNullish(nullish(number()));
-const NullishNumberSchema = unwrap(NonNullishNumberSchema);
+const NonNullishNumberSchema = v.nonNullish(v.nullish(v.number()));
+const NullishNumberSchema = v.unwrap(NonNullishNumberSchema);
 ```
 
 ## Related
@@ -71,12 +72,15 @@ The following APIs can be combined with `nonNullish`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
     'enum_',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
@@ -87,14 +91,17 @@ The following APIs can be combined with `nonNullish`.
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
+    'tupleWithRest',
     'undefined_',
     'union',
     'unknown',
@@ -107,8 +114,6 @@ The following APIs can be combined with `nonNullish`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -116,8 +121,12 @@ The following APIs can be combined with `nonNullish`.
     'getFallbacks',
     'is',
     'parse',
+    'pipe',
     'safeParse',
-    'transform',
     'unwrap',
   ]}
 />
+
+### Actions
+
+<ApiList items={['check', 'brand', 'readonly', 'transform']} />

@@ -1,10 +1,171 @@
 ---
 title: strictObject
+description: Creates a strict object schema.
 source: /schemas/strictObject/strictObject.ts
 contributors:
   - fabian-hiller
+  - kazizi55
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # strictObject
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/strictObject/strictObject.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a strict object schema.
+
+```ts
+const Schema = strictObject<TEntries, TMessage>(entries, message);
+```
+
+## Generics
+
+- `TEntries` <Property {...properties.TEntries} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `entries` <Property {...properties.entries} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `strictObject` you can validate the data type of the input and whether the content matches `entries`. If the input is not an object or does include unknown entries, you can use `message` to customize the error message.
+
+> The difference to <Link href="../object/">`object`</Link> is that this schema returns an issue for unknown entries.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `strictObject` can be used. Please see the <Link href="/guides/objects/">object guide</Link> for more examples and explanations.
+
+### Simple object schema
+
+Schema to validate a strict object with two keys.
+
+```ts
+const SimpleObjectSchema = v.strictObject({
+  key1: v.string(),
+  key2: v.number(),
+});
+```
+
+### Merge several objects
+
+Schema that merges the entries of two object schemas.
+
+```ts
+const MergedObjectSchema = v.strictObject({
+  ...ObjectSchema1.entries,
+  ...ObjectSchema2.entries,
+});
+```
+
+### Mark keys as optional
+
+Schema to validate an object with partial entries.
+
+```ts
+const PartialObjectSchema = v.partial(
+  v.strictObject({
+    key1: v.string(),
+    key2: v.number(),
+  })
+);
+```
+
+### Object with selected entries
+
+Schema to validate only selected entries of a strict object.
+
+```ts
+const PickObjectSchema = v.pick(
+  v.strictObject({
+    key1: v.string(),
+    key2: v.number(),
+    key3: v.boolean(),
+  }),
+  ['key1', 'key3']
+);
+```
+
+## Related
+
+The following APIs can be combined with `strictObject`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum_',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'record',
+    'set',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined_',
+    'union',
+    'unknown',
+    'variant',
+    'void_',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'fallback',
+    'forward',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'omit',
+    'parse',
+    'partial',
+    'pick',
+    'pipe',
+    'required',
+    'safeParse',
+  ]}
+/>
+
+### Actions
+
+<ApiList items={['check', 'brand', 'readonly', 'transform']} />

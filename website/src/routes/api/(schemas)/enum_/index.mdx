@@ -14,12 +14,13 @@ import { properties } from './properties';
 Creates an enum schema.
 
 ```ts
-const Schema = enum_<TEnum>(enum_, message);
+const Schema = enum_<TEnum, TMessage>(enum_, message);
 ```
 
 ## Generics
 
 - `TEnum` <Property {...properties.TEnum} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -48,7 +49,7 @@ enum Direction {
   Right,
 }
 
-const DirectionSchema = enum_(Direction, 'Invalid direction');
+const DirectionSchema = v.enum_(Direction, 'Invalid direction');
 ```
 
 ## Related
@@ -62,6 +63,8 @@ The following APIs can be combined with `enum_`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -69,10 +72,14 @@ The following APIs can be combined with `enum_`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -81,8 +88,6 @@ The following APIs can be combined with `enum_`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -90,7 +95,11 @@ The following APIs can be combined with `enum_`.
     'getFallbacks',
     'is',
     'parse',
+    'pipe',
     'safeParse',
-    'transform',
   ]}
 />
+
+### Actions
+
+<ApiList items={['check', 'brand', 'readonly', 'transform']} />

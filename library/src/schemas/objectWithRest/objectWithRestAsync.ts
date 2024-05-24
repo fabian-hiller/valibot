@@ -57,12 +57,12 @@ export interface ObjectWithRestSchemaAsync<
 }
 
 /**
- * Creates an object schema.
+ * Creates an object with rest schema.
  *
  * @param entries The entries schema.
  * @param rest The rest schema.
  *
- * @returns An object schema.
+ * @returns An object with rest schema.
  */
 export function objectWithRestAsync<
   const TEntries extends ObjectEntriesAsync,
@@ -75,13 +75,13 @@ export function objectWithRestAsync<
 ): ObjectWithRestSchemaAsync<TEntries, TRest, undefined>;
 
 /**
- * Creates an object schema.
+ * Creates an object with rest schema.
  *
  * @param entries The entries schema.
  * @param rest The rest schema.
  * @param message The error message.
  *
- * @returns An object schema.
+ * @returns An object with rest schema.
  */
 export function objectWithRestAsync<
   const TEntries extends ObjectEntriesAsync,

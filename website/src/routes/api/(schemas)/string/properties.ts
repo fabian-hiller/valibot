@@ -1,7 +1,8 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  message: {
+  TMessage: {
+    modifier: 'extends',
     type: {
       type: 'union',
       options: [
@@ -9,23 +10,22 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'ErrorMessage',
           href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'StringIssue',
+              href: '../StringIssue/',
+            },
+          ],
         },
         'undefined',
       ],
     },
   },
-  pipe: {
+  message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: ['string'],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
   Schema: {
@@ -33,6 +33,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'StringSchema',
       href: '../StringSchema/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TMessage',
+        },
+      ],
     },
   },
 };

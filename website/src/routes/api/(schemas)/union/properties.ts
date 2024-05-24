@@ -9,6 +9,41 @@ export const properties: Record<string, PropertyProps> = {
       href: '../UnionOptions/',
     },
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'UnionIssue',
+              href: '../UnionIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'InferIssue',
+                  href: '../InferIssue/',
+                  generics: [
+                    {
+                      type: 'custom',
+                      name: 'TOptions',
+                      indexes: ['number'],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   options: {
     type: {
       type: 'custom',
@@ -17,42 +52,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'Output',
-              href: '../Output/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TOptions',
-                  indexes: ['number'],
-                },
-              ],
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
   Schema: {
@@ -64,6 +65,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TOptions',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

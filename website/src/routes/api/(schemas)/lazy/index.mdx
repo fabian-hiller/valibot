@@ -51,10 +51,10 @@ type BinaryTree = {
   right: BinaryTree | null;
 };
 
-const BinaryTreeSchema: BaseSchema<BinaryTree> = object({
-  element: string(),
-  left: nullable(lazy(() => BinaryTreeSchema)),
-  right: nullable(lazy(() => BinaryTreeSchema)),
+const BinaryTreeSchema: v.GenericSchema<BinaryTree> = v.object({
+  element: v.string(),
+  left: v.nullable(v.lazy(() => BinaryTreeSchema)),
+  right: v.nullable(v.lazy(() => BinaryTreeSchema)),
 });
 ```
 
@@ -65,27 +65,27 @@ Schema to validate a discriminated union of objects.
 > In most cases, <Link href="/api/union/">`union`</Link> and <Link href="/api/variant/">`variant`</Link> are the better choices for creating such a schema. I recommend using `lazy` only in special cases.
 
 ```ts
-const LazyUnionSchema = lazy((input) => {
+const LazyUnionSchema = v.lazy((input) => {
   if (input && typeof input === 'object' && 'type' in input) {
     switch (input.type) {
       case 'email':
-        return object({
-          type: literal('email'),
-          email: string([email()]),
+        return v.object({
+          type: v.literal('email'),
+          email: v.pipe(v.string(), v.email()),
         });
       case 'url':
-        return object({
-          type: literal('url'),
-          url: string([url()]),
+        return v.object({
+          type: v.literal('url'),
+          url: v.pipe(v.string(), v.url()),
         });
       case 'date':
-        return object({
-          type: literal('date'),
-          date: string([isoDate()]),
+        return v.object({
+          type: v.literal('date'),
+          date: v.pipe(v.string(), v.isoDate()),
         });
     }
   }
-  return never();
+  return v.never();
 });
 ```
 
@@ -102,11 +102,14 @@ The following APIs can be combined with `lazy`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
     'enum_',
     'instance',
     'intersect',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
@@ -118,16 +121,19 @@ The following APIs can be combined with `lazy`.
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
     'undefined_',
     'union',
+    'unionWithRest',
     'unknown',
     'variant',
     'void_',
@@ -138,8 +144,6 @@ The following APIs can be combined with `lazy`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -147,8 +151,81 @@ The following APIs can be combined with `lazy`.
     'getFallbacks',
     'is',
     'parse',
+    'pipe',
     'safeParse',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'bic',
+    'brand',
+    'bytes',
+    'check',
+    'creditCard',
+    'cuid2',
+    'decimal',
+    'email',
+    'emoji',
+    'empty',
+    'endsWith',
+    'every',
+    'excludes',
+    'finite',
+    'hash',
+    'hexadecimal',
+    'hexColor',
+    'imei',
+    'includes',
+    'integer',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'mac',
+    'mac48',
+    'mac64',
+    'maxBytes',
+    'maxLength',
+    'maxSize',
+    'maxValue',
+    'mimeType',
+    'minBytes',
+    'minLength',
+    'minSize',
+    'minValue',
+    'multipleOf',
+    'nonEmpty',
+    'notBytes',
+    'notLength',
+    'notSize',
+    'notValue',
+    'octal',
+    'readonly',
+    'regex',
+    'safeInteger',
+    'size',
+    'some',
+    'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
     'transform',
-    'unwrap',
+    'trim',
+    'trimEnd',
+    'trimStart',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
   ]}
 />

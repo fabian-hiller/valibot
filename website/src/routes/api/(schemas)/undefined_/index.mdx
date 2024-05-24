@@ -14,8 +14,12 @@ import { properties } from './properties';
 Creates an undefined schema.
 
 ```ts
-const Schema = undefined_(message);
+const Schema = undefined_<TMessage>(message);
 ```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -40,6 +44,8 @@ The following APIs can be combined with `undefined_`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -47,10 +53,14 @@ The following APIs can be combined with `undefined_`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -59,8 +69,6 @@ The following APIs can be combined with `undefined_`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -68,7 +76,11 @@ The following APIs can be combined with `undefined_`.
     'getFallbacks',
     'is',
     'parse',
+    'pipe',
     'safeParse',
-    'transform',
   ]}
 />
+
+### Actions
+
+<ApiList items={['check', 'brand', 'readonly', 'transform']} />

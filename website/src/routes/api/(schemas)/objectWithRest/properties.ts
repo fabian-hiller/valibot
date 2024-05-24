@@ -1,7 +1,15 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TWrapped: {
+  TEntries: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'ObjectEntries',
+      href: '../ObjectEntries/',
+    },
+  },
+  TRest: {
     modifier: 'extends',
     type: {
       type: 'custom',
@@ -31,8 +39,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'NonNullishIssue',
-              href: '../NonNullishIssue/',
+              name: 'ObjectWithRestIssue',
+              href: '../ObjectWithRestIssue/',
             },
           ],
         },
@@ -40,10 +48,16 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  wrapped: {
+  entries: {
     type: {
       type: 'custom',
-      name: 'TWrapped',
+      name: 'TEntries',
+    },
+  },
+  rest: {
+    type: {
+      type: 'custom',
+      name: 'TRest',
     },
   },
   message: {
@@ -55,12 +69,16 @@ export const properties: Record<string, PropertyProps> = {
   Schema: {
     type: {
       type: 'custom',
-      name: 'NonNullishSchema',
-      href: '../NonNullishSchema/',
+      name: 'ObjectWithRestSchema',
+      href: '../ObjectWithRestSchema/',
       generics: [
         {
           type: 'custom',
-          name: 'TWrapped',
+          name: 'TEntries',
+        },
+        {
+          type: 'custom',
+          name: 'TRest',
         },
         {
           type: 'custom',

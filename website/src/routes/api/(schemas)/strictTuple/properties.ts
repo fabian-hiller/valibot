@@ -1,22 +1,12 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TWrapped: {
+  TItems: {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'BaseSchema',
-      href: '../BaseSchema/',
-      generics: [
-        'unknown',
-        'unknown',
-        {
-          type: 'custom',
-          name: 'BaseIssue',
-          href: '../BaseIssue/',
-          generics: ['unknown'],
-        },
-      ],
+      name: 'TupleItems',
+      href: '../TupleItems/',
     },
   },
   TMessage: {
@@ -31,8 +21,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'NonNullishIssue',
-              href: '../NonNullishIssue/',
+              name: 'StrictTupleIssue',
+              href: '../StrictTupleIssue/',
             },
           ],
         },
@@ -40,10 +30,10 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  wrapped: {
+  items: {
     type: {
       type: 'custom',
-      name: 'TWrapped',
+      name: 'TItems',
     },
   },
   message: {
@@ -55,12 +45,12 @@ export const properties: Record<string, PropertyProps> = {
   Schema: {
     type: {
       type: 'custom',
-      name: 'NonNullishSchema',
-      href: '../NonNullishSchema/',
+      name: 'StrictTupleSchema',
+      href: '../StrictTupleSchema/',
       generics: [
         {
           type: 'custom',
-          name: 'TWrapped',
+          name: 'TItems',
         },
         {
           type: 'custom',

@@ -9,6 +9,27 @@ export const properties: Record<string, PropertyProps> = {
       href: '../Class/',
     },
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'InstanceIssue',
+              href: '../InstanceIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   class_: {
     type: {
       type: 'custom',
@@ -17,34 +38,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TClass',
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
   Schema: {
@@ -56,6 +51,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TClass',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },
