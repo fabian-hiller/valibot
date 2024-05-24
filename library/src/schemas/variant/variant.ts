@@ -115,7 +115,7 @@ export function variant(
           let outputDataset: Dataset<unknown, BaseIssue<unknown>> | undefined;
 
           // Parse only if it is a variant schema or if discriminator matches
-          for (const schema of options) {
+          for (const schema of this.options) {
             if (
               schema.type === 'variant' ||
               !schema.entries[this.key]._run(
@@ -155,7 +155,7 @@ export function variant(
         // Otherwise, cache expected discriminators if necessary
         if (!expectedDiscriminators) {
           expectedDiscriminators =
-            [..._discriminators(this.key, options)].join(' | ') || 'never';
+            [..._discriminators(this.key, this.options)].join(' | ') || 'never';
         }
 
         // And add discriminator issue
