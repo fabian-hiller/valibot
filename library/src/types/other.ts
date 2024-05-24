@@ -14,7 +14,7 @@ import type { Dataset } from './dataset.ts';
 import type { InferInput, InferIssue } from './infer.ts';
 import type { BaseIssue } from './issue.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
-import type { MaybePromise } from './utils.ts';
+import type { MaybePromise, MaybeReadonly } from './utils.ts';
 
 /**
  * Error message type.
@@ -38,12 +38,11 @@ export type Default<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   TInput extends null | undefined,
 > =
-  | InferInput<TWrapped>
-  | TInput
+  | MaybeReadonly<InferInput<TWrapped> | TInput>
   | ((
       dataset?: Dataset<TInput, never>,
       config?: Config<InferIssue<TWrapped>>
-    ) => InferInput<TWrapped> | TInput);
+    ) => MaybeReadonly<InferInput<TWrapped> | TInput>);
 
 /**
  * Default async type.
@@ -54,12 +53,11 @@ export type DefaultAsync<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   TInput extends null | undefined,
 > =
-  | InferInput<TWrapped>
-  | TInput
+  | MaybeReadonly<InferInput<TWrapped> | TInput>
   | ((
       dataset?: Dataset<TInput, never>,
       config?: Config<InferIssue<TWrapped>>
-    ) => MaybePromise<InferInput<TWrapped> | TInput>);
+    ) => MaybePromise<MaybeReadonly<InferInput<TWrapped> | TInput>>);
 
 /**
  * Default value type.
