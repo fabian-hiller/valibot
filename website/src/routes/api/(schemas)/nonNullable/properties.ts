@@ -7,6 +7,37 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
+      generics: [
+        'unknown',
+        'unknown',
+        {
+          type: 'custom',
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
+        },
+      ],
+    },
+  },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'NonNullableIssue',
+              href: '../NonNullableIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
   wrapped: {
@@ -17,15 +48,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
   Schema: {
@@ -37,6 +61,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TWrapped',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

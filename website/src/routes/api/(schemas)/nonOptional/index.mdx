@@ -17,12 +17,13 @@ Creates a non optional schema.
 > This schema function can be used to override the behavior of <Link href="../optional/">`optional`</Link>.
 
 ```ts
-const Schema = nonOptional<TWrapped>(wrapped, message);
+const Schema = nonOptional<TWrapped, TMessage>(wrapped, message);
 ```
 
 ## Generics
 
 - `TWrapped` <Property {...properties.TWrapped} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -43,10 +44,10 @@ The following examples show how `nonOptional` can be used.
 
 ### Non optional string
 
-Schema that does not accept `null`.
+Schema that does not accept `undefined`.
 
 ```ts
-const NonOptionalStringSchema = nonOptional(optional(string()));
+const NonOptionalStringSchema = v.nonOptional(v.optional(v.string()));
 ```
 
 ### Unwrap non optional
@@ -54,8 +55,8 @@ const NonOptionalStringSchema = nonOptional(optional(string()));
 Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `nonOptional`.
 
 ```ts
-const NonOptionalNumberSchema = nonOptional(optional(number()));
-const OptionalNumberSchema = unwrap(NonOptionalNumberSchema);
+const NonOptionalNumberSchema = v.nonOptional(v.optional(v.number()));
+const OptionalNumberSchema = v.unwrap(NonOptionalNumberSchema);
 ```
 
 ## Related
@@ -71,30 +72,36 @@ The following APIs can be combined with `nonOptional`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
     'enum_',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
-    'nonNullish',
+    'nonOptional',
     'null_',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
+    'tupleWithRest',
     'undefined_',
     'union',
     'unknown',
@@ -107,8 +114,6 @@ The following APIs can be combined with `nonOptional`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -116,8 +121,12 @@ The following APIs can be combined with `nonOptional`.
     'getFallbacks',
     'is',
     'parse',
+    'pipe',
     'safeParse',
-    'transform',
     'unwrap',
   ]}
 />
+
+### Actions
+
+<ApiList items={['check', 'brand', 'readonly', 'transform']} />

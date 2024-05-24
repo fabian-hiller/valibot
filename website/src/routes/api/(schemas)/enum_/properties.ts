@@ -9,6 +9,27 @@ export const properties: Record<string, PropertyProps> = {
       href: '../Enum/',
     },
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'EnumIssue',
+              href: '../EnumIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   enum_: {
     type: {
       type: 'custom',
@@ -17,15 +38,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
   Schema: {
@@ -37,6 +51,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TEnum',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

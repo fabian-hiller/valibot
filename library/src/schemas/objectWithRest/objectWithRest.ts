@@ -54,12 +54,12 @@ export interface ObjectWithRestSchema<
 }
 
 /**
- * Creates an object schema.
+ * Creates an object with rest schema.
  *
  * @param entries The entries schema.
  * @param rest The rest schema.
  *
- * @returns An object schema.
+ * @returns An object with rest schema.
  */
 export function objectWithRest<
   const TEntries extends ObjectEntries,
@@ -70,13 +70,13 @@ export function objectWithRest<
 ): ObjectWithRestSchema<TEntries, TRest, undefined>;
 
 /**
- * Creates an object schema.
+ * Creates an object with rest schema.
  *
  * @param entries The entries schema.
  * @param rest The rest schema.
  * @param message The error message.
  *
- * @returns An object schema.
+ * @returns An object with rest schema.
  */
 export function objectWithRest<
   const TEntries extends ObjectEntries,

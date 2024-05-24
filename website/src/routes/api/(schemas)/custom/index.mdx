@@ -16,26 +16,22 @@ Creates a custom schema.
 > This schema function allows you to define a schema that matches a value based on a custom function. Use it whenever you need to define a schema that cannot be expressed using any of the other schema functions.
 
 ```ts
-// Special schema with an optional pipe
-const Schema = custom<TInput>(check, pipe);
-
-// Special schema with an optional message and pipe
-const Schema = custom<TInput>(check, message, pipe);
+const Schema = custom<TInput, TMessage>(check, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `check` <Property {...properties.check} />
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-With `custom` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the input. If the input does not match the validation of `check`, you can use `message` to customize the error message.
+With `custom` you can validate the data type of the input. If the input does not match the validation of `check`, you can use `message` to customize the error message.
 
 > Make sure that the validation in `check` matches the data type of `TInput`.
 
@@ -52,7 +48,7 @@ The following examples show how `custom` can be used.
 Schema to validate a pixel string.
 
 ```ts
-const PixelStringSchema = custom<`${number}px`>((input) =>
+const PixelStringSchema = v.custom<`${number}px`>((input) =>
   typeof input === 'string' ? /^\d+px$/.test(input) : false
 );
 ```
@@ -68,6 +64,8 @@ The following APIs can be combined with `custom`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -75,10 +73,14 @@ The following APIs can be combined with `custom`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -87,8 +89,6 @@ The following APIs can be combined with `custom`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -96,38 +96,25 @@ The following APIs can be combined with `custom`.
     'getFallbacks',
     'is',
     'parse',
+    'pipe',
     'safeParse',
-    'transform',
   ]}
 />
 
-### Transformations
-
-<ApiList
-  items={[
-    'toCustom',
-    'toLowerCase',
-    'toMaxValue',
-    'toMinValue',
-    'toTrimmed',
-    'toTrimmedEnd',
-    'toTrimmedStart',
-    'toUpperCase',
-  ]}
-/>
-
-### Validations
+### Actions
 
 <ApiList
   items={[
     'bic',
+    'brand',
     'bytes',
+    'check',
     'creditCard',
     'cuid2',
-    'custom',
     'decimal',
     'email',
     'emoji',
+    'empty',
     'endsWith',
     'every',
     'excludes',
@@ -161,16 +148,26 @@ The following APIs can be combined with `custom`.
     'minSize',
     'minValue',
     'multipleOf',
+    'nonEmpty',
     'notBytes',
     'notLength',
     'notSize',
     'notValue',
     'octal',
+    'readonly',
     'regex',
     'safeInteger',
     'size',
     'some',
     'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
+    'transform',
+    'trim',
+    'trimEnd',
+    'trimStart',
     'ulid',
     'url',
     'uuid',
