@@ -28,29 +28,6 @@ export const properties: Record<string, PropertyProps> = {
   input: {
     type: 'unknown',
   },
-  config: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pick',
-          generics: [
-            {
-              type: 'custom',
-              name: 'SchemaConfig',
-              href: '../SchemaConfig/',
-            },
-            {
-              type: 'string',
-              value: 'skipPipe',
-            },
-          ],
-        },
-        'undefined',
-      ],
-    },
-  },
   result: {
     type: 'boolean',
   },
