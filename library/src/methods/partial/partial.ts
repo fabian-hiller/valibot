@@ -197,7 +197,7 @@ export type SchemaWithPartial<
       : never;
 
 /**
- * Creates a modified copy that marks all entries as optional.
+ * Creates a modified copy of an object schema that marks all entries as optional.
  *
  * @param schema The schema to modify.
  *
@@ -208,7 +208,8 @@ export function partial<const TSchema extends Schema>(
 ): SchemaWithPartial<TSchema, undefined>;
 
 /**
- * Creates a modified copy that marks the selected entries as optional.
+ * Creates a modified copy of an object schema that marks the selected entries
+ * as optional.
  *
  * @param schema The schema to modify.
  * @param keys The selected entries.

@@ -217,7 +217,7 @@ export type SchemaWithRequiredAsync<
       : never;
 
 /**
- * Creates a modified copy that marks all entries as required.
+ * Creates a modified copy of an object schema that marks all entries as required.
  *
  * @param schema The schema to modify.
  *
@@ -230,7 +230,7 @@ export function requiredAsync<const TSchema extends Schema>(
 ): SchemaWithRequiredAsync<TSchema, undefined, undefined>;
 
 /**
- * Creates a modified copy that marks all entries as required.
+ * Creates a modified copy of an object schema that marks all entries as required.
  *
  * @param schema The schema to modify.
  * @param message The error message.
@@ -246,7 +246,8 @@ export function requiredAsync<
 ): SchemaWithRequiredAsync<TSchema, undefined, TMessage>;
 
 /**
- * Creates a modified copy that marks the selected entries as required.
+ * Creates a modified copy of an object schema that marks the selected entries
+ * as required.
  *
  * @param schema The schema to modify.
  * @param keys The selected entries.
@@ -262,7 +263,8 @@ export function requiredAsync<
 ): SchemaWithRequiredAsync<TSchema, TKeys, undefined>;
 
 /**
- * Creates a modified copy that marks the selected entries as required.
+ * Creates a modified copy of an object schema that marks the selected entries
+ * as required.
  *
  * @param schema The schema to modify.
  * @param keys The selected entries.

@@ -382,7 +382,8 @@ export type SchemaWithPick<
             : never;
 
 /**
- * Creates a modified copy that contains only the selected entries.
+ * Creates a modified copy of an object schema that contains only the selected
+ * entries.
  *
  * @param schema The schema to pick from.
  * @param keys The selected entries.
