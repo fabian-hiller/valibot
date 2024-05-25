@@ -48,7 +48,7 @@ const PasswordSchema = v.pipe(
   v.object({
     password1: v.pipe(
       v.string(),
-      v.minLength(1, 'Please enter your password.'),
+      v.nonEmpty('Please enter your password.'),
       v.minLength(8, 'Your password must have 8 characters or more.')
     ),
     password2: v.string(),

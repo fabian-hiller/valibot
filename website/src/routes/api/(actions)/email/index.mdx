@@ -43,7 +43,7 @@ Schema to validate an email.
 
 ```ts
 const EmailSchema = string([
-  minLength(1, 'Please enter your email.'),
+  nonEmpty('Please enter your email.'),
   email('The email is badly formatted.'),
   maxLength(30, 'Your email is too long.'),
 ]);

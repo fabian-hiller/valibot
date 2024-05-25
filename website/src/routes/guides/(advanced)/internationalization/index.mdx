@@ -89,12 +89,12 @@ import * as m from './paraglide/messages.js';
 const LoginSchema = v.object({
   email: v.pipe(
     v.string(),
-    v.minLength(1, m.emailRequired),
+    v.nonEmpty(m.emailRequired),
     v.email(m.emailInvalid)
   ),
   password: v.pipe(
     v.string(),
-    v.minLength(1, m.passwordRequired),
+    v.nonEmpty(m.passwordRequired),
     v.minLength(8, m.passwordInvalid)
   ),
 });
