@@ -168,7 +168,7 @@ export function intersectAsync(
       }
 
       // Return output dataset
-      return dataset as Dataset<unknown, IntersectIssue | BaseIssue<unknown>>;
+      return dataset as Dataset<never, IntersectIssue | BaseIssue<unknown>>;
     },
   };
 }

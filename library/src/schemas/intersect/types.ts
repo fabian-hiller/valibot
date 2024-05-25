@@ -2,10 +2,7 @@ import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
-  InferInput,
-  InferOutput,
   MaybeReadonly,
-  UnionToIntersect,
 } from '../../types/index.ts';
 
 /**
@@ -44,15 +41,40 @@ export type IntersectOptionsAsync = MaybeReadonly<
 >;
 
 /**
+ * Infer option type.
+ */
+type InferOption<TInput, TOutput> =
+  | BaseSchema<TInput, TOutput, BaseIssue<unknown>>
+  | BaseSchemaAsync<TInput, TOutput, BaseIssue<unknown>>;
+
+/**
  * Infer intersect input type.
  */
 export type InferIntersectInput<
   TOptions extends IntersectOptions | IntersectOptionsAsync,
-> = UnionToIntersect<InferInput<TOptions[number]>>;
+> =
+  TOptions extends MaybeReadonly<
+    [InferOption<infer TInput, unknown>, ...infer TRest]
+  >
+    ? TRest extends MaybeReadonly<
+        [InferOption<unknown, unknown>, ...InferOption<unknown, unknown>[]]
+      >
+      ? TInput & InferIntersectInput<TRest>
+      : TInput
+    : never;
 
 /**
  * Infer intersect output type.
  */
 export type InferIntersectOutput<
   TOptions extends IntersectOptions | IntersectOptionsAsync,
-> = UnionToIntersect<InferOutput<TOptions[number]>>;
+> =
+  TOptions extends MaybeReadonly<
+    [InferOption<unknown, infer TOutput>, ...infer TRest]
+  >
+    ? TRest extends MaybeReadonly<
+        [InferOption<unknown, unknown>, ...InferOption<unknown, unknown>[]]
+      >
+      ? TOutput & InferIntersectOutput<TRest>
+      : TOutput
+    : never;
