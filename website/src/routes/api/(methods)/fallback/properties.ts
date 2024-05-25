@@ -25,6 +25,12 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'Fallback',
       href: '../Fallback/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TSchema',
+        },
+      ],
     },
   },
   schema: {

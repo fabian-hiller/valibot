@@ -81,6 +81,7 @@ The following APIs can be combined with `partial`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
     'enum_',
     'instance',
@@ -102,7 +103,6 @@ The following APIs can be combined with `partial`.
     'picklist',
     'record',
     'set',
-    'special',
     'string',
     'symbol',
     'tuple',
@@ -118,8 +118,6 @@ The following APIs can be combined with `partial`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'forward',
     'getDefault',
@@ -127,22 +125,16 @@ The following APIs can be combined with `partial`.
     'getFallback',
     'getFallbacks',
     'is',
-    'keyof',
-    'merge',
     'omit',
+    'keyof',
     'parse',
     'pick',
     'required',
     'safeParse',
-    'transform',
     'unwrap',
   ]}
 />
 
-### Transformations
+### Actions
 
-<ApiList items={['toCustom']} />
-
-### Validations
-
-<ApiList items={['custom']} />
+<ApiList items={['check', 'brand', 'readonly', 'transform']} />

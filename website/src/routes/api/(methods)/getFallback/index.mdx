@@ -14,7 +14,7 @@ import { properties } from './properties';
 Returns the fallback value of the schema.
 
 ```ts
-const value = getFallback<TSchema>(schema, info);
+const value = getFallback<TSchema>(schema, dataset, config);
 ```
 
 ## Generics
@@ -24,7 +24,8 @@ const value = getFallback<TSchema>(schema, info);
 ## Parameters
 
 - `schema` <Property {...properties.schema} />
-- `info` <Property {...properties.info} />
+- `dataset` <Property {...properties.dataset} />
+- `config` <Property {...properties.config} />
 
 ## Returns
 
@@ -39,8 +40,8 @@ The following examples show how `getFallback` can be used.
 Get the fallback value of a string schema.
 
 ```ts
-const FallbackStringSchema = fallback(string(), "I'm the fallback!");
-const fallbackValue = getFallback(FallbackStringSchema); // "I'm the fallback!"
+const FallbackStringSchema = v.fallback(v.string(), "I'm the fallback!");
+const fallbackValue = v.getFallback(FallbackStringSchema); // "I'm the fallback!"
 ```
 
 ## Related
@@ -56,12 +57,15 @@ The following APIs can be combined with `getFallback`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
     'enum_',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
@@ -73,14 +77,17 @@ The following APIs can be combined with `getFallback`.
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
+    'tupleWithRest',
     'undefined_',
     'union',
     'unknown',
@@ -93,15 +100,13 @@ The following APIs can be combined with `getFallback`.
 
 <ApiList
   items={[
-    'coerce',
     'fallback',
     'keyof',
-    'merge',
     'omit',
     'partial',
     'pick',
+    'pipe',
     'required',
-    'transform',
     'unwrap',
   ]}
 />

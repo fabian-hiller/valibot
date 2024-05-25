@@ -42,8 +42,8 @@ The following example show how `parse` can be used.
 
 ```ts
 try {
-  const EmailSchema = string([email()]);
-  const email = parse(EmailSchema, 'jane@example.com');
+  const EmailSchema = v.pipe(v.string(), v.email());
+  const email = v.parse(EmailSchema, 'jane@example.com');
 
   // Handle errors if one occurs
 } catch (error) {
@@ -64,12 +64,15 @@ The following APIs can be combined with `parse`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
     'enum_',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
@@ -81,14 +84,17 @@ The following APIs can be combined with `parse`.
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
+    'tupleWithRest',
     'undefined_',
     'union',
     'unknown',
@@ -101,16 +107,13 @@ The following APIs can be combined with `parse`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'keyof',
-    'merge',
     'omit',
     'partial',
     'pick',
+    'pipe',
     'required',
-    'transform',
     'unwrap',
   ]}
 />

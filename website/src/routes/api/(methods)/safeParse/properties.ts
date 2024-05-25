@@ -34,8 +34,31 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         {
           type: 'custom',
-          name: 'SchemaConfig',
-          href: '../SchemaConfig/',
+          name: 'Omit',
+          generics: [
+            {
+              type: 'custom',
+              name: 'Config',
+              href: '../Config/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'InferIssue',
+                  href: '../InferIssue/',
+                  generics: [
+                    {
+                      type: 'custom',
+                      name: 'TSchema',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'string',
+              value: 'skipPipe',
+            },
+          ],
         },
         'undefined',
       ],

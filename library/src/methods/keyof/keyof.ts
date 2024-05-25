@@ -28,6 +28,11 @@ import type {
  * Schema type.
  */
 type Schema =
+  | LooseObjectSchema<ObjectEntries, ErrorMessage<LooseObjectIssue> | undefined>
+  | LooseObjectSchemaAsync<
+      ObjectEntriesAsync,
+      ErrorMessage<LooseObjectIssue> | undefined
+    >
   | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
   | ObjectSchemaAsync<ObjectEntriesAsync, ErrorMessage<ObjectIssue> | undefined>
   | ObjectWithRestSchema<
@@ -47,11 +52,6 @@ type Schema =
   | StrictObjectSchemaAsync<
       ObjectEntriesAsync,
       ErrorMessage<StrictObjectIssue> | undefined
-    >
-  | LooseObjectSchema<ObjectEntries, ErrorMessage<LooseObjectIssue> | undefined>
-  | LooseObjectSchemaAsync<
-      ObjectEntriesAsync,
-      ErrorMessage<LooseObjectIssue> | undefined
     >;
 
 /**
