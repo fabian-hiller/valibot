@@ -82,6 +82,7 @@ type DefinitionData =
   | {
       type: 'custom';
       modifier?: string;
+      spread?: boolean;
       name: string;
       href?: string;
       generics?: DefinitionData[];
@@ -287,6 +288,7 @@ const Definition = component$<DefinitionProps>(({ data }) => (
         {data.modifier && (
           <span class="text-red-600 dark:text-red-400">{data.modifier} </span>
         )}
+        {data.spread && <span class="text-red-600 dark:text-red-400">...</span>}
         {data.href ? (
           <Link class="text-sky-600 dark:text-sky-400" href={data.href}>
             {data.name}

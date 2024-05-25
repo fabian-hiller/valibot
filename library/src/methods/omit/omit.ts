@@ -385,7 +385,8 @@ export type SchemaWithOmit<
             : never;
 
 /**
- * Creates a modified copy that contains not the selected entries.
+ * Creates a modified copy of an object schema that does not contain the
+ * selected entries.
  *
  * @param schema The schema to omit from.
  * @param keys The selected entries.
