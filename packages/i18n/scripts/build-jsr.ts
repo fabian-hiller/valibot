@@ -15,6 +15,7 @@ import pt from '../src/pt';
 import ro from '../src/ro';
 import ru from '../src/ru';
 import sl from '../src/sl';
+import sv from '../src/sv';
 import tr from '../src/tr';
 import uk from '../src/uk';
 import zhCN from '../src/zh-CN';
@@ -40,6 +41,7 @@ const languages = [
   ro,
   ru,
   sl,
+  sv,
   tr,
   uk,
   zhCN,
