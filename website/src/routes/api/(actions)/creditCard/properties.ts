@@ -5,28 +5,51 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'string',
   },
-  message: {
+  TMessage: {
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
           name: 'ErrorMessage',
-          href: '../ErrorMessage/',
+          href: '../../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'CreditCardIssue',
+              href: '../CreditCardIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+              ],
+            },
+          ],
         },
         'undefined',
       ],
     },
   },
-  Validation: {
+  message: {
     type: {
       type: 'custom',
-      name: 'CreditCardValidation',
-      href: '../CreditCardValidation/',
+      name: 'TMessage',
+    },
+  },
+  Action: {
+    type: {
+      type: 'custom',
+      name: 'CreditCardAction',
+      href: '../CreditCardAction/',
       generics: [
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

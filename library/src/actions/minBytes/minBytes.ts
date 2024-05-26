@@ -67,7 +67,7 @@ export interface MinBytesAction<
 }
 
 /**
- * Creates a min bytes validation action.
+ * Creates a min [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
  *
  * @param requirement The minimum bytes.
  *
@@ -79,7 +79,7 @@ export function minBytes<
 >(requirement: TRequirement): MinBytesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a min bytes validation action.
+ * Creates a min [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
  *
  * @param requirement The minimum bytes.
  * @param message The error message.

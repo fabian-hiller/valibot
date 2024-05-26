@@ -63,7 +63,7 @@ export interface BytesAction<
 }
 
 /**
- * Creates a bytes validation action.
+ * Creates a [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
  *
  * @param requirement The required bytes.
  *
@@ -74,7 +74,7 @@ export function bytes<TInput extends string, const TRequirement extends number>(
 ): BytesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a bytes validation action.
+ * Creates a [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
  *
  * @param requirement The required bytes.
  * @param message The error message.

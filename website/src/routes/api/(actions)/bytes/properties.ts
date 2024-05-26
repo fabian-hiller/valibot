@@ -9,6 +9,37 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'number',
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'BytesIssue',
+              href: '../BytesIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+                {
+                  type: 'custom',
+                  name: 'TRequirement',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   requirement: {
     type: {
       type: 'custom',
@@ -17,22 +48,15 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
-  Validation: {
+  Action: {
     type: {
       type: 'custom',
-      name: 'BytesValidation',
-      href: '../BytesValidation/',
+      name: 'BytesAction',
+      href: '../BytesAction/',
       generics: [
         {
           type: 'custom',
@@ -41,6 +65,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TRequirement',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

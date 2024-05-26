@@ -8,6 +8,33 @@ export const properties: Record<string, PropertyProps> = {
       item: 'any',
     },
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'EveryIssue',
+              href: '../EveryIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   requirement: {
     type: {
       type: 'function',
@@ -27,12 +54,8 @@ export const properties: Record<string, PropertyProps> = {
         {
           name: 'array',
           type: {
-            type: 'array',
-            item: {
-              type: 'custom',
-              name: 'TInput',
-              indexes: ['number'],
-            },
+            type: 'custom',
+            name: 'TInput',
           },
         },
       ],
@@ -41,26 +64,23 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
-  Validation: {
+  Action: {
     type: {
       type: 'custom',
-      name: 'EveryValidation',
-      href: '../EveryValidation/',
+      name: 'EveryAction',
+      href: '../EveryAction/',
       generics: [
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

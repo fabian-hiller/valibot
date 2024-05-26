@@ -1,7 +1,6 @@
 ---
 title: every
-description: >-
-  Creates a pipeline validation action that validates the items of an array.
+description: Creates an every validation action.
 source: /actions/every/every.ts
 contributors:
   - fabian-hiller
@@ -12,15 +11,16 @@ import { properties } from './properties';
 
 # every
 
-Creates a pipeline validation action that validates the items of an array.
+Creates an every validation action.
 
 ```ts
-const Validation = every<TInput>(requirement, message);
+const Action = every<TInput, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -33,7 +33,7 @@ With `every` you can freely validate the items of an array and return `true` if 
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -44,12 +44,13 @@ The following examples show how `every` can be used.
 Schema to validate that an array is sorted.
 
 ```ts
-const SortedArraySchema = array(number(), [
-  every(
+const SortedArraySchema = v.pipe(
+  v.array(v.number()),
+  v.every(
     (value, index, array) => index === 0 || value >= array[index - 1],
     'The numbers must be sorted in ascending order.'
-  ),
-]);
+  )
+);
 ```
 
 ## Related
@@ -59,3 +60,7 @@ The following APIs can be combined with `every`.
 ### Schemas
 
 <ApiList items={['any', 'array', 'instance', 'special', 'tuple', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

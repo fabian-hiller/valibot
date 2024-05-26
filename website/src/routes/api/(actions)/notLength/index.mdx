@@ -1,8 +1,6 @@
 ---
 title: notLength
-description: >-
-  Creates a pipeline validation action that validates the length of a string or
-  array.
+description: Creates a not length validation action.
 source: /actions/notLength/notLength.ts
 contributors:
   - fabian-hiller
@@ -13,16 +11,17 @@ import { properties } from './properties';
 
 # notLength
 
-Creates a pipeline validation action that validates the length of a string or array.
+Creates a not length validation action.
 
 ```ts
-const Validation = notLength<TInput, TRequirement>(requirement, message);
+const Action = notLength<TInput, TRequirement, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -35,7 +34,7 @@ With `notLength` you can validate the length of a string or array. If the input 
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -46,9 +45,10 @@ The following examples show how `notLength` can be used.
 Schema to validate the length of a string.
 
 ```ts
-const StringSchema = string([
-  notLength(8, 'The string must not be 8 characters long.'),
-]);
+const StringSchema = v.pipe(
+  v.string(),
+  v.notLength(8, 'The string must not be 8 characters long.')
+);
 ```
 
 ### Array schema
@@ -56,9 +56,10 @@ const StringSchema = string([
 Schema to validate the length of an array.
 
 ```ts
-const ArraySchema = array(number(), [
-  notLength(10, 'The array must not contain 10 numbers.'),
-]);
+const ArraySchema = v.pipe(
+  v.array(number()),
+  v.notLength(10, 'The array must not contain 10 numbers.')
+);
 ```
 
 ## Related
@@ -70,3 +71,7 @@ The following APIs can be combined with `notLength`.
 <ApiList
   items={['any', 'array', 'instance', 'special', 'string', 'tuple', 'unknown']}
 />
+
+### Methods
+
+<ApiList items={['pipe']} />

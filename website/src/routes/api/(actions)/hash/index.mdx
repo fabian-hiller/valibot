@@ -1,6 +1,6 @@
 ---
 title: hash
-description: Creates a pipeline validation action that validates a hash.
+description: Creates a hash validation action.
 source: /actions/hash/hash.ts
 contributors:
   - fabian-hiller
@@ -12,20 +12,20 @@ import { properties } from './properties';
 
 # hash
 
-Creates a pipeline validation action that validates a hash.
+Creates a [hash](https://en.wikipedia.org/wiki/Hash_function) validation action.
 
 ```ts
-const Validation = hash<TInput>(message);
+const Action = hash<TInput, TMessage>(message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `types` <Property {...properties.types} />
-
 - `message` <Property {...properties.message} />
 
 ### Explanation
@@ -34,7 +34,7 @@ With `hash` you can validate the formatting of a string. If the input is not a h
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -45,9 +45,10 @@ The following examples show how `hash` can be used.
 Schema to validate a hash.
 
 ```ts
-const HashSchema = string([
-  hash(['md5', 'sha1'], 'The specified hash is invalid.'),
-]);
+const HashSchema = v.pipe(
+  v.string(),
+  v.hash(['md5', 'sha1'], 'The specified hash is invalid.')
+);
 ```
 
 ## Related
@@ -57,3 +58,7 @@ The following APIs can be combined with `hash`.
 ### Schemas
 
 <ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

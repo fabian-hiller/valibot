@@ -1,6 +1,6 @@
 ---
 title: hexadecimal
-description: Creates a pipeline validation action that validates a hexadecimal.
+description: Creates a hexadecimal validation action.
 source: /actions/hexadecimal/hexadecimal.ts
 contributors:
   - fabian-hiller
@@ -12,15 +12,16 @@ import { properties } from './properties';
 
 # hexadecimal
 
-Creates a pipeline validation action that validates a [hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal).
+Creates a [hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) validation action.
 
 ```ts
-const Validation = hexadecimal<TInput>(message);
+const Action = hexadecimal<TInput, TMessage>(message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -32,7 +33,7 @@ With `hexadecimal` you can validate the formatting of a string. If the input is 
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -43,9 +44,10 @@ The following examples show how `hexadecimal` can be used.
 Schema to validate a Hexadecimal string.
 
 ```ts
-const HexadecimalSchema = string([
-  hexadecimal('The hexadecimal is badly formatted.'),
-]);
+const HexadecimalSchema = v.pipe(
+  v.string(),
+  v.hexadecimal('The hexadecimal is badly formatted.')
+);
 ```
 
 ## Related
@@ -55,3 +57,7 @@ The following APIs can be combined with `hexadecimal`.
 ### Schemas
 
 <ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

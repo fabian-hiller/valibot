@@ -1,7 +1,6 @@
 ---
 title: startsWith
-description: >-
-  Creates a pipeline validation action that validates the start of a string.
+description: Creates a starts with validation action.
 source: /actions/startsWith/startsWith.ts
 contributors:
   - fabian-hiller
@@ -12,16 +11,17 @@ import { properties } from './properties';
 
 # startsWith
 
-Creates a pipeline validation action that validates the start of a string.
+Creates a starts with validation action.
 
 ```ts
-const Validation = startsWith<TInput, TRequirement>(requirement, message);
+const Action = startsWith<TInput, TRequirement, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -34,7 +34,7 @@ With `startsWith` you can validate the start of a string. If the start does not 
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -45,7 +45,7 @@ The following examples show how `startsWith` can be used.
 Schema to validate a HTTPS URL.
 
 ```ts
-const HttpsUrlSchema = string([url(), startsWith('https://')]);
+const HttpsUrlSchema = v.pipe(v.string(), v.url(), v.startsWith('https://'));
 ```
 
 ## Related
@@ -55,3 +55,7 @@ The following APIs can be combined with `startsWith`.
 ### Schemas
 
 <ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

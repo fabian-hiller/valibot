@@ -1,8 +1,6 @@
 ---
 title: notValue
-description: >-
-  Creates a pipeline validation action that validates the value of a string,
-  number, boolean or date.
+description: Creates a not value validation action.
 source: /actions/notValue/notValue.ts
 contributors:
   - fabian-hiller
@@ -14,16 +12,17 @@ import { properties } from './properties';
 
 # notValue
 
-Creates a pipeline validation action that validates the value of a string, number, boolean or date.
+Creates a not value validation action.
 
 ```ts
-const Validation = notValue<TInput, TRequirement>(requirement, message);
+const Action = notValue<TInput, TRequirement, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -36,7 +35,7 @@ With `notValue` you can validate the value of a string, number, boolean or date.
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -47,7 +46,10 @@ The following examples show how `notValue` can be used.
 Schema to validate a number that is more or less than 100.
 
 ```ts
-const NumberSchema = number([notValue(100, 'The number must not be 100.')]);
+const NumberSchema = v.pipe(
+  v.number(),
+  v.notValue(100, 'The number must not be 100.')
+);
 ```
 
 ### Date schema
@@ -55,9 +57,10 @@ const NumberSchema = number([notValue(100, 'The number must not be 100.')]);
 Schema to validate a date that is before or after the start of 2000.
 
 ```ts
-const DateSchema = date([
-  notValue(new Date('2000-01-01'), 'The date must not be the start of 2000.'),
-]);
+const DateSchema = v.pipe(
+  v.date(),
+  v.notValue(new Date('2000-01-01'), 'The date must not be the start of 2000.')
+);
 ```
 
 ## Related
@@ -78,3 +81,7 @@ The following APIs can be combined with `notValue`.
     'unknown',
   ]}
 />
+
+### Methods
+
+<ApiList items={['pipe']} />

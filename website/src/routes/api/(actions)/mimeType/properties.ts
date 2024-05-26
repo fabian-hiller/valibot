@@ -15,6 +15,37 @@ export const properties: Record<string, PropertyProps> = {
       item: 'string',
     },
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'MimeTypeIssue',
+              href: '../MimeTypeIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+                {
+                  type: 'custom',
+                  name: 'TRequirement',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   requirement: {
     type: {
       type: 'custom',
@@ -23,22 +54,15 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
-  Validation: {
+  Action: {
     type: {
       type: 'custom',
-      name: 'MimeTypeValidation',
-      href: '../MimeTypeValidation/',
+      name: 'MimeTypeAction',
+      href: '../MimeTypeAction/',
       generics: [
         {
           type: 'custom',
@@ -47,6 +71,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TRequirement',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

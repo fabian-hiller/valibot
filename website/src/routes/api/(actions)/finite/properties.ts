@@ -5,7 +5,8 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'number',
   },
-  message: {
+  TMessage: {
+    modifier: 'extends',
     type: {
       type: 'union',
       options: [
@@ -13,20 +14,43 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'ErrorMessage',
           href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'FiniteIssue',
+              href: '../FiniteIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+              ],
+            },
+          ],
         },
-        'undefined',
+        'unknown',
       ],
     },
   },
-  Validation: {
+  message: {
     type: {
       type: 'custom',
-      name: 'FiniteValidation',
-      href: '../FiniteValidation/',
+      name: 'TMessage',
+    },
+  },
+  Action: {
+    type: {
+      type: 'custom',
+      name: 'FiniteAction',
+      href: '../FiniteAction/',
       generics: [
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

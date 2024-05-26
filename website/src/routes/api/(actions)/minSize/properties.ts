@@ -4,28 +4,45 @@ export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Map',
-          generics: ['any', 'any'],
-        },
-        {
-          type: 'custom',
-          name: 'Set',
-          generics: ['any'],
-        },
-        {
-          type: 'custom',
-          name: 'Blob',
-        },
-      ],
+      type: 'custom',
+      name: 'SizeInput',
+      href: '../SizeInput/',
     },
   },
   TRequirement: {
     modifier: 'extends',
     type: 'number',
+  },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'MinSizeIssue',
+              href: '../MinSizeIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+                {
+                  type: 'custom',
+                  name: 'TRequirement',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
   requirement: {
     type: {
@@ -35,22 +52,15 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
-  Validation: {
+  Action: {
     type: {
       type: 'custom',
-      name: 'MinSizeValidation',
-      href: '../MinSizeValidation/',
+      name: 'MinSizeAction',
+      href: '../MinSizeAction/',
       generics: [
         {
           type: 'custom',
@@ -59,6 +69,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TRequirement',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },
