@@ -1,6 +1,6 @@
 ---
 title: octal
-description: Creates a pipeline validation action that validates an octal.
+description: Creates an octal validation action.
 source: /actions/octal/octal.ts
 contributors:
   - fabian-hiller
@@ -12,15 +12,16 @@ import { properties } from './properties';
 
 # octal
 
-Creates a pipeline validation action that validates an [octal](https://en.wikipedia.org/wiki/Octal).
+Creates an [octal](https://en.wikipedia.org/wiki/Octal) validation action.
 
 ```ts
-const Validation = octal<TInput>(message);
+const Action = octal<TInput, TMessage>(message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -32,7 +33,7 @@ With `octal` you can validate the formatting of a string. If the input is not an
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -43,7 +44,10 @@ The following examples show how `octal` can be used.
 Schema to validate a octal string.
 
 ```ts
-const OctalSchema = string([octal('The octal is badly formatted.')]);
+const OctalSchema = v.pipe(
+  v.string(),
+  v.octal('The octal is badly formatted.')
+);
 ```
 
 ## Related
@@ -53,3 +57,7 @@ The following APIs can be combined with `octal`.
 ### Schemas
 
 <ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

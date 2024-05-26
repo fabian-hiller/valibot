@@ -62,7 +62,7 @@ export interface FiniteAction<
 }
 
 /**
- * Creates a finite validation action.
+ * Creates a [finite](https://en.wikipedia.org/wiki/Finite) validation action.
  *
  * @returns A finite action.
  */
@@ -72,7 +72,7 @@ export function finite<TInput extends number>(): FiniteAction<
 >;
 
 /**
- * Creates a finite validation action.
+ * Creates a [finite](https://en.wikipedia.org/wiki/Finite) validation action.
  *
  * @param message The error message.
  *

@@ -1,7 +1,6 @@
 ---
 title: maxBytes
-description: >-
-  Creates a pipeline validation action that validates the bytes of a string.
+description: Creates a max bytes validation action.
 source: /actions/maxBytes/maxBytes.ts
 contributors:
   - fabian-hiller
@@ -12,16 +11,17 @@ import { properties } from './properties';
 
 # maxBytes
 
-Creates a pipeline validation action that validates the bytes of a string.
+Creates a max [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
 
 ```ts
-const Validation = maxBytes<TInput, TRequirement>(requirement, message);
+const Action = maxBytes<TInput, TRequirement, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -34,7 +34,7 @@ With `maxBytes` you can validate the bytes of a string. If the input does not ma
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -45,9 +45,10 @@ The following examples show how `maxBytes` can be used.
 Schema to validate a string with a maximum of 64 bytes.
 
 ```ts
-const MaxBytesSchema = string([
-  maxBytes(64, 'The string must not exceed 64 bytes.'),
-]);
+const MaxBytesSchema = v.pipe(
+  v.string(),
+  v.maxBytes(64, 'The string must not exceed 64 bytes.')
+);
 ```
 
 ## Related
@@ -57,3 +58,7 @@ The following APIs can be combined with `maxBytes`.
 ### Schemas
 
 <ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

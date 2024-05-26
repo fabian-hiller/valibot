@@ -1,8 +1,6 @@
 ---
 title: minValue
-description: >-
-  Creates a pipeline validation action that validates the value of a string, 
-  number, boolean or date.
+description: Creates a min value validation action.
 source: /actions/minValue/minValue.ts
 contributors:
   - fabian-hiller
@@ -13,16 +11,17 @@ import { properties } from './properties';
 
 # minValue
 
-Creates a pipeline validation action that validates the value of a string, number, boolean or date.
+Creates a min value validation action.
 
 ```ts
-const Validation = minValue<TInput, TRequirement>(requirement, message);
+const Action = minValue<TInput, TRequirement, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -35,7 +34,7 @@ With `minValue` you can validate the value of a string, number, boolean or date.
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -46,9 +45,10 @@ The following examples show how `minValue` can be used.
 Schema to validate a number with a minimum value.
 
 ```ts
-const NumberSchema = number([
-  minValue(100, 'The number must be at least 100.'),
-]);
+const NumberSchema = v.pipe(
+  v.number(),
+  v.minValue(100, 'The number must be at least 100.')
+);
 ```
 
 ### Date schema
@@ -56,9 +56,10 @@ const NumberSchema = number([
 Schema to validate a date with a minimum year.
 
 ```ts
-const DateSchema = date([
-  minValue(new Date('2000-01-01'), 'The date must be after the year 1999.'),
-]);
+const DateSchema = v.pipe(
+  v.date(),
+  v.minValue(new Date('2000-01-01'), 'The date must be after the year 1999.')
+);
 ```
 
 ## Related
@@ -79,3 +80,7 @@ The following APIs can be combined with `minValue`.
     'unknown',
   ]}
 />
+
+### Methods
+
+<ApiList items={['pipe']} />

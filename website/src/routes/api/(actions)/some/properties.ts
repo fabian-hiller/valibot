@@ -5,7 +5,34 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'array',
-      item: 'any',
+      item: 'unknown',
+    },
+  },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'SomeIssue',
+              href: '../SomeIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
   requirement: {
@@ -27,12 +54,8 @@ export const properties: Record<string, PropertyProps> = {
         {
           name: 'array',
           type: {
-            type: 'array',
-            item: {
-              type: 'custom',
-              name: 'TInput',
-              indexes: ['number'],
-            },
+            type: 'custom',
+            name: 'TInput',
           },
         },
       ],
@@ -41,26 +64,23 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
-  Validation: {
+  Action: {
     type: {
       type: 'custom',
-      name: 'SomeValidation',
-      href: '../SomeValidation/',
+      name: 'SomeAction',
+      href: '../SomeAction/',
       generics: [
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

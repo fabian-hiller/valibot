@@ -63,14 +63,24 @@ export interface EmailAction<
 }
 
 /**
- * Creates an email validation action.
+ * Creates an [email](https://en.wikipedia.org/wiki/Email_address) validation
+ * action.
+ *
+ * Hint: This validation action intentionally only validates common email
+ * addresses. If you are interested in an action that covers the entire
+ * specification, please see issue [#204](https://github.com/fabian-hiller/valibot/issues/204).
  *
  * @returns An email action.
  */
 export function email<TInput extends string>(): EmailAction<TInput, undefined>;
 
 /**
- * Creates an email validation action.
+ * Creates an [email](https://en.wikipedia.org/wiki/Email_address) validation
+ * action.
+ *
+ * Hint: This validation action intentionally only validates common email
+ * addresses. If you are interested in an action that covers the entire
+ * specification, please see issue [#204](https://github.com/fabian-hiller/valibot/issues/204).
  *
  * @param message The error message.
  *

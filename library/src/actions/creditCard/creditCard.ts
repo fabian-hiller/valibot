@@ -94,7 +94,7 @@ const PROVIDER_REGEX_LIST = [
 ];
 
 /**
- * Creates a credit card validation action.
+ * Creates a [credit card](https://en.wikipedia.org/wiki/Payment_card_number) validation action.
  *
  * @returns A Credit card action.
  */
@@ -104,7 +104,7 @@ export function creditCard<TInput extends string>(): CreditCardAction<
 >;
 
 /**
- * Creates a credit card validation action.
+ * Creates a [credit card](https://en.wikipedia.org/wiki/Payment_card_number) validation action.
  *
  * @param message The error message.
  *

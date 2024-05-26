@@ -1,6 +1,6 @@
 ---
 title: brand
-description: Brands the output type of a schema.
+description: Creates a brand transformation action.
 source: /actions/brand/brand.ts
 contributors:
   - fabian-hiller
@@ -11,29 +11,28 @@ import { properties } from './properties';
 
 # brand
 
-Brands the output type of a schema.
+Creates a brand transformation action.
 
 ```ts
-const Schema = brand<TSchema, TName>(schema, name);
+const Action = brand<TInput, TName>(name);
 ```
 
 ## Generics
 
-- `TSchema` <Property {...properties.TSchema} />
+- `TInput` <Property {...properties.TInput} />
 - `TName` <Property {...properties.TName} />
 
 ## Parameters
 
-- `schema` <Property {...properties.schema} />
 - `name` <Property {...properties.name} />
 
 ### Explanation
 
-`brand` allows you to brand the output type of `schema` with `name`. This ensures that data can only be considered valid if it has been validated by a particular branded schema.
+`brand` allows you to brand the output type of a schema with a `name`. This ensures that data can only be considered valid if it has been validated by a particular branded schema.
 
 ## Returns
 
-- `Schema` <Property {...properties.Schema} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -45,11 +44,11 @@ Schema to ensure that only a validated fruit is accepted.
 
 ```ts
 // Create schema and infer output type
-const FruitSchema = brand(object({ name: string() }), 'Fruit');
-type FruitOutput = Output<typeof FruitSchema>;
+const FruitSchema = v.pipe(v.object({ name: v.string() }), v.brand('Fruit'));
+type FruitOutput = v.InferOutput<typeof FruitSchema>;
 
 // This works because output is branded
-const apple: FruitOutput = parse(FruitSchema, { name: 'apple' });
+const apple: FruitOutput = v.parse(FruitSchema, { name: 'apple' });
 
 // But this will result in a type error
 const banana: FruitOutput = { name: 'banana' };
@@ -68,12 +67,15 @@ The following APIs can be combined with `brand`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
     'enum_',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
@@ -85,14 +87,17 @@ The following APIs can be combined with `brand`.
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
+    'tupleWithRest',
     'undefined_',
     'union',
     'unknown',
@@ -103,23 +108,4 @@ The following APIs can be combined with `brand`.
 
 ### Methods
 
-<ApiList
-  items={[
-    'coerce',
-    'fallback',
-    'getDefault',
-    'getDefaults',
-    'getFallback',
-    'getFallbacks',
-    'is',
-    'keyof',
-    'omit',
-    'parse',
-    'partial',
-    'pick',
-    'required',
-    'safeParse',
-    'transform',
-    'unwrap',
-  ]}
-/>
+<ApiList items={['pipe']} />

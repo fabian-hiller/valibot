@@ -62,9 +62,9 @@ export interface IntegerAction<
 }
 
 /**
- * Creates a integer validation action.
+ * Creates an [integer](https://en.wikipedia.org/wiki/Integer) validation action.
  *
- * @returns A integer action.
+ * @returns An integer action.
  */
 export function integer<TInput extends number>(): IntegerAction<
   TInput,
@@ -72,11 +72,11 @@ export function integer<TInput extends number>(): IntegerAction<
 >;
 
 /**
- * Creates a integer validation action.
+ * Creates an [integer](https://en.wikipedia.org/wiki/Integer) validation action.
  *
  * @param message The error message.
  *
- * @returns A integer action.
+ * @returns An integer action.
  */
 export function integer<
   TInput extends number,

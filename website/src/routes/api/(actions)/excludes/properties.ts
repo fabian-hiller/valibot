@@ -4,42 +4,55 @@ export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
-        'string',
-        {
-          type: 'array',
-          item: 'any',
-        },
-      ],
+      type: 'custom',
+      name: 'ContentInput',
+      href: '../ContentInput/',
     },
   },
   TRequirement: {
     modifier: 'extends',
     type: {
-      type: 'conditional',
-      conditions: [
+      type: 'custom',
+      name: 'ContentRequirement',
+      href: '../ContentRequirement/',
+      generics: [
         {
-          type: {
-            type: 'custom',
-            name: 'TInput',
-            indexes: ['number'],
-          },
-          extends: {
-            type: 'array',
-            item: 'any',
-          },
-          true: {
-            type: 'custom',
-            name: 'TInput',
-            indexes: ['number'],
-          },
+          type: 'custom',
+          name: 'ContentInput',
+          href: '../ContentInput/',
         },
       ],
-      false: {
-        type: 'custom',
-        name: 'TInput',
-      },
+    },
+  },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'ExcludesIssue',
+              href: '../ExcludesIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+                {
+                  type: 'custom',
+                  name: 'TRequirement',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
   requirement: {
@@ -50,26 +63,27 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
-  Validation: {
+  Action: {
     type: {
       type: 'custom',
-      name: 'ExcludesValidation',
-      href: '../ExcludesValidation/',
+      name: 'ExcludesAction',
+      href: '../ExcludesAction/',
       generics: [
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TRequirement',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

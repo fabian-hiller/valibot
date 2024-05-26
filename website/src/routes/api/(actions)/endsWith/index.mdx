@@ -1,7 +1,6 @@
 ---
 title: endsWith
-description: >-
-  Creates a pipeline validation action that validates the end of a string.
+description: Creates an ends with validation action.
 source: /actions/endsWith/endsWith.ts
 contributors:
   - fabian-hiller
@@ -12,16 +11,17 @@ import { properties } from './properties';
 
 # endsWith
 
-Creates a pipeline validation action that validates the end of a string.
+Creates an ends with validation action.
 
 ```ts
-const Validation = endsWith<TInput, TRequirement>(requirement, message);
+const Action = endsWith<TInput, TRequirement, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -34,7 +34,7 @@ With `endsWith` you can validate the end of a string. If the end does not match 
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -45,7 +45,7 @@ The following examples show how `endsWith` can be used.
 Schema to validate an email with a specific domain.
 
 ```ts
-const EmailSchema = string([email(), endsWith('@example.com')]);
+const EmailSchema = v.pipe(v.string(), v.email(), v.endsWith('@example.com'));
 ```
 
 ## Related
@@ -55,3 +55,7 @@ The following APIs can be combined with `endsWith`.
 ### Schemas
 
 <ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

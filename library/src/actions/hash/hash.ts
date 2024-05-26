@@ -87,7 +87,7 @@ export interface HashAction<
 }
 
 /**
- * Creates a hash validation action.
+ * Creates a [hash](https://en.wikipedia.org/wiki/Hash_function) validation action.
  *
  * @param types The hash types.
  *
@@ -98,7 +98,7 @@ export function hash<TInput extends string>(
 ): HashAction<TInput, undefined>;
 
 /**
- * Creates a hash validation action.
+ * Creates a [hash](https://en.wikipedia.org/wiki/Hash_function) validation action.
  *
  * @param types The hash types.
  * @param message The error message.

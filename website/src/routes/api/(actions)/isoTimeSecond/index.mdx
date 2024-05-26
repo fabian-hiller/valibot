@@ -1,7 +1,6 @@
 ---
 title: isoTimeSecond
-description: >-
-  Creates a pipeline validation action that validates a time second.
+description: Creates an ISO time second validation action.
 source: /actions/isoTimeSecond/isoTimeSecond.ts
 contributors:
   - fabian-hiller
@@ -12,15 +11,16 @@ import { properties } from './properties';
 
 # isoTimeSecond
 
-Creates a pipeline validation action that validates a time second.
+Creates an [ISO time second](https://en.wikipedia.org/wiki/ISO_8601) validation action.
 
 ```ts
-const Validation = isoTimeSecond<TInput>(message);
+const Action = isoTimeSecond<TInput, TMessage>(message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -32,7 +32,7 @@ With `isoTimeSecond` you can validate the formatting of a string. If the input i
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -43,9 +43,10 @@ The following examples show how `isoTimeSecond` can be used.
 Schema to validate an ISO time second.
 
 ```ts
-const IsoTimeSecondSchema = string([
-  isoTimeSecond('The time is badly formatted.'),
-]);
+const IsoTimeSecondSchema = v.pipe(
+  v.string(),
+  v.isoTimeSecond('The time is badly formatted.')
+);
 ```
 
 ## Related
@@ -55,3 +56,7 @@ The following APIs can be combined with `isoTimeSecond`.
 ### Schemas
 
 <ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
