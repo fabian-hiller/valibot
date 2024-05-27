@@ -33,7 +33,8 @@ pattern vb_schemas_with_mandatory_arg() {
     `union`,
     `intersect`,
     `tuple`,
-    `picklist`
+    `picklist`,
+    `variant`
   }
 }
 
@@ -50,8 +51,11 @@ pattern vb_pipe_schema_args($schema, $new_schema_args, $piped_args) {
         // If it is a union, then there must be a second argument
         and {
           $schema <: vb_schemas_with_mandatory_arg(),
-          $one_arg <: not undefined
-        }
+          $one_arg <: not undefined,
+          if ($schema <: `variant`) {
+            $two_arg <: not undefined
+          }
+        },
       }
     },
     $new_schema_args = join($other_args, `,`)
@@ -138,14 +142,15 @@ const Schema = v.pipe(v.map(v.number(),v.pipe(v.string(), v.url(), v.endsWith('@
 
 ## Union without pipe
 
-`intersect` and `union` are not necessarily piped.
+`intersect` and `union` are not necessarily piped. `variant` also takes a non-piped array as the second argument.
 
 ```js
 const Schema = v.object({
   email: v.string([v.email(), v.endsWith('@gmail.com')]),
   password: v.string([v.minLength(8)]),
   other: v.union([v.string([v.decimal()]), v.number()]),
-  intersection: v.intersect([v.string(), v.number()])
+  intersection: v.intersect([v.string(), v.number()]),
+  variant: v.variant("type", [v.string(), v.number()])
 });
 ```
 
@@ -154,7 +159,8 @@ const Schema = v.object({
   email: v.pipe(v.string(), v.email(), v.endsWith('@gmail.com')),
   password: v.pipe(v.string(), v.minLength(8)),
   other: v.union([v.pipe(v.string(), v.decimal()), v.number()]),
-  intersection: v.intersect([v.string(), v.number()])
+  intersection: v.intersect([v.string(), v.number()]),
+  variant: v.variant("type", [v.string(), v.number()])
 });
 ```
 
