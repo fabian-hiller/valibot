@@ -62,7 +62,7 @@ pattern vb_pipe_schema_args($schema, $new_schema_args, $piped_args) {
   }
 }
 
-pattern vb_pipe($v) {
+pattern vb_pipe($v, $piped_args) {
   or {
     `$v.$schema($schema_args)` where {
       $schema <: vb_schema(),
@@ -90,11 +90,28 @@ pattern vb_flatten($v) {
   }
 }
 
+pattern vb_brand_to_pipe($v) {
+  `$v.$brandlike($schema, $brand_arg)` as $outer where {
+    $brandlike <: or {`brand`, `transform`},
+    or {
+      and {
+        $schema <: contains vb_pipe($v, $piped_args),
+        $piped_args += `, $v.$brandlike($brand_arg)`,
+        $outer => $schema
+      },
+      and {
+        $outer => `$v.pipe($schema, $v.$brandlike($brand_arg))`
+      }
+    }
+  }
+}
+
 any {
   vb_renames(),
   vb_pipe($v),
   vb_coerce($v),
-  vb_flatten($v)
+  vb_flatten($v),
+  vb_brand_to_pipe($v)
 } where {
   $v <: or {
     undefined,
@@ -268,3 +285,23 @@ const flatErrors = flatten(error.issues);
 ```
 
 ## Brand
+
+Previously, `brand` and transform were methods that could be wrapped around a schema to modify it. Now they are just transformations in the pipe.
+
+```js
+const Schema = v.brand(v.string([v.url()]), "foo");
+
+// Transform too
+const TransformedSchema = v.transform(
+  v.string(),
+  (input) => input.length
+);
+```
+
+After:
+```js
+const Schema = v.pipe(v.string(), v.url(), v.brand("foo"));
+
+// Transform too
+const TransformedSchema = v.pipe(v.string(), v.transform((input) => input.length));
+```
