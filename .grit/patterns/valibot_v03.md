@@ -90,17 +90,25 @@ pattern vb_flatten($v) {
   }
 }
 
-pattern vb_brand_to_pipe($v) {
+pattern vb_brand_to_pipe($v, $schema, $piped_args) {
   `$v.$brandlike($schema, $brand_arg)` as $outer where {
     $brandlike <: or {`brand`, `transform`},
     or {
       and {
-        $schema <: contains vb_pipe($v, $piped_args),
+        $schema <: vb_pipe($v, $piped_args),
         $piped_args += `, $v.$brandlike($brand_arg)`,
         $outer => $schema
       },
       and {
-        $outer => `$v.pipe($schema, $v.$brandlike($brand_arg))`
+        // Handle the nested case
+        $schema <: bubble($outer, $v, $brandlike, $brand_arg) vb_brand_to_pipe(v=$_, $schema, $piped_args) where {
+          $piped_args += `, $v.$brandlike($brand_arg)`,
+          $outer => `$v.pipe($schema, $piped_args)`
+        }
+      },
+      and {
+        $piped_args = `$v.$brandlike($brand_arg)`,
+        $outer => `$v.pipe($schema, $piped_args)`
       }
     }
   }
@@ -296,6 +304,12 @@ const TransformedSchema = v.transform(
   v.string(),
   (input) => input.length
 );
+
+// Both together
+const NestedTransformedSchema = v.transform(
+  v.brand(v.string(), "Name"),
+  (input) => input.length
+);
 ```
 
 After:
@@ -304,4 +318,7 @@ const Schema = v.pipe(v.string(), v.url(), v.brand("foo"));
 
 // Transform too
 const TransformedSchema = v.pipe(v.string(), v.transform((input) => input.length));
+
+// Both together
+const NestedTransformedSchema = v.pipe(v.string(), v.brand("Name"), v.transform((input) => input.length));
 ```
