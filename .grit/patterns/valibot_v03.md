@@ -27,6 +27,16 @@ pattern vb_renames() {
   }
 }
 
+/// These schemas have a mandatory first arg, so should only be piped if there are other arguments
+pattern vb_schemas_with_mandatory_arg() {
+  or {
+    `union`,
+    `intersect`,
+    `tuple`,
+    `picklist`
+  }
+}
+
 pattern vb_pipe_schema_args($schema, $new_schema_args, $piped_args) {
   or {
     [$maybe_pipe] where $other_args = [],
@@ -36,10 +46,10 @@ pattern vb_pipe_schema_args($schema, $new_schema_args, $piped_args) {
   } where {
     $maybe_pipe <: `[$piped_args]` where {
       or {
-        $schema <: not `union`,
+        $schema <: not vb_schemas_with_mandatory_arg(),
         // If it is a union, then there must be a second argument
         and {
-          $schema <: `union`,
+          $schema <: vb_schemas_with_mandatory_arg(),
           $one_arg <: not undefined
         }
       }
@@ -128,11 +138,14 @@ const Schema = v.pipe(v.map(v.number(),v.pipe(v.string(), v.url(), v.endsWith('@
 
 ## Union without pipe
 
+`intersect` and `union` are not necessarily piped.
+
 ```js
 const Schema = v.object({
   email: v.string([v.email(), v.endsWith('@gmail.com')]),
   password: v.string([v.minLength(8)]),
   other: v.union([v.string([v.decimal()]), v.number()]),
+  intersection: v.intersect([v.string(), v.number()])
 });
 ```
 
@@ -141,6 +154,7 @@ const Schema = v.object({
   email: v.pipe(v.string(), v.email(), v.endsWith('@gmail.com')),
   password: v.pipe(v.string(), v.minLength(8)),
   other: v.union([v.pipe(v.string(), v.decimal()), v.number()]),
+  intersection: v.intersect([v.string(), v.number()])
 });
 ```
 
@@ -155,6 +169,7 @@ const Schema = v.object({
   password: v.string([v.minLength(8)]),
   other: v.union([v.string([v.decimal()]), v.number()]),
   unionPipe: v.union([v.string(), v.number()], [v.minLength(8)]),
+  intersectionPipe: v.intersect([v.string(), v.number()], [v.minLength(8)]),
 });
 ```
 
@@ -164,6 +179,7 @@ const Schema = v.object({
   password: v.pipe(v.string(), v.minLength(8)),
   other: v.union([v.pipe(v.string(), v.decimal()), v.number()]),
   unionPipe: v.pipe(v.union([v.string(), v.number()]), v.minLength(8)),
+  intersectionPipe: v.pipe(v.intersect([v.string(), v.number()]), v.minLength(8)),
 });
 ```
 
@@ -244,3 +260,5 @@ const schemaWithPipe = pipe(string(), email());
 
 const flatErrors = flatten(error.issues);
 ```
+
+## Brand
