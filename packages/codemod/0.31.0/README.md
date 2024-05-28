@@ -4,6 +4,11 @@ Updates valibot from 0.30.0 to 0.31.0
 
 [See official guide](https://valibot.dev/guides/migrate-from-v0.30.0/)
 
+## Run codemod from source code
+```bash
+npx codemod@latest packages/codemod/0.31.0/src/index.ts --engine=workflow
+```
+
 ## Examples
 
 ### Before
