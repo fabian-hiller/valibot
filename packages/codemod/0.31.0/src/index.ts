@@ -226,6 +226,16 @@ export async function workflow({ jsFiles }: Api) {
       namedImports,
       keys: ['transform'],
     });
+    const isCoerce = constructIs({
+      importStar,
+      namedImports,
+      keys: ['coerce'],
+    });
+    const isFlatten = constructIs({
+      importStar,
+      namedImports,
+      keys: ['flatten'],
+    });
     // simple renames
     for (const [from, to] of [
       ...(importStar
@@ -326,6 +336,25 @@ export async function workflow({ jsFiles }: Api) {
         }
       }
     );
+    // remove coerce
+    await astGrep`$COERCE($REMOVE, $LASTARG)`.replace(({ getMatch }) => {
+      const coerce = getMatch('COERCE')?.text();
+      const lastArg = getMatch('LASTARG')?.text();
+      if (isCoerce(coerce)) {
+        if (!importStar) {
+          removeImport(`import { coerce } from "valibot"`);
+          addImport(`import { pipe, unknown, transform } from "valibot"`);
+        }
+        return `${importStar ? `${importStar}.` : ''}pipe(${importStar ? `${importStar}.` : ''}unknown(), ${importStar ? `${importStar}.` : ''}transform(${lastArg}))`;
+      }
+    });
+    // fix flatten
+    await astGrep`$FLATTEN($ARG)`.replace(({ getMatch }) => {
+      const flatten = getMatch('FLATTEN')?.text();
+      if (isFlatten(flatten) && !getMatch('ARG')?.children().length) {
+        return `$FLATTEN($ARG.issues)`;
+      }
+    });
     // brand and transform fixes
     let replaced = true;
     while (replaced) {
@@ -347,37 +376,42 @@ export async function workflow({ jsFiles }: Api) {
       });
     }
     // v.pipe support
-    await astGrep`$SCHEMA($$$REST, [$$$ACTIONS])`.replace(
-      ({ getMatch, getMultipleMatches }) => {
-        const schema = getMatch('SCHEMA')?.text();
-        const rest = getMultipleMatches('REST')
-          .filter((node) => node.kind() !== ',')
-          .map((node) => node.text());
-        const actions = getMultipleMatches('ACTIONS').filter(
-          (node) => node.kind() !== ','
-        );
-        if (
-          isSchema(schema) &&
-          actions.length &&
-          actions.every((node) => {
-            return (
-              node.kind() === 'call_expression' &&
-              isAction(node.child(0)?.text())
-            );
-          })
-        ) {
-          const pipeMethod = importStar ? `${importStar}.pipe` : 'pipe';
-          if (!importStar) {
-            addImport(`import { pipe } from "valibot"`);
-            namedImports.push(`pipe`);
+    replaced = true;
+    while (replaced) {
+      replaced = false;
+      await astGrep`$SCHEMA($$$REST, [$$$ACTIONS])`.replace(
+        ({ getMatch, getMultipleMatches }) => {
+          const schema = getMatch('SCHEMA')?.text();
+          const rest = getMultipleMatches('REST')
+            .filter((node) => node.kind() !== ',')
+            .map((node) => node.text());
+          const actions = getMultipleMatches('ACTIONS').filter(
+            (node) => node.kind() !== ','
+          );
+          if (
+            isSchema(schema) &&
+            actions.length &&
+            actions.every((node) => {
+              return (
+                node.kind() === 'call_expression' &&
+                isAction(node.child(0)?.text())
+              );
+            })
+          ) {
+            const pipeMethod = importStar ? `${importStar}.pipe` : 'pipe';
+            if (!importStar) {
+              addImport(`import { pipe } from "valibot"`);
+              namedImports.push(`pipe`);
+            }
+            const replacement = `${pipeMethod}(${schema}(${rest.join(
+              ', '
+            )}), ${actions.map((node) => node.text()).join(', ')})`;
+            replaced = true;
+            return replacement;
           }
-          const replacement = `${pipeMethod}(${schema}(${rest.join(
-            ', '
-          )}), ${actions.map((node) => node.text()).join(', ')})`;
-          return replacement;
         }
-      }
-    );
+      );
+    }
     // merge nested pipes
     replaced = true;
     while (replaced) {
