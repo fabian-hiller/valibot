@@ -22,10 +22,13 @@ pattern rewritten_names() {
 
 pattern rewrite_names($v) {
   or {
-    `$vb.$name` where $name <: rewritten_names(),
     `$name` where {
       $name <: rewritten_names(),
-      $name <: imported
+      $name <: imported_from(`"valibot"`)
+    },
+    `$v.$name` where {
+      $name <: rewritten_names(),
+    },
   }
 }
 
@@ -125,7 +128,7 @@ pattern rewrite_nested_pipes($v, $args) {
 }
 
 any {
-  rewrite_names(),
+  rewrite_names($v),
   rewrite_pipes($v),
   rewrite_brand_and_transform($v),
   rewrite_coerce($v),
@@ -356,5 +359,5 @@ import * as vb from 'valibot';
 
 const foo = <Input />
 const bar = custom();
-const baz = vb.toCustom();
+const baz = vb.transform();
 ```
