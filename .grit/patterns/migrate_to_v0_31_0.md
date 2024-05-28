@@ -5,7 +5,7 @@ You can use [Grit](https://docs.grit.io/cli/quickstart) to automatically update 
 ```grit
 language js
 
-pattern rewrite_names() {
+pattern rewritten_names() {
   or {
     `custom` => `check`,
     `BaseSchema` => `GenericSchema`,
@@ -17,6 +17,17 @@ pattern rewrite_names() {
     `toTrimmed` => `trim`,
     `toTrimmedEnd` => `trimEnd`,
     `toTrimmedStart` => `trimStart`
+  }
+}
+
+pattern rewrite_names($v) {
+  or {
+    rewritten_names() as $name where {
+      $name <: imported_from(`"valibot"`)
+    },
+    `$v.$name` where {
+      $name <: rewritten_names(),
+    },
   }
 }
 
@@ -116,7 +127,7 @@ pattern rewrite_nested_pipes($v, $args) {
 }
 
 any {
-  rewrite_names(),
+  rewrite_names($v),
   rewrite_pipes($v),
   rewrite_brand_and_transform($v),
   rewrite_coerce($v),
@@ -326,4 +337,26 @@ After:
 ```js
 const Schema1 = v.pipe(v.string(), v.email(), v.maxLength(10));
 const Schema2 = v.pipe(v.pipe(v.unknown(), v.transform((input) => new Date(input))), v.transform((input) => input.toJSON()));
+```
+
+## Should not rename unrelated methods
+
+```js
+import { Input } from '~/ui';
+import { special } from 'valibot';
+import * as vb from 'valibot';
+
+const foo = <Input />
+const bar = special();
+const baz = vb.toCustom();
+```
+
+```js
+import { Input } from '~/ui';
+import { custom } from 'valibot';
+import * as vb from 'valibot';
+
+const foo = <Input />
+const bar = custom();
+const baz = vb.transform();
 ```
