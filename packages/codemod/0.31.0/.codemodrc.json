@@ -1,13 +1,14 @@
 {
   "$schema": "https://codemod-utils.s3.us-west-1.amazonaws.com/configuration_schema.json",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": false,
   "name": "valibot/upgrade-v0.31",
   "engine": "workflow",
   "meta": {
-    "tags": ["valibot", "0.30.0", "0.31.0"]
+    "tags": ["valibot", "0.30.0", "0.31.0"],
+    "git": "https://github.com/fabian-hiller/valibot/tree/main/packages/codemod/0.31.0"
   },
   "applicability": {
-    "from": [["valbot", ">=", "0.30.0"], ["valbot", "<=", "0.31.0"]]
+    "from": [["valibot", ">=", "0.30.0"]]
   }
 }
