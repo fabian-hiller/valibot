@@ -22,8 +22,7 @@ pattern rewritten_names() {
 
 pattern rewrite_names($v) {
   or {
-    `$name` where {
-      $name <: rewritten_names(),
+    rewritten_names() as $name where {
       $name <: imported_from(`"valibot"`)
     },
     `$v.$name` where {
