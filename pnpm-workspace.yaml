@@ -1,4 +1,5 @@
 packages:
   - 'library'
   - 'packages/*'
+  - 'packages/codemod/*'
   - 'website'
