@@ -236,7 +236,7 @@ Before:
 const flatErrors1 = v.flatten(error);
 
 // This should be unchanged
-const flatErrors2 = v.flatten([issues]);
+const flatErrors2 = v.flatten([issue]);
 const flatErrors3 = v.flatten(result.issues);
 ```
 
@@ -246,7 +246,7 @@ After:
 const flatErrors1 = v.flatten(error.issues);
 
 // This should be unchanged
-const flatErrors2 = v.flatten([issues]);
+const flatErrors2 = v.flatten([issue]);
 const flatErrors3 = v.flatten(result.issues);
 ```
 
@@ -277,7 +277,7 @@ const Schema2 = notFoo.string([notFoo.email()]);
 Before:
 
 ```js
-import { email, flatten, string } from 'valibot';
+import { email, string } from 'valibot';
 
 const Schema = string([email()]);
 ```
@@ -285,7 +285,7 @@ const Schema = string([email()]);
 After:
 
 ```js
-import { email, flatten, string, pipe } from 'valibot';
+import { email, string, pipe } from 'valibot';
 
 const Schema = pipe(string(), email());
 ```
