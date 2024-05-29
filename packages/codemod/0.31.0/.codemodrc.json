@@ -9,6 +9,6 @@
     "git": "https://github.com/fabian-hiller/valibot/tree/main/packages/codemod/0.31.0"
   },
   "applicability": {
-    "from": [["valibot", ">=", "0.30.0"]]
+    "from": [["valibot", "<=", "0.30.0"]]
   }
 }
