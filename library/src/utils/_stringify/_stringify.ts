@@ -10,7 +10,7 @@
 export function _stringify(input: unknown): string {
   let type = typeof input;
   if (type === 'object') {
-    type = input ? Object.getPrototypeOf(input).constructor.name : 'null';
+    type = (input && Object.getPrototypeOf(input)?.constructor?.name) ?? 'null';
   }
   return type === 'string'
     ? `"${input}"`
