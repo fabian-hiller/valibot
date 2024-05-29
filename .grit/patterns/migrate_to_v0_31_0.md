@@ -40,7 +40,7 @@ pattern schema_names() {
 // These schemas have a mandatory array argument that is not a pipeline
 pattern schema_names_with_array_arg() {
   or {
-    `union`, `intersect`, `tuple`, `picklist`, `variant`
+    `union`, `intersect`, `tuple`, `looseTuple`, `strictTuple`, `picklist`, `variant`
   }
 }
 
