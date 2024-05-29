@@ -167,11 +167,14 @@ const constructIs = ({
 
 export async function workflow({ jsFiles }: Api) {
   await jsFiles(async ({ astGrep, addImport, removeImport, getImports }) => {
+    // Get wildcard import
     const importStar = (
       await getImports('import * as $IMPORT from "valibot"').map(
         ({ getMatch }) => getMatch('IMPORT')?.text()
       )
     ).shift();
+
+    // Get direct imports
     const namedImports = (
       await getImports('import { $$$IMPORTS } from "valibot"').map(
         ({ getMultipleMatches }) =>
@@ -183,6 +186,8 @@ export async function workflow({ jsFiles }: Api) {
       allImports.push(...imports);
       return allImports;
     }, [] as string[]);
+
+    // Create util functions
     const isSchema = constructIs({ importStar, namedImports, keys: SCHEMAS });
     const isAction = constructIs({ importStar, namedImports, keys: ACTIONS });
     const isImported = constructIsImported({ importStar, namedImports });
@@ -241,7 +246,8 @@ export async function workflow({ jsFiles }: Api) {
       namedImports,
       keys: ['union'],
     });
-    // simple renames
+
+    // Rewrite names
     for (const [from, to] of [
       ...(importStar
         ? RENAMES.map(([f, t]) => [`${importStar}.${f}`, `${importStar}.${t}`])
@@ -262,7 +268,8 @@ export async function workflow({ jsFiles }: Api) {
         },
       }).replace(() => to);
     }
-    // object/tuple fixes
+
+    // Rewrite objects and tuples with rest
     await astGrep`$OBJECT($ARGUMENT, $SCHEMA)`.replace(({ getMatch }) => {
       const object = getMatch('OBJECT')?.text();
       const argument = getMatch('ARGUMENT')?.text();
@@ -283,7 +290,8 @@ export async function workflow({ jsFiles }: Api) {
         return `${object}WithRest(${argument}, ${schema.text()})`;
       }
     });
-    // loose and strict object/tuple fixes
+
+    // Rewrite loose and strict objects and tuples
     await astGrep`$OBJECT($ARGUMENT, $SCHEMA)`.replace(({ getMatch }) => {
       const object = getMatch('OBJECT')?.text();
       const argument = getMatch('ARGUMENT')?.text();
@@ -320,7 +328,8 @@ export async function workflow({ jsFiles }: Api) {
         }${looseOrStrict}${objectOrTuple}(${argument})`;
       }
     });
-    // object merging
+
+    // Rewrite object merging
     await astGrep`$MERGE([$$$OBJECTS])`.replace(
       ({ getMultipleMatches, getMatch }) => {
         const merge = getMatch('MERGE')?.text();
@@ -342,7 +351,8 @@ export async function workflow({ jsFiles }: Api) {
         }
       }
     );
-    // remove coerce
+
+    // Rewrite coerce
     await astGrep`$COERCE($REMOVE, $LASTARG)`.replace(({ getMatch }) => {
       const coerce = getMatch('COERCE')?.text();
       const lastArg = getMatch('LASTARG')?.text();
@@ -354,14 +364,16 @@ export async function workflow({ jsFiles }: Api) {
         return `${importStar ? `${importStar}.` : ''}pipe(${importStar ? `${importStar}.` : ''}unknown(), ${importStar ? `${importStar}.` : ''}transform(${lastArg}))`;
       }
     });
-    // fix flatten
+
+    // Rewrite platten
     await astGrep`$FLATTEN($ARG)`.replace(({ getMatch }) => {
       const flatten = getMatch('FLATTEN')?.text();
       if (isFlatten(flatten) && !getMatch('ARG')?.children().length) {
         return `$FLATTEN($ARG.issues)`;
       }
     });
-    // brand and transform fixes
+
+    // Rewrite brand and transform
     let replaced = true;
     while (replaced) {
       replaced = false;
@@ -381,7 +393,8 @@ export async function workflow({ jsFiles }: Api) {
         }
       });
     }
-    // v.union support
+
+    // Rewrite union
     replaced = true;
     while (replaced) {
       replaced = false;
@@ -407,7 +420,8 @@ export async function workflow({ jsFiles }: Api) {
         }
       );
     }
-    // v.pipe support
+
+    // Rewrite pipelines
     replaced = true;
     while (replaced) {
       replaced = false;
@@ -444,7 +458,8 @@ export async function workflow({ jsFiles }: Api) {
         }
       );
     }
-    // merge nested pipes
+
+    // Rewrite nested pipes
     replaced = true;
     while (replaced) {
       replaced = false;
