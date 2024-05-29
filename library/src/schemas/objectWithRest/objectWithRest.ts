@@ -111,7 +111,7 @@ export function objectWithRest(
       const input = dataset.value;
 
       // If root type is valid, check nested types
-      if (input && typeof input === 'object' && input.constructor === Object) {
+      if (input && typeof input === 'object') {
         // Set typed to `true` and value to blank object
         dataset.typed = true;
         dataset.value = {};

@@ -19,6 +19,8 @@ import { strictObject } from '../strictObject/index.ts';
 import { string } from '../string/index.ts';
 import { variant, type VariantSchema } from './variant.ts';
 
+// TODO: Add test for invalid type inputs
+
 describe('variant', () => {
   describe('should return schema object', () => {
     const key = 'type' as const;

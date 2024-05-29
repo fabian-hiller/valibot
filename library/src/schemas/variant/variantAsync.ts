@@ -104,7 +104,7 @@ export function variantAsync(
       const input = dataset.value;
 
       // If root type is valid, check nested types
-      if (input && typeof input === 'object' && input.constructor === Object) {
+      if (input && typeof input === 'object') {
         // Get discriminator from input
         // @ts-expect-error
         const discriminator: unknown = input[this.key];
