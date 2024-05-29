@@ -333,6 +333,7 @@ export async function workflow({ jsFiles }: Api) {
         if (isMerge(merge)) {
           if (!importStar) {
             addImport(`import { object } from "valibot"`);
+            removeImport(`import { merge } from "valibot"`);
             namedImports.push(`object`);
           }
           return `${importStar ? `${importStar}.` : ''}object({${objects.join(
