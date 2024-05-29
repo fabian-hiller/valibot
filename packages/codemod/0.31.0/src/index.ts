@@ -236,6 +236,11 @@ export async function workflow({ jsFiles }: Api) {
       namedImports,
       keys: ['flatten'],
     });
+    const isUnion = constructIs({
+      importStar,
+      namedImports,
+      keys: ['union'],
+    });
     // simple renames
     for (const [from, to] of [
       ...(importStar
@@ -374,6 +379,32 @@ export async function workflow({ jsFiles }: Api) {
           }pipe(${schema}, ${brand}(${argument}))`;
         }
       });
+    }
+    // v.union support
+    replaced = true;
+    while (replaced) {
+      replaced = false;
+      await astGrep`$SCHEMA([$$$ARGS1], [$$$ARGS2])`.replace(
+        ({ getMatch, getMultipleMatches }) => {
+          const schema = getMatch('SCHEMA')?.text();
+          const args1 = getMultipleMatches('ARGS1').filter(
+            (node) => node.kind() !== ','
+          );
+          const args2 = getMultipleMatches('ARGS2').filter(
+            (node) => node.kind() !== ','
+          );
+          if (isUnion(schema)) {
+            const pipeMethod = importStar ? `${importStar}.pipe` : 'pipe';
+            if (!importStar) {
+              addImport(`import { pipe } from "valibot"`);
+              namedImports.push(`pipe`);
+            }
+            const replacement = `${pipeMethod}(${schema}([${args1.map((node) => node.text()).join(', ')}])${args2.length ? `, ${args2.map((node) => node.text()).join(', ')}` : ''})`;
+            replaced = true;
+            return replacement;
+          }
+        }
+      );
     }
     // v.pipe support
     replaced = true;
