@@ -366,7 +366,7 @@ export async function workflow({ jsFiles }: Api) {
           removeImport(`import { coerce } from "valibot"`);
           addImport(`import { pipe, unknown, transform } from "valibot"`);
         }
-        return `${importStarOrNamed}pipe(importStarOrNamed}unknown(), ${importStarOrNamed}transform(${lastArg}))`;
+        return `${importStarOrNamed}pipe(${importStarOrNamed}unknown(), ${importStarOrNamed}transform(${lastArg}))`;
       }
     });
 
@@ -401,7 +401,7 @@ export async function workflow({ jsFiles }: Api) {
     replaced = true;
     while (replaced) {
       replaced = false;
-      await astGrep`$SCHEMA([$$$ARGS1], [$$$ARGS2])`.replace(
+      await astGrep`$SCHEMA([$$$ARGS1], $$$REST, [$$$ARGS2])`.replace(
         ({ getMatch, getMultipleMatches }) => {
           const schema = getMatch('SCHEMA')?.text();
           const args1 = getMultipleMatches('ARGS1').filter(
@@ -410,13 +410,14 @@ export async function workflow({ jsFiles }: Api) {
           const args2 = getMultipleMatches('ARGS2').filter(
             (node) => node.kind() !== ','
           );
+          const rest = getMultipleMatches('REST');
           if (isUnionLike(schema)) {
             const pipeMethod = `${importStarOrNamed}pipe`;
             if (!importStar) {
               addImport(`import { pipe } from "valibot"`);
               namedImports.push(`pipe`);
             }
-            const replacement = `${pipeMethod}(${schema}([${args1.map((node) => node.text()).join(', ')}])${args2.length ? `, ${args2.map((node) => node.text()).join(', ')}` : ''})`;
+            const replacement = `${pipeMethod}(${schema}([${args1.map((node) => node.text()).join(', ')}]${rest.length ? `, ${rest.map((node) => node.text())}` : ''})${args2.length ? `, ${args2.map((node) => node.text()).join(', ')}` : ''})`;
             replaced = true;
             return replacement;
           }
