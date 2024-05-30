@@ -241,11 +241,20 @@ export async function workflow({ jsFiles }: Api) {
       namedImports,
       keys: ['flatten'],
     });
-    const isUnion = constructIs({
+    const isUnionLike = constructIs({
       importStar,
       namedImports,
-      keys: ['union'],
+      keys: [
+        'union',
+        'intersect',
+        'tuple',
+        'looseTuple',
+        'strictTuple',
+        'picklist',
+        'variant',
+      ],
     });
+    const importStarOrNamed = importStar ? `${importStar}.` : '';
 
     // Rewrite names
     for (const [from, to] of [
@@ -323,9 +332,7 @@ export async function workflow({ jsFiles }: Api) {
           removeImport(`import { ${removeImports.join(', ')} } from "valibot"`);
           namedImports.push(`${looseOrStrict}${objectOrTuple}`);
         }
-        return `${
-          importStar ? `${importStar}.` : ''
-        }${looseOrStrict}${objectOrTuple}(${argument})`;
+        return `${importStarOrNamed}${looseOrStrict}${objectOrTuple}(${argument})`;
       }
     });
 
@@ -345,9 +352,7 @@ export async function workflow({ jsFiles }: Api) {
             removeImport(`import { merge } from "valibot"`);
             namedImports.push(`object`);
           }
-          return `${importStar ? `${importStar}.` : ''}object({${objects.join(
-            ' '
-          )}})`;
+          return `${importStarOrNamed}object({${objects.join(' ')}})`;
         }
       }
     );
@@ -361,7 +366,7 @@ export async function workflow({ jsFiles }: Api) {
           removeImport(`import { coerce } from "valibot"`);
           addImport(`import { pipe, unknown, transform } from "valibot"`);
         }
-        return `${importStar ? `${importStar}.` : ''}pipe(${importStar ? `${importStar}.` : ''}unknown(), ${importStar ? `${importStar}.` : ''}transform(${lastArg}))`;
+        return `${importStarOrNamed}pipe(importStarOrNamed}unknown(), ${importStarOrNamed}transform(${lastArg}))`;
       }
     });
 
@@ -387,9 +392,7 @@ export async function workflow({ jsFiles }: Api) {
             namedImports.push(`pipe`);
           }
           replaced = true;
-          return `${
-            importStar ? `${importStar}.` : ''
-          }pipe(${schema}, ${brand}(${argument}))`;
+          return `${importStarOrNamed}pipe(${schema}, ${brand}(${argument}))`;
         }
       });
     }
@@ -407,8 +410,8 @@ export async function workflow({ jsFiles }: Api) {
           const args2 = getMultipleMatches('ARGS2').filter(
             (node) => node.kind() !== ','
           );
-          if (isUnion(schema)) {
-            const pipeMethod = importStar ? `${importStar}.pipe` : 'pipe';
+          if (isUnionLike(schema)) {
+            const pipeMethod = `${importStarOrNamed}pipe`;
             if (!importStar) {
               addImport(`import { pipe } from "valibot"`);
               namedImports.push(`pipe`);
@@ -468,7 +471,7 @@ export async function workflow({ jsFiles }: Api) {
           const outerPipe = getMatch('OUTERPIPE')?.text();
           const innerPipe = getMatch('INNERPIPE')?.text();
           if (isPipe(outerPipe) && isPipe(innerPipe)) {
-            const importPipe = `${importStar ? `${importStar}.` : ''}pipe`;
+            const importPipe = `${importStarOrNamed}pipe`;
             if (!importStar) {
               addImport(`import { pipe } from "valibot"`);
               namedImports.push(`pipe`);
