@@ -46,9 +46,9 @@ export interface BaseValidation<
    * @internal
    */
   _run(
-    dataset: Dataset<TInput, BaseIssue<TInput>>,
+    dataset: Dataset<TInput, BaseIssue<unknown>>,
     config: Config<TIssue>
-  ): Dataset<TOutput, BaseIssue<TInput> | TIssue>;
+  ): Dataset<TOutput, BaseIssue<unknown> | TIssue>;
   /**
    * Input, output and issue type.
    *
@@ -96,9 +96,9 @@ export interface BaseValidationAsync<
    * @internal
    */
   _run(
-    dataset: Dataset<TInput, BaseIssue<TInput>>,
+    dataset: Dataset<TInput, BaseIssue<unknown>>,
     config: Config<TIssue>
-  ): Promise<Dataset<TOutput, BaseIssue<TInput> | TIssue>>;
+  ): Promise<Dataset<TOutput, BaseIssue<unknown> | TIssue>>;
 }
 
 /**

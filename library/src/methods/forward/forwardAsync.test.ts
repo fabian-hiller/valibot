@@ -1,5 +1,9 @@
 import { describe, expect, test } from 'vitest';
-import { check, type CheckIssue } from '../../actions/index.ts';
+import {
+  check,
+  type CheckIssue,
+  type MinLengthIssue,
+} from '../../actions/index.ts';
 import type { TypedDataset } from '../../types/index.ts';
 import { forwardAsync } from './forwardAsync.ts';
 
@@ -103,6 +107,96 @@ describe('forwardAsync', () => {
         },
       ],
     } satisfies TypedDataset<Input, CheckIssue<Input>>);
+  });
+
+  test('should only forward issues of wrapped action', async () => {
+    const input = { nested: [{ key: 'value_1' }, { key: 'value_2' }] };
+    type Input = typeof input;
+    const requirement = () => false;
+    const prevIssue: MinLengthIssue<Input['nested'], 3> = {
+      kind: 'validation',
+      type: 'min_length',
+      input: input.nested,
+      expected: '>=3',
+      received: '2',
+      message: 'message',
+      path: [
+        {
+          type: 'object',
+          origin: 'value',
+          input: input,
+          key: 'nested',
+          value: input.nested,
+        },
+      ],
+      requirement: 3,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+      skipPipe: undefined,
+    };
+    expect(
+      await forwardAsync<Input, CheckIssue<Input>>(
+        check(requirement, 'message'),
+        ['nested', 1, 'key']
+      )._run(
+        {
+          typed: true,
+          value: input,
+          // Hint: We pass a copy of the previous issue to avoid accidentally
+          // modifying our test data.
+          issues: [{ ...prevIssue, path: [...prevIssue.path!] }],
+        },
+        {}
+      )
+    ).toStrictEqual({
+      typed: true,
+      value: input,
+      issues: [
+        prevIssue,
+        {
+          kind: 'validation',
+          type: 'check',
+          input,
+          expected: null,
+          received: 'Object',
+          message: 'message',
+          path: [
+            {
+              type: 'unknown',
+              origin: 'value',
+              input: input,
+              key: 'nested',
+              value: input.nested,
+            },
+            {
+              type: 'unknown',
+              origin: 'value',
+              input: input.nested,
+              key: 1,
+              value: input.nested[1],
+            },
+            {
+              type: 'unknown',
+              origin: 'value',
+              input: input.nested[1],
+              key: 'key',
+              value: input.nested[1].key,
+            },
+          ],
+          requirement,
+          issues: undefined,
+          lang: undefined,
+          abortEarly: undefined,
+          abortPipeEarly: undefined,
+          skipPipe: undefined,
+        },
+      ],
+    } satisfies TypedDataset<
+      Input,
+      MinLengthIssue<Input['nested'], 3> | CheckIssue<Input>
+    >);
   });
 
   test('should do nothing if there are no issues', async () => {
