@@ -122,7 +122,11 @@ pattern rewrite_flatten($v) {
 
 pattern rewrite_nested_pipes($v, $args) {
   `$v.pipe($args)` where {
-    $args <: maybe contains bubble($args) rewrite_nested_pipes($v, args=$inner) => $inner
+    $args <: maybe contains {
+      bubble rewrite_nested_pipes($v, args=$inner) => $inner
+    }
+      // Don't traverse inside schemas
+      until `$_($_)`
   }
 }
 
@@ -360,3 +364,25 @@ const foo = <Input />
 const bar = custom();
 const baz = vb.transform();
 ```
+
+## Should not transform nested pipes incorrectly
+
+```js
+const Schema1 = v.pipe(v.pipe(v.pipe(v.string()), v.email()), v.maxLength(10));
+const Schema3 = v.pipe(v.array(v.pipe(v.string(), v.decimal())), v.transform((input) => input.length));
+```
+
+```js
+const Schema1 = v.pipe(v.string(), v.email(), v.maxLength(10));
+const Schema3 = v.pipe(v.array(v.pipe(v.string(), v.decimal())), v.transform((input) => input.length));
+```
+
+<!-- ## Should inject unknown for pipes without a schema
+
+```js
+const Schema2 = v.transform(v.coerce(v.date(), (input) => new Date(input)), (input) => input.toJSON());
+```
+
+```js
+const Schema2 = v.pipe(v.unknown(), v.transform((input) => new Date(input)), v.transform((input) => input.toJSON()));
+``` -->
