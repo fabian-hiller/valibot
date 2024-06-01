@@ -1,6 +1,6 @@
-import * as v from "valibot";
+import * as v from 'valibot';
 
 const Schema = v.transform(
-  v.brand(v.string(), "Name"),
-  (input) => input.length,
+  v.brand(v.string(), 'Name'),
+  (input) => input.length
 );

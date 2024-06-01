@@ -1,3 +1,3 @@
-import { string, url } from "valibot";
+import { string, url } from 'valibot';
 
 const Schema = string([url()]);

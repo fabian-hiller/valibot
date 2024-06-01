@@ -1,3 +1,3 @@
-import { string, url, pipe } from "valibot";
+import { pipe, string, url } from 'valibot';
 
 const Schema = pipe(string(), url());

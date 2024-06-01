@@ -1,3 +1,3 @@
-import * as v from "valibot";
+import * as v from 'valibot';
 
-const Schema = v.brand(v.string([v.url()]), "foo");
+const Schema = v.brand(v.string([v.url()]), 'foo');

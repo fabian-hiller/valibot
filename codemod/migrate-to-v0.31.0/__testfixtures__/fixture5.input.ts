@@ -1,4 +1,4 @@
-import { object, tuple, string, unknown, never } from "valibot";
+import { never, object, string, tuple, unknown } from 'valibot';
 
 const LooseObjectSchema = object({ key: string() }, unknown());
 const LooseTupleSchema = tuple([string()], unknown());

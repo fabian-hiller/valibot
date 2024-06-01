@@ -1,4 +1,4 @@
-import * as v from "valibot";
+import * as v from 'valibot';
 
 const Schema = v.pipe(
   v.object({
@@ -6,7 +6,7 @@ const Schema = v.pipe(
     age: v.number(),
   }),
   v.forward(
-    v.check((i) => i.age > 18, "You must be over 18"),
-    ["age"],
-  ),
+    v.check((i) => i.age > 18, 'You must be over 18'),
+    ['age']
+  )
 );

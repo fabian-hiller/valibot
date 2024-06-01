@@ -1,5 +1,5 @@
-import * as v from "valibot";
-import { toCustom } from "valibot";
+import * as v from 'valibot';
+import { toCustom } from 'valibot';
 
 v.custom();
 v.BaseSchema();

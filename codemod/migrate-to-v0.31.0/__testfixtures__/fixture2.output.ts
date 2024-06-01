@@ -1,5 +1,5 @@
-import * as v from "valibot";
-import { transform } from "valibot";
+import * as v from 'valibot';
+import { transform } from 'valibot';
 
 v.check();
 v.GenericSchema();

@@ -1,7 +1,7 @@
-import * as v from "valibot";
+import * as v from 'valibot';
 
-const BrandedSchema = v.pipe(v.string(), v.brand("foo"));
+const BrandedSchema = v.pipe(v.string(), v.brand('foo'));
 const TransformedSchema = v.pipe(
   v.string(),
-  v.transform((input) => input.length),
+  v.transform((input) => input.length)
 );

@@ -1,4 +1,4 @@
-import * as v from "valibot";
+import * as v from 'valibot';
 
 const Schema = v.object(
   {
@@ -7,8 +7,8 @@ const Schema = v.object(
   },
   [
     v.forward(
-      v.custom((i) => i.age > 18, "You must be over 18"),
-      ["age"],
+      v.custom((i) => i.age > 18, 'You must be over 18'),
+      ['age']
     ),
-  ],
+  ]
 );
