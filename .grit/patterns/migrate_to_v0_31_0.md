@@ -7,10 +7,10 @@ language js
 
 pattern rewritten_names() {
   or {
-    // This could end up as a three way rename, hence why we only do it in first phase
+    // This could end up as a three-way rename, so we only apply it in first phase
     `custom` => `check`,
     `special` => `custom`,
-    // These are safe to apply in the second pass
+    // These are safe to apply in the second phase
     `BaseSchema` => `GenericSchema`,
     `Input` => `InferInput`,
     `Output` => `InferOutput`,
@@ -145,7 +145,7 @@ pattern is_valibot() {
   }
 }
 
-pattern one_pass() {
+pattern rewrite_functions() {
   any {
     rewrite_pipes($v),
     rewrite_brand_and_transform($v),
@@ -159,10 +159,10 @@ pattern one_pass() {
 
 sequential {
   bubble file($body) where $body <: contains or {
-    one_pass(),
+    rewrite_functions(),
     rewrite_names($v) where $v <: is_valibot()
   },
-  bubble file($body) where $body <: maybe contains one_pass()
+  bubble file($body) where $body <: maybe contains rewrite_functions()
 }
 ```
 
@@ -189,33 +189,15 @@ const Schema3 = v.pipe(v.string(), v.email(), v.endsWith('@example.com'), v.maxL
 Before:
 
 ```javascript
-const Schema1 = v.map(
-  v.number(),
-  v.string([v.url(), v.endsWith('@example.com')]),
-  [v.maxSize(10)]
-);
-
-const Schema2 = v.object(
-  {
-    list: v.array(
-      v.string([v.minLength(3)]),
-      [v.minLength(3), v.includes('foo')]
-    ),
-    length: v.number([v.integer()]),
-  },
-  [v.custom((input) => input.list.length === input.length)],
-);
+const Schema1 = v.map(v.number(), v.string([v.url(), v.endsWith('@example.com')]), [v.maxSize(10)]);
+const Schema2 = v.object({ list: v.array(v.string([v.minLength(3)]), [v.minLength(3), v.includes('foo')]), length: v.number([v.integer()]) }, [v.custom((input) => input.list.length === input.length)]);
 ```
 
 After:
 
 ```javascript
 const Schema1 = v.pipe(v.map(v.number(),v.pipe(v.string(), v.url(), v.endsWith('@example.com'))), v.maxSize(10));
-
-const Schema2 = v.pipe(v.object({
-    list: v.pipe(v.array(v.pipe(v.string(), v.minLength(3))), v.minLength(3), v.includes('foo')),
-    length: v.pipe(v.number(), v.integer()),
-  }), v.check((input) => input.list.length === input.length));
+const Schema2 = v.pipe(v.object({ list: v.pipe(v.array(v.pipe(v.string(), v.minLength(3))), v.minLength(3), v.includes('foo')), length: v.pipe(v.number(), v.integer()) }), v.check((input) => input.list.length === input.length));
 ```
 
 ## Should not transform non pipe
@@ -331,7 +313,6 @@ const Schema1 = v.brand(v.string([v.url()]), 'foo');
 const Schema2 = v.transform(v.string(), (input) => input.length);
 const Schema3 = v.transform(v.brand(v.string(), 'Name'), (input) => input.length);
 const Schema4 = v.brand(v.brand(v.string(), 'Name1'), 'Name2');
-const Schema5 = v.transform(v.coerce(v.date(), (input) => new Date(input)), (input) => input.toJSON());
 ```
 
 After:
@@ -341,7 +322,6 @@ const Schema1 = v.pipe(v.string(), v.url(), v.brand('foo'));
 const Schema2 = v.pipe(v.string(), v.transform((input) => input.length));
 const Schema3 = v.pipe(v.string(), v.brand('Name'), v.transform((input) => input.length));
 const Schema4 = v.pipe(v.string(), v.brand('Name1'), v.brand('Name2'));
-const Schema5 = v.pipe(v.unknown(), v.transform((input) => new Date(input)), v.transform((input) => input.toJSON()));
 ```
 
 ## Should transform unnecessary pipes
@@ -351,6 +331,7 @@ Before:
 ```js
 const Schema1 = v.pipe(v.pipe(v.pipe(v.string()), v.email()), v.maxLength(10));
 const Schema2 = v.transform(v.coerce(v.date(), (input) => new Date(input)), (input) => input.toJSON());
+const Schema3 = v.pipe(v.array(v.pipe(v.string(), v.decimal())), v.transform((input) => input.length));
 ```
 
 After:
@@ -358,48 +339,31 @@ After:
 ```js
 const Schema1 = v.pipe(v.string(), v.email(), v.maxLength(10));
 const Schema2 = v.pipe(v.unknown(), v.transform((input) => new Date(input)), v.transform((input) => input.toJSON()));
+const Schema3 = v.pipe(v.array(v.pipe(v.string(), v.decimal())), v.transform((input) => input.length));
 ```
 
 ## Should not rename unrelated methods
 
+Before:
+
 ```js
-import { Input } from '~/ui';
 import { special } from 'valibot';
 import * as vb from 'valibot';
+import { Input } from '~/ui';
 
 const foo = <Input />
 const bar = special();
 const baz = vb.toCustom();
 ```
 
+After:
+
 ```js
-import { Input } from '~/ui';
 import { custom } from 'valibot';
 import * as vb from 'valibot';
+import { Input } from '~/ui';
 
 const foo = <Input />
 const bar = custom();
 const baz = vb.transform();
-```
-
-## Should not transform nested pipes incorrectly
-
-```js
-const Schema1 = v.pipe(v.pipe(v.pipe(v.string()), v.email()), v.maxLength(10));
-const Schema3 = v.pipe(v.array(v.pipe(v.string(), v.decimal())), v.transform((input) => input.length));
-```
-
-```js
-const Schema1 = v.pipe(v.string(), v.email(), v.maxLength(10));
-const Schema3 = v.pipe(v.array(v.pipe(v.string(), v.decimal())), v.transform((input) => input.length));
-```
-
-## Should inject unknown for pipes without a schema
-
-```js
-const Schema2 = v.transform(v.coerce(v.date(), (input) => new Date(input)), (input) => input.toJSON());
-```
-
-```js
-const Schema2 = v.pipe(v.unknown(), v.transform((input) => new Date(input)), v.transform((input) => input.toJSON()));
 ```
