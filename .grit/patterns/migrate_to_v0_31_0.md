@@ -7,12 +7,14 @@ language js
 
 pattern rewritten_names() {
   or {
+    // This could end up as a three way rename, hence why we only do it in first phase
     `custom` => `check`,
+    `special` => `custom`,
+    // These are safe to apply in the second pass
     `BaseSchema` => `GenericSchema`,
     `Input` => `InferInput`,
     `Output` => `InferOutput`,
     `SchemaConfig` => `Config`,
-    `special` => `custom`,
     `toCustom` => `transform`,
     `toTrimmed` => `trim`,
     `toTrimmedEnd` => `trimEnd`,
@@ -122,26 +124,45 @@ pattern rewrite_flatten($v) {
 
 pattern rewrite_nested_pipes($v, $args) {
   `$v.pipe($args)` where {
-    $args <: maybe contains bubble($args) rewrite_nested_pipes($v, args=$inner) => $inner
+    $args <: maybe contains {
+      bubble rewrite_nested_pipes($v, args=$inner) => $inner
+    }
+      // Don't traverse inside schemas
+      until `$_($_)`
   }
 }
 
-any {
-  rewrite_names($v),
-  rewrite_pipes($v),
-  rewrite_brand_and_transform($v),
-  rewrite_coerce($v),
-  rewrite_flatten($v),
-  rewrite_nested_pipes($v),
-} where {
-  $v <: or {
-    // Direct imports
-    undefined,
-    // Default wildcard specification
-    `v`,
-    // Other wildcard imports
-    identifier() where $program <: contains `import * as $v from 'valibot'`
+pattern is_valibot() {
+  `$v` where {
+    $v <: or {
+      // Direct imports
+      undefined,
+      // Default wildcard specification
+      `v`,
+      // Other wildcard imports
+      identifier() where $program <: contains `import * as $v from 'valibot'`
+    }
   }
+}
+
+pattern one_pass() {
+  any {
+    rewrite_pipes($v),
+    rewrite_brand_and_transform($v),
+    rewrite_coerce($v),
+    rewrite_flatten($v),
+    rewrite_nested_pipes($v),
+  } where {
+    $v <: is_valibot()
+  }
+}
+
+sequential {
+  bubble file($body) where $body <: contains or {
+    one_pass(),
+    rewrite_names($v) where $v <: is_valibot()
+  },
+  bubble file($body) where $body <: maybe contains one_pass()
 }
 ```
 
@@ -320,7 +341,7 @@ const Schema1 = v.pipe(v.string(), v.url(), v.brand('foo'));
 const Schema2 = v.pipe(v.string(), v.transform((input) => input.length));
 const Schema3 = v.pipe(v.string(), v.brand('Name'), v.transform((input) => input.length));
 const Schema4 = v.pipe(v.string(), v.brand('Name1'), v.brand('Name2'));
-const Schema5 = v.pipe(v.pipe(v.unknown(), v.transform((input) => new Date(input))), v.transform((input) => input.toJSON()));
+const Schema5 = v.pipe(v.unknown(), v.transform((input) => new Date(input)), v.transform((input) => input.toJSON()));
 ```
 
 ## Should transform unnecessary pipes
@@ -336,7 +357,7 @@ After:
 
 ```js
 const Schema1 = v.pipe(v.string(), v.email(), v.maxLength(10));
-const Schema2 = v.pipe(v.pipe(v.unknown(), v.transform((input) => new Date(input))), v.transform((input) => input.toJSON()));
+const Schema2 = v.pipe(v.unknown(), v.transform((input) => new Date(input)), v.transform((input) => input.toJSON()));
 ```
 
 ## Should not rename unrelated methods
@@ -359,4 +380,26 @@ import * as vb from 'valibot';
 const foo = <Input />
 const bar = custom();
 const baz = vb.transform();
+```
+
+## Should not transform nested pipes incorrectly
+
+```js
+const Schema1 = v.pipe(v.pipe(v.pipe(v.string()), v.email()), v.maxLength(10));
+const Schema3 = v.pipe(v.array(v.pipe(v.string(), v.decimal())), v.transform((input) => input.length));
+```
+
+```js
+const Schema1 = v.pipe(v.string(), v.email(), v.maxLength(10));
+const Schema3 = v.pipe(v.array(v.pipe(v.string(), v.decimal())), v.transform((input) => input.length));
+```
+
+## Should inject unknown for pipes without a schema
+
+```js
+const Schema2 = v.transform(v.coerce(v.date(), (input) => new Date(input)), (input) => input.toJSON());
+```
+
+```js
+const Schema2 = v.pipe(v.unknown(), v.transform((input) => new Date(input)), v.transform((input) => input.toJSON()));
 ```
