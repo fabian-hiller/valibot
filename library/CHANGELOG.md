@@ -4,7 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## v0.31.0 (Month DD, YYYY)
 
-- More details will follow soon
+> To migrate from an older version, please see the official [migration guide](https://valibot.dev/guides/migrate-to-v0.31.0/).
 
 ## v0.30.0 (March 06, 2024)
 

@@ -1,5 +1,5 @@
 {
   "name": "@valibot/valibot",
-  "version": "0.31.0-rc.7",
+  "version": "0.31.0-rc.8",
   "exports": "./src/index.ts"
 }
