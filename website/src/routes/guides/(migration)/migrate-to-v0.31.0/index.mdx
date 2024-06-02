@@ -1,7 +1,7 @@
 ---
-title: Migrate from v0.30.0
+title: Migrate to v0.31.0
 description: >-
-  Migrating Valibot from v0.30.0 to a newer version isn't complicated. Except
+  Migrating Valibot from an older version to v0.31.0 isn't complicated. Except
   for the new `pipe` method, most things remain the same.
 contributors:
   - fabian-hiller
@@ -9,11 +9,25 @@ contributors:
 
 import { Link } from '@builder.io/qwik-city';
 
-# Migrate from v0.30.0
+# Migrate to v0.31.0
 
-Migrating Valibot from v0.30.0 to a newer version isn't complicated. Except for the new <Link href="/api/pipe/">`pipe`</Link> method, most things remain the same. The following guide will help you migrate step by step and also point out important differences.
+Migrating Valibot from an older version to v0.31.0 isn't complicated. Except for the new <Link href="/api/pipe/">`pipe`</Link> method, most things remain the same. The following guide will help you to migrate automatically or manually step by step and also point out important differences.
 
-> There are already two codemods available from [Codemod](https://go.codemod.com/valibot) and [Grit](https://docs.grit.io/registry/github.com/fabian-hiller/valibot/migrate_to_v0_31_0) that will automate the following steps for you. Once we can confirm that they work as expected, we will include them in this guide.
+## Automatic upgrade
+
+We worked togehter with [Codemod](https://codemod.com/registry/valibot-migrate-to-v0-31-0) and [Grit](https://docs.grit.io/registry/github.com/fabian-hiller/valibot/migrate_to_v0_31_0) to automatically upgrade your schemas to the new version with a single CLI command. Both codemods are similar. You can use one or the other. Simply run the command in the directory of your project.
+
+> We recommend using a version control system like [Git](https://git-scm.com/) so that you can revert changes if the codemod screws something up.
+
+```bash
+# Codemod
+npx codemod valibot/migrate-to-v0.31.0
+
+# Grit
+npx @getgrit/cli apply github.com/fabian-hiller/valibot#migrate_to_v0_31_0
+```
+
+Please create an [issue](https://github.com/fabian-hiller/valibot/issues/new) if you encounter any problems or unexpected behavior with the provided codemods.
 
 ## Restructure code
 

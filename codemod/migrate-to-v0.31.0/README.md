@@ -1,6 +1,6 @@
 # Migrate to v0.31.0
 
-You can use [Codemod](https://codemod.com/) to automatically update your code to the new API. See the [migration guide](https://valibot.dev/guides/migrate-from-v0.30.0/) for more details on the changes.
+You can use [Codemod](https://codemod.com/) to automatically update your code to the new API. See the [migration guide](https://valibot.dev/guides/migrate-to-v0.31.0/) for more details on the changes.
 
 ## Examples
 
