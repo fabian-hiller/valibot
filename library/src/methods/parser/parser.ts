@@ -62,19 +62,11 @@ export function parser(
   >
 ): Parser<
   BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  | Omit<
-      Config<InferIssue<BaseSchema<unknown, unknown, BaseIssue<unknown>>>>,
-      'skipPipe'
-    >
-  | undefined
+  Omit<Config<BaseIssue<unknown>>, 'skipPipe'> | undefined
 > {
   const func: Parser<
     BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-    | Omit<
-        Config<InferIssue<BaseSchema<unknown, unknown, BaseIssue<unknown>>>>,
-        'skipPipe'
-      >
-    | undefined
+    Omit<Config<BaseIssue<unknown>>, 'skipPipe'> | undefined
   > = (input: unknown) => parse(schema, input, config);
   // @ts-ignore
   func.schema = schema;

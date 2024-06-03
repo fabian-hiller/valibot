@@ -77,30 +77,12 @@ export function parserAsync(
 ): ParserAsync<
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  | Omit<
-      Config<
-        InferIssue<
-          | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-          | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-        >
-      >,
-      'skipPipe'
-    >
-  | undefined
+  Omit<Config<BaseIssue<unknown>>, 'skipPipe'> | undefined
 > {
   const func: ParserAsync<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-    | Omit<
-        Config<
-          InferIssue<
-            | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-            | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-          >
-        >,
-        'skipPipe'
-      >
-    | undefined
+    Omit<Config<BaseIssue<unknown>>, 'skipPipe'> | undefined
   > = (input: unknown) => parseAsync(schema, input, config);
   // @ts-expect-error
   func.schema = schema;
