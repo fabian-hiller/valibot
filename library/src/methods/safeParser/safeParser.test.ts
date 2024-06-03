@@ -1,10 +1,41 @@
 import { describe, expect, test } from 'vitest';
 import { minLength, transform } from '../../actions/index.ts';
 import { object, string } from '../../schemas/index.ts';
+import type { Config, InferIssue } from '../../types/index.ts';
 import { pipe } from '../pipe/index.ts';
 import { safeParser } from './safeParser.ts';
 
 describe('safeParser', () => {
+  describe('should return function object', () => {
+    const schema = object({
+      key: pipe(
+        string(),
+        transform((input) => input.length)
+      ),
+    });
+
+    test('without config', () => {
+      const func1 = safeParser(schema);
+      expect(func1).toBeInstanceOf(Function);
+      expect(func1.schema).toBe(schema);
+      expect(func1.config).toBeUndefined();
+      const func2 = safeParser(schema, undefined);
+      expect(func2).toBeInstanceOf(Function);
+      expect(func2.schema).toBe(schema);
+      expect(func2.config).toBeUndefined();
+    });
+
+    test('with config', () => {
+      const config: Omit<Config<InferIssue<typeof schema>>, 'skipPipe'> = {
+        abortEarly: true,
+      };
+      const func = safeParser(schema, config);
+      expect(func).toBeInstanceOf(Function);
+      expect(func.schema).toBe(schema);
+      expect(func.config).toBe(config);
+    });
+  });
+
   test('should return successful output', () => {
     expect(
       safeParser(
