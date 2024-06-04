@@ -132,6 +132,17 @@ pattern rewrite_nested_pipes($v, $args) {
   }
 }
 
+pattern rewrite_object_and_tuple($v) {
+  or {
+    `$v.object($obj, $v.unknown())` => `$v.looseObject($obj)`,
+    `$v.tuple($tuple, $v.unknown())` => `$v.looseTuple($tuple)`,
+    `$v.object($obj, $v.never())` => `$v.strictObject($obj)`,
+    `$v.tuple($tuple, $v.never())` => `$v.strictTuple($tuple)`,
+    `$v.object($obj, $v.$rest())` => `$v.objectWithRest($obj, $v.$rest())`,
+    `$v.tuple($tuple, $v.$rest())` => `$v.tupleWithRest($tuple, $v.$rest())`,
+  }
+}
+
 pattern is_valibot() {
   `$v` where {
     $v <: or {
@@ -152,6 +163,7 @@ pattern rewrite_functions() {
     rewrite_coerce($v),
     rewrite_flatten($v),
     rewrite_nested_pipes($v),
+    rewrite_object_and_tuple($v),
   } where {
     $v <: is_valibot()
   }
@@ -366,4 +378,30 @@ import { Input } from '~/ui';
 const foo = <Input />
 const bar = custom();
 const baz = vb.transform();
+```
+
+## Should transform objects and tuples
+
+Before:
+
+```js
+const ObjectSchema = v.object({ key: v.string() }, v.null_());
+const TupleSchema = v.tuple([v.string()], v.null_());
+
+const LooseObjectSchema = v.object({ key: v.string() }, v.unknown());
+const LooseTupleSchema = v.tuple([v.string()], v.unknown());
+const StrictObjectSchema = v.object({ key: v.string() }, v.never());
+const StrictTupleSchema = v.tuple([v.string()], v.never());
+```
+
+After:
+  
+```js
+const ObjectSchema = v.objectWithRest({ key: v.string() }, v.null_());
+const TupleSchema = v.tupleWithRest([v.string()], v.null_());
+
+const LooseObjectSchema = v.looseObject({ key: v.string() });
+const LooseTupleSchema = v.looseTuple([v.string()]);
+const StrictObjectSchema = v.strictObject({ key: v.string() });
+const StrictTupleSchema = v.strictTuple([v.string()]);
 ```
