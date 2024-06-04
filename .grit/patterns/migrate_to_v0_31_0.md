@@ -164,13 +164,29 @@ pattern rewrite_object_and_tuple($v) {
 }
 
 pattern rewrite_merge($v) {
-  `$v.merge([$schemas])` where {
+  or {
+    `$v.merge([$schemas], $rest, '$message', $pipe)`,
+    `$v.merge([$schemas], '$message', $pipe)`,
+    `$v.merge([$schemas], $rest, $pipe)`,
+    `$v.merge([$schemas], $pipe)`,
+    `$v.merge([$schemas])`,
+  } where {
     $entries = [],
     $schemas <: some bubble($entries) $schema where {
       $entries += `...$schema.entries`,
     },
     $entries = join($entries, `, `),
-  } => `$v.object({ $entries })`
+    $args = `{ $entries }`,
+    if ($rest <: not undefined) {
+      $args += `, $rest`
+    },
+    if ($message <: not undefined) {
+      $args += `, '$message'`
+    },
+    if ($pipe <: not undefined) {
+      $args += `, $pipe`,
+    },
+  } => `$v.object($args)`
 }
 
 pattern is_valibot() {
@@ -455,4 +471,18 @@ const ObjectSchema1 = v.object({ foo: v.string() });
 const ObjectSchema2 = v.object({ bar: v.number() });
 
 const MergedObject = v.object({ ...ObjectSchema1.entries, ...ObjectSchema2.entries });
+```
+
+## Should transform object with additional arguments
+
+Before:
+
+```js
+const Schema = v.merge([ObjectSchema1, ObjectSchema1], v.string(), 'Error message', [v.custom(() => true)]);
+```
+
+After:
+
+```js
+const Schema = v.pipe(v.objectWithRest({ ...ObjectSchema1.entries, ...ObjectSchema1.entries }, v.string(), 'Error message'), v.check(() => true));
 ```
