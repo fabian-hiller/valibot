@@ -1,6 +1,6 @@
 {
   "$schema": "https://codemod-utils.s3.us-west-1.amazonaws.com/configuration_schema.json",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "name": "valibot/migrate-to-v0.31.0",
   "engine": "workflow",

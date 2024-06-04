@@ -9,16 +9,36 @@ pattern rewritten_names() {
   or {
     // This could end up as a three-way rename, so we only apply it in first phase
     `custom` => `check`,
+    `customAsync` => `checkAsync`,
     `special` => `custom`,
+    `specialAsync` => `customAsync`,
     // These are safe to apply in the second phase
+    `anyAsync` => `any`,
     `BaseSchema` => `GenericSchema`,
+    `bigintAsync` => `bigint`,
+    `blobAsync` => `blob`,
+    `booleanAsync` => `boolean`,
+    `dateAsync` => `date`,
+    `enumAsync` => `enum_`,
     `Input` => `InferInput`,
+    `instanceAsync` => `instance`,
+    `literalAsync` => `literal`,
+    `nanAsync` => `nan`,
+    `neverAsync` => `never`,
+    `nullAsync` => `null_`,
+    `numberAsync` => `number`,
     `Output` => `InferOutput`,
+    `picklistAsync` => `picklist`,
     `SchemaConfig` => `Config`,
+    `stringAsync` => `string`,
+    `symbolAsync` => `symbol`,
+    `undefinedAsync` => `undefined_`,
+    `unknownAsync` => `unknown`,
     `toCustom` => `transform`,
     `toTrimmed` => `trim`,
     `toTrimmedEnd` => `trimEnd`,
     `toTrimmedStart` => `trimStart`
+    `voidAsync` => `void_`,
   }
 }
 

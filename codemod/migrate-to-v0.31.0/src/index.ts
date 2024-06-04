@@ -58,15 +58,36 @@ const SCHEMAS_WITH_ARRAY_ARG = [
 
 // List of names that have changed
 const RENAMES: [string, string][] = [
-  ['custom', 'check'],
+  ['anyAsync', 'any'],
   ['BaseSchema', 'GenericSchema'],
+  ['bigintAsync', 'bigint'],
+  ['blobAsync', 'blob'],
+  ['booleanAsync', 'boolean'],
+  ['custom', 'check'],
+  ['customAsync', 'checkAsync'],
+  ['dateAsync', 'date'],
+  ['enumAsync', 'enum_'],
   ['Input', 'InferInput'],
+  ['instanceAsync', 'instance'],
+  ['literalAsync', 'literal'],
+  ['nanAsync', 'nan'],
+  ['neverAsync', 'never'],
+  ['nullAsync', 'null_'],
+  ['numberAsync', 'number'],
   ['Output', 'InferOutput'],
+  ['picklistAsync', 'picklist'],
   ['special', 'custom'],
+  ['specialAsync', 'customAsync'],
+  ['SchemaConfig', 'Config'],
+  ['stringAsync', 'string'],
+  ['symbolAsync', 'symbol'],
+  ['undefinedAsync', 'undefined_'],
+  ['unknownAsync', 'unknown'],
   ['toCustom', 'transform'],
   ['toTrimmed', 'trim'],
   ['toTrimmedEnd', 'trimEnd'],
   ['toTrimmedStart', 'trimStart'],
+  ['voidAsync', 'void_'],
 ];
 
 /**
