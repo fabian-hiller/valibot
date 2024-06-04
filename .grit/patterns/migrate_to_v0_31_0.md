@@ -37,7 +37,7 @@ pattern rewritten_names() {
     `toCustom` => `transform`,
     `toTrimmed` => `trim`,
     `toTrimmedEnd` => `trimEnd`,
-    `toTrimmedStart` => `trimStart`
+    `toTrimmedStart` => `trimStart`,
     `voidAsync` => `void_`,
   }
 }
@@ -86,7 +86,7 @@ pattern extract_pipe_args($schema, $new_schema_args, $pipe_args) {
         },
       }
     },
-    $new_schema_args = join($other_args, `,`)
+    $new_schema_args = join($other_args, `, `)
   }
 }
 
@@ -154,23 +154,51 @@ pattern rewrite_nested_pipes($v, $args) {
 
 pattern rewrite_object_and_tuple($v) {
   or {
+    `$v.object($obj, $v.unknown(), '$message', $pipe)` => `$v.looseObject($obj, '$message', $pipe)`,
+    `$v.object($obj, $v.unknown(), $pipe)` => `$v.looseObject($obj, $pipe)`,
     `$v.object($obj, $v.unknown())` => `$v.looseObject($obj)`,
+    `$v.tuple($tuple, $v.unknown(), '$message', $pipe)` => `$v.looseTuple($tuple, '$message', $pipe)`,
+    `$v.tuple($tuple, $v.unknown(), $pipe)` => `$v.looseTuple($tuple, $pipe)`,
     `$v.tuple($tuple, $v.unknown())` => `$v.looseTuple($tuple)`,
+    `$v.object($obj, $v.never(), '$message', $pipe)` => `$v.strictObject($obj, '$message', $pipe)`,
+    `$v.object($obj, $v.never(), $pipe)` => `$v.strictObject($obj, $pipe)`,
     `$v.object($obj, $v.never())` => `$v.strictObject($obj)`,
+    `$v.tuple($tuple, $v.never(), '$message', $pipe)` => `$v.strictTuple($tuple, '$message', $pipe)`,
+    `$v.tuple($tuple, $v.never(), $pipe)` => `$v.strictTuple($tuple, $pipe)`,
     `$v.tuple($tuple, $v.never())` => `$v.strictTuple($tuple)`,
+    `$v.object($obj, $v.$rest(), '$message', $pipe)` => `$v.objectWithRest($obj, $v.$rest(), '$message', $pipe)`,
+    `$v.object($obj, $v.$rest(), $pipe)` => `$v.objectWithRest($obj, $v.$rest(), $pipe)`,
     `$v.object($obj, $v.$rest())` => `$v.objectWithRest($obj, $v.$rest())`,
+    `$v.tuple($tuple, $v.$rest(), '$message', $pipe)` => `$v.tupleWithRest($tuple, $v.$rest(), '$message', $pipe)`,
+    `$v.tuple($tuple, $v.$rest(), $pipe)` => `$v.tupleWithRest($tuple, $v.$rest(), $pipe)`,
     `$v.tuple($tuple, $v.$rest())` => `$v.tupleWithRest($tuple, $v.$rest())`,
   }
 }
 
 pattern rewrite_merge($v) {
-  `$v.merge([$schemas])` where {
+  or {
+    `$v.merge([$schemas], $rest, '$message', $pipe)`,
+    `$v.merge([$schemas], '$message', $pipe)`,
+    `$v.merge([$schemas], $rest, $pipe)`,
+    `$v.merge([$schemas], $pipe)`,
+    `$v.merge([$schemas])`,
+  } where {
     $entries = [],
     $schemas <: some bubble($entries) $schema where {
       $entries += `...$schema.entries`,
     },
     $entries = join($entries, `, `),
-  } => `$v.object({ $entries })`
+    $args = `{ $entries }`,
+    if ($rest <: not undefined) {
+      $args += `, $rest`
+    },
+    if ($message <: not undefined) {
+      $args += `, '$message'`
+    },
+    if ($pipe <: not undefined) {
+      $args += `, $pipe`,
+    },
+  } => `$v.object($args)`
 }
 
 pattern is_valibot() {
@@ -205,7 +233,8 @@ sequential {
     rewrite_functions(),
     rewrite_names($v) where $v <: is_valibot()
   },
-  bubble file($body) where $body <: maybe contains rewrite_functions()
+  bubble file($body) where $body <: maybe contains rewrite_functions(),
+  bubble file($body) where $body <: maybe contains rewrite_functions(),
 }
 ```
 
@@ -239,7 +268,7 @@ const Schema2 = v.object({ list: v.array(v.string([v.minLength(3)]), [v.minLengt
 After:
 
 ```javascript
-const Schema1 = v.pipe(v.map(v.number(),v.pipe(v.string(), v.url(), v.endsWith('@example.com'))), v.maxSize(10));
+const Schema1 = v.pipe(v.map(v.number(), v.pipe(v.string(), v.url(), v.endsWith('@example.com'))), v.maxSize(10));
 const Schema2 = v.pipe(v.object({ list: v.pipe(v.array(v.pipe(v.string(), v.minLength(3))), v.minLength(3), v.includes('foo')), length: v.pipe(v.number(), v.integer()) }), v.check((input) => input.list.length === input.length));
 ```
 
@@ -455,4 +484,18 @@ const ObjectSchema1 = v.object({ foo: v.string() });
 const ObjectSchema2 = v.object({ bar: v.number() });
 
 const MergedObject = v.object({ ...ObjectSchema1.entries, ...ObjectSchema2.entries });
+```
+
+## Should transform object with additional arguments
+
+Before:
+
+```js
+const Schema = v.merge([ObjectSchema1, ObjectSchema1], v.string(), 'Error message', [v.custom(() => true)]);
+```
+
+After:
+
+```js
+const Schema = v.pipe(v.objectWithRest({ ...ObjectSchema1.entries, ...ObjectSchema1.entries }, v.string(), 'Error message'), v.check(() => true));
 ```
