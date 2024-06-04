@@ -154,11 +154,23 @@ pattern rewrite_nested_pipes($v, $args) {
 
 pattern rewrite_object_and_tuple($v) {
   or {
+    `$v.object($obj, $v.unknown(), '$message', $pipe)` => `$v.looseObject($obj, '$message', $pipe)`,
+    `$v.object($obj, $v.unknown(), $pipe)` => `$v.looseObject($obj, $pipe)`,
     `$v.object($obj, $v.unknown())` => `$v.looseObject($obj)`,
+    `$v.tuple($tuple, $v.unknown(), '$message', $pipe)` => `$v.looseTuple($tuple, '$message', $pipe)`,
+    `$v.tuple($tuple, $v.unknown(), $pipe)` => `$v.looseTuple($tuple, $pipe)`,
     `$v.tuple($tuple, $v.unknown())` => `$v.looseTuple($tuple)`,
+    `$v.object($obj, $v.never(), '$message', $pipe)` => `$v.strictObject($obj, '$message', $pipe)`,
+    `$v.object($obj, $v.never(), $pipe)` => `$v.strictObject($obj, $pipe)`,
     `$v.object($obj, $v.never())` => `$v.strictObject($obj)`,
+    `$v.tuple($tuple, $v.never(), '$message', $pipe)` => `$v.strictTuple($tuple, '$message', $pipe)`,
+    `$v.tuple($tuple, $v.never(), $pipe)` => `$v.strictTuple($tuple, $pipe)`,
     `$v.tuple($tuple, $v.never())` => `$v.strictTuple($tuple)`,
+    `$v.object($obj, $v.$rest(), '$message', $pipe)` => `$v.objectWithRest($obj, $v.$rest(), '$message', $pipe)`,
+    `$v.object($obj, $v.$rest(), $pipe)` => `$v.objectWithRest($obj, $v.$rest(), $pipe)`,
     `$v.object($obj, $v.$rest())` => `$v.objectWithRest($obj, $v.$rest())`,
+    `$v.tuple($tuple, $v.$rest(), '$message', $pipe)` => `$v.tupleWithRest($tuple, $v.$rest(), '$message', $pipe)`,
+    `$v.tuple($tuple, $v.$rest(), $pipe)` => `$v.tupleWithRest($tuple, $v.$rest(), $pipe)`,
     `$v.tuple($tuple, $v.$rest())` => `$v.tupleWithRest($tuple, $v.$rest())`,
   }
 }
@@ -221,7 +233,8 @@ sequential {
     rewrite_functions(),
     rewrite_names($v) where $v <: is_valibot()
   },
-  bubble file($body) where $body <: maybe contains rewrite_functions()
+  bubble file($body) where $body <: maybe contains rewrite_functions(),
+  bubble file($body) where $body <: maybe contains rewrite_functions(),
 }
 ```
 
