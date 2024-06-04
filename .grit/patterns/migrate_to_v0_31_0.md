@@ -143,6 +143,16 @@ pattern rewrite_object_and_tuple($v) {
   }
 }
 
+pattern rewrite_merge($v) {
+  `$v.merge([$schemas])` where {
+    $entries = [],
+    $schemas <: some bubble($entries) $schema where {
+      $entries += `...$schema.entries`,
+    },
+    $entries = join($entries, `, `),
+  } => `$v.object({ $entries })`
+}
+
 pattern is_valibot() {
   `$v` where {
     $v <: or {
@@ -164,6 +174,7 @@ pattern rewrite_functions() {
     rewrite_flatten($v),
     rewrite_nested_pipes($v),
     rewrite_object_and_tuple($v),
+    rewrite_merge($v),
   } where {
     $v <: is_valibot()
   }
@@ -404,4 +415,24 @@ const LooseObjectSchema = v.looseObject({ key: v.string() });
 const LooseTupleSchema = v.looseTuple([v.string()]);
 const StrictObjectSchema = v.strictObject({ key: v.string() });
 const StrictTupleSchema = v.strictTuple([v.string()]);
+```
+
+## Should transform object merging
+
+Before:
+
+```js
+const ObjectSchema1 = v.object({ foo: v.string() });
+const ObjectSchema2 = v.object({ bar: v.number() });
+
+const MergedObject = v.merge([ObjectSchema1, ObjectSchema2]);
+```
+
+After:
+  
+```js
+const ObjectSchema1 = v.object({ foo: v.string() });
+const ObjectSchema2 = v.object({ bar: v.number() });
+
+const MergedObject = v.object({ ...ObjectSchema1.entries, ...ObjectSchema2.entries });
 ```
