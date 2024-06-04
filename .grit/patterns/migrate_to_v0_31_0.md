@@ -37,7 +37,7 @@ pattern rewritten_names() {
     `toCustom` => `transform`,
     `toTrimmed` => `trim`,
     `toTrimmedEnd` => `trimEnd`,
-    `toTrimmedStart` => `trimStart`
+    `toTrimmedStart` => `trimStart`,
     `voidAsync` => `void_`,
   }
 }
