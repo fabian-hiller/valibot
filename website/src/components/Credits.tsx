@@ -78,7 +78,6 @@ export const Credits = component$(() => {
       <ul class="mt-4 flex flex-wrap gap-2 md:mt-5 lg:mt-6 lg:gap-3">
         {[
           'dailydotdev',
-          'ivan-mihalic',
           'KATT',
           'osdiab',
           'Thanaen',
