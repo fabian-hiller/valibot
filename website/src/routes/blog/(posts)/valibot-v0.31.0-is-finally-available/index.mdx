@@ -87,7 +87,7 @@ const BirthdaySchema = v.pipe(
 );
 ```
 
-Furthermore, it is now possible to extand the pipeline of an existing schema by adding additional validation and transformation rules. This makes it possible to reuse already created schemas to construct more specific ones. Similar to how you extend a class in object-oriented programming to make it more specialized.
+Furthermore, it is now possible to extend the pipeline of an existing schema by adding additional validation and transformation rules. This makes it possible to reuse already created schemas to construct more specific ones. Similar to how you extend a class in object-oriented programming to make it more specialized.
 
 ```ts
 const EmailSchema = v.pipe(v.string(), v.email());
