@@ -143,12 +143,15 @@ const LooseTupleSchema = v.looseTuple([v.string(), v.number()]); // [string, num
 const MapSchema = v.map(v.string(), v.number()); // Map<string, number>
 const ObjectSchema = v.object({ key: v.string() }); // { key: string }
 const ObjectWithRestSchema = v.objectWithRest({ key: v.string() }, v.null_()); // { key: string } & { [key: string]: null }
-const RecordSchema = v.record(v.number()); // Record<string, number>
+const RecordSchema = v.record(v.string(), v.number()); // Record<string, number>
 const SetSchema = v.set(v.number()); // Set<number>
 const StrictObjectSchema = v.strictObject({ key: v.string() }); // { key: string }
 const StrictTupleSchema = v.strictTuple([v.string(), v.number()]); // [string, number]
 const TupleSchema = v.tuple([v.string(), v.number()]); // [string, number]
-const TupleWithRestSchema = v.tuple([v.string(), v.number()], v.null_()); // [string, number, ...null[]]
+const TupleWithRestSchema = v.tupleWithRest(
+  [v.string(), v.number()],
+  v.null_()
+); // [string, number, ...null[]]
 ```
 
 ## Special cases
