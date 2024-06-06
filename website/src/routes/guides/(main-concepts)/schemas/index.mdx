@@ -148,7 +148,10 @@ const SetSchema = v.set(v.number()); // Set<number>
 const StrictObjectSchema = v.strictObject({ key: v.string() }); // { key: string }
 const StrictTupleSchema = v.strictTuple([v.string(), v.number()]); // [string, number]
 const TupleSchema = v.tuple([v.string(), v.number()]); // [string, number]
-const TupleWithRestSchema = v.tupleWithRest([v.string(), v.number()], v.null_()); // [string, number, ...null[]]
+const TupleWithRestSchema = v.tupleWithRest(
+  [v.string(), v.number()],
+  v.null_()
+); // [string, number, ...null[]]
 ```
 
 ## Special cases
