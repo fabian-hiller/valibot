@@ -1,0 +1,207 @@
+---
+cover: v0.31.0
+title: Valibot v0.31.0 is finally available
+description: >-
+  After 3 months of hard work I am happy to announce that Valibot v0.31.0 is
+  finally available.
+published: 2024-06-06
+authors:
+  - fabian-hiller
+contributors:
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+import IssueTypeDark from './issue-type-dark.jpg?jsx';
+import IssueTypeLight from './issue-type-light.jpg?jsx';
+import MentalModelDark from './mental-model-dark.jpg?jsx';
+import MentalModelLight from './mental-model-light.jpg?jsx';
+import StringSizeDark from './string-size-dark.jpg?jsx';
+import StringSizeLight from './string-size-light.jpg?jsx';
+
+After 3 months of hard work I am happy to announce that Valibot v0.31.0 is finally available. This is not a regular release as we have rewritten the whole library from scratch.
+
+Based on your feedback and all the lessons learned from the past, we were able to drastically improve the mental model, bundle size, flexibility, type safety and stability of the library. I would like to highlight some of the major improvements and changes in this post.
+
+> Because this release introduces some breaking changes, we put a lot of effort into making the migration experience as smooth as possible. I worked closely with the open source community to create a detailed <Link href="/guides/migrate-to-v0.31.0/">migration guide</Link> and two codemods to automatically update your schemas.
+
+## Mental model
+
+We believe that Valibot will be easier to use because we have drastically improved the mental model. For a modular library like Valibot, this is crucial, as each functionality is imported as its own function.
+
+The mental model is now reduced to **schemas**, **methods** and **actions**. Schemas are used to validate a specific data type like a string, object or date. They are the starting point for using Valibot.
+
+Methods help you either modify or use a schema. For example, the new <Link href="/api/pipe/">`pipe`</Link> method extends the functionality of a schema by adding additional validation and transformation rules. When using a method, you always pass a schema as the first argument.
+
+Finally, there are actions. Actions are used exclusively in the pipeline of a schema. They can be used to further validate or transform a particular data type. For example, the following schema can be used to trim a string and check if it is a valid email address.
+
+<MentalModelDark
+  alt="Code example with a schema, method and actions"
+  class="hidden dark:block"
+/>
+<MentalModelLight
+  alt="Code example with a schema, method and actions"
+  class="dark:hidden"
+/>
+
+> We recommend using Valibot with a wildcard import as this improves the developer experience. Three shaking still works when using `v.`. We tested it with various build-systems.
+
+You can find a list of all schemas, methods and actions in our <Link href="/api/">API reference</Link>.
+
+## Bundle Size
+
+After increasing the initial bundle size by introducing new features to the core of Valibot in the past, I am pleased to announce that this release reduces the individual bundle size of your schemas by approximately 15 to 30% without losing any functionality. This has been achieved by simplifying and unifying the internal structure and implementation.
+
+For example, the <Link href="/api/string/">`string`</Link> schema required 800 bytes in the previous version, while the same schema now requires only 560 bytes. This is a reduction of 30%. As the library is optimized for compression, and most of these bytes are shared across all schemas and actions, the bundle size increases only slightly when adding more schemas or actions.
+
+<StringSizeDark
+  alt="Comparison of string schema bundle size between v0.30.0 and v0.31.0"
+  class="hidden dark:block"
+/>
+<StringSizeLight
+  alt="Comparison of string schema bundle size between v0.30.0 and v0.31.0"
+  class="dark:hidden"
+/>
+
+For example, adding the <Link href="/api/number/">`number`</Link> schema increases the bundle size by only 40 bytes, resulting in a total bundle size of 600 bytes. This is a huge improvement and makes Valibot even more attractive when using schemas to validate unknown data in the browser, on the edge, or in serverless environments. A smaller bundle size can greatly improve the startup performance of your application by reducing the time it takes to download and parse the JavaScript code.
+
+> I am planning an experimental library with the same external API but slightly less functionality. If it works out, it could become a drop-in replacement if you do not need the full functionality of Valibot. I expect the initial bundle size of this library to start around 200 bytes. Stay tuned!
+
+## Flexibility
+
+Another huge improvement is the flexibility gained by our new <Link href="/api/pipe/">`pipe`</Link> method. Compared to the previous versions, we removed many limitation. For example, it is now possible to transform the data type inside of pipelines. This simplifies the usage and readability as it reduces function nesting.
+
+```ts
+// With the previous API
+const BirthdaySchema = v.brand(
+  v.transform(v.string([v.isoDate()]), (input) => new Date(input)),
+  'birthday'
+);
+
+// With the brand new API
+const BirthdaySchema = v.pipe(
+  v.string(),
+  v.isoDate(),
+  v.transform((input) => new Date(input)),
+  v.brand('birthday')
+);
+```
+
+Furthermore, it is now possible to extand the pipeline of an existing schema by adding additional validation and transformation rules. This makes it possible to reuse already created schemas to construct more specific ones. Similar to how you extend a class in object-oriented programming to make it more specialized.
+
+```ts
+const EmailSchema = v.pipe(v.string(), v.email());
+const GmailSchema = v.pipe(EmailSchema, v.endsWith('@gmail.com'));
+```
+
+## Type safety
+
+After I started working on a first draft in early March, I spent at least two weeks thinking about the structure and interplay of everything. I also thought a lot about the type safety of the library.
+
+Previously, many parts were only typed generically. An example is the issues that a schema returns when parsing invalid data. Even though each issue contains very specific data depending on the schema or action, they were all previously typed as a generic `SchemaIssue`.
+
+This changes with this release. Wherever possible, we have tried to achieve 100% type safety. You can even infer the issue type of any schema or action used. We expect this improvement to result in a better developer experience and fewer bugs.
+
+<IssueTypeDark
+  alt="Code example showing how the issue type of a schema is automatically inferred"
+  class="hidden dark:block"
+/>
+<IssueTypeLight
+  alt="Code example showing how the issue type of a schema is automatically inferred"
+  class="dark:hidden"
+/>
+
+## Stability
+
+Once most of the decisions were made, we spent a lot of time writing unit and type tests. This explains why it took us two and a half months to release the first release candidate. The tests have allowed us to fix some previously undetected bugs and enhance the stability of the library in the long run.
+
+Before v1, I would like to further improve the test coverage to be able to fully guarantee the functionality of each function. This is an ambitious goal, but I am confident that we will reach it soon.
+
+## Thank you!
+
+This release was a team effort! Because so many of you contributed to this release in so many different ways, I am not able to mention everyone. However, I have tried to link all of your GitHub profiles and highlight some very important contributions. Please ping me if your avatar is missing.
+
+<ul class="!mx-8 !mt-10 flex !list-none flex-wrap gap-2 md:!mt-12 lg:!mx-10 lg:!mt-14 lg:gap-3">
+  {[
+    'Afsoon',
+    'AlexXanderGrib',
+    'Andarist',
+    'AndreyYolkin',
+    'ariskemper',
+    'Demivan',
+    'DylanThomasFr',
+    'EltonLobo07',
+    'GabrielHangor',
+    'Hugos68',
+    'IlyaSemenov',
+    'MohammedEsafi',
+    'MrGeniusProgrammer',
+    'Saeris',
+    'Sandros94',
+    'Sec-ant',
+    'alexbit-codemod',
+    'ammarriq',
+    'anuraghazra',
+    'arybitskiy',
+    'bingtsingw',
+    'brandonpittman',
+    'brenelz',
+    'chertik77',
+    'chimame',
+    'christophsturm',
+    'dboune',
+    'devcaeg',
+    'dusty',
+    'fredericoo',
+    'gmaxlev',
+    'homersimpsons',
+    'jansedlon',
+    'jchatard',
+    'joshwashywash',
+    'jsudelko',
+    'juliusmarminge',
+    'kovalchukq',
+    'linkb15',
+    'lukemorton',
+    'macarie',
+    'morgante',
+    'mtt-artis',
+    'mutewinter',
+    'mxdvl',
+    'nakanoasaservice',
+    'naveen-bharathi',
+    'sacrosanctic',
+    'samualtnorman',
+    'saturnonearth',
+    'seren5240',
+    'sillvva',
+    'ssalbdivad',
+    'vladshcherbin',
+    'xcfox',
+    'yudinmaxim',
+    'znycheporuk',
+  ].map((sponsor) => (
+    <li key={sponsor} class="!m-0 !p-0">
+      <a
+        href={`https://github.com/${sponsor}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        <img
+          width="88"
+          height="88"
+          loading="lazy"
+          src={`https://github.com/${sponsor}.png?size=88`}
+          alt={`GitHub profile picture of ${sponsor}`}
+          class="w-9 rounded-full md:w-10 lg:w-11"
+        />
+      </a>
+    </li>
+  ))}
+</ul>
+
+Thanks to <a href="https://github.com/Demivan">@Demivan</a> and <a href="https://github.com/xcfox">@xcfox</a> for their contributions to the new API design. <a href="https://github.com/Demivan">@Demivan</a> had the initial idea for the <Link href="/api/pipe/">`pipe`</Link> method and helped me with many decisions along the way. Thanks to <a href="https://github.com/ariskemper">@ariskemper</a> for influencing the new structure of our unit tests, thanks to <a href="https://github.com/EltonLobo07">@EltonLobo07</a> for porting over 25 actions to the new implementation and thanks to <a href="https://github.com/anuraghazra">@anuraghazra</a> for finding a TypeScript workaround that made the new <Link href="/api/pipe/">`pipe`</Link> method possible in this way.
+
+I would also like to thank our partners and sponsors who provide intellectual and financial support to the project. In particular, I would like to thank the <a href="https://www.pace.edu/seidenberg">Seidenberg School of Computer Science and Information Systems</a> at Pace University. Without their support over the past few months, this release would not have been possible.
+
+> Please <a href="mailto:info@sifa-digital.de">contact us</a> if your organization is interested in becoming a partner of Valibot to help us ensure the long-term development and maintenance of the project.
