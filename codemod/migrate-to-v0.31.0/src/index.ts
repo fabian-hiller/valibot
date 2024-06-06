@@ -421,7 +421,7 @@ export async function workflow({ jsFiles }: Api) {
               }
 
               // Return rewritten code
-              return `${wildcardPrefix}pipe(${schemaName}([${itemsText}]${restText ? `, ${restText}` : ''})${actionsText})`;
+              return `${wildcardPrefix}pipe(${schemaName}([${itemsText}]${restText ? `, ${restText}` : ''}), ${actionsText})`;
             }
 
             // Otherwise, remove pipe argument from schema
