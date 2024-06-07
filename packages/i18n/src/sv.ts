@@ -1,4 +1,4 @@
-import { Language } from './types';
+import type { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
@@ -63,4 +63,3 @@ const language: Language = {
 };
 
 export default language;
-
