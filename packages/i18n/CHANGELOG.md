@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.14.0 (June 07, 2024)
 
 - Add Italian (it) translations (pull request #605)
 - Add Swedish (sv) translations (pull request #606)
