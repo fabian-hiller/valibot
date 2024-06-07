@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add Swedish (sv) translations (pull request #606)
+
 ## v0.13.0 (May 18, 2024)
 
 - Add Spanish (es) translations (pull request #581)
