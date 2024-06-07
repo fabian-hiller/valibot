@@ -14,6 +14,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 | French (fr)     | [#418][pr-418-url] | ✅     |
 | German (de)     | [#397][pr-397-url] | ✅     |
 | Hungarian (hu)  | [#560][pr-560-url] | ✅     |
+| Italian (it)    | [#605][pr-605-url] | ✅     |
 | Japanese (ja)   | [#431][pr-431-url] | ✅     |
 | Korean (kr)     | [#429][pr-429-url] | ✅     |
 | Norwegian (nb)  | [#439][pr-439-url] | ✅     |
@@ -43,6 +44,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 [pr-549-url]: https://github.com/fabian-hiller/valibot/pull/549
 [pr-560-url]: https://github.com/fabian-hiller/valibot/pull/560
 [pr-581-url]: https://github.com/fabian-hiller/valibot/pull/581
+[pr-605-url]: https://github.com/fabian-hiller/valibot/pull/605
 [pr-606-url]: https://github.com/fabian-hiller/valibot/pull/606
 
 ## Getting started
