@@ -5,7 +5,8 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'string',
   },
-  message: {
+  TMessage: {
+    modifier: 'extends',
     type: {
       type: 'union',
       options: [
@@ -13,20 +14,43 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'ErrorMessage',
           href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'Ipv4Issue',
+              href: '../Ipv4Issue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+              ],
+            },
+          ],
         },
         'undefined',
       ],
     },
   },
-  Validation: {
+  message: {
     type: {
       type: 'custom',
-      name: 'Ipv4Validation',
-      href: '../Ipv4Validation/',
+      name: 'TMessage',
+    },
+  },
+  Action: {
+    type: {
+      type: 'custom',
+      name: 'Ipv4Action',
+      href: '../Ipv4Action/',
       generics: [
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

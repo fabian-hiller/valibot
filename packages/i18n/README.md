@@ -22,6 +22,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 | Russian (ru)    | [#434][pr-434-url] | ✅     |
 | Slovenian (sl)  | [#422][pr-422-url] | ✅     |
 | Spanish (es)    | [#581][pr-581-url] | ✅     |
+| Swedish (sv)    | [#606][pr-606-url] | ✅     |
 | Turkish (tr)    | [#549][pr-549-url] | ✅     |
 | Ukrainian (uk)  | [#423][pr-423-url] | ✅     |
 
@@ -42,6 +43,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 [pr-549-url]: https://github.com/fabian-hiller/valibot/pull/549
 [pr-560-url]: https://github.com/fabian-hiller/valibot/pull/560
 [pr-581-url]: https://github.com/fabian-hiller/valibot/pull/581
+[pr-606-url]: https://github.com/fabian-hiller/valibot/pull/606
 
 ## Getting started
 

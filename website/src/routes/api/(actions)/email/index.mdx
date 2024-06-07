@@ -1,6 +1,6 @@
 ---
 title: email
-description: Creates a pipeline validation action that validates an email.
+description: Creates an email validation action.
 source: /actions/email/email.ts
 contributors:
   - fabian-hiller
@@ -11,15 +11,16 @@ import { properties } from './properties';
 
 # email
 
-Creates a pipeline validation action that validates an email.
+Creates an [email](https://en.wikipedia.org/wiki/Email_address) validation action.
 
 ```ts
-const Validation = email<TInput>(message);
+const Action = email<TInput, TMessage>(message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -29,9 +30,11 @@ const Validation = email<TInput>(message);
 
 With `email` you can validate the formatting of a string. If the input is not an email, you can use `message` to customize the error message.
 
+> This validation action intentionally only validates common email addresses. If you are interested in an action that covers the entire specification, please see issue [#204](https://github.com/fabian-hiller/valibot/issues/204).
+
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -42,11 +45,12 @@ The following examples show how `email` can be used.
 Schema to validate an email.
 
 ```ts
-const EmailSchema = string([
-  nonEmpty('Please enter your email.'),
-  email('The email is badly formatted.'),
-  maxLength(30, 'Your email is too long.'),
-]);
+const EmailSchema = v.pipe(
+  v.string(),
+  v.nonEmpty('Please enter your email.'),
+  v.email('The email is badly formatted.'),
+  v.maxLength(30, 'Your email is too long.')
+);
 ```
 
 ## Related
@@ -56,3 +60,7 @@ The following APIs can be combined with `email`.
 ### Schemas
 
 <ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

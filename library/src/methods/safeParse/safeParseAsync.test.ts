@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { minLength, transform } from '../../actions/index.ts';
-import { object, string } from '../../schemas/index.ts';
+import { objectAsync, string } from '../../schemas/index.ts';
 import { pipe } from '../pipe/index.ts';
 import { safeParseAsync } from './safeParseAsync.ts';
 
@@ -8,7 +8,7 @@ describe('safeParseAsync', () => {
   test('should return successful output', async () => {
     expect(
       await safeParseAsync(
-        object({
+        objectAsync({
           key: pipe(
             string(),
             minLength(5),
@@ -27,7 +27,7 @@ describe('safeParseAsync', () => {
 
   test('should return typed output with issues', async () => {
     expect(
-      await safeParseAsync(object({ key: pipe(string(), minLength(5)) }), {
+      await safeParseAsync(objectAsync({ key: pipe(string(), minLength(5)) }), {
         key: 'foo',
       })
     ).toEqual({
@@ -64,7 +64,7 @@ describe('safeParseAsync', () => {
 
   test('should return untyped output with issues', async () => {
     expect(
-      await safeParseAsync(object({ key: string() }), { key: 123 })
+      await safeParseAsync(objectAsync({ key: string() }), { key: 123 })
     ).toEqual({
       typed: false,
       success: false,

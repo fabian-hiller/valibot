@@ -1,23 +1,9 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TSchema: {
+  TInput: {
     modifier: 'extends',
-    type: {
-      type: 'custom',
-      name: 'BaseSchema',
-      href: '../BaseSchema/',
-      generics: [
-        'unknown',
-        'unknown',
-        {
-          type: 'custom',
-          name: 'BaseIssue',
-          href: '../BaseIssue/',
-          generics: ['unknown'],
-        },
-      ],
-    },
+    type: 'any',
   },
   TName: {
     modifier: 'extends',
@@ -27,27 +13,21 @@ export const properties: Record<string, PropertyProps> = {
       href: '../BrandName/',
     },
   },
-  schema: {
-    type: {
-      type: 'custom',
-      name: 'TSchema',
-    },
-  },
   name: {
     type: {
       type: 'custom',
       name: 'TName',
     },
   },
-  Schema: {
+  Action: {
     type: {
       type: 'custom',
-      name: 'SchemaWithBrand',
-      href: '../SchemaWithBrand/',
+      name: 'BicAction',
+      href: '../BicAction/',
       generics: [
         {
           type: 'custom',
-          name: 'TSchema',
+          name: 'TInput',
         },
         {
           type: 'custom',

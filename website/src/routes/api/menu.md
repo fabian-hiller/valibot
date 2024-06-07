@@ -46,6 +46,7 @@
 
 ## Methods
 
+- [config](/api/config/)
 - [fallback](/api/fallback/)
 - [flatten](/api/flatten/)
 - [forward](/api/forward/)
@@ -57,11 +58,13 @@
 - [keyof](/api/keyof/)
 - [omit](/api/omit/)
 - [parse](/api/parse/)
+- [parser](/api/parser/)
 - [partial](/api/partial/)
 - [pick](/api/pick/)
 - [pipe](/api/pipe/)
 - [required](/api/required/)
 - [safeParse](/api/safeParse/)
+- [safeParser](/api/safeParser/)
 - [unwrap](/api/unwrap/)
 
 ## Actions

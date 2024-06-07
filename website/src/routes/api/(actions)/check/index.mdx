@@ -14,12 +14,13 @@ import { properties } from './properties';
 Creates a check pipeline validation action.
 
 ```ts
-const Validation = check<TInput>(requirement, message);
+const Action = check<TInput, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -28,32 +29,30 @@ const Validation = check<TInput>(requirement, message);
 
 ### Explanation
 
-With `check` you can freely validate the input and return `true` if it is valid or `false` otherwise. If the input does not match your `requirement`, you can use `message` to checkize the error message.
+With `check` you can freely validate the input and return `true` if it is valid or `false` otherwise. If the input does not match your `requirement`, you can use `message` to customize the error message.
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
 The following examples show how `check` can be used.
 
-### Custom object schema
+### Check object properties
 
-Schema to validate a check object.
+Schema to check the properties of an object.
 
 ```ts
-const CustomObjectSchema = object(
-  {
-    list: array(string()),
-    length: number(),
-  },
-  [
-    check(
-      (input) => input.list.length === input.length,
-      'The list does not match the length.'
-    ),
-  ]
+const CustomObjectSchema = v.pipe(
+  v.object({
+    list: v.array(v.string()),
+    length: v.number(),
+  }),
+  v.check(
+    (input) => input.list.length === input.length,
+    'The list does not match the length.'
+  )
 );
 ```
 
@@ -70,19 +69,45 @@ The following APIs can be combined with `check`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
+    'enum_',
     'instance',
     'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
     'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null_',
+    'nullable',
+    'nullish',
     'number',
     'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
+    'symbol',
     'tuple',
+    'tupleWithRest',
+    'undefined_',
     'union',
     'unknown',
     'variant',
+    'void_',
   ]}
 />
+
+### Methods
+
+<ApiList items={['pipe']} />

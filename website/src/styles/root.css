@@ -85,7 +85,7 @@
   }
 
   /* Images */
-  .mdx img {
+  .mdx > img {
     @apply w-auto rounded-2xl border-2 border-slate-200 lg:rounded-3xl lg:border-[3px] dark:border-slate-800;
   }
 

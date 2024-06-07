@@ -1,7 +1,6 @@
 ---
 title: notBytes
-description: >-
-  Creates a pipeline validation action that validates the bytes of a string.
+description: Creates a not bytes validation action.
 source: /actions/notBytes/notBytes.ts
 contributors:
   - fabian-hiller
@@ -12,16 +11,17 @@ import { properties } from './properties';
 
 # notBytes
 
-Creates a pipeline validation action that validates the bytes of a string.
+Creates a not [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
 
 ```ts
-const Validation = notBytes<TInput, TRequirement>(requirement, message);
+const Action = notBytes<TInput, TRequirement, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -34,7 +34,7 @@ With `notBytes` you can validate the bytes of a string. If the input does not ma
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -45,9 +45,10 @@ The following examples show how `notBytes` can be used.
 Schema to validate a string with more or less than 8 bytes.
 
 ```ts
-const NotBytesSchema = string([
-  notBytes(8, 'The string must not have 8 bytes.'),
-]);
+const NotBytesSchema = v.pipe(
+  v.string(),
+  v.notBytes(8, 'The string must not have 8 bytes.')
+);
 ```
 
 ## Related
@@ -57,3 +58,7 @@ The following APIs can be combined with `notBytes`.
 ### Schemas
 
 <ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

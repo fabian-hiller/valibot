@@ -1,6 +1,6 @@
 ---
 title: isoDate
-description: Creates a pipeline validation action that validates a date.
+description: Creates an ISO date validation action.
 source: /actions/isoDate/isoDate.ts
 contributors:
   - fabian-hiller
@@ -11,17 +11,18 @@ import { properties } from './properties';
 
 # isoDate
 
-Creates a pipeline validation action that validates a date.
+Creates an [ISO date](https://en.wikipedia.org/wiki/ISO_8601) validation action.
 
 > The regex used cannot validate the maximum number of days based on year and month. For example, "2023-06-31" is valid although June has only 30 days.
 
 ```ts
-const Validation = isoDate<TInput>(message);
+const Action = isoDate<TInput, TMessage>(message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -33,7 +34,7 @@ With `isoDate` you can validate the formatting of a string. If the input is not 
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -44,7 +45,10 @@ The following examples show how `isoDate` can be used.
 Schema to validate an ISO date.
 
 ```ts
-const IsoDateSchema = string([isoDate('The date is badly formatted.')]);
+const IsoDateSchema = v.pipe(
+  v.string(),
+  v.isoDate('The date is badly formatted.')
+);
 ```
 
 ## Related
@@ -54,3 +58,7 @@ The following APIs can be combined with `isoDate`.
 ### Schemas
 
 <ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

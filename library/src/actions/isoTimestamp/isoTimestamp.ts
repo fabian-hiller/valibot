@@ -76,7 +76,7 @@ export interface IsoTimestampAction<
  * specification can be removed or contain up to 9 digits.
  *
  * Hint: The regex used cannot validate the maximum number of days based on
- * year and month. For example, `"2023-06-31T00:00:00.000Z"` is valid although
+ * year and month. For example, "2023-06-31T00:00:00.000Z" is valid although
  * June has only 30 days.
  *
  * @returns An ISO timestamp action.
@@ -100,7 +100,7 @@ export function isoTimestamp<TInput extends string>(): IsoTimestampAction<
  * specification can be removed or contain up to 9 digits.
  *
  * Hint: The regex used cannot validate the maximum number of days based on
- * year and month. For example, `"2023-06-31T00:00:00.000Z"` is valid although
+ * year and month. For example, "2023-06-31T00:00:00.000Z" is valid although
  * June has only 30 days.
  *
  * @param message The error message.

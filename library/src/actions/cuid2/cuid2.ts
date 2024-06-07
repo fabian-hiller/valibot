@@ -63,14 +63,14 @@ export interface Cuid2Action<
 }
 
 /**
- * Creates a Cuid2 validation action.
+ * Creates a [Cuid2](https://github.com/paralleldrive/cuid2) validation action.
  *
  * @returns A Cuid2 action.
  */
 export function cuid2<TInput extends string>(): Cuid2Action<TInput, undefined>;
 
 /**
- * Creates a Cuid2 validation action.
+ * Creates a [Cuid2](https://github.com/paralleldrive/cuid2) validation action.
  *
  * @param message The error message.
  *

@@ -62,7 +62,7 @@ export interface RegexAction<
 }
 
 /**
- * Creates a regex validation action.
+ * Creates a [regex](https://en.wikipedia.org/wiki/Regular_expression) validation action.
  *
  * @param requirement The regex pattern.
  *
@@ -73,7 +73,7 @@ export function regex<TInput extends string>(
 ): RegexAction<TInput, undefined>;
 
 /**
- * Creates a regex validation action.
+ * Creates a [regex](https://en.wikipedia.org/wiki/Regular_expression) validation action.
  *
  * @param requirement The regex pattern.
  * @param message The error message.

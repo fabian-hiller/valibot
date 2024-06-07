@@ -45,5 +45,11 @@ describe('_stringify', () => {
 
   test('should return null as string', () => {
     expect(_stringify(null)).toBe('null');
+    expect(_stringify(Object.create(null))).toBe('null');
+    function EmptyObject() {}
+    EmptyObject.prototype = Object.create(null);
+    // @ts-expect-error
+    const emptyObject = new EmptyObject();
+    expect(_stringify(emptyObject)).toBe('null');
   });
 });

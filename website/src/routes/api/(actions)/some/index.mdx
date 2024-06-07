@@ -1,7 +1,6 @@
 ---
 title: some
-description: >-
-  Creates a pipeline validation action that validates the items of an array.
+description: Creates a some validation action.
 source: /actions/some/some.ts
 contributors:
   - fabian-hiller
@@ -12,15 +11,16 @@ import { properties } from './properties';
 
 # some
 
-Creates a pipeline validation action that validates the items of an array.
+Creates a some validation action.
 
 ```ts
-const Validation = some<TInput>(requirement, message);
+const Action = some<TInput, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -33,7 +33,7 @@ With `some` you can freely validate the items of an array and return `true` if t
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -44,12 +44,13 @@ The following examples show how `some` can be used.
 Schema to validate that an array is not sorted.
 
 ```ts
-const UnsortedArraySchema = array(number(), [
-  some(
+const UnsortedArraySchema = v.pipe(
+  v.array(number()),
+  v.some(
     (value, index, array) => array.length === 1 || value < array[index - 1],
     'The numbers must not be sorted in ascending order.'
-  ),
-]);
+  )
+);
 ```
 
 ## Related
@@ -59,3 +60,7 @@ The following APIs can be combined with `some`.
 ### Schemas
 
 <ApiList items={['any', 'array', 'instance', 'special', 'tuple', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

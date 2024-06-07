@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { transform } from '../../actions/index.ts';
-import { number, object, string } from '../../schemas/index.ts';
+import { number, objectAsync, string } from '../../schemas/index.ts';
 import { pipe } from '../pipe/index.ts';
 import { parseAsync } from './parseAsync.ts';
 
@@ -15,7 +15,9 @@ describe('parseAsync', () => {
   test('should return output for valid input', async () => {
     expect(await parseAsync(string(), 'hello')).toBe('hello');
     expect(await parseAsync(number(), 123)).toBe(123);
-    expect(await parseAsync(object(entries), { key: 'foo' })).toStrictEqual({
+    expect(
+      await parseAsync(objectAsync(entries), { key: 'foo' })
+    ).toStrictEqual({
       key: 3,
     });
   });
@@ -24,7 +26,7 @@ describe('parseAsync', () => {
     await expect(() => parseAsync(string(), 123)).rejects.toThrowError();
     await expect(() => parseAsync(number(), 'foo')).rejects.toThrowError();
     await expect(() =>
-      parseAsync(object(entries), null)
+      parseAsync(objectAsync(entries), null)
     ).rejects.toThrowError();
   });
 });

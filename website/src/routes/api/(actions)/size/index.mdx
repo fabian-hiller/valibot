@@ -1,8 +1,6 @@
 ---
 title: size
-description: >-
-  Creates a pipeline validation action that validates the size of a map, set or
-  blob.
+description: Creates a size validation action.
 source: /actions/size/size.ts
 contributors:
   - fabian-hiller
@@ -13,16 +11,17 @@ import { properties } from './properties';
 
 # size
 
-Creates a pipeline validation action that validates the size of a map, set or blob.
+Creates a size validation action.
 
 ```ts
-const Validation = size<TInput, TRequirement>(requirement, message);
+const Action = size<TInput, TRequirement, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -35,7 +34,7 @@ With `size` you can validate the size of a map, set or blob. If the input does n
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -46,7 +45,10 @@ The following examples show how `size` can be used.
 Schema to validate a blob with a size of 256 bytes.
 
 ```ts
-const BlobSchema = blob([size(256, 'The blob must be 256 bytes in size.')]);
+const BlobSchema = v.pipe(
+  v.blob(),
+  v.size(256, 'The blob must be 256 bytes in size.')
+);
 ```
 
 ### Set size schema
@@ -54,7 +56,10 @@ const BlobSchema = blob([size(256, 'The blob must be 256 bytes in size.')]);
 Schema to validate a set of 8 numbers.
 
 ```ts
-const SetSchema = set(number(), [size(8, 'The set must contain 8 numbers.')]);
+const SetSchema = v.pipe(
+  v.set(number()),
+  v.size(8, 'The set must contain 8 numbers.')
+);
 ```
 
 ## Related
@@ -66,3 +71,7 @@ The following APIs can be combined with `size`.
 <ApiList
   items={['any', 'array', 'instance', 'special', 'string', 'tuple', 'unknown']}
 />
+
+### Methods
+
+<ApiList items={['pipe']} />

@@ -1,8 +1,6 @@
 ---
 title: minSize
-description: >-
-  Creates a pipeline validation action that validates the size of a map, set or
-  blob.
+description: Creates a min size validation action.
 source: /actions/minSize/minSize.ts
 contributors:
   - fabian-hiller
@@ -13,16 +11,17 @@ import { properties } from './properties';
 
 # minSize
 
-Creates a pipeline validation action that validates the size of a map, set or blob.
+Creates a min size validation action.
 
 ```ts
-const Validation = minSize<TInput, TRequirement>(requirement, message);
+const Action = minSize<TInput, TRequirement, TMessage>(requirement, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -35,7 +34,7 @@ With `minSize` you can validate the size of a map, set or blob. If the input doe
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -46,9 +45,10 @@ The following examples show how `minSize` can be used.
 Schema to validate a blob with a minimum size of 10 MB.
 
 ```ts
-const BlobSchema = blob([
-  minSize(10 * 1024 * 1024, 'The blob must be at least 10 MB.'),
-]);
+const BlobSchema = v.pipe(
+  v.blob(),
+  v.minSize(10 * 1024 * 1024, 'The blob must be at least 10 MB.')
+);
 ```
 
 ### Set size schema
@@ -56,9 +56,10 @@ const BlobSchema = blob([
 Schema to validate a set with a minimum of 8 numbers.
 
 ```ts
-const SetSchema = set(number(), [
-  minSize(8, 'The set must contain at least 8 numbers.'),
-]);
+const SetSchema = v.pipe(
+  v.set(number()),
+  v.minSize(8, 'The set must contain at least 8 numbers.')
+);
 ```
 
 ## Related
@@ -70,3 +71,7 @@ The following APIs can be combined with `minSize`.
 <ApiList
   items={['any', 'blob', 'instance', 'map', 'set', 'special', 'unknown']}
 />
+
+### Methods
+
+<ApiList items={['pipe']} />

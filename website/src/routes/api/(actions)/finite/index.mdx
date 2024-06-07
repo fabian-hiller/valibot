@@ -1,8 +1,6 @@
 ---
 title: finite
-description: >-
-  Creates a pipeline validation action that validates whether a number is
-  finite.
+description: Creates a finite validation action.
 source: /actions/finite/finite.ts
 contributors:
   - fabian-hiller
@@ -13,15 +11,16 @@ import { properties } from './properties';
 
 # finite
 
-Creates a pipeline validation action that validates whether a number is finite.
+Creates a [finite](https://en.wikipedia.org/wiki/Finite) validation action.
 
 ```ts
-const Validation = finite<TInput>(message);
+const Action = finite<TInput, TMessage>(message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -33,7 +32,7 @@ With `finite` you can validate the value of a number. If the input is not a fini
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -44,7 +43,10 @@ The following examples show how `finite` can be used.
 Schema to validate a finite number.
 
 ```ts
-const FiniteNumberSchema = number([finite('The number must be finite.')]);
+const FiniteNumberSchema = v.pipe(
+  v.number(),
+  v.finite('The number must be finite.')
+);
 ```
 
 ## Related
@@ -54,3 +56,7 @@ The following APIs can be combined with `finite`.
 ### Schemas
 
 <ApiList items={['any', 'number', 'special', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

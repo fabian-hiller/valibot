@@ -1,6 +1,6 @@
 ---
 title: cuid2
-description: Creates a pipeline validation action that validates a Cuid2.
+description: Creates a Cuid2 validation action.
 source: /actions/cuid2/cuid2.ts
 contributors:
   - fabian-hiller
@@ -11,15 +11,16 @@ import { properties } from './properties';
 
 # cuid2
 
-Creates a pipeline validation action that validates a [Cuid2](https://github.com/paralleldrive/cuid2).
+Creates a [Cuid2](https://github.com/paralleldrive/cuid2) validation action.
 
 ```ts
-const Validation = cuid2<TInput>(message);
+const Action = cuid2<TInput, TMessage>(message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -31,7 +32,7 @@ With `cuid2` you can validate the formatting of a string. If the input is not an
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
@@ -42,7 +43,7 @@ The following examples show how `cuid2` can be used.
 Schema to validate an Cuid2.
 
 ```ts
-const Cuid2Schema = string([cuid2('The Cuid2 is badly formatted.')]);
+const Cuid2Schema = v.pip(v.string(), v.cuid2('The Cuid2 is badly formatted.'));
 ```
 
 ## Related
@@ -52,3 +53,7 @@ The following APIs can be combined with `cuid2`.
 ### Schemas
 
 <ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

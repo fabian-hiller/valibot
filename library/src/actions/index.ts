@@ -61,6 +61,7 @@ export * from './transform/index.ts';
 export * from './trim/index.ts';
 export * from './trimEnd/index.ts';
 export * from './trimStart/index.ts';
+export * from './types.ts';
 export * from './ulid/index.ts';
 export * from './url/index.ts';
 export * from './uuid/index.ts';

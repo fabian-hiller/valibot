@@ -67,7 +67,7 @@ export interface NotBytesAction<
 }
 
 /**
- * Creates a not bytes validation action.
+ * Creates a not [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
  *
  * @param requirement The not required bytes.
  *
@@ -79,7 +79,7 @@ export function notBytes<
 >(requirement: TRequirement): NotBytesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a not bytes validation action.
+ * Creates a not [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
  *
  * @param requirement The not required bytes.
  * @param message The error message.

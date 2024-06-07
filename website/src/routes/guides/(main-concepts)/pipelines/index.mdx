@@ -1,8 +1,11 @@
 ---
 title: Pipelines
 description: >-
-  For detailed validations and transformations, a schema can be wrapped in a pipeline. This is useful to validate further details apart from the raw data type.
+  For detailed validations and transformations, a schema can be wrapped in a
+  pipeline. This is useful to validate further details apart from the raw data
+  type.
 contributors:
+  - daxeh
   - fabian-hiller
   - ariskemper
 ---
@@ -107,7 +110,7 @@ Some of these actions can be combined with different schemas. For example, <Link
 import * as v from 'valibot';
 
 const StringSchema = v.pipe(v.string(), v.minValue('foo'));
-const NumberSchema = v.pip(v.number(), v.minValue(1234));
+const NumberSchema = v.pipe(v.number(), v.minValue(1234));
 const BigintSchema = v.pipe(v.bigint(), v.minValue(1234n));
 const DateSchema = v.pipe(v.date(), v.minValue(new Date()));
 ```

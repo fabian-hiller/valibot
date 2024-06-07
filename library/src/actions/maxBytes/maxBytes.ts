@@ -67,7 +67,7 @@ export interface MaxBytesAction<
 }
 
 /**
- * Creates a max bytes validation action.
+ * Creates a max [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
  *
  * @param requirement The maximum bytes.
  *
@@ -79,7 +79,7 @@ export function maxBytes<
 >(requirement: TRequirement): MaxBytesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a max bytes validation action.
+ * Creates a max [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
  *
  * @param requirement The maximum bytes.
  * @param message The error message.

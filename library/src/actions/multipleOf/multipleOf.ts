@@ -71,7 +71,7 @@ export interface MultipleOfAction<
 }
 
 /**
- * Creates a multiple of validation action.
+ * Creates a [multiple](https://en.wikipedia.org/wiki/Multiple_(mathematics)) of validation action.
  *
  * @param requirement The divisor.
  *
@@ -83,7 +83,7 @@ export function multipleOf<
 >(requirement: TRequirement): MultipleOfAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a multiple of validation action.
+ * Creates a [multiple](https://en.wikipedia.org/wiki/Multiple_(mathematics)) of validation action.
  *
  * @param requirement The divisor.
  * @param message The error message.

@@ -63,14 +63,14 @@ export interface EmojiAction<
 }
 
 /**
- * Creates an emoji validation action.
+ * Creates an [emoji](https://en.wikipedia.org/wiki/Emoji) validation action.
  *
  * @returns An emoji action.
  */
 export function emoji<TInput extends string>(): EmojiAction<TInput, undefined>;
 
 /**
- * Creates an emoji validation action.
+ * Creates an [emoji](https://en.wikipedia.org/wiki/Emoji) validation action.
  *
  * @param message The error message.
  *
