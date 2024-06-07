@@ -2,9 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.15.0 (June 07, 2024)
 
 - Migrate i18n library to Valibot v0.31.0
+- Change peer dependency to `>=0.31.0 <1`
 
 ## v0.14.0 (June 07, 2024)
 
