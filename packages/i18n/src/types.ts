@@ -8,6 +8,7 @@ export type Language = {
     | 'es'
     | 'fr'
     | 'hu'
+    | 'it'
     | 'ja'
     | 'kr'
     | 'nb'
