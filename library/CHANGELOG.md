@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Fix missing file extension for Deno (pull request #637)
+
 ## v0.31.0 (June 06, 2024)
 
 > To migrate from an older version, please see the official [migration guide](https://valibot.dev/guides/migrate-to-v0.31.0/) and our [announcement post](https://valibot.dev/blog/valibot-v0.31.0-is-finally-available/).
