@@ -1,5 +1,5 @@
 import { expect } from 'vitest';
-import type { BaseIssue, BaseSchema, InferInput } from '../types';
+import type { BaseIssue, BaseSchema, InferInput } from '../types/index.ts';
 
 /**
  * Expect no schema issue to be returned.
