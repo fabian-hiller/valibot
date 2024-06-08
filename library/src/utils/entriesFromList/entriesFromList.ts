@@ -1,4 +1,8 @@
-import type { BaseIssue, BaseSchema, MaybeReadonly } from '../../types';
+import type {
+  BaseIssue,
+  BaseSchema,
+  MaybeReadonly,
+} from '../../types/index.ts';
 
 /**
  * Creates a object entries definition from a list of keys and a schema.
