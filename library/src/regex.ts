@@ -127,3 +127,9 @@ export const ULID_REGEX = /^[\da-hjkmnp-tv-z]{26}$/iu;
  * [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) regex.
  */
 export const UUID_REGEX = /^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/iu;
+
+/**
+ * [Base64](https://en.wikipedia.org/wiki/Base64) regex.
+ */
+export const BASE64_REGEX =
+  /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/u;
