@@ -69,6 +69,7 @@
 
 ## Actions
 
+- [base64](/api/base64/)
 - [bic](/api/bic/)
 - [brand](/api/brand/)
 - [bytes](/api/bytes/)
