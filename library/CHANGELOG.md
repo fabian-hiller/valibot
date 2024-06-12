@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Change `FlatErrors` type for better developer experience (discussion #640)
+- Fix `this` reference in `looseTuple`, `looseTupleAsync`, `strictTuple`, `strictTupleAsync`, `tuple`, `tupleAsync`, `tupleWithRest` and `tupleWithRestAsync` schema (pull request #649)
 
 ## v0.31.1 (June 08, 2024)
 

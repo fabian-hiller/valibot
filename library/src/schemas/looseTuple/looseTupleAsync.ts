@@ -96,7 +96,7 @@ export function looseTupleAsync(
 
         // Parse schema of each tuple item
         const itemDatasets = await Promise.all(
-          items.map(async (item, key) => {
+          this.items.map(async (item, key) => {
             const value = input[key];
             return [
               key,
@@ -154,7 +154,7 @@ export function looseTupleAsync(
 
         // Add rest to dataset if necessary
         if (!dataset.issues || !config.abortEarly) {
-          for (let key = items.length; key < input.length; key++) {
+          for (let key = this.items.length; key < input.length; key++) {
             // @ts-expect-error
             dataset.value.push(input[key]);
           }
