@@ -2,9 +2,17 @@
 
 All notable changes to the library will be documented in this file.
 
-## v0.31.0 (Month DD, YYYY)
+## vX.X.X (Month DD, YYYY)
 
-> To migrate from an older version, please see the official [migration guide](https://valibot.dev/guides/migrate-to-v0.31.0/).
+- Change `FlatErrors` type for better developer experience (discussion #640)
+
+## v0.31.1 (June 08, 2024)
+
+- Fix missing file extension for Deno (pull request #637)
+
+## v0.31.0 (June 06, 2024)
+
+> To migrate from an older version, please see the official [migration guide](https://valibot.dev/guides/migrate-to-v0.31.0/) and our [announcement post](https://valibot.dev/blog/valibot-v0.31.0-is-finally-available/).
 
 ## v0.30.0 (March 06, 2024)
 

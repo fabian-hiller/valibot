@@ -82,13 +82,16 @@ async function updateContributors() {
 
       // Sort contributors by commit count
       contributors.sort((a, b) =>
-        a.count < b.count ? 1 : a.count < b.count ? -1 : 0
+        a.count < b.count ? 1 : a.count > b.count ? -1 : 0
       );
 
       // Add contributors to frontmatter
-      frontmatter.data.contributors = contributors.map(
-        (contributor) => contributor.author
-      );
+      frontmatter.data.contributors = [
+        ...new Set([
+          ...contributors.map((contributor) => contributor.author),
+          ...(frontmatter.data.contributors || []),
+        ]),
+      ];
 
       // Write changes to MDX file
       fs.writeFileSync(

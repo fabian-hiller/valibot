@@ -28,21 +28,24 @@ type PostData = {
 /**
  * Loads the required data for each blog post.
  */
-export const usePosts = routeLoader$(() => {
-  const modules = import.meta.glob<DocumentHeadValue<PostData>>('./**/*.mdx');
-  return Promise.all(
-    Object.entries(modules).map(async ([path, readFile]) => {
-      const { frontmatter } = await readFile();
-      return {
-        cover: frontmatter!.cover,
-        title: frontmatter!.title,
-        published: frontmatter!.published,
-        authors: frontmatter!.authors,
-        href: `./${path.split('/').slice(2, 3)[0]}/`,
-      };
-    })
-  );
-});
+export const usePosts = routeLoader$(async () =>
+  (
+    await Promise.all(
+      Object.entries(
+        import.meta.glob<DocumentHeadValue<PostData>>('./**/index.mdx')
+      ).map(async ([path, readFile]) => {
+        const { frontmatter } = await readFile();
+        return {
+          cover: frontmatter!.cover,
+          title: frontmatter!.title,
+          published: frontmatter!.published,
+          authors: frontmatter!.authors,
+          href: `./${path.split('/').slice(2, 3)[0]}/`,
+        };
+      })
+    )
+  ).sort((a, b) => (a.published < b.published ? 1 : -1))
+);
 
 export default component$(() => {
   const posts = usePosts();

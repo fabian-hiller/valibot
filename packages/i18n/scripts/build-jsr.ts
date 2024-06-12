@@ -7,6 +7,7 @@ import de from '../src/de';
 import es from '../src/es';
 import fr from '../src/fr';
 import hu from '../src/hu';
+import it from '../src/it';
 import ja from '../src/ja';
 import kr from '../src/kr';
 import nb from '../src/nb';
@@ -15,6 +16,7 @@ import pt from '../src/pt';
 import ro from '../src/ro';
 import ru from '../src/ru';
 import sl from '../src/sl';
+import sv from '../src/sv';
 import tr from '../src/tr';
 import uk from '../src/uk';
 import zhCN from '../src/zh-CN';
@@ -31,6 +33,7 @@ const languages = [
   de,
   es,
   fr,
+  it,
   hu,
   ja,
   kr,
@@ -40,6 +43,7 @@ const languages = [
   ro,
   ru,
   sl,
+  sv,
   tr,
   uk,
   zhCN,

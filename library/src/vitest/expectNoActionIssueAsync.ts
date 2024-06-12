@@ -1,5 +1,9 @@
 import { expect } from 'vitest';
-import type { BaseIssue, BaseValidationAsync, InferInput } from '../types';
+import type {
+  BaseIssue,
+  BaseValidationAsync,
+  InferInput,
+} from '../types/index.ts';
 
 /**
  * Expect no action issue to be returned.

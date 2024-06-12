@@ -426,9 +426,9 @@ export async function workflow({ jsFiles }: Api) {
                   directImports.push(`pipe`);
                 }
 
-                // Return rewritten code
-                return `${wildcardPrefix}pipe(${schemaName}([${itemsText}]${restText ? `, ${restText}` : ''})${actionsText})`;
-              }
+              // Return rewritten code
+              return `${wildcardPrefix}pipe(${schemaName}([${itemsText}]${restText ? `, ${restText}` : ''}), ${actionsText})`;
+            }
 
               // Otherwise, remove pipe argument from schema
               return `${schemaName}([${itemsText}]${restText ? `, ${restText}` : ''})`;

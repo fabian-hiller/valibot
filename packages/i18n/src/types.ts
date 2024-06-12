@@ -1,4 +1,4 @@
-import type { ErrorMessage } from 'valibot';
+import type { BaseIssue, ErrorMessage } from 'valibot';
 
 export type Language = {
   code:
@@ -8,6 +8,7 @@ export type Language = {
     | 'es'
     | 'fr'
     | 'hu'
+    | 'it'
     | 'ja'
     | 'kr'
     | 'nb'
@@ -16,65 +17,68 @@ export type Language = {
     | 'ro'
     | 'ru'
     | 'sl'
+    | 'sv'
     | 'tr'
     | 'uk'
     | 'zh-CN'
     | 'zh-TW';
-  schema: ErrorMessage;
+  schema: ErrorMessage<BaseIssue<unknown>>;
   specific: {
-    bic: ErrorMessage;
-    bytes: ErrorMessage;
-    creditCard: ErrorMessage;
-    cuid2: ErrorMessage;
-    custom: ErrorMessage;
-    customAsync: ErrorMessage;
-    decimal: ErrorMessage;
-    email: ErrorMessage;
-    emoji: ErrorMessage;
-    endsWith: ErrorMessage;
-    excludes: ErrorMessage;
-    finite: ErrorMessage;
-    hash: ErrorMessage;
-    hexColor: ErrorMessage;
-    hexadecimal: ErrorMessage;
-    imei: ErrorMessage;
-    includes: ErrorMessage;
-    integer: ErrorMessage;
-    ip: ErrorMessage;
-    ipv4: ErrorMessage;
-    ipv6: ErrorMessage;
-    isoDate: ErrorMessage;
-    isoDateTime: ErrorMessage;
-    isoTime: ErrorMessage;
-    isoTimeSecond: ErrorMessage;
-    isoTimestamp: ErrorMessage;
-    isoWeek: ErrorMessage;
-    length: ErrorMessage;
-    mac: ErrorMessage;
-    mac48: ErrorMessage;
-    mac64: ErrorMessage;
-    maxBytes: ErrorMessage;
-    maxLength: ErrorMessage;
-    maxSize: ErrorMessage;
-    maxValue: ErrorMessage;
-    mimeType: ErrorMessage;
-    minBytes: ErrorMessage;
-    minLength: ErrorMessage;
-    minSize: ErrorMessage;
-    minValue: ErrorMessage;
-    multipleOf: ErrorMessage;
-    notBytes: ErrorMessage;
-    notLength: ErrorMessage;
-    notSize: ErrorMessage;
-    notValue: ErrorMessage;
-    octal: ErrorMessage;
-    regex: ErrorMessage;
-    safeInteger: ErrorMessage;
-    size: ErrorMessage;
-    startsWith: ErrorMessage;
-    ulid: ErrorMessage;
-    url: ErrorMessage;
-    uuid: ErrorMessage;
-    value: ErrorMessage;
+    bic: ErrorMessage<BaseIssue<unknown>>;
+    bytes: ErrorMessage<BaseIssue<unknown>>;
+    check: ErrorMessage<BaseIssue<unknown>>;
+    checkAsync: ErrorMessage<BaseIssue<unknown>>;
+    creditCard: ErrorMessage<BaseIssue<unknown>>;
+    cuid2: ErrorMessage<BaseIssue<unknown>>;
+    decimal: ErrorMessage<BaseIssue<unknown>>;
+    email: ErrorMessage<BaseIssue<unknown>>;
+    emoji: ErrorMessage<BaseIssue<unknown>>;
+    empty: ErrorMessage<BaseIssue<unknown>>;
+    endsWith: ErrorMessage<BaseIssue<unknown>>;
+    excludes: ErrorMessage<BaseIssue<unknown>>;
+    finite: ErrorMessage<BaseIssue<unknown>>;
+    hash: ErrorMessage<BaseIssue<unknown>>;
+    hexColor: ErrorMessage<BaseIssue<unknown>>;
+    hexadecimal: ErrorMessage<BaseIssue<unknown>>;
+    imei: ErrorMessage<BaseIssue<unknown>>;
+    includes: ErrorMessage<BaseIssue<unknown>>;
+    integer: ErrorMessage<BaseIssue<unknown>>;
+    ip: ErrorMessage<BaseIssue<unknown>>;
+    ipv4: ErrorMessage<BaseIssue<unknown>>;
+    ipv6: ErrorMessage<BaseIssue<unknown>>;
+    isoDate: ErrorMessage<BaseIssue<unknown>>;
+    isoDateTime: ErrorMessage<BaseIssue<unknown>>;
+    isoTime: ErrorMessage<BaseIssue<unknown>>;
+    isoTimeSecond: ErrorMessage<BaseIssue<unknown>>;
+    isoTimestamp: ErrorMessage<BaseIssue<unknown>>;
+    isoWeek: ErrorMessage<BaseIssue<unknown>>;
+    length: ErrorMessage<BaseIssue<unknown>>;
+    mac: ErrorMessage<BaseIssue<unknown>>;
+    mac48: ErrorMessage<BaseIssue<unknown>>;
+    mac64: ErrorMessage<BaseIssue<unknown>>;
+    maxBytes: ErrorMessage<BaseIssue<unknown>>;
+    maxLength: ErrorMessage<BaseIssue<unknown>>;
+    maxSize: ErrorMessage<BaseIssue<unknown>>;
+    maxValue: ErrorMessage<BaseIssue<unknown>>;
+    mimeType: ErrorMessage<BaseIssue<unknown>>;
+    minBytes: ErrorMessage<BaseIssue<unknown>>;
+    minLength: ErrorMessage<BaseIssue<unknown>>;
+    minSize: ErrorMessage<BaseIssue<unknown>>;
+    minValue: ErrorMessage<BaseIssue<unknown>>;
+    multipleOf: ErrorMessage<BaseIssue<unknown>>;
+    nonEmpty: ErrorMessage<BaseIssue<unknown>>;
+    notBytes: ErrorMessage<BaseIssue<unknown>>;
+    notLength: ErrorMessage<BaseIssue<unknown>>;
+    notSize: ErrorMessage<BaseIssue<unknown>>;
+    notValue: ErrorMessage<BaseIssue<unknown>>;
+    octal: ErrorMessage<BaseIssue<unknown>>;
+    regex: ErrorMessage<BaseIssue<unknown>>;
+    safeInteger: ErrorMessage<BaseIssue<unknown>>;
+    size: ErrorMessage<BaseIssue<unknown>>;
+    startsWith: ErrorMessage<BaseIssue<unknown>>;
+    ulid: ErrorMessage<BaseIssue<unknown>>;
+    url: ErrorMessage<BaseIssue<unknown>>;
+    uuid: ErrorMessage<BaseIssue<unknown>>;
+    value: ErrorMessage<BaseIssue<unknown>>;
   };
 };

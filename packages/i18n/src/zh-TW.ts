@@ -1,4 +1,4 @@
-import { Language } from './types';
+import type { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
@@ -7,13 +7,14 @@ const language: Language = {
   specific: {
     bic:            (issue) => `無效的商業識別代碼：輸入為 ${issue.received}`,
     bytes:          (issue) => `無效的位元組：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
+    check:          (issue) => `無效的輸入：輸入為 ${issue.received}`,
     creditCard:     (issue) => `無效的信用卡：輸入為 ${issue.received}`,
+    checkAsync:     (issue) => `無效的輸入：輸入為 ${issue.received}`,
     cuid2:          (issue) => `無效的 Cuid2：輸入為 ${issue.received}`,
-    custom:         (issue) => `無效的輸入：輸入為 ${issue.received}`,
-    customAsync:    (issue) => `無效的輸入：輸入為 ${issue.received}`,
     decimal:        (issue) => `無效的十進位：輸入為 ${issue.received}`,
     email:          (issue) => `無效的電子郵件：輸入為 ${issue.received}`,
     emoji:          (issue) => `無效的表情符號：輸入為 ${issue.received}`,
+    empty:          (issue) => `無效的長度：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
     endsWith:       (issue) => `無效的結尾：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
     excludes:       (issue) => `無效的內容：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
     finite:         (issue) => `無效的有限數：輸入為 ${issue.received}`,
@@ -46,6 +47,7 @@ const language: Language = {
     minSize:        (issue) => `無效的大小：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
     minValue:       (issue) => `無效的值：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
     multipleOf:     (issue) => `無效的倍數：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
+    nonEmpty:       (issue) => `無效的長度：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
     notBytes:       (issue) => `無效的位元組：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
     notLength:      (issue) => `無效的長度：預期為 ${issue.expected} 但輸入為 ${issue.received}`,
     notSize:        (issue) => `無效的大小：預期為 ${issue.expected} 但輸入為 ${issue.received}`,

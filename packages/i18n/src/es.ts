@@ -1,4 +1,4 @@
-import { Language } from './types';
+import type { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
@@ -7,13 +7,14 @@ const language: Language = {
   specific: {
     bic:            (issue) => `BIC inválido: Se recibió ${issue.received}`,
     bytes:          (issue) => `Bytes inválidos: Se esperaba ${issue.expected} pero se recibió ${issue.received}`,
+    check:          (issue) => `Valor inválido: Se recibió ${issue.received}`,
+    checkAsync:     (issue) => `Valor inválido: Se recibió ${issue.received}`,
     creditCard:     (issue) => `Tarjeta de crédito inválida: Se recibió ${issue.received}`,
     cuid2:          (issue) => `Cuid2 inválido: Se recibió ${issue.received}`,
-    custom:         (issue) => `Valor inválido: Se recibió ${issue.received}`,
-    customAsync:    (issue) => `Valor inválido: Se recibió ${issue.received}`,
     decimal:        (issue) => `Decimal inválido: Se recibió ${issue.received}`,
     email:          (issue) => `Correo electrónico inválido: Se recibió ${issue.received}`,
     emoji:          (issue) => `Emoji inválido: Se recibió ${issue.received}`,
+    empty:          (issue) => `Longitud inválida: Se esperaba ${issue.expected} pero se recibió ${issue.received}`,
     endsWith:       (issue) => `Final inválido: Se esperaba ${issue.expected} pero se recibió ${issue.received}`,
     excludes:       (issue) => `Contenido inválido: Se esperaba ${issue.expected} pero se recibió ${issue.received}`,
     finite:         (issue) => `Finito inválido: Se recibió ${issue.received}`,
@@ -46,6 +47,7 @@ const language: Language = {
     minSize:        (issue) => `Tamaño inválido: Se esperaba ${issue.expected} pero se recibió ${issue.received}`,
     minValue:       (issue) => `Valor inválido: Se esperaba ${issue.expected} pero se recibió ${issue.received}`,
     multipleOf:     (issue) => `Múltiplo inválido: Se esperaba ${issue.expected} pero se recibió ${issue.received}`,
+    nonEmpty:       (issue) => `Longitud inválida: Se esperaba ${issue.expected} pero se recibió ${issue.received}`,
     notBytes:       (issue) => `Bytes inválidos: Se esperaba ${issue.expected} pero se recibió ${issue.received}`,
     notLength:      (issue) => `Longitud inválida: Se esperaba ${issue.expected} pero se recibió ${issue.received}`,
     notSize:        (issue) => `Tamaño inválido: Se esperaba ${issue.expected} pero se recibió ${issue.received}`,
