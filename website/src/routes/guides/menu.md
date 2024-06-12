@@ -10,6 +10,7 @@
 
 ## Main concepts
 
+- [Mental model](/guides/mental-model/)
 - [Schemas](/guides/schemas/)
 - [Pipelines](/guides/pipelines/)
 - [Parse data](/guides/parse-data/)
