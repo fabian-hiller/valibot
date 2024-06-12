@@ -96,7 +96,7 @@ export function strictTupleAsync(
 
         // Parse schema of each tuple item
         const itemDatasets = await Promise.all(
-          items.map(async (item, key) => {
+          this.items.map(async (item, key) => {
             const value = input[key];
             return [
               key,
@@ -155,7 +155,7 @@ export function strictTupleAsync(
         // Check input for unknown items if necessary
         if (
           !(dataset.issues && config.abortEarly) &&
-          items.length < input.length
+          this.items.length < input.length
         ) {
           const value = input[items.length];
           _addIssue(this, 'type', dataset, config, {
@@ -166,7 +166,7 @@ export function strictTupleAsync(
                 type: 'tuple',
                 origin: 'value',
                 input,
-                key: items.length,
+                key: this.items.length,
                 value,
               },
             ],

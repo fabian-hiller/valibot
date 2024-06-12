@@ -92,7 +92,7 @@ export function looseTuple(
         dataset.value = [];
 
         // Parse schema of each tuple item
-        for (let key = 0; key < items.length; key++) {
+        for (let key = 0; key < this.items.length; key++) {
           const value = input[key];
           const itemDataset = this.items[key]._run(
             { typed: false, value },
@@ -145,7 +145,7 @@ export function looseTuple(
 
         // Add rest to dataset if necessary
         if (!dataset.issues || !config.abortEarly) {
-          for (let key = items.length; key < input.length; key++) {
+          for (let key = this.items.length; key < input.length; key++) {
             // @ts-expect-error
             dataset.value.push(input[key]);
           }

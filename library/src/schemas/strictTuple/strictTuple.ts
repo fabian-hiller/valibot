@@ -92,7 +92,7 @@ export function strictTuple(
         dataset.value = [];
 
         // Parse schema of each tuple item
-        for (let key = 0; key < items.length; key++) {
+        for (let key = 0; key < this.items.length; key++) {
           const value = input[key];
           const itemDataset = this.items[key]._run(
             { typed: false, value },
@@ -146,7 +146,7 @@ export function strictTuple(
         // Check input for unknown items if necessary
         if (
           !(dataset.issues && config.abortEarly) &&
-          items.length < input.length
+          this.items.length < input.length
         ) {
           const value = input[items.length];
           _addIssue(this, 'type', dataset, config, {
@@ -157,7 +157,7 @@ export function strictTuple(
                 type: 'tuple',
                 origin: 'value',
                 input,
-                key: items.length,
+                key: this.items.length,
                 value,
               },
             ],
