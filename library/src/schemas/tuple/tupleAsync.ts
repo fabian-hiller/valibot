@@ -103,7 +103,7 @@ export function tupleAsync(
 
         // Parse schema of each tuple item
         const itemDatasets = await Promise.all(
-          items.map(async (item, key) => {
+          this.items.map(async (item, key) => {
             const value = input[key];
             return [
               key,

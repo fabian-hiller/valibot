@@ -102,7 +102,7 @@ export function tuple(
         dataset.value = [];
 
         // Parse schema of each tuple item
-        for (let key = 0; key < items.length; key++) {
+        for (let key = 0; key < this.items.length; key++) {
           const value = input[key];
           const itemDataset = this.items[key]._run(
             { typed: false, value },

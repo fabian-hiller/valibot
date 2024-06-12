@@ -130,7 +130,7 @@ export function tupleWithRestAsync(
         const [normalDatasets, restDatasets] = await Promise.all([
           // Parse schema of each normal item
           Promise.all(
-            items.map(async (item, key) => {
+            this.items.map(async (item, key) => {
               const value = input[key];
               return [
                 key,
@@ -142,11 +142,11 @@ export function tupleWithRestAsync(
 
           // Parse other items with rest schema
           Promise.all(
-            input.slice(items.length).map(async (value, key) => {
+            input.slice(this.items.length).map(async (value, key) => {
               return [
-                key + items.length,
+                key + this.items.length,
                 value,
-                await rest._run({ typed: false, value }, config),
+                await this.rest._run({ typed: false, value }, config),
               ] as const;
             })
           ),
