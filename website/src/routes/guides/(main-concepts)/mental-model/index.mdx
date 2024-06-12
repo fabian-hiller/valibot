@@ -24,7 +24,7 @@ My mental model is mainly divided between **schemas**, **methods**, and **action
   class="dark:hidden"
 />
 
-> Our <Link href="/api/">API reference</Link> gives you a great overview of all schemas, methods and actions, and at the end of a specific API reference we list all related schemas, methods and actions that can be combined with it.
+> My <Link href="/api/">API reference</Link> gives you a great overview of all schemas, methods and actions, and at the end of a specific API reference we list all related schemas, methods and actions that can be combined with it.
 
 ## Schemas
 
@@ -49,6 +49,8 @@ Methods help you either **modify or use a schema**. For example, the <Link href=
 
 ```ts
 import * as v from 'valibot';
+
+const BookSchema = v.object({…});
 
 function createBook(data: unknown) {
   return v.parse(BookSchema, data);

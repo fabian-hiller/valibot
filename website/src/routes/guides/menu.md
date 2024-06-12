@@ -4,6 +4,7 @@
 
 - [Introduction](/guides/introduction/)
 - [Installation](/guides/installation/)
+- [Quick start](/guides/quick-start/)
 - [Use cases](/guides/use-cases/)
 - [Comparison](/guides/comparison/)
 - [Ecosystem](/guides/ecosystem/)

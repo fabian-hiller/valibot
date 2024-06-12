@@ -117,7 +117,7 @@ const DateSchema = v.pipe(v.date(), v.minValue(new Date()));
 
 ### Custom validation
 
-For custom validations, <Link href="/api/check/">`check`</Link> can be used. If the function passed as the first argument returns a falsy value, an issue is returned. Otherwise the input is considered valid.
+For custom validations, <Link href="/api/check/">`check`</Link> can be used. If the function passed as the first argument returns `false`, an issue is returned. Otherwise the input is considered valid.
 
 ```ts
 import * as v from 'valibot';
