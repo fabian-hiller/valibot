@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Change `FlatErrors` type for better developer experience (discussion #640)
+
 ## v0.31.1 (June 08, 2024)
 
 - Fix missing file extension for Deno (pull request #637)
