@@ -1,0 +1,24 @@
+---
+title: MimeTypeValidation
+description: MIME type action type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# MimeTypeValidation
+
+MIME type action type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Definition
+
+- `MimeTypeValidation` <Property {...properties.BaseValidation} />
+  - `type` <Property {...properties.type} />
+  - `requirement` <Property {...properties.requirement} />

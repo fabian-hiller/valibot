@@ -1,7 +1,7 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TSchema: {
+  TWrapped: {
     modifier: 'extends',
     type: {
       type: 'custom',
@@ -19,44 +19,104 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  Default: {
+  TInput: {
     modifier: 'extends',
+    type: {
+      type: 'union',
+      options: ['null', 'undefined'],
+    },
+  },
+  Default: {
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'Input',
-          href: '../Input/',
+          name: 'MaybeReadonly',
+          href: '../MaybeReadonly/',
           generics: [
             {
               type: 'custom',
-              name: 'TSchema',
+              name: 'InferInput',
+              href: '../InferInput/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TWrapped',
+                },
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'TInput',
             },
           ],
         },
         {
           type: 'function',
-          params: [],
-          return: {
-            type: 'union',
-            options: [
-              {
+          params: [
+            {
+              name: 'dataset',
+              optional: true,
+              type: {
                 type: 'custom',
-                name: 'Input',
-                href: '../Input/',
+                name: 'Dataset',
+                href: '../Dataset/',
                 generics: [
                   {
                     type: 'custom',
-                    name: 'TSchema',
+                    name: 'TInput',
+                  },
+                  'never',
+                ],
+              },
+            },
+            {
+              name: 'config',
+              optional: true,
+              type: {
+                type: 'custom',
+                name: 'Config',
+                href: '../Config/',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'InferIssue',
+                    href: '../InferIssue/',
+                    generics: [
+                      {
+                        type: 'custom',
+                        name: 'TWrapped',
+                      },
+                    ],
                   },
                 ],
               },
-              'undefined',
+            },
+          ],
+          return: {
+            type: 'custom',
+            name: 'MaybeReadonly',
+            href: '../MaybeReadonly/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'InferInput',
+                href: '../InferInput/',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'TWrapped',
+                  },
+                ],
+              },
+              {
+                type: 'custom',
+                name: 'TInput',
+              },
             ],
           },
         },
-        'undefined',
       ],
     },
   },

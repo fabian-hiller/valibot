@@ -5,14 +5,74 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'any',
   },
-  BaseTransformationAsync: {
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+  },
+  TIssue: {
+    modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'Object',
+      name: 'BaseIssue',
+      href: '../BaseIssue/',
+      generics: ['unknown'],
+    },
+  },
+  BaseTransformationAsync: {
+    type: 'object',
+  },
+  kind: {
+    type: {
+      type: 'string',
+      value: 'transformation',
+    },
+  },
+  type: {
+    type: 'string',
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      name: 'FunctionReference',
+      href: '../FunctionReference/',
       generics: [
         {
-          type: 'custom',
-          name: 'TInput',
+          type: 'array',
+          item: 'any',
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'BaseTransformation',
+              href: '../BaseTransformation/',
+              generics: [
+                'unknown',
+                'unknown',
+                {
+                  type: 'custom',
+                  name: 'BaseIssue',
+                  href: '../BaseIssue/',
+                  generics: ['unknown'],
+                },
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'BaseTransformationAsync',
+              generics: [
+                'unknown',
+                'unknown',
+                {
+                  type: 'custom',
+                  name: 'BaseIssue',
+                  href: '../BaseIssue/',
+                  generics: ['unknown'],
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -23,15 +83,37 @@ export const properties: Record<string, PropertyProps> = {
       value: true,
     },
   },
-  _parse: {
+  _run: {
     type: {
       type: 'function',
       params: [
         {
-          name: 'input',
+          name: 'dataset',
           type: {
             type: 'custom',
-            name: 'TInput',
+            name: 'TypedDataset',
+            href: '../TypedDataset/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TInput',
+              },
+              'never',
+            ],
+          },
+        },
+        {
+          name: 'config',
+          type: {
+            type: 'custom',
+            name: 'Config',
+            href: '../Config/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TIssue',
+              },
+            ],
           },
         },
       ],
@@ -41,17 +123,55 @@ export const properties: Record<string, PropertyProps> = {
         generics: [
           {
             type: 'custom',
-            name: 'PipeActionResult',
-            href: '../PipeActionResult/',
+            name: 'TypedDataset',
+            href: '../TypedDataset/',
             generics: [
               {
                 type: 'custom',
-                name: 'TInput',
+                name: 'TOutput',
+              },
+              {
+                type: 'custom',
+                name: 'TIssue',
               },
             ],
           },
         ],
       },
+    },
+  },
+  _types: {
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'object',
+          entries: [
+            {
+              key: 'input',
+              value: {
+                type: 'custom',
+                name: 'TInput',
+              },
+            },
+            {
+              key: 'output',
+              value: {
+                type: 'custom',
+                name: 'TOutput',
+              },
+            },
+            {
+              key: 'issue',
+              value: {
+                type: 'custom',
+                name: 'TIssue',
+              },
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
 };

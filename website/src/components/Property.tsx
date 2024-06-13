@@ -63,6 +63,10 @@ type DefinitionData =
       return: DefinitionData;
     }
   | {
+      type: 'template';
+      parts: DefinitionData[];
+    }
+  | {
       type: 'union';
       options: [DefinitionData, DefinitionData, ...DefinitionData[]];
     }
@@ -119,10 +123,20 @@ export const Property = component$<PropertyProps>(
 );
 
 type DefinitionProps = {
+  parent?:
+    | 'object'
+    | 'array'
+    | 'tuple'
+    | 'function'
+    | 'template'
+    | 'union'
+    | 'intersect'
+    | 'conditional'
+    | 'custom';
   data: DefinitionData;
 };
 
-const Definition = component$<DefinitionProps>(({ data }) => (
+const Definition = component$<DefinitionProps>(({ parent, data }) => (
   <>
     {typeof data === 'string' ? (
       <span
@@ -189,14 +203,17 @@ const Definition = component$<DefinitionProps>(({ data }) => (
                   ) : (
                     entrie.key.name
                   )}
-                  {entrie.key.type && <Definition data={entrie.key.type} />}]
+                  {entrie.key.type && (
+                    <Definition parent={data.type} data={entrie.key.type} />
+                  )}
+                  ]
                 </>
               )}
             </>
             <span class="text-red-600 dark:text-red-400">
               {entrie.optional && '?'}:
             </span>{' '}
-            <Definition data={entrie.value} />
+            <Definition parent={data.type} data={entrie.value} />
             {index === data.entries.length - 1 && ' '}
           </Fragment>
         ))}
@@ -210,7 +227,7 @@ const Definition = component$<DefinitionProps>(({ data }) => (
             data.item.type === 'intersect' ||
             (data.item.type === 'custom' && data.item.modifier)) &&
           '('}
-        <Definition data={data.item} />
+        <Definition parent={data.type} data={data.item} />
         {typeof data.item === 'object' &&
           (data.item.type === 'union' ||
             data.item.type === 'intersect' ||
@@ -224,15 +241,18 @@ const Definition = component$<DefinitionProps>(({ data }) => (
         {data.items.map((item, index) => (
           <Fragment key={index}>
             {index > 0 && ', '}
-            <Definition data={item} />
+            <Definition parent={data.type} data={item} />
           </Fragment>
         ))}
         ]
       </span>
     ) : data.type === 'function' ? (
       <span class="text-slate-600 dark:text-slate-400">
-        {typeof data.return === 'object' &&
-          (data.return.type === 'union' || data.return.type === 'intersect') &&
+        {(parent === 'union' ||
+          parent === 'intersect' ||
+          (typeof data.return === 'object' &&
+            (data.return.type === 'union' ||
+              data.return.type === 'intersect'))) &&
           '('}
         (
         {data.params.map((param, index) => (
@@ -249,39 +269,62 @@ const Definition = component$<DefinitionProps>(({ data }) => (
                 {param.optional && '?'}:
               </span>{' '}
             </span>
-            <Definition data={param.type} />
+            <Definition parent={data.type} data={param.type} />
           </Fragment>
         ))}
-        ) {'=>'} <Definition data={data.return} />
-        {typeof data.return === 'object' && data.return.type === 'union' && ')'}
+        ) {'=>'} <Definition parent={data.type} data={data.return} />
+        {(parent === 'union' ||
+          parent === 'intersect' ||
+          (typeof data.return === 'object' &&
+            (data.return.type === 'union' ||
+              data.return.type === 'intersect'))) &&
+          ')'}
+      </span>
+    ) : data.type === 'template' ? (
+      <span class="text-yellow-600 dark:text-amber-200">
+        `
+        {data.parts.map((part, index) => (
+          <Fragment key={index}>
+            {typeof part === 'object' && part.type === 'string' ? (
+              part.value
+            ) : (
+              <>
+                <span class="text-purple-600 dark:text-purple-400">{'${'}</span>
+                <Definition parent={data.type} data={part} />
+                <span class="text-purple-600 dark:text-purple-400">{'}'}</span>
+              </>
+            )}
+          </Fragment>
+        ))}
+        `
       </span>
     ) : data.type === 'union' ? (
       data.options.map((option, index) => (
         <Fragment key={index}>
           {index > 0 && <span class="text-red-600 dark:text-red-400"> | </span>}
-          <Definition data={option} />
+          <Definition parent={data.type} data={option} />
         </Fragment>
       ))
     ) : data.type === 'intersect' ? (
       data.options.map((option, index) => (
         <Fragment key={index}>
           {index > 0 && <span class="text-red-600 dark:text-red-400"> & </span>}
-          <Definition data={option} />
+          <Definition parent={data.type} data={option} />
         </Fragment>
       ))
     ) : data.type === 'conditional' ? (
       <>
         {data.conditions.map((condition, index) => (
           <Fragment key={index}>
-            <Definition data={condition.type} />
+            <Definition parent={data.type} data={condition.type} />
             <span class="text-red-600 dark:text-red-400"> extends </span>
-            <Definition data={condition.extends} />
+            <Definition parent={data.type} data={condition.extends} />
             <span class="text-red-600 dark:text-red-400"> ? </span>
-            <Definition data={condition.true} />
+            <Definition parent={data.type} data={condition.true} />
             <span class="text-red-600 dark:text-red-400"> : </span>
           </Fragment>
         ))}
-        <Definition data={data.false} />
+        <Definition parent={data.type} data={data.false} />
       </>
     ) : (
       <>
@@ -290,11 +333,28 @@ const Definition = component$<DefinitionProps>(({ data }) => (
         )}
         {data.spread && <span class="text-red-600 dark:text-red-400">...</span>}
         {data.href ? (
-          <Link class="text-sky-600 dark:text-sky-400" href={data.href}>
+          <Link
+            class={{
+              'text-sky-600 dark:text-sky-400':
+                data.name[0] === data.name[0].toUpperCase(),
+              '!text-slate-700 dark:!text-slate-300':
+                data.name[0] !== data.name[0].toUpperCase(),
+            }}
+            href={data.href}
+          >
             {data.name}
           </Link>
         ) : (
-          <span class="text-sky-600 dark:text-sky-400">{data.name}</span>
+          <span
+            class={{
+              'text-sky-600 dark:text-sky-400':
+                data.name[0] === data.name[0].toUpperCase(),
+              'text-slate-700 dark:text-slate-300':
+                data.name[0] !== data.name[0].toUpperCase(),
+            }}
+          >
+            {data.name}
+          </span>
         )}
         {data.generics && (
           <>
@@ -302,18 +362,18 @@ const Definition = component$<DefinitionProps>(({ data }) => (
             {data.generics.map((generic, index) => (
               <Fragment key={index}>
                 {index > 0 && ', '}
-                <Definition data={generic} />
+                <Definition parent={data.type} data={generic} />
               </Fragment>
             ))}
             {'>'}
           </>
         )}
-        {data.indexes?.map((data, index) => (
-          <Fragment key={index}>
+        {data.indexes?.map((data_, index) => (
+          <span key={index} class="text-slate-600 dark:text-slate-400">
             {'['}
-            <Definition data={data} />
+            <Definition parent={data.type} data={data_} />
             {']'}
-          </Fragment>
+          </span>
         ))}
       </>
     )}
