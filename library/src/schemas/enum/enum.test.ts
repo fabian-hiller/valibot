@@ -17,7 +17,6 @@ describe('enum_', () => {
       reference: enum_,
       expects: '"foo" | "bar" | "baz"',
       enum: options,
-      // @ts-expect-error
       options: Object.entries(options)
         .filter(([key]) => isNaN(+key))
         .map(([, value]) => value),
