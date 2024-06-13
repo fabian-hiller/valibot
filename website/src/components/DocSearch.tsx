@@ -40,8 +40,8 @@ type AlgoliaResult = {
     _highlightResult: {
       hierarchy: {
         lvl0: { value: string };
-        lvl1: { value: string };
-        lvl2: { value: string };
+        lvl1: { value: string } | undefined;
+        lvl2: { value: string } | undefined;
         lvl3: { value: string } | undefined;
         lvl4: { value: string } | undefined;
         lvl5: { value: string } | undefined;
@@ -218,7 +218,10 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
                           ? 'child'
                           : 'none',
                     type: hit.type,
-                    page: hit._highlightResult.hierarchy.lvl2.value,
+                    page:
+                      hit._highlightResult.hierarchy.lvl2?.value ??
+                      hit._highlightResult.hierarchy.lvl1?.value ??
+                      hit._highlightResult.hierarchy.lvl0.value,
                     text:
                       hit.type === 'content'
                         ? hit._snippetResult!.content.value
@@ -252,6 +255,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
 
               // Update state in case of an error
             } catch (_) {
+              console.error('LALA', _);
               error.value = true;
             }
           }, 150);
