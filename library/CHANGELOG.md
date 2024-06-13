@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Change `FlatErrors` type for better developer experience (discussion #640)
 - Fix `this` reference in `looseTuple`, `looseTupleAsync`, `strictTuple`, `strictTupleAsync`, `tuple`, `tupleAsync`, `tupleWithRest` and `tupleWithRestAsync` schema (pull request #649)
+- Fix type of `options` key in `EnumSchema` interface
 
 ## v0.31.1 (June 08, 2024)
 
