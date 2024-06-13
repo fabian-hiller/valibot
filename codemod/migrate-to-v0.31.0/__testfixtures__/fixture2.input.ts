@@ -1,8 +1,8 @@
 import * as v from 'valibot';
-import { toCustom } from 'valibot';
+import { type BaseSchema, toCustom } from 'valibot';
 
 v.custom();
-v.BaseSchema();
+BaseSchema();
 v.Input();
 v.Output();
 v.special();

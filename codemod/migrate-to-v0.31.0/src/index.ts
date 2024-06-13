@@ -108,7 +108,11 @@ export async function workflow({ jsFiles }: Api) {
         ({ getMultipleMatches }) =>
           getMultipleMatches('IMPORTS')
             .filter((node) => node.kind() === 'import_specifier')
-            .map((node) => node.text())
+            .map(
+              (node) =>
+                node.find({ rule: { kind: 'identifier' } })?.text() ??
+                node.text()
+            )
       )
     ).reduce((allImports, imports) => {
       allImports.push(...imports);
