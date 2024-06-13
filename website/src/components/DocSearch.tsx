@@ -255,7 +255,6 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
 
               // Update state in case of an error
             } catch (_) {
-              console.error('LALA', _);
               error.value = true;
             }
           }, 150);
