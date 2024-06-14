@@ -24,7 +24,7 @@ export async function safeParseAsync<
 >(
   schema: TSchema,
   input: unknown,
-  config?: Omit<Config<InferIssue<TSchema>>, 'skipPipe'>
+  config?: Config<InferIssue<TSchema>>
 ): Promise<SafeParseResult<TSchema>> {
   const dataset = await schema._run(
     { typed: false, value: input },

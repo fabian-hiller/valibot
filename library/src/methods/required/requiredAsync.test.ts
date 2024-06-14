@@ -28,7 +28,6 @@ describe('requiredAsync', () => {
     lang: undefined,
     abortEarly: undefined,
     abortPipeEarly: undefined,
-    skipPipe: undefined,
   } as const;
 
   describe('object', () => {

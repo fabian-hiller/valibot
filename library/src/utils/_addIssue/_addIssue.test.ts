@@ -38,7 +38,6 @@ describe('_addIssue', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
 
     type MinLength1Issue = MinLengthIssue<string, 1>;
@@ -209,7 +208,6 @@ describe('_addIssue', () => {
       lang: 'en',
       abortEarly: true,
       abortPipeEarly: true,
-      skipPipe: true,
     };
     _addIssue(string(), 'type', dataset, config);
     expect(dataset.issues?.[0]).toMatchObject(config);

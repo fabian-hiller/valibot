@@ -776,22 +776,22 @@ export function pipeAsync<
     async _run(dataset, config) {
       // Run actions of pipeline
       for (let index = 0; index < pipe.length; index++) {
-        // @ts-expect-error
-        dataset = await pipe[index]._run(dataset, config);
-
-        // If necessary, skip pipe or abort early
-        const nextAction = pipe[index + 1];
+        // Mark dataset as untyped and break pipe if there are issues and pipe
+        // item is schema or transformation
         if (
-          config.skipPipe ||
-          (dataset.issues &&
-            (config.abortEarly ||
-              config.abortPipeEarly ||
-              // TODO: This behavior must be documented!
-              nextAction?.kind === 'schema' ||
-              nextAction?.kind === 'transformation'))
+          dataset.issues &&
+          (pipe[index].kind === 'schema' ||
+            pipe[index].kind === 'transformation')
         ) {
+          // TODO: This behavior must be documented!
           dataset.typed = false;
           break;
+        }
+
+        // Continue pipe execution if there is no reason to abort early
+        if (!dataset.issues || (!config.abortEarly && !config.abortPipeEarly)) {
+          // @ts-expect-error
+          dataset = await pipe[index]._run(dataset, config);
         }
       }
 

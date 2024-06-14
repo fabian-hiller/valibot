@@ -57,7 +57,6 @@ describe('forward', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     } satisfies TypedDataset<Input, CheckIssue<Input>>);
@@ -105,7 +104,6 @@ describe('forward', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     } satisfies TypedDataset<Input, CheckIssue<Input>>);
@@ -136,7 +134,6 @@ describe('forward', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
     expect(
       forward<Input, CheckIssue<Input>>(check(requirement, 'message'), [
@@ -193,7 +190,6 @@ describe('forward', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     } satisfies TypedDataset<

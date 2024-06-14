@@ -76,7 +76,6 @@ export function _addIssue<
     lang: config.lang,
     abortEarly: config.abortEarly,
     abortPipeEarly: config.abortPipeEarly,
-    skipPipe: config.skipPipe,
   };
 
   // Check if context is a schema

@@ -18,10 +18,7 @@ export function config<
   TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(
-  schema: TSchema,
-  config: Omit<Config<InferIssue<TSchema>>, 'skipPipe'>
-): TSchema {
+>(schema: TSchema, config: Config<InferIssue<TSchema>>): TSchema {
   return {
     ...schema,
     _run(dataset, config_) {

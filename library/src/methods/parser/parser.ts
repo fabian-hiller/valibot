@@ -12,7 +12,7 @@ import { parse } from '../parse/index.ts';
  */
 export interface Parser<
   TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  TConfig extends Omit<Config<InferIssue<TSchema>>, 'skipPipe'> | undefined,
+  TConfig extends Config<InferIssue<TSchema>> | undefined,
 > {
   /**
    * Parses an unknown input based on the schema.
@@ -49,24 +49,19 @@ export function parser<
  */
 export function parser<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  const TConfig extends
-    | Omit<Config<InferIssue<TSchema>>, 'skipPipe'>
-    | undefined,
+  const TConfig extends Config<InferIssue<TSchema>> | undefined,
 >(schema: TSchema, config: TConfig): Parser<TSchema, TConfig>;
 
 export function parser(
   schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  config?: Omit<
-    Config<InferIssue<BaseSchema<unknown, unknown, BaseIssue<unknown>>>>,
-    'skipPipe'
-  >
+  config?: Config<InferIssue<BaseSchema<unknown, unknown, BaseIssue<unknown>>>>
 ): Parser<
   BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  Omit<Config<BaseIssue<unknown>>, 'skipPipe'> | undefined
+  Config<BaseIssue<unknown>> | undefined
 > {
   const func: Parser<
     BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-    Omit<Config<BaseIssue<unknown>>, 'skipPipe'> | undefined
+    Config<BaseIssue<unknown>> | undefined
   > = (input: unknown) => parse(schema, input, config);
   // @ts-ignore
   func.schema = schema;

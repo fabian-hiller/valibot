@@ -153,7 +153,6 @@ describe('recordAsync', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
 
     const numberIssue1: NumberIssue = {

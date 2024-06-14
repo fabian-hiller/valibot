@@ -27,7 +27,6 @@ describe('_subIssues', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
 
     const emailIssue: EmailIssue<string> = {

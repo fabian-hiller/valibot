@@ -83,7 +83,6 @@ describe('intersect', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
 
     test('for empty options', () => {

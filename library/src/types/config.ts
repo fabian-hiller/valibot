@@ -21,8 +21,4 @@ export interface Config<TIssue extends BaseIssue<unknown>> {
    * Whether the pipe was abort early.
    */
   readonly abortPipeEarly?: boolean;
-  /**
-   * Whether the pipe was skipped.
-   */
-  readonly skipPipe?: boolean;
 }

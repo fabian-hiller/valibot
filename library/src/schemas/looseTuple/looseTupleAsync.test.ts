@@ -169,7 +169,6 @@ describe('looseTupleAsync', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
 
     const stringIssue: StringIssue = {

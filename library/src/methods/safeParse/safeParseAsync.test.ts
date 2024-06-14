@@ -56,7 +56,6 @@ describe('safeParseAsync', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     });
@@ -91,7 +90,6 @@ describe('safeParseAsync', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     });

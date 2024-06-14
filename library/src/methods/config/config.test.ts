@@ -8,10 +8,10 @@ describe('config', () => {
     const schema = string();
     schema._run = vi.fn(schema._run);
     const dataset = { typed: false, value: 'foo' };
-    const globalConfig: Omit<Config<BaseIssue<unknown>>, 'skipPipe'> = {
+    const globalConfig: Config<BaseIssue<unknown>> = {
       lang: 'de',
     };
-    const localConfig: Omit<Config<BaseIssue<unknown>>, 'skipPipe'> = {
+    const localConfig: Config<BaseIssue<unknown>> = {
       abortPipeEarly: true,
     };
     config(schema, localConfig)._run(dataset, globalConfig);
@@ -25,10 +25,10 @@ describe('config', () => {
     const schema = objectAsync({ key: string() });
     schema._run = vi.fn(schema._run);
     const dataset = { typed: false, value: { key: 'foo' } };
-    const globalConfig: Omit<Config<BaseIssue<unknown>>, 'skipPipe'> = {
+    const globalConfig: Config<BaseIssue<unknown>> = {
       lang: 'de',
     };
-    const localConfig: Omit<Config<BaseIssue<unknown>>, 'skipPipe'> = {
+    const localConfig: Config<BaseIssue<unknown>> = {
       abortEarly: true,
       lang: 'en',
     };

@@ -33,7 +33,7 @@ export function expectSchemaIssue<
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
+
           ...baseIssue,
           input: value,
           received: _stringify(value),

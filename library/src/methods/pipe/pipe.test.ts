@@ -47,7 +47,6 @@ describe('pipe', () => {
     lang: undefined,
     abortEarly: undefined,
     abortPipeEarly: undefined,
-    skipPipe: undefined,
   };
 
   const minLengthIssue: MinLengthIssue<string, 1> = {
@@ -79,20 +78,11 @@ describe('pipe', () => {
   });
 
   describe('should break pipe if necessary', () => {
-    test('for skip pipe config', () => {
-      expect(
-        schema._run({ typed: false, value: ' 123 ' }, { skipPipe: true })
-      ).toStrictEqual({
-        typed: false,
-        value: ' 123 ',
-      });
-    });
-
     test('for abort early config', () => {
       expect(
         schema._run({ typed: false, value: '  ' }, { abortEarly: true })
       ).toStrictEqual({
-        typed: false,
+        typed: true,
         value: '',
         issues: [{ ...minLengthIssue, abortEarly: true }],
       });
@@ -102,7 +92,7 @@ describe('pipe', () => {
       expect(
         schema._run({ typed: false, value: '  ' }, { abortPipeEarly: true })
       ).toStrictEqual({
-        typed: false,
+        typed: true,
         value: '',
         issues: [{ ...minLengthIssue, abortPipeEarly: true }],
       });

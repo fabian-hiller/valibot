@@ -84,7 +84,6 @@ describe('intersectAsync', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
 
     test('for empty options', async () => {

@@ -26,7 +26,7 @@ describe('safeParserAsync', () => {
     });
 
     test('with config', () => {
-      const config: Omit<Config<InferIssue<Schema>>, 'skipPipe'> = {
+      const config: Config<InferIssue<Schema>> = {
         abortEarly: true,
       };
       expectTypeOf(safeParserAsync(schema, config)).toEqualTypeOf<

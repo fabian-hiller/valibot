@@ -26,7 +26,7 @@ describe('safeParser', () => {
     });
 
     test('with config', () => {
-      const config: Omit<Config<InferIssue<Schema>>, 'skipPipe'> = {
+      const config: Config<InferIssue<Schema>> = {
         abortEarly: true,
       };
       expectTypeOf(safeParser(schema, config)).toEqualTypeOf<
