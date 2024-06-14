@@ -3,6 +3,7 @@ import path from 'node:path';
 import jsr from '../jsr.json';
 import package_ from '../package.json';
 import ar from '../src/ar';
+import ca from '../src/ca';
 import de from '../src/de';
 import es from '../src/es';
 import fr from '../src/fr';
@@ -30,6 +31,7 @@ console.time('build');
 // messages of Valibot are already in English
 const languages = [
   ar,
+  ca,
   de,
   es,
   fr,
