@@ -37,6 +37,9 @@ export interface BaseMetadata<TInput> {
   };
 }
 
+/**
+ * Intersect extra properties from metadata
+ */
 export type ExtraProperties<T> = T extends {
   extraProperties: infer TExtraProperties;
 }

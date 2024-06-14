@@ -3,6 +3,7 @@ import type {
   BaseSchema,
   Config,
   Dataset,
+  ExtraProperties,
   FirstTupleItem,
   InferInput,
   InferIssue,
@@ -11,7 +12,6 @@ import type {
   PipeAction,
   PipeItem,
 } from '../../types/index.ts';
-import type { ExtraProperties } from '../../types/metadata.ts';
 
 /**
  * Schema with pipe type.

@@ -1,12 +1,12 @@
 import { parse } from '../../methods/index.ts';
 import type {
   BaseIssue,
+  BaseMetadata,
   BaseSchema,
   Config,
   InferIssue,
   InferOutput,
 } from '../../types/index.ts';
-import type { BaseMetadata } from '../../types/metadata.ts';
 
 /**
  * WithParse metadata type.

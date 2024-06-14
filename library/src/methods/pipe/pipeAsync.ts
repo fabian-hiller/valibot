@@ -4,6 +4,7 @@ import type {
   BaseSchemaAsync,
   Config,
   Dataset,
+  ExtraProperties,
   FirstTupleItem,
   InferInput,
   InferIssue,
@@ -14,7 +15,6 @@ import type {
   PipeItem,
   PipeItemAsync,
 } from '../../types/index.ts';
-import type { ExtraProperties } from '../../types/metadata.ts';
 
 /**
  * Schema with pipe async type.
