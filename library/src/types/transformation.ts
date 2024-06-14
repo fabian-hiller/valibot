@@ -1,5 +1,5 @@
 import type { Config } from './config.ts';
-import type { TypedDataset } from './dataset.ts';
+import type { Dataset, TypedDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
 import type { FunctionReference } from './other.ts';
 
@@ -44,7 +44,7 @@ export interface BaseTransformation<
   _run(
     dataset: TypedDataset<TInput, never>,
     config: Config<TIssue>
-  ): TypedDataset<TOutput, TIssue>;
+  ): Dataset<TOutput, TIssue>;
   /**
    * Input, output and issue type.
    *
@@ -94,7 +94,7 @@ export interface BaseTransformationAsync<
   _run(
     dataset: TypedDataset<TInput, never>,
     config: Config<TIssue>
-  ): Promise<TypedDataset<TOutput, TIssue>>;
+  ): Promise<Dataset<TOutput, TIssue>>;
 }
 
 /**

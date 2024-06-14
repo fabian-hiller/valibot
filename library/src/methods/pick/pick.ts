@@ -31,6 +31,9 @@ import type {
   ObjectKeys,
 } from '../../types/index.ts';
 
+/**
+ * The schema type.
+ */
 type Schema = NoPipe<
   | LooseObjectSchema<ObjectEntries, ErrorMessage<LooseObjectIssue> | undefined>
   | LooseObjectSchemaAsync<

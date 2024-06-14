@@ -4,6 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `rawCheck`, `rawCheckAsync`, `rawTransform` and `rawTransformAsync` action (issue #597)
 - Change `FlatErrors` type for better developer experience (discussion #640)
 - Change `pipe` and `pipeAsync` method to mark output as untyped only when necessary (discussion #613)
 - Remove unused `skipPipe` option from `Config` type and refactor library
