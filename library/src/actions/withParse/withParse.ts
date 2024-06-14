@@ -4,21 +4,21 @@ import type {
   BaseSchema,
   InferInput,
   InferOutput,
-} from '../../types';
-import type { BaseMetadata } from '../../types/metadata';
+} from '../../types/index.ts';
+import type { BaseMetadata } from '../../types/metadata.ts';
 
 /**
- * Parsable action type.
+ * WithParse metadata type.
  */
-export interface ParsableAction<TInput> extends BaseMetadata<TInput> {
+export interface WithParseAction<TInput> extends BaseMetadata<TInput> {
   /**
    * The metadata type.
    */
-  readonly type: 'parsable';
+  readonly type: 'withParse';
   /**
    * The metadata reference.
    */
-  readonly reference: typeof parsable;
+  readonly reference: typeof withParse;
 
   readonly extraProperties: {
     parse<TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>>(
@@ -29,15 +29,15 @@ export interface ParsableAction<TInput> extends BaseMetadata<TInput> {
 }
 
 /**
- * Parsable metadata type.
+ * Creates a with parse metadata.
  *
- * @returns A parsable action.
+ * @returns A WithParse metadata.
  */
-export function parsable<TInput>(): ParsableAction<TInput> {
+export function withParse<TInput>(): WithParseAction<TInput> {
   return {
     kind: 'metadata',
-    type: 'parsable',
-    reference: parsable,
+    type: 'withParse',
+    reference: withParse,
     extraProperties: {
       parse: _parse,
     },

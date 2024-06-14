@@ -1,10 +1,10 @@
 import { describe, expectTypeOf, test } from 'vitest';
-import { transform } from '../../actions/index.ts';
 import { pipe } from '../../methods/pipe/pipe.ts';
 import { object, string } from '../../schemas/index.ts';
-import { parsable } from './parsable.ts';
+import { transform } from '../index.ts';
+import { withParse } from './withParse.ts';
 
-describe('parsable', () => {
+describe('withParse', () => {
   test('should return output type of schema', () => {
     const parsableSchema = pipe(
       object({
@@ -13,7 +13,7 @@ describe('parsable', () => {
           transform((input) => input.length)
         ),
       }),
-      parsable()
+      withParse()
     );
     expectTypeOf(parsableSchema.parse({ key: 'foo' })).toEqualTypeOf<{
       key: number;
