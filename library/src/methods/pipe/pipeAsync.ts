@@ -14,6 +14,7 @@ import type {
   PipeItem,
   PipeItemAsync,
 } from '../../types/index.ts';
+import type { ExtraProperties } from '../../types/metadata.ts';
 
 /**
  * Schema with pipe async type.
@@ -64,7 +65,7 @@ export type SchemaWithPipeAsync<
     readonly output: InferOutput<LastTupleItem<TPipe>>;
     readonly issue: InferIssue<TPipe[number]>;
   };
-};
+} & ExtraProperties<TPipe>;
 
 /**
  * Adds a pipeline to a schema, that can validate and transform its input.
@@ -769,13 +770,22 @@ export function pipeAsync<
     | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
   )[],
 >(...pipe: [TSchema, ...TItems]): SchemaWithPipeAsync<[TSchema, ...TItems]> {
+  const extraProperties = pipe.reduce(
+    (props, it) => {
+      if ('extraProperties' in it) Object.assign(props, it.extraProperties);
+      return props;
+    },
+    {} as ExtraProperties<[TSchema, ...TItems]>
+  );
   return {
     ...pipe[0],
+    ...extraProperties,
     pipe,
     async: true,
     async _run(dataset, config) {
       // Run actions of pipeline
       for (let index = 0; index < pipe.length; index++) {
+        if (pipe[index].kind === 'metadata') continue;
         // Mark dataset as untyped and break pipe if there are issues and pipe
         // item is schema or transformation
         if (

@@ -24,7 +24,8 @@ export type PipeActionAsync<
   TIssue extends BaseIssue<unknown>,
 > =
   | BaseValidationAsync<TInput, TOutput, TIssue>
-  | BaseTransformationAsync<TInput, TOutput, TIssue>;
+  | BaseTransformationAsync<TInput, TOutput, TIssue>
+  | BaseMetadata<TInput>;
 
 /**
  * Pipe item type.

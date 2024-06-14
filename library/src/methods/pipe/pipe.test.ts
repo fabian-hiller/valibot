@@ -7,13 +7,20 @@ import {
   minValue,
   transform,
   trim,
+  withDescription,
 } from '../../actions/index.ts';
 import { DECIMAL_REGEX } from '../../regex.ts';
 import { string } from '../../schemas/index.ts';
 import { pipe } from './pipe.ts';
 
 describe('pipe', () => {
-  const schema = pipe(string(), trim(), minLength(1), decimal());
+  const schema = pipe(
+    string(),
+    withDescription('some descriptions'),
+    trim(),
+    minLength(1),
+    decimal()
+  );
 
   test('should return schema object', () => {
     expect(schema).toStrictEqual({
@@ -22,8 +29,10 @@ describe('pipe', () => {
       reference: string,
       expects: 'string',
       message: undefined,
+      description: 'some descriptions',
       pipe: [
         { ...string(), _run: expect.any(Function) },
+        { ...withDescription('some descriptions') },
         { ...trim(), _run: expect.any(Function) },
         { ...minLength(1), _run: expect.any(Function) },
         { ...decimal(), _run: expect.any(Function) },
