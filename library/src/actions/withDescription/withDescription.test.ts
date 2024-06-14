@@ -10,7 +10,7 @@ describe('withDescription', () => {
   test('should return metadata object', () => {
     const metadata: WithDescriptionMetadata<unknown, 'test'> = {
       kind: 'metadata',
-      type: 'withDescription',
+      type: 'with_description',
       reference: withDescription,
       extraProperties: {
         description: 'test' as const,

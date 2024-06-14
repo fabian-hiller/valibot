@@ -15,7 +15,7 @@ export interface WithParseMetadata<TInput> extends BaseMetadata<TInput> {
   /**
    * The metadata type.
    */
-  readonly type: 'withParse';
+  readonly type: 'with_parse';
   /**
    * The metadata reference.
    */
@@ -47,7 +47,7 @@ export interface WithParseMetadata<TInput> extends BaseMetadata<TInput> {
 export function withParse<TInput>(): WithParseMetadata<TInput> {
   return {
     kind: 'metadata',
-    type: 'withParse',
+    type: 'with_parse',
     reference: withParse,
     extraProperties: {
       parse: _parse,

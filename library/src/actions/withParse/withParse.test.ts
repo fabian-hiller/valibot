@@ -8,7 +8,7 @@ describe('withParse', () => {
   test('should return metadata object', () => {
     const metadata: WithParseMetadata<unknown> = {
       kind: 'metadata',
-      type: 'withParse',
+      type: 'with_parse',
       reference: withParse,
       extraProperties: {
         parse: expect.any(Function),

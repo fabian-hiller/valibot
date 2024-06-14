@@ -8,7 +8,7 @@ export interface WithDescriptionMetadata<TInput, TDescription extends string>
   /**
    * The metadata type.
    */
-  readonly type: 'withDescription';
+  readonly type: 'with_description';
   /**
    * The metadata reference.
    */
@@ -31,7 +31,7 @@ export function withDescription<TInput, TDescription extends string>(
 ): WithDescriptionMetadata<TInput, TDescription> {
   return {
     kind: 'metadata',
-    type: 'withDescription',
+    type: 'with_description',
     reference: withDescription,
     extraProperties: {
       description,
