@@ -3,7 +3,7 @@ import type { BaseMetadata } from '../../types/metadata';
 /**
  * WithDescription metadata type.
  */
-export interface WithDescriptionAction<TInput, TDescription extends string>
+export interface WithDescriptionMetadata<TInput, TDescription extends string>
   extends BaseMetadata<TInput> {
   /**
    * The metadata type.
@@ -20,7 +20,7 @@ export interface WithDescriptionAction<TInput, TDescription extends string>
 }
 
 /**
- * Creates a with description metadata.
+ * Creates a with-description metadata.
  *
  * @param description The description value.
  *
@@ -28,7 +28,7 @@ export interface WithDescriptionAction<TInput, TDescription extends string>
  */
 export function withDescription<TInput, TDescription extends string>(
   description: TDescription
-): WithDescriptionAction<TInput, TDescription> {
+): WithDescriptionMetadata<TInput, TDescription> {
   return {
     kind: 'metadata',
     type: 'withDescription',
