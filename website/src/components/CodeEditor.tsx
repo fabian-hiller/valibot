@@ -3,7 +3,9 @@ import {
   component$,
   type NoSerialize,
   noSerialize,
+  type QRL,
   type Signal,
+  sync$,
   useSignal,
   useVisibleTask$,
 } from '@builder.io/qwik';
@@ -14,6 +16,9 @@ import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { Registry } from 'monaco-textmate';
 import { loadWASM } from 'onigasm';
 import onigasm from 'onigasm/lib/onigasm.wasm?url';
+import { format } from 'prettier';
+import prettierPluginEstree from 'prettier/plugins/estree';
+import prettierPluginTypeScript from 'prettier/plugins/typescript';
 import { useTheme } from '~/routes/plugin@theme';
 import valibotTypes from '../../../library/dist/index.d.ts?raw';
 import packageJson from '../../../library/package.json?raw';
@@ -22,106 +27,143 @@ import typescriptTm from '../json/TypeScript.tmLanguage.json';
 type CodeEditorProps = {
   value: Signal<string>;
   model: Signal<NoSerialize<monaco.editor.ITextModel>>;
+  onSave$: QRL<() => void>;
 };
 
 /**
  * Monaco code editor with TypeScript support and syntax highlighting.
  */
-export const CodeEditor = component$<CodeEditorProps>(({ value, model }) => {
-  // Use theme
-  const theme = useTheme();
+export const CodeEditor = component$<CodeEditorProps>(
+  ({ value, model, onSave$ }) => {
+    // Use theme
+    const theme = useTheme();
 
-  // Use element and editor signal
-  const element = useSignal<HTMLElement>();
-  const editor = useSignal<NoSerialize<monaco.editor.IStandaloneCodeEditor>>();
+    // Use element and editor signal
+    const element = useSignal<HTMLElement>();
+    const editor =
+      useSignal<NoSerialize<monaco.editor.IStandaloneCodeEditor>>();
 
-  /**
-   * Returns device specific editor options.
-   */
-  const getDeviceOptions = $(() =>
-    window.innerWidth <= 640
-      ? {
-          fontSize: 16,
-          padding: { top: 20, bottom: 20 },
-          lineNumbersMinChars: 3,
-        }
-      : {
-          fontSize: 18,
-          padding: { top: 40, bottom: 40 },
-          lineNumbersMinChars: 4,
-        }
-  );
-
-  /**
-   * Returns theme name based on current theme.
-   */
-  const getThemeName = $(() =>
-    theme.value === 'dark' ? 'pace-dark' : 'pace-light'
-  );
-
-  // Initialize and setup Monaco editor
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async ({ cleanup }) => {
-    // Initialize Monaco editor environment
-    await initializeMonaco();
-
-    // Create model for Monaco editor instance
-    model.value = noSerialize(
-      monaco.editor.createModel(
-        value.value,
-        'typescript',
-        monaco.Uri.parse('file:///index.ts')
-      )
+    /**
+     * Returns device specific editor options.
+     */
+    const getDeviceOptions = $(() =>
+      window.innerWidth <= 640
+        ? {
+            fontSize: 16,
+            padding: { top: 20, bottom: 20 },
+            lineNumbersMinChars: 3,
+          }
+        : {
+            fontSize: 18,
+            padding: { top: 40, bottom: 40 },
+            lineNumbersMinChars: 4,
+          }
     );
 
-    // Create Monaco editor instance with model
-    editor.value = noSerialize(
-      monaco.editor.create(element.value!, {
-        ...(await getDeviceOptions()),
-        autoDetectHighContrast: false,
-        automaticLayout: true,
-        // @ts-expect-error
-        'bracketPairColorization.enabled': false,
-        fontFamily:
-          'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-        model: model.value,
-        minimap: { enabled: false },
-        scrollBeyondLastLine: false,
+    /**
+     * Returns theme name based on current theme.
+     */
+    const getThemeName = $(() =>
+      theme.value === 'dark' ? 'pace-dark' : 'pace-light'
+    );
+
+    // Initialize and setup Monaco editor
+    // eslint-disable-next-line qwik/no-use-visible-task
+    useVisibleTask$(async ({ cleanup }) => {
+      // Initialize Monaco editor environment
+      await initializeMonaco();
+
+      // Create model for Monaco editor instance
+      model.value = noSerialize(
+        monaco.editor.createModel(
+          value.value,
+          'typescript',
+          monaco.Uri.parse('file:///index.ts')
+        )
+      );
+
+      // Create Monaco editor instance with model
+      editor.value = noSerialize(
+        monaco.editor.create(element.value!, {
+          ...(await getDeviceOptions()),
+          autoDetectHighContrast: false,
+          automaticLayout: true,
+          // @ts-expect-error
+          'bracketPairColorization.enabled': false,
+          fontFamily:
+            'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+          model: model.value,
+          minimap: { enabled: false },
+          scrollBeyondLastLine: false,
+          theme: await getThemeName(),
+        })
+      );
+
+      // Dispose editor and model on cleanup
+      cleanup(() => {
+        editor.value!.dispose();
+        model.value!.dispose();
+      });
+    });
+
+    // Update theme on change
+    // eslint-disable-next-line qwik/no-use-visible-task
+    useVisibleTask$(async ({ track }) => {
+      track(theme);
+      editor.value?.updateOptions({
         theme: await getThemeName(),
-      })
+      });
+    });
+
+    /**
+     * Updates the device options of the code editor.
+     */
+    const updateDeviceOptions = $(async () =>
+      editor.value?.updateOptions(await getDeviceOptions())
     );
 
-    // Dispose editor and model on cleanup
-    cleanup(() => {
-      editor.value!.dispose();
-      model.value!.dispose();
+    /**
+     * Handles keyboard keydown events.
+     */
+    const handleKeyDown = $(async (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        // Format code with Prettier
+        try {
+          model.value!.setValue(
+            await format(model.value!.getValue(), {
+              parser: 'typescript',
+              plugins: [prettierPluginEstree, prettierPluginTypeScript],
+              singleQuote: true,
+            })
+          );
+        } catch {
+          // Ignore formatting errors
+        }
+
+        // Execute save event
+        onSave$();
+      }
     });
-  });
 
-  // Update theme on change
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async ({ track }) => {
-    track(theme);
-    editor.value?.updateOptions({
-      theme: await getThemeName(),
+    /**
+     * Prevents default behavior of keydown events.
+     */
+    const preventDefault = sync$((event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault();
+      }
     });
-  });
 
-  /**
-   * Updates the device options of the code editor.
-   */
-  const updateDeviceOptions = $(async () =>
-    editor.value?.updateOptions(await getDeviceOptions())
-  );
-
-  return (
-    <div
-      class="w-full lg:rounded-3xl lg:border-[3px] lg:border-slate-200 lg:dark:border-slate-800"
-      ref={element}
-      window:onResize$={updateDeviceOptions}
-    />
-  );
-});
+    return (
+      <div
+        class="w-full lg:rounded-3xl lg:border-[3px] lg:border-slate-200 lg:dark:border-slate-800"
+        ref={element}
+        window:onResize$={updateDeviceOptions}
+        onKeyDown$={[preventDefault, handleKeyDown]}
+      />
+    );
+  }
+);
 
 /**
  * Sets up the Monaco editor environment.
