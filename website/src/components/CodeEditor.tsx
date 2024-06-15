@@ -16,7 +16,7 @@ import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { Registry } from 'monaco-textmate';
 import { loadWASM } from 'onigasm';
 import onigasm from 'onigasm/lib/onigasm.wasm?url';
-import { format } from 'prettier';
+import { formatWithCursor } from 'prettier';
 import prettierPluginEstree from 'prettier/plugins/estree';
 import prettierPluginTypeScript from 'prettier/plugins/typescript';
 import { useTheme } from '~/routes/plugin@theme';
@@ -129,12 +129,17 @@ export const CodeEditor = component$<CodeEditorProps>(
       if ((event.ctrlKey || event.metaKey) && event.key === 's') {
         // Format code with Prettier
         try {
-          model.value!.setValue(
-            await format(model.value!.getValue(), {
-              parser: 'typescript',
-              plugins: [prettierPluginEstree, prettierPluginTypeScript],
-              singleQuote: true,
-            })
+          const prettier = await formatWithCursor(model.value!.getValue(), {
+            cursorOffset: model.value!.getOffsetAt(
+              editor.value!.getPosition()!
+            ),
+            parser: 'typescript',
+            plugins: [prettierPluginEstree, prettierPluginTypeScript],
+            singleQuote: true,
+          });
+          model.value!.setValue(prettier.formatted);
+          editor.value!.setPosition(
+            model.value!.getPositionAt(prettier.cursorOffset)
           );
         } catch {
           // Ignore formatting errors
