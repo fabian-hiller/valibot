@@ -7,7 +7,7 @@ const language: Language = {
   specific: {
     bic:            (issue) => `Nieprawidłowy BIC: Otrzymano ${issue.received}`,
     bytes:          (issue) => `Nieprawidłowe bajty: Oczekiwano ${issue.expected}, ale otrzymano ${issue.received}`,
-    creditCard:     (issue) => `Nieprawidłowa karta kredytowa: Otrzymano ${issue.received}`,
+    creditCard:     (issue) => `Nieprawidłowy numer karty kredytowej: Otrzymano ${issue.received}`,
     cuid2:          (issue) => `Nieprawidłowy Cuid2: Otrzymano ${issue.received}`,
     custom:         (issue) => `Nieprawidłowe dane: Otrzymano ${issue.received}`,
     customAsync:    (issue) => `Nieprawidłowe dane: Otrzymano ${issue.received}`,
