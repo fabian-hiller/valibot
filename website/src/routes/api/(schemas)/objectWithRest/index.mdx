@@ -71,7 +71,7 @@ const MergedObjectSchema = v.objectWithRest(
     ...ObjectSchema1.entries,
     ...ObjectSchema2.entries,
   },
-  v.null_()
+  v.null()
 );
 ```
 
@@ -86,7 +86,7 @@ const PartialObjectSchema = partial(
       key1: string(),
       key2: number(),
     },
-    v.undefined_()
+    v.undefined()
   )
 );
 ```
@@ -103,7 +103,7 @@ const PickObjectSchema = v.pick(
       key2: v.number(),
       key3: v.boolean(),
     },
-    v.null_()
+    v.null()
   ),
   ['key1', 'key3']
 );
@@ -124,7 +124,7 @@ The following APIs can be combined with `objectWithRest`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
@@ -137,7 +137,7 @@ The following APIs can be combined with `objectWithRest`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -152,11 +152,11 @@ The following APIs can be combined with `objectWithRest`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

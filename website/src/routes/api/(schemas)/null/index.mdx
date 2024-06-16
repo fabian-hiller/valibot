@@ -1,7 +1,7 @@
 ---
-title: enum_
-description: Creates an enum schema.
-source: /schemas/enum/enum.ts
+title: null
+description: Creates a null schema.
+source: /schemas/null/null.ts
 contributors:
   - fabian-hiller
 ---
@@ -9,52 +9,33 @@ contributors:
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# enum\_
+# null
 
-Creates an enum schema.
+Creates a null schema.
 
 ```ts
-const Schema = enum_<TEnum, TMessage>(enum_, message);
+const Schema = null<TMessage>(message);
 ```
 
 ## Generics
 
-- `TEnum` <Property {...properties.TEnum} />
 - `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
-- `enum_` {/* prettier-ignore */}<Property {...properties.enum_} />
 - `message` <Property {...properties.message} />
 
 ### Explanation
 
-With `enum_` you can validate that the input corresponds to an enum option. If the input is invalid, you can use `message` to customize the error message.
+With `null` you can validate the data type of the input and if it is not `null`, you can use `message` to customize the error message.
 
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
 
-## Examples
-
-The following examples show how `enum_` can be used.
-
-### Direction enum
-
-Schema to validate a direction enum option.
-
-```ts
-enum Direction {
-  Left,
-  Right,
-}
-
-const DirectionSchema = v.enum_(Direction, 'Invalid direction');
-```
-
 ## Related
 
-The following APIs can be combined with `enum_`.
+The following APIs can be combined with `null`.
 
 ### Schemas
 

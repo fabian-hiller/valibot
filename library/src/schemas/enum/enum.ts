@@ -111,3 +111,5 @@ export function enum_(
     },
   };
 }
+
+export { enum_ as enum };

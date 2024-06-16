@@ -9,7 +9,7 @@
 - [boolean](/api/boolean/)
 - [custom](/api/custom/)
 - [date](/api/date/)
-- [enum_](/api/enum_/)
+- [enum](/api/enum/)
 - [instance](/api/instance/)
 - [intersect](/api/intersect/)
 - [lazy](/api/lazy/)
@@ -22,7 +22,7 @@
 - [nonNullable](/api/nonNullable/)
 - [nonNullish](/api/nonNullish/)
 - [nonOptional](/api/nonOptional/)
-- [null_](/api/null_/)
+- [null](/api/null/)
 - [nullable](/api/nullable/)
 - [nullish](/api/nullish/)
 - [number](/api/number/)
@@ -38,11 +38,11 @@
 - [symbol](/api/symbol/)
 - [tuple](/api/tuple/)
 - [tupleWithRest](/api/tupleWithRest/)
-- [undefined_](/api/undefined_/)
+- [undefined](/api/undefined/)
 - [union](/api/union/)
 - [unknown](/api/unknown/)
 - [variant](/api/variant/)
-- [void_](/api/void_/)
+- [void](/api/void/)
 
 ## Methods
 

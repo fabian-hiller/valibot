@@ -1,7 +1,7 @@
 ---
-title: null_
-description: Creates a null schema.
-source: /schemas/null/null.ts
+title: undefined
+description: Creates an undefined schema.
+source: /schemas/undefined/undefined.ts
 contributors:
   - fabian-hiller
 ---
@@ -9,12 +9,12 @@ contributors:
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# null\_
+# undefined
 
-Creates a null schema.
+Creates an undefined schema.
 
 ```ts
-const Schema = null_<TMessage>(message);
+const Schema = undefined<TMessage>(message);
 ```
 
 ## Generics
@@ -27,7 +27,7 @@ const Schema = null_<TMessage>(message);
 
 ### Explanation
 
-With `null_` you can validate the data type of the input and if it is not `null`, you can use `message` to customize the error message.
+With `undefined` you can validate the data type of the input and if it is not `undefined`, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -35,7 +35,7 @@ With `null_` you can validate the data type of the input and if it is not `null`
 
 ## Related
 
-The following APIs can be combined with `null_`.
+The following APIs can be combined with `undefined`.
 
 ### Schemas
 

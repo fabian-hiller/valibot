@@ -30,7 +30,7 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  enum_: {
+  enum: {
     type: {
       type: 'custom',
       name: 'TEnum',

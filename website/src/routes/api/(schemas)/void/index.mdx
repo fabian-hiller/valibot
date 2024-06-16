@@ -1,5 +1,5 @@
 ---
-title: void_
+title: void
 description: Creates a void schema.
 source: /schemas/void/void.ts
 contributors:
@@ -9,12 +9,12 @@ contributors:
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# void\_
+# void
 
 Creates a void schema.
 
 ```ts
-const Schema = void_<TMessage>(message);
+const Schema = void<TMessage>(message);
 ```
 
 ## Generics
@@ -27,7 +27,7 @@ const Schema = void_<TMessage>(message);
 
 ### Explanation
 
-With `void_` you can validate the data type of the input and if it is not `undefined`, you can use `message` to customize the error message.
+With `void` you can validate the data type of the input and if it is not `undefined`, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -35,7 +35,7 @@ With `void_` you can validate the data type of the input and if it is not `undef
 
 ## Related
 
-The following APIs can be combined with `void_`.
+The following APIs can be combined with `void`.
 
 ### Schemas
 

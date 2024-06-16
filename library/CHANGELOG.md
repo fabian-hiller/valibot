@@ -4,6 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add export alias with reserved keywords for functions with underscore suffix
 - Rename `_isAllowedObjectKey` to `_isValidObjectKey` and add check for inherited properties
 
 ## v0.32.0 (June 14, 2024)

@@ -45,7 +45,7 @@ const ObjectSchema = v.objectWithRest(
     key1: v.string(),
     key2: v.number(),
   },
-  v.null_()
+  v.null()
 );
 ```
 
@@ -81,7 +81,7 @@ const RecordSchema = v.record(v.string(), v.number()); // Record<string, number>
 
 ### Specific record keys
 
-Instead of <Link href="/api/string/">`string`</Link>, you can also use <Link href="/api/custom/">`custom`</Link>, <Link href="/api/enum_/">`enum_`</Link>, <Link href="/api/literal/">`literal`</Link>, <Link href="/api/picklist/">`picklist`</Link> or <Link href="/api/union/">`union`</Link> to validate the keys.
+Instead of <Link href="/api/string/">`string`</Link>, you can also use <Link href="/api/custom/">`custom`</Link>, <Link href="/api/enum/">`enum`</Link>, <Link href="/api/literal/">`literal`</Link>, <Link href="/api/picklist/">`picklist`</Link> or <Link href="/api/union/">`union`</Link> to validate the keys.
 
 ```ts
 import * as v from 'valibot';
