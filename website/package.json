@@ -65,6 +65,7 @@
     "monaco-editor-textmate": "^4.0.0",
     "monaco-textmate": "^3.0.1",
     "onigasm": "^2.2.5",
+    "prettier": "^3.3.2",
     "sucrase": "^3.35.0",
     "valibot": "workspace:^"
   },

@@ -159,6 +159,9 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
   useTask$(({ track, cleanup }) => {
     const currentInput = track(() => input.value);
     if (isBrowser) {
+      // Reset error state
+      error.value = false;
+
       // If input is present, query and set search result
       if (currentInput) {
         // Get its current value
@@ -191,7 +194,10 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
                         .PUBLIC_ALGOLIA_PUBLIC_API_KEY,
                       'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ query: currentInput }),
+                    body: JSON.stringify({
+                      query: currentInput,
+                      filters: 'NOT type:lvl1',
+                    }),
                   }
                 )
               ).json()) as AlgoliaResult;
