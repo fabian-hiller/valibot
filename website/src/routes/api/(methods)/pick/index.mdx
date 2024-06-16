@@ -17,7 +17,7 @@ import { properties } from './properties';
 Creates a modified copy of an object schema that contains only the selected entries.
 
 ```ts
-const Schema = pick<TSchema, TKeys>(schema, keys);
+const Schema = v.pick<TSchema, TKeys>(schema, keys);
 ```
 
 ## Generics
@@ -49,7 +49,7 @@ The following examples show how `pick` can be used.
 Schema that contains only the selected keys of an existing schema.
 
 ```ts
-const PickedSchema = pick(
+const PickedSchema = v.pick(
   object({
     key1: string(),
     key2: number(),

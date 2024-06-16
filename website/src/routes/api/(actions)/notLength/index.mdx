@@ -14,7 +14,10 @@ import { properties } from './properties';
 Creates a not length validation action.
 
 ```ts
-const Action = notLength<TInput, TRequirement, TMessage>(requirement, message);
+const Action = v.notLength<TInput, TRequirement, TMessage>(
+  requirement,
+  message
+);
 ```
 
 ## Generics

@@ -16,7 +16,7 @@ Creates an [ISO week](https://en.wikipedia.org/wiki/ISO_8601) validation action.
 > The regex used cannot validate the maximum number of weeks based on the year. For example, "2021W53" is valid although 2021 has only 52 weeks.
 
 ```ts
-const Action = isoWeek<TInput, TMessage>(message);
+const Action = v.isoWeek<TInput, TMessage>(message);
 ```
 
 ## Generics

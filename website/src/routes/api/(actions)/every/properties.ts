@@ -40,7 +40,7 @@ export const properties: Record<string, PropertyProps> = {
       type: 'function',
       params: [
         {
-          name: 'input',
+          name: 'item',
           type: {
             type: 'custom',
             name: 'TInput',
