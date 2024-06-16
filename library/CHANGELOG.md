@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Add export alias with reserved keywords for functions with underscore suffix
 - Rename `_isAllowedObjectKey` to `_isValidObjectKey` and add check for inherited properties
+- Fix `received` property of issue in `date` schema for invalid dates (issue #654)
 
 ## v0.32.0 (June 14, 2024)
 

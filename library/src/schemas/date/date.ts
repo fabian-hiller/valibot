@@ -77,8 +77,15 @@ export function date(
     async: false,
     message,
     _run(dataset, config) {
-      if (dataset.value instanceof Date && !isNaN(dataset.value.getTime())) {
-        dataset.typed = true;
+      if (dataset.value instanceof Date) {
+        // @ts-expect-error
+        if (!isNaN(dataset.value)) {
+          dataset.typed = true;
+        } else {
+          _addIssue(this, 'type', dataset, config, {
+            received: '"Invalid Date"',
+          });
+        }
       } else {
         _addIssue(this, 'type', dataset, config);
       }
