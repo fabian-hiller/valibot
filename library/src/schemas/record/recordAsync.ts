@@ -6,7 +6,7 @@ import type {
   ErrorMessage,
   InferIssue,
 } from '../../types/index.ts';
-import { _addIssue, _isAllowedObjectKey } from '../../utils/index.ts';
+import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
 import type {
   InferRecordInput,
   InferRecordOutput,
@@ -137,7 +137,7 @@ export function recordAsync(
             // Exclude blocked keys to prevent prototype pollutions
             // TODO: We should document that we exclude specific keys for
             // security reasons.
-            .filter(([key]) => _isAllowedObjectKey(key))
+            .filter(([key]) => _isValidObjectKey(input, key))
             .map(([entryKey, entryValue]) =>
               Promise.all([
                 entryKey,
