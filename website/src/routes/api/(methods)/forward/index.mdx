@@ -39,13 +39,18 @@ const Action = v.forward<TInput, TIssue>(action, pathList);
 
 The following examples show how `forward` can be used.
 
-### Password schema
+### Register schema
 
 Schema that ensures that the two passwords match.
 
 ```ts
-const PasswordSchema = v.pipe(
+const RegisterSchema = v.pipe(
   v.object({
+    email: v.pipe(
+      v.string(),
+      v.nonEmpty('Please enter your email.'),
+      v.email('The email address is badly formatted.')
+    ),
     password1: v.pipe(
       v.string(),
       v.nonEmpty('Please enter your password.'),
@@ -54,7 +59,8 @@ const PasswordSchema = v.pipe(
     password2: v.string(),
   }),
   v.forward(
-    v.check(
+    v.partialCheck(
+      [['password1'], ['password2']],
       (input) => input.password1 === input.password2,
       'The two passwords do not match.'
     ),
