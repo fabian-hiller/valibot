@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add export alias with reserved keywords for functions with underscore suffix
+- Add `partialCheck` and `partialCheckAsync` action (issue #145, #260)
 - Rename `every` and `some` action to `everyItem` and `someItem`
 - Rename `_isAllowedObjectKey` to `_isValidObjectKey` and add check for inherited properties
 - Fix `received` property of issue in `date` schema for invalid dates (issue #654)

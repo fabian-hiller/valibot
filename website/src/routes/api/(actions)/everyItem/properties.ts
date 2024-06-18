@@ -5,7 +5,8 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'array',
-      item: 'any',
+      modifier: 'readonly',
+      item: 'unknown',
     },
   },
   TMessage: {

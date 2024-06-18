@@ -2,8 +2,8 @@ import type {
   BaseIssue,
   BaseValidation,
   IssuePathItem,
+  PathKeys,
 } from '../../types/index.ts';
-import type { PathKeys } from './types.ts';
 
 // TODO: We should try to find a better way to type this function without
 // breaking the type inference, as the current implementation loses some type
@@ -18,7 +18,7 @@ import type { PathKeys } from './types.ts';
  * @returns The modified action.
  */
 export function forward<
-  TInput extends Record<string, unknown> | unknown[],
+  TInput extends Record<string, unknown> | readonly unknown[],
   TIssue extends BaseIssue<unknown>,
 >(
   action: BaseValidation<TInput, TInput, TIssue>,

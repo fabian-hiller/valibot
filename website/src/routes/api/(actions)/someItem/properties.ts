@@ -5,6 +5,7 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'array',
+      modifier: 'readonly',
       item: 'unknown',
     },
   },

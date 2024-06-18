@@ -47,6 +47,7 @@ export * from './notLength/index.ts';
 export * from './notSize/index.ts';
 export * from './notValue/index.ts';
 export * from './octal/index.ts';
+export * from './partialCheck/index.ts';
 export * from './rawCheck/index.ts';
 export * from './rawTransform/index.ts';
 export * from './readonly/index.ts';

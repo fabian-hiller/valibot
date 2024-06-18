@@ -18,7 +18,7 @@ export interface TuplePathItem {
   /**
    * The path item input.
    */
-  readonly input: unknown[];
+  readonly input: MaybeReadonly<unknown[]>;
   /**
    * The path item key.
    */

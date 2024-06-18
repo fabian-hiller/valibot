@@ -1,4 +1,4 @@
-import type { BaseIssue } from '../../types/index.ts';
+import type { BaseIssue, MaybeReadonly } from '../../types/index.ts';
 
 /**
  * Array issue type.
@@ -33,7 +33,7 @@ export interface ArrayPathItem {
   /**
    * The path item input.
    */
-  readonly input: unknown[];
+  readonly input: MaybeReadonly<unknown[]>;
   /**
    * The path item key.
    */

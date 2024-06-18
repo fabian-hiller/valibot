@@ -22,7 +22,6 @@ import type {
   InferObjectInput,
   InferObjectOutput,
   InferOutput,
-  MaybeReadonly,
   NoPipe,
   ObjectEntriesAsync,
   ObjectKeys,
@@ -54,9 +53,9 @@ type Schema = NoPipe<
  */
 type PartialEntries<
   TEntries extends ObjectEntriesAsync,
-  TKeys extends MaybeReadonly<(keyof TEntries)[]> | undefined,
+  TKeys extends readonly (keyof TEntries)[] | undefined,
 > = {
-  [TKey in keyof TEntries]: TKeys extends MaybeReadonly<(keyof TEntries)[]>
+  [TKey in keyof TEntries]: TKeys extends readonly (keyof TEntries)[]
     ? TKey extends TKeys[number]
       ? OptionalSchemaAsync<TEntries[TKey], never>
       : TEntries[TKey]

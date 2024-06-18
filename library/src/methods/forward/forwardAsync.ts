@@ -3,8 +3,8 @@ import type {
   BaseValidation,
   BaseValidationAsync,
   IssuePathItem,
+  PathKeys,
 } from '../../types/index.ts';
-import type { PathKeys } from './types.ts';
 
 // TODO: We should try to find a better way to type this function without
 // breaking the type inference, as the current implementation loses some type

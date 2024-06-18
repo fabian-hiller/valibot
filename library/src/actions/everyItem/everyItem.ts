@@ -9,7 +9,7 @@ import type { ArrayRequirement } from '../types.ts';
 /**
  * Every item issue type.
  */
-export interface EveryItemIssue<TInput extends unknown[]>
+export interface EveryItemIssue<TInput extends readonly unknown[]>
   extends BaseIssue<TInput> {
   /**
    * The issue kind.
@@ -33,7 +33,7 @@ export interface EveryItemIssue<TInput extends unknown[]>
  * Every item action type.
  */
 export interface EveryItemAction<
-  TInput extends unknown[],
+  TInput extends readonly unknown[],
   TMessage extends ErrorMessage<EveryItemIssue<TInput>> | undefined,
 > extends BaseValidation<TInput, TInput, EveryItemIssue<TInput>> {
   /**
@@ -65,7 +65,7 @@ export interface EveryItemAction<
  *
  * @returns An every item action.
  */
-export function everyItem<TInput extends unknown[]>(
+export function everyItem<TInput extends readonly unknown[]>(
   requirement: ArrayRequirement<TInput>
 ): EveryItemAction<TInput, undefined>;
 
@@ -78,7 +78,7 @@ export function everyItem<TInput extends unknown[]>(
  * @returns An every item action.
  */
 export function everyItem<
-  TInput extends unknown[],
+  TInput extends readonly unknown[],
   const TMessage extends ErrorMessage<EveryItemIssue<TInput>> | undefined,
 >(
   requirement: ArrayRequirement<TInput>,
