@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.33.0 (June 18, 2024)
 
 - Add export alias with reserved keywords for functions with underscore suffix
 - Add `partialCheck` and `partialCheckAsync` action (issue #145, #260)
