@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Add export alias with reserved keywords for functions with underscore suffix
 - Add `partialCheck` and `partialCheckAsync` action (issue #145, #260)
+- Add `checkItems`, `filterItems`, `findItem`, `mapItems`, `reduceItems` and `sortItem` action (issue #595)
 - Rename `every` and `some` action to `everyItem` and `someItem`
 - Rename `_isAllowedObjectKey` to `_isValidObjectKey` and add check for inherited properties
 - Remove `RecordPathItem` and `TuplePathItem` type and refactor code
