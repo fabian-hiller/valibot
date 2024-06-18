@@ -34,32 +34,6 @@ export interface RecordIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Record path item type.
- */
-export interface RecordPathItem {
-  /**
-   * The path item type.
-   */
-  readonly type: 'record';
-  /**
-   * The path item origin.
-   */
-  readonly origin: 'key' | 'value';
-  /**
-   * The path item input.
-   */
-  readonly input: Record<string, unknown>;
-  /**
-   * The path item key.
-   */
-  readonly key: string;
-  /**
-   * The path item value.
-   */
-  readonly value: unknown;
-}
-
-/**
  * Is literal type.
  */
 type IsLiteral<TKey extends string | number | symbol> = string extends TKey

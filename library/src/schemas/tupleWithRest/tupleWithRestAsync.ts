@@ -1,4 +1,5 @@
 import type {
+  ArrayPathItem,
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
@@ -11,7 +12,6 @@ import type {
   InferTupleIssue,
   InferTupleOutput,
   TupleItemsAsync,
-  TuplePathItem,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { TupleWithRestIssue } from './types.ts';
@@ -157,8 +157,8 @@ export function tupleWithRestAsync(
           // If there are issues, capture them
           if (itemDataset.issues) {
             // Create tuple path item
-            const pathItem: TuplePathItem = {
-              type: 'tuple',
+            const pathItem: ArrayPathItem = {
+              type: 'array',
               origin: 'value',
               input,
               key,
@@ -204,8 +204,8 @@ export function tupleWithRestAsync(
             // If there are issues, capture them
             if (itemDataset.issues) {
               // Create tuple path item
-              const pathItem: TuplePathItem = {
-                type: 'tuple',
+              const pathItem: ArrayPathItem = {
+                type: 'array',
                 origin: 'value',
                 input,
                 key,

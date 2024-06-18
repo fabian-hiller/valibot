@@ -4,32 +4,6 @@ import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type { MaybeReadonly } from './utils.ts';
 
 /**
- * Tuple path item type.
- */
-export interface TuplePathItem {
-  /**
-   * The path item type.
-   */
-  readonly type: 'tuple';
-  /**
-   * The path item origin.
-   */
-  readonly origin: 'value';
-  /**
-   * The path item input.
-   */
-  readonly input: MaybeReadonly<unknown[]>;
-  /**
-   * The path item key.
-   */
-  readonly key: number;
-  /**
-   * The path item value.
-   */
-  readonly value: unknown;
-}
-
-/**
  * Tuple items type.
  */
 export type TupleItems = MaybeReadonly<

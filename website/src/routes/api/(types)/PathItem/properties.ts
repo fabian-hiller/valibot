@@ -22,18 +22,8 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'RecordPathItem',
-          href: '../RecordPathItem/',
-        },
-        {
-          type: 'custom',
           name: 'SetPathItem',
           href: '../SetPathItem/',
-        },
-        {
-          type: 'custom',
-          name: 'TuplePathItem',
-          href: '../TuplePathItem/',
         },
         {
           type: 'custom',
