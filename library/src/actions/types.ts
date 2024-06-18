@@ -1,4 +1,13 @@
 /**
+ * Array requirement type.
+ */
+export type ArrayRequirement<TInput extends unknown[]> = (
+  item: TInput[number],
+  index: number,
+  array: TInput
+) => boolean;
+
+/**
  * Content input type.
  */
 export type ContentInput = string | unknown[];

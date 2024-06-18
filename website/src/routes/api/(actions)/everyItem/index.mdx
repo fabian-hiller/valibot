@@ -1,7 +1,7 @@
 ---
-title: every
-description: Creates an every validation action.
-source: /actions/every/every.ts
+title: everyItem
+description: Creates an every item validation action.
+source: /actions/everyItem/everyItem.ts
 contributors:
   - fabian-hiller
 ---
@@ -9,12 +9,12 @@ contributors:
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# every
+# everyItem
 
-Creates an every validation action.
+Creates an every item validation action.
 
 ```ts
-const Action = v.every<TInput, TMessage>(requirement, message);
+const Action = v.everyItem<TInput, TMessage>(requirement, message);
 ```
 
 ## Generics
@@ -29,7 +29,7 @@ const Action = v.every<TInput, TMessage>(requirement, message);
 
 ### Explanation
 
-With `every` you can freely validate the items of an array and return `true` if they are valid or `false` otherwise. If not every item matches your `requirement`, you can use `message` to customize the error message.
+With `everyItem` you can freely validate the items of an array and return `true` if they are valid or `false` otherwise. If not every item matches your `requirement`, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -37,7 +37,7 @@ With `every` you can freely validate the items of an array and return `true` if 
 
 ## Examples
 
-The following examples show how `every` can be used.
+The following examples show how `everyItem` can be used.
 
 ### Sorted array schema
 
@@ -46,8 +46,8 @@ Schema to validate that an array is sorted.
 ```ts
 const SortedArraySchema = v.pipe(
   v.array(v.number()),
-  v.every(
-    (value, index, array) => index === 0 || value >= array[index - 1],
+  v.everyItem(
+    (item, index, array) => index === 0 || item >= array[index - 1],
     'The numbers must be sorted in ascending order.'
   )
 );
@@ -55,7 +55,7 @@ const SortedArraySchema = v.pipe(
 
 ## Related
 
-The following APIs can be combined with `every`.
+The following APIs can be combined with `everyItem`.
 
 ### Schemas
 

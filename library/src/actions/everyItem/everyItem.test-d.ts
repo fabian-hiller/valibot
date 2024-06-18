@@ -1,17 +1,21 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { every, type EveryAction, type EveryIssue } from './every.ts';
+import {
+  everyItem,
+  type EveryItemAction,
+  type EveryItemIssue,
+} from './everyItem.ts';
 
-describe('every', () => {
+describe('everyItem', () => {
   describe('should return action object', () => {
     test('with undefined message', () => {
-      type Action = EveryAction<string[], undefined>;
+      type Action = EveryItemAction<string[], undefined>;
       expectTypeOf(
-        every<string[]>((element: string) => Boolean(element))
+        everyItem<string[]>((item: string) => Boolean(item))
       ).toEqualTypeOf<Action>();
       expectTypeOf(
-        every<string[], undefined>(
-          (element: string) => Boolean(element),
+        everyItem<string[], undefined>(
+          (item: string) => Boolean(item),
           undefined
         )
       ).toEqualTypeOf<Action>();
@@ -19,26 +23,26 @@ describe('every', () => {
 
     test('with string message', () => {
       expectTypeOf(
-        every<string[], 'message'>(
-          (element: string) => Boolean(element),
+        everyItem<string[], 'message'>(
+          (item: string) => Boolean(item),
           'message'
         )
-      ).toEqualTypeOf<EveryAction<string[], 'message'>>();
+      ).toEqualTypeOf<EveryItemAction<string[], 'message'>>();
     });
 
     test('with function message', () => {
       expectTypeOf(
-        every<string[], () => string>(
-          (element: string) => Boolean(element),
+        everyItem<string[], () => string>(
+          (item: string) => Boolean(item),
           () => 'message'
         )
-      ).toEqualTypeOf<EveryAction<string[], () => string>>();
+      ).toEqualTypeOf<EveryItemAction<string[], () => string>>();
     });
   });
 
   describe('should infer correct types', () => {
     type Input = ['foo', 123, true];
-    type Action = EveryAction<Input, undefined>;
+    type Action = EveryItemAction<Input, undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
@@ -49,7 +53,7 @@ describe('every', () => {
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<EveryIssue<Input>>();
+      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<EveryItemIssue<Input>>();
     });
   });
 });

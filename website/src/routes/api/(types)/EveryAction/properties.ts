@@ -65,15 +65,15 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'every',
+      value: 'everyItem',
     },
   },
   reference: {
     type: {
       type: 'custom',
       modifier: 'typeof',
-      name: 'every',
-      href: '../every/',
+      name: 'everyItem',
+      href: '../everyItem/',
     },
   },
   expects: {

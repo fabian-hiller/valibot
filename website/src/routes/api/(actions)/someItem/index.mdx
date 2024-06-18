@@ -1,7 +1,7 @@
 ---
-title: some
-description: Creates a some validation action.
-source: /actions/some/some.ts
+title: someItem
+description: Creates a some item validation action.
+source: /actions/someItem/someItem.ts
 contributors:
   - fabian-hiller
 ---
@@ -9,12 +9,12 @@ contributors:
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# some
+# someItem
 
-Creates a some validation action.
+Creates a some item validation action.
 
 ```ts
-const Action = v.some<TInput, TMessage>(requirement, message);
+const Action = v.someItem<TInput, TMessage>(requirement, message);
 ```
 
 ## Generics
@@ -29,7 +29,7 @@ const Action = v.some<TInput, TMessage>(requirement, message);
 
 ### Explanation
 
-With `some` you can freely validate the items of an array and return `true` if they are valid or `false` otherwise. If not some item matches your `requirement`, you can use `message` to customize the error message.
+With `someItem` you can freely validate the items of an array and return `true` if they are valid or `false` otherwise. If not some item matches your `requirement`, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -37,7 +37,7 @@ With `some` you can freely validate the items of an array and return `true` if t
 
 ## Examples
 
-The following examples show how `some` can be used.
+The following examples show how `someItem` can be used.
 
 ### Unsorted array schema
 
@@ -45,9 +45,9 @@ Schema to validate that an array is not sorted.
 
 ```ts
 const UnsortedArraySchema = v.pipe(
-  v.array(number()),
-  v.some(
-    (value, index, array) => array.length === 1 || value < array[index - 1],
+  v.array(v.number()),
+  v.someItem(
+    (item, index, array) => array.length === 1 || item < array[index - 1],
     'The numbers must not be sorted in ascending order.'
   )
 );
@@ -55,7 +55,7 @@ const UnsortedArraySchema = v.pipe(
 
 ## Related
 
-The following APIs can be combined with `some`.
+The following APIs can be combined with `someItem`.
 
 ### Schemas
 
