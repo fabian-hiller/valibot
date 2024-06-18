@@ -123,6 +123,8 @@
 - [notValue](/api/notValue/)
 - [octal](/api/octal/)
 - [partialCheck](/api/partialCheck/)
+- [rawCheck](/api/rawCheck/)
+- [rawTransform](/api/rawTransform/)
 - [readonly](/api/readonly/)
 - [reduceItems](/api/reduceItems/)
 - [regex](/api/regex/)

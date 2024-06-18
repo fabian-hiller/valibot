@@ -1,6 +1,6 @@
 export * from './bic/index.ts';
-export * from './bytes/index.ts';
 export * from './brand/index.ts';
+export * from './bytes/index.ts';
 export * from './check/index.ts';
 export * from './checkItems/index.ts';
 export * from './creditCard/index.ts';
