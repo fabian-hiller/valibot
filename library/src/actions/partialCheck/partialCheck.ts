@@ -5,29 +5,17 @@ import type {
   PathKeys,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
-import type { PartialCheckIssue } from './types.ts';
+import type { PartialCheckIssue, PartialInput } from './types.ts';
 import { _isPartiallyTyped } from './utils/index.ts';
-
-/**
- * Input type.
- */
-type Input = Record<string, unknown> | readonly unknown[];
 
 /**
  * Partial check action type.
  */
-// @ts-ignore
 export interface PartialCheckAction<
-  TInput extends Input,
-  TPathList extends readonly PathKeys<TInput>[],
-  TMessage extends
-    | ErrorMessage<PartialCheckIssue<DeepPickN<TInput, TPathList>>>
-    | undefined,
-> extends BaseValidation<
-    TInput,
-    TInput,
-    PartialCheckIssue<DeepPickN<TInput, TPathList>>
-  > {
+  TInput extends PartialInput,
+  TSelection extends PartialInput,
+  TMessage extends ErrorMessage<PartialCheckIssue<TSelection>> | undefined,
+> extends BaseValidation<TInput, TInput, PartialCheckIssue<TSelection>> {
   /**
    * The action type.
    */
@@ -43,7 +31,7 @@ export interface PartialCheckAction<
   /**
    * The validation function.
    */
-  readonly requirement: (input: DeepPickN<TInput, TPathList>) => boolean;
+  readonly requirement: (input: TSelection) => boolean;
   /**
    * The error message.
    */
@@ -59,12 +47,13 @@ export interface PartialCheckAction<
  * @returns A partial check action.
  */
 export function partialCheck<
-  TInput extends Input,
+  TInput extends PartialInput,
   const TPathList extends readonly PathKeys<TInput>[],
+  const TSelection extends DeepPickN<TInput, TPathList>,
 >(
   pathList: TPathList,
-  requirement: (input: DeepPickN<TInput, TPathList>) => boolean
-): PartialCheckAction<TInput, TPathList, undefined>;
+  requirement: (input: TSelection) => boolean
+): PartialCheckAction<TInput, TSelection, undefined>;
 
 /**
  * Creates a partial check validation action.
@@ -76,25 +65,26 @@ export function partialCheck<
  * @returns A partial check action.
  */
 export function partialCheck<
-  TInput extends Input,
+  TInput extends PartialInput,
   const TPathList extends readonly PathKeys<TInput>[],
+  const TSelection extends DeepPickN<TInput, TPathList>,
   const TMessage extends
-    | ErrorMessage<PartialCheckIssue<DeepPickN<TInput, TPathList>>>
+    | ErrorMessage<PartialCheckIssue<TSelection>>
     | undefined,
 >(
   pathList: TPathList,
-  requirement: (input: DeepPickN<TInput, TPathList>) => boolean,
+  requirement: (input: TSelection) => boolean,
   message: TMessage
-): PartialCheckAction<TInput, TPathList, TMessage>;
+): PartialCheckAction<TInput, TSelection, TMessage>;
 
 export function partialCheck(
-  pathList: ([string] | [number])[],
-  requirement: (input: Input) => boolean,
-  message?: ErrorMessage<PartialCheckIssue<never>>
+  pathList: PathKeys<PartialInput>[],
+  requirement: (input: PartialInput) => boolean,
+  message?: ErrorMessage<PartialCheckIssue<PartialInput>>
 ): PartialCheckAction<
-  Input,
-  ([string] | [number])[],
-  ErrorMessage<PartialCheckIssue<never>> | undefined
+  PartialInput,
+  PartialInput,
+  ErrorMessage<PartialCheckIssue<PartialInput>> | undefined
 > {
   return {
     kind: 'validation',

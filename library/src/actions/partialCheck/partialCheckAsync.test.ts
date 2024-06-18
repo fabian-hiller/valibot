@@ -22,10 +22,11 @@ describe('partialCheckAsync', () => {
     type Input = { nested: { key: string } };
     const pathList = [['nested', 'key']] as const;
     type PathList = typeof pathList;
-    const requirement = async (input: DeepPickN<Input, PathList>) =>
+    type Selection = DeepPickN<Input, PathList>;
+    const requirement = async (input: Selection) =>
       input.nested.key.includes('foo');
     const baseAction: Omit<
-      PartialCheckActionAsync<Input, PathList, never>,
+      PartialCheckActionAsync<Input, Selection, never>,
       'message'
     > = {
       kind: 'validation',
@@ -38,15 +39,15 @@ describe('partialCheckAsync', () => {
     };
 
     test('with undefined message', () => {
-      const action: PartialCheckActionAsync<Input, PathList, undefined> = {
+      const action: PartialCheckActionAsync<Input, Selection, undefined> = {
         ...baseAction,
         message: undefined,
       };
       expect(
-        partialCheckAsync<Input, PathList>(pathList, requirement)
+        partialCheckAsync<Input, PathList, Selection>(pathList, requirement)
       ).toStrictEqual(action);
       expect(
-        partialCheckAsync<Input, PathList, undefined>(
+        partialCheckAsync<Input, PathList, Selection, undefined>(
           pathList,
           requirement,
           undefined
@@ -57,7 +58,7 @@ describe('partialCheckAsync', () => {
     test('with string message', () => {
       const message = 'message';
       expect(
-        partialCheckAsync<Input, PathList, 'message'>(
+        partialCheckAsync<Input, PathList, Selection, 'message'>(
           pathList,
           requirement,
           message
@@ -65,13 +66,13 @@ describe('partialCheckAsync', () => {
       ).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies PartialCheckActionAsync<Input, PathList, 'message'>);
+      } satisfies PartialCheckActionAsync<Input, Selection, 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
       expect(
-        partialCheckAsync<Input, PathList, typeof message>(
+        partialCheckAsync<Input, PathList, Selection, typeof message>(
           pathList,
           requirement,
           message
@@ -79,7 +80,7 @@ describe('partialCheckAsync', () => {
       ).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies PartialCheckActionAsync<Input, PathList, typeof message>);
+      } satisfies PartialCheckActionAsync<Input, Selection, typeof message>);
     });
   });
 
@@ -94,9 +95,10 @@ describe('partialCheckAsync', () => {
     ['tuple', 1, 'key'],
   ] as const;
   type PathList = typeof pathList;
-  const requirement = async (input: DeepPickN<Input, PathList>) =>
+  type Selection = DeepPickN<Input, PathList>;
+  const requirement = async (input: Selection) =>
     input.nested.key === input.tuple[1].key;
-  const action = partialCheckAsync<Input, PathList, 'message'>(
+  const action = partialCheckAsync<Input, PathList, Selection, 'message'>(
     [
       ['nested', 'key'],
       ['tuple', 1, 'key'],
@@ -245,10 +247,7 @@ describe('partialCheckAsync', () => {
             requirement,
           },
         ],
-      } satisfies TypedDataset<
-        Input,
-        PartialCheckIssue<DeepPickN<Input, PathList>>
-      >);
+      } satisfies TypedDataset<Input, PartialCheckIssue<Selection>>);
     });
 
     test('if there are no schema issues', async () => {
@@ -303,19 +302,16 @@ describe('partialCheckAsync', () => {
         ],
       } satisfies TypedDataset<
         Input,
-        | MinLengthIssue<string, 5>
-        | PartialCheckIssue<DeepPickN<Input, PathList>>
+        MinLengthIssue<string, 5> | PartialCheckIssue<Selection>
       >);
     });
 
     test('if only unselected paths are untyped', async () => {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-      type Input = {
+      const input: {
         nested: { key: string };
         tuple: [number, { key: string }, null];
         other: null;
-      };
-      const input: Input = {
+      } = {
         nested: { key: 'foo' },
         tuple: [123, { key: 'baz' }, null],
         other: null,
@@ -375,16 +371,14 @@ describe('partialCheckAsync', () => {
             ...baseInfo,
             kind: 'validation',
             type: 'partial_check',
-            input: input as DeepPickN<Input, PathList>,
+            input: input,
             expected: null,
             received: 'Object',
             requirement,
           },
         ],
       } satisfies UntypedDataset<
-        | NumberIssue
-        | StringIssue
-        | PartialCheckIssue<DeepPickN<Input, PathList>>
+        NumberIssue | StringIssue | PartialCheckIssue<Selection>
       >);
     });
   });

@@ -16,17 +16,18 @@ describe('partialCheckAsync', () => {
   type Input = { nested: { key: string } };
   const pathList = [['nested', 'key']] as const;
   type PathList = typeof pathList;
-  const requirement = (input: DeepPickN<Input, PathList>) =>
+  type Selection = DeepPickN<Input, PathList>;
+  const requirement = async (input: Selection) =>
     input.nested.key.includes('foo');
 
   describe('should return action object', () => {
     test('with undefined message', () => {
-      type Action = PartialCheckActionAsync<Input, PathList, undefined>;
+      type Action = PartialCheckActionAsync<Input, Selection, undefined>;
       expectTypeOf(
-        partialCheckAsync<Input, PathList>(pathList, requirement)
+        partialCheckAsync<Input, PathList, Selection>(pathList, requirement)
       ).toEqualTypeOf<Action>();
       expectTypeOf(
-        partialCheckAsync<Input, PathList, undefined>(
+        partialCheckAsync<Input, PathList, Selection, undefined>(
           pathList,
           requirement,
           undefined
@@ -36,30 +37,31 @@ describe('partialCheckAsync', () => {
 
     test('with string message', () => {
       expectTypeOf(
-        partialCheckAsync<Input, PathList, 'message'>(
+        partialCheckAsync<Input, PathList, Selection, 'message'>(
           pathList,
           requirement,
           'message'
         )
-      ).toEqualTypeOf<PartialCheckActionAsync<Input, PathList, 'message'>>();
+      ).toEqualTypeOf<PartialCheckActionAsync<Input, Selection, 'message'>>();
     });
 
     test('with function message', () => {
       expectTypeOf(
-        partialCheckAsync<Input, PathList, () => string>(
+        partialCheckAsync<Input, PathList, Selection, () => string>(
           pathList,
           requirement,
           () => 'message'
         )
-      ).toEqualTypeOf<PartialCheckActionAsync<Input, PathList, () => string>>();
+      ).toEqualTypeOf<
+        PartialCheckActionAsync<Input, Selection, () => string>
+      >();
     });
   });
 
   describe('should infer correct types', () => {
-    type Action = PartialCheckActionAsync<Input, PathList, undefined>;
+    type Action = PartialCheckActionAsync<Input, Selection, undefined>;
 
     test('of input', () => {
-      // @ts-ignore
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
     });
 

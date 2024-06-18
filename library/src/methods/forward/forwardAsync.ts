@@ -19,7 +19,7 @@ import type {
  * @returns The modified action.
  */
 export function forwardAsync<
-  TInput extends Record<string, unknown> | unknown[],
+  TInput extends Record<string, unknown> | ArrayLike<unknown>,
   TIssue extends BaseIssue<unknown>,
 >(
   action:

@@ -19,10 +19,10 @@ describe('partialCheck', () => {
     type Input = { nested: { key: string } };
     const pathList = [['nested', 'key']] as const;
     type PathList = typeof pathList;
-    const requirement = (input: DeepPickN<Input, PathList>) =>
-      input.nested.key.includes('foo');
+    type Selection = DeepPickN<Input, PathList>;
+    const requirement = (input: Selection) => input.nested.key.includes('foo');
     const baseAction: Omit<
-      PartialCheckAction<Input, PathList, never>,
+      PartialCheckAction<Input, Selection, never>,
       'message'
     > = {
       kind: 'validation',
@@ -35,15 +35,15 @@ describe('partialCheck', () => {
     };
 
     test('with undefined message', () => {
-      const action: PartialCheckAction<Input, PathList, undefined> = {
+      const action: PartialCheckAction<Input, Selection, undefined> = {
         ...baseAction,
         message: undefined,
       };
       expect(
-        partialCheck<Input, PathList>(pathList, requirement)
+        partialCheck<Input, PathList, Selection>(pathList, requirement)
       ).toStrictEqual(action);
       expect(
-        partialCheck<Input, PathList, undefined>(
+        partialCheck<Input, PathList, Selection, undefined>(
           pathList,
           requirement,
           undefined
@@ -54,17 +54,7 @@ describe('partialCheck', () => {
     test('with string message', () => {
       const message = 'message';
       expect(
-        partialCheck<Input, PathList, 'message'>(pathList, requirement, message)
-      ).toStrictEqual({
-        ...baseAction,
-        message,
-      } satisfies PartialCheckAction<Input, PathList, 'message'>);
-    });
-
-    test('with function message', () => {
-      const message = () => 'message';
-      expect(
-        partialCheck<Input, PathList, typeof message>(
+        partialCheck<Input, PathList, Selection, 'message'>(
           pathList,
           requirement,
           message
@@ -72,7 +62,21 @@ describe('partialCheck', () => {
       ).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies PartialCheckAction<Input, PathList, typeof message>);
+      } satisfies PartialCheckAction<Input, Selection, 'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(
+        partialCheck<Input, PathList, Selection, typeof message>(
+          pathList,
+          requirement,
+          message
+        )
+      ).toStrictEqual({
+        ...baseAction,
+        message,
+      } satisfies PartialCheckAction<Input, Selection, typeof message>);
     });
   });
 
@@ -87,9 +91,10 @@ describe('partialCheck', () => {
     ['tuple', 1, 'key'],
   ] as const;
   type PathList = typeof pathList;
-  const requirement = (input: DeepPickN<Input, PathList>) =>
+  type Selection = DeepPickN<Input, PathList>;
+  const requirement = (input: Selection) =>
     input.nested.key === input.tuple[1].key;
-  const action = partialCheck<Input, PathList, 'message'>(
+  const action = partialCheck<Input, PathList, Selection, 'message'>(
     [
       ['nested', 'key'],
       ['tuple', 1, 'key'],
@@ -238,10 +243,7 @@ describe('partialCheck', () => {
             requirement,
           },
         ],
-      } satisfies TypedDataset<
-        Input,
-        PartialCheckIssue<DeepPickN<Input, PathList>>
-      >);
+      } satisfies TypedDataset<Input, PartialCheckIssue<Selection>>);
     });
 
     test('if there are no schema issues', () => {
@@ -296,19 +298,16 @@ describe('partialCheck', () => {
         ],
       } satisfies TypedDataset<
         Input,
-        | MinLengthIssue<string, 5>
-        | PartialCheckIssue<DeepPickN<Input, PathList>>
+        MinLengthIssue<string, 5> | PartialCheckIssue<Selection>
       >);
     });
 
     test('if only unselected paths are untyped', () => {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-      type Input = {
+      const input: {
         nested: { key: string };
         tuple: [number, { key: string }, null];
         other: null;
-      };
-      const input: Input = {
+      } = {
         nested: { key: 'foo' },
         tuple: [123, { key: 'baz' }, null],
         other: null,
@@ -368,16 +367,14 @@ describe('partialCheck', () => {
             ...baseInfo,
             kind: 'validation',
             type: 'partial_check',
-            input: input as DeepPickN<Input, PathList>,
+            input: input,
             expected: null,
             received: 'Object',
             requirement,
           },
         ],
       } satisfies UntypedDataset<
-        | NumberIssue
-        | StringIssue
-        | PartialCheckIssue<DeepPickN<Input, PathList>>
+        NumberIssue | StringIssue | PartialCheckIssue<Selection>
       >);
     });
   });

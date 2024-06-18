@@ -6,29 +6,17 @@ import type {
   PathKeys,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
-import type { PartialCheckIssue } from './types.ts';
+import type { PartialCheckIssue, PartialInput } from './types.ts';
 import { _isPartiallyTyped } from './utils/index.ts';
-
-/**
- * Input type.
- */
-type Input = Record<string, unknown> | readonly unknown[];
 
 /**
  * Partial check action async type.
  */
-// @ts-ignore
 export interface PartialCheckActionAsync<
-  TInput extends Input,
-  TPathList extends readonly PathKeys<TInput>[],
-  TMessage extends
-    | ErrorMessage<PartialCheckIssue<DeepPickN<TInput, TPathList>>>
-    | undefined,
-> extends BaseValidationAsync<
-    TInput,
-    TInput,
-    PartialCheckIssue<DeepPickN<TInput, TPathList>>
-  > {
+  TInput extends PartialInput,
+  TSelection extends PartialInput,
+  TMessage extends ErrorMessage<PartialCheckIssue<TSelection>> | undefined,
+> extends BaseValidationAsync<TInput, TInput, PartialCheckIssue<TSelection>> {
   /**
    * The action type.
    */
@@ -44,9 +32,7 @@ export interface PartialCheckActionAsync<
   /**
    * The validation function.
    */
-  readonly requirement: (
-    input: DeepPickN<TInput, TPathList>
-  ) => MaybePromise<boolean>;
+  readonly requirement: (input: TSelection) => MaybePromise<boolean>;
   /**
    * The error message.
    */
@@ -62,12 +48,13 @@ export interface PartialCheckActionAsync<
  * @returns A partial check action.
  */
 export function partialCheckAsync<
-  TInput extends Input,
+  TInput extends PartialInput,
   const TPathList extends readonly PathKeys<TInput>[],
+  const TSelection extends DeepPickN<TInput, TPathList>,
 >(
   pathList: TPathList,
-  requirement: (input: DeepPickN<TInput, TPathList>) => MaybePromise<boolean>
-): PartialCheckActionAsync<TInput, TPathList, undefined>;
+  requirement: (input: TSelection) => MaybePromise<boolean>
+): PartialCheckActionAsync<TInput, TSelection, undefined>;
 
 /**
  * Creates a partial check validation action.
@@ -79,25 +66,26 @@ export function partialCheckAsync<
  * @returns A partial check action.
  */
 export function partialCheckAsync<
-  TInput extends Input,
+  TInput extends PartialInput,
   const TPathList extends readonly PathKeys<TInput>[],
+  const TSelection extends DeepPickN<TInput, TPathList>,
   const TMessage extends
-    | ErrorMessage<PartialCheckIssue<DeepPickN<TInput, TPathList>>>
+    | ErrorMessage<PartialCheckIssue<TSelection>>
     | undefined,
 >(
   pathList: TPathList,
-  requirement: (input: DeepPickN<TInput, TPathList>) => MaybePromise<boolean>,
+  requirement: (input: TSelection) => MaybePromise<boolean>,
   message: TMessage
-): PartialCheckActionAsync<TInput, TPathList, TMessage>;
+): PartialCheckActionAsync<TInput, TSelection, TMessage>;
 
 export function partialCheckAsync(
-  pathList: ([string] | [number])[],
-  requirement: (input: Input) => MaybePromise<boolean>,
-  message?: ErrorMessage<PartialCheckIssue<never>>
+  pathList: PathKeys<PartialInput>[],
+  requirement: (input: PartialInput) => MaybePromise<boolean>,
+  message?: ErrorMessage<PartialCheckIssue<PartialInput>>
 ): PartialCheckActionAsync<
-  Input,
-  ([string] | [number])[],
-  ErrorMessage<PartialCheckIssue<never>> | undefined
+  PartialInput,
+  PartialInput,
+  ErrorMessage<PartialCheckIssue<PartialInput>> | undefined
 > {
   return {
     kind: 'validation',

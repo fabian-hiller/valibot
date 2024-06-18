@@ -2,10 +2,14 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Fix types of `partialCheck` and `partialCheckAsync` action
+
 ## v0.33.0 (June 18, 2024)
 
 - Add export alias with reserved keywords for functions with underscore suffix
-- Add `partialCheck` and `partialCheckAsync` action (issue #145, #260)
+- Add `partialCheck` and `partialCheckAsync` action (issue #76, #145, #260)
 - Add `checkItems`, `filterItems`, `findItem`, `mapItems`, `reduceItems` and `sortItem` action (issue #595)
 - Rename `every` and `some` action to `everyItem` and `someItem`
 - Rename `_isAllowedObjectKey` to `_isValidObjectKey` and add check for inherited properties

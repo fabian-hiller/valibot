@@ -160,7 +160,7 @@ type DeepMerge<TValue1, TValue2> = TValue1 extends readonly unknown[]
  * Deeply picks N specific keys.
  */
 export type DeepPickN<
-  TInput extends Record<string, unknown> | readonly unknown[],
+  TInput,
   TPathList extends readonly PathKeys<TInput>[],
 > = TPathList extends readonly [
   infer TPathKeys extends PathKeys<TInput>,
@@ -169,4 +169,4 @@ export type DeepPickN<
   ? TRest extends readonly [unknown, ...(readonly unknown[])]
     ? DeepMerge<DeepPick<TInput, TPathKeys>, DeepPickN<TInput, TRest>>
     : DeepPick<TInput, TPathKeys>
-  : never;
+  : TInput;

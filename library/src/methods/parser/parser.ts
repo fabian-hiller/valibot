@@ -63,9 +63,9 @@ export function parser(
     BaseSchema<unknown, unknown, BaseIssue<unknown>>,
     Config<BaseIssue<unknown>> | undefined
   > = (input: unknown) => parse(schema, input, config);
-  // @ts-ignore
+  // @ts-expect-error
   func.schema = schema;
-  // @ts-ignore
+  // @ts-expect-error
   func.config = config;
   return func;
 }
