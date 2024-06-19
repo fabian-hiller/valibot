@@ -9,7 +9,6 @@ import type {
   TypedDataset,
   UntypedDataset,
 } from '../../types/index.ts';
-import type { MinLengthIssue } from '../minLength/index.ts';
 import {
   type PartialCheckActionAsync,
   partialCheckAsync,
@@ -248,62 +247,6 @@ describe('partialCheckAsync', () => {
           },
         ],
       } satisfies TypedDataset<Input, PartialCheckIssue<Selection>>);
-    });
-
-    test('if there are no schema issues', async () => {
-      const input: Input = {
-        nested: { key: 'foo' },
-        tuple: [123, { key: 'baz' }, 456],
-        other: 'bar',
-      };
-      const firstIssue: MinLengthIssue<string, 5> = {
-        ...baseInfo,
-        kind: 'validation',
-        type: 'min_length',
-        input: 'foo',
-        expected: '>=5',
-        received: '3',
-        requirement: 5,
-        path: [
-          {
-            type: 'object',
-            origin: 'value',
-            input,
-            key: 'nested',
-            value: input.nested,
-          },
-          {
-            type: 'object',
-            origin: 'value',
-            input: input.nested,
-            key: 'key',
-            value: input.nested.key,
-          },
-        ],
-      };
-      const dataset: TypedDataset<Input, MinLengthIssue<string, 5>> = {
-        typed: true,
-        value: input,
-        issues: [firstIssue],
-      };
-      expect(await action._run(dataset, {})).toStrictEqual({
-        ...dataset,
-        issues: [
-          firstIssue,
-          {
-            ...baseInfo,
-            kind: 'validation',
-            type: 'partial_check',
-            input,
-            expected: null,
-            received: 'Object',
-            requirement,
-          },
-        ],
-      } satisfies TypedDataset<
-        Input,
-        MinLengthIssue<string, 5> | PartialCheckIssue<Selection>
-      >);
     });
 
     test('if only unselected paths are untyped', async () => {
