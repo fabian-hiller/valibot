@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.33.3 (June 19, 2024)
 
 - Fix `_isPartiallyTyped` util of `partialCheck` and `partialCheckAsync` action
 
