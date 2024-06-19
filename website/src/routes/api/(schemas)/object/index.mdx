@@ -16,7 +16,7 @@ import { properties } from './properties';
 Creates an object schema.
 
 ```ts
-const Schema = object<TEntries, TMessage>(entries, message);
+const Schema = v.object<TEntries, TMessage>(entries, message);
 ```
 
 ## Generics
@@ -108,7 +108,7 @@ The following APIs can be combined with `object`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
@@ -121,7 +121,7 @@ The following APIs can be combined with `object`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -136,11 +136,11 @@ The following APIs can be combined with `object`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

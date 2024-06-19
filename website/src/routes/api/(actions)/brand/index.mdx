@@ -14,7 +14,7 @@ import { properties } from './properties';
 Creates a brand transformation action.
 
 ```ts
-const Action = brand<TInput, TName>(name);
+const Action = v.brand<TInput, TName>(name);
 ```
 
 ## Generics
@@ -69,7 +69,7 @@ The following APIs can be combined with `brand`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
@@ -82,7 +82,7 @@ The following APIs can be combined with `brand`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -98,11 +98,11 @@ The following APIs can be combined with `brand`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

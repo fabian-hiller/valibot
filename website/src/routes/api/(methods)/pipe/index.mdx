@@ -15,7 +15,7 @@ import { properties } from './properties';
 Adds a pipeline to a schema, that can validate and transform its input.
 
 ```ts
-const Schema = pipe<TSchema, TItems>(schema, ...items);
+const Schema = v.pipe<TSchema, TItems>(schema, ...items);
 ```
 
 ## Generics
@@ -76,7 +76,7 @@ The following APIs can be combined with `pipe`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
@@ -89,7 +89,7 @@ The following APIs can be combined with `pipe`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -105,11 +105,11 @@ The following APIs can be combined with `pipe`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -150,7 +150,7 @@ The following APIs can be combined with `pipe`.
     'emoji',
     'empty',
     'endsWith',
-    'every',
+    'everyItem',
     'excludes',
     'finite',
     'hash',
@@ -192,7 +192,7 @@ The following APIs can be combined with `pipe`.
     'regex',
     'safeInteger',
     'size',
-    'some',
+    'someItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',

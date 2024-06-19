@@ -4,14 +4,10 @@ import type {
   Dataset,
   ErrorMessage,
   InferIssue,
+  MapPathItem,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
-import type {
-  InferMapInput,
-  InferMapOutput,
-  MapIssue,
-  MapPathItem,
-} from './types.ts';
+import type { InferMapInput, InferMapOutput, MapIssue } from './types.ts';
 
 /**
  * Map schema type.

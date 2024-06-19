@@ -1,4 +1,5 @@
 import type {
+  ArrayPathItem,
   BaseIssue,
   BaseSchema,
   Dataset,
@@ -8,7 +9,7 @@ import type {
   InferOutput,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
-import type { ArrayIssue, ArrayPathItem } from './types.ts';
+import type { ArrayIssue } from './types.ts';
 
 /**
  * Array schema type.

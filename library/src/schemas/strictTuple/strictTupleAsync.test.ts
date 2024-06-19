@@ -169,7 +169,7 @@ describe('strictTupleAsync', () => {
       received: '123',
       path: [
         {
-          type: 'tuple',
+          type: 'array',
           origin: 'value',
           input: [123, 456, 'true'],
           key: 0,
@@ -196,7 +196,7 @@ describe('strictTupleAsync', () => {
             received: '"true"',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input,
                 key: 2,
@@ -242,14 +242,14 @@ describe('strictTupleAsync', () => {
             received: '"123"',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input,
                 key: 0,
                 value: input[0],
               },
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input[0],
                 key: 1,
@@ -266,7 +266,7 @@ describe('strictTupleAsync', () => {
             received: 'null',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input,
                 key: 1,
@@ -295,7 +295,7 @@ describe('strictTupleAsync', () => {
             received: 'null',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input,
                 key: 3,

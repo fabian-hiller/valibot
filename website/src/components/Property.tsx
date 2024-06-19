@@ -45,6 +45,7 @@ type DefinitionData =
     }
   | {
       type: 'array';
+      modifier?: string;
       spread?: boolean;
       item: DefinitionData;
     }
@@ -221,6 +222,9 @@ const Definition = component$<DefinitionProps>(({ parent, data }) => (
       </span>
     ) : data.type === 'array' ? (
       <span>
+        {data.modifier && (
+          <span class="text-red-600 dark:text-red-400">{data.modifier} </span>
+        )}
         {data.spread && <span class="text-red-600 dark:text-red-400">...</span>}
         {typeof data.item === 'object' &&
           (data.item.type === 'union' ||

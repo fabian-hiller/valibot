@@ -16,7 +16,7 @@ import { properties } from './properties';
 Creates a custom transformation action.
 
 ```ts
-const Action = transform<TInput, TOutput>(action);
+const Action = v.transform<TInput, TOutput>(action);
 ```
 
 ## Generics
@@ -80,7 +80,7 @@ The following APIs can be combined with `transform`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
@@ -93,7 +93,7 @@ The following APIs can be combined with `transform`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -109,11 +109,11 @@ The following APIs can be combined with `transform`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

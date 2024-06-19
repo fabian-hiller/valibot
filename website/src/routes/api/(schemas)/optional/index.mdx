@@ -16,7 +16,7 @@ import { properties } from './properties';
 Creates an optional schema.
 
 ```ts
-const Schema = optional<TWrapped, TDefault>(wrapped, default_);
+const Schema = v.optional<TWrapped, TDefault>(wrapped, default_);
 ```
 
 ## Generics
@@ -95,7 +95,7 @@ The following APIs can be combined with `optional`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
@@ -108,7 +108,7 @@ The following APIs can be combined with `optional`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -123,11 +123,11 @@ The following APIs can be combined with `optional`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

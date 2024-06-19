@@ -108,11 +108,11 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0
       monaco-editor:
-        specifier: ^0.47.0
-        version: 0.47.0
+        specifier: 0.50.0-dev-20240618
+        version: 0.50.0-dev-20240618
       monaco-editor-textmate:
         specifier: ^4.0.0
-        version: 4.0.0(monaco-editor@0.47.0)(monaco-textmate@3.0.1(onigasm@2.2.5))
+        version: 4.0.0(monaco-editor@0.50.0-dev-20240618)(monaco-textmate@3.0.1(onigasm@2.2.5))
       monaco-textmate:
         specifier: ^3.0.1
         version: 3.0.1(onigasm@2.2.5)
@@ -5173,8 +5173,8 @@ packages:
       monaco-editor: 0.x.x
       monaco-textmate: ^3.0.0
 
-  monaco-editor@0.47.0:
-    resolution: {integrity: sha512-VabVvHvQ9QmMwXu4du008ZDuyLnHs9j7ThVFsiJoXSOQk18+LF89N4ADzPbFenm0W4V2bGHnFBztIRQTgBfxzw==}
+  monaco-editor@0.50.0-dev-20240618:
+    resolution: {integrity: sha512-ldQWJic4cH5tB91OSt4rSusEMXlrAtH5zTBshYVvV6w0uIhoT4VrKq1NcELq6bh7yrxXYyUFKegPL1ucGMIGjQ==}
 
   monaco-textmate@3.0.1:
     resolution: {integrity: sha512-ZxxY3OsqUczYP1sGqo97tu+CJmMBwuSW+dL0WEBdDhOZ5G1zntw72hvBc68ZQAirosWvbDKgN1dL5k173QtFww==}
@@ -12989,12 +12989,12 @@ snapshots:
       fast-equals: 3.0.3
       micro-memoize: 4.1.2
 
-  monaco-editor-textmate@4.0.0(monaco-editor@0.47.0)(monaco-textmate@3.0.1(onigasm@2.2.5)):
+  monaco-editor-textmate@4.0.0(monaco-editor@0.50.0-dev-20240618)(monaco-textmate@3.0.1(onigasm@2.2.5)):
     dependencies:
-      monaco-editor: 0.47.0
+      monaco-editor: 0.50.0-dev-20240618
       monaco-textmate: 3.0.1(onigasm@2.2.5)
 
-  monaco-editor@0.47.0: {}
+  monaco-editor@0.50.0-dev-20240618: {}
 
   monaco-textmate@3.0.1(onigasm@2.2.5):
     dependencies:

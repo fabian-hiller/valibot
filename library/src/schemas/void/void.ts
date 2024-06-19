@@ -86,3 +86,5 @@ export function void_(
     },
   };
 }
+
+export { void_ as void };

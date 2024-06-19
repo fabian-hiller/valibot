@@ -52,29 +52,31 @@ type InferOption<TInput, TOutput> =
  */
 export type InferIntersectInput<
   TOptions extends IntersectOptions | IntersectOptionsAsync,
-> =
-  TOptions extends MaybeReadonly<
-    [InferOption<infer TInput, unknown>, ...infer TRest]
-  >
-    ? TRest extends MaybeReadonly<
-        [InferOption<unknown, unknown>, ...InferOption<unknown, unknown>[]]
-      >
-      ? TInput & InferIntersectInput<TRest>
-      : TInput
-    : never;
+> = TOptions extends readonly [
+  InferOption<infer TInput, unknown>,
+  ...infer TRest,
+]
+  ? TRest extends readonly [
+      InferOption<unknown, unknown>,
+      ...InferOption<unknown, unknown>[],
+    ]
+    ? TInput & InferIntersectInput<TRest>
+    : TInput
+  : never;
 
 /**
  * Infer intersect output type.
  */
 export type InferIntersectOutput<
   TOptions extends IntersectOptions | IntersectOptionsAsync,
-> =
-  TOptions extends MaybeReadonly<
-    [InferOption<unknown, infer TOutput>, ...infer TRest]
-  >
-    ? TRest extends MaybeReadonly<
-        [InferOption<unknown, unknown>, ...InferOption<unknown, unknown>[]]
-      >
-      ? TOutput & InferIntersectOutput<TRest>
-      : TOutput
-    : never;
+> = TOptions extends readonly [
+  InferOption<unknown, infer TOutput>,
+  ...infer TRest,
+]
+  ? TRest extends readonly [
+      InferOption<unknown, unknown>,
+      ...InferOption<unknown, unknown>[],
+    ]
+    ? TOutput & InferIntersectOutput<TRest>
+    : TOutput
+  : never;

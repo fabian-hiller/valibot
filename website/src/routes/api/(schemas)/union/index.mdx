@@ -18,7 +18,7 @@ Creates an union schema.
 > I recommend that you read the <Link href="/guides/unions/">unions guide</Link> before using this schema function.
 
 ```ts
-const Schema = union<TOptions, TMessage>(options, message);
+const Schema = v.union<TOptions, TMessage>(options, message);
 ```
 
 ## Generics
@@ -84,7 +84,7 @@ The following APIs can be combined with `union`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
@@ -97,7 +97,7 @@ The following APIs can be combined with `union`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -113,11 +113,11 @@ The following APIs can be combined with `union`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -152,7 +152,7 @@ The following APIs can be combined with `union`.
     'emoji',
     'empty',
     'endsWith',
-    'every',
+    'everyItem',
     'excludes',
     'finite',
     'hash',
@@ -194,7 +194,7 @@ The following APIs can be combined with `union`.
     'regex',
     'safeInteger',
     'size',
-    'some',
+    'someItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',

@@ -16,7 +16,7 @@ import { properties } from './properties';
 Creates a strict object schema.
 
 ```ts
-const Schema = strictObject<TEntries, TMessage>(entries, message);
+const Schema = v.strictObject<TEntries, TMessage>(entries, message);
 ```
 
 ## Generics
@@ -108,7 +108,7 @@ The following APIs can be combined with `strictObject`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
@@ -121,7 +121,7 @@ The following APIs can be combined with `strictObject`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -136,11 +136,11 @@ The following APIs can be combined with `strictObject`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

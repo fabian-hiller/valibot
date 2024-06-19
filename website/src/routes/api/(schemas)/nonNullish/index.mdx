@@ -17,7 +17,7 @@ Creates a non nullish schema.
 > This schema function can be used to override the behavior of <Link href="../nullish/">`nullish`</Link>.
 
 ```ts
-const Schema = nonNullish<TWrapped, TMessage>(wrapped, message);
+const Schema = v.nonNullish<TWrapped, TMessage>(wrapped, message);
 ```
 
 ## Generics
@@ -74,7 +74,7 @@ The following APIs can be combined with `nonNullish`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
@@ -86,7 +86,7 @@ The following APIs can be combined with `nonNullish`.
     'never',
     'nonNullable',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -102,11 +102,11 @@ The following APIs can be combined with `nonNullish`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

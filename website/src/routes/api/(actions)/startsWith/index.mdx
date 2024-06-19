@@ -14,7 +14,10 @@ import { properties } from './properties';
 Creates a starts with validation action.
 
 ```ts
-const Action = startsWith<TInput, TRequirement, TMessage>(requirement, message);
+const Action = v.startsWith<TInput, TRequirement, TMessage>(
+  requirement,
+  message
+);
 ```
 
 ## Generics

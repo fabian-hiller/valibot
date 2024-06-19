@@ -13,7 +13,7 @@ import type {
   ObjectEntriesAsync,
   ObjectPathItem,
 } from '../../types/index.ts';
-import { _addIssue, _isAllowedObjectKey } from '../../utils/index.ts';
+import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
 import type { ObjectWithRestIssue } from './types.ts';
 
 /**
@@ -150,7 +150,8 @@ export function objectWithRestAsync(
               // TODO: We should document that we exclude specific keys for
               // security reasons.
               .filter(
-                ([key]) => _isAllowedObjectKey(key) && !(key in this.entries)
+                ([key]) =>
+                  _isValidObjectKey(input, key) && !(key in this.entries)
               )
               .map(
                 async ([key, value]) =>

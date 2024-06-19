@@ -22,7 +22,6 @@ import type {
   InferObjectInput,
   InferObjectOutput,
   InferOutput,
-  MaybeReadonly,
   NoPipe,
   ObjectEntries,
   ObjectKeys,
@@ -50,10 +49,10 @@ type Schema = NoPipe<
  */
 type RequiredEntries<
   TEntries extends ObjectEntries,
-  TKeys extends MaybeReadonly<(keyof TEntries)[]> | undefined,
+  TKeys extends readonly (keyof TEntries)[] | undefined,
   TMessage extends ErrorMessage<NonOptionalIssue> | undefined,
 > = {
-  [TKey in keyof TEntries]: TKeys extends MaybeReadonly<(keyof TEntries)[]>
+  [TKey in keyof TEntries]: TKeys extends readonly (keyof TEntries)[]
     ? TKey extends TKeys[number]
       ? NonOptionalSchema<TEntries[TKey], TMessage>
       : TEntries[TKey]

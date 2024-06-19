@@ -74,8 +74,8 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'custom',
       modifier: 'typeof',
-      name: 'enum_',
-      href: '../enum_/',
+      name: 'enum',
+      href: '../enum/',
     },
   },
   enum: {

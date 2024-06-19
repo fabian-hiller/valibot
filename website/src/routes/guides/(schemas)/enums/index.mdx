@@ -11,11 +11,11 @@ import { Link } from '@builder.io/qwik-city';
 
 # Enums
 
-An enumerated type is a data type that consists of a set of values. They can be represented by either an object, a TypeScript enum or, to keep things simple, an array. You use <Link href="/api/enum_/">`enum_`</Link> for objects and TypeScript enums and <Link href="/api/picklist/">`picklist`</Link> for arrays.
+An enumerated type is a data type that consists of a set of values. They can be represented by either an object, a TypeScript enum or, to keep things simple, an array. You use <Link href="/api/enum/">`enum`</Link> for objects and TypeScript enums and <Link href="/api/picklist/">`picklist`</Link> for arrays.
 
 ## Enum schema
 
-Since TypeScript enums are transpiled to JavaScript objects by the TypeScript compiler, you can use the <Link href="/api/enum_/">`enum_`</Link> schema function for both. Just pass your enumerated data type as the first argument to the schema function. On validation, the schema checks whether the input matches one of the values in the enum.
+Since TypeScript enums are transpiled to JavaScript objects by the TypeScript compiler, you can use the <Link href="/api/enum/">`enum`</Link> schema function for both. Just pass your enumerated data type as the first argument to the schema function. On validation, the schema checks whether the input matches one of the values in the enum.
 
 ```ts
 import * as v from 'valibot';
@@ -32,7 +32,7 @@ enum Direction {
   Right = 'RIGHT',
 }
 
-const DirectionSchema = v.enum_(Direction);
+const DirectionSchema = v.enum(Direction);
 ```
 
 ## Picklist schema

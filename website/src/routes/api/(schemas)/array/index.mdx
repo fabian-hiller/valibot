@@ -16,7 +16,7 @@ import { properties } from './properties';
 Creates an array schema.
 
 ```ts
-const Schema = array<TItem, TMessage>(item, message);
+const Schema = v.array<TItem, TMessage>(item, message);
 ```
 
 ## Generics
@@ -97,7 +97,7 @@ The following APIs can be combined with `array`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
@@ -110,7 +110,7 @@ The following APIs can be combined with `array`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -126,11 +126,11 @@ The following APIs can be combined with `array`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -157,7 +157,7 @@ The following APIs can be combined with `array`.
     'check',
     'brand',
     'empty',
-    'every',
+    'everyItem',
     'excludes',
     'includes',
     'length',
@@ -166,7 +166,7 @@ The following APIs can be combined with `array`.
     'nonEmpty',
     'notLength',
     'readonly',
-    'some',
+    'someItem',
     'transform',
   ]}
 />

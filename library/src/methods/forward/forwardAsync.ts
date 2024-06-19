@@ -3,8 +3,8 @@ import type {
   BaseValidation,
   BaseValidationAsync,
   IssuePathItem,
+  PathKeys,
 } from '../../types/index.ts';
-import type { PathKeys } from './types.ts';
 
 // TODO: We should try to find a better way to type this function without
 // breaking the type inference, as the current implementation loses some type
@@ -19,7 +19,7 @@ import type { PathKeys } from './types.ts';
  * @returns The modified action.
  */
 export function forwardAsync<
-  TInput extends Record<string, unknown> | unknown[],
+  TInput extends Record<string, unknown> | ArrayLike<unknown>,
   TIssue extends BaseIssue<unknown>,
 >(
   action:

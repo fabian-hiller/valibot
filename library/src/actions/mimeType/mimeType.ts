@@ -2,14 +2,13 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  MaybeReadonly,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
 /**
  * Requirement type.
  */
-type Requirement = MaybeReadonly<`${string}/${string}`[]>;
+type Requirement = readonly `${string}/${string}`[];
 
 /**
  * MIME type issue type.
