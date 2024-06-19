@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add Polish (pl) translations (pull request #584)
+
 ## v0.15.0 (June 07, 2024)
 
 - Migrate i18n library to Valibot v0.31.0
