@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.33.2 (June 19, 2024)
+
+- Fix type exports for JSR and Deno (pull request #663)
+
 ## v0.33.1 (June 18, 2024)
 
 - Fix types of `partialCheck` and `partialCheckAsync` action
