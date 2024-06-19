@@ -2,6 +2,20 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.15.0 (June 07, 2024)
+
+- Migrate i18n library to Valibot v0.31.0
+- Change peer dependency to `>=0.31.0 <1`
+
+## v0.14.0 (June 07, 2024)
+
+- Add Italian (it) translations (pull request #605)
+- Add Swedish (sv) translations (pull request #606)
+
+## v0.13.0 (May 18, 2024)
+
+- Add Spanish (es) translations (pull request #581)
+
 ## v0.12.0 (May 11, 2024)
 
 - Add Hungarian (hu) translations (pull request #560)

@@ -16,7 +16,7 @@ Checks if the input matches the scheme.
 > By using a type predicate, this function can be used as a type guard.
 
 ```ts
-const result = is<TSchema>(schema, input, config);
+const result = v.is<TSchema>(schema, input);
 ```
 
 ## Generics
@@ -27,7 +27,6 @@ const result = is<TSchema>(schema, input, config);
 
 - `schema` <Property {...properties.schema} />
 - `input` <Property {...properties.input} />
-- `config` <Property {...properties.config} />
 
 ## Returns
 
@@ -38,10 +37,10 @@ const result = is<TSchema>(schema, input, config);
 The following example show how `is` can be used.
 
 ```ts
-const EmailSchema = string([email()]);
+const EmailSchema = v.pipe(v.string(), v.email());
 const data: unknown = 'jane@example.com';
 
-if (is(EmailSchema, data)) {
+if (v.is(EmailSchema, data)) {
   const email = data; // string
 }
 ```
@@ -59,36 +58,42 @@ The following APIs can be combined with `is`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -96,16 +101,13 @@ The following APIs can be combined with `is`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'keyof',
-    'merge',
     'omit',
     'partial',
     'pick',
+    'pipe',
     'required',
-    'transform',
     'unwrap',
   ]}
 />

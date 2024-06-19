@@ -1,0 +1,62 @@
+---
+title: integer
+description: Creates an integer validation action.
+source: /actions/integer/integer.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# integer
+
+Creates an [integer](https://en.wikipedia.org/wiki/Integer) validation action.
+
+```ts
+const Action = v.integer<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `integer` you can validate the value of a number. If the input is not an integer, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `integer` can be used.
+
+### Integer schema
+
+Schema to validate an integer.
+
+```ts
+const IntegerSchema = v.pipe(
+  v.number(),
+  v.integer('The number must be an integer.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `integer`.
+
+### Schemas
+
+<ApiList items={['any', 'number', 'special', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

@@ -1,49 +1,66 @@
 import type {
+  BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
-  Input,
+  InferInput,
+  InferIssue,
+  InferOutput,
   MaybePromise,
-  Output,
 } from '../../types/index.ts';
 
 /**
  * Lazy schema async type.
  */
 export interface LazySchemaAsync<
-  TGetter extends (
-    input: unknown
-  ) => MaybePromise<BaseSchema | BaseSchemaAsync>,
-  TOutput = Output<Awaited<ReturnType<TGetter>>>,
-> extends BaseSchemaAsync<Input<Awaited<ReturnType<TGetter>>>, TOutput> {
+  TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+> extends BaseSchemaAsync<
+    InferInput<TWrapped>,
+    InferOutput<TWrapped>,
+    InferIssue<TWrapped>
+  > {
   /**
    * The schema type.
    */
-  type: 'lazy';
+  readonly type: 'lazy';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof lazyAsync;
+  /**
+   * The expected property.
+   */
+  readonly expects: 'unknown';
   /**
    * The schema getter.
    */
-  getter: TGetter;
+  readonly getter: (input: unknown) => MaybePromise<TWrapped>;
 }
 
 /**
- * Creates an async lazy schema.
+ * Creates a lazy schema.
  *
  * @param getter The schema getter.
  *
- * @returns An async lazy schema.
+ * @returns A lazy schema.
  */
 export function lazyAsync<
-  TGetter extends (
-    input: unknown
-  ) => MaybePromise<BaseSchema | BaseSchemaAsync>,
->(getter: TGetter): LazySchemaAsync<TGetter> {
+  const TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+>(
+  getter: (input: unknown) => MaybePromise<TWrapped>
+): LazySchemaAsync<TWrapped> {
   return {
+    kind: 'schema',
     type: 'lazy',
+    reference: lazyAsync,
     expects: 'unknown',
     async: true,
     getter,
-    async _parse(input, config) {
-      return (await this.getter(input))._parse(input, config);
+    async _run(dataset, config) {
+      return (await this.getter(dataset.value))._run(dataset, config);
     },
   };
 }

@@ -1,154 +1,153 @@
 import type {
+  BaseIssue,
   BaseSchema,
+  Dataset,
   ErrorMessage,
-  Pipe,
-  SchemaIssues,
+  InferIssue,
+  SetPathItem,
 } from '../../types/index.ts';
-import {
-  defaultArgs,
-  pipeResult,
-  schemaIssue,
-  schemaResult,
-} from '../../utils/index.ts';
-import type { SetInput, SetOutput, SetPathItem } from './types.ts';
+import { _addIssue } from '../../utils/index.ts';
+import type { InferSetInput, InferSetOutput, SetIssue } from './types.ts';
 
 /**
  * Set schema type.
  */
 export interface SetSchema<
-  TValue extends BaseSchema,
-  TOutput = SetOutput<TValue>,
-> extends BaseSchema<SetInput<TValue>, TOutput> {
+  TValue extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  TMessage extends ErrorMessage<SetIssue> | undefined,
+> extends BaseSchema<
+    InferSetInput<TValue>,
+    InferSetOutput<TValue>,
+    SetIssue | InferIssue<TValue>
+  > {
   /**
    * The schema type.
    */
-  type: 'set';
+  readonly type: 'set';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof set;
+  /**
+   * The expected property.
+   */
+  readonly expects: 'Set';
   /**
    * The set value schema.
    */
-  value: TValue;
+  readonly value: TValue;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
-  /**
-   * The validation and transformation pipeline.
-   */
-  pipe: Pipe<SetOutput<TValue>> | undefined;
+  readonly message: TMessage;
 }
 
 /**
  * Creates a set schema.
  *
  * @param value The value schema.
- * @param pipe A validation and transformation pipe.
  *
  * @returns A set schema.
  */
-export function set<TValue extends BaseSchema>(
-  value: TValue,
-  pipe?: Pipe<SetOutput<TValue>>
-): SetSchema<TValue>;
+export function set<
+  const TValue extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(value: TValue): SetSchema<TValue, undefined>;
 
 /**
  * Creates a set schema.
  *
  * @param value The value schema.
  * @param message The error message.
- * @param pipe A validation and transformation pipe.
  *
  * @returns A set schema.
  */
-export function set<TValue extends BaseSchema>(
-  value: TValue,
-  message?: ErrorMessage,
-  pipe?: Pipe<SetOutput<TValue>>
-): SetSchema<TValue>;
+export function set<
+  const TValue extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  const TMessage extends ErrorMessage<SetIssue> | undefined,
+>(value: TValue, message: TMessage): SetSchema<TValue, TMessage>;
 
-export function set<TValue extends BaseSchema>(
-  value: TValue,
-  arg2?: Pipe<SetOutput<TValue>> | ErrorMessage,
-  arg3?: Pipe<SetOutput<TValue>>
-): SetSchema<TValue> {
-  // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg2, arg3);
-
-  // Create and return set schema
+export function set(
+  value: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  message?: ErrorMessage<SetIssue>
+): SetSchema<
+  BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  ErrorMessage<SetIssue> | undefined
+> {
   return {
+    kind: 'schema',
     type: 'set',
+    reference: set,
     expects: 'Set',
     async: false,
     value,
     message,
-    pipe,
-    _parse(input, config) {
+    _run(dataset, config) {
+      // Get input value from dataset
+      const input = dataset.value;
+
       // If root type is valid, check nested types
       if (input instanceof Set) {
-        // Create key, typed, output and issues
-        let key = 0;
-        let typed = true;
-        let issues: SchemaIssues | undefined;
-        const output: SetOutput<TValue> = new Set();
+        // Set typed to `true` and value to empty set
+        dataset.typed = true;
+        dataset.value = new Set();
 
-        // Parse each value by schema
+        // Parse schema of each set value
         for (const inputValue of input) {
-          // Get schema result of input value
-          const result = this.value._parse(inputValue, config);
+          const valueDataset = this.value._run(
+            { typed: false, value: inputValue },
+            config
+          );
 
           // If there are issues, capture them
-          if (result.issues) {
+          if (valueDataset.issues) {
             // Create set path item
             const pathItem: SetPathItem = {
               type: 'set',
               origin: 'value',
               input,
-              key,
               value: inputValue,
             };
 
-            // Add modified result issues to issues
-            for (const issue of result.issues) {
+            // Add modified item dataset issues to issues
+            for (const issue of valueDataset.issues) {
               if (issue.path) {
                 issue.path.unshift(pathItem);
               } else {
+                // @ts-expect-error
                 issue.path = [pathItem];
               }
-              issues?.push(issue);
+              // @ts-expect-error
+              dataset.issues?.push(issue);
             }
-            if (!issues) {
-              issues = result.issues;
+            if (!dataset.issues) {
+              // @ts-expect-error
+              dataset.issues = valueDataset.issues;
             }
 
             // If necessary, abort early
-            if (config?.abortEarly) {
-              typed = false;
+            if (config.abortEarly) {
+              dataset.typed = false;
               break;
             }
           }
 
-          // If not typed, set typed to false
-          if (!result.typed) {
-            typed = false;
+          // If not typed, set typed to `false`
+          if (!valueDataset.typed) {
+            dataset.typed = false;
           }
 
-          // Set output of entry if necessary
-          output.add(result.output);
-
-          // Increment key
-          key++;
+          // Add value to dataset
+          // @ts-expect-error
+          dataset.value.add(valueDataset.value);
         }
 
-        // If output is typed, return pipe result
-        if (typed) {
-          return pipeResult(this, output, config, issues);
-        }
-
-        // Otherwise, return untyped schema result
-        return schemaResult(false, output, issues as SchemaIssues);
+        // Otherwise, add set issue
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
 
-      // Otherwise, return schema issue
-      return schemaIssue(this, set, input, config);
+      // Return output dataset
+      return dataset as Dataset<Set<unknown>, SetIssue | BaseIssue<unknown>>;
     },
   };
 }

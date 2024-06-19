@@ -14,21 +14,20 @@ import { properties } from './properties';
 Creates a bigint schema.
 
 ```ts
-// Bigint schema with an optional pipe
-const Schema = bigint(pipe);
-
-// Bigint schema with an optional message and pipe
-const Schema = bigint(message, pipe);
+const Schema = v.bigint<TMessage>(message);
 ```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-With `bigint` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the bigint. If the input is not a bigint, you can use `message` to customize the error message.
+With `bigint` you can validate the data type of the input. If the input is not a bigint, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -43,7 +42,7 @@ The following examples show how `bigint` can be used.
 Schema that forces a minimum bigint value.
 
 ```ts
-const MinBigintSchema = bigint([toMinValue(10n)]);
+const MinBigintSchema = v.pipe(v.bigint(), v.toMinValue(10n));
 ```
 
 ### Validate maximum
@@ -51,7 +50,7 @@ const MinBigintSchema = bigint([toMinValue(10n)]);
 Schema that validates a maximum bigint value.
 
 ```ts
-const MaxBigintSchema = bigint([maxValue(999n)]);
+const MaxBigintSchema = v.pipe(v.bigint(), v.maxValue(999n));
 ```
 
 ## Related
@@ -65,6 +64,8 @@ The following APIs can be combined with `bigint`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -72,10 +73,14 @@ The following APIs can be combined with `bigint`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -84,8 +89,6 @@ The following APIs can be combined with `bigint`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -93,15 +96,24 @@ The following APIs can be combined with `bigint`.
     'getFallbacks',
     'is',
     'parse',
+    'pipe',
     'safeParse',
-    'transform',
   ]}
 />
 
-### Transformations
+### Actions
 
-<ApiList items={['toCustom', 'toMaxValue', 'toMinValue']} />
-
-### Validations
-
-<ApiList items={['custom', 'maxValue', 'minValue', 'notValue', 'value']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'maxValue',
+    'minValue',
+    'notValue',
+    'readonly',
+    'toMaxValue',
+    'toMinValue',
+    'transform',
+    'value',
+  ]}
+/>

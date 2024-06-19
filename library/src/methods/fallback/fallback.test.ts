@@ -1,30 +1,51 @@
 import { describe, expect, test } from 'vitest';
-import { object, string } from '../../schemas/index.ts';
-import { parse } from '../parse/index.ts';
-import { fallback } from './fallback.ts';
+import { transform } from '../../actions/index.ts';
+import { number } from '../../schemas/index.ts';
+import { pipe } from '../pipe/index.ts';
+import { fallback, type SchemaWithFallback } from './fallback.ts';
 
 describe('fallback', () => {
-  const schema1 = fallback(string(), 'test');
-  const schema2 = fallback(string(), () => 'test');
-  const schema3 = object({ key1: schema1, key2: schema2 });
+  describe('should return schema object', () => {
+    const schema = pipe(number(), transform(String));
+    type Schema = typeof schema;
+    const baseSchema: Omit<SchemaWithFallback<Schema, never>, 'fallback'> = {
+      ...schema,
+      _run: expect.any(Function),
+    };
 
-  test('should use default value', () => {
-    const output1 = parse(schema1, 123);
-    expect(output1).toBe('test');
-    const output2 = parse(schema2, 123);
-    expect(output2).toBe('test');
-    const output3 = parse(schema3, {});
-    expect(output3).toEqual({ key1: 'test', key2: 'test' });
+    test('with value fallback', () => {
+      expect(fallback(schema, '123')).toStrictEqual({
+        ...baseSchema,
+        fallback: '123',
+      } satisfies SchemaWithFallback<Schema, '123'>);
+    });
+
+    test('with function fallback', () => {
+      const fallbackArg = () => '123';
+      expect(fallback(schema, fallbackArg)).toStrictEqual({
+        ...baseSchema,
+        fallback: fallbackArg,
+      } satisfies SchemaWithFallback<Schema, typeof fallbackArg>);
+    });
   });
 
-  test('should not use default value', () => {
-    const input1 = 'hello';
-    const output1 = parse(schema1, input1);
-    expect(output1).toBe(input1);
-    const output2 = parse(schema2, input1);
-    expect(output2).toBe(input1);
-    const input2 = { key1: 'hello', key2: 'hello' };
-    const output3 = parse(schema3, input2);
-    expect(output3).toEqual(input2);
+  const schema = fallback(pipe(number(), transform(String)), '123');
+
+  describe('should return default dataset', () => {
+    test('for valid input', () => {
+      expect(schema._run({ typed: false, value: 789 }, {})).toStrictEqual({
+        typed: true,
+        value: '789',
+      });
+    });
+  });
+
+  describe('should return dataset with fallback', () => {
+    test('for invalid input', () => {
+      expect(schema._run({ typed: false, value: 'foo' }, {})).toStrictEqual({
+        typed: true,
+        value: '123',
+      });
+    });
   });
 });

@@ -1,0 +1,122 @@
+---
+title: transform
+description: Creates a custom transformation action.
+source: /actions/transform/transform.ts
+contributors:
+  - fabian-hiller
+  - HJGreen
+---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# transform
+
+Creates a custom transformation action.
+
+```ts
+const Action = v.transform<TInput, TOutput>(action);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Parameters
+
+- `action` <Property {...properties.action} />
+
+### Explanation
+
+`transform` can be used to freely transform the input. The `action` parameter is a function that takes the input and returns the transformed output.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `transform` can be used.
+
+### Transform to length
+
+Schema that transforms a string to its length.
+
+```ts
+const StringLengthSchema = v.pipe(
+  v.string(),
+  v.transform((input) => input.length)
+);
+```
+
+### Add object entry
+
+Schema that transforms an object to add an entry.
+
+```ts
+const UserSchema = v.pipe(
+  v.object({ name: v.string(), age: v.number() }),
+  v.transform((input) => ({
+    ...input,
+    created: new Date().toISOString(),
+  }))
+);
+```
+
+## Related
+
+The following APIs can be combined with `transform`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />

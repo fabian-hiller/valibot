@@ -1,0 +1,24 @@
+---
+title: NotValueValidation
+description: Not value action type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# NotValueValidation
+
+Not value action type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Definition
+
+- `NotValueValidation` <Property {...properties.BaseValidation} />
+  - `type` <Property {...properties.type} />
+  - `requirement` <Property {...properties.requirement} />

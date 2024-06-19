@@ -1,84 +1,107 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
-import type { Class } from './types.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
+
+/**
+ * Class type.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Class = new (...args: any[]) => any;
+
+/**
+ * Instance issue type.
+ */
+export interface InstanceIssue extends BaseIssue<unknown> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'schema';
+  /**
+   * The issue type.
+   */
+  readonly type: 'instance';
+  /**
+   * The expected property.
+   */
+  readonly expected: string;
+}
 
 /**
  * Instance schema type.
  */
 export interface InstanceSchema<
   TClass extends Class,
-  TOutput = InstanceType<TClass>,
-> extends BaseSchema<InstanceType<TClass>, TOutput> {
+  TMessage extends ErrorMessage<InstanceIssue> | undefined,
+> extends BaseSchema<
+    InstanceType<TClass>,
+    InstanceType<TClass>,
+    InstanceIssue
+  > {
   /**
    * The schema type.
    */
-  type: 'instance';
+  readonly type: 'instance';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof instance;
   /**
    * The class of the instance.
    */
-  class: TClass;
+  readonly class: TClass;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
-  /**
-   * The validation and transformation pipeline.
-   */
-  pipe: Pipe<InstanceType<TClass>> | undefined;
+  readonly message: TMessage;
 }
 
 /**
  * Creates an instance schema.
  *
  * @param class_ The class of the instance.
- * @param pipe A validation and transformation pipe.
  *
  * @returns An instance schema.
  */
 export function instance<TClass extends Class>(
-  class_: TClass,
-  pipe?: Pipe<InstanceType<TClass>>
-): InstanceSchema<TClass>;
+  class_: TClass
+): InstanceSchema<TClass, undefined>;
 
 /**
  * Creates an instance schema.
  *
  * @param class_ The class of the instance.
  * @param message The error message.
- * @param pipe A validation and transformation pipe.
  *
  * @returns An instance schema.
  */
-export function instance<TClass extends Class>(
-  class_: TClass,
-  message?: ErrorMessage,
-  pipe?: Pipe<InstanceType<TClass>>
-): InstanceSchema<TClass>;
+export function instance<
+  TClass extends Class,
+  const TMessage extends ErrorMessage<InstanceIssue> | undefined,
+>(class_: TClass, message: TMessage): InstanceSchema<TClass, TMessage>;
 
-export function instance<TClass extends Class>(
-  class_: TClass,
-  arg2?: Pipe<InstanceType<TClass>> | ErrorMessage,
-  arg3?: Pipe<InstanceType<TClass>>
-): InstanceSchema<TClass> {
-  // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg2, arg3);
-
-  // Create and return string schema
+export function instance(
+  class_: Class,
+  message?: ErrorMessage<InstanceIssue>
+): InstanceSchema<Class, ErrorMessage<InstanceIssue> | undefined> {
   return {
+    kind: 'schema',
     type: 'instance',
+    reference: instance,
     expects: class_.name,
     async: false,
     class: class_,
     message,
-    pipe,
-    _parse(input, config) {
-      // If type is valid, return pipe result
-      if (input instanceof this.class) {
-        return pipeResult(this, input, config);
+    _run(dataset, config) {
+      if (dataset.value instanceof this.class) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
-
-      // Otherwise, return schema issue
-      return schemaIssue(this, instance, input, config);
+      return dataset as Dataset<InstanceType<Class>, InstanceIssue>;
     },
   };
 }

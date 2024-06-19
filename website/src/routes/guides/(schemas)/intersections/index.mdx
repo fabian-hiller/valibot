@@ -2,7 +2,7 @@
 title: Intersections
 description: >-
   An intersection represents a logical AND relationship. You can apply this
-  concept to your schemas with intersect and partially with merge.
+  concept to your schemas with `intersect` and by merging object schemas.
 contributors:
   - fabian-hiller
 ---
@@ -11,7 +11,7 @@ import { Link } from '@builder.io/qwik-city';
 
 # Intersections
 
-An intersection represents a logical AND relationship. You can apply this concept to your schemas with <Link href="/api/intersect/">`intersect`</Link> and partially with <Link href="/api/merge/">`merge`</Link>. For simple object schemas I recommend <Link href="/api/merge/">`merge`</Link> and in all other cases <Link href="/api/intersect/">`intersect`</Link>.
+An intersection represents a logical AND relationship. You can apply this concept to your schemas with <Link href="/api/intersect/">`intersect`</Link> and partially by merging multiple object schemas into a new one. I recommend this approach for simple object schemas, and <Link href="/api/intersect/">`intersect`</Link> for all other cases.
 
 ## Intersect schema
 
@@ -30,19 +30,22 @@ const IntersectSchema = v.intersect([
 ]);
 ```
 
-## Merge method
+## Merge objects
 
-Technically, there is a big difference between <Link href="/api/intersect/">`intersect`</Link> and <Link href="/api/merge/">`merge`</Link>. <Link href="/api/intersect/">`intersect`</Link> is a schema function that executes the passed schemas during validation. In contrast, <Link href="/api/merge/">`merge`</Link> is a <Link href="../methods/">method</Link> that merges the entries of the given object schemas during initialization to create a new object schema.
+Technically, there is a big difference between <Link href="/api/intersect/">`intersect`</Link> and object merging. <Link href="/api/intersect/">`intersect`</Link> is a schema function that executes the passed schemas during validation. In contrast, object merging is done during initialization to create a new object schema.
 
-As a result, <Link href="/api/merge/">`merge`</Link> usually has much better performance than <Link href="/api/intersect/">`intersect`</Link> when validating unknown data. Also, subsequent object properties overwrite the previous ones. This is not the case with <Link href="/api/intersect/">`intersect`</Link>, since the validation would fail if two properties with the same name are fundamentally different. However, this also means that the `pipe` and `rest` parameter of the passed object schemas must be ignored and redefined.
+As a result, object merging usually has much better performance than <Link href="/api/intersect/">`intersect`</Link> when validating unknown data. Also, subsequent object properties overwrite the previous ones. This is not the case with <Link href="/api/intersect/">`intersect`</Link>, since the validation would fail if two properties with the same name are fundamentally different.
 
 ```ts
 import * as v from 'valibot';
 
-const ObjectSchema = v.merge([
-  v.object({ foo: v.string(), baz: v.number() }),
-  v.object({ bar: v.string(), baz: v.boolean() }),
-]); // { foo: string; bar: string; baz: boolean }
+const ObjectSchema1 = v.object({ foo: v.string(), baz: v.number() });
+const ObjectSchema2 = v.object({ bar: v.string(), baz: v.boolean() });
+
+const MergedSchema = v.object({
+  ...ObjectSchema1.entries,
+  ...ObjectSchema2.entries,
+}); // { foo: string; bar: string; baz: boolean }
 ```
 
 In the previous code example, the `baz` property of the first object schema is overwritten by the `baz` property of the second object schema.

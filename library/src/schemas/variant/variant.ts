@@ -1,37 +1,18 @@
 import type {
+  BaseIssue,
   BaseSchema,
+  Dataset,
   ErrorMessage,
-  Input,
-  Output,
-  Pipe,
-  SchemaResult,
+  InferInput,
+  InferOutput,
 } from '../../types/index.ts';
-import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
-import type { ObjectSchema } from '../object/index.ts';
-
-/**
- * Variant option schema type.
- */
-interface VariantOptionSchema<TKey extends string> extends BaseSchema {
-  type: 'variant';
-  options: VariantOptions<TKey>;
-}
-
-/**
- * Variant option type.
- */
-export type VariantOption<TKey extends string> =
-  | ObjectSchema<Record<TKey, BaseSchema>, any>
-  | VariantOptionSchema<TKey>;
-
-/**
- * Variant options type.
- */
-export type VariantOptions<TKey extends string> = [
-  VariantOption<TKey>,
-  VariantOption<TKey>,
-  ...VariantOption<TKey>[],
-];
+import { _addIssue } from '../../utils/index.ts';
+import type {
+  InferVariantIssue,
+  VariantIssue,
+  VariantOptions,
+} from './types.ts';
+import { _discriminators } from './utils/index.ts';
 
 /**
  * Variant schema type.
@@ -39,193 +20,169 @@ export type VariantOptions<TKey extends string> = [
 export interface VariantSchema<
   TKey extends string,
   TOptions extends VariantOptions<TKey>,
-  TOutput = Output<TOptions[number]>,
-> extends BaseSchema<Input<TOptions[number]>, TOutput> {
+  TMessage extends ErrorMessage<VariantIssue> | undefined,
+> extends BaseSchema<
+    InferInput<TOptions[number]>,
+    InferOutput<TOptions[number]>,
+    VariantIssue | InferVariantIssue<TOptions>
+  > {
   /**
    * The schema type.
    */
-  type: 'variant';
+  readonly type: 'variant';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof variant;
   /**
    * The discriminator key.
    */
-  key: TKey;
+  readonly key: TKey;
   /**
    * The variant options.
    */
-  options: TOptions;
+  readonly options: TOptions;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
-  /**
-   * The validation and transformation pipeline.
-   */
-  pipe: Pipe<Output<TOptions[number]>> | undefined;
+  readonly message: TMessage;
 }
 
 /**
- * Creates a variant (aka discriminated union) schema.
+ * Creates a variant schema.
  *
  * @param key The discriminator key.
  * @param options The variant options.
- * @param pipe A validation and transformation pipe.
  *
  * @returns A variant schema.
  */
 export function variant<
-  TKey extends string,
-  TOptions extends VariantOptions<TKey>,
->(
-  key: TKey,
-  options: TOptions,
-  pipe?: Pipe<Output<TOptions[number]>>
-): VariantSchema<TKey, TOptions>;
+  const TKey extends string,
+  const TOptions extends VariantOptions<TKey>,
+>(key: TKey, options: TOptions): VariantSchema<TKey, TOptions, undefined>;
 
 /**
- * Creates a variant (aka discriminated union) schema.
+ * Creates a variant schema.
  *
  * @param key The discriminator key.
  * @param options The variant options.
  * @param message The error message.
- * @param pipe A validation and transformation pipe.
  *
- * @returns A variant schema.
+ * @returns An variant schema.
  */
 export function variant<
-  TKey extends string,
-  TOptions extends VariantOptions<TKey>,
+  const TKey extends string,
+  const TOptions extends VariantOptions<TKey>,
+  const TMessage extends ErrorMessage<VariantIssue> | undefined,
 >(
   key: TKey,
   options: TOptions,
-  message?: ErrorMessage,
-  pipe?: Pipe<Output<TOptions[number]>>
-): VariantSchema<TKey, TOptions>;
+  message: TMessage
+): VariantSchema<TKey, TOptions, TMessage>;
 
-export function variant<
-  TKey extends string,
-  TOptions extends VariantOptions<TKey>,
->(
-  key: TKey,
-  options: TOptions,
-  arg3?: Pipe<Output<TOptions[number]>> | ErrorMessage,
-  arg4?: Pipe<Output<TOptions[number]>>
-): VariantSchema<TKey, TOptions> {
-  // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg3, arg4);
-
-  // Create cached expected key
-  let cachedExpectedKey: string | undefined;
-
-  // Create and return variant schema
+export function variant(
+  key: string,
+  options: VariantOptions<string>,
+  message?: ErrorMessage<VariantIssue>
+): VariantSchema<
+  string,
+  VariantOptions<string>,
+  ErrorMessage<VariantIssue> | undefined
+> {
+  let expectedDiscriminators: string | undefined;
   return {
+    kind: 'schema',
     type: 'variant',
+    reference: variant,
     expects: 'Object',
     async: false,
     key,
     options,
     message,
-    pipe,
-    _parse(input, config) {
+    _run(dataset, config) {
+      // Get input value from dataset
+      const input = dataset.value;
+
       // If root type is valid, check nested types
       if (input && typeof input === 'object') {
-        // If key is in input or expected key is not cached, continue
-        if (this.key in input || !cachedExpectedKey) {
-          // Create expected key and variant result
-          let expectedKey: string[] | undefined;
-          let variantResult: SchemaResult<Output<TOptions[number]>> | undefined;
+        // Get discriminator from input
+        // @ts-expect-error
+        const discriminator: unknown = input[this.key];
 
-          // Create function to parse options recursively
-          const parseOptions = (options: VariantOptions<TKey>) => {
-            for (const schema of options) {
-              // If it is an object schema, parse discriminator key
-              if (schema.type === 'object') {
-                const keySchema = schema.entries[this.key];
-                const keyResult = keySchema._parse(
-                  (input as Record<TKey, unknown>)[this.key],
-                  config
-                );
+        // If key is in input, parse schema of each option
+        if (this.key in input) {
+          // Create output dataset variable
+          let outputDataset: Dataset<unknown, BaseIssue<unknown>> | undefined;
 
-                // If expected key is not cached create it
-                if (!cachedExpectedKey) {
-                  expectedKey
-                    ? expectedKey.push(keySchema.expects)
-                    : (expectedKey = [keySchema.expects]);
-                }
+          // Parse only if it is a variant schema or if discriminator matches
+          for (const schema of this.options) {
+            if (
+              schema.type === 'variant' ||
+              !schema.entries[this.key]._run(
+                { typed: false, value: discriminator },
+                config
+              ).issues
+            ) {
+              // Parse input with schema of option
+              const optionDataset = schema._run(
+                { typed: false, value: input },
+                config
+              );
 
-                // If right variant option was found, parse it
-                if (!keyResult.issues) {
-                  const dataResult = schema._parse(input, config);
+              // If valid option is found, return its dataset
+              if (!optionDataset.issues) {
+                return optionDataset;
+              }
 
-                  // If there are not issues, store result and break loop
-                  if (!dataResult.issues) {
-                    variantResult = dataResult;
-                    break;
-                  }
-
-                  // Otherwise, replace variant result only if necessary
-                  if (
-                    !variantResult ||
-                    (!variantResult.typed && dataResult.typed)
-                  ) {
-                    variantResult = dataResult;
-                  }
-                }
-
-                // Otherwise, if it is a variant parse its options
-                // recursively
-              } else if (schema.type === 'variant') {
-                parseOptions(schema.options);
-
-                // If variant option was found, break loop to end execution
-                if (variantResult && !variantResult.issues) {
-                  break;
-                }
+              // Otherwise, replace output dataset if necessary
+              // TODO: Document that only first untyped or typed dataset is
+              // returned and that typed datasets are prioritized
+              if (
+                !outputDataset ||
+                (!outputDataset.typed && optionDataset.typed)
+              ) {
+                outputDataset = optionDataset;
               }
             }
-          };
+          }
 
-          // Parse options recursively
-          parseOptions(this.options);
-
-          // Cache expected key lazy
-          cachedExpectedKey =
-            cachedExpectedKey || [...new Set(expectedKey)].join(' | ');
-
-          // If a variant result is available, process it
-          if (variantResult) {
-            // If result is typed, return pipe result
-            if (variantResult.typed) {
-              return pipeResult(
-                this,
-                variantResult.output,
-                config,
-                variantResult.issues
-              );
-            }
-
-            // Otherwise, return variant result
-            return variantResult;
+          // If any output dataset is available, return it
+          if (outputDataset) {
+            return outputDataset;
           }
         }
 
-        // Otherwise, if discriminator key is invalid, return schema issue
-        const value = (input as Record<string, unknown>)[this.key];
-        return schemaIssue(this, variant, value, config, {
-          expected: cachedExpectedKey,
+        // Otherwise, cache expected discriminators if necessary
+        if (!expectedDiscriminators) {
+          expectedDiscriminators =
+            [..._discriminators(this.key, this.options)].join(' | ') || 'never';
+        }
+
+        // And add discriminator issue
+        _addIssue(this, 'type', dataset, config, {
+          input: discriminator,
+          expected: expectedDiscriminators,
           path: [
             {
               type: 'object',
               origin: 'value',
               input: input as Record<string, unknown>,
               key: this.key,
-              value,
+              value: discriminator,
             },
           ],
         });
+
+        // Otherwise, add variant issue
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
 
-      // Otherwise, return default schema issue
-      return schemaIssue(this, variant, input, config);
+      // Return output dataset
+      return dataset as Dataset<
+        InferOutput<VariantOptions<string>[number]>,
+        VariantIssue | BaseIssue<unknown>
+      >;
     },
   };
 }

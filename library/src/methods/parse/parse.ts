@@ -1,6 +1,12 @@
-import { ValiError } from '../../error/index.ts';
 import { getGlobalConfig } from '../../storages/index.ts';
-import type { BaseSchema, Output, SchemaConfig } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Config,
+  InferIssue,
+  InferOutput,
+} from '../../types/index.ts';
+import { ValiError } from '../../utils/index.ts';
 
 /**
  * Parses an unknown input based on a schema.
@@ -9,16 +15,21 @@ import type { BaseSchema, Output, SchemaConfig } from '../../types/index.ts';
  * @param input The input to be parsed.
  * @param config The parse configuration.
  *
- * @returns The parsed output.
+ * @returns The parsed input.
  */
-export function parse<TSchema extends BaseSchema>(
+export function parse<
+  const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(
   schema: TSchema,
   input: unknown,
-  config?: SchemaConfig
-): Output<TSchema> {
-  const result = schema._parse(input, getGlobalConfig(config));
-  if (result.issues) {
-    throw new ValiError(result.issues);
+  config?: Config<InferIssue<TSchema>>
+): InferOutput<TSchema> {
+  const dataset = schema._run(
+    { typed: false, value: input },
+    getGlobalConfig(config)
+  );
+  if (dataset.issues) {
+    throw new ValiError(dataset.issues);
   }
-  return result.output;
+  return dataset.value;
 }

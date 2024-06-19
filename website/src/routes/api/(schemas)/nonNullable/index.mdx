@@ -17,12 +17,13 @@ Creates a non nullable schema.
 > This schema function can be used to override the behavior of <Link href="../nullable/">`nullable`</Link>.
 
 ```ts
-const Schema = nonNullable<TWrapped>(wrapped, message);
+const Schema = v.nonNullable<TWrapped, TMessage>(wrapped, message);
 ```
 
 ## Generics
 
 - `TWrapped` <Property {...properties.TWrapped} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -46,7 +47,7 @@ The following examples show how `nonNullable` can be used.
 Schema that does not accept `null`.
 
 ```ts
-const NonNullableStringSchema = nonNullable(nullable(string()));
+const NonNullableStringSchema = v.nonNullable(v.nullable(v.string()));
 ```
 
 ### Unwrap non nullable
@@ -54,8 +55,8 @@ const NonNullableStringSchema = nonNullable(nullable(string()));
 Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `nonNullable`.
 
 ```ts
-const NonNullableNumberSchema = nonNullable(nullable(number()));
-const NullableNumberSchema = unwrap(NonNullableNumberSchema);
+const NonNullableNumberSchema = v.nonNullable(v.nullable(v.number()));
+const NullableNumberSchema = v.unwrap(NonNullableNumberSchema);
 ```
 
 ## Related
@@ -71,35 +72,41 @@ The following APIs can be combined with `nonNullable`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -107,8 +114,6 @@ The following APIs can be combined with `nonNullable`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -116,8 +121,12 @@ The following APIs can be combined with `nonNullable`.
     'getFallbacks',
     'is',
     'parse',
+    'pipe',
     'safeParse',
-    'transform',
     'unwrap',
   ]}
 />
+
+### Actions
+
+<ApiList items={['check', 'brand', 'readonly', 'transform']} />

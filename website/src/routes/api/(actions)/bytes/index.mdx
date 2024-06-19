@@ -1,0 +1,64 @@
+---
+title: bytes
+description: Creates a bytes validation action.
+source: /actions/bytes/bytes.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# bytes
+
+Creates a [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
+
+```ts
+const Action = v.bytes<TInput, TRequirement, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `bytes` you can validate the bytes of a string. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `bytes` can be used.
+
+### Bytes schema
+
+Schema to validate a string with 8 bytes
+
+```ts
+const BytesSchema = v.pipe(
+  v.string(),
+  v.bytes(8, 'Exactly 8 bytes are required.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `bytes`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

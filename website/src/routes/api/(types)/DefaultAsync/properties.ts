@@ -1,75 +1,129 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TSchema: {
+  TWrapped: {
     modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
+      generics: [
+        'unknown',
+        'unknown',
+        {
+          type: 'custom',
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
+        },
+      ],
+    },
+  },
+  TInput: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: ['null', 'undefined'],
     },
   },
   DefaultAsync: {
-    modifier: 'extends',
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'Input',
-          href: '../Input/',
+          name: 'MaybeReadonly',
+          href: '../MaybeReadonly/',
           generics: [
             {
               type: 'custom',
-              name: 'TSchema',
+              name: 'InferInput',
+              href: '../InferInput/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TWrapped',
+                },
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'TInput',
             },
           ],
         },
         {
           type: 'function',
-          params: [],
-          return: {
-            type: 'union',
-            options: [
-              {
+          params: [
+            {
+              name: 'dataset',
+              optional: true,
+              type: {
                 type: 'custom',
-                name: 'Input',
-                href: '../Input/',
+                name: 'Dataset',
+                href: '../Dataset/',
                 generics: [
                   {
                     type: 'custom',
-                    name: 'TSchema',
+                    name: 'TInput',
                   },
+                  'never',
                 ],
               },
-              {
+            },
+            {
+              name: 'config',
+              optional: true,
+              type: {
                 type: 'custom',
-                name: 'Promise',
+                name: 'Config',
+                href: '../Config/',
                 generics: [
                   {
-                    type: 'union',
-                    options: [
+                    type: 'custom',
+                    name: 'InferIssue',
+                    href: '../InferIssue/',
+                    generics: [
                       {
                         type: 'custom',
-                        name: 'Input',
-                        href: '../Input/',
-                        generics: [
-                          {
-                            type: 'custom',
-                            name: 'TSchema',
-                          },
-                        ],
+                        name: 'TWrapped',
                       },
-                      'undefined',
                     ],
                   },
                 ],
               },
-              'undefined',
+            },
+          ],
+          return: {
+            type: 'custom',
+            name: 'MaybePromise',
+            href: '../MaybePromise/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'MaybeReadonly',
+                href: '../MaybeReadonly/',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'InferInput',
+                    href: '../InferInput/',
+                    generics: [
+                      {
+                        type: 'custom',
+                        name: 'TWrapped',
+                      },
+                    ],
+                  },
+                  {
+                    type: 'custom',
+                    name: 'TInput',
+                  },
+                ],
+              },
             ],
           },
         },
-        'undefined',
       ],
     },
   },

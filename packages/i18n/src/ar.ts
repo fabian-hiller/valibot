@@ -1,4 +1,4 @@
-import { Language } from './types';
+import type { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
@@ -7,13 +7,14 @@ const language: Language = {
   specific: {
     bic:            (issue) => `BIC غير صالح: القيمة المُدخلة ${issue.received}`,
     bytes:          (issue) => `حجم بايت غير صالح: القيمة المتوقّعة ${issue.expected} لكن القيمة المُدخلة ${issue.received}`,
+    check:          (issue) => `مُدخل غير صالح: القيمة المُدخلة ${issue.received}`,
+    checkAsync:     (issue) => `مُدخل غير صالح: القيمة المُدخلة ${issue.received}`,
     creditCard:     (issue) => `بطاقة إئتمان غير صالحة: القيمة المُدخلة ${issue.received}`,
     cuid2:          (issue) => `قيمة Cuid2 غير صالحة: القيمة المُدخلة ${issue.received}`,
-    custom:         (issue) => `مُدخل غير صالح: القيمة المُدخلة ${issue.received}`,
-    customAsync:    (issue) => `مُدخل غير صالح: القيمة المُدخلة ${issue.received}`,
     decimal:        (issue) => `رقم عُشَري غير صالح: القيمة المُدخلة ${issue.received}`,
     email:          (issue) => `بريد الكتروني غير صالح: القيمة المُدخلة ${issue.received}`,
     emoji:          (issue) => `رمز تعبيري غير صالح: القيمة المُدخلة ${issue.received}`,
+    empty:          (issue) => `الطول غير صالح: القيمة المتوقّعة ${issue.expected} لكن القيمة المُدخلة ${issue.received}`,
     endsWith:       (issue) => `نهاية غير صالحة: القيمة المتوقّعة ${issue.expected} لكن القيمة المُدخلة ${issue.received}`,
     excludes:       (issue) => `محتوى غير صالح: القيمة المتوقّعة ${issue.expected} لكن القيمة المُدخلة ${issue.received}`,
     finite:         (issue) => `عدد محدود غير صالح: القيمة المُدخلة ${issue.received}`,
@@ -46,6 +47,7 @@ const language: Language = {
     minSize:        (issue) => `حجم غير صالح: القيمة المتوقّعة ${issue.expected} لكن القيمة المُدخلة ${issue.received}`,
     minValue:       (issue) => `قيمة غير صالحة: القيمة المتوقّعة ${issue.expected} لكن القيمة المُدخلة ${issue.received}`,
     multipleOf:     (issue) => `متعدد غير صالح: القيمة المتوقّعة ${issue.expected} لكن القيمة المُدخلة ${issue.received}`,
+    nonEmpty:       (issue) => `الطول غير صالح: القيمة المتوقّعة ${issue.expected} لكن القيمة المُدخلة ${issue.received}`,
     notBytes:       (issue) => `حجم بايت غير صالح: القيمة المتوقّعة ${issue.expected} لكن القيمة المُدخلة ${issue.received}`,
     notLength:      (issue) => `طول غير صالح: القيمة المتوقّعة ${issue.expected} لكن القيمة المُدخلة ${issue.received}`,
     notSize:        (issue) => `حجم غير صالح: القيمة المتوقّعة ${issue.expected} لكن القيمة المُدخلة ${issue.received}`,

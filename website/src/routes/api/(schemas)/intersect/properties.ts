@@ -9,6 +9,27 @@ export const properties: Record<string, PropertyProps> = {
       href: '../IntersectOptions/',
     },
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'IntersectIssue',
+              href: '../IntersectIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   options: {
     type: {
       type: 'custom',
@@ -17,41 +38,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'IntersectOutput',
-              href: '../IntersectOutput/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TOptions',
-                },
-              ],
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
   Schema: {
@@ -63,6 +51,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TOptions',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

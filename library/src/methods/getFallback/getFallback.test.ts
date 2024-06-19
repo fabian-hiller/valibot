@@ -1,21 +1,34 @@
 import { describe, expect, test } from 'vitest';
-import { nullable, object, string } from '../../schemas/index.ts';
-import { fallback } from '../fallback/index.ts';
+import { transform } from '../../actions/index.ts';
+import { number, object, string } from '../../schemas/index.ts';
+import { fallback, fallbackAsync } from '../fallback/index.ts';
+import { pipe } from '../pipe/index.ts';
 import { getFallback } from './getFallback.ts';
 
 describe('getFallback', () => {
   test('should return undefined', () => {
     expect(getFallback(string())).toBeUndefined();
-    expect(getFallback(object({ key: string() }))).toBeUndefined();
+    expect(getFallback(number())).toBeUndefined();
+    expect(getFallback(object({}))).toBeUndefined();
   });
 
-  test('should return fallback value', () => {
-    expect(getFallback(fallback(string(), 'test'))).toBe('test');
-    expect(getFallback(fallback(nullable(string()), null))).toBe(null);
-    expect(
-      getFallback(fallback(object({ key: string() }), { key: 'test' }))
-    ).toEqual({
-      key: 'test',
+  describe('should return fallback fallback', () => {
+    const schema = pipe(string(), transform(parseInt));
+
+    test('for direct value', () => {
+      expect(getFallback(fallback(schema, 123))).toBe(123);
+      expect(getFallback(fallbackAsync(schema, 123))).toBe(123);
+    });
+
+    test('for value getter', () => {
+      expect(getFallback(fallback(schema, () => 123))).toBe(123);
+      expect(getFallback(fallbackAsync(schema, () => 123))).toBe(123);
+    });
+
+    test('for asycn value getter', async () => {
+      expect(await getFallback(fallbackAsync(schema, async () => 123))).toBe(
+        123
+      );
     });
   });
 });

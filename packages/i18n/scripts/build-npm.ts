@@ -3,8 +3,10 @@ import path from 'node:path';
 import package_ from '../package.json';
 import ar from '../src/ar';
 import de from '../src/de';
+import es from '../src/es';
 import fr from '../src/fr';
 import hu from '../src/hu';
+import it from '../src/it';
 import ja from '../src/ja';
 import kr from '../src/kr';
 import nb from '../src/nb';
@@ -13,6 +15,7 @@ import pt from '../src/pt';
 import ro from '../src/ro';
 import ru from '../src/ru';
 import sl from '../src/sl';
+import sv from '../src/sv';
 import tr from '../src/tr';
 import uk from '../src/uk';
 import zhCN from '../src/zh-CN';
@@ -27,8 +30,10 @@ console.time('build');
 const languages = [
   ar,
   de,
+  es,
   fr,
   hu,
+  it,
   ja,
   kr,
   nb,
@@ -37,6 +42,7 @@ const languages = [
   ro,
   ru,
   sl,
+  sv,
   tr,
   uk,
   zhCN,

@@ -14,7 +14,7 @@ import { properties } from './properties';
 Returns the default value of the schema.
 
 ```ts
-const value = getDefault<TSchema>(schema);
+const value = v.getDefault<TSchema>(schema, dataset, config);
 ```
 
 ## Generics
@@ -24,6 +24,8 @@ const value = getDefault<TSchema>(schema);
 ## Parameters
 
 - `schema` <Property {...properties.schema} />
+- `dataset` <Property {...properties.dataset} />
+- `config` <Property {...properties.config} />
 
 ## Returns
 
@@ -38,8 +40,8 @@ The following examples show how `getDefault` can be used.
 Get the default value of an optional string schema.
 
 ```ts
-const OptionalStringSchema = optional(string(), "I'm the default!");
-const defaultValue = getDefault(OptionalStringSchema); // "I'm the default!"
+const OptionalStringSchema = v.optional(v.string(), "I'm the default!");
+const defaultValue = v.getDefault(OptionalStringSchema); // "I'm the default!"
 ```
 
 ## Related
@@ -55,36 +57,42 @@ The following APIs can be combined with `getDefault`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -92,15 +100,13 @@ The following APIs can be combined with `getDefault`.
 
 <ApiList
   items={[
-    'coerce',
     'fallback',
     'keyof',
-    'merge',
     'omit',
     'partial',
     'pick',
+    'pipe',
     'required',
-    'transform',
     'unwrap',
   ]}
 />

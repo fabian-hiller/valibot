@@ -1,0 +1,210 @@
+---
+title: pipe
+description: Adds a pipeline to a schema, that can validate and transform its input.
+source: /methods/pipe/pipe.ts
+contributors:
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# pipe
+
+Adds a pipeline to a schema, that can validate and transform its input.
+
+```ts
+const Schema = v.pipe<TSchema, TItems>(schema, ...items);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TItems` <Property {...properties.TItems} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `items` <Property {...properties.items} />
+
+### Explanation
+
+`pipe` creates a modified copy of the given `schema`, containing a pipeline for detailed validations and transformations. It passes the input data synchronously through the `items` in the order they are provided and each item can examine and modify it.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `pipe` can be used. Please see the <Link href="/guides/pipelines/">pipeline guide</Link> for more examples and explanations.
+
+### Email schema
+
+Schema to validate an email.
+
+```ts
+const EmailSchema = v.pipe(
+  v.string(),
+  v.nonEmpty('Please enter your email.'),
+  v.email('The email is badly formatted.'),
+  v.maxLength(30, 'Your email is too long.')
+);
+```
+
+### String to number
+
+Schema to convert a string to a number.
+
+```ts
+const NumberSchema = v.pipe(v.string(), v.transform(Number), v.number());
+```
+
+## Related
+
+The following APIs can be combined with `pipe`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'fallback',
+    'forward',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'omit',
+    'parse',
+    'partial',
+    'pick',
+    'required',
+    'safeParse',
+    'unwrap',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'bic',
+    'brand',
+    'bytes',
+    'check',
+    'creditCard',
+    'cuid2',
+    'decimal',
+    'email',
+    'emoji',
+    'empty',
+    'endsWith',
+    'everyItem',
+    'excludes',
+    'finite',
+    'hash',
+    'hexadecimal',
+    'hexColor',
+    'imei',
+    'includes',
+    'integer',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'mac',
+    'mac48',
+    'mac64',
+    'maxBytes',
+    'maxLength',
+    'maxSize',
+    'maxValue',
+    'mimeType',
+    'minBytes',
+    'minLength',
+    'minSize',
+    'minValue',
+    'multipleOf',
+    'nonEmpty',
+    'notBytes',
+    'notLength',
+    'notSize',
+    'notValue',
+    'octal',
+    'readonly',
+    'regex',
+    'safeInteger',
+    'size',
+    'someItem',
+    'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
+    'transform',
+    'trim',
+    'trimEnd',
+    'trimStart',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
+  ]}
+/>

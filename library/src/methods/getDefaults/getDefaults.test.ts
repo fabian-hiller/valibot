@@ -1,10 +1,13 @@
 import { describe, expect, test } from 'vitest';
 import {
+  boolean,
   nullable,
   nullish,
   number,
   object,
   optional,
+  strictObject,
+  strictTuple,
   string,
   tuple,
 } from '../../schemas/index.ts';
@@ -13,60 +16,93 @@ import { getDefaults } from './getDefaults.ts';
 describe('getDefaults', () => {
   test('should return undefined', () => {
     expect(getDefaults(string())).toBeUndefined();
-    expect(getDefaults(optional(string()))).toBeUndefined();
-    expect(getDefaults(nullable(string()))).toBeUndefined();
-    expect(getDefaults(nullish(string()))).toBeUndefined();
+    expect(getDefaults(number())).toBeUndefined();
+    expect(getDefaults(boolean())).toBeUndefined();
   });
 
-  test('should return default value', () => {
-    expect(getDefaults(optional(string(), ''))).toBe('');
-    expect(getDefaults(nullable(string(), ''))).toBe('');
-    expect(getDefaults(nullish(string(), ''))).toBe('');
-    expect(getDefaults(optional(number(), 0))).toBe(0);
-    expect(getDefaults(nullable(number(), 0))).toBe(0);
-    expect(getDefaults(nullish(number(), 0))).toBe(0);
-    expect(getDefaults(optional(string(), 'test'))).toBe('test');
-    expect(getDefaults(nullable(string(), 'test'))).toBe('test');
-    expect(getDefaults(nullish(string(), 'test'))).toBe('test');
+  test('should return default', () => {
+    expect(getDefaults(optional(string(), 'foo'))).toBe('foo');
+    expect(getDefaults(nullish(number(), () => 123 as const))).toBe(123);
+    expect(getDefaults(nullable(boolean(), false))).toBe(false);
   });
 
-  test('should return object defaults', () => {
-    expect(getDefaults(object({}))).toEqual({});
-    expect(
-      getDefaults(
-        object({
-          key1: string(),
-          key2: optional(string(), 'test'),
-          key3: optional(number(), 0),
-          nested: object({
-            key1: string(),
-            key2: optional(string(), 'test'),
-            key3: optional(number(), 0),
-          }),
-        })
-      )
-    ).toEqual({
-      key1: undefined,
-      key2: 'test',
-      key3: 0,
-      nested: {
-        key1: undefined,
-        key2: 'test',
-        key3: 0,
-      },
+  describe('should return object defaults', () => {
+    test('for empty object', () => {
+      expect(getDefaults(object({}))).toStrictEqual({});
+    });
+
+    test('for simple object', () => {
+      expect(
+        getDefaults(
+          object({
+            key1: optional(string(), 'foo'),
+            key2: nullish(number(), () => 123 as const),
+            key3: nullable(boolean(), false),
+            key4: string(),
+          })
+        )
+      ).toStrictEqual({
+        key1: 'foo',
+        key2: 123,
+        key3: false,
+        key4: undefined,
+      });
+    });
+
+    test('for nested object', () => {
+      expect(
+        getDefaults(
+          object({
+            nested: strictObject({
+              key1: optional(string(), 'foo'),
+              key2: nullish(number(), () => 123 as const),
+              key3: nullable(boolean(), false),
+            }),
+            other: string(),
+          })
+        )
+      ).toStrictEqual({
+        nested: {
+          key1: 'foo',
+          key2: 123,
+          key3: false,
+        },
+        other: undefined,
+      });
     });
   });
 
-  test('should return tuple defaults', () => {
-    expect(
-      getDefaults(
-        tuple([
-          string(),
-          optional(string(), 'test'),
-          optional(number(), 0),
-          tuple([string(), optional(string(), 'test'), optional(number(), 0)]),
-        ])
-      )
-    ).toEqual([undefined, 'test', 0, [undefined, 'test', 0]]);
+  describe('should return tuple defaults', () => {
+    test('for empty tuple', () => {
+      expect(getDefaults(tuple([]))).toStrictEqual([]);
+    });
+
+    test('for simple tuple', () => {
+      expect(
+        getDefaults(
+          tuple([
+            optional(string(), 'foo'),
+            nullish(number(), () => 123 as const),
+            nullable(boolean(), false),
+            string(),
+          ])
+        )
+      ).toStrictEqual(['foo', 123, false, undefined]);
+    });
+
+    test('for nested tuple', () => {
+      expect(
+        getDefaults(
+          tuple([
+            strictTuple([
+              optional(string(), 'foo'),
+              nullish(number(), () => 123 as const),
+              nullable(boolean(), false),
+            ]),
+            string(),
+          ])
+        )
+      ).toStrictEqual([['foo', 123, false], undefined]);
+    });
   });
 });

@@ -1,6 +1,6 @@
 ---
 title: fallback
-description: Returns a fallback output value when validating the passed schema failed.
+description: Returns a fallback value as output if the input does not match the schema.
 source: /methods/fallback/fallback.ts
 contributors:
   - fabian-hiller
@@ -14,10 +14,10 @@ import { properties } from './properties';
 
 # fallback
 
-Returns a fallback output value when validating the passed schema failed.
+Returns a fallback value as output if the input does not match the schema.
 
 ```ts
-const Schema = fallback<TSchema, TFallback>(schema, fallback);
+const Schema = v.fallback<TSchema, TFallback>(schema, fallback);
 ```
 
 ## Generics
@@ -36,7 +36,7 @@ const Schema = fallback<TSchema, TFallback>(schema, fallback);
 
 > If you only want to set a default value for `null` or `undefined` inputs, you should use <Link href="../optional/">`optional`</Link>, <Link href="../nullable/">`nullable`</Link> or <Link href="../nullish/">`nullish`</Link> instead.
 
-> Warning: The fallback value is not validated. Make sure that the fallback value matches your schema.
+> The fallback value is not validated. Make sure that the fallback value matches your schema.
 
 ## Returns
 
@@ -51,7 +51,7 @@ The following examples show how `fallback` can be used.
 Schema that will always return a string output.
 
 ```ts
-const FallbackStringSchema = fallback(string(), "I'm the fallback!");
+const FallbackStringSchema = v.fallback(v.string(), "I'm the fallback!");
 ```
 
 ### Fallback date schema
@@ -61,7 +61,7 @@ Schema that will always return a [`Date`](https://developer.mozilla.org/en-US/do
 > By using a function as the `fallback` parameter, the schema will return a new [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance each time the input does not match the schema.
 
 ```ts
-const FallbackDateSchema = fallback(date(), () => new Date());
+const FallbackDateSchema = v.fallback(v.date(), () => new Date());
 ```
 
 ## Related
@@ -77,36 +77,42 @@ The following APIs can be combined with `fallback`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -114,22 +120,93 @@ The following APIs can be combined with `fallback`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'getDefault',
     'getDefaults',
     'getFallback',
     'getFallbacks',
     'is',
     'keyof',
-    'merge',
     'omit',
     'parse',
     'partial',
     'pick',
+    'pipe',
     'required',
     'safeParse',
-    'transform',
     'unwrap',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'bic',
+    'brand',
+    'bytes',
+    'check',
+    'creditCard',
+    'cuid2',
+    'decimal',
+    'email',
+    'emoji',
+    'empty',
+    'endsWith',
+    'everyItem',
+    'excludes',
+    'finite',
+    'hash',
+    'hexadecimal',
+    'hexColor',
+    'imei',
+    'includes',
+    'integer',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'mac',
+    'mac48',
+    'mac64',
+    'maxBytes',
+    'maxLength',
+    'maxSize',
+    'maxValue',
+    'mimeType',
+    'minBytes',
+    'minLength',
+    'minSize',
+    'minValue',
+    'multipleOf',
+    'nonEmpty',
+    'notBytes',
+    'notLength',
+    'notSize',
+    'notValue',
+    'octal',
+    'readonly',
+    'regex',
+    'safeInteger',
+    'size',
+    'someItem',
+    'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
+    'transform',
+    'trim',
+    'trimEnd',
+    'trimStart',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
   ]}
 />

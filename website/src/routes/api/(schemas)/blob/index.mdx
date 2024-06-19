@@ -14,21 +14,20 @@ import { properties } from './properties';
 Creates a blob schema.
 
 ```ts
-// Blob schema with an optional pipe
-const Schema = blob(pipe);
-
-// Blob schema with an optional message and pipe
-const Schema = blob(message, pipe);
+const Schema = v.blob<TMessage>(message);
 ```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-With `blob` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the blob. If the input is not a blob, you can use `message` to customize the error message.
+With `blob` you can validate the data type of the input. If the input is not a blob, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -43,10 +42,11 @@ The following examples show how `blob` can be used.
 Schema to validate an image.
 
 ```ts
-const ImageSchema = blob('Please select an image file.', [
-  mimeType(['image/jpeg', 'image/png'], 'Please select a JPEG or PNG file.'),
-  maxSize(1024 * 1024 * 10, 'Please select a file smaller than 10 MB.'),
-]);
+const ImageSchema = v.pipe(
+  v.blob('Please select an image file.'),
+  v.mimeType(['image/jpeg', 'image/png'], 'Please select a JPEG or PNG file.'),
+  v.maxSize(1024 * 1024 * 10, 'Please select a file smaller than 10 MB.')
+);
 ```
 
 ## Related
@@ -60,6 +60,8 @@ The following APIs can be combined with `blob`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -67,10 +69,14 @@ The following APIs can be combined with `blob`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -79,8 +85,6 @@ The following APIs can be combined with `blob`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -88,17 +92,23 @@ The following APIs can be combined with `blob`.
     'getFallbacks',
     'is',
     'parse',
+    'pipe',
     'safeParse',
-    'transform',
   ]}
 />
 
-### Transformations
-
-<ApiList items={['toCustom']} />
-
-### Validations
+### Actions
 
 <ApiList
-  items={['custom', 'maxSize', 'mimeType', 'minSize', 'notSize', 'size']}
+  items={[
+    'check',
+    'brand',
+    'maxSize',
+    'mimeType',
+    'minSize',
+    'notSize',
+    'readonly',
+    'size',
+    'transform',
+  ]}
 />

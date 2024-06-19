@@ -18,10 +18,10 @@ When validating unknown data against a schema, I collect information about each 
 The issues are an array of objects. In the following I will explain you exactly what information an issue contains and how this information can help you.
 
 ```ts
-type SchemaIssue = {
+type BaseIssue = {
   // Required info
-  reason: IssueReason;
-  context: string;
+  kind: 'schema' | 'validation' | 'transformation';
+  type: string;
   input: unknown;
   expected: string | null;
   received: string;
@@ -42,13 +42,13 @@ type SchemaIssue = {
 
 Each issue contains the following required information.
 
-#### Reason
+#### Kind
 
-`reason` describes the reason of the problem. If an input does not match the data type, for example a number was passed instead of a string, `reason` has the value `'type'`. In all other cases the reason is not the datatype but the actual content of the data. For example, if a string is invalid because it does not match a regex, `reason` has the value `'string'`.
+`kind` describes the kind of the problem. If an input does not match the data type, for example a number was passed instead of a string, `kind` has the value `'schema'`. In all other cases the reason is not the datatype but the actual content of the data. For example, if a string is invalid because it does not match a regex, `kind` has the value `'validation'`.
 
-#### Context
+#### Type
 
-`context` describes which function did the validation. If the schema function <Link href="/api/array/">`array`</Link> detects that the input is not an array, `context` has the value `'array'`. If the <Link href="/api/minLength/">`minLength`</Link> validation function detects that an array is too short, `context` has the value `'min_length'`.
+`type` describes which function did the validation. If the schema function <Link href="/api/array/">`array`</Link> detects that the input is not an array, `type` has the value `'array'`. If the <Link href="/api/minLength/">`minLength`</Link> validation function detects that an array is too short, `type` has the value `'min_length'`.
 
 #### Input
 
@@ -80,10 +80,10 @@ Some issues contain further optional information.
 
 ```ts
 type PathItem = {
-  schema: string;
+  type: string;
   origin: 'key' | 'value';
   input: unknown;
-  key: string | number | symbol;
+  key?: unknown;
   value: unknown;
 };
 ```
@@ -108,7 +108,7 @@ For common use cases like forms, I can help you with small functions to format i
 
 ### Flatten errors
 
-If you are only interested in the error messages of each issue to show them to your users, you can convert an array of issues or a <Link href="/api/ValiError/">`ValiError`</Link> to a flat object with <Link href="/api/flatten/">`flatten`</Link>. Below is an example.
+If you are only interested in the error messages of each issue to show them to your users, you can convert an array of issues to a flat object with <Link href="/api/flatten/">`flatten`</Link>. Below is an example.
 
 ```ts
 import * as v from 'valibot';
@@ -120,55 +120,57 @@ const ObjectSchema = v.object({
   }),
 });
 
-try {
-  v.parse(ObjectSchema, { nested: {} }); // Throws an error
-} catch (error) {
-  console.log(v.flatten<typeof ObjectSchema>(error));
+const result = v.safeParse(ObjectSchema, { nested: {} });
+
+if (result.issues) {
+  console.log(v.flatten<typeof ObjectSchema>(result.issues));
 }
 ```
 
-The <Link href="/api/ValiError/">`ValiError`</Link> thrown in the code sample above this text contains the following issues.
+The `result` returned in the code sample above this text contains the following issues.
 
 ```ts
 [
   {
-    reason: 'type',
-    context: 'string',
+    kind: 'schema',
+    type: 'string',
     input: undefined,
     expected: 'string',
     received: 'undefined',
     message: 'Value of "key" is missing.',
     path: [
       {
-        schema: 'object',
+        type: 'object',
         origin: 'value',
-        input: { nested: {} },
+        input: {
+          nested: {},
+        },
         key: 'key',
-        value: undefined,
       },
     ],
   },
   {
-    reason: 'type',
-    context: 'string',
+    kind: 'schema',
+    type: 'string',
     input: undefined,
     expected: 'string',
     received: 'undefined',
     message: 'Value of "nested.key" is missing.',
     path: [
       {
-        schema: 'object',
+        type: 'object',
         origin: 'value',
-        input: { nested: {} },
+        input: {
+          nested: {},
+        },
         key: 'nested',
         value: {},
       },
       {
-        schema: 'object',
+        type: 'object',
         origin: 'value',
         input: {},
         key: 'key',
-        value: undefined,
       },
     ],
   },

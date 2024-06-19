@@ -1,126 +1,509 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods/index.ts';
-import { custom, customAsync } from '../../validations/index.ts';
-import { literal } from '../literal/index.ts';
+import { decimal, email, url } from '../../actions/index.ts';
+import { pipe } from '../../methods/index.ts';
+import { EMAIL_REGEX } from '../../regex.ts';
+import type {
+  InferIssue,
+  InferOutput,
+  TypedDataset,
+  UntypedDataset,
+} from '../../types/index.ts';
+import { expectNoSchemaIssueAsync } from '../../vitest/index.ts';
+import { bigint } from '../bigint/bigint.ts';
+import { boolean } from '../boolean/index.ts';
+import { literal } from '../literal/literal.ts';
+import { null_ } from '../null/null.ts';
 import { number } from '../number/index.ts';
-import { object } from '../object/index.ts';
+import { object, objectAsync } from '../object/index.ts';
+import { strictObjectAsync } from '../strictObject/index.ts';
 import { string } from '../string/index.ts';
-import { variantAsync } from './variantAsync.ts';
+import { variantAsync, type VariantSchemaAsync } from './variantAsync.ts';
+
+// TODO: Add test for invalid type inputs
 
 describe('variantAsync', () => {
-  test('should pass only variant values', async () => {
-    const schema1 = variantAsync('type', [
-      object({ type: literal('a'), a: string() }),
-      object({ type: literal('b'), b: number() }),
-    ]);
-    const input1 = { type: 'a', a: 'hello' };
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toEqual(input1);
-    const input2 = { type: 'b', b: 123 };
-    const output2 = await parseAsync(schema1, input2);
-    expect(output2).toEqual(input2);
+  describe('should return schema object', () => {
+    const key = 'type' as const;
+    type Key = typeof key;
+    const options = [
+      object({ type: literal('foo') }),
+      strictObjectAsync({ type: literal('bar') }),
+    ] as const;
+    type Options = typeof options;
+    const baseSchema: Omit<
+      VariantSchemaAsync<Key, Options, never>,
+      'message'
+    > = {
+      kind: 'schema',
+      type: 'variant',
+      reference: variantAsync,
+      expects: 'Object',
+      key,
+      options,
+      async: true,
+      _run: expect.any(Function),
+    };
 
-    const schema2 = variantAsync('type', [
-      schema1,
-      object({ type: literal('c'), foo: literal('foo') }),
-      object({ type: literal('c'), bar: literal('bar') }),
-    ]);
-    const input3 = { type: 'b', b: 123 };
-    const output3 = await parseAsync(schema2, input3);
-    expect(output3).toEqual(input3);
-    const input4 = { type: 'c', foo: 'foo' };
-    const output4 = await parseAsync(schema2, input4);
-    expect(output4).toEqual(input4);
-    const input5 = { type: 'c', bar: 'bar' };
-    const output5 = await parseAsync(schema2, input5);
-    expect(output5).toEqual(input5);
+    test('with undefined message', () => {
+      const schema: VariantSchemaAsync<Key, Options, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(variantAsync(key, options)).toStrictEqual(schema);
+      expect(variantAsync(key, options, undefined)).toStrictEqual(schema);
+    });
 
-    await expect(parseAsync(schema2, null)).rejects.toThrowError();
-    await expect(parseAsync(schema2, {})).rejects.toThrowError();
-    await expect(
-      parseAsync(schema2, { type: 'b', b: '123' })
-    ).rejects.toThrowError();
-    await expect(
-      parseAsync(schema2, { type: 'c', c: 123 })
-    ).rejects.toThrowError();
-    await expect(parseAsync(schema2, { type: 'x' })).rejects.toThrowError();
+    test('with string message', () => {
+      expect(variantAsync(key, options, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies VariantSchemaAsync<Key, Options, 'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(variantAsync(key, options, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies VariantSchemaAsync<Key, Options, typeof message>);
+    });
   });
 
-  test('should throw custom error', async () => {
-    const error = 'Value is not in variant!';
-    await expect(
-      parseAsync(
-        variantAsync(
-          'type',
-          [
-            object({ type: literal('a'), a: string() }),
-            object({ type: literal('b'), b: number() }),
-          ],
-          error
-        ),
-        null
-      )
-    ).rejects.toThrowError(error);
+  describe('should return dataset without issues', () => {
+    test('for simple variants', async () => {
+      await expectNoSchemaIssueAsync(
+        variantAsync('type', [
+          object({ type: literal('foo') }),
+          object({ type: literal('bar') }),
+          objectAsync({ type: null_() }),
+        ]),
+        [{ type: 'foo' }, { type: 'bar' }, { type: null }]
+      );
+    });
+
+    test('for same discriminators', async () => {
+      await expectNoSchemaIssueAsync(
+        variantAsync('type', [
+          object({ type: literal('foo'), other: string() }),
+          object({ type: literal('foo'), other: number() }),
+          objectAsync({ type: literal('foo'), other: boolean() }),
+        ]),
+        [
+          { type: 'foo', other: 'hello' },
+          { type: 'foo', other: 123 },
+          { type: 'foo', other: true },
+        ]
+      );
+    });
+
+    test('for nested variants', async () => {
+      await expectNoSchemaIssueAsync(
+        variantAsync('type', [
+          object({ type: literal('foo') }),
+          variantAsync('type', [
+            object({ type: literal('bar') }),
+            objectAsync({ type: null_() }),
+          ]),
+        ]),
+        [{ type: 'foo' }, { type: 'bar' }, { type: null }]
+      );
+    });
+
+    test('for deeply nested variants', async () => {
+      await expectNoSchemaIssueAsync(
+        variantAsync('type', [
+          object({ type: literal('foo') }),
+          variantAsync('type', [
+            object({ type: literal('bar') }),
+            variantAsync('type', [object({ type: null_() })]),
+          ]),
+        ]),
+        [{ type: 'foo' }, { type: 'bar' }, { type: null }]
+      );
+    });
   });
 
-  test('should execute pipe', async () => {
-    const error = 'Input is invalid';
+  describe('should return dataset with issues', () => {
+    const baseInfo = {
+      message: expect.any(String),
+      requirement: undefined,
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+    };
 
-    const schema1 = variantAsync(
-      'type',
-      [
-        object({ type: literal('a'), a: string() }),
-        object({ type: literal('b'), b: number() }),
-      ],
-      [
-        custom(
-          (input) =>
-            (input.type === 'a' && input.a === 'test') ||
-            (input.type === 'b' && input.b === 10),
-          error
-        ),
-      ]
-    );
-    const input1 = { type: 'a', a: 'test' };
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toEqual(input1);
-    const input2 = { type: 'b', b: 10 };
-    const output2 = await parseAsync(schema1, input2);
-    expect(output2).toEqual(input2);
-    await expect(
-      parseAsync(schema1, { type: 'a', a: 'foo' })
-    ).rejects.toThrowError(error);
-    await expect(
-      parseAsync(schema1, { type: 'b', b: 123 })
-    ).rejects.toThrowError(error);
+    test('for invalid base type', async () => {
+      const schema = variantAsync('type', [
+        object({ type: literal('foo') }),
+        objectAsync({ type: literal('bar') }),
+      ]);
+      expect(
+        await schema._run({ typed: false, value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: 'foo',
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'variant',
+            input: 'foo',
+            expected: 'Object',
+            received: '"foo"',
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
 
-    const schema2 = variantAsync(
-      'type',
-      [
-        object({ type: literal('a'), a: string() }),
-        object({ type: literal('b'), b: number() }),
-      ],
-      'Error',
-      [
-        customAsync(
-          async (input) =>
-            (input.type === 'a' && input.a === 'test') ||
-            (input.type === 'b' && input.b === 10),
-          error
-        ),
-      ]
-    );
-    const input3 = { type: 'a', a: 'test' };
-    const output3 = await parseAsync(schema2, input3);
-    expect(output3).toEqual(input3);
-    const input4 = { type: 'b', b: 10 };
-    const output4 = await parseAsync(schema2, input4);
-    expect(output4).toEqual(input4);
-    await expect(
-      parseAsync(schema2, { type: 'a', a: 'foo' })
-    ).rejects.toThrowError(error);
-    await expect(
-      parseAsync(schema2, { type: 'b', b: 123 })
-    ).rejects.toThrowError(error);
+    test('for empty options', async () => {
+      const schema = variantAsync('type', []);
+      const input = { type: 'foo' };
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'variant',
+            input: input.type,
+            expected: 'never',
+            received: `"${input.type}"`,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'type',
+                value: input.type,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for missing discriminator', async () => {
+      const schema = variantAsync('type', [
+        object({ type: literal('foo') }),
+        objectAsync({ type: literal('bar') }),
+      ]);
+      const input = { other: 123 };
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'variant',
+            input: undefined,
+            expected: '"foo" | "bar"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'type',
+                value: undefined,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for invalid discriminator', async () => {
+      const schema = variantAsync('type', [
+        object({ type: literal('foo') }),
+        objectAsync({ type: literal('bar') }),
+      ]);
+      const input = { type: 'baz' };
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'variant',
+            input: input.type,
+            expected: '"foo" | "bar"',
+            received: `"${input.type}"`,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'type',
+                value: input.type,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for nested invalid discriminator', async () => {
+      const schema = variantAsync('type', [
+        object({ type: literal('foo') }),
+        variantAsync('other', [
+          object({ type: literal('bar'), other: string() }),
+          objectAsync({ type: literal('baz'), other: number() }),
+        ]),
+      ]);
+      const input = { type: 'bar', other: null };
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'variant',
+            input: input.other,
+            expected: 'string | number',
+            received: `${input.other}`,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'other',
+                value: input.other,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for untyped object', async () => {
+      const schema = variantAsync('type', [
+        object({ type: literal('foo'), other: bigint() }),
+        object({ type: literal('bar'), other: string() }),
+        objectAsync({ type: literal('baz'), other: number() }),
+      ]);
+      const input = { type: 'bar', other: null };
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: input.other,
+            expected: 'string',
+            received: `${input.other}`,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'other',
+                value: input.other,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for nested untyped object', async () => {
+      const schema = variantAsync('type', [
+        object({ type: literal('foo') }),
+        variantAsync('type', [
+          object({ type: literal('bar'), other: string() }),
+          objectAsync({ type: literal('baz'), other: number() }),
+        ]),
+      ]);
+      const input = { type: 'bar', other: null };
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: input.other,
+            expected: 'string',
+            received: `${input.other}`,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'other',
+                value: input.other,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for multiple untyped objects', async () => {
+      const schema = variantAsync('type', [
+        object({ type: literal('foo'), other: bigint() }),
+        object({ type: literal('bar'), other: string() }),
+        object({ type: literal('bar'), other: number() }),
+        objectAsync({ type: literal('bar'), other: boolean() }),
+      ]);
+      const input = { type: 'bar', other: null };
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: input.other,
+            expected: 'string',
+            received: `${input.other}`,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'other',
+                value: input.other,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for typed objects', async () => {
+      const schema = variantAsync('type', [
+        object({ type: literal('foo'), other: number() }),
+        object({ type: literal('bar'), other: pipe(string(), email()) }),
+        objectAsync({ type: literal('baz'), other: boolean() }),
+      ]);
+      type Schema = typeof schema;
+      const input = { type: 'bar', other: 'hello' } as const;
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'validation',
+            type: 'email',
+            input: input.other,
+            expected: null,
+            received: `"${input.other}"`,
+            requirement: EMAIL_REGEX,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'other',
+                value: input.other,
+              },
+            ],
+          },
+        ],
+      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+    });
+
+    test('for nested typed objects', async () => {
+      const schema = variantAsync('type', [
+        object({ type: literal('foo'), other: number() }),
+        variantAsync('type', [
+          object({ type: literal('bar'), other: pipe(string(), email()) }),
+          objectAsync({ type: literal('baz'), other: boolean() }),
+        ]),
+      ]);
+      type Schema = typeof schema;
+      const input = { type: 'bar', other: 'hello' } as const;
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'validation',
+            type: 'email',
+            input: input.other,
+            expected: null,
+            received: `"${input.other}"`,
+            requirement: EMAIL_REGEX,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'other',
+                value: input.other,
+              },
+            ],
+          },
+        ],
+      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+    });
+
+    test('for multiple typed objects', async () => {
+      const schema = variantAsync('type', [
+        object({ type: literal('foo'), other: number() }),
+        object({ type: literal('foo'), other: pipe(string(), email()) }),
+        object({ type: literal('foo'), other: pipe(string(), url()) }),
+        object({ type: literal('foo'), other: pipe(string(), decimal()) }),
+        objectAsync({ type: literal('foo'), other: boolean() }),
+      ]);
+      type Schema = typeof schema;
+      const input = { type: 'foo', other: 'hello' } as const;
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'validation',
+            type: 'email',
+            input: input.other,
+            expected: null,
+            received: `"${input.other}"`,
+            requirement: EMAIL_REGEX,
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'other',
+                value: input.other,
+              },
+            ],
+          },
+        ],
+      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+    });
   });
 });

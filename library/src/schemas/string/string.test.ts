@@ -1,38 +1,110 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
-import { email, maxLength, minLength } from '../../validations/index.ts';
-import { string } from './string.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { string, type StringIssue, type StringSchema } from './string.ts';
 
 describe('string', () => {
-  test('should pass only strings', () => {
+  describe('should return schema object', () => {
+    const baseSchema: Omit<StringSchema<never>, 'message'> = {
+      kind: 'schema',
+      type: 'string',
+      reference: string,
+      expects: 'string',
+      async: false,
+      _run: expect.any(Function),
+    };
+
+    test('with undefined message', () => {
+      const schema: StringSchema<undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(string()).toStrictEqual(schema);
+      expect(string(undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(string('message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies StringSchema<'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(string(message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies StringSchema<typeof message>);
+    });
+  });
+
+  describe('should return dataset without issues', () => {
     const schema = string();
-    const input = '';
-    const output = parse(schema, input);
-    expect(output).toBe(input);
-    expect(() => parse(schema, 123n)).toThrowError();
-    expect(() => parse(schema, null)).toThrowError();
-    expect(() => parse(schema, {})).toThrowError();
+
+    test('for empty strings', () => {
+      expectNoSchemaIssue(schema, ['', ' ', '\n']);
+    });
+
+    test('for single char', () => {
+      expectNoSchemaIssue(schema, ['a', 'A', '0']);
+    });
+
+    test('for multiple chars', () => {
+      expectNoSchemaIssue(schema, ['abc', 'ABC', '123']);
+    });
+
+    test('for special chars', () => {
+      expectNoSchemaIssue(schema, ['-', '+', '#', '$', '%']);
+    });
   });
 
-  test('should throw custom error', () => {
-    const error = 'Value is not a string!';
-    expect(() => parse(string(error), 123)).toThrowError(error);
-  });
+  describe('should return dataset with issues', () => {
+    const schema = string('message');
+    const baseIssue: Omit<StringIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'string',
+      expected: 'string',
+      message: 'message',
+    };
 
-  test('should execute pipe', () => {
-    const lengthError = 'Invalid length';
-    const schema1 = string([minLength(1), maxLength(3)]);
-    const input1 = '12';
-    const output1 = parse(schema1, input1);
-    expect(output1).toBe(input1);
-    expect(() => parse(schema1, '')).toThrowError(lengthError);
-    expect(() => parse(schema1, '1234')).toThrowError(lengthError);
+    // Primitive types
 
-    const emailError = 'Invalid email';
-    const schema2 = string('Error', [email()]);
-    const input2 = 'jane@example.com';
-    const output2 = parse(schema2, input2);
-    expect(output2).toBe(input2);
-    expect(() => parse(schema2, 'jane@example')).toThrowError(emailError);
+    test('for bigints', () => {
+      expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
+    });
+
+    test('for booleans', () => {
+      expectSchemaIssue(schema, baseIssue, [true, false]);
+    });
+
+    test('for null', () => {
+      expectSchemaIssue(schema, baseIssue, [null]);
+    });
+
+    test('for numbers', () => {
+      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', () => {
+      expectSchemaIssue(schema, baseIssue, [undefined]);
+    });
+
+    test('for symbols', () => {
+      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    });
+
+    // Complex types
+
+    test('for arrays', () => {
+      expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    });
+
+    test('for functions', () => {
+      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    });
+
+    test('for objects', () => {
+      expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    });
   });
 });

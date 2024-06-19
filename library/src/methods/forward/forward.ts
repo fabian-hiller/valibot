@@ -1,65 +1,82 @@
-import type { BaseValidation, PathItem } from '../../types/index.ts';
-import type { PathList } from './types.ts';
+import type {
+  BaseIssue,
+  BaseValidation,
+  IssuePathItem,
+  PathKeys,
+} from '../../types/index.ts';
+
+// TODO: We should try to find a better way to type this function without
+// breaking the type inference, as the current implementation loses some type
+// information by returning a `BaseValidation` instead of the original type.
 
 /**
  * Forwards the issues of the passed validation action.
  *
- * @param validation The validation.
- * @param pathList The path list.
+ * @param action The validation action.
+ * @param pathKeys The path keys.
  *
- * @returns The passed validation.
+ * @returns The modified action.
  */
-export function forward<TInput extends unknown[] | Record<string, unknown>>(
-  validation: BaseValidation<TInput>,
-  pathList: PathList<TInput>
-): BaseValidation<TInput> {
+export function forward<
+  TInput extends Record<string, unknown> | ArrayLike<unknown>,
+  TIssue extends BaseIssue<unknown>,
+>(
+  action: BaseValidation<TInput, TInput, TIssue>,
+  pathKeys: PathKeys<TInput>
+): BaseValidation<TInput, TInput, TIssue> {
   return {
-    ...validation,
-    _parse(input) {
-      // Get validation result
-      const result = validation._parse(input);
+    ...action,
+    _run(dataset, config) {
+      // Create copy of previous issues
+      const prevIssues = dataset.issues && [...dataset.issues];
 
-      // If issues occurred, try to forward them
-      if (result.issues) {
-        for (const issue of result.issues) {
-          // Create path input variable
-          let pathInput: any = input;
+      // Run validation action
+      action._run(dataset, config);
 
-          // Try to forward issue to end of path list
-          for (const key of pathList) {
-            // Create path value variable
-            const pathValue = pathInput[key];
+      // If dataset contains issues, forward newly added issues
+      if (dataset.issues) {
+        for (const issue of dataset.issues) {
+          if (!prevIssues?.includes(issue)) {
+            // Create path input variable
+            let pathInput: unknown = dataset.value;
 
-            // Overwrite issue input with path value
-            issue.input = pathValue;
+            // Try to forward issue to end of path list
+            for (const key of pathKeys) {
+              // Create path value variable
+              // @ts-expect-error
+              const pathValue: unknown = pathInput[key];
 
-            // Create path item for current key
-            // TODO: Check if we can prevent path item from being unknown by
-            // adding context of schema to `._parse`
-            const pathItem: PathItem = {
-              type: 'unknown',
-              origin: 'value',
-              input: pathInput,
-              key,
-              value: pathValue,
-            };
+              // Create path item for current key
+              const pathItem: IssuePathItem = {
+                type: 'unknown',
+                origin: 'value',
+                input: pathInput,
+                key,
+                value: pathValue,
+              };
 
-            // Forward issue by adding path item
-            issue.path ? issue.path.push(pathItem) : (issue.path = [pathItem]);
+              // Forward issue by adding path item
+              if (issue.path) {
+                issue.path.push(pathItem);
+              } else {
+                // @ts-expect-error
+                issue.path = [pathItem];
+              }
 
-            // If path value is undefined, stop forwarding
-            if (!pathValue) {
-              break;
+              // If path value is undefined, stop forwarding
+              if (!pathValue) {
+                break;
+              }
+
+              // Set next path input to current path value
+              pathInput = pathValue;
             }
-
-            // Set next path input to current path value
-            pathInput = pathValue;
           }
         }
       }
 
-      // Return validation result
-      return result;
+      // Return output dataset
+      return dataset;
     },
   };
 }

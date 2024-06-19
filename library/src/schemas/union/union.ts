@@ -1,160 +1,179 @@
 import type {
+  BaseIssue,
   BaseSchema,
   ErrorMessage,
-  Input,
+  InferInput,
+  InferIssue,
+  InferOutput,
   MaybeReadonly,
-  Output,
-  Pipe,
-  TypedSchemaResult,
-  UntypedSchemaResult,
+  TypedDataset,
+  UntypedDataset,
 } from '../../types/index.ts';
-import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
-import { subissues } from './utils/index.ts';
+import { _addIssue } from '../../utils/index.ts';
+import type { UnionIssue } from './types.ts';
+import { _subIssues } from './utils/index.ts';
 
 /**
  * Union options type.
  */
-export type UnionOptions = MaybeReadonly<BaseSchema[]>;
+export type UnionOptions = MaybeReadonly<
+  BaseSchema<unknown, unknown, BaseIssue<unknown>>[]
+>;
 
 /**
  * Union schema type.
  */
 export interface UnionSchema<
   TOptions extends UnionOptions,
-  TOutput = Output<TOptions[number]>,
-> extends BaseSchema<Input<TOptions[number]>, TOutput> {
+  TMessage extends
+    | ErrorMessage<UnionIssue<InferIssue<TOptions[number]>>>
+    | undefined,
+> extends BaseSchema<
+    InferInput<TOptions[number]>,
+    InferOutput<TOptions[number]>,
+    UnionIssue<InferIssue<TOptions[number]>> | InferIssue<TOptions[number]>
+  > {
   /**
    * The schema type.
    */
-  type: 'union';
+  readonly type: 'union';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof union;
   /**
    * The union options.
    */
-  options: TOptions;
+  readonly options: TOptions;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
-  /**
-   * The validation and transformation pipeline.
-   */
-  pipe: Pipe<Output<TOptions[number]>> | undefined;
+  readonly message: TMessage;
 }
 
 /**
- * Creates a union schema.
+ * Creates an union schema.
  *
  * @param options The union options.
- * @param pipe A validation and transformation pipe.
  *
- * @returns A union schema.
+ * @returns An union schema.
  */
-export function union<TOptions extends UnionOptions>(
-  options: TOptions,
-  pipe?: Pipe<Output<TOptions[number]>>
-): UnionSchema<TOptions>;
+export function union<const TOptions extends UnionOptions>(
+  options: TOptions
+): UnionSchema<TOptions, undefined>;
 
 /**
- * Creates a union schema.
+ * Creates an union schema.
  *
  * @param options The union options.
  * @param message The error message.
- * @param pipe A validation and transformation pipe.
  *
- * @returns A union schema.
+ * @returns An union schema.
  */
-export function union<TOptions extends UnionOptions>(
-  options: TOptions,
-  message?: ErrorMessage,
-  pipe?: Pipe<Output<TOptions[number]>>
-): UnionSchema<TOptions>;
+export function union<
+  const TOptions extends UnionOptions,
+  const TMessage extends
+    | ErrorMessage<UnionIssue<InferIssue<TOptions[number]>>>
+    | undefined,
+>(options: TOptions, message: TMessage): UnionSchema<TOptions, TMessage>;
 
-export function union<TOptions extends UnionOptions>(
-  options: TOptions,
-  arg2?: Pipe<Output<TOptions[number]>> | ErrorMessage,
-  arg3?: Pipe<Output<TOptions[number]>>
-): UnionSchema<TOptions> {
-  // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg2, arg3);
-
-  // Create and return union schema
+export function union(
+  options: UnionOptions,
+  message?: ErrorMessage<UnionIssue<BaseIssue<unknown>>>
+): UnionSchema<
+  UnionOptions,
+  ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
+> {
   return {
+    kind: 'schema',
     type: 'union',
-    expects: [...new Set(options.map((option) => option.expects))].join(' | '),
+    reference: union,
+    expects:
+      [...new Set(options.map((option) => option.expects))].join(' | ') ||
+      'never',
     async: false,
     options,
     message,
-    pipe,
-    _parse(input, config) {
-      // Create variables to collect results
-      let validResult: TypedSchemaResult<Output<TOptions[number]>> | undefined;
-      let untypedResults: UntypedSchemaResult[] | undefined;
-      let typedResults:
-        | TypedSchemaResult<Output<TOptions[number]>>[]
+    _run(dataset, config) {
+      // Create variables to collect datasets
+      let validDataset: TypedDataset<unknown, BaseIssue<unknown>> | undefined;
+      let typedDatasets:
+        | TypedDataset<unknown, BaseIssue<unknown>>[]
         | undefined;
+      let untypedDatasets: UntypedDataset<BaseIssue<unknown>>[] | undefined;
 
-      // Parse schema of each option
+      // Parse schema of each option and collect datasets
       for (const schema of this.options) {
-        const result = schema._parse(input, config);
+        const optionDataset = schema._run(
+          { typed: false, value: dataset.value },
+          config
+        );
 
-        // If typed, add valid or typed result
-        if (result.typed) {
-          // If there are no issues, add valid result and break loop
-          if (!result.issues) {
-            validResult = result;
-            break;
+        // If typed, add it to valid or typed datasets
+        if (optionDataset.typed) {
+          // If there are issues, add it to typed datasets
+          if (optionDataset.issues) {
+            if (typedDatasets) {
+              typedDatasets.push(optionDataset);
+            } else {
+              typedDatasets = [optionDataset];
+            }
 
-            // Otherwise, add typed result
+            // Otherwise, add it as valid dataset and break loop
           } else {
-            typedResults
-              ? typedResults.push(result)
-              : (typedResults = [result]);
+            validDataset = optionDataset;
+            break;
           }
 
-          // Otherwise, add untyped result
+          // Otherwise, add it to untyped datasets
         } else {
-          untypedResults
-            ? untypedResults.push(result)
-            : (untypedResults = [result]);
+          if (untypedDatasets) {
+            untypedDatasets.push(optionDataset);
+          } else {
+            untypedDatasets = [optionDataset];
+          }
         }
       }
 
-      // If there is a valid result, return pipe result
-      if (validResult) {
-        return pipeResult(this, validResult.output, config);
+      // If there is a valid dataset, return it
+      if (validDataset) {
+        return validDataset;
       }
 
-      // If there are typed results, return pipe result
-      if (typedResults?.length) {
-        const firstResult = typedResults[0];
-        return pipeResult(
-          this,
-          firstResult.output,
-          config,
-          // Hint: If there is more than one typed result, we use a general
-          // union issue with subissues because the issues could contradict
-          // each other.
-          typedResults.length === 1
-            ? firstResult.issues
-            : schemaIssue(this, union, input, config, {
-                reason: 'union',
-                issues: subissues(typedResults),
-              }).issues
-        );
+      // If there are typed datasets process only those
+      if (typedDatasets) {
+        // If there is only one typed dataset, return it
+        if (typedDatasets.length === 1) {
+          return typedDatasets[0];
+        }
+
+        // Otherwise, add issue with typed subissues
+        // Hint: If there is more than one typed dataset, we use a general
+        // union issue with subissues because the issues could contradict
+        // each other.
+        _addIssue(this, 'type', dataset, config, {
+          issues: _subIssues(typedDatasets),
+        });
+
+        // And set typed to `true`
+        dataset.typed = true;
+
+        // Otherwise, if there is exactly one untyped dataset, return it
+      } else if (untypedDatasets?.length === 1) {
+        return untypedDatasets[0];
+
+        // Otherwise, add issue with untyped subissues
+      } else {
+        // Hint: If there are zero or more than one untyped results, we use a
+        // general union issue with subissues because the issues could
+        // contradict each other.
+        _addIssue(this, 'type', dataset, config, {
+          issues: _subIssues(untypedDatasets),
+        });
       }
 
-      // If there is only one untyped result, return it
-      if (untypedResults?.length === 1) {
-        return untypedResults[0];
-      }
-
-      // Otherwise, return schema issue
-      // Hint: If there are zero or more than one untyped results, we use a
-      // general union issue with subissues because the issues could contradict
-      // each other.
-      return schemaIssue(this, union, input, config, {
-        issues: subissues(untypedResults),
-      });
+      // Return output dataset
+      return dataset;
     },
   };
 }

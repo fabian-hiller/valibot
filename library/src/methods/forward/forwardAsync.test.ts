@@ -1,104 +1,212 @@
 import { describe, expect, test } from 'vitest';
-import '../../schemas/index.ts';
-import { customAsync } from '../../validations/index.ts';
+import {
+  check,
+  type CheckIssue,
+  type MinLengthIssue,
+} from '../../actions/index.ts';
+import type { TypedDataset } from '../../types/index.ts';
 import { forwardAsync } from './forwardAsync.ts';
 
 describe('forwardAsync', () => {
   test('should forward issues to end of path list', async () => {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-    type Input = { nested: { key: string } };
-    const requirement = async () => false;
-    const validate = forwardAsync<Input>(
-      customAsync(requirement, 'Custom error'),
-      ['nested', 'key']
-    );
-    const result = await validate._parse({ nested: { key: 'value' } });
-    expect(result).toEqual({
+    const input = { nested: [{ key: 'value_1' }, { key: 'value_2' }] };
+    type Input = typeof input;
+    const requirement = () => false;
+    expect(
+      await forwardAsync<Input, CheckIssue<Input>>(
+        check(requirement, 'message'),
+        ['nested', 1, 'key']
+      )._run({ typed: true, value: input }, {})
+    ).toStrictEqual({
+      typed: true,
+      value: input,
       issues: [
         {
-          context: {
-            type: 'custom',
-            expects: null,
-            async: true,
-            message: 'Custom error',
-            requirement,
-            _parse: expect.any(Function),
-          },
-          reference: expect.any(Function),
-          input: 'value',
-          label: 'input',
+          kind: 'validation',
+          type: 'check',
+          input,
+          expected: null,
+          received: 'Object',
+          message: 'message',
           path: [
             {
               type: 'unknown',
               origin: 'value',
-              input: { nested: { key: 'value' } },
+              input: input,
               key: 'nested',
-              value: { key: 'value' },
+              value: input.nested,
             },
             {
               type: 'unknown',
               origin: 'value',
-              input: { key: 'value' },
+              input: input.nested,
+              key: 1,
+              value: input.nested[1],
+            },
+            {
+              type: 'unknown',
+              origin: 'value',
+              input: input.nested[1],
               key: 'key',
-              value: 'value',
+              value: input.nested[1].key,
             },
           ],
+          requirement,
+          issues: undefined,
+          lang: undefined,
+          abortEarly: undefined,
+          abortPipeEarly: undefined,
         },
       ],
-    });
+    } satisfies TypedDataset<Input, CheckIssue<Input>>);
   });
 
   test('should stop forwarding if path input is undefined', async () => {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-    type Input = { nested: { key: string }[] };
-    const requirement = async () => false;
-    const validate = forwardAsync<Input>(
-      customAsync(requirement, 'Custom error'),
-      ['nested', 10, 'key']
-    );
-    const result = await validate._parse({ nested: [{ key: 'value' }] });
-    expect(result).toEqual({
+    const input = { nested: [{ key: 'value_1' }, { key: 'value_2' }] };
+    type Input = typeof input;
+    const requirement = () => false;
+    expect(
+      await forwardAsync<Input, CheckIssue<Input>>(
+        check(requirement, 'message'),
+        ['nested', 6, 'key']
+      )._run({ typed: true, value: input }, {})
+    ).toStrictEqual({
+      typed: true,
+      value: input,
       issues: [
         {
-          context: {
-            type: 'custom',
-            expects: null,
-            async: true,
-            message: 'Custom error',
-            requirement,
-            _parse: expect.any(Function),
-          },
-          reference: expect.any(Function),
-          input: undefined,
-          label: 'input',
+          kind: 'validation',
+          type: 'check',
+          input,
+          expected: null,
+          received: 'Object',
+          message: 'message',
           path: [
             {
               type: 'unknown',
               origin: 'value',
-              input: { nested: [{ key: 'value' }] },
+              input: input,
               key: 'nested',
-              value: [{ key: 'value' }],
+              value: input.nested,
             },
             {
               type: 'unknown',
               origin: 'value',
-              input: [{ key: 'value' }],
-              key: 10,
-              value: undefined,
+              input: input.nested,
+              key: 6,
+              value: input.nested[6],
             },
           ],
+          requirement,
+          issues: undefined,
+          lang: undefined,
+          abortEarly: undefined,
+          abortPipeEarly: undefined,
         },
       ],
-    });
+    } satisfies TypedDataset<Input, CheckIssue<Input>>);
+  });
+
+  test('should only forward issues of wrapped action', async () => {
+    const input = { nested: [{ key: 'value_1' }, { key: 'value_2' }] };
+    type Input = typeof input;
+    const requirement = () => false;
+    const prevIssue: MinLengthIssue<Input['nested'], 3> = {
+      kind: 'validation',
+      type: 'min_length',
+      input: input.nested,
+      expected: '>=3',
+      received: '2',
+      message: 'message',
+      path: [
+        {
+          type: 'object',
+          origin: 'value',
+          input: input,
+          key: 'nested',
+          value: input.nested,
+        },
+      ],
+      requirement: 3,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+    };
+    expect(
+      await forwardAsync<Input, CheckIssue<Input>>(
+        check(requirement, 'message'),
+        ['nested', 1, 'key']
+      )._run(
+        {
+          typed: true,
+          value: input,
+          // Hint: We pass a copy of the previous issue to avoid accidentally
+          // modifying our test data.
+          issues: [{ ...prevIssue, path: [...prevIssue.path!] }],
+        },
+        {}
+      )
+    ).toStrictEqual({
+      typed: true,
+      value: input,
+      issues: [
+        prevIssue,
+        {
+          kind: 'validation',
+          type: 'check',
+          input,
+          expected: null,
+          received: 'Object',
+          message: 'message',
+          path: [
+            {
+              type: 'unknown',
+              origin: 'value',
+              input: input,
+              key: 'nested',
+              value: input.nested,
+            },
+            {
+              type: 'unknown',
+              origin: 'value',
+              input: input.nested,
+              key: 1,
+              value: input.nested[1],
+            },
+            {
+              type: 'unknown',
+              origin: 'value',
+              input: input.nested[1],
+              key: 'key',
+              value: input.nested[1].key,
+            },
+          ],
+          requirement,
+          issues: undefined,
+          lang: undefined,
+          abortEarly: undefined,
+          abortPipeEarly: undefined,
+        },
+      ],
+    } satisfies TypedDataset<
+      Input,
+      MinLengthIssue<Input['nested'], 3> | CheckIssue<Input>
+    >);
   });
 
   test('should do nothing if there are no issues', async () => {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-    type Input = { nested: { key: string } };
-    const requirement = async () => true;
-    const validate = forwardAsync<Input>(customAsync(requirement), ['nested']);
-    const input = { nested: { key: 'value' } };
-    const result = await validate._parse(input);
-    expect(result).toEqual({ output: input });
+    const input = { nested: [{ key: 'value_1' }, { key: 'value_2' }] };
+    type Input = typeof input;
+    const requirement = () => true;
+    expect(
+      await forwardAsync<Input, CheckIssue<Input>>(
+        check(requirement, 'message'),
+        ['nested', 6, 'key']
+      )._run({ typed: true, value: input }, {})
+    ).toStrictEqual({
+      typed: true,
+      value: input,
+    } satisfies TypedDataset<Input, CheckIssue<Input>>);
   });
 });

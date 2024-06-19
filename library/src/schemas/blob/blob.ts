@@ -1,65 +1,88 @@
-import type { BaseSchema, ErrorMessage, Pipe } from '../../types/index.ts';
-import { defaultArgs, pipeResult, schemaIssue } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
+
+/**
+ * Blob issue type.
+ */
+export interface BlobIssue extends BaseIssue<unknown> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'schema';
+  /**
+   * The issue type.
+   */
+  readonly type: 'blob';
+  /**
+   * The expected property.
+   */
+  readonly expected: 'Blob';
+}
 
 /**
  * Blob schema type.
  */
-export interface BlobSchema<TOutput = Blob> extends BaseSchema<Blob, TOutput> {
+export interface BlobSchema<
+  TMessage extends ErrorMessage<BlobIssue> | undefined,
+> extends BaseSchema<Blob, Blob, BlobIssue> {
   /**
    * The schema type.
    */
-  type: 'blob';
+  readonly type: 'blob';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof blob;
+  /**
+   * The expected property.
+   */
+  readonly expects: 'Blob';
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
-  /**
-   * The validation and transformation pipeline.
-   */
-  pipe: Pipe<Blob> | undefined;
+  readonly message: TMessage;
 }
 
 /**
  * Creates a blob schema.
  *
- * @param pipe A validation and transformation pipe.
- *
  * @returns A blob schema.
  */
-export function blob(pipe?: Pipe<Blob>): BlobSchema;
+export function blob(): BlobSchema<undefined>;
 
 /**
  * Creates a blob schema.
  *
  * @param message The error message.
- * @param pipe A validation and transformation pipe.
  *
  * @returns A blob schema.
  */
-export function blob(message?: ErrorMessage, pipe?: Pipe<Blob>): BlobSchema;
+export function blob<
+  const TMessage extends ErrorMessage<BlobIssue> | undefined,
+>(message: TMessage): BlobSchema<TMessage>;
 
 export function blob(
-  arg1?: ErrorMessage | Pipe<Blob>,
-  arg2?: Pipe<Blob>
-): BlobSchema {
-  // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg1, arg2);
-
-  // Create and return blob schema
+  message?: ErrorMessage<BlobIssue>
+): BlobSchema<ErrorMessage<BlobIssue> | undefined> {
   return {
+    kind: 'schema',
     type: 'blob',
+    reference: blob,
     expects: 'Blob',
     async: false,
     message,
-    pipe,
-    _parse(input, config) {
-      // If type is valid, return pipe result
-      if (input instanceof Blob) {
-        return pipeResult(this, input, config);
+    _run(dataset, config) {
+      if (dataset.value instanceof Blob) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
-
-      // Otherwise, return schema issue
-      return schemaIssue(this, blob, input, config);
+      return dataset as Dataset<Blob, BlobIssue>;
     },
   };
 }

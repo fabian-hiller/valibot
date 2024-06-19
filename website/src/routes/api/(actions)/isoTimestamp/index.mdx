@@ -1,0 +1,64 @@
+---
+title: isoTimestamp
+description: Creates an ISO timestamp validation action.
+source: /actions/isoTimestamp/isoTimestamp.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# isoTimestamp
+
+Creates an [ISO timestamp](https://en.wikipedia.org/wiki/ISO_8601) validation action.
+
+> The regex used cannot validate the maximum number of days based on year and month. For example, "2023-06-31T00:00:00.000Z" is valid although June has only 30 days.
+
+```ts
+const Action = v.isoTimestamp<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `isoTimestamp` you can validate the formatting of a string. If the input is not an ISO timestamp, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `isoTimestamp` can be used.
+
+### ISO timestamp schema
+
+Schema to validate an ISO timestamp.
+
+```ts
+const IsoTimestampSchema = v.pipe(
+  v.string(),
+  v.isoTimestamp('The timestamp is badly formatted.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `isoTimestamp`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

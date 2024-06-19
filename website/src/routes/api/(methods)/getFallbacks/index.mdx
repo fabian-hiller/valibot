@@ -14,10 +14,10 @@ import { properties } from './properties';
 
 Returns the fallback values of the schema.
 
-> The difference to <Link href='../getFallback/'>`getFallback`</Link> is that for objects and tuples without an explicit fallback value, this function recursively returns the fallback values of the subschemas instead of `undefined`.
+> The difference to <Link href='../getFallback/'>`getFallback`</Link> is that for object and tuple schemas this function recursively returns the fallback values of the subschemas instead of `undefined`.
 
 ```ts
-const values = getFallbacks<TSchema>(schema);
+const values = v.getFallbacks<TSchema>(schema);
 ```
 
 ## Generics
@@ -41,8 +41,11 @@ The following examples show how `getFallbacks` can be used.
 Get the fallback values of an object schema.
 
 ```ts
-const ObjectSchema = object({ key: fallback(string(), "I'm the fallback!") });
-const fallbackValues = getFallbacks(ObjectSchema); // { key: "I'm the fallback!" }
+const ObjectSchema = v.object({
+  key: v.fallback(v.string(), "I'm the fallback!"),
+});
+
+const fallbackValues = v.getFallbacks(ObjectSchema); // { key: "I'm the fallback!" }
 ```
 
 ### Tuple fallbacks
@@ -50,8 +53,8 @@ const fallbackValues = getFallbacks(ObjectSchema); // { key: "I'm the fallback!"
 Get the fallback values of a tuple schema.
 
 ```ts
-const TupleSchema = tuple([fallback(number(), 100)]);
-const fallbackValues = getFallbacks(TupleSchema); // [100]
+const TupleSchema = v.tuple([v.fallback(v.number(), 100)]);
+const fallbackValues = v.getFallbacks(TupleSchema); // [100]
 ```
 
 ## Related
@@ -67,36 +70,42 @@ The following APIs can be combined with `getFallbacks`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -104,15 +113,13 @@ The following APIs can be combined with `getFallbacks`.
 
 <ApiList
   items={[
-    'coerce',
     'fallback',
     'keyof',
-    'merge',
     'omit',
     'partial',
     'pick',
+    'pipe',
     'required',
-    'transform',
     'unwrap',
   ]}
 />

@@ -1,4 +1,4 @@
-import { Language } from './types';
+import type { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
@@ -7,13 +7,14 @@ const language: Language = {
   specific: {
     bic:            (issue) => `Неправильний BIC: отримано ${issue.received}`,
     bytes:          (issue) => `Неправильна кількість байт: очікувалося ${issue.expected}, але отримано ${issue.received}`,
+    check:          (issue) => `Неправильні дані: отримано ${issue.received}`,
+    checkAsync:     (issue) => `Неправильні дані: отримано ${issue.received}`,
     creditCard:     (issue) => `Неправильний номер кредитної картки: отримано ${issue.received}`,
     cuid2:          (issue) => `Неправильний Cuid2: отримано ${issue.received}`,
-    custom:         (issue) => `Неправильні дані: отримано ${issue.received}`,
-    customAsync:    (issue) => `Неправильні дані: отримано ${issue.received}`,
     decimal:        (issue) => `Неправильне десяткове число: отримано ${issue.received}`,
     email:          (issue) => `Неправильний email: отримано ${issue.received}`,
     emoji:          (issue) => `Неправильні емодзі: отримано ${issue.received}`,
+    empty:          (issue) => `Неправильна довжина: очікувалося ${issue.expected}, але отримано ${issue.received}`,
     endsWith:       (issue) => `Неправильний кінець: очікувалося ${issue.expected}, але отримано ${issue.received}`,
     excludes:       (issue) => `Неправильний вміст: очікувалося ${issue.expected}, але отримано ${issue.received}`,
     finite:         (issue) => `Неправильне скінченне число: отримано ${issue.received}`,
@@ -46,6 +47,7 @@ const language: Language = {
     minSize:        (issue) => `Неправильний розмір: очікувалося ${issue.expected}, але отримано ${issue.received}`,
     minValue:       (issue) => `Неправильне значення: очікувалося ${issue.expected}, але отримано ${issue.received}`,
     multipleOf:     (issue) => `Неправильне кратне число: очікувалося ${issue.expected}, але отримано ${issue.received}`,
+    nonEmpty:       (issue) => `Неправильна довжина: очікувалося ${issue.expected}, але отримано ${issue.received}`,
     notBytes:       (issue) => `Неправильна кількість байт: очікувалося ${issue.expected}, але отримано ${issue.received}`,
     notLength:      (issue) => `Неправильна довжина: очікувалося ${issue.expected}, але отримано ${issue.received}`,
     notSize:        (issue) => `Неправильний розмір: очікувалося ${issue.expected}, але отримано ${issue.received}`,

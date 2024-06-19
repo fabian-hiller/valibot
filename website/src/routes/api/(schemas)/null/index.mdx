@@ -1,0 +1,86 @@
+---
+title: null
+description: Creates a null schema.
+source: /schemas/null/null.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# null
+
+Creates a null schema.
+
+```ts
+const Schema = v.null<TMessage>(message);
+```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `null` you can validate the data type of the input and if it is not `null`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Related
+
+The following APIs can be combined with `null`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'objectWithRest',
+    'optional',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'tuple',
+    'tupleWithRest',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'pipe',
+    'safeParse',
+  ]}
+/>
+
+### Actions
+
+<ApiList items={['check', 'brand', 'readonly', 'transform']} />

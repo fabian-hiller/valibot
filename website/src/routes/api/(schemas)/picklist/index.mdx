@@ -16,12 +16,13 @@ import { properties } from './properties';
 Creates a picklist schema.
 
 ```ts
-const Schema = picklist<TOptions>(options, message);
+const Schema = v.picklist<TOptions, TMessage>(options, message);
 ```
 
 ## Generics
 
 - `TOptions` <Property {...properties.TOptions} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -32,7 +33,7 @@ const Schema = picklist<TOptions>(options, message);
 
 With `picklist` you can validate that the input corresponds to a picklist option. If the input is invalid, you can use `message` to customize the error message.
 
-> `picklist` works in a similar way to <Link href="../enum_/">`enum_`</Link>. However, in many cases it is easier to use because you can pass an array of strings instead of an enum.
+> `picklist` works in a similar way to <Link href="../enum/">`enum`</Link>. However, in many cases it is easier to use because you can pass an array of values instead of an enum.
 
 ## Returns
 
@@ -47,7 +48,7 @@ The following examples show how `picklist` can be used.
 Schema to validate programming languages.
 
 ```ts
-const LanguageSchema = picklist(['JavaScript', 'TypeScript']);
+const LanguageSchema = v.picklist(['JavaScript', 'TypeScript']);
 ```
 
 ### Country schema
@@ -61,7 +62,7 @@ const countries = [
   { name: 'United States', code: 'US' },
 ] as const;
 
-const CountrySchema = picklist(
+const CountrySchema = v.picklist(
   countries.map((country) => country.code),
   'Please select your country.'
 );
@@ -69,7 +70,7 @@ const CountrySchema = picklist(
 
 ## Related
 
-The following APIs can be combined with `enum_`.
+The following APIs can be combined with `enum`.
 
 ### Schemas
 
@@ -78,6 +79,8 @@ The following APIs can be combined with `enum_`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -85,10 +88,14 @@ The following APIs can be combined with `enum_`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -97,8 +104,6 @@ The following APIs can be combined with `enum_`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -106,7 +111,11 @@ The following APIs can be combined with `enum_`.
     'getFallbacks',
     'is',
     'parse',
+    'pipe',
     'safeParse',
-    'transform',
   ]}
 />
+
+### Actions
+
+<ApiList items={['check', 'brand', 'readonly', 'transform']} />

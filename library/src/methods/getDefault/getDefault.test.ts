@@ -1,9 +1,13 @@
 import { describe, expect, test } from 'vitest';
 import {
   nullable,
+  nullableAsync,
   nullish,
+  nullishAsync,
+  number,
   object,
   optional,
+  optionalAsync,
   string,
 } from '../../schemas/index.ts';
 import { getDefault } from './getDefault.ts';
@@ -11,30 +15,99 @@ import { getDefault } from './getDefault.ts';
 describe('getDefault', () => {
   test('should return undefined', () => {
     expect(getDefault(string())).toBeUndefined();
+    expect(getDefault(number())).toBeUndefined();
     expect(getDefault(object({}))).toBeUndefined();
   });
 
-  test('should return optional default', () => {
-    expect(getDefault(optional(string()))).toBeUndefined();
-    expect(getDefault(optional(string(), undefined))).toBeUndefined();
-    expect(getDefault(optional(string(), () => undefined))).toBeUndefined();
-    expect(getDefault(optional(string(), 'test'))).toBe('test');
-    expect(getDefault(optional(string(), () => 'test'))).toBe('test');
+  describe('should return optional default', () => {
+    test('for undefined value', async () => {
+      expect(getDefault(optional(string()))).toBeUndefined();
+      expect(getDefault(optional(string(), undefined))).toBeUndefined();
+      expect(getDefault(optional(string(), () => undefined))).toBeUndefined();
+      expect(
+        await getDefault(optionalAsync(string(), async () => undefined))
+      ).toBeUndefined();
+    });
+
+    test('for direct value', () => {
+      expect(getDefault(optional(string(), 'foo'))).toBe('foo');
+      expect(getDefault(optionalAsync(string(), 'foo'))).toBe('foo');
+    });
+
+    test('for value getter', () => {
+      expect(getDefault(optional(string(), () => 'foo'))).toBe('foo');
+      expect(getDefault(optionalAsync(string(), () => 'foo'))).toBe('foo');
+    });
+
+    test('for asycn value getter', async () => {
+      expect(await getDefault(optionalAsync(string(), async () => 'foo'))).toBe(
+        'foo'
+      );
+    });
   });
 
-  test('should return nullable default', () => {
-    expect(getDefault(nullable(string()))).toBeUndefined();
-    expect(getDefault(nullable(string(), undefined))).toBeUndefined();
-    expect(getDefault(nullable(string(), () => undefined))).toBeUndefined();
-    expect(getDefault(nullable(string(), 'test'))).toBe('test');
-    expect(getDefault(nullable(string(), () => 'test'))).toBe('test');
+  describe('should return nullable default', () => {
+    test('for undefined value', async () => {
+      expect(getDefault(nullable(string()))).toBeUndefined();
+    });
+
+    test('for null value', async () => {
+      expect(getDefault(nullable(string(), null))).toBeNull();
+      expect(getDefault(nullable(string(), () => null))).toBeNull();
+      expect(
+        await getDefault(nullableAsync(string(), async () => null))
+      ).toBeNull();
+    });
+
+    test('for direct value', () => {
+      expect(getDefault(nullable(string(), 'foo'))).toBe('foo');
+      expect(getDefault(nullableAsync(string(), 'foo'))).toBe('foo');
+    });
+
+    test('for value getter', () => {
+      expect(getDefault(nullable(string(), () => 'foo'))).toBe('foo');
+      expect(getDefault(nullableAsync(string(), () => 'foo'))).toBe('foo');
+    });
+
+    test('for value getter', async () => {
+      expect(await getDefault(nullableAsync(string(), async () => 'foo'))).toBe(
+        'foo'
+      );
+    });
   });
 
-  test('should return nullish default', () => {
-    expect(getDefault(nullish(string()))).toBeUndefined();
-    expect(getDefault(nullish(string(), undefined))).toBeUndefined();
-    expect(getDefault(nullish(string(), () => undefined))).toBeUndefined();
-    expect(getDefault(nullish(string(), 'test'))).toBe('test');
-    expect(getDefault(nullish(string(), () => 'test'))).toBe('test');
+  describe('should return nullish default', () => {
+    test('for undefined value', async () => {
+      expect(getDefault(nullish(string()))).toBeUndefined();
+      expect(getDefault(nullish(string(), undefined))).toBeUndefined();
+      expect(getDefault(nullish(string(), () => undefined))).toBeUndefined();
+      expect(
+        await getDefault(nullishAsync(string(), async () => undefined))
+      ).toBeUndefined();
+    });
+
+    test('for null value', async () => {
+      expect(getDefault(nullish(string(), null))).toBeNull();
+      expect(getDefault(nullish(string(), () => null))).toBeNull();
+      expect(
+        await getDefault(nullishAsync(string(), async () => null))
+      ).toBeNull();
+    });
+
+    test('for direct value', () => {
+      expect(getDefault(nullish(string(), 'foo'))).toBe('foo');
+      expect(getDefault(nullishAsync(string(), 'foo'))).toBe('foo');
+    });
+
+    test('for value getter', () => {
+      expect(getDefault(nullish(string(), () => 'foo'))).toBe('foo');
+      expect(getDefault(nullishAsync(string(), () => 'foo'))).toBe('foo');
+    });
+
+    test('for value getter', async () => {
+      expect(await getDefault(nullishAsync(string(), async () => 'foo'))).toBe(
+        'foo'
+      );
+    });
   });
 });

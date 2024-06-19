@@ -7,6 +7,16 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
+      generics: [
+        'unknown',
+        'unknown',
+        {
+          type: 'custom',
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
+        },
+      ],
     },
   },
   schema: {
@@ -24,8 +34,31 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         {
           type: 'custom',
-          name: 'SchemaConfig',
-          href: '../SchemaConfig/',
+          name: 'Omit',
+          generics: [
+            {
+              type: 'custom',
+              name: 'Config',
+              href: '../Config/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'InferIssue',
+                  href: '../InferIssue/',
+                  generics: [
+                    {
+                      type: 'custom',
+                      name: 'TSchema',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'string',
+              value: 'skipPipe',
+            },
+          ],
         },
         'undefined',
       ],
@@ -34,8 +67,8 @@ export const properties: Record<string, PropertyProps> = {
   output: {
     type: {
       type: 'custom',
-      name: 'Output',
-      href: '../Output/',
+      name: 'InferOutput',
+      href: '../InferOutput/',
       generics: [
         {
           type: 'custom',

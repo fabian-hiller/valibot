@@ -1,53 +1,115 @@
 import type {
-  ObjectEntries,
-  ObjectEntriesAsync,
+  LooseObjectIssue,
+  LooseObjectSchema,
+  LooseObjectSchemaAsync,
+  LooseTupleIssue,
+  LooseTupleSchema,
+  LooseTupleSchemaAsync,
+  ObjectIssue,
   ObjectSchema,
   ObjectSchemaAsync,
-  TupleItems,
-  TupleItemsAsync,
+  ObjectWithRestIssue,
+  ObjectWithRestSchema,
+  ObjectWithRestSchemaAsync,
+  StrictObjectIssue,
+  StrictObjectSchema,
+  StrictObjectSchemaAsync,
+  StrictTupleIssue,
+  StrictTupleSchema,
+  StrictTupleSchemaAsync,
+  TupleIssue,
   TupleSchema,
   TupleSchemaAsync,
+  TupleWithRestIssue,
+  TupleWithRestSchema,
+  TupleWithRestSchemaAsync,
 } from '../../schemas/index.ts';
-import type { BaseSchema, BaseSchemaAsync } from '../../types/schema.ts';
-import { isOfType } from '../../utils/index.ts';
-import {
-  getDefaultAsync,
-  type SchemaWithMaybeDefault,
-  type SchemaWithMaybeDefaultAsync,
-} from '../getDefault/index.ts';
-import type { DefaultValues } from './types.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  BaseSchemaAsync,
+  ErrorMessage,
+  ObjectEntries,
+  ObjectEntriesAsync,
+  TupleItems,
+  TupleItemsAsync,
+} from '../../types/index.ts';
+import { getDefault } from '../getDefault/index.ts';
+import type { InferDefaults } from './types.ts';
 
 /**
  * Returns the default values of the schema.
  *
- * The difference to `getDefaultAsync` is that for objects and tuples without
- * an explicit default value, this function recursively returns the default
- * values of the subschemas instead of `undefined`.
+ * Hint: The difference to `getDefault` is that for object and tuple schemas
+ * this function recursively returns the default values of the subschemas
+ * instead of `undefined`.
  *
- * @param schema The schema to get the default values from.
+ * @param schema The schema to get them from.
  *
  * @returns The default values.
  */
 export async function getDefaultsAsync<
-  TSchema extends
-    | SchemaWithMaybeDefault<
-        | BaseSchema
-        | ObjectSchema<ObjectEntries, any>
-        | TupleSchema<TupleItems, any>
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
       >
-    | SchemaWithMaybeDefaultAsync<
-        | BaseSchemaAsync
-        | ObjectSchemaAsync<ObjectEntriesAsync, any>
-        | TupleSchemaAsync<TupleItemsAsync, any>
+    | LooseObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
+    | LooseTupleSchema<TupleItems, ErrorMessage<LooseTupleIssue> | undefined>
+    | LooseTupleSchemaAsync<
+        TupleItemsAsync,
+        ErrorMessage<LooseTupleIssue> | undefined
+      >
+    | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
+    | ObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<ObjectIssue> | undefined
+      >
+    | ObjectWithRestSchema<
+        ObjectEntries,
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<ObjectWithRestIssue> | undefined
+      >
+    | ObjectWithRestSchemaAsync<
+        ObjectEntriesAsync,
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<ObjectWithRestIssue> | undefined
+      >
+    | StrictObjectSchema<
+        ObjectEntries,
+        ErrorMessage<StrictObjectIssue> | undefined
+      >
+    | StrictObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<StrictObjectIssue> | undefined
+      >
+    | StrictTupleSchema<TupleItems, ErrorMessage<StrictTupleIssue> | undefined>
+    | StrictTupleSchemaAsync<
+        TupleItemsAsync,
+        ErrorMessage<StrictTupleIssue> | undefined
+      >
+    | TupleSchema<TupleItems, ErrorMessage<TupleIssue> | undefined>
+    | TupleSchemaAsync<TupleItemsAsync, ErrorMessage<TupleIssue> | undefined>
+    | TupleWithRestSchema<
+        TupleItems,
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<TupleWithRestIssue> | undefined
+      >
+    | TupleWithRestSchemaAsync<
+        TupleItemsAsync,
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<TupleWithRestIssue> | undefined
       >,
->(schema: TSchema): Promise<DefaultValues<TSchema> | undefined> {
-  // If schema contains default, return its value
-  if (schema.default !== undefined) {
-    return getDefaultAsync(schema);
-  }
-
-  // If it is an object schema, return default of each entry
-  if (isOfType('object', schema)) {
+>(schema: TSchema): Promise<InferDefaults<TSchema>> {
+  // If it is an object schema, return defaults of entries
+  if ('entries' in schema) {
     return Object.fromEntries(
       await Promise.all(
         Object.entries(schema.entries).map(async ([key, value]) => [
@@ -55,16 +117,17 @@ export async function getDefaultsAsync<
           await getDefaultsAsync(value),
         ])
       )
-    ) as DefaultValues<TSchema>;
+    ) as InferDefaults<TSchema>;
   }
 
-  // If it is a tuple schema, return default of each item
-  if (isOfType('tuple', schema)) {
-    return Promise.all(
-      schema.items.map(getDefaultsAsync)
-    ) as DefaultValues<TSchema>;
+  // If it is a tuple schema, return defaults of items
+  if ('items' in schema) {
+    return Promise.all(schema.items.map(getDefaultsAsync)) as Promise<
+      InferDefaults<TSchema>
+    >;
   }
 
-  // Otherwise, return undefined
-  return undefined;
+  // Otherwise, return default or `undefined`
+  // @ts-expect-error
+  return getDefault(schema);
 }

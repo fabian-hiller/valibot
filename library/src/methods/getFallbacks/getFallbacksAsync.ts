@@ -1,53 +1,115 @@
 import type {
-  ObjectEntries,
-  ObjectEntriesAsync,
+  LooseObjectIssue,
+  LooseObjectSchema,
+  LooseObjectSchemaAsync,
+  LooseTupleIssue,
+  LooseTupleSchema,
+  LooseTupleSchemaAsync,
+  ObjectIssue,
   ObjectSchema,
   ObjectSchemaAsync,
-  TupleItems,
-  TupleItemsAsync,
+  ObjectWithRestIssue,
+  ObjectWithRestSchema,
+  ObjectWithRestSchemaAsync,
+  StrictObjectIssue,
+  StrictObjectSchema,
+  StrictObjectSchemaAsync,
+  StrictTupleIssue,
+  StrictTupleSchema,
+  StrictTupleSchemaAsync,
+  TupleIssue,
   TupleSchema,
   TupleSchemaAsync,
+  TupleWithRestIssue,
+  TupleWithRestSchema,
+  TupleWithRestSchemaAsync,
 } from '../../schemas/index.ts';
-import type { BaseSchema, BaseSchemaAsync } from '../../types/schema.ts';
-import { isOfType } from '../../utils/index.ts';
-import {
-  getFallbackAsync,
-  type SchemaWithMaybeFallback,
-  type SchemaWithMaybeFallbackAsync,
-} from '../getFallback/index.ts';
-import type { FallbackValues } from './types.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  BaseSchemaAsync,
+  ErrorMessage,
+  ObjectEntries,
+  ObjectEntriesAsync,
+  TupleItems,
+  TupleItemsAsync,
+} from '../../types/index.ts';
+import { getFallback } from '../getFallback/index.ts';
+import type { InferFallbacks } from './types.ts';
 
 /**
  * Returns the fallback values of the schema.
  *
- * Hint: The difference to `getFallbackAsync` is that for objects and tuples
- * without an explicit fallback value, this function recursively returns the
- * fallback values of the subschemas instead of `undefined`.
+ * Hint: The difference to `getFallback` is that for object and tuple schemas
+ * this function recursively returns the fallback values of the subschemas
+ * instead of `undefined`.
  *
- * @param schema The schema to get the fallback values from.
+ * @param schema The schema to get them from.
  *
  * @returns The fallback values.
  */
 export async function getFallbacksAsync<
-  TSchema extends
-    | SchemaWithMaybeFallback<
-        | BaseSchema
-        | ObjectSchema<ObjectEntries, any>
-        | TupleSchema<TupleItems, any>
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
       >
-    | SchemaWithMaybeFallbackAsync<
-        | BaseSchemaAsync
-        | ObjectSchemaAsync<ObjectEntriesAsync, any>
-        | TupleSchemaAsync<TupleItemsAsync, any>
+    | LooseObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
+    | LooseTupleSchema<TupleItems, ErrorMessage<LooseTupleIssue> | undefined>
+    | LooseTupleSchemaAsync<
+        TupleItemsAsync,
+        ErrorMessage<LooseTupleIssue> | undefined
+      >
+    | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
+    | ObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<ObjectIssue> | undefined
+      >
+    | ObjectWithRestSchema<
+        ObjectEntries,
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<ObjectWithRestIssue> | undefined
+      >
+    | ObjectWithRestSchemaAsync<
+        ObjectEntriesAsync,
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<ObjectWithRestIssue> | undefined
+      >
+    | StrictObjectSchema<
+        ObjectEntries,
+        ErrorMessage<StrictObjectIssue> | undefined
+      >
+    | StrictObjectSchemaAsync<
+        ObjectEntriesAsync,
+        ErrorMessage<StrictObjectIssue> | undefined
+      >
+    | StrictTupleSchema<TupleItems, ErrorMessage<StrictTupleIssue> | undefined>
+    | StrictTupleSchemaAsync<
+        TupleItemsAsync,
+        ErrorMessage<StrictTupleIssue> | undefined
+      >
+    | TupleSchema<TupleItems, ErrorMessage<TupleIssue> | undefined>
+    | TupleSchemaAsync<TupleItemsAsync, ErrorMessage<TupleIssue> | undefined>
+    | TupleWithRestSchema<
+        TupleItems,
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<TupleWithRestIssue> | undefined
+      >
+    | TupleWithRestSchemaAsync<
+        TupleItemsAsync,
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<TupleWithRestIssue> | undefined
       >,
->(schema: TSchema): Promise<FallbackValues<TSchema> | undefined> {
-  // If schema has fallback, return its value
-  if (schema.fallback !== undefined) {
-    return getFallbackAsync(schema);
-  }
-
-  // If it is an object schema, return fallback of each entry
-  if (isOfType('object', schema)) {
+>(schema: TSchema): Promise<InferFallbacks<TSchema>> {
+  // If it is an object schema, return fallbacks of entries
+  if ('entries' in schema) {
     return Object.fromEntries(
       await Promise.all(
         Object.entries(schema.entries).map(async ([key, value]) => [
@@ -55,16 +117,17 @@ export async function getFallbacksAsync<
           await getFallbacksAsync(value),
         ])
       )
-    ) as FallbackValues<TSchema>;
+    ) as InferFallbacks<TSchema>;
   }
 
-  // If it is a tuple schema, return fallback of each item
-  if (isOfType('tuple', schema)) {
-    return Promise.all(
-      schema.items.map(getFallbacksAsync)
-    ) as FallbackValues<TSchema>;
+  // If it is a tuple schema, return fallbacks of items
+  if ('items' in schema) {
+    return Promise.all(schema.items.map(getFallbacksAsync)) as Promise<
+      InferFallbacks<TSchema>
+    >;
   }
 
-  // Otherwise, return undefined
-  return undefined;
+  // Otherwise, return fallback or `undefined`
+  // @ts-expect-error
+  return getFallback(schema);
 }

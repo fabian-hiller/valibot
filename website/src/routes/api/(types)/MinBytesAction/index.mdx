@@ -1,0 +1,24 @@
+---
+title: MinBytesAction
+description: Min bytes action type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# MinBytesAction
+
+Min bytes action type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Definition
+
+- `MinBytesAction` <Property {...properties.BaseValidation} />
+  - `type` <Property {...properties.type} />
+  - `requirement` <Property {...properties.requirement} />

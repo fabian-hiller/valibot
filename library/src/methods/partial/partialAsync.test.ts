@@ -1,56 +1,258 @@
 import { describe, expect, test } from 'vitest';
-import { comparable } from '../../comparable.ts';
 import {
-  object,
+  boolean,
+  nullishAsync,
+  number,
   objectAsync,
+  objectWithRestAsync,
   optionalAsync,
   string,
 } from '../../schemas/index.ts';
-import { toCustom } from '../../transformations/index.ts';
-import { parseAsync } from '../parse/index.ts';
+import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import { expectNoSchemaIssueAsync } from '../../vitest/index.ts';
 import { partialAsync } from './partialAsync.ts';
 
 describe('partialAsync', () => {
-  test('should have optional keys', async () => {
-    const schema = partialAsync(
-      objectAsync({ key1: string(), key2: string() })
-    );
-    expect(schema).toEqual(
-      comparable(
-        objectAsync({
-          key1: optionalAsync(string()),
-          key2: optionalAsync(string()),
-        })
-      )
-    );
-    const input = { key1: 'test' };
-    const output = await parseAsync(schema, input);
-    expect(output).toEqual(input);
+  const entries = {
+    key1: string(),
+    key2: number(),
+    key3: string(),
+    key4: nullishAsync(number(), async () => 123),
+  };
+  const baseInfo = {
+    message: expect.any(String),
+    requirement: undefined,
+    issues: undefined,
+    lang: undefined,
+    abortEarly: undefined,
+    abortPipeEarly: undefined,
+  } as const;
+
+  describe('objectAsync', () => {
+    const wrapped = objectAsync(entries);
+    const schema1 = partialAsync(wrapped);
+    const schema2 = partialAsync(wrapped, ['key1', 'key3']);
+
+    describe('should return schema objectAsync', () => {
+      test('with undefined keys', () => {
+        expect(schema1).toStrictEqual({
+          kind: 'schema',
+          type: 'object',
+          reference: objectAsync,
+          expects: 'Object',
+          entries: {
+            key1: {
+              ...optionalAsync(entries.key1),
+              _run: expect.any(Function),
+            },
+            key2: {
+              ...optionalAsync(entries.key2),
+              _run: expect.any(Function),
+            },
+            key3: {
+              ...optionalAsync(entries.key3),
+              _run: expect.any(Function),
+            },
+            key4: {
+              ...optionalAsync(entries.key4),
+              _run: expect.any(Function),
+            },
+          },
+          message: undefined,
+          async: true,
+          _run: expect.any(Function),
+        } satisfies typeof schema1);
+      });
+
+      test('with specific keys', () => {
+        expect(schema2).toStrictEqual({
+          kind: 'schema',
+          type: 'object',
+          reference: objectAsync,
+          expects: 'Object',
+          entries: {
+            key1: {
+              ...optionalAsync(entries.key1),
+              _run: expect.any(Function),
+            },
+            key2: entries.key2,
+            key3: {
+              ...optionalAsync(entries.key3),
+              _run: expect.any(Function),
+            },
+            key4: entries.key4,
+          },
+          message: undefined,
+          async: true,
+          _run: expect.any(Function),
+        } satisfies typeof schema2);
+      });
+    });
+
+    describe('should return dataset without nested issues', () => {
+      test('if partialAsync keys are present', async () => {
+        const input = { key1: 'foo', key2: 123, key3: 'bar', key4: 123 };
+        await expectNoSchemaIssueAsync(schema1, [input]);
+        await expectNoSchemaIssueAsync(schema2, [input]);
+      });
+
+      test('if partialAsync keys are missing', async () => {
+        await expectNoSchemaIssueAsync(schema1, [{}]);
+        await expectNoSchemaIssueAsync(schema2, [{ key2: 123, key4: 123 }]);
+      });
+    });
+
+    describe('should return dataset with nested issues', () => {
+      test('if non-partialed keys are missing', async () => {
+        for (const input of [{}, { key1: 'foo', key3: 'bar' }]) {
+          expect(
+            await schema2._run({ typed: false, value: input }, {})
+          ).toStrictEqual({
+            typed: false,
+            value: { ...input, key4: 123 },
+            issues: [
+              {
+                ...baseInfo,
+                kind: 'schema',
+                type: 'number',
+                input: undefined,
+                expected: 'number',
+                received: 'undefined',
+                path: [
+                  {
+                    type: 'object',
+                    origin: 'value',
+                    input: input,
+                    key: 'key2',
+                    value: undefined,
+                  },
+                ],
+              },
+            ],
+          } satisfies UntypedDataset<InferIssue<typeof schema2>>);
+        }
+      });
+    });
   });
 
-  test('should throw custom error', async () => {
-    const error = 'Value is not an object!';
-    const schema = partialAsync(
-      object({ key1: string(), key2: string() }),
-      error
-    );
-    await expect(parseAsync(schema, 123)).rejects.toThrowError(error);
-  });
+  describe('objectWithRestAsync', () => {
+    const rest = boolean();
+    const wrapped = objectWithRestAsync(entries, rest);
+    const schema1 = partialAsync(wrapped);
+    const schema2 = partialAsync(wrapped, ['key2', 'key3']);
 
-  test('should execute pipe', async () => {
-    const input = {};
-    const transformInput = (): { key1?: string } => ({ key1: '1' });
-    const output1 = await parseAsync(
-      partialAsync(object({ key1: string() }), [toCustom(transformInput)]),
-      input
-    );
-    const output2 = await parseAsync(
-      partialAsync(object({ key1: string() }), 'Error', [
-        toCustom(transformInput),
-      ]),
-      input
-    );
-    expect(output1).toEqual(transformInput());
-    expect(output2).toEqual(transformInput());
+    describe('should return schema objectAsync', () => {
+      test('with undefined keys', () => {
+        expect(schema1).toStrictEqual({
+          kind: 'schema',
+          type: 'object_with_rest',
+          reference: objectWithRestAsync,
+          expects: 'Object',
+          entries: {
+            key1: {
+              ...optionalAsync(entries.key1),
+              _run: expect.any(Function),
+            },
+            key2: {
+              ...optionalAsync(entries.key2),
+              _run: expect.any(Function),
+            },
+            key3: {
+              ...optionalAsync(entries.key3),
+              _run: expect.any(Function),
+            },
+            key4: {
+              ...optionalAsync(entries.key4),
+              _run: expect.any(Function),
+            },
+          },
+          rest,
+          message: undefined,
+          async: true,
+          _run: expect.any(Function),
+        } satisfies typeof schema1);
+      });
+
+      test('with specific keys', () => {
+        expect(schema2).toStrictEqual({
+          kind: 'schema',
+          type: 'object_with_rest',
+          reference: objectWithRestAsync,
+          expects: 'Object',
+          entries: {
+            key1: entries.key1,
+            key2: {
+              ...optionalAsync(entries.key2),
+              _run: expect.any(Function),
+            },
+            key3: {
+              ...optionalAsync(entries.key3),
+              _run: expect.any(Function),
+            },
+            key4: entries.key4,
+          },
+          rest,
+          message: undefined,
+          async: true,
+          _run: expect.any(Function),
+        } satisfies typeof schema2);
+      });
+    });
+
+    describe('should return dataset without nested issues', () => {
+      test('if partialAsync keys are present', async () => {
+        const input = {
+          key1: 'foo',
+          key2: 123,
+          key3: 'bar',
+          key4: 123,
+          other: true,
+        };
+        // @ts-expect-error
+        await expectNoSchemaIssueAsync(schema1, [input]);
+        // @ts-expect-error
+        await expectNoSchemaIssueAsync(schema2, [input]);
+      });
+
+      test('if partialAsync keys are missing', async () => {
+        await expectNoSchemaIssueAsync(schema1, [{}]);
+        await expectNoSchemaIssueAsync(schema2, [
+          // @ts-expect-error
+          { key1: 'foo', key4: 123, other: true },
+        ]);
+      });
+    });
+
+    describe('should return dataset with nested issues', () => {
+      test('if non-partialed keys are missing', async () => {
+        for (const input of [{}, { key2: 123, key3: 'bar', other: true }]) {
+          expect(
+            await schema2._run({ typed: false, value: input }, {})
+          ).toStrictEqual({
+            typed: false,
+            value: { ...input, key4: 123 },
+            issues: [
+              {
+                ...baseInfo,
+                kind: 'schema',
+                type: 'string',
+                input: undefined,
+                expected: 'string',
+                received: 'undefined',
+                path: [
+                  {
+                    type: 'object',
+                    origin: 'value',
+                    input: input,
+                    key: 'key1',
+                    value: undefined,
+                  },
+                ],
+              },
+            ],
+          } satisfies UntypedDataset<InferIssue<typeof schema2>>);
+        }
+      });
+    });
   });
 });

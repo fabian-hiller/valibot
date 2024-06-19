@@ -1,10 +1,26 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: 'bigint',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'BigintIssue',
+              href: '../BigintIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
   BaseSchema: {
     type: {
@@ -13,9 +29,11 @@ export const properties: Record<string, PropertyProps> = {
       href: '../BaseSchema/',
       generics: [
         'bigint',
+        'bigint',
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'BigintIssue',
+          href: '../BigintIssue/',
         },
       ],
     },
@@ -26,31 +44,24 @@ export const properties: Record<string, PropertyProps> = {
       value: 'bigint',
     },
   },
-  message: {
+  reference: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'bigint',
+      href: '../bigint/',
     },
   },
-  pipe: {
+  expects: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: ['bigint'],
-        },
-        'undefined',
-      ],
+      type: 'string',
+      value: 'bigint',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

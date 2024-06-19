@@ -14,7 +14,7 @@ import { properties } from './properties';
 Parses an unknown input based on a schema.
 
 ```ts
-const result = safeParse<TSchema>(schema, input, config);
+const result = v.safeParse<TSchema>(schema, input, config);
 ```
 
 ## Generics
@@ -36,8 +36,8 @@ const result = safeParse<TSchema>(schema, input, config);
 The following example show how `safeParse` can be used.
 
 ```ts
-const EmailSchema = string([email()]);
-const result = safeParse(EmailSchema, 'jane@example.com');
+const EmailSchema = v.pipe(v.string(), v.email());
+const result = v.safeParse(EmailSchema, 'jane@example.com');
 
 if (result.success) {
   const email = result.output;
@@ -59,36 +59,42 @@ The following APIs can be combined with `safeParse`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -96,16 +102,13 @@ The following APIs can be combined with `safeParse`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
     'fallback',
     'keyof',
-    'merge',
     'omit',
     'partial',
     'pick',
+    'pipe',
     'required',
-    'transform',
     'unwrap',
   ]}
 />

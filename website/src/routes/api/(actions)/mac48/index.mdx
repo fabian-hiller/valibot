@@ -1,0 +1,63 @@
+---
+title: mac48
+description: Creates a 48-bit MAC address validation action.
+source: /actions/mac48/mac48.ts
+contributors:
+  - fabian-hiller
+  - ariskemper
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# mac48
+
+Creates a 48-bit [MAC address](https://en.wikipedia.org/wiki/MAC_address) validation action.
+
+```ts
+const Action = v.mac48<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `mac48` you can validate the formatting of a string. If the input is not a 48-bit MAC address, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `mac48` can be used.
+
+### 48-bit MAC schema
+
+Schema to validate a 48-bit MAC address.
+
+```ts
+const Mac48Schema = v.pipe(
+  v.string(),
+  v.mac48('The MAC address is badly formatted.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `mac48`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

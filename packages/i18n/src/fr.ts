@@ -1,4 +1,4 @@
-import { Language } from './types';
+import type { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
@@ -7,13 +7,14 @@ const language: Language = {
   specific: {
     bic:            (issue) => `BIC invalide: reçu ${issue.received}`,
     bytes:          (issue) => `Octet invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
+    check:          (issue) => `Valeur invalide: reçu ${issue.received}`,
+    checkAsync:     (issue) => `Valeur invalide: reçu ${issue.received}`,
     creditCard:     (issue) => `Carte de crédit invalide: reçu ${issue.received}`,
     cuid2:          (issue) => `Cuid2 invalide: reçu ${issue.received}`,
-    custom:         (issue) => `Valeur invalide: reçu ${issue.received}`,
-    customAsync:    (issue) => `Valeur invalide: reçu ${issue.received}`,
     decimal:        (issue) => `Décimale invalide: reçu ${issue.received}`,
     email:          (issue) => `Email invalide: reçu ${issue.received}`,
     emoji:          (issue) => `Émoji invalide: reçu ${issue.received}`,
+    empty:          (issue) => `Longeur invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
     endsWith:       (issue) => `Fin invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
     excludes:       (issue) => `Contenu invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
     finite:         (issue) => `Entier invalide: reçu ${issue.received}`,
@@ -46,6 +47,7 @@ const language: Language = {
     minSize:        (issue) => `Taille invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
     minValue:       (issue) => `Valeur invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
     multipleOf:     (issue) => `Multiple invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
+    nonEmpty:       (issue) => `Longeur invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
     notBytes:       (issue) => `Octet invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
     notLength:      (issue) => `Longeur invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,
     notSize:        (issue) => `Taille invalide: attendu ${issue.expected}, mais reçu ${issue.received}`,

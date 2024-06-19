@@ -1,103 +1,105 @@
 import type {
+  ArrayPathItem,
+  BaseIssue,
   BaseSchema,
+  Dataset,
   ErrorMessage,
-  Input,
-  Output,
-  Pipe,
-  SchemaIssues,
+  InferInput,
+  InferIssue,
+  InferOutput,
 } from '../../types/index.ts';
-import {
-  defaultArgs,
-  pipeResult,
-  schemaIssue,
-  schemaResult,
-} from '../../utils/index.ts';
-import type { ArrayPathItem } from './types.ts';
+import { _addIssue } from '../../utils/index.ts';
+import type { ArrayIssue } from './types.ts';
 
 /**
  * Array schema type.
  */
 export interface ArraySchema<
-  TItem extends BaseSchema,
-  TOutput = Output<TItem>[],
-> extends BaseSchema<Input<TItem>[], TOutput> {
+  TItem extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  TMessage extends ErrorMessage<ArrayIssue> | undefined,
+> extends BaseSchema<
+    InferInput<TItem>[],
+    InferOutput<TItem>[],
+    ArrayIssue | InferIssue<TItem>
+  > {
   /**
    * The schema type.
    */
-  type: 'array';
+  readonly type: 'array';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof array;
+  /**
+   * The expected property.
+   */
+  readonly expects: 'Array';
   /**
    * The array item schema.
    */
-  item: TItem;
+  readonly item: TItem;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
-  /**
-   * The validation and transformation pipeline.
-   */
-  pipe: Pipe<Output<TItem>[]> | undefined;
+  readonly message: TMessage;
 }
 
 /**
- * Creates a array schema.
+ * Creates an array schema.
  *
  * @param item The item schema.
- * @param pipe A validation and transformation pipe.
  *
- * @returns A array schema.
+ * @returns An array schema.
  */
-export function array<TItem extends BaseSchema>(
-  item: TItem,
-  pipe?: Pipe<Output<TItem>[]>
-): ArraySchema<TItem>;
+export function array<
+  const TItem extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(item: TItem): ArraySchema<TItem, undefined>;
 
 /**
- * Creates a array schema.
+ * Creates an array schema.
  *
  * @param item The item schema.
  * @param message The error message.
- * @param pipe A validation and transformation pipe.
  *
- * @returns A array schema.
+ * @returns An array schema.
  */
-export function array<TItem extends BaseSchema>(
-  item: TItem,
-  message?: ErrorMessage,
-  pipe?: Pipe<Output<TItem>[]>
-): ArraySchema<TItem>;
+export function array<
+  const TItem extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  const TMessage extends ErrorMessage<ArrayIssue> | undefined,
+>(item: TItem, message: TMessage): ArraySchema<TItem, TMessage>;
 
-export function array<TItem extends BaseSchema>(
-  item: TItem,
-  arg2?: ErrorMessage | Pipe<Output<TItem>[]>,
-  arg3?: Pipe<Output<TItem>[]>
-): ArraySchema<TItem> {
-  // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg2, arg3);
-
-  // Create and return array schema
+export function array(
+  item: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  message?: ErrorMessage<ArrayIssue>
+): ArraySchema<
+  BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  ErrorMessage<ArrayIssue> | undefined
+> {
   return {
+    kind: 'schema',
     type: 'array',
+    reference: array,
     expects: 'Array',
     async: false,
     item,
     message,
-    pipe,
-    _parse(input, config) {
+    _run(dataset, config) {
+      // Get input value from dataset
+      const input = dataset.value;
+
       // If root type is valid, check nested types
       if (Array.isArray(input)) {
-        // Create typed, issues and output
-        let typed = true;
-        let issues: SchemaIssues | undefined;
-        const output: any[] = [];
+        // Set typed to `true` and value to empty array
+        dataset.typed = true;
+        dataset.value = [];
 
         // Parse schema of each array item
         for (let key = 0; key < input.length; key++) {
           const value = input[key];
-          const result = this.item._parse(value, config);
+          const itemDataset = this.item._run({ typed: false, value }, config);
 
           // If there are issues, capture them
-          if (result.issues) {
+          if (itemDataset.issues) {
             // Create array path item
             const pathItem: ArrayPathItem = {
               type: 'array',
@@ -107,46 +109,46 @@ export function array<TItem extends BaseSchema>(
               value,
             };
 
-            // Add modified result issues to issues
-            for (const issue of result.issues) {
+            // Add modified item dataset issues to issues
+            for (const issue of itemDataset.issues) {
               if (issue.path) {
                 issue.path.unshift(pathItem);
               } else {
+                // @ts-expect-error
                 issue.path = [pathItem];
               }
-              issues?.push(issue);
+              // @ts-expect-error
+              dataset.issues?.push(issue);
             }
-            if (!issues) {
-              issues = result.issues;
+            if (!dataset.issues) {
+              // @ts-expect-error
+              dataset.issues = itemDataset.issues;
             }
 
             // If necessary, abort early
-            if (config?.abortEarly) {
-              typed = false;
+            if (config.abortEarly) {
+              dataset.typed = false;
               break;
             }
           }
 
-          // If not typed, set typed to false
-          if (!result.typed) {
-            typed = false;
+          // If not typed, set typed to `false`
+          if (!itemDataset.typed) {
+            dataset.typed = false;
           }
 
-          // Set output of item
-          output.push(result.output);
+          // Add item to dataset
+          // @ts-expect-error
+          dataset.value.push(itemDataset.value);
         }
 
-        // If output is typed, return pipe result
-        if (typed) {
-          return pipeResult(this, output as Output<TItem>[], config, issues);
-        }
-
-        // Otherwise, return untyped schema result
-        return schemaResult(false, output, issues as SchemaIssues);
+        // Otherwise, add array issue
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
 
-      // Otherwise, return schema issue
-      return schemaIssue(this, array, input, config);
+      // Return output dataset
+      return dataset as Dataset<unknown[], ArrayIssue | BaseIssue<unknown>>;
     },
   };
 }
