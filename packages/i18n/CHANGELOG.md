@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.16.0 (June 19, 2024)
 
 - Add Polish (pl) translations (pull request #584)
 - Add Catalan (ca) translations (pull request #652)
