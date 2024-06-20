@@ -73,6 +73,7 @@ module.exports = {
     'no-duplicate-imports': 'off',
 
     // Security
+    'security/detect-non-literal-regexp': 'off', // Prevents interpolation, used to make regexes more readable
     'security/detect-object-injection': 'off', // Too many false positives
     'security/detect-unsafe-regex': 'off', // Too many false positives, see https://github.com/eslint-community/eslint-plugin-security/issues/28 - we use the redos-detector plugin instead
   },
