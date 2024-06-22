@@ -1,3 +1,4 @@
+export * from './asParser/index.ts';
 export * from './bic/index.ts';
 export * from './bytes/index.ts';
 export * from './brand/index.ts';
@@ -69,4 +70,3 @@ export * from './url/index.ts';
 export * from './uuid/index.ts';
 export * from './value/index.ts';
 export * from './withDescription/index.ts';
-export * from './withParse/index.ts';

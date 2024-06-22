@@ -3,7 +3,7 @@ import { pipe } from '../../methods/pipe/pipe.ts';
 import { object, string } from '../../schemas/index.ts';
 import { withDescription } from './withDescription.ts';
 
-describe('withParse', () => {
+describe('withDescription', () => {
   test('should return output type of schema', () => {
     const schema = pipe(
       object({
