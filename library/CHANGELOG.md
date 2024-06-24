@@ -7,6 +7,7 @@ All notable changes to the library will be documented in this file.
 - Add `operation` property to `filterItems`, `findItem`, `mapItems`, `reduceItems` and `sortItem` action
 - Rename `action` argument of `filterItems`, `findItem`, `mapItems`, `reduceItems` and `sortItem` action to `operation`
 - Rename `action` argument and property of `transform` and `transformAsync` action to `operation`
+- Change and improve implementation of `_stringify` util
 
 ## v0.33.3 (June 19, 2024)
 
