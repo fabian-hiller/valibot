@@ -3,13 +3,14 @@ import { transform, type TransformAction } from './transform.ts';
 
 describe('transform', () => {
   test('should return action object', () => {
-    const action = transform((input: string) => input.length);
+    const operation = (input: string) => input.length;
+    const action = transform(operation);
     expect(action).toStrictEqual({
       kind: 'transformation',
       type: 'transform',
       reference: transform,
       async: false,
-      action: action.action,
+      operation,
       _run: expect.any(Function),
     } satisfies TransformAction<string, number>);
   });

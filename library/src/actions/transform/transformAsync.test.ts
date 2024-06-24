@@ -3,18 +3,19 @@ import { type TransformActionAsync, transformAsync } from './transformAsync.ts';
 
 describe('transformAsync', () => {
   test('should return action object', () => {
-    const action = transformAsync(async (input: string) => input.length);
+    const operation = async (input: string) => input.length;
+    const action = transformAsync(operation);
     expect(action).toStrictEqual({
       kind: 'transformation',
       type: 'transform',
       reference: transformAsync,
       async: true,
-      action: action.action,
+      operation,
       _run: expect.any(Function),
     } satisfies TransformActionAsync<string, number>);
   });
 
-  describe('should transformAsync input', () => {
+  describe('should transform input', () => {
     test('to length of string', async () => {
       const action = transformAsync(async (input: string) => input.length);
       expect(
