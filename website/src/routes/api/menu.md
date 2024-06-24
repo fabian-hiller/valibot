@@ -32,6 +32,7 @@
 - [objectWithRest](/api/objectWithRest/)
 - [optional](/api/optional/)
 - [picklist](/api/picklist/)
+- [promise](/api/promise/)
 - [record](/api/record/)
 - [set](/api/set/)
 - [strictObject](/api/strictObject/)

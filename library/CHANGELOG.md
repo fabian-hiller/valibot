@@ -4,7 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
-- Add `file` and `function` schema
+- Add `file`, `function` and `promise` schema
 - Add `operation` property to `filterItems`, `findItem`, `mapItems`, `reduceItems` and `sortItem` action
 - Rename `action` argument of `filterItems`, `findItem`, `mapItems`, `reduceItems` and `sortItem` action to `operation`
 - Rename `action` argument and property of `transform` and `transformAsync` action to `operation`
