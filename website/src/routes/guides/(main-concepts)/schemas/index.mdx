@@ -59,6 +59,7 @@ Among complex values I support objects, records, arrays, tuples as well as vario
     'array',
     'blob',
     'date',
+    'file',
     'looseObject',
     'looseTuple',
     'map',
@@ -79,6 +80,7 @@ import * as v from 'valibot';
 const ArraySchema = v.array(v.string()); // string[]
 const BlobSchema = v.blob(); // Blob
 const DateSchema = v.date(); // Date
+const FileSchema = v.file(); // File
 const LooseObjectSchema = v.looseObject({ key: v.string() }); // { key: string }
 const LooseTupleSchema = v.looseTuple([v.string(), v.number()]); // [string, number]
 const MapSchema = v.map(v.string(), v.number()); // Map<string, number>

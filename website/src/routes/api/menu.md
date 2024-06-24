@@ -10,6 +10,7 @@
 - [custom](/api/custom/)
 - [date](/api/date/)
 - [enum](/api/enum/)
+- [file](/api/file/)
 - [instance](/api/instance/)
 - [intersect](/api/intersect/)
 - [lazy](/api/lazy/)
