@@ -21,6 +21,16 @@
     transition: none !important;
   }
 
+  /* Scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.slate.300') theme('colors.transparent');
+  }
+  .dark,
+  .dark * {
+    scrollbar-color: theme('colors.slate.700') theme('colors.transparent');
+  }
+
   /* Monaco editor */
   .monaco-editor,
   .monaco-editor > div {
