@@ -172,6 +172,7 @@
 ## Async
 
 - [arrayAsync](/api/arrayAsync/)
+- [awaitAsync](/api/awaitAsync/)
 - [customAsync](/api/customAsync/)
 - [fallbackAsync](/api/fallbackAsync/)
 - [forwardAsync](/api/forwardAsync/)

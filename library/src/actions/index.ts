@@ -1,3 +1,4 @@
+export * from './await/index.ts';
 export * from './bic/index.ts';
 export * from './brand/index.ts';
 export * from './bytes/index.ts';
