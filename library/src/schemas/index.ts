@@ -7,6 +7,7 @@ export * from './custom/index.ts';
 export * from './date/index.ts';
 export * from './enum/index.ts';
 export * from './file/index.ts';
+export * from './function/index.ts';
 export * from './instance/index.ts';
 export * from './intersect/index.ts';
 export * from './lazy/index.ts';

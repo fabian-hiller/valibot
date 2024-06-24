@@ -60,6 +60,7 @@ Among complex values I support objects, records, arrays, tuples as well as vario
     'blob',
     'date',
     'file',
+    'function',
     'looseObject',
     'looseTuple',
     'map',
@@ -81,6 +82,7 @@ const ArraySchema = v.array(v.string()); // string[]
 const BlobSchema = v.blob(); // Blob
 const DateSchema = v.date(); // Date
 const FileSchema = v.file(); // File
+const FunctionSchema = v.function(); // (...args: unknown[]) => unknown
 const LooseObjectSchema = v.looseObject({ key: v.string() }); // { key: string }
 const LooseTupleSchema = v.looseTuple([v.string(), v.number()]); // [string, number]
 const MapSchema = v.map(v.string(), v.number()); // Map<string, number>

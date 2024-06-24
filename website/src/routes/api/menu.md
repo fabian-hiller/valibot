@@ -11,6 +11,7 @@
 - [date](/api/date/)
 - [enum](/api/enum/)
 - [file](/api/file/)
+- [function](/api/function/)
 - [instance](/api/instance/)
 - [intersect](/api/intersect/)
 - [lazy](/api/lazy/)
