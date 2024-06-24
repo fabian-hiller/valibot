@@ -2,7 +2,8 @@ import { describe, expect, test } from 'vitest';
 import { findItem, type FindItemAction } from './findItem.ts';
 
 describe('findItem', () => {
-  const action = findItem<number[]>((item) => item > 9);
+  const operation = (item: number) => item > 9;
+  const action = findItem<number[]>(operation);
 
   test('should return action object', () => {
     expect(action).toStrictEqual({
@@ -10,6 +11,7 @@ describe('findItem', () => {
       type: 'find_item',
       reference: findItem,
       async: false,
+      operation,
       _run: expect.any(Function),
     } satisfies FindItemAction<number[]>);
   });

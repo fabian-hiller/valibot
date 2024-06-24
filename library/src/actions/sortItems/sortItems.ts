@@ -21,29 +21,34 @@ export interface SortItemsAction<TInput extends readonly unknown[]>
    * The action reference.
    */
   readonly reference: typeof sortItems;
+  /**
+   * The sort items operation.
+   */
+  readonly operation: ArrayAction<TInput> | undefined;
 }
 
 /**
  * Creates a sort items transformation action.
  *
- * @param action The sort items logic.
+ * @param operation The sort items operation.
  *
  * @returns A sort items action.
  */
 export function sortItems<TInput extends readonly unknown[]>(
-  action?: ArrayAction<TInput>
+  operation?: ArrayAction<TInput>
 ): SortItemsAction<TInput>;
 
 export function sortItems(
-  action?: ArrayAction<unknown[]>
+  operation?: ArrayAction<unknown[]>
 ): SortItemsAction<unknown[]> {
   return {
     kind: 'transformation',
     type: 'sort_items',
     reference: sortItems,
     async: false,
+    operation,
     _run(dataset) {
-      dataset.value = dataset.value.sort(action);
+      dataset.value = dataset.value.sort(this.operation);
       return dataset;
     },
   };

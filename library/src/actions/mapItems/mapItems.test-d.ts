@@ -6,11 +6,11 @@ describe('mapItems', () => {
   test('should return action object', () => {
     expectTypeOf(
       mapItems<number[], { item: number }>((item) => ({ item }))
-    ).toEqualTypeOf<MapItemsAction<number[], { item: number }[]>>();
+    ).toEqualTypeOf<MapItemsAction<number[], { item: number }>>();
   });
 
   describe('should infer correct types', () => {
-    type Action = MapItemsAction<number[], { item: number }[]>;
+    type Action = MapItemsAction<number[], { item: number }>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<number[]>();

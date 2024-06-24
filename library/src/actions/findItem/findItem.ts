@@ -14,30 +14,35 @@ export interface FindItemAction<TInput extends readonly unknown[]>
    * The action reference.
    */
   readonly reference: typeof findItem;
+  /**
+   * The find item operation.
+   */
+  readonly operation: ArrayRequirement<TInput>;
 }
 
 /**
  * Creates a find item transformation action.
  *
- * @param action The find item logic.
+ * @param operation The find item operation.
  *
  * @returns A find item action.
  */
 export function findItem<TInput extends readonly unknown[]>(
-  action: ArrayRequirement<TInput>
+  operation: ArrayRequirement<TInput>
 ): FindItemAction<TInput>;
 
 export function findItem(
-  action: ArrayRequirement<unknown[]>
+  operation: ArrayRequirement<unknown[]>
 ): FindItemAction<unknown[]> {
   return {
     kind: 'transformation',
     type: 'find_item',
     reference: findItem,
     async: false,
+    operation,
     _run(dataset) {
       // @ts-expect-error
-      dataset.value = dataset.value.find(action);
+      dataset.value = dataset.value.find(this.operation);
       return dataset as TypedDataset<unknown, never>;
     },
   };

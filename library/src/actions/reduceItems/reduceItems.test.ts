@@ -2,10 +2,9 @@ import { describe, expect, test } from 'vitest';
 import { reduceItems, type ReduceItemsAction } from './reduceItems.ts';
 
 describe('reduceItems', () => {
-  const action = reduceItems<number[], number>(
-    (output, item) => output + item,
-    0
-  );
+  const operation = (output: number, item: number) => output + item;
+  const initial = 0;
+  const action = reduceItems<number[], number>(operation, initial);
 
   test('should return action object', () => {
     expect(action).toStrictEqual({
@@ -13,6 +12,8 @@ describe('reduceItems', () => {
       type: 'reduce_items',
       reference: reduceItems,
       async: false,
+      operation,
+      initial,
       _run: expect.any(Function),
     } satisfies ReduceItemsAction<number[], number>);
   });

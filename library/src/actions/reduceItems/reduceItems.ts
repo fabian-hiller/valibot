@@ -23,23 +23,31 @@ export interface ReduceItemsAction<TInput extends readonly unknown[], TOutput>
    * The action reference.
    */
   readonly reference: typeof reduceItems;
+  /**
+   * The reduce items operation.
+   */
+  readonly operation: ArrayAction<TInput, TOutput>;
+  /**
+   * The initial value.
+   */
+  readonly initial: TOutput;
 }
 
 /**
  * Creates a reduce items transformation action.
  *
- * @param action The reduce items logic.
+ * @param operation The reduce items operation.
  * @param initial The initial value.
  *
  * @returns A reduce items action.
  */
 export function reduceItems<TInput extends readonly unknown[], TOutput>(
-  action: ArrayAction<TInput, TOutput>,
+  operation: ArrayAction<TInput, TOutput>,
   initial: TOutput
 ): ReduceItemsAction<TInput, TOutput>;
 
 export function reduceItems(
-  action: ArrayAction<unknown[], unknown>,
+  operation: ArrayAction<unknown[], unknown>,
   initial: unknown
 ): ReduceItemsAction<unknown[], unknown> {
   return {
@@ -47,9 +55,11 @@ export function reduceItems(
     type: 'reduce_items',
     reference: reduceItems,
     async: false,
+    operation,
+    initial,
     _run(dataset) {
       // @ts-expect-error
-      dataset.value = dataset.value.reduce(action, initial);
+      dataset.value = dataset.value.reduce(this.operation, this.initial);
       return dataset as TypedDataset<unknown, never>;
     },
   };

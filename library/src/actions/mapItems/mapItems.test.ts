@@ -2,7 +2,8 @@ import { describe, expect, test } from 'vitest';
 import { mapItems, type MapItemsAction } from './mapItems.ts';
 
 describe('mapItems', () => {
-  const action = mapItems<number[], { item: number }>((item) => ({ item }));
+  const operation = (item: number) => ({ item });
+  const action = mapItems<number[], { item: number }>(operation);
 
   test('should return action object', () => {
     expect(action).toStrictEqual({
@@ -10,8 +11,9 @@ describe('mapItems', () => {
       type: 'map_items',
       reference: mapItems,
       async: false,
+      operation,
       _run: expect.any(Function),
-    } satisfies MapItemsAction<number[], { item: number }[]>);
+    } satisfies MapItemsAction<number[], { item: number }>);
   });
 
   test('should transform input', () => {

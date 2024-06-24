@@ -12,10 +12,8 @@ type ArrayAction<TInput extends readonly unknown[], TOutput> = (
 /**
  * Map items action type.
  */
-export interface MapItemsAction<
-  TInput extends readonly unknown[],
-  TOutput extends readonly unknown[],
-> extends BaseTransformation<TInput, TOutput, never> {
+export interface MapItemsAction<TInput extends readonly unknown[], TOutput>
+  extends BaseTransformation<TInput, TOutput[], never> {
   /**
    * The action type.
    */
@@ -24,29 +22,34 @@ export interface MapItemsAction<
    * The action reference.
    */
   readonly reference: typeof mapItems;
+  /**
+   * The map items operation.
+   */
+  readonly operation: ArrayAction<TInput, TOutput>;
 }
 
 /**
  * Creates a map items transformation action.
  *
- * @param action The map items logic.
+ * @param operation The map items operation.
  *
  * @returns A map items action.
  */
 export function mapItems<TInput extends readonly unknown[], TOutput>(
-  action: ArrayAction<TInput, TOutput>
-): MapItemsAction<TInput, TOutput[]>;
+  operation: ArrayAction<TInput, TOutput>
+): MapItemsAction<TInput, TOutput>;
 
 export function mapItems(
-  action: ArrayAction<unknown[], unknown>
-): MapItemsAction<unknown[], unknown[]> {
+  operation: ArrayAction<unknown[], unknown>
+): MapItemsAction<unknown[], unknown> {
   return {
     kind: 'transformation',
     type: 'map_items',
     reference: mapItems,
     async: false,
+    operation,
     _run(dataset) {
-      dataset.value = dataset.value.map(action);
+      dataset.value = dataset.value.map(this.operation);
       return dataset;
     },
   };
