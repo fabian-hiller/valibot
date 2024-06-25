@@ -90,6 +90,6 @@ cd ../packages/i18n
 Execute build script
 
 ```bash
-pnpm build-npm      # for npm
-pnpm build-jsr      # for JSR
+pnpm build.npm      # for npm
+pnpm build.jsr      # for JSR
 ```
