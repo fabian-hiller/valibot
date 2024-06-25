@@ -6,6 +6,8 @@ import type {
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
+// TODO: Document that `File` is not available by default in Node.js <=v18.
+
 /**
  * File issue type.
  */
