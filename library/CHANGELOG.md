@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.35.0 (June 25, 2024)
 
 - Increase argument limit of `pipe` and `pipeAsync` method (issue #643)
 
