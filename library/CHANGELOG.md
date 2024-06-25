@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Increase argument limit of `pipe` and `pipeAsync` method (issue #643)
+
 ## v0.34.0 (June 24, 2024)
 
 - Add `file`, `function` and `promise` schema
