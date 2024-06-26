@@ -25,28 +25,6 @@ export interface SetIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Set path item type.
- */
-export interface SetPathItem {
-  /**
-   * The path item type.
-   */
-  readonly type: 'set';
-  /**
-   * The path item origin.
-   */
-  readonly origin: 'value';
-  /**
-   * The path item input.
-   */
-  readonly input: Set<unknown>;
-  /**
-   * The path item key.
-   */
-  readonly value: unknown;
-}
-
-/**
  * Infer set input type.
  */
 export type InferSetInput<

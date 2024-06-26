@@ -12,7 +12,7 @@ import type {
   ObjectEntries,
   ObjectPathItem,
 } from '../../types/index.ts';
-import { _addIssue, _isAllowedObjectKey } from '../../utils/index.ts';
+import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
 import type { ObjectWithRestIssue } from './types.ts';
 
 /**
@@ -181,7 +181,7 @@ export function objectWithRest(
           for (const key in input) {
             // TODO: We should document that we exclude specific keys for
             // security reasons.
-            if (_isAllowedObjectKey(key) && !(key in this.entries)) {
+            if (_isValidObjectKey(input, key) && !(key in this.entries)) {
               const value: unknown = input[key as keyof typeof input];
               const valueDataset = this.rest._run(
                 { typed: false, value },

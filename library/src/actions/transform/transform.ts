@@ -14,30 +14,30 @@ export interface TransformAction<TInput, TOutput>
    */
   readonly reference: typeof transform;
   /**
-   * The transformation action.
+   * The transformation operation.
    */
-  readonly action: (input: TInput) => TOutput;
+  readonly operation: (input: TInput) => TOutput;
 }
 
 /**
  * Creates a custom transformation action.
  *
- * @param action The transformation logic.
+ * @param operation The transformation operation.
  *
  * @returns A transform action.
  */
 export function transform<TInput, TOutput>(
-  action: (input: TInput) => TOutput
+  operation: (input: TInput) => TOutput
 ): TransformAction<TInput, TOutput> {
   return {
     kind: 'transformation',
     type: 'transform',
     reference: transform,
     async: false,
-    action,
+    operation,
     _run(dataset) {
       // @ts-expect-error
-      dataset.value = action(dataset.value);
+      dataset.value = this.operation(dataset.value);
       // @ts-expect-error
       return dataset as TypedDataset<TOutput, never>;
     },

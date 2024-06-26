@@ -164,7 +164,7 @@ describe('recordAsync', () => {
       received: '"2"',
       path: [
         {
-          type: 'record',
+          type: 'object',
           origin: 'value',
           input: {
             foo: 1,
@@ -211,7 +211,7 @@ describe('recordAsync', () => {
             received: '"other"',
             path: [
               {
-                type: 'record',
+                type: 'object',
                 origin: 'key',
                 input,
                 key: 'other',
@@ -269,14 +269,14 @@ describe('recordAsync', () => {
             received: '"2"',
             path: [
               {
-                type: 'record',
+                type: 'object',
                 origin: 'value',
                 input,
                 key: 'key1',
                 value: input.key1,
               },
               {
-                type: 'record',
+                type: 'object',
                 origin: 'value',
                 input: input.key1,
                 key: 'bar',
@@ -293,7 +293,7 @@ describe('recordAsync', () => {
             received: '123',
             path: [
               {
-                type: 'record',
+                type: 'object',
                 origin: 'value',
                 input,
                 key: 'key2',

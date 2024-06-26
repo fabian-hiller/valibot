@@ -17,30 +17,30 @@ export interface TransformActionAsync<TInput, TOutput>
    */
   readonly reference: typeof transformAsync;
   /**
-   * The transformation action.
+   * The transformation operation.
    */
-  readonly action: (input: TInput) => Promise<TOutput>;
+  readonly operation: (input: TInput) => Promise<TOutput>;
 }
 
 /**
  * Creates a custom transformation action.
  *
- * @param action The transformation logic.
+ * @param operation The transformation operation.
  *
  * @returns A transform action.
  */
 export function transformAsync<TInput, TOutput>(
-  action: (input: TInput) => Promise<TOutput>
+  operation: (input: TInput) => Promise<TOutput>
 ): TransformActionAsync<TInput, TOutput> {
   return {
     kind: 'transformation',
     type: 'transform',
     reference: transformAsync,
     async: true,
-    action,
+    operation,
     async _run(dataset) {
       // @ts-expect-error
-      dataset.value = await action(dataset.value);
+      dataset.value = await this.operation(dataset.value);
       // @ts-expect-error
       return dataset as TypedDataset<TOutput, never>;
     },

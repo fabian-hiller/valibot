@@ -16,7 +16,7 @@ Checks if the input matches the scheme.
 > By using a type predicate, this function can be used as a type guard.
 
 ```ts
-const result = is<TSchema>(schema, input);
+const result = v.is<TSchema>(schema, input);
 ```
 
 ## Generics
@@ -60,7 +60,9 @@ The following APIs can be combined with `is`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -73,7 +75,7 @@ The following APIs can be combined with `is`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -81,6 +83,7 @@ The following APIs can be combined with `is`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -89,11 +92,11 @@ The following APIs can be combined with `is`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

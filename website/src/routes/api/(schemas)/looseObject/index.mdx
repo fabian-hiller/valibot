@@ -16,7 +16,7 @@ import { properties } from './properties';
 Creates a loose object schema.
 
 ```ts
-const Schema = looseObject<TEntries, TMessage>(entries, message);
+const Schema = v.looseObject<TEntries, TMessage>(entries, message);
 ```
 
 ## Generics
@@ -108,7 +108,9 @@ The following APIs can be combined with `looseObject`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -120,7 +122,7 @@ The following APIs can be combined with `looseObject`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -128,6 +130,7 @@ The following APIs can be combined with `looseObject`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -136,11 +139,11 @@ The following APIs can be combined with `looseObject`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

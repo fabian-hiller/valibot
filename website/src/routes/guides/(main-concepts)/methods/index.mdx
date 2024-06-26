@@ -110,7 +110,8 @@ const RegisterSchema = v.pipe(
     password2: v.string(),
   }),
   v.forward(
-    v.check(
+    v.partialCheck(
+      [['password1'], ['password2']],
       (input) => input.password1 === input.password2,
       'The two passwords do not match.'
     ),

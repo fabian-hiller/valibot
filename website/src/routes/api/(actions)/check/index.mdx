@@ -14,7 +14,7 @@ import { properties } from './properties';
 Creates a check pipeline validation action.
 
 ```ts
-const Action = check<TInput, TMessage>(requirement, message);
+const Action = v.check<TInput, TMessage>(requirement, message);
 ```
 
 ## Generics
@@ -71,7 +71,9 @@ The following APIs can be combined with `check`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -84,7 +86,7 @@ The following APIs can be combined with `check`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -92,6 +94,7 @@ The following APIs can be combined with `check`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -100,11 +103,11 @@ The following APIs can be combined with `check`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

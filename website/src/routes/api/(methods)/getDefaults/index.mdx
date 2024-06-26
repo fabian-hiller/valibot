@@ -17,7 +17,7 @@ Returns the default values of the schema.
 > The difference to <Link href='../getDefault/'>`getDefault`</Link> is that for object and tuple schemas this function recursively returns the default values of the subschemas instead of `undefined`.
 
 ```ts
-const values = getDefaults<TSchema>(schema);
+const values = v.getDefaults<TSchema>(schema);
 ```
 
 ## Generics
@@ -72,7 +72,9 @@ The following APIs can be combined with `getDefaults`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -85,7 +87,7 @@ The following APIs can be combined with `getDefaults`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -93,6 +95,7 @@ The following APIs can be combined with `getDefaults`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -101,11 +104,11 @@ The following APIs can be combined with `getDefaults`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

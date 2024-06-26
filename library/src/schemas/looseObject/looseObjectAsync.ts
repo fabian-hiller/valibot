@@ -8,7 +8,7 @@ import type {
   ObjectEntriesAsync,
   ObjectPathItem,
 } from '../../types/index.ts';
-import { _addIssue, _isAllowedObjectKey } from '../../utils/index.ts';
+import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
 import type { LooseObjectIssue } from './types.ts';
 
 /**
@@ -165,7 +165,7 @@ export function looseObjectAsync(
           for (const key in input) {
             // TODO: We should document that we exclude specific keys for
             // security reasons.
-            if (_isAllowedObjectKey(key) && !(key in this.entries)) {
+            if (_isValidObjectKey(input, key) && !(key in this.entries)) {
               // @ts-expect-error
               dataset.value[key] = input[key];
             }

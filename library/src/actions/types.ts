@@ -1,4 +1,13 @@
 /**
+ * Array requirement type.
+ */
+export type ArrayRequirement<TInput extends readonly unknown[]> = (
+  item: TInput[number],
+  index: number,
+  array: TInput
+) => boolean;
+
+/**
  * Content input type.
  */
 export type ContentInput = string | unknown[];
@@ -7,7 +16,7 @@ export type ContentInput = string | unknown[];
  * Content requirement type.
  */
 export type ContentRequirement<TInput extends ContentInput> =
-  TInput extends unknown[] ? TInput[number] : TInput;
+  TInput extends readonly unknown[] ? TInput[number] : TInput;
 
 /**
  * Length input type.

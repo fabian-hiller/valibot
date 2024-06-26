@@ -5,13 +5,13 @@ import type {
   Dataset,
   ErrorMessage,
   InferIssue,
+  ObjectPathItem,
 } from '../../types/index.ts';
-import { _addIssue, _isAllowedObjectKey } from '../../utils/index.ts';
+import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
 import type {
   InferRecordInput,
   InferRecordOutput,
   RecordIssue,
-  RecordPathItem,
 } from './types.ts';
 
 /**
@@ -137,7 +137,7 @@ export function recordAsync(
             // Exclude blocked keys to prevent prototype pollutions
             // TODO: We should document that we exclude specific keys for
             // security reasons.
-            .filter(([key]) => _isAllowedObjectKey(key))
+            .filter(([key]) => _isValidObjectKey(input, key))
             .map(([entryKey, entryValue]) =>
               Promise.all([
                 entryKey,
@@ -158,8 +158,8 @@ export function recordAsync(
           // If there are issues, capture them
           if (keyDataset.issues) {
             // Create record path item
-            const pathItem: RecordPathItem = {
-              type: 'record',
+            const pathItem: ObjectPathItem = {
+              type: 'object',
               origin: 'key',
               input: input as Record<string, unknown>,
               key: entryKey,
@@ -188,8 +188,8 @@ export function recordAsync(
           // If there are issues, capture them
           if (valueDataset.issues) {
             // Create record path item
-            const pathItem: RecordPathItem = {
-              type: 'record',
+            const pathItem: ObjectPathItem = {
+              type: 'object',
               origin: 'value',
               input: input as Record<string, unknown>,
               key: entryKey,

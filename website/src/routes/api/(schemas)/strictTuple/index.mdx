@@ -15,7 +15,7 @@ import { properties } from './properties';
 Creates a strict tuple schema.
 
 ```ts
-const Schema = strictTuple<TItems, TMessage>(items, message);
+const Schema = v.strictTuple<TItems, TMessage>(items, message);
 ```
 
 ## Generics
@@ -65,7 +65,9 @@ The following APIs can be combined with `strictTuple`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -78,7 +80,7 @@ The following APIs can be combined with `strictTuple`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -86,6 +88,7 @@ The following APIs can be combined with `strictTuple`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -93,11 +96,11 @@ The following APIs can be combined with `strictTuple`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -123,7 +126,7 @@ The following APIs can be combined with `strictTuple`.
   items={[
     'check',
     'brand',
-    'every',
+    'everyItem',
     'excludes',
     'includes',
     'length',
@@ -131,7 +134,7 @@ The following APIs can be combined with `strictTuple`.
     'minLength',
     'notLength',
     'readonly',
-    'some',
+    'someItem',
     'transform',
   ]}
 />

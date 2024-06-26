@@ -1,4 +1,5 @@
 import type {
+  ArrayPathItem,
   BaseIssue,
   BaseSchema,
   Dataset,
@@ -7,7 +8,6 @@ import type {
   InferTupleIssue,
   InferTupleOutput,
   TupleItems,
-  TuplePathItem,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { LooseTupleIssue } from './types.ts';
@@ -102,8 +102,8 @@ export function looseTuple(
           // If there are issues, capture them
           if (itemDataset.issues) {
             // Create tuple path item
-            const pathItem: TuplePathItem = {
-              type: 'tuple',
+            const pathItem: ArrayPathItem = {
+              type: 'array',
               origin: 'value',
               input,
               key,

@@ -18,8 +18,6 @@ import { ApiList } from '~/components';
 
 Schemas allow you to validate a specific data type. They are similar to type definitions in TypeScript. Besides primitive values like strings and complex values like objects, I also support special cases like literals, unions and custom types.
 
-> Due to the modular design, occasionally reserved keywords of JavaScript or TypeScript get in my way. As a workaround, I have added the suffix `_` in these cases. Let me know [here](https://github.com/fabian-hiller/valibot/issues/new) if you have alternative ideas.
-
 ## Primitive values
 
 I support the creation of schemas for any primitive data type. These are immutable values that are stored directly in the stack, unlike objects where only a reference to the heap is stored.
@@ -29,11 +27,11 @@ I support the creation of schemas for any primitive data type. These are immutab
   items={[
     'bigint',
     'boolean',
-    'null_',
+    'null',
     'number',
     'string',
     'symbol',
-    'undefined_',
+    'undefined',
   ]}
 />
 
@@ -42,11 +40,11 @@ import * as v from 'valibot';
 
 const BigintSchema = v.bigint(); // bigint
 const BooleanSchema = v.boolean(); // boolean
-const NullSchema = v.null_(); // null
+const NullSchema = v.null(); // null
 const NumberSchema = v.number(); // number
 const StringSchema = v.string(); // string
 const SymbolSchema = v.symbol(); // symbol
-const UndefinedSchema = v.undefined_(); // undefined
+const UndefinedSchema = v.undefined(); // undefined
 ```
 
 ## Complex values
@@ -61,11 +59,14 @@ Among complex values I support objects, records, arrays, tuples as well as vario
     'array',
     'blob',
     'date',
+    'file',
+    'function',
     'looseObject',
     'looseTuple',
     'map',
     'object',
     'objectWithRest',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -81,20 +82,20 @@ import * as v from 'valibot';
 const ArraySchema = v.array(v.string()); // string[]
 const BlobSchema = v.blob(); // Blob
 const DateSchema = v.date(); // Date
+const FileSchema = v.file(); // File
+const FunctionSchema = v.function(); // (...args: unknown[]) => unknown
 const LooseObjectSchema = v.looseObject({ key: v.string() }); // { key: string }
 const LooseTupleSchema = v.looseTuple([v.string(), v.number()]); // [string, number]
 const MapSchema = v.map(v.string(), v.number()); // Map<string, number>
 const ObjectSchema = v.object({ key: v.string() }); // { key: string }
-const ObjectWithRestSchema = v.objectWithRest({ key: v.string() }, v.null_()); // { key: string } & { [key: string]: null }
+const ObjectWithRestSchema = v.objectWithRest({ key: v.string() }, v.null()); // { key: string } & { [key: string]: null }
+const PromiseSchema = v.promise(); // Promise<unknown>
 const RecordSchema = v.record(v.string(), v.number()); // Record<string, number>
 const SetSchema = v.set(v.number()); // Set<number>
 const StrictObjectSchema = v.strictObject({ key: v.string() }); // { key: string }
 const StrictTupleSchema = v.strictTuple([v.string(), v.number()]); // [string, number]
 const TupleSchema = v.tuple([v.string(), v.number()]); // [string, number]
-const TupleWithRestSchema = v.tupleWithRest(
-  [v.string(), v.number()],
-  v.null_()
-); // [string, number, ...null[]]
+const TupleWithRestSchema = v.tupleWithRest([v.string(), v.number()], v.null()); // [string, number, ...null[]]
 ```
 
 ## Special cases
@@ -106,7 +107,7 @@ Beyond primitive and complex values, I also provide schema functions for more sp
   items={[
     'any',
     'custom',
-    'enum_',
+    'enum',
     'instance',
     'intersect',
     'lazy',
@@ -123,7 +124,7 @@ Beyond primitive and complex values, I also provide schema functions for more sp
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -132,7 +133,7 @@ import * as v from 'valibot';
 
 const AnySchema = v.any(); // any
 const CustomSchema = v.custom<`${number}px`>(isPixelString); // `${number}px`
-const EnumSchema = v.enum_(Direction); // Direction
+const EnumSchema = v.enum(Direction); // Direction
 const InstanceSchema = v.instance(Error); // Error
 const LazySchema = v.lazy(() => v.string()); // string
 const IntersectSchema = v.intersect([v.string(), v.literal('a')]); // string & 'a'
@@ -152,5 +153,5 @@ const VariantSchema = v.variant('type', [
   v.object({ type: v.literal('a'), foo: v.string() }),
   v.object({ type: v.literal('b'), bar: v.number() }),
 ]); // { type: 'a'; foo: string } | { type: 'b'; bar: number }
-const VoidSchema = v.void_(); // void
+const VoidSchema = v.void(); // void
 ```

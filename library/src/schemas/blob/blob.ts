@@ -6,6 +6,8 @@ import type {
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
+// TODO: Document that `Blob` is not available by default in Node.js <=v16.
+
 /**
  * Blob issue type.
  */
