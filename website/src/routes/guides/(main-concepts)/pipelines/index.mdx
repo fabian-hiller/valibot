@@ -49,6 +49,7 @@ Pipeline validation actions examine the input and, if the input does not meet a 
     'bic',
     'bytes',
     'check',
+    'checkItems',
     'creditCard',
     'cuid2',
     'decimal',
@@ -56,7 +57,7 @@ Pipeline validation actions examine the input and, if the input does not meet a 
     'emoji',
     'empty',
     'endsWith',
-    'every',
+    'everyItem',
     'excludes',
     'finite',
     'hash',
@@ -93,10 +94,12 @@ Pipeline validation actions examine the input and, if the input does not meet a 
     'notSize',
     'notValue',
     'octal',
+    'partialCheck',
+    'rawCheck',
     'regex',
     'safeInteger',
     'size',
-    'some',
+    'someItem',
     'startsWith',
     'ulid',
     'url',
@@ -118,7 +121,7 @@ const DateSchema = v.pipe(v.date(), v.minValue(new Date()));
 
 ### Custom validation
 
-For custom validations, <Link href="/api/check/">`check`</Link> can be used. If the function passed as the first argument returns a falsy value, an issue is returned. Otherwise the input is considered valid.
+For custom validations, <Link href="/api/check/">`check`</Link> can be used. If the function passed as the first argument returns `false`, an issue is returned. Otherwise the input is considered valid.
 
 ```ts
 import * as v from 'valibot';
@@ -140,7 +143,13 @@ Pipeline transformation actions allow to change the value and data type of the i
   label="Transformation actions"
   items={[
     'brand',
+    'filterItems',
+    'findItem',
+    'mapItems',
+    'rawTransform',
     'readonly',
+    'reduceItems',
+    'sortItems',
     'toLowerCase',
     'toMaxValue',
     'toMinValue',

@@ -1,4 +1,5 @@
 import type {
+  ArrayPathItem,
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
@@ -11,7 +12,6 @@ import type {
   InferTupleIssue,
   InferTupleOutput,
   TupleItemsAsync,
-  TuplePathItem,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { TupleWithRestIssue } from './types.ts';
@@ -130,7 +130,7 @@ export function tupleWithRestAsync(
         const [normalDatasets, restDatasets] = await Promise.all([
           // Parse schema of each normal item
           Promise.all(
-            items.map(async (item, key) => {
+            this.items.map(async (item, key) => {
               const value = input[key];
               return [
                 key,
@@ -142,11 +142,11 @@ export function tupleWithRestAsync(
 
           // Parse other items with rest schema
           Promise.all(
-            input.slice(items.length).map(async (value, key) => {
+            input.slice(this.items.length).map(async (value, key) => {
               return [
-                key + items.length,
+                key + this.items.length,
                 value,
-                await rest._run({ typed: false, value }, config),
+                await this.rest._run({ typed: false, value }, config),
               ] as const;
             })
           ),
@@ -157,8 +157,8 @@ export function tupleWithRestAsync(
           // If there are issues, capture them
           if (itemDataset.issues) {
             // Create tuple path item
-            const pathItem: TuplePathItem = {
-              type: 'tuple',
+            const pathItem: ArrayPathItem = {
+              type: 'array',
               origin: 'value',
               input,
               key,
@@ -204,8 +204,8 @@ export function tupleWithRestAsync(
             // If there are issues, capture them
             if (itemDataset.issues) {
               // Create tuple path item
-              const pathItem: TuplePathItem = {
-                type: 'tuple',
+              const pathItem: ArrayPathItem = {
+                type: 'array',
                 origin: 'value',
                 input,
                 key,

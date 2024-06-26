@@ -7,6 +7,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 | Language        | Pull Request       | Status |
 | --------------- | ------------------ | ------ |
 | Arabic (ar)     | [#527][pr-527-url] | ✅     |
+| Catalan (ca)    | [#652][pr-527-url] | ✅     |
 | Chinese (zh-CN) | [#419][pr-419-url] | ✅     |
 | Chinese (zh-TW) | [#427][pr-427-url] | ✅     |
 | Dutch (nl)      | [#438][pr-438-url] | ✅     |
@@ -18,6 +19,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 | Japanese (ja)   | [#431][pr-431-url] | ✅     |
 | Korean (kr)     | [#429][pr-429-url] | ✅     |
 | Norwegian (nb)  | [#439][pr-439-url] | ✅     |
+| Polish (pl)     | [#584][pr-584-url] | ✅     |
 | Portuguese (pt) | [#509][pr-509-url] | ✅     |
 | Romanian (ro)   | [#472][pr-472-url] | ✅     |
 | Russian (ru)    | [#434][pr-434-url] | ✅     |
@@ -44,8 +46,10 @@ The official i18n translations for Valibot. See the [internationalization guide]
 [pr-549-url]: https://github.com/fabian-hiller/valibot/pull/549
 [pr-560-url]: https://github.com/fabian-hiller/valibot/pull/560
 [pr-581-url]: https://github.com/fabian-hiller/valibot/pull/581
+[pr-584-url]: https://github.com/fabian-hiller/valibot/pull/584
 [pr-605-url]: https://github.com/fabian-hiller/valibot/pull/605
 [pr-606-url]: https://github.com/fabian-hiller/valibot/pull/606
+[pr-652-url]: https://github.com/fabian-hiller/valibot/pull/652
 
 ## Getting started
 
@@ -86,6 +90,6 @@ cd ../packages/i18n
 Execute build script
 
 ```bash
-pnpm build-npm      # for npm
-pnpm build-jsr      # for JSR
+pnpm build.npm      # for npm
+pnpm build.jsr      # for JSR
 ```

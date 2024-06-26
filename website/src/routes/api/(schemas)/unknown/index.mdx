@@ -17,7 +17,7 @@ Creates an unknown schema.
 > Use this schema function only if the data is truly unknown. Otherwise, use the other more specific schema functions that describe the data exactly.
 
 ```ts
-const Schema = unknown();
+const Schema = v.unknown();
 ```
 
 ## Returns
@@ -88,7 +88,7 @@ The following APIs can be combined with `unknwon`.
     'emoji',
     'empty',
     'endsWith',
-    'every',
+    'everyItem',
     'excludes',
     'finite',
     'hash',
@@ -130,7 +130,7 @@ The following APIs can be combined with `unknwon`.
     'regex',
     'safeInteger',
     'size',
-    'some',
+    'someItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',

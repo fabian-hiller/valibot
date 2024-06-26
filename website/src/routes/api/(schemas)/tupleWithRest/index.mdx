@@ -15,7 +15,7 @@ import { properties } from './properties';
 Creates a tuple with rest schema.
 
 ```ts
-const Schema = tupleWithRest<TItems, TRest, TMessage>(items, rest, message);
+const Schema = v.tupleWithRest<TItems, TRest, TMessage>(items, rest, message);
 ```
 
 ## Generics
@@ -68,7 +68,9 @@ The following APIs can be combined with `tupleWithRest`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -81,7 +83,7 @@ The following APIs can be combined with `tupleWithRest`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -89,6 +91,7 @@ The following APIs can be combined with `tupleWithRest`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -96,11 +99,11 @@ The following APIs can be combined with `tupleWithRest`.
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -126,7 +129,7 @@ The following APIs can be combined with `tupleWithRest`.
   items={[
     'check',
     'brand',
-    'every',
+    'everyItem',
     'excludes',
     'includes',
     'length',
@@ -134,7 +137,7 @@ The following APIs can be combined with `tupleWithRest`.
     'minLength',
     'notLength',
     'readonly',
-    'some',
+    'someItem',
     'transform',
   ]}
 />

@@ -14,7 +14,10 @@ import { properties } from './properties';
 Creates a [multiple](<https://en.wikipedia.org/wiki/Multiple_(mathematics)>) of validation action.
 
 ```ts
-const Action = multipleOf<TInput, TRequirement, TMessage>(requirement, message);
+const Action = v.multipleOf<TInput, TRequirement, TMessage>(
+  requirement,
+  message
+);
 ```
 
 ## Generics

@@ -2,6 +2,50 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.35.0 (June 25, 2024)
+
+- Increase argument limit of `pipe` and `pipeAsync` method (issue #643)
+
+## v0.34.0 (June 24, 2024)
+
+- Add `file`, `function` and `promise` schema
+- Add `awaitAsync` action to await promise in pipeline
+- Add `operation` property to `filterItems`, `findItem`, `mapItems`, `reduceItems` and `sortItem` action
+- Rename `action` argument of `filterItems`, `findItem`, `mapItems`, `reduceItems` and `sortItem` action to `operation`
+- Rename `action` argument and property of `transform` and `transformAsync` action to `operation`
+- Change and improve implementation of `_stringify` util
+
+## v0.33.3 (June 19, 2024)
+
+- Fix `_isPartiallyTyped` util of `partialCheck` and `partialCheckAsync` action
+
+## v0.33.2 (June 19, 2024)
+
+- Fix type exports for JSR and Deno (pull request #663)
+
+## v0.33.1 (June 18, 2024)
+
+- Fix types of `partialCheck` and `partialCheckAsync` action
+
+## v0.33.0 (June 18, 2024)
+
+- Add export alias with reserved keywords for functions with underscore suffix
+- Add `partialCheck` and `partialCheckAsync` action (issue #76, #145, #260)
+- Add `checkItems`, `filterItems`, `findItem`, `mapItems`, `reduceItems` and `sortItem` action (issue #595)
+- Rename `every` and `some` action to `everyItem` and `someItem`
+- Rename `_isAllowedObjectKey` to `_isValidObjectKey` and add check for inherited properties
+- Remove `RecordPathItem` and `TuplePathItem` type and refactor code
+- Fix `received` property of issue in `date` schema for invalid dates (issue #654)
+
+## v0.32.0 (June 14, 2024)
+
+- Add `rawCheck`, `rawCheckAsync`, `rawTransform` and `rawTransformAsync` action (issue #597)
+- Change `FlatErrors` type for better developer experience (discussion #640)
+- Change `pipe` and `pipeAsync` method to mark output as untyped only when necessary (discussion #613)
+- Remove unused `skipPipe` option from `Config` type and refactor library
+- Fix `this` reference in `looseTuple`, `looseTupleAsync`, `strictTuple`, `strictTupleAsync`, `tuple`, `tupleAsync`, `tupleWithRest` and `tupleWithRestAsync` schema (pull request #649)
+- Fix type of `options` key in `EnumSchema` interface
+
 ## v0.31.1 (June 08, 2024)
 
 - Fix missing file extension for Deno (pull request #637)

@@ -12,10 +12,6 @@ export const properties: Record<string, PropertyProps> = {
             options: ['string', 'number'],
           },
         },
-        {
-          key: { name: 'key', type: 'number' },
-          value: 'string',
-        },
       ],
     },
   },

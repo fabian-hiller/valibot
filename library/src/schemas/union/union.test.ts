@@ -71,7 +71,6 @@ describe('union', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
 
     test('with single typed issue', () => {

@@ -164,7 +164,6 @@ describe('tupleWithRest', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
 
     const stringIssue: StringIssue = {
@@ -176,7 +175,7 @@ describe('tupleWithRest', () => {
       received: '123',
       path: [
         {
-          type: 'tuple',
+          type: 'array',
           origin: 'value',
           input: [123, 456, 'true', null, null, null],
           key: 0,
@@ -201,7 +200,7 @@ describe('tupleWithRest', () => {
             received: '"true"',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input,
                 key: 2,
@@ -251,14 +250,14 @@ describe('tupleWithRest', () => {
             received: '"123"',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input,
                 key: 0,
                 value: input[0],
               },
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input[0],
                 key: 1,
@@ -275,7 +274,7 @@ describe('tupleWithRest', () => {
             received: 'null',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input,
                 key: 1,
@@ -296,7 +295,7 @@ describe('tupleWithRest', () => {
       received: '"null"',
       path: [
         {
-          type: 'tuple',
+          type: 'array',
           origin: 'value',
           input: ['foo', 456, true, null, 'null', null, undefined],
           key: 4,
@@ -321,7 +320,7 @@ describe('tupleWithRest', () => {
             received: 'undefined',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input,
                 key: 6,

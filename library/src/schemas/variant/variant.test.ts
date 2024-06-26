@@ -129,7 +129,6 @@ describe('variant', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
 
     test('for invalid base type', () => {

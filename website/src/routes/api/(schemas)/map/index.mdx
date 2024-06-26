@@ -14,7 +14,7 @@ import { properties } from './properties';
 Creates a map schema.
 
 ```ts
-const Schema = map<TKey, TValue, TMessage>(key, value, message);
+const Schema = v.map<TKey, TValue, TMessage>(key, value, message);
 ```
 
 ## Generics
@@ -72,7 +72,9 @@ The following APIs can be combined with `map`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -84,7 +86,7 @@ The following APIs can be combined with `map`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -92,6 +94,7 @@ The following APIs can be combined with `map`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -100,11 +103,11 @@ The following APIs can be combined with `map`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

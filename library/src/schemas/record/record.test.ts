@@ -138,7 +138,6 @@ describe('record', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
 
     const numberIssue1: NumberIssue = {
@@ -150,7 +149,7 @@ describe('record', () => {
       received: '"2"',
       path: [
         {
-          type: 'record',
+          type: 'object',
           origin: 'value',
           input: {
             foo: 1,
@@ -197,7 +196,7 @@ describe('record', () => {
             received: '"other"',
             path: [
               {
-                type: 'record',
+                type: 'object',
                 origin: 'key',
                 input,
                 key: 'other',
@@ -255,14 +254,14 @@ describe('record', () => {
             received: '"2"',
             path: [
               {
-                type: 'record',
+                type: 'object',
                 origin: 'value',
                 input,
                 key: 'key1',
                 value: input.key1,
               },
               {
-                type: 'record',
+                type: 'object',
                 origin: 'value',
                 input: input.key1,
                 key: 'bar',
@@ -279,7 +278,7 @@ describe('record', () => {
             received: '123',
             path: [
               {
-                type: 'record',
+                type: 'object',
                 origin: 'value',
                 input,
                 key: 'key2',

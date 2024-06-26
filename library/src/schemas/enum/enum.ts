@@ -53,7 +53,7 @@ export interface EnumSchema<
   /**
    * The enum options.
    */
-  readonly options: (keyof TEnum)[];
+  readonly options: TEnum[keyof TEnum][];
   /**
    * The error message.
    */
@@ -111,3 +111,5 @@ export function enum_(
     },
   };
 }
+
+export { enum_ as enum };

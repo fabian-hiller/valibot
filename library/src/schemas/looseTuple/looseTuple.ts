@@ -1,4 +1,5 @@
 import type {
+  ArrayPathItem,
   BaseIssue,
   BaseSchema,
   Dataset,
@@ -7,7 +8,6 @@ import type {
   InferTupleIssue,
   InferTupleOutput,
   TupleItems,
-  TuplePathItem,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { LooseTupleIssue } from './types.ts';
@@ -92,7 +92,7 @@ export function looseTuple(
         dataset.value = [];
 
         // Parse schema of each tuple item
-        for (let key = 0; key < items.length; key++) {
+        for (let key = 0; key < this.items.length; key++) {
           const value = input[key];
           const itemDataset = this.items[key]._run(
             { typed: false, value },
@@ -102,8 +102,8 @@ export function looseTuple(
           // If there are issues, capture them
           if (itemDataset.issues) {
             // Create tuple path item
-            const pathItem: TuplePathItem = {
-              type: 'tuple',
+            const pathItem: ArrayPathItem = {
+              type: 'array',
               origin: 'value',
               input,
               key,
@@ -145,7 +145,7 @@ export function looseTuple(
 
         // Add rest to dataset if necessary
         if (!dataset.issues || !config.abortEarly) {
-          for (let key = items.length; key < input.length; key++) {
+          for (let key = this.items.length; key < input.length; key++) {
             // @ts-expect-error
             dataset.value.push(input[key]);
           }

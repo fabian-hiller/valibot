@@ -86,3 +86,5 @@ export function null_(
     },
   };
 }
+
+export { null_ as null };

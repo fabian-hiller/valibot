@@ -26,7 +26,7 @@ describe('safeParser', () => {
     });
 
     test('with config', () => {
-      const config: Omit<Config<InferIssue<typeof schema>>, 'skipPipe'> = {
+      const config: Config<InferIssue<typeof schema>> = {
         abortEarly: true,
       };
       const func = safeParser(schema, config);
@@ -84,7 +84,6 @@ describe('safeParser', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     });
@@ -117,7 +116,6 @@ describe('safeParser', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     });

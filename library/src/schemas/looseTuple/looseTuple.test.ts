@@ -150,7 +150,6 @@ describe('looseTuple', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
 
     const stringIssue: StringIssue = {
@@ -162,7 +161,7 @@ describe('looseTuple', () => {
       received: '123',
       path: [
         {
-          type: 'tuple',
+          type: 'array',
           origin: 'value',
           input: [123, 456, 'true'],
           key: 0,
@@ -187,7 +186,7 @@ describe('looseTuple', () => {
             received: '"true"',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input,
                 key: 2,
@@ -233,14 +232,14 @@ describe('looseTuple', () => {
             received: '"123"',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input,
                 key: 0,
                 value: input[0],
               },
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input[0],
                 key: 1,
@@ -257,7 +256,7 @@ describe('looseTuple', () => {
             received: 'null',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input: input,
                 key: 1,

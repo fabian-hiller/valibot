@@ -15,7 +15,7 @@ import { properties } from './properties';
 Creates a lazy schema.
 
 ```ts
-const Schema = lazy<TGetter>(getter);
+const Schema = v.lazy<TGetter>(getter);
 ```
 
 ## Generics
@@ -104,7 +104,9 @@ The following APIs can be combined with `lazy`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'literal',
@@ -116,7 +118,7 @@ The following APIs can be combined with `lazy`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -124,6 +126,7 @@ The following APIs can be combined with `lazy`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -131,12 +134,12 @@ The following APIs can be combined with `lazy`.
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'undefined',
     'union',
     'unionWithRest',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -172,7 +175,7 @@ The following APIs can be combined with `lazy`.
     'emoji',
     'empty',
     'endsWith',
-    'every',
+    'everyItem',
     'excludes',
     'finite',
     'hash',
@@ -214,7 +217,7 @@ The following APIs can be combined with `lazy`.
     'regex',
     'safeInteger',
     'size',
-    'some',
+    'someItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',

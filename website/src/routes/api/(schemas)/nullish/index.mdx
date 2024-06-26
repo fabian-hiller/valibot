@@ -16,7 +16,7 @@ import { properties } from './properties';
 Creates a nullish schema.
 
 ```ts
-const Schema = nullish<TWrapped, TDefault>(wrapped, default_);
+const Schema = v.nullish<TWrapped, TDefault>(wrapped, default_);
 ```
 
 ## Generics
@@ -95,7 +95,9 @@ The following APIs can be combined with `nullish`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -108,13 +110,14 @@ The following APIs can be combined with `nullish`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'number',
     'object',
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -123,11 +126,11 @@ The following APIs can be combined with `nullish`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

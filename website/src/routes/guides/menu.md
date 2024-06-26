@@ -4,12 +4,14 @@
 
 - [Introduction](/guides/introduction/)
 - [Installation](/guides/installation/)
+- [Quick start](/guides/quick-start/)
 - [Use cases](/guides/use-cases/)
 - [Comparison](/guides/comparison/)
 - [Ecosystem](/guides/ecosystem/)
 
 ## Main concepts
 
+- [Mental model](/guides/mental-model/)
 - [Schemas](/guides/schemas/)
 - [Pipelines](/guides/pipelines/)
 - [Parse data](/guides/parse-data/)

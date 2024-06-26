@@ -21,6 +21,16 @@
     transition: none !important;
   }
 
+  /* Scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.slate.300') theme('colors.transparent');
+  }
+  .dark,
+  .dark * {
+    scrollbar-color: theme('colors.slate.700') theme('colors.transparent');
+  }
+
   /* Monaco editor */
   .monaco-editor,
   .monaco-editor > div {
@@ -72,6 +82,9 @@
   }
   .mdx :is(p, blockquote, ul, ol) {
     @apply leading-loose md:text-lg md:leading-loose lg:text-xl lg:leading-loose;
+  }
+  .mdx p strong {
+    @apply text-slate-800 dark:text-slate-300;
   }
 
   /* Blockquote */

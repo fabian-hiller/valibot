@@ -8,13 +8,15 @@
  * @internal
  */
 export function _stringify(input: unknown): string {
-  let type = typeof input;
-  if (type === 'object') {
-    type = (input && Object.getPrototypeOf(input)?.constructor?.name) ?? 'null';
+  const type = typeof input;
+  if (type === 'string') {
+    return `"${input}"`;
   }
-  return type === 'string'
-    ? `"${input}"`
-    : type === 'number' || type === 'bigint' || type === 'boolean'
-      ? `${input}`
-      : type;
+  if (type === 'number' || type === 'bigint' || type === 'boolean') {
+    return `${input}`;
+  }
+  if (type === 'object' || type === 'function') {
+    return (input && Object.getPrototypeOf(input)?.constructor?.name) ?? 'null';
+  }
+  return type;
 }

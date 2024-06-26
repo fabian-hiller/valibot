@@ -26,7 +26,6 @@ describe('partialAsync', () => {
     lang: undefined,
     abortEarly: undefined,
     abortPipeEarly: undefined,
-    skipPipe: undefined,
   } as const;
 
   describe('objectAsync', () => {

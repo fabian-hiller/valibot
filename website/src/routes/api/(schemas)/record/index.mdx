@@ -15,7 +15,7 @@ import { properties } from './properties';
 Creates a record schema.
 
 ```ts
-const Schema = record<TKey, TValue, TMessage>(key, value, message);
+const Schema = v.record<TKey, TValue, TMessage>(key, value, message);
 ```
 
 ## Generics
@@ -84,7 +84,7 @@ enum Products {
   PRODUCT_C = 'product_c',
 }
 
-const ProductRecordSchema = v.record(v.enum_(Products), v.optional(v.number()));
+const ProductRecordSchema = v.record(v.enum(Products), v.optional(v.number()));
 ```
 
 ## Related
@@ -102,7 +102,9 @@ The following APIs can be combined with `record`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -115,7 +117,7 @@ The following APIs can be combined with `record`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -123,6 +125,7 @@ The following APIs can be combined with `record`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'set',
     'strictObject',
     'strictTuple',
@@ -130,11 +133,11 @@ The following APIs can be combined with `record`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

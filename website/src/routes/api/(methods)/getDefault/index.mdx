@@ -14,7 +14,7 @@ import { properties } from './properties';
 Returns the default value of the schema.
 
 ```ts
-const value = getDefault<TSchema>(schema, dataset, config);
+const value = v.getDefault<TSchema>(schema, dataset, config);
 ```
 
 ## Generics
@@ -59,7 +59,9 @@ The following APIs can be combined with `getDefault`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -72,7 +74,7 @@ The following APIs can be combined with `getDefault`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -80,6 +82,7 @@ The following APIs can be combined with `getDefault`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -88,11 +91,11 @@ The following APIs can be combined with `getDefault`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 

@@ -66,7 +66,7 @@ describe('date', () => {
     // Special values
 
     test('for invalid dates', () => {
-      expectSchemaIssue(schema, baseIssue, [new Date('foo')]);
+      expectSchemaIssue(schema, baseIssue, [new Date('foo')], '"Invalid Date"');
     });
 
     // Primitive types

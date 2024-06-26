@@ -16,7 +16,7 @@ Creates an [ISO date](https://en.wikipedia.org/wiki/ISO_8601) validation action.
 > The regex used cannot validate the maximum number of days based on year and month. For example, "2023-06-31" is valid although June has only 30 days.
 
 ```ts
-const Action = isoDate<TInput, TMessage>(message);
+const Action = v.isoDate<TInput, TMessage>(message);
 ```
 
 ## Generics

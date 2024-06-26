@@ -17,7 +17,7 @@ import { properties } from './properties';
 Returns a fallback value as output if the input does not match the schema.
 
 ```ts
-const Schema = fallback<TSchema, TFallback>(schema, fallback);
+const Schema = v.fallback<TSchema, TFallback>(schema, fallback);
 ```
 
 ## Generics
@@ -79,7 +79,9 @@ The following APIs can be combined with `fallback`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -92,7 +94,7 @@ The following APIs can be combined with `fallback`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -100,6 +102,7 @@ The following APIs can be combined with `fallback`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -108,11 +111,11 @@ The following APIs can be combined with `fallback`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -153,7 +156,7 @@ The following APIs can be combined with `fallback`.
     'emoji',
     'empty',
     'endsWith',
-    'every',
+    'everyItem',
     'excludes',
     'finite',
     'hash',
@@ -195,7 +198,7 @@ The following APIs can be combined with `fallback`.
     'regex',
     'safeInteger',
     'size',
-    'some',
+    'someItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',

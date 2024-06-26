@@ -16,7 +16,7 @@ import { properties } from './properties';
 Creates a picklist schema.
 
 ```ts
-const Schema = picklist<TOptions, TMessage>(options, message);
+const Schema = v.picklist<TOptions, TMessage>(options, message);
 ```
 
 ## Generics
@@ -33,7 +33,7 @@ const Schema = picklist<TOptions, TMessage>(options, message);
 
 With `picklist` you can validate that the input corresponds to a picklist option. If the input is invalid, you can use `message` to customize the error message.
 
-> `picklist` works in a similar way to <Link href="../enum_/">`enum_`</Link>. However, in many cases it is easier to use because you can pass an array of values instead of an enum.
+> `picklist` works in a similar way to <Link href="../enum/">`enum`</Link>. However, in many cases it is easier to use because you can pass an array of values instead of an enum.
 
 ## Returns
 
@@ -70,7 +70,7 @@ const CountrySchema = v.picklist(
 
 ## Related
 
-The following APIs can be combined with `enum_`.
+The following APIs can be combined with `enum`.
 
 ### Schemas
 

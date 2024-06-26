@@ -1,6 +1,15 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+  TIssue: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'BaseIssue',
+      href: '../BaseIssue/',
+      generics: ['unknown'],
+    },
+  },
   Config: {
     type: 'object',
   },
@@ -18,6 +27,12 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'ErrorMessage',
           href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TIssue',
+            },
+          ],
         },
         'undefined',
       ],

@@ -28,7 +28,7 @@ describe('parserAsync', () => {
     });
 
     test('with config', () => {
-      const config: Omit<Config<InferIssue<typeof schema>>, 'skipPipe'> = {
+      const config: Config<InferIssue<typeof schema>> = {
         abortEarly: true,
       };
       const func = parserAsync(schema, config);

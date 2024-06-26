@@ -3,7 +3,7 @@ import type { BaseIssue, Config } from '../../types/index.ts';
 /**
  * The global config type.
  */
-export type GlobalConfig = Omit<Config<never>, 'message' | 'skipPipe'>;
+export type GlobalConfig = Omit<Config<never>, 'message'>;
 
 // Create global configuration store
 let store: GlobalConfig | undefined;
@@ -34,7 +34,6 @@ export function getGlobalConfig<const TIssue extends BaseIssue<unknown>>(
     message: config?.message,
     abortEarly: config?.abortEarly ?? store?.abortEarly,
     abortPipeEarly: config?.abortPipeEarly ?? store?.abortPipeEarly,
-    skipPipe: config?.skipPipe,
   };
 }
 

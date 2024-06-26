@@ -17,7 +17,7 @@ Creates an intersect schema.
 > I recommend to read the <Link href="/guides/intersections/">intersections guide</Link> before using this schema function.
 
 ```ts
-const Schema = intersect<TOptions, TMessage>(options, message);
+const Schema = v.intersect<TOptions, TMessage>(options, message);
 ```
 
 ## Generics
@@ -68,7 +68,9 @@ The following APIs can be combined with `intersect`.
     'boolean',
     'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'lazy',
     'literal',
@@ -80,7 +82,7 @@ The following APIs can be combined with `intersect`.
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
@@ -88,6 +90,7 @@ The following APIs can be combined with `intersect`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -96,12 +99,12 @@ The following APIs can be combined with `intersect`.
     'symbol',
     'tuple',
     'tupleWithRest',
-    'undefined_',
+    'undefined',
     'union',
     'intersect',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -137,7 +140,7 @@ The following APIs can be combined with `intersect`.
     'emoji',
     'empty',
     'endsWith',
-    'every',
+    'everyItem',
     'excludes',
     'finite',
     'hash',
@@ -179,7 +182,7 @@ The following APIs can be combined with `intersect`.
     'regex',
     'safeInteger',
     'size',
-    'some',
+    'someItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',

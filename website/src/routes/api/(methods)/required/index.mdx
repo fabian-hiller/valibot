@@ -17,8 +17,8 @@ import { properties } from './properties';
 Creates a modified copy of an object schema that marks all entries or only the selected keys as required.
 
 ```ts
-const Schema = required<TSchema>(schema, message);
-const Schema = required<TSchema, TKeys>(schema, keys, message);
+const Schema = v.required<TSchema>(schema, message);
+const Schema = v.required<TSchema, TKeys>(schema, keys, message);
 ```
 
 ## Generics

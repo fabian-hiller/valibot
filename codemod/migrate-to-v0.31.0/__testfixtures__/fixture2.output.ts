@@ -1,8 +1,8 @@
 import * as v from 'valibot';
-import { transform } from 'valibot';
+import { type GenericSchema, transform } from 'valibot';
 
 v.check();
-v.GenericSchema();
+GenericSchema();
 v.InferInput();
 v.InferOutput();
 v.custom();

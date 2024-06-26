@@ -8,8 +8,8 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'SchemaConfig',
-          href: '../SchemaConfig/',
+          name: 'Config',
+          href: '../Config/',
         },
         {
           type: 'string',

@@ -22,7 +22,7 @@ export function parse<
 >(
   schema: TSchema,
   input: unknown,
-  config?: Omit<Config<InferIssue<TSchema>>, 'skipPipe'>
+  config?: Config<InferIssue<TSchema>>
 ): InferOutput<TSchema> {
   const dataset = schema._run(
     { typed: false, value: input },

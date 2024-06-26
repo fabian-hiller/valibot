@@ -45,13 +45,15 @@ const ObjectSchema = v.objectWithRest(
     key1: v.string(),
     key2: v.number(),
   },
-  v.null_()
+  v.null()
 );
 ```
 
 ### Pipeline validation
 
 To validate the value of an entry based on another entry, you can wrap you schema with the <Link href="/api/check/">`check`</Link> validation action in a pipeline. You can also use <Link href="/api/forward/">`forward`</Link> to assign the issue to a specific object key in the event of an error.
+
+> If you only want to validate specific entries, I recommend using <Link href="/api/partialCheck/">`partialCheck`</Link> instead as <Link href="/api/check/">`check`</Link> can only be executed if the input is fully typed.
 
 ```ts
 import * as v from 'valibot';
@@ -81,7 +83,7 @@ const RecordSchema = v.record(v.string(), v.number()); // Record<string, number>
 
 ### Specific record keys
 
-Instead of <Link href="/api/string/">`string`</Link>, you can also use <Link href="/api/custom/">`custom`</Link>, <Link href="/api/enum_/">`enum_`</Link>, <Link href="/api/literal/">`literal`</Link>, <Link href="/api/picklist/">`picklist`</Link> or <Link href="/api/union/">`union`</Link> to validate the keys.
+Instead of <Link href="/api/string/">`string`</Link>, you can also use <Link href="/api/custom/">`custom`</Link>, <Link href="/api/enum/">`enum`</Link>, <Link href="/api/literal/">`literal`</Link>, <Link href="/api/picklist/">`picklist`</Link> or <Link href="/api/union/">`union`</Link> to validate the keys.
 
 ```ts
 import * as v from 'valibot';

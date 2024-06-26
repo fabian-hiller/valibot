@@ -1,4 +1,5 @@
 import type {
+  ArrayPathItem,
   BaseIssue,
   BaseSchema,
   Dataset,
@@ -7,7 +8,6 @@ import type {
   InferTupleIssue,
   InferTupleOutput,
   TupleItems,
-  TuplePathItem,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { StrictTupleIssue } from './types.ts';
@@ -92,7 +92,7 @@ export function strictTuple(
         dataset.value = [];
 
         // Parse schema of each tuple item
-        for (let key = 0; key < items.length; key++) {
+        for (let key = 0; key < this.items.length; key++) {
           const value = input[key];
           const itemDataset = this.items[key]._run(
             { typed: false, value },
@@ -102,8 +102,8 @@ export function strictTuple(
           // If there are issues, capture them
           if (itemDataset.issues) {
             // Create tuple path item
-            const pathItem: TuplePathItem = {
-              type: 'tuple',
+            const pathItem: ArrayPathItem = {
+              type: 'array',
               origin: 'value',
               input,
               key,
@@ -146,7 +146,7 @@ export function strictTuple(
         // Check input for unknown items if necessary
         if (
           !(dataset.issues && config.abortEarly) &&
-          items.length < input.length
+          this.items.length < input.length
         ) {
           const value = input[items.length];
           _addIssue(this, 'type', dataset, config, {
@@ -154,10 +154,10 @@ export function strictTuple(
             expected: 'never',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input,
-                key: items.length,
+                key: this.items.length,
                 value,
               },
             ],

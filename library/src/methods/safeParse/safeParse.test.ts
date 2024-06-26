@@ -54,7 +54,6 @@ describe('safeParse', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     });
@@ -87,7 +86,6 @@ describe('safeParse', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     });

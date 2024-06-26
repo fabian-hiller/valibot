@@ -14,7 +14,7 @@ export interface SafeParserAsync<
   TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  TConfig extends Omit<Config<InferIssue<TSchema>>, 'skipPipe'> | undefined,
+  TConfig extends Config<InferIssue<TSchema>> | undefined,
 > {
   /**
    * Parses an unknown input based on the schema.
@@ -55,33 +55,28 @@ export function safeParserAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TConfig extends
-    | Omit<Config<InferIssue<TSchema>>, 'skipPipe'>
-    | undefined,
+  const TConfig extends Config<InferIssue<TSchema>> | undefined,
 >(schema: TSchema, config: TConfig): SafeParserAsync<TSchema, TConfig>;
 
 export function safeParserAsync(
   schema:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  config?: Omit<
-    Config<
-      InferIssue<
-        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-      >
-    >,
-    'skipPipe'
+  config?: Config<
+    InferIssue<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+    >
   >
 ): SafeParserAsync<
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  Omit<Config<BaseIssue<unknown>>, 'skipPipe'> | undefined
+  Config<BaseIssue<unknown>> | undefined
 > {
   const func: SafeParserAsync<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-    Omit<Config<BaseIssue<unknown>>, 'skipPipe'> | undefined
+    Config<BaseIssue<unknown>> | undefined
   > = (input: unknown) => safeParseAsync(schema, input, config);
   // @ts-expect-error
   func.schema = schema;

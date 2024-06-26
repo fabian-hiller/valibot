@@ -25,7 +25,7 @@ describe('parserAsync', () => {
     });
 
     test('with config', () => {
-      const config: Omit<Config<InferIssue<Schema>>, 'skipPipe'> = {
+      const config: Config<InferIssue<Schema>> = {
         abortEarly: true,
       };
       expectTypeOf(parserAsync(schema, config)).toEqualTypeOf<

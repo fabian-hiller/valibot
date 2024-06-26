@@ -56,7 +56,6 @@ describe('forwardAsync', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     } satisfies TypedDataset<Input, CheckIssue<Input>>);
@@ -103,7 +102,6 @@ describe('forwardAsync', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     } satisfies TypedDataset<Input, CheckIssue<Input>>);
@@ -134,7 +132,6 @@ describe('forwardAsync', () => {
       lang: undefined,
       abortEarly: undefined,
       abortPipeEarly: undefined,
-      skipPipe: undefined,
     };
     expect(
       await forwardAsync<Input, CheckIssue<Input>>(
@@ -190,7 +187,6 @@ describe('forwardAsync', () => {
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
         },
       ],
     } satisfies TypedDataset<

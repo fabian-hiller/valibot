@@ -1,4 +1,5 @@
 import type {
+  ArrayPathItem,
   BaseIssue,
   BaseSchemaAsync,
   Dataset,
@@ -7,7 +8,6 @@ import type {
   InferTupleIssue,
   InferTupleOutput,
   TupleItemsAsync,
-  TuplePathItem,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { StrictTupleIssue } from './types.ts';
@@ -96,7 +96,7 @@ export function strictTupleAsync(
 
         // Parse schema of each tuple item
         const itemDatasets = await Promise.all(
-          items.map(async (item, key) => {
+          this.items.map(async (item, key) => {
             const value = input[key];
             return [
               key,
@@ -111,8 +111,8 @@ export function strictTupleAsync(
           // If there are issues, capture them
           if (itemDataset.issues) {
             // Create tuple path item
-            const pathItem: TuplePathItem = {
-              type: 'tuple',
+            const pathItem: ArrayPathItem = {
+              type: 'array',
               origin: 'value',
               input,
               key,
@@ -155,7 +155,7 @@ export function strictTupleAsync(
         // Check input for unknown items if necessary
         if (
           !(dataset.issues && config.abortEarly) &&
-          items.length < input.length
+          this.items.length < input.length
         ) {
           const value = input[items.length];
           _addIssue(this, 'type', dataset, config, {
@@ -163,10 +163,10 @@ export function strictTupleAsync(
             expected: 'never',
             path: [
               {
-                type: 'tuple',
+                type: 'array',
                 origin: 'value',
                 input,
-                key: items.length,
+                key: this.items.length,
                 value,
               },
             ],

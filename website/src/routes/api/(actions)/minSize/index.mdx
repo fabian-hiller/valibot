@@ -14,7 +14,7 @@ import { properties } from './properties';
 Creates a min size validation action.
 
 ```ts
-const Action = minSize<TInput, TRequirement, TMessage>(requirement, message);
+const Action = v.minSize<TInput, TRequirement, TMessage>(requirement, message);
 ```
 
 ## Generics
@@ -69,7 +69,16 @@ The following APIs can be combined with `minSize`.
 ### Schemas
 
 <ApiList
-  items={['any', 'blob', 'instance', 'map', 'set', 'special', 'unknown']}
+  items={[
+    'any',
+    'blob',
+    'file',
+    'instance',
+    'map',
+    'set',
+    'special',
+    'unknown',
+  ]}
 />
 
 ### Methods

@@ -1,6 +1,5 @@
 import type {
   ArrayIssue,
-  ArrayPathItem,
   ArraySchema,
   ArraySchemaAsync,
   IntersectIssue,
@@ -15,7 +14,6 @@ import type {
   LooseTupleSchema,
   LooseTupleSchemaAsync,
   MapIssue,
-  MapPathItem,
   MapSchema,
   MapSchemaAsync,
   NonNullableIssue,
@@ -40,11 +38,9 @@ import type {
   OptionalSchema,
   OptionalSchemaAsync,
   RecordIssue,
-  RecordPathItem,
   RecordSchema,
   RecordSchemaAsync,
   SetIssue,
-  SetPathItem,
   SetSchema,
   SetSchemaAsync,
   StrictObjectIssue,
@@ -65,14 +61,111 @@ import type {
 } from '../schemas/index.ts';
 import type { Config } from './config.ts';
 import type { InferInput } from './infer.ts';
-import type {
-  ObjectEntries,
-  ObjectEntriesAsync,
-  ObjectPathItem,
-} from './object.ts';
+import type { ObjectEntries, ObjectEntriesAsync } from './object.ts';
 import type { Default, DefaultAsync, ErrorMessage } from './other.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
-import type { TupleItems, TupleItemsAsync, TuplePathItem } from './tuple.ts';
+import type { TupleItems, TupleItemsAsync } from './tuple.ts';
+import type { MaybeReadonly } from './utils.ts';
+
+/**
+ * Array path item type.
+ */
+export interface ArrayPathItem {
+  /**
+   * The path item type.
+   */
+  readonly type: 'array';
+  /**
+   * The path item origin.
+   */
+  readonly origin: 'value';
+  /**
+   * The path item input.
+   */
+  readonly input: MaybeReadonly<unknown[]>;
+  /**
+   * The path item key.
+   */
+  readonly key: number;
+  /**
+   * The path item value.
+   */
+  readonly value: unknown;
+}
+
+/**
+ * Map path item type.
+ */
+export interface MapPathItem {
+  /**
+   * The path item type.
+   */
+  readonly type: 'map';
+  /**
+   * The path item origin.
+   */
+  readonly origin: 'key' | 'value';
+  /**
+   * The path item input.
+   */
+  readonly input: Map<unknown, unknown>;
+  /**
+   * The path item key.
+   */
+  readonly key: unknown;
+  /**
+   * The path item value.
+   */
+  readonly value: unknown;
+}
+
+/**
+ * Object path item type.
+ */
+export interface ObjectPathItem {
+  /**
+   * The path item type.
+   */
+  readonly type: 'object';
+  /**
+   * The path item origin.
+   */
+  readonly origin: 'key' | 'value';
+  /**
+   * The path item input.
+   */
+  readonly input: Record<string, unknown>;
+  /**
+   * The path item key.
+   */
+  readonly key: string;
+  /**
+   * The path item value.
+   */
+  readonly value: unknown;
+}
+
+/**
+ * Set path item type.
+ */
+export interface SetPathItem {
+  /**
+   * The path item type.
+   */
+  readonly type: 'set';
+  /**
+   * The path item origin.
+   */
+  readonly origin: 'value';
+  /**
+   * The path item input.
+   */
+  readonly input: Set<unknown>;
+  /**
+   * The path item key.
+   */
+  readonly value: unknown;
+}
 
 /**
  * Unknown path item type.
@@ -110,9 +203,7 @@ export type IssuePathItem =
   | ArrayPathItem
   | MapPathItem
   | ObjectPathItem
-  | RecordPathItem
   | SetPathItem
-  | TuplePathItem
   | UnknownPathItem;
 
 /**
@@ -149,6 +240,9 @@ export interface BaseIssue<TInput> extends Config<BaseIssue<TInput>> {
   readonly requirement?: unknown;
   /**
    * The issue path.
+   *
+   * TODO: Investigate if it is possible to make the path type safe based on the
+   * input.
    */
   readonly path?: [IssuePathItem, ...IssuePathItem[]];
   /**

@@ -21,7 +21,7 @@ export function safeParse<
 >(
   schema: TSchema,
   input: unknown,
-  config?: Omit<Config<InferIssue<TSchema>>, 'skipPipe'>
+  config?: Config<InferIssue<TSchema>>
 ): SafeParseResult<TSchema> {
   const dataset = schema._run(
     { typed: false, value: input },

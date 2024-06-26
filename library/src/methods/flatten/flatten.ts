@@ -13,7 +13,12 @@ import { getDotPath } from '../../utils/index.ts';
 /**
  * Flat errors type.
  */
-export interface FlatErrors<TNestedPath extends string> {
+export type FlatErrors<
+  TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+    | undefined,
+> = Prettify<{
   /**
    * The root errors.
    *
@@ -28,7 +33,18 @@ export interface FlatErrors<TNestedPath extends string> {
    * and can be converted to a dot path are added to this key.
    */
   readonly nested?: Prettify<
-    Readonly<Partial<Record<TNestedPath, [string, ...string[]]>>>
+    Readonly<
+      Partial<
+        Record<
+          TSchema extends
+            | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+            | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+            ? IssueDotPath<TSchema>
+            : string,
+          [string, ...string[]]
+        >
+      >
+    >
   >;
   /**
    * The other errors.
@@ -38,7 +54,7 @@ export interface FlatErrors<TNestedPath extends string> {
    * issues are added to this key.
    */
   readonly other?: [string, ...string[]];
-}
+}>;
 
 /**
  * Flatten the error messages of schema issues.
@@ -49,7 +65,7 @@ export interface FlatErrors<TNestedPath extends string> {
  */
 export function flatten(
   issues: [BaseIssue<unknown>, ...BaseIssue<unknown>[]]
-): Prettify<FlatErrors<string>>;
+): FlatErrors<undefined>;
 
 /**
  * Flatten the error messages of schema issues.
@@ -62,9 +78,7 @@ export function flatten<
   TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(
-  issues: [InferIssue<TSchema>, ...InferIssue<TSchema>[]]
-): Prettify<FlatErrors<IssueDotPath<TSchema>>>;
+>(issues: [InferIssue<TSchema>, ...InferIssue<TSchema>[]]): FlatErrors<TSchema>;
 
 /**
  * Flatten the error messages of schema issues.
@@ -75,9 +89,9 @@ export function flatten<
  */
 export function flatten(
   issues: [BaseIssue<unknown>, ...BaseIssue<unknown>[]]
-): Prettify<FlatErrors<string>> {
+): FlatErrors<undefined> {
   // Create flat errors object
-  const flatErrors: FlatErrors<string> = {};
+  const flatErrors: FlatErrors<undefined> = {};
 
   // Add message of each issue to flat errors object
   for (const issue of issues) {

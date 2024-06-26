@@ -7,10 +7,13 @@ import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
+  BaseTransformation,
+  BaseTransformationAsync,
   BaseValidation,
   BaseValidationAsync,
   Config,
   Dataset,
+  ErrorMessage,
   InferInput,
   InferIssue,
   IssuePathItem,
@@ -18,14 +21,29 @@ import type {
 import { _stringify } from '../_stringify/index.ts';
 
 /**
- * The other type.
+ * Context type.
  */
-interface Other<TInput> {
+type Context =
+  | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+  | BaseValidation<unknown, unknown, BaseIssue<unknown>>
+  | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
+  | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
+  | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>;
+
+/**
+ * Other type.
+ */
+interface Other<TContext extends Context> {
   input?: unknown;
   expected?: string;
   received?: string;
+  message?: ErrorMessage<InferIssue<TContext>>;
   path?: [IssuePathItem, ...IssuePathItem[]];
-  issues?: [BaseIssue<TInput>, ...BaseIssue<TInput>[]];
+  issues?: [
+    BaseIssue<InferInput<TContext>>,
+    ...BaseIssue<InferInput<TContext>>[],
+  ];
 }
 
 /**
@@ -39,22 +57,17 @@ interface Other<TInput> {
  *
  * @internal
  */
-export function _addIssue<
-  const TContext extends
-    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-    | BaseValidation<unknown, unknown, BaseIssue<unknown>>
-    | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>,
->(
+export function _addIssue<const TContext extends Context>(
   context: TContext,
   label: string,
   dataset: Dataset<unknown, BaseIssue<unknown>>,
   config: Config<InferIssue<TContext>>,
-  other?: Other<InferInput<TContext>>
+  other?: Other<TContext>
 ): void {
   // Get expected and received string
   const input = other && 'input' in other ? other.input : dataset.value;
-  const expected = other?.expected ?? context.expects;
+  // @ts-expect-error
+  const expected = other?.expected ?? context.expects ?? null;
   const received = other?.received ?? _stringify(input);
 
   // Create issue object
@@ -76,7 +89,6 @@ export function _addIssue<
     lang: config.lang,
     abortEarly: config.abortEarly,
     abortPipeEarly: config.abortPipeEarly,
-    skipPipe: config.skipPipe,
   };
 
   // Check if context is a schema
@@ -84,6 +96,7 @@ export function _addIssue<
 
   // Get custom issue message
   const message =
+    other?.message ??
     // @ts-expect-error
     context.message ??
     getSpecificMessage(context.reference, issue.lang) ??

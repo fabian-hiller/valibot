@@ -36,7 +36,7 @@ export function expectActionIssue<
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-          skipPipe: undefined,
+
           input: value,
           received: getReceived?.(value) ?? _stringify(value),
           ...baseIssue,
