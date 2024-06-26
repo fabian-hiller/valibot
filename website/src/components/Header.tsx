@@ -16,6 +16,7 @@ import {
 import clsx from 'clsx';
 import { useFocusTrap } from '~/hooks';
 import { LogoIcon } from '~/icons';
+import { DiscordIconLink } from './DiscordIconLink';
 import { GitHubIconLink } from './GitHubIconLink';
 import { MainMenuToggle } from './MainMenuToggle';
 import { SearchToggle } from './SearchToggle';
@@ -93,7 +94,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
         )}
       >
         {/* Website logo */}
-        <div class="-m-1 overflow-hidden p-1 lg:w-56">
+        <div class="-m-1 overflow-hidden p-1 lg:w-64">
           <Link
             class="focus-ring inline-flex w-full items-center rounded-lg p-2 font-medium transition-colors hover:text-slate-900 md:w-auto md:text-lg lg:text-xl dark:hover:text-slate-200"
             href="/"
@@ -107,6 +108,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
 
         {/* Icon buttons (mobile) */}
         <div class="flex items-center space-x-4 lg:hidden">
+          <DiscordIconLink />
           <GitHubIconLink />
           <ThemeToggle />
           <SearchToggle open={searchOpen} />
@@ -116,7 +118,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
         {/* Main menu */}
         <nav
           class={clsx(
-            'absolute left-0 top-full flex max-h-[60vh] w-full origin-top flex-col overflow-y-auto border-b-2 pb-8 pt-4 duration-200 lg:static lg:top-auto lg:w-auto lg:translate-y-0 lg:flex-row lg:space-x-10 lg:overflow-visible lg:border-none lg:bg-transparent lg:p-0 lg:dark:bg-transparent',
+            'absolute left-0 top-full flex max-h-[60vh] w-full origin-top flex-col overflow-y-auto border-b-2 pb-8 pt-4 duration-200 lg:static lg:top-auto lg:w-auto lg:translate-y-0 lg:flex-row lg:space-x-6 lg:overflow-visible lg:border-none lg:bg-transparent lg:p-0 xl:space-x-12 lg:dark:bg-transparent',
             !isOpen.value && 'invisible scale-y-0 lg:visible lg:scale-y-100',
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             (isOpen.value && 'bg-white dark:bg-gray-900') ||
@@ -148,7 +150,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
         </nav>
 
         {/* Icon buttons (desktop) */}
-        <div class="hidden lg:flex lg:w-56 lg:items-center lg:justify-end lg:space-x-6">
+        <div class="hidden lg:flex lg:w-64 lg:items-center lg:justify-end lg:space-x-6">
           <SearchToggle open={searchOpen} />
           <ThemeToggle />
           <div
@@ -156,6 +158,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
             role="separator"
           />
           <GitHubIconLink />
+          <DiscordIconLink />
         </div>
       </div>
 
