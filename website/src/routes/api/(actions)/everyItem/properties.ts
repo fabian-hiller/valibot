@@ -72,8 +72,8 @@ export const properties: Record<string, PropertyProps> = {
   Action: {
     type: {
       type: 'custom',
-      name: 'EveryAction',
-      href: '../EveryAction/',
+      name: 'EveryItemAction',
+      href: '../EveryItemAction/',
       generics: [
         {
           type: 'custom',

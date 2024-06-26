@@ -52,6 +52,7 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'EveryIssue',
+          href: '../EveryIssue/',
           generics: [
             {
               type: 'custom',
@@ -84,7 +85,7 @@ export const properties: Record<string, PropertyProps> = {
       type: 'function',
       params: [
         {
-          name: 'element',
+          name: 'item',
           type: {
             type: 'custom',
             name: 'TInput',

@@ -5,7 +5,6 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'array',
-      modifier: 'readonly',
       item: 'unknown',
     },
   },
@@ -21,8 +20,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'SomeIssue',
-              href: '../SomeIssue/',
+              name: 'EveryIssue',
+              href: '../EveryIssue/',
               generics: [
                 {
                   type: 'custom',
@@ -35,6 +34,50 @@ export const properties: Record<string, PropertyProps> = {
         'undefined',
       ],
     },
+  },
+  BaseValidation: {
+    type: {
+      type: 'custom',
+      name: 'BaseValidation',
+      href: '../BaseValidation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'EveryIssue',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'everyItem',
+    },
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'everyItem',
+      href: '../everyItem/',
+    },
+  },
+  expects: {
+    type: 'null',
   },
   requirement: {
     type: {
@@ -67,23 +110,6 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'custom',
       name: 'TMessage',
-    },
-  },
-  Action: {
-    type: {
-      type: 'custom',
-      name: 'SomeItemAction',
-      href: '../SomeItemAction/',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TInput',
-        },
-        {
-          type: 'custom',
-          name: 'TMessage',
-        },
-      ],
     },
   },
 };

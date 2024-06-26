@@ -99,8 +99,8 @@ export const properties: Record<string, PropertyProps> = {
       ],
       return: {
         type: 'custom',
-        name: 'TypedDataset',
-        href: '../TypedDataset/',
+        name: 'Dataset',
+        href: '../Dataset/',
         generics: [
           {
             type: 'custom',

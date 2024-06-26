@@ -68,7 +68,9 @@ export const properties: Record<string, PropertyProps> = {
   reference: {
     type: {
       type: 'custom',
+      modifier: 'typeof',
       name: 'cuid2',
+      href: '../cuid2/',
     },
   },
   expects: {

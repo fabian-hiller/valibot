@@ -22,6 +22,7 @@ export const properties: Record<string, PropertyProps> = {
             {
               type: 'custom',
               name: 'EnumIssue',
+              href: '../EnumIssue/',
             },
           ],
         },
@@ -60,6 +61,7 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'EnumIssue',
+          href: '../EnumIssue/',
         },
       ],
     },

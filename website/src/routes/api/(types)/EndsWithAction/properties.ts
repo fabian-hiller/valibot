@@ -17,7 +17,7 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'ErrorMessage',
-          href: '../../types/index.ts',
+          href: '../ErrorMessage/',
           generics: [
             {
               type: 'custom',

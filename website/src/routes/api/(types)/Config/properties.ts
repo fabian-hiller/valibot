@@ -50,10 +50,4 @@ export const properties: Record<string, PropertyProps> = {
       options: ['boolean', 'undefined'],
     },
   },
-  skipPipe: {
-    type: {
-      type: 'union',
-      options: ['boolean', 'undefined'],
-    },
-  },
 };

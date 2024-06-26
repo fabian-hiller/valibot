@@ -123,8 +123,8 @@ export const properties: Record<string, PropertyProps> = {
         generics: [
           {
             type: 'custom',
-            name: 'TypedDataset',
-            href: '../TypedDataset/',
+            name: 'Dataset',
+            href: '../Dataset/',
             generics: [
               {
                 type: 'custom',
