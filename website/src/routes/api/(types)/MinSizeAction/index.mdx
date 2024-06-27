@@ -1,5 +1,5 @@
 ---
-title: MinSizeValidation
+title: MinSizeAction
 description: Min size action type.
 contributors:
   - fabian-hiller
@@ -8,7 +8,7 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# MinSizeValidation
+# MinSizeAction
 
 Min size action type.
 
@@ -16,9 +16,13 @@ Min size action type.
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `MinSizeValidation` <Property {...properties.BaseValidation} />
+- `MinSizeAction` <Property {...properties.BaseValidation} />
   - `type` <Property {...properties.type} />
+  - `referece` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
   - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

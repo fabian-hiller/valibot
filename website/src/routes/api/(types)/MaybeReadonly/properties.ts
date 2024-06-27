@@ -1,7 +1,7 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  T: {
+  TValue: {
     modifier: 'extends',
     type: 'any',
   },
@@ -11,17 +11,17 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         {
           type: 'custom',
+          name: 'TValue',
+        },
+        {
+          type: 'custom',
           name: 'Readonly',
           generics: [
             {
               type: 'custom',
-              name: 'T',
+              name: 'TValue',
             },
           ],
-        },
-        {
-          type: 'custom',
-          name: 'T',
         },
       ],
     },
