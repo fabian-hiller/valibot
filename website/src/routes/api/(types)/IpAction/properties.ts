@@ -5,6 +5,33 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'string',
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'IpIssue',
+              href: '../IpIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   BaseValidation: {
     type: {
       type: 'custom',
@@ -15,6 +42,21 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'TInput',
         },
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'IpIssue',
+          href: '../IpIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+          ],
+        },
       ],
     },
   },
@@ -24,19 +66,27 @@ export const properties: Record<string, PropertyProps> = {
       value: 'ip',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'ip',
+      href: '../ip/',
+    },
+  },
+  expects: {
+    type: 'null',
+  },
   requirement: {
     type: {
-      type: 'tuple',
-      items: [
-        {
-          type: 'custom',
-          name: 'RegExp',
-        },
-        {
-          type: 'custom',
-          name: 'RegExp',
-        },
-      ],
+      type: 'custom',
+      name: 'RegExp',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

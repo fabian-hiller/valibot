@@ -9,12 +9,25 @@ export const properties: Record<string, PropertyProps> = {
       href: '../Literal/',
     },
   },
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'TLiteral',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'LiteralIssue',
+              href: '../LiteralIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
   BaseSchema: {
@@ -29,7 +42,12 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'TLiteral',
+        },
+        {
+          type: 'custom',
+          name: 'LiteralIssue',
+          href: '../LiteralIssue/',
         },
       ],
     },
@@ -40,6 +58,14 @@ export const properties: Record<string, PropertyProps> = {
       value: 'literal',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'literal',
+      href: '../literal/',
+    },
+  },
   literal: {
     type: {
       type: 'custom',
@@ -48,15 +74,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

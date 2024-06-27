@@ -9,17 +9,24 @@ export const properties: Record<string, PropertyProps> = {
       href: '../Class/',
     },
   },
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'InstanceType',
-      generics: [
+    type: {
+      type: 'union',
+      options: [
         {
           type: 'custom',
-          name: 'TClass',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'InstanceIssue',
+              href: '../InstanceIssue/',
+            },
+          ],
         },
+        'undefined',
       ],
     },
   },
@@ -41,7 +48,18 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InstanceType',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TClass',
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'InstanceIssue',
+          href: '../InstanceIssue/',
         },
       ],
     },
@@ -52,6 +70,14 @@ export const properties: Record<string, PropertyProps> = {
       value: 'instance',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'instance',
+      href: '../instance/',
+    },
+  },
   class: {
     type: {
       type: 'custom',
@@ -60,40 +86,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'InstanceType',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TClass',
-                },
-              ],
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

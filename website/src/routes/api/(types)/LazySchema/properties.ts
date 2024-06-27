@@ -1,35 +1,19 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TGetter: {
-    modifier: 'extends',
+  TWrapped: {
     type: {
-      type: 'function',
-      params: [{ name: 'input', type: 'unknown' }],
-      return: {
-        type: 'custom',
-        name: 'BaseSchema',
-        href: '../BaseSchema/',
-      },
-    },
-  },
-  TOutput: {
-    modifier: 'extends',
-    type: 'any',
-    default: {
       type: 'custom',
-      name: 'Output',
-      href: '../Output/',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
       generics: [
+        'unknown',
+        'unknown',
         {
           type: 'custom',
-          name: 'ReturnType',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TGetter',
-            },
-          ],
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
         },
       ],
     },
@@ -42,24 +26,36 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'Input',
-          href: '../Input/',
+          name: 'InferInput',
+          href: '../InferInput/',
           generics: [
             {
               type: 'custom',
-              name: 'ReturnType',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TGetter',
-                },
-              ],
+              name: 'TWrapped',
             },
           ],
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferOutput',
+          href: '../InferOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'InferIssue',
+          href: '../InferIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
         },
       ],
     },
@@ -70,10 +66,33 @@ export const properties: Record<string, PropertyProps> = {
       value: 'lazy',
     },
   },
-  getter: {
+  reference: {
     type: {
       type: 'custom',
-      name: 'TGetter',
+      modifier: 'typeof',
+      name: 'lazy',
+      href: '../lazy/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: 'unknown',
+    },
+  },
+  getter: {
+    type: {
+      type: 'function',
+      params: [
+        {
+          name: 'input',
+          type: 'unknown',
+        },
+      ],
+      return: {
+        type: 'custom',
+        name: 'TWrapped',
+      },
     },
   },
 };

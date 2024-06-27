@@ -9,18 +9,24 @@ export const properties: Record<string, PropertyProps> = {
       href: '../IntersectOptions/',
     },
   },
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'IntersectOutput',
-      href: '../IntersectOutput/',
-      generics: [
+    type: {
+      type: 'union',
+      options: [
         {
           type: 'custom',
-          name: 'TOptions',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'IntersectIssue',
+              href: '../IntersectIssue/',
+            },
+          ],
         },
+        'undefined',
       ],
     },
   },
@@ -32,8 +38,8 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'IntersectInput',
-          href: '../IntersectInput/',
+          name: 'InferIntersectInput',
+          href: '../InferIntersectInput/',
           generics: [
             {
               type: 'custom',
@@ -43,7 +49,36 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferIntersectOutput',
+          href: '../InferIntersectOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TOptions',
+            },
+          ],
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'IntersectIssue',
+              href: '../IntersectIssue/',
+            },
+            {
+              type: 'custom',
+              name: 'InferIssue',
+              href: '../InferIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TOptions',
+                  indexes: ['number'],
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -54,6 +89,14 @@ export const properties: Record<string, PropertyProps> = {
       value: 'intersect',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'intersect',
+      href: '../intersect/',
+    },
+  },
   options: {
     type: {
       type: 'custom',
@@ -62,41 +105,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'IntersectOutput',
-              href: '../IntersectOutput/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TOptions',
-                },
-              ],
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

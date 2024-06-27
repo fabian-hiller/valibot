@@ -54,9 +54,23 @@ export const properties: Record<string, PropertyProps> = {
       type: 'union',
       options: [
         {
-          type: 'custom',
-          name: 'IssuePath',
-          href: '../IssuePath/',
+          type: 'tuple',
+          items: [
+            {
+              type: 'custom',
+              name: 'IssuePathItem',
+              href: '../IssuePathItem/',
+            },
+            {
+              type: 'array',
+              spread: true,
+              item: {
+                type: 'custom',
+                name: 'IssuePathItem',
+                href: '../IssuePathItem/',
+              },
+            },
+          ],
         },
         'undefined',
       ],
