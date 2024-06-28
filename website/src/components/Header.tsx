@@ -96,8 +96,14 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
         {/* Website logo */}
         <div class="-m-1 overflow-hidden p-1 lg:w-64">
           <Link
-            class="focus-ring inline-flex w-full items-center rounded-lg p-2 font-medium transition-colors hover:text-slate-900 md:w-auto md:text-lg lg:text-xl dark:hover:text-slate-200"
+            class="focus-ring inline-flex w-full select-none items-center rounded-lg p-2 font-medium transition-colors hover:text-slate-900 md:w-auto md:text-lg lg:text-xl dark:hover:text-slate-200"
             href="/"
+            preventdefault:contextmenu
+            onContextMenu$={() =>
+              window.open(
+                'https://github.com/fabian-hiller/valibot/tree/main/brand'
+              )
+            }
           >
             <LogoIcon class="mr-2 h-8 shrink-0 md:h-9 lg:mr-3 lg:h-10" />
             <div class="font-lexend-exa truncate bg-gradient-to-br from-slate-800 to-slate-600 bg-clip-text text-lg font-medium text-transparent md:text-xl lg:text-2xl dark:from-slate-200 dark:to-slate-400">
