@@ -4,19 +4,45 @@ export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
-        'string',
-        {
-          type: 'array',
-          item: 'any',
-        },
-      ],
+      type: 'custom',
+      name: 'LengthInput',
+      href: '../LengthInput/',
     },
   },
   TRequirement: {
     modifier: 'extends',
     type: 'number',
+  },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'NotLengthIssue',
+              href: '../NotLengthIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+                {
+                  type: 'custom',
+                  name: 'TRequirement',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
   BaseValidation: {
     type: {
@@ -28,6 +54,25 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'TInput',
         },
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'NotLengthIssue',
+          href: '../NotLengthIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+            {
+              type: 'custom',
+              name: 'TRequirement',
+            },
+          ],
+        },
       ],
     },
   },
@@ -37,10 +82,39 @@ export const properties: Record<string, PropertyProps> = {
       value: 'not_length',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'notLength',
+      href: '../notLength/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'template',
+      parts: [
+        {
+          type: 'string',
+          value: '!',
+        },
+        {
+          type: 'custom',
+          name: 'TRequirement',
+        },
+      ],
+    },
+  },
   requirement: {
     type: {
       type: 'custom',
       name: 'TRequirement',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

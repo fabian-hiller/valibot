@@ -2,6 +2,7 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   TDefault: {
+    modifier: 'extends',
     type: {
       type: 'union',
       options: [

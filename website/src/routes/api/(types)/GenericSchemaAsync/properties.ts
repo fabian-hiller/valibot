@@ -29,7 +29,6 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   BaseSchemaAsync: {
-    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchemaAsync',

@@ -2,6 +2,7 @@ import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
   TWrapped: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
