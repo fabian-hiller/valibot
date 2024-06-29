@@ -7,6 +7,7 @@ import de from '../src/de';
 import es from '../src/es';
 import fr from '../src/fr';
 import hu from '../src/hu';
+import id from '../src/id';
 import it from '../src/it';
 import ja from '../src/ja';
 import kr from '../src/kr';
@@ -36,6 +37,7 @@ const languages = [
   es,
   fr,
   hu,
+  id,
   it,
   ja,
   kr,
