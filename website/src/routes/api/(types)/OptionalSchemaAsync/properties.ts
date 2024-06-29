@@ -10,11 +10,31 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'BaseSchema',
           href: '../BaseSchema/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
         },
         {
           type: 'custom',
           name: 'BaseSchemaAsync',
           href: '../BaseSchemaAsync/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
         },
       ],
     },
@@ -29,26 +49,6 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TWrapped',
-        },
-      ],
-    },
-  },
-  TOutput: {
-    modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Output',
-          href: '../Output/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TWrapped',
-            },
-          ],
         },
         'undefined',
       ],
@@ -65,8 +65,8 @@ export const properties: Record<string, PropertyProps> = {
           options: [
             {
               type: 'custom',
-              name: 'Input',
-              href: '../Input/',
+              name: 'InferInput',
+              href: '../InferInput/',
               generics: [
                 {
                   type: 'custom',
@@ -79,7 +79,29 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferOptionalOutput',
+          href: '../InferOptionalOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+            {
+              type: 'custom',
+              name: 'TDefault',
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'InferIssue',
+          href: '../InferIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
         },
       ],
     },
@@ -88,6 +110,30 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'string',
       value: 'optional',
+    },
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'optionalAsync',
+      href: '../optionalAsync/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'template',
+      parts: [
+        {
+          type: 'custom',
+          name: 'TWrapped',
+          href: '../TWrapped/',
+        },
+        {
+          type: 'string',
+          value: ' | undefined',
+        },
+      ],
     },
   },
   wrapped: {

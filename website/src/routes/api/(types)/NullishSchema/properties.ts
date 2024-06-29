@@ -30,28 +30,10 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'TWrapped',
         },
-      ],
-    },
-  },
-  TOutput: {
-    modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'union',
-      options: [
         {
-          type: 'custom',
-          name: 'Output',
-          href: '../Output/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TWrapped',
-            },
-          ],
+          type: 'union',
+          options: ['null', 'undefined'],
         },
-        'null',
-        'undefined',
       ],
     },
   },
@@ -66,8 +48,8 @@ export const properties: Record<string, PropertyProps> = {
           options: [
             {
               type: 'custom',
-              name: 'Input',
-              href: '../Input/',
+              name: 'InferInput',
+              href: '../InferInput/',
               generics: [
                 {
                   type: 'custom',
@@ -81,7 +63,29 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferNullishOutput',
+          href: '../InferNullishOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+            {
+              type: 'custom',
+              name: 'TDefault',
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'InferIssue',
+          href: '../InferIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
         },
       ],
     },
@@ -90,6 +94,35 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'string',
       value: 'nullish',
+    },
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'nullish',
+      href: '../nullish/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'template',
+      parts: [
+        {
+          type: 'custom',
+          name: 'TWrapped',
+          indexes: [
+            {
+              type: 'string',
+              value: 'expects',
+            },
+          ],
+        },
+        {
+          type: 'string',
+          value: ' | null | undefined',
+        },
+      ],
     },
   },
   wrapped: {
