@@ -30,8 +30,8 @@
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@builder.io/qwik": "^1.5.1",
-    "@builder.io/qwik-city": "^1.5.1",
+    "@builder.io/qwik": "1.5.7",
+    "@builder.io/qwik-city": "1.5.7",
     "@mapbox/rehype-prism": "^0.9.0",
     "@netlify/edge-functions": "^2.3.1",
     "@types/eslint": "^8.56.7",
@@ -43,7 +43,7 @@
     "autoprefixer": "^10.4.19",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
-    "eslint-plugin-qwik": "^1.5.1",
+    "eslint-plugin-qwik": "1.5.7",
     "gray-matter": "^4.0.3",
     "netlify-cli": "^17.21.1",
     "og-img": "^0.2.1",
