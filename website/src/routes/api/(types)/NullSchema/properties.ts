@@ -1,10 +1,26 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: 'null',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'NullIssue',
+              href: '../NullIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
   BaseSchema: {
     type: {
@@ -13,9 +29,11 @@ export const properties: Record<string, PropertyProps> = {
       href: '../BaseSchema/',
       generics: [
         'null',
+        'null',
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'NullIssue',
+          href: '../NullIssue/',
         },
       ],
     },
@@ -26,17 +44,24 @@ export const properties: Record<string, PropertyProps> = {
       value: 'null',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'null',
+      href: '../null/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: 'null',
+    },
+  },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

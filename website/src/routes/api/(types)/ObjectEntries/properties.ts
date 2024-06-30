@@ -3,14 +3,28 @@ import type { PropertyProps } from '~/components';
 export const properties: Record<string, PropertyProps> = {
   ObjectEntries: {
     type: {
-      type: 'custom',
-      name: 'Record',
-      generics: [
-        'string',
+      type: 'object',
+      entries: [
         {
-          type: 'custom',
-          name: 'BaseSchema',
-          href: '../BaseSchema/',
+          key: {
+            name: 'key',
+            type: 'string',
+          },
+          value: {
+            type: 'custom',
+            name: 'BaseSchema',
+            href: '../BaseSchema/',
+            generics: [
+              'unknown',
+              'unknown',
+              {
+                type: 'custom',
+                name: 'BaseIssue',
+                href: '../BaseIssue/',
+                generics: ['unknown'],
+              },
+            ],
+          },
         },
       ],
     },

@@ -9,13 +9,25 @@ export const properties: Record<string, PropertyProps> = {
       href: '../PicklistOptions/',
     },
   },
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'TOptions',
-      indexes: ['number'],
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'PicklistIssue',
+              href: '../PicklistIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
   BaseSchema: {
@@ -31,7 +43,13 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'TOptions',
+          indexes: ['number'],
+        },
+        {
+          type: 'custom',
+          name: 'PicklistIssue',
+          href: '../PicklistIssue/',
         },
       ],
     },
@@ -42,6 +60,14 @@ export const properties: Record<string, PropertyProps> = {
       value: 'picklist',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'picklist',
+      href: '../picklist/',
+    },
+  },
   options: {
     type: {
       type: 'custom',
@@ -50,15 +76,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

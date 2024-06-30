@@ -1,0 +1,23 @@
+---
+title: InferTupleInput
+description: Infer tuple output type.
+contributors:
+  - fabian-hiller
+---
+
+# InferTupleInput
+
+Infer tuple output type.
+
+```ts
+// Create tuple items
+const items = [
+  v.pipe(
+    v.string(),
+    v.transform((input) => input.length)
+  ),
+];
+
+// Infer items input type
+type ItemsInput = v.InferTupleInput<typeof items>; // [string]
+```
