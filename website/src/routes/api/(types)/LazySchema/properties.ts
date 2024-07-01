@@ -20,6 +20,7 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',

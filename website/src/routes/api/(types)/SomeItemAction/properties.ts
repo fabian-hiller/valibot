@@ -4,6 +4,7 @@ export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
     type: {
+      modifier: 'readonly',
       type: 'array',
       item: 'unknown',
     },
@@ -20,8 +21,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'EveryIssue',
-              href: '../EveryIssue/',
+              name: 'SomeItemIssue',
+              href: '../SomeItemIssue/',
               generics: [
                 {
                   type: 'custom',
@@ -36,6 +37,7 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   BaseValidation: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseValidation',
@@ -51,7 +53,8 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'EveryIssue',
+          name: 'SomeItemIssue',
+          href: '../SomeItemIssue/',
           generics: [
             {
               type: 'custom',
@@ -65,15 +68,15 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'everyItem',
+      value: 'some_item',
     },
   },
   reference: {
     type: {
       type: 'custom',
       modifier: 'typeof',
-      name: 'everyItem',
-      href: '../everyItem/',
+      name: 'someItem',
+      href: '../someItem/',
     },
   },
   expects: {

@@ -33,6 +33,7 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   BaseValidation: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseValidation',

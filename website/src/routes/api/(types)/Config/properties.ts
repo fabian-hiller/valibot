@@ -10,9 +10,6 @@ export const properties: Record<string, PropertyProps> = {
       generics: ['unknown'],
     },
   },
-  Config: {
-    type: 'object',
-  },
   lang: {
     type: {
       type: 'union',

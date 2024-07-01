@@ -1,21 +1,40 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: 'void',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'VoidIssue',
+              href: '../VoidIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
       generics: [
         'void',
+        'void',
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'VoidIssue',
+          href: '../VoidIssue/',
         },
       ],
     },
@@ -26,17 +45,24 @@ export const properties: Record<string, PropertyProps> = {
       value: 'void',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'void',
+      href: '../void/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: 'void',
+    },
+  },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

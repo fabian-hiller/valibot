@@ -35,6 +35,10 @@ export interface VariantSchema<
    */
   readonly reference: typeof variant;
   /**
+   * The expected property.
+   */
+  readonly expects: 'Object';
+  /**
    * The discriminator key.
    */
   readonly key: TKey;

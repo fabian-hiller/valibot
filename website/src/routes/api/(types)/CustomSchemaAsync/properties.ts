@@ -3,7 +3,7 @@ import type { PropertyProps } from '~/components';
 export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
-    type: 'string',
+    type: 'any',
   },
   TMessage: {
     modifier: 'extends',
@@ -17,14 +17,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'CheckIssue',
-              href: '../CheckIssue/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TInput',
-                },
-              ],
+              name: 'CustomIssue',
+              href: '../CustomIssue/',
             },
           ],
         },
@@ -32,12 +26,11 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  BaseValidation: {
-    modifier: 'extends',
+  BaseSchemaAsync: {
     type: {
       type: 'custom',
-      name: 'BaseValidation',
-      href: '../BaseValidation/',
+      name: 'BaseSchemaAsync',
+      href: '../BaseSchemaAsync/',
       generics: [
         {
           type: 'custom',
@@ -49,14 +42,8 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'CheckIssue',
-          href: '../CheckIssue/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TInput',
-            },
-          ],
+          name: 'CustomIssue',
+          href: '../CustomIssue/',
         },
       ],
     },
@@ -64,33 +51,38 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'check',
+      value: 'custom',
     },
   },
   reference: {
     type: {
       type: 'custom',
       modifier: 'typeof',
-      name: 'check',
-      href: '../check/',
+      name: 'customAsync',
+      href: '../customAsync/',
     },
   },
   expects: {
-    type: 'null',
+    type: {
+      type: 'string',
+      value: 'unknown',
+    },
   },
-  requirement: {
+  check: {
     type: {
       type: 'function',
       params: [
         {
           name: 'input',
-          type: {
-            type: 'custom',
-            name: 'TInput',
-          },
+          type: 'unknown',
         },
       ],
-      return: 'boolean',
+      return: {
+        type: 'custom',
+        name: 'MaybePromise',
+        href: '../MaybePromise/',
+        generics: ['boolean'],
+      },
     },
   },
   message: {

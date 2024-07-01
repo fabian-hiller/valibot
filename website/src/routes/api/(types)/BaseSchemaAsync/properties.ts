@@ -18,9 +18,6 @@ export const properties: Record<string, PropertyProps> = {
       generics: ['unknown'],
     },
   },
-  BaseSchemaAsync: {
-    type: 'object',
-  },
   kind: {
     type: {
       type: 'string',

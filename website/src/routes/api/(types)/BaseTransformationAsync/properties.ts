@@ -18,9 +18,6 @@ export const properties: Record<string, PropertyProps> = {
       generics: ['unknown'],
     },
   },
-  BaseTransformationAsync: {
-    type: 'object',
-  },
   kind: {
     type: {
       type: 'string',

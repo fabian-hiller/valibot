@@ -1,5 +1,5 @@
 ---
-title: SchemaIssue
+title: BaseIssue
 description: Schema issue type.
 contributors:
   - fabian-hiller
@@ -9,15 +9,19 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# SchemaIssue
+# BaseIssue
 
 Schema issue type.
 
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
 ## Definition
 
-- `SchemaIssue` <Property {...properties.SchemaIssue} />
-  - `reason` <Property {...properties.reason} />
-  - `context` <Property {...properties.context} />
+- `BaseIssue` <Property {...properties.Config} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
   - `input` <Property {...properties.input} />
   - `expected` <Property {...properties.expected} />
   - `received` <Property {...properties.received} />

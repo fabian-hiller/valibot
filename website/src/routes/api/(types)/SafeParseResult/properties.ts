@@ -39,9 +39,6 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  SafeParseResult: {
-    type: 'object',
-  },
   typed: {
     type: 'boolean',
   },

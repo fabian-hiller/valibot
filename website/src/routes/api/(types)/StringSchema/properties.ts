@@ -1,32 +1,8 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: 'string',
-  },
-  BaseSchema: {
-    type: {
-      type: 'custom',
-      name: 'BaseSchema',
-      href: '../BaseSchema/',
-      generics: [
-        'string',
-        {
-          type: 'custom',
-          name: 'TOutput',
-        },
-      ],
-    },
-  },
-  type: {
-    type: {
-      type: 'string',
-      value: 'string',
-    },
-  },
-  message: {
     type: {
       type: 'union',
       options: [
@@ -39,18 +15,47 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  pipe: {
+  BaseSchema: {
+    modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
+      type: 'custom',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+      generics: [
+        'string',
+        'string',
         {
           type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: ['string'],
+          name: 'StringIssue',
+          href: '../StringIssue/',
         },
-        'undefined',
       ],
+    },
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'string',
+    },
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'string',
+      href: '../string/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: 'string',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };
