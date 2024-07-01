@@ -1,10 +1,111 @@
 ---
 title: promise
+description: Creates a promise schema.
 source: /schemas/promise/promise.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # promise
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/promise/promise.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a promise schema.
+
+```ts
+const Schema = v.promise<TMessage>(message);
+```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `promise` you can validate the data type of the input. If the input is not a promise, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `promise` can be used.
+
+### Number promise
+
+Schema to validate a promise that resolves to a number.
+
+```ts
+const NumberPromiseSchema = v.pipeAsync(
+  v.promise(),
+  v.awaitAsync(),
+  v.number()
+);
+```
+
+## Related
+
+The following APIs can be combined with `promise`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'objectWithRest',
+    'optional',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'tuple',
+    'tupleWithRest',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'pipe',
+    'safeParse',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
