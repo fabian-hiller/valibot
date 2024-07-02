@@ -1,4 +1,10 @@
 /**
+ * [Base64](https://en.wikipedia.org/wiki/Base64) regex.
+ */
+export const BASE64_REGEX =
+  /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/u;
+
+/**
  * [BIC](https://en.wikipedia.org/wiki/ISO_9362) regex.
  */
 export const BIC_REGEX = /^[A-Z]{6}(?!00)[A-Z\d]{2}(?:[A-Z\d]{3})?$/u;

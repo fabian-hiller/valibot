@@ -1,0 +1,105 @@
+import { BASE64_REGEX } from '../../regex.ts';
+import type {
+  BaseIssue,
+  BaseValidation,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
+
+/**
+ * Base64 issue type.
+ */
+export interface Base64Issue<TInput extends string> extends BaseIssue<TInput> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'validation';
+  /**
+   * The issue type.
+   */
+  readonly type: 'base64';
+  /**
+   * The expected property.
+   */
+  readonly expected: null;
+  /**
+   * The received property.
+   */
+  readonly received: `"${string}"`;
+  /**
+   * The Base64 regex.
+   */
+  readonly requirement: RegExp;
+}
+
+/**
+ * Base64 action type.
+ */
+export interface Base64Action<
+  TInput extends string,
+  TMessage extends ErrorMessage<Base64Issue<TInput>> | undefined,
+> extends BaseValidation<TInput, TInput, Base64Issue<TInput>> {
+  /**
+   * The action type.
+   */
+  readonly type: 'base64';
+  /**
+   * The action reference.
+   */
+  readonly reference: typeof base64;
+  /**
+   * The expected property.
+   */
+  readonly expects: null;
+  /**
+   * The Base64 regex.
+   */
+  readonly requirement: RegExp;
+  /**
+   * The error message.
+   */
+  readonly message: TMessage;
+}
+
+/**
+ * Creates a [Base64](https://en.wikipedia.org/wiki/Base64) validation action.
+ *
+ * @returns A Base64 action.
+ */
+export function base64<TInput extends string>(): Base64Action<
+  TInput,
+  undefined
+>;
+
+/**
+ * Creates a [Base64](https://en.wikipedia.org/wiki/Base64) validation action.
+ *
+ * @param message The error message.
+ *
+ * @returns A Base64 action.
+ */
+export function base64<
+  TInput extends string,
+  const TMessage extends ErrorMessage<Base64Issue<TInput>> | undefined,
+>(message: TMessage): Base64Action<TInput, TMessage>;
+
+export function base64(
+  message?: ErrorMessage<Base64Issue<string>>
+): Base64Action<string, ErrorMessage<Base64Issue<string>> | undefined> {
+  return {
+    kind: 'validation',
+    type: 'base64',
+    reference: base64,
+    async: false,
+    expects: null,
+    requirement: BASE64_REGEX,
+    message,
+    _run(dataset, config) {
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
+        _addIssue(this, 'Base64', dataset, config);
+      }
+      return dataset as Dataset<string, Base64Issue<string>>;
+    },
+  };
+}
