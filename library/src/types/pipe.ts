@@ -1,4 +1,5 @@
 import type { BaseIssue } from './issue.ts';
+import type { BaseMetadata } from './metadata.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type {
   BaseTransformation,
@@ -11,7 +12,8 @@ import type { BaseValidation, BaseValidationAsync } from './validation.ts';
  */
 export type PipeAction<TInput, TOutput, TIssue extends BaseIssue<unknown>> =
   | BaseValidation<TInput, TOutput, TIssue>
-  | BaseTransformation<TInput, TOutput, TIssue>;
+  | BaseTransformation<TInput, TOutput, TIssue>
+  | BaseMetadata<TInput>;
 
 /**
  * Pipe action async type.
@@ -22,7 +24,8 @@ export type PipeActionAsync<
   TIssue extends BaseIssue<unknown>,
 > =
   | BaseValidationAsync<TInput, TOutput, TIssue>
-  | BaseTransformationAsync<TInput, TOutput, TIssue>;
+  | BaseTransformationAsync<TInput, TOutput, TIssue>
+  | BaseMetadata<TInput>;
 
 /**
  * Pipe item type.

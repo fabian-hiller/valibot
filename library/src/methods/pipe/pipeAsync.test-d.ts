@@ -1,4 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest';
+import type { WithDescriptionMetadata } from '../../actions/index.ts';
 import {
   decimal,
   type DecimalAction,
@@ -13,6 +14,7 @@ import {
   transformAsync,
   trim,
   type TrimAction,
+  withDescription,
 } from '../../actions/index.ts';
 import {
   number,
@@ -28,6 +30,7 @@ import { pipeAsync, type SchemaWithPipeAsync } from './pipeAsync.ts';
 describe('pipeAsync', () => {
   const schema = pipeAsync(
     string(),
+    withDescription('some descriptions'),
     trim(),
     minLength(1),
     decimal(),
@@ -41,6 +44,7 @@ describe('pipeAsync', () => {
       SchemaWithPipeAsync<
         [
           StringSchema<undefined>,
+          WithDescriptionMetadata<string, 'some descriptions'>,
           TrimAction,
           MinLengthAction<string, 1, undefined>,
           DecimalAction<string, undefined>,
@@ -71,6 +75,12 @@ describe('pipeAsync', () => {
         | NumberIssue
         | MinValueIssue<number, 100>
       >();
+    });
+
+    test('metadata', () => {
+      expectTypeOf<
+        Schema['description']
+      >().toEqualTypeOf<'some descriptions'>();
     });
   });
 });

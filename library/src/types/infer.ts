@@ -1,4 +1,5 @@
 import type { BaseIssue } from './issue.ts';
+import type { BaseMetadata } from './metadata.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type {
   BaseTransformation,
@@ -16,7 +17,8 @@ export type InferInput<
     | BaseValidation<unknown, unknown, BaseIssue<unknown>>
     | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
     | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
-    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>,
+    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>
+    | BaseMetadata<unknown>,
 > = NonNullable<TSchema['_types']>['input'];
 
 /**
@@ -29,7 +31,8 @@ export type InferOutput<
     | BaseValidation<unknown, unknown, BaseIssue<unknown>>
     | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
     | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
-    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>,
+    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>
+    | BaseMetadata<unknown>,
 > = NonNullable<TSchema['_types']>['output'];
 
 /**
@@ -42,5 +45,6 @@ export type InferIssue<
     | BaseValidation<unknown, unknown, BaseIssue<unknown>>
     | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
     | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
-    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>,
+    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>
+    | BaseMetadata<unknown>,
 > = NonNullable<TSchema['_types']>['issue'];
