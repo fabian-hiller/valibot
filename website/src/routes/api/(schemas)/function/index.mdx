@@ -1,0 +1,98 @@
+---
+title: function
+description: Creates a function schema.
+source: /schemas/function/function.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# function
+
+Creates a function schema.
+
+```ts
+const Schema = v.function<TMessage>(message);
+```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `function` you can validate the data type of the input. If the input is not a function, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Related
+
+The following APIs can be combined with `function`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'objectWithRest',
+    'optional',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'tuple',
+    'tupleWithRest',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'parser',
+    'pipe',
+    'safeParse',
+    'safeParser',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>

@@ -7,6 +7,37 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
+      generics: [
+        'unknown',
+        'unknown',
+        {
+          type: 'custom',
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
+        },
+      ],
+    },
+  },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'ArrayIssue',
+              href: '../ArrayIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
   item: {
@@ -17,44 +48,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'array',
-              item: {
-                type: 'custom',
-                name: 'Output',
-                href: '../Output/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TItem',
-                  },
-                ],
-              },
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
   Schema: {
@@ -66,6 +61,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TItem',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

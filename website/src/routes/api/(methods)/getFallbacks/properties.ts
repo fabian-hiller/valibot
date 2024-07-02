@@ -5,44 +5,15 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'SchemaWithMaybeFallback',
-      href: '../SchemaWithMaybeFallback/',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
       generics: [
+        'unknown',
+        'unknown',
         {
-          type: 'union',
-          options: [
-            {
-              type: 'custom',
-              name: 'BaseSchema',
-              href: '../BaseSchema/',
-            },
-            {
-              type: 'custom',
-              name: 'ObjectSchema',
-              href: '../ObjectSchema/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'ObjectEntries',
-                  href: '../ObjectEntries/',
-                },
-                'any',
-              ],
-            },
-            {
-              type: 'custom',
-              name: 'TupleSchema',
-              href: '../TupleSchema/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TupleItems',
-                  href: '../TupleItems/',
-                },
-                'any',
-              ],
-            },
-          ],
+          type: 'custom',
+          name: 'BaseIssue',
+          generics: ['unknown'],
         },
       ],
     },
@@ -56,8 +27,8 @@ export const properties: Record<string, PropertyProps> = {
   values: {
     type: {
       type: 'custom',
-      name: 'FallbackValues',
-      href: '../FallbackValues/',
+      name: 'InferFallbacks',
+      href: '../InferFallbacks/',
       generics: [
         {
           type: 'custom',

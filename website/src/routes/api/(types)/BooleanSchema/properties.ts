@@ -1,21 +1,40 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: 'boolean',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'BooleanIssue',
+              href: '../BooleanIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
       generics: [
         'boolean',
+        'boolean',
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'BooleanIssue',
+          href: '../BooleanIssue/',
         },
       ],
     },
@@ -26,31 +45,24 @@ export const properties: Record<string, PropertyProps> = {
       value: 'boolean',
     },
   },
-  message: {
+  reference: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'boolean',
+      href: '../boolean/',
     },
   },
-  pipe: {
+  expects: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: ['boolean'],
-        },
-        'undefined',
-      ],
+      type: 'string',
+      value: 'boolean',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

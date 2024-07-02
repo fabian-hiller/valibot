@@ -1,27 +1,55 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue } from '../../utils/index.ts';
-import type { NonNullableInput, NonNullableOutput } from './types.ts';
+import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
+import type {
+  InferNonNullableInput,
+  InferNonNullableIssue,
+  InferNonNullableOutput,
+  NonNullableIssue,
+} from './types.ts';
 
 /**
  * Non nullable schema type.
  */
 export interface NonNullableSchema<
-  TWrapped extends BaseSchema,
-  TOutput = NonNullableOutput<TWrapped>,
-> extends BaseSchema<NonNullableInput<TWrapped>, TOutput> {
+  TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  TMessage extends ErrorMessage<NonNullableIssue> | undefined,
+> extends BaseSchema<
+    InferNonNullableInput<TWrapped>,
+    InferNonNullableOutput<TWrapped>,
+    NonNullableIssue | InferNonNullableIssue<TWrapped>
+  > {
   /**
    * The schema type.
    */
-  type: 'non_nullable';
+  readonly type: 'non_nullable';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof nonNullable;
+  /**
+   * The expected property.
+   */
+  readonly expects: '!null';
   /**
    * The wrapped schema.
    */
-  wrapped: TWrapped;
+  readonly wrapped: TWrapped;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
+  readonly message: TMessage;
 }
+
+/**
+ * Creates a non nullable schema.
+ *
+ * @param wrapped The wrapped schema.
+ *
+ * @returns A non nullable schema.
+ */
+export function nonNullable<
+  const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(wrapped: TWrapped): NonNullableSchema<TWrapped, undefined>;
 
 /**
  * Creates a non nullable schema.
@@ -31,24 +59,35 @@ export interface NonNullableSchema<
  *
  * @returns A non nullable schema.
  */
-export function nonNullable<TWrapped extends BaseSchema>(
-  wrapped: TWrapped,
-  message?: ErrorMessage
-): NonNullableSchema<TWrapped> {
+export function nonNullable<
+  const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  const TMessage extends ErrorMessage<NonNullableIssue> | undefined,
+>(wrapped: TWrapped, message: TMessage): NonNullableSchema<TWrapped, TMessage>;
+
+export function nonNullable(
+  wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  message?: ErrorMessage<NonNullableIssue> | undefined
+): NonNullableSchema<
+  BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  ErrorMessage<NonNullableIssue> | undefined
+> {
   return {
+    kind: 'schema',
     type: 'non_nullable',
+    reference: nonNullable,
     expects: '!null',
     async: false,
     wrapped,
     message,
-    _parse(input, config) {
-      // In input is `null`, return schema issue
-      if (input === null) {
-        return schemaIssue(this, nonNullable, input, config);
+    _run(dataset, config) {
+      // If value is `null`, add issue and return dataset
+      if (dataset.value === null) {
+        _addIssue(this, 'type', dataset, config);
+        return dataset;
       }
 
-      // Otherwise, return result of wrapped schema
-      return this.wrapped._parse(input, config);
+      // Otherwise, return dataset of wrapped schema
+      return this.wrapped._run(dataset, config);
     },
   };
 }

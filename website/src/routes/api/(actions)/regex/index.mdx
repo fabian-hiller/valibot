@@ -1,0 +1,63 @@
+---
+title: regex
+description: Creates a regex validation action.
+source: /actions/regex/regex.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# regex
+
+Creates a [regex](https://en.wikipedia.org/wiki/Regular_expression) validation action.
+
+```ts
+const Action = v.regex<TInput, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `regex` you can validate the formatting of a string. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `regex` can be used.
+
+### Pixel string schema
+
+Schema to validate a pixel string.
+
+```ts
+const PixelStringSchema = v.pipe(
+  v.string(),
+  v.regex(/^\d+px$/, 'The pixel string is badly formatted.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `regex`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

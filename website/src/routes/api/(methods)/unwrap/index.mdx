@@ -14,7 +14,7 @@ import { properties } from './properties';
 Unwraps the wrapped schema.
 
 ```ts
-const Schema = unwrap<TSchema>(schema);
+const Schema = v.unwrap<TSchema>(schema);
 ```
 
 ## Generics
@@ -38,8 +38,8 @@ The following examples show how `unwrap` can be used.
 Unwraps the wrapped string schema.
 
 ```ts
-const OptionalStringSchema = optional(string());
-const StringSchema = unwrap(OptionalStringSchema);
+const OptionalStringSchema = v.optional(v.string());
+const StringSchema = v.unwrap(OptionalStringSchema);
 ```
 
 ## Related
@@ -50,58 +50,17 @@ The following APIs can be combined with `unwrap`.
 
 <ApiList
   items={[
-    'any',
-    'array',
-    'bigint',
-    'blob',
-    'boolean',
-    'date',
-    'enum_',
-    'instance',
-    'intersect',
-    'lazy',
-    'literal',
-    'map',
-    'nan',
-    'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
     'nullable',
     'nullish',
-    'number',
-    'object',
     'optional',
-    'picklist',
-    'record',
-    'set',
-    'special',
-    'string',
-    'symbol',
-    'tuple',
-    'undefined_',
-    'union',
-    'unknown',
-    'variant',
-    'void_',
   ]}
 />
 
 ### Methods
 
 <ApiList
-  items={[
-    'brand',
-    'coerce',
-    'fallback',
-    'keyof',
-    'merge',
-    'omit',
-    'parse',
-    'partial',
-    'pick',
-    'required',
-    'transform',
-  ]}
+  items={['config', 'fallback', 'is', 'parse', 'parser', 'pipe', 'safeParse']}
 />

@@ -1,38 +1,106 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
-import { maxValue, minValue } from '../../validations/index.ts';
-import { bigint } from './bigint.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { bigint, type BigintIssue, type BigintSchema } from './bigint.ts';
 
 describe('bigint', () => {
-  test('should pass only bigints', () => {
+  describe('should return schema object', () => {
+    const baseSchema: Omit<BigintSchema<never>, 'message'> = {
+      kind: 'schema',
+      type: 'bigint',
+      reference: bigint,
+      expects: 'bigint',
+      async: false,
+      _run: expect.any(Function),
+    };
+
+    test('with undefined message', () => {
+      const schema: BigintSchema<undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(bigint()).toStrictEqual(schema);
+      expect(bigint(undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(bigint('message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies BigintSchema<'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(bigint(message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies BigintSchema<typeof message>);
+    });
+  });
+
+  describe('should return dataset without issues', () => {
     const schema = bigint();
-    const input = 123n;
-    const output = parse(schema, input);
-    expect(output).toBe(input);
-    expect(() => parse(schema, 123)).toThrowError();
-    expect(() => parse(schema, '123')).toThrowError();
-    expect(() => parse(schema, {})).toThrowError();
+
+    test('for bigint zero', () => {
+      expectNoSchemaIssue(schema, [0n, -0n]);
+    });
+
+    test('for positive bigints', () => {
+      expectNoSchemaIssue(schema, [1n, 23n, 456n]);
+    });
+
+    test('for negative bigints', () => {
+      expectNoSchemaIssue(schema, [-1n, -23n, -456n]);
+    });
   });
 
-  test('should throw custom error', () => {
-    const error = 'Value is not a bigint!';
-    expect(() => parse(bigint(error), 123)).toThrowError(error);
-  });
+  describe('should return dataset with issues', () => {
+    const schema = bigint('message');
+    const baseIssue: Omit<BigintIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'bigint',
+      expected: 'bigint',
+      message: 'message',
+    };
 
-  test('should execute pipe', () => {
-    const valueError = 'Invalid value';
+    // Primitive types
 
-    const schema1 = bigint([minValue(1n), maxValue(3n)]);
-    const input1 = 2n;
-    const output1 = parse(schema1, input1);
-    expect(output1).toEqual(input1);
-    expect(() => parse(schema1, 0n)).toThrowError(valueError);
-    expect(() => parse(schema1, 12n)).toThrowError(valueError);
+    test('for booleans', () => {
+      expectSchemaIssue(schema, baseIssue, [true, false]);
+    });
 
-    const schema2 = bigint('Error', [maxValue(3n)]);
-    const input2 = 3n;
-    const output2 = parse(schema2, input2);
-    expect(output2).toEqual(input2);
-    expect(() => parse(schema2, 12346789n)).toThrowError(valueError);
+    test('for null', () => {
+      expectSchemaIssue(schema, baseIssue, [null]);
+    });
+
+    test('for numbers', () => {
+      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', () => {
+      expectSchemaIssue(schema, baseIssue, [undefined]);
+    });
+
+    test('for strings', () => {
+      expectSchemaIssue(schema, baseIssue, ['', '0', '-2', '12.34']);
+    });
+
+    test('for symbols', () => {
+      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    });
+
+    // Complex types
+
+    test('for arrays', () => {
+      expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    });
+
+    test('for functions', () => {
+      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    });
+
+    test('for objects', () => {
+      expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    });
   });
 });

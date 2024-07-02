@@ -4,9 +4,39 @@ export const properties: Record<string, PropertyProps> = {
   TSchema: {
     modifier: 'extends',
     type: {
-      type: 'custom',
-      name: 'BaseSchemaAsync',
-      href: '../BaseSchemaAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'BaseSchema',
+          href: '../BaseSchema/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'BaseSchemaAsync',
+          href: '../BaseSchemaAsync/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
+        },
+      ],
     },
   },
   FallbackAsync: {
@@ -16,8 +46,8 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         {
           type: 'custom',
-          name: 'Output',
-          href: '../Output/',
+          name: 'InferOutput',
+          href: '../InferOutput/',
           generics: [
             {
               type: 'custom',
@@ -29,43 +59,74 @@ export const properties: Record<string, PropertyProps> = {
           type: 'function',
           params: [
             {
+              name: 'dataset',
+              optional: true,
               type: {
                 type: 'custom',
-                name: 'FallbackInfo',
-                href: '../FallbackInfo/',
-              },
-              name: 'info',
-              optional: true,
-            },
-          ],
-          return: {
-            type: 'union',
-            options: [
-              {
-                type: 'custom',
-                name: 'Output',
-                href: '../Output/',
+                name: 'Dataset',
+                href: '../Dataset/',
                 generics: [
                   {
                     type: 'custom',
-                    name: 'TSchema',
-                  },
-                ],
-              },
-              {
-                type: 'custom',
-                name: 'Promise',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'Output',
-                    href: '../Output/',
+                    name: 'InferOutput',
+                    href: '../InferOutput/',
                     generics: [
                       {
                         type: 'custom',
                         name: 'TSchema',
                       },
                     ],
+                  },
+                  {
+                    type: 'custom',
+                    name: 'InferIssue',
+                    href: '../InferIssue/',
+                    generics: [
+                      {
+                        type: 'custom',
+                        name: 'TSchema',
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+            {
+              name: 'config',
+              optional: true,
+              type: {
+                type: 'custom',
+                name: 'Config',
+                href: '../Config/',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'InferIssue',
+                    href: '../InferIssue/',
+                    generics: [
+                      {
+                        type: 'custom',
+                        name: 'TSchema',
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          ],
+          return: {
+            type: 'custom',
+            name: 'MaybePromise',
+            href: '../MaybePromise/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'InferOutput',
+                href: '../InferOutput/',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'TSchema',
                   },
                 ],
               },

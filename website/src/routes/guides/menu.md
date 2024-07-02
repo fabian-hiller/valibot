@@ -4,12 +4,14 @@
 
 - [Introduction](/guides/introduction/)
 - [Installation](/guides/installation/)
+- [Quick start](/guides/quick-start/)
 - [Use cases](/guides/use-cases/)
 - [Comparison](/guides/comparison/)
 - [Ecosystem](/guides/ecosystem/)
 
 ## Main concepts
 
+- [Mental model](/guides/mental-model/)
 - [Schemas](/guides/schemas/)
 - [Pipelines](/guides/pipelines/)
 - [Parse data](/guides/parse-data/)
@@ -35,6 +37,7 @@
 
 ## Migration
 
+- [To v0.31.0](/guides/migrate-to-v0.31.0/)
 - [From Zod](/guides/migrate-from-zod/)
 - [From Ajv](/guides/migrate-from-ajv/)
 - [From Joi](/guides/migrate-from-joi/)

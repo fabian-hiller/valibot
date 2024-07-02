@@ -1,8 +1,8 @@
 ---
 title: Other
 description: >-
-  This guide explains other special schema functions such as literal, instance,
-  special and lazy that are not covered in the other guides.
+  This guide explains other special schema functions such as `literal`,
+  `instance`, `custom` and `lazy` that are not covered in the other guides.
 contributors:
   - fabian-hiller
 ---
@@ -11,7 +11,7 @@ import { Link } from '@builder.io/qwik-city';
 
 # Other
 
-This guide explains other special schema functions such as <Link href="/api/literal/">`literal`</Link>, <Link href="/api/instance/">`instance`</Link>, <Link href="/api/special/">`special`</Link> and <Link href="/api/lazy/">`lazy`</Link> that are not covered in the other guides.
+This guide explains other special schema functions such as <Link href="/api/literal/">`literal`</Link>, <Link href="/api/instance/">`instance`</Link>, <Link href="/api/custom/">`custom`</Link> and <Link href="/api/lazy/">`lazy`</Link> that are not covered in the other guides.
 
 ## Literal schema
 
@@ -33,20 +33,20 @@ With schema functions like <Link href="/api/blob/">`blob`</Link>, <Link href="/a
 import * as v from 'valibot';
 
 const ErrorSchema = v.instance(Error); // Error
-const FileSchema = v.instance(File); // File
+const UrlSchema = v.instance(URL); // URL
 ```
 
-## Special schema
+## Custom schema
 
-The <Link href="/api/special/">`special`</Link> schema function is a bit more advanced. It allows you to define a schema that matches a value based on a custom function. Use it whenever you need to define a schema that cannot be expressed using any of the other schema functions.
+The <Link href="/api/custom/">`custom`</Link> schema function is a bit more advanced. It allows you to define a schema that matches a value based on a custom function. Use it whenever you need to define a schema that cannot be expressed using any of the other schema functions.
 
 The function receives the value to validate as its first argument and must return a boolean value. If the function returns `true`, the value is considered valid. Otherwise, it is considered invalid.
 
 ```ts
 import * as v from 'valibot';
 
-const PixelStringSchema = v.special<`${number}px`>((val) =>
-  typeof val === 'string' ? /^\d+px$/.test(val) : false
+const PixelStringSchema = v.custom<`${number}px`>((input) =>
+  typeof input === 'string' ? /^\d+px$/.test(input) : false
 );
 ```
 
@@ -54,7 +54,7 @@ const PixelStringSchema = v.special<`${number}px`>((val) =>
 
 The <Link href="/api/lazy/">`lazy`</Link> schema function allows you to define recursive schemas. A recursive schema is a schema that references itself. For example, you can use it to define a schema for a tree-like data structure.
 
-> Due to a TypeScript limitation, the input and output types cannot be inferred automatically. Therefore, you must explicitly specify these types using <Link href="/api/BaseSchema/">`BaseSchema`</Link>.
+> Due to a TypeScript limitation, the input and output types cannot be inferred automatically in this case. Therefore, you must explicitly specify these types using the <Link href="/api/GenericSchema/">`GenericSchema`</Link> type.
 
 ```ts
 import * as v from 'valibot';
@@ -65,7 +65,7 @@ type BinaryTree = {
   right: BinaryTree | null;
 };
 
-const BinaryTreeSchema: v.BaseSchema<BinaryTree> = v.object({
+const BinaryTreeSchema: v.GenericSchema<BinaryTree> = v.object({
   element: v.string(),
   left: v.nullable(v.lazy(() => BinaryTreeSchema)),
   right: v.nullable(v.lazy(() => BinaryTreeSchema)),

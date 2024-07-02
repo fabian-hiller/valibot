@@ -1,0 +1,98 @@
+---
+title: undefined
+description: Creates an undefined schema.
+source: /schemas/undefined/undefined.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# undefined
+
+Creates an undefined schema.
+
+```ts
+const Schema = v.undefined<TMessage>(message);
+```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `undefined` you can validate the data type of the input and if it is not `undefined`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Related
+
+The following APIs can be combined with `undefined`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'objectWithRest',
+    'optional',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'tuple',
+    'tupleWithRest',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'parser',
+    'pipe',
+    'safeParse',
+    'safeParser',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>

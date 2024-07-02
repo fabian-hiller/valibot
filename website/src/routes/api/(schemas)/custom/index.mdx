@@ -1,0 +1,188 @@
+---
+title: custom
+description: Creates a custom schema.
+source: /schemas/custom/custom.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# custom
+
+Creates a custom schema.
+
+> This schema function allows you to define a schema that matches a value based on a custom function. Use it whenever you need to define a schema that cannot be expressed using any of the other schema functions.
+
+```ts
+const Schema = v.custom<TInput, TMessage>(check, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `check` <Property {...properties.check} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `custom` you can validate the data type of the input. If the input does not match the validation of `check`, you can use `message` to customize the error message.
+
+> Make sure that the validation in `check` matches the data type of `TInput`.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `custom` can be used.
+
+### Pixel string schema
+
+Schema to validate a pixel string.
+
+```ts
+const PixelStringSchema = v.custom<`${number}px`>((input) =>
+  typeof input === 'string' ? /^\d+px$/.test(input) : false
+);
+```
+
+## Related
+
+The following APIs can be combined with `custom`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'objectWithRest',
+    'optional',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'tuple',
+    'tupleWithRest',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'parser',
+    'pipe',
+    'safeParse',
+    'safeParser',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'bic',
+    'brand',
+    'bytes',
+    'check',
+    'checkItems',
+    'creditCard',
+    'cuid2',
+    'decimal',
+    'email',
+    'emoji',
+    'empty',
+    'endsWith',
+    'everyItem',
+    'excludes',
+    'filterItems',
+    'findItem',
+    'finite',
+    'hash',
+    'hexadecimal',
+    'hexColor',
+    'imei',
+    'includes',
+    'integer',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'mac',
+    'mac48',
+    'mac64',
+    'mapItems',
+    'maxBytes',
+    'maxLength',
+    'maxSize',
+    'maxValue',
+    'mimeType',
+    'minBytes',
+    'minLength',
+    'minSize',
+    'minValue',
+    'multipleOf',
+    'nonEmpty',
+    'notBytes',
+    'notLength',
+    'notSize',
+    'notValue',
+    'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'reduceItems',
+    'regex',
+    'safeInteger',
+    'size',
+    'someItem',
+    'sortItem',
+    'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
+    'transform',
+    'trim',
+    'trimEnd',
+    'trimStart',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
+  ]}
+/>

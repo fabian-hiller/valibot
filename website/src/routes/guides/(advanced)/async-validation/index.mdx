@@ -16,11 +16,11 @@ By default, I validate each schema synchronously. This is usually the fastest wa
 
 ## How it works
 
-To be able to do this, I provide an asynchronous implementation for almost every synchronous implementation. The only difference is that the asynchronous implementation is promise-based. Otherwise, the API is exactly the same.
+To be able to do this, I provide an asynchronous implementation when necessary. The only difference is that the asynchronous implementation is promise-based. Otherwise, the API and functionality is exactly the same.
 
 ### Naming
 
-The asynchronous implementation starts with the same name as the synchronous one, but adds the suffix `Async` to the end. For example, the asynchronous implementation of <Link href="/api/string/">`string`</Link> is called <Link href="/api/stringAsync/">`stringAsync`</Link> and the asynchronous implementation of <Link href="/api/object/">`object`</Link> is called <Link href="/api/objectAsync/">`objectAsync`</Link>.
+The asynchronous implementation starts with the same name as the synchronous one, but adds the suffix `Async` to the end. For example, the asynchronous implementation of <Link href="/api/pipe/">`pipe`</Link> is called <Link href="/api/pipeAsync/">`pipeAsync`</Link> and the asynchronous implementation of <Link href="/api/object/">`object`</Link> is called <Link href="/api/objectAsync/">`objectAsync`</Link>.
 
 ### Nesting
 
@@ -41,8 +41,8 @@ import * as v from 'valibot';
 import { isUsernameAvailable } from '~/api';
 
 const ProfileSchema = v.objectAsync({
-  username: v.stringAsync([v.customAsync(isUsernameAvailable)]),
-  avatar: v.string([v.url()]),
-  description: v.string([v.maxLength(1000)]),
+  username: v.pipeAsync(v.string(), v.checkAsync(isUsernameAvailable)),
+  avatar: v.pipe(v.string(), v.url()),
+  description: v.pipe(v.string(), v.maxLength(1000)),
 });
 ```

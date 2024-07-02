@@ -14,8 +14,12 @@ import { properties } from './properties';
 Creates a never schema.
 
 ```ts
-const Schema = never(message);
+const Schema = v.never<TMessage>(message);
 ```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -29,30 +33,6 @@ When validated, `never` always returns an issue. You can use `message` to custom
 
 - `Schema` <Property {...properties.Schema} />
 
-## Examples
-
-The following examples show how `never` can be used.
-
-### Strict object schema
-
-Schema to prevent any unknown object properties.
-
-> Otherwise, unknown object properties are simply ignored by default.
-
-```ts
-const StrictObjectSchema = object({ key: sting() }, never());
-```
-
-### Strict tuple schema
-
-Schema to prevent any unknown tuple items.
-
-> Otherwise, unknown tuple items are simply ignored by default.
-
-```ts
-const StrictTupleSchema = tuple([string(), number()], never());
-```
-
 ## Related
 
 The following APIs can be combined with `never`.
@@ -64,6 +44,8 @@ The following APIs can be combined with `never`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -71,10 +53,14 @@ The following APIs can be combined with `never`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -83,8 +69,7 @@ The following APIs can be combined with `never`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -92,7 +77,9 @@ The following APIs can be combined with `never`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
-    'transform',
+    'safeParser',
   ]}
 />

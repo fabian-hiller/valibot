@@ -1,197 +1,238 @@
 import type {
+  BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
+  Dataset,
   ErrorMessage,
-  Output,
-  PipeAsync,
-  SchemaIssues,
+  InferIssue,
+  MapPathItem,
 } from '../../types/index.ts';
-import {
-  defaultArgs,
-  pipeResultAsync,
-  schemaIssue,
-  schemaResult,
-} from '../../utils/index.ts';
-import type { MapInput, MapOutput, MapPathItem } from './types.ts';
+import { _addIssue } from '../../utils/index.ts';
+import type { InferMapInput, InferMapOutput, MapIssue } from './types.ts';
 
 /**
  * Map schema async type.
  */
 export interface MapSchemaAsync<
-  TKey extends BaseSchema | BaseSchemaAsync,
-  TValue extends BaseSchema | BaseSchemaAsync,
-  TOutput = MapOutput<TKey, TValue>,
-> extends BaseSchemaAsync<MapInput<TKey, TValue>, TOutput> {
+  TKey extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  TValue extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  TMessage extends ErrorMessage<MapIssue> | undefined,
+> extends BaseSchemaAsync<
+    InferMapInput<TKey, TValue>,
+    InferMapOutput<TKey, TValue>,
+    MapIssue | InferIssue<TKey> | InferIssue<TValue>
+  > {
   /**
    * The schema type.
    */
-  type: 'map';
+  readonly type: 'map';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof mapAsync;
+  /**
+   * The expected property.
+   */
+  readonly expects: 'Map';
   /**
    * The map key schema.
    */
-  key: TKey;
+  readonly key: TKey;
   /**
    * The map value schema.
    */
-  value: TValue;
+  readonly value: TValue;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
-  /**
-   * The validation and transformation pipeline.
-   */
-  pipe: PipeAsync<MapOutput<TKey, TValue>> | undefined;
+  readonly message: TMessage;
 }
 
 /**
- * Creates an async map schema.
+ * Creates a map schema.
  *
  * @param key The key schema.
  * @param value The value schema.
- * @param pipe A validation and transformation pipe.
  *
- * @returns An async map schema.
+ * @returns A map schema.
  */
 export function mapAsync<
-  TKey extends BaseSchema | BaseSchemaAsync,
-  TValue extends BaseSchema | BaseSchemaAsync,
->(
-  key: TKey,
-  value: TValue,
-  pipe?: PipeAsync<MapOutput<TKey, TValue>>
-): MapSchemaAsync<TKey, TValue>;
+  const TKey extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TValue extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+>(key: TKey, value: TValue): MapSchemaAsync<TKey, TValue, undefined>;
 
 /**
- * Creates an async map schema.
+ * Creates a map schema.
  *
  * @param key The key schema.
  * @param value The value schema.
  * @param message The error message.
- * @param pipe A validation and transformation pipe.
  *
- * @returns An async map schema.
+ * @returns A map schema.
  */
 export function mapAsync<
-  TKey extends BaseSchema | BaseSchemaAsync,
-  TValue extends BaseSchema | BaseSchemaAsync,
+  const TKey extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TValue extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TMessage extends ErrorMessage<MapIssue> | undefined,
 >(
   key: TKey,
   value: TValue,
-  message?: ErrorMessage,
-  pipe?: PipeAsync<MapOutput<TKey, TValue>>
-): MapSchemaAsync<TKey, TValue>;
+  message: TMessage
+): MapSchemaAsync<TKey, TValue, TMessage>;
 
-export function mapAsync<
-  TKey extends BaseSchema | BaseSchemaAsync,
-  TValue extends BaseSchema | BaseSchemaAsync,
->(
-  key: TKey,
-  value: TValue,
-  arg3?: PipeAsync<MapOutput<TKey, TValue>> | ErrorMessage,
-  arg4?: PipeAsync<MapOutput<TKey, TValue>>
-): MapSchemaAsync<TKey, TValue> {
-  // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg3, arg4);
-
-  // Create and return async map schema
+export function mapAsync(
+  key:
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  value:
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  message?: ErrorMessage<MapIssue>
+): MapSchemaAsync<
+  | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  ErrorMessage<MapIssue> | undefined
+> {
   return {
+    kind: 'schema',
     type: 'map',
+    reference: mapAsync,
     expects: 'Map',
     async: true,
     key,
     value,
     message,
-    pipe,
-    async _parse(input, config) {
+    async _run(dataset, config) {
+      // Get input value from dataset
+      const input = dataset.value;
+
       // If root type is valid, check nested types
       if (input instanceof Map) {
-        // Create typed, issues and output
-        let typed = true;
-        let issues: SchemaIssues | undefined;
-        const output: Map<Output<TKey>, Output<TValue>> = new Map();
+        // Set typed to `true` and value to empty map
+        dataset.typed = true;
+        dataset.value = new Map();
 
-        // Parse each key and value by schema
-        await Promise.all(
-          Array.from(input.entries()).map(async ([inputKey, inputValue]) => {
-            // Create path item variable
-            let pathItem: MapPathItem | undefined;
-
-            // Get schema result of key and value
-            const [keyResult, valueResult] = await Promise.all(
-              (
-                [
-                  { schema: this.key, value: inputKey, origin: 'key' },
-                  { schema: this.value, value: inputValue, origin: 'value' },
-                ] as const
-              ).map(async ({ schema, value, origin }) => {
-                // If not aborted early, continue execution
-                if (!(config?.abortEarly && issues)) {
-                  // Get schema result of value
-                  const result = await schema._parse(value, config);
-
-                  // If not aborted early, continue execution
-                  if (!(config?.abortEarly && issues)) {
-                    // If there are issues, capture them
-                    if (result.issues) {
-                      // Create map path item
-                      pathItem = pathItem ?? {
-                        type: 'map',
-                        origin,
-                        input,
-                        key: inputKey,
-                        value: inputValue,
-                      };
-
-                      // Add modified result issues to issues
-                      for (const issue of result.issues) {
-                        if (issue.path) {
-                          issue.path.unshift(pathItem);
-                        } else {
-                          issue.path = [pathItem];
-                        }
-                        issues?.push(issue);
-                      }
-                      if (!issues) {
-                        issues = result.issues;
-                      }
-
-                      // If necessary, abort early
-                      if (config?.abortEarly) {
-                        throw null;
-                      }
-                    }
-
-                    // Return schema result
-                    return result;
-                  }
-                }
-              })
-            ).catch(() => []);
-
-            // If not typed, set typed to false
-            if (!keyResult?.typed || !valueResult?.typed) {
-              typed = false;
-            }
-
-            // Set output of entry
-            if (keyResult && valueResult) {
-              output.set(keyResult.output, valueResult.output);
-            }
-          })
+        // Parse schema of each map entry
+        const datasets = await Promise.all(
+          [...input].map(([inputKey, inputValue]) =>
+            Promise.all([
+              inputKey,
+              inputValue,
+              this.key._run({ typed: false, value: inputKey }, config),
+              this.value._run({ typed: false, value: inputValue }, config),
+            ])
+          )
         );
 
-        // If output is typed, return pipe result
-        if (typed) {
-          return pipeResultAsync(this, output, config, issues);
+        // Process datasets of each map entry
+        for (const [
+          inputKey,
+          inputValue,
+          keyDataset,
+          valueDataset,
+        ] of datasets) {
+          // If there are issues, capture them
+          if (keyDataset.issues) {
+            // Create map path item
+            const pathItem: MapPathItem = {
+              type: 'map',
+              origin: 'key',
+              input,
+              key: inputKey,
+              value: inputValue,
+            };
+
+            // Add modified item dataset issues to issues
+            for (const issue of keyDataset.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                // @ts-expect-error
+                issue.path = [pathItem];
+              }
+              // @ts-expect-error
+              dataset.issues?.push(issue);
+            }
+            if (!dataset.issues) {
+              // @ts-expect-error
+              dataset.issues = keyDataset.issues;
+            }
+
+            // If necessary, abort early
+            if (config.abortEarly) {
+              dataset.typed = false;
+              break;
+            }
+          }
+
+          // If there are issues, capture them
+          if (valueDataset.issues) {
+            // Create map path item
+            const pathItem: MapPathItem = {
+              type: 'map',
+              origin: 'value',
+              input,
+              key: inputKey,
+              value: inputValue,
+            };
+
+            // Add modified item dataset issues to issues
+            for (const issue of valueDataset.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                // @ts-expect-error
+                issue.path = [pathItem];
+              }
+              // @ts-expect-error
+              dataset.issues?.push(issue);
+            }
+            if (!dataset.issues) {
+              // @ts-expect-error
+              dataset.issues = valueDataset.issues;
+            }
+
+            // If necessary, abort early
+            if (config.abortEarly) {
+              dataset.typed = false;
+              break;
+            }
+          }
+
+          // If not typed, map typed to `false`
+          if (!keyDataset.typed || !valueDataset.typed) {
+            dataset.typed = false;
+          }
+
+          // Add value to dataset
+          // @ts-expect-error
+          dataset.value.set(keyDataset.value, valueDataset.value);
         }
 
-        // Otherwise, return untyped schema result
-        return schemaResult(false, output, issues as SchemaIssues);
+        // Otherwise, add map issue
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
 
-      // Otherwise, return schema issue
-      return schemaIssue(this, mapAsync, input, config);
+      // Return output dataset
+      return dataset as Dataset<
+        Map<unknown, unknown>,
+        MapIssue | BaseIssue<unknown>
+      >;
     },
   };
 }

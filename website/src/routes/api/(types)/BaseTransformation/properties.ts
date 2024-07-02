@@ -5,14 +5,51 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'any',
   },
-  BaseTransformation: {
+  TOutput: {
+    modifier: 'extends',
+    type: 'any',
+  },
+  TIssue: {
+    modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'Object',
+      name: 'BaseIssue',
+      href: '../BaseIssue/',
+      generics: ['unknown'],
+    },
+  },
+  kind: {
+    type: {
+      type: 'string',
+      value: 'transformation',
+    },
+  },
+  type: {
+    type: 'string',
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      name: 'FunctionReference',
+      href: '../FunctionReference/',
       generics: [
         {
+          type: 'array',
+          item: 'any',
+        },
+        {
           type: 'custom',
-          name: 'TInput',
+          name: 'BaseTransformation',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
         },
       ],
     },
@@ -23,29 +60,89 @@ export const properties: Record<string, PropertyProps> = {
       value: false,
     },
   },
-  _parse: {
+  _run: {
     type: {
       type: 'function',
       params: [
         {
-          name: 'input',
+          name: 'dataset',
           type: {
             type: 'custom',
-            name: 'TInput',
+            name: 'TypedDataset',
+            href: '../TypedDataset/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TInput',
+              },
+              'never',
+            ],
+          },
+        },
+        {
+          name: 'config',
+          type: {
+            type: 'custom',
+            name: 'Config',
+            href: '../Config/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TIssue',
+              },
+            ],
           },
         },
       ],
       return: {
         type: 'custom',
-        name: 'PipeActionResult',
-        href: '../PipeActionResult/',
+        name: 'Dataset',
+        href: '../Dataset/',
         generics: [
           {
             type: 'custom',
-            name: 'TInput',
+            name: 'TOutput',
+          },
+          {
+            type: 'custom',
+            name: 'TIssue',
           },
         ],
       },
+    },
+  },
+  _types: {
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'object',
+          entries: [
+            {
+              key: 'input',
+              value: {
+                type: 'custom',
+                name: 'TInput',
+              },
+            },
+            {
+              key: 'output',
+              value: {
+                type: 'custom',
+                name: 'TOutput',
+              },
+            },
+            {
+              key: 'issue',
+              value: {
+                type: 'custom',
+                name: 'TIssue',
+              },
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
 };

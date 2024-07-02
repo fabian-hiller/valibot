@@ -1,0 +1,28 @@
+---
+title: NotLengthAction
+description: Not length action type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# NotLengthAction
+
+Not length action type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `NotLengthAction` <Property {...properties.BaseValidation} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

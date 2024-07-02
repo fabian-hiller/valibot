@@ -9,19 +9,38 @@ export const properties: Record<string, PropertyProps> = {
       href: '../UnionOptionsAsync/',
     },
   },
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'Output',
-      href: '../Output/',
-      generics: [
+    type: {
+      type: 'union',
+      options: [
         {
           type: 'custom',
-          name: 'TOptions',
-          indexes: ['number'],
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'UnionIssue',
+              href: '../UnionIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'InferIssue',
+                  href: '../InferIssue/',
+                  generics: [
+                    {
+                      type: 'custom',
+                      name: 'TOptions',
+                      indexes: ['number'],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
+        'undefined',
       ],
     },
   },
@@ -33,8 +52,8 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'Input',
-          href: '../Input/',
+          name: 'InferInput',
+          href: '../InferInput/',
           generics: [
             {
               type: 'custom',
@@ -45,49 +64,42 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
-        },
-      ],
-    },
-  },
-  type: {
-    type: {
-      type: 'string',
-      value: 'union',
-    },
-  },
-  options: {
-    type: {
-      type: 'custom',
-      name: 'TOptions',
-    },
-  },
-  message: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'PipeAsync',
-          href: '../PipeAsync/',
+          name: 'InferOutput',
+          href: '../InferOutput/',
           generics: [
             {
               type: 'custom',
-              name: 'Output',
-              href: '../Output/',
+              name: 'TOptions',
+              indexes: ['number'],
+            },
+          ],
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'UnionIssue',
+              href: '../UnionIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'InferIssue',
+                  href: '../InferIssue/',
+                  generics: [
+                    {
+                      type: 'custom',
+                      name: 'TOptions',
+                      indexes: ['number'],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'InferIssue',
+              href: '../InferIssue/',
               generics: [
                 {
                   type: 'custom',
@@ -98,8 +110,33 @@ export const properties: Record<string, PropertyProps> = {
             },
           ],
         },
-        'undefined',
       ],
+    },
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'union',
+    },
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'unionAsync',
+      href: '../unionAsync/',
+    },
+  },
+  options: {
+    type: {
+      type: 'custom',
+      name: 'TOptions',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

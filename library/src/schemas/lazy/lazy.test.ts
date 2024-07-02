@@ -1,26 +1,88 @@
 import { describe, expect, test, vi } from 'vitest';
-import { parse } from '../../methods/index.ts';
-import { minLength } from '../../validations/index.ts';
-import { string } from '../string/index.ts';
-import { lazy } from './lazy.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import {
+  string,
+  type StringIssue,
+  type StringSchema,
+} from '../string/index.ts';
+import { lazy, type LazySchema } from './lazy.ts';
 
 describe('lazy', () => {
-  test('should pass only getter schema', () => {
-    const schema = lazy(() => string([minLength(3)]));
-    const input = 'hello';
-    const output = parse(schema, input);
-    expect(output).toBe(input);
-    expect(() => parse(schema, 'he')).toThrowError();
-    expect(() => parse(schema, 123n)).toThrowError();
-    expect(() => parse(schema, null)).toThrowError();
-    expect(() => parse(schema, {})).toThrowError();
+  test('should return schema object', () => {
+    const getter = () => string();
+    expect(lazy(getter)).toStrictEqual({
+      kind: 'schema',
+      type: 'lazy',
+      reference: lazy,
+      expects: 'unknown',
+      getter,
+      async: false,
+      _run: expect.any(Function),
+    } satisfies LazySchema<StringSchema<undefined>>);
   });
 
-  test('should pass the input to the getter function as a parameter', () => {
-    const getter = vi.fn().mockReturnValue({ _parse: string()._parse });
-    const schema = lazy(getter);
-    const input = 'hello';
-    parse(schema, input);
-    expect(getter).toHaveBeenCalledWith(input);
+  describe('should return dataset without issues', () => {
+    const schema = lazy(() => string());
+
+    test('for strings', () => {
+      expectNoSchemaIssue(schema, ['', 'foo', '123']);
+    });
+  });
+
+  describe('should return dataset with issues', () => {
+    const schema = lazy(() => string('message'));
+    const baseIssue: Omit<StringIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'string',
+      expected: 'string',
+      message: 'message',
+    };
+
+    // Primitive types
+
+    test('for bigints', () => {
+      expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
+    });
+
+    test('for booleans', () => {
+      expectSchemaIssue(schema, baseIssue, [true, false]);
+    });
+
+    test('for null', () => {
+      expectSchemaIssue(schema, baseIssue, [null]);
+    });
+
+    test('for numbers', () => {
+      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', () => {
+      expectSchemaIssue(schema, baseIssue, [undefined]);
+    });
+
+    test('for symbols', () => {
+      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    });
+
+    // Complex types
+
+    test('for arrays', () => {
+      expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    });
+
+    test('for functions', () => {
+      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    });
+
+    test('for objects', () => {
+      expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    });
+  });
+
+  test('should call getter with input', () => {
+    const getter = vi.fn(() => string());
+    const dataset = { typed: false, value: 'foo' };
+    lazy(getter)._run(dataset, {});
+    expect(getter).toHaveBeenCalledWith(dataset.value);
   });
 });

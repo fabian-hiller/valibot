@@ -9,22 +9,29 @@ export const properties: Record<string, PropertyProps> = {
       href: '../Enum/',
     },
   },
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'TEnum',
-      indexes: [
+    type: {
+      type: 'union',
+      options: [
         {
           type: 'custom',
-          modifier: 'keyof',
-          name: 'TEnum',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'EnumIssue',
+              href: '../EnumIssue/',
+            },
+          ],
         },
+        'undefined',
       ],
     },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -43,7 +50,19 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'TEnum',
+          indexes: [
+            {
+              type: 'custom',
+              modifier: 'keyof',
+              name: 'TEnum',
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'EnumIssue',
+          href: '../EnumIssue/',
         },
       ],
     },
@@ -54,23 +73,40 @@ export const properties: Record<string, PropertyProps> = {
       value: 'enum',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'enum',
+      href: '../enum/',
+    },
+  },
   enum: {
     type: {
       type: 'custom',
       name: 'TEnum',
     },
   },
+  options: {
+    type: {
+      type: 'array',
+      item: {
+        type: 'custom',
+        name: 'TEnum',
+        indexes: [
+          {
+            type: 'custom',
+            modifier: 'keyof',
+            name: 'TEnum',
+          },
+        ],
+      },
+    },
+  },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

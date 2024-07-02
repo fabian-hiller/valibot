@@ -1,15 +1,29 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'Date',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'DateIssue',
+              href: '../DateIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -21,7 +35,12 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'Date',
+        },
+        {
+          type: 'custom',
+          name: 'DateIssue',
+          href: '../DateIssue/',
         },
       ],
     },
@@ -32,36 +51,24 @@ export const properties: Record<string, PropertyProps> = {
       value: 'date',
     },
   },
-  message: {
+  reference: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'date',
+      href: '../date/',
     },
   },
-  pipe: {
+  expects: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'Date',
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'string',
+      value: 'Date',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

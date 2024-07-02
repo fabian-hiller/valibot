@@ -7,19 +7,35 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
+      generics: [
+        'unknown',
+        'unknown',
+        {
+          type: 'custom',
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
+        },
+      ],
     },
   },
   TDefault: {
     modifier: 'extends',
     type: {
-      type: 'custom',
-      name: 'Default',
-      href: '../Default/',
-      generics: [
+      type: 'union',
+      options: [
         {
           type: 'custom',
-          name: 'TWrapped',
+          name: 'Default',
+          href: '../Default/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
         },
+        'never',
       ],
     },
   },

@@ -1,21 +1,40 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: 'number',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'NumberIssue',
+              href: '../NumberIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
       generics: [
         'number',
+        'number',
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'NumberIssue',
+          href: '../NumberIssue/',
         },
       ],
     },
@@ -26,31 +45,24 @@ export const properties: Record<string, PropertyProps> = {
       value: 'number',
     },
   },
-  message: {
+  reference: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'number',
+      href: '../number/',
     },
   },
-  pipe: {
+  expects: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: ['number'],
-        },
-        'undefined',
-      ],
+      type: 'string',
+      value: 'number',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

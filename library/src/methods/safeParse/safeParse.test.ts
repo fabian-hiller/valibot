@@ -1,79 +1,93 @@
 import { describe, expect, test } from 'vitest';
+import { minLength, transform } from '../../actions/index.ts';
 import { object, string } from '../../schemas/index.ts';
-import type { SchemaIssues } from '../../types/index.ts';
-import { minLength } from '../../validations/index.ts';
+import { pipe } from '../pipe/index.ts';
 import { safeParse } from './safeParse.ts';
 
 describe('safeParse', () => {
   test('should return successful output', () => {
-    const input = { key: 'hello' };
-    const result = safeParse(object({ key: string() }), input);
-    expect(result).toEqual({
+    expect(
+      safeParse(
+        object({
+          key: pipe(
+            string(),
+            minLength(5),
+            transform((input) => input.length)
+          ),
+        }),
+        { key: 'foobar' }
+      )
+    ).toStrictEqual({
       typed: true,
       success: true,
-      output: input,
+      output: { key: 6 },
       issues: undefined,
     });
   });
 
   test('should return typed output with issues', () => {
-    const input = { key: 'hello' };
-    const result = safeParse(object({ key: string([minLength(10)]) }), input);
-    const issues: SchemaIssues = [
-      {
-        reason: 'string',
-        context: 'min_length',
-        expected: '>=10',
-        received: '5',
-        message: 'Invalid length: Expected >=10 but received 5',
-        input: input.key,
-        requirement: 10,
-        path: [
-          {
-            type: 'object',
-            origin: 'value',
-            input,
-            key: 'key',
-            value: input.key,
-          },
-        ],
-      },
-    ];
-    expect(result).toEqual({
+    expect(
+      safeParse(object({ key: pipe(string(), minLength(5)) }), { key: 'foo' })
+    ).toEqual({
       typed: true,
       success: false,
-      output: input,
-      issues,
+      output: { key: 'foo' },
+      issues: [
+        {
+          kind: 'validation',
+          type: 'min_length',
+          input: 'foo',
+          expected: '>=5',
+          received: '3',
+          message: 'Invalid length: Expected >=5 but received 3',
+          requirement: 5,
+          path: [
+            {
+              type: 'object',
+              origin: 'value',
+              input: { key: 'foo' },
+              key: 'key',
+              value: 'foo',
+            },
+          ],
+          issues: undefined,
+          lang: undefined,
+          abortEarly: undefined,
+          abortPipeEarly: undefined,
+        },
+      ],
     });
   });
 
-  test('should return type issues', () => {
-    const input = { key: 123 };
-    const result = safeParse(object({ key: string() }), input);
-    const issues: SchemaIssues = [
-      {
-        reason: 'type',
-        context: 'string',
-        expected: 'string',
-        received: '123',
-        message: 'Invalid type: Expected string but received 123',
-        input: input.key,
-        path: [
-          {
-            type: 'object',
-            origin: 'value',
-            input,
-            key: 'key',
-            value: input.key,
-          },
-        ],
-      },
-    ];
-    expect(result).toEqual({
+  test('should return untyped output with issues', () => {
+    expect(safeParse(object({ key: string() }), { key: 123 })).toEqual({
       typed: false,
       success: false,
-      output: input,
-      issues,
+      output: { key: 123 },
+      issues: [
+        {
+          kind: 'schema',
+          type: 'string',
+          input: 123,
+          expected: 'string',
+          received: '123',
+          message: 'Invalid type: Expected string but received 123',
+          requirement: undefined,
+          path: [
+            {
+              type: 'object',
+              origin: 'value',
+              input: { key: 123 },
+              key: 'key',
+              value: 123,
+            },
+          ],
+          issues: undefined,
+          lang: undefined,
+          abortEarly: undefined,
+          abortPipeEarly: undefined,
+        },
+      ],
     });
   });
 });

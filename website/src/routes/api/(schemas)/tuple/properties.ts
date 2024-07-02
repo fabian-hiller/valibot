@@ -9,15 +9,22 @@ export const properties: Record<string, PropertyProps> = {
       href: '../TupleItems/',
     },
   },
-  TRest: {
+  TMessage: {
     modifier: 'extends',
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'BaseSchema',
-          href: '../BaseSchema/',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TupleIssue',
+              href: '../TupleIssue/',
+            },
+          ],
         },
         'undefined',
       ],
@@ -29,53 +36,10 @@ export const properties: Record<string, PropertyProps> = {
       name: 'TItems',
     },
   },
-  rest: {
-    type: {
-      type: 'custom',
-      name: 'TRest',
-    },
-  },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TupleOutput',
-              href: '../TupleOutput/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TItems',
-                },
-                {
-                  type: 'custom',
-                  name: 'TRest',
-                },
-              ],
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
   Schema: {
@@ -90,7 +54,7 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TRest',
+          name: 'TMessage',
         },
       ],
     },

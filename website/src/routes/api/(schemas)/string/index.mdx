@@ -15,21 +15,20 @@ import { properties } from './properties';
 Creates a string schema.
 
 ```ts
-// String schema with an optional pipe
-const Schema = string(pipe);
-
-// String schema with an optional message and pipe
-const Schema = string(message, pipe);
+const Schema = v.string<TMessage>(message);
 ```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-With `string` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the string. If the input is not a string, you can use `message` to customize the error message.
+With `string` you can validate the data type of the input. If the input is not a string, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -44,11 +43,12 @@ The following examples show how `string` can be used.
 Schema to validate an email.
 
 ```ts
-const EmailSchema = string([
-  minLength(1, 'Please enter your email.'),
-  email('The email is badly formatted.'),
-  maxLength(30, 'Your email is too long.'),
-]);
+const EmailSchema = v.pipe(
+  v.string(),
+  v.nonEmpty('Please enter your email.'),
+  v.email('The email is badly formatted.'),
+  v.maxLength(30, 'Your email is too long.')
+);
 ```
 
 ### Password schema
@@ -56,13 +56,14 @@ const EmailSchema = string([
 Schema to validate a password.
 
 ```ts
-const PasswordSchema = string([
-  minLength(8, 'Your password is too short.'),
-  maxLength(30, 'Your password is too long.'),
-  regex(/[a-z]/, 'Your password must contain a lowercase letter.'),
-  regex(/[A-Z]/, 'Your password must contain a uppercase letter.'),
-  regex(/[0-9]/, 'Your password must contain a number.'),
-]);
+const PasswordSchema = v.pipe(
+  v.string(),
+  v.minLength(8, 'Your password is too short.'),
+  v.maxLength(30, 'Your password is too long.'),
+  v.regex(/[a-z]/, 'Your password must contain a lowercase letter.'),
+  v.regex(/[A-Z]/, 'Your password must contain a uppercase letter.'),
+  v.regex(/[0-9]/, 'Your password must contain a number.')
+);
 ```
 
 ### URL schema
@@ -70,9 +71,10 @@ const PasswordSchema = string([
 Schema to validate a URL.
 
 ```ts
-const UrlSchema = string('A URL must be string.', [
-  url('The URL is badly formatted.'),
-]);
+const UrlSchema = v.pipe(
+  v.string('A URL must be string.'),
+  v.url('The URL is badly formatted.')
+);
 ```
 
 ## Related
@@ -86,6 +88,8 @@ The following APIs can be combined with `string`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -93,10 +97,14 @@ The following APIs can be combined with `string`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -105,8 +113,7 @@ The following APIs can be combined with `string`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -114,38 +121,27 @@ The following APIs can be combined with `string`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
-    'transform',
+    'safeParser',
   ]}
 />
 
-### Transformations
-
-<ApiList
-  items={[
-    'toCustom',
-    'toLowerCase',
-    'toMaxValue',
-    'toMinValue',
-    'toTrimmed',
-    'toTrimmedEnd',
-    'toTrimmedStart',
-    'toUpperCase',
-  ]}
-/>
-
-### Validations
+### Actions
 
 <ApiList
   items={[
     'bic',
+    'brand',
     'bytes',
     'creditCard',
     'cuid2',
-    'custom',
+    'check',
     'decimal',
     'email',
     'emoji',
+    'empty',
     'endsWith',
     'excludes',
     'hash',
@@ -172,12 +168,24 @@ The following APIs can be combined with `string`.
     'minBytes',
     'minLength',
     'minValue',
+    'nonEmpty',
     'notBytes',
     'notLength',
     'notValue',
     'octal',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
     'regex',
     'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
+    'transform',
+    'trim',
+    'trimEnd',
+    'trimStart',
     'ulid',
     'url',
     'uuid',

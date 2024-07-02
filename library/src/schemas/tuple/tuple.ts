@@ -1,258 +1,165 @@
 import type {
+  ArrayPathItem,
+  BaseIssue,
   BaseSchema,
+  Dataset,
   ErrorMessage,
-  Pipe,
-  SchemaIssues,
+  InferTupleInput,
+  InferTupleIssue,
+  InferTupleOutput,
+  TupleItems,
 } from '../../types/index.ts';
-import {
-  pipeResult,
-  restAndDefaultArgs,
-  schemaIssue,
-  schemaResult,
-} from '../../utils/index.ts';
-import type { TupleInput, TupleOutput, TuplePathItem } from './types.ts';
-
-/**
- * Tuple shape type.
- */
-export type TupleItems = [BaseSchema, ...BaseSchema[]];
+import { _addIssue } from '../../utils/index.ts';
+import type { TupleIssue } from './types.ts';
 
 /**
  * Tuple schema type.
  */
 export interface TupleSchema<
   TItems extends TupleItems,
-  TRest extends BaseSchema | undefined = undefined,
-  TOutput = TupleOutput<TItems, TRest>,
-> extends BaseSchema<TupleInput<TItems, TRest>, TOutput> {
+  TMessage extends ErrorMessage<TupleIssue> | undefined,
+> extends BaseSchema<
+    InferTupleInput<TItems>,
+    InferTupleOutput<TItems>,
+    TupleIssue | InferTupleIssue<TItems>
+  > {
   /**
    * The schema type.
    */
-  type: 'tuple';
+  readonly type: 'tuple';
   /**
-   * The tuple items schema.
+   * The schema reference.
    */
-  items: TItems;
+  readonly reference: typeof tuple;
   /**
-   * The tuple rest schema.
+   * The expected property.
    */
-  rest: TRest;
+  readonly expects: 'Array';
+  /**
+   * The items schema.
+   */
+  readonly items: TItems;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
-  /**
-   * The validation and transformation pipeline.
-   */
-  pipe: Pipe<TupleOutput<TItems, TRest>> | undefined;
+  readonly message: TMessage;
 }
 
 /**
  * Creates a tuple schema.
  *
+ * Hint: This schema removes unknown items. The output will only include the
+ * items you specify. To include unknown items, use `looseTuple`. To
+ * return an issue for unknown items, use `strictTuple`. To include and
+ * validate unknown items, use `tupleWithRest`.
+ *
  * @param items The items schema.
- * @param pipe A validation and transformation pipe.
  *
  * @returns A tuple schema.
  */
-export function tuple<TItems extends TupleItems>(
-  items: TItems,
-  pipe?: Pipe<TupleOutput<TItems, undefined>>
-): TupleSchema<TItems>;
+export function tuple<const TItems extends TupleItems>(
+  items: TItems
+): TupleSchema<TItems, undefined>;
 
 /**
  * Creates a tuple schema.
+ *
+ * Hint: This schema removes unknown items. The output will only include the
+ * items you specify. To include unknown items, use `looseTuple`. To
+ * return an issue for unknown items, use `strictTuple`. To include and
+ * validate unknown items, use `tupleWithRest`.
  *
  * @param items The items schema.
  * @param message The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A tuple schema.
- */
-export function tuple<TItems extends TupleItems>(
-  items: TItems,
-  message?: ErrorMessage,
-  pipe?: Pipe<TupleOutput<TItems, undefined>>
-): TupleSchema<TItems>;
-
-/**
- * Creates a tuple schema.
- *
- * @param items The items schema.
- * @param rest The rest schema.
- * @param pipe A validation and transformation pipe.
  *
  * @returns A tuple schema.
  */
 export function tuple<
-  TItems extends TupleItems,
-  TRest extends BaseSchema | undefined,
->(
-  items: TItems,
-  rest: TRest,
-  pipe?: Pipe<TupleOutput<TItems, TRest>>
-): TupleSchema<TItems, TRest>;
+  const TItems extends TupleItems,
+  const TMessage extends ErrorMessage<TupleIssue> | undefined,
+>(items: TItems, message: TMessage): TupleSchema<TItems, TMessage>;
 
-/**
- * Creates a tuple schema.
- *
- * @param items The items schema.
- * @param rest The rest schema.
- * @param message The error message.
- * @param pipe A validation and transformation pipe.
- *
- * @returns A tuple schema.
- */
-export function tuple<
-  TItems extends TupleItems,
-  TRest extends BaseSchema | undefined,
->(
-  items: TItems,
-  rest: TRest,
-  message?: ErrorMessage,
-  pipe?: Pipe<TupleOutput<TItems, TRest>>
-): TupleSchema<TItems, TRest>;
-
-export function tuple<
-  TItems extends TupleItems,
-  TRest extends BaseSchema | undefined = undefined,
->(
-  items: TItems,
-  arg2?: Pipe<TupleOutput<TItems, TRest>> | ErrorMessage | TRest,
-  arg3?: Pipe<TupleOutput<TItems, TRest>> | ErrorMessage,
-  arg4?: Pipe<TupleOutput<TItems, TRest>>
-): TupleSchema<TItems, TRest> {
-  // Get rest, message and pipe argument
-  const [rest, message, pipe] = restAndDefaultArgs<
-    TRest,
-    Pipe<TupleOutput<TItems, TRest>>
-  >(arg2, arg3, arg4);
-
-  // Create and return tuple schema
+export function tuple(
+  items: TupleItems,
+  message?: ErrorMessage<TupleIssue>
+): TupleSchema<TupleItems, ErrorMessage<TupleIssue> | undefined> {
   return {
+    kind: 'schema',
     type: 'tuple',
+    reference: tuple,
     expects: 'Array',
     async: false,
     items,
-    rest,
     message,
-    pipe,
-    _parse(input, config) {
+    _run(dataset, config) {
+      // Get input value from dataset
+      const input = dataset.value;
+
       // If root type is valid, check nested types
       if (Array.isArray(input)) {
-        // Create typed, issues and output
-        let typed = true;
-        let issues: SchemaIssues | undefined;
-        const output: any[] = [];
+        // Set typed to `true` and value to empty array
+        dataset.typed = true;
+        dataset.value = [];
 
         // Parse schema of each tuple item
         for (let key = 0; key < this.items.length; key++) {
           const value = input[key];
-          const result = this.items[key]._parse(value, config);
+          const itemDataset = this.items[key]._run(
+            { typed: false, value },
+            config
+          );
 
           // If there are issues, capture them
-          if (result.issues) {
+          if (itemDataset.issues) {
             // Create tuple path item
-            const pathItem: TuplePathItem = {
-              type: 'tuple',
+            const pathItem: ArrayPathItem = {
+              type: 'array',
               origin: 'value',
-              input: input as [any, ...any[]],
+              input,
               key,
               value,
             };
 
-            // Add modified result issues to issues
-            for (const issue of result.issues) {
+            // Add modified item dataset issues to issues
+            for (const issue of itemDataset.issues) {
               if (issue.path) {
                 issue.path.unshift(pathItem);
               } else {
+                // @ts-expect-error
                 issue.path = [pathItem];
               }
-              issues?.push(issue);
+              // @ts-expect-error
+              dataset.issues?.push(issue);
             }
-            if (!issues) {
-              issues = result.issues;
+            if (!dataset.issues) {
+              // @ts-expect-error
+              dataset.issues = itemDataset.issues;
             }
 
             // If necessary, abort early
-            if (config?.abortEarly) {
-              typed = false;
+            if (config.abortEarly) {
+              dataset.typed = false;
               break;
             }
           }
 
-          // If not typed, set typed to false
-          if (!result.typed) {
-            typed = false;
+          // If not typed, set typed to `false`
+          if (!itemDataset.typed) {
+            dataset.typed = false;
           }
 
-          // Set output of item
-          output[key] = result.output;
+          // Add item to dataset
+          // @ts-expect-error
+          dataset.value.push(itemDataset.value);
         }
 
-        // If necessary parse schema of each rest item
-        if (this.rest && !(config?.abortEarly && issues)) {
-          for (let key = this.items.length; key < input.length; key++) {
-            const value = input[key];
-            const result = this.rest._parse(value, config);
-
-            // If there are issues, capture them
-            if (result.issues) {
-              // Create tuple path item
-              const pathItem: TuplePathItem = {
-                type: 'tuple',
-                origin: 'value',
-                input: input as [any, ...any[]],
-                key,
-                value,
-              };
-
-              // Add modified result issues to issues
-              for (const issue of result.issues) {
-                if (issue.path) {
-                  issue.path.unshift(pathItem);
-                } else {
-                  issue.path = [pathItem];
-                }
-                issues?.push(issue);
-              }
-              if (!issues) {
-                issues = result.issues;
-              }
-
-              // If necessary, abort early
-              if (config?.abortEarly) {
-                typed = false;
-                break;
-              }
-            }
-
-            // If not typed, set typed to false
-            if (!result.typed) {
-              typed = false;
-            }
-
-            // Set output of item
-            output[key] = result.output;
-          }
-        }
-
-        // If output is typed, return pipe result
-        if (typed) {
-          return pipeResult(
-            this,
-            output as TupleOutput<TItems, TRest>,
-            config,
-            issues
-          );
-        }
-
-        // Otherwise, return untyped schema result
-        return schemaResult(false, output, issues as SchemaIssues);
+        // Otherwise, add tuple issue
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
 
-      // Otherwise, return schema issue
-      return schemaIssue(this, tuple, input, config);
+      // Return output dataset
+      return dataset as Dataset<unknown[], TupleIssue | BaseIssue<unknown>>;
     },
   };
 }

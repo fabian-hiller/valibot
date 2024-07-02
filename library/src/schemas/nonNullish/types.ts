@@ -1,23 +1,77 @@
 import type {
+  BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
-  Input,
-  Output,
+  ErrorMessage,
+  InferInput,
+  InferIssue,
+  InferOutput,
+  NonNullish,
 } from '../../types/index.ts';
+import type {
+  UnionIssue,
+  UnionOptions,
+  UnionOptionsAsync,
+  UnionSchema,
+  UnionSchemaAsync,
+} from '../union/index.ts';
 
 /**
- * Non nullish type.
+ * Non nullish issue type.
  */
-type NonNullish<T> = T extends null | undefined ? never : T;
+export interface NonNullishIssue extends BaseIssue<unknown> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'schema';
+  /**
+   * The issue type.
+   */
+  readonly type: 'non_nullish';
+  /**
+   * The expected property.
+   */
+  readonly expected: '!null & !undefined';
+}
 
 /**
- * Non nullish input inference type.
+ * Infer non nullish input type.
  */
-export type NonNullishInput<TWrapped extends BaseSchema | BaseSchemaAsync> =
-  NonNullish<Input<TWrapped>>;
+export type InferNonNullishInput<
+  TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+> = NonNullish<InferInput<TWrapped>>;
 
 /**
- * Non nullish output inference type.
+ * Infer non nullish output type.
  */
-export type NonNullishOutput<TWrapped extends BaseSchema | BaseSchemaAsync> =
-  NonNullish<Output<TWrapped>>;
+export type InferNonNullishOutput<
+  TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+> =
+  // FIXME: For schemas that transform the input to `null` or `undefined`,
+  // this implementation may result in an incorrect output type
+  NonNullish<InferOutput<TWrapped>>;
+
+/**
+ * Infer non nullish issue type.
+ */
+export type InferNonNullishIssue<
+  TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+> = TWrapped extends
+  | UnionSchema<
+      UnionOptions,
+      ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
+    >
+  | UnionSchemaAsync<
+      UnionOptionsAsync,
+      ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
+    >
+  ?
+      | Exclude<InferIssue<TWrapped>, { type: 'null' | 'undefined' | 'union' }>
+      | UnionIssue<InferNonNullishIssue<TWrapped['options'][number]>>
+  : Exclude<InferIssue<TWrapped>, { type: 'null' | 'undefined' }>;

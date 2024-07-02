@@ -8,23 +8,51 @@ export const properties: Record<string, PropertyProps> = {
   TOutput: {
     modifier: 'extends',
     type: 'any',
-    default: {
-      type: 'custom',
-      name: 'TInput',
-    },
   },
-  BaseSchema: {
+  TIssue: {
+    modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'Object',
+      name: 'BaseIssue',
+      href: '../BaseIssue/',
+      generics: ['unknown'],
+    },
+  },
+  kind: {
+    type: {
+      type: 'string',
+      value: 'schema',
+    },
+  },
+  type: {
+    type: 'string',
+  },
+  expects: {
+    type: 'string',
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      name: 'FunctionReference',
+      href: '../FunctionReference/',
       generics: [
         {
-          type: 'custom',
-          name: 'TInput',
+          type: 'array',
+          item: 'any',
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'BaseSchema',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
         },
       ],
     },
@@ -35,29 +63,48 @@ export const properties: Record<string, PropertyProps> = {
       value: false,
     },
   },
-  _parse: {
+  _run: {
     type: {
       type: 'function',
       params: [
         {
-          name: 'input',
-          type: 'unknown',
+          name: 'dataset',
+          type: {
+            type: 'custom',
+            name: 'Dataset',
+            href: '../Dataset/',
+            generics: ['unknown', 'never'],
+          },
         },
         {
           name: 'config',
-          optional: true,
           type: {
             type: 'custom',
-            name: 'SchemaConfig',
-            href: '../SchemaConfig/',
+            name: 'Config',
+            href: '../Config/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TIssue',
+              },
+            ],
           },
         },
       ],
       return: {
         type: 'custom',
-        name: 'SchemaResult',
-        href: '../SchemaResult/',
-        generics: [{ type: 'custom', name: 'TOutput' }],
+        name: 'Dataset',
+        href: '../Dataset/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'TOutput',
+          },
+          {
+            type: 'custom',
+            name: 'TIssue',
+          },
+        ],
       },
     },
   },
@@ -80,6 +127,13 @@ export const properties: Record<string, PropertyProps> = {
               value: {
                 type: 'custom',
                 name: 'TOutput',
+              },
+            },
+            {
+              key: 'issue',
+              value: {
+                type: 'custom',
+                name: 'TIssue',
               },
             },
           ],

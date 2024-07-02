@@ -1,5 +1,5 @@
 /**
- * [BIC] (https://en.wikipedia.org/wiki/ISO_9362) regex.
+ * [BIC](https://en.wikipedia.org/wiki/ISO_9362) regex.
  */
 export const BIC_REGEX = /^[A-Z]{6}(?!00)[A-Z\d]{2}(?:[A-Z\d]{3})?$/u;
 
@@ -24,21 +24,24 @@ export const EMAIL_REGEX =
  */
 export const EMOJI_REGEX = /^[\p{Extended_Pictographic}\p{Emoji_Component}]+$/u;
 
+// This emoji regex is not supported in Node.js v18 and older browsers.
+// Therefore, we are postponing the switch to this regex to a later date.
+// export const EMOJI_REGEX = /^\p{RGI_Emoji}+$/v;
+
 /**
  * [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) regex.
  */
-export const HEXADECIMAL_REGEX = /^(0h|0x)?[\da-f]+$/iu;
+export const HEXADECIMAL_REGEX = /^(?:0h|0x)?[\da-f]+$/iu;
 
 /**
  * [Hex color](https://en.wikipedia.org/wiki/Web_colors#Hex_triplet) regex.
  */
-export const HEX_COLOR_REGEX =
-  /^#([\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})$/iu;
+export const HEX_COLOR_REGEX = /^#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/iu;
 
 /**
  * [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity) regex.
  */
-export const IMEI_REGEX = /^\d{2}(?:[ /|-]?\d{6}){2}[ /|-]?\d$/u;
+export const IMEI_REGEX = /^\d{15}$|^\d{2}-\d{6}-\d{6}-\d$/u;
 
 /**
  * [IPv4](https://en.wikipedia.org/wiki/IPv4) regex.
@@ -52,6 +55,12 @@ export const IPV4_REGEX =
  */
 export const IPV6_REGEX =
   /^(?:(?:[\da-f]{1,4}:){7}[\da-f]{1,4}|(?:[\da-f]{1,4}:){1,7}:|(?:[\da-f]{1,4}:){1,6}:[\da-f]{1,4}|(?:[\da-f]{1,4}:){1,5}(?::[\da-f]{1,4}){1,2}|(?:[\da-f]{1,4}:){1,4}(?::[\da-f]{1,4}){1,3}|(?:[\da-f]{1,4}:){1,3}(?::[\da-f]{1,4}){1,4}|(?:[\da-f]{1,4}:){1,2}(?::[\da-f]{1,4}){1,5}|[\da-f]{1,4}:(?::[\da-f]{1,4}){1,6}|:(?:(?::[\da-f]{1,4}){1,7}|:)|fe80:(?::[\da-f]{0,4}){0,4}%[\da-z]+|::(?:f{4}(?::0{1,4})?:)?(?:(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\.){3}(?:25[0-5]|(?:2[0-4]|1?\d)?\d)|(?:[\da-f]{1,4}:){1,4}:(?:(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\.){3}(?:25[0-5]|(?:2[0-4]|1?\d)?\d))$/iu;
+
+/**
+ * [IP](https://en.wikipedia.org/wiki/IP_address) regex.
+ */
+export const IP_REGEX =
+  /^(?:(?:[1-9]|1\d|2[0-4])?\d|25[0-5])(?:\.(?:(?:[1-9]|1\d|2[0-4])?\d|25[0-5])){3}$|^(?:(?:[\da-f]{1,4}:){7}[\da-f]{1,4}|(?:[\da-f]{1,4}:){1,7}:|(?:[\da-f]{1,4}:){1,6}:[\da-f]{1,4}|(?:[\da-f]{1,4}:){1,5}(?::[\da-f]{1,4}){1,2}|(?:[\da-f]{1,4}:){1,4}(?::[\da-f]{1,4}){1,3}|(?:[\da-f]{1,4}:){1,3}(?::[\da-f]{1,4}){1,4}|(?:[\da-f]{1,4}:){1,2}(?::[\da-f]{1,4}){1,5}|[\da-f]{1,4}:(?::[\da-f]{1,4}){1,6}|:(?:(?::[\da-f]{1,4}){1,7}|:)|fe80:(?::[\da-f]{0,4}){0,4}%[\da-z]+|::(?:f{4}(?::0{1,4})?:)?(?:(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\.){3}(?:25[0-5]|(?:2[0-4]|1?\d)?\d)|(?:[\da-f]{1,4}:){1,4}:(?:(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\.){3}(?:25[0-5]|(?:2[0-4]|1?\d)?\d))$/iu;
 
 /**
  * [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date regex.
@@ -79,7 +88,7 @@ export const ISO_TIME_SECOND_REGEX = /^(?:0\d|1\d|2[0-3])(?::[0-5]\d){2}$/u;
  * [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) timestamp regex.
  */
 export const ISO_TIMESTAMP_REGEX =
-  /^\d{4}-(?:0[1-9]|1[0-2])-(?:[12]\d|0[1-9]|3[01])T(?:0\d|1\d|2[0-3])(?::[0-5]\d){2}(?:\.\d{1,9})?Z$/u;
+  /^\d{4}-(?:0[1-9]|1[0-2])-(?:[12]\d|0[1-9]|3[01])T(?:0\d|1\d|2[0-3])(?::[0-5]\d){2}(?:\.\d{1,9})?(?:Z|[+-](?:0\d|1\d|2[0-3])(?::?[0-5]\d)?)$/u;
 
 /**
  * [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) week regex.
@@ -99,9 +108,15 @@ export const MAC64_REGEX =
   /^(?:[\da-f]{2}:){7}[\da-f]{2}$|^(?:[\da-f]{2}-){7}[\da-f]{2}$|^(?:[\da-f]{4}\.){3}[\da-f]{4}$|^(?:[\da-f]{4}:){3}[\da-f]{4}$/iu;
 
 /**
+ * [MAC](https://en.wikipedia.org/wiki/MAC_address) regex.
+ */
+export const MAC_REGEX =
+  /^(?:[\da-f]{2}:){5}[\da-f]{2}$|^(?:[\da-f]{2}-){5}[\da-f]{2}$|^(?:[\da-f]{4}\.){2}[\da-f]{4}$|^(?:[\da-f]{2}:){7}[\da-f]{2}$|^(?:[\da-f]{2}-){7}[\da-f]{2}$|^(?:[\da-f]{4}\.){3}[\da-f]{4}$|^(?:[\da-f]{4}:){3}[\da-f]{4}$/iu;
+
+/**
  * [Octal](https://en.wikipedia.org/wiki/Octal) regex.
  */
-export const OCTAL_REGEX = /^(0o)?[0-7]+$/iu;
+export const OCTAL_REGEX = /^(?:0o)?[0-7]+$/iu;
 
 /**
  * [ULID](https://github.com/ulid/spec) regex.

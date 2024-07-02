@@ -1,0 +1,64 @@
+---
+title: minBytes
+description: Creates a min bytes validation action.
+source: /actions/minBytes/minBytes.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# minBytes
+
+Creates a min [bytes](https://en.wikipedia.org/wiki/Byte) validation action.
+
+```ts
+const Action = v.minBytes<TInput, TRequirement, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `minBytes` you can validate the bytes of a string. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `minBytes` can be used.
+
+### Min bytes schema
+
+Schema to validate a string with a minimum of 64 bytes.
+
+```ts
+const MinBytesSchema = v.pipe(
+  v.string(),
+  v.minBytes(64, 'The string must contain at least 64 bytes.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `minBytes`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

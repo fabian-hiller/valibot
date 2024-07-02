@@ -1,0 +1,27 @@
+---
+title: BicAction
+description: BIC action type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# BicAction
+
+BIC action type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `BicAction` <Property {...properties.BaseValidation} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

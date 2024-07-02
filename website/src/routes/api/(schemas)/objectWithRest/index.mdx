@@ -1,0 +1,203 @@
+---
+title: objectWithRest
+description: Creates an object with rest schema.
+source: /schemas/object/object.ts
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# objectWithRest
+
+Creates an object with rest schema.
+
+```ts
+const Schema = v.objectWithRest<TEntries, TRest, TMessage>(
+  entries,
+  rest,
+  message
+);
+```
+
+## Generics
+
+- `TEntries` <Property {...properties.TEntries} />
+- `TRest` <Property {...properties.TRest} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `entries` <Property {...properties.entries} />
+- `rest` <Property {...properties.rest} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `objectWithRest` you can validate the data type of the input and whether the content matches `entries` and `rest`. If the input is not an object, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `objectWithRest` can be used. Please see the <Link href="/guides/objects/">object guide</Link> for more examples and explanations.
+
+### Object schema with rest
+
+Schema to validate an object with generic rest entries.
+
+```ts
+const ObjectSchemaWithRest = v.objectWithRest(
+  {
+    key1: v.string(),
+    key2: v.number(),
+  },
+  v.boolean()
+);
+```
+
+### Merge several objects
+
+Schema that merges the entries of two object schemas.
+
+```ts
+const MergedObjectSchema = v.objectWithRest(
+  {
+    ...ObjectSchema1.entries,
+    ...ObjectSchema2.entries,
+  },
+  v.null()
+);
+```
+
+### Mark keys as optional
+
+Schema to validate an object with partial entries.
+
+```ts
+const PartialObjectSchema = partial(
+  objectWithRest(
+    {
+      key1: string(),
+      key2: number(),
+    },
+    v.undefined()
+  )
+);
+```
+
+### Object with selected entries
+
+Schema to validate only selected entries of an object.
+
+```ts
+const PickObjectSchema = v.pick(
+  v.objectWithRest(
+    {
+      key1: v.string(),
+      key2: v.number(),
+      key3: v.boolean(),
+    },
+    v.null()
+  ),
+  ['key1', 'key3']
+);
+```
+
+## Related
+
+The following APIs can be combined with `objectWithRest`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'forward',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'omit',
+    'parse',
+    'parser',
+    'partial',
+    'pick',
+    'pipe',
+    'required',
+    'safeParse',
+    'safeParser',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>

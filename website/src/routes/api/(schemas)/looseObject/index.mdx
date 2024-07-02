@@ -1,0 +1,187 @@
+---
+title: looseObject
+description: Creates a loose object schema.
+source: /schemas/looseObject/looseObject.ts
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# looseObject
+
+Creates a loose object schema.
+
+```ts
+const Schema = v.looseObject<TEntries, TMessage>(entries, message);
+```
+
+## Generics
+
+- `TEntries` <Property {...properties.TEntries} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `entries` <Property {...properties.entries} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `looseObject` you can validate the data type of the input and whether the content matches `entries`. If the input is not an object, you can use `message` to customize the error message.
+
+> The difference to <Link href="../object/">`object`</Link> is that this schema does include unknown entries into the output.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `looseObject` can be used. Please see the <Link href="/guides/objects/">object guide</Link> for more examples and explanations.
+
+### Simple object schema
+
+Schema to validate a loose object with two specific keys.
+
+```ts
+const SimpleObjectSchema = v.looseObject({
+  key1: v.string(),
+  key2: v.number(),
+});
+```
+
+### Merge several objects
+
+Schema that merges the entries of two object schemas.
+
+```ts
+const MergedObjectSchema = v.looseObject({
+  ...ObjectSchema1.entries,
+  ...ObjectSchema2.entries,
+});
+```
+
+### Mark keys as optional
+
+Schema to validate an object with partial entries.
+
+```ts
+const PartialObjectSchema = v.partial(
+  v.looseObject({
+    key1: v.string(),
+    key2: v.number(),
+  })
+);
+```
+
+### Object with selected entries
+
+Schema to validate only selected entries of a loose object.
+
+```ts
+const PickObjectSchema = v.pick(
+  v.looseObject({
+    key1: v.string(),
+    key2: v.number(),
+    key3: v.boolean(),
+  }),
+  ['key1', 'key3']
+);
+```
+
+## Related
+
+The following APIs can be combined with `looseObject`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'forward',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'omit',
+    'parse',
+    'parser',
+    'partial',
+    'pick',
+    'pipe',
+    'required',
+    'safeParse',
+    'safeParser',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>

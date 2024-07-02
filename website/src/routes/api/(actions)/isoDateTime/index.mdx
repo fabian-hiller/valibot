@@ -1,0 +1,66 @@
+---
+title: isoDateTime
+description: Creates an ISO date time validation action.
+source: /actions/isoDateTime/isoDateTime.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# isoDateTime
+
+Creates an [ISO date time](https://en.wikipedia.org/wiki/ISO_8601) validation action.
+
+Format: `yyyy-mm-ddThh:mm`
+
+> The regex used cannot validate the maximum number of days based on year and month. For example, "2023-06-31T00:00" is valid although June has only 30 days.
+
+```ts
+const Action = v.isoDateTime<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `isoDateTime` you can validate the formatting of a string. If the input is not an ISO date time, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `isoDateTime` can be used.
+
+### ISO date time schema
+
+Schema to validate an ISO date time.
+
+```ts
+const IsoDateTimeSchema = v.pipe(
+  v.string(),
+  v.isoDateTime('The date is badly formatted.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `isoDateTime`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

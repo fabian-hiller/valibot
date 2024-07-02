@@ -5,8 +5,21 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'RecordKey',
-      href: '../RecordKey/',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+      generics: [
+        'string',
+        {
+          type: 'union',
+          options: ['string', 'number', 'symbol'],
+        },
+        {
+          type: 'custom',
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
+        },
+      ],
     },
   },
   TValue: {
@@ -15,6 +28,37 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
+      generics: [
+        'unknown',
+        'unknown',
+        {
+          type: 'custom',
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
+        },
+      ],
+    },
+  },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'RecordIssue',
+              href: '../RecordIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
   key: {
@@ -31,45 +75,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'RecordOutput',
-              href: '../RecordOutput/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TKey',
-                },
-                {
-                  type: 'custom',
-                  name: 'TValue',
-                },
-              ],
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
   Schema: {
@@ -85,6 +92,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TValue',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },

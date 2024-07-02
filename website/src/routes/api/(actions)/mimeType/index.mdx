@@ -1,0 +1,64 @@
+---
+title: mimeType
+description: Creates a MIME type validation action.
+source: /actions/mimeType/mimeType.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# mimeType
+
+Creates a [MIME type](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/MIME_types) validation action.
+
+```ts
+const Action = v.mimeType<TInput, TRequirement, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `mimeType` you can validate the MIME type of a blob. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `mimeType` can be used.
+
+### Image schema
+
+Schema to validate an image file.
+
+```ts
+const ImageSchema = v.pipe(
+  v.blob(),
+  v.mimeType(['image/jpeg', 'image/png'], 'Please select a JPEG or PNG file.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `mimeType`.
+
+### Schemas
+
+<ApiList items={['any', 'blob', 'file', 'instance', 'special', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />

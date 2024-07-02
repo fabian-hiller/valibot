@@ -1,0 +1,60 @@
+---
+title: url
+description: Creates a pipeline validation action that validates a URL.
+source: /validations/url/url.ts
+contributors:
+  - depsimon
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# url
+
+Creates a pipeline validation action that validates a URL.
+
+> The value is passed to the URL constructor to check if it is valid. This check is not perfect. For example, values like "abc:1234" are accepted.
+
+```ts
+const Validation = url<TInput>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `url` you can validate the formatting of a URL. If the input is not a valid URL, you can use `message` to customize the error message.
+
+## Returns
+
+- `Validation` <Property {...properties.Validation} />
+
+## Examples
+
+The following examples show how `url` can be used.
+
+### URL schema
+
+Schema to validate an url.
+
+```ts
+const urlSchema = string([
+  url('The url is badly formatted.'),
+  startsWith('https://', 'The URL must be using HTTPS.'),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `url`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />

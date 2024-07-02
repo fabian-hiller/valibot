@@ -1,25 +1,122 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
-import { picklist } from './picklist.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import {
+  picklist,
+  type PicklistIssue,
+  type PicklistSchema,
+} from './picklist.ts';
 
 describe('picklist', () => {
-  test('should pass only picklist values', () => {
-    const schema = picklist(['value_1', 'value_2']);
-    const input1 = 'value_1';
-    const output1 = parse(schema, input1);
-    expect(output1).toBe(input1);
-    const input2 = 'value_2';
-    const output2 = parse(schema, input2);
-    expect(output2).toBe(input2);
-    expect(() => parse(schema, 123)).toThrowError();
-    expect(() => parse(schema, 'value_3')).toThrowError();
-    expect(() => parse(schema, {})).toThrowError();
+  const options = ['foo', 'bar', 'baz'] as const;
+  type Options = typeof options;
+
+  describe('should return schema object', () => {
+    const baseSchema: Omit<PicklistSchema<Options, never>, 'message'> = {
+      kind: 'schema',
+      type: 'picklist',
+      reference: picklist,
+      expects: '"foo" | "bar" | "baz"',
+      options,
+      async: false,
+      _run: expect.any(Function),
+    };
+
+    test('with undefined message', () => {
+      const schema: PicklistSchema<Options, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(picklist(options)).toStrictEqual(schema);
+      expect(picklist(options, undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(picklist(options, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies PicklistSchema<Options, 'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(picklist(options, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies PicklistSchema<Options, typeof message>);
+    });
   });
 
-  test('should throw custom error', () => {
-    const error = 'Value is not a picklist value!';
-    expect(() => parse(picklist(['value_1'], error), 'test')).toThrowError(
-      error
-    );
+  describe('should return dataset without issues', () => {
+    test('for valid options', () => {
+      expectNoSchemaIssue(picklist(options), ['foo', 'bar', 'baz']);
+    });
+  });
+
+  describe('should return dataset with issues', () => {
+    const schema = picklist(options, 'message');
+    const baseIssue: Omit<PicklistIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'picklist',
+      expected: '"foo" | "bar" | "baz"',
+      message: 'message',
+    };
+
+    // Special values
+
+    test('for empty options', () => {
+      expectSchemaIssue(
+        picklist([], 'message'),
+        { ...baseIssue, expected: 'never' },
+        ['foo', 'bar', 'baz']
+      );
+    });
+
+    test('for invalid options', () => {
+      expectSchemaIssue(schema, baseIssue, ['fo', 'fooo', 'foobar']);
+    });
+
+    // Primitive types
+
+    test('for bigints', () => {
+      expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
+    });
+
+    test('for booleans', () => {
+      expectSchemaIssue(schema, baseIssue, [true, false]);
+    });
+
+    test('for null', () => {
+      expectSchemaIssue(schema, baseIssue, [null]);
+    });
+
+    test('for numbers', () => {
+      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', () => {
+      expectSchemaIssue(schema, baseIssue, [undefined]);
+    });
+
+    test('for strings', () => {
+      expectSchemaIssue(schema, baseIssue, ['', 'hello', '123']);
+    });
+
+    test('for symbols', () => {
+      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    });
+
+    // Complex types
+
+    test('for arrays', () => {
+      expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    });
+
+    test('for functions', () => {
+      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    });
+
+    test('for objects', () => {
+      expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    });
   });
 });

@@ -10,27 +10,53 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'BaseSchema',
           href: '../BaseSchema/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
         },
         {
           type: 'custom',
           name: 'BaseSchemaAsync',
           href: '../BaseSchemaAsync/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
         },
       ],
     },
   },
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'NonOptionalOutput',
-      href: '../NonOptionalOutput/',
-      generics: [
+    type: {
+      type: 'union',
+      options: [
         {
           type: 'custom',
-          name: 'TWrapped',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'NonOptionalIssue',
+              href: '../NonOptionalIssue/',
+            },
+          ],
         },
+        'undefined',
       ],
     },
   },
@@ -42,8 +68,8 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'NonOptionalInput',
-          href: '../NonOptionalInput/',
+          name: 'InferNonOptionalInput',
+          href: '../InferNonOptionalInput/',
           generics: [
             {
               type: 'custom',
@@ -53,7 +79,35 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferNonOptionalOutput',
+          href: '../InferNonOptionalOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'NonOptionalIssue',
+              href: '../NonOptionalIssue/',
+            },
+            {
+              type: 'custom',
+              name: 'InferNonOptionalIssue',
+              href: '../InferNonOptionalIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TWrapped',
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -64,6 +118,20 @@ export const properties: Record<string, PropertyProps> = {
       value: 'non_optional',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'nonOptionalAsync',
+      href: '../nonOptionalAsync/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: '!undefined',
+    },
+  },
   wrapped: {
     type: {
       type: 'custom',
@@ -72,15 +140,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

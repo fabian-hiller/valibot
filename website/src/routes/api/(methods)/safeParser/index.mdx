@@ -1,0 +1,120 @@
+---
+title: safeParser
+description: Returns a function that parses an unknown input based on a schema.
+source: /methods/safeParser/safeParser.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# safeParser
+
+Returns a function that parses an unknown input based on a schema.
+
+```ts
+const safeParser = v.safeParser<TSchema, TConfig>(schema, config);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TConfig` <Property {...properties.TConfig} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `config` <Property {...properties.config} />
+
+## Returns
+
+- `safeParser` <Property {...properties.safeParser} />
+
+## Example
+
+The following example show how `safeParser` can be used.
+
+```ts
+const EmailSchema = v.pipe(v.string(), v.email());
+const safeEmailParser = v.safeParser(EmailSchema);
+const result = safeEmailParser('jane@example.com');
+
+if (result.success) {
+  const email = result.output;
+} else {
+  console.log(result.issues);
+}
+```
+
+## Related
+
+The following APIs can be combined with `safeParser`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'flatten',
+    'keyof',
+    'omit',
+    'partial',
+    'pick',
+    'pipe',
+    'required',
+    'unwrap',
+  ]}
+/>

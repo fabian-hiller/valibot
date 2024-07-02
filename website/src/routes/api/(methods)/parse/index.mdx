@@ -15,7 +15,7 @@ import { properties } from './properties';
 Parses an unknown input based on a schema.
 
 ```ts
-const output = parse<TSchema>(schema, input, config);
+const output = v.parse<TSchema>(schema, input, config);
 ```
 
 ## Generics
@@ -42,8 +42,8 @@ The following example show how `parse` can be used.
 
 ```ts
 try {
-  const EmailSchema = string([email()]);
-  const email = parse(EmailSchema, 'jane@example.com');
+  const EmailSchema = v.pipe(v.string(), v.email());
+  const email = v.parse(EmailSchema, 'jane@example.com');
 
   // Handle errors if one occurs
 } catch (error) {
@@ -64,36 +64,45 @@ The following APIs can be combined with `parse`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -101,16 +110,15 @@ The following APIs can be combined with `parse`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
+    'flatten',
     'keyof',
-    'merge',
     'omit',
     'partial',
     'pick',
+    'pipe',
     'required',
-    'transform',
     'unwrap',
   ]}
 />

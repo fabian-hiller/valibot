@@ -14,52 +14,58 @@ import { properties } from './properties';
 Forwards the issues of the passed validation action.
 
 ```ts
-const Validation = forward<TInput>(validation, pathList);
+const Action = v.forward<TInput, TIssue>(action, pathKeys);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TIssue` <Property {...properties.TIssue} />
 
 ## Parameters
 
-- `validation` <Property {...properties.validation} />
-- `pathList` <Property {...properties.pathList} />
+- `action` <Property {...properties.action} />
+- `pathKeys` <Property {...properties.pathKeys} />
 
 ### Explanation
 
-`forward` allows you to forward the issues of the passed `validation` action via a `pathList` to a nested field of a schema.
+`forward` allows you to forward the issues of the passed validation `action` via `pathKeys` to a nested field of a schema.
 
 ## Returns
 
-- `Validation` <Property {...properties.Validation} />
+- `Action` <Property {...properties.Action} />
 
 ## Examples
 
 The following examples show how `forward` can be used.
 
-### Password schema
+### Register schema
 
 Schema that ensures that the two passwords match.
 
 ```ts
-const PasswordSchema = object(
-  {
-    password1: string([
-      minLength(1, 'Please enter your password.'),
-      minLength(8, 'Your password must have 8 characters or more.'),
-    ]),
-    password2: string(),
-  },
-  [
-    forward(
-      custom(
-        (input) => input.password1 === input.password2,
-        'The two passwords do not match.'
-      ),
-      ['password2']
+const RegisterSchema = v.pipe(
+  v.object({
+    email: v.pipe(
+      v.string(),
+      v.nonEmpty('Please enter your email.'),
+      v.email('The email address is badly formatted.')
     ),
-  ]
+    password1: v.pipe(
+      v.string(),
+      v.nonEmpty('Please enter your password.'),
+      v.minLength(8, 'Your password must have 8 characters or more.')
+    ),
+    password2: v.string(),
+  }),
+  v.forward(
+    v.partialCheck(
+      [['password1'], ['password2']],
+      (input) => input.password1 === input.password2,
+      'The two passwords do not match.'
+    ),
+    ['password2']
+  )
 );
 ```
 
@@ -73,10 +79,16 @@ The following APIs can be combined with `forward`.
   items={[
     'any',
     'array',
+    'custom',
+    'looseObject',
+    'looseTuple',
     'object',
+    'objectWithRest',
     'record',
-    'special',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
     'unknown',
     'variant',
@@ -85,22 +97,30 @@ The following APIs can be combined with `forward`.
 
 ### Methods
 
-<ApiList
-  items={['merge', 'omit', 'partial', 'pick', 'required', 'transform']}
-/>
+<ApiList items={['omit', 'partial', 'pick', 'required']} />
 
-### Validations
+### Actions
 
 <ApiList
   items={[
-    'custom',
-    'every',
+    'check',
+    'checkItems',
+    'empty',
+    'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'includes',
     'length',
+    'mapItems',
     'maxLength',
     'minLength',
+    'nonEmpty',
     'notLength',
-    'some',
+    'partialCheck',
+    'rawCheck',
+    'reduceItems',
+    'someItem',
+    'sortItems',
   ]}
 />

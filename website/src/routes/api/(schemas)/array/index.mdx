@@ -16,26 +16,22 @@ import { properties } from './properties';
 Creates an array schema.
 
 ```ts
-// Array schema with an optional pipe
-const Schema = array<TItem>(item, pipe);
-
-// Array schema with an optional message and pipe
-const Schema = array<TItem>(item, message, pipe);
+const Schema = v.array<TItem, TMessage>(item, message);
 ```
 
 ## Generics
 
 - `TItem` <Property {...properties.TItem} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `item` <Property {...properties.item} />
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-With `array` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the array. If the input is not an array, you can use `message` to customize the error message.
+With `array` you can validate the data type of the input. If the input is not an array, you can use `message` to customize the error message.
 
 > If your array has a fixed length, consider using <Link href="../tuple/">`tuple`</Link> for a more precise typing.
 
@@ -52,7 +48,7 @@ The following examples show how `array` can be used.
 Schema to validate an array of strings.
 
 ```ts
-const StringArraySchema = array(string(), 'An array is required.');
+const StringArraySchema = v.array(v.string(), 'An array is required.');
 ```
 
 ### Object array schema
@@ -60,7 +56,7 @@ const StringArraySchema = array(string(), 'An array is required.');
 Schema to validate an array of objects.
 
 ```ts
-const ObjectArraySchema = array(object({ key: string() }));
+const ObjectArraySchema = v.array(v.object({ key: v.string() }));
 ```
 
 ### Validate length
@@ -68,7 +64,11 @@ const ObjectArraySchema = array(object({ key: string() }));
 Schema that validates the length of an array.
 
 ```ts
-const ArrayLengthSchema = array(number(), [minLength(1), maxLength(3)]);
+const ArrayLengthSchema = v.pipe(
+  v.array(v.number()),
+  v.minLength(1),
+  v.maxLength(3)
+);
 ```
 
 ### Validate content
@@ -76,7 +76,11 @@ const ArrayLengthSchema = array(number(), [minLength(1), maxLength(3)]);
 Schema that validates the content of an array.
 
 ```ts
-const ArrayContentSchema = array(string(), [includes('foo'), excludes('bar')]);
+const ArrayContentSchema = v.pipe(
+  v.array(v.string()),
+  v.includes('foo'),
+  v.excludes('bar')
+);
 ```
 
 ## Related
@@ -91,36 +95,45 @@ The following APIs can be combined with `array`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -128,8 +141,7 @@ The following APIs can be combined with `array`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -137,27 +149,39 @@ The following APIs can be combined with `array`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
-    'transform',
+    'safeParser',
   ]}
 />
 
-### Transformations
-
-<ApiList items={['toCustom']} />
-
-### Validations
+### Actions
 
 <ApiList
   items={[
-    'custom',
-    'every',
+    'check',
+    'checkItems',
+    'brand',
+    'empty',
+    'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'includes',
     'length',
+    'mapItems',
     'maxLength',
     'minLength',
+    'nonEmpty',
     'notLength',
-    'some',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'reduceItems',
+    'someItem',
+    'sortItems',
+    'transform',
   ]}
 />

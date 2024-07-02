@@ -1,32 +1,24 @@
-import type { SchemaIssue } from './issues.ts';
+import type { BaseIssue } from './issue.ts';
+import type { ErrorMessage } from './other.ts';
 
 /**
- * Error message type.
+ * Config type.
  */
-export type ErrorMessage = string | ((issue: SchemaIssue) => string);
-
-/**
- * The schema config type.
- */
-export interface SchemaConfig {
+export interface Config<TIssue extends BaseIssue<unknown>> {
   /**
    * The selected language.
    */
-  lang?: string;
+  readonly lang?: string;
   /**
    * The error message.
    */
-  message?: ErrorMessage;
+  readonly message?: ErrorMessage<TIssue>;
   /**
    * Whether it was abort early.
    */
-  abortEarly?: boolean;
+  readonly abortEarly?: boolean;
   /**
    * Whether the pipe was abort early.
    */
-  abortPipeEarly?: boolean;
-  /**
-   * Whether the pipe was skipped.
-   */
-  skipPipe?: boolean;
+  readonly abortPipeEarly?: boolean;
 }

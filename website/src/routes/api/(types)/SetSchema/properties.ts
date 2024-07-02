@@ -7,24 +7,40 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
-    },
-  },
-  TOutput: {
-    modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'SetOutput',
-      href: '../SetOutput/',
       generics: [
+        'unknown',
+        'unknown',
         {
           type: 'custom',
-          name: 'TValue',
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
         },
       ],
     },
   },
+  TMessage: {
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'SetIssue',
+              href: '../SetIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -32,8 +48,8 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'SetInput',
-          href: '../SetInput/',
+          name: 'InferSetInput',
+          href: '../InferSetInput/',
           generics: [
             {
               type: 'custom',
@@ -43,7 +59,35 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferSetOutput',
+          href: '../InferSetOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TValue',
+            },
+          ],
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'SetIssue',
+              href: '../SetIssue/',
+            },
+            {
+              type: 'custom',
+              name: 'InferIssue',
+              href: '../InferIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TValue',
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -54,6 +98,20 @@ export const properties: Record<string, PropertyProps> = {
       value: 'set',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'set',
+      href: '../set/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: 'Set',
+    },
+  },
   value: {
     type: {
       type: 'custom',
@@ -62,41 +120,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'SetOutput',
-              href: '../SetOutput/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TValue',
-                },
-              ],
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

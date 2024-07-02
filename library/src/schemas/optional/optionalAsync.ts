@@ -1,92 +1,134 @@
-import { getDefaultAsync } from '../../methods/index.ts';
+import { getDefault } from '../../methods/index.ts';
 import type {
+  BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
+  Dataset,
   DefaultAsync,
-  Input,
-  Output,
+  InferInput,
+  InferIssue,
 } from '../../types/index.ts';
-import { schemaResult } from '../../utils/index.ts';
+import type { InferOptionalOutput } from './types.ts';
 
 /**
  * Optional schema async type.
  */
 export interface OptionalSchemaAsync<
-  TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends DefaultAsync<TWrapped> = undefined,
-  TOutput = TDefault extends
-    | Input<TWrapped>
-    | (() => Input<TWrapped> | Promise<Input<TWrapped>>)
-    ? Output<TWrapped>
-    : Output<TWrapped> | undefined,
-> extends BaseSchemaAsync<Input<TWrapped> | undefined, TOutput> {
+  TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  TDefault extends DefaultAsync<TWrapped, undefined>,
+> extends BaseSchemaAsync<
+    InferInput<TWrapped> | undefined,
+    InferOptionalOutput<TWrapped, TDefault>,
+    InferIssue<TWrapped>
+  > {
   /**
    * The schema type.
    */
-  type: 'optional';
+  readonly type: 'optional';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof optionalAsync;
+  /**
+   * The expected property.
+   */
+  readonly expects: `${TWrapped['expects']} | undefined`;
   /**
    * The wrapped schema.
    */
-  wrapped: TWrapped;
+  readonly wrapped: TWrapped;
   /**
-   * Returns the default value.
+   * The default value.
    */
-  default: TDefault;
+  readonly default: TDefault;
 }
 
 /**
- * Creates an async optional schema.
+ * Creates an optional schema.
  *
  * @param wrapped The wrapped schema.
  *
- * @returns An async optional schema.
+ * @returns An optional schema.
  */
-export function optionalAsync<TWrapped extends BaseSchema | BaseSchemaAsync>(
-  wrapped: TWrapped
-): OptionalSchemaAsync<TWrapped>;
+export function optionalAsync<
+  const TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+>(wrapped: TWrapped): OptionalSchemaAsync<TWrapped, never>;
 
 /**
- * Creates an async optional schema.
+ * Creates an optional schema.
  *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
  *
- * @returns An async optional schema.
+ * @returns An optional schema.
  */
 export function optionalAsync<
-  TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends DefaultAsync<TWrapped>,
+  const TWrapped extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TDefault extends DefaultAsync<TWrapped, undefined>,
 >(
   wrapped: TWrapped,
   default_: TDefault
 ): OptionalSchemaAsync<TWrapped, TDefault>;
 
-export function optionalAsync<
-  TWrapped extends BaseSchema | BaseSchemaAsync,
-  TDefault extends DefaultAsync<TWrapped> = undefined,
->(
-  wrapped: TWrapped,
-  default_?: TDefault
-): OptionalSchemaAsync<TWrapped, TDefault> {
-  return {
+export function optionalAsync(
+  wrapped:
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  ...args: unknown[]
+): OptionalSchemaAsync<
+  | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  unknown
+> {
+  // Create schema object
+  // @ts-expect-error
+  const schema: OptionalSchemaAsync<
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+    unknown
+  > = {
+    kind: 'schema',
     type: 'optional',
+    reference: optionalAsync,
     expects: `${wrapped.expects} | undefined`,
     async: true,
     wrapped,
-    default: default_ as TDefault,
-    async _parse(input, config) {
-      // If input is `undefined`, return typed schema result or override it
-      // with default value
-      if (input === undefined) {
-        const override = await getDefaultAsync(this);
-        if (override === undefined) {
-          return schemaResult(true, input);
+    async _run(dataset, config) {
+      // If value is `undefined`, override it with default or return dataset
+      if (dataset.value === undefined) {
+        // If default is specified, override value of dataset
+        if ('default' in this) {
+          dataset.value = await getDefault(
+            this,
+            dataset as Dataset<undefined, never>,
+            config
+          );
         }
-        input = override;
+
+        // If value is still `undefined`, return dataset
+        if (dataset.value === undefined) {
+          dataset.typed = true;
+          return dataset;
+        }
       }
 
-      // Otherwise, return result of wrapped schema
-      return this.wrapped._parse(input, config);
+      // Otherwise, return dataset of wrapped schema
+      return this.wrapped._run(dataset, config);
     },
   };
+
+  // Add default if specified
+  if (0 in args) {
+    // @ts-expect-error
+    schema.default = args[0];
+  }
+
+  // Return schema object
+  return schema;
 }

@@ -17,7 +17,7 @@ Hello, I am Valibot and I would like to help you validate data easily using a sc
 - Small bundle size starting at less than 600 bytes
 - Validate everything from strings to complex objects
 - Open source and fully tested with 100 % coverage
-- Many transformation and validation helpers included
+- Many transformation and validation actions included
 - Well structured source code without dependencies
 - Minimal, readable and well thought out API
 
@@ -27,22 +27,22 @@ First you create a schema that describes a structured data set. A schema can be 
 
 <!-- prettier-ignore -->
 ```ts
-import { email, minLength, object, type Output, parse, string } from 'valibot'; // 1.54 kB
+import * as v from 'valibot'; // 1.21 kB
 
 // Create login schema with email and password
-const LoginSchema = object({
-  email: string([email()]),
-  password: string([minLength(8)]),
+const LoginSchema = v.object({
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
 });
 
 // Infer output TypeScript type of login schema
-type LoginData = Output<typeof LoginSchema>; // { email: string; password: string }
+type LoginData = v.InferOutput<typeof LoginSchema>; // { email: string; password: string }
 
 // Throws error for `email` and `password`
-parse(LoginSchema, { email: '', password: '' });
+v.parse(LoginSchema, { email: '', password: '' });
 
 // Returns data as { email: string; password: string }
-parse(LoginSchema, { email: 'jane@example.com', password: '12345678' });
+v.parse(LoginSchema, { email: 'jane@example.com', password: '12345678' });
 ```
 
 Apart from `parse` I also offer a non-exception-based API with `safeParse` and a type guard function with `is`. You can read more about it [here](https://valibot.dev/guides/parse-data/).

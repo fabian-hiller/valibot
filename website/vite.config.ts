@@ -16,6 +16,7 @@ export default defineConfig(() => {
         },
         mdx: {
           rehypePlugins: [
+            // @ts-expect-error
             rehypePrism,
             [rehypeExternalLinks, { rel: 'noreferrer', target: '_blank' }],
           ],

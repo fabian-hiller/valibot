@@ -1,53 +1,40 @@
 ---
 title: pick
 description: >-
-  Creates an object schema that contains only the selected keys of an existing 
-  schema.
+  Creates a modified copy of an object schema that contains only the selected
+  entries.
 source: /methods/pick/pick.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
 # pick
 
-Creates an object schema that contains only the selected keys of an existing schema.
+Creates a modified copy of an object schema that contains only the selected entries.
 
 ```ts
-// Object schema with an optional pipe
-const Schema = pick<TSchema, TKeys>(schema, keys, pipe);
-
-// Object schema with an optional message and pipe
-const Schema = pick<TSchema, TKeys>(schema, keys, message, pipe);
-
-// Object schema with rest and optional pipe
-const Schema = pick<TSchema, TKeys, TRest>(schema, keys, rest, pipe);
-
-// Object schema with rest and optional message and pipe
-const Schema = pick<TSchema, TKeys, TRest>(schema, keys, rest, message, pipe);
+const Schema = v.pick<TSchema, TKeys>(schema, keys);
 ```
 
 ## Generics
 
 - `TSchema` <Property {...properties.TSchema} />
 - `TKeys` <Property {...properties.TKeys} />
-- `TRest` <Property {...properties.TRest} />
 
 ## Parameters
 
 - `schema` <Property {...properties.schema} />
 - `keys` <Property {...properties.keys} />
-- `rest` <Property {...properties.rest} />
-- `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-`pick` creates a new object schema that containing only the selected `keys` of the given object `schema`. It is similar to TypeScript's [`Pick`](https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys) utility type.
+`pick` creates modified copy of the given object `schema` that containing only the selected `keys`. It is similar to TypeScript's [`Pick`](https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys) utility type.
 
-> Note that `rest`, `message` and `pipe` of the passed schema are completely ignored and must be added again.
+> Because `pick` changes the data type of the input and output, it is not allowed to pass a schema that has been modified by the <Link href='../pipe/'>`pipe`</Link> method, as this may cause runtime errors. Please use the <Link href='../pipe/'>`pipe`</Link> method after you have modified the schema with `pick`.
 
 ## Returns
 
@@ -62,13 +49,14 @@ The following examples show how `pick` can be used.
 Schema that contains only the selected keys of an existing schema.
 
 ```ts
-const ObjectSchema = object({
-  key1: string(),
-  key2: number(),
-  key3: boolean(),
-});
-
-const PickSchema = pick(ObjectSchema, ['key1', 'key2']);
+const PickedSchema = v.pick(
+  object({
+    key1: string(),
+    key2: number(),
+    key3: boolean(),
+  }),
+  ['key1', 'key3']
+); // { key1: string; key3: boolean }
 ```
 
 ## Related
@@ -79,41 +67,27 @@ The following APIs can be combined with `pick`.
 
 <ApiList
   items={[
-    'any',
     'array',
-    'bigint',
-    'blob',
-    'boolean',
-    'date',
-    'enum_',
-    'instance',
     'intersect',
     'lazy',
-    'literal',
+    'looseObject',
+    'looseTuple',
     'map',
-    'nan',
-    'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
     'nullable',
     'nullish',
-    'number',
     'object',
+    'objectWithRest',
     'optional',
-    'picklist',
     'record',
     'set',
-    'special',
-    'string',
-    'symbol',
+    'strictObject',
+    'strictTuple',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
     'union',
-    'unknown',
-    'variant',
-    'void_',
   ]}
 />
 
@@ -121,8 +95,7 @@ The following APIs can be combined with `pick`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'forward',
     'getDefault',
@@ -131,21 +104,27 @@ The following APIs can be combined with `pick`.
     'getFallbacks',
     'is',
     'keyof',
-    'merge',
     'omit',
     'parse',
+    'parser',
     'partial',
     'required',
     'safeParse',
-    'transform',
+    'safeParser',
     'unwrap',
   ]}
 />
 
-### Transformations
+### Actions
 
-<ApiList items={['toCustom']} />
-
-### Validations
-
-<ApiList items={['custom']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>

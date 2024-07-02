@@ -4,9 +4,37 @@ export const properties: Record<string, PropertyProps> = {
   TSchema: {
     modifier: 'extends',
     type: {
-      type: 'custom',
-      name: 'SchemaWithMaybeFallback',
-      href: '../SchemaWithMaybeFallback/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'BaseSchema',
+          href: '../BaseSchema/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              generics: ['unknown'],
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'BaseSchemaAsync',
+          href: '../BaseSchemaAsync/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              generics: ['unknown'],
+            },
+          ],
+        },
+      ],
     },
   },
   schema: {
@@ -15,14 +43,59 @@ export const properties: Record<string, PropertyProps> = {
       name: 'TSchema',
     },
   },
-  info: {
+  dataset: {
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'FallbackInfo',
-          href: '../FallbackInfo/',
+          name: 'Dataset',
+          generics: [
+            {
+              type: 'custom',
+              name: 'InferOutput',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TSchema',
+                },
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'InferIssue',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TSchema',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
+  config: {
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'Config',
+          generics: [
+            {
+              type: 'custom',
+              name: 'InferIssue',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TSchema',
+                },
+              ],
+            },
+          ],
         },
         'undefined',
       ],
@@ -31,8 +104,8 @@ export const properties: Record<string, PropertyProps> = {
   value: {
     type: {
       type: 'custom',
-      name: 'FallbackValue',
-      href: '../FallbackValue/',
+      name: 'InferFallback',
+      href: '../InferFallback/',
       generics: [
         {
           type: 'custom',

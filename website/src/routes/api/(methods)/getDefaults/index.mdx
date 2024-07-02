@@ -14,10 +14,10 @@ import { properties } from './properties';
 
 Returns the default values of the schema.
 
-> The difference to <Link href='../getDefault/'>`getDefault`</Link> is that for objects and tuples without an explicit default value, this function recursively returns the default values of the subschemas instead of `undefined`.
+> The difference to <Link href='../getDefault/'>`getDefault`</Link> is that for object and tuple schemas this function recursively returns the default values of the subschemas instead of `undefined`.
 
 ```ts
-const values = getDefaults<TSchema>(schema);
+const values = v.getDefaults<TSchema>(schema);
 ```
 
 ## Generics
@@ -41,8 +41,11 @@ The following examples show how `getDefaults` can be used.
 Get the default values of an object schema.
 
 ```ts
-const ObjectSchema = object({ key: optional(string(), "I'm the default!") });
-const defaultValues = getDefaults(ObjectSchema); // { key: "I'm the default!" }
+const ObjectSchema = v.object({
+  key: v.optional(v.string(), "I'm the default!"),
+});
+
+const defaultValues = v.getDefaults(ObjectSchema); // { key: "I'm the default!" }
 ```
 
 ### Tuple defaults
@@ -50,8 +53,8 @@ const defaultValues = getDefaults(ObjectSchema); // { key: "I'm the default!" }
 Get the default values of a tuple schema.
 
 ```ts
-const TupleSchema = tuple([nullable(number(), 100)]);
-const defaultValues = getDefaults(TupleSchema); // [100]
+const TupleSchema = v.tuple([v.nullable(v.number(), 100)]);
+const defaultValues = v.getDefaults(TupleSchema); // [100]
 ```
 
 ## Related
@@ -67,36 +70,45 @@ The following APIs can be combined with `getDefaults`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -104,15 +116,14 @@ The following APIs can be combined with `getDefaults`.
 
 <ApiList
   items={[
-    'coerce',
+    'config',
     'fallback',
     'keyof',
-    'merge',
     'omit',
     'partial',
     'pick',
+    'pipe',
     'required',
-    'transform',
     'unwrap',
   ]}
 />

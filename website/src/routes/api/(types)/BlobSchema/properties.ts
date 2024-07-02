@@ -1,15 +1,29 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'Blob',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'BlobIssue',
+              href: '../BlobIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -21,7 +35,12 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'Blob',
+        },
+        {
+          type: 'custom',
+          name: 'BlobIssue',
+          href: '../BlobIssue/',
         },
       ],
     },
@@ -32,36 +51,24 @@ export const properties: Record<string, PropertyProps> = {
       value: 'blob',
     },
   },
-  message: {
+  reference: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'blob',
+      href: '../blob/',
     },
   },
-  pipe: {
+  expects: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'Blob',
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'string',
+      value: 'Blob',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'BlobIssue',
     },
   },
 };

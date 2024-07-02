@@ -15,21 +15,20 @@ import { properties } from './properties';
 Creates a date schema.
 
 ```ts
-// Date schema with an optional pipe
-const Schema = date(pipe);
-
-// Date schema with an optional message and pipe
-const Schema = date(message, pipe);
+const Schema = v.date<TMessage>(message);
 ```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-With `date` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the date. If the input is not a date, you can use `message` to customize the error message.
+With `date` you can validate the data type of the input. If the input is not a date, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -44,7 +43,7 @@ The following examples show how `date` can be used.
 Schema that forces a minimum date of today.
 
 ```ts
-const MinDateSchema = date([toMinValue(new Date())]);
+const MinDateSchema = v.pipe(v.date(), v.toMinValue(new Date()));
 ```
 
 ### Validate range
@@ -52,10 +51,11 @@ const MinDateSchema = date([toMinValue(new Date())]);
 Schema that validates a date in a range.
 
 ```ts
-const DateRangeSchema = date([
-  minValue(new Date(2019, 0, 1)),
-  maxValue(new Date(2020, 0, 1)),
-]);
+const DateRangeSchema = v.pipe(
+  v.date(),
+  v.minValue(new Date(2019, 0, 1)),
+  v.maxValue(new Date(2020, 0, 1))
+);
 ```
 
 ## Related
@@ -69,6 +69,8 @@ The following APIs can be combined with `date`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -76,10 +78,14 @@ The following APIs can be combined with `date`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -88,8 +94,7 @@ The following APIs can be combined with `date`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -97,15 +102,28 @@ The following APIs can be combined with `date`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
-    'transform',
+    'safeParser',
   ]}
 />
 
-### Transformations
+### Actions
 
-<ApiList items={['toCustom', 'toMaxValue', 'toMinValue']} />
-
-### Validations
-
-<ApiList items={['custom', 'maxValue', 'minValue', 'notValue', 'value']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'maxValue',
+    'minValue',
+    'notValue',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'toMaxValue',
+    'toMinValue',
+    'transform',
+    'value',
+  ]}
+/>

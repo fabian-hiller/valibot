@@ -1,25 +1,69 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult, stringify } from '../../utils/index.ts';
-import type { Literal } from './types.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue, _stringify } from '../../utils/index.ts';
+
+/**
+ * Literal type.
+ */
+export type Literal = bigint | boolean | number | string | symbol;
+
+/**
+ * Literal issue type.
+ */
+export interface LiteralIssue extends BaseIssue<unknown> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'schema';
+  /**
+   * The issue type.
+   */
+  readonly type: 'literal';
+  /**
+   * The expected property.
+   */
+  readonly expected: string;
+}
 
 /**
  * Literal schema type.
  */
-export interface LiteralSchema<TLiteral extends Literal, TOutput = TLiteral>
-  extends BaseSchema<TLiteral, TOutput> {
+export interface LiteralSchema<
+  TLiteral extends Literal,
+  TMessage extends ErrorMessage<LiteralIssue> | undefined,
+> extends BaseSchema<TLiteral, TLiteral, LiteralIssue> {
   /**
    * The schema type.
    */
-  type: 'literal';
+  readonly type: 'literal';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof literal;
   /**
    * The literal value.
    */
-  literal: TLiteral;
+  readonly literal: TLiteral;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
+  readonly message: TMessage;
 }
+
+/**
+ * Creates a literal schema.
+ *
+ * @param literal_ The literal value.
+ *
+ * @returns A literal schema.
+ */
+export function literal<const TLiteral extends Literal>(
+  literal_: TLiteral
+): LiteralSchema<TLiteral, undefined>;
 
 /**
  * Creates a literal schema.
@@ -29,24 +73,30 @@ export interface LiteralSchema<TLiteral extends Literal, TOutput = TLiteral>
  *
  * @returns A literal schema.
  */
-export function literal<TLiteral extends Literal>(
-  literal_: TLiteral,
-  message?: ErrorMessage
-): LiteralSchema<TLiteral> {
+export function literal<
+  const TLiteral extends Literal,
+  const TMessage extends ErrorMessage<LiteralIssue> | undefined,
+>(literal_: TLiteral, message: TMessage): LiteralSchema<TLiteral, TMessage>;
+
+export function literal(
+  literal_: Literal,
+  message?: ErrorMessage<LiteralIssue>
+): LiteralSchema<Literal, ErrorMessage<LiteralIssue> | undefined> {
   return {
+    kind: 'schema',
     type: 'literal',
-    expects: stringify(literal_),
+    reference: literal,
+    expects: _stringify(literal_),
     async: false,
     literal: literal_,
     message,
-    _parse(input, config) {
-      // If type is valid, return schema result
-      if (input === this.literal) {
-        return schemaResult(true, input as TLiteral);
+    _run(dataset, config) {
+      if (dataset.value === this.literal) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
-
-      // Otherwise, return schema issue
-      return schemaIssue(this, literal, input, config);
+      return dataset as Dataset<Literal, LiteralIssue>;
     },
   };
 }

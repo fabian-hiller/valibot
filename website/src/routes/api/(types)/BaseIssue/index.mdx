@@ -1,0 +1,31 @@
+---
+title: BaseIssue
+description: Schema issue type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# BaseIssue
+
+Schema issue type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Definition
+
+- `BaseIssue` <Property {...properties.Config} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
+  - `input` <Property {...properties.input} />
+  - `expected` <Property {...properties.expected} />
+  - `received` <Property {...properties.received} />
+  - `message` <Property {...properties.message} />
+  - `requirement` <Property {...properties.requirement} />
+  - `path` <Property {...properties.path} />
+  - `issues` <Property {...properties.issues} />

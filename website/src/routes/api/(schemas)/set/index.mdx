@@ -14,26 +14,22 @@ import { properties } from './properties';
 Creates a set schema.
 
 ```ts
-// Set schema with an optional pipe
-const Schema = set<TValue>(value, pipe);
-
-// Set schema with an optional message and pipe
-const Schema = set<TValue>(value, message, pipe);
+const Schema = v.set<TValue, TMessage>(value, message);
 ```
 
 ## Generics
 
 - `TValue` <Property {...properties.TValue} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `value` <Property {...properties.value} />
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-With `set` you can validate the data type of the input and whether the content matches `value`. With `pipe` you can transform and validate the further details of the set. If the input is not a set, you can use `message` to customize the error message.
+With `set` you can validate the data type of the input and whether the content matches `value`. If the input is not a set, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -48,7 +44,7 @@ The following examples show how `set` can be used.
 Schema to validate a set with string values.
 
 ```ts
-const StringSetSchema = set(string());
+const StringSetSchema = v.set(v.string());
 ```
 
 ### Object set schema
@@ -56,7 +52,7 @@ const StringSetSchema = set(string());
 Schema to validate a set with object values.
 
 ```ts
-const ObjectSetSchema = set(object({ key: string() }));
+const ObjectSetSchema = v.set(v.object({ key: v.string() }));
 ```
 
 ## Related
@@ -72,35 +68,44 @@ The following APIs can be combined with `set`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -108,8 +113,7 @@ The following APIs can be combined with `set`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -117,15 +121,26 @@ The following APIs can be combined with `set`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
-    'transform',
+    'safeParser',
   ]}
 />
 
-### Transformations
+### Actions
 
-<ApiList items={['toCustom']} />
-
-### Validations
-
-<ApiList items={['custom', 'maxSize', 'minSize', 'notSize', 'size']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'maxSize',
+    'minSize',
+    'notSize',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'size',
+    'transform',
+  ]}
+/>

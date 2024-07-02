@@ -1,4 +1,4 @@
-import { Language } from './types';
+import type { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
@@ -7,13 +7,14 @@ const language: Language = {
   specific: {
     bic:            (issue) => `유효하지 않은 사업자 식별코드(BIC): ${issue.received} 을(를) 받았습니다`,
     bytes:          (issue) => `유효하지 않은 바이트: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
+    check:          (issue) => `유효하지 않은 입력: ${issue.received} 을(를) 받았습니다`,
+    checkAsync:     (issue) => `유효하지 않은 입력: ${issue.received} 을(를) 받았습니다`,
     creditCard:     (issue) => `유효하지 않은 신용카드: ${issue.received} 을(를) 받았습니다`,
     cuid2:          (issue) => `유효하지 않은 Cuid2: ${issue.received} 을(를) 받았습니다`,
-    custom:         (issue) => `유효하지 않은 입력: ${issue.received} 을(를) 받았습니다`,
-    customAsync:    (issue) => `유효하지 않은 입력: ${issue.received} 을(를) 받았습니다`,
     decimal:        (issue) => `유효하지 않은 십진수: ${issue.received} 을(를) 받았습니다`,
     email:          (issue) => `유효하지 않은 이메일: ${issue.received} 을(를) 받았습니다`,
     emoji:          (issue) => `유효하지 않은 이모지: ${issue.received} 을(를) 받았습니다`,
+    empty:          (issue) => `유효하지 않은 길이: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
     endsWith:       (issue) => `유효하지 않은 끝: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
     excludes:       (issue) => `유효하지 않은 컨텐츠: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
     finite:         (issue) => `유효하지 않은 유한 숫자: ${issue.received} 을(를) 받았습니다`,
@@ -46,6 +47,7 @@ const language: Language = {
     minSize:        (issue) => `유효하지 않은 크기: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
     minValue:       (issue) => `유효하지 않은 값: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
     multipleOf:     (issue) => `유효하지 않은 배수: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
+    nonEmpty:       (issue) => `유효하지 않은 길이: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
     notBytes:       (issue) => `유효하지 않은 바이트: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
     notLength:      (issue) => `유효하지 않은 길이: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,
     notSize:        (issue) => `유효하지 않은 크기: ${issue.expected} 을(를) 예상했으나 ${issue.received} 을(를) 받았습니다`,

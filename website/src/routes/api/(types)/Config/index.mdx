@@ -1,0 +1,25 @@
+---
+title: Config
+description: Schema config type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# Config
+
+Config type.
+
+## Generics
+
+- `TIssue` <Property {...properties.TIssue} />
+
+## Definition
+
+- `Config`
+  - `lang` <Property {...properties.lang} />
+  - `message` <Property {...properties.message} />
+  - `abortEarly` <Property {...properties.abortEarly} />
+  - `abortPipeEarly` <Property {...properties.abortPipeEarly} />
