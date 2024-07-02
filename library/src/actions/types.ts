@@ -20,6 +20,8 @@ export type ContentRequirement<TInput extends ContentInput> =
 
 /**
  * Length input type.
+ *
+ * TODO: Should we change `unknown[]` to `ArrayLike<unknown>`?
  */
 export type LengthInput = string | unknown[];
 
