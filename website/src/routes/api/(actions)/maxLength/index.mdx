@@ -1,10 +1,81 @@
 ---
 title: maxLength
+description: Creates a max length validation action.
 source: /actions/maxLength/maxLength.ts
 contributors:
   - fabian-hiller
+  - depsimon
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # maxLength
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/actions/maxLength/maxLength.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a max length validation action.
+
+```ts
+const Action = v.maxLength<TInput, TRequirement, TMessage>(
+  requirement,
+  message
+);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `maxLength` you can validate the length of a string or array. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `maxLength` can be used.
+
+### Maximum string length
+
+Schema to validate a string with a maximum length of 32 characters.
+
+```ts
+const MaxStringSchema = v.pipe(
+  v.string(),
+  v.maxLength(32, 'The string must not exceed 32 characters.')
+);
+```
+
+### Maximum array length
+
+Schema to validate an array with a maximum length of 5 items.
+
+```ts
+const MaxArraySchema = v.pipe(
+  v.array(v.number()),
+  v.maxLength(5, 'The array must not exceed 5 numbers.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `maxLength`.
+
+### Schemas
+
+<ApiList
+  items={['any', 'array', 'instance', 'special', 'string', 'tuple', 'unknown']}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
