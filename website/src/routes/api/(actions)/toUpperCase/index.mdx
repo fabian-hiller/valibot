@@ -1,10 +1,46 @@
 ---
 title: toUpperCase
+description: Creates a to upper case transformation action.
 source: /actions/toUpperCase/toUpperCase.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # toUpperCase
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/actions/toUpperCase/toUpperCase.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a to upper case transformation action.
+
+```ts
+const Action = v.toUpperCase();
+```
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `toUpperCase` can be used.
+
+### Lower case string
+
+Schema that transforms a string to upper case.
+
+```ts
+const StringSchema = v.pipe(v.string(), v.toUpperCase());
+```
+
+## Related
+
+The following APIs can be combined with `toUpperCase`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
