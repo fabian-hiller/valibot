@@ -134,7 +134,7 @@
 - [safeInteger](/api/safeInteger/)
 - [size](/api/size/)
 - [someItem](/api/someItem/)
-- [sortItem](/api/sortItem/)
+- [sortItems](/api/sortItems/)
 - [startsWith](/api/startsWith/)
 - [toLowerCase](/api/toLowerCase/)
 - [toMaxValue](/api/toMaxValue/)
@@ -209,7 +209,9 @@
 ## Types
 
 - [AnySchema](/api/AnySchema/)
+- [ArrayInput](/api/ArrayInput/)
 - [ArrayPathItem](/api/ArrayPathItem/)
+- [ArrayRequirement](/api/ArrayRequirement/)
 - [ArraySchema](/api/ArraySchema/)
 - [BaseIssue](/api/BaseIssue/)
 - [BaseSchema](/api/BaseSchema/)

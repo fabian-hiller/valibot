@@ -1,9 +1,10 @@
 import type { BaseTransformation } from '../../types/index.ts';
+import type { ArrayInput } from '../types.ts';
 
 /**
  * Array action type.
  */
-type ArrayAction<TInput extends readonly unknown[]> = (
+type ArrayAction<TInput extends ArrayInput> = (
   itemA: TInput[number],
   itemB: TInput[number]
 ) => number;
@@ -11,7 +12,7 @@ type ArrayAction<TInput extends readonly unknown[]> = (
 /**
  * Sort items action type.
  */
-export interface SortItemsAction<TInput extends readonly unknown[]>
+export interface SortItemsAction<TInput extends ArrayInput>
   extends BaseTransformation<TInput, TInput, never> {
   /**
    * The action type.
@@ -34,7 +35,7 @@ export interface SortItemsAction<TInput extends readonly unknown[]>
  *
  * @returns A sort items action.
  */
-export function sortItems<TInput extends readonly unknown[]>(
+export function sortItems<TInput extends ArrayInput>(
   operation?: ArrayAction<TInput>
 ): SortItemsAction<TInput>;
 

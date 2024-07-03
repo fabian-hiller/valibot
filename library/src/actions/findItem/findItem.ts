@@ -1,10 +1,10 @@
 import type { BaseTransformation, TypedDataset } from '../../types/index.ts';
-import type { ArrayRequirement } from '../types.ts';
+import type { ArrayInput, ArrayRequirement } from '../types.ts';
 
 /**
  * Find item action type.
  */
-export interface FindItemAction<TInput extends readonly unknown[]>
+export interface FindItemAction<TInput extends ArrayInput>
   extends BaseTransformation<TInput, TInput[number] | undefined, never> {
   /**
    * The action type.
@@ -27,7 +27,7 @@ export interface FindItemAction<TInput extends readonly unknown[]>
  *
  * @returns A find item action.
  */
-export function findItem<TInput extends readonly unknown[]>(
+export function findItem<TInput extends ArrayInput>(
   operation: ArrayRequirement<TInput>
 ): FindItemAction<TInput>;
 

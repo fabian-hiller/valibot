@@ -147,6 +147,8 @@ export interface ObjectPathItem {
 
 /**
  * Set path item type.
+ *
+ * TODO: Should we add `key: undefined` to make working with path keys easier?
  */
 export interface SetPathItem {
   /**

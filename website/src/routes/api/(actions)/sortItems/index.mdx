@@ -1,0 +1,58 @@
+---
+title: sortItems
+description: Creates a sort items transformation action.
+source: /actions/sortItems/sortItems.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# sortItems
+
+Creates a sort items transformation action.
+
+```ts
+const Action = v.sortItems<TInput>(operation);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `operation` <Property {...properties.operation} />
+
+### Explanation
+
+With `sortItems` you can sort the items of an array based on a custom `operation`. This is a function that takes two items and returns a number. If the number is less than 0, the first item is sorted before the second item. If the number is greater than 0, the second item is sorted before the first. If the number is 0, the order of the items is not changed.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `sortItems` can be used.
+
+### Sort numbers
+
+Schema that sorts the numbers in an array in ascending order.
+
+```ts
+const SortedArraySchema = v.pipe(v.array(v.number()), v.sortItems());
+```
+
+## Related
+
+The following APIs can be combined with `sortItems`.
+
+### Schemas
+
+<ApiList items={['any', 'array', 'instance', 'special', 'tuple', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
