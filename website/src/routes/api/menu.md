@@ -167,6 +167,10 @@
 ## Utils
 
 - [entriesFromList](/api/entriesFromList/)
+- [getDotPath](/api/getDotPath/)
+- [isOfKind](/api/isOfKind/)
+- [isOfType](/api/isOfType/)
+- [isValiError](/api/isValiError/)
 - [ValiError](/api/ValiError/)
 
 ## Async
