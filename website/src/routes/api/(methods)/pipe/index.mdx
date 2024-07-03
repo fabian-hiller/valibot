@@ -32,6 +32,8 @@ const Schema = v.pipe<TSchema, TItems>(schema, ...items);
 
 `pipe` creates a modified copy of the given `schema`, containing a pipeline for detailed validations and transformations. It passes the input data synchronously through the `items` in the order they are provided and each item can examine and modify it.
 
+> Since `pipe` returns a schema that can be used as the first argument of another pipeline, it is possible to nest multiple `pipe` calls to extend the validation and transformation further.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
