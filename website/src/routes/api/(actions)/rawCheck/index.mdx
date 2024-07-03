@@ -37,14 +37,14 @@ With `rawCheck` you can freely validate the input with a custom `action` and add
 
 The following examples show how `rawCheck` can be used.
 
-### Complex object
+### Emails schema
 
 Object schema that ensures that the primary email is not the same as any of the other emails.
 
 > This `rawCheck` validation action adds an issue for any invalid other email and forwards it via `path` to the appropriate nested field.
 
 ```ts
-const ObjectSchema = v.pipe(
+const EmailsSchema = v.pipe(
   v.object({
     primaryEmail: v.pipe(v.string(), v.email()),
     otherEmails: v.array(v.pipe(v.string(), v.email())),
