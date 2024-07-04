@@ -1,10 +1,23 @@
 ---
 title: deleteSpecificMessage
+description: Deletes a specific error message.
 source: /storages/specificMessage/specificMessage.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Property } from '~/components';
+import { properties } from './properties';
+
 # deleteSpecificMessage
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/storages/specificMessage/specificMessage.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Deletes a specific error message.
+
+```ts
+v.deleteSpecificMessage(reference, lang);
+```
+
+## Parameters
+
+- `reference` <Property {...properties.reference} />
+- `lang` <Property {...properties.lang} />
