@@ -35,29 +35,31 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      name: 'FunctionReference',
-      href: '../FunctionReference/',
-      generics: [
+      type: 'function',
+      params: [
         {
-          type: 'array',
-          item: 'any',
-        },
-        {
-          type: 'custom',
-          name: 'BaseValidation',
-          generics: [
-            'unknown',
-            'unknown',
-            {
-              type: 'custom',
-              name: 'BaseIssue',
-              href: '../BaseIssue/',
-              generics: ['unknown'],
-            },
-          ],
+          name: 'args',
+          spread: true,
+          type: {
+            type: 'array',
+            item: 'any',
+          },
         },
       ],
+      return: {
+        type: 'custom',
+        name: 'BaseValidation',
+        generics: [
+          'unknown',
+          'unknown',
+          {
+            type: 'custom',
+            name: 'BaseIssue',
+            href: '../BaseIssue/',
+            generics: ['unknown'],
+          },
+        ],
+      },
     },
   },
   async: {

@@ -1,7 +1,6 @@
 import type { Config } from './config.ts';
 import type { Dataset, TypedDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
-import type { FunctionReference } from './other.ts';
 
 /**
  * Base transformation type.
@@ -22,11 +21,10 @@ export interface BaseTransformation<
   /**
    * The transformation reference.
    */
-  readonly reference: FunctionReference<
+  readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    any[],
-    BaseTransformation<unknown, unknown, BaseIssue<unknown>>
-  >;
+    ...args: any[]
+  ) => BaseTransformation<unknown, unknown, BaseIssue<unknown>>;
   /**
    * Whether it's async.
    */
@@ -71,12 +69,12 @@ export interface BaseTransformationAsync<
   /**
    * The transformation reference.
    */
-  readonly reference: FunctionReference<
+  readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    any[],
+    ...args: any[]
+  ) =>
     | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
-    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>
-  >;
+    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>;
   /**
    * Whether it's async.
    */

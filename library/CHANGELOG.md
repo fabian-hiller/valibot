@@ -7,6 +7,7 @@ All notable changes to the library will be documented in this file.
 - Add support for async schemas to `entriesFromList` util
 - Add support for numbers and symbols to `entriesFromList` util (issue #492)
 - Add `key` property to `SetPathItem` type to improve DX (issue #693, #694)
+- Remove `FunctionReference` type and refactor code
 
 ## v0.35.0 (June 25, 2024)
 
