@@ -1,4 +1,8 @@
-import type { BaseIssue, BaseSchema } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  BaseSchemaAsync,
+} from '../../types/index.ts';
 
 /**
  * Creates a object entries definition from a list of keys and a schema.
@@ -9,8 +13,10 @@ import type { BaseIssue, BaseSchema } from '../../types/index.ts';
  * @returns The object entries.
  */
 export function entriesFromList<
-  const TList extends readonly string[],
-  const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  const TList extends readonly (string | number | symbol)[],
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 >(list: TList, schema: TSchema): Record<TList[number], TSchema> {
   // @ts-expect-error
   const entries: Record<TList[number], TSchema> = {};

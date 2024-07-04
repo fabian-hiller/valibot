@@ -2,6 +2,11 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add support for async schemas to `entriesFromList` util
+- Add support for numbers and symbols to `entriesFromList` util (issue #492)
+
 ## v0.35.0 (June 25, 2024)
 
 - Increase argument limit of `pipe` and `pipeAsync` method (issue #643)
