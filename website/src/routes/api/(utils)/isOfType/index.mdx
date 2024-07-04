@@ -1,10 +1,32 @@
 ---
 title: isOfType
+description: A generic type guard to check the type of an object.
 source: /utils/isOfType/isOfType.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Property } from '~/components';
+import { properties } from './properties';
+
 # isOfType
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/utils/isOfType/isOfType.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+A generic type guard to check the type of an object.
+
+```ts
+const result = v.isOfType<TType, TObject>(type, object);
+```
+
+## Generics
+
+- `TType` <Property {...properties.TType} />
+- `TObject` <Property {...properties.TObject} />
+
+## Parameters
+
+- `type` <Property {...properties.type} />
+- `object` <Property {...properties.object} />
+
+## Returns
+
+- `result` <Property {...properties.result} />

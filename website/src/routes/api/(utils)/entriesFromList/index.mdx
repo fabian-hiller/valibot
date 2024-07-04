@@ -1,10 +1,96 @@
 ---
 title: entriesFromList
+description: Creates an object entries definition from a list of keys and a schema.
 source: /utils/entriesFromList/entriesFromList.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # entriesFromList
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/utils/entriesFromList/entriesFromList.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates an object entries definition from a list of keys and a schema.
+
+```ts
+const entries = v.entriesFromList<TList, TSchema>(list, schema);
+```
+
+## Generics
+
+- `TList` <Property {...properties.TList} />
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `list` <Property {...properties.list} />
+- `schema` <Property {...properties.schema} />
+
+## Returns
+
+- `entries` <Property {...properties.entries} />
+
+## Examples
+
+The following example show how `entriesFromList` can be used.
+
+```ts
+const ObjectSchema = v.object(
+  v.entriesFromList(['foo', 'bar', 'baz'], v.string())
+);
+```
+
+## Related
+
+The following APIs can be combined with `entriesFromList`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined',
+    'union',
+    'unionWithRest',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>

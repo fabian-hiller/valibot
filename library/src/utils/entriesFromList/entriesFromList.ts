@@ -5,7 +5,7 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Creates a object entries definition from a list of keys and a schema.
+ * Creates an object entries definition from a list of keys and a schema.
  *
  * @param list A list of keys.
  * @param schema The schema of the keys.

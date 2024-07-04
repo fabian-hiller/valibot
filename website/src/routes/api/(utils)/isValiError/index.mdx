@@ -1,10 +1,30 @@
 ---
 title: isValiError
+description: A type guard to check if an error is a ValiError.
 source: /utils/isValiError/isValiError.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Property } from '~/components';
+import { properties } from './properties';
+
 # isValiError
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/utils/isValiError/isValiError.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+A type guard to check if an error is a ValiError.
+
+```ts
+const result = v.isValiError<TSchema>(error);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `error` <Property {...properties.error} />
+
+## Returns
+
+- `result` <Property {...properties.result} />

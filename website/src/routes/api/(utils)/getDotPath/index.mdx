@@ -1,10 +1,30 @@
 ---
 title: getDotPath
+description: Creates and returns the dot path of an issue if possible.
 source: /utils/getDotPath/getDotPath.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Property } from '~/components';
+import { properties } from './properties';
+
 # getDotPath
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/utils/getDotPath/getDotPath.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates and returns the dot path of an issue if possible.
+
+```ts
+const dotPath = v.getDotPath<TSchema>(issue);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `issue` <Property {...properties.issue} />
+
+## Returns
+
+- `dotPath` <Property {...properties.dotPath} />
