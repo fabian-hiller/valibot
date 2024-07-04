@@ -30,6 +30,7 @@ describe('getDotPath', () => {
             type: 'set',
             origin: 'value',
             input: new Set(['foo', 123, 'baz', null]),
+            key: null,
             value: 123,
           },
         ],
