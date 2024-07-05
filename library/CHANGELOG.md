@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.36.0 (July 05, 2024)
 
 - Add `normalize` action to normalize strings (issue #691)
 - Add support for async schemas to `entriesFromList` util
