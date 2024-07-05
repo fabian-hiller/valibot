@@ -4,44 +4,40 @@ export const properties: Record<string, PropertyProps> = {
   TItem: {
     modifier: 'extends',
     type: {
-      type: "union",
+      type: 'union',
       options: [
         {
-          type: "custom",
+          type: 'custom',
           name: 'BaseSchema',
-          href: "../BaseSchema",
+          href: '../BaseSchema',
           generics: [
-            "unknown",
-            "unknown",
+            'unknown',
+            'unknown',
             {
-              type: "custom",
-              name: "BaseIssue",
-              href: "../BaseIssue",
-              generics: [
-                "unknown"
-              ]
-            }
-          ]
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue',
+              generics: ['unknown'],
+            },
+          ],
         },
         {
-          type: "custom",
+          type: 'custom',
           name: 'BaseSchemaAsync',
-          href: "../BaseSchemaAsync",
+          href: '../BaseSchemaAsync',
           generics: [
-            "unknown",
-            "unknown",
+            'unknown',
+            'unknown',
             {
-              type: "custom",
-              name: "BaseIssue",
-              href: "../BaseIssue",
-              generics: [
-                "unknown"
-              ]
-            }
-          ]
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue',
+              generics: ['unknown'],
+            },
+          ],
         },
-      ]
-    }
+      ],
+    },
   },
   TMessage: {
     modifier: 'extends',
