@@ -4,6 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `normalize` action to normalize strings (issue #691)
 - Add support for async schemas to `entriesFromList` util
 - Add support for numbers and symbols to `entriesFromList` util (issue #492)
 - Add `key` property to `SetPathItem` type to improve DX (issue #693, #694)

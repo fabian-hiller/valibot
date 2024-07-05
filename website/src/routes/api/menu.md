@@ -120,6 +120,7 @@
 - [minValue](/api/minValue/)
 - [multipleOf](/api/multipleOf/)
 - [nonEmpty](/api/nonEmpty/)
+- [normalize](/api/normalize/)
 - [notBytes](/api/notBytes/)
 - [notLength](/api/notLength/)
 - [notSize](/api/notSize/)
