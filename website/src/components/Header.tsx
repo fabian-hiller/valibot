@@ -128,7 +128,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
             !isOpen.value && 'invisible scale-y-0 lg:visible lg:scale-y-100',
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             (isOpen.value && 'bg-white dark:bg-gray-900') ||
-              (windowScrolled.value && 'bg-white/90  dark:bg-gray-900/90'),
+              (windowScrolled.value && 'bg-white/90 dark:bg-gray-900/90'),
             isOpen.value || windowScrolled.value
               ? 'border-b-slate-200 dark:border-b-slate-800'
               : 'border-b-transparent'
