@@ -49,12 +49,13 @@ Schema to validate an array of stored emails.
 ```ts
 import { isEmailPresent } from '~/api';
 
-const StoredEmailSchema = v.pipeAsync(
-  v.string(),
-  v.email(),
-  v.checkAsync(isEmailPresent, 'stored email required.')
+const StoredEmailsSchema = v.arrayAsync(
+  v.pipeAsync(
+    v.string(),
+    v.email(),
+    v.checkAsync(isEmailPresent, 'The email is not in the database.')
+  )
 );
-const StoredEmailsSchema = v.arrayAsync(StoredEmailSchema);
 ```
 
 ### Profile array schema
@@ -69,7 +70,7 @@ const ProfileSchema = v.objectAsync({
     v.string(),
     v.checkAsync(
       isUsernameAvailable,
-      'username taken. different username required.'
+      'The username is already in use by another user.'
     )
   ),
   avatar: v.pipe(v.string(), v.url()),
