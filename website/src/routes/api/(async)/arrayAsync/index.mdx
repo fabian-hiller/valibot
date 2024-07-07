@@ -15,7 +15,7 @@ import { properties } from './properties';
 Creates an array async schema.
 
 ```ts
-const SchemaAsync = v.arrayAsync<TItem, TMessage>(item, message);
+const Schema = v.arrayAsync<TItem, TMessage>(item, message);
 ```
 
 ## Generics
@@ -42,47 +42,39 @@ With `arrayAsync` you can validate the data type of the input asynchronously. If
 
 The following examples show how `arrayAsync` can be used.
 
-### String array async schema
+### Stored emails schema
 
-Schema to validate an array of strings asynchronously.
+Schema to validate an array of stored emails.
 
 ```ts
-const StringArraySchemaAsync = v.arrayAsync(
+import { isEmailPresent } from '~/api';
+
+const StoredEmailSchema = v.pipeAsync(
   v.string(),
-  'An array is required.'
+  v.email(),
+  v.checkAsync(isEmailPresent, 'stored email required.')
 );
+const StoredEmailsSchema = v.arrayAsync(StoredEmailSchema);
 ```
 
-### Object array async schema
+### Profile array schema
 
-Schema to validate an array of objects asynchronously.
-
-```ts
-const ObjectArraySchemaAsync = v.arrayAsync(v.object({ key: v.string() }));
-```
-
-### Validate length
-
-Schema that validates the length of an array asynchronously.
+Schema to validate an array of profiles.
 
 ```ts
-const ArrayLengthSchemaAsync = v.pipeAsync(
-  v.arrayAsync(v.number()),
-  v.minLength(1),
-  v.maxLength(3)
-);
-```
+import { isUsernameAvailable } from '~/api';
 
-### Validate content
-
-Schema that validates the content of an array asynchronously.
-
-```ts
-const ArrayContentSchemaAsync = v.pipeAsync(
-  v.arrayAsync(v.string()),
-  v.includes('foo'),
-  v.excludes('bar')
-);
+const ProfileSchema = v.objectAsync({
+  username: v.pipeAsync(
+    v.string(),
+    v.checkAsync(
+      isUsernameAvailable,
+      'username taken. different username required.'
+    )
+  ),
+  avatar: v.pipe(v.string(), v.url()),
+});
+const ProfilesSchema = v.arrayAsync(ProfileSchema);
 ```
 
 ## Related
