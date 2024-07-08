@@ -218,6 +218,7 @@
 - [ArrayPathItem](/api/ArrayPathItem/)
 - [ArrayRequirement](/api/ArrayRequirement/)
 - [ArraySchema](/api/ArraySchema/)
+- [ArraySchemaAsync](/api/ArraySchemaAsync/)
 - [BaseIssue](/api/BaseIssue/)
 - [BaseSchema](/api/BaseSchema/)
 - [BaseSchemaAsync](/api/BaseSchemaAsync/)
