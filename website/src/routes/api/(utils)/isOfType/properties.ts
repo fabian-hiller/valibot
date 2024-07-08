@@ -6,14 +6,14 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'custom',
       name: 'TObject',
-      indexes: [{ type: 'string', value: 'kind' }],
+      indexes: [{ type: 'string', value: 'type' }],
     },
   },
   TObject: {
     modifier: 'extends',
     type: {
       type: 'object',
-      entries: [{ key: 'kind', value: 'string' }],
+      entries: [{ key: 'type', value: 'string' }],
     },
   },
   type: {
