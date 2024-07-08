@@ -1,9 +1,10 @@
 ---
 title: arrayAsync
+description: Creates an array schema.
 source: /schemas/array/arrayAsync.ts
 contributors:
-  - fabian-hiller
   - EltonLobo07
+  - fabian-hiller
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -12,7 +13,7 @@ import { properties } from './properties';
 
 # arrayAsync
 
-Creates an array async schema.
+Creates an array schema.
 
 ```ts
 const Schema = v.arrayAsync<TItem, TMessage>(item, message);
@@ -30,7 +31,7 @@ const Schema = v.arrayAsync<TItem, TMessage>(item, message);
 
 ### Explanation
 
-With `arrayAsync` you can validate the data type of the input asynchronously. If the input is not an array, you can use `message` to customize the error message.
+With `arrayAsync` you can validate the data type of the input. If the input is not an array, you can use `message` to customize the error message.
 
 > If your array has a fixed length, consider using <Link href="../tupleAsync/">`tupleAsync`</Link> for a more precise typing.
 
@@ -56,26 +57,6 @@ const StoredEmailsSchema = v.arrayAsync(
     v.checkAsync(isEmailPresent, 'The email is not in the database.')
   )
 );
-```
-
-### Profile array schema
-
-Schema to validate an array of profiles.
-
-```ts
-import { isUsernameAvailable } from '~/api';
-
-const ProfileSchema = v.objectAsync({
-  username: v.pipeAsync(
-    v.string(),
-    v.checkAsync(
-      isUsernameAvailable,
-      'The username is already in use by another user.'
-    )
-  ),
-  avatar: v.pipe(v.string(), v.url()),
-});
-const ProfilesSchema = v.arrayAsync(ProfileSchema);
 ```
 
 ## Related
@@ -174,7 +155,11 @@ The following APIs can be combined with `arrayAsync`.
 
 <ApiList
   items={[
+    'checkAsync',
     'customAsync',
+    'fallbackAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
     'intersectAsync',
     'lazyAsync',
     'looseObjectAsync',
@@ -188,26 +173,22 @@ The following APIs can be combined with `arrayAsync`.
     'objectAsync',
     'objectWithRestAsync',
     'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialCheckAsync',
+    'pipeAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
     'recordAsync',
+    'safeParseAsync',
+    'safeParserAsync',
     'setAsync',
     'strictObjectAsync',
     'strictTupleAsync',
+    'transformAsync',
     'tupleAsync',
     'tupleWithRestAsync',
     'unionAsync',
     'variantAsync',
-    'fallbackAsync',
-    'getDefaultsAsync',
-    'getFallbacksAsync',
-    'parseAsync',
-    'parserAsync',
-    'pipeAsync',
-    'safeParseAsync',
-    'safeParserAsync',
-    'checkAsync',
-    'partialCheckAsync',
-    'rawCheckAsync',
-    'rawTransformAsync',
-    'transformAsync',
   ]}
 />
