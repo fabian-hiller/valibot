@@ -65,7 +65,7 @@ type BinaryTree = {
   right: BinaryTree | null;
 };
 
-const BinaryTreeSchema: v.GenericSchema<BinaryTree> = v.object({
+const BinaryTreeSchema: v.GenericSchema<unknown, BinaryTree> = v.object({
   element: v.string(),
   left: v.nullable(v.lazy(() => BinaryTreeSchema)),
   right: v.nullable(v.lazy(() => BinaryTreeSchema)),
