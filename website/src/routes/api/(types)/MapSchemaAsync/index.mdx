@@ -1,0 +1,30 @@
+---
+title: MapSchemaAsync
+description: Map schema async type.
+contributors:
+  - EltonLobo07
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# MapSchemaAsync
+
+Map schema async type.
+
+## Generics
+
+- `TKey` <Property {...properties.TKey} />
+- `TValue` <Property {...properties.TValue} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `MapSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `key` <Property {...properties.key} />
+  - `value` <Property {...properties.value} />
+  - `message` <Property {...properties.message} />
