@@ -316,6 +316,7 @@
 - [MaxBytesAction](/api/MaxBytesAction/)
 - [MaxSizeAction](/api/MaxSizeAction/)
 - [MaxValueAction](/api/MaxValueAction/)
+- [MaybePromise](/api/MaybePromise/)
 - [MaybeReadonly](/api/MaybeReadonly/)
 - [MimeTypeAction](/api/MimeTypeAction/)
 - [MinBytesAction](/api/MinBytesAction/)
