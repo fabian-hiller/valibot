@@ -313,6 +313,7 @@
 - [MacAction](/api/MacAction/)
 - [MapPathItem](/api/MapPathItem/)
 - [MapSchema](/api/MapSchema/)
+- [MapSchemaAsync](/api/MapSchemaAsync/)
 - [MaxBytesAction](/api/MaxBytesAction/)
 - [MaxSizeAction](/api/MaxSizeAction/)
 - [MaxValueAction](/api/MaxValueAction/)
