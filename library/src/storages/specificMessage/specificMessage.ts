@@ -7,23 +7,22 @@ import type {
   BaseValidation,
   BaseValidationAsync,
   ErrorMessage,
-  FunctionReference,
   InferIssue,
 } from '../../types/index.ts';
 
 /**
  * Reference type.
  */
-type Reference = FunctionReference<
+type Reference = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any[],
+  ...args: any[]
+) =>
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
   | BaseValidation<unknown, unknown, BaseIssue<unknown>>
   | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
   | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
-  | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>
->;
+  | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>;
 
 // Create specific message store
 let store:

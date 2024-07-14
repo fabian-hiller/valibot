@@ -85,6 +85,7 @@ The following APIs can be combined with `blob`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -92,8 +93,10 @@ The following APIs can be combined with `blob`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
     'pipe',
     'safeParse',
+    'safeParser',
   ]}
 />
 
@@ -107,8 +110,14 @@ The following APIs can be combined with `blob`.
     'mimeType',
     'minSize',
     'notSize',
+    'rawCheck',
+    'rawTransform',
     'readonly',
     'size',
     'transform',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

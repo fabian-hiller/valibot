@@ -4,12 +4,12 @@ import type {
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
-import type { ArrayRequirement } from '../types.ts';
+import type { ArrayInput, ArrayRequirement } from '../types.ts';
 
 /**
  * Some item issue type.
  */
-export interface SomeItemIssue<TInput extends readonly unknown[]>
+export interface SomeItemIssue<TInput extends ArrayInput>
   extends BaseIssue<TInput> {
   /**
    * The issue kind.
@@ -33,7 +33,7 @@ export interface SomeItemIssue<TInput extends readonly unknown[]>
  * Some item action type.
  */
 export interface SomeItemAction<
-  TInput extends readonly unknown[],
+  TInput extends ArrayInput,
   TMessage extends ErrorMessage<SomeItemIssue<TInput>> | undefined,
 > extends BaseValidation<TInput, TInput, SomeItemIssue<TInput>> {
   /**
@@ -65,7 +65,7 @@ export interface SomeItemAction<
  *
  * @returns A some item action.
  */
-export function someItem<TInput extends readonly unknown[]>(
+export function someItem<TInput extends ArrayInput>(
   requirement: ArrayRequirement<TInput>
 ): SomeItemAction<TInput, undefined>;
 
@@ -78,7 +78,7 @@ export function someItem<TInput extends readonly unknown[]>(
  * @returns A some item action.
  */
 export function someItem<
-  TInput extends readonly unknown[],
+  TInput extends ArrayInput,
   const TMessage extends ErrorMessage<SomeItemIssue<TInput>> | undefined,
 >(
   requirement: ArrayRequirement<TInput>,

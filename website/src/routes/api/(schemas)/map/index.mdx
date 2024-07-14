@@ -73,6 +73,8 @@ The following APIs can be combined with `map`.
     'custom',
     'date',
     'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -92,6 +94,7 @@ The following APIs can be combined with `map`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -112,6 +115,7 @@ The following APIs can be combined with `map`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -119,8 +123,10 @@ The following APIs can be combined with `map`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
     'pipe',
     'safeParse',
+    'safeParser',
   ]}
 />
 
@@ -133,8 +139,14 @@ The following APIs can be combined with `map`.
     'maxSize',
     'minSize',
     'notSize',
+    'rawCheck',
+    'rawTransform',
     'readonly',
     'size',
     'transform',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

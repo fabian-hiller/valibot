@@ -1,5 +1,5 @@
 ---
-title: Mac48Validation
+title: Mac48Action
 description: 48-bit MAC action type.
 contributors:
   - fabian-hiller
@@ -8,16 +8,20 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# Mac48Validation
+# Mac48Action
 
 48-bit MAC action type.
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `Mac48Validation` <Property {...properties.BaseValidation} />
+- `Mac48Action` <Property {...properties.BaseValidation} />
   - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
   - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

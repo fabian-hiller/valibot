@@ -14,7 +14,7 @@ import { properties } from './properties';
 Forwards the issues of the passed validation action.
 
 ```ts
-const Action = v.forward<TInput, TIssue>(action, pathList);
+const Action = v.forward<TInput, TIssue>(action, pathKeys);
 ```
 
 ## Generics
@@ -25,11 +25,11 @@ const Action = v.forward<TInput, TIssue>(action, pathList);
 ## Parameters
 
 - `action` <Property {...properties.action} />
-- `pathList` <Property {...properties.pathList} />
+- `pathKeys` <Property {...properties.pathKeys} />
 
 ### Explanation
 
-`forward` allows you to forward the issues of the passed validation `action` via a `pathList` to a nested field of a schema.
+`forward` allows you to forward the issues of the passed validation `action` via `pathKeys` to a nested field of a schema.
 
 ## Returns
 
@@ -104,15 +104,27 @@ The following APIs can be combined with `forward`.
 <ApiList
   items={[
     'check',
+    'checkItems',
     'empty',
     'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'includes',
     'length',
+    'mapItems',
     'maxLength',
     'minLength',
     'nonEmpty',
     'notLength',
+    'partialCheck',
+    'rawCheck',
+    'reduceItems',
     'someItem',
+    'sortItems',
   ]}
 />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

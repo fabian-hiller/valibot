@@ -98,6 +98,8 @@ The following APIs can be combined with `array`.
     'custom',
     'date',
     'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -118,6 +120,7 @@ The following APIs can be combined with `array`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -138,6 +141,7 @@ The following APIs can be combined with `array`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -145,8 +149,10 @@ The following APIs can be combined with `array`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
     'pipe',
     'safeParse',
+    'safeParser',
   ]}
 />
 
@@ -155,18 +161,31 @@ The following APIs can be combined with `array`.
 <ApiList
   items={[
     'check',
+    'checkItems',
     'brand',
     'empty',
     'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'includes',
     'length',
+    'mapItems',
     'maxLength',
     'minLength',
     'nonEmpty',
     'notLength',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
     'readonly',
+    'reduceItems',
     'someItem',
+    'sortItems',
     'transform',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

@@ -4,9 +4,9 @@ export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
     type: {
-      type: 'array',
-      modifier: 'readonly',
-      item: 'unknown',
+      type: 'custom',
+      name: 'ArrayInput',
+      href: '../ArrayInput/',
     },
   },
   TMessage: {
@@ -21,8 +21,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'SomeIssue',
-              href: '../SomeIssue/',
+              name: 'SomeItemIssue',
+              href: '../SomeItemIssue/',
               generics: [
                 {
                   type: 'custom',
@@ -38,29 +38,15 @@ export const properties: Record<string, PropertyProps> = {
   },
   requirement: {
     type: {
-      type: 'function',
-      params: [
+      type: 'custom',
+      name: 'ArrayRequirement',
+      href: '../ArrayRequirement/',
+      generics: [
         {
-          name: 'item',
-          type: {
-            type: 'custom',
-            name: 'TInput',
-            indexes: ['number'],
-          },
-        },
-        {
-          name: 'index',
-          type: 'number',
-        },
-        {
-          name: 'array',
-          type: {
-            type: 'custom',
-            name: 'TInput',
-          },
+          type: 'custom',
+          name: 'TInput',
         },
       ],
-      return: 'boolean',
     },
   },
   message: {
@@ -72,8 +58,8 @@ export const properties: Record<string, PropertyProps> = {
   Action: {
     type: {
       type: 'custom',
-      name: 'SomeAction',
-      href: '../SomeAction/',
+      name: 'SomeItemAction',
+      href: '../SomeItemAction/',
       generics: [
         {
           type: 'custom',

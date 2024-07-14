@@ -344,12 +344,14 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
       class={clsx(
         open.value && 'fixed left-0 top-0 z-40 h-screen w-screen lg:p-48'
       )}
-      ref={modalElement}
       window:onKeyDown$={[preventDefault, handleKeyDown]}
     >
       {open.value && (
         <>
-          <div class="flex h-full w-full flex-col bg-white/90 backdrop-blur-sm lg:mx-auto lg:h-auto lg:max-h-full lg:max-w-3xl lg:rounded-3xl lg:bg-white lg:backdrop-blur-none dark:bg-gray-900/90 lg:dark:bg-gray-900">
+          <div
+            class="flex h-full w-full flex-col bg-white/90 backdrop-blur-sm lg:mx-auto lg:h-auto lg:max-h-full lg:max-w-3xl lg:rounded-3xl lg:bg-white lg:backdrop-blur-none dark:bg-gray-900/90 lg:dark:bg-gray-900"
+            ref={modalElement}
+          >
             {/* Header */}
             <header class="flex h-14 flex-shrink-0 items-center px-2 md:h-16 lg:h-[72px] lg:px-4">
               <form class="flex flex-1" preventdefault:submit>

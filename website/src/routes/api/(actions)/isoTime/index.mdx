@@ -13,6 +13,8 @@ import { properties } from './properties';
 
 Creates an [ISO time](https://en.wikipedia.org/wiki/ISO_8601) validation action.
 
+Format: `hh:mm`
+
 ```ts
 const Action = v.isoTime<TInput, TMessage>(message);
 ```
@@ -60,3 +62,7 @@ The following APIs can be combined with `isoTime`.
 ### Methods
 
 <ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

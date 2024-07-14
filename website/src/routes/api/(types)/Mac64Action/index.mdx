@@ -1,5 +1,5 @@
 ---
-title: Mac64Validation
+title: Mac64Action
 description: 64-bit MAC action type.
 contributors:
   - fabian-hiller
@@ -8,16 +8,20 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# Mac64Validation
+# Mac64Action
 
 64-bit MAC action type.
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `Mac64Validation` <Property {...properties.BaseValidation} />
+- `Mac64Action` <Property {...properties.BaseValidation} />
   - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
   - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

@@ -60,6 +60,7 @@ The following APIs can be combined with `any`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -67,8 +68,10 @@ The following APIs can be combined with `any`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
     'pipe',
     'safeParse',
+    'safeParser',
   ]}
 />
 
@@ -80,6 +83,7 @@ The following APIs can be combined with `any`.
     'brand',
     'bytes',
     'check',
+    'checkItems',
     'creditCard',
     'cuid2',
     'decimal',
@@ -89,6 +93,8 @@ The following APIs can be combined with `any`.
     'endsWith',
     'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'finite',
     'hash',
     'hexadecimal',
@@ -109,6 +115,7 @@ The following APIs can be combined with `any`.
     'mac',
     'mac48',
     'mac64',
+    'mapItems',
     'maxBytes',
     'maxLength',
     'maxSize',
@@ -125,11 +132,16 @@ The following APIs can be combined with `any`.
     'notSize',
     'notValue',
     'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
     'readonly',
+    'reduceItems',
     'regex',
     'safeInteger',
     'size',
     'someItem',
+    'sortItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',
@@ -145,3 +157,7 @@ The following APIs can be combined with `any`.
     'value',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

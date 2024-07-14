@@ -10,9 +10,6 @@ export const properties: Record<string, PropertyProps> = {
       generics: ['unknown'],
     },
   },
-  Config: {
-    type: 'object',
-  },
   lang: {
     type: {
       type: 'union',
@@ -45,12 +42,6 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   abortPipeEarly: {
-    type: {
-      type: 'union',
-      options: ['boolean', 'undefined'],
-    },
-  },
-  skipPipe: {
     type: {
       type: 'union',
       options: ['boolean', 'undefined'],

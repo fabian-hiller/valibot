@@ -105,6 +105,7 @@ export function set(
               type: 'set',
               origin: 'value',
               input,
+              key: null,
               value: inputValue,
             };
 

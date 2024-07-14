@@ -110,6 +110,7 @@ The following APIs can be combined with `required`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'forward',
     'getDefault',
@@ -120,13 +121,29 @@ The following APIs can be combined with `required`.
     'omit',
     'keyof',
     'parse',
+    'parser',
     'partial',
     'pick',
     'safeParse',
+    'safeParser',
     'unwrap',
   ]}
 />
 
 ### Actions
 
-<ApiList items={['check', 'brand', 'readonly', 'transform']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

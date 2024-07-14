@@ -75,6 +75,8 @@ The following APIs can be combined with `nonNullish`.
     'custom',
     'date',
     'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -94,6 +96,7 @@ The following APIs can be combined with `nonNullish`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -114,6 +117,7 @@ The following APIs can be combined with `nonNullish`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -121,12 +125,28 @@ The following APIs can be combined with `nonNullish`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
     'pipe',
     'safeParse',
+    'safeParser',
     'unwrap',
   ]}
 />
 
 ### Actions
 
-<ApiList items={['check', 'brand', 'readonly', 'transform']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

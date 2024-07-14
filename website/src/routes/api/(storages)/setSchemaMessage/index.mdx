@@ -1,10 +1,23 @@
 ---
 title: setSchemaMessage
+description: Sets a schema error message.
 source: /storages/schemaMessage/schemaMessage.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Property } from '~/components';
+import { properties } from './properties';
+
 # setSchemaMessage
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/storages/schemaMessage/schemaMessage.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Sets a schema error message.
+
+```ts
+v.setSchemaMessage(message, lang);
+```
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+- `lang` <Property {...properties.lang} />

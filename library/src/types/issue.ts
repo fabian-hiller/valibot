@@ -164,6 +164,10 @@ export interface SetPathItem {
   /**
    * The path item key.
    */
+  readonly key: null;
+  /**
+   * The path item key.
+   */
   readonly value: unknown;
 }
 
@@ -207,7 +211,7 @@ export type IssuePathItem =
   | UnknownPathItem;
 
 /**
- * Schema issue type.
+ * Base issue type.
  */
 export interface BaseIssue<TInput> extends Config<BaseIssue<TInput>> {
   /**

@@ -33,7 +33,7 @@ const Schema = v.object({ key: v.string() });
 
 ## Restructure code
 
-One of the biggest differences between Zod and Valibot is the way you further validate a given type. In Zod, you chain methods like `.email` and `.endsWith`. In Valibot you use <Link href="../pipelines/">pipelines</Link> to do the same thing. This is a function that starts with a schema and is followed by up to 9 validation or transformation actions.
+One of the biggest differences between Zod and Valibot is the way you further validate a given type. In Zod, you chain methods like `.email` and `.endsWith`. In Valibot you use <Link href="../pipelines/">pipelines</Link> to do the same thing. This is a function that starts with a schema and is followed by up to 19 validation or transformation actions.
 
 ```ts
 // Change this

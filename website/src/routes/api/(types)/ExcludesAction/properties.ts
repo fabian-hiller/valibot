@@ -4,45 +4,58 @@ export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
-        'string',
-        {
-          type: 'array',
-          item: 'any',
-        },
-      ],
+      type: 'custom',
+      name: 'ContentInput',
+      href: '../ContentInput/',
     },
   },
   TRequirement: {
     modifier: 'extends',
     type: {
-      type: 'conditional',
-      conditions: [
+      type: 'custom',
+      name: 'ContentRequirement',
+      href: '../ContentRequirement/',
+      generics: [
         {
-          type: {
-            type: 'custom',
-            name: 'TInput',
-            indexes: ['number'],
-          },
-          extends: {
-            type: 'array',
-            item: 'any',
-          },
-          true: {
-            type: 'custom',
-            name: 'TInput',
-            indexes: ['number'],
-          },
+          type: 'custom',
+          name: 'TInput',
         },
       ],
-      false: {
-        type: 'custom',
-        name: 'TInput',
-      },
+    },
+  },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'ExcludesIssue',
+              href: '../ExcludesIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+                {
+                  type: 'custom',
+                  name: 'TRequirement',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
   BaseValidation: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseValidation',
@@ -51,6 +64,25 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'ExcludesIssue',
+          href: '../ExcludesIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+            {
+              type: 'custom',
+              name: 'TRequirement',
+            },
+          ],
         },
       ],
     },
@@ -61,10 +93,27 @@ export const properties: Record<string, PropertyProps> = {
       value: 'excludes',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'excludes',
+      href: '../excludes/',
+    },
+  },
+  expects: {
+    type: 'string',
+  },
   requirement: {
     type: {
       type: 'custom',
       name: 'TRequirement',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

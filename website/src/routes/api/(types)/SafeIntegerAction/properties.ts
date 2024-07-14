@@ -5,7 +5,35 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'number',
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'SafeIntegerIssue',
+              href: '../SafeIntegerIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   BaseValidation: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseValidation',
@@ -14,6 +42,21 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'SafeIntegerIssue',
+          href: '../SafeIntegerIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+          ],
         },
       ],
     },
@@ -24,19 +67,33 @@ export const properties: Record<string, PropertyProps> = {
       value: 'safe_integer',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'safeInteger',
+      href: '../safeInteger/',
+    },
+  },
+  expects: {
+    type: 'null',
+  },
   requirement: {
     type: {
       type: 'function',
       params: [
         {
           name: 'input',
-          type: {
-            type: 'custom',
-            name: 'TInput',
-          },
+          type: 'number',
         },
       ],
       return: 'boolean',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

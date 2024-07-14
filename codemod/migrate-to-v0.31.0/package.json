@@ -11,6 +11,6 @@
   "devDependencies": {
     "@codemod.com/workflow": "^0.0.3",
     "@types/node": "20.9.0",
-    "typescript": "5.2.2"
+    "typescript": "5.5.3"
   }
 }

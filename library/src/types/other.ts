@@ -24,14 +24,6 @@ export type ErrorMessage<TIssue extends BaseIssue<unknown>> =
   | string;
 
 /**
- * Function reference type.
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type FunctionReference<TArgs extends any[], TReturn> = (
-  ...args: TArgs
-) => TReturn;
-
-/**
  * Default type.
  */
 export type Default<

@@ -1,10 +1,22 @@
 ---
 title: deleteSchemaMessage
+description: Deletes a schema error message.
 source: /storages/schemaMessage/schemaMessage.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Property } from '~/components';
+import { properties } from './properties';
+
 # deleteSchemaMessage
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/storages/schemaMessage/schemaMessage.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Deletes a schema error message.
+
+```ts
+v.deleteSchemaMessage(lang);
+```
+
+## Parameters
+
+- `lang` <Property {...properties.lang} />

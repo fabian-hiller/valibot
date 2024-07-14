@@ -9,68 +9,76 @@ export const properties: Record<string, PropertyProps> = {
       href: '../ObjectEntriesAsync/',
     },
   },
-  TRest: {
+  TMessage: {
     modifier: 'extends',
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'BaseSchema',
-          href: '../BaseSchema/',
-        },
-        {
-          type: 'custom',
-          name: 'BaseSchemaAsync',
-          href: '../BaseSchemaAsync/',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'ObjectIssue',
+              href: '../ObjectIssue/',
+            },
+          ],
         },
         'undefined',
       ],
     },
   },
-  TOutput: {
-    modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'ObjectOutput',
-      href: '../ObjectOutput/',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TEntries',
-        },
-        {
-          type: 'custom',
-          name: 'TRest',
-        },
-      ],
-    },
-  },
   BaseSchemaAsync: {
     type: {
+      modifier: 'extends',
       type: 'custom',
       name: 'BaseSchemaAsync',
       href: '../BaseSchemaAsync/',
       generics: [
         {
           type: 'custom',
-          name: 'ObjectInput',
-          href: '../ObjectInput/',
+          name: 'InferObjectInput',
+          href: '../InferObjectInput/',
           generics: [
             {
               type: 'custom',
               name: 'TEntries',
             },
-            {
-              type: 'custom',
-              name: 'TRest',
-            },
           ],
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferObjectOutput',
+          href: '../InferObjectOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TEntries',
+            },
+          ],
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'ObjectIssue',
+              href: '../ObjectIssue/',
+            },
+            {
+              type: 'custom',
+              name: 'InferObjectIssue',
+              href: '../InferObjectIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TEntries',
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -81,59 +89,30 @@ export const properties: Record<string, PropertyProps> = {
       value: 'object',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'objectAsync',
+      href: '../objectAsync/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: 'Object',
+    },
+  },
   entries: {
     type: {
       type: 'custom',
       name: 'TEntries',
     },
   },
-  rest: {
-    type: {
-      type: 'custom',
-      name: 'TRest',
-    },
-  },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'PipeAsync',
-          href: '../PipeAsync/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'ObjectOutput',
-              href: '../ObjectOutput/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TEntries',
-                },
-                {
-                  type: 'custom',
-                  name: 'TRest',
-                },
-              ],
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

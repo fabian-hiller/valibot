@@ -34,10 +34,7 @@ export function getDotPath(issue: BaseIssue<unknown>): string | null {
   if (issue.path) {
     let key = '';
     for (const item of issue.path) {
-      if (
-        'key' in item &&
-        (typeof item.key === 'string' || typeof item.key === 'number')
-      ) {
+      if (typeof item.key === 'string' || typeof item.key === 'number') {
         if (key) {
           key += `.${item.key}`;
         } else {

@@ -13,7 +13,7 @@ let store: GlobalConfig | undefined;
  *
  * @param config The configuration.
  */
-export function setGlobalConfig(config: GlobalConfig) {
+export function setGlobalConfig(config: GlobalConfig): void {
   store = { ...store, ...config };
 }
 
@@ -40,6 +40,6 @@ export function getGlobalConfig<const TIssue extends BaseIssue<unknown>>(
 /**
  * Deletes the global configuration.
  */
-export function deleteGlobalConfig() {
+export function deleteGlobalConfig(): void {
   store = undefined;
 }

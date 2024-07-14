@@ -1,3 +1,4 @@
+export * from './await/index.ts';
 export * from './bic/index.ts';
 export * from './brand/index.ts';
 export * from './bytes/index.ts';
@@ -46,6 +47,7 @@ export * from './minSize/index.ts';
 export * from './minValue/index.ts';
 export * from './multipleOf/index.ts';
 export * from './nonEmpty/index.ts';
+export * from './normalize/index.ts';
 export * from './notBytes/index.ts';
 export * from './notLength/index.ts';
 export * from './notSize/index.ts';

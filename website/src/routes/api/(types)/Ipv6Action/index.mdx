@@ -1,5 +1,5 @@
 ---
-title: Ipv6Validation
+title: Ipv6Action
 description: IPv6 action type.
 contributors:
   - fabian-hiller
@@ -8,16 +8,20 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# Ipv6Validation
+# Ipv6Action
 
 IPv6 action type.
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `Ipv6Validation` <Property {...properties.BaseValidation} />
+- `Ipv6Action` <Property {...properties.BaseValidation} />
   - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
   - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

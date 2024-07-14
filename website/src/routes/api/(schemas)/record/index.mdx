@@ -103,6 +103,8 @@ The following APIs can be combined with `record`.
     'custom',
     'date',
     'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -123,6 +125,7 @@ The following APIs can be combined with `record`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'set',
     'strictObject',
     'strictTuple',
@@ -142,6 +145,7 @@ The following APIs can be combined with `record`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -149,11 +153,27 @@ The following APIs can be combined with `record`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
     'pipe',
     'safeParse',
+    'safeParser',
   ]}
 />
 
 ### Actions
 
-<ApiList items={['check', 'brand', 'readonly', 'transform']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

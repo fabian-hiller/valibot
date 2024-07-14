@@ -1,10 +1,26 @@
 ---
 title: getGlobalMessage
+description: Returns a global error message.
 source: /storages/globalMessage/globalMessage.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Property } from '~/components';
+import { properties } from './properties';
+
 # getGlobalMessage
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/storages/globalMessage/globalMessage.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Returns a global error message.
+
+```ts
+const message = v.getGlobalMessage(lang);
+```
+
+## Parameters
+
+- `lang` <Property {...properties.lang} />
+
+## Returns
+
+- `message` <Property {...properties.message} />

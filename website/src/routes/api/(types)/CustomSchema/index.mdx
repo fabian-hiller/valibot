@@ -1,0 +1,28 @@
+---
+title: CustomSchema
+description: Custom schema type.
+contributors:
+  - fabian-hiller
+  - EltonLobo07
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# CustomSchema
+
+Custom schema type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `CustomSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `check` <Property {...properties.check} />
+  - `message` <Property {...properties.message} />

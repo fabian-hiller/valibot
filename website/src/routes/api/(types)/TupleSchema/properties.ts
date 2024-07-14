@@ -9,40 +9,28 @@ export const properties: Record<string, PropertyProps> = {
       href: '../TupleItems/',
     },
   },
-  TRest: {
+  TMessage: {
     modifier: 'extends',
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'BaseSchema',
-          href: '../BaseSchema/',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TupleIssue',
+            },
+          ],
         },
         'undefined',
       ],
     },
   },
-  TOutput: {
-    modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'TupleOutput',
-      href: '../TupleOutput/',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TItems',
-        },
-        {
-          type: 'custom',
-          name: 'TRest',
-        },
-      ],
-    },
-  },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -50,22 +38,46 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'TupleInput',
-          href: '../TupleInput/',
+          name: 'InferTupleInput',
+          href: '../InferTupleInput/',
           generics: [
             {
               type: 'custom',
               name: 'TItems',
             },
-            {
-              type: 'custom',
-              name: 'TRest',
-            },
           ],
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferTupleOutput',
+          href: '../InferTupleOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TItems',
+            },
+          ],
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'TupleIssue',
+              href: '../TupleIssue/',
+            },
+            {
+              type: 'custom',
+              name: 'InferTupleIssue',
+              href: '../InferTupleIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TItems',
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -76,59 +88,30 @@ export const properties: Record<string, PropertyProps> = {
       value: 'tuple',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'tuple',
+      href: '../tuple/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: 'Array',
+    },
+  },
   items: {
     type: {
       type: 'custom',
       name: 'TItems',
     },
   },
-  rest: {
-    type: {
-      type: 'custom',
-      name: 'TRest',
-    },
-  },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TupleOutput',
-              href: '../TupleOutput/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TItems',
-                },
-                {
-                  type: 'custom',
-                  name: 'TRest',
-                },
-              ],
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

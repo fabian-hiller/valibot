@@ -5,7 +5,6 @@ import type {
   StringIssue,
 } from '../../../../schemas/index.ts';
 import type { TypedDataset, UntypedDataset } from '../../../../types/index.ts';
-import type { MinLengthIssue } from '../../../minLength/index.ts';
 import { _isPartiallyTyped } from './_isPartiallyTyped.ts';
 
 describe('_isPartiallyTyped', () => {
@@ -50,7 +49,7 @@ describe('_isPartiallyTyped', () => {
       expect(_isPartiallyTyped(dataset, pathList)).toBe(false);
     });
 
-    test('if part of path matches path of schema issue', () => {
+    test('if part of path matches path of issue', () => {
       const input = {
         nested: null,
         tuple: [123, { key: 'foo' }, 456],
@@ -82,7 +81,7 @@ describe('_isPartiallyTyped', () => {
       expect(_isPartiallyTyped(dataset, pathList)).toBe(false);
     });
 
-    test('if entire path matches path of schema issue', () => {
+    test('if entire path matches path of issue', () => {
       const input = {
         nested: { key: null },
         tuple: [123, { key: 'foo' }, 456],
@@ -133,46 +132,6 @@ describe('_isPartiallyTyped', () => {
         typed: true,
         value: input,
         issues: undefined,
-      };
-      expect(_isPartiallyTyped(dataset, pathList)).toBe(true);
-    });
-
-    test('if there are no schema issues', () => {
-      const input: Input = {
-        nested: { key: 'foo' },
-        tuple: [123, { key: 'baz' }, 456],
-        other: 'bar',
-      };
-      const dataset: TypedDataset<Input, MinLengthIssue<string, 5>> = {
-        typed: true,
-        value: input,
-        issues: [
-          {
-            ...baseInfo,
-            kind: 'validation',
-            type: 'min_length',
-            input: 'foo',
-            expected: '>=5',
-            received: '3',
-            requirement: 5,
-            path: [
-              {
-                type: 'object',
-                origin: 'value',
-                input,
-                key: 'nested',
-                value: input.nested,
-              },
-              {
-                type: 'object',
-                origin: 'value',
-                input: input.nested,
-                key: 'key',
-                value: input.nested.key,
-              },
-            ],
-          },
-        ],
       };
       expect(_isPartiallyTyped(dataset, pathList)).toBe(true);
     });

@@ -95,6 +95,7 @@ The following APIs can be combined with `omit`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'forward',
     'getDefault',
@@ -104,14 +105,30 @@ The following APIs can be combined with `omit`.
     'is',
     'keyof',
     'parse',
+    'parser',
     'partial',
     'pick',
     'required',
     'safeParse',
+    'safeParser',
     'unwrap',
   ]}
 />
 
 ### Actions
 
-<ApiList items={['check', 'brand', 'readonly', 'transform']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

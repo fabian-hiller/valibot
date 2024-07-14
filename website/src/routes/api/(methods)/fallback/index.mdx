@@ -80,6 +80,8 @@ The following APIs can be combined with `fallback`.
     'custom',
     'date',
     'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -100,6 +102,7 @@ The following APIs can be combined with `fallback`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -128,11 +131,13 @@ The following APIs can be combined with `fallback`.
     'keyof',
     'omit',
     'parse',
+    'parser',
     'partial',
     'pick',
     'pipe',
     'required',
     'safeParse',
+    'safeParser',
     'unwrap',
   ]}
 />
@@ -145,6 +150,7 @@ The following APIs can be combined with `fallback`.
     'brand',
     'bytes',
     'check',
+    'checkItems',
     'creditCard',
     'cuid2',
     'decimal',
@@ -154,6 +160,8 @@ The following APIs can be combined with `fallback`.
     'endsWith',
     'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'finite',
     'hash',
     'hexadecimal',
@@ -174,6 +182,7 @@ The following APIs can be combined with `fallback`.
     'mac',
     'mac48',
     'mac64',
+    'mapItems',
     'maxBytes',
     'maxLength',
     'maxSize',
@@ -190,11 +199,16 @@ The following APIs can be combined with `fallback`.
     'notSize',
     'notValue',
     'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
     'readonly',
+    'reduceItems',
     'regex',
     'safeInteger',
     'size',
     'someItem',
+    'sortItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',
@@ -210,3 +224,7 @@ The following APIs can be combined with `fallback`.
     'value',
   ]}
 />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

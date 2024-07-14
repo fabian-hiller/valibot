@@ -22,6 +22,7 @@ export const properties: Record<string, PropertyProps> = {
             {
               type: 'custom',
               name: 'EnumIssue',
+              href: '../EnumIssue/',
             },
           ],
         },
@@ -30,6 +31,7 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -60,6 +62,7 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'EnumIssue',
+          href: '../EnumIssue/',
         },
       ],
     },

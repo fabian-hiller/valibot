@@ -4,30 +4,48 @@ export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Map',
-          generics: ['any', 'any'],
-        },
-        {
-          type: 'custom',
-          name: 'Set',
-          generics: ['any'],
-        },
-        {
-          type: 'custom',
-          name: 'Blob',
-        },
-      ],
+      type: 'custom',
+      name: 'SizeInput',
+      href: '../SizeInput/',
     },
   },
   TRequirement: {
     modifier: 'extends',
     type: 'number',
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'MaxSizeIssue',
+              href: '../MaxSizeIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+                {
+                  type: 'custom',
+                  name: 'TRequirement',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   BaseValidation: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseValidation',
@@ -36,6 +54,25 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'MaxSizeIssue',
+          href: '../MaxSizeIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+            {
+              type: 'custom',
+              name: 'TRequirement',
+            },
+          ],
         },
       ],
     },
@@ -46,10 +83,39 @@ export const properties: Record<string, PropertyProps> = {
       value: 'max_size',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'maxSize',
+      href: '../maxSize/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'template',
+      parts: [
+        {
+          type: 'string',
+          value: '<=',
+        },
+        {
+          type: 'custom',
+          name: 'TRequirement',
+        },
+      ],
+    },
+  },
   requirement: {
     type: {
       type: 'custom',
       name: 'TRequirement',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

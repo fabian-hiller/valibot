@@ -1,5 +1,5 @@
 ---
-title: LengthValidation
+title: LengthAction
 description: Length action type.
 contributors:
   - fabian-hiller
@@ -8,7 +8,7 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# LengthValidation
+# LengthAction
 
 Length action type.
 
@@ -16,9 +16,13 @@ Length action type.
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `LengthValidation` <Property {...properties.BaseValidation} />
+- `LengthAction` <Property {...properties.BaseValidation} />
   - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
   - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

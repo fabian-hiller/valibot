@@ -1,0 +1,125 @@
+---
+title: file
+description: Creates a file schema.
+source: /schemas/file/file.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# file
+
+Creates a file schema.
+
+> The `File` class is not available by default in Node.js v18 and below.
+
+```ts
+const Schema = v.file<TMessage>(message);
+```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `file` you can validate the data type of the input. If the input is not a file, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `file` can be used.
+
+### Image schema
+
+Schema to validate an image.
+
+```ts
+const ImageSchema = v.pipe(
+  v.file('Please select an image file.'),
+  v.mimeType(['image/jpeg', 'image/png'], 'Please select a JPEG or PNG file.'),
+  v.maxSize(1024 * 1024 * 10, 'Please select a file smaller than 10 MB.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `file`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'objectWithRest',
+    'optional',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'tuple',
+    'tupleWithRest',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'parse',
+    'parser',
+    'pipe',
+    'safeParse',
+    'safeParser',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'maxSize',
+    'mimeType',
+    'minSize',
+    'notSize',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'size',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

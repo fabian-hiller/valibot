@@ -2,9 +2,9 @@ import { describe, expect, test } from 'vitest';
 import { sortItems, type SortItemsAction } from './sortItems.ts';
 
 describe('sortItems', () => {
-  const action = sortItems<number[]>((itemA, itemB) =>
-    itemA > itemB ? 1 : itemA < itemB ? -1 : 0
-  );
+  const operation = (itemA: number, itemB: number) =>
+    itemA > itemB ? 1 : itemA < itemB ? -1 : 0;
+  const action = sortItems<number[]>(operation);
 
   test('should return action object', () => {
     expect(action).toStrictEqual({
@@ -12,6 +12,7 @@ describe('sortItems', () => {
       type: 'sort_items',
       reference: sortItems,
       async: false,
+      operation,
       _run: expect.any(Function),
     } satisfies SortItemsAction<number[]>);
   });

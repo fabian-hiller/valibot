@@ -1,0 +1,25 @@
+---
+title: InferNonNullableOutput
+description: Infer non nullable output type.
+contributors:
+  - fabian-hiller
+---
+
+# InferNonNullableOutput
+
+Infer non nullable output type.
+
+```ts
+// Create nullable sting schema
+const NullableStringSchema = v.nullable(
+  v.pipe(
+    v.string(),
+    v.transform((input) => input.length)
+  )
+);
+
+// Infer non nullable string output type
+type NonNullableStringOutput = v.InferNonNullableOutput<
+  typeof NullableStringSchema
+>; // number
+```

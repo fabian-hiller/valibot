@@ -30,31 +30,12 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'TWrapped',
         },
-      ],
-    },
-  },
-  TOutput: {
-    modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Output',
-          href: '../Output/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TWrapped',
-            },
-          ],
-        },
         'null',
       ],
     },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -65,8 +46,8 @@ export const properties: Record<string, PropertyProps> = {
           options: [
             {
               type: 'custom',
-              name: 'Input',
-              href: '../Input/',
+              name: 'InferInput',
+              href: '../InferInput/',
               generics: [
                 {
                   type: 'custom',
@@ -79,7 +60,29 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferNullableOutput',
+          href: '../InferNullableOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+            {
+              type: 'custom',
+              name: 'TDefault',
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'InferIssue',
+          href: '../InferIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
         },
       ],
     },
@@ -88,6 +91,35 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'string',
       value: 'nullable',
+    },
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'nullable',
+      href: '../nullable/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'template',
+      parts: [
+        {
+          type: 'custom',
+          name: 'TWrapped',
+          indexes: [
+            {
+              type: 'string',
+              value: 'expects',
+            },
+          ],
+        },
+        {
+          type: 'string',
+          value: ' | null',
+        },
+      ],
     },
   },
   wrapped: {

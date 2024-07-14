@@ -7,7 +7,9 @@
     "moduleResolution": "node",
     "allowImportingTsExtensions": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "declaration": true,
+    "isolatedDeclarations": true
   },
   "include": ["src", "./*.config.ts"]
 }

@@ -109,6 +109,8 @@ The following APIs can be combined with `looseObject`.
     'custom',
     'date',
     'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
@@ -128,6 +130,7 @@ The following APIs can be combined with `looseObject`.
     'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
@@ -148,6 +151,7 @@ The following APIs can be combined with `looseObject`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'forward',
     'getDefault',
@@ -158,14 +162,30 @@ The following APIs can be combined with `looseObject`.
     'keyof',
     'omit',
     'parse',
+    'parser',
     'partial',
     'pick',
     'pipe',
     'required',
     'safeParse',
+    'safeParser',
   ]}
 />
 
 ### Actions
 
-<ApiList items={['check', 'brand', 'readonly', 'transform']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

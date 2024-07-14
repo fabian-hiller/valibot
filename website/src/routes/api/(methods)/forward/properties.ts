@@ -12,8 +12,9 @@ export const properties: Record<string, PropertyProps> = {
           generics: ['string', 'unknown'],
         },
         {
-          type: 'array',
-          item: 'unknown',
+          type: 'custom',
+          name: 'ArrayLike',
+          generics: ['unknown'],
         },
       ],
     },
@@ -48,10 +49,11 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  pathList: {
+  pathKeys: {
     type: {
       type: 'custom',
-      name: 'PathList',
+      name: 'PathKeys',
+      href: '../PathKeys/',
       generics: [
         {
           type: 'custom',

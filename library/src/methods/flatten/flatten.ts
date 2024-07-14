@@ -22,15 +22,16 @@ export type FlatErrors<
   /**
    * The root errors.
    *
-   * Hint: Issues without a path that belong to the root of the schema are
-   * added to this key.
+   * Hint: The error messages of issues without a path that belong to the root
+   * of the schema are added to this key.
    */
   readonly root?: [string, ...string[]];
   /**
    * The nested errors.
    *
-   * Hint: Issues with a path that belong to the nested parts of the schema
-   * and can be converted to a dot path are added to this key.
+   * Hint: The error messages of issues with a path that belong to the nested
+   * parts of the schema and can be converted to a dot path are added to this
+   * key.
    */
   readonly nested?: Prettify<
     Readonly<
@@ -51,15 +52,15 @@ export type FlatErrors<
    *
    * Hint: Some issue paths, for example for complex data types like `Set` and
    * `Map`, have no key or a key that cannot be converted to a dot path. These
-   * issues are added to this key.
+   * error messages are added to this key.
    */
   readonly other?: [string, ...string[]];
 }>;
 
 /**
- * Flatten the error messages of schema issues.
+ * Flatten the error messages of issues.
  *
- * @param issues The schema issues.
+ * @param issues The list of issues.
  *
  * @returns A flat error object.
  */
@@ -68,9 +69,9 @@ export function flatten(
 ): FlatErrors<undefined>;
 
 /**
- * Flatten the error messages of schema issues.
+ * Flatten the error messages of issues.
  *
- * @param issues The schema issues.
+ * @param issues The list of issues.
  *
  * @returns A flat error object.
  */
@@ -80,13 +81,6 @@ export function flatten<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 >(issues: [InferIssue<TSchema>, ...InferIssue<TSchema>[]]): FlatErrors<TSchema>;
 
-/**
- * Flatten the error messages of schema issues.
- *
- * @param issues The schema issues.
- *
- * @returns A flat error object.
- */
 export function flatten(
   issues: [BaseIssue<unknown>, ...BaseIssue<unknown>[]]
 ): FlatErrors<undefined> {

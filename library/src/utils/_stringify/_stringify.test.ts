@@ -23,10 +23,6 @@ describe('_stringify', () => {
     expect(_stringify(Symbol('foo'))).toBe('symbol');
   });
 
-  test('should return type of function', () => {
-    expect(_stringify(() => null)).toBe('function');
-  });
-
   test('should return type of undefined', () => {
     expect(_stringify(undefined)).toBe('undefined');
   });
@@ -37,6 +33,10 @@ describe('_stringify', () => {
 
   test('should return Array constructor name', () => {
     expect(_stringify([])).toBe('Array');
+  });
+
+  test('should return Function constructor name', () => {
+    expect(_stringify(() => {})).toBe('Function');
   });
 
   test('should return Date constructor name', () => {
