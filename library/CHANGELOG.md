@@ -2,6 +2,11 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Refactor `HEXADECIMAL_REGEX` (pull request #666)
+- Change `EMOJI_REGEX` to be more accurate and strict (pull request #666)
+
 ## v0.36.0 (July 05, 2024)
 
 - Add `normalize` action to normalize strings (issue #691)
