@@ -42,20 +42,17 @@ With `mapAsync` you can validate the data type of the input and whether the entr
 
 The following examples show how `mapAsync` can be used.
 
-### Allowed username to total items map schema
+### Shopping items schema
 
 Schema to validate a map with usernames that are allowed to shop as keys and the total items purchased as values.
 
 ```ts
-import { isUsernameAllowedToShop } from '~/api';
+import { isUserVerified } from '~/api';
 
-const UsernameTotalItemsMapSchema = v.mapAsync(
+const ShoppingItemsSchema = v.mapAsync(
   v.pipeAsync(
     v.string(),
-    v.checkAsync(
-      isUsernameAllowedToShop,
-      'The username is not allowed to shop.'
-    )
+    v.checkAsync(isUserVerified, 'The username is not allowed to shop.')
   ),
   v.pipe(v.number(), v.minValue(0))
 );
