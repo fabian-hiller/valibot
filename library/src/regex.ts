@@ -21,15 +21,15 @@ export const EMAIL_REGEX =
 
 /**
  * Emoji regex.
- * From [emoji-regex-xs](https://github.com/slevithan/emoji-regex-xs); MIT License.
+ * From [emoji-regex-xs](https://github.com/slevithan/emoji-regex-xs) 1.0.0; MIT License.
  */
 export const EMOJI_REGEX =
   // eslint-disable-next-line redos-detector/no-unsafe-regex, regexp/no-dupe-disjunctions -- false positives
   /^(?:[\u{1F1E6}-\u{1F1FF}]{2}|\u{1F3F4}[\u{E0061}-\u{E007A}]{2}[\u{E0030}-\u{E0039}\u{E0061}-\u{E007A}]{1,3}\u{E007F}|(?:\p{Emoji}\uFE0F\u20E3?|\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji_Presentation})(?:\u200D(?:\p{Emoji}\uFE0F\u20E3?|\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji_Presentation}))*)+$/u;
 
-// This emoji regex uses ES2024's flag v and is supported in Node.js v20 and
-// 2023-era browsers. However, it's also stricter and doesn't match
-// underqualified and overqualified emoji found in real-world data.
+// This emoji regex uses ES2024's flag v and is supported in Node.js v20.
+// However, it doesn't match emoji supported on only some platforms or
+// underqualified/overqualified emoji that can be in real-world data.
 // export const EMOJI_REGEX = /^\p{RGI_Emoji}+$/v;
 
 /**

@@ -62,6 +62,7 @@ describe('emoji', () => {
         '🇺🇸',
         '👋🏼',
         '🫨',
+        '✈️',
       ]);
     });
 
@@ -112,30 +113,26 @@ describe('emoji', () => {
       ]);
     });
 
-    // TODO: This test needs to be enabled after upgrading the emoji regex.
-    // See the comment in `regex.ts` for more details.
-    // test('for numbers', () => {
-    //   expectActionIssue(action, baseIssue, [
-    //     '0',
-    //     '1',
-    //     '2',
-    //     '3',
-    //     '4',
-    //     '5',
-    //     '6',
-    //     '7',
-    //     '8',
-    //     '9',
-    //     '0123456789',
-    //   ]);
-    // });
+    test('for numbers', () => {
+      expectActionIssue(action, baseIssue, [
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '0123456789',
+      ]);
+    });
 
     test('for special chars', () => {
       expectActionIssue(action, baseIssue, [
-        // TODO: These chars needs to be enabled after upgrading the emoji regex.
-        // See the comment in `regex.ts` for more details.
-        // '#',
-        // '*',
+        '#',
+        '*',
         '!',
         '@',
         '$',
@@ -160,6 +157,33 @@ describe('emoji', () => {
       ]);
     });
 
+    test('for format and mark chars', () => {
+      expectActionIssue(action, baseIssue, [
+        '\u200D',
+        '\u20E3',
+        '\uFE0F',
+        '\u{E007F}',
+      ]);
+    });
+
+    test('for tag digit and tag small letter chars', () => {
+      expectActionIssue(action, baseIssue, [
+        '\u{E0030}',
+        '\u{E0039}',
+        '\u{E0061}',
+        '\u{E007A}',
+      ]);
+    });
+
+    test('for non-emoji symbol chars', () => {
+      expectActionIssue(action, baseIssue, [
+        '\u2642', // ♂
+        '\u2708', // ✈
+        '\u{1F3F3}', // 🏳
+        '\u{1F441}', // 👁
+      ]);
+    });
+
     test('for composite chars', () => {
       expectActionIssue(action, baseIssue, [
         'S\u0307', // Ṡ
@@ -168,11 +192,12 @@ describe('emoji', () => {
       ]);
     });
 
-    test('for wrong emoji parts', () => {
+    test('for surrogate code points', () => {
+      // 😍 '\u{1F60D}' can be represented with surrogate pair '\uD83D\uDE0D'
       expectActionIssue(action, baseIssue, [
-        '\uD83D', // First part of 😍
-        '\uDE0D', // Second part of 😍
-        '\uDE0D\uD83D', // Twisted parts of 😍
+        '\uD83D', // Lone high surrogate
+        '\uDE0D', // Lone low surrogate
+        '\uDE0D\uD83D', // Reversed surrogate order for 😍
       ]);
     });
   });
