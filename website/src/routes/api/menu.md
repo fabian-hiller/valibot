@@ -360,6 +360,7 @@
 - [SchemaWithFallback](/api/SchemaWithFallback/)
 - [SetPathItem](/api/SetPathItem/)
 - [SetSchema](/api/SetSchema/)
+- [SetSchemaAsync](/api/SetSchemaAsync/)
 - [SizeAction](/api/SizeAction/)
 - [SomeItemAction](/api/SomeItemAction/)
 - [StartsWithAction](/api/StartsWithAction/)
