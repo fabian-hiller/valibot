@@ -45,13 +45,13 @@ The following examples show how `setAsync` can be used.
 Schema to validate a set of allowed IP addresses.
 
 ```ts
-import { isIPAddressAllowed } from '~/api';
+import { isIpAllowed } from '~/api';
 
 const AllowedIPsSchema = v.setAsync(
   v.pipeAsync(
     v.string(),
     v.ip(),
-    v.checkAsync(isIPAddressAllowed, 'The IP is not an allowed IP address.')
+    v.checkAsync(isIpAllowed, 'This IP address is not allowed.')
   )
 );
 ```
