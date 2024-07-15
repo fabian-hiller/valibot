@@ -50,11 +50,12 @@ describe('base64', () => {
       });
     });
 
-    test('for valid Base64 strings', () => {
+    test('for empty string', () => {
+      expectNoActionIssue(action, ['']);
+    });
+
+    test('for Base64 strings', () => {
       expectNoActionIssue(action, [
-        'dmFsaWJvdA==', // 'valibot'
-        'SGVsbG8sIEkgYW0gVmFsaWJvdCBhbmQgSSB3b3VsZCBsaWtlIHRvIGhlbHAgeW91IHZhbGlkYXRlIGRhdGEgZWFzaWx5IHVzaW5nIGEgc2NoZW1hLg==', // 'Hello, I am Valibot and I would like to help you validate data easily using a schema.'
-        '8J+Mrg==', // '🌮'
         // Test vectors from https://datatracker.ietf.org/doc/html/rfc4648#section-10
         '', // ''
         'Zg==', // 'f'
@@ -63,6 +64,11 @@ describe('base64', () => {
         'Zm9vYg==', // 'foob'
         'Zm9vYmE=', // 'fooba'
         'Zm9vYmFy', // 'foobar'
+
+        // Other custom tests
+        'dmFsaWJvdA==', // 'valibot'
+        'SGVsbG8sIEkgYW0gVmFsaWJvdCBhbmQgSSB3b3VsZCBsaWtlIHRvIGhlbHAgeW91IHZhbGlkYXRlIGRhdGEgZWFzaWx5IHVzaW5nIGEgc2NoZW1hLg==', // 'Hello, I am Valibot and I would like to help you validate data easily using a schema.'
+        '8J+Mrg==', // '🌮'
       ]);
     });
   });
@@ -77,44 +83,51 @@ describe('base64', () => {
       requirement: BASE64_REGEX,
     };
 
-    test('for empty string', () => {
+    test('for blank strings', () => {
       expectActionIssue(action, baseIssue, [' ', '\n']);
     });
 
-    test('for invalid Base64 strings', () => {
+    test('for invalid chars', () => {
       expectActionIssue(action, baseIssue, [
-        'foo`', // invalid character '`'
-        'foo~', // invalid character '~'
-        'foo!', // invalid character '!'
-        'foo@', // invalid character '@'
-        'foo#', // invalid character '#'
-        'foo$', // invalid character '$'
-        'foo%', // invalid character '%'
-        'foo^', // invalid character '^'
-        'foo&', // invalid character '&'
-        'foo*', // invalid character '*'
-        'foo(', // invalid character '('
-        'foo)', // invalid character ')'
-        'foo-', // invalid character '-'
-        'foo_', // invalid character '_'
-        'foo[', // invalid character '['
-        'foo]', // invalid character ']'
-        'foo{', // invalid character '{'
-        'foo}', // invalid character '}'
-        'foo\\', // invalid character '\'
-        'foo|', // invalid character '|'
-        'foo;', // invalid character ';'
-        'foo:', // invalid character ':'
-        "foo'", // invalid character '''
-        'foo"', // invalid character '"'
-        'foo,', // invalid character ','
-        'foo.', // invalid character '.'
-        'foo<', // invalid character '<'
-        'foo>', // invalid character '>'
-        'foo?', // invalid character '?'
-        'dmFsaWJvdA', // missing padding
-        'dmFsaWJvdA=', // incorrect padding
-        'dmFsaWJvdA===', // incorrect padding
+        'foo`', // `
+        'foo~', // ~
+        'foo!', // !
+        'foo@', // @
+        'foo#', // #
+        'foo$', // $
+        'foo%', // %
+        'foo^', // ^
+        'foo&', // &
+        'foo*', // *
+        'foo(', // (
+        'foo)', // )
+        'foo-', // -
+        'foo_', // _
+        'foo[', // [
+        'foo]', // ]
+        'foo{', // {
+        'foo}', // }
+        'foo\\', // \
+        'foo|', // |
+        'foo;', // ;
+        'foo:', // :
+        "foo'", // '
+        'foo"', // "
+        'foo,', // ,
+        'foo.', // .
+        'foo<', // <
+        'foo>', // >
+        'foo?', // ?
+      ]);
+    });
+
+    test('for invalid padding', () => {
+      expectActionIssue(action, baseIssue, [
+        'dmFsaWJvdA', // == missing
+        'dmFsaWJvdA=', // = missing
+        'dmFsaWJvdA===', // = extra
+        'Zm9vYmE', // = missing
+        'Zm9vYmE==', // = extra
       ]);
     });
   });
