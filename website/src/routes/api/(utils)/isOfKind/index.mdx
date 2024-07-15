@@ -1,0 +1,32 @@
+---
+title: isOfKind
+description: A generic type guard to check the kind of an object.
+source: /utils/isOfKind/isOfKind.ts
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# isOfKind
+
+A generic type guard to check the kind of an object.
+
+```ts
+const result = v.isOfKind<TKind, TObject>(kind, object);
+```
+
+## Generics
+
+- `TKind` <Property {...properties.TKind} />
+- `TObject` <Property {...properties.TObject} />
+
+## Parameters
+
+- `kind` <Property {...properties.kind} />
+- `object` <Property {...properties.object} />
+
+## Returns
+
+- `result` <Property {...properties.result} />

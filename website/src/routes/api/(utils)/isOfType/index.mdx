@@ -1,0 +1,33 @@
+---
+title: isOfType
+description: A generic type guard to check the type of an object.
+source: /utils/isOfType/isOfType.ts
+contributors:
+  - fabian-hiller
+  - EltonLobo07
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# isOfType
+
+A generic type guard to check the type of an object.
+
+```ts
+const result = v.isOfType<TType, TObject>(type, object);
+```
+
+## Generics
+
+- `TType` <Property {...properties.TType} />
+- `TObject` <Property {...properties.TObject} />
+
+## Parameters
+
+- `type` <Property {...properties.type} />
+- `object` <Property {...properties.object} />
+
+## Returns
+
+- `result` <Property {...properties.result} />

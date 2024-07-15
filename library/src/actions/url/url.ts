@@ -62,24 +62,24 @@ export interface UrlAction<
 }
 
 /**
- * Creates a [URL](https://en.wikipedia.org/wiki/URL) validation action.
+ * Creates an [URL](https://en.wikipedia.org/wiki/URL) validation action.
  *
  * Hint: The value is passed to the URL constructor to check if it is valid.
  * This check is not perfect. For example, values like "abc:1234" are accepted.
  *
- * @returns A URL action.
+ * @returns An URL action.
  */
 export function url<TInput extends string>(): UrlAction<TInput, undefined>;
 
 /**
- * Creates a [URL](https://en.wikipedia.org/wiki/URL) validation action.
+ * Creates an [URL](https://en.wikipedia.org/wiki/URL) validation action.
  *
  * Hint: The value is passed to the URL constructor to check if it is valid.
  * This check is not perfect. For example, values like "abc:1234" are accepted.
  *
  * @param message The error message.
  *
- * @returns A URL action.
+ * @returns An URL action.
  */
 export function url<
   TInput extends string,

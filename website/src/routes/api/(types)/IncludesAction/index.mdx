@@ -1,5 +1,5 @@
 ---
-title: IncludesValidation
+title: IncludesAction
 description: Includes action type.
 contributors:
   - fabian-hiller
@@ -8,7 +8,7 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# IncludesValidation
+# IncludesAction
 
 Includes action type.
 
@@ -16,9 +16,13 @@ Includes action type.
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `IncludesValidation` <Property {...properties.BaseValidation} />
+- `IncludesAction` <Property {...properties.BaseValidation} />
   - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
   - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

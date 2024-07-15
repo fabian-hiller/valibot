@@ -4,14 +4,14 @@ import type {
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
-import type { ArrayRequirement } from '../types.ts';
+import type { ArrayInput, ArrayRequirement } from '../types.ts';
 
 // TODO: Also add `checkItemsAsync` action
 
 /**
  * Check items issue type.
  */
-export interface CheckItemsIssue<TInput extends readonly unknown[]>
+export interface CheckItemsIssue<TInput extends ArrayInput>
   extends BaseIssue<TInput[number]> {
   /**
    * The issue kind.
@@ -35,7 +35,7 @@ export interface CheckItemsIssue<TInput extends readonly unknown[]>
  * Check items action type.
  */
 export interface CheckItemsAction<
-  TInput extends readonly unknown[],
+  TInput extends ArrayInput,
   TMessage extends ErrorMessage<CheckItemsIssue<TInput>> | undefined,
 > extends BaseValidation<TInput, TInput, CheckItemsIssue<TInput>> {
   /**
@@ -67,7 +67,7 @@ export interface CheckItemsAction<
  *
  * @returns An check items action.
  */
-export function checkItems<TInput extends readonly unknown[]>(
+export function checkItems<TInput extends ArrayInput>(
   requirement: ArrayRequirement<TInput>
 ): CheckItemsAction<TInput, undefined>;
 
@@ -80,7 +80,7 @@ export function checkItems<TInput extends readonly unknown[]>(
  * @returns An check items action.
  */
 export function checkItems<
-  TInput extends readonly unknown[],
+  TInput extends ArrayInput,
   const TMessage extends ErrorMessage<CheckItemsIssue<TInput>> | undefined,
 >(
   requirement: ArrayRequirement<TInput>,

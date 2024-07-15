@@ -2,6 +2,14 @@
 
 All notable changes to the library will be documented in this file.
 
+## v0.36.0 (July 05, 2024)
+
+- Add `normalize` action to normalize strings (issue #691)
+- Add support for async schemas to `entriesFromList` util
+- Add support for numbers and symbols to `entriesFromList` util (issue #492)
+- Add `key` property to `SetPathItem` type to improve DX (issue #693, #694)
+- Remove `FunctionReference` type and refactor code
+
 ## v0.35.0 (June 25, 2024)
 
 - Increase argument limit of `pipe` and `pipeAsync` method (issue #643)

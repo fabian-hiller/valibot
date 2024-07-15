@@ -1,10 +1,65 @@
 ---
 title: findItem
-source: /schemas/findItem/findItem.ts
+description: Creates a find item transformation action.
+source: /actions/findItem/findItem.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # findItem
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/findItem/findItem.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a find item transformation action.
+
+```ts
+const Action = v.findItem<TInput>(operation);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `operation` <Property {...properties.operation} />
+
+### Explanation
+
+With `findItem` you can extract the first item of an array that matches the given `operation`.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `findItem` can be used.
+
+### Find duplicate item
+
+Schema to find the first duplicate item in an array.
+
+```ts
+const DuplicateItemSchema = v.pipe(
+  v.array(v.string()),
+  v.findItem((item, index, array) => array.indexOf(item) !== index)
+);
+```
+
+## Related
+
+The following APIs can be combined with `findItem`.
+
+### Schemas
+
+<ApiList items={['any', 'array', 'instance', 'special', 'tuple', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

@@ -1,5 +1,5 @@
 ---
-title: Ipv4Validation
+title: Ipv4Action
 description: IPv4 action type.
 contributors:
   - fabian-hiller
@@ -8,16 +8,20 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# Ipv4Validation
+# Ipv4Action
 
 IPv4 action type.
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `Ipv4Validation` <Property {...properties.BaseValidation} />
+- `Ipv4Action` <Property {...properties.BaseValidation} />
   - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
   - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

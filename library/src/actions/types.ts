@@ -1,7 +1,12 @@
 /**
+ * Array input type.
+ */
+export type ArrayInput = readonly unknown[];
+
+/**
  * Array requirement type.
  */
-export type ArrayRequirement<TInput extends readonly unknown[]> = (
+export type ArrayRequirement<TInput extends ArrayInput> = (
   item: TInput[number],
   index: number,
   array: TInput
@@ -20,6 +25,8 @@ export type ContentRequirement<TInput extends ContentInput> =
 
 /**
  * Length input type.
+ *
+ * TODO: Should we change `unknown[]` to `ArrayLike<unknown>`?
  */
 export type LengthInput = string | unknown[];
 

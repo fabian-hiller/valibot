@@ -5,7 +5,35 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'string',
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'ImeiIssue',
+              href: '../ImeiIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   BaseValidation: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseValidation',
@@ -14,6 +42,21 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'ImeiIssue',
+          href: '../ImeiIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+          ],
         },
       ],
     },
@@ -24,25 +67,33 @@ export const properties: Record<string, PropertyProps> = {
       value: 'imei',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'imei',
+      href: '../imei/',
+    },
+  },
+  expects: {
+    type: 'null',
+  },
   requirement: {
     type: {
-      type: 'tuple',
-      items: [
+      type: 'function',
+      params: [
         {
-          type: 'custom',
-          name: 'RegExp',
-        },
-        {
-          type: 'function',
-          params: [
-            {
-              name: 'input',
-              type: 'string',
-            },
-          ],
-          return: 'boolean',
+          name: 'input',
+          type: 'string',
         },
       ],
+      return: 'boolean',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

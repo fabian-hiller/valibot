@@ -89,6 +89,7 @@ The following APIs can be combined with `custom`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -96,8 +97,10 @@ The following APIs can be combined with `custom`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
     'pipe',
     'safeParse',
+    'safeParser',
   ]}
 />
 
@@ -110,6 +113,7 @@ The following APIs can be combined with `custom`.
     'brand',
     'bytes',
     'check',
+    'checkItems',
     'creditCard',
     'cuid2',
     'decimal',
@@ -119,6 +123,8 @@ The following APIs can be combined with `custom`.
     'endsWith',
     'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'finite',
     'hash',
     'hexadecimal',
@@ -139,6 +145,7 @@ The following APIs can be combined with `custom`.
     'mac',
     'mac48',
     'mac64',
+    'mapItems',
     'maxBytes',
     'maxLength',
     'maxSize',
@@ -155,11 +162,16 @@ The following APIs can be combined with `custom`.
     'notSize',
     'notValue',
     'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
     'readonly',
+    'reduceItems',
     'regex',
     'safeInteger',
     'size',
     'someItem',
+    'sortItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',
@@ -175,3 +187,7 @@ The following APIs can be combined with `custom`.
     'value',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

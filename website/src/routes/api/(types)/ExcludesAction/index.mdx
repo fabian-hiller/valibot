@@ -1,5 +1,5 @@
 ---
-title: ExcludesValidation
+title: ExcludesAction
 description: Excludes action type.
 contributors:
   - fabian-hiller
@@ -8,7 +8,7 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# ExcludesValidation
+# ExcludesAction
 
 Excludes action type.
 
@@ -16,9 +16,13 @@ Excludes action type.
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `ExcludesValidation` <Property {...properties.BaseValidation} />
+- `ExcludesAction` <Property {...properties.BaseValidation} />
   - `type` <Property {...properties.type} />
+  - `referece` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
   - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

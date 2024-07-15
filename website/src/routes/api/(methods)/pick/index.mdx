@@ -95,6 +95,7 @@ The following APIs can be combined with `pick`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'forward',
     'getDefault',
@@ -105,13 +106,29 @@ The following APIs can be combined with `pick`.
     'keyof',
     'omit',
     'parse',
+    'parser',
     'partial',
     'required',
     'safeParse',
+    'safeParser',
     'unwrap',
   ]}
 />
 
 ### Actions
 
-<ApiList items={['check', 'brand', 'readonly', 'transform']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

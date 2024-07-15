@@ -124,6 +124,7 @@ export function setAsync(
               type: 'set',
               origin: 'value',
               input,
+              key: null,
               value: inputValue,
             };
 

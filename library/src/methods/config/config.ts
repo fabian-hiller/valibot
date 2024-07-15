@@ -15,7 +15,7 @@ import type {
  * @returns The configured schema.
  */
 export function config<
-  TSchema extends
+  const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 >(schema: TSchema, config: Config<InferIssue<TSchema>>): TSchema {

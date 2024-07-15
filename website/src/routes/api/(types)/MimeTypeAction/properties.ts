@@ -15,7 +15,39 @@ export const properties: Record<string, PropertyProps> = {
       item: 'string',
     },
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'MimeTypeIssue',
+              href: '../MimeTypeAction/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+                {
+                  type: 'custom',
+                  name: 'TRequirement',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   BaseValidation: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseValidation',
@@ -24,6 +56,25 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'MimeTypeIssue',
+          href: '../MimeTypeIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+            {
+              type: 'custom',
+              name: 'TRequirement',
+            },
+          ],
         },
       ],
     },
@@ -34,10 +85,27 @@ export const properties: Record<string, PropertyProps> = {
       value: 'mime_type',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'mimeType',
+      href: '../mimeType/',
+    },
+  },
+  expects: {
+    type: 'string',
+  },
   requirement: {
     type: {
       type: 'custom',
       name: 'TRequirement',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

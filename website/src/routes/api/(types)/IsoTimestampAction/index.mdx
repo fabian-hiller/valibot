@@ -1,5 +1,5 @@
 ---
-title: IsoTimestampValidation
+title: IsoTimestampAction
 description: ISO timestamp action type.
 contributors:
   - fabian-hiller
@@ -8,16 +8,20 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# IsoTimestampValidation
+# IsoTimestampAction
 
 ISO timestamp action type.
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `IsoTimestampValidation` <Property {...properties.BaseValidation} />
+- `IsoTimestampAction` <Property {...properties.BaseValidation} />
   - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
   - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

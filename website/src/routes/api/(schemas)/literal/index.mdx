@@ -99,6 +99,7 @@ The following APIs can be combined with `literal`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -106,11 +107,26 @@ The following APIs can be combined with `literal`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
     'pipe',
     'safeParse',
+    'safeParser',
   ]}
 />
 
 ### Actions
 
-<ApiList items={['check', 'brand', 'readonly', 'transform']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

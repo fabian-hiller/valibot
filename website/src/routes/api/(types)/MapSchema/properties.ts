@@ -37,26 +37,29 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'MapOutput',
-      href: '../MapOutput/',
-      generics: [
+    type: {
+      type: 'union',
+      options: [
         {
           type: 'custom',
-          name: 'TKey',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'MapIssue',
+              href: '../MapIssue/',
+            },
+          ],
         },
-        {
-          type: 'custom',
-          name: 'TValue',
-        },
+        'undefined',
       ],
     },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -64,8 +67,8 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'MapInput',
-          href: '../MapInput/',
+          name: 'InferMapInput',
+          href: '../InferMapInput/',
           generics: [
             {
               type: 'custom',
@@ -79,7 +82,50 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferMapOutput',
+          href: '../InferMapOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TKey',
+            },
+            {
+              type: 'custom',
+              name: 'TValue',
+            },
+          ],
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'MapIssue',
+              href: '../MapIssue/',
+            },
+            {
+              type: 'custom',
+              name: 'InferIssue',
+              href: '../InferIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TKey',
+                },
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'InferIssue',
+              href: '../InferIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TValue',
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -88,6 +134,20 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'string',
       value: 'map',
+    },
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'map',
+      href: '../map/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: 'Map',
     },
   },
   key: {
@@ -104,45 +164,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'MapOutput',
-              href: '../MapOutput/',
-              generics: [
-                {
-                  type: 'custom',
-                  name: 'TKey',
-                },
-                {
-                  type: 'custom',
-                  name: 'TValue',
-                },
-              ],
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

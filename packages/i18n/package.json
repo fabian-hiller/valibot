@@ -32,7 +32,7 @@
   "devDependencies": {
     "@types/node": "^20.12.2",
     "tsm": "^2.3.0",
-    "typescript": "^5.4.3",
+    "typescript": "^5.5.3",
     "valibot": "workspace:*"
   },
   "peerDependencies": {

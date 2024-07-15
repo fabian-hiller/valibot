@@ -1,9 +1,10 @@
 import type { BaseTransformation } from '../../types/index.ts';
+import type { ArrayInput } from '../types.ts';
 
 /**
  * Array action type.
  */
-type ArrayAction<TInput extends readonly unknown[], TOutput> = (
+type ArrayAction<TInput extends ArrayInput, TOutput> = (
   item: TInput[number],
   index: number,
   array: TInput
@@ -12,7 +13,7 @@ type ArrayAction<TInput extends readonly unknown[], TOutput> = (
 /**
  * Map items action type.
  */
-export interface MapItemsAction<TInput extends readonly unknown[], TOutput>
+export interface MapItemsAction<TInput extends ArrayInput, TOutput>
   extends BaseTransformation<TInput, TOutput[], never> {
   /**
    * The action type.
@@ -35,7 +36,7 @@ export interface MapItemsAction<TInput extends readonly unknown[], TOutput>
  *
  * @returns A map items action.
  */
-export function mapItems<TInput extends readonly unknown[], TOutput>(
+export function mapItems<TInput extends ArrayInput, TOutput>(
   operation: ArrayAction<TInput, TOutput>
 ): MapItemsAction<TInput, TOutput>;
 

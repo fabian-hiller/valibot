@@ -31,13 +31,13 @@ export interface ObjectSchemaAsync<
    */
   readonly reference: typeof objectAsync;
   /**
-   * The entries schema.
-   */
-  readonly entries: TEntries;
-  /**
    * The expected property.
    */
   readonly expects: 'Object';
+  /**
+   * The entries schema.
+   */
+  readonly entries: TEntries;
   /**
    * The error message.
    */

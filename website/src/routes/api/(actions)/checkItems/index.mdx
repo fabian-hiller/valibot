@@ -1,10 +1,72 @@
 ---
 title: checkItems
-source: /schemas/checkItems/checkItems.ts
+description: Creates a check items validation action.
+source: /actions/checkItems/checkItems.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # checkItems
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/checkItems/checkItems.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a check items validation action.
+
+```ts
+const Action = v.checkItems<TInput, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `checkItems` you can freely validate the items of an array and return `true` if they are valid or `false` otherwise. If an item does not match your `requirement`, you can use `message` to customize the error message.
+
+> The special thing about `checkItems` is that it automatically forwards each issue to the appropriate item.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `checkItems` can be used.
+
+### No duplicate items
+
+Schema to validate that an array has no duplicate items.
+
+```ts
+const ArraySchema = v.pipe(
+  v.array(v.string()),
+  v.checkItems(
+    (item, index, array) => array.indexOf(item) === index,
+    'Duplicate items are not allowed.'
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `checkItems`.
+
+### Schemas
+
+<ApiList items={['any', 'array', 'instance', 'special', 'tuple', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

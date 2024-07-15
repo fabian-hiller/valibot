@@ -60,6 +60,7 @@ The following APIs can be combined with `unknwon`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -67,8 +68,10 @@ The following APIs can be combined with `unknwon`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
     'pipe',
     'safeParse',
+    'safeParser',
   ]}
 />
 
@@ -81,6 +84,7 @@ The following APIs can be combined with `unknwon`.
     'brand',
     'bytes',
     'check',
+    'checkItems',
     'creditCard',
     'cuid2',
     'decimal',
@@ -90,6 +94,8 @@ The following APIs can be combined with `unknwon`.
     'endsWith',
     'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'finite',
     'hash',
     'hexadecimal',
@@ -110,6 +116,7 @@ The following APIs can be combined with `unknwon`.
     'mac',
     'mac48',
     'mac64',
+    'mapItems',
     'maxBytes',
     'maxLength',
     'maxSize',
@@ -126,11 +133,16 @@ The following APIs can be combined with `unknwon`.
     'notSize',
     'notValue',
     'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
     'readonly',
+    'reduceItems',
     'regex',
     'safeInteger',
     'size',
     'someItem',
+    'sortItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',
@@ -146,3 +158,7 @@ The following APIs can be combined with `unknwon`.
     'value',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

@@ -32,6 +32,8 @@ const Schema = v.pipe<TSchema, TItems>(schema, ...items);
 
 `pipe` creates a modified copy of the given `schema`, containing a pipeline for detailed validations and transformations. It passes the input data synchronously through the `items` in the order they are provided and each item can examine and modify it.
 
+> Since `pipe` returns a schema that can be used as the first argument of another pipeline, it is possible to nest multiple `pipe` calls to extend the validation and transformation further.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
@@ -120,6 +122,7 @@ The following APIs can be combined with `pipe`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'forward',
     'getDefault',
@@ -130,10 +133,12 @@ The following APIs can be combined with `pipe`.
     'keyof',
     'omit',
     'parse',
+    'parser',
     'partial',
     'pick',
     'required',
     'safeParse',
+    'safeParser',
     'unwrap',
   ]}
 />
@@ -147,6 +152,7 @@ The following APIs can be combined with `pipe`.
     'brand',
     'bytes',
     'check',
+    'checkItems',
     'creditCard',
     'cuid2',
     'decimal',
@@ -156,6 +162,8 @@ The following APIs can be combined with `pipe`.
     'endsWith',
     'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'finite',
     'hash',
     'hexadecimal',
@@ -176,6 +184,7 @@ The following APIs can be combined with `pipe`.
     'mac',
     'mac48',
     'mac64',
+    'mapItems',
     'maxBytes',
     'maxLength',
     'maxSize',
@@ -192,11 +201,16 @@ The following APIs can be combined with `pipe`.
     'notSize',
     'notValue',
     'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
     'readonly',
+    'reduceItems',
     'regex',
     'safeInteger',
     'size',
     'someItem',
+    'sortItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',
@@ -212,3 +226,7 @@ The following APIs can be combined with `pipe`.
     'value',
   ]}
 />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

@@ -5,7 +5,35 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'string',
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'RegexIssue',
+              href: '../RegexIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TInput',
+                },
+              ],
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   BaseValidation: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseValidation',
@@ -14,6 +42,21 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'RegexIssue',
+          href: '../RegexIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+          ],
         },
       ],
     },
@@ -24,10 +67,27 @@ export const properties: Record<string, PropertyProps> = {
       value: 'regex',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'regex',
+      href: '../regex/',
+    },
+  },
+  expects: {
+    type: 'string',
+  },
   requirement: {
     type: {
       type: 'custom',
       name: 'RegExp',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

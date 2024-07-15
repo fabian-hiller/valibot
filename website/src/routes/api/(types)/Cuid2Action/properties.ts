@@ -32,6 +32,7 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   BaseValidation: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseValidation',
@@ -68,7 +69,9 @@ export const properties: Record<string, PropertyProps> = {
   reference: {
     type: {
       type: 'custom',
+      modifier: 'typeof',
       name: 'cuid2',
+      href: '../cuid2/',
     },
   },
   expects: {

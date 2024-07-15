@@ -19,22 +19,29 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'NonNullishOutput',
-      href: '../NonNullishOutput/',
-      generics: [
+    type: {
+      type: 'union',
+      options: [
         {
           type: 'custom',
-          name: 'TWrapped',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'NonNullishIssue',
+              href: '../NonNullishIssue/',
+            },
+          ],
         },
+        'undefined',
       ],
     },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -42,8 +49,8 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'NonNullishInput',
-          href: '../NonNullishInput/',
+          name: 'InferNonNullishInput',
+          href: '../InferNonNullishInput/',
           generics: [
             {
               type: 'custom',
@@ -53,7 +60,35 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferNonNullishOutput',
+          href: '../InferNonNullishOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'NonNullishIssue',
+              href: '../NonNullishIssue/',
+            },
+            {
+              type: 'custom',
+              name: 'InferNonNullishIssue',
+              href: '../InferNonNullishIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TWrapped',
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -64,6 +99,20 @@ export const properties: Record<string, PropertyProps> = {
       value: 'non_nullish',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'nonNullish',
+      href: '../nonNullish/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: '!null & !undefined',
+    },
+  },
   wrapped: {
     type: {
       type: 'custom',
@@ -72,15 +121,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

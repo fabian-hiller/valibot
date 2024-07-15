@@ -1,10 +1,194 @@
 ---
 title: arrayAsync
+description: Creates an array schema.
 source: /schemas/array/arrayAsync.ts
 contributors:
+  - EltonLobo07
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # arrayAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/array/arrayAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates an array schema.
+
+```ts
+const Schema = v.arrayAsync<TItem, TMessage>(item, message);
+```
+
+## Generics
+
+- `TItem` <Property {...properties.TItem} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `item` <Property {...properties.item} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `arrayAsync` you can validate the data type of the input. If the input is not an array, you can use `message` to customize the error message.
+
+> If your array has a fixed length, consider using <Link href="../tupleAsync/">`tupleAsync`</Link> for a more precise typing.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `arrayAsync` can be used.
+
+### Stored emails schema
+
+Schema to validate an array of stored emails.
+
+```ts
+import { isEmailPresent } from '~/api';
+
+const StoredEmailsSchema = v.arrayAsync(
+  v.pipeAsync(
+    v.string(),
+    v.email(),
+    v.checkAsync(isEmailPresent, 'The email is not in the database.')
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `arrayAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['config', 'getDefault', 'getFallback']} />
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'checkItems',
+    'brand',
+    'empty',
+    'everyItem',
+    'excludes',
+    'filterItems',
+    'findItem',
+    'includes',
+    'length',
+    'mapItems',
+    'maxLength',
+    'minLength',
+    'nonEmpty',
+    'notLength',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'reduceItems',
+    'someItem',
+    'sortItems',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'checkAsync',
+    'customAsync',
+    'fallbackAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialCheckAsync',
+    'pipeAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'recordAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>

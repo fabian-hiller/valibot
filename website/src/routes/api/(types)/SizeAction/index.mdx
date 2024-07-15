@@ -1,5 +1,5 @@
 ---
-title: SizeValidation
+title: SizeAction
 description: Size action type.
 contributors:
   - fabian-hiller
@@ -8,7 +8,7 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# SizeValidation
+# SizeAction
 
 Size action type.
 
@@ -16,9 +16,13 @@ Size action type.
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `SizeValidation` <Property {...properties.BaseValidation} />
+- `SizeAction` <Property {...properties.BaseValidation} />
   - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
   - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

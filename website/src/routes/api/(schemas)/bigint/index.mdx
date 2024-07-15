@@ -89,6 +89,7 @@ The following APIs can be combined with `bigint`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -96,8 +97,10 @@ The following APIs can be combined with `bigint`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
     'pipe',
     'safeParse',
+    'safeParser',
   ]}
 />
 
@@ -110,6 +113,8 @@ The following APIs can be combined with `bigint`.
     'maxValue',
     'minValue',
     'notValue',
+    'rawCheck',
+    'rawTransform',
     'readonly',
     'toMaxValue',
     'toMinValue',
@@ -117,3 +122,7 @@ The following APIs can be combined with `bigint`.
     'value',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

@@ -112,6 +112,7 @@ The following APIs can be combined with `intersect`.
 
 <ApiList
   items={[
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -119,8 +120,10 @@ The following APIs can be combined with `intersect`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
     'pipe',
     'safeParse',
+    'safeParser',
   ]}
 />
 
@@ -133,6 +136,7 @@ The following APIs can be combined with `intersect`.
     'brand',
     'bytes',
     'check',
+    'checkItems',
     'creditCard',
     'cuid2',
     'decimal',
@@ -142,6 +146,8 @@ The following APIs can be combined with `intersect`.
     'endsWith',
     'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'finite',
     'hash',
     'hexadecimal',
@@ -162,6 +168,7 @@ The following APIs can be combined with `intersect`.
     'mac',
     'mac48',
     'mac64',
+    'mapItems',
     'maxBytes',
     'maxLength',
     'maxSize',
@@ -178,11 +185,16 @@ The following APIs can be combined with `intersect`.
     'notSize',
     'notValue',
     'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
     'readonly',
+    'reduceItems',
     'regex',
     'safeInteger',
     'size',
     'someItem',
+    'sortItem',
     'startsWith',
     'toLowerCase',
     'toMaxValue',
@@ -198,3 +210,7 @@ The following APIs can be combined with `intersect`.
     'value',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

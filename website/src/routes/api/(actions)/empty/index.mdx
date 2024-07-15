@@ -1,10 +1,76 @@
 ---
 title: empty
+description: Creates an empty validation action.
 source: /actions/empty/empty.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # empty
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/actions/empty/empty.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates an empty validation action.
+
+```ts
+const Action = v.empty<TInput, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `empty` you can validate that a string or array is empty. If the input is not empty, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `empty` can be used.
+
+### String schema
+
+Schema to validate that a string is empty.
+
+```ts
+const StringSchema = v.pipe(v.string(), v.empty('The string must be empty.'));
+```
+
+### Array schema
+
+Schema to validate that an array is empty.
+
+```ts
+const ArraySchema = v.pipe(
+  v.array(v.number()),
+  v.empty('The array must be empty.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `empty`.
+
+### Schemas
+
+<ApiList
+  items={['any', 'array', 'instance', 'special', 'string', 'tuple', 'unknown']}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

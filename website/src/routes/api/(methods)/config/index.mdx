@@ -1,10 +1,233 @@
 ---
 title: config
+description: Changes the local configuration of a schema.
 source: /methods/config/config.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # config
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/config/config.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Changes the local configuration of a schema.
+
+```ts
+const Schema = v.config<TSchema>(schema, config);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `config` <Property {...properties.config} />
+
+### Explanation
+
+This method overwrites the selected configuration properties by merging the previous configuration of the `schema` with the provided `config`.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `config` can be used.
+
+### Same error message
+
+Schema that uses the same error message for the entire pipeline.
+
+```ts
+const Schema = v.object({
+  email: v.config(
+    v.pipe(v.string(), v.trim(), v.email(), v.endsWith('@example.com')),
+    { message: 'The email does not conform to the required format.' }
+  ),
+  // ...
+});
+```
+
+### Abort pipeline early
+
+Schema that aborts only a specific pipeline early.
+
+```ts
+const Schema = v.object({
+  url: v.config(
+    v.pipe(v.string(), v.trim(), v.url(), v.endsWith('@example.com')),
+    { abortPipeEarly: true }
+  ),
+  // ...
+});
+```
+
+## Related
+
+The following APIs can be combined with `config`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'fallback',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'omit',
+    'parse',
+    'parser',
+    'partial',
+    'pick',
+    'pipe',
+    'required',
+    'safeParse',
+    'safeParser',
+    'unwrap',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'bic',
+    'brand',
+    'bytes',
+    'check',
+    'checkItems',
+    'creditCard',
+    'cuid2',
+    'decimal',
+    'email',
+    'emoji',
+    'empty',
+    'endsWith',
+    'everyItem',
+    'excludes',
+    'filterItems',
+    'findItem',
+    'finite',
+    'hash',
+    'hexadecimal',
+    'hexColor',
+    'imei',
+    'includes',
+    'integer',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'mac',
+    'mac48',
+    'mac64',
+    'mapItems',
+    'maxBytes',
+    'maxLength',
+    'maxSize',
+    'maxValue',
+    'mimeType',
+    'minBytes',
+    'minLength',
+    'minSize',
+    'minValue',
+    'multipleOf',
+    'nonEmpty',
+    'notBytes',
+    'notLength',
+    'notSize',
+    'notValue',
+    'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'reduceItems',
+    'regex',
+    'safeInteger',
+    'size',
+    'someItem',
+    'sortItem',
+    'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
+    'transform',
+    'trim',
+    'trimEnd',
+    'trimStart',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

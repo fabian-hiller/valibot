@@ -1,10 +1,10 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import type { ArrayRequirement } from '../types.ts';
+import type { ArrayInput, ArrayRequirement } from '../types.ts';
 
 /**
  * Filter items action type.
  */
-export interface FilterItemsAction<TInput extends readonly unknown[]>
+export interface FilterItemsAction<TInput extends ArrayInput>
   extends BaseTransformation<TInput, TInput, never> {
   /**
    * The action type.
@@ -27,7 +27,7 @@ export interface FilterItemsAction<TInput extends readonly unknown[]>
  *
  * @returns A filter items action.
  */
-export function filterItems<TInput extends readonly unknown[]>(
+export function filterItems<TInput extends ArrayInput>(
   operation: ArrayRequirement<TInput>
 ): FilterItemsAction<TInput>;
 

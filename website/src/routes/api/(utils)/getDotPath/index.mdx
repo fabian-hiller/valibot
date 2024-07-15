@@ -1,0 +1,30 @@
+---
+title: getDotPath
+description: Creates and returns the dot path of an issue if possible.
+source: /utils/getDotPath/getDotPath.ts
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# getDotPath
+
+Creates and returns the dot path of an issue if possible.
+
+```ts
+const dotPath = v.getDotPath<TSchema>(issue);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `issue` <Property {...properties.issue} />
+
+## Returns
+
+- `dotPath` <Property {...properties.dotPath} />

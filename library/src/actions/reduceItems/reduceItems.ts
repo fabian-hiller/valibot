@@ -1,9 +1,10 @@
 import type { BaseTransformation, TypedDataset } from '../../types/index.ts';
+import type { ArrayInput } from '../types.ts';
 
 /**
  * Array action type.
  */
-type ArrayAction<TInput extends readonly unknown[], TOutput> = (
+type ArrayAction<TInput extends ArrayInput, TOutput> = (
   output: TOutput,
   item: TInput[number],
   index: number,
@@ -13,7 +14,7 @@ type ArrayAction<TInput extends readonly unknown[], TOutput> = (
 /**
  * Reduce items action type.
  */
-export interface ReduceItemsAction<TInput extends readonly unknown[], TOutput>
+export interface ReduceItemsAction<TInput extends ArrayInput, TOutput>
   extends BaseTransformation<TInput, TOutput, never> {
   /**
    * The action type.
@@ -41,7 +42,7 @@ export interface ReduceItemsAction<TInput extends readonly unknown[], TOutput>
  *
  * @returns A reduce items action.
  */
-export function reduceItems<TInput extends readonly unknown[], TOutput>(
+export function reduceItems<TInput extends ArrayInput, TOutput>(
   operation: ArrayAction<TInput, TOutput>,
   initial: TOutput
 ): ReduceItemsAction<TInput, TOutput>;

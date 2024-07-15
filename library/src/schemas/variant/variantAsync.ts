@@ -35,6 +35,10 @@ export interface VariantSchemaAsync<
    */
   readonly reference: typeof variantAsync;
   /**
+   * The expected property.
+   */
+  readonly expects: 'Object';
+  /**
    * The discriminator key.
    */
   readonly key: TKey;

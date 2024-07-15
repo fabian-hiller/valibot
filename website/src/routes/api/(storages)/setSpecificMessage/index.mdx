@@ -1,10 +1,28 @@
 ---
 title: setSpecificMessage
+description: Sets a specific error message.
 source: /storages/specificMessage/specificMessage.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Property } from '~/components';
+import { properties } from './properties';
+
 # setSpecificMessage
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/storages/specificMessage/specificMessage.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Sets a specific error message.
+
+```ts
+v.setSpecificMessage<TReference>(reference, message, lang);
+```
+
+## Generics
+
+- `TReference` <Property {...properties.TReference} />
+
+## Parameters
+
+- `reference` <Property {...properties.reference} />
+- `message` <Property {...properties.message} />
+- `lang` <Property {...properties.lang} />
