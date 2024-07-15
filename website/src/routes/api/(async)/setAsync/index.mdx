@@ -1,10 +1,177 @@
 ---
 title: setAsync
+description: Creates a set schema.
 source: /schemas/set/setAsync.ts
 contributors:
+  - EltonLobo07
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # setAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/set/setAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a set schema.
+
+```ts
+const Schema = v.setAsync<TValue, TMessage>(value, message);
+```
+
+## Generics
+
+- `TValue` <Property {...properties.TValue} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `value` <Property {...properties.value} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `setAsync` you can validate the data type of the input and whether the content matches `value`. If the input is not a set, you can use `message` to customize the error message.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `setAsync` can be used.
+
+### Allowed IPs schema
+
+Schema to validate a set of allowed IP addresses.
+
+```ts
+import { isIPAddressAllowed } from '~/api';
+
+const AllowedIPsSchema = v.setAsync(
+  v.pipeAsync(
+    v.string(),
+    v.ip(),
+    v.checkAsync(isIPAddressAllowed, 'The IP is not an allowed IP address.')
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `setAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['config', 'getDefault', 'getFallback']} />
+
+### Actions
+
+<ApiList
+  items={[
+    'brand',
+    'check',
+    'maxSize',
+    'minSize',
+    'notSize',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'size',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'checkAsync',
+    'customAsync',
+    'fallbackAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'pipeAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'recordAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>
