@@ -1,26 +1,28 @@
 ---
-title: DateSchema
-description: Date schema type.
+title: StrictObjectSchema
+description: Strict object schema type.
 contributors:
   - fabian-hiller
-  - wout-junius
+  - kazizi55
 ---
 
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# DateSchema
+# StrictObjectSchema
 
-Date schema type.
+Strict object schema type.
 
 ## Generics
 
+- `TEntries` <Property {...properties.TEntries} />
 - `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `DateSchema` <Property {...properties.BaseSchema} />
+- `StrictObjectSchema` <Property {...properties.BaseSchema} />
   - `type` <Property {...properties.type} />
   - `reference` <Property {...properties.reference} />
   - `expects` <Property {...properties.expects} />
+  - `entries` <Property {...properties.entries} />
   - `message` <Property {...properties.message} />

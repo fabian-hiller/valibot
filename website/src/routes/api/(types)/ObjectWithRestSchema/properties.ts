@@ -1,12 +1,12 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TItems: {
+  TEntries: {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'TupleItems',
-      href: '../TupleItems/',
+      name: 'ObjectEntries',
+      href: '../ObjectEntries/',
     },
   },
   TMessage: {
@@ -21,8 +21,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'TupleIssue',
-              href: '../TupleIssue/',
+              name: 'ObjectWithRestIssue',
+              href: '../ObjectWithRestIssue/',
             },
           ],
         },
@@ -39,23 +39,23 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'InferTupleInput',
-          href: '../InferTupleInput/',
+          name: 'InferObjectInput',
+          href: '../InferObjectInput/',
           generics: [
             {
               type: 'custom',
-              name: 'TItems',
+              name: 'TEntries',
             },
           ],
         },
         {
           type: 'custom',
-          name: 'InferTupleOutput',
-          href: '../InferTupleOutput/',
+          name: 'InferObjectOutput',
+          href: '../InferObjectOutput/',
           generics: [
             {
               type: 'custom',
-              name: 'TItems',
+              name: 'TEntries',
             },
           ],
         },
@@ -64,17 +64,17 @@ export const properties: Record<string, PropertyProps> = {
           options: [
             {
               type: 'custom',
-              name: 'TupleIssue',
-              href: '../TupleIssue/',
+              name: 'ObjectWithRestIssue',
+              href: '../ObjectWithRestIssue/',
             },
             {
               type: 'custom',
-              name: 'InferTupleIssue',
-              href: '../InferTupleIssue/',
+              name: 'InferObjectIssue',
+              href: '../InferObjectIssue/',
               generics: [
                 {
                   type: 'custom',
-                  name: 'TItems',
+                  name: 'TEntries',
                 },
               ],
             },
@@ -86,27 +86,27 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'tuple',
+      value: 'object_with_rest',
     },
   },
   reference: {
     type: {
       type: 'custom',
       modifier: 'typeof',
-      name: 'tuple',
-      href: '../tuple/',
+      name: 'objectWithRest',
+      href: '../objectWithRest/',
     },
   },
   expects: {
     type: {
       type: 'string',
-      value: 'Array',
+      value: 'Object',
     },
   },
-  items: {
+  entries: {
     type: {
       type: 'custom',
-      name: 'TItems',
+      name: 'TEntries',
     },
   },
   message: {

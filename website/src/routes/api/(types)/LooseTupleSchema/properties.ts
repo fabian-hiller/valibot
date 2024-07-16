@@ -21,8 +21,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'TupleIssue',
-              href: '../TupleIssue/',
+              name: 'LooseTupleIssue',
+              href: '../LooseTupleIssue/',
             },
           ],
         },
@@ -64,8 +64,8 @@ export const properties: Record<string, PropertyProps> = {
           options: [
             {
               type: 'custom',
-              name: 'TupleIssue',
-              href: '../TupleIssue/',
+              name: 'LooseTupleIssue',
+              href: '../LooseTupleIssue/',
             },
             {
               type: 'custom',
@@ -86,15 +86,15 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'tuple',
+      value: 'loose_tuple',
     },
   },
   reference: {
     type: {
       type: 'custom',
       modifier: 'typeof',
-      name: 'tuple',
-      href: '../tuple/',
+      name: 'looseTuple',
+      href: '../looseTuple/',
     },
   },
   expects: {
