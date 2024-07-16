@@ -40,23 +40,22 @@ With `checkAsync` you can freely validate the input and return `true` if it is v
 
 The following examples show how `checkAsync` can be used.
 
-### Check cart item object
+### Cart item schema
 
 Schema to check a cart item object.
 
 ```ts
-import { isQtyLessOrEqToAvailable } from '~/api';
+import { getProductItem } from '~/api';
 
-// Assume any id that passes `itemId` validation is present in the shop
 const CartItemSchema = v.pipeAsync(
   v.object({
     itemId: v.pipe(v.string(), v.regex(/^[a-z0-9]{10}$/i)),
     quantity: v.pipe(v.number(), v.minValue(1)),
   }),
-  v.checkAsync(
-    isQtyLessOrEqToAvailable,
-    'The required quantity is greater than available.'
-  )
+  v.checkAsync(async (input) => {
+    const productItem = await getProductItem(input.itemId);
+    return productItem?.quantity >= input.quantity;
+  }, 'The required quantity is greater than available.')
 );
 ```
 
