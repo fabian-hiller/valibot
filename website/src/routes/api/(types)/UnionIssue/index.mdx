@@ -1,0 +1,25 @@
+---
+title: UnionIssue
+description: Union issue type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# UnionIssue
+
+Union issue type.
+
+## Generics
+
+- `TSubIssue` <Property {...properties.TSubIssue} />
+
+## Definition
+
+- `UnionIssue` <Property {...properties.BaseIssue} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
+  - `expected` <Property {...properties.expected} />
+  - `issues` <Property {...properties.issues} />

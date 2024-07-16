@@ -1,0 +1,25 @@
+---
+title: PromiseSchema
+description: Promise schema type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# PromiseSchema
+
+Promise schema type.
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `PromiseSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `message` <Property {...properties.message} />

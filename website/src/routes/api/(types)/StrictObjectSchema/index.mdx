@@ -1,0 +1,28 @@
+---
+title: StrictObjectSchema
+description: Strict object schema type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# StrictObjectSchema
+
+Strict object schema type.
+
+## Generics
+
+- `TEntries` <Property {...properties.TEntries} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `StrictObjectSchema` <Property {...properties.BaseSchema} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `entries` <Property {...properties.entries} />
+  - `message` <Property {...properties.message} />
