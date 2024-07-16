@@ -5,6 +5,8 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add `base64` action to validate Base64 strings (pull request #644)
+- Refactor `HEXADECIMAL_REGEX` (pull request #666)
+- Change `EMOJI_REGEX` to be more accurate and strict (pull request #666)
 
 ## v0.36.0 (July 05, 2024)
 

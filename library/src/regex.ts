@@ -26,19 +26,19 @@ export const EMAIL_REGEX: RegExp =
   /^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/iu;
 
 /**
- * Emoji regex.
+ * Emoji regex from [emoji-regex-xs](https://github.com/slevithan/emoji-regex-xs) v1.0.0 (MIT license).
+ *
+ * Hint: We decided against the newer `/^\p{RGI_Emoji}+$/v` regex because it is
+ * not supported in older runtimes and does not match all emoji.
  */
 export const EMOJI_REGEX: RegExp =
-  /^[\p{Extended_Pictographic}\p{Emoji_Component}]+$/u;
-
-// This emoji regex is not supported in Node.js v18 and older browsers.
-// Therefore, we are postponing the switch to this regex to a later date.
-// export const EMOJI_REGEX = /^\p{RGI_Emoji}+$/v;
+  // eslint-disable-next-line redos-detector/no-unsafe-regex, regexp/no-dupe-disjunctions -- false positives
+  /^(?:[\u{1F1E6}-\u{1F1FF}]{2}|\u{1F3F4}[\u{E0061}-\u{E007A}]{2}[\u{E0030}-\u{E0039}\u{E0061}-\u{E007A}]{1,3}\u{E007F}|(?:\p{Emoji}\uFE0F\u20E3?|\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji_Presentation})(?:\u200D(?:\p{Emoji}\uFE0F\u20E3?|\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji_Presentation}))*)+$/u;
 
 /**
  * [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) regex.
  */
-export const HEXADECIMAL_REGEX: RegExp = /^(?:0h|0x)?[\da-f]+$/iu;
+export const HEXADECIMAL_REGEX: RegExp = /^(?:0[hx])?[\da-f]+$/iu;
 
 /**
  * [Hex color](https://en.wikipedia.org/wiki/Web_colors#Hex_triplet) regex.
