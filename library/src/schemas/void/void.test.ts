@@ -1,22 +1,98 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
-import { void_ } from './void.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { void_, type VoidIssue, type VoidSchema } from './void.ts';
 
 describe('void', () => {
-  test('should pass only void', () => {
-    const schema = void_();
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    expect(parse(schema, (() => {})())).toBeUndefined();
-    expect(parse(schema, undefined)).toBeUndefined();
-    expect(() => parse(schema, 123)).toThrowError();
-    expect(() => parse(schema, 'test')).toThrowError();
-    expect(() => parse(schema, false)).toThrowError();
-    expect(() => parse(schema, null)).toThrowError();
-    expect(() => parse(schema, {})).toThrowError();
+  describe('should return schema object', () => {
+    const baseSchema: Omit<VoidSchema<never>, 'message'> = {
+      kind: 'schema',
+      type: 'void',
+      reference: void_,
+      expects: 'void',
+      async: false,
+      _run: expect.any(Function),
+    };
+
+    test('with undefined message', () => {
+      const schema: VoidSchema<undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(void_()).toStrictEqual(schema);
+      expect(void_(undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(void_('message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies VoidSchema<'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(void_(message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies VoidSchema<typeof message>);
+    });
   });
 
-  test('should throw custom error', () => {
-    const error = 'Value is not void!';
-    expect(() => parse(void_(error), 123)).toThrowError(error);
+  describe('should return dataset without issues', () => {
+    const schema = void_();
+
+    test('for undefined', () => {
+      expectNoSchemaIssue(schema, [undefined]);
+    });
+  });
+
+  describe('should return dataset with issues', () => {
+    const schema = void_('message');
+    const baseIssue: Omit<VoidIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'void',
+      expected: 'void',
+      message: 'message',
+    };
+
+    // Primitive types
+
+    test('for bigints', () => {
+      expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
+    });
+
+    test('for booleans', () => {
+      expectSchemaIssue(schema, baseIssue, [true, false]);
+    });
+
+    test('for numbers', () => {
+      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for null', () => {
+      expectSchemaIssue(schema, baseIssue, [null]);
+    });
+
+    test('for strings', () => {
+      expectSchemaIssue(schema, baseIssue, ['', 'foo', '123']);
+    });
+
+    test('for symbols', () => {
+      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    });
+
+    // Complex types
+
+    test('for arrays', () => {
+      expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    });
+
+    test('for functions', () => {
+      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    });
+
+    test('for objects', () => {
+      expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    });
   });
 });

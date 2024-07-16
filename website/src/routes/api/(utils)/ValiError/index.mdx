@@ -1,0 +1,30 @@
+---
+title: ValiError
+description: Creates a Valibot error with useful information.
+source: /utils/ValiError/ValiError.ts
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# ValiError
+
+Creates a Valibot error with useful information.
+
+```ts
+const error = new v.ValiError<TSchema>(issues);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `issues` <Property {...properties.issues} />
+
+## Returns
+
+- `error` <Property {...properties.error} />

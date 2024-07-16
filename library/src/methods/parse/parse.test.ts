@@ -1,22 +1,28 @@
 import { describe, expect, test } from 'vitest';
+import { transform } from '../../actions/index.ts';
 import { number, object, string } from '../../schemas/index.ts';
+import { pipe } from '../pipe/index.ts';
 import { parse } from './parse.ts';
 
 describe('parse', () => {
-  test('should parse schema', () => {
-    const output1 = parse(string(), 'hello');
-    expect(output1).toBe('hello');
-    const output2 = parse(number(), 123);
-    expect(output2).toBe(123);
-    const output3 = parse(object({ test: string() }), { test: 'hello' });
-    expect(output3).toEqual({ test: 'hello' });
+  const entries = {
+    key: pipe(
+      string(),
+      transform((input) => input.length)
+    ),
+  };
+
+  test('should return output for valid input', () => {
+    expect(parse(string(), 'hello')).toBe('hello');
+    expect(parse(number(), 123)).toBe(123);
+    expect(parse(object(entries), { key: 'foo' })).toStrictEqual({
+      key: 3,
+    });
   });
 
-  test('should throw error', () => {
-    expect(() => parse(string(), 123)).toThrowError('Invalid type');
-    expect(() => parse(number(), 'hello')).toThrowError('Invalid type');
-    expect(() => parse(object({ test: string() }), {})).toThrowError(
-      'Invalid type'
-    );
+  test('should throw error for invalid input', () => {
+    expect(() => parse(string(), 123)).toThrowError();
+    expect(() => parse(number(), 'foo')).toThrowError();
+    expect(() => parse(object(entries), null)).toThrowError();
   });
 });

@@ -14,28 +14,24 @@ import { properties } from './properties';
 Creates a map schema.
 
 ```ts
-// Map schema with an optional pipe
-const Schema = map<TKey, TValue>(key, value, pipe);
-
-// Map schema with an optional message and pipe
-const Schema = map<TKey, TValue>(key, value, message, pipe);
+const Schema = v.map<TKey, TValue, TMessage>(key, value, message);
 ```
 
 ## Generics
 
 - `TKey` <Property {...properties.TKey} />
 - `TValue` <Property {...properties.TValue} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `key` <Property {...properties.key} />
 - `value` <Property {...properties.value} />
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-With `map` you can validate the data type of the input and whether the entries matches `key` and `value`. With `pipe` you can transform and validate the further details of the map. If the input is not a map, you can use `message` to customize the error message.
+With `map` you can validate the data type of the input and whether the entries matches `key` and `value`. If the input is not a map, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -50,7 +46,7 @@ The following examples show how `map` can be used.
 Schema to validate a map with string values.
 
 ```ts
-const StringMapSchema = map(string(), string());
+const StringMapSchema = v.map(v.string(), v.string());
 ```
 
 ### Object map schema
@@ -58,7 +54,7 @@ const StringMapSchema = map(string(), string());
 Schema to validate a map with object values.
 
 ```ts
-const ObjectMapSchema = map(string(), object({ key: string() }));
+const ObjectMapSchema = v.map(v.string(), v.object({ key: v.string() }));
 ```
 
 ## Related
@@ -74,35 +70,44 @@ The following APIs can be combined with `map`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -110,8 +115,7 @@ The following APIs can be combined with `map`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -119,15 +123,30 @@ The following APIs can be combined with `map`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
+    'safeParser',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'maxSize',
+    'minSize',
+    'notSize',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'size',
     'transform',
   ]}
 />
 
-### Transformations
+### Utils
 
-<ApiList items={['toCustom']} />
-
-### Validations
-
-<ApiList items={['custom', 'maxSize', 'minSize', 'notSize', 'size']} />
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

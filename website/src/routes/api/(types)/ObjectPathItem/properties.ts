@@ -9,8 +9,17 @@ export const properties: Record<string, PropertyProps> = {
   },
   origin: {
     type: {
-      type: 'string',
-      value: 'value',
+      type: 'union',
+      options: [
+        {
+          type: 'string',
+          value: 'key',
+        },
+        {
+          type: 'string',
+          value: 'value',
+        },
+      ],
     },
   },
   input: {

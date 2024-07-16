@@ -1,20 +1,82 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TSchema: {
+  TDefault: {
     modifier: 'extends',
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'SchemaWithMaybeDefault',
-          href: '../SchemaWithMaybeDefault/',
+          name: 'Default',
+          href: '../Default/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'BaseSchema',
+              href: '../BaseSchema/',
+              generics: [
+                'unknown',
+                'unknown',
+                {
+                  type: 'custom',
+                  name: 'BaseIssue',
+                  href: '../BaseIssue/',
+                  generics: ['unknown'],
+                },
+              ],
+            },
+            {
+              type: 'union',
+              options: ['null', 'undefined'],
+            },
+          ],
         },
         {
           type: 'custom',
-          name: 'SchemaWithMaybeDefaultAsync',
-          href: '../SchemaWithMaybeDefaultAsync/',
+          name: 'DefaultAsync',
+          href: '../DefaultAsync/',
+          generics: [
+            {
+              type: 'union',
+              options: [
+                {
+                  type: 'custom',
+                  name: 'BaseSchema',
+                  href: '../BaseSchema/',
+                  generics: [
+                    'unknown',
+                    'unknown',
+                    {
+                      type: 'custom',
+                      name: 'BaseIssue',
+                      href: '../BaseIssue/',
+                      generics: ['unknown'],
+                    },
+                  ],
+                },
+                {
+                  type: 'custom',
+                  name: 'BaseSchemaAsync',
+                  href: '../BaseSchemaAsync/',
+                  generics: [
+                    'unknown',
+                    'unknown',
+                    {
+                      type: 'custom',
+                      name: 'BaseIssue',
+                      href: '../BaseIssue/',
+                      generics: ['unknown'],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'union',
+              options: ['null', 'undefined'],
+            },
+          ],
         },
       ],
     },
@@ -26,154 +88,131 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: {
             type: 'custom',
-            name: 'TSchema',
-            indexes: [
-              {
-                type: 'string',
-                value: 'default',
-              },
-            ],
+            name: 'TDefault',
           },
           extends: {
-            type: 'union',
-            options: [
+            type: 'custom',
+            name: 'DefaultAsync',
+            href: '../DefaultAsync/',
+            generics: [
               {
                 type: 'custom',
-                name: 'Output',
-                href: '../Output/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TSchema',
-                  },
-                ],
+                modifier: 'infer',
+                name: 'TWrapped',
               },
-              'undefined',
+              {
+                type: 'custom',
+                modifier: 'infer',
+                name: 'TInput',
+              },
             ],
           },
           true: {
-            type: 'custom',
-            name: 'TSchema',
-            indexes: [
+            type: 'conditional',
+            conditions: [
               {
-                type: 'string',
-                value: 'default',
-              },
-            ],
-          },
-        },
-        {
-          type: {
-            type: 'custom',
-            name: 'TSchema',
-            indexes: [
-              {
-                type: 'string',
-                value: 'default',
-              },
-            ],
-          },
-          extends: {
-            type: 'function',
-            params: [],
-            return: {
-              type: 'union',
-              options: [
-                {
+                type: {
                   type: 'custom',
-                  name: 'Output',
-                  href: '../Output/',
-                  generics: [
+                  name: 'TDefault',
+                },
+                extends: {
+                  type: 'function',
+                  params: [
                     {
-                      type: 'custom',
-                      name: 'TSchema',
+                      name: 'dataset',
+                      optional: true,
+                      type: {
+                        type: 'custom',
+                        name: 'Dataset',
+                        href: '../Dataset/',
+                        generics: [
+                          {
+                            type: 'custom',
+                            name: 'TInput',
+                          },
+                          'never',
+                        ],
+                      },
+                    },
+                    {
+                      name: 'config',
+                      optional: true,
+                      type: {
+                        type: 'custom',
+                        name: 'Config',
+                        href: '../Config/',
+                        generics: [
+                          {
+                            type: 'custom',
+                            name: 'InferIssue',
+                            href: '../InferIssue/',
+                            generics: [
+                              {
+                                type: 'custom',
+                                name: 'TWrapped',
+                              },
+                            ],
+                          },
+                        ],
+                      },
                     },
                   ],
-                },
-                'undefined',
-              ],
-            },
-          },
-          true: {
-            type: 'custom',
-            name: 'ReturnType',
-            generics: [
-              {
-                type: 'custom',
-                name: 'TSchema',
-                indexes: [
-                  {
-                    type: 'string',
-                    value: 'default',
-                  },
-                ],
-              },
-            ],
-          },
-        },
-        {
-          type: {
-            type: 'custom',
-            name: 'TSchema',
-            indexes: [
-              {
-                type: 'string',
-                value: 'default',
-              },
-            ],
-          },
-          extends: {
-            type: 'function',
-            params: [],
-            return: {
-              type: 'custom',
-              name: 'Promise',
-              generics: [
-                {
-                  type: 'union',
-                  options: [
-                    {
-                      type: 'custom',
-                      name: 'Output',
-                      href: '../Output/',
-                      generics: [
-                        {
-                          type: 'custom',
-                          name: 'TSchema',
-                        },
-                      ],
-                    },
-                    'undefined',
-                  ],
-                },
-              ],
-            },
-          },
-          true: {
-            type: 'custom',
-            name: 'Awaited',
-            generics: [
-              {
-                type: 'custom',
-                name: 'ReturnType',
-                generics: [
-                  {
+                  return: {
                     type: 'custom',
-                    name: 'TSchema',
-                    indexes: [
+                    name: 'MaybePromise',
+                    href: '../MaybePromise/',
+                    generics: [
                       {
-                        type: 'string',
-                        value: 'default',
+                        type: 'custom',
+                        name: 'MaybeReadonly',
+                        href: '../MaybeReadonly/',
+                        generics: [
+                          {
+                            type: 'custom',
+                            name: 'InferInput',
+                            href: '../InferInput/',
+                            generics: [
+                              {
+                                type: 'custom',
+                                name: 'TWrapped',
+                              },
+                            ],
+                          },
+                          {
+                            type: 'custom',
+                            name: 'TInput',
+                          },
+                        ],
                       },
                     ],
                   },
-                ],
+                },
+                true: {
+                  type: 'custom',
+                  name: 'Awaited',
+                  generics: [
+                    {
+                      type: 'custom',
+                      name: 'ReturnType',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'TDefault',
+                        },
+                      ],
+                    },
+                  ],
+                },
               },
             ],
+            false: {
+              type: 'custom',
+              name: 'TDefault',
+            },
           },
         },
       ],
-      false: 'undefined',
+      false: 'never',
     },
   },
 };

@@ -1,25 +1,64 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
-import { toCustom } from '../../transformations/index.ts';
-import { any } from './any.ts';
+import { expectNoSchemaIssue } from '../../vitest/index.ts';
+import { any, type AnySchema } from './any.ts';
 
 describe('any', () => {
-  test('should pass any values', () => {
-    const schema = any();
-    const input1 = 'hello';
-    const output1 = parse(schema, input1);
-    expect(output1).toBe(input1);
-    const input2 = 123;
-    const output2 = parse(schema, input2);
-    expect(output2).toBe(input2);
-    const input3 = { test: 123 };
-    const output3 = parse(schema, input3);
-    expect(output3).toEqual(input3);
+  test('should return schema object', () => {
+    expect(any()).toStrictEqual({
+      kind: 'schema',
+      type: 'any',
+      reference: any,
+      expects: 'any',
+      async: false,
+      _run: expect.any(Function),
+    } satisfies AnySchema);
   });
 
-  test('should execute pipe', () => {
-    const transformInput = () => 'hello';
-    const output = parse(any([toCustom(transformInput)]), 123);
-    expect(output).toBe(transformInput());
+  describe('should return dataset without issues', () => {
+    const schema = any();
+
+    // Primitive types
+
+    test('for bigints', () => {
+      expectNoSchemaIssue(schema, [-1n, 0n, 123n]);
+    });
+
+    test('for booleans', () => {
+      expectNoSchemaIssue(schema, [true, false]);
+    });
+
+    test('for null', () => {
+      expectNoSchemaIssue(schema, [null]);
+    });
+
+    test('for numbers', () => {
+      expectNoSchemaIssue(schema, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', () => {
+      expectNoSchemaIssue(schema, [undefined]);
+    });
+
+    test('for strings', () => {
+      expectNoSchemaIssue(schema, ['', 'foo', '123']);
+    });
+
+    test('for symbols', () => {
+      expectNoSchemaIssue(schema, [Symbol(), Symbol('foo')]);
+    });
+
+    // Complex types
+
+    test('for arrays', () => {
+      expectNoSchemaIssue(schema, [[], ['value']]);
+    });
+
+    test('for functions', () => {
+      expectNoSchemaIssue(schema, [() => {}, function () {}]);
+    });
+
+    test('for objects', () => {
+      expectNoSchemaIssue(schema, [{}, { key: 'value' }]);
+    });
   });
 });

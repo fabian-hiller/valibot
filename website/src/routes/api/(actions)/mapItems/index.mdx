@@ -1,0 +1,67 @@
+---
+title: mapItems
+description: Creates a map items transformation action.
+source: /actions/mapItems/mapItems.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# mapItems
+
+Creates a map items transformation action.
+
+```ts
+const Action = v.mapItems<TInput, TOutput>(operation);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Parameters
+
+- `operation` <Property {...properties.operation} />
+
+### Explanation
+
+With `mapItems` you can apply an `operation` to each item in an array to transform it.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `mapItems` can be used.
+
+### Mark duplicates
+
+```ts
+const MarkedArraySchema = v.pipe(
+  v.array(v.string()),
+  v.mapItems((item, index, array) => {
+    const isDuplicate = array.indexOf(item) !== index;
+    return { item, isDuplicate };
+  })
+);
+```
+
+## Related
+
+The following APIs can be combined with `mapItems`.
+
+### Schemas
+
+<ApiList items={['any', 'array', 'instance', 'special', 'tuple', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

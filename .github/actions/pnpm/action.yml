@@ -1,12 +1,11 @@
 name: Setup
-description: Sets up Node.js and runs install
+description: Sets up Node.js and pnpm
 
 runs:
   using: composite
   steps:
     - name: Setup pnpm
       uses: pnpm/action-setup@v4
-      id: pnpm-install
       with:
         version: 9
         run_install: false

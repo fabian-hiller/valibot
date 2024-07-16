@@ -7,18 +7,28 @@ export const properties: Record<string, PropertyProps> = {
       type: 'union',
       options: [
         {
-          type: 'array',
-          item: 'unknown',
+          type: 'custom',
+          name: 'Record',
+          generics: ['string', 'unknown'],
         },
         {
           type: 'custom',
-          name: 'Record',
+          name: 'ArrayLike',
           generics: ['unknown'],
         },
       ],
     },
   },
-  validation: {
+  TIssue: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'BaseIssue',
+      href: '../BaseIssue/',
+      generics: ['unknown'],
+    },
+  },
+  action: {
     type: {
       type: 'custom',
       name: 'BaseValidation',
@@ -28,13 +38,22 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'TInput',
         },
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TIssue',
+        },
       ],
     },
   },
-  pathList: {
+  pathKeys: {
     type: {
       type: 'custom',
-      name: 'PathList',
+      name: 'PathKeys',
+      href: '../PathKeys/',
       generics: [
         {
           type: 'custom',
@@ -43,7 +62,7 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  Validation: {
+  Action: {
     type: {
       type: 'custom',
       name: 'BaseValidation',
@@ -52,6 +71,14 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TIssue',
         },
       ],
     },

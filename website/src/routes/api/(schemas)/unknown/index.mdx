@@ -17,16 +17,8 @@ Creates an unknown schema.
 > Use this schema function only if the data is truly unknown. Otherwise, use the other more specific schema functions that describe the data exactly.
 
 ```ts
-const Schema = unknown(pipe);
+const Schema = v.unknown();
 ```
-
-## Parameters
-
-- `pipe` <Property {...properties.pipe} />
-
-### Explanation
-
-With `pipe` you can transform and validate the further details of the unknown data.
 
 ## Returns
 
@@ -43,6 +35,8 @@ The following APIs can be combined with `unknwon`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -50,10 +44,14 @@ The following APIs can be combined with `unknwon`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -62,8 +60,7 @@ The following APIs can be combined with `unknwon`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -71,41 +68,34 @@ The following APIs can be combined with `unknwon`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
-    'transform',
+    'safeParser',
   ]}
 />
 
-### Transformations
+### Actions
 
 <ApiList
   items={[
-    'toCustom',
-    'toLowerCase',
-    'toMaxValue',
-    'toMinValue',
-    'toTrimmed',
-    'toTrimmedEnd',
-    'toTrimmedStart',
-    'toUpperCase',
-  ]}
-/>
-
-### Validations
-
-<ApiList
-  items={[
+    'base64',
     'bic',
+    'brand',
     'bytes',
+    'check',
+    'checkItems',
     'creditCard',
     'cuid2',
-    'custom',
     'decimal',
     'email',
     'emoji',
+    'empty',
     'endsWith',
-    'every',
+    'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'finite',
     'hash',
     'hexadecimal',
@@ -126,6 +116,7 @@ The following APIs can be combined with `unknwon`.
     'mac',
     'mac48',
     'mac64',
+    'mapItems',
     'maxBytes',
     'maxLength',
     'maxSize',
@@ -136,19 +127,38 @@ The following APIs can be combined with `unknwon`.
     'minSize',
     'minValue',
     'multipleOf',
+    'nonEmpty',
     'notBytes',
     'notLength',
     'notSize',
     'notValue',
     'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'reduceItems',
     'regex',
     'safeInteger',
     'size',
-    'some',
+    'someItem',
+    'sortItem',
     'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
+    'transform',
+    'trim',
+    'trimEnd',
+    'trimStart',
     'ulid',
     'url',
     'uuid',
     'value',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

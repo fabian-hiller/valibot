@@ -1,0 +1,82 @@
+---
+title: toMinValue
+description: Creates a to min value transformation action.
+source: /actions/toMinValue/toMinValue.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# toMinValue
+
+Creates a to min value transformation action.
+
+```ts
+const Action = v.toMinValue<TInput, TRequirement>(requirement);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+
+### Explanation
+
+With `toMinValue` you can enforce a minimum value for a number, date or string. If the input does not meet the `requirement`, it will be changed to its value.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `toMinValue` can be used.
+
+### Number schema
+
+Schema to enforce a minimum value for a number.
+
+```ts
+const NumberSchema = v.pipe(v.number(), v.toMinValue(100));
+```
+
+### Date schema
+
+Schema to enforce a minimum value for a date.
+
+```ts
+const DateSchema = v.pipe(v.date(), v.toMinValue(new Date('1999-12-31')));
+```
+
+## Related
+
+The following APIs can be combined with `toMinValue`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'bigint',
+    'boolean',
+    'date',
+    'number',
+    'special',
+    'string',
+    'unknown',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

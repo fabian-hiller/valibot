@@ -7,27 +7,41 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
+      generics: [
+        'unknown',
+        'unknown',
+        {
+          type: 'custom',
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
+        },
+      ],
     },
   },
-  TOutput: {
+  TMessage: {
     modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'array',
-      item: {
-        type: 'custom',
-        name: 'Output',
-        href: '../Output/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'TItem',
-          },
-        ],
-      },
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'ArrayIssue',
+              href: '../ArrayIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -37,8 +51,8 @@ export const properties: Record<string, PropertyProps> = {
           type: 'array',
           item: {
             type: 'custom',
-            name: 'Input',
-            href: '../Input/',
+            name: 'InferInput',
+            href: '../InferInput/',
             generics: [
               {
                 type: 'custom',
@@ -48,8 +62,39 @@ export const properties: Record<string, PropertyProps> = {
           },
         },
         {
-          type: 'custom',
-          name: 'TOutput',
+          type: 'array',
+          item: {
+            type: 'custom',
+            name: 'InferOutput',
+            href: '../InferOutput/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TItem',
+              },
+            ],
+          },
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'ArrayIssue',
+              href: '../ArrayIssue/',
+            },
+            {
+              type: 'custom',
+              name: 'InferIssue',
+              href: '../InferIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TItem',
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -60,6 +105,20 @@ export const properties: Record<string, PropertyProps> = {
       value: 'array',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'array',
+      href: '../array/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: 'Array',
+    },
+  },
   item: {
     type: {
       type: 'custom',
@@ -68,43 +127,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
-    },
-  },
-  pipe: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'Pipe',
-          href: '../Pipe/',
-          generics: [
-            {
-              type: 'array',
-              item: {
-                type: 'custom',
-                name: 'Output',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TItem',
-                  },
-                ],
-              },
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

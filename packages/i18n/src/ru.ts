@@ -1,4 +1,4 @@
-import { Language } from './types';
+import type { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
@@ -7,13 +7,14 @@ const language: Language = {
   specific: {
     bic:            (issue) => `Неправильный BIC: получено ${issue.received}`,
     bytes:          (issue) => `Неправильное количество байтов: ожидалось ${issue.expected}, получено ${issue.received}`,
+    check:          (issue) => `Неправильные данные: получено ${issue.received}`,
+    checkAsync:     (issue) => `Неправильные данные: получено ${issue.received}`,
     creditCard:     (issue) => `Неправильный номер кредитной карты: получено ${issue.received}`,
     cuid2:          (issue) => `Неправильный Cuid2: получено ${issue.received}`,
-    custom:         (issue) => `Неправильные данные: получено ${issue.received}`,
-    customAsync:    (issue) => `Неправильные данные: получено ${issue.received}`,
     decimal:        (issue) => `Неправильное десятичное значение: получено ${issue.received}`,
     email:          (issue) => `Неправильный email: получено ${issue.received}`,
     emoji:          (issue) => `Неправильный эмодзи: получено ${issue.received}`,
+    empty:          (issue) => `Неправильная длина: ожидалось ${issue.expected}, получено ${issue.received}`,
     endsWith:       (issue) => `Неправильный конец: ожидалось ${issue.expected}, получено ${issue.received}`,
     excludes:       (issue) => `Неправильное вхождение: ожидалось ${issue.expected}, получено ${issue.received}`,
     finite:         (issue) => `Неправильное конечное число: получено ${issue.received}`,
@@ -46,6 +47,7 @@ const language: Language = {
     minSize:        (issue) => `Неправильный размер: ожидалось ${issue.expected}, получено ${issue.received}`,
     minValue:       (issue) => `Неправильное значение: ожидалось ${issue.expected}, получено ${issue.received}`,
     multipleOf:     (issue) => `Неправильное кратное число: ожидалось ${issue.expected}, получено ${issue.received}`,
+    nonEmpty:       (issue) => `Неправильная длина: ожидалось ${issue.expected}, получено ${issue.received}`,
     notBytes:       (issue) => `Неправильное количество байтов: ожидалось ${issue.expected}, получено ${issue.received}`,
     notLength:      (issue) => `Неправильная длина: ожидалось ${issue.expected}, получено ${issue.received}`,
     notSize:        (issue) => `Неправильный размер: ожидалось ${issue.expected}, получено ${issue.received}`,

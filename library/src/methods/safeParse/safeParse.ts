@@ -1,5 +1,10 @@
 import { getGlobalConfig } from '../../storages/index.ts';
-import type { BaseSchema, SchemaConfig } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Config,
+  InferIssue,
+} from '../../types/index.ts';
 import type { SafeParseResult } from './types.ts';
 
 /**
@@ -9,18 +14,23 @@ import type { SafeParseResult } from './types.ts';
  * @param input The input to be parsed.
  * @param config The parse configuration.
  *
- * @returns The parsed output.
+ * @returns The parse result.
  */
-export function safeParse<TSchema extends BaseSchema>(
+export function safeParse<
+  const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(
   schema: TSchema,
   input: unknown,
-  config?: SchemaConfig
+  config?: Config<InferIssue<TSchema>>
 ): SafeParseResult<TSchema> {
-  const result = schema._parse(input, getGlobalConfig(config));
+  const dataset = schema._run(
+    { typed: false, value: input },
+    getGlobalConfig(config)
+  );
   return {
-    typed: result.typed,
-    success: !result.issues,
-    output: result.output,
-    issues: result.issues,
-  } as unknown as SafeParseResult<TSchema>;
+    typed: dataset.typed,
+    success: !dataset.issues,
+    output: dataset.value,
+    issues: dataset.issues,
+  } as SafeParseResult<TSchema>;
 }

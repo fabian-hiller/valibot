@@ -34,22 +34,28 @@ The following issues are returned if the input is `null` instead of a string or 
 ```ts
 [
   {
-    reason: 'type',
-    validation: 'union',
-    message: 'Invalid type',
+    kind: 'schema',
+    type: 'union',
     input: null,
+    expected: 'string | number',
+    received: 'null',
+    message: 'Invalid type: Expected string | number but received null',
     issues: [
       {
-        reason: 'type',
-        validation: 'string',
-        message: 'Invalid type',
+        kind: 'schema',
+        type: 'string',
         input: null,
+        expected: 'string',
+        received: 'null',
+        message: 'Invalid type: Expected string but received null',
       },
       {
-        reason: 'type',
-        validation: 'number',
-        message: 'Invalid type',
+        kind: 'schema',
+        type: 'number',
         input: null,
+        expected: 'number',
+        received: 'null',
+        message: 'Invalid type: Expected number but received null',
       },
     ],
   },
@@ -76,3 +82,5 @@ const VariantScheme = v.variant('type', [
   }),
 ]);
 ```
+
+For very complex datasets, multiple <Link href="/api/variant/">`variant`</Link> schemas can also be deeply nested within one another.

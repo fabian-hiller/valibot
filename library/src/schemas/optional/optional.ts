@@ -1,29 +1,45 @@
 import { getDefault } from '../../methods/index.ts';
-import type { BaseSchema, Default, Input, Output } from '../../types/index.ts';
-import { schemaResult } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  Default,
+  InferInput,
+  InferIssue,
+} from '../../types/index.ts';
+import type { InferOptionalOutput } from './types.ts';
 
 /**
  * Optional schema type.
  */
 export interface OptionalSchema<
-  TWrapped extends BaseSchema,
-  TDefault extends Default<TWrapped> = undefined,
-  TOutput = TDefault extends Input<TWrapped> | (() => Input<TWrapped>)
-    ? Output<TWrapped>
-    : Output<TWrapped> | undefined,
-> extends BaseSchema<Input<TWrapped> | undefined, TOutput> {
+  TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  TDefault extends Default<TWrapped, undefined>,
+> extends BaseSchema<
+    InferInput<TWrapped> | undefined,
+    InferOptionalOutput<TWrapped, TDefault>,
+    InferIssue<TWrapped>
+  > {
   /**
    * The schema type.
    */
-  type: 'optional';
+  readonly type: 'optional';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof optional;
+  /**
+   * The expected property.
+   */
+  readonly expects: `${TWrapped['expects']} | undefined`;
   /**
    * The wrapped schema.
    */
-  wrapped: TWrapped;
+  readonly wrapped: TWrapped;
   /**
-   * Returns the default value.
+   * The default value.
    */
-  default: TDefault;
+  readonly default: TDefault;
 }
 
 /**
@@ -33,9 +49,9 @@ export interface OptionalSchema<
  *
  * @returns A optional schema.
  */
-export function optional<TWrapped extends BaseSchema>(
-  wrapped: TWrapped
-): OptionalSchema<TWrapped>;
+export function optional<
+  const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+>(wrapped: TWrapped): OptionalSchema<TWrapped, never>;
 
 /**
  * Creates a optional schema.
@@ -46,33 +62,56 @@ export function optional<TWrapped extends BaseSchema>(
  * @returns A optional schema.
  */
 export function optional<
-  TWrapped extends BaseSchema,
-  TDefault extends Default<TWrapped>,
+  const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  const TDefault extends Default<TWrapped, undefined>,
 >(wrapped: TWrapped, default_: TDefault): OptionalSchema<TWrapped, TDefault>;
 
-export function optional<
-  TWrapped extends BaseSchema,
-  TDefault extends Default<TWrapped> = undefined,
->(wrapped: TWrapped, default_?: TDefault): OptionalSchema<TWrapped, TDefault> {
-  return {
+export function optional(
+  wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  ...args: unknown[]
+): OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown> {
+  // Create schema object
+  // @ts-expect-error
+  const schema: OptionalSchema<
+    BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+    unknown
+  > = {
+    kind: 'schema',
     type: 'optional',
+    reference: optional,
     expects: `${wrapped.expects} | undefined`,
     async: false,
     wrapped,
-    default: default_ as TDefault,
-    _parse(input, config) {
-      // If input is `undefined`, return typed schema result or override it
-      // with default value
-      if (input === undefined) {
-        const override = getDefault(this);
-        if (override === undefined) {
-          return schemaResult(true, input);
+    _run(dataset, config) {
+      // If value is `undefined`, override it with default or return dataset
+      if (dataset.value === undefined) {
+        // If default is specified, override value of dataset
+        if ('default' in this) {
+          dataset.value = getDefault(
+            this,
+            dataset as Dataset<undefined, never>,
+            config
+          );
         }
-        input = override;
+
+        // If value is still `undefined`, return dataset
+        if (dataset.value === undefined) {
+          dataset.typed = true;
+          return dataset;
+        }
       }
 
-      // Otherwise, return result of wrapped schema
-      return this.wrapped._parse(input, config);
+      // Otherwise, return dataset of wrapped schema
+      return this.wrapped._run(dataset, config);
     },
   };
+
+  // Add default if specified
+  if (0 in args) {
+    // @ts-expect-error
+    schema.default = args[0];
+  }
+
+  // Return schema object
+  return schema;
 }

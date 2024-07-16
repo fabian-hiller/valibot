@@ -14,12 +14,13 @@ import { properties } from './properties';
 Creates a literal schema.
 
 ```ts
-const Schema = literal<TLiteral>(literal, message);
+const Schema = v.literal<TLiteral, TMessage>(literal, message);
 ```
 
 ## Generics
 
 - `TLiteral` <Property {...properties.TLiteral} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -43,7 +44,7 @@ The following examples show how `literal` can be used.
 Schema to validate a string literal.
 
 ```ts
-const StringLiteralSchema = literal('foo');
+const StringLiteralSchema = v.literal('foo');
 ```
 
 ### Number literal
@@ -51,7 +52,7 @@ const StringLiteralSchema = literal('foo');
 Schema to validate a number literal.
 
 ```ts
-const NumberLiteralSchema = literal(26);
+const NumberLiteralSchema = v.literal(26);
 ```
 
 ### Boolean literal
@@ -59,7 +60,7 @@ const NumberLiteralSchema = literal(26);
 Schema to validate a boolean literal.
 
 ```ts
-const BooleanLiteralSchema = literal(true);
+const BooleanLiteralSchema = v.literal(true);
 ```
 
 ## Related
@@ -73,6 +74,8 @@ The following APIs can be combined with `literal`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -80,10 +83,14 @@ The following APIs can be combined with `literal`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -92,8 +99,7 @@ The following APIs can be combined with `literal`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -101,7 +107,26 @@ The following APIs can be combined with `literal`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
+    'safeParser',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
     'transform',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

@@ -1,0 +1,64 @@
+---
+title: ulid
+description: Creates an ULID validation action.
+source: /actions/ulid/ulid.ts
+contributors:
+  - fabian-hiller
+  - jmcdo29
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# ulid
+
+Creates an [ULID](https://github.com/ulid/spec) validation action.
+
+```ts
+const Action = v.ulid<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `ulid` you can validate the formatting of a string. If the input is not an ULID, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `ulid` can be used.
+
+### ULID schema
+
+Schema to validate an ULID.
+
+```ts
+const UlidSchema = v.pipe(v.string(), v.ulid('The ULID is badly formatted.'));
+```
+
+## Related
+
+The following APIs can be combined with `ulid`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

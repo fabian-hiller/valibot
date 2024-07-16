@@ -15,9 +15,12 @@ import { properties } from './properties';
 Creates a symbol schema.
 
 ```ts
-// Symbol schema with an optional message
-const Schema = symbol(message);
+const Schema = v.symbol<TMessage>(message);
 ```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -40,7 +43,7 @@ The following examples show how `symbol` can be used.
 Symbol schema with a custom error message.
 
 ```ts
-const schema = symbol('A symbol is required');
+const schema = v.symbol('A symbol is required');
 ```
 
 ## Related
@@ -54,6 +57,8 @@ The following APIs can be combined with `symbol`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -61,10 +66,14 @@ The following APIs can be combined with `symbol`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -73,8 +82,7 @@ The following APIs can be combined with `symbol`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -82,7 +90,26 @@ The following APIs can be combined with `symbol`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
+    'safeParser',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
     'transform',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

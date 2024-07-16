@@ -15,36 +15,24 @@ import { properties } from './properties';
 Creates a record schema.
 
 ```ts
-// Record schema with an optional pipe
-const Schema = record<TValue>(value, pipe);
-
-// Record schema with an optional message and pipe
-const Schema = record<TValue>(value, message, pipe);
-
-// Record schema with key and optional pipe
-const Schema = record<TKey, TValue>(key, value, pipe);
-
-// Record schema with key and optional message and pipe
-const Schema = record<TKey, TValue>(key, value, message, pipe);
+const Schema = v.record<TKey, TValue, TMessage>(key, value, message);
 ```
 
 ## Generics
 
 - `TKey` <Property {...properties.TKey} />
 - `TValue` <Property {...properties.TValue} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `key` <Property {...properties.key} />
 - `value` <Property {...properties.value} />
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-With `record` you can validate the data type of the input and whether the entries matches `key` and `value`. With `pipe` you can transform and validate the further details of the record. If the input is not an object, you can use `message` to customize the error message.
-
-> If `key` is not specified, the keys are validated with <Link href="../string/">`string`</Link>.
+With `record` you can validate the data type of the input and whether the entries matches `key` and `value`. If the input is not an object, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -59,7 +47,11 @@ The following examples show how `record` can be used.
 Schema to validate a record with strings.
 
 ```ts
-const StringRecordSchema = record(string(), 'An object is required.');
+const StringRecordSchema = v.record(
+  v.string(),
+  v.string(),
+  'An object is required.'
+);
 ```
 
 ### Object record schema
@@ -67,23 +59,23 @@ const StringRecordSchema = record(string(), 'An object is required.');
 Schema to validate a record of objects.
 
 ```ts
-const ObjectRecordSchema = record(object({ key: string() }));
+const ObjectRecordSchema = v.record(v.string(), v.object({ key: v.string() }));
 ```
 
 ### Picklist as key
 
-Schema to validate a record with specific keys.
+Schema to validate a record with specific optional keys.
 
 ```ts
-const ProductRecordSchema = record(
-  picklist(['product_a', 'product_b', 'product_c']),
-  number()
+const ProductRecordSchema = v.record(
+  v.picklist(['product_a', 'product_b', 'product_c']),
+  v.optional(v.number())
 );
 ```
 
 ### Enum as key
 
-Schema to validate a record with specific keys.
+Schema to validate a record with specific optional keys.
 
 ```ts
 enum Products {
@@ -92,7 +84,7 @@ enum Products {
   PRODUCT_C = 'product_c',
 }
 
-const ProductRecordSchema = record(enum_(Products), number());
+const ProductRecordSchema = v.record(v.enum(Products), v.optional(v.number()));
 ```
 
 ## Related
@@ -108,35 +100,44 @@ The following APIs can be combined with `record`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -144,8 +145,7 @@ The following APIs can be combined with `record`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -153,15 +153,27 @@ The following APIs can be combined with `record`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
+    'safeParser',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
     'transform',
   ]}
 />
 
-### Transformations
+### Utils
 
-<ApiList items={['toCustom']} />
-
-### Validations
-
-<ApiList items={['custom']} />
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

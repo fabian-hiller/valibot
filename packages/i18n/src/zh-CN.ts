@@ -1,4 +1,4 @@
-import { Language } from './types';
+import type { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
@@ -7,13 +7,14 @@ const language: Language = {
   specific: {
     bic:            (issue) => `无效的商业标识符：输入为 ${issue.received}`,
     bytes:          (issue) => `无效的字节长度：预期为 ${issue.expected}，而输入为 ${issue.received}`,
+    check:          (issue) => `无效的输入：输入为 ${issue.received}`,
+    checkAsync:     (issue) => `无效的输入：输入为 ${issue.received}`,
     creditCard:     (issue) => `无效的信用卡：输入为 ${issue.received}`,
     cuid2:          (issue) => `无效的 Cuid2：输入为 ${issue.received}`,
-    custom:         (issue) => `无效的输入：输入为 ${issue.received}`,
-    customAsync:    (issue) => `无效的输入：输入为 ${issue.received}`,
     decimal:        (issue) => `无效的十进制：输入为 ${issue.received}`,
     email:          (issue) => `无效的邮箱地址：输入为 ${issue.received}`,
     emoji:          (issue) => `无效的 emoji：输入为 ${issue.received}`,
+    empty:          (issue) => `无效的长度：预期为 ${issue.expected}，而输入为 ${issue.received}`,
     endsWith:       (issue) => `无效的结尾：预期结尾为 ${issue.expected}，而输入为 ${issue.received}`,
     excludes:       (issue) => `无效的内容：预期为 ${issue.expected}，而输入为 ${issue.received}`,
     finite:         (issue) => `无效的有限数：输入为 ${issue.received}`,
@@ -46,6 +47,7 @@ const language: Language = {
     minSize:        (issue) => `无效的大小：预期为 ${issue.expected}，而输入为 ${issue.received}`,
     minValue:       (issue) => `无效的值：预期为 ${issue.expected}，而输入为 ${issue.received}`,
     multipleOf:     (issue) => `无效的倍数：预期为 ${issue.expected}，而输入为 ${issue.received}`,
+    nonEmpty:       (issue) => `无效的长度：预期为 ${issue.expected}，而输入为 ${issue.received}`,
     notBytes:       (issue) => `无效的字节长度：预期为 ${issue.expected}，而输入为 ${issue.received}`,
     notLength:      (issue) => `无效的长度：预期为 ${issue.expected}，而输入为 ${issue.received}`,
     notSize:        (issue) => `无效的大小：预期为 ${issue.expected}，而输入为 ${issue.received}`,

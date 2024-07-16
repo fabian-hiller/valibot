@@ -1,0 +1,66 @@
+---
+title: ipv6
+description: Creates an IPv6 address validation action.
+source: /actions/ipv6/ipv6.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# ipv6
+
+Creates an [IPv6](https://en.wikipedia.org/wiki/IPv6) address validation action.
+
+```ts
+const Action = v.ipv6<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `ipv6` you can validate the formatting of a string. If the input is not an IPv6 address, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `ipv6` can be used.
+
+### IPv6 schema
+
+Schema to validate an IPv6 address.
+
+```ts
+const Ipv6Schema = v.pipe(
+  v.string(),
+  v.ipv6('The IP address is badly formatted.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `ipv6`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

@@ -1,30 +1,104 @@
-import type { BaseSchema, Default } from '../../types/index.ts';
-import type { DefaultValue } from './types.ts';
+import type {
+  NullableSchema,
+  NullableSchemaAsync,
+  NullishSchema,
+  NullishSchemaAsync,
+  OptionalSchema,
+  OptionalSchemaAsync,
+} from '../../schemas/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  BaseSchemaAsync,
+  Config,
+  Dataset,
+  InferInput,
+  InferIssue,
+  MaybePromise,
+} from '../../types/index.ts';
 
 /**
- * Schema with maybe default type.
+ * Infer default type.
  */
-export type SchemaWithMaybeDefault<
-  TSchema extends BaseSchema = BaseSchema,
-  TDefault extends Default<TSchema> = Default<TSchema>,
-> = TSchema & {
-  /**
-   * The optional default value.
-   */
-  default?: TDefault;
-};
+export type InferDefault<
+  TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+    | NullableSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
+    | NullableSchemaAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >
+    | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
+    | NullishSchemaAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >
+    | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
+    | OptionalSchemaAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >,
+> = TSchema extends
+  | NullableSchema<
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      infer TDefault
+    >
+  | NullableSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      infer TDefault
+    >
+  | NullishSchema<
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      infer TDefault
+    >
+  | NullishSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      infer TDefault
+    >
+  | OptionalSchema<
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      infer TDefault
+    >
+  | OptionalSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      infer TDefault
+    >
+  ? [TDefault] extends [never]
+    ? undefined
+    : TDefault extends () => MaybePromise<InferInput<TSchema>>
+      ? ReturnType<TDefault>
+      : TDefault
+  : undefined;
 
 /**
  * Returns the default value of the schema.
  *
- * @param schema The schema to get the default value from.
+ * @param schema The schema to get it from.
+ * @param dataset The input dataset if available.
+ * @param config The config if available.
  *
  * @returns The default value.
  */
-export function getDefault<TSchema extends SchemaWithMaybeDefault>(
-  schema: TSchema
-): DefaultValue<TSchema> {
+export function getDefault<
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+>(
+  schema: TSchema,
+  dataset?: Dataset<null | undefined, never>,
+  config?: Config<InferIssue<TSchema>>
+): InferDefault<TSchema> {
+  // @ts-expect-error
   return typeof schema.default === 'function'
-    ? schema.default()
-    : schema.default;
+    ? // @ts-expect-error
+      schema.default(dataset, config)
+    : // @ts-expect-error
+      schema.default;
 }

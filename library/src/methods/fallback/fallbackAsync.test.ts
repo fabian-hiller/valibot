@@ -1,30 +1,73 @@
 import { describe, expect, test } from 'vitest';
-import { objectAsync, stringAsync } from '../../schemas/index.ts';
-import { parseAsync } from '../parse/index.ts';
-import { fallbackAsync } from './fallbackAsync.ts';
+import { transform } from '../../actions/index.ts';
+import { number } from '../../schemas/index.ts';
+import { pipe } from '../pipe/index.ts';
+import {
+  fallbackAsync,
+  type SchemaWithFallbackAsync,
+} from './fallbackAsync.ts';
 
 describe('fallbackAsync', () => {
-  const schema1 = fallbackAsync(stringAsync(), 'test');
-  const schema2 = fallbackAsync(stringAsync(), () => 'test');
-  const schema3 = objectAsync({ key1: schema1, key2: schema2 });
+  describe('should return schema object', () => {
+    const schema = pipe(number(), transform(String));
+    type Schema = typeof schema;
+    const baseSchema: Omit<
+      SchemaWithFallbackAsync<Schema, never>,
+      'fallback'
+    > = {
+      ...schema,
+      async: true,
+      _run: expect.any(Function),
+    };
 
-  test('should use default value', async () => {
-    const output1 = await parseAsync(schema1, 123);
-    expect(output1).toBe('test');
-    const output2 = await parseAsync(schema2, 123);
-    expect(output2).toBe('test');
-    const output3 = await parseAsync(schema3, {});
-    expect(output3).toEqual({ key1: 'test', key2: 'test' });
+    test('with value fallback', () => {
+      expect(fallbackAsync(schema, '123')).toStrictEqual({
+        ...baseSchema,
+        fallback: '123',
+      } satisfies SchemaWithFallbackAsync<Schema, '123'>);
+    });
+
+    test('with function fallback', () => {
+      const fallbackArg = () => '123';
+      expect(fallbackAsync(schema, fallbackArg)).toStrictEqual({
+        ...baseSchema,
+        fallback: fallbackArg,
+      } satisfies SchemaWithFallbackAsync<Schema, typeof fallbackArg>);
+    });
+
+    test('with async function fallback', () => {
+      const fallbackArg = async () => '123';
+      expect(fallbackAsync(schema, fallbackArg)).toStrictEqual({
+        ...baseSchema,
+        fallback: fallbackArg,
+      } satisfies SchemaWithFallbackAsync<Schema, typeof fallbackArg>);
+    });
   });
 
-  test('should not use default value', async () => {
-    const input1 = 'hello';
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toBe(input1);
-    const output2 = await parseAsync(schema2, input1);
-    expect(output2).toBe(input1);
-    const input2 = { key1: 'hello', key2: 'hello' };
-    const output3 = await parseAsync(schema3, input2);
-    expect(output3).toEqual(input2);
+  const schema = fallbackAsync(
+    pipe(number(), transform(String)),
+    async () => '123'
+  );
+
+  describe('should return default dataset', () => {
+    test('for valid input', async () => {
+      expect(await schema._run({ typed: false, value: 789 }, {})).toStrictEqual(
+        {
+          typed: true,
+          value: '789',
+        }
+      );
+    });
+  });
+
+  describe('should return dataset with fallback', () => {
+    test('for invalid input', async () => {
+      expect(
+        await schema._run({ typed: false, value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: '123',
+      });
+    });
   });
 });

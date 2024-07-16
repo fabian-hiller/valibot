@@ -14,7 +14,7 @@ import { Link } from '@builder.io/qwik-city';
 
 Now that you've learned how to create a schema, let's look at how you can use it to validate unknown data and make it type-safe. I offer 3 different ways for this. Just pick what you think fits your code best.
 
-> Each schema has a `._parse` method. However, this is an internal API and should only be used if you know what you are doing.
+> Each schema has a `._run` method. However, this is an internal API and should only be used if you know what you are doing.
 
 ## Default way
 
@@ -24,7 +24,7 @@ The <Link href="/api/parse/">`parse`</Link> method will throw a <Link href="/api
 import * as v from 'valibot';
 
 try {
-  const EmailSchema = v.string([v.email()]);
+  const EmailSchema = v.pipe(v.string(), v.email());
   const email = v.parse(EmailSchema, 'jane@example.com');
 
   // Handle errors if one occurs
@@ -42,7 +42,7 @@ If the input is valid, you can use `.output` to get the output of the schema val
 ```ts
 import * as v from 'valibot';
 
-const EmailSchema = v.string([v.email()]);
+const EmailSchema = v.pipe(v.string(), v.email());
 const result = v.safeParse(EmailSchema, 'jane@example.com');
 
 if (result.success) {
@@ -61,7 +61,7 @@ If a type guard is used, the issues of the validation cannot be accessed. Also, 
 ```ts
 import * as v from 'valibot';
 
-const EmailSchema = v.string([v.email()]);
+const EmailSchema = v.pipe(v.string(), v.email());
 const data: unknown = 'jane@example.com';
 
 if (v.is(EmailSchema, data)) {
@@ -71,7 +71,7 @@ if (v.is(EmailSchema, data)) {
 
 ## Configuration
 
-By default, I collect each issue during validation to give you detailed feedback on why the input does not match the schema. If this is not required in your use case, you can control this behavior with `abortEarly`, `abortPipeEarly` and `skipPipe` to improve the performance of validation.
+By default, I collect each issue during validation to give you detailed feedback on why the input does not match the schema. If this is not required in your use case, you can control this behavior with `abortEarly` and `abortPipeEarly` to improve the performance of validation.
 
 ### Abort validation
 
@@ -105,27 +105,10 @@ If you only set `abortPipeEarly` to `true` I only abort the validation within a 
 import * as v from 'valibot';
 
 try {
-  const EmailSchema = v.string([v.email(), v.endsWith('@example.com')]);
+  const EmailSchema = v.pipe(v.string(), v.email(), v.endsWith('@example.com'));
   const email = v.parse(EmailSchema, 'jane@example.com', {
     abortPipeEarly: true,
   });
-
-  // Handle errors if one occurs
-} catch (error) {
-  console.log(error);
-}
-```
-
-### Skip pipeline
-
-If you set `skipPipe` to `true` I skip every pipeline of a schema. This can be useful for forms, for example, to check only the data types of initial values and not the other details that are validated in the pipelines.
-
-```ts
-import * as v from 'valibot';
-
-try {
-  const EmailSchema = v.string([v.email(), v.endsWith('@example.com')]);
-  const email = v.parse(EmailSchema, '', { skipPipe: true });
 
   // Handle errors if one occurs
 } catch (error) {

@@ -16,23 +16,22 @@ import { properties } from './properties';
 Creates a boolean schema.
 
 ```ts
-// Boolean schema with an optional pipe
-const Schema = boolean(pipe);
-
-// Boolean schema with an optional message and pipe
-const Schema = boolean(message, pipe);
+const Schema = v.boolean<TMessage>(message);
 ```
+
+## Generics
+
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-With `boolean` you can validate the data type of the input and with `pipe` you can transform and validate the further details of the boolean. If the input is not a boolean, you can use `message` to customize the error message.
+With `boolean` you can validate the data type of the input. If the input is not a boolean, you can use `message` to customize the error message.
 
-> Instead of using the `pipe` to force `true` or `false` as a value, in most cases it makes more sense to use <Link href="../literal/">`literal`</Link> for better typing.
+> Instead of using a <Link href="../pipe/">`pipe`</Link> to force `true` or `false` as a value, in most cases it makes more sense to use <Link href="../literal/">`literal`</Link> for better typing.
 
 ## Returns
 
@@ -47,7 +46,7 @@ The following examples show how `boolean` can be used.
 Boolean schema with a custom error message.
 
 ```ts
-const BooleanSchema = boolean('A boolean is required');
+const BooleanSchema = v.boolean('A boolean is required');
 ```
 
 ## Related
@@ -61,6 +60,8 @@ The following APIs can be combined with `boolean`.
     'array',
     'intersect',
     'lazy',
+    'looseObject',
+    'looseTuple',
     'map',
     'nonNullable',
     'nonNullish',
@@ -68,10 +69,14 @@ The following APIs can be combined with `boolean`.
     'nullable',
     'nullish',
     'object',
+    'objectWithRest',
     'optional',
     'record',
     'set',
+    'strictObject',
+    'strictTuple',
     'tuple',
+    'tupleWithRest',
     'union',
   ]}
 />
@@ -80,8 +85,7 @@ The following APIs can be combined with `boolean`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -89,15 +93,36 @@ The following APIs can be combined with `boolean`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
-    'transform',
+    'safeParser',
   ]}
 />
 
 ### Transformations
 
-<ApiList items={['toCustom', 'toMaxValue', 'toMinValue']} />
+<ApiList items={['toCustom']} />
 
 ### Validations
 
-<ApiList items={['custom', 'maxValue', 'minValue', 'notValue', 'value']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'maxValue',
+    'minValue',
+    'notValue',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'toMaxValue',
+    'toMinValue',
+    'transform',
+    'value',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

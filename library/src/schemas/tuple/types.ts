@@ -1,58 +1,19 @@
-import type {
-  BaseSchema,
-  BaseSchemaAsync,
-  Input,
-  Output,
-} from '../../types/index.ts';
-import type { NeverSchema, NeverSchemaAsync } from '../never/index.ts';
-import type { TupleItems } from './tuple.ts';
-import type { TupleItemsAsync } from './tupleAsync.ts';
+import type { BaseIssue } from '../../types/index.ts';
 
 /**
- * Tuple path item type.
+ * Tuple issue type.
  */
-export interface TuplePathItem {
-  type: 'tuple';
-  origin: 'value';
-  input: [unknown, ...unknown[]];
-  key: number;
-  value: unknown;
+export interface TupleIssue extends BaseIssue<unknown> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'schema';
+  /**
+   * The issue type.
+   */
+  readonly type: 'tuple';
+  /**
+   * The expected property.
+   */
+  readonly expected: 'Array';
 }
-
-/**
- * Tuple input inference type.
- */
-export type TupleInput<
-  TItems extends TupleItems | TupleItemsAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined,
-> = TRest extends undefined | NeverSchema | NeverSchemaAsync
-  ? {
-      [TKey in keyof TItems]: Input<TItems[TKey]>;
-    }
-  : TRest extends BaseSchema | BaseSchemaAsync
-    ? [
-        ...{
-          [TKey in keyof TItems]: Input<TItems[TKey]>;
-        },
-        ...Input<TRest>[],
-      ]
-    : never;
-
-/**
- * Tuple with rest output inference type.
- */
-export type TupleOutput<
-  TItems extends TupleItems | TupleItemsAsync,
-  TRest extends BaseSchema | BaseSchemaAsync | undefined,
-> = TRest extends undefined | NeverSchema | NeverSchemaAsync
-  ? {
-      [TKey in keyof TItems]: Output<TItems[TKey]>;
-    }
-  : TRest extends BaseSchema | BaseSchemaAsync
-    ? [
-        ...{
-          [TKey in keyof TItems]: Output<TItems[TKey]>;
-        },
-        ...Output<TRest>[],
-      ]
-    : never;

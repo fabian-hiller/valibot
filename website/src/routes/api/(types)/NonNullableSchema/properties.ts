@@ -7,24 +7,41 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       name: 'BaseSchema',
       href: '../BaseSchema/',
-    },
-  },
-  TOutput: {
-    modifier: 'extends',
-    type: 'any',
-    default: {
-      type: 'custom',
-      name: 'NonNullableOutput',
-      href: '../NonNullableOutput/',
       generics: [
+        'unknown',
+        'unknown',
         {
           type: 'custom',
-          name: 'TWrapped',
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
         },
       ],
     },
   },
+  TMessage: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'NonNullableIssue',
+              href: '../NonNullableIssue/',
+            },
+          ],
+        },
+        'undefined',
+      ],
+    },
+  },
   BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
       name: 'BaseSchema',
@@ -32,8 +49,8 @@ export const properties: Record<string, PropertyProps> = {
       generics: [
         {
           type: 'custom',
-          name: 'NonNullableInput',
-          href: '../NonNullableInput/',
+          name: 'InferNonNullableInput',
+          href: '../InferNonNullableInput/',
           generics: [
             {
               type: 'custom',
@@ -43,7 +60,35 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOutput',
+          name: 'InferNonNullableOutput',
+          href: '../InferNonNullableOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'NonNullableIssue',
+              href: '../NonNullableIssue/',
+            },
+            {
+              type: 'custom',
+              name: 'InferNonNullableIssue',
+              href: '../InferNonNullableIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TWrapped',
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -54,6 +99,20 @@ export const properties: Record<string, PropertyProps> = {
       value: 'non_nullable',
     },
   },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'nonNullable',
+      href: '../nonNullable/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'string',
+      value: '!null',
+    },
+  },
   wrapped: {
     type: {
       type: 'custom',
@@ -62,15 +121,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
 };

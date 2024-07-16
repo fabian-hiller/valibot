@@ -1,0 +1,58 @@
+---
+cover: Retrospect
+title: How Valibot has evolved this year
+description: >-
+  Especially in the last months Valibot has evolved a lot. In this blog post I
+  would like to look back on our efforts and achievements.
+published: 2024-06-19
+authors:
+  - fabian-hiller
+contributors:
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+import MonthlyDownloads from './monthly-downloads.jpg?jsx';
+import PlaygroundDark from './playground-dark.jpg?jsx';
+import PlaygroundLight from './playground-light.jpg?jsx';
+
+In the context of an independent study at the [Seidenberg School of Computer Science and Information Systems](https://www.pace.edu/seidenberg) at Pace University in New York I continued the maintenance, research and development for my open source project Valibot, which I started 11 months ago with Miško Hevery and Ryan Carniato as part of my [bachelor's thesis](/thesis.pdf) at the Stuttgart Media University. Especially in the last months the project has evolved a lot. In this blog post I would like to look back on our efforts and achievements.
+
+## Statistics
+
+Last year, Valibot was downloaded 350k times via the npm registry. With 210k monthly downloads in January, the project started very successfully into the new year. I am very happy to report that we were able to increase the total downloads to over 3 million and the monthly downloads to almost 800k. This means that in less than 6 months the total downloads and the monthly downloads have increased by more than 500%.
+
+<MonthlyDownloads alt="Monthly downloads of Valibot in the past 12 months" />
+
+Our website, which contains a detailed documentation of the library, has been visited more than 60k times with more than 400k page views since the beginning of this year. According to our website statistics, Valibot is used all over the world. The top countries with more than 4% share of visits are the United States, Japan, Germany, France and India.
+
+On Github the project now has 5,483 stars and 102 contributors. During this year, the community created 323 new issues, pull requests and discussions, which I labeled and answered. I released 8 new versions with various improvements. I will highlight some of them in the next sections of this post.
+
+## Website
+
+In December 2023 we started to add a detailed <Link href="/api/">API reference</Link> to provide additional information besides the guides that mainly explain the general concept of Valibot. With more than 400 symbols this was a pretty big task and I am happy about the [support](https://github.com/fabian-hiller/valibot/issues/287) I got from the community. Some references are still missing and will be added in the next weeks.
+
+Another highlight is the new <Link href="/playground/">playground</Link> that I added in February with the help of [Milo](https://github.com/milomg), a SolidJS core team member and student at the University of Toronto. The playground can be used to write, test, and share schemas directly on our website. Since then, the button to execute code has been clicked more than 13k times.
+
+<PlaygroundDark
+  alt="The new playground to write, test and share schemas"
+  class="hidden dark:block"
+/>
+<PlaygroundLight
+  alt="The new playground to write, test and share schemas"
+  class="dark:hidden"
+/>
+
+## Library
+
+On February 6th, we shipped a pretty big update with [v0.28.0](https://github.com/fabian-hiller/valibot/releases/tag/v0.28.0), which included our <Link href="/guides/internationalization/">i18n feature</Link>. We also refactored a large part of Valibot's source code and expanded and improved the default error messages. They now provide much more helpful details than before, and I am happy to announce that the community has translated them into 21 languages besides English for our official i18n package.
+
+At the end of February, I started preparing our v1 release in my head, until [@Demivan](https://github.com/Demivan) and [@xcfox](https://github.com/xcfox) came up with two API proposals. I was skeptical at first, but I also knew that the API design had some major limitations that could harm the developer experience and the project in general in the long run. That's why I reached out to the community on [GitHub](https://github.com/fabian-hiller/valibot/discussions/463) to get their feedback.
+
+It was great to see that more than 70 developers participated. The overall feedback was very positive. So I started working on a <Link href="../first-draft-of-the-new-pipe-function/">first draft</Link> in March. Back then, the only change I planned to introduce was the new <Link href="/api/pipe/">`pipe`</Link> method, but in the process I saw many more areas where I could improve Valibot. In the end, I started to rewrite the whole library from scratch with the help of the community. The results are promising. Feel free to read my <Link href="../valibot-v0.31.0-is-finally-available/">previous blog post</Link> for more details.
+
+## Upcoming
+
+In the next few weeks, I plan to investigate the implementation of a `function` and `promise` schema, and take a look at [PR #655](https://github.com/fabian-hiller/valibot/pull/655), which introduces a metadata feature. After that, I plan to focus on our documentation to expand and update our <Link href="/api/">API reference</Link>. As we get closer to our v1 release, I will be thinking about a v1 roadmap soon. At the moment I expect to release a release candidate in August and the final release in September. Stay tuned for further updates!
+
+> Recently I was a guest on Nick's show and talked about Valibot. If you missed our stream, you can watch it [here](https://www.youtube.com/live/fR2GJx_SQTE) on YouTube.

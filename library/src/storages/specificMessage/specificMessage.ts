@@ -1,8 +1,33 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import type { ErrorMessage } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  BaseSchemaAsync,
+  BaseTransformation,
+  BaseTransformationAsync,
+  BaseValidation,
+  BaseValidationAsync,
+  ErrorMessage,
+  InferIssue,
+} from '../../types/index.ts';
+
+/**
+ * Reference type.
+ */
+type Reference = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ...args: any[]
+) =>
+  | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+  | BaseValidation<unknown, unknown, BaseIssue<unknown>>
+  | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
+  | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
+  | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>;
 
 // Create specific message store
-let store: Map<Function, Map<string | undefined, ErrorMessage>> | undefined;
+let store:
+  | Map<Reference, Map<string | undefined, ErrorMessage<BaseIssue<unknown>>>>
+  | undefined;
 
 /**
  * Sets a specific error message.
@@ -11,9 +36,9 @@ let store: Map<Function, Map<string | undefined, ErrorMessage>> | undefined;
  * @param message The error message.
  * @param lang The language of the message.
  */
-export function setSpecificMessage(
-  reference: Function,
-  message: ErrorMessage,
+export function setSpecificMessage<const TReference extends Reference>(
+  reference: TReference,
+  message: ErrorMessage<InferIssue<ReturnType<TReference>>>,
   lang?: string
 ): void {
   if (!store) store = new Map();
@@ -29,10 +54,10 @@ export function setSpecificMessage(
  *
  * @returns The error message.
  */
-export function getSpecificMessage(
-  reference: Function,
+export function getSpecificMessage<const TReference extends Reference>(
+  reference: TReference,
   lang?: string
-): ErrorMessage | undefined {
+): ErrorMessage<InferIssue<ReturnType<TReference>>> | undefined {
   return store?.get(reference)?.get(lang);
 }
 
@@ -43,7 +68,7 @@ export function getSpecificMessage(
  * @param lang The language of the message.
  */
 export function deleteSpecificMessage(
-  reference: Function,
+  reference: Reference,
   lang?: string
 ): void {
   store?.get(reference)?.delete(lang);

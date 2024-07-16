@@ -1,0 +1,124 @@
+---
+title: parser
+description: Returns a function that parses an unknown input based on a schema.
+source: /methods/parser/parser.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# parser
+
+Returns a function that parses an unknown input based on a schema.
+
+```ts
+const parser = v.parser<TSchema, TConfig>(schema, config);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TConfig` <Property {...properties.TConfig} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `config` <Property {...properties.config} />
+
+## Returns
+
+- `parser` <Property {...properties.parser} />
+
+## Example
+
+The following example show how `parser` can be used.
+
+```ts
+try {
+  const EmailSchema = v.pipe(v.string(), v.email());
+  const emailParser = v.parser(EmailSchema);
+  const email = emailParser('jane@example.com');
+
+  // Handle errors if one occurs
+} catch (error) {
+  console.log(error);
+}
+```
+
+## Related
+
+The following APIs can be combined with `parser`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'flatten',
+    'keyof',
+    'omit',
+    'partial',
+    'pick',
+    'pipe',
+    'required',
+    'unwrap',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['getDotPath', 'isValiError', 'ValiError']} />

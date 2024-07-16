@@ -1,87 +1,126 @@
 import { describe, expect, test } from 'vitest';
 import {
+  boolean,
+  nullable,
   nullableAsync,
-  nullishAsync,
+  nullish,
   number,
-  numberAsync,
   object,
-  objectAsync,
   optional,
-  optionalAsync,
+  strictObject,
+  strictTuple,
   string,
-  stringAsync,
   tuple,
-  tupleAsync,
 } from '../../schemas/index.ts';
 import { getDefaultsAsync } from './getDefaultsAsync.ts';
 
 describe('getDefaultsAsync', () => {
   test('should return undefined', async () => {
-    expect(await getDefaultsAsync(stringAsync())).toBeUndefined();
-    expect(
-      await getDefaultsAsync(optionalAsync(stringAsync()))
-    ).toBeUndefined();
-    expect(
-      await getDefaultsAsync(nullableAsync(stringAsync()))
-    ).toBeUndefined();
-    expect(await getDefaultsAsync(nullishAsync(stringAsync()))).toBeUndefined();
+    expect(await getDefaultsAsync(string())).toBeUndefined();
+    expect(await getDefaultsAsync(number())).toBeUndefined();
+    expect(await getDefaultsAsync(boolean())).toBeUndefined();
   });
 
-  test('should return default value', async () => {
-    expect(await getDefaultsAsync(optionalAsync(stringAsync(), ''))).toBe('');
-    expect(await getDefaultsAsync(nullableAsync(stringAsync(), ''))).toBe('');
-    expect(await getDefaultsAsync(nullishAsync(stringAsync(), ''))).toBe('');
-    expect(await getDefaultsAsync(optionalAsync(numberAsync(), 0))).toBe(0);
-    expect(await getDefaultsAsync(nullableAsync(numberAsync(), 0))).toBe(0);
-    expect(await getDefaultsAsync(nullishAsync(numberAsync(), 0))).toBe(0);
-    expect(await getDefaultsAsync(optionalAsync(stringAsync(), 'test'))).toBe(
-      'test'
+  test('should return default', async () => {
+    expect(await getDefaultsAsync(optional(string(), 'foo'))).toBe('foo');
+    expect(await getDefaultsAsync(nullish(number(), () => 123 as const))).toBe(
+      123
     );
-    expect(await getDefaultsAsync(nullableAsync(stringAsync(), 'test'))).toBe(
-      'test'
-    );
-    expect(await getDefaultsAsync(nullishAsync(stringAsync(), 'test'))).toBe(
-      'test'
-    );
-  });
-
-  test('should return object defaults', async () => {
-    expect(await getDefaultsAsync(objectAsync({}))).toEqual({});
     expect(
       await getDefaultsAsync(
-        objectAsync({
-          key1: stringAsync(),
-          key2: optionalAsync(stringAsync(), 'test'),
-          key3: optionalAsync(numberAsync(), 0),
-          nested: object({
-            key1: string(),
-            key2: optional(string(), 'test'),
-            key3: optional(number(), 0),
-          }),
-        })
+        nullableAsync(boolean(), async () => false as const)
       )
-    ).toEqual({
-      key1: undefined,
-      key2: 'test',
-      key3: 0,
-      nested: {
-        key1: undefined,
-        key2: 'test',
-        key3: 0,
-      },
+    ).toBe(false);
+  });
+
+  describe('should return object defaults', () => {
+    test('for empty object', async () => {
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      expect(await getDefaultsAsync(object({}))).toStrictEqual({});
+    });
+
+    test('for simple object', async () => {
+      expect(
+        await getDefaultsAsync(
+          // TODO: Switch this to `objectAsync`
+          object({
+            key1: optional(string(), 'foo'),
+            key2: nullish(number(), () => 123 as const),
+            // TODO: Switch this to `nullableAsync`
+            key3: nullable(boolean(), false),
+            key4: string(),
+          })
+        )
+      ).toStrictEqual({
+        key1: 'foo',
+        key2: 123,
+        key3: false,
+        key4: undefined,
+      });
+    });
+
+    test('for nested object', async () => {
+      expect(
+        await getDefaultsAsync(
+          // TODO: Switch this to `objectAsync`
+          object({
+            // TODO: Switch this to `strictObjectAsync`
+            nested: strictObject({
+              key1: optional(string(), 'foo'),
+              key2: nullish(number(), () => 123 as const),
+              // TODO: Switch this to `nullableAsync`
+              key3: nullable(boolean(), false),
+            }),
+            other: string(),
+          })
+        )
+      ).toStrictEqual({
+        nested: {
+          key1: 'foo',
+          key2: 123,
+          key3: false,
+        },
+        other: undefined,
+      });
     });
   });
 
-  test('should return tuple defaults', async () => {
-    expect(
-      await getDefaultsAsync(
-        tupleAsync([
-          stringAsync(),
-          optionalAsync(stringAsync(), 'test'),
-          optionalAsync(numberAsync(), 0),
-          tuple([string(), optional(string(), 'test'), optional(number(), 0)]),
-        ])
-      )
-    ).toEqual([undefined, 'test', 0, [undefined, 'test', 0]]);
+  describe('should return tuple defaults', () => {
+    test('for empty tuple', async () => {
+      expect(await getDefaultsAsync(tuple([]))).toStrictEqual([]);
+    });
+
+    test('for simple tuple', async () => {
+      expect(
+        await getDefaultsAsync(
+          // TODO: Switch this to `tupleAsync`
+          tuple([
+            optional(string(), 'foo'),
+            nullish(number(), () => 123 as const),
+            // TODO: Switch this to `nullableAsync`
+            nullable(boolean(), false),
+            string(),
+          ])
+        )
+      ).toStrictEqual(['foo', 123, false, undefined]);
+    });
+
+    test('for nested tuple', async () => {
+      expect(
+        await getDefaultsAsync(
+          // TODO: Switch this to `tupleAsync`
+          tuple([
+            // TODO: Switch this to `strictTupleAsync`
+            strictTuple([
+              optional(string(), 'foo'),
+              nullish(number(), () => 123 as const),
+              // TODO: Switch this to `nullableAsync`
+              nullable(boolean(), false),
+            ]),
+            string(),
+          ])
+        )
+      ).toStrictEqual([['foo', 123, false], undefined]);
+    });
   });
 });

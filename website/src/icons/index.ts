@@ -6,6 +6,7 @@ export * from './BinIcon';
 export * from './CheckIcon';
 export * from './CloseIcon';
 export * from './CopyIcon';
+export * from './DiscordIcon';
 export * from './GitHubIcon';
 export * from './HashtagIcon';
 export * from './LogoIcon';

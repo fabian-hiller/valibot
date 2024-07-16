@@ -1,0 +1,81 @@
+---
+title: size
+description: Creates a size validation action.
+source: /actions/size/size.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# size
+
+Creates a size validation action.
+
+```ts
+const Action = v.size<TInput, TRequirement, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `size` you can validate the size of a map, set or blob. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `size` can be used.
+
+### Blob size schema
+
+Schema to validate a blob with a size of 256 bytes.
+
+```ts
+const BlobSchema = v.pipe(
+  v.blob(),
+  v.size(256, 'The blob must be 256 bytes in size.')
+);
+```
+
+### Set size schema
+
+Schema to validate a set of 8 numbers.
+
+```ts
+const SetSchema = v.pipe(
+  v.set(number()),
+  v.size(8, 'The set must contain 8 numbers.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `size`.
+
+### Schemas
+
+<ApiList
+  items={['any', 'array', 'instance', 'special', 'string', 'tuple', 'unknown']}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

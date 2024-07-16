@@ -1,51 +1,42 @@
 ---
 title: required
 description: >-
-  Creates an object schema consisting of all properties of an existing object
-  schema set to non optional.
+  Creates a modified copy of an object schema that marks all entries or only the
+  selected keys as required.
 source: /methods/required/required.ts
 contributors:
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
 # required
 
-Creates an object schema consisting of all properties of an existing object schema set to non optional.
+Creates a modified copy of an object schema that marks all entries or only the selected keys as required.
 
 ```ts
-// Required object schema with an optional pipe
-const Schema = required<TSchema>(schema, pipe);
-
-// Required object schema with an optional message and pipe
-const Schema = required<TSchema>(schema, message, pipe);
-
-// Required object schema with rest and optional pipe
-const Schema = required<TSchema, TRest>(schema, rest, pipe);
-
-// Required object schema with rest and optional message and pipe
-const Schema = required<TSchema, TRest>(schema, rest, message, pipe);
+const Schema = v.required<TSchema>(schema, message);
+const Schema = v.required<TSchema, TKeys>(schema, keys, message);
 ```
 
 ## Generics
 
 - `TSchema` <Property {...properties.TSchema} />
-- `TRest` <Property {...properties.TRest} />
+- `TKeys` <Property {...properties.TKeys} />
 
 ## Parameters
 
 - `schema` <Property {...properties.schema} />
-- `rest` <Property {...properties.rest} />
+- `keys` <Property {...properties.keys} />
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-`required` creates a new object schema where the entries of the provided object `schema` are non optional. It is similar to TypeScript's [`Required`](https://www.typescriptlang.org/docs/handbook/utility-types.html#requiredtype) utility type.
+`required` creates a modified copy of the given object `schema` where all entries or only the selected `keys` are required. It is similar to TypeScript's [`Required`](https://www.typescriptlang.org/docs/handbook/utility-types.html#requiredtype) utility type.
 
-> Note that `rest`, `message` and `pipe` of the passed schema are completely ignored and must be added again.
+> Because `required` changes the data type of the input and output, it is not allowed to pass a schema that has been modified by the <Link href='../pipe/'>`pipe`</Link> method, as this may cause runtime errors. Please use the <Link href='../pipe/'>`pipe`</Link> method after you have modified the schema with `required`.
 
 ## Returns
 
@@ -60,12 +51,27 @@ The following examples show how `required` can be used.
 Schema to validate an object with required entries.
 
 ```ts
-const RequiredObjectSchema = required(
-  object({
-    key1: optional(string()),
-    key2: optional(number()),
+const RequiredSchema = v.required(
+  v.object({
+    key1: v.optional(v.string()),
+    key2: v.optional(v.number()),
   })
-);
+); // { key1: string; key2: number }
+```
+
+### With only specific keys
+
+Schema to validate an object with only specific entries marked as required.
+
+```ts
+const RequiredSchema = v.required(
+  v.object({
+    key1: v.optional(v.string()),
+    key2: v.optional(v.number()),
+    key3: v.optional(v.boolean()),
+  }),
+  ['key1', 'key3']
+); // { key1: string; key2?: number; key3: boolean }
 ```
 
 ## Related
@@ -76,41 +82,27 @@ The following APIs can be combined with `required`.
 
 <ApiList
   items={[
-    'any',
     'array',
-    'bigint',
-    'blob',
-    'boolean',
-    'date',
-    'enum_',
-    'instance',
     'intersect',
     'lazy',
-    'literal',
+    'looseObject',
+    'looseTuple',
     'map',
-    'nan',
-    'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
     'nullable',
     'nullish',
-    'number',
     'object',
+    'objectWithRest',
     'optional',
-    'picklist',
     'record',
     'set',
-    'special',
-    'string',
-    'symbol',
+    'strictObject',
+    'strictTuple',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
     'union',
-    'unknown',
-    'variant',
-    'void_',
   ]}
 />
 
@@ -118,8 +110,7 @@ The following APIs can be combined with `required`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'forward',
     'getDefault',
@@ -127,22 +118,32 @@ The following APIs can be combined with `required`.
     'getFallback',
     'getFallbacks',
     'is',
-    'keyof',
-    'merge',
     'omit',
+    'keyof',
     'parse',
+    'parser',
     'partial',
     'pick',
     'safeParse',
-    'transform',
+    'safeParser',
     'unwrap',
   ]}
 />
 
-### Transformations
+### Actions
 
-<ApiList items={['toCustom']} />
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
 
-### Validations
+### Utils
 
-<ApiList items={['custom']} />
+<ApiList items={['isOfKind', 'isOfType']} />

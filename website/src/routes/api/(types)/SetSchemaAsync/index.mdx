@@ -1,0 +1,28 @@
+---
+title: SetSchemaAsync
+description: Set schema async type.
+contributors:
+  - EltonLobo07
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# SetSchemaAsync
+
+Set schema async type.
+
+## Generics
+
+- `TValue` <Property {...properties.TValue} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `SetSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `value` <Property {...properties.value} />
+  - `message` <Property {...properties.message} />

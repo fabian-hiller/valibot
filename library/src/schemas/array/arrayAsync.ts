@@ -1,166 +1,169 @@
 import type {
+  ArrayPathItem,
+  BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
+  Dataset,
   ErrorMessage,
-  Input,
-  Output,
-  PipeAsync,
-  SchemaIssues,
+  InferInput,
+  InferIssue,
+  InferOutput,
 } from '../../types/index.ts';
-import {
-  defaultArgs,
-  pipeResultAsync,
-  schemaIssue,
-  schemaResult,
-} from '../../utils/index.ts';
-import type { ArrayPathItem } from './types.ts';
+import { _addIssue } from '../../utils/index.ts';
+import type { ArrayIssue } from './types.ts';
 
 /**
- * Array schema async type.
+ * Array schema type.
  */
 export interface ArraySchemaAsync<
-  TItem extends BaseSchema | BaseSchemaAsync,
-  TOutput = Output<TItem>[],
-> extends BaseSchemaAsync<Input<TItem>[], TOutput> {
+  TItem extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  TMessage extends ErrorMessage<ArrayIssue> | undefined,
+> extends BaseSchemaAsync<
+    InferInput<TItem>[],
+    InferOutput<TItem>[],
+    ArrayIssue | InferIssue<TItem>
+  > {
   /**
    * The schema type.
    */
-  type: 'array';
+  readonly type: 'array';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof arrayAsync;
+  /**
+   * The expected property.
+   */
+  readonly expects: 'Array';
   /**
    * The array item schema.
    */
-  item: TItem;
+  readonly item: TItem;
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
-  /**
-   * The validation and transformation pipeline.
-   */
-  pipe: PipeAsync<Output<TItem>[]> | undefined;
+  readonly message: TMessage;
 }
 
 /**
- * Creates an async array schema.
+ * Creates an array schema.
  *
  * @param item The item schema.
- * @param pipe A validation and transformation pipe.
  *
- * @returns An async array schema.
+ * @returns An array schema.
  */
-export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
-  item: TItem,
-  pipe?: PipeAsync<Output<TItem>[]>
-): ArraySchemaAsync<TItem>;
+export function arrayAsync<
+  const TItem extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+>(item: TItem): ArraySchemaAsync<TItem, undefined>;
 
 /**
- * Creates an async array schema.
+ * Creates an array schema.
  *
  * @param item The item schema.
  * @param message The error message.
- * @param pipe A validation and transformation pipe.
  *
- * @returns An async array schema.
+ * @returns An array schema.
  */
-export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
-  item: TItem,
-  message?: ErrorMessage,
-  pipe?: PipeAsync<Output<TItem>[]>
-): ArraySchemaAsync<TItem>;
+export function arrayAsync<
+  const TItem extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TMessage extends ErrorMessage<ArrayIssue> | undefined,
+>(item: TItem, message: TMessage): ArraySchemaAsync<TItem, TMessage>;
 
-export function arrayAsync<TItem extends BaseSchema | BaseSchemaAsync>(
-  item: TItem,
-  arg2?: ErrorMessage | PipeAsync<Output<TItem>[]>,
-  arg3?: PipeAsync<Output<TItem>[]>
-): ArraySchemaAsync<TItem> {
-  // Get message and pipe argument
-  const [message, pipe] = defaultArgs(arg2, arg3);
-
-  // Create and return async array schema
+export function arrayAsync(
+  item:
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  message?: ErrorMessage<ArrayIssue>
+): ArraySchemaAsync<
+  | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  ErrorMessage<ArrayIssue> | undefined
+> {
   return {
+    kind: 'schema',
     type: 'array',
+    reference: arrayAsync,
     expects: 'Array',
     async: true,
     item,
     message,
-    pipe,
-    async _parse(input, config) {
+    async _run(dataset, config) {
+      // Get input value from dataset
+      const input = dataset.value;
+
       // If root type is valid, check nested types
       if (Array.isArray(input)) {
-        // Create typed, issues and output
-        let typed = true;
-        let issues: SchemaIssues | undefined;
-        const output: any[] = [];
+        // Set typed to `true` and value to empty array
+        dataset.typed = true;
+        dataset.value = [];
 
-        // Parse schema of each array item
-        await Promise.all(
-          input.map(async (value, key) => {
-            // If not aborted early, continue execution
-            if (!(config?.abortEarly && issues)) {
-              // Parse schema of array item
-              const result = await this.item._parse(value, config);
+        // Parse schema of each item async
+        const itemDatasets = await Promise.all(
+          input.map((value) => this.item._run({ typed: false, value }, config))
+        );
 
-              // If not aborted early, continue execution
-              if (!(config?.abortEarly && issues)) {
-                // If there are issues, capture them
-                if (result.issues) {
-                  // Create array path item
-                  const pathItem: ArrayPathItem = {
-                    type: 'array',
-                    origin: 'value',
-                    input,
-                    key,
-                    value,
-                  };
+        // Process each item dataset
+        for (let key = 0; key < itemDatasets.length; key++) {
+          // Get item dataset
+          const itemDataset = itemDatasets[key];
 
-                  // Add modified result issues to issues
-                  for (const issue of result.issues) {
-                    if (issue.path) {
-                      issue.path.unshift(pathItem);
-                    } else {
-                      issue.path = [pathItem];
-                    }
-                    issues?.push(issue);
-                  }
-                  if (!issues) {
-                    issues = result.issues;
-                  }
+          // If there are issues, capture them
+          if (itemDataset.issues) {
+            // Create array path item
+            const pathItem: ArrayPathItem = {
+              type: 'array',
+              origin: 'value',
+              input,
+              key,
+              value: input[key],
+            };
 
-                  // If necessary, abort early
-                  if (config?.abortEarly) {
-                    typed = false;
-                    throw null;
-                  }
-                }
-
-                // If not typed, set typed to false
-                if (!result.typed) {
-                  typed = false;
-                }
-
-                // Set output of item
-                output[key] = result.output;
+            // Add modified item dataset issues to issues
+            for (const issue of itemDataset.issues) {
+              if (issue.path) {
+                issue.path.unshift(pathItem);
+              } else {
+                // @ts-expect-error
+                issue.path = [pathItem];
               }
+              // @ts-expect-error
+              dataset.issues?.push(issue);
             }
-          })
-        ).catch(() => null);
+            if (!dataset.issues) {
+              // @ts-expect-error
+              dataset.issues = itemDataset.issues;
+            }
 
-        // If output is typed, return pipe result
-        if (typed) {
-          return pipeResultAsync(
-            this,
-            output as Output<TItem>[],
-            config,
-            issues
-          );
+            // If necessary, abort early
+            if (config.abortEarly) {
+              dataset.typed = false;
+              break;
+            }
+          }
+
+          // If not typed, set typed to `false`
+          if (!itemDataset.typed) {
+            dataset.typed = false;
+          }
+
+          // Add item to dataset
+          // @ts-expect-error
+          dataset.value.push(itemDataset.value);
         }
 
-        // Otherwise, return untyped schema result
-        return schemaResult(false, output, issues as SchemaIssues);
+        // Otherwise, add array issue
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
 
-      // Otherwise, return schema issue
-      return schemaIssue(this, arrayAsync, input, config);
+      // Return output dataset
+      return dataset as Dataset<unknown[], ArrayIssue | BaseIssue<unknown>>;
     },
   };
 }

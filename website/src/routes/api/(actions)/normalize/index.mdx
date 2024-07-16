@@ -1,0 +1,58 @@
+---
+title: normalize
+description: Creates a normalize transformation action.
+source: /actions/normalize/normalize.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# normalize
+
+Creates a normalize transformation action.
+
+```ts
+const Action = v.normalize<TForm>(form);
+```
+
+## Generics
+
+- `TForm` <Property {...properties.TForm} />
+
+## Parameters
+
+- `form` <Property {...properties.form} />
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `normalize` can be used.
+
+### Normalized string
+
+Schema to normalize a string.
+
+```ts
+const StringSchema = v.pipe(v.string(), v.normalize());
+```
+
+## Related
+
+The following APIs can be combined with `normalize`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

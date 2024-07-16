@@ -1,0 +1,70 @@
+---
+title: everyItem
+description: Creates an every item validation action.
+source: /actions/everyItem/everyItem.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# everyItem
+
+Creates an every item validation action.
+
+```ts
+const Action = v.everyItem<TInput, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `everyItem` you can freely validate the items of an array and return `true` if they are valid or `false` otherwise. If not every item matches your `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `everyItem` can be used.
+
+### Sorted array schema
+
+Schema to validate that an array is sorted.
+
+```ts
+const SortedArraySchema = v.pipe(
+  v.array(v.number()),
+  v.everyItem(
+    (item, index, array) => index === 0 || item >= array[index - 1],
+    'The numbers must be sorted in ascending order.'
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `everyItem`.
+
+### Schemas
+
+<ApiList items={['any', 'array', 'instance', 'special', 'tuple', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

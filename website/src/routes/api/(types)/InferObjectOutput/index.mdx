@@ -1,0 +1,24 @@
+---
+title: InferObjectOutput
+description: Infer object output type.
+contributors:
+  - fabian-hiller
+  - kazizi55
+---
+
+# InferObjectOutput
+
+Infer object output type.
+
+```ts
+// Create object entries
+const entries = {
+  key: v.pipe(
+    v.string(),
+    v.transform((input) => input.length)
+  ),
+};
+
+// Infer entries output type
+type EntriesOutput = v.InferObjectOutput<typeof entries>; // { key: number }
+```

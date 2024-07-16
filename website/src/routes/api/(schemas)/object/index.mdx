@@ -16,36 +16,24 @@ import { properties } from './properties';
 Creates an object schema.
 
 ```ts
-// Object schema with an optional pipe
-const Schema = object<TEntries>(entries, pipe);
-
-// Object schema with an optional message and pipe
-const Schema = object<TEntries>(entries, message, pipe);
-
-// Object schema with rest and optional pipe
-const Schema = object<TEntries, TRest>(entries, rest, pipe);
-
-// Object schema with rest and optional message and pipe
-const Schema = object<TEntries, TRest>(entries, rest, message, pipe);
+const Schema = v.object<TEntries, TMessage>(entries, message);
 ```
 
 ## Generics
 
 - `TEntries` <Property {...properties.TEntries} />
-- `TRest` <Property {...properties.TRest} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `entries` <Property {...properties.entries} />
-- `rest` <Property {...properties.rest} />
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe}/>
 
 ### Explanation
 
-With `object` you can validate the data type of the input and whether the content matches `entries` and `rest`. With `pipe` you can transform and validate the further details of the object. If the input is not an object, you can use `message` to customize the error message.
+With `object` you can validate the data type of the input and whether the content matches `entries`. If the input is not an object, you can use `message` to customize the error message.
 
-> By default, `object` removes unknown entries from the input. You can change and control this behavior with `rest`. Read more <Link href="/guides/objects/#rest-argument">here</Link>.
+> This schema removes unknown entries. The output will only include the entries you specify. To include unknown entries, use <Link href="../looseObject/">`looseObject`</Link>. To return an issue for unknown entries, use <Link href="../strictObject/">`strictObject`</Link>. To include and validate unknown entries, use <Link href="../objectWithRest/">`objectWithRest`</Link>.
 
 ## Returns
 
@@ -60,61 +48,48 @@ The following examples show how `object` can be used. Please see the <Link href=
 Schema to validate an object with two keys.
 
 ```ts
-const SimpleObjectSchema = object({
-  key1: string(),
-  key2: number(),
+const SimpleObjectSchema = v.object({
+  key1: v.string(),
+  key2: v.number(),
 });
 ```
 
-### Object schema with rest
-
-Schema to validate an object with generic rest entries.
-
-```ts
-const ObjectSchemaWithRest = object(
-  {
-    key1: string(),
-    key2: number(),
-  },
-  boolean()
-);
-```
-
-### Strict object schema
-
-Schema to validate a strict object that prevent unknown entries.
-
-```ts
-const StrictObjectSchema = object(
-  {
-    key1: string(),
-    key2: number(),
-  },
-  never()
-);
-```
-
-### Merge objects
+### Merge several objects
 
 Schema that merges the entries of two object schemas.
 
 ```ts
-const MergedObjectSchema = merge([
-  object({ key1: string() }),
-  object({ key2: number() }),
-]);
+const MergedObjectSchema = v.object({
+  ...ObjectSchema1.entries,
+  ...ObjectSchema2.entries,
+});
 ```
 
-### Partial object schema
+### Mark keys as optional
 
 Schema to validate an object with partial entries.
 
 ```ts
-const PartialObjectSchema = partial(
-  object({
-    key1: string(),
-    key2: number(),
+const PartialObjectSchema = v.partial(
+  v.object({
+    key1: v.string(),
+    key2: v.number(),
   })
+);
+```
+
+### Object with selected entries
+
+Schema to validate only selected entries of an object.
+
+```ts
+const PickObjectSchema = v.pick(
+  v.object({
+    key1: v.string(),
+    key2: v.number(),
+    key3: v.boolean(),
+  }),
+  ['key1', 'key3']
 );
 ```
 
@@ -131,35 +106,44 @@ The following APIs can be combined with `object`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
+    'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -167,8 +151,7 @@ The following APIs can be combined with `object`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'forward',
     'getDefault',
@@ -177,21 +160,32 @@ The following APIs can be combined with `object`.
     'getFallbacks',
     'is',
     'keyof',
-    'merge',
     'omit',
     'parse',
+    'parser',
     'partial',
     'pick',
+    'pipe',
     'required',
     'safeParse',
+    'safeParser',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
     'transform',
   ]}
 />
 
-### Transformations
+### Utils
 
-<ApiList items={['toCustom']} />
-
-### Validations
-
-<ApiList items={['custom']} />
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

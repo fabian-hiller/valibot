@@ -16,7 +16,7 @@ import { properties } from './properties';
 Creates a nullish schema.
 
 ```ts
-const Schema = nullish<TWrapped, TDefault>(wrapped, default_);
+const Schema = v.nullish<TWrapped, TDefault>(wrapped, default_);
 ```
 
 ## Generics
@@ -48,7 +48,7 @@ The following examples show how `nullish` can be used.
 Schema that accepts `string`, `undefined` and `null`.
 
 ```ts
-const NullishStringSchema = nullish(string(), "I'm the default!");
+const NullishStringSchema = v.nullish(v.string(), "I'm the default!");
 ```
 
 ### Nullish date schema
@@ -58,7 +58,7 @@ Schema that accepts [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaSc
 > By using a function as the `default_` parameter, the schema will return a new [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance each time the input is `undefined` or `null`.
 
 ```ts
-const NullishDateSchema = nullish(date(), () => new Date());
+const NullishDateSchema = v.nullish(v.date(), () => new Date());
 ```
 
 ### Nullish entry schema
@@ -66,8 +66,8 @@ const NullishDateSchema = nullish(date(), () => new Date());
 Object schema with a nullish entry.
 
 ```ts
-const NullishEntrySchema = object({
-  key: nullish(string()),
+const NullishEntrySchema = v.object({
+  key: v.nullish(v.string()),
 });
 ```
 
@@ -76,8 +76,8 @@ const NullishEntrySchema = object({
 Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `nullish`.
 
 ```ts
-const NullishNumberSchema = nullish(number());
-const NumberSchema = unwrap(NullishNumberSchema);
+const NullishNumberSchema = v.nullish(v.number());
+const NumberSchema = v.unwrap(NullishNumberSchema);
 ```
 
 ## Related
@@ -93,35 +93,44 @@ The following APIs can be combined with `nullish`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -129,8 +138,7 @@ The following APIs can be combined with `nullish`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -138,8 +146,28 @@ The following APIs can be combined with `nullish`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
-    'transform',
+    'safeParser',
     'unwrap',
   ]}
 />
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

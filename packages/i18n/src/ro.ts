@@ -1,4 +1,4 @@
-import { Language } from './types';
+import type { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
@@ -7,13 +7,14 @@ const language: Language = {
   specific: {
     bic:            (issue) => `BIC incorect: S-a primit ${issue.received}`,
     bytes:          (issue) => `Byți incorecți: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,
+    check:          (issue) => `Intrare incorectă: S-a primit ${issue.received}`,
+    checkAsync:     (issue) => `Intrare incorectă: S-a primit ${issue.received}`,
     creditCard:     (issue) => `Card de credit incorect: S-a primit ${issue.received}`,
     cuid2:          (issue) => `Cuid2 incorect: S-a primit ${issue.received}`,
-    custom:         (issue) => `Intrare incorectă: S-a primit ${issue.received}`,
-    customAsync:    (issue) => `Intrare incorectă: S-a primit ${issue.received}`,
     decimal:        (issue) => `Număr zecimal incorect: S-a primit ${issue.received}`,
     email:          (issue) => `Email incorect: S-a primit ${issue.received}`,
     emoji:          (issue) => `Emoji incorect: S-a primit ${issue.received}`,
+    empty:          (issue) => `Lungime incorectă: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,
     endsWith:       (issue) => `Final incorect: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,
     excludes:       (issue) => `Conținut incorect: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,
     finite:         (issue) => `Valoare finită incorectă: S-a primit ${issue.received}`,
@@ -46,6 +47,7 @@ const language: Language = {
     minSize:        (issue) => `Mărime incorectă: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,
     minValue:       (issue) => `Valoare incorectă: S-a așteptat ${issue.expected}, dar s-a primit ${issue.received}`,
     multipleOf:     (issue) => `Multiplu incorect: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,
+    nonEmpty:       (issue) => `Lungime incorectă: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,
     notBytes:       (issue) => `Byți incorecți: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,
     notLength:      (issue) => `Lungime incorectă: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,
     notSize:        (issue) => `Mărime incorectă: Valoarea așteptată era ${issue.expected}, dar s-a primit ${issue.received}`,

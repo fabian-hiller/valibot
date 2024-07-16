@@ -1,0 +1,161 @@
+---
+title: rawTransform
+description: Creates a raw transformation action.
+source: /actions/rawTransform/rawTransform.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# rawTransform
+
+Creates a raw transformation action.
+
+```ts
+const Action = v.rawTransform<TInput, TOutput>(action);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Parameters
+
+- `action` <Property {...properties.action} />
+
+### Explanation
+
+With `rawTransform` you can freely transform and validate the input with a custom `action` and add issues if necessary.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `rawTransform` can be used.
+
+### Calculate game result
+
+Schema that calculates the total score of a game based on the scores and a multiplier.
+
+> This `rawTransform` validation action adds an issue for points that exceed a certain maximum and forwards it via `path` to the appropriate nested score.
+
+```ts
+const GameResultSchema = v.pipe(
+  v.object({
+    scores: v.array(v.pipe(v.number(), v.integer())),
+    multiplier: v.number(),
+  }),
+  v.rawTransform(({ dataset, addIssue, NEVER }) => {
+    // Create total variable
+    let total = 0;
+
+    // Iterate over scores and check points
+    for (let index = 0; index < dataset.value.scores.length; index++) {
+      // Calculate points by multiplying score with multiplier
+      const score = dataset.value.scores[index];
+      const points = score * dataset.value.multiplier;
+
+      // Add issue if points exceed maximum of 1,000 points
+      if (points > 1_000) {
+        addIssue({
+          message:
+            'The score exceeds the maximum allowed value of 1,000 points.',
+          path: [
+            {
+              type: 'object',
+              origin: 'value',
+              input: dataset.value,
+              key: 'scores',
+              value: dataset.value.scores,
+            },
+            {
+              type: 'array',
+              origin: 'value',
+              input: dataset.value.scores,
+              key: index,
+              value: score,
+            },
+          ],
+        });
+
+        // Abort transformation
+        return NEVER;
+      }
+
+      // Add points to total
+      total += points;
+    }
+
+    // Add calculated total to dataset
+    return { ...dataset.value, total };
+  })
+);
+```
+
+## Related
+
+The following APIs can be combined with `rawTransform`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

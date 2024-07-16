@@ -1,4 +1,4 @@
-import { Language } from './types';
+import type { Language } from './types';
 
 // prettier-ignore
 const language: Language = {
@@ -7,13 +7,14 @@ const language: Language = {
   specific: {
     bic:            (issue) => `Invalid BIC: Received ${issue.received}`,
     bytes:          (issue) => `Invalid bytes: Expected ${issue.expected} but received ${issue.received}`,
+    check:          (issue) => `Invalid input: Received ${issue.received}`,
+    checkAsync:     (issue) => `Invalid input: Received ${issue.received}`,
     creditCard:     (issue) => `Invalid credit card: Received ${issue.received}`,
     cuid2:          (issue) => `Invalid Cuid2: Received ${issue.received}`,
-    custom:         (issue) => `Invalid input: Received ${issue.received}`,
-    customAsync:    (issue) => `Invalid input: Received ${issue.received}`,
     decimal:        (issue) => `Invalid decimal: Received ${issue.received}`,
     email:          (issue) => `Invalid email: Received ${issue.received}`,
     emoji:          (issue) => `Invalid emoji: Received ${issue.received}`,
+    empty:          (issue) => `Invalid length: Expected ${issue.expected} but received ${issue.received}`,
     endsWith:       (issue) => `Invalid end: Expected ${issue.expected} but received ${issue.received}`,
     excludes:       (issue) => `Invalid content: Expected ${issue.expected} but received ${issue.received}`,
     finite:         (issue) => `Invalid finite: Received ${issue.received}`,
@@ -46,6 +47,7 @@ const language: Language = {
     minSize:        (issue) => `Invalid size: Expected ${issue.expected} but received ${issue.received}`,
     minValue:       (issue) => `Invalid value: Expected ${issue.expected} but received ${issue.received}`,
     multipleOf:     (issue) => `Invalid multiple: Expected ${issue.expected} but received ${issue.received}`,
+    nonEmpty:       (issue) => `Invalid length: Expected ${issue.expected} but received ${issue.received}`,
     notBytes:       (issue) => `Invalid bytes: Expected ${issue.expected} but received ${issue.received}`,
     notLength:      (issue) => `Invalid length: Expected ${issue.expected} but received ${issue.received}`,
     notSize:        (issue) => `Invalid size: Expected ${issue.expected} but received ${issue.received}`,

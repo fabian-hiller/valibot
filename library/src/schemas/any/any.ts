@@ -1,35 +1,43 @@
-import type { BaseSchema, Pipe } from '../../types/index.ts';
-import { pipeResult } from '../../utils/index.ts';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { BaseSchema } from '../../types/index.ts';
 
 /**
  * Any schema type.
  */
-export interface AnySchema<TOutput = any> extends BaseSchema<any, TOutput> {
+export interface AnySchema extends BaseSchema<any, any, never> {
   /**
    * The schema type.
    */
-  type: 'any';
+  readonly type: 'any';
   /**
-   * The validation and transformation pipeline.
+   * The schema reference.
    */
-  pipe: Pipe<any> | undefined;
+  readonly reference: typeof any;
+  /**
+   * The expected property.
+   */
+  readonly expects: 'any';
 }
 
 /**
  * Creates an any schema.
  *
- * @param pipe A validation and transformation pipe.
+ * Hint: This schema function exists only for completeness and is not
+ * recommended in practice. Instead, `unknown` should be used to accept
+ * unknown data.
  *
  * @returns An any schema.
  */
-export function any(pipe?: Pipe<any>): AnySchema {
+export function any(): AnySchema {
   return {
+    kind: 'schema',
     type: 'any',
+    reference: any,
     expects: 'any',
     async: false,
-    pipe,
-    _parse(input, config) {
-      return pipeResult(this, input, config);
+    _run(dataset) {
+      dataset.typed = true;
+      return dataset;
     },
   };
 }

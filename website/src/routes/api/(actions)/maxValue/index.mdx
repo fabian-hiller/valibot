@@ -1,0 +1,90 @@
+---
+title: maxValue
+description: Creates a max value validation action.
+source: /actions/maxValue/maxValue.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# maxValue
+
+Creates a max value validation action.
+
+```ts
+const Action = v.maxValue<TInput, TRequirement, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `maxValue` you can validate the value of a string, number, boolean or date. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `maxValue` can be used.
+
+### Number schema
+
+Schema to validate a number with a maximum value.
+
+```ts
+const NumberSchema = v.pipe(
+  v.number(),
+  v.maxValue(100, 'The number must not exceed 100.')
+);
+```
+
+### Date schema
+
+Schema to validate a date with a maximum year.
+
+```ts
+const DateSchema = v.pipe(
+  v.date(),
+  v.maxValue(new Date('1999-12-31'), 'The date must not exceed the year 1999.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `maxValue`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'bigint',
+    'boolean',
+    'date',
+    'number',
+    'special',
+    'string',
+    'unknown',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

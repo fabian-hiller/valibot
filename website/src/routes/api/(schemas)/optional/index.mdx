@@ -16,7 +16,7 @@ import { properties } from './properties';
 Creates an optional schema.
 
 ```ts
-const Schema = optional<TWrapped, TDefault>(wrapped, default_);
+const Schema = v.optional<TWrapped, TDefault>(wrapped, default_);
 ```
 
 ## Generics
@@ -48,7 +48,7 @@ The following examples show how `optional` can be used.
 Schema that accepts `string` and `undefined`.
 
 ```ts
-const OptionalStringSchema = optional(string(), "I'm the default!");
+const OptionalStringSchema = v.optional(v.string(), "I'm the default!");
 ```
 
 ### Optional date schema
@@ -58,7 +58,7 @@ Schema that accepts [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaSc
 > By using a function as the `default_` parameter, the schema will return a new [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance each time the input is `undefined`.
 
 ```ts
-const OptionalDateSchema = optional(date(), () => new Date());
+const OptionalDateSchema = v.optional(v.date(), () => new Date());
 ```
 
 ### Optional entry schema
@@ -66,8 +66,8 @@ const OptionalDateSchema = optional(date(), () => new Date());
 Object schema with an optional entry.
 
 ```ts
-const OptionalEntrySchema = object({
-  key: optional(string()),
+const OptionalEntrySchema = v.object({
+  key: v.optional(v.string()),
 });
 ```
 
@@ -76,8 +76,8 @@ const OptionalEntrySchema = object({
 Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `optional`.
 
 ```ts
-const OptionalNumberSchema = optional(number());
-const NumberSchema = unwrap(OptionalNumberSchema);
+const OptionalNumberSchema = v.optional(v.number());
+const NumberSchema = v.unwrap(OptionalNumberSchema);
 ```
 
 ## Related
@@ -93,35 +93,44 @@ The following APIs can be combined with `optional`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'picklist',
+    'promise',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -129,8 +138,7 @@ The following APIs can be combined with `optional`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -138,8 +146,28 @@ The following APIs can be combined with `optional`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
-    'transform',
+    'safeParser',
     'unwrap',
   ]}
 />
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

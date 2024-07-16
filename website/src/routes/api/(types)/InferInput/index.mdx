@@ -1,0 +1,23 @@
+---
+title: InferInput
+description: Infer input type.
+contributors:
+  - fabian-hiller
+---
+
+# InferInput
+
+Infer input type.
+
+```ts
+// Create object schema
+const ObjectSchema = v.object({
+  key: v.pipe(
+    v.string(),
+    v.transform((input) => input.length)
+  ),
+});
+
+// Infer object input type
+type ObjectInput = v.InferInput<typeof ObjectSchema>; // { key: string }
+```

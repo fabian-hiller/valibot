@@ -1,19 +1,59 @@
-import type { BaseSchema, ErrorMessage } from '../../types/index.ts';
-import { schemaIssue, schemaResult } from '../../utils/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  Dataset,
+  ErrorMessage,
+} from '../../types/index.ts';
+import { _addIssue } from '../../utils/index.ts';
+
+/**
+ * Null issue type.
+ */
+export interface NullIssue extends BaseIssue<unknown> {
+  /**
+   * The issue kind.
+   */
+  readonly kind: 'schema';
+  /**
+   * The issue type.
+   */
+  readonly type: 'null';
+  /**
+   * The expected property.
+   */
+  readonly expected: 'null';
+}
 
 /**
  * Null schema type.
  */
-export interface NullSchema<TOutput = null> extends BaseSchema<null, TOutput> {
+export interface NullSchema<
+  TMessage extends ErrorMessage<NullIssue> | undefined,
+> extends BaseSchema<null, null, NullIssue> {
   /**
    * The schema type.
    */
-  type: 'null';
+  readonly type: 'null';
+  /**
+   * The schema reference.
+   */
+  readonly reference: typeof null_;
+  /**
+   * The expected property.
+   */
+  readonly expects: 'null';
   /**
    * The error message.
    */
-  message: ErrorMessage | undefined;
+  readonly message: TMessage;
 }
+
+/**
+ * Creates a null schema.
+ *
+ * @returns A null schema.
+ */
+export function null_(): NullSchema<undefined>;
 
 /**
  * Creates a null schema.
@@ -22,20 +62,29 @@ export interface NullSchema<TOutput = null> extends BaseSchema<null, TOutput> {
  *
  * @returns A null schema.
  */
-export function null_(message?: ErrorMessage): NullSchema {
+export function null_<
+  const TMessage extends ErrorMessage<NullIssue> | undefined,
+>(message: TMessage): NullSchema<TMessage>;
+
+export function null_(
+  message?: ErrorMessage<NullIssue>
+): NullSchema<ErrorMessage<NullIssue> | undefined> {
   return {
+    kind: 'schema',
     type: 'null',
+    reference: null_,
     expects: 'null',
     async: false,
     message,
-    _parse(input, config) {
-      // If type is valid, return schema result
-      if (input === null) {
-        return schemaResult(true, input);
+    _run(dataset, config) {
+      if (dataset.value === null) {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, 'type', dataset, config);
       }
-
-      // Otherwise, return schema issue
-      return schemaIssue(this, null_, input, config);
+      return dataset as Dataset<null, NullIssue>;
     },
   };
 }
+
+export { null_ as null };

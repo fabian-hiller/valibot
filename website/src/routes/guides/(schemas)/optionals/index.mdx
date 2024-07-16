@@ -1,8 +1,8 @@
 ---
 title: Optionals
 description: >-
-  It often happens that undefined or null should also be accepted. To make the
-  API more readable for this and to reduce boilerplate, I offer a shortcut.
+  It often happens that `undefined` or `null` should also be accepted. To make
+  the API more readable for this and to reduce boilerplate, I offer a shortcut.
 contributors:
   - fabian-hiller
 ---
@@ -15,7 +15,7 @@ It often happens that `undefined` or `null` should also be accepted instead of t
 
 ## How it works
 
-To accept `undefined` or `null` besides your actual value, you just have to nest the schema in <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link> and <Link href="/api/nullish/">`nullish`</Link>.
+To accept `undefined` or `null` besides your actual value, you just have to wrap the schema in <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link> and <Link href="/api/nullish/">`nullish`</Link>.
 
 ```ts
 import * as v from 'valibot';
@@ -27,28 +27,12 @@ const NullishStringSchema = v.nullish(v.string()); // string | null | undefined
 
 ### Use in objects
 
-When used inside of objects, <Link href="/api/optional/">`optional`</Link> is a special case, as it also marks the value as optional in TypeScript with a question mark.
+When used inside of objects, <Link href="/api/optional/">`optional`</Link> and <Link href="/api/nullish/">`nullish`</Link> is a special case, as it also marks the value as optional in TypeScript with a question mark.
 
 ```ts
 import * as v from 'valibot';
 
 const OptionalKeySchema = v.object({ key: v.optional(v.string()) }); // { key?: string | undefined }
-```
-
-It is important to note that <Link href="/api/nullish/">`nullish`</Link> does not behave this way. To make a nullable value optional, you must explicitly nest it in <Link href="/api/optional/">`optional`</Link>.
-
-> Let us know with an [issue](https://github.com/fabian-hiller/valibot/issues/new) if you find this cumbersome and would prefer <Link href="/api/nullish/">`nullish`</Link> to do this automatically.
-
-```ts
-import * as v from 'valibot';
-
-const NullishKeySchema = v.object({
-  key: v.nullish(v.string()),
-}); // { key: string | null | undefined }
-
-const OptionalNullableKeySchema = v.object({
-  key: v.optional(v.nullable(v.string())),
-}); // { key?: string | null | undefined }
 ```
 
 ## Default values

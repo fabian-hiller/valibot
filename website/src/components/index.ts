@@ -3,6 +3,7 @@ export * from './ApiList';
 export * from './ButtonGroup';
 export * from './CodeEditor';
 export * from './Credits';
+export * from './DiscordIconLink';
 export * from './DocSearch';
 export * from './DocsLayout';
 export * from './Expandable';

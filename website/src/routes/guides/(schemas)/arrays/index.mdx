@@ -1,8 +1,8 @@
 ---
 title: Arrays
 description: >-
-  To validate arrays with a schema you can use array or tuple. You use tuple if
-  your array has a specific shape and array in the other case.
+  To validate arrays with a schema you can use `array` or `tuple`. You use
+  `tuple` if your array has a specific shape and `array` in the other case.
 contributors:
   - fabian-hiller
 ---
@@ -25,17 +25,18 @@ const ArraySchema = v.array(v.number()); // number[]
 
 ### Pipeline validation
 
-To validate the length or contents of the array, you can use its pipeline.
+To validate the length or contents of the array, you can use a pipeline.
 
 ```ts
 import * as v from 'valibot';
 
-const ArraySchema = v.array(v.string(), [
+const ArraySchema = v.pipe(
+  v.array(v.string()),
   v.minLength(1),
   v.maxLength(5),
   v.includes('foo'),
-  v.excludes('bar'),
-]);
+  v.excludes('bar')
+);
 ```
 
 ## Tuple schema
@@ -48,36 +49,33 @@ import * as v from 'valibot';
 const TupleSchema = v.tuple([v.string(), v.number()]); // [string, number]
 ```
 
-### Rest argument
+### Loose and strict tuples
 
-By default, <Link href="/api/tuple/">`tuple`</Link> ignores and removes unknown items. This means that items that occur after the items defined by the first argument will not be validated and will not be added to the output. You can control this behavior with the `rest` argument.
+The <Link href="/api/tuple/">`tuple`</Link> schema removes unknown items. This means that items that you have not defined in the first argument are not validated and added to the output. You can change this behavior by using the <Link href="/api/looseTuple/">`looseTuple`</Link> or <Link href="/api/strictTuple/">`strictTuple`</Link> schema instead.
 
-By using <Link href="/api/never/">`never`</Link> for the `rest` argument, you can make the validation strict and forbid unknown items completely. If unknown items are detected, an issue is returned for each entry.
+The <Link href="/api/looseTuple/">`looseTuple`</Link> schema allows unknown items and adds them to the output. The <Link href="/api/strictTuple/">`strictTuple`</Link> schema forbids unknown items and returns an issue for the first unknown item found.
 
-```ts
-import * as v from 'valibot';
+### Tuple with specific rest
 
-const TupleSchema = v.tuple([v.string(), v.number()], v.never());
-```
-
-Alternatively, you can also allow unknown items with <Link href="/api/unknown/">`unknown`</Link> and add them to the output. Instead of <Link href="/api/unknown/">`unknown`</Link>, you can also use any other schema function, such as <Link href="/api/string/">`string`</Link>, for a typed output.
+Alternatively, you can also use the <Link href="/api/tupleWithRest/">`tupleWithRest`</Link> schema to define a specific schema for unknown items. Any items not defined in the first argument are then validated against the schema of the second argument.
 
 ```ts
 import * as v from 'valibot';
 
-const TupleSchema = v.tuple([v.string()], v.unknown()); // [string, ...unknown[]]
+const TupleSchema = v.tupleWithRest([v.string(), v.number()], v.null());
 ```
 
 ### Pipeline validation
 
-Similar to <Link href="/api/array/">`array`</Link>, you can use the pipeline of <Link href="/api/tuple/">`tuple`</Link> to validate its length and contents.
+Similar to arrays, you can use a pipeline to validate the length and contents of a tuple.
 
 ```ts
 import * as v from 'valibot';
 
-const TupleSchema = v.tuple([v.string()], v.string(), [
+const TupleSchema = v.pipe(
+  v.tupleWithRest([v.string()], v.string()),
   v.maxLength(5),
   v.includes('foo'),
-  v.excludes('bar'),
-]);
+  v.excludes('bar')
+);
 ```

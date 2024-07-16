@@ -21,6 +21,16 @@
     transition: none !important;
   }
 
+  /* Scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.slate.300') theme('colors.transparent');
+  }
+  .dark,
+  .dark * {
+    scrollbar-color: theme('colors.slate.700') theme('colors.transparent');
+  }
+
   /* Monaco editor */
   .monaco-editor,
   .monaco-editor > div {
@@ -73,6 +83,9 @@
   .mdx :is(p, blockquote, ul, ol) {
     @apply leading-loose md:text-lg md:leading-loose lg:text-xl lg:leading-loose;
   }
+  .mdx p strong {
+    @apply text-slate-800 dark:text-slate-300;
+  }
 
   /* Blockquote */
   .mdx blockquote p {
@@ -85,7 +98,7 @@
   }
 
   /* Images */
-  .mdx img {
+  .mdx > img {
     @apply w-auto rounded-2xl border-2 border-slate-200 lg:rounded-3xl lg:border-[3px] dark:border-slate-800;
   }
 

@@ -1,239 +1,326 @@
 import { describe, expect, test } from 'vitest';
-import { type ValiError } from '../../error/index.ts';
-import { parseAsync } from '../../methods/index.ts';
-import type {
-  Output,
-  TypedSchemaResult,
-  UntypedSchemaResult,
-} from '../../types/index.ts';
-import { maxSize, minLength, minSize, size } from '../../validations/index.ts';
-import { date } from '../date/index.ts';
-import { mapAsync } from '../map/index.ts';
-import { number, numberAsync } from '../number/index.ts';
-import { object } from '../object/index.ts';
-import { string } from '../string/index.ts';
+import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
+import { number } from '../number/index.ts';
+import { string, type StringIssue } from '../string/index.ts';
+import { mapAsync, type MapSchemaAsync } from './mapAsync.ts';
+import type { MapIssue } from './types.ts';
 
 describe('mapAsync', () => {
-  test('should pass only maps', async () => {
-    const schema1 = mapAsync(string(), date());
-    const input1 = new Map().set('1', new Date());
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toEqual(input1);
+  describe('should return schema object', () => {
+    const key = number();
+    type Key = typeof key;
+    const value = string();
+    type Value = typeof value;
+    const baseSchema: Omit<MapSchemaAsync<Key, Value, never>, 'message'> = {
+      kind: 'schema',
+      type: 'map',
+      reference: mapAsync,
+      expects: 'Map',
+      key,
+      value,
+      async: true,
+      _run: expect.any(Function),
+    };
 
-    const schema2 = mapAsync(number(), string());
-    const input2 = new Map().set(1, '1').set(2, '2');
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toEqual(input2);
-    const input3 = new Map();
-    const output3 = await parseAsync(schema2, input3);
-    expect(output3).toEqual(input3);
+    test('with undefined message', () => {
+      const schema: MapSchemaAsync<Key, Value, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(mapAsync(key, value)).toStrictEqual(schema);
+      expect(mapAsync(key, value, undefined)).toStrictEqual(schema);
+    });
 
-    await expect(
-      parseAsync(schema1, new Map().set('1', '1'))
-    ).rejects.toThrowError();
-    await expect(
-      parseAsync(schema1, new Map().set(1, '1'))
-    ).rejects.toThrowError();
-    await expect(parseAsync(schema1, 123)).rejects.toThrowError();
-    await expect(parseAsync(schema1, 'test')).rejects.toThrowError();
-    await expect(parseAsync(schema1, {})).rejects.toThrowError();
+    test('with string message', () => {
+      expect(mapAsync(key, value, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies MapSchemaAsync<Key, Value, 'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(mapAsync(key, value, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies MapSchemaAsync<Key, Value, typeof message>);
+    });
   });
 
-  test('should throw custom error', async () => {
-    const error = 'Value is not an map!';
-    const schema = mapAsync(number(), string(), error);
-    await expect(parseAsync(schema, new Set())).rejects.toThrowError(error);
-  });
-
-  test('should throw every issue', async () => {
+  describe('should return dataset without issues', () => {
     const schema = mapAsync(number(), string());
-    const input = new Map().set(1, 1).set(2, '2').set('3', '3');
-    await expect(parseAsync(schema, input)).rejects.toThrowError();
-    try {
-      await parseAsync(schema, input);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(2);
-    }
+
+    test('for empty mapAsync', async () => {
+      await expectNoSchemaIssueAsync(schema, [new Map()]);
+    });
+
+    test('for simple mapAsync', async () => {
+      await expectNoSchemaIssueAsync(schema, [
+        new Map([
+          [0, 'foo'],
+          [1, 'bar'],
+          [2, 'baz'],
+        ]),
+      ]);
+    });
   });
 
-  test('should throw only first issue', async () => {
+  describe('should return dataset with issues', () => {
+    const schema = mapAsync(number(), string(), 'message');
+    const baseIssue: Omit<MapIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'map',
+      expected: 'Map',
+      message: 'message',
+    };
+
+    // Primitive types
+
+    test('for bigints', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1n, 0n, 123n]);
+    });
+
+    test('for booleans', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [true, false]);
+    });
+
+    test('for null', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [null]);
+    });
+
+    test('for numbers', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
+    });
+
+    test('for strings', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, ['', 'abc', '123']);
+    });
+
+    test('for symbols', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        Symbol(),
+        Symbol('foo'),
+      ]);
+    });
+
+    // Complex types
+
+    test('for arrays', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [[], ['value']]);
+    });
+
+    test('for functions', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [
+        () => {},
+        function () {},
+      ]);
+    });
+
+    test('for objects', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [{}, { key: 'value' }]);
+    });
+  });
+
+  describe('should return dataset without nested issues', () => {
     const schema = mapAsync(number(), string());
-    const config = { abortEarly: true };
-    const input1 = new Map().set(1, 1).set(2, '2').set('3', '3');
-    await expect(parseAsync(schema, input1, config)).rejects.toThrowError();
-    try {
-      await parseAsync(schema, input1, config);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].path?.[0].origin).toBe('value');
-    }
 
-    const input2 = new Map().set('1', 1).set(2, '2').set('3', '3');
-    await expect(parseAsync(schema, input2, config)).rejects.toThrowError();
-    try {
-      await parseAsync(schema, input2, config);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].path?.[0].origin).toBe('key');
-    }
-  });
+    test('for simple mapAsync', async () => {
+      await expectNoSchemaIssueAsync(schema, [
+        new Map([
+          [0, 'foo'],
+          [1, 'bar'],
+          [2, 'baz'],
+        ]),
+      ]);
+    });
 
-  test('should return issue path', async () => {
-    const schema1 = mapAsync(string(), number());
-    const input1 = new Map().set('A', 1).set('B', 2).set('C', '3');
-    const result1 = await schema1._parse(input1);
-    expect(result1.issues?.[0].path).toEqual([
-      {
-        type: 'map',
-        origin: 'value',
-        input: input1,
-        key: 'C',
-        value: input1.get('C'),
-      },
-    ]);
-
-    const schema2 = mapAsync(string(), object({ key: string() }));
-    const input2 = new Map()
-      .set('A', { key: '1' })
-      .set('B', { key: 2 })
-      .set('C', { key: '3' });
-    const result2 = await schema2._parse(input2);
-    expect(result2.issues?.[0].path).toEqual([
-      {
-        type: 'map',
-        origin: 'value',
-        input: input2,
-        key: 'B',
-        value: input2.get('B'),
-      },
-      {
-        type: 'object',
-        origin: 'value',
-        input: input2.get('B'),
-        key: 'key',
-        value: input2.get('B').key,
-      },
-    ]);
-
-    const schema3 = mapAsync(object({ key: string() }), string());
-    const errorKey = { key: 2 };
-    const input3 = new Map()
-      .set({ key: '1' }, 'A')
-      .set(errorKey, 'B')
-      .set({ key: '3' }, 'C');
-    const result3 = await schema3._parse(input3);
-    expect(result3.issues?.[0].path).toEqual([
-      {
-        type: 'map',
-        origin: 'key',
-        input: input3,
-        key: errorKey,
-        value: input3.get(errorKey),
-      },
-      {
-        type: 'object',
-        origin: 'value',
-        input: errorKey,
-        key: 'key',
-        value: errorKey.key,
-      },
-    ]);
-  });
-
-  test('should execute pipe', async () => {
-    const sizeError = 'Invalid size';
-
-    const schema1 = mapAsync(numberAsync(), string(), [size(1)]);
-    const input1 = new Map().set(1, '1');
-    const output1 = await parseAsync(schema1, input1);
-    expect(output1).toEqual(input1);
-    await expect(parseAsync(schema1, new Map())).rejects.toThrowError(
-      sizeError
-    );
-    await expect(parseAsync(schema1, input1.set(2, '2'))).rejects.toThrowError(
-      sizeError
-    );
-
-    const schema2 = mapAsync(numberAsync(), string(), 'Error', [
-      minSize(2),
-      maxSize(4),
-    ]);
-    const input2 = new Map().set(1, '1').set(2, '2').set(3, '3');
-    const output2 = await parseAsync(schema2, input2);
-    expect(output2).toEqual(input2);
-    await expect(
-      parseAsync(schema2, input2.set(4, '4').set(5, '5'))
-    ).rejects.toThrowError(sizeError);
-    await expect(
-      parseAsync(schema2, new Map().set(1, '1'))
-    ).rejects.toThrowError(sizeError);
-  });
-
-  test('should execute pipe if output is typed', async () => {
-    const schema = mapAsync(number(), string([minLength(10)]), [minSize(10)]);
-    const input = new Map().set(0, '12345');
-    const result = await schema._parse(input);
-    expect(result).toEqual({
-      typed: true,
-      output: input,
-      issues: [
-        {
-          reason: 'string',
-          context: 'min_length',
-          expected: '>=10',
-          received: '5',
-          message: 'Invalid length: Expected >=10 but received 5',
-          input: input.get(0),
-          requirement: 10,
-          path: [
-            {
-              type: 'map',
-              origin: 'value',
-              input: input,
-              key: 0,
-              value: input.get(0),
-            },
+    test('for nested mapAsync', async () => {
+      await expectNoSchemaIssueAsync(mapAsync(schema, schema), [
+        new Map([
+          [
+            new Map([
+              [0, 'foo'],
+              [1, 'bar'],
+            ]),
+            new Map([[3, 'baz']]),
           ],
-        },
+        ]),
+      ]);
+    });
+  });
+
+  describe('should return dataset with nested issues', () => {
+    const schema = mapAsync(number(), string());
+
+    const baseInfo = {
+      message: expect.any(String),
+      requirement: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+    };
+
+    const stringIssue: StringIssue = {
+      ...baseInfo,
+      kind: 'schema',
+      type: 'string',
+      input: 123,
+      expected: 'string',
+      received: '123',
+      path: [
         {
-          reason: 'map',
-          context: 'min_size',
-          expected: '>=10',
-          received: '1',
-          message: 'Invalid size: Expected >=10 but received 1',
-          input: input,
-          requirement: 10,
+          type: 'map',
+          origin: 'value',
+          input: new Map<unknown, unknown>([
+            [0, 'foo'],
+            [1, 123],
+            [2, 'baz'],
+            [null, 'bar'],
+          ]),
+          key: 1,
+          value: 123,
         },
       ],
-    } satisfies TypedSchemaResult<Output<typeof schema>>);
-  });
+    };
 
-  test('should skip pipe if output is not typed', async () => {
-    const schema = mapAsync(number(), string(), [minSize(10)]);
-    const input = new Map().set(0, 12345);
-    const result = await schema._parse(input);
-    expect(result).toEqual({
-      typed: false,
-      output: input,
-      issues: [
-        {
-          reason: 'type',
-          context: 'string',
-          expected: 'string',
-          received: '12345',
-          message: 'Invalid type: Expected string but received 12345',
-          input: input.get(0),
-          path: [
-            {
-              type: 'map',
-              origin: 'value',
-              input: input,
-              key: 0,
-              value: input.get(0),
-            },
-          ],
-        },
-      ],
-    } satisfies UntypedSchemaResult);
+    test('for wrong values', async () => {
+      const input = new Map<unknown, unknown>([
+        [0, 'foo'],
+        [1, 123],
+        [2, 'baz'],
+        [null, 'bar'],
+      ]);
+      expect(
+        await schema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          stringIssue,
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: null,
+            expected: 'number',
+            received: 'null',
+            path: [
+              {
+                type: 'map',
+                origin: 'key',
+                input,
+                key: null,
+                value: 'bar',
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('with abort early', async () => {
+      expect(
+        await schema._run(
+          {
+            typed: false,
+            value: new Map<unknown, unknown>([
+              [0, 'foo'],
+              [1, 123],
+              [2, 'baz'],
+              [null, 'bar'],
+            ]),
+          },
+          { abortEarly: true }
+        )
+      ).toStrictEqual({
+        typed: false,
+        value: new Map([[0, 'foo']]),
+        issues: [{ ...stringIssue, abortEarly: true }],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for wrong nested values', async () => {
+      const nestedSchema = mapAsync(schema, schema);
+      const input = new Map<unknown, unknown>([
+        [
+          new Map<unknown, unknown>([
+            [0, 123],
+            [1, 'foo'],
+          ]),
+          new Map(),
+        ],
+        [new Map(), 'bar'],
+      ]);
+      expect(
+        await nestedSchema._run(
+          {
+            typed: false,
+            value: input,
+          },
+          {}
+        )
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: 123,
+            expected: 'string',
+            received: '123',
+            path: [
+              {
+                type: 'map',
+                origin: 'key',
+                input,
+                key: new Map<unknown, unknown>([
+                  [0, 123],
+                  [1, 'foo'],
+                ]),
+                value: new Map(),
+              },
+              {
+                type: 'map',
+                origin: 'value',
+                input: new Map<unknown, unknown>([
+                  [0, 123],
+                  [1, 'foo'],
+                ]),
+                key: 0,
+                value: 123,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'map',
+            input: 'bar',
+            expected: 'Map',
+            received: '"bar"',
+            path: [
+              {
+                type: 'map',
+                origin: 'value',
+                input,
+                key: new Map(),
+                value: 'bar',
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+    });
   });
 });

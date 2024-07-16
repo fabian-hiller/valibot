@@ -1,239 +1,293 @@
 import { describe, expect, test } from 'vitest';
-import { type ValiError } from '../../error/index.ts';
-import { parse } from '../../methods/index.ts';
-import { toCustom } from '../../transformations/index.ts';
-import type {
-  Output,
-  TypedSchemaResult,
-  UntypedSchemaResult,
-} from '../../types/index.ts';
-import { custom, maxLength, minLength } from '../../validations/index.ts';
-import { any } from '../any/index.ts';
-import { number } from '../number/index.ts';
-import { object } from '../object/index.ts';
+import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { number, type NumberIssue } from '../number/index.ts';
+import { optional } from '../optional/index.ts';
+import { picklist } from '../picklist/index.ts';
 import { string } from '../string/index.ts';
-import { union } from '../union/index.ts';
-import { record } from './record.ts';
+import { record, type RecordSchema } from './record.ts';
+import type { RecordIssue } from './types.ts';
 
 describe('record', () => {
-  test('should pass only objects', () => {
-    const schema1 = record(number());
-    const input1 = { key1: 1, key2: 2 };
-    const output1 = parse(schema1, input1);
-    expect(output1).toEqual(input1);
-    expect(() => parse(schema1, { test: 'hello' })).toThrowError();
-    expect(() => parse(schema1, 'test')).toThrowError();
-    expect(() => parse(schema1, 123)).toThrowError();
+  describe('should return schema record', () => {
+    const key = string();
+    type Key = typeof key;
+    const value = number();
+    type Value = typeof value;
+    const baseSchema: Omit<RecordSchema<Key, Value, never>, 'message'> = {
+      kind: 'schema',
+      type: 'record',
+      reference: record,
+      expects: 'Object',
+      key,
+      value,
+      async: false,
+      _run: expect.any(Function),
+    };
 
-    const schema2 = record(string([minLength(3)]), union([string(), number()]));
-    const input2 = { 1234: 1234, test: 'hello' };
-    const output2 = parse(schema2, input2);
-    expect(output2).toEqual(input2);
-    expect(() => parse(schema2, { a: 'test' })).toThrowError();
-    expect(() => parse(schema2, { test: null })).toThrowError();
-    expect(() => parse(schema2, 'test')).toThrowError();
-    expect(() => parse(schema2, 123)).toThrowError();
+    test('with undefined message', () => {
+      const schema: RecordSchema<Key, Value, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(record(key, value)).toStrictEqual(schema);
+      expect(record(key, value, undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(record(key, value, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies RecordSchema<Key, Value, 'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(record(key, value, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies RecordSchema<Key, Value, typeof message>);
+    });
   });
 
-  test('should throw custom error', () => {
-    const error = 'Value is not an object!';
-    const schema = record(string(), error);
-    expect(() => parse(schema, 123)).toThrowError(error);
+  describe('should return dataset without issues', () => {
+    const schema = record(string(), number());
+
+    test('for empty record', () => {
+      expectNoSchemaIssue(schema, [{}]);
+    });
+
+    test('for simple record', () => {
+      expectNoSchemaIssue(schema, [{ foo: 1, bar: 2, baz: 3 }]);
+    });
   });
 
-  test('should throw every issue', () => {
-    const schema1 = record(number());
-    const input1 = { 1: '1', 2: 2, 3: '3', 4: '4' };
-    expect(() => parse(schema1, input1)).toThrowError();
-    try {
-      parse(schema1, input1);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(3);
-    }
+  describe('should return dataset with issues', () => {
+    const schema = record(string(), number(), 'message');
+    const baseIssue: Omit<RecordIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'record',
+      expected: 'Object',
+      message: 'message',
+    };
 
-    const schema2 = record(string([minLength(2)]), number());
-    const input2 = { '1': '1', 2: 2, 3: '3' };
-    expect(() => parse(schema2, input2)).toThrowError();
-    try {
-      parse(schema2, input2);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(5);
-    }
+    // Primitive types
+
+    test('for bigints', () => {
+      expectSchemaIssue(schema, baseIssue, [-1n, 0n, 123n]);
+    });
+
+    test('for booleans', () => {
+      expectSchemaIssue(schema, baseIssue, [true, false]);
+    });
+
+    test('for null', () => {
+      expectSchemaIssue(schema, baseIssue, [null]);
+    });
+
+    test('for numbers', () => {
+      expectSchemaIssue(schema, baseIssue, [-1, 0, 123, 45.67]);
+    });
+
+    test('for undefined', () => {
+      expectSchemaIssue(schema, baseIssue, [undefined]);
+    });
+
+    test('for strings', () => {
+      expectSchemaIssue(schema, baseIssue, ['', 'abc', '123']);
+    });
+
+    test('for symbols', () => {
+      expectSchemaIssue(schema, baseIssue, [Symbol(), Symbol('foo')]);
+    });
+
+    // Complex types
+
+    // TODO: Enable this test again in case we find a reliable way to check for
+    // plain objects
+    // test('for arrays', () => {
+    //   expectSchemaIssue(schema, baseIssue, [[], ['value']]);
+    // });
+
+    test('for functions', () => {
+      expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
+    });
   });
 
-  test('should throw only first issue', () => {
-    const config = { abortEarly: true };
+  describe('should return dataset without nested issues', () => {
+    const schema = record(picklist(['foo', 'bar', 'baz']), optional(number()));
 
-    const schema1 = record(number());
-    const input1 = { 1: '1', 2: 2, 3: '3' };
-    expect(() => parse(schema1, input1, config)).toThrowError();
-    try {
-      parse(schema1, input1, config);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].path?.[0].origin).toBe('value');
-    }
+    test('for simple record', () => {
+      expectNoSchemaIssue(schema, [{ foo: 1, bar: 2, baz: 3 }]);
+    });
 
-    const schema2 = record(string([minLength(2)]), number());
-    const input2 = { '1': '1', 2: 2, 3: '3' };
-    expect(() => parse(schema2, input2, config)).toThrowError();
-    try {
-      parse(schema2, input2, config);
-    } catch (error) {
-      expect((error as ValiError).issues.length).toBe(1);
-      expect((error as ValiError).issues[0].path?.[0].origin).toBe('key');
-    }
+    test('for nested record', () => {
+      expectNoSchemaIssue(record(string(), schema), [
+        { foo: { foo: 1, bar: 2 }, bar: { baz: 3 } },
+      ]);
+    });
   });
 
-  test('should return issue path', () => {
-    const schema1 = record(number());
-    const input1 = { a: 1, b: '2', c: 3 };
-    const result1 = schema1._parse(input1);
-    expect(result1.issues?.[0].path).toEqual([
-      {
-        type: 'record',
-        origin: 'value',
-        input: input1,
-        key: 'b',
-        value: input1.b,
-      },
-    ]);
+  describe('should return dataset with nested issues', () => {
+    const schema = record(picklist(['foo', 'bar', 'baz']), optional(number()));
 
-    const schema2 = record(object({ key: string() }));
-    const input2 = { a: { key: 'test' }, b: { key: 123 } };
-    const result2 = schema2._parse(input2);
-    expect(result2.issues?.[0].path).toEqual([
-      {
-        type: 'record',
-        origin: 'value',
-        input: input2,
-        key: 'b',
-        value: input2.b,
-      },
-      {
-        type: 'object',
-        origin: 'value',
-        input: input2.b,
-        key: 'key',
-        value: input2.b.key,
-      },
-    ]);
+    const baseInfo = {
+      message: expect.any(String),
+      requirement: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+    };
 
-    const schema3 = record(string([maxLength(1)]), number());
-    const input3 = { a: 1, bb: 2, c: 3 };
-    const result3 = schema3._parse(input3);
-    expect(result3.issues?.[0].path).toEqual([
-      {
-        type: 'record',
-        origin: 'key',
-        input: input3,
-        key: 'bb',
-        value: input3.bb,
-      },
-    ]);
-  });
-
-  test('should execute pipe', () => {
-    const input = { key1: 1, key2: 1 };
-    const transformInput = (): Record<string, number> => ({ key1: 2, key2: 2 });
-    const output1 = parse(record(number(), [toCustom(transformInput)]), input);
-    const output2 = parse(
-      record(string(), number(), [toCustom(transformInput)]),
-      input
-    );
-    const output3 = parse(
-      record(number(), 'Error', [toCustom(transformInput)]),
-      input
-    );
-    const output4 = parse(
-      record(string(), number(), 'Error', [toCustom(transformInput)]),
-      input
-    );
-    expect(output1).toEqual(transformInput());
-    expect(output2).toEqual(transformInput());
-    expect(output3).toEqual(transformInput());
-    expect(output4).toEqual(transformInput());
-  });
-
-  test('should prevent prototype pollution', () => {
-    const schema = record(string(), any());
-    const input = JSON.parse('{"__proto__":{"polluted":"yes"}}');
-    expect(input.__proto__.polluted).toBe('yes');
-    expect(({} as any).polluted).toBeUndefined();
-    const output = parse(schema, input);
-    expect(output.__proto__.polluted).toBeUndefined();
-    expect(output.polluted).toBeUndefined();
-  });
-
-  test('should execute pipe if output is typed', () => {
-    const requirement = (value: Record<string, string>) =>
-      value.key.length >= 10;
-    const schema = record(string([minLength(10)]), [custom(requirement)]);
-    const input = { key: '12345' };
-    const result = schema._parse(input);
-    expect(result).toEqual({
-      typed: true,
-      output: input,
-      issues: [
+    const numberIssue1: NumberIssue = {
+      ...baseInfo,
+      kind: 'schema',
+      type: 'number',
+      input: '2',
+      expected: 'number',
+      received: '"2"',
+      path: [
         {
-          reason: 'string',
-          context: 'min_length',
-          expected: '>=10',
-          received: '5',
-          message: 'Invalid length: Expected >=10 but received 5',
-          input: input.key,
-          requirement: 10,
-          path: [
-            {
-              type: 'record',
-              origin: 'value',
-              input: input,
-              key: 'key',
-              value: input.key,
-            },
-          ],
-        },
-        {
-          reason: 'record',
-          context: 'custom',
-          expected: null,
-          received: 'Object',
-          message: 'Invalid input: Received Object',
-          input: input,
-          requirement,
+          type: 'object',
+          origin: 'value',
+          input: {
+            foo: 1,
+            bar: '2',
+            baz: undefined,
+            other: 4,
+          },
+          key: 'bar',
+          value: '2',
         },
       ],
-    } satisfies TypedSchemaResult<Output<typeof schema>>);
-  });
+    };
 
-  test('should skip pipe if output is not typed', () => {
-    const schema = record(string(), [
-      custom((value) => value.key.length >= 10),
-    ]);
-    const input = { key: 12345 };
-    const result = schema._parse(input);
-    expect(result).toEqual({
-      typed: false,
-      output: input,
-      issues: [
-        {
-          reason: 'type',
-          context: 'string',
-          expected: 'string',
-          received: '12345',
-          message: 'Invalid type: Expected string but received 12345',
-          input: input.key,
-          path: [
-            {
-              type: 'record',
-              origin: 'value',
-              input: input,
-              key: 'key',
-              value: input.key,
-            },
-          ],
+    test('for wrong values', () => {
+      const input = {
+        foo: 1,
+        bar: '2',
+        baz: undefined,
+        other: 4,
+      };
+      expect(
+        schema._run(
+          {
+            typed: false,
+            value: input,
+          },
+          {}
+        )
+      ).toStrictEqual({
+        typed: false,
+        value: {
+          foo: input.foo,
+          bar: input.bar,
+          baz: input.baz,
         },
-      ],
-    } satisfies UntypedSchemaResult);
+        issues: [
+          numberIssue1,
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'picklist',
+            input: 'other',
+            expected: '"foo" | "bar" | "baz"',
+            received: '"other"',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input,
+                key: 'other',
+                value: 4,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('with abort early', () => {
+      expect(
+        schema._run(
+          {
+            typed: false,
+            value: {
+              foo: 1,
+              bar: '2',
+              baz: undefined,
+              other: 4,
+            },
+          },
+          { abortEarly: true }
+        )
+      ).toStrictEqual({
+        typed: false,
+        value: { foo: 1 },
+        issues: [{ ...numberIssue1, abortEarly: true }],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for wrong nested values', () => {
+      const nestedSchema = record(string(), schema);
+      const input = {
+        key1: {
+          foo: 1,
+          bar: '2',
+          baz: undefined,
+        },
+        key2: 123,
+      };
+      expect(
+        nestedSchema._run({ typed: false, value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: input.key1.bar,
+            expected: 'number',
+            received: '"2"',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key1',
+                value: input.key1,
+              },
+              {
+                type: 'object',
+                origin: 'value',
+                input: input.key1,
+                key: 'bar',
+                value: input.key1.bar,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'record',
+            input: input.key2,
+            expected: 'Object',
+            received: '123',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key2',
+                value: input.key2,
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+    });
   });
 });

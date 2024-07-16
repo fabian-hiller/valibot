@@ -1,0 +1,65 @@
+---
+title: filterItems
+description: Creates a filter items transformation action.
+source: /actions/filterItems/filterItems.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# filterItems
+
+Creates a filter items transformation action.
+
+```ts
+const Action = v.filterItems<TInput>(operation);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `operation` <Property {...properties.operation} />
+
+### Explanation
+
+With `filterItems` you can filter the items of an array. Returning `true` for an item will keep it in the array and returning `false` will remove it.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `filterItems` can be used.
+
+### Filter duplicate items
+
+Schema to filter duplicate items from an array.
+
+```ts
+const FilteredArraySchema = v.pipe(
+  v.array(v.string()),
+  v.filterItems((item, index, array) => array.indexOf(item) === index)
+);
+```
+
+## Related
+
+The following APIs can be combined with `filterItems`.
+
+### Schemas
+
+<ApiList items={['any', 'array', 'instance', 'special', 'tuple', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

@@ -1,0 +1,65 @@
+---
+title: endsWith
+description: Creates an ends with validation action.
+source: /actions/endsWith/endsWith.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# endsWith
+
+Creates an ends with validation action.
+
+```ts
+const Action = v.endsWith<TInput, TRequirement, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `endsWith` you can validate the end of a string. If the end does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `endsWith` can be used.
+
+### Email schema
+
+Schema to validate an email with a specific domain.
+
+```ts
+const EmailSchema = v.pipe(v.string(), v.email(), v.endsWith('@example.com'));
+```
+
+## Related
+
+The following APIs can be combined with `endsWith`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

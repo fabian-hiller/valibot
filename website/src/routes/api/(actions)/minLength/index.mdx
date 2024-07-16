@@ -1,0 +1,85 @@
+---
+title: minLength
+description: Creates a min length validation action.
+source: /actions/minLength/minLength.ts
+contributors:
+  - fabian-hiller
+  - depsimon
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# minLength
+
+Creates a min length validation action.
+
+```ts
+const Action = v.minLength<TInput, TRequirement, TMessage>(
+  requirement,
+  message
+);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `minLength` you can validate the length of a string or array. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `minLength` can be used.
+
+### Minumum string length
+
+Schema to validate a string with a minimum length of 3 characters.
+
+```ts
+const MinStringSchema = v.pipe(
+  v.string(),
+  v.minLength(3, 'The string must be 3 or more characters long.')
+);
+```
+
+### Minimum array length
+
+Schema to validate an array with a minimum length of 5 items.
+
+```ts
+const MinArraySchema = v.pipe(
+  v.array(v.number()),
+  v.minLength(5, 'The array must contain 3 numbers or more.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `minLength`.
+
+### Schemas
+
+<ApiList
+  items={['any', 'array', 'instance', 'special', 'string', 'tuple', 'unknown']}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

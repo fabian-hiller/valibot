@@ -1,102 +1,204 @@
 import { describe, expect, test } from 'vitest';
-import { parse } from '../../methods/index.ts';
-import { custom, length } from '../../validations/index.ts';
-import { null_ } from '../null/index.ts';
+import { email, minLength, url } from '../../actions/index.ts';
+import { pipe } from '../../methods/index.ts';
+import type {
+  InferIssue,
+  InferOutput,
+  TypedDataset,
+  UntypedDataset,
+} from '../../types/index.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { literal } from '../literal/literal.ts';
 import { number } from '../number/index.ts';
 import { string } from '../string/index.ts';
-import { union } from './union.ts';
+import { union, type UnionSchema } from './union.ts';
 
 describe('union', () => {
-  test('should pass only union values', () => {
-    const schema = union([string(), number(), null_()]);
-    const input1 = 'test';
-    const output1 = parse(schema, input1);
-    expect(output1).toBe(input1);
-    const input2 = 123;
-    const output2 = parse(schema, input2);
-    expect(output2).toBe(input2);
-    const input3 = null;
-    const output3 = parse(schema, input3);
-    expect(output3).toBe(input3);
-    expect(() => parse(schema, 123n)).toThrowError();
-    expect(() => parse(schema, undefined)).toThrowError();
-    expect(() => parse(schema, {})).toThrowError();
-    expect(() => parse(schema, [])).toThrowError();
+  describe('should return schema object', () => {
+    const options = [literal('foo'), literal('bar'), number()] as const;
+    type Options = typeof options;
+    const baseSchema: Omit<UnionSchema<Options, never>, 'message'> = {
+      kind: 'schema',
+      type: 'union',
+      reference: union,
+      expects: '"foo" | "bar" | number',
+      options,
+      async: false,
+      _run: expect.any(Function),
+    };
+
+    test('with undefined message', () => {
+      const schema: UnionSchema<Options, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(union(options)).toStrictEqual(schema);
+      expect(union(options, undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(union(options, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies UnionSchema<Options, 'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(union(options, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies UnionSchema<Options, typeof message>);
+    });
   });
 
-  test('should throw custom error', () => {
-    const error = 'Value is not in union!';
-    expect(() => parse(union([string(), number()], error), null)).toThrowError(
-      error
-    );
+  describe('should return dataset without issues', () => {
+    test('for valid values', () => {
+      expectNoSchemaIssue(union([literal('foo'), literal('bar'), number()]), [
+        'foo',
+        'bar',
+        123,
+      ]);
+    });
   });
 
-  test('should execute pipe with valid result', () => {
-    const equalError = 'Not equal 10';
+  describe('should return dataset with issues', () => {
+    const baseInfo = {
+      message: expect.any(String),
+      requirement: undefined,
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+    };
 
-    const schema1 = union(
-      [string(), number()],
-      [custom((input) => +input === 10, equalError)]
-    );
-    expect(parse(schema1, '10')).toEqual('10');
-    expect(parse(schema1, 10)).toEqual(10);
-    expect(() => parse(schema1, '123')).toThrowError(equalError);
-    expect(() => parse(schema1, 123)).toThrowError(equalError);
+    test('with single typed issue', () => {
+      const schema = union([pipe(string(), minLength(5)), number()]);
+      type Schema = typeof schema;
+      expect(schema._run({ typed: false, value: 'foo' }, {})).toStrictEqual({
+        typed: true,
+        value: 'foo',
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'validation',
+            type: 'min_length',
+            input: 'foo',
+            expected: '>=5',
+            received: '3',
+            requirement: 5,
+          },
+        ],
+      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+    });
 
-    const schema2 = union([string(), number()], 'Error', [
-      custom((input) => +input === 10, equalError),
-    ]);
-    expect(parse(schema2, '10')).toEqual('10');
-    expect(parse(schema2, 10)).toEqual(10);
-    expect(() => parse(schema2, '123')).toThrowError(equalError);
-    expect(() => parse(schema2, 123)).toThrowError(equalError);
-  });
+    test('with multiple typed issues', () => {
+      const schema = union([pipe(string(), email()), pipe(string(), url())]);
+      type Schema = typeof schema;
+      expect(schema._run({ typed: false, value: 'foo' }, {})).toStrictEqual({
+        typed: true,
+        value: 'foo',
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'union',
+            input: 'foo',
+            // TODO: Investigate if there is a better solution for `expected`
+            // and `received` to prevent such situations that are not logical
+            expected: 'string',
+            received: '"foo"',
+            issues: [
+              {
+                ...baseInfo,
+                kind: 'validation',
+                type: 'email',
+                input: 'foo',
+                expected: null,
+                received: '"foo"',
+                requirement: expect.any(RegExp),
+              },
+              {
+                ...baseInfo,
+                kind: 'validation',
+                type: 'url',
+                input: 'foo',
+                expected: null,
+                received: '"foo"',
+                requirement: expect.any(Function),
+              },
+            ],
+          },
+        ],
+      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+    });
 
-  test('should execute pipe with single typed result', () => {
-    const equalError = 'Not equal 10';
-    const lengthError = 'Invalid string length';
+    test('with zero untyped issue', () => {
+      expectSchemaIssue(
+        union([]),
+        {
+          kind: 'schema',
+          type: 'union',
+          expected: 'never',
+          message: expect.any(String),
+        },
+        ['foo', 123, null, undefined]
+      );
+    });
 
-    const schema1 = union(
-      [string([length(2, lengthError)]), number()],
-      [custom((input) => +input === 10, equalError)]
-    );
-    expect(parse(schema1, '10')).toEqual('10');
-    expect(parse(schema1, 10)).toEqual(10);
-    expect(() => parse(schema1, '1')).toThrowError(lengthError);
-    expect(() => parse(schema1, '123')).toThrowError(lengthError);
-    expect(() => parse(schema1, 11)).toThrowError(equalError);
+    test('with single untyped issue', () => {
+      const schema = union([literal('foo')]);
+      expect(schema._run({ typed: false, value: 'bar' }, {})).toStrictEqual({
+        typed: false,
+        value: 'bar',
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'literal',
+            input: 'bar',
+            expected: '"foo"',
+            received: '"bar"',
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
 
-    const schema2 = union(
-      [string([length(2, lengthError)]), number()],
-      'Error',
-      [custom((input) => +input === 10, equalError)]
-    );
-    expect(parse(schema2, '10')).toEqual('10');
-    expect(parse(schema2, 10)).toEqual(10);
-    expect(() => parse(schema2, '1')).toThrowError(lengthError);
-    expect(() => parse(schema2, '123')).toThrowError(lengthError);
-    expect(() => parse(schema2, 11)).toThrowError(equalError);
-  });
-
-  test('should execute pipe with multiple typed results', () => {
-    const invalidError = 'Invalid string value';
-    const schema = union(
-      [string([length(2)]), string([length(4)])],
-      invalidError,
-      [custom((input) => +input % 2 === 0)]
-    );
-    expect(parse(schema, '10')).toEqual('10');
-    expect(parse(schema, '2222')).toEqual('2222');
-    expect(() => parse(schema, '1')).toThrowError(invalidError);
-    expect(() => parse(schema, '123')).toThrowError(invalidError);
-  });
-
-  test('should return single untyped result', () => {
-    const typeError = 'Not a string!';
-    const schema = union([string(typeError)]);
-    expect(parse(schema, 'foo')).toEqual('foo');
-    expect(parse(schema, '123')).toEqual('123');
-    expect(() => parse(schema, null)).toThrowError(typeError);
-    expect(() => parse(schema, 123)).toThrowError(typeError);
+    test('with multiple typed issues', () => {
+      const schema = union([string(), number()]);
+      expect(schema._run({ typed: false, value: null }, {})).toStrictEqual({
+        typed: false,
+        value: null,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'union',
+            input: null,
+            expected: 'string | number',
+            received: 'null',
+            issues: [
+              {
+                ...baseInfo,
+                kind: 'schema',
+                type: 'string',
+                input: null,
+                expected: 'string',
+                received: 'null',
+              },
+              {
+                ...baseInfo,
+                kind: 'schema',
+                type: 'number',
+                input: null,
+                expected: 'number',
+                received: 'null',
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
   });
 });

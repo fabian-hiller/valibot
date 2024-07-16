@@ -16,7 +16,7 @@ import { properties } from './properties';
 Creates a nullable schema.
 
 ```ts
-const Schema = nullable<TWrapped, TDefault>(wrapped, default_);
+const Schema = v.nullable<TWrapped, TDefault>(wrapped, default_);
 ```
 
 ## Generics
@@ -48,7 +48,7 @@ The following examples show how `nullable` can be used.
 Schema that accepts `string` and `null`.
 
 ```ts
-const NullableStringSchema = nullable(string(), "I'm the default!");
+const NullableStringSchema = v.nullable(v.string(), "I'm the default!");
 ```
 
 ### Nullable date schema
@@ -58,7 +58,7 @@ Schema that accepts [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaSc
 > By using a function as the `default_` parameter, the schema will return a new [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance each time the input is `null`.
 
 ```ts
-const NullableDateSchema = nullable(date(), () => new Date());
+const NullableDateSchema = v.nullable(v.date(), () => new Date());
 ```
 
 ### Nullable entry schema
@@ -66,8 +66,8 @@ const NullableDateSchema = nullable(date(), () => new Date());
 Object schema with a nullable entry.
 
 ```ts
-const NullableEntrySchema = object({
-  key: nullable(string()),
+const NullableEntrySchema = v.object({
+  key: v.nullable(v.string()),
 });
 ```
 
@@ -76,8 +76,8 @@ const NullableEntrySchema = object({
 Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `nullable`.
 
 ```ts
-const NullableNumberSchema = nullable(number());
-const NumberSchema = unwrap(NullableNumberSchema);
+const NullableNumberSchema = v.nullable(v.number());
+const NumberSchema = v.unwrap(NullableNumberSchema);
 ```
 
 ## Related
@@ -93,35 +93,44 @@ The following APIs can be combined with `nullable`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'intersect',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -129,8 +138,7 @@ The following APIs can be combined with `nullable`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -138,8 +146,28 @@ The following APIs can be combined with `nullable`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
-    'transform',
+    'safeParser',
     'unwrap',
   ]}
 />
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'brand',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

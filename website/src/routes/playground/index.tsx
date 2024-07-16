@@ -46,7 +46,8 @@ export const head: DocumentHead = {
 };
 
 export default component$(() => {
-  // Use location and side bar toggle
+  // Use navigate, location and side bar toggle
+  const navigate = useNavigate();
   const location = useLocation();
   const toggle = useSideBarToggle();
 
@@ -77,8 +78,8 @@ export default component$(() => {
       : `import * as v from 'valibot';
 
 const Schema = v.object({
-  email: v.string([v.minLength(1), v.email()]),
-  password: v.string([v.minLength(1), v.minLength(8)]),
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
 });
 
 const result = v.safeParse(Schema, {
@@ -87,6 +88,20 @@ const result = v.safeParse(Schema, {
 });
 
 console.log(result);`;
+  });
+
+  /**
+   * Saves the current code of the editor.
+   */
+  const saveCode = $(async () => {
+    // Add compressed code to search params
+    await navigate(
+      `?code=${lz.compressToEncodedURIComponent(model.value!.getValue())}`,
+      { replaceState: true }
+    );
+
+    // Track playground event
+    trackEvent('save_playground_code');
   });
 
   /**
@@ -103,11 +118,12 @@ console.log(result);`;
   return (
     <main class="flex w-full flex-1 flex-col lg:flex-row lg:space-x-10 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:space-x-14 2xl:self-center">
       <div class="flex flex-1 lg:relative">
-        <CodeEditor value={initialCode} model={model} />
+        <CodeEditor value={initialCode} model={model} onSave$={saveCode} />
         <EditorButtons
           class="!hidden lg:!absolute lg:right-10 lg:top-10 lg:!flex"
           model={model}
           code={code}
+          logs={logs}
         />
       </div>
 
@@ -118,6 +134,7 @@ console.log(result);`;
           toggle={toggle}
           model={model}
           code={code}
+          logs={logs}
         />
         <IconButton
           class="!absolute right-8 top-8 z-10 lg:right-10 lg:top-10"
@@ -308,10 +325,11 @@ type EditorButtonsProps = {
   toggle?: ReturnType<typeof useSideBarToggle>;
   model: Signal<NoSerialize<monaco.editor.ITextModel>>;
   code: Signal<string>;
+  logs: Signal<[LogLevel, string][]>;
 };
 
 const EditorButtons = component$<EditorButtonsProps>(
-  ({ toggle, code, model, ...props }) => {
+  ({ toggle, code, model, logs, ...props }) => {
     // Use navigate and location
     const navigate = useNavigate();
     const location = useLocation();
@@ -368,11 +386,20 @@ const EditorButtons = component$<EditorButtonsProps>(
       }
 
       // Update code of iframe
-      code.value = `// ${Date.now()}\n\n${
-        transform(model.value!.getValue(), {
-          transforms: ['typescript'],
-        }).code
-      }`;
+      try {
+        code.value = `// ${Date.now()}\n\n${
+          transform(model.value!.getValue(), {
+            transforms: ['typescript'],
+          }).code
+        }`;
+
+        // Handle transform errors
+      } catch (error) {
+        logs.value = [
+          ...logs.value,
+          ['error', 'TypeScript syntax error detected'],
+        ];
+      }
 
       // Track playground event
       trackEvent('execute_playground_code');

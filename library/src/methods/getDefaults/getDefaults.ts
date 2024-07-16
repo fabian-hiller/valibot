@@ -1,53 +1,83 @@
 import type {
-  ObjectEntries,
+  LooseObjectIssue,
+  LooseObjectSchema,
+  LooseTupleIssue,
+  LooseTupleSchema,
+  ObjectIssue,
   ObjectSchema,
-  TupleItems,
+  ObjectWithRestIssue,
+  ObjectWithRestSchema,
+  StrictObjectIssue,
+  StrictObjectSchema,
+  StrictTupleIssue,
+  StrictTupleSchema,
+  TupleIssue,
   TupleSchema,
+  TupleWithRestIssue,
+  TupleWithRestSchema,
 } from '../../schemas/index.ts';
-import type { BaseSchema } from '../../types/schema.ts';
-import { isOfType } from '../../utils/index.ts';
-import {
-  getDefault,
-  type SchemaWithMaybeDefault,
-} from '../getDefault/index.ts';
-import type { DefaultValues } from './types.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  ErrorMessage,
+  ObjectEntries,
+  TupleItems,
+} from '../../types/index.ts';
+import { getDefault } from '../getDefault/index.ts';
+import type { InferDefaults } from './types.ts';
 
 /**
  * Returns the default values of the schema.
  *
- * Hint: The difference to `getDefault` is that for objects and tuples without
- * an explicit default value, this function recursively returns the default
- * values of the subschemas instead of `undefined`.
+ * Hint: The difference to `getDefault` is that for object and tuple schemas
+ * this function recursively returns the default values of the subschemas
+ * instead of `undefined`.
  *
- * @param schema The schema to get the default values from.
+ * @param schema The schema to get them from.
  *
  * @returns The default values.
  */
 export function getDefaults<
-  TSchema extends SchemaWithMaybeDefault<
-    BaseSchema | ObjectSchema<ObjectEntries, any> | TupleSchema<TupleItems, any>
-  >,
->(schema: TSchema): DefaultValues<TSchema> | undefined {
-  // If schema has default, return its value
-  if (schema.default !== undefined) {
-    return getDefault(schema);
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | LooseObjectSchema<
+        ObjectEntries,
+        ErrorMessage<LooseObjectIssue> | undefined
+      >
+    | LooseTupleSchema<TupleItems, ErrorMessage<LooseTupleIssue> | undefined>
+    | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
+    | ObjectWithRestSchema<
+        ObjectEntries,
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<ObjectWithRestIssue> | undefined
+      >
+    | StrictObjectSchema<
+        ObjectEntries,
+        ErrorMessage<StrictObjectIssue> | undefined
+      >
+    | StrictTupleSchema<TupleItems, ErrorMessage<StrictTupleIssue> | undefined>
+    | TupleSchema<TupleItems, ErrorMessage<TupleIssue> | undefined>
+    | TupleWithRestSchema<
+        TupleItems,
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        ErrorMessage<TupleWithRestIssue> | undefined
+      >,
+>(schema: TSchema): InferDefaults<TSchema> {
+  // If it is an object schema, return defaults of entries
+  if ('entries' in schema) {
+    const object: Record<string, unknown> = {};
+    for (const key in schema.entries) {
+      object[key] = getDefaults(schema.entries[key]);
+    }
+    return object as InferDefaults<TSchema>;
   }
 
-  // If it is an object schema, return default of each entry
-  if (isOfType('object', schema)) {
-    return Object.fromEntries(
-      Object.entries(schema.entries).map(([key, value]) => [
-        key,
-        getDefaults(value),
-      ])
-    ) as DefaultValues<TSchema>;
+  // If it is a tuple schema, return defaults of items
+  if ('items' in schema) {
+    return schema.items.map(getDefaults) as InferDefaults<TSchema>;
   }
 
-  // If it is a tuple schema, return default of each item
-  if (isOfType('tuple', schema)) {
-    return schema.items.map(getDefaults) as DefaultValues<TSchema>;
-  }
-
-  // Otherwise, return undefined
-  return undefined;
+  // Otherwise, return default or `undefined`
+  // @ts-expect-error
+  return getDefault(schema);
 }

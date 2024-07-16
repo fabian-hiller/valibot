@@ -1,0 +1,71 @@
+---
+title: multipleOf
+description: Creates a multiple of validation action.
+source: /actions/multipleOf/multipleOf.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# multipleOf
+
+Creates a [multiple](<https://en.wikipedia.org/wiki/Multiple_(mathematics)>) of validation action.
+
+```ts
+const Action = v.multipleOf<TInput, TRequirement, TMessage>(
+  requirement,
+  message
+);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `multipleOf` you can validate the value of a number. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `multipleOf` can be used.
+
+### Even number schema
+
+Schema to validate an even number.
+
+```ts
+const EvenNumberSchema = v.pipe(
+  v.number(),
+  v.multipleOf(2, 'The number must be even.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `multipleOf`.
+
+### Schemas
+
+<ApiList items={['any', 'number', 'special', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

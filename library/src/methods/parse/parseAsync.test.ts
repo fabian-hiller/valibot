@@ -1,28 +1,32 @@
 import { describe, expect, test } from 'vitest';
-import { numberAsync, object, string } from '../../schemas/index.ts';
+import { transform } from '../../actions/index.ts';
+import { number, objectAsync, string } from '../../schemas/index.ts';
+import { pipe } from '../pipe/index.ts';
 import { parseAsync } from './parseAsync.ts';
 
 describe('parseAsync', () => {
-  test('should parse schema', async () => {
-    const output1 = await parseAsync(string(), 'hello');
-    expect(output1).toBe('hello');
-    const output2 = await parseAsync(numberAsync(), 123);
-    expect(output2).toBe(123);
-    const output3 = await parseAsync(object({ test: string() }), {
-      test: 'hello',
+  const entries = {
+    key: pipe(
+      string(),
+      transform((input) => input.length)
+    ),
+  };
+
+  test('should return output for valid input', async () => {
+    expect(await parseAsync(string(), 'hello')).toBe('hello');
+    expect(await parseAsync(number(), 123)).toBe(123);
+    expect(
+      await parseAsync(objectAsync(entries), { key: 'foo' })
+    ).toStrictEqual({
+      key: 3,
     });
-    expect(output3).toEqual({ test: 'hello' });
   });
 
-  test('should throw error', async () => {
-    await expect(parseAsync(string(), 123)).rejects.toThrowError(
-      'Invalid type'
-    );
-    await expect(parseAsync(numberAsync(), 'hello')).rejects.toThrowError(
-      'Invalid type'
-    );
-    await expect(
-      parseAsync(object({ test: string() }), {})
-    ).rejects.toThrowError('Invalid type');
+  test('should throw error for invalid input', async () => {
+    await expect(() => parseAsync(string(), 123)).rejects.toThrowError();
+    await expect(() => parseAsync(number(), 'foo')).rejects.toThrowError();
+    await expect(() =>
+      parseAsync(objectAsync(entries), null)
+    ).rejects.toThrowError();
   });
 });

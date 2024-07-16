@@ -14,29 +14,25 @@ import { properties } from './properties';
 
 Creates an intersect schema.
 
-> I recommend that you read the <Link href="/guides/intersections/">intersections guide</Link> before using this schema function.
+> I recommend to read the <Link href="/guides/intersections/">intersections guide</Link> before using this schema function.
 
 ```ts
-// Intersect schema with an optional pipe
-const Schema = intersect<TOptions>(options, pipe);
-
-// Intersect schema with an optional message and pipe
-const Schema = intersect<TOptions>(options, message, pipe);
+const Schema = v.intersect<TOptions, TMessage>(options, message);
 ```
 
 ## Generics
 
 - `TOptions` <Property {...properties.TOptions} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
 - `options` <Property {...properties.options} />
 - `message` <Property {...properties.message} />
-- `pipe` <Property {...properties.pipe} />
 
 ### Explanation
 
-With `intersect` you can validate if the input matches each of the given `options`. With `pipe` you can transform and validate the further details of the intersection. If the output of the intersection cannot be successfully merged, you can use `message` to customize the error message.
+With `intersect` you can validate if the input matches each of the given `options`. If the output of the intersection cannot be successfully merged, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -51,9 +47,9 @@ The following examples show how `intersect` can be used.
 Schema that combines two object schemas.
 
 ```ts
-const ObjectSchema = intersect([
-  object({ foo: string() }),
-  object({ bar: number() }),
+const ObjectSchema = v.intersect([
+  v.object({ foo: v.string() }),
+  v.object({ bar: v.number() }),
 ]);
 ```
 
@@ -70,36 +66,45 @@ The following APIs can be combined with `intersect`.
     'bigint',
     'blob',
     'boolean',
+    'custom',
     'date',
-    'enum_',
+    'enum',
+    'file',
+    'function',
     'instance',
     'lazy',
     'literal',
+    'looseObject',
+    'looseTuple',
     'map',
     'nan',
     'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
-    'null_',
+    'null',
     'nullable',
     'nullish',
     'number',
     'object',
+    'objectWithRest',
     'optional',
     'picklist',
+    'promise',
     'record',
     'set',
-    'special',
+    'strictObject',
+    'strictTuple',
     'string',
     'symbol',
     'tuple',
-    'undefined_',
+    'tupleWithRest',
+    'undefined',
     'union',
     'intersect',
     'unknown',
     'variant',
-    'void_',
+    'void',
   ]}
 />
 
@@ -107,8 +112,7 @@ The following APIs can be combined with `intersect`.
 
 <ApiList
   items={[
-    'brand',
-    'coerce',
+    'config',
     'fallback',
     'getDefault',
     'getDefaults',
@@ -116,41 +120,34 @@ The following APIs can be combined with `intersect`.
     'getFallbacks',
     'is',
     'parse',
+    'parser',
+    'pipe',
     'safeParse',
-    'transform',
+    'safeParser',
   ]}
 />
 
-### Transformations
+### Actions
 
 <ApiList
   items={[
-    'toCustom',
-    'toLowerCase',
-    'toMaxValue',
-    'toMinValue',
-    'toTrimmed',
-    'toTrimmedEnd',
-    'toTrimmedStart',
-    'toUpperCase',
-  ]}
-/>
-
-### Validations
-
-<ApiList
-  items={[
+    'base64',
     'bic',
+    'brand',
     'bytes',
+    'check',
+    'checkItems',
     'creditCard',
     'cuid2',
-    'custom',
     'decimal',
     'email',
     'emoji',
+    'empty',
     'endsWith',
-    'every',
+    'everyItem',
     'excludes',
+    'filterItems',
+    'findItem',
     'finite',
     'hash',
     'hexadecimal',
@@ -171,6 +168,7 @@ The following APIs can be combined with `intersect`.
     'mac',
     'mac48',
     'mac64',
+    'mapItems',
     'maxBytes',
     'maxLength',
     'maxSize',
@@ -181,19 +179,38 @@ The following APIs can be combined with `intersect`.
     'minSize',
     'minValue',
     'multipleOf',
+    'nonEmpty',
     'notBytes',
     'notLength',
     'notSize',
     'notValue',
     'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'reduceItems',
     'regex',
     'safeInteger',
     'size',
-    'some',
+    'someItem',
+    'sortItem',
     'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
+    'transform',
+    'trim',
+    'trimEnd',
+    'trimStart',
     'ulid',
     'url',
     'uuid',
     'value',
   ]}
 />
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />

@@ -1,0 +1,119 @@
+---
+title: partialCheck
+description: Creates a partial check validation action.
+source: /actions/partialCheck/partialCheck.ts
+contributors:
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# partialCheck
+
+Creates a partial check validation action.
+
+```ts
+const Action = v.partialCheck<TInput, TPathList, TSelection, TMessage>(
+  pathList,
+  requirement,
+  message
+);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TPathList` <Property {...properties.TPathList} />
+- `TSelection` <Property {...properties.TSelection} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `pathList` <Property {...properties.pathList} />
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `partialCheck` you can freely validate the selected input and return `true` if it is valid or `false` otherwise. If the input does not match your `requirement`, you can use `message` to customize the error message.
+
+> The difference to <Link href='../check/'>`check`</Link> is that `partialCheck` can be executed whenever the selected part of the data is valid, while <Link href='../check/'>`check`</Link> is executed only when the entire dataset is typed. This can be an important advantage when working with forms.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `partialCheck` can be used.
+
+### Register schema
+
+Schema that ensures that the two passwords match.
+
+```ts
+const RegisterSchema = v.pipe(
+  v.object({
+    email: v.pipe(
+      v.string(),
+      v.nonEmpty('Please enter your email.'),
+      v.email('The email address is badly formatted.')
+    ),
+    password1: v.pipe(
+      v.string(),
+      v.nonEmpty('Please enter your password.'),
+      v.minLength(8, 'Your password must have 8 characters or more.')
+    ),
+    password2: v.string(),
+  }),
+  v.forward(
+    v.partialCheck(
+      [['password1'], ['password2']],
+      (input) => input.password1 === input.password2,
+      'The two passwords do not match.'
+    ),
+    ['password2']
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `partialCheck`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'custom',
+    'instance',
+    'intersect',
+    'lazy',
+    'looseObject',
+    'looseTuple',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'object',
+    'objectWithRest',
+    'record',
+    'strictObject',
+    'strictTuple',
+    'tuple',
+    'tupleWithRest',
+    'union',
+    'variant',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

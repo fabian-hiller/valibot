@@ -1,106 +1,217 @@
 import { describe, expect, test } from 'vitest';
-import { parseAsync } from '../../methods/index.ts';
-import { custom, customAsync, length } from '../../validations/index.ts';
-import { null_ } from '../null/index.ts';
-import { number, numberAsync } from '../number/index.ts';
-import { string, stringAsync } from '../string/index.ts';
-import { unionAsync } from './unionAsync.ts';
+import { email, minLength, url } from '../../actions/index.ts';
+import { pipe } from '../../methods/index.ts';
+import type {
+  InferIssue,
+  InferOutput,
+  TypedDataset,
+  UntypedDataset,
+} from '../../types/index.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
+import { literal } from '../literal/literal.ts';
+import { number } from '../number/index.ts';
+import { string } from '../string/index.ts';
+import { unionAsync, type UnionSchemaAsync } from './unionAsync.ts';
 
 describe('unionAsync', () => {
-  test('should pass only union values', async () => {
-    const schema = unionAsync([stringAsync(), number(), null_()]);
+  describe('should return schema object', () => {
+    const options = [literal('foo'), literal('bar'), number()] as const;
+    type Options = typeof options;
+    const baseSchema: Omit<UnionSchemaAsync<Options, never>, 'message'> = {
+      kind: 'schema',
+      type: 'union',
+      reference: unionAsync,
+      expects: '"foo" | "bar" | number',
+      options,
+      async: true,
+      _run: expect.any(Function),
+    };
 
-    const input1 = 'test';
-    const output1 = await parseAsync(schema, input1);
-    expect(output1).toBe(input1);
+    test('with undefined message', () => {
+      const schema: UnionSchemaAsync<Options, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(unionAsync(options)).toStrictEqual(schema);
+      expect(unionAsync(options, undefined)).toStrictEqual(schema);
+    });
 
-    const input2 = 123;
-    const output2 = await parseAsync(schema, input2);
-    expect(output2).toBe(input2);
+    test('with string message', () => {
+      expect(unionAsync(options, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies UnionSchemaAsync<Options, 'message'>);
+    });
 
-    const input3 = null;
-    const output3 = await parseAsync(schema, input3);
-    expect(output3).toBe(input3);
-
-    await expect(parseAsync(schema, 123n)).rejects.toThrowError();
-    await expect(parseAsync(schema, undefined)).rejects.toThrowError();
-    await expect(parseAsync(schema, {})).rejects.toThrowError();
-    await expect(parseAsync(schema, [])).rejects.toThrowError();
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(unionAsync(options, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies UnionSchemaAsync<Options, typeof message>);
+    });
   });
 
-  test('should throw custom error', async () => {
-    const error = 'Value is not in union!';
-    await expect(
-      parseAsync(unionAsync([string(), numberAsync()], error), null)
-    ).rejects.toThrowError(error);
+  describe('should return dataset without issues', () => {
+    test('for valid values', async () => {
+      await expectNoSchemaIssueAsync(
+        unionAsync([literal('foo'), literal('bar'), number()]),
+        ['foo', 'bar', 123]
+      );
+    });
   });
 
-  test('should execute pipe with valid result', async () => {
-    const equalError = 'Not equal 10';
+  describe('should return dataset with issues', () => {
+    const baseInfo = {
+      message: expect.any(String),
+      requirement: undefined,
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+    };
 
-    const schema1 = unionAsync(
-      [string(), number()],
-      [custom((input) => +input === 10, equalError)]
-    );
-    expect(await parseAsync(schema1, '10')).toEqual('10');
-    expect(await parseAsync(schema1, 10)).toEqual(10);
-    await expect(parseAsync(schema1, '123')).rejects.toThrowError(equalError);
-    await expect(parseAsync(schema1, 123)).rejects.toThrowError(equalError);
+    test('with single typed issue', async () => {
+      const schema = unionAsync([pipe(string(), minLength(5)), number()]);
+      type Schema = typeof schema;
+      expect(
+        await schema._run({ typed: false, value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: 'foo',
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'validation',
+            type: 'min_length',
+            input: 'foo',
+            expected: '>=5',
+            received: '3',
+            requirement: 5,
+          },
+        ],
+      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+    });
 
-    const schema2 = unionAsync([string(), number()], 'Error', [
-      customAsync(async (input) => +input === 10, equalError),
-    ]);
-    expect(await parseAsync(schema2, '10')).toEqual('10');
-    expect(await parseAsync(schema2, 10)).toEqual(10);
-    await expect(parseAsync(schema2, '123')).rejects.toThrowError(equalError);
-    await expect(parseAsync(schema2, 123)).rejects.toThrowError(equalError);
-  });
+    test('with multiple typed issues', async () => {
+      const schema = unionAsync([
+        pipe(string(), email()),
+        pipe(string(), url()),
+      ]);
+      type Schema = typeof schema;
+      expect(
+        await schema._run({ typed: false, value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: 'foo',
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'union',
+            input: 'foo',
+            // TODO: Investigate if there is a better solution for `expected`
+            // and `received` to prevent such situations that are not logical
+            expected: 'string',
+            received: '"foo"',
+            issues: [
+              {
+                ...baseInfo,
+                kind: 'validation',
+                type: 'email',
+                input: 'foo',
+                expected: null,
+                received: '"foo"',
+                requirement: expect.any(RegExp),
+              },
+              {
+                ...baseInfo,
+                kind: 'validation',
+                type: 'url',
+                input: 'foo',
+                expected: null,
+                received: '"foo"',
+                requirement: expect.any(Function),
+              },
+            ],
+          },
+        ],
+      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+    });
 
-  test('should execute pipe with single typed result', async () => {
-    const equalError = 'Not equal 10';
-    const lengthError = 'Invalid string length';
+    test('with zero untyped issue', async () => {
+      await expectSchemaIssueAsync(
+        unionAsync([]),
+        {
+          kind: 'schema',
+          type: 'union',
+          expected: 'never',
+          message: expect.any(String),
+        },
+        ['foo', 123, null, undefined]
+      );
+    });
 
-    const schema1 = unionAsync(
-      [string([length(2, lengthError)]), number()],
-      [custom((input) => +input === 10, equalError)]
-    );
-    expect(await parseAsync(schema1, '10')).toEqual('10');
-    expect(await parseAsync(schema1, 10)).toEqual(10);
-    await expect(parseAsync(schema1, '1')).rejects.toThrowError(lengthError);
-    await expect(parseAsync(schema1, '123')).rejects.toThrowError(lengthError);
-    await expect(parseAsync(schema1, 11)).rejects.toThrowError(equalError);
+    test('with single untyped issue', async () => {
+      const schema = unionAsync([literal('foo')]);
+      expect(
+        await schema._run({ typed: false, value: 'bar' }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: 'bar',
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'literal',
+            input: 'bar',
+            expected: '"foo"',
+            received: '"bar"',
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
 
-    const schema2 = unionAsync(
-      [string([length(2, lengthError)]), number()],
-      'Error',
-      [custom((input) => +input === 10, equalError)]
-    );
-    expect(await parseAsync(schema2, '10')).toEqual('10');
-    expect(await parseAsync(schema2, 10)).toEqual(10);
-    await expect(parseAsync(schema2, '1')).rejects.toThrowError(lengthError);
-    await expect(parseAsync(schema2, '123')).rejects.toThrowError(lengthError);
-    await expect(parseAsync(schema2, 11)).rejects.toThrowError(equalError);
-  });
-
-  test('should execute pipe with multiple typed results', async () => {
-    const invalidError = 'Invalid string value';
-    const schema = unionAsync(
-      [string([length(2)]), string([length(4)])],
-      invalidError,
-      [custom((input) => +input % 2 === 0)]
-    );
-    expect(await parseAsync(schema, '10')).toEqual('10');
-    expect(await parseAsync(schema, '2222')).toEqual('2222');
-    await expect(parseAsync(schema, '1')).rejects.toThrowError(invalidError);
-    await expect(parseAsync(schema, '123')).rejects.toThrowError(invalidError);
-  });
-
-  test('should return single untyped result', async () => {
-    const typeError = 'Not a string!';
-    const schema = unionAsync([string(typeError)]);
-    expect(await parseAsync(schema, 'foo')).toEqual('foo');
-    expect(await parseAsync(schema, '123')).toEqual('123');
-    await expect(parseAsync(schema, null)).rejects.toThrowError(typeError);
-    await expect(parseAsync(schema, 123)).rejects.toThrowError(typeError);
+    test('with multiple typed issues', async () => {
+      const schema = unionAsync([string(), number()]);
+      expect(
+        await schema._run({ typed: false, value: null }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: null,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'union',
+            input: null,
+            expected: 'string | number',
+            received: 'null',
+            issues: [
+              {
+                ...baseInfo,
+                kind: 'schema',
+                type: 'string',
+                input: null,
+                expected: 'string',
+                received: 'null',
+              },
+              {
+                ...baseInfo,
+                kind: 'schema',
+                type: 'number',
+                input: null,
+                expected: 'number',
+                received: 'null',
+              },
+            ],
+          },
+        ],
+      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+    });
   });
 });
