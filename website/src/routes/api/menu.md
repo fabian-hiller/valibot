@@ -246,6 +246,7 @@
 - [BrandName](/api/BrandName/)
 - [BytesAction](/api/BytesAction/)
 - [CheckAction](/api/CheckAction/)
+- [CheckActionAsync](/api/CheckActionAsync/)
 - [Class](/api/Class/)
 - [Config](/api/Config/)
 - [CreditCardAction](/api/CreditCardAction/)
