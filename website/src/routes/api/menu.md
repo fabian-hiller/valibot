@@ -249,6 +249,7 @@
 - [BytesAction](/api/BytesAction/)
 - [BytesIssue](/api/BytesIssue/)
 - [CheckAction](/api/CheckAction/)
+- [CheckActionAsync](/api/CheckActionAsync/)
 - [Class](/api/Class/)
 - [Config](/api/Config/)
 - [CreditCardAction](/api/CreditCardAction/)
