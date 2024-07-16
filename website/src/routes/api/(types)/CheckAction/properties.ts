@@ -3,7 +3,7 @@ import type { PropertyProps } from '~/components';
 export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
-    type: 'string',
+    type: 'any',
   },
   TMessage: {
     modifier: 'extends',
