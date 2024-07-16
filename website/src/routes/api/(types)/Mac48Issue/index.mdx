@@ -1,0 +1,26 @@
+---
+title: Mac48Issue
+description: 48-bit MAC issue type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# Mac48Issue
+
+48-bit MAC issue type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Definition
+
+- `Mac48Issue` <Property {...properties.BaseIssue} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
+  - `expected` <Property {...properties.expected} />
+  - `received` <Property {...properties.received} />
+  - `requirement` <Property {...properties.requirement} />

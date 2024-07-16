@@ -1,0 +1,26 @@
+---
+title: IsoDateTimeIssue
+description: ISO date time issue type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# IsoDateTimeIssue
+
+ISO date time issue type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Definition
+
+- `IsoDateTimeIssue` <Property {...properties.BaseIssue} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
+  - `expected` <Property {...properties.expected} />
+  - `received` <Property {...properties.received} />
+  - `requirement` <Property {...properties.requirement} />

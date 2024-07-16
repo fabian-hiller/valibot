@@ -1,0 +1,27 @@
+---
+title: UrlAction
+description: URL action type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# UrlAction
+
+URL action type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `UrlAction` <Property {...properties.BaseValidation} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

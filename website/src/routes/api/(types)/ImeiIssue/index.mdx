@@ -1,0 +1,26 @@
+---
+title: ImeiIssue
+description: IMEI issue type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# ImeiIssue
+
+IMEI issue type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Definition
+
+- `ImeiIssue` <Property {...properties.BaseIssue} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
+  - `expected` <Property {...properties.expected} />
+  - `received` <Property {...properties.received} />
+  - `requirement` <Property {...properties.requirement} />

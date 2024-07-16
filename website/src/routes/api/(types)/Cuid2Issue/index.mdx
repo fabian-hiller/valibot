@@ -1,0 +1,26 @@
+---
+title: Cuid2Issue
+description: Cuid2 issue type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# Cuid2Issue
+
+Cuid2 issue type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Definition
+
+- `Cuid2Issue` <Property {...properties.BaseIssue} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
+  - `expected` <Property {...properties.expected} />
+  - `received` <Property {...properties.received} />
+  - `requirement` <Property {...properties.requirement} />

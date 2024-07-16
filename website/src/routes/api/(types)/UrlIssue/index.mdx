@@ -1,0 +1,26 @@
+---
+title: UrlIssue
+description: URL issue type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# UrlIssue
+
+URL issue type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Definition
+
+- `UrlIssue` <Property {...properties.BaseIssue} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
+  - `expected` <Property {...properties.expected} />
+  - `received` <Property {...properties.received} />
+  - `requirement` <Property {...properties.requirement} />

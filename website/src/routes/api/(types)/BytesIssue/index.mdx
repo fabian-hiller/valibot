@@ -1,0 +1,27 @@
+---
+title: BytesIssue
+description: Bytes issue type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# BytesIssue
+
+Bytes issue type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Definition
+
+- `BytesIssue` <Property {...properties.BaseIssue} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
+  - `expected` <Property {...properties.expected} />
+  - `received` <Property {...properties.received} />
+  - `requirement` <Property {...properties.requirement} />

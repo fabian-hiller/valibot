@@ -1,0 +1,27 @@
+---
+title: StartsWithIssue
+description: Starts with issue type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# StartsWithIssue
+
+Starts with issue type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+
+## Definition
+
+- `StartsWithIssue` <Property {...properties.BaseIssue} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
+  - `expected` <Property {...properties.expected} />
+  - `received` <Property {...properties.received} />
+  - `requirement` <Property {...properties.requirement} />
