@@ -1,7 +1,13 @@
 /**
+ * [Base64](https://en.wikipedia.org/wiki/Base64) regex.
+ */
+export const BASE64_REGEX =
+  /^(?:[\da-z+/]{4})*(?:[\da-z+/]{2}==|[\da-z+/]{3}=)?$/iu;
+
+/**
  * [BIC](https://en.wikipedia.org/wiki/ISO_9362) regex.
  */
-export const BIC_REGEX: RegExp = /^[A-Z]{6}(?!00)[A-Z\d]{2}(?:[A-Z\d]{3})?$/u;
+export const BIC_REGEX: RegExp = /^[A-Z]{6}(?!00)[\dA-Z]{2}(?:[\dA-Z]{3})?$/u;
 
 /**
  * [Cuid2](https://github.com/paralleldrive/cuid2) regex.
