@@ -2,9 +2,62 @@
 title: base64
 source: /actions/base64/base64.ts
 contributors:
+  - fabian-hiller
   - morinokami
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # base64
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/actions/base64/base64.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a [Base64](https://en.wikipedia.org/wiki/Base64) validation action.
+
+```ts
+const Action = v.base64<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `base64` you can validate the formatting of a string. If the input is not a Base64 string, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `base64` can be used.
+
+### Base64 schema
+
+Schema to validate a Base64 string.
+
+```ts
+const Base64Schema = v.pipe(v.string(), v.base64('The data is badly encoded.'));
+```
+
+## Related
+
+The following APIs can be combined with `base64`.
+
+### Schemas
+
+<ApiList items={['any', 'special', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

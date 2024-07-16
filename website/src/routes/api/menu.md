@@ -226,6 +226,7 @@
 - [ArrayRequirement](/api/ArrayRequirement/)
 - [ArraySchema](/api/ArraySchema/)
 - [ArraySchemaAsync](/api/ArraySchemaAsync/)
+- [Base64Action](/api/Base64Action/)
 - [BaseIssue](/api/BaseIssue/)
 - [BaseSchema](/api/BaseSchema/)
 - [BaseSchemaAsync](/api/BaseSchemaAsync/)
