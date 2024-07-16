@@ -1,7 +1,7 @@
 /**
  * [Base64](https://en.wikipedia.org/wiki/Base64) regex.
  */
-export const BASE64_REGEX =
+export const BASE64_REGEX: RegExp =
   /^(?:[\da-z+/]{4})*(?:[\da-z+/]{2}==|[\da-z+/]{3}=)?$/iu;
 
 /**
