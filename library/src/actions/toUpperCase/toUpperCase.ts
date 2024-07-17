@@ -1,7 +1,7 @@
 import type { BaseTransformation } from '../../types/index.ts';
 
 /**
- * To upper case transformation action type.
+ * To upper case action type.
  */
 export interface ToUpperCaseAction
   extends BaseTransformation<string, string, never> {

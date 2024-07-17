@@ -84,7 +84,7 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       modifier: 'typeof',
       name: 'startsWith',
-      href: '../startsWith',
+      href: '../startsWith/',
     },
   },
   expects: {

@@ -23,7 +23,6 @@ export const properties: Record<string, PropertyProps> = {
                 {
                   type: 'custom',
                   name: 'TInput',
-                  href: '../TInput/',
                 },
               ],
             },
@@ -56,7 +55,6 @@ export const properties: Record<string, PropertyProps> = {
             {
               type: 'custom',
               name: 'TInput',
-              href: '../TInput/',
             },
           ],
         },

@@ -1,0 +1,25 @@
+---
+title: TransformAction
+description: Transform action type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# TransformAction
+
+Transform action type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `TransformAction` <Property {...properties.BaseTransformation} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `operation` <Property {...properties.operation} />
