@@ -1,7 +1,7 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TItem: {
+  TSchema: {
     modifier: 'extends',
     type: {
       type: 'union',
@@ -39,52 +39,23 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  TMessage: {
-    modifier: 'extends',
+  NoPipe: {
     type: {
-      type: 'union',
+      type: 'intersect',
       options: [
         {
           type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
-          generics: [
+          name: 'TSchema',
+        },
+        {
+          type: 'object',
+          entries: [
             {
-              type: 'custom',
-              name: 'ArrayIssue',
-              href: '../ArrayIssue/',
+              key: 'pipe',
+              optional: true,
+              value: 'never',
             },
           ],
-        },
-        'undefined',
-      ],
-    },
-  },
-  item: {
-    type: {
-      type: 'custom',
-      name: 'TItem',
-    },
-  },
-  message: {
-    type: {
-      type: 'custom',
-      name: 'TMessage',
-    },
-  },
-  Schema: {
-    type: {
-      type: 'custom',
-      name: 'ArraySchemaAsync',
-      href: '../ArraySchemaAsync/',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TItem',
-        },
-        {
-          type: 'custom',
-          name: 'TMessage',
         },
       ],
     },

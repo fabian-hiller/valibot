@@ -1,7 +1,7 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TItem: {
+  TSchema: {
     modifier: 'extends',
     type: {
       type: 'union',
@@ -39,20 +39,26 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  TMessage: {
+  TConfig: {
     modifier: 'extends',
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'ErrorMessage',
-          href: '../ErrorMessage/',
+          name: 'Config',
+          href: '../Config/',
           generics: [
             {
               type: 'custom',
-              name: 'ArrayIssue',
-              href: '../ArrayIssue/',
+              name: 'InferIssue',
+              href: '../InferIssue/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TSchema',
+                },
+              ],
             },
           ],
         },
@@ -60,33 +66,44 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  item: {
+  function: {
     type: {
-      type: 'custom',
-      name: 'TItem',
-    },
-  },
-  message: {
-    type: {
-      type: 'custom',
-      name: 'TMessage',
-    },
-  },
-  Schema: {
-    type: {
-      type: 'custom',
-      name: 'ArraySchemaAsync',
-      href: '../ArraySchemaAsync/',
-      generics: [
+      type: 'function',
+      params: [
         {
-          type: 'custom',
-          name: 'TItem',
-        },
-        {
-          type: 'custom',
-          name: 'TMessage',
+          name: 'input',
+          type: 'unknown',
         },
       ],
+      return: {
+        type: 'custom',
+        name: 'Promise',
+        generics: [
+          {
+            type: 'custom',
+            name: 'SafeParseResult',
+            href: '../SafeParseResult/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TSchema',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  schema: {
+    type: {
+      type: 'custom',
+      name: 'TSchema',
+    },
+  },
+  config: {
+    type: {
+      type: 'custom',
+      name: 'TConfig',
     },
   },
 };

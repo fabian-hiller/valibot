@@ -1,0 +1,24 @@
+---
+title: SortItemsAction
+description: Sort items action type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# SortItemsAction
+
+Sort items action type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Definition
+
+- `SortItemsAction` <Property {...properties.BaseTransformation} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `operation` <Property {...properties.operation} />

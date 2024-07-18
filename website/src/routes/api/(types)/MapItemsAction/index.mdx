@@ -1,0 +1,25 @@
+---
+title: MapItemsAction
+description: Map items action type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# MapItemsAction
+
+Map items action type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `MapItemsAction` <Property {...properties.BaseTransformation} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `operation` <Property {...properties.operation} />

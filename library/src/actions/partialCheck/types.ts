@@ -8,7 +8,8 @@ export type PartialInput = Record<string, unknown> | ArrayLike<unknown>;
 /**
  * Partial check issue type.
  */
-export interface PartialCheckIssue<TInput> extends BaseIssue<TInput> {
+export interface PartialCheckIssue<TInput extends PartialInput>
+  extends BaseIssue<TInput> {
   /**
    * The issue kind.
    */

@@ -1,0 +1,25 @@
+---
+title: PartialCheckIssue
+description: Partial check issue type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# PartialCheckIssue
+
+Partial check issue type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Definition
+
+- `PartialCheckIssue` <Property {...properties.BaseIssue} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
+  - `expected` <Property {...properties.expected} />
+  - `requirement` <Property {...properties.requirement} />

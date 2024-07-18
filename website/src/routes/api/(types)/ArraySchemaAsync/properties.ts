@@ -24,7 +24,7 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'BaseSchemaAsync',
-          href: '../BaseSchemaAsync',
+          href: '../BaseSchemaAsync/',
           generics: [
             'unknown',
             'unknown',
