@@ -33,7 +33,7 @@ import type {
 import type { InferFallback } from '../getFallback/index.ts';
 
 /**
- * Fallback values inference type.
+ * Infer fallbacks type.
  */
 export type InferFallbacks<
   TSchema extends

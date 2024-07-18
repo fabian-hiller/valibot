@@ -38,24 +38,58 @@ export const properties: Record<string, PropertyProps> = {
       href: '../BaseSchema/',
       generics: [
         {
-          type: 'custom',
-          name: 'InferObjectInput',
-          href: '../InferObjectInput/',
-          generics: [
+          type: 'intersect',
+          options: [
             {
               type: 'custom',
-              name: 'TEntries',
+              name: 'InferObjectInput',
+              href: '../InferObjectInput/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TEntries',
+                },
+              ],
+            },
+            {
+              type: 'object',
+              entries: [
+                {
+                  key: {
+                    name: 'key',
+                    type: 'string',
+                  },
+                  value: 'unknown',
+                },
+              ],
             },
           ],
         },
         {
-          type: 'custom',
-          name: 'InferObjectOutput',
-          href: '../InferObjectOutput/',
-          generics: [
+          type: 'intersect',
+          options: [
             {
               type: 'custom',
-              name: 'TEntries',
+              name: 'InferObjectOutput',
+              href: '../InferObjectOutput/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TEntries',
+                },
+              ],
+            },
+            {
+              type: 'object',
+              entries: [
+                {
+                  key: {
+                    name: 'key',
+                    type: 'string',
+                  },
+                  value: 'unknown',
+                },
+              ],
             },
           ],
         },

@@ -1,7 +1,7 @@
 import type { BaseIssue, MaybePromise } from '../../types/index.ts';
 
 /**
- * Input type.
+ * Partial input type.
  */
 export type PartialInput = Record<string, unknown> | ArrayLike<unknown>;
 

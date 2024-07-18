@@ -5,8 +5,21 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'RecordKey',
-      href: '../RecordKey/',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+      generics: [
+        'string',
+        {
+          type: 'union',
+          options: ['string', 'number', 'symbol'],
+        },
+        {
+          type: 'custom',
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
+        },
+      ],
     },
   },
   TValue: {

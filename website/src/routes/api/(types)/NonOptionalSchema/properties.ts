@@ -50,7 +50,7 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'InferNonOptionalInput',
-          href: '../InerNonOptionalInput/',
+          href: '../InferNonOptionalInput/',
           generics: [
             {
               type: 'custom',

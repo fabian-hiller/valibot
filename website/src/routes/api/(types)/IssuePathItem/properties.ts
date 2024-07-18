@@ -7,28 +7,28 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         {
           type: 'custom',
-          name: 'ArrayIssuePathItem',
-          href: '../ArrayIssuePathItem/',
+          name: 'ArrayPathItem',
+          href: '../ArrayPathItem/',
         },
         {
           type: 'custom',
-          name: 'MapIssuePathItem',
-          href: '../MapIssuePathItem/',
+          name: 'MapPathItem',
+          href: '../MapPathItem/',
         },
         {
           type: 'custom',
-          name: 'ObjectIssuePathItem',
-          href: '../ObjectIssuePathItem/',
+          name: 'ObjectPathItem',
+          href: '../ObjectPathItem/',
         },
         {
           type: 'custom',
-          name: 'SetIssuePathItem',
-          href: '../SetIssuePathItem/',
+          name: 'SetPathItem',
+          href: '../SetPathItem/',
         },
         {
           type: 'custom',
-          name: 'UnknownIssuePathItem',
-          href: '../UnknownIssuePathItem/',
+          name: 'UnknownPathItem',
+          href: '../UnknownPathItem/',
         },
       ],
     },

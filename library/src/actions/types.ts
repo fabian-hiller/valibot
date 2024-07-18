@@ -33,7 +33,7 @@ export type LengthInput = string | unknown[];
 /**
  * Size input type.
  */
-export type SizeInput = Map<unknown, unknown> | Set<unknown> | Blob;
+export type SizeInput = Blob | Map<unknown, unknown> | Set<unknown>;
 
 /**
  * Value input type.

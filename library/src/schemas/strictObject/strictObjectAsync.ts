@@ -12,7 +12,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { StrictObjectIssue } from './types.ts';
 
 /**
- * Object schema async type.
+ * Strict object schema async type.
  */
 export interface StrictObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,

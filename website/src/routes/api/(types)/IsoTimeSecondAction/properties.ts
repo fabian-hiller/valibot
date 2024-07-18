@@ -72,7 +72,7 @@ export const properties: Record<string, PropertyProps> = {
       type: 'custom',
       modifier: 'typeof',
       name: 'isoTimeSecond',
-      href: '../IsoTimeSecond/',
+      href: '../isoTimeSecond/',
     },
   },
   expects: {
