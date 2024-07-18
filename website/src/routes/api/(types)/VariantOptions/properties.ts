@@ -7,33 +7,12 @@ export const properties: Record<string, PropertyProps> = {
   },
   VariantOptions: {
     type: {
-      type: 'tuple',
-      items: [
-        {
-          type: 'custom',
-          name: 'VariantOption',
-          href: '../VariantOption/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TKey',
-            },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'VariantOption',
-          href: '../VariantOption/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TKey',
-            },
-          ],
-        },
+      type: 'custom',
+      name: 'MaybeReadonly',
+      href: '../MaybeReadonly/',
+      generics: [
         {
           type: 'array',
-          spread: true,
           item: {
             type: 'custom',
             name: 'VariantOption',
