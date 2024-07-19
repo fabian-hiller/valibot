@@ -6,7 +6,7 @@ export const AlgoliaLogo = component$<HTMLAttributes<SVGSVGElement>>(
     <svg
       viewBox="0 0 135 64"
       role="img"
-      aria-label="Builder.io logo"
+      aria-label="Algolia logo"
       class={clsx('text-[#003dff] dark:text-white', className)}
       fill="currentColor"
       {...props}
