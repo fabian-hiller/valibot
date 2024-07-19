@@ -37,7 +37,7 @@ export interface UntypedDataset<TIssue extends BaseIssue<unknown>> {
 }
 
 /**
- * The dataset type.
+ * Dataset type.
  */
 export type Dataset<TValue, TIssue extends BaseIssue<unknown>> =
   | TypedDataset<TValue, TIssue>

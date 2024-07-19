@@ -10,37 +10,37 @@ import type { BaseValidation, BaseValidationAsync } from './validation.ts';
  * Infer input type.
  */
 export type InferInput<
-  TSchema extends
+  TItem extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
     | BaseValidation<unknown, unknown, BaseIssue<unknown>>
     | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
     | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
     | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>,
-> = NonNullable<TSchema['_types']>['input'];
+> = NonNullable<TItem['_types']>['input'];
 
 /**
  * Infer output type.
  */
 export type InferOutput<
-  TSchema extends
+  TItem extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
     | BaseValidation<unknown, unknown, BaseIssue<unknown>>
     | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
     | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
     | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>,
-> = NonNullable<TSchema['_types']>['output'];
+> = NonNullable<TItem['_types']>['output'];
 
 /**
  * Infer issue type.
  */
 export type InferIssue<
-  TSchema extends
+  TItem extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
     | BaseValidation<unknown, unknown, BaseIssue<unknown>>
     | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
     | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
     | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>,
-> = NonNullable<TSchema['_types']>['issue'];
+> = NonNullable<TItem['_types']>['issue'];
