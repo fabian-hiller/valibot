@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { transform } from '../../actions/index.ts';
+import { transformAsync } from '../../actions/index.ts';
 import { number } from '../../schemas/index.ts';
-import { pipe } from '../pipe/index.ts';
+import { pipeAsync } from '../pipe/index.ts';
 import {
   fallbackAsync,
   type SchemaWithFallbackAsync,
@@ -9,7 +9,10 @@ import {
 
 describe('fallbackAsync', () => {
   describe('should return schema object', () => {
-    const schema = pipe(number(), transform(String));
+    const schema = pipeAsync(
+      number(),
+      transformAsync(async (input) => String(input))
+    );
     type Schema = typeof schema;
     const baseSchema: Omit<
       SchemaWithFallbackAsync<Schema, never>,
@@ -45,7 +48,10 @@ describe('fallbackAsync', () => {
   });
 
   const schema = fallbackAsync(
-    pipe(number(), transform(String)),
+    pipeAsync(
+      number(),
+      transformAsync(async (input) => String(input))
+    ),
     async () => '123'
   );
 

@@ -79,7 +79,7 @@ export function fallbackAsync<
     fallback,
     async: true,
     async _run(dataset, config) {
-      schema._run(dataset, config);
+      await schema._run(dataset, config);
       return dataset.issues
         ? // @ts-expect-error
           { typed: true, value: await getFallback(this, dataset, config) }
