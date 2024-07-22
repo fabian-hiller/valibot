@@ -1,10 +1,254 @@
 ---
 title: fallbackAsync
+description: Returns a fallback value as output if the input does not match the schema.
 source: /methods/fallback/fallbackAsync.ts
 contributors:
+  - EltonLobo07
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # fallbackAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/fallback/fallbackAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Returns a fallback value as output if the input does not match the schema.
+
+```ts
+const Schema = v.fallbackAsync<TSchema, TFallback>(schema, fallback);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFallback` <Property {...properties.TFallback} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `fallback` <Property {...properties.fallback} />
+
+### Explanation
+
+`fallbackAsync` allows you to define a fallback value for the output that will be used if the validation of the input fails. This means that no issues will be returned when using `fallbackAsync` and the schema will always return an output.
+
+> If you only want to set a default value for `null` or `undefined` inputs, you should use <Link href="../optionalAsync/">`optionalAsync`</Link>, <Link href="../nullableAsync/">`nullableAsync`</Link> or <Link href="../nullishAsync/">`nullishAsync`</Link> instead.
+
+> The fallback value is not validated. Make sure that the fallback value matches your schema.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `fallbackAsync` can be used.
+
+### Unique username schema
+
+Schema that will always return a unique username.
+
+> By using a function as the `fallbackAsync` parameter, the schema will return any unique username each time the input does not match the schema.
+
+```ts
+import { getAnyUniqueUsername, isUsernameUnique } from '~/api';
+
+const UniqueUsernameSchema = v.fallbackAsync(
+  v.pipeAsync(v.string(), v.minLength(4), v.checkAsync(isUsernameUnique)),
+  getAnyUniqueUsername
+);
+```
+
+## Related
+
+The following APIs can be combined with `fallbackAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={['getDefault', 'getFallback', 'keyof', 'omit', 'pick', 'unwrap']}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'base64',
+    'bic',
+    'brand',
+    'bytes',
+    'check',
+    'checkItems',
+    'creditCard',
+    'cuid2',
+    'decimal',
+    'email',
+    'emoji',
+    'empty',
+    'endsWith',
+    'everyItem',
+    'excludes',
+    'filterItems',
+    'findItem',
+    'finite',
+    'hash',
+    'hexadecimal',
+    'hexColor',
+    'imei',
+    'includes',
+    'integer',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'mac',
+    'mac48',
+    'mac64',
+    'mapItems',
+    'maxBytes',
+    'maxLength',
+    'maxSize',
+    'maxValue',
+    'mimeType',
+    'minBytes',
+    'minLength',
+    'minSize',
+    'minValue',
+    'multipleOf',
+    'nonEmpty',
+    'notBytes',
+    'notLength',
+    'notSize',
+    'notValue',
+    'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'reduceItems',
+    'regex',
+    'safeInteger',
+    'size',
+    'someItem',
+    'sortItem',
+    'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
+    'transform',
+    'trim',
+    'trimEnd',
+    'trimStart',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'checkAsync',
+    'customAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialAsync',
+    'partialCheckAsync',
+    'pipeAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'recordAsync',
+    'requiredAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>
