@@ -3,6 +3,7 @@ import { useDocumentHead } from '@builder.io/qwik-city';
 import {
   AlgoliaLogo,
   BuilderLogo,
+  DailyDevLogo,
   DigitalOceanLogo,
   HdmLogo,
   NetlifyLogo,
@@ -59,6 +60,7 @@ export const Credits = component$(() => {
           { Logo: PaceLogo, href: 'https://www.pace.edu' },
           { Logo: BuilderLogo, href: 'https://www.builder.io' },
           { Logo: HdmLogo, href: 'https://www.hdm-stuttgart.de' },
+          { Logo: DailyDevLogo, href: 'https://daily.dev/' },
           { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
           { Logo: AlgoliaLogo, href: 'https://www.algolia.com' },
           { Logo: DigitalOceanLogo, href: 'https://www.digitalocean.com/' },
@@ -79,7 +81,6 @@ export const Credits = component$(() => {
       </p>
       <ul class="mt-4 flex flex-wrap gap-2 md:mt-5 lg:mt-6 lg:gap-3">
         {[
-          'dailydotdev',
           'Thanaen',
           'KATT',
           'osdiab',
