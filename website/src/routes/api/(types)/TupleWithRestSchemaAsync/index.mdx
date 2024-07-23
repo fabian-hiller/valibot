@@ -1,0 +1,30 @@
+---
+title: TupleWithRestSchemaAsync
+description: Tuple with rest schema async type.
+contributors:
+  - fabian-hiller
+  - mehm8128
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# TupleWithRestSchemaAsync
+
+Tuple with rest schema async type.
+
+## Generics
+
+- `TItems` <Property {...properties.TItems} />
+- `TRest` <Property {...properties.TRest} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `TupleWithRestSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `items` <Property {...properties.items} />
+  - `rest` <Property {...properties.rest} />
+  - `message` <Property {...properties.message} />
