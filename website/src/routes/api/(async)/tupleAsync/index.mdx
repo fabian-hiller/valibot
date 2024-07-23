@@ -1,6 +1,6 @@
 ---
 title: tupleAsync
-description: Creates a tuple async schema.
+description: Creates a tuple schema.
 source: /schemas/tuple/tupleAsync.ts
 contributors:
   - fabian-hiller
@@ -13,7 +13,7 @@ import { properties } from './properties';
 
 # tupleAsync
 
-Creates a tuple async schema.
+Creates a tuple schema.
 
 ```ts
 const Schema = v.tupleAsync<TItems, TMessage>(items, message);
@@ -43,14 +43,14 @@ With `tupleAsync` you can validate the data type of the input and whether the co
 
 The following examples show how `tupleAsync` can be used. Please see the <Link href="/guides/arrays/">arrays guide</Link> for more examples and explanations.
 
-### Number and Stored email schema
+### Number and email tuple
 
-Schema to validate a tuple with one number and one stored email item.
+Schema to validate a tuple with one number and one stored email address.
 
 ```ts
 import { isEmailPresent } from '~/api';
 
-const SimpleTupleSchema = v.tupleAsync([
+const TupleSchema = v.tupleAsync([
   v.number(),
   v.pipeAsync(
     v.string(),
