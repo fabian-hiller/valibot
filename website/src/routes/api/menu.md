@@ -510,6 +510,7 @@
 - [SafeParserAsync](/api/SafeParserAsync/)
 - [SafeParseResult](/api/SafeParseResult/)
 - [SchemaWithFallback](/api/SchemaWithFallback/)
+- [SchemaWithFallbackAsync](/api/SchemaWithFallbackAsync/)
 - [SetPathItem](/api/SetPathItem/)
 - [SetIssue](/api/SetIssue/)
 - [SetSchema](/api/SetSchema/)
