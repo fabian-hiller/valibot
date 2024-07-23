@@ -1,0 +1,28 @@
+---
+title: LooseTupleSchemaAsync
+description: Loose tuple schema async type.
+contributors:
+  - fabian-hiller
+  - mehm8128
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# LooseTupleSchemaAsync
+
+Loose tuple schema async type.
+
+## Generics
+
+- `TItems` <Property {...properties.TItems} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `LooseTupleSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `items` <Property {...properties.items} />
+  - `message` <Property {...properties.message} />

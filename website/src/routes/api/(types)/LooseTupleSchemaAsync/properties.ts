@@ -5,8 +5,8 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'TupleItems',
-      href: '../TupleItems/',
+      name: 'TupleItemsAsync',
+      href: '../TupleItemsAsync/',
     },
   },
   TMessage: {
@@ -30,12 +30,12 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  BaseSchema: {
+  BaseSchemaAsync: {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'BaseSchema',
-      href: '../BaseSchema/',
+      name: 'BaseSchemaAsync',
+      href: '../BaseSchemaAsync/',
       generics: [
         {
           type: 'tuple',
@@ -115,8 +115,8 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'custom',
       modifier: 'typeof',
-      name: 'looseTuple',
-      href: '../looseTuple/',
+      name: 'looseTupleAsync',
+      href: '../looseTupleAsync/',
     },
   },
   expects: {

@@ -394,6 +394,7 @@
 - [LooseObjectSchemaAsync](/api/LooseObjectSchemaAsync/)
 - [LooseTupleIssue](/api/LooseTupleIssue/)
 - [LooseTupleSchema](/api/LooseTupleSchema/)
+- [LooseTupleSchemaAsync](/api/LooseTupleSchemaAsync/)
 - [LiteralSchema](/api/LiteralSchema/)
 - [Mac48Action](/api/Mac48Action/)
 - [Mac48Issue](/api/Mac48Issue/)
