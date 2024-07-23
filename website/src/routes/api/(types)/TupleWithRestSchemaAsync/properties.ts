@@ -5,24 +5,44 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'TupleItems',
-      href: '../TupleItems/',
+      name: 'TupleItemsAsync',
+      href: '../TupleItemsAsync/',
     },
   },
   TRest: {
     modifier: 'extends',
     type: {
-      type: 'custom',
-      name: 'BaseSchema',
-      href: '../BaseSchema/',
-      generics: [
-        'unknown',
-        'unknown',
+      type: 'union',
+      options: [
         {
           type: 'custom',
-          name: 'BaseIssue',
-          href: '../BaseIssue/',
-          generics: ['unknown'],
+          name: 'BaseSchema',
+          href: '../BaseSchema/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'BaseSchemaAsync',
+          href: '../BaseSchemaAsync/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
         },
       ],
     },
@@ -48,12 +68,12 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  BaseSchema: {
+  BaseSchemaAsync: {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'BaseSchema',
-      href: '../BaseSchema/',
+      name: 'BaseSchemaAsync',
+      href: '../BaseSchemaAsync/',
       generics: [
         {
           type: 'tuple',
@@ -164,8 +184,8 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'custom',
       modifier: 'typeof',
-      name: 'tupleWithRest',
-      href: '../tupleWithRest/',
+      name: 'tupleWithRestAsync',
+      href: '../tupleWithRestAsync/',
     },
   },
   expects: {

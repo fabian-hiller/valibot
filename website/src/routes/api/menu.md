@@ -549,6 +549,7 @@
 - [TupleSchemaAsync](/api/TupleSchemaAsync/)
 - [TupleWithRestIssue](/api/TupleWithRestIssue/)
 - [TupleWithRestSchema](/api/TupleWithRestSchema/)
+- [TupleWithRestSchemaAsync](/api/TupleWithRestSchemaAsync/)
 - [TypedDataset](/api/TypedDataset/)
 - [UlidAction](/api/UlidAction/)
 - [UlidIssue](/api/UlidIssue/)
