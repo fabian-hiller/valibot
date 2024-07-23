@@ -1,10 +1,160 @@
 ---
 title: getDefaultsAsync
+description: Returns the default values of the schema.
 source: /methods/getDefaults/getDefaultsAsync.ts
 contributors:
+  - EltonLobo07
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # getDefaultsAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/getDefaults/getDefaultsAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Returns the default values of the schema.
+
+> The difference to <Link href='../getDefault/'>`getDefault`</Link> is that for object and tuple schemas this function recursively returns the default values of the subschemas instead of `undefined`.
+
+```ts
+const values = v.getDefaultsAsync<TSchema>(schema);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+
+## Returns
+
+- `values` <Property {...properties.values} />
+
+## Examples
+
+The following examples show how `getDefaultsAsync` can be used.
+
+### Donation schema defaults
+
+Get the default values of a donation schema.
+
+```ts
+import { isValidOrganizationId } from '~/api';
+
+const DonationSchema = v.objectAsync({
+  name: v.pipe(v.nullable(v.string(), 'anonymous'), v.minLength(3)),
+  on: v.optional(v.date(), () => new Date()),
+  organizationId: v.pipeAsync(
+    v.nullable(v.string(), 'hostOrg123'),
+    v.regex(/^[a-z0-9]{10}$/i),
+    v.checkAsync(isValidOrganizationId)
+  ),
+  message: v.nullish(v.pipe(v.string(), v.minLength(1))),
+});
+
+const defaultValues = await v.getDefaultsAsync(DonationSchema);
+/*
+  {
+    name: "anonymous",
+    on: "2012-06-03T18:16:33.124Z",
+    organizationId: "hostOrg123",
+    message: undefined
+  }
+*/
+```
+
+## Related
+
+The following APIs can be combined with `getDefaultsAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['config', 'keyof', 'omit', 'pick', 'unwrap']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'customAsync',
+    'fallbackAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'partialAsync',
+    'pipeAsync',
+    'recordAsync',
+    'requiredAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>
