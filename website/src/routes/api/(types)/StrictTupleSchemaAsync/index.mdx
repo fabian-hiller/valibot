@@ -1,0 +1,28 @@
+---
+title: StrictTupleSchemaAsync
+description: Strict tuple schema async type.
+contributors:
+  - fabian-hiller
+  - mehm8128
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# StrictTupleSchemaAsync
+
+Strict tuple schema async type.
+
+## Generics
+
+- `TItems` <Property {...properties.TItems} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `StrictTupleSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `items` <Property {...properties.items} />
+  - `message` <Property {...properties.message} />
