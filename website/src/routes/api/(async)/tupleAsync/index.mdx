@@ -1,10 +1,195 @@
 ---
 title: tupleAsync
+description: Creates a tuple schema.
 source: /schemas/tuple/tupleAsync.ts
 contributors:
   - fabian-hiller
+  - mehm8128
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # tupleAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/tuple/tupleAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a tuple schema.
+
+```ts
+const Schema = v.tupleAsync<TItems, TMessage>(items, message);
+```
+
+## Generics
+
+- `TItems` <Property {...properties.TItems} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `items` <Property {...properties.items} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `tupleAsync` you can validate the data type of the input and whether the content matches `items`. If the input is not an array, you can use `message` to customize the error message.
+
+> This schema removes unknown items. The output will only include the items you specify. To include unknown items, use <Link href="../looseTupleAsync/">`looseTupleAsync`</Link>. To return an issue for unknown items, use <Link href="../strictTupleAsync/">`strictTupleAsync`</Link>. To include and validate unknown items, use <Link href="../tupleWithRestAsync/">`tupleWithRestAsync`</Link>.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `tupleAsync` can be used. Please see the <Link href="/guides/arrays/">arrays guide</Link> for more examples and explanations.
+
+### Number and email tuple
+
+Schema to validate a tuple with one number and one stored email address.
+
+```ts
+import { isEmailPresent } from '~/api';
+
+const TupleSchema = v.tupleAsync([
+  v.number(),
+  v.pipeAsync(
+    v.string(),
+    v.email(),
+    v.checkAsync(isEmailPresent, 'The email is not in the database.')
+  ),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `tupleAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['config', 'getDefault', 'getFallback']} />
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'checkItems',
+    'brand',
+    'empty',
+    'everyItem',
+    'excludes',
+    'filterItems',
+    'findItem',
+    'includes',
+    'length',
+    'mapItems',
+    'maxLength',
+    'minLength',
+    'nonEmpty',
+    'notLength',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'reduceItems',
+    'someItem',
+    'sortItems',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'checkAsync',
+    'customAsync',
+    'fallbackAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialCheckAsync',
+    'pipeAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'recordAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>

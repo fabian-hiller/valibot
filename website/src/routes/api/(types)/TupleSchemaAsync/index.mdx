@@ -1,0 +1,28 @@
+---
+title: TupleSchemaAsync
+description: Tuple schema async type.
+contributors:
+  - fabian-hiller
+  - mehm8128
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# TupleSchemaAsync
+
+Tuple schema async type.
+
+## Generics
+
+- `TItems` <Property {...properties.TItems} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `TupleSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `items` <Property {...properties.items} />
+  - `message` <Property {...properties.message} />

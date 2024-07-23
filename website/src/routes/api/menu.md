@@ -544,6 +544,7 @@
 - [TupleItems](/api/TupleItems/)
 - [TupleItemsAsync](/api/TupleItemsAsync/)
 - [TupleSchema](/api/TupleSchema/)
+- [TupleSchemaAsync](/api/TupleSchemaAsync/)
 - [TupleWithRestIssue](/api/TupleWithRestIssue/)
 - [TupleWithRestSchema](/api/TupleWithRestSchema/)
 - [TypedDataset](/api/TypedDataset/)
