@@ -42,25 +42,22 @@ The following examples show how `getDefaultsAsync` can be used.
 Get the default values of a donation schema.
 
 ```ts
-import { isValidOrganizationId } from '~/api';
+import { getRandomOrgId } from '~/api';
 
 const DonationSchema = v.objectAsync({
-  name: v.pipe(v.nullable(v.string(), 'anonymous'), v.minLength(3)),
-  on: v.optional(v.date(), () => new Date()),
-  organizationId: v.pipeAsync(
-    v.nullable(v.string(), 'hostOrg123'),
-    v.regex(/^[a-z0-9]{10}$/i),
-    v.checkAsync(isValidOrganizationId)
-  ),
-  message: v.nullish(v.pipe(v.string(), v.minLength(1))),
+  timestamp: v.optional(v.date(), () => new Date()),
+  sponsor: v.optional(v.pipe(v.string(), v.nonEmpty()), 'anonymous'),
+  organizationId: v.optionalAsync(v.pipe(v.string(), v.uuid()), getRandomOrgId),
+  message: v.optional(v.pipe(v.string(), v.minLength(1))),
 });
 
 const defaultValues = await v.getDefaultsAsync(DonationSchema);
+
 /*
   {
-    name: "anonymous",
-    on: "2012-06-03T18:16:33.124Z",
-    organizationId: "hostOrg123",
+    timestamp: new Date(),
+    sponsor: "anonymous",
+    organizationId: "43775869-95f3-4e00-9f37-161ec8f9f7cd",
     message: undefined
   }
 */
@@ -123,7 +120,19 @@ The following APIs can be combined with `getDefaultsAsync`.
 
 ### Methods
 
-<ApiList items={['config', 'keyof', 'omit', 'pick', 'unwrap']} />
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'keyof',
+    'omit',
+    'partial',
+    'pick',
+    'pipe',
+    'required',
+    'unwrap',
+  ]}
+/>
 
 ### Async
 
