@@ -528,6 +528,7 @@
 - [StrictObjectSchemaAsync](/api/StrictObjectSchemaAsync/)
 - [StrictTupleIssue](/api/StrictTupleIssue/)
 - [StrictTupleSchema](/api/StrictTupleSchema/)
+- [StrictTupleSchemaAsync](/api/StrictTupleSchemaAsync/)
 - [StringIssue](/api/StringIssue/)
 - [StringSchema](/api/StringSchema/)
 - [SymbolIssue](/api/SymbolIssue/)
