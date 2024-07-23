@@ -38,24 +38,46 @@ export const properties: Record<string, PropertyProps> = {
       href: '../BaseSchema/',
       generics: [
         {
-          type: 'custom',
-          name: 'InferTupleInput',
-          href: '../InferTupleInput/',
-          generics: [
+          type: 'tuple',
+          items: [
             {
               type: 'custom',
-              name: 'TItems',
+              spread: true,
+              name: 'InferTupleInput',
+              href: '../InferTupleInput/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TItems',
+                },
+              ],
+            },
+            {
+              type: 'array',
+              spread: true,
+              item: 'unknown',
             },
           ],
         },
         {
-          type: 'custom',
-          name: 'InferTupleOutput',
-          href: '../InferTupleOutput/',
-          generics: [
+          type: 'tuple',
+          items: [
             {
               type: 'custom',
-              name: 'TItems',
+              spread: true,
+              name: 'InferTupleOutput',
+              href: '../InferTupleOutput/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TItems',
+                },
+              ],
+            },
+            {
+              type: 'array',
+              spread: true,
+              item: 'unknown',
             },
           ],
         },
