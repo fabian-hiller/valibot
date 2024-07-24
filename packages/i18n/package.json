@@ -50,6 +50,7 @@
     "es",
     "fr",
     "hu",
+    "id",
     "it",
     "ja",
     "kr",
@@ -3555,6 +3556,586 @@
       "require": {
         "types": "./hu/value.d.cts",
         "default": "./hu/value.cjs"
+      }
+    },
+    "./id": {
+      "import": {
+        "types": "./id/index.d.ts",
+        "default": "./id/index.js"
+      },
+      "require": {
+        "types": "./id/index.d.cts",
+        "default": "./id/index.cjs"
+      }
+    },
+    "./id/schema": {
+      "import": {
+        "types": "./id/schema.d.ts",
+        "default": "./id/schema.js"
+      },
+      "require": {
+        "types": "./id/schema.d.cts",
+        "default": "./id/schema.cjs"
+      }
+    },
+    "./id/bic": {
+      "import": {
+        "types": "./id/bic.d.ts",
+        "default": "./id/bic.js"
+      },
+      "require": {
+        "types": "./id/bic.d.cts",
+        "default": "./id/bic.cjs"
+      }
+    },
+    "./id/bytes": {
+      "import": {
+        "types": "./id/bytes.d.ts",
+        "default": "./id/bytes.js"
+      },
+      "require": {
+        "types": "./id/bytes.d.cts",
+        "default": "./id/bytes.cjs"
+      }
+    },
+    "./id/check": {
+      "import": {
+        "types": "./id/check.d.ts",
+        "default": "./id/check.js"
+      },
+      "require": {
+        "types": "./id/check.d.cts",
+        "default": "./id/check.cjs"
+      }
+    },
+    "./id/checkAsync": {
+      "import": {
+        "types": "./id/checkAsync.d.ts",
+        "default": "./id/checkAsync.js"
+      },
+      "require": {
+        "types": "./id/checkAsync.d.cts",
+        "default": "./id/checkAsync.cjs"
+      }
+    },
+    "./id/creditCard": {
+      "import": {
+        "types": "./id/creditCard.d.ts",
+        "default": "./id/creditCard.js"
+      },
+      "require": {
+        "types": "./id/creditCard.d.cts",
+        "default": "./id/creditCard.cjs"
+      }
+    },
+    "./id/cuid2": {
+      "import": {
+        "types": "./id/cuid2.d.ts",
+        "default": "./id/cuid2.js"
+      },
+      "require": {
+        "types": "./id/cuid2.d.cts",
+        "default": "./id/cuid2.cjs"
+      }
+    },
+    "./id/decimal": {
+      "import": {
+        "types": "./id/decimal.d.ts",
+        "default": "./id/decimal.js"
+      },
+      "require": {
+        "types": "./id/decimal.d.cts",
+        "default": "./id/decimal.cjs"
+      }
+    },
+    "./id/email": {
+      "import": {
+        "types": "./id/email.d.ts",
+        "default": "./id/email.js"
+      },
+      "require": {
+        "types": "./id/email.d.cts",
+        "default": "./id/email.cjs"
+      }
+    },
+    "./id/emoji": {
+      "import": {
+        "types": "./id/emoji.d.ts",
+        "default": "./id/emoji.js"
+      },
+      "require": {
+        "types": "./id/emoji.d.cts",
+        "default": "./id/emoji.cjs"
+      }
+    },
+    "./id/empty": {
+      "import": {
+        "types": "./id/empty.d.ts",
+        "default": "./id/empty.js"
+      },
+      "require": {
+        "types": "./id/empty.d.cts",
+        "default": "./id/empty.cjs"
+      }
+    },
+    "./id/endsWith": {
+      "import": {
+        "types": "./id/endsWith.d.ts",
+        "default": "./id/endsWith.js"
+      },
+      "require": {
+        "types": "./id/endsWith.d.cts",
+        "default": "./id/endsWith.cjs"
+      }
+    },
+    "./id/excludes": {
+      "import": {
+        "types": "./id/excludes.d.ts",
+        "default": "./id/excludes.js"
+      },
+      "require": {
+        "types": "./id/excludes.d.cts",
+        "default": "./id/excludes.cjs"
+      }
+    },
+    "./id/finite": {
+      "import": {
+        "types": "./id/finite.d.ts",
+        "default": "./id/finite.js"
+      },
+      "require": {
+        "types": "./id/finite.d.cts",
+        "default": "./id/finite.cjs"
+      }
+    },
+    "./id/hash": {
+      "import": {
+        "types": "./id/hash.d.ts",
+        "default": "./id/hash.js"
+      },
+      "require": {
+        "types": "./id/hash.d.cts",
+        "default": "./id/hash.cjs"
+      }
+    },
+    "./id/hexColor": {
+      "import": {
+        "types": "./id/hexColor.d.ts",
+        "default": "./id/hexColor.js"
+      },
+      "require": {
+        "types": "./id/hexColor.d.cts",
+        "default": "./id/hexColor.cjs"
+      }
+    },
+    "./id/hexadecimal": {
+      "import": {
+        "types": "./id/hexadecimal.d.ts",
+        "default": "./id/hexadecimal.js"
+      },
+      "require": {
+        "types": "./id/hexadecimal.d.cts",
+        "default": "./id/hexadecimal.cjs"
+      }
+    },
+    "./id/imei": {
+      "import": {
+        "types": "./id/imei.d.ts",
+        "default": "./id/imei.js"
+      },
+      "require": {
+        "types": "./id/imei.d.cts",
+        "default": "./id/imei.cjs"
+      }
+    },
+    "./id/includes": {
+      "import": {
+        "types": "./id/includes.d.ts",
+        "default": "./id/includes.js"
+      },
+      "require": {
+        "types": "./id/includes.d.cts",
+        "default": "./id/includes.cjs"
+      }
+    },
+    "./id/integer": {
+      "import": {
+        "types": "./id/integer.d.ts",
+        "default": "./id/integer.js"
+      },
+      "require": {
+        "types": "./id/integer.d.cts",
+        "default": "./id/integer.cjs"
+      }
+    },
+    "./id/ip": {
+      "import": {
+        "types": "./id/ip.d.ts",
+        "default": "./id/ip.js"
+      },
+      "require": {
+        "types": "./id/ip.d.cts",
+        "default": "./id/ip.cjs"
+      }
+    },
+    "./id/ipv4": {
+      "import": {
+        "types": "./id/ipv4.d.ts",
+        "default": "./id/ipv4.js"
+      },
+      "require": {
+        "types": "./id/ipv4.d.cts",
+        "default": "./id/ipv4.cjs"
+      }
+    },
+    "./id/ipv6": {
+      "import": {
+        "types": "./id/ipv6.d.ts",
+        "default": "./id/ipv6.js"
+      },
+      "require": {
+        "types": "./id/ipv6.d.cts",
+        "default": "./id/ipv6.cjs"
+      }
+    },
+    "./id/isoDate": {
+      "import": {
+        "types": "./id/isoDate.d.ts",
+        "default": "./id/isoDate.js"
+      },
+      "require": {
+        "types": "./id/isoDate.d.cts",
+        "default": "./id/isoDate.cjs"
+      }
+    },
+    "./id/isoDateTime": {
+      "import": {
+        "types": "./id/isoDateTime.d.ts",
+        "default": "./id/isoDateTime.js"
+      },
+      "require": {
+        "types": "./id/isoDateTime.d.cts",
+        "default": "./id/isoDateTime.cjs"
+      }
+    },
+    "./id/isoTime": {
+      "import": {
+        "types": "./id/isoTime.d.ts",
+        "default": "./id/isoTime.js"
+      },
+      "require": {
+        "types": "./id/isoTime.d.cts",
+        "default": "./id/isoTime.cjs"
+      }
+    },
+    "./id/isoTimeSecond": {
+      "import": {
+        "types": "./id/isoTimeSecond.d.ts",
+        "default": "./id/isoTimeSecond.js"
+      },
+      "require": {
+        "types": "./id/isoTimeSecond.d.cts",
+        "default": "./id/isoTimeSecond.cjs"
+      }
+    },
+    "./id/isoTimestamp": {
+      "import": {
+        "types": "./id/isoTimestamp.d.ts",
+        "default": "./id/isoTimestamp.js"
+      },
+      "require": {
+        "types": "./id/isoTimestamp.d.cts",
+        "default": "./id/isoTimestamp.cjs"
+      }
+    },
+    "./id/isoWeek": {
+      "import": {
+        "types": "./id/isoWeek.d.ts",
+        "default": "./id/isoWeek.js"
+      },
+      "require": {
+        "types": "./id/isoWeek.d.cts",
+        "default": "./id/isoWeek.cjs"
+      }
+    },
+    "./id/length": {
+      "import": {
+        "types": "./id/length.d.ts",
+        "default": "./id/length.js"
+      },
+      "require": {
+        "types": "./id/length.d.cts",
+        "default": "./id/length.cjs"
+      }
+    },
+    "./id/mac": {
+      "import": {
+        "types": "./id/mac.d.ts",
+        "default": "./id/mac.js"
+      },
+      "require": {
+        "types": "./id/mac.d.cts",
+        "default": "./id/mac.cjs"
+      }
+    },
+    "./id/mac48": {
+      "import": {
+        "types": "./id/mac48.d.ts",
+        "default": "./id/mac48.js"
+      },
+      "require": {
+        "types": "./id/mac48.d.cts",
+        "default": "./id/mac48.cjs"
+      }
+    },
+    "./id/mac64": {
+      "import": {
+        "types": "./id/mac64.d.ts",
+        "default": "./id/mac64.js"
+      },
+      "require": {
+        "types": "./id/mac64.d.cts",
+        "default": "./id/mac64.cjs"
+      }
+    },
+    "./id/maxBytes": {
+      "import": {
+        "types": "./id/maxBytes.d.ts",
+        "default": "./id/maxBytes.js"
+      },
+      "require": {
+        "types": "./id/maxBytes.d.cts",
+        "default": "./id/maxBytes.cjs"
+      }
+    },
+    "./id/maxLength": {
+      "import": {
+        "types": "./id/maxLength.d.ts",
+        "default": "./id/maxLength.js"
+      },
+      "require": {
+        "types": "./id/maxLength.d.cts",
+        "default": "./id/maxLength.cjs"
+      }
+    },
+    "./id/maxSize": {
+      "import": {
+        "types": "./id/maxSize.d.ts",
+        "default": "./id/maxSize.js"
+      },
+      "require": {
+        "types": "./id/maxSize.d.cts",
+        "default": "./id/maxSize.cjs"
+      }
+    },
+    "./id/maxValue": {
+      "import": {
+        "types": "./id/maxValue.d.ts",
+        "default": "./id/maxValue.js"
+      },
+      "require": {
+        "types": "./id/maxValue.d.cts",
+        "default": "./id/maxValue.cjs"
+      }
+    },
+    "./id/mimeType": {
+      "import": {
+        "types": "./id/mimeType.d.ts",
+        "default": "./id/mimeType.js"
+      },
+      "require": {
+        "types": "./id/mimeType.d.cts",
+        "default": "./id/mimeType.cjs"
+      }
+    },
+    "./id/minBytes": {
+      "import": {
+        "types": "./id/minBytes.d.ts",
+        "default": "./id/minBytes.js"
+      },
+      "require": {
+        "types": "./id/minBytes.d.cts",
+        "default": "./id/minBytes.cjs"
+      }
+    },
+    "./id/minLength": {
+      "import": {
+        "types": "./id/minLength.d.ts",
+        "default": "./id/minLength.js"
+      },
+      "require": {
+        "types": "./id/minLength.d.cts",
+        "default": "./id/minLength.cjs"
+      }
+    },
+    "./id/minSize": {
+      "import": {
+        "types": "./id/minSize.d.ts",
+        "default": "./id/minSize.js"
+      },
+      "require": {
+        "types": "./id/minSize.d.cts",
+        "default": "./id/minSize.cjs"
+      }
+    },
+    "./id/minValue": {
+      "import": {
+        "types": "./id/minValue.d.ts",
+        "default": "./id/minValue.js"
+      },
+      "require": {
+        "types": "./id/minValue.d.cts",
+        "default": "./id/minValue.cjs"
+      }
+    },
+    "./id/multipleOf": {
+      "import": {
+        "types": "./id/multipleOf.d.ts",
+        "default": "./id/multipleOf.js"
+      },
+      "require": {
+        "types": "./id/multipleOf.d.cts",
+        "default": "./id/multipleOf.cjs"
+      }
+    },
+    "./id/nonEmpty": {
+      "import": {
+        "types": "./id/nonEmpty.d.ts",
+        "default": "./id/nonEmpty.js"
+      },
+      "require": {
+        "types": "./id/nonEmpty.d.cts",
+        "default": "./id/nonEmpty.cjs"
+      }
+    },
+    "./id/notBytes": {
+      "import": {
+        "types": "./id/notBytes.d.ts",
+        "default": "./id/notBytes.js"
+      },
+      "require": {
+        "types": "./id/notBytes.d.cts",
+        "default": "./id/notBytes.cjs"
+      }
+    },
+    "./id/notLength": {
+      "import": {
+        "types": "./id/notLength.d.ts",
+        "default": "./id/notLength.js"
+      },
+      "require": {
+        "types": "./id/notLength.d.cts",
+        "default": "./id/notLength.cjs"
+      }
+    },
+    "./id/notSize": {
+      "import": {
+        "types": "./id/notSize.d.ts",
+        "default": "./id/notSize.js"
+      },
+      "require": {
+        "types": "./id/notSize.d.cts",
+        "default": "./id/notSize.cjs"
+      }
+    },
+    "./id/notValue": {
+      "import": {
+        "types": "./id/notValue.d.ts",
+        "default": "./id/notValue.js"
+      },
+      "require": {
+        "types": "./id/notValue.d.cts",
+        "default": "./id/notValue.cjs"
+      }
+    },
+    "./id/octal": {
+      "import": {
+        "types": "./id/octal.d.ts",
+        "default": "./id/octal.js"
+      },
+      "require": {
+        "types": "./id/octal.d.cts",
+        "default": "./id/octal.cjs"
+      }
+    },
+    "./id/regex": {
+      "import": {
+        "types": "./id/regex.d.ts",
+        "default": "./id/regex.js"
+      },
+      "require": {
+        "types": "./id/regex.d.cts",
+        "default": "./id/regex.cjs"
+      }
+    },
+    "./id/safeInteger": {
+      "import": {
+        "types": "./id/safeInteger.d.ts",
+        "default": "./id/safeInteger.js"
+      },
+      "require": {
+        "types": "./id/safeInteger.d.cts",
+        "default": "./id/safeInteger.cjs"
+      }
+    },
+    "./id/size": {
+      "import": {
+        "types": "./id/size.d.ts",
+        "default": "./id/size.js"
+      },
+      "require": {
+        "types": "./id/size.d.cts",
+        "default": "./id/size.cjs"
+      }
+    },
+    "./id/startsWith": {
+      "import": {
+        "types": "./id/startsWith.d.ts",
+        "default": "./id/startsWith.js"
+      },
+      "require": {
+        "types": "./id/startsWith.d.cts",
+        "default": "./id/startsWith.cjs"
+      }
+    },
+    "./id/ulid": {
+      "import": {
+        "types": "./id/ulid.d.ts",
+        "default": "./id/ulid.js"
+      },
+      "require": {
+        "types": "./id/ulid.d.cts",
+        "default": "./id/ulid.cjs"
+      }
+    },
+    "./id/url": {
+      "import": {
+        "types": "./id/url.d.ts",
+        "default": "./id/url.js"
+      },
+      "require": {
+        "types": "./id/url.d.cts",
+        "default": "./id/url.cjs"
+      }
+    },
+    "./id/uuid": {
+      "import": {
+        "types": "./id/uuid.d.ts",
+        "default": "./id/uuid.js"
+      },
+      "require": {
+        "types": "./id/uuid.d.cts",
+        "default": "./id/uuid.cjs"
+      }
+    },
+    "./id/value": {
+      "import": {
+        "types": "./id/value.d.ts",
+        "default": "./id/value.js"
+      },
+      "require": {
+        "types": "./id/value.d.cts",
+        "default": "./id/value.cjs"
       }
     },
     "./it": {
