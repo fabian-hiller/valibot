@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.17.0 (July 26, 2024)
 
 - Add Indonesia (id) translations (pull request #683)
 
