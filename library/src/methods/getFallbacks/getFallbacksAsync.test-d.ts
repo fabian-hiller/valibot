@@ -3,10 +3,12 @@ import {
   boolean,
   number,
   object,
-  strictObject,
-  strictTuple,
+  objectAsync,
+  strictObjectAsync,
+  strictTupleAsync,
   string,
   tuple,
+  tupleAsync,
 } from '../../schemas/index.ts';
 import { fallback, fallbackAsync } from '../fallback/index.ts';
 import { getFallbacksAsync } from './getFallbacksAsync.ts';
@@ -45,12 +47,10 @@ describe('getFallbacksAsync', () => {
     test('for simple object', () => {
       expectTypeOf(
         getFallbacksAsync(
-          // TODO: Switch this to `objectAsync`
-          object({
+          objectAsync({
             key1: fallback(string(), 'foo' as const),
             key2: fallback(number(), () => 123 as const),
-            // TODO: Switch this to `fallbackAsync`
-            key3: fallback(boolean(), false as const),
+            key3: fallbackAsync(boolean(), false as const),
             key4: string(),
           })
         )
@@ -67,14 +67,11 @@ describe('getFallbacksAsync', () => {
     test('for nested object', () => {
       expectTypeOf(
         getFallbacksAsync(
-          // TODO: Switch this to `objectAsync`
-          object({
-            // TODO: Switch this to `strictObjectAsync`
-            nested: strictObject({
+          objectAsync({
+            nested: strictObjectAsync({
               key1: fallback(string(), 'foo' as const),
               key2: fallback(number(), () => 123 as const),
-              // TODO: Switch this to `fallbackAsync`
-              key3: fallback(boolean(), false as const),
+              key3: fallbackAsync(boolean(), false as const),
             }),
             other: string(),
           })
@@ -100,12 +97,10 @@ describe('getFallbacksAsync', () => {
     test('for simple tuple', () => {
       expectTypeOf(
         getFallbacksAsync(
-          // TODO: Switch this to `tupleAsync`
-          tuple([
+          tupleAsync([
             fallback(string(), 'foo' as const),
             fallback(number(), () => 123 as const),
-            // TODO: Switch this to `fallbackAsync`
-            fallback(boolean(), false as const),
+            fallbackAsync(boolean(), false as const),
             string(),
           ])
         )
@@ -115,14 +110,11 @@ describe('getFallbacksAsync', () => {
     test('for nested tuple', () => {
       expectTypeOf(
         getFallbacksAsync(
-          // TODO: Switch this to `tupleAsync`
-          tuple([
-            // TODO: Switch this to `strictTupleAsync`
-            strictTuple([
+          tupleAsync([
+            strictTupleAsync([
               fallback(string(), 'foo' as const),
               fallback(number(), () => 123 as const),
-              // TODO: Switch this to `fallbackAsync`
-              fallback(boolean(), false as const),
+              fallbackAsync(boolean(), false as const),
             ]),
             string(),
           ])

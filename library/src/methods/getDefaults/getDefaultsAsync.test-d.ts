@@ -1,16 +1,17 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import {
   boolean,
-  nullable,
   nullableAsync,
   nullish,
   number,
   object,
+  objectAsync,
   optional,
-  strictObject,
-  strictTuple,
+  strictObjectAsync,
+  strictTupleAsync,
   string,
   tuple,
+  tupleAsync,
 } from '../../schemas/index.ts';
 import { getDefaultsAsync } from './getDefaultsAsync.ts';
 
@@ -48,12 +49,10 @@ describe('getDefaultsAsync', () => {
     test('for simple object', () => {
       expectTypeOf(
         getDefaultsAsync(
-          // TODO: Switch this to `objectAsync`
-          object({
+          objectAsync({
             key1: optional(string(), 'foo'),
             key2: nullish(number(), () => 123 as const),
-            // TODO: Switch this to `nullableAsync`
-            key3: nullable(boolean(), false),
+            key3: nullableAsync(boolean(), false),
             key4: string(),
           })
         )
@@ -70,14 +69,11 @@ describe('getDefaultsAsync', () => {
     test('for nested object', () => {
       expectTypeOf(
         getDefaultsAsync(
-          // TODO: Switch this to `objectAsync`
-          object({
-            // TODO: Switch this to `strictObjectAsync`
-            nested: strictObject({
+          objectAsync({
+            nested: strictObjectAsync({
               key1: optional(string(), 'foo'),
               key2: nullish(number(), () => 123 as const),
-              // TODO: Switch this to `nullableAsync`
-              key3: nullable(boolean(), false),
+              key3: nullableAsync(boolean(), false),
             }),
             other: string(),
           })
@@ -103,12 +99,10 @@ describe('getDefaultsAsync', () => {
     test('for simple tuple', () => {
       expectTypeOf(
         getDefaultsAsync(
-          // TODO: Switch this to `tupleAsync`
-          tuple([
+          tupleAsync([
             optional(string(), 'foo'),
             nullish(number(), () => 123 as const),
-            // TODO: Switch this to `nullableAsync`
-            nullable(boolean(), false),
+            nullableAsync(boolean(), false),
             string(),
           ])
         )
@@ -118,14 +112,11 @@ describe('getDefaultsAsync', () => {
     test('for nested tuple', () => {
       expectTypeOf(
         getDefaultsAsync(
-          // TODO: Switch this to `tupleAsync`
-          tuple([
-            // TODO: Switch this to `strictTupleAsync`
-            strictTuple([
+          tupleAsync([
+            strictTupleAsync([
               optional(string(), 'foo'),
               nullish(number(), () => 123 as const),
-              // TODO: Switch this to `nullableAsync`
-              nullable(boolean(), false),
+              nullableAsync(boolean(), false),
             ]),
             string(),
           ])
