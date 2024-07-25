@@ -1,10 +1,167 @@
 ---
 title: getFallbacksAsync
+description: Returns the fallback values of the schema.
 source: /methods/getFallbacks/getFallbacksAsync.ts
 contributors:
+  - EltonLobo07
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # getFallbacksAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/getFallbacks/getFallbacksAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Returns the fallback values of the schema.
+
+> The difference to <Link href='../getFallback/'>`getFallback`</Link> is that for object and tuple schemas this function recursively returns the fallback values of the subschemas instead of `undefined`.
+
+```ts
+const values = v.getFallbacksAsync<TSchema>(schema);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+
+## Returns
+
+- `values` <Property {...properties.values} />
+
+## Examples
+
+The following examples show how `getFallbacksAsync` can be used.
+
+### New user fallbacks
+
+Get the fallback values of a new user schema.
+
+```ts
+import { getAnyUniqueUsername, isUsernameUnique } from '~/api';
+
+const NewUserSchema = v.objectAsync({
+  username: v.fallbackAsync(
+    v.pipeAsync(v.string(), v.minLength(3), v.checkAsync(isUsernameUnique)),
+    getAnyUniqueUsername
+  ),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+const fallbackValues = await v.getFallbacksAsync(NewUserSchema);
+/*
+  {
+    username: "cookieMonster07",
+    password: undefined
+  }
+*/
+```
+
+## Related
+
+The following APIs can be combined with `getFallbacksAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'keyof',
+    'omit',
+    'partial',
+    'pick',
+    'pipe',
+    'required',
+    'unwrap',
+  ]}
+/>
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'customAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'recordAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+    'fallbackAsync',
+    'partialAsync',
+    'pipeAsync',
+    'requiredAsync',
+  ]}
+/>
