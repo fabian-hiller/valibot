@@ -3,9 +3,15 @@ import type { PropertyProps } from '~/components';
 export const properties: Record<string, PropertyProps> = {
   ArrayInput: {
     type: {
-      type: 'array',
-      modifier: 'readonly',
-      item: 'unknown',
+      type: 'custom',
+      name: 'MaybeReadonly',
+      href: '../MaybeReadonly/',
+      generics: [
+        {
+          type: 'array',
+          item: 'unknown',
+        },
+      ],
     },
   },
 };

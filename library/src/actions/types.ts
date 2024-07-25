@@ -1,7 +1,9 @@
+import type { MaybeReadonly } from '../types';
+
 /**
  * Array input type.
  */
-export type ArrayInput = readonly unknown[];
+export type ArrayInput = MaybeReadonly<unknown[]>;
 
 /**
  * Array requirement type.
@@ -15,7 +17,7 @@ export type ArrayRequirement<TInput extends ArrayInput> = (
 /**
  * Content input type.
  */
-export type ContentInput = string | unknown[];
+export type ContentInput = string | MaybeReadonly<unknown[]>;
 
 /**
  * Content requirement type.

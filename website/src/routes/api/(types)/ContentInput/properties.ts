@@ -7,8 +7,15 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         'string',
         {
-          type: 'array',
-          item: 'unknown',
+          type: 'custom',
+          name: 'MaybeReadonly',
+          href: '../MaybeReadonly/',
+          generics: [
+            {
+              type: 'array',
+              item: 'unknown',
+            },
+          ],
         },
       ],
     },
