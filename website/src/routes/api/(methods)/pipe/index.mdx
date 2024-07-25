@@ -34,6 +34,8 @@ const Schema = v.pipe<TSchema, TItems>(schema, ...items);
 
 > Since `pipe` returns a schema that can be used as the first argument of another pipeline, it is possible to nest multiple `pipe` calls to extend the validation and transformation further.
 
+The `pipe` aborts early and marks the output as untyped if issues were collected before attempting to execute a schema or transformation action as the next item in the pipeline, to prevent unexpected behavior.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
