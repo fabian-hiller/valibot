@@ -7,8 +7,9 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         'string',
         {
-          type: 'array',
-          item: 'unknown',
+          type: 'custom',
+          name: 'ArrayLike',
+          generics: ['unknown'],
         },
       ],
     },
