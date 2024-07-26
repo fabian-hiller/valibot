@@ -105,6 +105,8 @@ export function maxBytes(
   number,
   ErrorMessage<MaxBytesIssue<string, number>> | undefined
 > {
+  let cachedTextEncoder: TextEncoder;
+  let cachedUint8Array: Uint8Array;
   return {
     kind: 'validation',
     type: 'max_bytes',
@@ -115,8 +117,10 @@ export function maxBytes(
     message,
     _run(dataset, config) {
       if (dataset.typed) {
-        const length = new TextEncoder().encode(dataset.value).length;
-        if (length > this.requirement) {
+        cachedTextEncoder ??= new TextEncoder()
+        cachedUint8Array ??= new Uint8Array(requirement + 1)
+        const written = cachedTextEncoder.encodeInto(dataset.value, cachedUint8Array).written;
+        if (written > this.requirement) {
           _addIssue(this, 'bytes', dataset, config, {
             received: `${length}`,
           });
