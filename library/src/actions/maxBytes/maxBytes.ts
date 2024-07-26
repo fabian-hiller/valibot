@@ -118,7 +118,7 @@ export function maxBytes(
     _run(dataset, config) {
       if (dataset.typed) {
         cachedTextEncoder ??= new TextEncoder()
-        cachedUint8Array ??= new Uint8Array(requirement + 1)
+        cachedUint8Array ??= new Uint8Array(requirement + 4)
         const written = cachedTextEncoder.encodeInto(dataset.value, cachedUint8Array).written;
         if (written > this.requirement) {
           _addIssue(this, 'bytes', dataset, config, {
