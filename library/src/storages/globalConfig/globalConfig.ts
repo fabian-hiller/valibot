@@ -27,7 +27,7 @@ export function setGlobalConfig(config: GlobalConfig): void {
 export function getGlobalConfig<const TIssue extends BaseIssue<unknown>>(
   config?: Config<TIssue>
 ): Config<TIssue> {
-  // Note: The configuration is deliberately not constructed with the spread
+  // Hint: The configuration is deliberately not constructed with the spread
   // operator for performance reasons
   return {
     lang: config?.lang ?? store?.lang,

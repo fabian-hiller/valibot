@@ -16,7 +16,7 @@ export function _subIssues(
   if (datasets) {
     for (const dataset of datasets) {
       if (issues) {
-        // Note: According to the implementation of `union` and `unionAsync`,
+        // Hint: According to the implementation of `union` and `unionAsync`,
         // `dataset.issues` can never be `undefined`.
         issues.push(...dataset.issues!);
       } else {

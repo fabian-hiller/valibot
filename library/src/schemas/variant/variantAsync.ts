@@ -141,8 +141,8 @@ export function variantAsync(
               }
 
               // Otherwise, replace output dataset if necessary
-              // TODO: Document that only first untyped or typed dataset is
-              // returned and that typed datasets are prioritized
+              // Hint: Only the first untyped or typed dataset is returned, and
+              // typed datasets take precedence over untyped ones.
               if (
                 !outputDataset ||
                 (!outputDataset.typed && optionDataset.typed)

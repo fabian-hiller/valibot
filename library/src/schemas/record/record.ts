@@ -120,11 +120,9 @@ export function record(
         dataset.value = {};
 
         // Parse schema of each record entry
-        // Note: for...in loop always returns keys as strings
+        // Hint: for...in loop always returns keys as strings
+        // Hint: We exclude specific keys for security reasons
         for (const entryKey in input) {
-          // Exclude blocked keys to prevent prototype pollutions
-          // TODO: We should document that we exclude specific keys for
-          // security reasons.
           if (_isValidObjectKey(input, entryKey)) {
             // Get value of record entry
             const entryValue: unknown = input[entryKey as keyof typeof input];

@@ -3038,7 +3038,6 @@ export function pipeAsync<
           (pipe[index].kind === 'schema' ||
             pipe[index].kind === 'transformation')
         ) {
-          // TODO: This behavior must be documented!
           dataset.typed = false;
           break;
         }

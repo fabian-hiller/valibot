@@ -33,7 +33,7 @@ const Schema = v.strictTupleAsync<TItems, TMessage>(items, message);
 
 With `strictTupleAsync` you can validate the data type of the input and whether the content matches `items`. If the input is not an array or does include unknown items, you can use `message` to customize the error message.
 
-> The difference to <Link href="../tupleAsync/">`tupleAsync`</Link> is that this schema returns an issue for unknown items.
+> The difference to <Link href="../tupleAsync/">`tupleAsync`</Link> is that this schema returns an issue for unknown items. It intentionally returns only one issue. Otherwise, attackers could send large arrays to exhaust device resources. If you want an issue for every unknown item, use the <Link href="../tupleWithRestAsync/">`tupleWithRestAsync`</Link> schema with <Link href="../never/">`never`</Link> for the `rest` argument.
 
 ## Returns
 

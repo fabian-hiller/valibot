@@ -39,6 +39,10 @@ const Schema = v.objectWithRest<TEntries, TRest, TMessage>(
 
 With `objectWithRest` you can validate the data type of the input and whether the content matches `entries` and `rest`. If the input is not an object, you can use `message` to customize the error message.
 
+> The difference to <Link href="../object/">`object`</Link> is that this schema includes unknown entries in the output. In addition, this schema filters certain entries from the unknown entries for security reasons.
+
+> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />

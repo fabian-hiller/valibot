@@ -129,12 +129,11 @@ export function objectWithRestAsync(
         // Parse each normal and rest entry
         const [normalDatasets, restDatasets] = await Promise.all([
           // Parse schema of each normal entry
+          // Hint: We do not distinguish between missing and `undefined` entries.
+          // The reason for this decision is that it reduces the bundle size, and
+          // we also expect that most users will expect this behavior.
           Promise.all(
             Object.entries(this.entries).map(async ([key, schema]) => {
-              // TODO: We should document that missing keys do not cause issues
-              // when `undefined` passes the schema. The reason for this decision
-              // is that it reduces the bundle size, and we also expect that most
-              // users will expect this behavior.
               const value = input[key as keyof typeof input];
               return [
                 key,
@@ -145,10 +144,9 @@ export function objectWithRestAsync(
           ),
 
           // Parse other entries with rest schema
+          // Hint: We exclude specific keys for security reasons
           Promise.all(
             Object.entries(input)
-              // TODO: We should document that we exclude specific keys for
-              // security reasons.
               .filter(
                 ([key]) =>
                   _isValidObjectKey(input, key) && !(key in this.entries)

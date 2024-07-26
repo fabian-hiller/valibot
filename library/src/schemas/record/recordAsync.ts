@@ -131,12 +131,10 @@ export function recordAsync(
         dataset.value = {};
 
         // Parse schema of each record entry
-        // Note: `Object.entries(…)` always returns keys as strings
+        // Hint: `Object.entries(…)` always returns keys as strings
+        // Hint: We exclude specific keys for security reasons
         const datasets = await Promise.all(
           Object.entries(input)
-            // Exclude blocked keys to prevent prototype pollutions
-            // TODO: We should document that we exclude specific keys for
-            // security reasons.
             .filter(([key]) => _isValidObjectKey(input, key))
             .map(([entryKey, entryValue]) =>
               Promise.all([

@@ -163,10 +163,7 @@ export function strictTuple(
             ],
           });
 
-          // TODO: We need to document why we only add one issue for
-          // unknown items.
-
-          // Note: We intentionally only add one issue for unknown items.
+          // Hint: We intentionally only add one issue for unknown items.
           // Otherwise, attackers could send large arrays to exhaust
           // device resources. If you want an issue for every unknown item,
           // use the `tupleWithRest` schema with `never` for the `rest`

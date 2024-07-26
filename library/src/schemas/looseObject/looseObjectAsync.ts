@@ -97,12 +97,11 @@ export function looseObjectAsync(
         dataset.value = {};
 
         // Parse schema of each entry
+        // Hint: We do not distinguish between missing and `undefined` entries.
+        // The reason for this decision is that it reduces the bundle size, and
+        // we also expect that most users will expect this behavior.
         const valueDatasets = await Promise.all(
           Object.entries(this.entries).map(async ([key, schema]) => {
-            // TODO: We should document that missing keys do not cause issues
-            // when `undefined` passes the schema. The reason for this decision
-            // is that it reduces the bundle size, and we also expect that most
-            // users will expect this behavior.
             const value = input[key as keyof typeof input];
             return [
               key,
@@ -161,10 +160,9 @@ export function looseObjectAsync(
         }
 
         // Add rest to dataset if necessary
+        // Hint: We exclude specific keys for security reasons
         if (!dataset.issues || !config.abortEarly) {
           for (const key in input) {
-            // TODO: We should document that we exclude specific keys for
-            // security reasons.
             if (_isValidObjectKey(input, key) && !(key in this.entries)) {
               // @ts-expect-error
               dataset.value[key] = input[key];

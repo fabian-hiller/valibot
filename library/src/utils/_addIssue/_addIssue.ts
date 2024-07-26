@@ -71,7 +71,7 @@ export function _addIssue<const TContext extends Context>(
   const received = other?.received ?? _stringify(input);
 
   // Create issue object
-  // Note: The issue is deliberately not constructed with the spread operator
+  // Hint: The issue is deliberately not constructed with the spread operator
   // for performance reasons
   const issue: BaseIssue<unknown> = {
     kind: context.kind,

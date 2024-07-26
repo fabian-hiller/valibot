@@ -33,6 +33,8 @@ const Schema = v.variant<TKey, TOptions, TMessage>(key, options, message);
 
 With `variant` you can validate if the input matches one of the given object `options`. The object schema to be used for the validation is determined by the discriminator `key`. If the input does not match a schema and cannot be clearly assigned to one of the options, you can use `message` to customize the error message.
 
+> It is allowed to specify the exact same or a similar discriminator multiple times. However, in such cases `variant` will only return the output of the first untyped or typed variant option result. Typed results take precedence over untyped ones.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />

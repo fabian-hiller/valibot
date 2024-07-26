@@ -56,16 +56,14 @@ type OptionalKeys<TObject extends Record<string | number | symbol, unknown>> = {
 /**
  * With question marks type.
  *
- * TODO: We need to document why we make entries optional when we detect that
- * the key is a literal type.
- *
  * Hint: We mark an entry as optional if we detect that its key is a literal
  * type. The reason for this is that it is not technically possible to detect
  * missing literal keys without restricting the key schema to `string`, `enum`
  * and `picklist`. However, if `enum` and `picklist` are used, it is better to
- * use `object` because it already covers the needed functionality. This
- * decision also reduces the bundle size of `record`, because it only needs to
- * check the entries of the input and not any missing keys.
+ * use `object` with `entriesFromList` because it already covers the needed
+ * functionality. This decision also reduces the bundle size of `record`,
+ * because it only needs to check the entries of the input and not any missing
+ * keys.
  */
 type WithQuestionMarks<
   TObject extends Record<string | number | symbol, unknown>,
