@@ -54,11 +54,7 @@ const AllowedActionSchema = v.pipeAsync(
       v.minLength(3),
       v.checkAsync(isUsernamePresent, 'The username is not in the database.')
     ),
-    action: v.union([
-      v.literal('read'),
-      v.literal('delete'),
-      v.literal('addOrEdit'),
-    ]),
+    action: v.picklist(['view', 'edit', 'delete']),
   }),
   v.forwardAsync(
     v.checkAsync(
@@ -98,7 +94,7 @@ The following APIs can be combined with `forwardAsync`.
 
 ### Methods
 
-<ApiList items={['omit', 'partial', 'pick', 'required']} />
+<ApiList items={['omit', 'partial', 'pick', 'pipe', 'required']} />
 
 ### Actions
 
