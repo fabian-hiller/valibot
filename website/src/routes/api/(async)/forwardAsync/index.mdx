@@ -1,10 +1,152 @@
 ---
 title: forwardAsync
+description: Forwards the issues of the passed validation action.
 source: /methods/forward/forwardAsync.ts
 contributors:
+  - EltonLobo07
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # forwardAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/forward/forwardAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Forwards the issues of the passed validation action.
+
+```ts
+const Action = v.forwardAsync<TInput, TIssue>(action, pathKeys);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TIssue` <Property {...properties.TIssue} />
+
+## Parameters
+
+- `action` <Property {...properties.action} />
+- `pathKeys` <Property {...properties.pathKeys} />
+
+### Explanation
+
+`forwardAsync` allows you to forward the issues of the passed validation `action` via `pathKeys` to a nested field of a schema.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `forwardAsync` can be used.
+
+### Allowed action schema
+
+Schema that checks if the user is allowed to complete an action.
+
+```ts
+import { isAllowedAction, isUsernamePresent } from '~/api';
+
+const AllowedActionSchema = v.pipeAsync(
+  v.objectAsync({
+    username: v.pipeAsync(
+      v.string(),
+      v.minLength(3),
+      v.checkAsync(isUsernamePresent, 'The username is not in the database.')
+    ),
+    action: v.picklist(['view', 'edit', 'delete']),
+  }),
+  v.forwardAsync(
+    v.checkAsync(
+      isAllowedAction,
+      'The user is not allowed to complete the action.'
+    ),
+    ['action']
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `forwardAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'custom',
+    'looseObject',
+    'looseTuple',
+    'object',
+    'objectWithRest',
+    'record',
+    'strictObject',
+    'strictTuple',
+    'tuple',
+    'tupleWithRest',
+    'union',
+    'unknown',
+    'variant',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['omit', 'partial', 'pick', 'pipe', 'required']} />
+
+### Actions
+
+<ApiList
+  items={[
+    'check',
+    'checkItems',
+    'empty',
+    'everyItem',
+    'excludes',
+    'filterItems',
+    'findItem',
+    'includes',
+    'length',
+    'mapItems',
+    'maxLength',
+    'minLength',
+    'nonEmpty',
+    'notLength',
+    'partialCheck',
+    'rawCheck',
+    'reduceItems',
+    'someItem',
+    'sortItems',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'checkAsync',
+    'customAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'partialAsync',
+    'partialCheckAsync',
+    'rawCheckAsync',
+    'recordAsync',
+    'requiredAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>
