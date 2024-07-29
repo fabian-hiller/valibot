@@ -1,10 +1,190 @@
 ---
 title: looseObjectAsync
+description: Creates a loose object schema.
 source: /schemas/looseObject/looseObjectAsync.ts
 contributors:
+  - EltonLobo07
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # looseObjectAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/looseObject/looseObjectAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a loose object schema.
+
+```ts
+const Schema = v.looseObjectAsync<TEntries, TMessage>(entries, message);
+```
+
+## Generics
+
+- `TEntries` <Property {...properties.TEntries} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `entries` <Property {...properties.entries} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `looseObjectAsync` you can validate the data type of the input and whether the content matches `entries`. If the input is not an object, you can use `message` to customize the error message.
+
+> The difference to <Link href="../objectAsync/">`objectAsync`</Link> is that this schema includes any unknown entries in the output. In addition, this schema filters certain entries from the unknown entries for security reasons.
+
+> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `looseObjectAsync` can be used. Please see the <Link href="/guides/objects/">object guide</Link> for more examples and explanations.
+
+### New user schema
+
+Schema to validate a loose object containing specific new user details.
+
+```ts
+import { isEmailPresent } from '~/api';
+
+const NewUserSchema = v.looseObjectAsync({
+  firstName: v.pipe(v.string(), v.minLength(2), v.maxLength(45)),
+  lastName: v.pipe(v.string(), v.minLength(2), v.maxLength(45)),
+  email: v.pipeAsync(
+    v.string(),
+    v.email(),
+    v.checkAsync(isEmailPresent, 'The email is already in use by another user.')
+  ),
+  password: v.pipe(v.string(), v.minLength(8)),
+  avatar: v.optional(v.pipe(v.string(), v.url())),
+});
+```
+
+## Related
+
+The following APIs can be combined with `looseObjectAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={['config', 'getDefault', 'getFallback', 'keyof', 'omit', 'pick']}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'brand',
+    'check',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'checkAsync',
+    'customAsync',
+    'fallbackAsync',
+    'forwardAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialAsync',
+    'partialCheckAsync',
+    'pipeAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'recordAsync',
+    'requiredAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>
