@@ -9,6 +9,7 @@ All notable changes to the library will be documented in this file.
 - Change `unknown[]` in `LengthInput` type to `ArrayLike<unknown>`
 - Change `ArrayInput` and `ContentInput` type to use `MaybeReadonly`
 - Change `EMOJI_REGEX` to be more accurate and strict (pull request #666)
+- Fix bug in `fallback` and `fallbackAsync` method for specific schemas (pull request #752)
 - Fix bug in `fallbackAsync` method for async schemas (pull request #732)
 
 ## v0.36.0 (July 05, 2024)

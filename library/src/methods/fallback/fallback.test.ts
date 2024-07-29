@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { transform } from '../../actions/index.ts';
-import { number } from '../../schemas/index.ts';
+import { boolean, number, union } from '../../schemas/index.ts';
 import { pipe } from '../pipe/index.ts';
 import { fallback, type SchemaWithFallback } from './fallback.ts';
 
@@ -29,7 +29,10 @@ describe('fallback', () => {
     });
   });
 
-  const schema = fallback(pipe(number(), transform(String)), '123');
+  const schema = fallback(
+    pipe(union([number(), boolean()]), transform(String)),
+    '123'
+  );
 
   describe('should return default dataset', () => {
     test('for valid input', () => {

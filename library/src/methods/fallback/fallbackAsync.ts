@@ -79,11 +79,11 @@ export function fallbackAsync<
     fallback,
     async: true,
     async _run(dataset, config) {
-      await schema._run(dataset, config);
-      return dataset.issues
+      const outputDataset = await schema._run(dataset, config);
+      return outputDataset.issues
         ? // @ts-expect-error
-          { typed: true, value: await getFallback(this, dataset, config) }
-        : dataset;
+          { typed: true, value: await getFallback(this, outputDataset, config) }
+        : outputDataset;
     },
   };
 }

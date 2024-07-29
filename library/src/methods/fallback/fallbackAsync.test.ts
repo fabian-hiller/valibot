@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { transformAsync } from '../../actions/index.ts';
-import { number } from '../../schemas/index.ts';
+import { boolean, number, union } from '../../schemas/index.ts';
 import { pipeAsync } from '../pipe/index.ts';
 import {
   fallbackAsync,
@@ -49,7 +49,7 @@ describe('fallbackAsync', () => {
 
   const schema = fallbackAsync(
     pipeAsync(
-      number(),
+      union([number(), boolean()]),
       transformAsync(async (input) => String(input))
     ),
     async () => '123'

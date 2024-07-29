@@ -52,10 +52,10 @@ export function fallback<
     ...schema,
     fallback,
     _run(dataset, config) {
-      schema._run(dataset, config);
-      return dataset.issues
-        ? { typed: true, value: getFallback(this, dataset, config) }
-        : dataset;
+      const outputDataset = schema._run(dataset, config);
+      return outputDataset.issues
+        ? { typed: true, value: getFallback(this, outputDataset, config) }
+        : outputDataset;
     },
   };
 }
