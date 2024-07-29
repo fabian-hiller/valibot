@@ -20,7 +20,7 @@ export interface DescriptionAction<TInput, TDescription extends string>
 }
 
 /**
- * Creates a description transformation action.
+ * Creates a description metadata action.
  *
  * @param description_ The description text.
  *

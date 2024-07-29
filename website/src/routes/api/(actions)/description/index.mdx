@@ -1,0 +1,116 @@
+---
+title: description
+description: Creates a description metadata action.
+source: /actions/description/description.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# description
+
+Creates a description metadata action.
+
+```ts
+const Action = v.description<TInput, TDescription>(description_);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TDescription` <Property {...properties.TDescription} />
+
+## Parameters
+
+- `description_` <Property {...properties['description_']} />
+
+### Explanation
+
+With `description` you can describe the purpose of a schema. This can be useful when working with AI tools or for documentation purposes.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `description` can be used.
+
+### Username schema
+
+Schema to validate a user name.
+
+```ts
+const UsernameSchema = v.pipe(
+  v.string(),
+  v.regex(/^[a-z0-9_-]{4,16}$/iu),
+  v.description(
+    'A username must be between 4 and 16 characters long and can only contain letters, numbers, underscores and hyphens.'
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `description`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

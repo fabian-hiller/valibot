@@ -5,6 +5,8 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add `base64` action to validate Base64 strings (pull request #644)
+- Add `description` metadata action (pull request #747)
+- Add metadata feature to `pipe` and `pipeAsync` method (pull request #747)
 - Refactor `HEXADECIMAL_REGEX` (pull request #666)
 - Change `unknown[]` in `LengthInput` type to `ArrayLike<unknown>`
 - Change `ArrayInput` and `ContentInput` type to use `MaybeReadonly`
