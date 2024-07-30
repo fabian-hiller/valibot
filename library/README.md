@@ -28,7 +28,7 @@ First you create a schema that describes a structured data set. A schema can be 
 
 <!-- prettier-ignore -->
 ```ts
-import * as v from 'valibot'; // 1.21 kB
+import * as v from 'valibot'; // 1.2 kB
 
 // Create login schema with email and password
 const LoginSchema = v.object({
