@@ -60,6 +60,17 @@ export const properties: Record<string, PropertyProps> = {
             },
           ],
         },
+        {
+          type: 'custom',
+          name: 'BaseMetadata',
+          href: '../BaseMetadata/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+          ],
+        },
       ],
     },
   },

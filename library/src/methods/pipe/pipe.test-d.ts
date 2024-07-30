@@ -3,6 +3,8 @@ import {
   decimal,
   type DecimalAction,
   type DecimalIssue,
+  description,
+  type DescriptionAction,
   minLength,
   type MinLengthAction,
   type MinLengthIssue,
@@ -28,6 +30,7 @@ import { pipe, type SchemaWithPipe } from './pipe.ts';
 describe('pipe', () => {
   const schema = pipe(
     string(),
+    description('text'),
     trim(),
     minLength(1),
     decimal(),
@@ -41,6 +44,7 @@ describe('pipe', () => {
       SchemaWithPipe<
         [
           StringSchema<undefined>,
+          DescriptionAction<string, 'text'>,
           TrimAction,
           MinLengthAction<string, 1, undefined>,
           DecimalAction<string, undefined>,

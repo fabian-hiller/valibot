@@ -2639,23 +2639,28 @@ export function pipe<
     ...pipe[0],
     pipe,
     _run(dataset, config) {
-      // Run actions of pipeline
-      for (let index = 0; index < pipe.length; index++) {
-        // Mark dataset as untyped and break pipe if there are issues and pipe
-        // item is schema or transformation
-        if (
-          dataset.issues &&
-          (pipe[index].kind === 'schema' ||
-            pipe[index].kind === 'transformation')
-        ) {
-          dataset.typed = false;
-          break;
-        }
+      // Execute pipeline items in sequence
+      for (const item of pipe) {
+        // Exclude metadata items from execution
+        if (item.kind !== 'metadata') {
+          // Mark dataset as untyped and break pipe if there are issues and pipe
+          // item is schema or transformation
+          if (
+            dataset.issues &&
+            (item.kind === 'schema' || item.kind === 'transformation')
+          ) {
+            dataset.typed = false;
+            break;
+          }
 
-        // Continue pipe execution if there is no reason to abort early
-        if (!dataset.issues || (!config.abortEarly && !config.abortPipeEarly)) {
-          // @ts-expect-error
-          dataset = pipe[index]._run(dataset, config);
+          // Continue pipe execution if there is no reason to abort early
+          if (
+            !dataset.issues ||
+            (!config.abortEarly && !config.abortPipeEarly)
+          ) {
+            // @ts-expect-error
+            dataset = item._run(dataset, config);
+          }
         }
       }
 

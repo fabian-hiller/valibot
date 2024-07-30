@@ -2,6 +2,7 @@ export * from './config.ts';
 export * from './dataset.ts';
 export * from './infer.ts';
 export * from './issue.ts';
+export * from './metadata.ts';
 export * from './object.ts';
 export * from './other.ts';
 export * from './pipe.ts';

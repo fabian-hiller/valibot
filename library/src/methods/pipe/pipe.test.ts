@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import {
   decimal,
   type DecimalIssue,
+  description,
   minLength,
   type MinLengthIssue,
   minValue,
@@ -13,7 +14,13 @@ import { string } from '../../schemas/index.ts';
 import { pipe } from './pipe.ts';
 
 describe('pipe', () => {
-  const schema = pipe(string(), trim(), minLength(1), decimal());
+  const schema = pipe(
+    string(),
+    description('text'),
+    trim(),
+    minLength(1),
+    decimal()
+  );
 
   test('should return schema object', () => {
     expect(schema).toStrictEqual({
@@ -24,6 +31,7 @@ describe('pipe', () => {
       message: undefined,
       pipe: [
         { ...string(), _run: expect.any(Function) },
+        { ...description('text') },
         { ...trim(), _run: expect.any(Function) },
         { ...minLength(1), _run: expect.any(Function) },
         { ...decimal(), _run: expect.any(Function) },
