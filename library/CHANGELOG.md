@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.37.0 (July 30, 2024)
 
 - Add `base64` action to validate Base64 strings (pull request #644)
 - Add `description` metadata action (pull request #747)
