@@ -1,10 +1,205 @@
 ---
 title: objectWithRestAsync
+description: Creates an object with rest schema.
 source: /schemas/objectWithRest/objectWithRestAsync.ts
 contributors:
+  - EltonLobo07
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # objectWithRestAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/objectWithRest/objectWithRestAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates an object with rest schema.
+
+```ts
+const Schema = v.objectWithRestAsync<TEntries, TRest, TMessage>(
+  entries,
+  rest,
+  message
+);
+```
+
+## Generics
+
+- `TEntries` <Property {...properties.TEntries} />
+- `TRest` <Property {...properties.TRest} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `entries` <Property {...properties.entries} />
+- `rest` <Property {...properties.rest} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `objectWithRestAsync` you can validate the data type of the input and whether the content matches `entries` and `rest`. If the input is not an object, you can use `message` to customize the error message.
+
+> The difference to <Link href="../objectAsync/">`objectAsync`</Link> is that this schema includes unknown entries in the output. In addition, this schema filters certain entries from the unknown entries for security reasons.
+
+> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `objectWithRestAsync` can be used. Please see the <Link href="/guides/objects/">object guide</Link> for more examples and explanations.
+
+### Word map schema
+
+Schema to validate an object with word map mutation details.
+
+```ts
+import { isUserAllowedToMutate } from '~/api';
+
+// Assume the rest of the keys are always English words
+const WordMapSchema = v.objectWithRestAsync(
+  {
+    $userId: v.pipeAsync(
+      v.string(),
+      v.regex(/^[a-z0-9]{12}$/i),
+      v.checkAsync(
+        isUserAllowedToMutate,
+        'The user is not allowed to change the word map.'
+      )
+    ),
+    $targetLanguage: v.union([
+      v.literal('hindi'),
+      v.literal('spanish'),
+      v.literal('french'),
+    ]),
+  },
+  v.string()
+);
+```
+
+## Related
+
+The following APIs can be combined with `objectWithRestAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={['config', 'getDefault', 'getFallback', 'keyof', 'omit', 'pick']}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'brand',
+    'check',
+    'description',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'checkAsync',
+    'customAsync',
+    'fallbackAsync',
+    'forwardAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialAsync',
+    'partialCheckAsync',
+    'pipeAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'recordAsync',
+    'requiredAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>
