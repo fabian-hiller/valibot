@@ -63,7 +63,7 @@ export const Head = component$(() => {
       <title>{documentTitle.value}</title>
 
       {/* Default metadata */}
-      <meta charSet="utf-8" />
+      <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta name="theme-color" content={themeColor.value} />
       <link rel="canonical" href={location.url.href} />
