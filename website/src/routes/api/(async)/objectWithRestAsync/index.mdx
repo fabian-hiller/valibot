@@ -51,14 +51,14 @@ With `objectWithRestAsync` you can validate the data type of the input and wheth
 
 The following examples show how `objectWithRestAsync` can be used. Please see the <Link href="/guides/objects/">object guide</Link> for more examples and explanations.
 
-### Word map mutation schema
+### Word map schema
 
 Schema to validate an object with word map mutation details.
 
 ```ts
 import { isUserAllowedToMutate } from '~/api';
 
-// Assume rest of the keys are always english words
+// Assume the rest of the keys are always English words
 const WordMapSchema = v.objectWithRestAsync(
   {
     $userId: v.pipeAsync(
@@ -76,32 +76,6 @@ const WordMapSchema = v.objectWithRestAsync(
     ]),
   },
   v.string()
-);
-```
-
-### New user schema
-
-Schema to validate a strict object containing only specific new user details.
-
-> This example schema returns an issue for every unknown key. This behavior can exhaust device resources as attackers could send large objects containing unknown keys. If you want only a single issue returned, use the <Link href="../strictObjectAsync/">`strictObjectAsync`</Link> schema for this type of validation.
-
-```ts
-import { isEmailPresent } from '~/api';
-
-const NewUserSchema = v.objectWithRestAsync(
-  {
-    email: v.pipeAsync(
-      v.string(),
-      v.email(),
-      v.checkAsync(
-        isEmailPresent,
-        'The email is already in use by another user.'
-      )
-    ),
-    password: v.pipe(v.string(), v.minLength(8)),
-    avatar: v.optional(v.pipe(v.string(), v.url())),
-  },
-  v.never()
 );
 ```
 
