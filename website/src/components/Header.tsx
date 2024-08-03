@@ -106,8 +106,11 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
             }
           >
             <LogoIcon class="mr-2 h-8 shrink-0 md:h-9 lg:mr-3 lg:h-10" />
-            <div class="font-lexend-exa truncate bg-gradient-to-br from-slate-800 to-slate-600 bg-clip-text text-lg font-medium text-transparent md:text-xl lg:text-2xl dark:from-slate-200 dark:to-slate-400">
-              Valibot
+            <div class="font-lexend-exa truncate text-lg font-medium md:text-xl lg:text-2xl">
+              {/* The `<span />` is necessary because Safari will not display the text overflow ellipsis if the text color of the hidden element is transparent */}
+              <span class="bg-gradient-to-br from-slate-800 to-slate-600 bg-clip-text text-transparent dark:from-slate-200 dark:to-slate-400">
+                Valibot
+              </span>
             </div>
           </Link>
         </div>
