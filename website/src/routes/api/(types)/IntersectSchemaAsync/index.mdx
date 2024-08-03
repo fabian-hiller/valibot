@@ -1,0 +1,27 @@
+---
+title: IntersectSchemaAsync
+description: Intersect schema async type.
+contributors:
+  - EltonLobo07
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# IntersectSchemaAsync
+
+Intersect schema async type.
+
+## Generics
+
+- `TOptions` <Property {...properties.TOptions} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `IntersectSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `options` <Property {...properties.options} />
+  - `message` <Property {...properties.message} />
