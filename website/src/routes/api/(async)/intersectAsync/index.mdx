@@ -63,12 +63,12 @@ const DonationSchema = v.intersectAsync([
   }),
   // Assume the schemas below are from different files and are reused here
   v.object({
-    amountInEuros: v.pipe(v.bigint(), v.minValue(2n)),
-    message: v.optional(v.pipe(v.string(), v.minLength(3))),
+    amount: v.pipe(v.number(), v.minValue(100)),
+    message: v.pipe(v.string(), v.nonEmpty()),
   }),
   v.object({
-    amountInEuros: v.pipe(v.bigint(), v.maxValue(1000n)),
-    message: v.optional(v.pipe(v.string(), v.maxLength(100))),
+    amount: v.pipe(v.number(), v.maxValue(1_000_000)),
+    message: v.pipe(v.string(), v.maxLength(500)),
   }),
 ]);
 ```
