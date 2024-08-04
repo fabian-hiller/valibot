@@ -390,6 +390,7 @@
 - [IssueDotPath](/api/IssueDotPath/)
 - [IssuePathItem](/api/IssuePathItem/)
 - [LazySchema](/api/LazySchema/)
+- [LazySchemaAsync](/api/LazySchemaAsync/)
 - [LengthAction](/api/LengthAction/)
 - [LengthInput](/api/LengthInput/)
 - [LengthIssue](/api/LengthIssue/)

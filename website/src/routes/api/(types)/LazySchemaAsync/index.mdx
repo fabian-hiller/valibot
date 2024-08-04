@@ -1,0 +1,26 @@
+---
+title: LazySchemaAsync
+description: Lazy schema async type.
+contributors:
+  - fabian-hiller
+  - EltonLobo07
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# LazySchemaAsync
+
+Lazy schema async type.
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+
+## Definition
+
+- `LazySchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `getter` <Property {...properties.getter} />
