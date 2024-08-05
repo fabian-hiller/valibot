@@ -1,10 +1,296 @@
 ---
 title: lazyAsync
+description: Creates a lazy schema.
 source: /schemas/lazy/lazyAsync.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # lazyAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/lazy/lazyAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a lazy schema.
+
+```ts
+const Schema = v.lazyAsync<TWrapped>(getter);
+```
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+
+## Parameters
+
+- `getter` <Property {...properties.getter} />
+
+### Explanation
+
+The `getter` function is called lazily to retrieve the schema. This is necessary to be able to access the input through the first argument of the `getter` function and to avoid a circular dependency for recursive schemas.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `lazyAsync` can be used.
+
+### Transaction list schema
+
+Recursive schema to validate transactions.
+
+> Due to a TypeScript limitation, the input and output types of recursive schemas cannot be inferred automatically. Therefore, you must explicitly specify these types using <Link href="/api/GenericSchemaAsync/">`GenericSchemaAsync`</Link>.
+
+```ts
+import { isTransactionValid } from '~/api';
+
+type Transaction = {
+  transactionId: string;
+  next: Transaction | null;
+};
+
+const TransactionSchema: v.GenericSchemaAsync<Transaction> = v.objectAsync({
+  transactionId: v.pipeAsync(
+    v.string(),
+    v.uuid(),
+    v.checkAsync(isTransactionValid, 'The transaction is not valid.')
+  ),
+  next: v.nullableAsync(v.lazyAsync(() => TransactionSchema)),
+});
+```
+
+### Email or username schema
+
+Schema to validate an object containing an email or username.
+
+> In most cases, <Link href="/api/unionAsync/">`unionAsync`</Link> and <Link href="/api/variantAsync/">`variantAsync`</Link> are the better choices for creating such a schema. I recommend using `lazyAsync` only in special cases.
+
+```ts
+import { isEmailPresent, isUsernamePresent } from '~/api';
+
+const EmailOrUsernameSchema = v.lazyAsync((input) => {
+  if (input && typeof input === 'object' && 'type' in input) {
+    switch (input.type) {
+      case 'email':
+        return v.objectAsync({
+          type: v.literal('email'),
+          email: v.pipeAsync(
+            v.string(),
+            v.email(),
+            v.checkAsync(
+              isEmailPresent,
+              'The email is not present in the database.'
+            )
+          ),
+        });
+      case 'username':
+        return v.objectAsync({
+          type: v.literal('username'),
+          username: v.pipeAsync(
+            v.string(),
+            v.nonEmpty(),
+            v.checkAsync(
+              isUsernamePresent,
+              'The username is not present in the database.'
+            )
+          ),
+        });
+    }
+  }
+  return v.never();
+});
+```
+
+## Related
+
+The following APIs can be combined with `lazyAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'undefined',
+    'union',
+    'unionWithRest',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['config', 'getDefault', 'getFallback']} />
+
+### Actions
+
+<ApiList
+  items={[
+    'base64',
+    'bic',
+    'brand',
+    'bytes',
+    'check',
+    'checkItems',
+    'creditCard',
+    'cuid2',
+    'decimal',
+    'description',
+    'email',
+    'emoji',
+    'empty',
+    'endsWith',
+    'everyItem',
+    'excludes',
+    'filterItems',
+    'findItem',
+    'finite',
+    'hash',
+    'hexColor',
+    'hexadecimal',
+    'imei',
+    'includes',
+    'integer',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'mac',
+    'mac48',
+    'mac64',
+    'mapItems',
+    'maxBytes',
+    'maxLength',
+    'maxSize',
+    'maxValue',
+    'mimeType',
+    'minBytes',
+    'minLength',
+    'minSize',
+    'minValue',
+    'multipleOf',
+    'nonEmpty',
+    'notBytes',
+    'notLength',
+    'notSize',
+    'notValue',
+    'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'reduceItems',
+    'regex',
+    'safeInteger',
+    'size',
+    'someItem',
+    'sortItem',
+    'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
+    'transform',
+    'trim',
+    'trimEnd',
+    'trimStart',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'checkAsync',
+    'customAsync',
+    'fallbackAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialCheckAsync',
+    'pipeAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'recordAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>
