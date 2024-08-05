@@ -5,6 +5,7 @@ source: /schemas/lazy/lazy.ts
 contributors:
   - fabian-hiller
   - morinokami
+  - EltonLobo07
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -16,12 +17,12 @@ import { properties } from './properties';
 Creates a lazy schema.
 
 ```ts
-const Schema = v.lazy<TGetter>(getter);
+const Schema = v.lazy<TWrapped>(getter);
 ```
 
 ## Generics
 
-- `TGetter` <Property {...properties.TGetter} />
+- `TWrapped` <Property {...properties.TWrapped} />
 
 ## Parameters
 
@@ -43,7 +44,7 @@ The following examples show how `lazy` can be used.
 
 Recursive schema to validate a binary tree.
 
-> Due to a TypeScript limitation, the input and output types of recursive schemas cannot be inferred automatically. Therefore, you must explicitly specify these types using <Link href="/api/BaseSchema/">`BaseSchema`</Link>.
+> Due to a TypeScript limitation, the input and output types of recursive schemas cannot be inferred automatically. Therefore, you must explicitly specify these types using <Link href="/api/GenericSchema/">`GenericSchema`</Link>.
 
 ```ts
 type BinaryTree = {
