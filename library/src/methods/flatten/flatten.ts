@@ -4,9 +4,9 @@ import type {
   BaseSchemaAsync,
   InferIssue,
   IssueDotPath,
-  Prettify,
 } from '../../types/index.ts';
 import { getDotPath } from '../../utils/index.ts';
+import type { Prettify } from 'valibot/types';
 
 // TODO: Add unit and type tests for flatten method
 

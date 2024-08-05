@@ -22,7 +22,8 @@ import type {
 } from './other.ts';
 import type { PipeItem, PipeItemAsync } from './pipe.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
-import type { MarkOptional, MaybeReadonly, Prettify } from './utils.ts';
+import type { MarkOptional, MaybeReadonly } from './utils.ts';
+import type { Prettify } from 'valibot/types';
 
 /**
  * Object entries type.

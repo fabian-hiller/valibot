@@ -12,8 +12,8 @@ import type {
   MarkOptional,
   PipeItem,
   PipeItemAsync,
-  Prettify,
 } from '../../types/index.ts';
+import type { Prettify } from 'valibot/types';
 
 /**
  * Record issue type.

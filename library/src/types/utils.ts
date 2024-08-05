@@ -26,15 +26,6 @@ export type MaybeReadonly<TValue> = TValue | Readonly<TValue>;
 export type MaybePromise<TValue> = TValue | Promise<TValue>;
 
 /**
- * Prettifies a type for better readability.
- *
- * Hint: This type has no effect and is only used so that TypeScript displays
- * the final type in the preview instead of the utility types used.
- */
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type Prettify<TObject> = { [TKey in keyof TObject]: TObject[TKey] } & {};
-
-/**
  * Marks specific keys as optional.
  */
 export type MarkOptional<TObject, TKeys extends keyof TObject> = Omit<
