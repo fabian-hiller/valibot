@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    "@babel/plugin-syntax-typescript",
+    ["babel-plugin-transform-regex", {
+      "removeImport": true,
+      "disableUnicodeSets": true,
+      "optimize": true,
+      "headerComment": "!!!!!\nChanges to this file will be overwritten.\nMake changes in the `.src.ts` file.\nSource transformed by `babel-plugin-transform-regex`.\n!!!!!"
+    }]
+  ]
+}

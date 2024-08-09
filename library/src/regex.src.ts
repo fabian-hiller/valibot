@@ -1,23 +1,25 @@
-/*
-!!!!!
-Changes to this file will be overwritten.
-Make changes in the `.src.ts` file.
-Source transformed by `babel-plugin-transform-regex`.
-!!!!!
-*/
+import { regex } from 'regex';
+
 // Hint: The `regex` import declaration and [regex](https://github.com/slevithan/regex) library
 // calls are transpiled away.
 
 /**
  * [Base64](https://en.wikipedia.org/wiki/Base64) regex.
  */
-export const BASE64_REGEX: RegExp =
-  /^(?:[\da-z+/]{4})*(?:[\da-z+/]{2}==|[\da-z+/]{3}=)?$/iu;
+export const BASE64_REGEX: RegExp = regex('i')`
+  ^ (\g<char>{4})* (\g<char>{2} == | \g<char>{3} =)? $
+
+  (?(DEFINE)
+    (?<char> [\da-z+\/])
+  )
+`;
 
 /**
  * [BIC](https://en.wikipedia.org/wiki/ISO_9362) regex.
  */
-export const BIC_REGEX: RegExp = /^[A-Z]{6}(?!00)[\dA-Z]{2}(?:[\dA-Z]{3})?$/u;
+export const BIC_REGEX: RegExp = regex`^
+  [A-Z]{6} (?! 00) [\dA-Z]{2} ([\dA-Z]{3})?
+$`;
 
 /**
  * [Cuid2](https://github.com/paralleldrive/cuid2) regex.
