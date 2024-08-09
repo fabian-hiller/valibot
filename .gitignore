@@ -17,6 +17,7 @@ backups
 .netlify
 
 # Others
+/library/transpiled
 logs
 *.log
 .cache
