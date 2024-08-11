@@ -5,7 +5,7 @@ import type {
   ErrorMessage,
   InferIssue,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _joinExpects } from '../../utils/index.ts';
 import type {
   InferIntersectInput,
   InferIntersectOutput,
@@ -75,9 +75,10 @@ export function intersect(
     kind: 'schema',
     type: 'intersect',
     reference: intersect,
-    expects:
-      [...new Set(options.map((option) => option.expects))].join(' & ') ||
-      'never',
+    expects: _joinExpects(
+      options.map((option) => option.expects),
+      '&'
+    ),
     async: false,
     options,
     message,

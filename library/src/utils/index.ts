@@ -1,6 +1,7 @@
 export * from './_addIssue/index.ts';
 export * from './_isLuhnAlgo/index.ts';
 export * from './_isValidObjectKey/index.ts';
+export * from './_joinExpects/index.ts';
 export * from './_stringify/index.ts';
 export * from './entriesFromList/index.ts';
 export * from './getDotPath/index.ts';

@@ -12,7 +12,7 @@ describe('nullableAsync', () => {
       kind: 'schema',
       type: 'nullable',
       reference: nullableAsync,
-      expects: 'string | null',
+      expects: '(string | null)',
       wrapped: { ...string(), _run: expect.any(Function) },
       async: true,
       _run: expect.any(Function),

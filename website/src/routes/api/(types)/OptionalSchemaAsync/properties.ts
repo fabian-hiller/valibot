@@ -125,12 +125,22 @@ export const properties: Record<string, PropertyProps> = {
       type: 'template',
       parts: [
         {
+          type: 'string',
+          value: '(',
+        },
+        {
           type: 'custom',
           name: 'TWrapped',
+          indexes: [
+            {
+              type: 'string',
+              value: 'expects',
+            },
+          ],
         },
         {
           type: 'string',
-          value: ' | undefined',
+          value: ' | undefined)',
         },
       ],
     },

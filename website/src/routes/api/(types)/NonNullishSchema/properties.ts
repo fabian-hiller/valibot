@@ -110,7 +110,7 @@ export const properties: Record<string, PropertyProps> = {
   expects: {
     type: {
       type: 'string',
-      value: '!null & !undefined',
+      value: '(!null & !undefined)',
     },
   },
   wrapped: {

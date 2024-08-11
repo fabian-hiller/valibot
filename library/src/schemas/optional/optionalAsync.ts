@@ -34,7 +34,7 @@ export interface OptionalSchemaAsync<
   /**
    * The expected property.
    */
-  readonly expects: `${TWrapped['expects']} | undefined`;
+  readonly expects: `(${TWrapped['expects']} | undefined)`;
   /**
    * The wrapped schema.
    */
@@ -96,7 +96,7 @@ export function optionalAsync(
     kind: 'schema',
     type: 'optional',
     reference: optionalAsync,
-    expects: `${wrapped.expects} | undefined`,
+    expects: `(${wrapped.expects} | undefined)`,
     async: true,
     wrapped,
     async _run(dataset, config) {

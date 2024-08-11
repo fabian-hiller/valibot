@@ -204,7 +204,7 @@ describe('variantAsync', () => {
             kind: 'schema',
             type: 'variant',
             input: undefined,
-            expected: '"foo" | "bar"',
+            expected: '("foo" | "bar")',
             received: 'undefined',
             path: [
               {
@@ -237,7 +237,7 @@ describe('variantAsync', () => {
             kind: 'schema',
             type: 'variant',
             input: input.type,
-            expected: '"foo" | "bar"',
+            expected: '("foo" | "bar")',
             received: `"${input.type}"`,
             path: [
               {
@@ -273,7 +273,7 @@ describe('variantAsync', () => {
             kind: 'schema',
             type: 'variant',
             input: input.other,
-            expected: 'string | number',
+            expected: '(string | number)',
             received: `${input.other}`,
             path: [
               {

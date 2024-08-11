@@ -12,7 +12,7 @@ describe('nullable', () => {
       kind: 'schema',
       type: 'nullable',
       reference: nullable,
-      expects: 'string | null',
+      expects: '(string | null)',
       wrapped: { ...string(), _run: expect.any(Function) },
       async: false,
       _run: expect.any(Function),

@@ -10,7 +10,7 @@ import type {
   TypedDataset,
   UntypedDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _joinExpects } from '../../utils/index.ts';
 import type { UnionIssue } from './types.ts';
 import { _subIssues } from './utils/index.ts';
 
@@ -92,9 +92,10 @@ export function unionAsync(
     kind: 'schema',
     type: 'union',
     reference: unionAsync,
-    expects:
-      [...new Set(options.map((option) => option.expects))].join(' | ') ||
-      'never',
+    expects: _joinExpects(
+      options.map((option) => option.expects),
+      '|'
+    ),
     async: true,
     options,
     message,

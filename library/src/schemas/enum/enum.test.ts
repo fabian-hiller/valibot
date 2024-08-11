@@ -15,7 +15,7 @@ describe('enum_', () => {
       kind: 'schema',
       type: 'enum',
       reference: enum_,
-      expects: '"foo" | "bar" | "baz"',
+      expects: '("foo" | "bar" | "baz")',
       enum: options,
       options: Object.entries(options)
         .filter(([key]) => isNaN(+key))
@@ -69,7 +69,7 @@ describe('enum_', () => {
     const baseIssue: Omit<EnumIssue, 'input' | 'received'> = {
       kind: 'schema',
       type: 'enum',
-      expected: '"foo" | "bar" | "baz"',
+      expected: '("foo" | "bar" | "baz")',
       message: 'message',
     };
 

@@ -207,7 +207,7 @@ describe('recordAsync', () => {
             kind: 'schema',
             type: 'picklist',
             input: 'other',
-            expected: '"foo" | "bar" | "baz"',
+            expected: '("foo" | "bar" | "baz")',
             received: '"other"',
             path: [
               {

@@ -6,7 +6,7 @@ import type {
   InferInput,
   InferOutput,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _joinExpects } from '../../utils/index.ts';
 import type {
   InferVariantIssue,
   VariantIssue,
@@ -160,8 +160,10 @@ export function variantAsync(
 
         // Otherwise, cache expected discriminators if necessary
         if (!expectedDiscriminators) {
-          expectedDiscriminators =
-            [..._discriminators(this.key, this.options)].join(' | ') || 'never';
+          expectedDiscriminators = _joinExpects(
+            _discriminators(this.key, this.options),
+            '|'
+          );
         }
 
         // And add discriminator issue

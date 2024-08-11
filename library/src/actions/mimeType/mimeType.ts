@@ -3,7 +3,7 @@ import type {
   BaseValidation,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _joinExpects } from '../../utils/index.ts';
 
 /**
  * Requirement type.
@@ -115,7 +115,10 @@ export function mimeType(
     type: 'mime_type',
     reference: mimeType,
     async: false,
-    expects: requirement.map((option) => `"${option}"`).join(' | ') || 'never',
+    expects: _joinExpects(
+      requirement.map((option) => `"${option}"`),
+      '|'
+    ),
     requirement,
     message,
     _run(dataset, config) {

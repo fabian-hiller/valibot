@@ -12,7 +12,7 @@ describe('nullish', () => {
       kind: 'schema',
       type: 'nullish',
       reference: nullish,
-      expects: 'string | null | undefined',
+      expects: '(string | null | undefined)',
       wrapped: { ...string(), _run: expect.any(Function) },
       async: false,
       _run: expect.any(Function),

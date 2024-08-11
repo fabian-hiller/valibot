@@ -4,7 +4,7 @@ import type {
   Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _addIssue, _stringify } from '../../utils/index.ts';
+import { _addIssue, _joinExpects, _stringify } from '../../utils/index.ts';
 
 /**
  * Enum type.
@@ -95,7 +95,7 @@ export function enum_(
     kind: 'schema',
     type: 'enum',
     reference: enum_,
-    expects: options.map(_stringify).join(' | ') || 'never',
+    expects: _joinExpects(options.map(_stringify), '|'),
     async: false,
     enum: enum__,
     options,

@@ -29,7 +29,7 @@ export interface NonNullishSchema<
   /**
    * The expected property.
    */
-  readonly expects: '!null & !undefined';
+  readonly expects: '(!null & !undefined)';
   /**
    * The wrapped schema.
    */
@@ -75,7 +75,7 @@ export function nonNullish(
     kind: 'schema',
     type: 'non_nullish',
     reference: nonNullish,
-    expects: '!null & !undefined',
+    expects: '(!null & !undefined)',
     async: false,
     wrapped,
     message,

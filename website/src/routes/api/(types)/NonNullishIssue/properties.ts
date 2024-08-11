@@ -25,7 +25,7 @@ export const properties: Record<string, PropertyProps> = {
   expected: {
     type: {
       type: 'string',
-      value: '!null & !undefined',
+      value: '(!null & !undefined)',
     },
   },
 };

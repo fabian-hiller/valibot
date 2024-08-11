@@ -31,7 +31,7 @@ export interface NullableSchema<
   /**
    * The expected property.
    */
-  readonly expects: `${TWrapped['expects']} | null`;
+  readonly expects: `(${TWrapped['expects']} | null)`;
   /**
    * The wrapped schema.
    */
@@ -79,7 +79,7 @@ export function nullable(
     kind: 'schema',
     type: 'nullable',
     reference: nullable,
-    expects: `${wrapped.expects} | null`,
+    expects: `(${wrapped.expects} | null)`,
     async: false,
     wrapped,
     _run(dataset, config) {

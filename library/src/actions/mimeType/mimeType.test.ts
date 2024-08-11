@@ -18,7 +18,7 @@ describe('mimeType', () => {
       kind: 'validation',
       type: 'mime_type',
       reference: mimeType,
-      expects: '"text/html" | "image/png"',
+      expects: '("text/html" | "image/png")',
       requirement,
       async: false,
       _run: expect.any(Function),
@@ -83,7 +83,7 @@ describe('mimeType', () => {
     test('for valid MIME types', () => {
       expectActionIssue(
         action,
-        { ...baseIssue, expected: '"text/html" | "image/png"', requirement },
+        { ...baseIssue, expected: '("text/html" | "image/png")', requirement },
         [
           new Blob(['foo'], { type: 'text/plain' }),
           new Blob(['foo'], { type: 'image/jpeg' }),

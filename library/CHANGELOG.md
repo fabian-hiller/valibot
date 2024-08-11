@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Change `expects` and `expected` property by enclosing combined values in parentheses
+
 ## v0.37.0 (July 30, 2024)
 
 - Add `base64` action to validate Base64 strings (pull request #644)

@@ -19,7 +19,7 @@ describe('keyof', () => {
       kind: 'schema',
       type: 'picklist',
       reference: picklist,
-      expects: '"foo" | "bar" | "baz"',
+      expects: '("foo" | "bar" | "baz")',
       options,
       async: false,
       _run: expect.any(Function),

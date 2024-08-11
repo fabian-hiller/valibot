@@ -34,7 +34,7 @@ export interface NullishSchemaAsync<
   /**
    * The expected property.
    */
-  readonly expects: `${TWrapped['expects']} | null | undefined`;
+  readonly expects: `(${TWrapped['expects']} | null | undefined)`;
   /**
    * The wrapped schema.
    */
@@ -96,7 +96,7 @@ export function nullishAsync(
     kind: 'schema',
     type: 'nullish',
     reference: nullishAsync,
-    expects: `${wrapped.expects} | null | undefined`,
+    expects: `(${wrapped.expects} | null | undefined)`,
     async: true,
     wrapped,
     async _run(dataset, config) {

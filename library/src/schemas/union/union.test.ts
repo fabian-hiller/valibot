@@ -21,7 +21,7 @@ describe('union', () => {
       kind: 'schema',
       type: 'union',
       reference: union,
-      expects: '"foo" | "bar" | number',
+      expects: '("foo" | "bar" | number)',
       options,
       async: false,
       _run: expect.any(Function),
@@ -176,7 +176,7 @@ describe('union', () => {
             kind: 'schema',
             type: 'union',
             input: null,
-            expected: 'string | number',
+            expected: '(string | number)',
             received: 'null',
             issues: [
               {

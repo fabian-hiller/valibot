@@ -5,7 +5,7 @@ import type {
   ErrorMessage,
   MaybeReadonly,
 } from '../../types/index.ts';
-import { _addIssue, _stringify } from '../../utils/index.ts';
+import { _addIssue, _joinExpects, _stringify } from '../../utils/index.ts';
 
 /**
  * Picklist options type.
@@ -87,7 +87,7 @@ export function picklist(
     kind: 'schema',
     type: 'picklist',
     reference: picklist,
-    expects: options.map(_stringify).join(' | ') || 'never',
+    expects: _joinExpects(options.map(_stringify), '|'),
     async: false,
     options,
     message,

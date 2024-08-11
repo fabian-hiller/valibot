@@ -12,7 +12,7 @@ describe('optionalAsync', () => {
       kind: 'schema',
       type: 'optional',
       reference: optionalAsync,
-      expects: 'string | undefined',
+      expects: '(string | undefined)',
       wrapped: { ...string(), _run: expect.any(Function) },
       async: true,
       _run: expect.any(Function),

@@ -12,7 +12,7 @@ describe('optional', () => {
       kind: 'schema',
       type: 'optional',
       reference: optional,
-      expects: 'string | undefined',
+      expects: '(string | undefined)',
       wrapped: { ...string(), _run: expect.any(Function) },
       async: false,
       _run: expect.any(Function),

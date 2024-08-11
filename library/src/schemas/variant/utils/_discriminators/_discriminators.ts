@@ -5,7 +5,7 @@ import type { VariantOptions, VariantOptionsAsync } from '../../types.ts';
  *
  * @param key The discriminator key.
  * @param options The variant options.
- * @param set The expected discriminators.
+ * @param list The expected discriminators.
  *
  * @returns The expected discriminators.
  *
@@ -14,14 +14,14 @@ import type { VariantOptions, VariantOptionsAsync } from '../../types.ts';
 export function _discriminators(
   key: string,
   options: VariantOptions<string> | VariantOptionsAsync<string>,
-  set: Set<string> = new Set<string>()
-): Set<string> {
+  list: string[] = []
+): string[] {
   for (const schema of options) {
     if (schema.type === 'variant') {
-      _discriminators(key, schema.options, set);
+      _discriminators(key, schema.options, list);
     } else {
-      set.add(schema.entries[key].expects);
+      list.push(schema.entries[key].expects);
     }
   }
-  return set;
+  return list;
 }

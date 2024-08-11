@@ -18,7 +18,7 @@ describe('nonNullish', () => {
       kind: 'schema',
       type: 'non_nullish',
       reference: nonNullish,
-      expects: '!null & !undefined',
+      expects: '(!null & !undefined)',
       wrapped,
       async: false,
       _run: expect.any(Function),
@@ -71,7 +71,7 @@ describe('nonNullish', () => {
     const baseIssue: Omit<NonNullishIssue, 'input' | 'received'> = {
       kind: 'schema',
       type: 'non_nullish',
-      expected: '!null & !undefined',
+      expected: '(!null & !undefined)',
       message: 'message',
     };
 

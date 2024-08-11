@@ -15,7 +15,7 @@ describe('picklist', () => {
       kind: 'schema',
       type: 'picklist',
       reference: picklist,
-      expects: '"foo" | "bar" | "baz"',
+      expects: '("foo" | "bar" | "baz")',
       options,
       async: false,
       _run: expect.any(Function),
@@ -57,7 +57,7 @@ describe('picklist', () => {
     const baseIssue: Omit<PicklistIssue, 'input' | 'received'> = {
       kind: 'schema',
       type: 'picklist',
-      expected: '"foo" | "bar" | "baz"',
+      expected: '("foo" | "bar" | "baz")',
       message: 'message',
     };
 

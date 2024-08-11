@@ -125,6 +125,10 @@ export const properties: Record<string, PropertyProps> = {
       type: 'template',
       parts: [
         {
+          type: 'string',
+          value: '(',
+        },
+        {
           type: 'custom',
           name: 'TWrapped',
           indexes: [
@@ -136,7 +140,7 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'string',
-          value: ' | null',
+          value: ' | null)',
         },
       ],
     },
