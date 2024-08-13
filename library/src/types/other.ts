@@ -90,11 +90,9 @@ export type DefaultValue<
 export type QuestionMarkSchema =
   | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
   | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
-  // @ts-expect-error
-  | LazySchema<QuestionMarkSchema>
+  | LazySchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
   | NonNullableSchema<
-      // @ts-expect-error
-      QuestionMarkSchema,
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
       ErrorMessage<NonNullableIssue> | undefined
     >;
 
@@ -112,10 +110,12 @@ export type QuestionMarkSchemaAsync =
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       unknown
     >
-  // @ts-expect-error
-  | LazySchemaAsync<QuestionMarkSchema | QuestionMarkSchemaAsync>
+  | LazySchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+    >
   | NonNullableSchemaAsync<
-      // @ts-expect-error
-      QuestionMarkSchema | QuestionMarkSchemaAsync,
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       ErrorMessage<NonNullableIssue> | undefined
     >;

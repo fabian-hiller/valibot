@@ -1,5 +1,12 @@
 import { describe, expectTypeOf, test } from 'vitest';
-import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
+import type {
+  GenericSchema,
+  InferInput,
+  InferIssue,
+  InferOutput,
+} from '../../types/index.ts';
+import { object } from '../object/object.ts';
+import { optional } from '../optional/optional.ts';
 import {
   string,
   type StringIssue,
@@ -28,5 +35,25 @@ describe('lazy', () => {
     test('of issue', () => {
       expectTypeOf<InferIssue<Schema>>().toEqualTypeOf<StringIssue>();
     });
+  });
+
+  test('should handle recursion', () => {
+    interface BinaryTree {
+      element: string;
+      left?: BinaryTree;
+      right?: BinaryTree;
+    }
+
+    const BinaryTreeSchema: GenericSchema<BinaryTree> = object({
+      element: string(),
+      left: optional(lazy(() => BinaryTreeSchema)),
+      right: optional(lazy(() => BinaryTreeSchema)),
+    });
+
+    expectTypeOf<
+      NonNullable<
+        NonNullable<InferInput<typeof BinaryTreeSchema>['left']>['right']
+      >
+    >().toEqualTypeOf<BinaryTree>();
   });
 });
