@@ -5,3 +5,4 @@ export * from './DigitalOceanLogo';
 export * from './HdmLogo';
 export * from './NetlifyLogo';
 export * from './PaceLogo';
+export * from './VercelLogo';

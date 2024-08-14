@@ -8,6 +8,7 @@ import {
   HdmLogo,
   NetlifyLogo,
   PaceLogo,
+  VercelLogo,
 } from '~/logos';
 
 /**
@@ -63,6 +64,7 @@ export const Credits = component$(() => {
           { Logo: DailyDevLogo, href: 'https://daily.dev/' },
           { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
           { Logo: AlgoliaLogo, href: 'https://www.algolia.com' },
+          { Logo: VercelLogo, href: 'https://vercel.com' },
           { Logo: DigitalOceanLogo, href: 'https://www.digitalocean.com/' },
         ].map(({ Logo, href }) => (
           <li key={href}>
