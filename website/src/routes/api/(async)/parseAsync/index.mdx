@@ -16,7 +16,7 @@ import { properties } from './properties';
 Parses an unknown input based on a schema.
 
 ```ts
-const output = v.parseAsync<TSchema>(schema, input, config?);
+const output = v.parseAsync<TSchema>(schema, input, config);
 ```
 
 ## Generics
@@ -33,7 +33,7 @@ const output = v.parseAsync<TSchema>(schema, input, config?);
 
 `parseAsync` will throw a <Link href="../ValiError/">`ValiError`</Link> if the `input` does not match the `schema`. Therefore you should use a try/catch block to catch errors. If the input matches the schema, it is valid and the `output` of the schema will be returned typed.
 
-> If an asynchronous operation associated with the passed schema fails, the promise returned by `parseAsync` will be rejected and the error might not be of type <Link href="../ValiError/">`ValiError`</Link>.
+> If an asynchronous operation associated with the passed schema throws an error, the promise returned by `parseAsync` is rejected and the error thrown may not be a <Link href="../ValiError/">`ValiError`</Link>.
 
 ## Returns
 
