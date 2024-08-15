@@ -17,7 +17,8 @@ import { _stringify } from '../utils/index.ts';
  * @param getReceived Received value getter.
  */
 export async function expectActionIssueAsync<
-  TAction extends BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TAction extends BaseValidationAsync<any, unknown, BaseIssue<unknown>>,
 >(
   action: TAction,
   baseIssue: Omit<InferIssue<TAction>, 'input' | 'received'>,

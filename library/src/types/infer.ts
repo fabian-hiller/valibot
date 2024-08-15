@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BaseIssue } from './issue.ts';
 import type { BaseMetadata } from './metadata.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
@@ -14,11 +15,11 @@ export type InferInput<
   TItem extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-    | BaseValidation<unknown, unknown, BaseIssue<unknown>>
-    | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
-    | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
-    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>
-    | BaseMetadata<unknown>,
+    | BaseValidation<any, unknown, BaseIssue<unknown>>
+    | BaseValidationAsync<any, unknown, BaseIssue<unknown>>
+    | BaseTransformation<any, unknown, BaseIssue<unknown>>
+    | BaseTransformationAsync<any, unknown, BaseIssue<unknown>>
+    | BaseMetadata<any>,
 > = NonNullable<TItem['_types']>['input'];
 
 /**
@@ -28,11 +29,11 @@ export type InferOutput<
   TItem extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-    | BaseValidation<unknown, unknown, BaseIssue<unknown>>
-    | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
-    | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
-    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>
-    | BaseMetadata<unknown>,
+    | BaseValidation<any, unknown, BaseIssue<unknown>>
+    | BaseValidationAsync<any, unknown, BaseIssue<unknown>>
+    | BaseTransformation<any, unknown, BaseIssue<unknown>>
+    | BaseTransformationAsync<any, unknown, BaseIssue<unknown>>
+    | BaseMetadata<any>,
 > = NonNullable<TItem['_types']>['output'];
 
 /**
@@ -42,9 +43,9 @@ export type InferIssue<
   TItem extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-    | BaseValidation<unknown, unknown, BaseIssue<unknown>>
-    | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
-    | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
-    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>
-    | BaseMetadata<unknown>,
+    | BaseValidation<any, unknown, BaseIssue<unknown>>
+    | BaseValidationAsync<any, unknown, BaseIssue<unknown>>
+    | BaseTransformation<any, unknown, BaseIssue<unknown>>
+    | BaseTransformationAsync<any, unknown, BaseIssue<unknown>>
+    | BaseMetadata<any>,
 > = NonNullable<TItem['_types']>['issue'];

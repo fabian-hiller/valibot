@@ -6,6 +6,7 @@ import { config } from './config.ts';
 describe('config', () => {
   test('should override config of schema', () => {
     const schema = string();
+    // @ts-expect-error
     schema._run = vi.fn(schema._run);
     const dataset = { typed: false, value: 'foo' };
     const globalConfig: Config<BaseIssue<unknown>> = {
@@ -23,6 +24,7 @@ describe('config', () => {
 
   test('should override config of async schema', () => {
     const schema = objectAsync({ key: string() });
+    // @ts-expect-error
     schema._run = vi.fn(schema._run);
     const dataset = { typed: false, value: { key: 'foo' } };
     const globalConfig: Config<BaseIssue<unknown>> = {

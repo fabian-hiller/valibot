@@ -24,7 +24,8 @@ export interface BaseTransformation<
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-  ) => BaseTransformation<unknown, unknown, BaseIssue<unknown>>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ) => BaseTransformation<any, any, BaseIssue<unknown>>;
   /**
    * Whether it's async.
    */
@@ -39,10 +40,10 @@ export interface BaseTransformation<
    *
    * @internal
    */
-  _run(
+  readonly _run: (
     dataset: TypedDataset<TInput, never>,
     config: Config<TIssue>
-  ): Dataset<TOutput, TIssue>;
+  ) => Dataset<TOutput, TIssue>;
   /**
    * Input, output and issue type.
    *
@@ -72,9 +73,10 @@ export interface BaseTransformationAsync<
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-  ) =>
-    | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
-    | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>;
+  ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | BaseTransformation<any, any, BaseIssue<unknown>>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    | BaseTransformationAsync<any, any, BaseIssue<unknown>>;
   /**
    * Whether it's async.
    */
@@ -89,17 +91,18 @@ export interface BaseTransformationAsync<
    *
    * @internal
    */
-  _run(
+  readonly _run: (
     dataset: TypedDataset<TInput, never>,
     config: Config<TIssue>
-  ): Promise<Dataset<TOutput, TIssue>>;
+  ) => Promise<Dataset<TOutput, TIssue>>;
 }
 
 /**
  * Generic transformation type.
  */
 export interface GenericTransformation<
-  TInput = unknown,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TInput = any,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
 > extends BaseTransformation<TInput, TOutput, TIssue> {}
@@ -108,7 +111,8 @@ export interface GenericTransformation<
  * Generic transformation async type.
  */
 export interface GenericTransformationAsync<
-  TInput = unknown,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TInput = any,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
 > extends BaseTransformationAsync<TInput, TOutput, TIssue> {}

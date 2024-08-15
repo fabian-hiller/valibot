@@ -24,7 +24,8 @@ export interface BaseSchema<
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-  ) => BaseSchema<unknown, unknown, BaseIssue<unknown>>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ) => BaseSchema<any, any, BaseIssue<unknown>>;
   /**
    * The expected property.
    */
@@ -43,10 +44,10 @@ export interface BaseSchema<
    *
    * @internal
    */
-  _run(
+  readonly _run: (
     dataset: Dataset<unknown, never>,
     config: Config<TIssue>
-  ): Dataset<TOutput, TIssue>;
+  ) => Dataset<TOutput, TIssue>;
   /**
    * Input, output and issue type.
    *
@@ -76,9 +77,10 @@ export interface BaseSchemaAsync<
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-  ) =>
-    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>;
+  ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | BaseSchema<any, any, BaseIssue<unknown>>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    | BaseSchemaAsync<any, any, BaseIssue<unknown>>;
   /**
    * Whether it's async.
    */
@@ -93,10 +95,10 @@ export interface BaseSchemaAsync<
    *
    * @internal
    */
-  _run(
+  readonly _run: (
     dataset: Dataset<unknown, never>,
     config: Config<TIssue>
-  ): Promise<Dataset<TOutput, TIssue>>;
+  ) => Promise<Dataset<TOutput, TIssue>>;
 }
 
 /**

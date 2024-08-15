@@ -11,5 +11,5 @@
     "declaration": true,
     "isolatedDeclarations": true
   },
-  "include": ["src", "./*.config.ts"]
+  "include": ["src"]
 }
