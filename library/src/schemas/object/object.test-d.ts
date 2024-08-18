@@ -53,6 +53,12 @@ describe('object', () => {
         key5: SchemaWithPipe<[StringSchema<undefined>, ReadonlyAction<string>]>;
         key6: LazySchema<UndefinedSchema<undefined>>;
         key7: NonNullableSchema<UndefinedSchema<undefined>, undefined>;
+        key8: LazySchema<
+          NonNullableSchema<
+            NullishSchema<StringSchema<undefined>, 'foo'>,
+            undefined
+          >
+        >;
       },
       undefined
     >;
@@ -66,6 +72,7 @@ describe('object', () => {
         key5: string;
         key6: undefined;
         key7: undefined;
+        key8?: string | undefined;
       }>();
     });
 
@@ -78,6 +85,7 @@ describe('object', () => {
         readonly key5: string;
         key6: undefined;
         key7: undefined;
+        key8: string;
       }>();
     });
 

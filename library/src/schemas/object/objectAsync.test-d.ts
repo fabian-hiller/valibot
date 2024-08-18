@@ -51,6 +51,12 @@ describe('objectAsync', () => {
         key5: SchemaWithPipe<[StringSchema<undefined>, ReadonlyAction<string>]>;
         key6: LazySchemaAsync<UndefinedSchema<undefined>>;
         key7: NonNullableSchemaAsync<UndefinedSchema<undefined>, undefined>;
+        key8: LazySchemaAsync<
+          NonNullableSchemaAsync<
+            NullishSchema<StringSchema<undefined>, 'foo'>,
+            undefined
+          >
+        >;
       },
       undefined
     >;
@@ -64,6 +70,7 @@ describe('objectAsync', () => {
         key5: string;
         key6: undefined;
         key7: undefined;
+        key8?: string | undefined;
       }>();
     });
 
@@ -76,6 +83,7 @@ describe('objectAsync', () => {
         readonly key5: string;
         key6: undefined;
         key7: undefined;
+        key8: string;
       }>();
     });
 
