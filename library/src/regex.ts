@@ -123,6 +123,11 @@ export const MAC_REGEX: RegExp =
   /^(?:[\da-f]{2}:){5}[\da-f]{2}$|^(?:[\da-f]{2}-){5}[\da-f]{2}$|^(?:[\da-f]{4}\.){2}[\da-f]{4}$|^(?:[\da-f]{2}:){7}[\da-f]{2}$|^(?:[\da-f]{2}-){7}[\da-f]{2}$|^(?:[\da-f]{4}\.){3}[\da-f]{4}$|^(?:[\da-f]{4}:){3}[\da-f]{4}$/iu;
 
 /**
+ * [Nano ID](https://github.com/ai/nanoid) regex.
+ */
+export const NANO_ID_REGEX: RegExp = /^[\w-]{2,36}$/u;
+
+/**
  * [Octal](https://en.wikipedia.org/wiki/Octal) regex.
  */
 export const OCTAL_REGEX: RegExp = /^(?:0o)?[0-7]+$/iu;

@@ -48,6 +48,7 @@ export * from './minLength/index.ts';
 export * from './minSize/index.ts';
 export * from './minValue/index.ts';
 export * from './multipleOf/index.ts';
+export * from './nanoid/index.ts';
 export * from './nonEmpty/index.ts';
 export * from './normalize/index.ts';
 export * from './notBytes/index.ts';
