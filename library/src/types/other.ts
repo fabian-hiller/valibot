@@ -80,6 +80,10 @@ export type DefaultValue<
       : TDefault
     : never;
 
+type QuestionMarkSchemaBase =
+  | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
+  | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>;
+
 /**
  * Question mark schema type.
  *
@@ -88,18 +92,14 @@ export type DefaultValue<
  * `nullish`.
  */
 export type QuestionMarkSchema =
-  | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
-  | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
-  | LazySchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>>
+  | QuestionMarkSchemaBase
+  | LazySchema<QuestionMarkSchemaBase>
   | NonNullableSchema<
-      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      QuestionMarkSchemaBase,
       ErrorMessage<NonNullableIssue> | undefined
     >;
 
-/**
- * Question mark schema async type.
- */
-export type QuestionMarkSchemaAsync =
+type QuestionMarkSchemaAsyncBase =
   | NullishSchemaAsync<
       | BaseSchema<unknown, unknown, BaseIssue<unknown>>
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
@@ -109,13 +109,15 @@ export type QuestionMarkSchemaAsync =
       | BaseSchema<unknown, unknown, BaseIssue<unknown>>
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       unknown
-    >
-  | LazySchemaAsync<
-      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-    >
+    >;
+
+/**
+ * Question mark schema async type.
+ */
+export type QuestionMarkSchemaAsync =
+  | QuestionMarkSchemaAsyncBase
+  | LazySchemaAsync<QuestionMarkSchemaBase | QuestionMarkSchemaAsyncBase>
   | NonNullableSchemaAsync<
-      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      QuestionMarkSchemaBase | QuestionMarkSchemaAsyncBase,
       ErrorMessage<NonNullableIssue> | undefined
     >;
