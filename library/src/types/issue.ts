@@ -291,8 +291,11 @@ type TupleKeys<TItems extends TupleItems | TupleItemsAsync> = Exclude<
  * Tuple path type.
  */
 type TuplePath<TItems extends TupleItems | TupleItemsAsync> = {
-  // @ts-expect-error
-  [TKey in TupleKeys<TItems>]: DotPath<TKey, TItems[TKey]>;
+  [TKey in TupleKeys<TItems>]: TItems[TKey] extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+    ? DotPath<TKey, TItems[TKey]>
+    : never;
 }[TupleKeys<TItems>];
 
 /**
