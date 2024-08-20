@@ -24,8 +24,7 @@ export interface BaseSchema<
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) => BaseSchema<any, any, BaseIssue<unknown>>;
+  ) => BaseSchema<unknown, unknown, BaseIssue<unknown>>;
   /**
    * The expected property.
    */
@@ -77,10 +76,9 @@ export interface BaseSchemaAsync<
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-  ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | BaseSchema<any, any, BaseIssue<unknown>>
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    | BaseSchemaAsync<any, any, BaseIssue<unknown>>;
+  ) =>
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>;
   /**
    * Whether it's async.
    */

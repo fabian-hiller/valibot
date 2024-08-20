@@ -24,8 +24,7 @@ export interface BaseValidation<
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) => BaseValidation<any, any, BaseIssue<unknown>>;
+  ) => BaseValidation<TInput, TOutput, TIssue>;
   /**
    * The expected property.
    */
@@ -77,10 +76,9 @@ export interface BaseValidationAsync<
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-  ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | BaseValidation<any, any, BaseIssue<unknown>>
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    | BaseValidationAsync<any, any, BaseIssue<unknown>>;
+  ) =>
+    | BaseValidation<TInput, TOutput, TIssue>
+    | BaseValidationAsync<TInput, TOutput, TIssue>;
   /**
    * Whether it's async.
    */

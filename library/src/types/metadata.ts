@@ -16,8 +16,7 @@ export interface BaseMetadata<TInput> {
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) => BaseMetadata<any>;
+  ) => BaseMetadata<TInput>;
   /**
    * Input, output and issue type.
    *
