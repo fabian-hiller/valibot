@@ -73,7 +73,7 @@ export const onGet: RequestHandler = async ({ cacheControl, send, url }) => {
               </h1>
               <p
                 tw="text-4xl text-slate-400 leading-loose"
-                style="${description ? '' : 'display: none'}}"
+                style="${description ? '' : 'display: none'}"
               >
                 ${description
                   ? description.length > 110
