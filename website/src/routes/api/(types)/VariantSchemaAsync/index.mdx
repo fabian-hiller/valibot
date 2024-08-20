@@ -1,0 +1,30 @@
+---
+title: VariantSchemaAsync
+description: Variant schema async type.
+contributors:
+  - EltonLobo07
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# VariantSchemaAsync
+
+Variant schema async type.
+
+## Generics
+
+- `TKey` <Property {...properties.TKey} />
+- `TOptions` <Property {...properties.TOptions} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `VariantSchemaAsync` <Property {...properties.BaseSchemaAsync} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `key` <Property {...properties.key} />
+  - `options` <Property {...properties.options} />
+  - `message` <Property {...properties.message} />
