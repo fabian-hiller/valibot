@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## v0.38.0 (June 20, 2024)
+## v0.38.0 (August 20, 2024)
 
 - Change `expects` and `expected` property by enclosing combined values in parentheses
 - Change question mark handling for `optional`, `optionalAsync`, `nullish` and `nullishAsync` schemas in objects
