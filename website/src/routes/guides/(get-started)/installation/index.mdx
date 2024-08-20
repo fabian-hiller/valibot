@@ -18,7 +18,7 @@ Except for this guide, the rest of this documentation assumes that you are using
 
 It should make no difference whether you use individual imports or a wildcard import. Tree shaking and code splitting should work in both cases.
 
-If you are using TypeScript, I recommend that you enable strict mode in your `tsconfig.json` so that all types are calculated correctly and skip library checks.
+If you are using TypeScript, I recommend that you enable strict mode in your `tsconfig.json` so that all types are calculated correctly.
 
 > The minimum required TypeScript version is v5.0.2.
 
@@ -26,7 +26,6 @@ If you are using TypeScript, I recommend that you enable strict mode in your `ts
 {
   "compilerOptions": {
     "strict": true,
-    "skipLibCheck": true,
     // ...
   }
 }
