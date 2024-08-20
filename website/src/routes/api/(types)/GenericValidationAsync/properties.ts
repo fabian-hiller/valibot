@@ -4,7 +4,7 @@ export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
     type: 'any',
-    default: 'unknown',
+    default: 'any',
   },
   TOutput: {
     modifier: 'extends',

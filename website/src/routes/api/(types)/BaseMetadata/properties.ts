@@ -30,7 +30,12 @@ export const properties: Record<string, PropertyProps> = {
       return: {
         type: 'custom',
         name: 'BaseMetadata',
-        generics: ['unknown'],
+        generics: [
+          {
+            type: 'custom',
+            name: 'TInput',
+          },
+        ],
       },
     },
   },
