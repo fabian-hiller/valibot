@@ -41,7 +41,7 @@ export const properties: Record<string, PropertyProps> = {
           name: 'BaseValidation',
           href: '../BaseValidation/',
           generics: [
-            'unknown',
+            'any',
             'unknown',
             {
               type: 'custom',
@@ -56,7 +56,7 @@ export const properties: Record<string, PropertyProps> = {
           name: 'BaseValidationAsync',
           href: '../BaseValidationAsync/',
           generics: [
-            'unknown',
+            'any',
             'unknown',
             {
               type: 'custom',
@@ -71,7 +71,7 @@ export const properties: Record<string, PropertyProps> = {
           name: 'BaseTransformation',
           href: '../BaseTransformation/',
           generics: [
-            'unknown',
+            'any',
             'unknown',
             {
               type: 'custom',
@@ -86,7 +86,7 @@ export const properties: Record<string, PropertyProps> = {
           name: 'BaseTransformationAsync',
           href: '../BaseTransformationAsync/',
           generics: [
-            'unknown',
+            'any',
             'unknown',
             {
               type: 'custom',
@@ -100,7 +100,7 @@ export const properties: Record<string, PropertyProps> = {
           type: 'custom',
           name: 'BaseMetadata',
           href: '../BaseMetadata/',
-          generics: ['unknown'],
+          generics: ['any'],
         },
       ],
     },

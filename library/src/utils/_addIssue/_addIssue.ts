@@ -26,10 +26,14 @@ import { _stringify } from '../_stringify/index.ts';
 type Context =
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-  | BaseValidation<unknown, unknown, BaseIssue<unknown>>
-  | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>
-  | BaseTransformation<unknown, unknown, BaseIssue<unknown>>
-  | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | BaseValidation<any, unknown, BaseIssue<unknown>>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | BaseValidationAsync<any, unknown, BaseIssue<unknown>>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | BaseTransformation<any, unknown, BaseIssue<unknown>>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | BaseTransformationAsync<any, unknown, BaseIssue<unknown>>;
 
 /**
  * Other type.

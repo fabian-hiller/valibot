@@ -158,7 +158,8 @@ type ReadonlyOutputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
     | SchemaWithPipe<
         [
           BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-          ...PipeItem<unknown, unknown, BaseIssue<unknown>>[],
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ...PipeItem<any, unknown, BaseIssue<unknown>>[],
         ]
       >
     | SchemaWithPipeAsync<
@@ -168,8 +169,8 @@ type ReadonlyOutputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
             | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
           ),
           ...(
-            | PipeItem<unknown, unknown, BaseIssue<unknown>>
-            | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+            | PipeItem<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
+            | PipeItemAsync<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
           )[],
         ]
       >

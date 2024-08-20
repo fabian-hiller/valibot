@@ -8,7 +8,8 @@ import type { BaseIssue, BaseValidation, InferInput } from '../types/index.ts';
  * @param values The values to test.
  */
 export function expectNoActionIssue<
-  TAction extends BaseValidation<unknown, unknown, BaseIssue<unknown>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TAction extends BaseValidation<any, unknown, BaseIssue<unknown>>,
 >(action: TAction, values: InferInput<TAction>[]): void {
   for (const value of values) {
     expect(action._run({ typed: true, value }, {})).toStrictEqual({

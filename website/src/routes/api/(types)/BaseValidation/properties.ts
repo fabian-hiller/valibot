@@ -50,13 +50,17 @@ export const properties: Record<string, PropertyProps> = {
         type: 'custom',
         name: 'BaseValidation',
         generics: [
-          'unknown',
-          'unknown',
           {
             type: 'custom',
-            name: 'BaseIssue',
-            href: '../BaseIssue/',
-            generics: ['unknown'],
+            name: 'TInput',
+          },
+          {
+            type: 'custom',
+            name: 'TOutput',
+          },
+          {
+            type: 'custom',
+            name: 'TIssue',
           },
         ],
       },
