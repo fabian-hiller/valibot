@@ -14,7 +14,7 @@ import { properties } from './properties';
 Creates a [Nano ID](https://github.com/ai/nanoid) validation action.
 
 ```ts
-const Action = v.nanoid<TInput, TMessage>(message);
+const Action = v.nanoid<TInput, TMessage>(length, message);
 ```
 
 ## Generics
@@ -24,11 +24,12 @@ const Action = v.nanoid<TInput, TMessage>(message);
 
 ## Parameters
 
+- `length` <Property {...properties.length} />
 - `message` <Property {...properties.message} />
 
 ### Explanation
 
-With `nanoid` you can validate the formatting of a string. If the input is not an Nano ID, you can use `message` to customize the error message.
+With `nanoid` you can validate the formatting of a string. If the input is not an Nano ID, you can use `message` to customize the error message. You can also specify the `length` of the Nano ID, which defaults to 21 if empty.
 
 ## Returns
 
@@ -45,7 +46,7 @@ Schema to validate a Nano ID.
 ```ts
 const NanoIDSchema = v.pipe(
   v.string(),
-  v.nanoid('The Nano ID is badly formatted.')
+  v.nanoid(21, 'The Nano ID is badly formatted.')
 );
 ```
 

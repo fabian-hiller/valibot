@@ -125,7 +125,7 @@ export const MAC_REGEX: RegExp =
 /**
  * [Nano ID](https://github.com/ai/nanoid) regex.
  */
-export const NANO_ID_REGEX: RegExp = /^[\w-]{2,36}$/u;
+export const NANO_ID_REGEX: RegExp = /^[\w-]+$/u;
 
 /**
  * [Octal](https://en.wikipedia.org/wiki/Octal) regex.

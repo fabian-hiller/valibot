@@ -11,6 +11,7 @@ describe('nanoid', () => {
       reference: nanoid,
       expects: null,
       requirement: NANO_ID_REGEX,
+      length: 21,
       async: false,
       _run: expect.any(Function),
     };
@@ -25,7 +26,7 @@ describe('nanoid', () => {
     });
 
     test('with string message', () => {
-      expect(nanoid('message')).toStrictEqual({
+      expect(nanoid(21, 'message')).toStrictEqual({
         ...baseAction,
         message: 'message',
       } satisfies NanoIDAction<string, string>);
@@ -33,7 +34,7 @@ describe('nanoid', () => {
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(nanoid(message)).toStrictEqual({
+      expect(nanoid(21, message)).toStrictEqual({
         ...baseAction,
         message,
       } satisfies NanoIDAction<string, typeof message>);
@@ -42,6 +43,7 @@ describe('nanoid', () => {
 
   describe('should return dataset without issues', () => {
     const action = nanoid();
+    const action10 = nanoid(10);
 
     test('for untyped inputs', () => {
       expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
@@ -60,27 +62,19 @@ describe('nanoid', () => {
       ]);
     });
 
-    test('for 36 characters ID length', () => {
-      expectNoActionIssue(action, [
-        'GnNK4jChVqRzfS3D1tKlK1gyBFHet40wRME0',
-        'yKzhkwFV6MorFYCWvfrEra_cl2_C9AJVnr-P',
-        'wGGeRInEDWjHjyJF0jJBnYcxmdOW0yghjL_N',
-        'ER5WiemGh-BCwKfbqwa-dwzesKCALiti_kgn',
-        '3Pnm_UOzO-9JgSc82cvqVw8pdq3wXCEcRVDM',
+    test('for 10 characters ID length', () => {
+      expectNoActionIssue(action10, [
+        'ix9v8KdiSn',
+        '7nU_kDcYdd',
+        'gltYQWemBD',
+        'btbKlDDIa-',
+        't_XWeU7xf3',
       ]);
-    });
-
-    test('for 2 characters ID length', () => {
-      expectNoActionIssue(action, ['cf', 'Ka', '7G', 'gx', 'VS']);
-    });
-
-    test('for hyphens and underscores', () => {
-      expectNoActionIssue(action, ['_40', '-8K', 'Y-z', 'uI_', 'Mk-']);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const action = nanoid('message');
+    const action = nanoid(21, 'message');
     const baseIssue: Omit<NanoIDIssue<string>, 'input' | 'received'> = {
       kind: 'validation',
       type: 'nanoid',
@@ -95,26 +89,26 @@ describe('nanoid', () => {
 
     test('for string with spaces', () => {
       expectActionIssue(action, baseIssue, [
-        'TvVHTtJLv4 kMeb_tDipeg',
-        ' rqer3NNc7F6ZIIcZjabce',
-        '0-3_fzh-XNFlwL6JR95GT ',
+        'BImGM 7USGakXaVhydHgO',
+        'LBjowKnkbk95kK3IoUV7 ',
+        ' vM7SGqVFmPS5tw7fII-G',
       ]);
     });
 
-    test('for not between 2 to 36 characters', () => {
+    test('for not 21 characters', () => {
       expectActionIssue(action, baseIssue, [
-        'F',
-        'carpyVLA_Lb2H-C3fEhPwhn5w7bbZA-KzSdRG3vMe',
+        '8BHRbyPSzWSLK0JAQp',
+        'pSnYAH-kCzsXWx7Lu5mQ72Hy',
       ]);
     });
 
     test('for special chars', () => {
       expectActionIssue(action, baseIssue, [
-        '@1o5BK76uGc-mbqeprAvXc',
-        '#Lcb2qbTsjS98y9Vf-G15k',
-        '$3WZ4tXxsuiDBezXIJKlPu',
-        '%gSjBHLFDO67bE-nbgBRiO',
-        '&2zYmqr0APdImhdxC69t4_',
+        '@1o5BK76uGc-mbqeprAvX',
+        '#Lcb2qbTsjS98y9Vf-G15',
+        '$3WZ4tXxsuiDBezXIJKlP',
+        '%gSjBHLFDO67bE-nbgBRi',
+        '&2zYmqr0APdImhdxC69t4',
       ]);
     });
   });
