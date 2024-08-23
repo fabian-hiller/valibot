@@ -1,3 +1,4 @@
+import type { ReadonlyAction } from '../actions/index.ts';
 import type { SchemaWithPipe, SchemaWithPipeAsync } from '../methods/index.ts';
 import type {
   LooseObjectIssue,
@@ -20,7 +21,6 @@ import type {
 import type { InferInput, InferIssue, InferOutput } from './infer.ts';
 import type { BaseIssue } from './issue.ts';
 import type { ErrorMessage } from './other.ts';
-import type { PipeItem, PipeItemAsync } from './pipe.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type { MarkOptional, MaybeReadonly, Prettify } from './utils.ts';
 
@@ -202,26 +202,10 @@ type OutputWithQuestionMarks<
  */
 type ReadonlyOutputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
   [TKey in keyof TEntries]: TEntries[TKey] extends
-    | SchemaWithPipe<
-        [
-          BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ...PipeItem<any, unknown, BaseIssue<unknown>>[],
-        ]
-      >
-    | SchemaWithPipeAsync<
-        [
-          (
-            | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-            | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-          ),
-          ...(
-            | PipeItem<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
-            | PipeItemAsync<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
-          )[],
-        ]
-      >
-    ? 'readonly' extends TEntries[TKey]['pipe'][number]['type']
+    | SchemaWithPipe<infer TPipe>
+    | SchemaWithPipeAsync<infer TPipe>
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ReadonlyAction<any> extends TPipe[number]
       ? TKey
       : never
     : never;
