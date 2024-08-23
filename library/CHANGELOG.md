@@ -5,6 +5,8 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add support for `exactOptionalPropertyTypes` config (issue #385)
+- Fix `IssueDotPath` type for `pipe` and `pipeAsync` method (issue #793)
+- Fix `IssueDotPath` type for `variant` and `variantAsync` schema (issue #700)
 
 ## v0.38.0 (August 20, 2024)
 
