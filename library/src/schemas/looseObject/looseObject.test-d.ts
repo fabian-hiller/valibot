@@ -54,8 +54,8 @@ describe('looseObject', () => {
       expectTypeOf<InferInput<Schema>>().toEqualTypeOf<
         {
           key1: string;
-          key2?: string | undefined;
-          key3?: string | null | undefined;
+          key2?: string;
+          key3?: string | null;
           key4: { key: number };
           key5: string;
         } & { [key: string]: unknown }
@@ -67,7 +67,7 @@ describe('looseObject', () => {
         {
           key1: string;
           key2: string;
-          key3?: string | null | undefined;
+          key3?: string | null;
           key4: { key: number };
           readonly key5: string;
         } & { [key: string]: unknown }

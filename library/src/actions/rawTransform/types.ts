@@ -24,12 +24,12 @@ export interface RawTransformIssue<TInput> extends BaseIssue<TInput> {
  * Issue info type.
  */
 interface IssueInfo<TInput> {
-  label?: string;
-  input?: unknown;
-  expected?: string;
-  received?: string;
-  message?: ErrorMessage<RawTransformIssue<TInput>>;
-  path?: [IssuePathItem, ...IssuePathItem[]];
+  label?: string | undefined;
+  input?: unknown | undefined;
+  expected?: string | undefined;
+  received?: string | undefined;
+  message?: ErrorMessage<RawTransformIssue<TInput>> | undefined;
+  path?: [IssuePathItem, ...IssuePathItem[]] | undefined;
 }
 
 /**

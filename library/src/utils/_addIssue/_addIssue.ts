@@ -39,15 +39,14 @@ type Context =
  * Other type.
  */
 interface Other<TContext extends Context> {
-  input?: unknown;
-  expected?: string;
-  received?: string;
-  message?: ErrorMessage<InferIssue<TContext>>;
-  path?: [IssuePathItem, ...IssuePathItem[]];
-  issues?: [
-    BaseIssue<InferInput<TContext>>,
-    ...BaseIssue<InferInput<TContext>>[],
-  ];
+  input?: unknown | undefined;
+  expected?: string | undefined;
+  received?: string | undefined;
+  message?: ErrorMessage<InferIssue<TContext>> | undefined;
+  path?: [IssuePathItem, ...IssuePathItem[]] | undefined;
+  issues?:
+    | [BaseIssue<InferInput<TContext>>, ...BaseIssue<InferInput<TContext>>[]]
+    | undefined;
 }
 
 /**

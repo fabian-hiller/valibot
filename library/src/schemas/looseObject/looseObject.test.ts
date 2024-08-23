@@ -134,6 +134,7 @@ describe('looseObject', () => {
     test('for optional entry', () => {
       expectNoSchemaIssue(looseObject({ key: optional(string()) }), [
         {},
+        // @ts-expect-error
         { key: undefined },
         { key: 'foo' },
       ]);
@@ -142,6 +143,7 @@ describe('looseObject', () => {
     test('for nullish entry', () => {
       expectNoSchemaIssue(looseObject({ key: nullish(number()) }), [
         {},
+        // @ts-expect-error
         { key: undefined },
         { key: null },
         { key: 123 },

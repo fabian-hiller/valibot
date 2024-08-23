@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add support for `exactOptionalPropertyTypes` config (issue #385)
+
 ## v0.38.0 (August 20, 2024)
 
 - Change `expects` and `expected` property by enclosing combined values in parentheses

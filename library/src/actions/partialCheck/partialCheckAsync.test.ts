@@ -215,7 +215,6 @@ describe('partialCheckAsync', () => {
           tuple: [123, { key: 'foo' }, 456],
           other: 'bar',
         },
-        issues: undefined,
       };
       expect(await action._run(dataset, {})).toStrictEqual(dataset);
     });
@@ -231,7 +230,6 @@ describe('partialCheckAsync', () => {
       const dataset: TypedDataset<Input, never> = {
         typed: true,
         value: input,
-        issues: undefined,
       };
       expect(await action._run(dataset, {})).toStrictEqual({
         ...dataset,

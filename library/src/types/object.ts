@@ -80,20 +80,6 @@ export type ObjectKeys<
 > = MaybeReadonly<[keyof TSchema['entries'], ...(keyof TSchema['entries'])[]]>;
 
 /**
- * Infer entries input type.
- */
-type InferEntriesInput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
-  -readonly [TKey in keyof TEntries]: InferInput<TEntries[TKey]>;
-};
-
-/**
- * Infer entries output type.
- */
-type InferEntriesOutput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
-  -readonly [TKey in keyof TEntries]: InferOutput<TEntries[TKey]>;
-};
-
-/**
  * Question mark schema type.
  *
  * TODO: Document that for simplicity and bundle size, we currently do not
@@ -115,6 +101,67 @@ type QuestionMarkSchema =
     >;
 
 /**
+ * Has default type.
+ */
+type HasDefault<TSchema extends QuestionMarkSchema> = [
+  TSchema['default'],
+] extends [never]
+  ? false
+  : true;
+
+/**
+ * Exact optional input type.
+ */
+type ExactOptionalInput<
+  TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+> = TSchema extends
+  | NullishSchema<infer TWrapped, never>
+  | NullishSchemaAsync<infer TWrapped, never>
+  ? ExactOptionalInput<TWrapped> | null
+  : TSchema extends
+        | OptionalSchema<infer TWrapped, never>
+        | OptionalSchemaAsync<infer TWrapped, never>
+    ? ExactOptionalInput<TWrapped>
+    : InferInput<TSchema>;
+
+/**
+ * Exact optional output type.
+ */
+type ExactOptionalOutput<
+  TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+> = TSchema extends
+  | NullishSchema<infer TWrapped, never>
+  | NullishSchemaAsync<infer TWrapped, never>
+  ? HasDefault<TSchema> extends true
+    ? InferOutput<TSchema>
+    : ExactOptionalOutput<TWrapped> | null
+  : TSchema extends
+        | OptionalSchema<infer TWrapped, never>
+        | OptionalSchemaAsync<infer TWrapped, never>
+    ? HasDefault<TSchema> extends true
+      ? InferOutput<TSchema>
+      : ExactOptionalOutput<TWrapped>
+    : InferOutput<TSchema>;
+
+/**
+ * Infer entries input type.
+ */
+type InferEntriesInput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
+  -readonly [TKey in keyof TEntries]: ExactOptionalInput<TEntries[TKey]>;
+};
+
+/**
+ * Infer entries output type.
+ */
+type InferEntriesOutput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
+  -readonly [TKey in keyof TEntries]: ExactOptionalOutput<TEntries[TKey]>;
+};
+
+/**
  * Optional input keys type.
  */
 type OptionalInputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
@@ -128,9 +175,9 @@ type OptionalInputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
  */
 type OptionalOutputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
   [TKey in keyof TEntries]: TEntries[TKey] extends QuestionMarkSchema
-    ? [TEntries[TKey]['default']] extends [never]
-      ? TKey
-      : never
+    ? HasDefault<TEntries[TKey]> extends true
+      ? never
+      : TKey
     : never;
 }[keyof TEntries];
 

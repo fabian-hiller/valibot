@@ -131,7 +131,6 @@ describe('_isPartiallyTyped', () => {
       const dataset: TypedDataset<Input, never> = {
         typed: true,
         value: input,
-        issues: undefined,
       };
       expect(_isPartiallyTyped(dataset, pathList)).toBe(true);
     });

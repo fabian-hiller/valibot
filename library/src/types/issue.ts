@@ -241,18 +241,18 @@ export interface BaseIssue<TInput> extends Config<BaseIssue<TInput>> {
   /**
    * The input requirement.
    */
-  readonly requirement?: unknown;
+  readonly requirement?: unknown | undefined;
   /**
    * The issue path.
    *
    * TODO: Investigate if it is possible to make the path type safe based on the
    * input.
    */
-  readonly path?: [IssuePathItem, ...IssuePathItem[]];
+  readonly path?: [IssuePathItem, ...IssuePathItem[]] | undefined;
   /**
    * The sub issues.
    */
-  readonly issues?: [BaseIssue<TInput>, ...BaseIssue<TInput>[]];
+  readonly issues?: [BaseIssue<TInput>, ...BaseIssue<TInput>[]] | undefined;
 }
 
 /**
