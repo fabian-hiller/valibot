@@ -25,8 +25,8 @@ export type SchemaWithPipeAsync<
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
     ),
     ...(
-      | PipeItem<unknown, unknown, BaseIssue<unknown>>
-      | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+      | PipeItem<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
+      | PipeItemAsync<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
     )[],
   ],
 > = Omit<FirstTupleItem<TPipe>, 'async' | '_run' | '_types'> & {
@@ -48,10 +48,10 @@ export type SchemaWithPipeAsync<
    *
    * @internal
    */
-  _run(
+  readonly _run: (
     dataset: Dataset<unknown, never>,
     config: Config<InferIssue<FirstTupleItem<TPipe>>>
-  ): Promise<
+  ) => Promise<
     Dataset<InferOutput<LastTupleItem<TPipe>>, InferIssue<TPipe[number]>>
   >;
   /**

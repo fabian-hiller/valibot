@@ -55,9 +55,9 @@ describe('required', () => {
         }>();
         expectTypeOf<InferInput<Schema2>>().toEqualTypeOf<{
           key1: string;
-          key2?: number | undefined;
+          key2?: number;
           key3: string;
-          key4?: number | null | undefined;
+          key4?: number | null;
         }>();
       });
 
@@ -70,7 +70,7 @@ describe('required', () => {
         }>();
         expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<{
           key1: string;
-          key2?: number | undefined;
+          key2?: number;
           key3: string;
           key4: number;
         }>();
@@ -119,10 +119,10 @@ describe('required', () => {
         >();
         expectTypeOf<InferInput<Schema2>>().toEqualTypeOf<
           {
-            key1?: string | undefined;
+            key1?: string;
             key2: number;
             key3: string;
-            key4?: number | null | undefined;
+            key4?: number | null;
           } & { [key: string]: boolean }
         >();
       });
@@ -138,7 +138,7 @@ describe('required', () => {
         >();
         expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<
           {
-            key1?: string | undefined;
+            key1?: string;
             key2: number;
             key3: string;
             key4: number;

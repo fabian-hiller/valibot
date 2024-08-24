@@ -1,26 +1,26 @@
+import type { ReadonlyAction } from '../actions/index.ts';
 import type { SchemaWithPipe, SchemaWithPipeAsync } from '../methods/index.ts';
 import type {
   LooseObjectIssue,
   LooseObjectSchema,
   LooseObjectSchemaAsync,
+  NullishSchema,
+  NullishSchemaAsync,
   ObjectIssue,
   ObjectSchema,
   ObjectSchemaAsync,
   ObjectWithRestIssue,
   ObjectWithRestSchema,
   ObjectWithRestSchemaAsync,
+  OptionalSchema,
+  OptionalSchemaAsync,
   StrictObjectIssue,
   StrictObjectSchema,
   StrictObjectSchemaAsync,
 } from '../schemas/index.ts';
 import type { InferInput, InferIssue, InferOutput } from './infer.ts';
 import type { BaseIssue } from './issue.ts';
-import type {
-  ErrorMessage,
-  QuestionMarkSchema,
-  QuestionMarkSchemaAsync,
-} from './other.ts';
-import type { PipeItem, PipeItemAsync } from './pipe.ts';
+import type { ErrorMessage } from './other.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type { MarkOptional, MaybeReadonly, Prettify } from './utils.ts';
 
@@ -80,87 +80,155 @@ export type ObjectKeys<
 > = MaybeReadonly<[keyof TSchema['entries'], ...(keyof TSchema['entries'])[]]>;
 
 /**
+ * Question mark schema type.
+ *
+ * TODO: Document that for simplicity and bundle size, we currently do not
+ * distinguish between `undefined` and missing keys when using `optional` and
+ * `nullish`.
+ */
+type QuestionMarkSchema =
+  | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
+  | NullishSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      unknown
+    >
+  | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
+  | OptionalSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      unknown
+    >;
+
+/**
+ * Has default type.
+ */
+type HasDefault<TSchema extends QuestionMarkSchema> = [
+  TSchema['default'],
+] extends [never]
+  ? false
+  : true;
+
+/**
+ * Exact optional input type.
+ */
+type ExactOptionalInput<
+  TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+> = TSchema extends
+  | NullishSchema<infer TWrapped, never>
+  | NullishSchemaAsync<infer TWrapped, never>
+  ? ExactOptionalInput<TWrapped> | null
+  : TSchema extends
+        | OptionalSchema<infer TWrapped, never>
+        | OptionalSchemaAsync<infer TWrapped, never>
+    ? ExactOptionalInput<TWrapped>
+    : InferInput<TSchema>;
+
+/**
+ * Exact optional output type.
+ */
+type ExactOptionalOutput<
+  TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+> = TSchema extends
+  | NullishSchema<infer TWrapped, never>
+  | NullishSchemaAsync<infer TWrapped, never>
+  ? HasDefault<TSchema> extends true
+    ? InferOutput<TSchema>
+    : ExactOptionalOutput<TWrapped> | null
+  : TSchema extends
+        | OptionalSchema<infer TWrapped, never>
+        | OptionalSchemaAsync<infer TWrapped, never>
+    ? HasDefault<TSchema> extends true
+      ? InferOutput<TSchema>
+      : ExactOptionalOutput<TWrapped>
+    : InferOutput<TSchema>;
+
+/**
  * Infer entries input type.
  */
 type InferEntriesInput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
-  -readonly [TKey in keyof TEntries]: InferInput<TEntries[TKey]>;
+  -readonly [TKey in keyof TEntries]: ExactOptionalInput<TEntries[TKey]>;
 };
 
 /**
  * Infer entries output type.
  */
 type InferEntriesOutput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
-  -readonly [TKey in keyof TEntries]: InferOutput<TEntries[TKey]>;
+  -readonly [TKey in keyof TEntries]: ExactOptionalOutput<TEntries[TKey]>;
 };
 
 /**
- * Optional keys type.
+ * Optional input keys type.
  */
-type OptionalKeys<
+type OptionalInputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
+  [TKey in keyof TEntries]: TEntries[TKey] extends QuestionMarkSchema
+    ? TKey
+    : never;
+}[keyof TEntries];
+
+/**
+ * Optional output keys type.
+ */
+type OptionalOutputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
+  [TKey in keyof TEntries]: TEntries[TKey] extends QuestionMarkSchema
+    ? HasDefault<TEntries[TKey]> extends true
+      ? never
+      : TKey
+    : never;
+}[keyof TEntries];
+
+/**
+ * Input with question marks type.
+ */
+type InputWithQuestionMarks<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
   TObject extends InferEntriesInput<TEntries> | InferEntriesOutput<TEntries>,
-> = {
+> = MarkOptional<TObject, OptionalInputKeys<TEntries>>;
+
+/**
+ * Output with question marks type.
+ */
+type OutputWithQuestionMarks<
+  TEntries extends ObjectEntries | ObjectEntriesAsync,
+  TObject extends InferEntriesInput<TEntries> | InferEntriesOutput<TEntries>,
+> = MarkOptional<TObject, OptionalOutputKeys<TEntries>>;
+
+/**
+ * Readonly output keys type.
+ */
+type ReadonlyOutputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
   [TKey in keyof TEntries]: TEntries[TKey] extends
-    | QuestionMarkSchema
-    | QuestionMarkSchemaAsync
-    ? undefined extends TObject[TKey]
+    | SchemaWithPipe<infer TPipe>
+    | SchemaWithPipeAsync<infer TPipe>
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ReadonlyAction<any> extends TPipe[number]
       ? TKey
       : never
     : never;
 }[keyof TEntries];
 
 /**
- * With question marks type.
+ * Output with readonly type.
  */
-type WithQuestionMarks<
+type OutputWithReadonly<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObject extends InferEntriesInput<TEntries> | InferEntriesOutput<TEntries>,
-> = MarkOptional<TObject, OptionalKeys<TEntries, TObject>>;
-
-/**
- * Readonly keys type.
- */
-type ReadonlyKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
-  [TKey in keyof TEntries]: TEntries[TKey] extends
-    | SchemaWithPipe<
-        [
-          BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-          ...PipeItem<unknown, unknown, BaseIssue<unknown>>[],
-        ]
-      >
-    | SchemaWithPipeAsync<
-        [
-          (
-            | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-            | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-          ),
-          ...(
-            | PipeItem<unknown, unknown, BaseIssue<unknown>>
-            | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
-          )[],
-        ]
-      >
-    ? 'readonly' extends TEntries[TKey]['pipe'][number]['type']
-      ? TKey
-      : never
-    : never;
-}[keyof TEntries];
-
-/**
- * With readonly type.
- */
-type WithReadonly<
-  TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObject extends WithQuestionMarks<TEntries, InferEntriesOutput<TEntries>>,
+  TObject extends OutputWithQuestionMarks<
+    TEntries,
+    InferEntriesOutput<TEntries>
+  >,
 > = Readonly<TObject> &
-  Pick<TObject, Exclude<keyof TObject, ReadonlyKeys<TEntries>>>;
+  Pick<TObject, Exclude<keyof TObject, ReadonlyOutputKeys<TEntries>>>;
 
 /**
  * Infer object input type.
  */
 export type InferObjectInput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-> = Prettify<WithQuestionMarks<TEntries, InferEntriesInput<TEntries>>>;
+> = Prettify<InputWithQuestionMarks<TEntries, InferEntriesInput<TEntries>>>;
 
 /**
  * Infer object output type.
@@ -168,9 +236,9 @@ export type InferObjectInput<
 export type InferObjectOutput<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
 > = Prettify<
-  WithReadonly<
+  OutputWithReadonly<
     TEntries,
-    WithQuestionMarks<TEntries, InferEntriesOutput<TEntries>>
+    OutputWithQuestionMarks<TEntries, InferEntriesOutput<TEntries>>
   >
 >;
 

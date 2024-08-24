@@ -211,7 +211,6 @@ describe('partialCheck', () => {
           tuple: [123, { key: 'foo' }, 456],
           other: 'bar',
         },
-        issues: undefined,
       };
       expect(action._run(dataset, {})).toStrictEqual(dataset);
     });
@@ -227,7 +226,6 @@ describe('partialCheck', () => {
       const dataset: TypedDataset<Input, never> = {
         typed: true,
         value: input,
-        issues: undefined,
       };
       expect(action._run(dataset, {})).toStrictEqual({
         ...dataset,

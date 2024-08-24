@@ -582,5 +582,6 @@
 - [VariantOptions](/api/VariantOptions/)
 - [VariantOptionsAsync](/api/VariantOptionsAsync/)
 - [VariantSchema](/api/VariantSchema/)
+- [VariantSchemaAsync](/api/VariantSchemaAsync/)
 - [VoidIssue](/api/VoidIssue/)
 - [VoidSchema](/api/VoidSchema/)

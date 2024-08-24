@@ -54,13 +54,17 @@ export const properties: Record<string, PropertyProps> = {
             name: 'BaseValidation',
             href: '../BaseValidation/',
             generics: [
-              'unknown',
-              'unknown',
               {
                 type: 'custom',
-                name: 'BaseIssue',
-                href: '../BaseIssue/',
-                generics: ['unknown'],
+                name: 'TInput',
+              },
+              {
+                type: 'custom',
+                name: 'TOutput',
+              },
+              {
+                type: 'custom',
+                name: 'TIssue',
               },
             ],
           },
@@ -68,13 +72,17 @@ export const properties: Record<string, PropertyProps> = {
             type: 'custom',
             name: 'BaseValidationAsync',
             generics: [
-              'unknown',
-              'unknown',
               {
                 type: 'custom',
-                name: 'BaseIssue',
-                href: '../BaseIssue/',
-                generics: ['unknown'],
+                name: 'TInput',
+              },
+              {
+                type: 'custom',
+                name: 'TOutput',
+              },
+              {
+                type: 'custom',
+                name: 'TIssue',
               },
             ],
           },

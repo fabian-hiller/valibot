@@ -2,9 +2,18 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.39.0 (August 24, 2024)
+
+- Add support for `exactOptionalPropertyTypes` config (issue #385)
+- Fix `IssueDotPath` type for `pipe` and `pipeAsync` method (issue #793)
+- Fix `IssueDotPath` type for `variant` and `variantAsync` schema (issue #700)
+
+## v0.38.0 (August 20, 2024)
 
 - Change `expects` and `expected` property by enclosing combined values in parentheses
+- Change question mark handling for `optional`, `optionalAsync`, `nullish` and `nullishAsync` schemas in objects
+- Fix TypeScript errors in `TuplePath` and `QuestionMarkSchema` type (issue #659, #776)
+- Fix missing TypeScript errors in `pipe` and `pipeAsync` method (pull request #785)
 
 ## v0.37.0 (July 30, 2024)
 

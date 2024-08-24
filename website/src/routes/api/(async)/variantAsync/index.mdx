@@ -1,10 +1,168 @@
 ---
 title: variantAsync
+description: Creates a variant schema.
 source: /schemas/variant/variantAsync.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
 ---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # variantAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/variant/variantAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a variant schema.
+
+```ts
+const Schema = v.variantAsync<TKey, TOptions, TMessage>(key, options, message);
+```
+
+## Generics
+
+- `TKey` <Property {...properties.TKey} />
+- `TOptions` <Property {...properties.TOptions} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `key` <Property {...properties.key} />
+- `options` <Property {...properties.options} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `variantAsync` you can validate if the input matches one of the given object `options`. The object schema to be used for the validation is determined by the discriminator `key`. If the input does not match a schema and cannot be clearly assigned to one of the options, you can use `message` to customize the error message.
+
+> It is allowed to specify the exact same or a similar discriminator multiple times. However, in such cases `variantAsync` will only return the output of the first untyped or typed variant option result. Typed results take precedence over untyped ones.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `variantAsync` can be used.
+
+### Message schema
+
+Schema to validate a message object.
+
+```ts
+import { isValidGroupReceiver, isValidUserReceiver } from '~/api';
+
+const MessageSchema = v.objectAsync({
+  message: v.pipe(v.string(), v.nonEmpty()),
+  receiver: v.variantAsync('type', [
+    v.objectAsync({
+      type: v.literal('group'),
+      groupId: v.pipeAsync(
+        v.string(),
+        v.uuid(),
+        v.checkAsync(isValidGroupReceiver, 'The group cannot receive messages.')
+      ),
+    }),
+    v.objectAsync({
+      type: v.literal('user'),
+      email: v.pipeAsync(
+        v.string(),
+        v.email(),
+        v.checkAsync(isValidUserReceiver, 'The user cannot receive messages.')
+      ),
+    }),
+  ]),
+});
+```
+
+### User schema
+
+Schema to validate unique user details.
+
+```ts
+import { isRegisteredEmail, isRegisteredUsername, isValidUserId } from '~/api';
+
+const UserSchema = v.variantAsync('type', [
+  // Assume this schema is from a different file and reused here.
+  v.variantAsync('type', [
+    v.objectAsync({
+      type: v.literal('email'),
+      email: v.pipeAsync(
+        v.string(),
+        v.email(),
+        v.checkAsync(isRegisteredEmail, 'The email is not registered.')
+      ),
+    }),
+    v.objectAsync({
+      type: v.literal('username'),
+      username: v.pipeAsync(
+        v.string(),
+        v.nonEmpty(),
+        v.checkAsync(isRegisteredUsername, 'The username is not registered.')
+      ),
+    }),
+  ]),
+  v.objectAsync({
+    type: v.literal('userId'),
+    userId: v.pipeAsync(
+      v.string(),
+      v.uuid(),
+      v.checkAsync(isValidUserId, 'The user id is not valid.')
+    ),
+  }),
+]);
+```
+
+## Related
+
+The following APIs can be combined with `variantAsync`.
+
+### Schemas
+
+<ApiList items={['looseObject', 'object', 'objectWithRest', 'strictObject']} />
+
+### Methods
+
+<ApiList items={['config', 'getDefault', 'getFallback']} />
+
+### Actions
+
+<ApiList
+  items={[
+    'brand',
+    'check',
+    'description',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'checkAsync',
+    'fallbackAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'looseObjectAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialCheckAsync',
+    'pipeAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'strictObjectAsync',
+    'transformAsync',
+  ]}
+/>

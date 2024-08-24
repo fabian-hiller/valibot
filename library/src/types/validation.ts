@@ -24,7 +24,7 @@ export interface BaseValidation<
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-  ) => BaseValidation<unknown, unknown, BaseIssue<unknown>>;
+  ) => BaseValidation<TInput, TOutput, TIssue>;
   /**
    * The expected property.
    */
@@ -43,10 +43,10 @@ export interface BaseValidation<
    *
    * @internal
    */
-  _run(
+  readonly _run: (
     dataset: Dataset<TInput, BaseIssue<unknown>>,
     config: Config<TIssue>
-  ): Dataset<TOutput, BaseIssue<unknown> | TIssue>;
+  ) => Dataset<TOutput, BaseIssue<unknown> | TIssue>;
   /**
    * Input, output and issue type.
    *
@@ -77,8 +77,8 @@ export interface BaseValidationAsync<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
   ) =>
-    | BaseValidation<unknown, unknown, BaseIssue<unknown>>
-    | BaseValidationAsync<unknown, unknown, BaseIssue<unknown>>;
+    | BaseValidation<TInput, TOutput, TIssue>
+    | BaseValidationAsync<TInput, TOutput, TIssue>;
   /**
    * Whether it's async.
    */
@@ -93,17 +93,18 @@ export interface BaseValidationAsync<
    *
    * @internal
    */
-  _run(
+  readonly _run: (
     dataset: Dataset<TInput, BaseIssue<unknown>>,
     config: Config<TIssue>
-  ): Promise<Dataset<TOutput, BaseIssue<unknown> | TIssue>>;
+  ) => Promise<Dataset<TOutput, BaseIssue<unknown> | TIssue>>;
 }
 
 /**
  * Generic validation type.
  */
 export interface GenericValidation<
-  TInput = unknown,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TInput = any,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
 > extends BaseValidation<TInput, TOutput, TIssue> {}
@@ -112,7 +113,8 @@ export interface GenericValidation<
  * Generic validation async type.
  */
 export interface GenericValidationAsync<
-  TInput = unknown,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TInput = any,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
 > extends BaseValidationAsync<TInput, TOutput, TIssue> {}

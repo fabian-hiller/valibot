@@ -151,6 +151,7 @@ describe('objectAsync', () => {
     test('for optional entry', async () => {
       await expectNoSchemaIssueAsync(objectAsync({ key: optional(string()) }), [
         {},
+        // @ts-expect-error
         { key: undefined },
         { key: 'foo' },
       ]);
@@ -159,6 +160,7 @@ describe('objectAsync', () => {
     test('for nullish entry', async () => {
       await expectNoSchemaIssueAsync(objectAsync({ key: nullish(number()) }), [
         {},
+        // @ts-expect-error
         { key: undefined },
         { key: null },
         { key: 123 },

@@ -8,17 +8,17 @@ export interface Config<TIssue extends BaseIssue<unknown>> {
   /**
    * The selected language.
    */
-  readonly lang?: string;
+  readonly lang?: string | undefined;
   /**
    * The error message.
    */
-  readonly message?: ErrorMessage<TIssue>;
+  readonly message?: ErrorMessage<TIssue> | undefined;
   /**
    * Whether it was abort early.
    */
-  readonly abortEarly?: boolean;
+  readonly abortEarly?: boolean | undefined;
   /**
    * Whether the pipe was abort early.
    */
-  readonly abortPipeEarly?: boolean;
+  readonly abortPipeEarly?: boolean | undefined;
 }

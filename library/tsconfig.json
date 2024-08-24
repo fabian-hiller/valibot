@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
-    "strict": true,
+    "allowImportingTsExtensions": true,
+    "declaration": true,
+    "exactOptionalPropertyTypes": true,
+    "isolatedDeclarations": true,
     "lib": ["ESNext", "DOM"],
-    "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
-    "allowImportingTsExtensions": true,
-    "skipLibCheck": true,
     "noEmit": true,
-    "declaration": true,
-    "isolatedDeclarations": true
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext"
   },
-  "include": ["src", "./*.config.ts"]
+  "include": ["src"]
 }

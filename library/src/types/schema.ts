@@ -43,10 +43,10 @@ export interface BaseSchema<
    *
    * @internal
    */
-  _run(
+  readonly _run: (
     dataset: Dataset<unknown, never>,
     config: Config<TIssue>
-  ): Dataset<TOutput, TIssue>;
+  ) => Dataset<TOutput, TIssue>;
   /**
    * Input, output and issue type.
    *
@@ -93,10 +93,10 @@ export interface BaseSchemaAsync<
    *
    * @internal
    */
-  _run(
+  readonly _run: (
     dataset: Dataset<unknown, never>,
     config: Config<TIssue>
-  ): Promise<Dataset<TOutput, TIssue>>;
+  ) => Promise<Dataset<TOutput, TIssue>>;
 }
 
 /**

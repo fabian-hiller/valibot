@@ -18,7 +18,8 @@ import type {
 export type SchemaWithPipe<
   TPipe extends [
     BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-    ...PipeItem<unknown, unknown, BaseIssue<unknown>>[],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ...PipeItem<any, unknown, BaseIssue<unknown>>[],
   ],
 > = Omit<FirstTupleItem<TPipe>, '_run' | '_types'> & {
   /**
@@ -35,10 +36,10 @@ export type SchemaWithPipe<
    *
    * @internal
    */
-  _run(
+  readonly _run: (
     dataset: Dataset<unknown, never>,
     config: Config<InferIssue<FirstTupleItem<TPipe>>>
-  ): Dataset<InferOutput<LastTupleItem<TPipe>>, InferIssue<TPipe[number]>>;
+  ) => Dataset<InferOutput<LastTupleItem<TPipe>>, InferIssue<TPipe[number]>>;
   /**
    * Input, output and issue type.
    *
