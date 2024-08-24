@@ -6,6 +6,7 @@
 [![CI][ci-image]][ci-url]
 [![NPM version][npm-image]][npm-url]
 [![Downloads][downloads-image]][npm-url]
+[![JSR version][jsr-image]][jsr-url]
 [![Discord][discord-image]][discord-url]
 
 Hello, I am Valibot and I would like to help you validate data easily using a schema. No matter if it is incoming data on a server, a form or even configuration files. I have no dependencies and can run in any JavaScript environment.
@@ -75,5 +76,7 @@ I am completely free and licensed under the [MIT license](https://github.com/fab
 [npm-image]: https://img.shields.io/npm/v/valibot.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/valibot
 [downloads-image]: https://img.shields.io/npm/dm/valibot.svg?style=flat-square
+[jsr-image]: https://jsr.io/badges/@valibot/valibot?style=flat-square
+[jsr-url]: https://jsr.io/@valibot/valibot
 [discord-image]: https://img.shields.io/discord/1252985447273992222?label=Discord&style=flat-square
 [discord-url]: https://discord.gg/tkMjQACf2P
