@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.39.0 (August 24, 2024)
 
 - Add support for `exactOptionalPropertyTypes` config (issue #385)
 - Fix `IssueDotPath` type for `pipe` and `pipeAsync` method (issue #793)
