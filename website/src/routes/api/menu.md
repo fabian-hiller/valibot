@@ -584,3 +584,14 @@
 - [VariantSchemaAsync](/api/VariantSchemaAsync/)
 - [VoidIssue](/api/VoidIssue/)
 - [VoidSchema](/api/VoidSchema/)
+
+## Transformations
+
+- [toCustom](/api/toLowerCase/)
+- [toLowerCase](/api/toLowerCase/)
+- [toMaxValue](/api/toMaxValue/)
+- [toMinValue](/api/toMinValue/)
+- [toTrimmed](/api/toTrimmed/)
+- [toTrimmedEnd](/api/toTrimmedEnd)
+- [toTrimmedStart](/api/toTrimmedStart/)
+- [toUpperCase](/api/toUpperCase/)
