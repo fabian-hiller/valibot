@@ -38,9 +38,6 @@ export const properties: Record<string, PropertyProps> = {
       name: 'TMessage',
     },
   },
-  length: {
-    type: 'number',
-  },
   Action: {
     type: {
       type: 'custom',

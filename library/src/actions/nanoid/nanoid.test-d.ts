@@ -8,20 +8,20 @@ describe('nanoid', () => {
       type Action = NanoIDAction<string, undefined>;
       expectTypeOf(nanoid<string>()).toEqualTypeOf<Action>();
       expectTypeOf(
-        nanoid<string, undefined>(21, undefined)
+        nanoid<string, undefined>(undefined)
       ).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
-      expectTypeOf(nanoid<string, 'message'>(21, 'message')).toEqualTypeOf<
+      expectTypeOf(nanoid<string, 'message'>('message')).toEqualTypeOf<
         NanoIDAction<string, 'message'>
       >();
     });
 
     test('with function message', () => {
-      expectTypeOf(
-        nanoid<string, () => string>(21, () => 'message')
-      ).toEqualTypeOf<NanoIDAction<string, () => string>>();
+      expectTypeOf(nanoid<string, () => string>(() => 'message')).toEqualTypeOf<
+        NanoIDAction<string, () => string>
+      >();
     });
   });
 

@@ -11,7 +11,6 @@ describe('nanoid', () => {
       reference: nanoid,
       expects: null,
       requirement: NANO_ID_REGEX,
-      length: 21,
       async: false,
       _run: expect.any(Function),
     };
@@ -26,7 +25,7 @@ describe('nanoid', () => {
     });
 
     test('with string message', () => {
-      expect(nanoid(21, 'message')).toStrictEqual({
+      expect(nanoid('message')).toStrictEqual({
         ...baseAction,
         message: 'message',
       } satisfies NanoIDAction<string, string>);
@@ -34,7 +33,7 @@ describe('nanoid', () => {
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(nanoid(21, message)).toStrictEqual({
+      expect(nanoid(message)).toStrictEqual({
         ...baseAction,
         message,
       } satisfies NanoIDAction<string, typeof message>);
@@ -43,7 +42,6 @@ describe('nanoid', () => {
 
   describe('should return dataset without issues', () => {
     const action = nanoid();
-    const action10 = nanoid(10);
 
     test('for untyped inputs', () => {
       expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
@@ -52,29 +50,24 @@ describe('nanoid', () => {
       });
     });
 
-    test('for default ID length', () => {
+    test('for with _ and - symbols', () => {
       expectNoActionIssue(action, [
         'OIjC22zGKp_rrTYQBb3xt',
-        '4EdTtQZCc5GIFA9ABjEsQ',
         '8hiQ-95aV5qCnB4x0rPBu',
         'aIojG8uVOE0-1ANOZLugU',
-        'ODz0tL5pgbQvpbptus6LL',
       ]);
     });
 
-    test('for 10 characters ID length', () => {
-      expectNoActionIssue(action10, [
-        'ix9v8KdiSn',
-        '7nU_kDcYdd',
-        'gltYQWemBD',
-        'btbKlDDIa-',
-        't_XWeU7xf3',
+    test('for alphabets and numerals only', () => {
+      expectNoActionIssue(action, [
+        '4EdTtQZCc5GIFA9ABjEsQ',
+        'ODz0tL5pgbQvpbptus6LL',
       ]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const action = nanoid(21, 'message');
+    const action = nanoid('message');
     const baseIssue: Omit<NanoIDIssue<string>, 'input' | 'received'> = {
       kind: 'validation',
       type: 'nanoid',
@@ -92,13 +85,6 @@ describe('nanoid', () => {
         'BImGM 7USGakXaVhydHgO',
         'LBjowKnkbk95kK3IoUV7 ',
         ' vM7SGqVFmPS5tw7fII-G',
-      ]);
-    });
-
-    test('for not 21 characters', () => {
-      expectActionIssue(action, baseIssue, [
-        '8BHRbyPSzWSLK0JAQp',
-        'pSnYAH-kCzsXWx7Lu5mQ72Hy',
       ]);
     });
 

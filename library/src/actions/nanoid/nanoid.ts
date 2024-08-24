@@ -60,27 +60,21 @@ export interface NanoIDAction<
    * The error message.
    */
   readonly message: TMessage;
-  /**
-   * The expected length of the Nano ID.
-   */
-  readonly length?: number;
 }
 
 /**
  * Creates a [Nano ID](https://github.com/ai/nanoid) validation action.
  *
- * @param length The expected length of the Nano ID.
- *
  * @returns A Nano ID action.
  */
-export function nanoid<TInput extends string>(
-  length?: number
-): NanoIDAction<TInput, undefined>;
+export function nanoid<TInput extends string>(): NanoIDAction<
+  TInput,
+  undefined
+>;
 
 /**
  * Creates a [Nano ID](https://github.com/ai/nanoid) validation action.
  *
- * @param length The expected length of the Nano ID.
  * @param message The error message.
  *
  * @returns A Nano ID action.
@@ -88,10 +82,9 @@ export function nanoid<TInput extends string>(
 export function nanoid<
   TInput extends string,
   const TMessage extends ErrorMessage<NanoIDIssue<TInput>> | undefined,
->(length?: number, message?: TMessage): NanoIDAction<TInput, TMessage>;
+>(message: TMessage): NanoIDAction<TInput, TMessage>;
 
 export function nanoid(
-  length: number = 21,
   message?: ErrorMessage<NanoIDIssue<string>>
 ): NanoIDAction<string, ErrorMessage<NanoIDIssue<string>> | undefined> {
   return {
@@ -102,13 +95,8 @@ export function nanoid(
     expects: null,
     requirement: NANO_ID_REGEX,
     message,
-    length,
     _run(dataset, config) {
-      if (
-        dataset.typed &&
-        (!this.requirement.test(dataset.value) ||
-          dataset.value.length !== this.length)
-      ) {
+      if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Nano ID', dataset, config);
       }
       return dataset as Dataset<string, NanoIDIssue<string>>;
