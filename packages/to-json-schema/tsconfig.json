@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "declaration": true,
+    "isolatedDeclarations": true,
+    "paths": {
+      "valibot": ["../../library/src/index.ts"],
+      "valibot/*": ["../../library/src/*"]
+    }
+  },
+  "include": ["src", "./*.config.ts"]
+}
