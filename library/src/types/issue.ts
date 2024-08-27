@@ -56,6 +56,8 @@ import type {
   TupleWithRestIssue,
   TupleWithRestSchema,
   TupleWithRestSchemaAsync,
+  UndefinedableSchema,
+  UndefinedableSchemaAsync,
   UnionIssue,
   UnionSchema,
   UnionSchemaAsync,
@@ -556,6 +558,33 @@ export type IssueDotPath<
                               >
                             >
                           | OptionalSchemaAsync<
+                              infer TWrapped,
+                              DefaultAsync<
+                                | BaseSchema<
+                                    unknown,
+                                    unknown,
+                                    BaseIssue<unknown>
+                                  >
+                                | BaseSchemaAsync<
+                                    unknown,
+                                    unknown,
+                                    BaseIssue<unknown>
+                                  >,
+                                undefined
+                              >
+                            >
+                          | UndefinedableSchema<
+                              infer TWrapped,
+                              Default<
+                                BaseSchema<
+                                  unknown,
+                                  unknown,
+                                  BaseIssue<unknown>
+                                >,
+                                undefined
+                              >
+                            >
+                          | UndefinedableSchemaAsync<
                               infer TWrapped,
                               DefaultAsync<
                                 | BaseSchema<

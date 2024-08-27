@@ -158,13 +158,7 @@ describe('strictObjectAsync', () => {
     test('for nullish entry', async () => {
       await expectNoSchemaIssueAsync(
         strictObjectAsync({ key: nullish(number()) }),
-        [
-          {},
-          // @ts-expect-error
-          { key: undefined },
-          { key: null },
-          { key: 123 },
-        ]
+        [{}, { key: undefined }, { key: null }, { key: 123 }]
       );
     });
   });

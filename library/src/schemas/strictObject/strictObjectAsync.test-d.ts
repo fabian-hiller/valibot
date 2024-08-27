@@ -11,6 +11,7 @@ import {
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
+import type { UndefinedableSchema } from '../undefinedable/index.ts';
 import {
   strictObjectAsync,
   type StrictObjectSchemaAsync,
@@ -51,6 +52,7 @@ describe('strictObjectAsync', () => {
         key3: NullishSchema<StringSchema<undefined>, never>;
         key4: ObjectSchema<{ key: NumberSchema<undefined> }, never>;
         key5: SchemaWithPipe<[StringSchema<undefined>, ReadonlyAction<string>]>;
+        key6: UndefinedableSchema<StringSchema<undefined>, 'bar'>;
       },
       undefined
     >;
@@ -59,9 +61,10 @@ describe('strictObjectAsync', () => {
       expectTypeOf<InferInput<Schema>>().toEqualTypeOf<{
         key1: string;
         key2?: string;
-        key3?: string | null;
+        key3?: string | null | undefined;
         key4: { key: number };
         key5: string;
+        key6: string | undefined;
       }>();
     });
 
@@ -69,9 +72,10 @@ describe('strictObjectAsync', () => {
       expectTypeOf<InferOutput<Schema>>().toEqualTypeOf<{
         key1: string;
         key2: string;
-        key3?: string | null;
+        key3?: string | null | undefined;
         key4: { key: number };
         readonly key5: string;
+        key6: string;
       }>();
     });
 

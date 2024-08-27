@@ -160,7 +160,6 @@ describe('objectAsync', () => {
     test('for nullish entry', async () => {
       await expectNoSchemaIssueAsync(objectAsync({ key: nullish(number()) }), [
         {},
-        // @ts-expect-error
         { key: undefined },
         { key: null },
         { key: 123 },
