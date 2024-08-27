@@ -45,7 +45,7 @@ The following examples show how `isoTime` can be used.
 Schema to validate an ISO time.
 
 ```ts
-const IsoTimeSchema = v.pip(
+const IsoTimeSchema = v.pipe(
   v.string(),
   v.isoTime('The time is badly formatted.')
 );

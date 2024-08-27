@@ -50,18 +50,27 @@ describe('nanoid', () => {
       });
     });
 
-    test('for with _ and - symbols', () => {
+    test('for normal Nano IDs', () => {
       expectNoActionIssue(action, [
-        'OIjC22zGKp_rrTYQBb3xt',
-        '8hiQ-95aV5qCnB4x0rPBu',
-        'aIojG8uVOE0-1ANOZLugU',
+        'NOi6NWfhDRpgzBYFRR-uE',
+        'D7j9AWMA6anLPDE2_2uHz',
+        'g_Se_MXrTmRJpmcp8cN5m',
+        'Oc0XNYtCgyrX-x2T33z3E',
+        'gGCr-6yBmZkOTJQ1oLAFr',
       ]);
     });
 
-    test('for alphabets and numerals only', () => {
+    test('for single char', () => {
+      expectNoActionIssue(action, ['a', 'z', 'A', 'Z', '0', '9', '_', '-']);
+    });
+
+    test('for two chars', () => {
+      expectNoActionIssue(action, ['aa', 'zz', 'AZ', '09', '_-', '9A']);
+    });
+
+    test('for long IDs', () => {
       expectNoActionIssue(action, [
-        '4EdTtQZCc5GIFA9ABjEsQ',
-        'ODz0tL5pgbQvpbptus6LL',
+        '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-',
       ]);
     });
   });
@@ -80,11 +89,11 @@ describe('nanoid', () => {
       expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
-    test('for string with spaces', () => {
+    test('for blank spaces', () => {
       expectActionIssue(action, baseIssue, [
+        ' vM7SGqVFmPS5tw7fII-G',
         'BImGM 7USGakXaVhydHgO',
         'LBjowKnkbk95kK3IoUV7 ',
-        ' vM7SGqVFmPS5tw7fII-G',
       ]);
     });
 
@@ -95,6 +104,7 @@ describe('nanoid', () => {
         '$3WZ4tXxsuiDBezXIJKlP',
         '%gSjBHLFDO67bE-nbgBRi',
         '&2zYmqr0APdImhdxC69t4',
+        '–gGCr6yBmZkOTJQ1oLAFr',
       ]);
     });
   });
