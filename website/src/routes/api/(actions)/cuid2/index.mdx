@@ -6,6 +6,7 @@ contributors:
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
@@ -30,6 +31,8 @@ const Action = v.cuid2<TInput, TMessage>(message);
 
 With `cuid2` you can validate the formatting of a string. If the input is not an Cuid2, you can use `message` to customize the error message.
 
+> Since Cuid2s are not limited to a fixed length, it is recommended to combine `cuid2` with <Link href="../length/">`length`</Link> to ensure the correct length.
+
 ## Returns
 
 - `Action` <Property {...properties.Action} />
@@ -43,7 +46,11 @@ The following examples show how `cuid2` can be used.
 Schema to validate an Cuid2.
 
 ```ts
-const Cuid2Schema = v.pip(v.string(), v.cuid2('The Cuid2 is badly formatted.'));
+const Cuid2Schema = v.pipe(
+  v.string(),
+  v.cuid2('The Cuid2 is badly formatted.'),
+  v.length(10, 'The Cuid2 must be 10 characters long.')
+);
 ```
 
 ## Related

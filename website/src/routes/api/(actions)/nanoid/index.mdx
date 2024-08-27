@@ -1,0 +1,71 @@
+---
+title: nanoid
+description: Creates a Nano ID validation action.
+source: /actions/nanoid/nanoid.ts
+contributors:
+  - jasperteo
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# nanoid
+
+Creates a [Nano ID](https://github.com/ai/nanoid) validation action.
+
+```ts
+const Action = v.nanoid<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `nanoid` you can validate the formatting of a string. If the input is not an Nano ID, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `nanoid` can be used.
+
+> Since Nano IDs are not limited to a fixed length, it is recommended to combine `nanoid` with <Link href="../length/">`length`</Link> to ensure the correct length.
+
+### Nano ID schema
+
+Schema to validate a Nano ID.
+
+```ts
+const NanoIDSchema = v.pipe(
+  v.string(),
+  v.nanoid('The Nano ID is badly formatted.'),
+  v.length(21, 'The Nano ID must be 21 characters long.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `nanoid`.
+
+### Schemas
+
+<ApiList items={['any', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

@@ -122,6 +122,7 @@
 - [minSize](/api/minSize/)
 - [minValue](/api/minValue/)
 - [multipleOf](/api/multipleOf/)
+- [nanoid](/api/nanoid/)
 - [nonEmpty](/api/nonEmpty/)
 - [normalize](/api/normalize/)
 - [notBytes](/api/notBytes/)
