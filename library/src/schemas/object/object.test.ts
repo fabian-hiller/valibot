@@ -148,7 +148,6 @@ describe('object', () => {
     test('for nullish entry', () => {
       expectNoSchemaIssue(object({ key: nullish(number()) }), [
         {},
-        // @ts-expect-error
         { key: undefined },
         { key: null },
         { key: 123 },

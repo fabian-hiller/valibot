@@ -117,14 +117,10 @@ type ExactOptionalInput<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > = TSchema extends
-  | NullishSchema<infer TWrapped, never>
-  | NullishSchemaAsync<infer TWrapped, never>
-  ? ExactOptionalInput<TWrapped> | null
-  : TSchema extends
-        | OptionalSchema<infer TWrapped, never>
-        | OptionalSchemaAsync<infer TWrapped, never>
-    ? ExactOptionalInput<TWrapped>
-    : InferInput<TSchema>;
+  | OptionalSchema<infer TWrapped, never>
+  | OptionalSchemaAsync<infer TWrapped, never>
+  ? ExactOptionalInput<TWrapped>
+  : InferInput<TSchema>;
 
 /**
  * Exact optional output type.
@@ -134,18 +130,12 @@ type ExactOptionalOutput<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > = TSchema extends
-  | NullishSchema<infer TWrapped, never>
-  | NullishSchemaAsync<infer TWrapped, never>
+  | OptionalSchema<infer TWrapped, never>
+  | OptionalSchemaAsync<infer TWrapped, never>
   ? HasDefault<TSchema> extends true
     ? InferOutput<TSchema>
-    : ExactOptionalOutput<TWrapped> | null
-  : TSchema extends
-        | OptionalSchema<infer TWrapped, never>
-        | OptionalSchemaAsync<infer TWrapped, never>
-    ? HasDefault<TSchema> extends true
-      ? InferOutput<TSchema>
-      : ExactOptionalOutput<TWrapped>
-    : InferOutput<TSchema>;
+    : ExactOptionalOutput<TWrapped>
+  : InferOutput<TSchema>;
 
 /**
  * Infer entries input type.

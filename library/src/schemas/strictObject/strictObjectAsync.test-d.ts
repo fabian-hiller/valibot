@@ -59,7 +59,7 @@ describe('strictObjectAsync', () => {
       expectTypeOf<InferInput<Schema>>().toEqualTypeOf<{
         key1: string;
         key2?: string;
-        key3?: string | null;
+        key3?: string | null | undefined;
         key4: { key: number };
         key5: string;
       }>();
@@ -69,7 +69,7 @@ describe('strictObjectAsync', () => {
       expectTypeOf<InferOutput<Schema>>().toEqualTypeOf<{
         key1: string;
         key2: string;
-        key3?: string | null;
+        key3?: string | null | undefined;
         key4: { key: number };
         readonly key5: string;
       }>();

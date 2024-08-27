@@ -68,7 +68,7 @@ describe('objectWithRestAsync', () => {
         {
           key1: string;
           key2?: string;
-          key3?: string | null;
+          key3?: string | null | undefined;
           key4: { key: number };
           key5: string;
         } & { [key: string]: boolean }
@@ -80,7 +80,7 @@ describe('objectWithRestAsync', () => {
         {
           key1: string;
           key2: string;
-          key3?: string | null;
+          key3?: string | null | undefined;
           key4: { key: number };
           readonly key5: string;
         } & { [key: string]: boolean }
