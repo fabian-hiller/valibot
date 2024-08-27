@@ -33,7 +33,7 @@ type LoginInput = v.InferInput<typeof LoginSchema>; // { email: string; password
 
 ## Infer output types
 
-The output type differs from the input type only if you use <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link> or <Link href="/api/nullish/">`nullish`</Link> with a default value or <Link href="/api/brand/">`brand`</Link>, <Link href="/api/readonly/">`readonly`</Link> or <Link href="/api/transform/">`transform`</Link> to transform the input or data type of a schema after validation. The output type corresponds to the output of <Link href="/api/parse/">`parse`</Link> and <Link href="/api/safeParse/">`safeParse`</Link>. To infer it, you use the utility type <Link href="/api/InferOutput/">`InferOutput`</Link>.
+The output type differs from the input type only if you use <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link>, <Link href="/api/nullish/">`nullish`</Link> or <Link href="/api/undefinedable/">`undefinedable`</Link> with a default value or <Link href="/api/brand/">`brand`</Link>, <Link href="/api/readonly/">`readonly`</Link> or <Link href="/api/transform/">`transform`</Link> to transform the input or data type of a schema after validation. The output type corresponds to the output of <Link href="/api/parse/">`parse`</Link> and <Link href="/api/safeParse/">`safeParse`</Link>. To infer it, you use the utility type <Link href="/api/InferOutput/">`InferOutput`</Link>.
 
 ```ts
 import * as v from 'valibot';

@@ -5,6 +5,8 @@ import type {
   NullishSchemaAsync,
   OptionalSchema,
   OptionalSchemaAsync,
+  UndefinedableSchema,
+  UndefinedableSchemaAsync,
 } from '../../schemas/index.ts';
 import type {
   BaseIssue,
@@ -41,6 +43,15 @@ export type InferDefault<
         | BaseSchema<unknown, unknown, BaseIssue<unknown>>
         | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
         unknown
+      >
+    | UndefinedableSchema<
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >
+    | UndefinedableSchemaAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        unknown
       >,
 > = TSchema extends
   | NullableSchema<
@@ -66,6 +77,15 @@ export type InferDefault<
       infer TDefault
     >
   | OptionalSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      infer TDefault
+    >
+  | UndefinedableSchema<
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      infer TDefault
+    >
+  | UndefinedableSchemaAsync<
       | BaseSchema<unknown, unknown, BaseIssue<unknown>>
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       infer TDefault

@@ -14,6 +14,8 @@ import type {
   NullishSchemaAsync,
   OptionalSchema,
   OptionalSchemaAsync,
+  UndefinedableSchema,
+  UndefinedableSchemaAsync,
 } from '../../schemas/index.ts';
 import type {
   BaseIssue,
@@ -72,6 +74,15 @@ export function unwrap<
       >
     | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
     | OptionalSchemaAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >
+    | UndefinedableSchema<
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >
+    | UndefinedableSchemaAsync<
         | BaseSchema<unknown, unknown, BaseIssue<unknown>>
         | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
         unknown

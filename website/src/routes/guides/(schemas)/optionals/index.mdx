@@ -11,11 +11,11 @@ import { Link } from '@builder.io/qwik-city';
 
 # Optionals
 
-It often happens that `undefined` or `null` should also be accepted instead of the value. To make the API more readable for this and to reduce boilerplate, I offer a shortcut for this functionality with <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link> and <Link href="/api/nullish/">`nullish`</Link>.
+It often happens that `undefined` or `null` should also be accepted instead of the value. To make the API more readable for this and to reduce boilerplate, I offer a shortcut for this functionality with <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link>, <Link href="/api/nullish/">`nullish`</Link> and <Link href="/api/undefinedable/">`undefinedable`</Link>.
 
 ## How it works
 
-To accept `undefined` or `null` besides your actual value, you just have to wrap the schema in <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link> and <Link href="/api/nullish/">`nullish`</Link>.
+To accept `undefined` or `null` besides your actual value, you just have to wrap the schema in <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link>, and <Link href="/api/undefinedable/">`undefinedable`</Link>.
 
 ```ts
 import * as v from 'valibot';
@@ -23,6 +23,7 @@ import * as v from 'valibot';
 const OptionalStringSchema = v.optional(v.string()); // string | undefined
 const NullableStringSchema = v.nullable(v.string()); // string | null
 const NullishStringSchema = v.nullish(v.string()); // string | null | undefined
+const UndefinedableStringSchema = v.undefinedable(v.string()); // string | undefined
 ```
 
 ### Use in objects
@@ -37,7 +38,7 @@ const OptionalKeySchema = v.object({ key: v.optional(v.string()) }); // { key?: 
 
 ## Default values
 
-The special thing about <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link> and <Link href="/api/nullish/">`nullish`</Link> is that the schema functions accept a default value as the second argument. Depending on the schema function, this default value is always used if the input is `undefined` or `null`.
+The special thing about <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link>, <Link href="/api/nullish/">`nullish`</Link> and <Link href="/api/undefinedable/">`undefinedable`</Link> is that the schema functions accept a default value as the second argument. Depending on the schema function, this default value is always used if the input is `undefined` or `null`.
 
 ```ts
 import * as v from 'valibot';

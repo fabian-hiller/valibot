@@ -16,6 +16,7 @@ import {
   type StringIssue,
   type StringSchema,
 } from '../string/index.ts';
+import type { UndefinedableSchema } from '../undefinedable/index.ts';
 import {
   objectWithRestAsync,
   type ObjectWithRestSchemaAsync,
@@ -58,6 +59,7 @@ describe('objectWithRestAsync', () => {
         key3: NullishSchema<StringSchema<undefined>, never>;
         key4: ObjectSchema<{ key: NumberSchema<undefined> }, never>;
         key5: SchemaWithPipe<[StringSchema<undefined>, ReadonlyAction<string>]>;
+        key6: UndefinedableSchema<StringSchema<undefined>, 'bar'>;
       },
       BooleanSchema<undefined>,
       undefined
@@ -71,6 +73,7 @@ describe('objectWithRestAsync', () => {
           key3?: string | null | undefined;
           key4: { key: number };
           key5: string;
+          key6: string | undefined;
         } & { [key: string]: boolean }
       >();
     });
@@ -83,6 +86,7 @@ describe('objectWithRestAsync', () => {
           key3?: string | null | undefined;
           key4: { key: number };
           readonly key5: string;
+          key6: string;
         } & { [key: string]: boolean }
       >();
     });

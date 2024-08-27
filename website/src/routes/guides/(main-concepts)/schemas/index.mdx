@@ -121,6 +121,7 @@ Beyond primitive and complex values, I also provide schema functions for more sp
     'nullish',
     'optional',
     'picklist',
+    'undefinedable',
     'union',
     'unknown',
     'variant',
@@ -147,6 +148,7 @@ const NullableSchema = v.nullable(v.string()); // string | null
 const NullishSchema = v.nullish(v.string()); // string | null | undefined
 const OptionalSchema = v.optional(v.string()); // string | undefined
 const PicklistSchema = v.picklist(['a', 'b']); // 'a' | 'b'
+const UndefinedableSchema = v.undefinedable(v.string()); // string | undefined
 const UnionSchema = v.union([v.string(), v.number()]); // string | number
 const UnknownSchema = v.unknown(); // unknown
 const VariantSchema = v.variant('type', [
