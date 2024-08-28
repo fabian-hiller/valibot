@@ -1,19 +1,16 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "lib": ["ESNext"],
-    "target": "ESNext",
+    "allowImportingTsExtensions": true,
+    "declaration": true,
+    "exactOptionalPropertyTypes": true,
+    "isolatedDeclarations": true,
+    "lib": ["ESNext", "DOM"],
     "module": "ESNext",
     "moduleResolution": "node",
-    "allowImportingTsExtensions": true,
-    "skipLibCheck": true,
     "noEmit": true,
-    "declaration": true,
-    "isolatedDeclarations": true,
-    "paths": {
-      "valibot": ["../../library/src/index.ts"],
-      "valibot/*": ["../../library/src/*"]
-    }
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext"
   },
-  "include": ["src", "./*.config.ts"]
+  "include": ["src"]
 }

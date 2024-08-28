@@ -1,51 +1,48 @@
-# Valibot to JSON Schema converter
+# Valibot to JSON Schema
 
 Utility to convert [Valibot](https://valibot.dev) schemas to JSON schema (draft 07).
 
 ```js
-import * as v from 'valibot';
 import { toJsonSchema } from '@valibot/to-json-schema';
+import * as v from 'valibot';
 
-toJsonSchema(v.string());
-// => `{ type: 'string' }`
+toJsonSchema(v.string()); // { type: "string" }
 ```
 
-Some valibot features can't map to JSON schema. Valibot transformations have no equivalent in JSON schema as it only 
-does validation. And also some Valibot schemas or validations are too specific to JS and do not have an equivalent 
-JSON schema attribute.
+Some Valibot features can't be mapped to JSON schema. For example, transformation actions have no equivalent in JSON schema. Also, some Valibot schemas or validations are too JS-specific and do not have an equivalent JSON schema attribute.
 
 ## Supported features
 
-**Warning**: Converted schema might have slightly different behavior in JSON schema validators (especially on string 
-format) since their implementation is different from Valibot's implementation.
+**Warning**: Converted schemas may behave slightly differently in JSON schema validators (especially for string format) because their implementation is different from Valibot's.
 
-Here are the supported Valibot features:
+Here are the supported Valibot functions:
 
-| feature            | status                      |
-|--------------------|-----------------------------|
-| `any` schema       | ✅ supported                 |
-| `null` schema      | ✅ supported                 |
-| `string` schema    | ✅ supported                 |
-| `object` schema    | ✅ supported                 |
-| `email` validation | ✅ supported (string format) |
+| Schema   | Status | Note |
+| -------- | ------ | ---- |
+| `any`    | ✅     |      |
+| `null`   | ✅     |      |
+| `string` | ✅     |      |
+| `object` | ✅     |      |
 
-## Options 
+| Actions | Status | Note |
+| ------- | ------ | ---- |
+| `email` | ✅     |      |
+
+## Options
 
 ### Force conversion
 
-To force the conversion of unsupported Valibot features, you can provide the `force: true` option.
+To force the conversion of unsupported Valibot features, you can provide the `force: true` option. Without this option, `toJsonSchema` will throw an error for unsupported features.
 
-Unsupported schemas will return the empty JSON schema (`{}`) and unsupported validations or transformations will be 
-ignored.
+> Unsupported schemas will return an empty JSON schema (`{}`) and unsupported actions will be ignored.
 
 Example:
+
 ```js
-import * as v from 'valibot';
 import { toJsonSchema } from '@valibot/to-json-schema';
+import * as v from 'valibot';
 
-toJsonSchema(v.blob(), { force: true });
-// => `{}` (empty schema) 
+toJsonSchema(v.blob(), { force: true }); // {} (empty schema)
 
-toJsonSchema(v.pipe(v.string(), v.mac64()), { force: true });
-// => `{ type: 'string' }` (ignoring the unsupported mac64 validation) 
+toJsonSchema(v.pipe(v.string(), v.uuid()), { force: true }); // { type: "string" } (ignoring UUID validation)
 ```
