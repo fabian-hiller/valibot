@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "@babel/plugin-syntax-typescript",
+    ["babel-plugin-transform-regex", {
+      "removeImport": true,
+      "disableUnicodeSets": true,
+      "optimize": true
+    }]
+  ]
+}

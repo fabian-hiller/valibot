@@ -19,4 +19,10 @@ export default defineConfig({
       ],
     },
   },
+  resolve: {
+    // https://vitejs.dev/config/shared-options#resolve-alias
+    alias: {
+      '../../regex.ts': '../../../transpiled/regex.ts',
+    },
+  },
 });

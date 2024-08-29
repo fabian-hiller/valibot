@@ -1,13 +1,26 @@
+import { regex } from 'regex';
+
+// Hint: The `regex` import declaration and use of the [regex](https://github.com/slevithan/regex)
+// library (which extends JS regex syntax with key PCRE features that improve readability) are
+// transpiled away.
+
 /**
  * [Base64](https://en.wikipedia.org/wiki/Base64) regex.
  */
-export const BASE64_REGEX: RegExp =
-  /^(?:[\da-z+/]{4})*(?:[\da-z+/]{2}==|[\da-z+/]{3}=)?$/iu;
+export const BASE64_REGEX: RegExp = regex('i')`
+  ^ (\g<char>{4})* (\g<char>{2} == | \g<char>{3} =)? $
+
+  (?(DEFINE) (?<char> [\da-z+\/]))
+`;
 
 /**
  * [BIC](https://en.wikipedia.org/wiki/ISO_9362) regex.
  */
-export const BIC_REGEX: RegExp = /^[A-Z]{6}(?!00)[\dA-Z]{2}(?:[\dA-Z]{3})?$/u;
+export const BIC_REGEX: RegExp = regex`^
+  [A-Z]{6}
+  (?! 00) [\dA-Z]{2}
+  ([\dA-Z]{3})?
+$`;
 
 /**
  * [Cuid2](https://github.com/paralleldrive/cuid2) regex.
@@ -22,8 +35,18 @@ export const DECIMAL_REGEX: RegExp = /^\d+$/u;
 /**
  * Email regex.
  */
-export const EMAIL_REGEX: RegExp =
-  /^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/iu;
+export const EMAIL_REGEX: RegExp = regex('i')`
+  ^
+  \g<userChars> (\. \g<userChars>)*           # username
+  @ \g<domainChars> ([.\-] \g<domainChars>)*  # @domain
+  \. [a-z]{2,}                                # .TLD
+  $
+
+  (?(DEFINE)
+    (?<userChars>   [\w+\-]+)
+    (?<domainChars> [\da-z]+)
+  )
+`;
 
 /**
  * Emoji regex from [emoji-regex-xs](https://github.com/slevithan/emoji-regex-xs) v1.0.0 (MIT license).
@@ -38,37 +61,100 @@ export const EMOJI_REGEX: RegExp =
 /**
  * [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) regex.
  */
-export const HEXADECIMAL_REGEX: RegExp = /^(?:0[hx])?[\da-f]+$/iu;
+export const HEXADECIMAL_REGEX: RegExp = regex('i')`^ (0 [hx])? \p{AHex}+ $`;
 
 /**
  * [Hex color](https://en.wikipedia.org/wiki/Web_colors#Hex_triplet) regex.
  */
-export const HEX_COLOR_REGEX: RegExp =
-  /^#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/iu;
+export const HEX_COLOR_REGEX: RegExp = regex`^
+  \# ( \p{AHex}{3,4}
+     | \p{AHex}{6}
+     | \p{AHex}{8}
+     )
+$`;
 
 /**
  * [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity) regex.
  */
-export const IMEI_REGEX: RegExp = /^\d{15}$|^\d{2}-\d{6}-\d{6}-\d$/u;
+export const IMEI_REGEX: RegExp = regex`^ (\d{15} | \d{2}-\d{6}-\d{6}-\d) $`;
 
 /**
  * [IPv4](https://en.wikipedia.org/wiki/IPv4) regex.
  */
-export const IPV4_REGEX: RegExp =
-  // eslint-disable-next-line redos-detector/no-unsafe-regex -- false positive
-  /^(?:(?:[1-9]|1\d|2[0-4])?\d|25[0-5])(?:\.(?:(?:[1-9]|1\d|2[0-4])?\d|25[0-5])){3}$/u;
+export const IPV4_REGEX: RegExp = regex`
+  ^ \g<ipv4> $
+
+  (?(DEFINE)
+    (?<ipv4> \g<byte> (\. \g<byte>){3})
+    (?<byte> 25[0-5] | 2[0-4]\d | 1\d\d | [1-9]?\d)
+  )
+`;
 
 /**
  * [IPv6](https://en.wikipedia.org/wiki/IPv6) regex.
  */
-export const IPV6_REGEX: RegExp =
-  /^(?:(?:[\da-f]{1,4}:){7}[\da-f]{1,4}|(?:[\da-f]{1,4}:){1,7}:|(?:[\da-f]{1,4}:){1,6}:[\da-f]{1,4}|(?:[\da-f]{1,4}:){1,5}(?::[\da-f]{1,4}){1,2}|(?:[\da-f]{1,4}:){1,4}(?::[\da-f]{1,4}){1,3}|(?:[\da-f]{1,4}:){1,3}(?::[\da-f]{1,4}){1,4}|(?:[\da-f]{1,4}:){1,2}(?::[\da-f]{1,4}){1,5}|[\da-f]{1,4}:(?::[\da-f]{1,4}){1,6}|:(?:(?::[\da-f]{1,4}){1,7}|:)|fe80:(?::[\da-f]{0,4}){0,4}%[\da-z]+|::(?:f{4}(?::0{1,4})?:)?(?:(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\.){3}(?:25[0-5]|(?:2[0-4]|1?\d)?\d)|(?:[\da-f]{1,4}:){1,4}:(?:(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\.){3}(?:25[0-5]|(?:2[0-4]|1?\d)?\d))$/iu;
+export const IPV6_REGEX: RegExp = regex('i')`
+  ^ \g<ipv6> $
 
+  (?(DEFINE)
+    (?<ipv6>
+      ( ( \g<part>{7}
+        | :: \g<part>{0,6}
+        | \g<part>    : \g<part>{0,5}
+        | \g<part>{2} : \g<part>{0,4}
+        | \g<part>{3} : \g<part>{0,3}
+        | \g<part>{4} : \g<part>{0,2}
+        | \g<part>{5} : \g<part>?
+        )
+        \g<segment>
+      | ::
+      # With zone identifier
+      | fe80: (: \p{AHex}{0,4}){0,4} % [\da-z]+
+      # Mixed addresses
+      | :: (ffff (: 0{1,4})? :)? \g<ipv4>
+      | \g<part>{1,4} : \g<ipv4>
+      )
+    )
+    (?<part> \g<segment> :)
+    (?<segment> \p{AHex}{1,4})
+    (?<ipv4> \g<byte> (\. \g<byte>){3})
+    (?<byte> 25[0-5] | 2[0-4]\d | 1\d\d | [1-9]?\d)
+  )
+`;
+
+// Q: Would it be tree-shakeable if this used interpolation without adding any new variables, as
+// ``new RegExp(`^(?:${IPV4_REGEX.source.slice(1, -1)}|${IPV6_REGEX.source.slice(1, -1)})$`, 'iu')``?
 /**
  * [IP](https://en.wikipedia.org/wiki/IP_address) regex.
  */
-export const IP_REGEX: RegExp =
-  /^(?:(?:[1-9]|1\d|2[0-4])?\d|25[0-5])(?:\.(?:(?:[1-9]|1\d|2[0-4])?\d|25[0-5])){3}$|^(?:(?:[\da-f]{1,4}:){7}[\da-f]{1,4}|(?:[\da-f]{1,4}:){1,7}:|(?:[\da-f]{1,4}:){1,6}:[\da-f]{1,4}|(?:[\da-f]{1,4}:){1,5}(?::[\da-f]{1,4}){1,2}|(?:[\da-f]{1,4}:){1,4}(?::[\da-f]{1,4}){1,3}|(?:[\da-f]{1,4}:){1,3}(?::[\da-f]{1,4}){1,4}|(?:[\da-f]{1,4}:){1,2}(?::[\da-f]{1,4}){1,5}|[\da-f]{1,4}:(?::[\da-f]{1,4}){1,6}|:(?:(?::[\da-f]{1,4}){1,7}|:)|fe80:(?::[\da-f]{0,4}){0,4}%[\da-z]+|::(?:f{4}(?::0{1,4})?:)?(?:(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\.){3}(?:25[0-5]|(?:2[0-4]|1?\d)?\d)|(?:[\da-f]{1,4}:){1,4}:(?:(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\.){3}(?:25[0-5]|(?:2[0-4]|1?\d)?\d))$/iu;
+export const IP_REGEX: RegExp = regex('i')`
+  ^ (\g<ipv4> | \g<ipv6>) $
+
+  (?(DEFINE)
+    (?<ipv6>
+      ( ( \g<part>{7}
+        | :: \g<part>{0,6}
+        | \g<part>    : \g<part>{0,5}
+        | \g<part>{2} : \g<part>{0,4}
+        | \g<part>{3} : \g<part>{0,3}
+        | \g<part>{4} : \g<part>{0,2}
+        | \g<part>{5} : \g<part>?
+        )
+        \g<segment>
+      | ::
+      # With zone identifier
+      | fe80: (: \p{AHex}{0,4}){0,4} % [\da-z]+
+      # Mixed addresses
+      | :: (ffff (: 0{1,4})? :)? \g<ipv4>
+      | \g<part>{1,4} : \g<ipv4>
+      )
+    )
+    (?<part> \g<segment> :)
+    (?<segment> \p{AHex}{1,4})
+    (?<ipv4> \g<byte> (\. \g<byte>){3})
+    (?<byte> 25[0-5] | 2[0-4]\d | 1\d\d | [1-9]?\d)
+  )
+`;
 
 /**
  * [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date regex.
