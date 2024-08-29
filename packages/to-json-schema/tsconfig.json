@@ -10,7 +10,11 @@
     "noEmit": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "paths": {
+      "valibot": ["../../library/src/index.ts"],
+      "valibot/*": ["../../library/src/*"]
+    }
   },
   "include": ["src"]
 }

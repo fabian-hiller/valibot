@@ -1,23 +1,24 @@
 import type { JSONSchema7 } from 'json-schema';
-import type { GenericSchema } from 'valibot';
-import { convertSchema } from './schema-converters/index.ts';
-import type { ConversionOptions } from './types.ts';
-
-/** JSON Schema URI */
-export const $schema = 'http://json-schema.org/draft-07/schema#';
+import type * as v from 'valibot';
+import { convertSchema } from './convertSchema.ts';
+import type { JsonSchemaConfig } from './type.ts';
 
 /**
- * Convert valibot schema as JSON schema
+ * Converts a Valibot schema to the JSON schema format.
  *
- * @param schema a valibot schema
- * @param options conversion options
+ * @param schema The Valibot schema object.
+ * @param config The JSON schema configuration.
  *
- * @returns the converted JSON schema
+ * @returns The converted JSON schema.
  */
 export function toJsonSchema(
-  schema: GenericSchema,
-  options?: ConversionOptions
+  schema: v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+  config?: JsonSchemaConfig
 ): JSONSchema7 {
-  const converted = convertSchema(schema, options);
-  return { $schema, ...converted };
+  return convertSchema(
+    { $schema: 'http://json-schema.org/draft-07/schema#' },
+    // @ts-expect-error
+    schema,
+    config
+  );
 }

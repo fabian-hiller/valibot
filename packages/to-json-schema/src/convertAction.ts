@@ -6,8 +6,7 @@ import type { JsonSchemaConfig } from './type.ts';
  * Action type.
  */
 type Action =
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | v.DescriptionAction<any, string>
+  | v.DescriptionAction<unknown, string>
   | v.EmailAction<string, v.ErrorMessage<v.EmailIssue<string>> | undefined>
   | v.IntegerAction<number, v.ErrorMessage<v.IntegerIssue<number>> | undefined>;
 

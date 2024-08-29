@@ -17,16 +17,26 @@ Some Valibot features can't be mapped to JSON schema. For example, transformatio
 
 Here are the supported Valibot functions:
 
-| Schema   | Status | Note |
-| -------- | ------ | ---- |
-| `any`    | ✅     |      |
-| `null`   | ✅     |      |
-| `string` | ✅     |      |
-| `object` | ✅     |      |
+| Schema           | Status | Note |
+|------------------| ------ | ---- |
+| `any`            | ✅     |      |
+| `unknown`        | ✅     |      |
+| `null`           | ✅     |      |
+| `nullable`       | ✅     |      |
+| `nullish`        | ✅     |      |
+| `optional`       | ✅     |      |
+| `number`         | ✅     |      |
+| `string`         | ✅     |      |
+| `object`         | ✅     |      |
+| `objectWithRest` | ✅     |      |
+| `looseObject`    | ✅     |      |
+| `strictObject`   | ✅     |      |
 
-| Actions | Status | Note |
-| ------- | ------ | ---- |
-| `email` | ✅     |      |
+| Actions       | Status | Note |
+|---------------| ------ | ---- |
+| `description` | ✅     |      |
+| `email`       | ✅     |      |
+| `integer`     | ✅     |      |
 
 ## Options
 
