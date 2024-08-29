@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Add `nanoid` action to validate Nano IDs (pull request #789)
 - Add `undefinedable` and `undefinedableAsync` schema (issue #385)
+- Fix invalid output type for transformed optional object entries (issue #806)
 
 ## v0.39.0 (August 24, 2024)
 

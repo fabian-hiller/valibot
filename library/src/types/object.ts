@@ -165,9 +165,11 @@ type OptionalInputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
  */
 type OptionalOutputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
   [TKey in keyof TEntries]: TEntries[TKey] extends QuestionMarkSchema
-    ? HasDefault<TEntries[TKey]> extends true
-      ? never
-      : TKey
+    ? undefined extends InferOutput<TEntries[TKey]>
+      ? HasDefault<TEntries[TKey]> extends false
+        ? TKey
+        : never
+      : never
     : never;
 }[keyof TEntries];
 
