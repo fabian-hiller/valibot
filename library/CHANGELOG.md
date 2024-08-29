@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.40.0 (August 29, 2024)
 
 - Add `nanoid` action to validate Nano IDs (pull request #789)
 - Add `undefinedable` and `undefinedableAsync` schema (issue #385)
