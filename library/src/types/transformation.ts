@@ -24,7 +24,8 @@ export interface BaseTransformation<
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-  ) => BaseTransformation<TInput, TOutput, TIssue>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ) => BaseTransformation<any, any, BaseIssue<unknown>>;
   /**
    * Whether it's async.
    */
@@ -72,9 +73,10 @@ export interface BaseTransformationAsync<
   readonly reference: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
-  ) =>
-    | BaseTransformation<TInput, TOutput, TIssue>
-    | BaseTransformationAsync<TInput, TOutput, TIssue>;
+  ) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | BaseTransformation<any, any, BaseIssue<unknown>>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    | BaseTransformationAsync<any, any, BaseIssue<unknown>>;
   /**
    * Whether it's async.
    */
