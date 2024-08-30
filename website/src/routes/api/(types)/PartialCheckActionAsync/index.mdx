@@ -1,0 +1,28 @@
+---
+title: PartialCheckActionAsync
+description: Partial check action async type.
+contributors:
+  - EltonLobo07
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# PartialCheckActionAsync
+
+Partial check action async type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TSelection` <Property {...properties.TSelection} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `PartialCheckActionAsync` <Property {...properties.BaseValidationAsync} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />
