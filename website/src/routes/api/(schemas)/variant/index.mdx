@@ -35,6 +35,8 @@ With `variant` you can validate if the input matches one of the given object `op
 
 > It is allowed to specify the exact same or a similar discriminator multiple times. However, in such cases `variant` will only return the output of the first untyped or typed variant option result. Typed results take precedence over untyped ones.
 
+> For deeply nested `variant` schemas with several different discriminator keys, `variant` will return an issue for the first most likely object schemas on invalid input. The order of the discriminator keys and the presence of a discriminator in the input are taken into account.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
@@ -75,6 +77,39 @@ const NestedVariantSchema = v.variant('type', [
     type: v.literal('color'),
     date: v.pipe(v.string(), v.hexColor()),
   }),
+]);
+```
+
+### Complex variant schema
+
+You can also use `variant` to validate complex objects with multiple different discriminator keys.
+
+```ts
+const ComplexVariantSchema = v.variant('kind', [
+  v.variant('type', [
+    v.object({
+      kind: v.literal('fruit'),
+      type: v.literal('apple'),
+      item: v.object({ … }),
+    }),
+    v.object({
+      kind: v.literal('fruit'),
+      type: v.literal('banana'),
+      item: v.object({ … }),
+    }),
+  ]),
+  v.variant('type', [
+    v.object({
+      kind: v.literal('vegetable'),
+      type: v.literal('carrot'),
+      item: v.object({ … }),
+    }),
+    v.object({
+      kind: v.literal('vegetable'),
+      type: v.literal('tomato'),
+      item: v.object({ … }),
+    }),
+  ]),
 ]);
 ```
 

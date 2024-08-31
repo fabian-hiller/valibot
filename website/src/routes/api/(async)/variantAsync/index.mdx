@@ -36,6 +36,8 @@ With `variantAsync` you can validate if the input matches one of the given objec
 
 > It is allowed to specify the exact same or a similar discriminator multiple times. However, in such cases `variantAsync` will only return the output of the first untyped or typed variant option result. Typed results take precedence over untyped ones.
 
+> For deeply nested `variant` schemas with several different discriminator keys, `variant` will return an issue for the first most likely object schemas on invalid input. The order of the discriminator keys and the presence of a discriminator in the input are taken into account.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
