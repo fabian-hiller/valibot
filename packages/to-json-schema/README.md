@@ -32,11 +32,24 @@ Here are the supported Valibot functions:
 | `looseObject`    | ✅     |      |
 | `strictObject`   | ✅     |      |
 
-| Actions       | Status | Note |
-|---------------| ------ | ---- |
-| `description` | ✅     |      |
-| `email`       | ✅     |      |
-| `integer`     | ✅     |      |
+| Actions        | Status | Note                                         |
+|----------------|--------|----------------------------------------------|
+| `description`  | ✅      |                                              |
+| `email`        | ✅      |                                              |
+| `isoDate`      | ✅      |                                              |
+| `isoTimestamp` | ✅      |                                              |
+| `ipv4`         | ✅      |                                              |
+| `ipv6`         | ✅      |                                              |
+| `uuid`         | ✅      |                                              |
+| `regex`        | ⚠️     | RexExp flags are unsupported in JSON schema  |
+| `integer`      | ✅      |                                              |
+| `length`       | ✅      |                                              |
+| `minLength`    | ✅      |                                              |
+| `maxLength`    | ✅      |                                              |
+| `value`        | ⚠️     | For `number`, `string` and `boolean` schemas |
+| `minValue`     | ⚠️     | For `number` schema                          |
+| `maxValue`     | ⚠️     | For `number` schema                          |
+| `multipleOf`   | ✅      |                                              |
 
 ## Options
 
