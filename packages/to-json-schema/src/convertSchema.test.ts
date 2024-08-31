@@ -91,6 +91,13 @@ describe('convertSchema', () => {
       anyOf: [{ type: 'string' }, { type: 'null' }],
       default: 'foo',
     });
+    expect(() =>
+      convertSchema(
+        {},
+        v.nullable(v.number(), () => Infinity),
+        undefined
+      )
+    ).toThrowError(`Default value for 'nullable' is not JSON compatible.`);
   });
 
   test('should convert nullish schema', () => {
@@ -236,6 +243,13 @@ describe('convertSchema', () => {
       type: 'string',
       default: 'foo',
     });
+    expect(() =>
+      convertSchema(
+        {},
+        v.optional(v.number(), () => Infinity),
+        undefined
+      )
+    ).toThrowError(`Default value for 'optional' is not JSON compatible.`);
   });
 
   test('should convert string schema', () => {

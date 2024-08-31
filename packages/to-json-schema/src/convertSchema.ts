@@ -1,7 +1,8 @@
 import type { JSONSchema7 } from 'json-schema';
-import type * as v from 'valibot';
+import * as v from 'valibot';
 import { convertAction } from './convertAction.ts';
 import type { JsonSchemaConfig } from './type.ts';
+import { assertJSON } from './utils/assertJSON.ts';
 
 /**
  * Schema type.
@@ -104,11 +105,16 @@ export function convertSchema(
         convertSchema({}, schema.wrapped as SchemaOrPipe, config),
         { type: 'null' },
       ];
-      if ('default' in schema) {
-        json.default =
-          typeof schema.default === 'function'
-            ? schema.default()
-            : schema.default;
+      const defaultValue = v.getDefault(schema);
+      if (
+        defaultValue !== undefined &&
+        assertJSON(
+          defaultValue,
+          config?.force,
+          `Default value for '${schema.type}' is not JSON compatible.`
+        )
+      ) {
+        json.default = defaultValue;
       }
       break;
     }
@@ -146,11 +152,16 @@ export function convertSchema(
 
     case 'optional': {
       json = convertSchema({}, schema.wrapped as SchemaOrPipe, config);
-      if ('default' in schema) {
-        json.default =
-          typeof schema.default === 'function'
-            ? schema.default()
-            : schema.default;
+      const defaultValue = v.getDefault(schema);
+      if (
+        defaultValue !== undefined &&
+        assertJSON(
+          defaultValue,
+          config?.force,
+          `Default value for '${schema.type}' is not JSON compatible.`
+        )
+      ) {
+        json.default = defaultValue;
       }
       break;
     }
