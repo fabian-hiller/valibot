@@ -1,11 +1,303 @@
 ---
 title: pipeAsync
+description: Adds a pipeline to a schema, that can validate and transform its input.
 source: /methods/pipe/pipeAsync.ts
 contributors:
   - EltonLobo07
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # pipeAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/pipe/pipeAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Adds a pipeline to a schema, that can validate and transform its input.
+
+```ts
+const Schema = v.pipeAsync<TSchema, TItems>(schema, ...items);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TItems` <Property {...properties.TItems} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `items` <Property {...properties.items} />
+
+### Explanation
+
+`pipeAsync` creates a modified copy of the given `schema`, containing a pipeline for detailed validations and transformations. It passes the input data asynchronously through the `items` in the order they are provided and each item can examine and modify it.
+
+> Since `pipeAsync` returns a schema that can be used as the first argument of another pipeline, it is possible to nest multiple `pipeAsync` calls to extend the validation and transformation further.
+
+`pipeAsync` aborts early and marks the output as untyped if issues were collected before attempting to execute a schema or transformation action as the next item in the pipeline, to prevent unexpected behavior.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `pipeAsync` can be used. Please see the <Link href="/guides/pipelines/">pipeline guide</Link> for more examples and explanations.
+
+### Stored email schema
+
+Schema to validate a stored email address.
+
+```ts
+import { isEmailPresent } from '~/api';
+
+const StoredEmailSchema = v.pipeAsync(
+  v.string(),
+  v.nonEmpty('Please enter your email.'),
+  v.email('The email is badly formatted.'),
+  v.maxLength(30, 'Your email is too long.'),
+  v.checkAsync(isEmailPresent, 'The email is not in the database.')
+);
+```
+
+### New user schema
+
+Schema to validate and transform new user details to a string.
+
+```ts
+import { isUsernameUnique } from '~/api';
+
+const NewUserSchema = v.pipeAsync(
+  v.objectAsync({
+    firstName: v.pipe(v.string(), v.minLength(2), v.maxLength(45)),
+    lastName: v.pipe(v.string(), v.minLength(2), v.maxLength(45)),
+    username: v.pipeAsync(
+      v.string(),
+      v.nonEmpty(),
+      v.checkAsync(isUsernameUnique, 'The username is not unique.')
+    ),
+  }),
+  v.transform(
+    ({ firstName, lastName, username }) =>
+      `${username} (${firstName} ${lastName})`
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `pipeAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'undefinedable',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'forward',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'is',
+    'keyof',
+    'omit',
+    'parse',
+    'parser',
+    'partial',
+    'pick',
+    'required',
+    'safeParse',
+    'safeParser',
+    'unwrap',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'base64',
+    'bic',
+    'brand',
+    'bytes',
+    'check',
+    'checkItems',
+    'creditCard',
+    'cuid2',
+    'decimal',
+    'description',
+    'email',
+    'emoji',
+    'empty',
+    'endsWith',
+    'everyItem',
+    'excludes',
+    'filterItems',
+    'findItem',
+    'finite',
+    'hash',
+    'hexadecimal',
+    'hexColor',
+    'imei',
+    'includes',
+    'integer',
+    'ip',
+    'ipv4',
+    'ipv6',
+    'isoDate',
+    'isoDateTime',
+    'isoTime',
+    'isoTimeSecond',
+    'isoTimestamp',
+    'isoWeek',
+    'length',
+    'mac',
+    'mac48',
+    'mac64',
+    'mapItems',
+    'maxBytes',
+    'maxLength',
+    'maxSize',
+    'maxValue',
+    'mimeType',
+    'minBytes',
+    'minLength',
+    'minSize',
+    'minValue',
+    'multipleOf',
+    'nanoid',
+    'nonEmpty',
+    'notBytes',
+    'notLength',
+    'notSize',
+    'notValue',
+    'octal',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'reduceItems',
+    'regex',
+    'safeInteger',
+    'size',
+    'someItem',
+    'sortItem',
+    'startsWith',
+    'toLowerCase',
+    'toMaxValue',
+    'toMinValue',
+    'toUpperCase',
+    'transform',
+    'trim',
+    'trimEnd',
+    'trimStart',
+    'ulid',
+    'url',
+    'uuid',
+    'value',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'checkAsync',
+    'customAsync',
+    'fallbackAsync',
+    'forwardAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialAsync',
+    'partialCheckAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'recordAsync',
+    'requiredAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'undefinedableAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>
