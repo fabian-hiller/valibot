@@ -1,0 +1,88 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  default_ci:
+    name: Run default CI of repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: CI workflow
+        uses: ./.github/workflows/ci.yml
+
+  library_npm:
+    name: Publish library to NPM
+    needs: default_ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
+      - name: Build
+        run: pnpm build
+        working-directory: library
+      - name: Publish
+        run: npm publish --provenance --access public
+        working-directory: library
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  library_jsr:
+    name: Publish library to JSR
+    needs: default_ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Publish
+        run: npx jsr publish
+        working-directory: library
+
+  i18n_npm:
+    name: Publish i18n to NPM
+    needs: default_ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
+      - name: Build
+        run: pnpm build.npm
+        working-directory: packages/i18n
+      - name: Publish
+        run: npm publish --provenance --access public
+        working-directory: packages/i18n
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  i18n_jsr:
+    name: Publish i18n to JSR
+    needs: default_ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
+      - name: Build
+        run: pnpm build.jsr
+        working-directory: packages/i18n
+      - name: Publish
+        run: npx jsr publish
+        working-directory: packages/i18n

@@ -25,9 +25,7 @@
   "scripts": {
     "lint": "tsc --noEmit",
     "build.npm": "tsm ./scripts/build-npm.ts",
-    "build.jsr": "tsm ./scripts/build-jsr.ts",
-    "publish.npm": "npm publish",
-    "publish.jsr": "npx jsr publish"
+    "build.jsr": "tsm ./scripts/build-jsr.ts"
   },
   "devDependencies": {
     "@types/node": "^20.12.2",

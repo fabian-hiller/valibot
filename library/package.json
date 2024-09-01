@@ -49,9 +49,7 @@
     "eslint.fix": "eslint \"src/**/*.ts*\" --fix",
     "format": "prettier --write ./src",
     "format.check": "prettier --check ./src",
-    "build": "tsup",
-    "publish.npm": "npm publish",
-    "publish.jsr": "npx jsr publish"
+    "build": "tsup"
   },
   "devDependencies": {
     "@types/eslint": "^8.56.10",
