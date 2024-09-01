@@ -3,14 +3,12 @@ name: Publish
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   default_ci:
     name: Run default CI of repository
-    runs-on: ubuntu-latest
-    steps:
-      - name: CI workflow
-        uses: ./.github/workflows/ci.yml
+    uses: ./.github/workflows/ci.yml
 
   library_npm:
     name: Publish library to NPM
@@ -28,8 +26,9 @@ jobs:
         run: pnpm build
         working-directory: library
       - name: Publish
-        run: npm publish --provenance --access public
+        run: pnpm publish --provenance --access public
         working-directory: library
+        continue-on-error: true
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -63,8 +62,9 @@ jobs:
         run: pnpm build.npm
         working-directory: packages/i18n
       - name: Publish
-        run: npm publish --provenance --access public
+        run: pnpm publish --provenance --access public --no-git-checks
         working-directory: packages/i18n
+        continue-on-error: true
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -84,5 +84,5 @@ jobs:
         run: pnpm build.jsr
         working-directory: packages/i18n
       - name: Publish
-        run: npx jsr publish
+        run: npx jsr publish --allow-dirty
         working-directory: packages/i18n
