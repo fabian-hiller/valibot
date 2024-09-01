@@ -65,7 +65,7 @@ For local development setup you can use below commands
 
 To build library run the build command
 
-```shell
+```bash
 pnpm build 
 ```
 
@@ -73,7 +73,7 @@ pnpm build
 
 To run test for your changes run the test command below 
 
-```shell
+```bash
 pnpm test
 ```
 

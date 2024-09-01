@@ -16,6 +16,11 @@ Step 2: Install dependencies
 pnpm install
 ```
 
+Ste 3: Build library 
+```bash 
+cd ./library && pnpm build
+```
+
 Step 3: Start development server
 
 ```bash
