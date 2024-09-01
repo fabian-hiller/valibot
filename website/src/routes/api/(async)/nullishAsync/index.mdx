@@ -11,4 +11,13 @@ import { properties } from './properties';
 
 # nullishAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/nullish/nullishAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a nullish schema.
+
+```ts
+const Schema = v.nullishAsync<TWrapped, TDefault>(wrapped, default);
+```
+
+## Generics
+
+- `TWrapped` <Property {...properties.TWrapped} />
+- `TDefault` <Property {...properties.TDefault} />

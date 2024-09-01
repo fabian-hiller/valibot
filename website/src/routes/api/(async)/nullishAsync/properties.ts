@@ -1,78 +1,20 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
-  TKey: {
+  TWrapped: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
+      type: 'custom',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
+      generics: [
+        'unknown',
+        'unknown',
         {
           type: 'custom',
-          name: 'BaseSchema',
-          href: '../BaseSchema/',
-          generics: [
-            'unknown',
-            'unknown',
-            {
-              type: 'custom',
-              name: 'BaseIssue',
-              href: '../BaseIssue/',
-              generics: ['unknown'],
-            },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'BaseSchemaAsync',
-          href: '../BaseSchemaAsync/',
-          generics: [
-            'unknown',
-            'unknown',
-            {
-              type: 'custom',
-              name: 'BaseIssue',
-              href: '../BaseIssue/',
-              generics: ['unknown'],
-            },
-          ],
-        },
-      ],
-    },
-  },
-  TValue: {
-    modifier: 'extends',
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'BaseSchema',
-          href: '../BaseSchema/',
-          generics: [
-            'unknown',
-            'unknown',
-            {
-              type: 'custom',
-              name: 'BaseIssue',
-              href: '../BaseIssue/',
-              generics: ['unknown'],
-            },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'BaseSchemaAsync',
-          href: '../BaseSchemaAsync/',
-          generics: [
-            'unknown',
-            'unknown',
-            {
-              type: 'custom',
-              name: 'BaseIssue',
-              href: '../BaseIssue/',
-              generics: ['unknown'],
-            },
-          ],
+          name: 'BaseIssue',
+          href: '../BaseIssue/',
+          generics: ['unknown'],
         },
       ],
     },
@@ -92,39 +34,108 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  key: {
+  BaseSchema: {
+    modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'TKey',
-    },
-  },
-  value: {
-    type: {
-      type: 'custom',
-      name: 'TValue',
-    },
-  },
-  message: {
-    type: {
-      type: 'custom',
-      name: 'TMessage',
-    },
-  },
-  Schema: {
-    type: {
-      type: 'custom',
-      name: 'nullableAsync',
-      href: '../nullableAsync/',
+      name: 'BaseSchema',
+      href: '../BaseSchema/',
       generics: [
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'custom',
+              name: 'InferInput',
+              href: '../InferInput/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TWrapped',
+                },
+              ],
+            },
+            'undefined',
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'InferOptionalOutput',
+          href: '../InferOptionalOutput/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+            {
+              type: 'custom',
+              name: 'TDefault',
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'InferIssue',
+          href: '../InferIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TWrapped',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'optional',
+    },
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'optional',
+      href: '../optional/',
+    },
+  },
+  expects: {
+    type: {
+      type: 'template',
+      parts: [
+        {
+          type: 'string',
+          value: '(',
+        },
         {
           type: 'custom',
           name: 'TWrapped',
+          indexes: [
+            {
+              type: 'string',
+              value: 'expects',
+            },
+          ],
         },
         {
-          type: 'custom',
-          name: 'TDefault',
+          type: 'string',
+          value: ' | undefined)',
         },
       ],
+    },
+  },
+  wrapped: {
+    type: {
+      type: 'custom',
+      name: 'TWrapped',
+    },
+  },
+  default: {
+    type: {
+      type: 'custom',
+      name: 'TDefault',
     },
   },
 };
