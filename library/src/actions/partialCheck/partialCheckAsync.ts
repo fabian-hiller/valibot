@@ -11,6 +11,8 @@ import { _isPartiallyTyped } from './utils/index.ts';
 
 /**
  * Partial check action async type.
+ *
+ * TODO: Should we add a `pathList` property?
  */
 export interface PartialCheckActionAsync<
   TInput extends PartialInput,

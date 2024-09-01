@@ -10,6 +10,8 @@ import { _isPartiallyTyped } from './utils/index.ts';
 
 /**
  * Partial check action type.
+ *
+ * TODO: Should we add a `pathList` property?
  */
 export interface PartialCheckAction<
   TInput extends PartialInput,
