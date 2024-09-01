@@ -57,6 +57,20 @@ For example, this allows a bundler to use the import statements to remove code t
 
 In addition, it allows you to easily extend my functionality with external code and makes my source code more robust and secure because the functionality of the individual functions can be tested much more easily through unit tests.
 
+## Local Development
+
+For contributing to docs website checkout [Valibot Docs](website/README.md)
+
+For Contributing to library checkout [Library](library/README.md)
+
+## Development Setup
+
+### Prerequisites
+
+- Install [Node.js] which includes [Node Package Manager][npm]
+- Install [pnpm](https://pnpm.io/installation)  
+
+
 ## Credits
 
 My friend [Fabian](https://twitter.com/FabianHiller) created me as part of his bachelor thesis at [Stuttgart Media University](https://www.hdm-stuttgart.de/en/), supervised by Walter Kriha, [Miško Hevery](https://twitter.com/mhevery) and [Ryan Carniato](https://twitter.com/RyanCarniato). My role models also include [Colin McDonnell](https://twitter.com/colinhacks), who had a big influence on my API design with [Zod](https://zod.dev/).
