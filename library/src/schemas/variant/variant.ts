@@ -11,8 +11,8 @@ import type {
   InferVariantIssue,
   VariantIssue,
   VariantOptions,
+  VariantOptionSchema,
 } from './types.ts';
-import { _discriminators } from './utils/index.ts';
 
 /**
  * Variant schema type.
@@ -93,7 +93,6 @@ export function variant(
   VariantOptions<string>,
   ErrorMessage<VariantIssue> | undefined
 > {
-  let expectedDiscriminators: string | undefined;
   return {
     kind: 'schema',
     type: 'variant',
@@ -109,72 +108,124 @@ export function variant(
 
       // If root type is valid, check nested types
       if (input && typeof input === 'object') {
-        // Get discriminator from input
-        // @ts-expect-error
-        const discriminator: unknown = input[this.key];
+        // Create output dataset variable
+        let outputDataset: Dataset<unknown, BaseIssue<unknown>> | undefined;
 
-        // If key is in input, parse schema of each option
-        if (this.key in input) {
-          // Create output dataset variable
-          let outputDataset: Dataset<unknown, BaseIssue<unknown>> | undefined;
+        // Create variables to store invalid discriminator information
+        let maxDiscriminatorPriority = 0;
+        let invalidDiscriminatorKey = this.key;
+        let expectedDiscriminators: string[] = [];
 
-          // Parse only if it is a variant schema or if discriminator matches
-          for (const schema of this.options) {
-            if (
-              schema.type === 'variant' ||
-              !schema.entries[this.key]._run(
-                { typed: false, value: discriminator },
-                config
-              ).issues
-            ) {
-              // Parse input with schema of option
-              const optionDataset = schema._run(
-                { typed: false, value: input },
-                config
-              );
+        // Create recursive function to parse nested variant options
+        const parseOptions = (
+          variant: VariantOptionSchema<string>,
+          allKeys: Set<string>
+        ) => {
+          for (const schema of variant.options) {
+            // If it is a variant schema, parse its options recursively
+            if (schema.type === 'variant') {
+              parseOptions(schema, new Set(allKeys).add(schema.key));
 
-              // If valid option is found, return its dataset
-              if (!optionDataset.issues) {
-                return optionDataset;
+              // Otherwise, check discriminators and parse object schema
+            } else {
+              // Create variables to store local discriminator information
+              let keysAreValid = true;
+              let currentPriority = 0;
+
+              // Check if all discriminator keys are valid and collect
+              // information about invalid discriminator keys if not
+              for (const currentKey of allKeys) {
+                // If any discriminator is invalid, mark keys as invalid
+                if (
+                  schema.entries[currentKey]._run(
+                    // @ts-expect-error
+                    { typed: false, value: input[currentKey] },
+                    config
+                  ).issues
+                ) {
+                  keysAreValid = false;
+
+                  // If invalid discriminator key is not equal to current key
+                  // and if current key has a higher priority or same priority
+                  // but is the first one present in input, reset invalid
+                  // discriminator information
+                  if (
+                    invalidDiscriminatorKey !== currentKey &&
+                    (maxDiscriminatorPriority < currentPriority ||
+                      (maxDiscriminatorPriority === currentPriority &&
+                        currentKey in input &&
+                        !(invalidDiscriminatorKey in input)))
+                  ) {
+                    maxDiscriminatorPriority = currentPriority;
+                    invalidDiscriminatorKey = currentKey;
+                    expectedDiscriminators = [];
+                  }
+
+                  // If invalid discriminator key is equal to current key,
+                  // store its expected value
+                  if (invalidDiscriminatorKey === currentKey) {
+                    expectedDiscriminators.push(
+                      schema.entries[currentKey].expects
+                    );
+                  }
+
+                  // Break loop on first invalid discriminator key
+                  break;
+                }
+
+                // Increase priority for next discriminator key
+                currentPriority++;
               }
 
-              // Otherwise, replace output dataset if necessary
-              // Hint: Only the first untyped or typed dataset is returned, and
-              // typed datasets take precedence over untyped ones.
-              if (
-                !outputDataset ||
-                (!outputDataset.typed && optionDataset.typed)
-              ) {
-                outputDataset = optionDataset;
+              // If all discriminators are valid, parse input with schema of option
+              if (keysAreValid) {
+                const optionDataset = schema._run(
+                  { typed: false, value: input },
+                  config
+                );
+
+                // Store output dataset if necessary
+                // Hint: Only the first untyped or typed dataset is returned, and
+                // typed datasets take precedence over untyped ones.
+                if (
+                  !outputDataset ||
+                  (!outputDataset.typed && optionDataset.typed)
+                ) {
+                  outputDataset = optionDataset;
+                }
               }
             }
-          }
 
-          // If any output dataset is available, return it
-          if (outputDataset) {
-            return outputDataset;
+            // If valid option is found, break loop
+            // Hint: The `break` statement is intentionally placed at the end of
+            // the loop to break any outer loops in case of recursive execution.
+            if (outputDataset && !outputDataset.issues) {
+              break;
+            }
           }
+        };
+
+        // Parse input with nested variant options recursively
+        parseOptions(this, new Set([this.key]));
+
+        // If any output dataset is available, return it
+        if (outputDataset) {
+          return outputDataset;
         }
 
-        // Otherwise, cache expected discriminators if necessary
-        if (!expectedDiscriminators) {
-          expectedDiscriminators = _joinExpects(
-            _discriminators(this.key, this.options),
-            '|'
-          );
-        }
-
-        // And add discriminator issue
+        // Otherwise, add discriminator issue
         _addIssue(this, 'type', dataset, config, {
-          input: discriminator,
-          expected: expectedDiscriminators,
+          // @ts-expect-error
+          input: input[invalidDiscriminatorKey],
+          expected: _joinExpects(expectedDiscriminators, '|'),
           path: [
             {
               type: 'object',
               origin: 'value',
               input: input as Record<string, unknown>,
-              key: this.key,
-              value: discriminator,
+              key: invalidDiscriminatorKey,
+              // @ts-expect-error
+              value: input[invalidDiscriminatorKey],
             },
           ],
         });
@@ -184,7 +235,7 @@ export function variant(
         _addIssue(this, 'type', dataset, config);
       }
 
-      // Return output dataset
+      // Finally, return  output dataset
       return dataset as Dataset<
         InferOutput<VariantOptions<string>[number]>,
         VariantIssue | BaseIssue<unknown>

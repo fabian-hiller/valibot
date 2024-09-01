@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Change `reference` property of all action base types to be less strict (issue #799)
+- Change implementation of `variant` and `variantAsync` to improve performance and issues generation for nested variants with different discriminators (pull request #809)
 
 ## v0.40.0 (August 29, 2024)
 
