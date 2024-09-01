@@ -493,6 +493,7 @@
 - [Parser](/api/Parser/)
 - [ParserAsync](/api/ParserAsync/)
 - [PartialCheckAction](/api/PartialCheckAction/)
+- [PartialCheckActionAsync](/api/PartialCheckActionAsync/)
 - [PartialCheckIssue](/api/PartialCheckIssue/)
 - [PartialInput](/api/PartialInput/)
 - [PathKeys](/api/PathKeys/)
