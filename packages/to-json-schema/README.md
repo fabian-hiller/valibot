@@ -17,39 +17,52 @@ Some Valibot features can't be mapped to JSON schema. For example, transformatio
 
 Here are the supported Valibot functions:
 
-| Schema           | Status | Note |
-|------------------| ------ | ---- |
-| `any`            | ✅     |      |
-| `unknown`        | ✅     |      |
-| `null`           | ✅     |      |
-| `nullable`       | ✅     |      |
-| `nullish`        | ✅     |      |
-| `optional`       | ✅     |      |
-| `number`         | ✅     |      |
-| `string`         | ✅     |      |
-| `object`         | ✅     |      |
-| `objectWithRest` | ✅     |      |
-| `looseObject`    | ✅     |      |
-| `strictObject`   | ✅     |      |
+| Schema           | Status | Note                          |
+|------------------| ----- |-------------------------------|
+| `any`            | ✅    |                               |
+| `unknown`        | ✅    |                               |
+| `null`           | ✅    |                               |
+| `nullable`       | ✅    |                               |
+| `nullish`        | ✅    |                               |
+| `optional`       | ✅    |                               |
+| `boolean`        | ✅    |                               |
+| `number`         | ✅    |                               |
+| `string`         | ✅    |                               |
+| `literal`        | ✅    |                               |
+| `picklist`       | ✅    |                               |
+| `enum`           | ✅    |                               |
+| `union`          | ✅    |                               |
+| `variant`        | ⚠️    | Ignoring the key              |
+| `intersect`      | ✅    |                               |
+| `object`         | ✅    |                               |
+| `objectWithRest` | ✅    |                               |
+| `looseObject`    | ✅    |                               |
+| `strictObject`   | ✅    |                               |
+| `record`         | ⚠️    | Only with `string` key schema |
+| `tuple`          | ✅    |                               |
+| `tupleWithRest`  | ✅    |                               |
+| `looseTuple`     | ✅    |                               |
+| `strictTuple`    | ✅    |                               |
+| `array`          | ✅    |                               |
 
-| Actions        | Status | Note                                         |
-|----------------|--------|----------------------------------------------|
-| `description`  | ✅      |                                              |
-| `email`        | ✅      |                                              |
-| `isoDate`      | ✅      |                                              |
-| `isoTimestamp` | ✅      |                                              |
-| `ipv4`         | ✅      |                                              |
-| `ipv6`         | ✅      |                                              |
-| `uuid`         | ✅      |                                              |
-| `regex`        | ⚠️     | RexExp flags are unsupported in JSON schema  |
-| `integer`      | ✅      |                                              |
-| `length`       | ✅      |                                              |
-| `minLength`    | ✅      |                                              |
-| `maxLength`    | ✅      |                                              |
-| `value`        | ⚠️     | For `number`, `string` and `boolean` schemas |
-| `minValue`     | ⚠️     | For `number` schema                          |
-| `maxValue`     | ⚠️     | For `number` schema                          |
-| `multipleOf`   | ✅      |                                              |
+| Actions        | Status | Note                                          |
+|----------------|--------|-----------------------------------------------|
+| `description`  | ✅      |                                               |
+| `email`        | ✅      |                                               |
+| `isoDate`      | ✅      |                                               |
+| `isoTimestamp` | ✅      |                                               |
+| `ipv4`         | ✅      |                                               |
+| `ipv6`         | ✅      |                                               |
+| `uuid`         | ✅      |                                               |
+| `regex`        | ⚠️     | RexExp flags are not supported in JSON schema |
+| `integer`      | ✅      |                                               |
+| `length`       | ✅      |                                               |
+| `minLength`    | ✅      |                                               |
+| `maxLength`    | ✅      |                                               |
+| `value`        | ⚠️     | For `number`, `string` and `boolean` schemas  |
+| `minValue`     | ⚠️     | For `number` schema                           |
+| `maxValue`     | ⚠️     | For `number` schema                           |
+| `multipleOf`   | ✅      |                                               |
 
 ## Options
 

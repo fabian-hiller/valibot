@@ -1,4 +1,4 @@
-import type { JSONSchema7 } from 'json-schema';
+import type { JSONSchema7, JSONSchema7Type } from 'json-schema';
 import * as v from 'valibot';
 import { convertAction } from './convertAction.ts';
 import type { JsonSchemaConfig } from './type.ts';
@@ -9,8 +9,7 @@ import { assertJSON } from './utils/assertJSON.ts';
  */
 type Schema =
   | v.AnySchema
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | v.LooseObjectSchema<any, v.ErrorMessage<v.LooseObjectIssue> | undefined>
+  | v.UnknownSchema
   | v.NullableSchema<
       v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
       v.Default<v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>, null>
@@ -23,12 +22,32 @@ type Schema =
       >
     >
   | v.NullSchema<v.ErrorMessage<v.NullIssue> | undefined>
+  | v.StringSchema<v.ErrorMessage<v.StringIssue> | undefined>
+  | v.BooleanSchema<v.ErrorMessage<v.BooleanIssue> | undefined>
   | v.NumberSchema<v.ErrorMessage<v.NumberIssue> | undefined>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | v.ObjectSchema<any, v.ErrorMessage<v.ObjectIssue> | undefined>
-  | v.ObjectWithRestSchema<
+  | v.LiteralSchema<v.Literal, v.ErrorMessage<v.LiteralIssue> | undefined>
+  | v.PicklistSchema<
+      v.PicklistOptions,
+      v.ErrorMessage<v.PicklistIssue> | undefined
+    >
+  | v.EnumSchema<v.Enum, v.ErrorMessage<v.EnumIssue> | undefined>
+  | v.VariantSchema<
+      string,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       any,
+      v.ErrorMessage<v.VariantIssue> | undefined
+    >
+  | v.UnionSchema<
+      v.UnionOptions,
+      v.ErrorMessage<v.UnionIssue<v.BaseIssue<unknown>>> | undefined
+    >
+  | v.IntersectSchema<
+      v.IntersectOptions,
+      v.ErrorMessage<v.IntersectIssue> | undefined
+    >
+  | v.ObjectSchema<v.ObjectEntries, v.ErrorMessage<v.ObjectIssue> | undefined>
+  | v.ObjectWithRestSchema<
+      v.ObjectEntries,
       v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
       v.ErrorMessage<v.ObjectWithRestIssue> | undefined
     >
@@ -36,10 +55,37 @@ type Schema =
       v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
       v.Default<v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>, undefined>
     >
+  | v.StrictObjectSchema<
+      v.ObjectEntries,
+      v.ErrorMessage<v.StrictObjectIssue> | undefined
+    >
+  | v.LooseObjectSchema<
+      v.ObjectEntries,
+      v.ErrorMessage<v.LooseObjectIssue> | undefined
+    >
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | v.StrictObjectSchema<any, v.ErrorMessage<v.StrictObjectIssue> | undefined>
-  | v.StringSchema<v.ErrorMessage<v.StringIssue> | undefined>
-  | v.UnknownSchema;
+  | v.RecordSchema<any, any, v.ErrorMessage<v.RecordIssue> | undefined>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | v.TupleSchema<any, v.ErrorMessage<v.TupleIssue> | undefined>
+  | v.TupleWithRestSchema<
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      any,
+      v.ErrorMessage<v.TupleWithRestIssue> | undefined
+    >
+  | v.LooseTupleSchema<
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      any,
+      v.ErrorMessage<v.LooseTupleIssue> | undefined
+    >
+  | v.StrictTupleSchema<
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      any,
+      v.ErrorMessage<v.StrictTupleIssue> | undefined
+    >
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | v.ArraySchema<any, v.ErrorMessage<v.ArrayIssue> | undefined>;
 
 /**
  * Schema or pipe type.
@@ -119,8 +165,78 @@ export function convertSchema(
       break;
     }
 
+    case 'optional': {
+      json = convertSchema({}, schema.wrapped as SchemaOrPipe, config);
+      const defaultValue = v.getDefault(schema);
+      if (
+        defaultValue !== undefined &&
+        assertJSON(
+          defaultValue,
+          config?.force,
+          `Default value for '${schema.type}' is not JSON compatible.`
+        )
+      ) {
+        json.default = defaultValue;
+      }
+      break;
+    }
+
+    case 'boolean': {
+      json.type = 'boolean';
+      break;
+    }
+
     case 'number': {
       json.type = 'number';
+      break;
+    }
+
+    case 'string': {
+      json.type = 'string';
+      break;
+    }
+
+    case 'literal': {
+      if (
+        assertJSON(
+          schema.literal,
+          config?.force,
+          'Literal value provided is not JSON compatible.'
+        )
+      ) {
+        json.const = schema.literal;
+      }
+      break;
+    }
+
+    case 'enum':
+    case 'picklist': {
+      const options = Object.values(schema.options);
+      if (!config?.force) {
+        for (const option of options) {
+          assertJSON(
+            option,
+            config?.force,
+            'Picklist option provided is not JSON compatible.'
+          );
+        }
+      }
+      json.enum = options as JSONSchema7Type[];
+      break;
+    }
+
+    case 'variant':
+    case 'union': {
+      json.anyOf = schema.options.map((option: SchemaOrPipe) =>
+        convertSchema({}, option, config)
+      );
+      break;
+    }
+
+    case 'intersect': {
+      json.allOf = schema.options.map((option) =>
+        convertSchema({}, option as SchemaOrPipe, config)
+      );
       break;
     }
 
@@ -150,24 +266,43 @@ export function convertSchema(
       break;
     }
 
-    case 'optional': {
-      json = convertSchema({}, schema.wrapped as SchemaOrPipe, config);
-      const defaultValue = v.getDefault(schema);
-      if (
-        defaultValue !== undefined &&
-        assertJSON(
-          defaultValue,
-          config?.force,
-          `Default value for '${schema.type}' is not JSON compatible.`
-        )
-      ) {
-        json.default = defaultValue;
+    case 'record': {
+      if (!config?.force && schema.key.type !== 'string') {
+        throw new Error('Record key schema provided is not supported.');
+      }
+      json.type = 'object';
+      json.additionalProperties = convertSchema(
+        {},
+        schema.value as SchemaOrPipe,
+        config
+      );
+      break;
+    }
+
+    case 'tuple':
+    case 'tuple_with_rest':
+    case 'loose_tuple':
+    case 'strict_tuple': {
+      json.type = 'array';
+      json.items = [];
+      for (const item of schema.items) {
+        json.items.push(convertSchema({}, item as SchemaOrPipe, config));
+      }
+      if (schema.type === 'tuple_with_rest') {
+        json.additionalItems = convertSchema(
+          {},
+          schema.rest as SchemaOrPipe,
+          config
+        );
+      } else {
+        json.additionalItems = schema.type === 'loose_tuple';
       }
       break;
     }
 
-    case 'string': {
-      json.type = 'string';
+    case 'array': {
+      json.type = 'array';
+      json.items = convertSchema({}, schema.item as SchemaOrPipe, config);
       break;
     }
 

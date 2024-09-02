@@ -122,9 +122,106 @@ describe('convertSchema', () => {
     });
   });
 
+  test('should convert boolean schema', () => {
+    expect(convertSchema({}, v.boolean(), undefined)).toStrictEqual({
+      type: 'boolean',
+    });
+  });
+
   test('should convert number schema', () => {
     expect(convertSchema({}, v.number(), undefined)).toStrictEqual({
       type: 'number',
+    });
+  });
+
+  test('should convert string schema', () => {
+    expect(convertSchema({}, v.string(), undefined)).toStrictEqual({
+      type: 'string',
+    });
+  });
+
+  test('should convert literal schema', () => {
+    expect(() =>
+      convertSchema({}, v.literal(Infinity), undefined)
+    ).toThrowError();
+    expect(
+      convertSchema({}, v.literal(Infinity), { force: true })
+    ).toStrictEqual({ const: Infinity });
+    expect(convertSchema({}, v.literal(4), undefined)).toStrictEqual({
+      const: 4,
+    });
+  });
+
+  test('should convert picklist schema', () => {
+    expect(() =>
+      convertSchema({}, v.picklist([1, NaN]), undefined)
+    ).toThrowError();
+    expect(
+      convertSchema({}, v.picklist([1, NaN]), { force: true })
+    ).toStrictEqual({ enum: [1, NaN] });
+    expect(
+      convertSchema({}, v.picklist([1, 'string']), undefined)
+    ).toStrictEqual({
+      enum: [1, 'string'],
+    });
+  });
+
+  test('should convert enum schema', () => {
+    enum TestEnum {
+      KEY1,
+      KEY2 = 'key2',
+    }
+    // @ts-expect-error
+    expect(convertSchema({}, v.enum(TestEnum), undefined)).toStrictEqual({
+      enum: [0, 'key2'],
+    });
+  });
+
+  test('should convert union schema', () => {
+    expect(
+      convertSchema({}, v.union([v.string(), v.boolean()]), undefined)
+    ).toStrictEqual({
+      anyOf: [{ type: 'string' }, { type: 'boolean' }],
+    });
+  });
+
+  test('should convert variant schema', () => {
+    expect(
+      convertSchema(
+        {},
+        v.variant('type', [
+          v.object({ type: v.literal('type1') }),
+          v.object({ type: v.literal('type2') }),
+        ]),
+        undefined
+      )
+    ).toStrictEqual({
+      anyOf: [
+        {
+          additionalProperties: false,
+          properties: {
+            type: { const: 'type1' },
+          },
+          required: ['type'],
+          type: 'object',
+        },
+        {
+          additionalProperties: false,
+          properties: {
+            type: { const: 'type2' },
+          },
+          required: ['type'],
+          type: 'object',
+        },
+      ],
+    });
+  });
+
+  test('should convert intersect schema', () => {
+    expect(
+      convertSchema({}, v.intersect([v.string(), v.boolean()]), undefined)
+    ).toStrictEqual({
+      allOf: [{ type: 'string' }, { type: 'boolean' }],
     });
   });
 
@@ -132,7 +229,8 @@ describe('convertSchema', () => {
     expect(
       convertSchema(
         {},
-        v.object({
+        v.object<v.ObjectEntries>({
+          [Symbol()]: v.literal('symbol keyed'),
           key1: v.string(),
           key2: v.optional(v.string()),
           key3: v.nullish(v.string()),
@@ -155,8 +253,9 @@ describe('convertSchema', () => {
     expect(
       convertSchema(
         {},
-        v.objectWithRest(
+        v.objectWithRest<v.ObjectEntries, v.GenericSchema>(
           {
+            [Symbol()]: v.literal('symbol keyed'),
             key1: v.string(),
             key2: v.optional(v.string()),
             key3: v.nullish(v.string()),
@@ -181,7 +280,8 @@ describe('convertSchema', () => {
     expect(
       convertSchema(
         {},
-        v.looseObject({
+        v.looseObject<v.ObjectEntries>({
+          [Symbol()]: v.literal('symbol keyed'),
           key1: v.string(),
           key2: v.optional(v.string()),
           key3: v.nullish(v.string()),
@@ -204,7 +304,8 @@ describe('convertSchema', () => {
     expect(
       convertSchema(
         {},
-        v.strictObject({
+        v.strictObject<v.ObjectEntries>({
+          [Symbol()]: v.literal('symbol keyed'),
           key1: v.string(),
           key2: v.optional(v.string()),
           key3: v.nullish(v.string()),
@@ -252,9 +353,74 @@ describe('convertSchema', () => {
     ).toThrowError(`Default value for 'optional' is not JSON compatible.`);
   });
 
-  test('should convert string schema', () => {
-    expect(convertSchema({}, v.string(), undefined)).toStrictEqual({
-      type: 'string',
+  test('should convert record schema', () => {
+    expect(() =>
+      convertSchema({}, v.record(v.picklist(['prop1']), v.number()), undefined)
+    ).toThrowError();
+    expect(
+      convertSchema({}, v.record(v.picklist(['prop1']), v.number()), {
+        force: true,
+      })
+    ).toStrictEqual({
+      type: 'object',
+      additionalProperties: { type: 'number' },
+    });
+    expect(
+      convertSchema({}, v.record(v.string(), v.number()), undefined)
+    ).toStrictEqual({
+      type: 'object',
+      additionalProperties: { type: 'number' },
+    });
+  });
+
+  test('should convert tuple schema', () => {
+    expect(
+      convertSchema({}, v.tuple([v.number(), v.string()]), undefined)
+    ).toStrictEqual({
+      type: 'array',
+      items: [{ type: 'number' }, { type: 'string' }],
+      additionalItems: false,
+    });
+  });
+
+  test('should convert tuple with rest schema', () => {
+    expect(
+      convertSchema(
+        {},
+        v.tupleWithRest([v.number(), v.string()], v.boolean()),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'array',
+      items: [{ type: 'number' }, { type: 'string' }],
+      additionalItems: { type: 'boolean' },
+    });
+  });
+
+  test('should convert loose tuple schema', () => {
+    expect(
+      convertSchema({}, v.looseTuple([v.number(), v.string()]), undefined)
+    ).toStrictEqual({
+      type: 'array',
+      items: [{ type: 'number' }, { type: 'string' }],
+      additionalItems: true,
+    });
+  });
+
+  test('should convert strict tuple schema', () => {
+    expect(
+      convertSchema({}, v.strictTuple([v.number(), v.string()]), undefined)
+    ).toStrictEqual({
+      type: 'array',
+      items: [{ type: 'number' }, { type: 'string' }],
+      additionalItems: false,
+    });
+  });
+
+  test('should convert array schema', () => {
+    expect(convertSchema({}, v.array(v.number()), undefined)).toStrictEqual({
+      type: 'array',
+      items: { type: 'number' },
     });
   });
 
