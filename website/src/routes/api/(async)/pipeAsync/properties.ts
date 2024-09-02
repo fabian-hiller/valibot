@@ -51,7 +51,7 @@ export const properties: Record<string, PropertyProps> = {
             name: 'PipeItem',
             href: '../PipeItem/',
             generics: [
-              'unknown',
+              'any',
               'unknown',
               {
                 type: 'custom',
@@ -66,7 +66,7 @@ export const properties: Record<string, PropertyProps> = {
             name: 'PipeItemAsync',
             href: '../PipeItemAsync/',
             generics: [
-              'unknown',
+              'any',
               'unknown',
               {
                 type: 'custom',

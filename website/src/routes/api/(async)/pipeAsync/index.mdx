@@ -70,11 +70,12 @@ import { isUsernameUnique } from '~/api';
 
 const NewUserSchema = v.pipeAsync(
   v.objectAsync({
-    firstName: v.pipe(v.string(), v.minLength(2), v.maxLength(45)),
-    lastName: v.pipe(v.string(), v.minLength(2), v.maxLength(45)),
+    firstName: v.pipe(v.string(), v.nonEmpty(), v.maxLength(30)),
+    lastName: v.pipe(v.string(), v.nonEmpty(), v.maxLength(30)),
     username: v.pipeAsync(
       v.string(),
       v.nonEmpty(),
+      v.maxLength(30),
       v.checkAsync(isUsernameUnique, 'The username is not unique.')
     ),
   }),
