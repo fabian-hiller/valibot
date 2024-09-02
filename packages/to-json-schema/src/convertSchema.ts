@@ -1,7 +1,7 @@
 import type { JSONSchema7, JSONSchema7Type } from 'json-schema';
 import * as v from 'valibot';
+import type { Context } from './context.ts';
 import { convertAction } from './convertAction.ts';
-import type { JsonSchemaConfig } from './type.ts';
 import { assertJSON } from './utils/assertJSON.ts';
 
 /**
@@ -85,7 +85,9 @@ type Schema =
       v.ErrorMessage<v.StrictTupleIssue> | undefined
     >
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | v.ArraySchema<any, v.ErrorMessage<v.ArrayIssue> | undefined>;
+  | v.ArraySchema<any, v.ErrorMessage<v.ArrayIssue> | undefined>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | v.LazySchema<any>;
 
 /**
  * Schema or pipe type.
@@ -102,15 +104,23 @@ type SchemaOrPipe =
  *
  * @param json The JSON schema object.
  * @param schema The Valibot schema object.
- * @param config The JSON schema configuration.
+ * @param context The conversion context.
  *
  * @returns The converted JSON schema.
  */
 export function convertSchema(
   json: JSONSchema7,
   schema: SchemaOrPipe,
-  config: JsonSchemaConfig | undefined
+  context: Context
 ): JSONSchema7 {
+  const config = context?.config;
+
+  const definitionPath = context.definitionsPathMap.get(schema);
+  if (definitionPath) {
+    json.$ref = definitionPath;
+    return json;
+  }
+
   // If it is schema with pipe, convert each item of pipe
   if ('pipe' in schema) {
     for (let index = 0; index < schema.pipe.length; index++) {
@@ -124,10 +134,16 @@ export function convertSchema(
           }
           return json;
         }
-        convertSchema(json, action, config);
+        const convertedSchema = convertSchema({}, action, context);
+        if (convertedSchema.$ref) {
+          const name = convertedSchema.$ref.split('/')[2];
+          Object.assign(json, context.definitions[name]);
+        } else {
+          Object.assign(json, convertedSchema);
+        }
       } else {
         // @ts-expect-error
-        convertAction(json, action, config);
+        convertAction(json, action, context);
       }
     }
     return json;
@@ -148,7 +164,7 @@ export function convertSchema(
     case 'nullable':
     case 'nullish': {
       json.anyOf = [
-        convertSchema({}, schema.wrapped as SchemaOrPipe, config),
+        convertSchema({}, schema.wrapped as SchemaOrPipe, context),
         { type: 'null' },
       ];
       const defaultValue = v.getDefault(schema);
@@ -166,7 +182,7 @@ export function convertSchema(
     }
 
     case 'optional': {
-      json = convertSchema({}, schema.wrapped as SchemaOrPipe, config);
+      json = convertSchema({}, schema.wrapped as SchemaOrPipe, context);
       const defaultValue = v.getDefault(schema);
       if (
         defaultValue !== undefined &&
@@ -228,14 +244,14 @@ export function convertSchema(
     case 'variant':
     case 'union': {
       json.anyOf = schema.options.map((option: SchemaOrPipe) =>
-        convertSchema({}, option, config)
+        convertSchema({}, option, context)
       );
       break;
     }
 
     case 'intersect': {
       json.allOf = schema.options.map((option) =>
-        convertSchema({}, option as SchemaOrPipe, config)
+        convertSchema({}, option as SchemaOrPipe, context)
       );
       break;
     }
@@ -249,7 +265,7 @@ export function convertSchema(
       json.required = [];
       for (const key in schema.entries) {
         const entry = schema.entries[key] as SchemaOrPipe;
-        json.properties[key] = convertSchema({}, entry, config);
+        json.properties[key] = convertSchema({}, entry, context);
         if (entry.type !== 'nullish' && entry.type !== 'optional') {
           json.required.push(key);
         }
@@ -258,7 +274,7 @@ export function convertSchema(
         json.additionalProperties = convertSchema(
           {},
           schema.rest as SchemaOrPipe,
-          config
+          context
         );
       } else {
         json.additionalProperties = schema.type === 'loose_object';
@@ -274,7 +290,7 @@ export function convertSchema(
       json.additionalProperties = convertSchema(
         {},
         schema.value as SchemaOrPipe,
-        config
+        context
       );
       break;
     }
@@ -286,13 +302,13 @@ export function convertSchema(
       json.type = 'array';
       json.items = [];
       for (const item of schema.items) {
-        json.items.push(convertSchema({}, item as SchemaOrPipe, config));
+        json.items.push(convertSchema({}, item as SchemaOrPipe, context));
       }
       if (schema.type === 'tuple_with_rest') {
         json.additionalItems = convertSchema(
           {},
           schema.rest as SchemaOrPipe,
-          config
+          context
         );
       } else {
         json.additionalItems = schema.type === 'loose_tuple';
@@ -302,7 +318,20 @@ export function convertSchema(
 
     case 'array': {
       json.type = 'array';
-      json.items = convertSchema({}, schema.item as SchemaOrPipe, config);
+      json.items = convertSchema({}, schema.item as SchemaOrPipe, context);
+      break;
+    }
+
+    case 'lazy': {
+      // @ts-expect-error
+      const lazySchema = schema.getter();
+      const definitionPath = context.definitionsPathMap.get(lazySchema);
+      if (!definitionPath) {
+        throw new Error(
+          'Schema given in lazy schema is not provided in the definitions.'
+        );
+      }
+      json.$ref = definitionPath;
       break;
     }
 
