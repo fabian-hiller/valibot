@@ -1,6 +1,6 @@
 # Website
 
-Our [website](https://valibot.dev/) contains guides and an API reference to quickly understand Valibot.
+Our [website](https://valibot.dev/) contains guides, an API reference and a playground to quickly learn and understand Valibot.
 
 ## Getting started
 
@@ -16,8 +16,14 @@ Step 2: Install dependencies
 pnpm install
 ```
 
-Step 3: Start development server
+Step 3: Build library
 
 ```bash
-cd ./website && pnpm dev
+cd ./library && pnpm build
+```
+
+Step 4: Start website
+
+```bash
+cd ../website && pnpm start
 ```
