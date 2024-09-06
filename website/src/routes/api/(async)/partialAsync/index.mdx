@@ -1,10 +1,190 @@
 ---
 title: partialAsync
+description: Creates a modified copy of an object schema that marks all or only the selected entries as optional.
 source: /methods/partial/partialAsync.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # partialAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/methods/partial/partialAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a modified copy of an object schema that marks all or only the selected entries as optional.
+
+```ts
+const Schema = v.partialAsync<TSchema, TKeys>(schema, keys);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TKeys` <Property {...properties.TKeys} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `keys` <Property {...properties.keys} />
+
+### Explanation
+
+`partialAsync` creates a modified copy of the given object `schema` where all entries or only the selected `keys` are optional. It is similar to TypeScript's [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype) utility type.
+
+> Because `partialAsync` changes the data type of the input and output, it is not allowed to pass a schema that has been modified by the <Link href='../pipeAsync/'>`pipeAsync`</Link> method, as this may cause runtime errors. Please use the <Link href='../pipeAsync/'>`pipeAsync`</Link> method after you have modified the schema with `partialAsync`.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `partialAsync` can be used.
+
+### Update user schema
+
+Schema to update the user details.
+
+```ts
+import { isEmailAbsent, isUsernameAbsent } from '~/api';
+
+const UserSchema = v.objectAsync({
+  email: v.pipeAsync(
+    v.string(),
+    v.email(),
+    v.checkAsync(isEmailAbsent, 'The email is already in the database.')
+  ),
+  username: v.pipeAsync(
+    v.string(),
+    v.nonEmpty(),
+    v.checkAsync(isUsernameAbsent, 'The username is already in the database.')
+  ),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+const UpdateUserSchema = v.partialAsync(UserSchema);
+
+/*
+  { 
+    email?: string,
+    username?: string, 
+    password?: string 
+  }
+*/
+```
+
+## Related
+
+The following APIs can be combined with `partialAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'array',
+    'intersect',
+    'lazy',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'nullable',
+    'nullish',
+    'object',
+    'objectWithRest',
+    'optional',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'tuple',
+    'tupleWithRest',
+    'undefinedable',
+    'union',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'config',
+    'fallback',
+    'forward',
+    'getDefault',
+    'getDefaults',
+    'getFallback',
+    'getFallbacks',
+    'omit',
+    'keyof',
+    'pick',
+    'required',
+    'unwrap',
+  ]}
+/>
+
+### Actions
+
+<ApiList
+  items={[
+    'brand',
+    'check',
+    'description',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'checkAsync',
+    'fallbackAsync',
+    'forwardAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialCheckAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'recordAsync',
+    'requiredAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'undefinedableAsync',
+    'unionAsync',
+  ]}
+/>
