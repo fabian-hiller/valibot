@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Rename `NoPipe` type to `SchemaWithoutPipe`
+- Fix inference of generics in `IssueDotPath` type (issue #814)
 
 ## v0.41.0 (September 01, 2024)
 

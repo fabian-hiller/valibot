@@ -312,294 +312,340 @@ export type IssueDotPath<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > =
-  // Pipe
-  TSchema extends SchemaWithPipe<infer TPipe> | SchemaWithPipeAsync<infer TPipe>
+  // Pipe (sync)
+  TSchema extends SchemaWithPipe<infer TPipe>
     ? IssueDotPath<FirstTupleItem<TPipe>>
-    : // Array
-      TSchema extends
-          | ArraySchema<infer TItem, ErrorMessage<ArrayIssue> | undefined>
-          | ArraySchemaAsync<infer TItem, ErrorMessage<ArrayIssue> | undefined>
-      ? DotPath<number, TItem>
-      : // Intersect, Union or Variant
-        TSchema extends
-            | IntersectSchema<
-                infer TOptions,
-                ErrorMessage<IntersectIssue> | undefined
-              >
-            | IntersectSchemaAsync<
-                infer TOptions,
-                ErrorMessage<IntersectIssue> | undefined
-              >
-            | UnionSchema<
-                infer TOptions,
-                ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
-              >
-            | UnionSchemaAsync<
-                infer TOptions,
-                ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
-              >
-            | VariantSchema<
-                string,
-                infer TOptions,
-                ErrorMessage<VariantIssue> | undefined
-              >
-            | VariantSchemaAsync<
-                string,
-                infer TOptions,
-                ErrorMessage<VariantIssue> | undefined
-              >
-        ? IssueDotPath<TOptions[number]>
-        : // Map or Record
-          TSchema extends
-              | MapSchema<
-                  infer TKey,
-                  infer TValue,
-                  ErrorMessage<MapIssue> | undefined
-                >
-              | MapSchemaAsync<
-                  infer TKey,
-                  infer TValue,
-                  ErrorMessage<MapIssue> | undefined
-                >
-              | RecordSchema<
-                  infer TKey,
-                  infer TValue,
-                  ErrorMessage<RecordIssue> | undefined
-                >
-              | RecordSchemaAsync<
-                  infer TKey,
-                  infer TValue,
-                  ErrorMessage<RecordIssue> | undefined
-                >
-          ? DotPath<InferInput<TKey>, TValue>
-          : // Object
+    : // Pipe (async)
+      TSchema extends SchemaWithPipeAsync<infer TPipe>
+      ? IssueDotPath<FirstTupleItem<TPipe>>
+      : // Array (sync)
+        TSchema extends ArraySchema<
+            infer TItem,
+            ErrorMessage<ArrayIssue> | undefined
+          >
+        ? DotPath<number, TItem>
+        : // Array (async)
+          TSchema extends ArraySchemaAsync<
+              infer TItem,
+              ErrorMessage<ArrayIssue> | undefined
+            >
+          ? DotPath<number, TItem>
+          : // Intersect, Union or Variant (sync)
             TSchema extends
-                | LooseObjectSchema<
-                    infer TEntries,
-                    ErrorMessage<LooseObjectIssue> | undefined
+                | IntersectSchema<
+                    infer TOptions,
+                    ErrorMessage<IntersectIssue> | undefined
                   >
-                | LooseObjectSchemaAsync<
-                    infer TEntries,
-                    ErrorMessage<LooseObjectIssue> | undefined
+                | UnionSchema<
+                    infer TOptions,
+                    ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
                   >
-                | ObjectSchema<
-                    infer TEntries,
-                    ErrorMessage<ObjectIssue> | undefined
+                | VariantSchema<
+                    string,
+                    infer TOptions,
+                    ErrorMessage<VariantIssue> | undefined
                   >
-                | ObjectSchemaAsync<
-                    infer TEntries,
-                    ErrorMessage<ObjectIssue> | undefined
-                  >
-                | StrictObjectSchema<
-                    infer TEntries,
-                    ErrorMessage<StrictObjectIssue> | undefined
-                  >
-                | StrictObjectSchemaAsync<
-                    infer TEntries,
-                    ErrorMessage<StrictObjectIssue> | undefined
-                  >
-            ? ObjectPath<TEntries>
-            : // Object with Rest
+            ? IssueDotPath<TOptions[number]>
+            : // Intersect, Union or Variant (async)
               TSchema extends
-                  | ObjectWithRestSchema<
-                      ObjectEntries,
-                      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-                      ErrorMessage<ObjectWithRestIssue> | undefined
+                  | IntersectSchemaAsync<
+                      infer TOptions,
+                      ErrorMessage<IntersectIssue> | undefined
                     >
-                  | ObjectWithRestSchemaAsync<
-                      ObjectEntriesAsync,
-                      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-                      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-                      ErrorMessage<ObjectWithRestIssue> | undefined
+                  | UnionSchemaAsync<
+                      infer TOptions,
+                      ErrorMessage<UnionIssue<BaseIssue<unknown>>> | undefined
                     >
-              ? string
-              : // Set
+                  | VariantSchemaAsync<
+                      string,
+                      infer TOptions,
+                      ErrorMessage<VariantIssue> | undefined
+                    >
+              ? IssueDotPath<TOptions[number]>
+              : // Map or Record (sync)
                 TSchema extends
-                    | SetSchema<
+                    | MapSchema<
+                        infer TKey,
                         infer TValue,
-                        ErrorMessage<SetIssue> | undefined
+                        ErrorMessage<MapIssue> | undefined
                       >
-                    | SetSchemaAsync<
+                    | RecordSchema<
+                        infer TKey,
                         infer TValue,
-                        ErrorMessage<SetIssue> | undefined
+                        ErrorMessage<RecordIssue> | undefined
                       >
-                ? DotPath<number, TValue>
-                : // Tuple
+                ? DotPath<InferInput<TKey>, TValue>
+                : // Map or Record (async)
                   TSchema extends
-                      | LooseTupleSchema<
-                          infer TItems,
-                          ErrorMessage<LooseTupleIssue> | undefined
+                      | MapSchemaAsync<
+                          infer TKey,
+                          infer TValue,
+                          ErrorMessage<MapIssue> | undefined
                         >
-                      | LooseTupleSchemaAsync<
-                          infer TItems,
-                          ErrorMessage<LooseTupleIssue> | undefined
+                      | RecordSchemaAsync<
+                          infer TKey,
+                          infer TValue,
+                          ErrorMessage<RecordIssue> | undefined
                         >
-                      | StrictTupleSchema<
-                          infer TItems,
-                          ErrorMessage<StrictTupleIssue> | undefined
-                        >
-                      | StrictTupleSchemaAsync<
-                          infer TItems,
-                          ErrorMessage<StrictTupleIssue> | undefined
-                        >
-                      | TupleSchema<
-                          infer TItems,
-                          ErrorMessage<TupleIssue> | undefined
-                        >
-                      | TupleSchemaAsync<
-                          infer TItems,
-                          ErrorMessage<TupleIssue> | undefined
-                        >
-                  ? TuplePath<TItems>
-                  : // Tuple with Rest
+                  ? DotPath<InferInput<TKey>, TValue>
+                  : // Object (sync)
                     TSchema extends
-                        | TupleWithRestSchema<
-                            infer TItems,
-                            infer TRest,
-                            ErrorMessage<TupleWithRestIssue> | undefined
+                        | LooseObjectSchema<
+                            infer TEntries,
+                            ErrorMessage<LooseObjectIssue> | undefined
                           >
-                        | TupleWithRestSchemaAsync<
-                            infer TItems,
-                            infer TRest,
-                            ErrorMessage<TupleWithRestIssue> | undefined
+                        | ObjectSchema<
+                            infer TEntries,
+                            ErrorMessage<ObjectIssue> | undefined
                           >
-                    ? TuplePath<TItems> | DotPath<number, TRest>
-                    : // Wrapped
+                        | StrictObjectSchema<
+                            infer TEntries,
+                            ErrorMessage<StrictObjectIssue> | undefined
+                          >
+                    ? ObjectPath<TEntries>
+                    : // Object (async)
                       TSchema extends
-                          | LazySchema<infer TWrapped>
-                          | LazySchemaAsync<infer TWrapped>
-                          | NonNullableSchema<
-                              infer TWrapped,
-                              ErrorMessage<NonNullableIssue> | undefined
+                          | LooseObjectSchemaAsync<
+                              infer TEntries,
+                              ErrorMessage<LooseObjectIssue> | undefined
                             >
-                          | NonNullableSchemaAsync<
-                              infer TWrapped,
-                              ErrorMessage<NonNullableIssue> | undefined
+                          | ObjectSchemaAsync<
+                              infer TEntries,
+                              ErrorMessage<ObjectIssue> | undefined
                             >
-                          | NonNullishSchema<
-                              infer TWrapped,
-                              ErrorMessage<NonNullishIssue> | undefined
+                          | StrictObjectSchemaAsync<
+                              infer TEntries,
+                              ErrorMessage<StrictObjectIssue> | undefined
                             >
-                          | NonNullishSchemaAsync<
-                              infer TWrapped,
-                              ErrorMessage<NonNullishIssue> | undefined
-                            >
-                          | NonOptionalSchema<
-                              infer TWrapped,
-                              ErrorMessage<NonOptionalIssue> | undefined
-                            >
-                          | NonOptionalSchemaAsync<
-                              infer TWrapped,
-                              ErrorMessage<NonOptionalIssue> | undefined
-                            >
-                          | NullableSchema<
-                              infer TWrapped,
-                              Default<
-                                BaseSchema<
+                      ? ObjectPath<TEntries>
+                      : // Object with Rest (sync)
+                        TSchema extends ObjectWithRestSchema<
+                            ObjectEntries,
+                            BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+                            ErrorMessage<ObjectWithRestIssue> | undefined
+                          >
+                        ? string
+                        : // Object with Rest (async)
+                          TSchema extends ObjectWithRestSchemaAsync<
+                              ObjectEntriesAsync,
+                              | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+                              | BaseSchemaAsync<
                                   unknown,
                                   unknown,
                                   BaseIssue<unknown>
                                 >,
-                                null
-                              >
+                              ErrorMessage<ObjectWithRestIssue> | undefined
                             >
-                          | NullableSchemaAsync<
-                              infer TWrapped,
-                              DefaultAsync<
-                                | BaseSchema<
-                                    unknown,
-                                    unknown,
-                                    BaseIssue<unknown>
-                                  >
-                                | BaseSchemaAsync<
-                                    unknown,
-                                    unknown,
-                                    BaseIssue<unknown>
-                                  >,
-                                null
+                          ? string
+                          : // Set (sync)
+                            TSchema extends SetSchema<
+                                infer TValue,
+                                ErrorMessage<SetIssue> | undefined
                               >
-                            >
-                          | NullishSchema<
-                              infer TWrapped,
-                              Default<
-                                BaseSchema<
-                                  unknown,
-                                  unknown,
-                                  BaseIssue<unknown>
-                                >,
-                                null | undefined
-                              >
-                            >
-                          | NullishSchemaAsync<
-                              infer TWrapped,
-                              DefaultAsync<
-                                | BaseSchema<
-                                    unknown,
-                                    unknown,
-                                    BaseIssue<unknown>
-                                  >
-                                | BaseSchemaAsync<
-                                    unknown,
-                                    unknown,
-                                    BaseIssue<unknown>
-                                  >,
-                                null | undefined
-                              >
-                            >
-                          | OptionalSchema<
-                              infer TWrapped,
-                              Default<
-                                BaseSchema<
-                                  unknown,
-                                  unknown,
-                                  BaseIssue<unknown>
-                                >,
-                                undefined
-                              >
-                            >
-                          | OptionalSchemaAsync<
-                              infer TWrapped,
-                              DefaultAsync<
-                                | BaseSchema<
-                                    unknown,
-                                    unknown,
-                                    BaseIssue<unknown>
-                                  >
-                                | BaseSchemaAsync<
-                                    unknown,
-                                    unknown,
-                                    BaseIssue<unknown>
-                                  >,
-                                undefined
-                              >
-                            >
-                          | UndefinedableSchema<
-                              infer TWrapped,
-                              Default<
-                                BaseSchema<
-                                  unknown,
-                                  unknown,
-                                  BaseIssue<unknown>
-                                >,
-                                undefined
-                              >
-                            >
-                          | UndefinedableSchemaAsync<
-                              infer TWrapped,
-                              DefaultAsync<
-                                | BaseSchema<
-                                    unknown,
-                                    unknown,
-                                    BaseIssue<unknown>
-                                  >
-                                | BaseSchemaAsync<
-                                    unknown,
-                                    unknown,
-                                    BaseIssue<unknown>
-                                  >,
-                                undefined
-                              >
-                            >
-                      ? IssueDotPath<TWrapped>
-                      : // Otherwise
-                        never;
+                            ? DotPath<number, TValue>
+                            : // Set (async)
+                              TSchema extends SetSchemaAsync<
+                                  infer TValue,
+                                  ErrorMessage<SetIssue> | undefined
+                                >
+                              ? DotPath<number, TValue>
+                              : // Tuple (sync)
+                                TSchema extends
+                                    | LooseTupleSchema<
+                                        infer TItems,
+                                        | ErrorMessage<LooseTupleIssue>
+                                        | undefined
+                                      >
+                                    | StrictTupleSchema<
+                                        infer TItems,
+                                        | ErrorMessage<StrictTupleIssue>
+                                        | undefined
+                                      >
+                                    | TupleSchema<
+                                        infer TItems,
+                                        ErrorMessage<TupleIssue> | undefined
+                                      >
+                                ? TuplePath<TItems>
+                                : // Tuple (async)
+                                  TSchema extends
+                                      | LooseTupleSchemaAsync<
+                                          infer TItems,
+                                          | ErrorMessage<LooseTupleIssue>
+                                          | undefined
+                                        >
+                                      | StrictTupleSchemaAsync<
+                                          infer TItems,
+                                          | ErrorMessage<StrictTupleIssue>
+                                          | undefined
+                                        >
+                                      | TupleSchemaAsync<
+                                          infer TItems,
+                                          ErrorMessage<TupleIssue> | undefined
+                                        >
+                                  ? TuplePath<TItems>
+                                  : // Tuple with Rest (sync)
+                                    TSchema extends TupleWithRestSchema<
+                                        infer TItems,
+                                        infer TRest,
+                                        | ErrorMessage<TupleWithRestIssue>
+                                        | undefined
+                                      >
+                                    ? TuplePath<TItems> | DotPath<number, TRest>
+                                    : // Tuple with Rest (async)
+                                      TSchema extends TupleWithRestSchemaAsync<
+                                          infer TItems,
+                                          infer TRest,
+                                          | ErrorMessage<TupleWithRestIssue>
+                                          | undefined
+                                        >
+                                      ?
+                                          | TuplePath<TItems>
+                                          | DotPath<number, TRest>
+                                      : // Wrapped (sync)
+                                        TSchema extends
+                                            | LazySchema<infer TWrapped>
+                                            | NonNullableSchema<
+                                                infer TWrapped,
+                                                | ErrorMessage<NonNullableIssue>
+                                                | undefined
+                                              >
+                                            | NonNullishSchema<
+                                                infer TWrapped,
+                                                | ErrorMessage<NonNullishIssue>
+                                                | undefined
+                                              >
+                                            | NonOptionalSchema<
+                                                infer TWrapped,
+                                                | ErrorMessage<NonOptionalIssue>
+                                                | undefined
+                                              >
+                                            | NullableSchema<
+                                                infer TWrapped,
+                                                Default<
+                                                  BaseSchema<
+                                                    unknown,
+                                                    unknown,
+                                                    BaseIssue<unknown>
+                                                  >,
+                                                  null
+                                                >
+                                              >
+                                            | NullishSchema<
+                                                infer TWrapped,
+                                                Default<
+                                                  BaseSchema<
+                                                    unknown,
+                                                    unknown,
+                                                    BaseIssue<unknown>
+                                                  >,
+                                                  null | undefined
+                                                >
+                                              >
+                                            | OptionalSchema<
+                                                infer TWrapped,
+                                                Default<
+                                                  BaseSchema<
+                                                    unknown,
+                                                    unknown,
+                                                    BaseIssue<unknown>
+                                                  >,
+                                                  undefined
+                                                >
+                                              >
+                                            | UndefinedableSchema<
+                                                infer TWrapped,
+                                                Default<
+                                                  BaseSchema<
+                                                    unknown,
+                                                    unknown,
+                                                    BaseIssue<unknown>
+                                                  >,
+                                                  undefined
+                                                >
+                                              >
+                                        ? IssueDotPath<TWrapped>
+                                        : // Wrapped (async)
+                                          TSchema extends
+                                              | LazySchemaAsync<infer TWrapped>
+                                              | NonNullableSchemaAsync<
+                                                  infer TWrapped,
+                                                  | ErrorMessage<NonNullableIssue>
+                                                  | undefined
+                                                >
+                                              | NonNullishSchemaAsync<
+                                                  infer TWrapped,
+                                                  | ErrorMessage<NonNullishIssue>
+                                                  | undefined
+                                                >
+                                              | NonOptionalSchemaAsync<
+                                                  infer TWrapped,
+                                                  | ErrorMessage<NonOptionalIssue>
+                                                  | undefined
+                                                >
+                                              | NullableSchemaAsync<
+                                                  infer TWrapped,
+                                                  DefaultAsync<
+                                                    | BaseSchema<
+                                                        unknown,
+                                                        unknown,
+                                                        BaseIssue<unknown>
+                                                      >
+                                                    | BaseSchemaAsync<
+                                                        unknown,
+                                                        unknown,
+                                                        BaseIssue<unknown>
+                                                      >,
+                                                    null
+                                                  >
+                                                >
+                                              | NullishSchemaAsync<
+                                                  infer TWrapped,
+                                                  DefaultAsync<
+                                                    | BaseSchema<
+                                                        unknown,
+                                                        unknown,
+                                                        BaseIssue<unknown>
+                                                      >
+                                                    | BaseSchemaAsync<
+                                                        unknown,
+                                                        unknown,
+                                                        BaseIssue<unknown>
+                                                      >,
+                                                    null | undefined
+                                                  >
+                                                >
+                                              | OptionalSchemaAsync<
+                                                  infer TWrapped,
+                                                  DefaultAsync<
+                                                    | BaseSchema<
+                                                        unknown,
+                                                        unknown,
+                                                        BaseIssue<unknown>
+                                                      >
+                                                    | BaseSchemaAsync<
+                                                        unknown,
+                                                        unknown,
+                                                        BaseIssue<unknown>
+                                                      >,
+                                                    undefined
+                                                  >
+                                                >
+                                              | UndefinedableSchemaAsync<
+                                                  infer TWrapped,
+                                                  DefaultAsync<
+                                                    | BaseSchema<
+                                                        unknown,
+                                                        unknown,
+                                                        BaseIssue<unknown>
+                                                      >
+                                                    | BaseSchemaAsync<
+                                                        unknown,
+                                                        unknown,
+                                                        BaseIssue<unknown>
+                                                      >,
+                                                    undefined
+                                                  >
+                                                >
+                                          ? IssueDotPath<TWrapped>
+                                          : // Otherwise
+                                            never;
