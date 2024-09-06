@@ -43,72 +43,34 @@ const Schema = v.partialAsync<TSchema, TKeys>(schema, keys);
 
 The following examples show how `partialAsync` can be used.
 
-### Update donation schema
+### Update user schema
 
-Schema to validate an object with partial details of a donation.
-
-```ts
-import { isOrgIdPresent } from '~/api';
-
-const UpdateDonationSchema = v.objectAsync({
-  donationId: v.pipe(v.string(), v.regex(/^[a-z0-9]{10}$/i)),
-  toUpdate: v.partialAsync(
-    v.objectAsync({
-      sponsor: v.pipe(v.string(), v.nonEmpty()),
-      organizationId: v.pipeAsync(
-        v.string(),
-        v.uuid(),
-        v.checkAsync(
-          isOrgIdPresent,
-          'The organization id is not in the database.'
-        )
-      ),
-      message: v.pipe(v.string(), v.nonEmpty()),
-    })
-  ),
-});
-
-/*
-  { 
-    donationId: string, 
-    toUpdate: {
-      sponsor?: string,
-      organizationId?: string,
-      message?: string
-    }
-  }
-*/
-```
-
-### New user schema
-
-Schema to validate new user details.
+Schema to update the user details.
 
 ```ts
 import { isEmailAbsent, isUsernameAbsent } from '~/api';
 
-const NewUserSchema = v.partialAsync(
-  v.objectAsync({
-    email: v.pipeAsync(
-      v.string(),
-      v.email(),
-      v.checkAsync(isEmailAbsent, 'The email is already in the database.')
-    ),
-    username: v.pipeAsync(
-      v.string(),
-      v.nonEmpty(),
-      v.checkAsync(isUsernameAbsent, 'The username is already in the database.')
-    ),
-    password: v.pipe(v.string(), v.minLength(8)),
-  }),
-  ['username']
-);
+const UserSchema = v.objectAsync({
+  email: v.pipeAsync(
+    v.string(),
+    v.email(),
+    v.checkAsync(isEmailAbsent, 'The email is already in the database.')
+  ),
+  username: v.pipeAsync(
+    v.string(),
+    v.nonEmpty(),
+    v.checkAsync(isUsernameAbsent, 'The username is already in the database.')
+  ),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+const UpdateUserSchema = v.partialAsync(UserSchema);
 
 /*
   { 
-    email: string,
+    email?: string,
     username?: string, 
-    password: string 
+    password?: string 
   }
 */
 ```
