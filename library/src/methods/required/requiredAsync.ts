@@ -23,15 +23,15 @@ import type {
   InferObjectInput,
   InferObjectOutput,
   InferOutput,
-  NoPipe,
   ObjectEntriesAsync,
   ObjectKeys,
+  SchemaWithoutPipe,
 } from '../../types/index.ts';
 
 /**
  * Schema type.
  */
-type Schema = NoPipe<
+type Schema = SchemaWithoutPipe<
   | LooseObjectSchemaAsync<
       ObjectEntriesAsync,
       ErrorMessage<LooseObjectIssue> | undefined
