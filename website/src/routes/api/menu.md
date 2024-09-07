@@ -527,6 +527,7 @@
 - [SchemaWithPartialAsync](/api/SchemaWithPartialAsync/)
 - [SchemaWithPipe](/api/SchemaWithPipe/)
 - [SchemaWithPipeAsync](/api/SchemaWithPipeAsync/)
+- [SchemaWithRequiredAsync](/api/SchemaWithRequiredAsync/)
 - [SetPathItem](/api/SetPathItem/)
 - [SetIssue](/api/SetIssue/)
 - [SetSchema](/api/SetSchema/)
