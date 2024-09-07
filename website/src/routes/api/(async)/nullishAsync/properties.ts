@@ -23,14 +23,14 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'Default',
-      href: '../Default/',
+      name: 'DefaultAsync',
+      href: '../DefaultAsync/',
       generics: [
         {
           type: 'custom',
           name: 'TWrapped',
         },
-        'undefined',
+        'null',
       ],
     },
   },
