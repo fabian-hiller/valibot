@@ -1,8 +1,7 @@
-import type { JSONSchema7, JSONSchema7Type } from 'json-schema';
+import type { JSONSchema7 } from 'json-schema';
 import * as v from 'valibot';
-import type { Context } from './context.ts';
 import { convertAction } from './convertAction.ts';
-import { assertJSON } from './utils/assertJSON.ts';
+import type { ConversionConfig, ConversionContext } from './type.ts';
 
 /**
  * Schema type.
@@ -33,8 +32,7 @@ type Schema =
   | v.EnumSchema<v.Enum, v.ErrorMessage<v.EnumIssue> | undefined>
   | v.VariantSchema<
       string,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      any,
+      v.VariantOptions<string>,
       v.ErrorMessage<v.VariantIssue> | undefined
     >
   | v.UnionSchema<
@@ -63,31 +61,30 @@ type Schema =
       v.ObjectEntries,
       v.ErrorMessage<v.LooseObjectIssue> | undefined
     >
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | v.RecordSchema<any, any, v.ErrorMessage<v.RecordIssue> | undefined>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | v.TupleSchema<any, v.ErrorMessage<v.TupleIssue> | undefined>
+  | v.RecordSchema<
+      v.BaseSchema<string, string | number | symbol, v.BaseIssue<unknown>>,
+      v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+      v.ErrorMessage<v.RecordIssue> | undefined
+    >
+  | v.TupleSchema<v.TupleItems, v.ErrorMessage<v.TupleIssue> | undefined>
   | v.TupleWithRestSchema<
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      any,
+      v.TupleItems,
+      v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
       v.ErrorMessage<v.TupleWithRestIssue> | undefined
     >
   | v.LooseTupleSchema<
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      any,
+      v.TupleItems,
       v.ErrorMessage<v.LooseTupleIssue> | undefined
     >
   | v.StrictTupleSchema<
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      any,
+      v.TupleItems,
       v.ErrorMessage<v.StrictTupleIssue> | undefined
     >
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | v.ArraySchema<any, v.ErrorMessage<v.ArrayIssue> | undefined>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | v.LazySchema<any>;
+  | v.ArraySchema<
+      v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+      v.ErrorMessage<v.ArrayIssue> | undefined
+    >
+  | v.LazySchema<v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>>;
 
 /**
  * Schema or pipe type.
@@ -99,159 +96,198 @@ type SchemaOrPipe =
       [Schema, ...(Schema | v.PipeAction<any, any, v.BaseIssue<unknown>>)[]]
     >;
 
+// Create global reference count
+let refCount = 0;
+
 /**
- * Converts any supported Valibot schema to the JSON schema format.
+ * Converts any supported Valibot schema to the JSON Schema format.
  *
- * @param json The JSON schema object.
- * @param schema The Valibot schema object.
+ * @param jsonSchema The JSON Schema object.
+ * @param valibotSchema The Valibot schema object.
+ * @param config The conversion configuration.
  * @param context The conversion context.
  *
- * @returns The converted JSON schema.
+ * @returns The converted JSON Schema.
  */
 export function convertSchema(
-  json: JSONSchema7,
-  schema: SchemaOrPipe,
-  context: Context
+  jsonSchema: JSONSchema7,
+  valibotSchema: SchemaOrPipe,
+  config: ConversionConfig | undefined,
+  context: ConversionContext
 ): JSONSchema7 {
-  const config = context?.config;
-
-  const definitionPath = context.definitionsPathMap.get(schema);
-  if (definitionPath) {
-    json.$ref = definitionPath;
-    return json;
+  // If schema is in reference map, use reference and skip conversion
+  const referenceId = context.referenceMap.get(valibotSchema);
+  if (referenceId) {
+    jsonSchema.$ref = `#/$defs/${referenceId}`;
+    return jsonSchema;
   }
 
   // If it is schema with pipe, convert each item of pipe
-  if ('pipe' in schema) {
-    for (let index = 0; index < schema.pipe.length; index++) {
-      const action = schema.pipe[index];
-      if (action.kind === 'schema') {
+  if ('pipe' in valibotSchema) {
+    for (let index = 0; index < valibotSchema.pipe.length; index++) {
+      // Get current pipe item
+      const valibotPipeItem = valibotSchema.pipe[index];
+
+      if (valibotPipeItem.kind === 'schema') {
+        // If pipe has multiple schemas, throw error or return
         if (index > 0) {
           if (!config?.force) {
             throw new Error(
-              'A "pipe" with multiple schemas cannot be converted to JSON schema.'
+              'A "pipe" with multiple schemas cannot be converted to JSON Schema.'
             );
           }
-          return json;
+          return jsonSchema;
         }
-        const convertedSchema = convertSchema({}, action, context);
-        if (convertedSchema.$ref) {
-          const name = convertedSchema.$ref.split('/')[2];
-          Object.assign(json, context.definitions[name]);
+
+        // Otherwiese, convert Valibot schema to JSON Schema
+        const tempJsonSchema = convertSchema(
+          {},
+          valibotPipeItem,
+          config,
+          context
+        );
+
+        // If temporary JSON Schema object is just a reference, merge its
+        // definition into JSON Schema object
+        if (tempJsonSchema.$ref) {
+          // Hint: If the temporary JSON Schema is only a reference, we must
+          // merge its definition into the JSON Schema object, since subsequent
+          // pipe elements may modify it, which can result in an invalid JSON
+          // Schema output.
+          const referenceId = tempJsonSchema.$ref.split('/')[2];
+          Object.assign(jsonSchema, context.definitions[referenceId]);
+
+          // Otherwise, merge temporary JSON Schema into JSON Schema object
         } else {
-          Object.assign(json, convertedSchema);
+          Object.assign(jsonSchema, tempJsonSchema);
         }
+
+        // Otherwise, convert Valibot action to JSON Schema
       } else {
         // @ts-expect-error
-        convertAction(json, action, context);
+        jsonSchema = convertAction(jsonSchema, valibotPipeItem, context);
       }
     }
-    return json;
+
+    // Return converted JSON Schema
+    return jsonSchema;
   }
 
-  // Otherwise, convert individual schema to JSON schema
-  switch (schema.type) {
+  // Otherwise, convert individual schema to JSON Schema
+  switch (valibotSchema.type) {
     case 'any':
     case 'unknown': {
       break;
     }
 
     case 'null': {
-      json.type = 'null';
+      jsonSchema.type = 'null';
       break;
     }
 
     case 'nullable':
     case 'nullish': {
-      json.anyOf = [
-        convertSchema({}, schema.wrapped as SchemaOrPipe, context),
+      // Add union of wrapped schema and null to JSON Schema
+      jsonSchema.anyOf = [
+        convertSchema(
+          {},
+          valibotSchema.wrapped as SchemaOrPipe,
+          config,
+          context
+        ),
         { type: 'null' },
       ];
-      const defaultValue = v.getDefault(schema);
-      if (
-        defaultValue !== undefined &&
-        assertJSON(
-          defaultValue,
-          config?.force,
-          `Default value for '${schema.type}' is not JSON compatible.`
-        )
-      ) {
-        json.default = defaultValue;
+
+      // Add default value to JSON Schema, if available
+      if ('default' in valibotSchema) {
+        // @ts-expect-error
+        jsonSchema.default = v.getDefault(valibotSchema);
       }
+
       break;
     }
 
     case 'optional': {
-      json = convertSchema({}, schema.wrapped as SchemaOrPipe, context);
-      const defaultValue = v.getDefault(schema);
-      if (
-        defaultValue !== undefined &&
-        assertJSON(
-          defaultValue,
-          config?.force,
-          `Default value for '${schema.type}' is not JSON compatible.`
-        )
-      ) {
-        json.default = defaultValue;
+      // Convert wrapped schema to JSON Schema
+      jsonSchema = convertSchema(
+        jsonSchema,
+        valibotSchema.wrapped as SchemaOrPipe,
+        config,
+        context
+      );
+
+      // Add default value to JSON Schema, if available
+      if ('default' in valibotSchema) {
+        // @ts-expect-error
+        jsonSchema.default = v.getDefault(valibotSchema);
       }
+
       break;
     }
 
     case 'boolean': {
-      json.type = 'boolean';
+      jsonSchema.type = 'boolean';
       break;
     }
 
     case 'number': {
-      json.type = 'number';
+      jsonSchema.type = 'number';
       break;
     }
 
     case 'string': {
-      json.type = 'string';
+      jsonSchema.type = 'string';
       break;
     }
 
     case 'literal': {
       if (
-        assertJSON(
-          schema.literal,
-          config?.force,
-          'Literal value provided is not JSON compatible.'
-        )
+        !config?.force &&
+        typeof valibotSchema.literal !== 'boolean' &&
+        typeof valibotSchema.literal !== 'number' &&
+        typeof valibotSchema.literal !== 'string'
       ) {
-        json.const = schema.literal;
+        throw new Error(
+          'The value of the "literal" schema is not JSON compatible.'
+        );
       }
+      // @ts-expect-error
+      jsonSchema.const = valibotSchema.literal;
       break;
     }
 
-    case 'enum':
+    case 'enum': {
+      jsonSchema.enum = valibotSchema.options;
+      break;
+    }
+
     case 'picklist': {
-      const options = Object.values(schema.options);
-      if (!config?.force) {
-        for (const option of options) {
-          assertJSON(
-            option,
-            config?.force,
-            'Picklist option provided is not JSON compatible.'
-          );
-        }
+      if (
+        !config?.force &&
+        valibotSchema.options.some(
+          (option) => typeof option !== 'number' && typeof option !== 'string'
+        )
+      ) {
+        throw new Error(
+          'An option of the "picklist" schema is not JSON compatible.'
+        );
       }
-      json.enum = options as JSONSchema7Type[];
+      // @ts-expect-error
+      jsonSchema.enum = valibotSchema.options;
       break;
     }
 
     case 'variant':
     case 'union': {
-      json.anyOf = schema.options.map((option: SchemaOrPipe) =>
-        convertSchema({}, option, context)
+      jsonSchema.anyOf = valibotSchema.options.map((option) =>
+        convertSchema({}, option as SchemaOrPipe, config, context)
       );
       break;
     }
 
     case 'intersect': {
-      json.allOf = schema.options.map((option) =>
-        convertSchema({}, option as SchemaOrPipe, context)
+      jsonSchema.allOf = valibotSchema.options.map((option) =>
+        convertSchema({}, option as SchemaOrPipe, config, context)
       );
       break;
     }
@@ -260,36 +296,46 @@ export function convertSchema(
     case 'object_with_rest':
     case 'loose_object':
     case 'strict_object': {
-      json.type = 'object';
-      json.properties = {};
-      json.required = [];
-      for (const key in schema.entries) {
-        const entry = schema.entries[key] as SchemaOrPipe;
-        json.properties[key] = convertSchema({}, entry, context);
+      jsonSchema.type = 'object';
+
+      // Add JSON Schema of properties and mark required keys
+      jsonSchema.properties = {};
+      jsonSchema.required = [];
+      for (const key in valibotSchema.entries) {
+        const entry = valibotSchema.entries[key] as SchemaOrPipe;
+        jsonSchema.properties[key] = convertSchema({}, entry, config, context);
         if (entry.type !== 'nullish' && entry.type !== 'optional') {
-          json.required.push(key);
+          jsonSchema.required.push(key);
         }
       }
-      if (schema.type === 'object_with_rest') {
-        json.additionalProperties = convertSchema(
+
+      // Add additional properties depending on schema type
+      if (valibotSchema.type === 'object_with_rest') {
+        jsonSchema.additionalProperties = convertSchema(
           {},
-          schema.rest as SchemaOrPipe,
+          valibotSchema.rest as SchemaOrPipe,
+          config,
           context
         );
       } else {
-        json.additionalProperties = schema.type === 'loose_object';
+        jsonSchema.additionalProperties = valibotSchema.type === 'loose_object';
       }
+
       break;
     }
 
     case 'record': {
-      if (!config?.force && schema.key.type !== 'string') {
-        throw new Error('Record key schema provided is not supported.');
+      // TODO: Investigate if we should support more complex record schemas
+      if (!config?.force && valibotSchema.key.type !== 'string') {
+        throw new Error(
+          `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`
+        );
       }
-      json.type = 'object';
-      json.additionalProperties = convertSchema(
+      jsonSchema.type = 'object';
+      jsonSchema.additionalProperties = convertSchema(
         {},
-        schema.value as SchemaOrPipe,
+        valibotSchema.value as SchemaOrPipe,
+        config,
         context
       );
       break;
@@ -299,39 +345,62 @@ export function convertSchema(
     case 'tuple_with_rest':
     case 'loose_tuple':
     case 'strict_tuple': {
-      json.type = 'array';
-      json.items = [];
-      for (const item of schema.items) {
-        json.items.push(convertSchema({}, item as SchemaOrPipe, context));
+      jsonSchema.type = 'array';
+
+      // Add JSON Schema of items
+      jsonSchema.items = [];
+      for (const item of valibotSchema.items) {
+        jsonSchema.items.push(
+          convertSchema({}, item as SchemaOrPipe, config, context)
+        );
       }
-      if (schema.type === 'tuple_with_rest') {
-        json.additionalItems = convertSchema(
+
+      // Add additional items depending on schema type
+      if (valibotSchema.type === 'tuple_with_rest') {
+        jsonSchema.additionalItems = convertSchema(
           {},
-          schema.rest as SchemaOrPipe,
+          valibotSchema.rest as SchemaOrPipe,
+          config,
           context
         );
       } else {
-        json.additionalItems = schema.type === 'loose_tuple';
+        jsonSchema.additionalItems = valibotSchema.type === 'loose_tuple';
       }
+
       break;
     }
 
     case 'array': {
-      json.type = 'array';
-      json.items = convertSchema({}, schema.item as SchemaOrPipe, context);
+      jsonSchema.type = 'array';
+      jsonSchema.items = convertSchema(
+        {},
+        valibotSchema.item as SchemaOrPipe,
+        config,
+        context
+      );
       break;
     }
 
     case 'lazy': {
-      // @ts-expect-error
-      const lazySchema = schema.getter();
-      const definitionPath = context.definitionsPathMap.get(lazySchema);
-      if (!definitionPath) {
-        throw new Error(
-          'Schema given in lazy schema is not provided in the definitions.'
+      // Get wrapped Valibot schema and its reference ID
+      const wrappedValibotSchema = valibotSchema.getter(undefined);
+      let referenceId = context.referenceMap.get(wrappedValibotSchema);
+
+      // Add wrapped Valibot schema to reference map and definitions, if necessary
+      if (!referenceId) {
+        referenceId = `${refCount++}`;
+        context.referenceMap.set(wrappedValibotSchema, referenceId);
+        context.definitions[referenceId] = convertSchema(
+          {},
+          wrappedValibotSchema as SchemaOrPipe,
+          config,
+          context
         );
       }
-      json.$ref = definitionPath;
+
+      // Add reference to JSON Schema object
+      jsonSchema.$ref = `#/$defs/${referenceId}`;
+
       break;
     }
 
@@ -339,10 +408,12 @@ export function convertSchema(
       if (!config?.force) {
         throw new Error(
           // @ts-expect-error
-          `The "${schema.type}" schema cannot be converted to JSON schema.`
+          `The "${valibotSchema.type}" schema cannot be converted to JSON Schema.`
         );
       }
     }
   }
-  return json;
+
+  // Return converted JSON Schema
+  return jsonSchema;
 }

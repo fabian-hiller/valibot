@@ -1,7 +1,6 @@
-import type { JSONSchema7, JSONSchema7Type } from 'json-schema';
+import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
-import type { JsonSchemaConfig } from './type.ts';
-import { assertJSON } from './utils/assertJSON.ts';
+import type { ConversionConfig } from './type.ts';
 
 /**
  * Action type.
@@ -55,158 +54,138 @@ type Action =
       v.ErrorMessage<v.MultipleOfIssue<number, number>> | undefined
     >;
 
-function getUnsupportedActionError(json: JSONSchema7, action: Action) {
+/**
+ * Returns an error for an invalid action type.
+ *
+ * @param jsonSchema The JSON Schema object.
+ * @param valibotAction The Valibot action object.
+ *
+ * @returns An error object.
+ */
+function getInvalidTypeError(
+  jsonSchema: JSONSchema7,
+  valibotAction: Action
+): Error {
   return new Error(
-    `The "${action.type}" action is not supported on type "${json.type}".`
+    `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
   );
 }
 
 /**
- * Converts any supported Valibot schema to the JSON schema format.
+ * Converts any supported Valibot schema to the JSON Schema format.
  *
- * @param json The JSON schema object.
- * @param action The Valibot action object.
- * @param config The JSON schema configuration.
+ * @param jsonSchema The JSON Schema object.
+ * @param valibotAction The Valibot action object.
+ * @param config The conversion configuration.
  *
- * @returns The converted JSON schema.
+ * @returns The converted JSON Schema.
  */
 export function convertAction(
-  json: JSONSchema7,
-  action: Action,
-  config: JsonSchemaConfig | undefined
+  jsonSchema: JSONSchema7,
+  valibotAction: Action,
+  config: ConversionConfig | undefined
 ): JSONSchema7 {
-  switch (action.type) {
+  switch (valibotAction.type) {
     case 'description': {
-      json.description = action.description;
+      jsonSchema.description = valibotAction.description;
       break;
     }
 
     case 'email': {
-      json.format = 'email';
+      jsonSchema.format = 'email';
       break;
     }
 
     case 'iso_date': {
-      json.format = 'date';
+      jsonSchema.format = 'date';
       break;
     }
 
     case 'iso_timestamp': {
-      json.format = 'date-time';
+      jsonSchema.format = 'date-time';
       break;
     }
 
     case 'ipv4': {
-      json.format = 'ipv4';
+      jsonSchema.format = 'ipv4';
       break;
     }
 
     case 'ipv6': {
-      json.format = 'ipv6';
+      jsonSchema.format = 'ipv6';
       break;
     }
 
     case 'uuid': {
-      json.format = 'uuid';
+      jsonSchema.format = 'uuid';
       break;
     }
 
     case 'regex': {
-      if (action.requirement.flags && !config?.force) {
-        throw new Error('RegExp flags are not supported.');
+      if (!config?.force && valibotAction.requirement.flags) {
+        throw new Error('RegExp flags are not supported by JSON Schema.');
       }
-      json.pattern = action.requirement.source;
+      jsonSchema.pattern = valibotAction.requirement.source;
       break;
     }
 
     case 'integer': {
-      json.type = 'integer';
+      jsonSchema.type = 'integer';
       break;
     }
 
     case 'length':
     case 'min_length':
     case 'max_length': {
-      if (json.type === 'string') {
-        if (action.type !== 'max_length') {
-          json.minLength = action.requirement;
+      if (jsonSchema.type === 'string') {
+        if (valibotAction.type !== 'max_length') {
+          jsonSchema.minLength = valibotAction.requirement;
         }
-        if (action.type !== 'min_length') {
-          json.maxLength = action.requirement;
+        if (valibotAction.type !== 'min_length') {
+          jsonSchema.maxLength = valibotAction.requirement;
         }
-      } else if (json.type === 'array') {
-        if (action.type !== 'max_length') {
-          json.minItems = action.requirement;
+      } else if (jsonSchema.type === 'array') {
+        if (valibotAction.type !== 'max_length') {
+          jsonSchema.minItems = valibotAction.requirement;
         }
-        if (action.type !== 'min_length') {
-          json.maxItems = action.requirement;
+        if (valibotAction.type !== 'min_length') {
+          jsonSchema.maxItems = valibotAction.requirement;
         }
       } else if (!config?.force) {
-        throw getUnsupportedActionError(json, action);
+        throw getInvalidTypeError(jsonSchema, valibotAction);
       }
       break;
     }
 
     case 'value': {
-      if (
-        (json.type === 'string' ||
-          json.type === 'number' ||
-          json.type === 'boolean') &&
-        assertJSON(
-          action.requirement,
-          config?.force,
-          `Value provided is not JSON compatible.`
-        )
-      ) {
-        json.const = action.requirement as JSONSchema7Type;
-      } else if (!config?.force) {
-        throw getUnsupportedActionError(json, action);
-      }
+      // Hint: It is not necessary to validate the type of the JSON schema or
+      // Valibot action requirement, as this action can only follow a valid
+      // schema in the pipeline anyway.
+      // @ts-expect-error
+      jsonSchema.const = valibotAction.requirement;
       break;
     }
 
     case 'max_value': {
-      if (
-        json.type === 'number' &&
-        assertJSON(
-          action.requirement,
-          config?.force,
-          `Max value provided is not JSON compatible.`
-        )
-      ) {
-        json.maximum = action.requirement as number;
+      if (jsonSchema.type === 'number') {
+        jsonSchema.maximum = valibotAction.requirement as number;
       } else if (!config?.force) {
-        throw getUnsupportedActionError(json, action);
+        throw getInvalidTypeError(jsonSchema, valibotAction);
       }
       break;
     }
 
     case 'min_value': {
-      if (
-        json.type === 'number' &&
-        assertJSON(
-          action.requirement,
-          config?.force,
-          `Min value provided is not JSON compatible.`
-        )
-      ) {
-        json.minimum = action.requirement as number;
+      if (jsonSchema.type === 'number') {
+        jsonSchema.minimum = valibotAction.requirement as number;
       } else if (!config?.force) {
-        throw getUnsupportedActionError(json, action);
+        throw getInvalidTypeError(jsonSchema, valibotAction);
       }
       break;
     }
 
     case 'multiple_of': {
-      if (
-        assertJSON(
-          action.requirement,
-          config?.force,
-          `Multiple of value provided is not JSON compatible.`
-        )
-      ) {
-        json.multipleOf = action.requirement;
-      }
+      jsonSchema.multipleOf = valibotAction.requirement;
       break;
     }
 
@@ -214,10 +193,10 @@ export function convertAction(
       if (!config?.force) {
         throw new Error(
           // @ts-expect-error
-          `The "${schema.type}" action cannot be converted to JSON schema.`
+          `The "${schema.type}" action cannot be converted to JSON Schema.`
         );
       }
     }
   }
-  return json;
+  return jsonSchema;
 }

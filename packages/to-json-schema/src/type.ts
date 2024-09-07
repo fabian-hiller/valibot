@@ -1,22 +1,29 @@
+import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
 
 /**
- * JSON Schema config type.
+ * JSON Schema conversion config type.
  */
-export interface JsonSchemaConfig {
+export interface ConversionConfig {
   /**
    * Whether to force conversion to JSON Schema even for incompatible schemas and actions.
    */
   force?: boolean;
+}
+
+/**
+ * JSON Schema conversion context type.
+ */
+export interface ConversionContext {
   /**
-   * The name of the definitions property used. Defaults to "$defs".
+   * The JSON Schema definitions.
    */
-  definitionPath?: '$defs' | 'definitions';
+  definitions: Record<string, JSONSchema7>;
   /**
-   * Map schemas to definition names.
+   * The JSON Schema reference map.
    */
-  definitions?: Record<
-    string,
-    v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>
+  referenceMap: Map<
+    v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+    string
   >;
 }

@@ -1,43 +1,40 @@
 import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
-import { createContext } from './context.ts';
 import { convertSchema } from './convertSchema.ts';
-import type { JsonSchemaConfig } from './type.ts';
+import type { ConversionConfig, ConversionContext } from './type.ts';
 
 /**
- * Converts a Valibot schema to the JSON schema format.
+ * Converts a Valibot schema to the JSON Schema format.
  *
  * @param schema The Valibot schema object.
- * @param config The JSON schema configuration.
+ * @param config The JSON Schema configuration.
  *
- * @returns The converted JSON schema.
+ * @returns The converted JSON Schema.
  */
 export function toJsonSchema(
   schema: v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
-  config?: JsonSchemaConfig
+  config?: ConversionConfig
 ): JSONSchema7 {
-  const context = createContext(config);
-  for (const [key, schema] of Object.entries(context.config.definitions)) {
-    context.definitions[key] = convertSchema(
-      {},
-      // @ts-expect-error
-      schema,
-      context
-    );
-    context.definitionsPathMap.set(
-      schema,
-      `#/${context.config.definitionPath}/${key}`
-    );
-  }
+  // Initialize JSON Schema context
+  const context: ConversionContext = {
+    definitions: {},
+    referenceMap: new Map(),
+  };
 
-  const converted = convertSchema(
+  // Convert Valibot schema to JSON Schema
+  const jsonSchema = convertSchema(
     { $schema: 'http://json-schema.org/draft-07/schema#' },
     // @ts-expect-error
     schema,
+    config,
     context
   );
-  if (Object.keys(context.definitions).length > 0) {
-    converted[context.config.definitionPath] = context.definitions;
+
+  // Add definitions to JSON Schema, if necessary
+  if (context.referenceMap.size) {
+    jsonSchema.$defs = context.definitions;
   }
-  return converted;
+
+  // Return converted JSON Schema
+  return jsonSchema;
 }
