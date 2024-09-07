@@ -5,8 +5,8 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'NoPipe',
-      href: '../NoPipe/',
+      name: 'SchemaWithoutPipe',
+      href: '../SchemaWithoutPipe/',
       generics: [
         {
           type: 'union',
