@@ -27,10 +27,12 @@ export const properties: Record<string, PropertyProps> = {
                     {
                       type: 'custom',
                       name: 'ErrorMessage',
+                      href: '../ErrorMessage/',
                       generics: [
                         {
                           type: 'custom',
-                          name: 'ObjectIssue',
+                          name: 'LooseObjectIssue',
+                          href: '../LooseObjectIssue/',
                         },
                       ],
                     },
@@ -55,10 +57,12 @@ export const properties: Record<string, PropertyProps> = {
                     {
                       type: 'custom',
                       name: 'ErrorMessage',
+                      href: '../ErrorMessage/',
                       generics: [
                         {
                           type: 'custom',
                           name: 'ObjectIssue',
+                          href: '../ObjectIssue/',
                         },
                       ],
                     },
@@ -98,6 +102,7 @@ export const properties: Record<string, PropertyProps> = {
                     {
                       type: 'custom',
                       name: 'ErrorMessage',
+                      href: '../ErrorMessage/',
                       generics: [
                         {
                           type: 'custom',
@@ -127,10 +132,12 @@ export const properties: Record<string, PropertyProps> = {
                     {
                       type: 'custom',
                       name: 'ErrorMessage',
+                      href: '../ErrorMessage/',
                       generics: [
                         {
                           type: 'custom',
-                          name: 'ObjectIssue',
+                          name: 'StrictObjectIssue',
+                          href: '../StrictObjectIssue/',
                         },
                       ],
                     },
@@ -147,16 +154,31 @@ export const properties: Record<string, PropertyProps> = {
   TKeys: {
     modifier: 'extends',
     type: {
+      type: 'custom',
+      name: 'ObjectKeys',
+      href: '../ObjectKeys/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TSchema',
+        },
+      ],
+    },
+  },
+  TMessage: {
+    modifier: 'extends',
+    type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'ObjectKeys',
-          href: '../ObjectKeys/',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
           generics: [
             {
               type: 'custom',
-              name: 'TSchema',
+              name: 'NonOptionalIssue',
+              href: '../NonOptionalIssue/',
             },
           ],
         },
@@ -178,26 +200,33 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          generics: [
-            {
-              type: 'custom',
-              name: 'NonOptionalIssue',
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
-  Schema: {
+  AllKeysSchema: {
     type: {
       type: 'custom',
       name: 'SchemaWithRequired',
+      href: '../SchemaWithRequired/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TSchema',
+        },
+        'undefined',
+        {
+          type: 'custom',
+          name: 'TMessage',
+        },
+      ],
+    },
+  },
+  SelectedKeysSchema: {
+    type: {
+      type: 'custom',
+      name: 'SchemaWithRequired',
+      href: '../SchemaWithRequired/',
       generics: [
         {
           type: 'custom',
@@ -205,7 +234,11 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TKeys',
+          name: 'Tkeys',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },
