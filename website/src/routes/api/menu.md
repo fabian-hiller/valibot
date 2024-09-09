@@ -83,6 +83,7 @@
 - [cuid2](/api/cuid2/)
 - [decimal](/api/decimal/)
 - [description](/api/description/)
+- [digits](/api/digits/)
 - [email](/api/email/)
 - [emoji](/api/emoji/)
 - [empty](/api/empty/)

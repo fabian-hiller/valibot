@@ -1,0 +1,67 @@
+---
+title: digits
+description: Creates a digits validation action.
+source: /actions/digits/digits.ts
+contributors:
+  - fabian-hiller
+  - andrew-d-jackson
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# digits
+
+Creates a [digits](https://en.wikipedia.org/wiki/Numerical_digit) validation action.
+
+```ts
+const Action = v.digits<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `digits` you can validate the formatting of a string. If the input does not soley consist of numerical digits, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `digits` can be used.
+
+### Digits schema
+
+Schema to validate a digits.
+
+```ts
+const DigitsSchema = v.pipe(
+  v.string(),
+  v.digits('The string contains something other than digits.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `digits`.
+
+### Schemas
+
+<ApiList items={['any', 'custom', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

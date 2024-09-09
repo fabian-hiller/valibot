@@ -1,47 +1,47 @@
 import { describe, expect, test } from 'vitest';
-import { DECIMAL_REGEX } from '../../regex.ts';
+import { DIGITS_REGEX } from '../../regex.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
-import { decimal, type DecimalAction, type DecimalIssue } from './decimal.ts';
+import { digits, type DigitsAction, type DigitsIssue } from './digits.ts';
 
-describe('decimal', () => {
+describe('digits', () => {
   describe('should return action object', () => {
-    const baseAction: Omit<DecimalAction<string, never>, 'message'> = {
+    const baseAction: Omit<DigitsAction<string, never>, 'message'> = {
       kind: 'validation',
-      type: 'decimal',
-      reference: decimal,
+      type: 'digits',
+      reference: digits,
       expects: null,
-      requirement: DECIMAL_REGEX,
+      requirement: DIGITS_REGEX,
       async: false,
       _run: expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const action: DecimalAction<string, undefined> = {
+      const action: DigitsAction<string, undefined> = {
         ...baseAction,
         message: undefined,
       };
-      expect(decimal()).toStrictEqual(action);
-      expect(decimal(undefined)).toStrictEqual(action);
+      expect(digits()).toStrictEqual(action);
+      expect(digits(undefined)).toStrictEqual(action);
     });
 
     test('with string message', () => {
-      expect(decimal('message')).toStrictEqual({
+      expect(digits('message')).toStrictEqual({
         ...baseAction,
         message: 'message',
-      } satisfies DecimalAction<string, string>);
+      } satisfies DigitsAction<string, string>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(decimal(message)).toStrictEqual({
+      expect(digits(message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies DecimalAction<string, typeof message>);
+      } satisfies DigitsAction<string, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    const action = decimal();
+    const action = digits();
 
     test('for untyped inputs', () => {
       expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
@@ -59,31 +59,19 @@ describe('decimal', () => {
       expectNoActionIssue(action, ['00', '01', '12', '99']);
     });
 
-    test('for float numbers', () => {
-      expectNoActionIssue(action, ['0.1', '123.456']);
-    });
-
-    test('for number signs', () => {
-      expectNoActionIssue(action, ['+1', '-1', '+123', '-123']);
-    });
-
-    test('for float numbers with a number sign', () => {
-      expectNoActionIssue(action, ['-2.0', '-52.61', '+4.0', '-11.31']);
-    });
-
     test('for multiple digits', () => {
       expectNoActionIssue(action, ['0123456789']);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const action = decimal('message');
-    const baseIssue: Omit<DecimalIssue<string>, 'input' | 'received'> = {
+    const action = digits('message');
+    const baseIssue: Omit<DigitsIssue<string>, 'input' | 'received'> = {
       kind: 'validation',
-      type: 'decimal',
+      type: 'digits',
       expected: null,
       message: 'message',
-      requirement: DECIMAL_REGEX,
+      requirement: DIGITS_REGEX,
     };
 
     test('for empty strings', () => {
@@ -98,20 +86,16 @@ describe('decimal', () => {
       expectActionIssue(action, baseIssue, ['1,000', '1_000', '1 000']);
     });
 
+    test('for number signs', () => {
+      expectActionIssue(action, baseIssue, ['+1', '-1', '+123', '-123']);
+    });
+
+    test('for float numbers', () => {
+      expectActionIssue(action, baseIssue, ['0.1', '123.456']);
+    });
+
     test('for exponential numbers', () => {
       expectActionIssue(action, baseIssue, ['1e3', '1e-3', '1e+3']);
-    });
-
-    test('for floats ending in .', () => {
-      expectActionIssue(action, baseIssue, ['1.', '342.']);
-    });
-
-    test('for floats starting with .', () => {
-      expectActionIssue(action, baseIssue, ['.6', '.763']);
-    });
-
-    test('for floats starting with . and number sign', () => {
-      expectActionIssue(action, baseIssue, ['-.2', '-.922', '+.5', '+.452']);
     });
 
     test('for word chars', () => {
@@ -121,7 +105,9 @@ describe('decimal', () => {
     test('for special chars', () => {
       expectActionIssue(action, baseIssue, [
         '-',
+        '-1',
         '+',
+        '+1',
         '#',
         '#1',
         '$',
