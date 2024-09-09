@@ -21,6 +21,20 @@ export function toJsonSchema(
     referenceMap: new Map(),
   };
 
+  // Add provided definitions to context
+  if (config?.definitions) {
+    for (const key in config.definitions) {
+      context.referenceMap.set(config.definitions[key], key);
+      context.definitions[key] = convertSchema(
+        {},
+        // @ts-expect-error
+        config.definitions[key],
+        config,
+        context
+      );
+    }
+  }
+
   // Convert Valibot schema to JSON Schema
   const jsonSchema = convertSchema(
     { $schema: 'http://json-schema.org/draft-07/schema#' },
