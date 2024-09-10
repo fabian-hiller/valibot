@@ -1,0 +1,28 @@
+---
+title: DigitsAction
+description: Digits action type.
+contributors:
+  - fabian-hiller
+  - andrew-d-jackson
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# DigitsAction
+
+Digits action type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `DigitsAction` <Property {...properties.BaseValidation} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `expects` <Property {...properties.expects} />
+  - `requirement` <Property {...properties.requirement} />
+  - `message` <Property {...properties.message} />

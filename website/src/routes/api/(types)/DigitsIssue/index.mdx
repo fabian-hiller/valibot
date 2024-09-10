@@ -1,0 +1,27 @@
+---
+title: DigitsIssue
+description: Digits issue type.
+contributors:
+  - fabian-hiller
+  - andrew-d-jackson
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# DigitsIssue
+
+Digits issue type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Definition
+
+- `DigitsIssue` <Property {...properties.BaseIssue} />
+  - `kind` <Property {...properties.kind} />
+  - `type` <Property {...properties.type} />
+  - `expected` <Property {...properties.expected} />
+  - `received` <Property {...properties.received} />
+  - `requirement` <Property {...properties.requirement} />
