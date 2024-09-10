@@ -1,6 +1,7 @@
 import type { PropertyProps } from '~/components';
 
 export const properties: Record<string, PropertyProps> = {
+<<<<<<< HEAD
   TSchema: {
     modifier: 'extends',
     type: {
@@ -172,12 +173,16 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   TKeys: {
+=======
+  TKey: {
+>>>>>>> 7ff23862 (docs: document async apis)
     modifier: 'extends',
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
+<<<<<<< HEAD
           name: 'ObjectKeys',
           href: '../ObjectKeys/',
           generics: [
@@ -187,10 +192,93 @@ export const properties: Record<string, PropertyProps> = {
             },
           ],
         },
+=======
+          name: 'BaseSchema',
+          href: '../BaseSchema/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'BaseSchemaAsync',
+          href: '../BaseSchemaAsync/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
+        },
+      ],
+    },
+  },
+  TValue: {
+    modifier: 'extends',
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          name: 'BaseSchema',
+          href: '../BaseSchema/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'BaseSchemaAsync',
+          href: '../BaseSchemaAsync/',
+          generics: [
+            'unknown',
+            'unknown',
+            {
+              type: 'custom',
+              name: 'BaseIssue',
+              href: '../BaseIssue/',
+              generics: ['unknown'],
+            },
+          ],
+        },
+      ],
+    },
+  },
+  TDefault: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'Default',
+      href: '../Default/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TWrapped',
+        },
+>>>>>>> 7ff23862 (docs: document async apis)
         'undefined',
       ],
     },
   },
+<<<<<<< HEAD
   schema: {
     type: {
       type: 'custom',
@@ -198,11 +286,15 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   keys: {
+=======
+  key: {
+>>>>>>> 7ff23862 (docs: document async apis)
     type: {
       type: 'custom',
       name: 'TKey',
     },
   },
+<<<<<<< HEAD
   Schema: {
     type: {
       type: 'custom',
@@ -216,6 +308,33 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TKeys',
+=======
+  value: {
+    type: {
+      type: 'custom',
+      name: 'TValue',
+    },
+  },
+  message: {
+    type: {
+      type: 'custom',
+      name: 'TMessage',
+    },
+  },
+  Schema: {
+    type: {
+      type: 'custom',
+      name: 'nullableAsync',
+      href: '../nullableAsync/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TWrapped',
+        },
+        {
+          type: 'custom',
+          name: 'TDefault',
+>>>>>>> 7ff23862 (docs: document async apis)
         },
       ],
     },
