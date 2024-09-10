@@ -102,16 +102,27 @@ describe('decimal', () => {
       expectActionIssue(action, baseIssue, ['1e3', '1e-3', '1e+3']);
     });
 
-    test('for floats ending in .', () => {
+    test('for floats ending with a dot', () => {
       expectActionIssue(action, baseIssue, ['1.', '342.']);
     });
 
-    test('for floats starting with .', () => {
+    test('for floats starting with a dot', () => {
       expectActionIssue(action, baseIssue, ['.6', '.763']);
     });
 
-    test('for floats starting with . and number sign', () => {
+    test('for floats starting with number sign followed by a dot', () => {
       expectActionIssue(action, baseIssue, ['-.2', '-.922', '+.5', '+.452']);
+    });
+
+    test('for floats with multiple dots', () => {
+      expectActionIssue(action, baseIssue, [
+        '1.2.3',
+        '1..23',
+        '12..3',
+        '12.3.4',
+        '1.23.4',
+        '1.2.34',
+      ]);
     });
 
     test('for word chars', () => {
