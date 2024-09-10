@@ -282,6 +282,8 @@
 - [DefaultAsync](/api/DefaultAsync/)
 - [DefaultValue](/api/DefaultValue/)
 - [DescriptionAction](/api/DescriptionAction/)
+- [DigitsAction](/api/DigitsAction/)
+- [DigitsIssue](/api/DigitsIssue/)
 - [EmailAction](/api/EmailAction/)
 - [EmailIssue](/api/EmailIssue/)
 - [EmojiAction](/api/EmojiAction/)
