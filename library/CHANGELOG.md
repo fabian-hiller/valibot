@@ -4,7 +4,9 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
+- Add `decimal` action to validate integer and float strings (pull request #823)
 - Rename `NoPipe` type to `SchemaWithoutPipe`
+- Rename `decimal` action to `digits` (pull request #823)
 - Fix inference of generics in `IssueDotPath` type (issue #814)
 
 ## v0.41.0 (September 01, 2024)
