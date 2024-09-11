@@ -47,11 +47,13 @@ With `recordAsync` you can validate the data type of the input and whether the e
 
 The following examples show how `recordAsync` can be used.
 
-### Id to email schema
+### ID to email schema
 
-Schema to validate a record that maps an id to a public user email.
+Schema to validate a record that maps an ID to a public user email.
 
 ```ts
+import { isEmailPublic } from '~/api';
+
 const IdToEmailSchema = v.recordAsync(
   v.pipe(v.string(), v.uuid()),
   v.pipeAsync(
