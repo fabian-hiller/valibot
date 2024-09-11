@@ -515,6 +515,7 @@
 - [ReadonlyAction](/api/ReadonlyAction/)
 - [RecordIssue](/api/RecordIssue/)
 - [RecordSchema](/api/RecordSchema/)
+- [RecordSchemaAsync](/api/RecordSchemaAsync/)
 - [ReduceItemsAction](/api/ReduceItemsAction/)
 - [RegexAction](/api/RegexAction/)
 - [RegexIssue](/api/RegexIssue/)

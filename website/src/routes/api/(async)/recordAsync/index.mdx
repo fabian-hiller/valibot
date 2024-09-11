@@ -1,10 +1,185 @@
 ---
 title: recordAsync
+description: Creates a record schema.
 source: /schemas/record/recordAsync.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
 ---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
 
 # recordAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/schemas/record/recordAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a record schema.
+
+```ts
+const Schema = v.recordAsync<TKey, TValue, TMessage>(key, value, message);
+```
+
+## Generics
+
+- `TKey` <Property {...properties.TKey} />
+- `TValue` <Property {...properties.TValue} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `key` <Property {...properties.key} />
+- `value` <Property {...properties.value} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `recordAsync` you can validate the data type of the input and whether the entries match `key` and `value`. If the input is not an object, you can use `message` to customize the error message.
+
+> This schema filters certain entries from the record for security reasons.
+
+> This schema marks an entry as optional if it detects that its key is a literal type. The reason for this is that it is not technically possible to detect missing literal keys without restricting the `key` schema to <Link href="../string/">`string`</Link>, <Link href="../enum/">`enum`</Link> and <Link href="../picklist/">`picklist`</Link>. However, if <Link href="../enum/">`enum`</Link> and <Link href="../picklist/">`picklist`</Link> are used, it is better to use <Link href="../objectAsync/">`objectAsync`</Link> with <Link href="../entriesFromList/">`entriesFromList`</Link> because it already covers the needed functionality. This decision also reduces the bundle size of `recordAsync`, because it only needs to check the entries of the input and not any missing keys.
+
+## Returns
+
+- `Schema` <Property {...properties.Schema} />
+
+## Examples
+
+The following examples show how `recordAsync` can be used.
+
+### Id to email schema
+
+Schema to validate a record that maps an id to a public user email.
+
+```ts
+const IdToEmailSchema = v.recordAsync(
+  v.pipe(v.string(), v.uuid()),
+  v.pipeAsync(
+    v.string(),
+    v.email(),
+    v.checkAsync(isEmailPublic, 'The email address is private.')
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `recordAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'undefinedable',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['config', 'getDefault', 'getFallback']} />
+
+### Actions
+
+<ApiList
+  items={[
+    'brand',
+    'check',
+    'description',
+    'partialCheck',
+    'rawCheck',
+    'rawTransform',
+    'readonly',
+    'transform',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'checkAsync',
+    'customAsync',
+    'fallbackAsync',
+    'getDefaultsAsync',
+    'getFallbacksAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'parseAsync',
+    'parserAsync',
+    'partialCheckAsync',
+    'pipeAsync',
+    'rawCheckAsync',
+    'rawTransformAsync',
+    'safeParseAsync',
+    'safeParserAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'transformAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'undefinedableAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>
