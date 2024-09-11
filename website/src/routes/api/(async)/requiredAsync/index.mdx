@@ -56,6 +56,8 @@ The following examples show how `requiredAsync` can be used.
 Schema to validate an object containing task details.
 
 ```ts
+import { isOwnerPresent } from '~/api';
+
 const UpdateTaskSchema = v.objectAsync({
   owner: v.optionalAsync(
     v.pipeAsync(
