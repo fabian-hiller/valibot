@@ -21,7 +21,18 @@ describe('convertAction', () => {
     });
   });
 
-  test('should convert isoDate action', () => {
+  test('should convert integer action', () => {
+    expect(convertAction({}, v.integer<number>(), undefined)).toStrictEqual({
+      type: 'integer',
+    });
+    expect(
+      convertAction({ type: 'number' }, v.integer<number>(), undefined)
+    ).toStrictEqual({
+      type: 'integer',
+    });
+  });
+
+  test('should convert ISO date action', () => {
     expect(convertAction({}, v.isoDate<string>(), undefined)).toStrictEqual({
       format: 'date',
     });
@@ -33,7 +44,7 @@ describe('convertAction', () => {
     });
   });
 
-  test('should convert isoTimestamp action', () => {
+  test('should convert ISO timestamp action', () => {
     expect(
       convertAction({}, v.isoTimestamp<string>(), undefined)
     ).toStrictEqual({
@@ -47,7 +58,7 @@ describe('convertAction', () => {
     });
   });
 
-  test('should convert ipv4 action', () => {
+  test('should convert IPv4 action', () => {
     expect(convertAction({}, v.ipv4<string>(), undefined)).toStrictEqual({
       format: 'ipv4',
     });
@@ -59,7 +70,7 @@ describe('convertAction', () => {
     });
   });
 
-  test('should convert ipv6 action', () => {
+  test('should convert IPv6 action', () => {
     expect(convertAction({}, v.ipv6<string>(), undefined)).toStrictEqual({
       format: 'ipv6',
     });
@@ -71,7 +82,363 @@ describe('convertAction', () => {
     });
   });
 
-  test('should convert uuid action', () => {
+  test('should convert length action for strings', () => {
+    expect(
+      convertAction(
+        { type: 'string' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.length<string, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'string',
+      minLength: 3,
+      maxLength: 3,
+    });
+  });
+
+  test('should convert length action for arrays', () => {
+    expect(
+      convertAction(
+        { type: 'array' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.length<unknown[], 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'array',
+      minItems: 3,
+      maxItems: 3,
+    });
+  });
+
+  test('should throw error for length action with invalid type', () => {
+    expect(() =>
+      convertAction(
+        {},
+        // @ts-expect-error FIXME: Something is wrong here
+        v.length<unknown, 3>(3),
+        undefined
+      )
+    ).toThrowError('The "length" action is not supported on type "undefined".');
+    expect(() =>
+      convertAction(
+        { type: 'object' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.length<unknown, 3>(3),
+        undefined
+      )
+    ).toThrowError('The "length" action is not supported on type "object".');
+  });
+
+  test('should force conversion for length action with invalid type', () => {
+    expect(
+      convertAction(
+        {},
+        // @ts-expect-error FIXME: Something is wrong here
+        v.length<unknown, 3>(3),
+        { force: true }
+      )
+    ).toStrictEqual({});
+    expect(
+      convertAction(
+        { type: 'object' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.length<unknown, 3>(3),
+        { force: true }
+      )
+    ).toStrictEqual({ type: 'object' });
+  });
+
+  test('should convert min length action for strings', () => {
+    expect(
+      convertAction(
+        { type: 'string' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.minLength<string, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'string',
+      minLength: 3,
+    });
+  });
+
+  test('should convert min length action for arrays', () => {
+    expect(
+      convertAction(
+        { type: 'array' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.minLength<unknown[], 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'array',
+      minItems: 3,
+    });
+  });
+
+  test('should throw error for min length action with invalid type', () => {
+    expect(() =>
+      convertAction(
+        {},
+        // @ts-expect-error FIXME: Something is wrong here
+        v.minLength<unknown, 3>(3),
+        undefined
+      )
+    ).toThrowError(
+      'The "min_length" action is not supported on type "undefined".'
+    );
+    expect(() =>
+      convertAction(
+        { type: 'object' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.minLength<unknown, 3>(3),
+        undefined
+      )
+    ).toThrowError(
+      'The "min_length" action is not supported on type "object".'
+    );
+  });
+
+  test('should force conversion for min length action with invalid type', () => {
+    expect(
+      convertAction(
+        {},
+        // @ts-expect-error FIXME: Something is wrong here
+        v.minLength<unknown, 3>(3),
+        { force: true }
+      )
+    ).toStrictEqual({});
+    expect(
+      convertAction(
+        { type: 'object' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.minLength<unknown, 3>(3),
+        { force: true }
+      )
+    ).toStrictEqual({ type: 'object' });
+  });
+
+  test('should convert max length action for strings', () => {
+    expect(
+      convertAction(
+        { type: 'string' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.maxLength<string, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'string',
+      maxLength: 3,
+    });
+  });
+
+  test('should convert max length action for arrays', () => {
+    expect(
+      convertAction(
+        { type: 'array' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.maxLength<unknown[], 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'array',
+      maxItems: 3,
+    });
+  });
+
+  test('should throw error for max length action with invalid type', () => {
+    expect(() =>
+      convertAction(
+        {},
+        // @ts-expect-error FIXME: Something is wrong here
+        v.maxLength<unknown, 3>(3),
+        undefined
+      )
+    ).toThrowError(
+      'The "max_length" action is not supported on type "undefined".'
+    );
+    expect(() =>
+      convertAction(
+        { type: 'object' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.maxLength<unknown, 3>(3),
+        undefined
+      )
+    ).toThrowError(
+      'The "max_length" action is not supported on type "object".'
+    );
+  });
+
+  test('should force conversion for max length action with invalid type', () => {
+    expect(
+      convertAction(
+        {},
+        // @ts-expect-error FIXME: Something is wrong here
+        v.maxLength<unknown, 3>(3),
+        { force: true }
+      )
+    ).toStrictEqual({});
+    expect(
+      convertAction(
+        { type: 'object' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.maxLength<unknown, 3>(3),
+        { force: true }
+      )
+    ).toStrictEqual({ type: 'object' });
+  });
+
+  test('should convert max value action for numbers', () => {
+    expect(
+      convertAction(
+        { type: 'number' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.maxValue<number, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'number',
+      maximum: 3,
+    });
+  });
+
+  test('should throw error for max value action with invalid type', () => {
+    expect(() =>
+      convertAction(
+        {},
+        // @ts-expect-error FIXME: Something is wrong here
+        v.maxValue<unknown, 3>(3),
+        undefined
+      )
+    ).toThrowError(
+      'The "max_value" action is not supported on type "undefined".'
+    );
+    expect(() =>
+      convertAction(
+        { type: 'string' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.maxValue<string, 3>(3),
+        undefined
+      )
+    ).toThrowError('The "max_value" action is not supported on type "string".');
+  });
+
+  test('should force conversion for max value action with invalid type', () => {
+    expect(
+      convertAction(
+        {},
+        // @ts-expect-error FIXME: Something is wrong here
+        v.maxValue<unknown, 3>(3),
+        { force: true }
+      )
+    ).toStrictEqual({});
+    expect(
+      convertAction(
+        { type: 'string' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.maxValue<string, 3>(3),
+        { force: true }
+      )
+    ).toStrictEqual({ type: 'string' });
+  });
+
+  test('should convert min value action for numbers', () => {
+    expect(
+      convertAction(
+        { type: 'number' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.minValue<number, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'number',
+      minimum: 3,
+    });
+  });
+
+  test('should throw error for min value action with invalid type', () => {
+    expect(() =>
+      convertAction(
+        {},
+        // @ts-expect-error FIXME: Something is wrong here
+        v.minValue<unknown, 3>(3),
+        undefined
+      )
+    ).toThrowError(
+      'The "min_value" action is not supported on type "undefined".'
+    );
+    expect(() =>
+      convertAction(
+        { type: 'string' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.minValue<string, 3>(3),
+        undefined
+      )
+    ).toThrowError('The "min_value" action is not supported on type "string".');
+  });
+
+  test('should force conversion for min value action with invalid type', () => {
+    expect(
+      convertAction(
+        {},
+        // @ts-expect-error FIXME: Something is wrong here
+        v.minValue<unknown, 3>(3),
+        { force: true }
+      )
+    ).toStrictEqual({});
+    expect(
+      convertAction(
+        { type: 'string' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.minValue<string, 3>(3),
+        { force: true }
+      )
+    ).toStrictEqual({ type: 'string' });
+  });
+
+  test('should convert multiple of action', () => {
+    expect(
+      convertAction({}, v.multipleOf<number, 5>(5), undefined)
+    ).toStrictEqual({
+      multipleOf: 5,
+    });
+    expect(
+      convertAction({ type: 'number' }, v.multipleOf<number, 5>(5), undefined)
+    ).toStrictEqual({
+      type: 'number',
+      multipleOf: 5,
+    });
+  });
+
+  test('should convert supported regex action', () => {
+    expect(
+      convertAction({ type: 'string' }, v.regex<string>(/[a-zA-Z]/), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: '[a-zA-Z]',
+    });
+  });
+
+  test('should throw error for unsupported regex action', () => {
+    expect(() =>
+      convertAction({}, v.regex<string>(/[a-z]/im), undefined)
+    ).toThrowError('RegExp flags are not supported by JSON Schema.');
+  });
+
+  test('should force conversion for unsupported regex action', () => {
+    expect(
+      convertAction({ type: 'string' }, v.regex<string>(/[a-z]/im), {
+        force: true,
+      })
+    ).toStrictEqual({
+      type: 'string',
+      pattern: '[a-z]',
+    });
+  });
+
+  test('should convert UUID action', () => {
     expect(convertAction({}, v.uuid<string>(), undefined)).toStrictEqual({
       format: 'uuid',
     });
@@ -83,272 +450,71 @@ describe('convertAction', () => {
     });
   });
 
-  test('should convert regex action', () => {
-    expect(() =>
-      convertAction({}, v.regex<string>(/[a-z]/im), undefined)
-    ).toThrowError();
-    expect(
-      convertAction({ type: 'string' }, v.regex<string>(/[a-z]/im), {
-        force: true,
-      })
-    ).toStrictEqual({
-      type: 'string',
-      pattern: '[a-z]',
-    });
-    expect(
-      convertAction({ type: 'string' }, v.regex<string>(/[a-zA-Z]/), undefined)
-    ).toStrictEqual({
-      type: 'string',
-      pattern: '[a-zA-Z]',
-    });
-  });
-
-  test('should convert integer action', () => {
-    expect(convertAction({}, v.integer<number>(), undefined)).toStrictEqual({
-      type: 'integer',
-    });
-    expect(
-      convertAction({ type: 'number' }, v.integer<number>(), undefined)
-    ).toStrictEqual({
-      type: 'integer',
-    });
-  });
-
-  test('should convert length action', () => {
-    expect(() =>
-      // @ts-expect-error
-      convertAction({}, v.length(2), undefined)
-    ).toThrowError();
-    expect(
-      // @ts-expect-error
-      convertAction({}, v.length(2), { force: true })
-    ).toStrictEqual({});
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'string' }, v.length(2), undefined)
-    ).toStrictEqual({
-      type: 'string',
-      minLength: 2,
-      maxLength: 2,
-    });
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'array' }, v.length(2), undefined)
-    ).toStrictEqual({
-      type: 'array',
-      minItems: 2,
-      maxItems: 2,
-    });
-  });
-
-  test('should convert minLength action', () => {
-    expect(() =>
-      // @ts-expect-error
-      convertAction({}, v.minLength(2), undefined)
-    ).toThrowError();
-    expect(
-      // @ts-expect-error
-      convertAction({}, v.minLength(2), { force: true })
-    ).toStrictEqual({});
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'string' }, v.minLength(2), undefined)
-    ).toStrictEqual({
-      type: 'string',
-      minLength: 2,
-    });
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'array' }, v.minLength(2), undefined)
-    ).toStrictEqual({
-      type: 'array',
-      minItems: 2,
-    });
-  });
-
-  test('should convert maxLength action', () => {
-    expect(() =>
-      // @ts-expect-error
-      convertAction({}, v.maxLength(2), undefined)
-    ).toThrowError();
-    expect(
-      // @ts-expect-error
-      convertAction({}, v.maxLength(2), { force: true })
-    ).toStrictEqual({});
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'string' }, v.maxLength(2), undefined)
-    ).toStrictEqual({
-      type: 'string',
-      maxLength: 2,
-    });
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'array' }, v.maxLength(2), undefined)
-    ).toStrictEqual({
-      type: 'array',
-      maxItems: 2,
-    });
-  });
-
   test('should convert value action', () => {
-    expect(() =>
-      // @ts-expect-error
-      convertAction({}, v.value(2), undefined)
-    ).toThrowError();
     expect(
-      // @ts-expect-error
-      convertAction({}, v.value(2), { force: true })
-    ).toStrictEqual({});
-    expect(() =>
-      // @ts-expect-error
-      convertAction({ type: 'number' }, v.value(Infinity), undefined)
-    ).toThrowError();
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'number' }, v.value(Infinity), { force: true })
-    ).toStrictEqual({
-      type: 'number',
-      const: Infinity,
-    });
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'number' }, v.value(2), undefined)
-    ).toStrictEqual({
-      type: 'number',
-      const: 2,
-    });
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'string' }, v.value('value'), undefined)
-    ).toStrictEqual({
-      type: 'string',
-      const: 'value',
-    });
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'boolean' }, v.value(true), undefined)
+      convertAction(
+        { type: 'boolean' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.value<boolean, true>(true),
+        undefined
+      )
     ).toStrictEqual({
       type: 'boolean',
       const: true,
     });
-  });
-
-  test('should convert minValue action', () => {
-    expect(() =>
-      // @ts-expect-error
-      convertAction({}, v.minValue(2), undefined)
-    ).toThrowError();
     expect(
-      // @ts-expect-error
-      convertAction({}, v.minValue(2), { force: true })
-    ).toStrictEqual({});
-    expect(() =>
-      // @ts-expect-error
-      convertAction({ type: 'number' }, v.minValue(Infinity), undefined)
-    ).toThrowError();
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'number' }, v.minValue(Infinity), { force: true })
-    ).toStrictEqual({
-      type: 'number',
-      minimum: Infinity,
-    });
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'number' }, v.minValue(2), undefined)
-    ).toStrictEqual({
-      type: 'number',
-      minimum: 2,
-    });
-  });
-
-  test('should convert maxValue action', () => {
-    expect(() =>
-      // @ts-expect-error
-      convertAction({}, v.maxValue(2), undefined)
-    ).toThrowError();
-    expect(
-      // @ts-expect-error
-      convertAction({}, v.maxValue(2), { force: true })
-    ).toStrictEqual({});
-    expect(() =>
-      // @ts-expect-error
-      convertAction({ type: 'number' }, v.maxValue(Infinity), undefined)
-    ).toThrowError();
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'number' }, v.maxValue(Infinity), { force: true })
-    ).toStrictEqual({
-      type: 'number',
-      maximum: Infinity,
-    });
-    expect(() =>
-      // @ts-expect-error
-      convertAction({ type: 'number' }, v.maxValue(Infinity), undefined)
-    ).toThrowError();
-    expect(
-      // @ts-expect-error
-      convertAction({ type: 'number' }, v.maxValue(2), undefined)
-    ).toStrictEqual({
-      type: 'number',
-      maximum: 2,
-    });
-  });
-
-  test('should convert multipleOf action', () => {
-    expect(() =>
       convertAction(
         { type: 'number' },
-        v.multipleOf<number, number>(Infinity),
+        // @ts-expect-error FIXME: Something is wrong here
+        v.value<boolean, 123>(123),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'number',
+      const: 123,
+    });
+    expect(
+      convertAction(
+        { type: 'string' },
+        // @ts-expect-error FIXME: Something is wrong here
+        v.value<string, 'foo'>('foo'),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'string',
+      const: 'foo',
+    });
+  });
+
+  // TODO: Add all other unsupported Valibot actions
+
+  test('should throw error for unsupported transform action', () => {
+    expect(() =>
+      convertAction(
+        {},
+        // @ts-expect-error
+        v.transform(parseInt),
         undefined
       )
     ).toThrowError();
+  });
+
+  test('should force conversion for unsupported transform action', () => {
     expect(
       convertAction(
-        { type: 'number' },
-        v.multipleOf<number, number>(Infinity),
+        {},
+        // @ts-expect-error
+        v.transform(parseInt),
         { force: true }
       )
-    ).toStrictEqual({
-      type: 'number',
-      multipleOf: Infinity,
-    });
-    expect(
-      convertAction(
-        { type: 'number' },
-        v.multipleOf<number, number>(2),
-        undefined
-      )
-    ).toStrictEqual({
-      type: 'number',
-      multipleOf: 2,
-    });
-  });
-
-  test('should throw error for unsupported action', () => {
-    expect(() =>
-      // @ts-expect-error
-      convertAction({}, v.transform(parseInt), undefined)
-    ).toThrowError();
-    expect(() =>
-      // @ts-expect-error
-      convertAction({}, v.transform(parseInt), {})
-    ).toThrowError();
-    expect(() =>
-      // @ts-expect-error
-      convertAction({}, v.transform(parseInt), { force: false })
-    ).toThrowError();
-  });
-
-  test('should not throw error for unsupported action when forced', () => {
-    expect(
-      // @ts-expect-error
-      convertAction({}, v.transform(parseInt), { force: true })
     ).toStrictEqual({});
     expect(
-      // @ts-expect-error
-      convertAction({ type: 'string' }, v.transform(parseInt), { force: true })
+      convertAction(
+        { type: 'string' },
+        // @ts-expect-error
+        v.transform(parseInt),
+        { force: true }
+      )
     ).toStrictEqual({ type: 'string' });
   });
 });

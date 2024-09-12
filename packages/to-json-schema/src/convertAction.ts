@@ -2,6 +2,8 @@ import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
 import type { ConversionConfig } from './type.ts';
 
+// TODO: Add support for more actions (for example all regex-based actions)
+
 /**
  * Action type.
  */
@@ -55,23 +57,6 @@ type Action =
     >;
 
 /**
- * Returns an error for an invalid action type.
- *
- * @param jsonSchema The JSON Schema object.
- * @param valibotAction The Valibot action object.
- *
- * @returns An error object.
- */
-function getInvalidTypeError(
-  jsonSchema: JSONSchema7,
-  valibotAction: Action
-): Error {
-  return new Error(
-    `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
-  );
-}
-
-/**
  * Converts any supported Valibot schema to the JSON Schema format.
  *
  * @param jsonSchema The JSON Schema object.
@@ -96,6 +81,11 @@ export function convertAction(
       break;
     }
 
+    case 'integer': {
+      jsonSchema.type = 'integer';
+      break;
+    }
+
     case 'iso_date': {
       jsonSchema.format = 'date';
       break;
@@ -113,24 +103,6 @@ export function convertAction(
 
     case 'ipv6': {
       jsonSchema.format = 'ipv6';
-      break;
-    }
-
-    case 'uuid': {
-      jsonSchema.format = 'uuid';
-      break;
-    }
-
-    case 'regex': {
-      if (!config?.force && valibotAction.requirement.flags) {
-        throw new Error('RegExp flags are not supported by JSON Schema.');
-      }
-      jsonSchema.pattern = valibotAction.requirement.source;
-      break;
-    }
-
-    case 'integer': {
-      jsonSchema.type = 'integer';
       break;
     }
 
@@ -152,8 +124,50 @@ export function convertAction(
           jsonSchema.maxItems = valibotAction.requirement;
         }
       } else if (!config?.force) {
-        throw getInvalidTypeError(jsonSchema, valibotAction);
+        throw new Error(
+          `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
+        );
       }
+      break;
+    }
+
+    case 'max_value': {
+      if (jsonSchema.type === 'number') {
+        jsonSchema.maximum = valibotAction.requirement as number;
+      } else if (!config?.force) {
+        throw new Error(
+          `The "max_value" action is not supported on type "${jsonSchema.type}".`
+        );
+      }
+      break;
+    }
+
+    case 'min_value': {
+      if (jsonSchema.type === 'number') {
+        jsonSchema.minimum = valibotAction.requirement as number;
+      } else if (!config?.force) {
+        throw new Error(
+          `The "min_value" action is not supported on type "${jsonSchema.type}".`
+        );
+      }
+      break;
+    }
+
+    case 'multiple_of': {
+      jsonSchema.multipleOf = valibotAction.requirement;
+      break;
+    }
+
+    case 'regex': {
+      if (!config?.force && valibotAction.requirement.flags) {
+        throw new Error('RegExp flags are not supported by JSON Schema.');
+      }
+      jsonSchema.pattern = valibotAction.requirement.source;
+      break;
+    }
+
+    case 'uuid': {
+      jsonSchema.format = 'uuid';
       break;
     }
 
@@ -163,29 +177,6 @@ export function convertAction(
       // schema in the pipeline anyway.
       // @ts-expect-error
       jsonSchema.const = valibotAction.requirement;
-      break;
-    }
-
-    case 'max_value': {
-      if (jsonSchema.type === 'number') {
-        jsonSchema.maximum = valibotAction.requirement as number;
-      } else if (!config?.force) {
-        throw getInvalidTypeError(jsonSchema, valibotAction);
-      }
-      break;
-    }
-
-    case 'min_value': {
-      if (jsonSchema.type === 'number') {
-        jsonSchema.minimum = valibotAction.requirement as number;
-      } else if (!config?.force) {
-        throw getInvalidTypeError(jsonSchema, valibotAction);
-      }
-      break;
-    }
-
-    case 'multiple_of': {
-      jsonSchema.multipleOf = valibotAction.requirement;
       break;
     }
 

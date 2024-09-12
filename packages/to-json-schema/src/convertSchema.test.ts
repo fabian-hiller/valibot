@@ -11,7 +11,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           schema,
-          {},
+          undefined,
           createContext({
             definitions: { foo: { type: 'string' } },
             referenceMap: new Map().set(schema, 'foo'),
@@ -29,7 +29,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.pipe(v.string(), v.email(), v.description('foo')),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -45,7 +45,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.pipe(schema, v.email(), v.description('foo')),
-          {},
+          undefined,
           createContext({
             definitions: { foo: { type: 'string' } },
             referenceMap: new Map().set(schema, 'foo'),
@@ -63,7 +63,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.pipe(v.nullable(v.string()), v.string(), v.description('foo')),
-          {},
+          undefined,
           createContext()
         )
       ).toThrowError(
@@ -89,27 +89,33 @@ describe('convertSchema', () => {
 
   describe('primitive schemas', () => {
     test('should convert boolean schema', () => {
-      expect(convertSchema({}, v.boolean(), {}, createContext())).toStrictEqual(
-        {
-          type: 'boolean',
-        }
-      );
+      expect(
+        convertSchema({}, v.boolean(), undefined, createContext())
+      ).toStrictEqual({
+        type: 'boolean',
+      });
     });
 
     test('should convert null schema', () => {
-      expect(convertSchema({}, v.null(), {}, createContext())).toStrictEqual({
+      expect(
+        convertSchema({}, v.null(), undefined, createContext())
+      ).toStrictEqual({
         type: 'null',
       });
     });
 
     test('should convert number schema', () => {
-      expect(convertSchema({}, v.number(), {}, createContext())).toStrictEqual({
+      expect(
+        convertSchema({}, v.number(), undefined, createContext())
+      ).toStrictEqual({
         type: 'number',
       });
     });
 
     test('should convert string schema', () => {
-      expect(convertSchema({}, v.string(), {}, createContext())).toStrictEqual({
+      expect(
+        convertSchema({}, v.string(), undefined, createContext())
+      ).toStrictEqual({
         type: 'string',
       });
     });
@@ -118,7 +124,7 @@ describe('convertSchema', () => {
   describe('complex schemas', () => {
     test('should convert array schema', () => {
       expect(
-        convertSchema({}, v.array(v.number()), {}, createContext())
+        convertSchema({}, v.array(v.number()), undefined, createContext())
       ).toStrictEqual({
         type: 'array',
         items: { type: 'number' },
@@ -130,7 +136,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.tuple([v.number(), v.string()]),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -145,7 +151,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.tupleWithRest([v.number(), v.string()], v.boolean()),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -160,7 +166,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.looseTuple([v.number(), v.string()]),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -175,7 +181,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.strictTuple([v.number(), v.string()]),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -196,7 +202,7 @@ describe('convertSchema', () => {
             key3: v.number(),
             key4: v.nullish(v.number()),
           }),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -226,7 +232,7 @@ describe('convertSchema', () => {
             },
             v.number()
           ),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -253,7 +259,7 @@ describe('convertSchema', () => {
             key3: v.number(),
             key4: v.nullish(v.number()),
           }),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -280,7 +286,7 @@ describe('convertSchema', () => {
             key3: v.number(),
             key4: v.nullish(v.number()),
           }),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -298,7 +304,12 @@ describe('convertSchema', () => {
 
     test('should convert record schema', () => {
       expect(
-        convertSchema({}, v.record(v.string(), v.number()), {}, createContext())
+        convertSchema(
+          {},
+          v.record(v.string(), v.number()),
+          undefined,
+          createContext()
+        )
       ).toStrictEqual({
         type: 'object',
         additionalProperties: { type: 'number' },
@@ -310,7 +321,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.record(v.pipe(v.string(), v.email()), v.number()),
-          {},
+          undefined,
           createContext()
         )
       ).toThrowError(
@@ -338,7 +349,7 @@ describe('convertSchema', () => {
           {},
           // @ts-expect-error
           v.record(v.number(), v.number()),
-          {},
+          undefined,
           createContext()
         )
       ).toThrowError(
@@ -349,18 +360,20 @@ describe('convertSchema', () => {
 
   describe('special schemas', () => {
     test('should convert any schema', () => {
-      expect(convertSchema({}, v.any(), {}, createContext())).toStrictEqual({});
+      expect(
+        convertSchema({}, v.any(), undefined, createContext())
+      ).toStrictEqual({});
     });
 
     test('should convert unknown schema', () => {
-      expect(convertSchema({}, v.unknown(), {}, createContext())).toStrictEqual(
-        {}
-      );
+      expect(
+        convertSchema({}, v.unknown(), undefined, createContext())
+      ).toStrictEqual({});
     });
 
     test('should convert nullable schema without default', () => {
       expect(
-        convertSchema({}, v.nullable(v.string()), {}, createContext())
+        convertSchema({}, v.nullable(v.string()), undefined, createContext())
       ).toStrictEqual({
         anyOf: [{ type: 'string' }, { type: 'null' }],
       });
@@ -368,7 +381,12 @@ describe('convertSchema', () => {
 
     test('should convert nullable schema with default', () => {
       expect(
-        convertSchema({}, v.nullable(v.string(), 'foo'), {}, createContext())
+        convertSchema(
+          {},
+          v.nullable(v.string(), 'foo'),
+          undefined,
+          createContext()
+        )
       ).toStrictEqual({
         anyOf: [{ type: 'string' }, { type: 'null' }],
         default: 'foo',
@@ -377,7 +395,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.nullable(v.string(), () => 'foo'),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -388,7 +406,7 @@ describe('convertSchema', () => {
 
     test('should convert nullish schema without default', () => {
       expect(
-        convertSchema({}, v.nullish(v.string()), {}, createContext())
+        convertSchema({}, v.nullish(v.string()), undefined, createContext())
       ).toStrictEqual({
         anyOf: [{ type: 'string' }, { type: 'null' }],
       });
@@ -396,7 +414,12 @@ describe('convertSchema', () => {
 
     test('should convert nullish schema with default', () => {
       expect(
-        convertSchema({}, v.nullish(v.string(), 'foo'), {}, createContext())
+        convertSchema(
+          {},
+          v.nullish(v.string(), 'foo'),
+          undefined,
+          createContext()
+        )
       ).toStrictEqual({
         anyOf: [{ type: 'string' }, { type: 'null' }],
         default: 'foo',
@@ -405,7 +428,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.nullable(v.string(), () => 'foo'),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -416,7 +439,7 @@ describe('convertSchema', () => {
 
     test('should convert optional schema without default', () => {
       expect(
-        convertSchema({}, v.optional(v.string()), {}, createContext())
+        convertSchema({}, v.optional(v.string()), undefined, createContext())
       ).toStrictEqual({
         type: 'string',
       });
@@ -424,7 +447,12 @@ describe('convertSchema', () => {
 
     test('should convert optional schema with default', () => {
       expect(
-        convertSchema({}, v.optional(v.string(), 'foo'), {}, createContext())
+        convertSchema(
+          {},
+          v.optional(v.string(), 'foo'),
+          undefined,
+          createContext()
+        )
       ).toStrictEqual({
         type: 'string',
         default: 'foo',
@@ -433,7 +461,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.optional(v.string(), () => 'foo'),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -444,17 +472,17 @@ describe('convertSchema', () => {
 
     test('should convert supported literal schema', () => {
       expect(
-        convertSchema({}, v.literal(true), {}, createContext())
+        convertSchema({}, v.literal(true), undefined, createContext())
       ).toStrictEqual({
         const: true,
       });
       expect(
-        convertSchema({}, v.literal(123), {}, createContext())
+        convertSchema({}, v.literal(123), undefined, createContext())
       ).toStrictEqual({
         const: 123,
       });
       expect(
-        convertSchema({}, v.literal('foo'), {}, createContext())
+        convertSchema({}, v.literal('foo'), undefined, createContext())
       ).toStrictEqual({
         const: 'foo',
       });
@@ -462,12 +490,12 @@ describe('convertSchema', () => {
 
     test('should throw error for unsupported literal schema', () => {
       expect(() =>
-        convertSchema({}, v.literal(123n), {}, createContext())
+        convertSchema({}, v.literal(123n), undefined, createContext())
       ).toThrowError(
         'The value of the "literal" schema is not JSON compatible.'
       );
       expect(() =>
-        convertSchema({}, v.literal(Symbol('foo')), {}, createContext())
+        convertSchema({}, v.literal(Symbol('foo')), undefined, createContext())
       ).toThrowError(
         'The value of the "literal" schema is not JSON compatible.'
       );
@@ -496,7 +524,7 @@ describe('convertSchema', () => {
       }
       expect(
         // @ts-expect-error FIXME: Something is wrong here
-        convertSchema({}, v.enum(TestEnum), {}, createContext())
+        convertSchema({}, v.enum(TestEnum), undefined, createContext())
       ).toStrictEqual({
         enum: [0, 1, 'foo', 123],
       });
@@ -515,7 +543,7 @@ describe('convertSchema', () => {
 
     test('should throw error for unsupported picklist schema', () => {
       expect(() =>
-        convertSchema({}, v.picklist([123n, 456n]), {}, createContext())
+        convertSchema({}, v.picklist([123n, 456n]), undefined, createContext())
       ).toThrowError(
         'An option of the "picklist" schema is not JSON compatible.'
       );
@@ -537,7 +565,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.union([v.string(), v.boolean()]),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -553,7 +581,7 @@ describe('convertSchema', () => {
             v.object({ type: v.literal('foo'), foo: v.string() }),
             v.object({ type: v.literal('bar'), bar: v.number() }),
           ]),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -588,7 +616,7 @@ describe('convertSchema', () => {
             v.object({ foo: v.string() }),
             v.object({ bar: v.number() }),
           ]),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({
@@ -618,7 +646,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.lazy(() => v.string()),
-          {},
+          undefined,
           createContext()
         )
       ).toStrictEqual({ $ref: '#/$defs/0' });
@@ -627,7 +655,7 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.lazy(() => testSchema),
-          {},
+          undefined,
           createContext({
             definitions: { testSchema },
             referenceMap: new Map().set(testSchema, 'testSchema'),
@@ -643,7 +671,7 @@ describe('convertSchema', () => {
     test('should throw error for unsupported file schema', () => {
       expect(() =>
         // @ts-expect-error
-        convertSchema({}, v.file(), {}, createContext())
+        convertSchema({}, v.file(), undefined, createContext())
       ).toThrowError('The "file" schema cannot be converted to JSON Schema.');
     });
 
