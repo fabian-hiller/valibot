@@ -39,7 +39,7 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  NoPipe: {
+  SchemaWithoutPipe: {
     type: {
       type: 'intersect',
       options: [

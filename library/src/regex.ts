@@ -17,7 +17,12 @@ export const CUID2_REGEX: RegExp = /^[a-z][\da-z]*$/u;
 /**
  * [Decimal](https://en.wikipedia.org/wiki/Decimal) regex.
  */
-export const DECIMAL_REGEX: RegExp = /^\d+$/u;
+export const DECIMAL_REGEX: RegExp = /^[+-]?\d+(?:\.\d+)?$/u;
+
+/**
+ * [Digits](https://en.wikipedia.org/wiki/Numerical_digit) regex.
+ */
+export const DIGITS_REGEX: RegExp = /^\d+$/u;
 
 /**
  * Email regex.

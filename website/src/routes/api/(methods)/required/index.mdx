@@ -1,11 +1,10 @@
 ---
 title: required
-description: >-
-  Creates a modified copy of an object schema that marks all entries or only the
-  selected keys as required.
+description: Creates a modified copy of an object schema that marks all or only the selected entries as required.
 source: /methods/required/required.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -14,17 +13,22 @@ import { properties } from './properties';
 
 # required
 
-Creates a modified copy of an object schema that marks all entries or only the selected keys as required.
+Creates a modified copy of an object schema that marks all or only the selected entries as required.
 
 ```ts
-const Schema = v.required<TSchema>(schema, message);
-const Schema = v.required<TSchema, TKeys>(schema, keys, message);
+const AllKeysSchema = v.required<TSchema, TMessage>(schema, message);
+const SelectedKeysSchema = v.required<TSchema, TKeys, TMessage>(
+  schema,
+  keys,
+  message
+);
 ```
 
 ## Generics
 
 - `TSchema` <Property {...properties.TSchema} />
 - `TKeys` <Property {...properties.TKeys} />
+- `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
@@ -34,13 +38,14 @@ const Schema = v.required<TSchema, TKeys>(schema, keys, message);
 
 ### Explanation
 
-`required` creates a modified copy of the given object `schema` where all entries or only the selected `keys` are required. It is similar to TypeScript's [`Required`](https://www.typescriptlang.org/docs/handbook/utility-types.html#requiredtype) utility type.
+`required` creates a modified copy of the given object `schema` where all or only the selected `keys` are required. It is similar to TypeScript's [`Required`](https://www.typescriptlang.org/docs/handbook/utility-types.html#requiredtype) utility type.
 
 > Because `required` changes the data type of the input and output, it is not allowed to pass a schema that has been modified by the <Link href='../pipe/'>`pipe`</Link> method, as this may cause runtime errors. Please use the <Link href='../pipe/'>`pipe`</Link> method after you have modified the schema with `required`.
 
 ## Returns
 
-- `Schema` <Property {...properties.Schema} />
+- `AllKeysSchema` <Property {...properties.AllKeysSchema} />
+- `SelectedKeysSchema` <Property {...properties.SelectedKeysSchema} />
 
 ## Examples
 
@@ -135,8 +140,8 @@ The following APIs can be combined with `required`.
 
 <ApiList
   items={[
-    'check',
     'brand',
+    'check',
     'description',
     'partialCheck',
     'rawCheck',

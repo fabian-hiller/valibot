@@ -4,177 +4,135 @@ export const properties: Record<string, PropertyProps> = {
   TSchema: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
+      type: 'custom',
+      name: 'SchemaWithoutPipe',
+      href: '../SchemaWithoutPipe/',
+      generics: [
         {
-          type: 'custom',
-          name: 'LooseObjectSchema',
-          href: '../LooseObjectSchema/',
-          generics: [
+          type: 'union',
+          options: [
             {
               type: 'custom',
-              name: 'ObjectEntries',
-              href: '../ObjectEntries/',
-            },
-            {
-              type: 'union',
-              options: [
-                {
-                  type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
-                    {
-                      type: 'custom',
-                      name: 'ObjectIssue',
-                    },
-                  ],
-                },
-                'undefined',
-              ],
-            },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'LooseObjectSchemaAsync',
-          href: '../LooseObjectSchemaAsync/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'ObjectEntriesAsync',
-              href: '../ObjectEntriesAsync/',
-            },
-            {
-              type: 'union',
-              options: [
-                {
-                  type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
-                    {
-                      type: 'custom',
-                      name: 'ObjectIssue',
-                    },
-                  ],
-                },
-                'undefined',
-              ],
-            },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'ObjectSchema',
-          href: '../ObjectSchema/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'ObjectEntries',
-              href: '../ObjectEntries/',
-            },
-            {
-              type: 'union',
-              options: [
-                {
-                  type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
-                    {
-                      type: 'custom',
-                      name: 'ObjectIssue',
-                    },
-                  ],
-                },
-                'undefined',
-              ],
-            },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'ObjectSchemaAsync',
-          href: '../ObjectSchemaAsync/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'ObjectEntriesAsync',
-              href: '../ObjectEntriesAsync/',
-            },
-            {
-              type: 'union',
-              options: [
-                {
-                  type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
-                    {
-                      type: 'custom',
-                      name: 'ObjectIssue',
-                    },
-                  ],
-                },
-                'undefined',
-              ],
-            },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'ObjectWithRestSchema',
-          href: '../ObjectWithRestSchema/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'ObjectEntries',
-              href: '../ObjectEntries/',
-            },
-            {
-              type: 'custom',
-              name: 'BaseSchema',
-              href: '../BaseSchema/',
+              name: 'LooseObjectSchema',
+              href: '../LooseObjectSchema/',
               generics: [
-                'unknown',
-                'unknown',
                 {
                   type: 'custom',
-                  name: 'BaseIssue',
-                  href: '../BaseIssue/',
-                  generics: ['unknown'],
+                  name: 'ObjectEntries',
+                  href: '../ObjectEntries/',
                 },
-              ],
-            },
-            {
-              type: 'union',
-              options: [
                 {
-                  type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
+                  type: 'union',
+                  options: [
                     {
                       type: 'custom',
-                      name: 'ObjectWithRestIssue',
-                      href: '../ObjectWithRestIssue/',
+                      name: 'ErrorMessage',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'ObjectIssue',
+                        },
+                      ],
                     },
+                    'undefined',
                   ],
                 },
-                'undefined',
               ],
             },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'ObjectWithRestSchemaAsync',
-          href: '../ObjectWithRestSchemaAsync/',
-          generics: [
             {
               type: 'custom',
-              name: 'ObjectEntriesAsync',
-              href: '../ObjectEntriesAsync/',
+              name: 'LooseObjectSchemaAsync',
+              href: '../LooseObjectSchemaAsync/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'ObjectEntriesAsync',
+                  href: '../ObjectEntriesAsync/',
+                },
+                {
+                  type: 'union',
+                  options: [
+                    {
+                      type: 'custom',
+                      name: 'ErrorMessage',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'ObjectIssue',
+                        },
+                      ],
+                    },
+                    'undefined',
+                  ],
+                },
+              ],
             },
             {
-              type: 'union',
-              options: [
+              type: 'custom',
+              name: 'ObjectSchema',
+              href: '../ObjectSchema/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'ObjectEntries',
+                  href: '../ObjectEntries/',
+                },
+                {
+                  type: 'union',
+                  options: [
+                    {
+                      type: 'custom',
+                      name: 'ErrorMessage',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'ObjectIssue',
+                        },
+                      ],
+                    },
+                    'undefined',
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'ObjectSchemaAsync',
+              href: '../ObjectSchemaAsync/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'ObjectEntriesAsync',
+                  href: '../ObjectEntriesAsync/',
+                },
+                {
+                  type: 'union',
+                  options: [
+                    {
+                      type: 'custom',
+                      name: 'ErrorMessage',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'ObjectIssue',
+                        },
+                      ],
+                    },
+                    'undefined',
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'ObjectWithRestSchema',
+              href: '../ObjectWithRestSchema/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'ObjectEntries',
+                  href: '../ObjectEntries/',
+                },
                 {
                   type: 'custom',
                   name: 'BaseSchema',
@@ -191,93 +149,142 @@ export const properties: Record<string, PropertyProps> = {
                   ],
                 },
                 {
-                  type: 'custom',
-                  name: 'BaseSchemaAsync',
-                  href: '../BaseSchemaAsync/',
-                  generics: [
-                    'unknown',
-                    'unknown',
+                  type: 'union',
+                  options: [
                     {
                       type: 'custom',
-                      name: 'BaseIssue',
-                      href: '../BaseIssue/',
-                      generics: ['unknown'],
+                      name: 'ErrorMessage',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'ObjectWithRestIssue',
+                          href: '../ObjectWithRestIssue/',
+                        },
+                      ],
                     },
+                    'undefined',
                   ],
                 },
               ],
             },
-            {
-              type: 'union',
-              options: [
-                {
-                  type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
-                    {
-                      type: 'custom',
-                      name: 'ObjectWithRestIssue',
-                      href: '../ObjectWithRestIssue/',
-                    },
-                  ],
-                },
-                'undefined',
-              ],
-            },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'StrictObjectSchema',
-          href: '../StrictObjectSchema/',
-          generics: [
             {
               type: 'custom',
-              name: 'ObjectEntries',
-              href: '../ObjectEntries/',
-            },
-            {
-              type: 'union',
-              options: [
+              name: 'ObjectWithRestSchemaAsync',
+              href: '../ObjectWithRestSchemaAsync/',
+              generics: [
                 {
                   type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
+                  name: 'ObjectEntriesAsync',
+                  href: '../ObjectEntriesAsync/',
+                },
+                {
+                  type: 'union',
+                  options: [
                     {
                       type: 'custom',
-                      name: 'ObjectIssue',
+                      name: 'BaseSchema',
+                      href: '../BaseSchema/',
+                      generics: [
+                        'unknown',
+                        'unknown',
+                        {
+                          type: 'custom',
+                          name: 'BaseIssue',
+                          href: '../BaseIssue/',
+                          generics: ['unknown'],
+                        },
+                      ],
+                    },
+                    {
+                      type: 'custom',
+                      name: 'BaseSchemaAsync',
+                      href: '../BaseSchemaAsync/',
+                      generics: [
+                        'unknown',
+                        'unknown',
+                        {
+                          type: 'custom',
+                          name: 'BaseIssue',
+                          href: '../BaseIssue/',
+                          generics: ['unknown'],
+                        },
+                      ],
                     },
                   ],
                 },
-                'undefined',
+                {
+                  type: 'union',
+                  options: [
+                    {
+                      type: 'custom',
+                      name: 'ErrorMessage',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'ObjectWithRestIssue',
+                          href: '../ObjectWithRestIssue/',
+                        },
+                      ],
+                    },
+                    'undefined',
+                  ],
+                },
               ],
             },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'StrictObjectSchemaAsync',
-          href: '../StrictObjectSchemaAsync/',
-          generics: [
             {
               type: 'custom',
-              name: 'ObjectEntriesAsync',
-              href: '../ObjectEntriesAsync/',
-            },
-            {
-              type: 'union',
-              options: [
+              name: 'StrictObjectSchema',
+              href: '../StrictObjectSchema/',
+              generics: [
                 {
                   type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
+                  name: 'ObjectEntries',
+                  href: '../ObjectEntries/',
+                },
+                {
+                  type: 'union',
+                  options: [
                     {
                       type: 'custom',
-                      name: 'ObjectIssue',
+                      name: 'ErrorMessage',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'ObjectIssue',
+                        },
+                      ],
                     },
+                    'undefined',
                   ],
                 },
-                'undefined',
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'StrictObjectSchemaAsync',
+              href: '../StrictObjectSchemaAsync/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'ObjectEntriesAsync',
+                  href: '../ObjectEntriesAsync/',
+                },
+                {
+                  type: 'union',
+                  options: [
+                    {
+                      type: 'custom',
+                      name: 'ErrorMessage',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'ObjectIssue',
+                        },
+                      ],
+                    },
+                    'undefined',
+                  ],
+                },
               ],
             },
           ],

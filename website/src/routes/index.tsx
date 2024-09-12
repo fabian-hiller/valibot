@@ -46,21 +46,20 @@ export default component$(() => {
   return (
     <main class="flex flex-1 flex-col items-center space-y-24 py-24 md:space-y-36 md:py-36 xl:space-y-52 xl:py-52">
       {/* Pitch */}
-      <section class="space-y-8 px-4 text-center md:max-w-4xl md:space-y-12 lg:space-y-16">
-        <div class="absolute left-0 top-0 -z-10 flex w-full justify-center overflow-x-clip">
-          <div class="relative w-full xl:w-0">
-            <div class="absolute -right-[300px] -top-[250px] h-[600px] w-[600px] bg-[radial-gradient(theme(colors.yellow.500/.08),transparent_70%)] md:-right-[500px] md:-top-[500px] md:h-[1000px] md:w-[1000px] xl:-right-[1100px] xl:-top-[500px] dark:bg-[radial-gradient(theme(colors.yellow.300/.08),transparent_70%)]" />
-            <div class="absolute -left-[370px] top-[200px] h-[600px] w-[600px] bg-[radial-gradient(theme(colors.sky.600/.08),transparent_70%)] md:-left-[550px] md:top-[100px] md:h-[1000px] md:w-[1000px] lg:top-[200px] xl:-left-[1100px] xl:top-[300px] dark:bg-[radial-gradient(theme(colors.sky.400/.08),transparent_70%)]" />
-          </div>
-        </div>
-        <h1 class="font-lexend-exa text-[22px] font-medium text-slate-900 md:text-3xl lg:text-4xl xl:text-5xl dark:text-slate-200">
-          Validate with Valibot
+      <section class="px-4 text-center">
+        <h1 class="font-lexend-exa text-[min(6.2vw,30px)] font-medium leading-normal text-slate-900 md:text-[34px] md:leading-normal lg:text-[40px] lg:leading-normal xl:text-5xl xl:leading-normal dark:text-slate-200">
+          <span class="block">
+            Validate <span class="blur-[1px] xl:blur-[2px]">unknown</span>
+          </span>{' '}
+          <span class="blur-[2px] xl:blur-[3px]">data</span> with confidence
         </h1>
-        <p class="text-center leading-loose md:text-xl md:leading-loose xl:text-2xl xl:leading-loose">
-          Validate unknown data with Valibot, the open source schema library
-          with bundle size, type safety and developer experience in mind.
+        <p class="mt-6 leading-loose md:mt-10 md:text-[17px] md:leading-loose lg:mt-14 lg:text-lg lg:leading-loose xl:text-[22px] xl:leading-loose">
+          <span class="sm:block">
+            Valibot is the open source schema library for TypeScript with bundle
+          </span>{' '}
+          size, type safety and developer experience in mind.
         </p>
-        <ButtonGroup class="justify-center">
+        <ButtonGroup class="mt-8 justify-center md:mt-12 lg:mt-16">
           <ActionButton
             variant="primary"
             label="Get started"
@@ -74,6 +73,12 @@ export default component$(() => {
             href="/playground/"
           />
         </ButtonGroup>
+        <div class="absolute left-0 top-0 -z-10 flex w-full justify-center overflow-x-clip">
+          <div class="relative w-full xl:w-0">
+            <div class="absolute -right-[300px] -top-[250px] h-[600px] w-[600px] bg-[radial-gradient(theme(colors.yellow.500/.08),transparent_70%)] md:-right-[500px] md:-top-[500px] md:h-[1000px] md:w-[1000px] xl:-right-[1100px] xl:-top-[500px] dark:bg-[radial-gradient(theme(colors.yellow.300/.08),transparent_70%)]" />
+            <div class="absolute -left-[370px] top-[200px] h-[600px] w-[600px] bg-[radial-gradient(theme(colors.sky.600/.08),transparent_70%)] md:-left-[550px] md:top-[100px] md:h-[1000px] md:w-[1000px] lg:top-[200px] xl:-left-[1100px] xl:top-[300px] dark:bg-[radial-gradient(theme(colors.sky.400/.08),transparent_70%)]" />
+          </div>
+        </div>
       </section>
 
       {/* Video */}

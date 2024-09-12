@@ -59,6 +59,18 @@ describe('decimal', () => {
       expectNoActionIssue(action, ['00', '01', '12', '99']);
     });
 
+    test('for float numbers', () => {
+      expectNoActionIssue(action, ['0.1', '123.456']);
+    });
+
+    test('for number signs', () => {
+      expectNoActionIssue(action, ['+1', '-1', '+123', '-123']);
+    });
+
+    test('for float numbers with a number sign', () => {
+      expectNoActionIssue(action, ['-2.0', '-52.61', '+4.0', '-11.31']);
+    });
+
     test('for multiple digits', () => {
       expectNoActionIssue(action, ['0123456789']);
     });
@@ -86,16 +98,31 @@ describe('decimal', () => {
       expectActionIssue(action, baseIssue, ['1,000', '1_000', '1 000']);
     });
 
-    test('for number signs', () => {
-      expectActionIssue(action, baseIssue, ['+1', '-1', '+123', '-123']);
-    });
-
-    test('for float numbers', () => {
-      expectActionIssue(action, baseIssue, ['0.1', '123.456']);
-    });
-
     test('for exponential numbers', () => {
       expectActionIssue(action, baseIssue, ['1e3', '1e-3', '1e+3']);
+    });
+
+    test('for floats ending with a dot', () => {
+      expectActionIssue(action, baseIssue, ['1.', '342.']);
+    });
+
+    test('for floats starting with a dot', () => {
+      expectActionIssue(action, baseIssue, ['.6', '.763']);
+    });
+
+    test('for floats starting with number sign followed by a dot', () => {
+      expectActionIssue(action, baseIssue, ['-.2', '-.922', '+.5', '+.452']);
+    });
+
+    test('for floats with multiple dots', () => {
+      expectActionIssue(action, baseIssue, [
+        '1.2.3',
+        '1..23',
+        '12..3',
+        '12.3.4',
+        '1.23.4',
+        '1.2.34',
+      ]);
     });
 
     test('for word chars', () => {
@@ -105,9 +132,7 @@ describe('decimal', () => {
     test('for special chars', () => {
       expectActionIssue(action, baseIssue, [
         '-',
-        '-1',
         '+',
-        '+1',
         '#',
         '#1',
         '$',

@@ -4,132 +4,146 @@ export const properties: Record<string, PropertyProps> = {
   TSchema: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
+      type: 'custom',
+      name: 'SchemaWithoutPipe',
+      href: '../SchemaWithoutPipe/',
+      generics: [
         {
-          type: 'custom',
-          name: 'LooseObjectSchema',
-          href: '../LooseObjectSchema/',
-          generics: [
+          type: 'union',
+          options: [
             {
               type: 'custom',
-              name: 'ObjectEntries',
-              href: '../ObjectEntries/',
-            },
-            {
-              type: 'union',
-              options: [
-                {
-                  type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
-                    {
-                      type: 'custom',
-                      name: 'ObjectIssue',
-                    },
-                  ],
-                },
-                'undefined',
-              ],
-            },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'ObjectSchema',
-          href: '../ObjectSchema/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'ObjectEntries',
-              href: '../ObjectEntries/',
-            },
-            {
-              type: 'union',
-              options: [
-                {
-                  type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
-                    {
-                      type: 'custom',
-                      name: 'ObjectIssue',
-                    },
-                  ],
-                },
-                'undefined',
-              ],
-            },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'ObjectWithRestSchema',
-          href: '../ObjectWithRestSchema/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'ObjectEntries',
-              href: '../ObjectEntries/',
-            },
-            {
-              type: 'custom',
-              name: 'BaseSchema',
-              href: '../BaseSchema/',
+              name: 'LooseObjectSchema',
+              href: '../LooseObjectSchema/',
               generics: [
-                'unknown',
-                'unknown',
                 {
                   type: 'custom',
-                  name: 'BaseIssue',
-                  href: '../BaseIssue/',
-                  generics: ['unknown'],
+                  name: 'ObjectEntries',
+                  href: '../ObjectEntries/',
                 },
-              ],
-            },
-            {
-              type: 'union',
-              options: [
                 {
-                  type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
+                  type: 'union',
+                  options: [
                     {
                       type: 'custom',
-                      name: 'ObjectWithRestIssue',
-                      href: '../ObjectWithRestIssue/',
+                      name: 'ErrorMessage',
+                      href: '../ErrorMessage/',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'LooseObjectIssue',
+                          href: '../LooseObjectIssue/',
+                        },
+                      ],
                     },
+                    'undefined',
                   ],
                 },
-                'undefined',
               ],
             },
-          ],
-        },
-        {
-          type: 'custom',
-          name: 'StrictObjectSchema',
-          href: '../StrictObjectSchema/',
-          generics: [
             {
               type: 'custom',
-              name: 'ObjectEntries',
-              href: '../ObjectEntries/',
-            },
-            {
-              type: 'union',
-              options: [
+              name: 'ObjectSchema',
+              href: '../ObjectSchema/',
+              generics: [
                 {
                   type: 'custom',
-                  name: 'ErrorMessage',
-                  generics: [
+                  name: 'ObjectEntries',
+                  href: '../ObjectEntries/',
+                },
+                {
+                  type: 'union',
+                  options: [
                     {
                       type: 'custom',
-                      name: 'ObjectIssue',
+                      name: 'ErrorMessage',
+                      href: '../ErrorMessage/',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'ObjectIssue',
+                          href: '../ObjectIssue/',
+                        },
+                      ],
+                    },
+                    'undefined',
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'ObjectWithRestSchema',
+              href: '../ObjectWithRestSchema/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'ObjectEntries',
+                  href: '../ObjectEntries/',
+                },
+                {
+                  type: 'custom',
+                  name: 'BaseSchema',
+                  href: '../BaseSchema/',
+                  generics: [
+                    'unknown',
+                    'unknown',
+                    {
+                      type: 'custom',
+                      name: 'BaseIssue',
+                      href: '../BaseIssue/',
+                      generics: ['unknown'],
                     },
                   ],
                 },
-                'undefined',
+                {
+                  type: 'union',
+                  options: [
+                    {
+                      type: 'custom',
+                      name: 'ErrorMessage',
+                      href: '../ErrorMessage/',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'ObjectWithRestIssue',
+                          href: '../ObjectWithRestIssue/',
+                        },
+                      ],
+                    },
+                    'undefined',
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'custom',
+              name: 'StrictObjectSchema',
+              href: '../StrictObjectSchema/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'ObjectEntries',
+                  href: '../ObjectEntries/',
+                },
+                {
+                  type: 'union',
+                  options: [
+                    {
+                      type: 'custom',
+                      name: 'ErrorMessage',
+                      href: '../ErrorMessage/',
+                      generics: [
+                        {
+                          type: 'custom',
+                          name: 'StrictObjectIssue',
+                          href: '../StrictObjectIssue/',
+                        },
+                      ],
+                    },
+                    'undefined',
+                  ],
+                },
               ],
             },
           ],
@@ -140,16 +154,31 @@ export const properties: Record<string, PropertyProps> = {
   TKeys: {
     modifier: 'extends',
     type: {
+      type: 'custom',
+      name: 'ObjectKeys',
+      href: '../ObjectKeys/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TSchema',
+        },
+      ],
+    },
+  },
+  TMessage: {
+    modifier: 'extends',
+    type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'ObjectKeys',
-          href: '../ObjectKeys/',
+          name: 'ErrorMessage',
+          href: '../ErrorMessage/',
           generics: [
             {
               type: 'custom',
-              name: 'TSchema',
+              name: 'NonOptionalIssue',
+              href: '../NonOptionalIssue/',
             },
           ],
         },
@@ -171,26 +200,33 @@ export const properties: Record<string, PropertyProps> = {
   },
   message: {
     type: {
-      type: 'union',
-      options: [
-        {
-          type: 'custom',
-          name: 'ErrorMessage',
-          generics: [
-            {
-              type: 'custom',
-              name: 'NonOptionalIssue',
-            },
-          ],
-        },
-        'undefined',
-      ],
+      type: 'custom',
+      name: 'TMessage',
     },
   },
-  Schema: {
+  AllKeysSchema: {
     type: {
       type: 'custom',
       name: 'SchemaWithRequired',
+      href: '../SchemaWithRequired/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TSchema',
+        },
+        'undefined',
+        {
+          type: 'custom',
+          name: 'TMessage',
+        },
+      ],
+    },
+  },
+  SelectedKeysSchema: {
+    type: {
+      type: 'custom',
+      name: 'SchemaWithRequired',
+      href: '../SchemaWithRequired/',
       generics: [
         {
           type: 'custom',
@@ -198,7 +234,11 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TKeys',
+          name: 'Tkeys',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
         },
       ],
     },
