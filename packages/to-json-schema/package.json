@@ -1,6 +1,6 @@
 {
   "name": "@valibot/to-json-schema",
-  "description": "Valibot to JSON schema converter",
+  "description": "The official JSON schema converter for Valibot",
   "version": "0.1.0",
   "license": "MIT",
   "author": "Fabian Hiller",
@@ -18,20 +18,20 @@
     "valibot",
     "schema",
     "converter",
-    "JSON schema"
+    "json-schema"
   ],
   "type": "module",
-  "main": "./index.js",
-  "types": "./index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "types": "./index.d.ts",
-        "default": "./index.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       },
       "require": {
-        "types": "./index.d.cts",
-        "default": "./index.cjs"
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
       }
     }
   },
