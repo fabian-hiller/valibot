@@ -61,4 +61,21 @@ describe('toJsonSchema', () => {
       );
     });
   });
+
+  describe('should force conversion', () => {
+    test('for invalid file schema', () => {
+      expect(toJsonSchema(v.file(), { force: true })).toStrictEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+      });
+    });
+
+    test('for invalid credit card action', () => {
+      expect(
+        toJsonSchema(v.pipe(v.string(), v.creditCard()), { force: true })
+      ).toStrictEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'string',
+      });
+    });
+  });
 });

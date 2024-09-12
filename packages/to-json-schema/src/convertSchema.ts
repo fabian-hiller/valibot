@@ -130,13 +130,10 @@ export function convertSchema(
 
       if (valibotPipeItem.kind === 'schema') {
         // If pipe has multiple schemas, throw error or return
-        if (index > 0) {
-          if (!config?.force) {
-            throw new Error(
-              'A "pipe" with multiple schemas cannot be converted to JSON Schema.'
-            );
-          }
-          return jsonSchema;
+        if (index > 0 && !config?.force) {
+          throw new Error(
+            'A "pipe" with multiple schemas cannot be converted to JSON Schema.'
+          );
         }
 
         // Otherwiese, convert Valibot schema to JSON Schema
@@ -165,7 +162,7 @@ export function convertSchema(
         // Otherwise, convert Valibot action to JSON Schema
       } else {
         // @ts-expect-error
-        jsonSchema = convertAction(jsonSchema, valibotPipeItem, context);
+        jsonSchema = convertAction(jsonSchema, valibotPipeItem, config);
       }
     }
 
@@ -175,13 +172,127 @@ export function convertSchema(
 
   // Otherwise, convert individual schema to JSON Schema
   switch (valibotSchema.type) {
-    case 'any':
-    case 'unknown': {
+    // Primitive schemas
+
+    case 'boolean': {
+      jsonSchema.type = 'boolean';
       break;
     }
 
     case 'null': {
       jsonSchema.type = 'null';
+      break;
+    }
+
+    case 'number': {
+      jsonSchema.type = 'number';
+      break;
+    }
+
+    case 'string': {
+      jsonSchema.type = 'string';
+      break;
+    }
+
+    // Complex schemas
+
+    case 'array': {
+      jsonSchema.type = 'array';
+      jsonSchema.items = convertSchema(
+        {},
+        valibotSchema.item as SchemaOrPipe,
+        config,
+        context
+      );
+      break;
+    }
+
+    case 'tuple':
+    case 'tuple_with_rest':
+    case 'loose_tuple':
+    case 'strict_tuple': {
+      jsonSchema.type = 'array';
+
+      // Add JSON Schema of items
+      jsonSchema.items = [];
+      for (const item of valibotSchema.items) {
+        jsonSchema.items.push(
+          convertSchema({}, item as SchemaOrPipe, config, context)
+        );
+      }
+
+      // Add additional items depending on schema type
+      if (valibotSchema.type === 'tuple_with_rest') {
+        jsonSchema.additionalItems = convertSchema(
+          {},
+          valibotSchema.rest as SchemaOrPipe,
+          config,
+          context
+        );
+      } else {
+        jsonSchema.additionalItems = valibotSchema.type === 'loose_tuple';
+      }
+
+      break;
+    }
+
+    case 'object':
+    case 'object_with_rest':
+    case 'loose_object':
+    case 'strict_object': {
+      jsonSchema.type = 'object';
+
+      // Add JSON Schema of properties and mark required keys
+      jsonSchema.properties = {};
+      jsonSchema.required = [];
+      for (const key in valibotSchema.entries) {
+        const entry = valibotSchema.entries[key] as SchemaOrPipe;
+        jsonSchema.properties[key] = convertSchema({}, entry, config, context);
+        if (entry.type !== 'nullish' && entry.type !== 'optional') {
+          jsonSchema.required.push(key);
+        }
+      }
+
+      // Add additional properties depending on schema type
+      if (valibotSchema.type === 'object_with_rest') {
+        jsonSchema.additionalProperties = convertSchema(
+          {},
+          valibotSchema.rest as SchemaOrPipe,
+          config,
+          context
+        );
+      } else {
+        jsonSchema.additionalProperties = valibotSchema.type === 'loose_object';
+      }
+
+      break;
+    }
+
+    case 'record': {
+      if (!config?.force && 'pipe' in valibotSchema.key) {
+        throw new Error(
+          'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.'
+        );
+      }
+      if (!config?.force && valibotSchema.key.type !== 'string') {
+        throw new Error(
+          `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`
+        );
+      }
+      jsonSchema.type = 'object';
+      jsonSchema.additionalProperties = convertSchema(
+        {},
+        valibotSchema.value as SchemaOrPipe,
+        config,
+        context
+      );
+      break;
+    }
+
+    // Special schemas
+
+    case 'any':
+    case 'unknown': {
       break;
     }
 
@@ -225,21 +336,6 @@ export function convertSchema(
       break;
     }
 
-    case 'boolean': {
-      jsonSchema.type = 'boolean';
-      break;
-    }
-
-    case 'number': {
-      jsonSchema.type = 'number';
-      break;
-    }
-
-    case 'string': {
-      jsonSchema.type = 'string';
-      break;
-    }
-
     case 'literal': {
       if (
         !config?.force &&
@@ -277,8 +373,8 @@ export function convertSchema(
       break;
     }
 
-    case 'variant':
-    case 'union': {
+    case 'union':
+    case 'variant': {
       jsonSchema.anyOf = valibotSchema.options.map((option) =>
         convertSchema({}, option as SchemaOrPipe, config, context)
       );
@@ -288,95 +384,6 @@ export function convertSchema(
     case 'intersect': {
       jsonSchema.allOf = valibotSchema.options.map((option) =>
         convertSchema({}, option as SchemaOrPipe, config, context)
-      );
-      break;
-    }
-
-    case 'object':
-    case 'object_with_rest':
-    case 'loose_object':
-    case 'strict_object': {
-      jsonSchema.type = 'object';
-
-      // Add JSON Schema of properties and mark required keys
-      jsonSchema.properties = {};
-      jsonSchema.required = [];
-      for (const key in valibotSchema.entries) {
-        const entry = valibotSchema.entries[key] as SchemaOrPipe;
-        jsonSchema.properties[key] = convertSchema({}, entry, config, context);
-        if (entry.type !== 'nullish' && entry.type !== 'optional') {
-          jsonSchema.required.push(key);
-        }
-      }
-
-      // Add additional properties depending on schema type
-      if (valibotSchema.type === 'object_with_rest') {
-        jsonSchema.additionalProperties = convertSchema(
-          {},
-          valibotSchema.rest as SchemaOrPipe,
-          config,
-          context
-        );
-      } else {
-        jsonSchema.additionalProperties = valibotSchema.type === 'loose_object';
-      }
-
-      break;
-    }
-
-    case 'record': {
-      // TODO: Investigate if we should support more complex record schemas
-      if (!config?.force && valibotSchema.key.type !== 'string') {
-        throw new Error(
-          `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`
-        );
-      }
-      jsonSchema.type = 'object';
-      jsonSchema.additionalProperties = convertSchema(
-        {},
-        valibotSchema.value as SchemaOrPipe,
-        config,
-        context
-      );
-      break;
-    }
-
-    case 'tuple':
-    case 'tuple_with_rest':
-    case 'loose_tuple':
-    case 'strict_tuple': {
-      jsonSchema.type = 'array';
-
-      // Add JSON Schema of items
-      jsonSchema.items = [];
-      for (const item of valibotSchema.items) {
-        jsonSchema.items.push(
-          convertSchema({}, item as SchemaOrPipe, config, context)
-        );
-      }
-
-      // Add additional items depending on schema type
-      if (valibotSchema.type === 'tuple_with_rest') {
-        jsonSchema.additionalItems = convertSchema(
-          {},
-          valibotSchema.rest as SchemaOrPipe,
-          config,
-          context
-        );
-      } else {
-        jsonSchema.additionalItems = valibotSchema.type === 'loose_tuple';
-      }
-
-      break;
-    }
-
-    case 'array': {
-      jsonSchema.type = 'array';
-      jsonSchema.items = convertSchema(
-        {},
-        valibotSchema.item as SchemaOrPipe,
-        config,
-        context
       );
       break;
     }
@@ -403,6 +410,8 @@ export function convertSchema(
 
       break;
     }
+
+    // Other schemas
 
     default: {
       if (!config?.force) {
