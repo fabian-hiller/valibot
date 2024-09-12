@@ -86,3 +86,39 @@ jobs:
       - name: Publish
         run: npx jsr publish --allow-dirty
         working-directory: packages/i18n
+
+  to_json_schema_npm:
+    name: Publish to-json-schema to NPM
+    needs: default_ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
+      - name: Build
+        run: pnpm build
+        working-directory: packages/to-json-schema
+      - name: Publish
+        run: pnpm publish --provenance --access public
+        working-directory: packages/to-json-schema
+        continue-on-error: true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  to_json_schema_jsr:
+    name: Publish to-json-schema to JSR
+    needs: default_ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Publish
+        run: npx jsr publish
+        working-directory: packages/to-json-schema
