@@ -193,7 +193,7 @@ export function convertAction(
       if (!config?.force) {
         throw new Error(
           // @ts-expect-error
-          `The "${schema.type}" action cannot be converted to JSON Schema.`
+          `The "${valibotAction.type}" action cannot be converted to JSON Schema.`
         );
       }
     }

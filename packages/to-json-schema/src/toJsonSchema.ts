@@ -21,10 +21,9 @@ export function toJsonSchema(
     referenceMap: new Map(),
   };
 
-  // Add provided definitions to context
+  // Add provided definitions to context, if necessary
   if (config?.definitions) {
     for (const key in config.definitions) {
-      context.referenceMap.set(config.definitions[key], key);
       context.definitions[key] = convertSchema(
         {},
         // @ts-expect-error
@@ -32,6 +31,7 @@ export function toJsonSchema(
         config,
         context
       );
+      context.referenceMap.set(config.definitions[key], key);
     }
   }
 

@@ -389,13 +389,13 @@ export function convertSchema(
       // Add wrapped Valibot schema to reference map and definitions, if necessary
       if (!referenceId) {
         referenceId = `${refCount++}`;
-        context.referenceMap.set(wrappedValibotSchema, referenceId);
         context.definitions[referenceId] = convertSchema(
           {},
           wrappedValibotSchema as SchemaOrPipe,
           config,
           context
         );
+        context.referenceMap.set(wrappedValibotSchema, referenceId);
       }
 
       // Add reference to JSON Schema object
