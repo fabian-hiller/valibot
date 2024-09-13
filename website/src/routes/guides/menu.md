@@ -33,6 +33,7 @@
 
 - [Naming](/guides/naming-convention/)
 - [Async](/guides/async-validation/)
+- [JSON Schema](/guides/json-schema/)
 - [i18n](/guides/internationalization/)
 
 ## Migration
