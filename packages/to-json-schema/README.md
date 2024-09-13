@@ -13,133 +13,137 @@ Some Valibot features can't be mapped to JSON schema. For example, transformatio
 
 ## Supported features
 
-**Warning**: Converted schemas may behave slightly differently in JSON schema validators (especially for string format) because their implementation is different from Valibot's.
-
-Here are the supported Valibot functions:
+**Note**: Converted schemas may behave slightly differently in JSON schema validators (especially for string format) because their implementation is different from Valibot's.
 
 | Schema           | Status | Note                                                                |
-|------------------| ----- |---------------------------------------------------------------------|
-| `any`            | ✅    |                                                                     |
-| `unknown`        | ✅    |                                                                     |
-| `null`           | ✅    |                                                                     |
-| `nullable`       | ✅    |                                                                     |
-| `nullish`        | ✅    |                                                                     |
-| `optional`       | ✅    |                                                                     |
-| `boolean`        | ✅    |                                                                     |
-| `number`         | ✅    |                                                                     |
-| `string`         | ✅    |                                                                     |
-| `literal`        | ✅    |                                                                     |
-| `picklist`       | ✅    |                                                                     |
-| `enum`           | ✅    |                                                                     |
-| `union`          | ✅    |                                                                     |
-| `variant`        | ⚠️    | Ignoring the key                                                    |
-| `intersect`      | ✅    |                                                                     |
-| `object`         | ✅    |                                                                     |
-| `objectWithRest` | ✅    |                                                                     |
-| `looseObject`    | ✅    |                                                                     |
-| `strictObject`   | ✅    |                                                                     |
-| `record`         | ⚠️    | Only with `string` key schema                                       |
-| `tuple`          | ✅    |                                                                     |
-| `tupleWithRest`  | ✅    |                                                                     |
-| `looseTuple`     | ✅    |                                                                     |
-| `strictTuple`    | ✅    |                                                                     |
-| `array`          | ✅    |                                                                     |
-| `lazy`           | ⚠️    | Only if the schema is referenced in the [definitions](#definitions) |
+| ---------------- | ------ | ------------------------------------------------------------------- |
+| `any`            | ✅     |                                                                     |
+| `array`          | ✅     |                                                                     |
+| `boolean`        | ✅     |                                                                     |
+| `enum`           | ✅     |                                                                     |
+| `intersect`      | ✅     |                                                                     |
+| `lazy`           | ⚠️     | The `.getter`function is always executed with `undefined` as input  |
+| `literal`        | ⚠️     | Only JSON compatible values are supported                           |
+| `looseObject`    | ✅     |                                                                     |
+| `looseTuple`     | ✅     |                                                                     |
+| `null`           | ✅     |                                                                     |
+| `nullable`       | ✅     |                                                                     |
+| `nullish`        | ✅     |                                                                     |
+| `number`         | ✅     |                                                                     |
+| `objectWithRest` | ✅     |                                                                     |
+| `object`         | ✅     |                                                                     |
+| `optional`       | ✅     |                                                                     |
+| `picklist`       | ⚠️     | Only JSON compatible values are supported                           |
+| `record`         | ⚠️     | Only plain `string` schemas for the key of the record are supported |
+| `strictObject`   | ✅     |                                                                     |
+| `strictTuple`    | ✅     |                                                                     |
+| `string`         | ✅     |                                                                     |
+| `tupleWithRest`  | ✅     |                                                                     |
+| `tuple`          | ✅     |                                                                     |
+| `union`          | ✅     |                                                                     |
+| `unknown`        | ✅     |                                                                     |
+| `variant`        | ⚠️     | The discriminator key will be ignored                               |
 
-| Actions        | Status | Note                                          |
-|----------------|--------|-----------------------------------------------|
-| `description`  | ✅      |                                               |
-| `email`        | ✅      |                                               |
-| `isoDate`      | ✅      |                                               |
-| `isoTimestamp` | ✅      |                                               |
-| `ipv4`         | ✅      |                                               |
-| `ipv6`         | ✅      |                                               |
-| `uuid`         | ✅      |                                               |
-| `regex`        | ⚠️     | RexExp flags are not supported in JSON schema |
-| `integer`      | ✅      |                                               |
-| `length`       | ✅      |                                               |
-| `minLength`    | ✅      |                                               |
-| `maxLength`    | ✅      |                                               |
-| `value`        | ⚠️     | For `number`, `string` and `boolean` schemas  |
-| `minValue`     | ⚠️     | For `number` schema                           |
-| `maxValue`     | ⚠️     | For `number` schema                           |
-| `multipleOf`   | ✅      |                                               |
+| Actions        | Status | Note                                                  |
+| -------------- | ------ | ----------------------------------------------------- |
+| `description`  | ✅     |                                                       |
+| `email`        | ✅     |                                                       |
+| `integer`      | ✅     |                                                       |
+| `ipv4`         | ✅     |                                                       |
+| `ipv6`         | ✅     |                                                       |
+| `isoDate`      | ✅     |                                                       |
+| `isoTimestamp` | ✅     |                                                       |
+| `length`       | ⚠️     | Only in combination with `string` and `array` schema  |
+| `maxLength`    | ⚠️     | Only in combination with `string` and `array` schema  |
+| `maxValue`     | ⚠️     | Only in combination with `number` schema              |
+| `minLength`    | ⚠️     | Only in combination with `string` and `array` schemas |
+| `minValue`     | ⚠️     | Only in combination with `number` schema              |
+| `multipleOf`   | ✅     |                                                       |
+| `regex`        | ⚠️     | RexExp flags are not supported in JSON schema         |
+| `uuid`         | ✅     |                                                       |
+| `value`        | ✅     |                                                       |
 
-## Options
+## Configurations
 
-| Option      | Type                                   | Note                                                                                          |
-|-------------|----------------------------------------|-----------------------------------------------------------------------------------------------|
-| force       | `boolean`                              | Force conversion on incompatible schema or action (see [force conversion](#force-conversion)) |
-| definitions | `Record<string, Schema>`               | Named schema definitions (see [definitions](#definitions))                                    |
-| definitionPath | `'$defs'` (default) \| `'definitions'` | JSON schema definition path to use (see [definitions](#definitions))                          |
+| Option      | Type                            | Note                                                                                                                      |
+| ----------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| force       | `boolean`                       | Whether to force conversion to JSON Schema even for incompatible schemas and actions.                                     |
+| definitions | `Record<string, GenericSchema>` | The schema definitions for constructing recursive schemas. If not specified, the definitions are generated automatically. |
 
 ### Force conversion
 
-To force the conversion of unsupported Valibot features, you can provide the `force: true` option. Without this option, `toJsonSchema` will throw an error for unsupported features.
+To force the conversion of unsupported Valibot features, you can provide the `force: true` configuration. Without it, `toJsonSchema` will throw an error for unsupported features.
 
-> Unsupported schemas will return an empty JSON schema (`{}`) and unsupported actions will be ignored.
-
-Example:
+> Unsupported schemas usually return an empty JSON schema (`{}`) and unsupported actions are usually ignored.
 
 ```js
 import { toJsonSchema } from '@valibot/to-json-schema';
 import * as v from 'valibot';
 
-toJsonSchema(v.blob(), { force: true }); // {} (empty schema)
+toJsonSchema(v.file(), { force: true }); // {}
 
-toJsonSchema(v.pipe(v.string(), v.mac64()), { force: true }); // { type: "string" } (ignoring mac64 validation)
+toJsonSchema(v.pipe(v.string(), v.creditCard()), { force: true }); // { type: "string" }
 ```
 
 ### Definitions
 
-Nested schemas can be broken in multiple named definitions (`definitions` option).
-
-Example definitions:
+Nested schemas can be broken in multiple named definitions.
 
 ```js
 import { toJsonSchema } from '@valibot/to-json-schema';
 import * as v from 'valibot';
 
-const aNumber = v.number();
-const aString = v.string();
-toJsonSchema(
-    aNumber,
-    { definitions: { aNumber, aString } }
-); 
-// { 
-//    $ref: '#/$defs/aNumber', 
-//    $defs: { 
-//      aNumber: { type: 'number' }, 
-//      aString: { type: 'string' }
-//    }
-// }
+const EmailSchema = v.pipe(v.string(), v.email());
+toJsonSchema(v.object({ email: EmailSchema }), {
+  definitions: { EmailSchema },
+});
+
+/*
+{
+  $schema: "http://json-schema.org/draft-07/schema#",
+  type: "object",
+  properties: {
+    email: {
+      $ref: "#/$defs/EmailSchema",
+    },
+  },
+  required: ["email"],
+  additionalProperties: false,
+  $defs: {
+    EmailSchema: {
+      type: "string",
+      format: "email",
+    },
+  },
+}
+*/
 ```
 
-> The default JSON schema definitions path used is `$defs` but it can be customized with the option `definitionPath`.
-
-Definitions **are required when converting `lazy` schema** to provide the definition name.
-
-Example lazy with definitions:
+Definitions are not required for converting `lazy` schemas. Missing definitions will be generated automatically.
 
 ```js
 import { toJsonSchema } from '@valibot/to-json-schema';
 import * as v from 'valibot';
 
-const aNumber = v.number();
-const numberTree = v.record(v.string(), v.union([v.lazy(() => aNumber), v.lazy(() => numberTree)]));
-toJsonSchema(
-    numberTree,
-    { definitions: { aNumber, numberTree } }
-);
-// {
-//    $ref: '#/$defs/numberTree', 
-//    $defs: { 
-//      aNumber: { type: 'number' }, 
-//      numberTree: { 
-//        type: 'object', 
-//        additionalProperties: {
-//          anyOf: [{ $ref: '#/$defs/aNumber' }, { $ref: '#/$defs/numberTree' }]
-//        } 
-//    }
-// }
+const StringSchema = v.string();
+toJsonSchema(v.object({ key: v.lazy(() => StringSchema) }));
+
+/*
+{
+  $schema: "http://json-schema.org/draft-07/schema#",
+  type: "object",
+  properties: {
+    key: {
+      $ref: "#/$defs/0",
+    },
+  },
+  required: ["key"],
+  additionalProperties: false,
+  $defs: {
+    "0": {
+      type: "string",
+    },
+  },
+}
+*/
 ```
