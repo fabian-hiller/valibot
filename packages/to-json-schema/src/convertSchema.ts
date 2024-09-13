@@ -2,6 +2,7 @@ import type { JSONSchema7 } from 'json-schema';
 import * as v from 'valibot';
 import { convertAction } from './convertAction.ts';
 import type { ConversionConfig, ConversionContext } from './type.ts';
+import { throwOrWarn } from './utils/index.ts';
 
 /**
  * Schema type.
@@ -129,10 +130,11 @@ export function convertSchema(
       const valibotPipeItem = valibotSchema.pipe[index];
 
       if (valibotPipeItem.kind === 'schema') {
-        // If pipe has multiple schemas, throw error or return
-        if (index > 0 && !config?.force) {
-          throw new Error(
-            'A "pipe" with multiple schemas cannot be converted to JSON Schema.'
+        // If pipe has multiple schemas, throw or warn
+        if (index > 0) {
+          throwOrWarn(
+            'A "pipe" with multiple schemas cannot be converted to JSON Schema.',
+            config
           );
         }
 
@@ -269,14 +271,16 @@ export function convertSchema(
     }
 
     case 'record': {
-      if (!config?.force && 'pipe' in valibotSchema.key) {
-        throw new Error(
-          'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.'
+      if ('pipe' in valibotSchema.key) {
+        throwOrWarn(
+          'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.',
+          config
         );
       }
-      if (!config?.force && valibotSchema.key.type !== 'string') {
-        throw new Error(
-          `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`
+      if (valibotSchema.key.type !== 'string') {
+        throwOrWarn(
+          `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`,
+          config
         );
       }
       jsonSchema.type = 'object';
@@ -338,13 +342,13 @@ export function convertSchema(
 
     case 'literal': {
       if (
-        !config?.force &&
         typeof valibotSchema.literal !== 'boolean' &&
         typeof valibotSchema.literal !== 'number' &&
         typeof valibotSchema.literal !== 'string'
       ) {
-        throw new Error(
-          'The value of the "literal" schema is not JSON compatible.'
+        throwOrWarn(
+          'The value of the "literal" schema is not JSON compatible.',
+          config
         );
       }
       // @ts-expect-error
@@ -359,13 +363,13 @@ export function convertSchema(
 
     case 'picklist': {
       if (
-        !config?.force &&
         valibotSchema.options.some(
           (option) => typeof option !== 'number' && typeof option !== 'string'
         )
       ) {
-        throw new Error(
-          'An option of the "picklist" schema is not JSON compatible.'
+        throwOrWarn(
+          'An option of the "picklist" schema is not JSON compatible.',
+          config
         );
       }
       // @ts-expect-error
@@ -414,12 +418,11 @@ export function convertSchema(
     // Other schemas
 
     default: {
-      if (!config?.force) {
-        throw new Error(
-          // @ts-expect-error
-          `The "${valibotSchema.type}" schema cannot be converted to JSON Schema.`
-        );
-      }
+      throwOrWarn(
+        // @ts-expect-error
+        `The "${valibotSchema.type}" schema cannot be converted to JSON Schema.`,
+        config
+      );
     }
   }
 

@@ -1,7 +1,9 @@
 import * as v from 'valibot';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { convertSchema } from './convertSchema.ts';
 import { createContext } from './vitest/index.ts';
+
+console.warn = vi.fn();
 
 describe('convertSchema', () => {
   describe('definitions', () => {
@@ -84,6 +86,9 @@ describe('convertSchema', () => {
         type: 'string',
         description: 'foo',
       });
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'A "pipe" with multiple schemas cannot be converted to JSON Schema.'
+      );
     });
   });
 
@@ -341,6 +346,9 @@ describe('convertSchema', () => {
         type: 'object',
         additionalProperties: { type: 'number' },
       });
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.'
+      );
     });
 
     test('should throw error for record schema with non-string schema key', () => {
@@ -507,12 +515,18 @@ describe('convertSchema', () => {
       ).toStrictEqual({
         const: 123n,
       });
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The value of the "literal" schema is not JSON compatible.'
+      );
       const symbol = Symbol('foo');
       expect(
         convertSchema({}, v.literal(symbol), { force: true }, createContext())
       ).toStrictEqual({
         const: symbol,
       });
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The value of the "literal" schema is not JSON compatible.'
+      );
     });
 
     test('should convert enum schema', () => {
@@ -558,6 +572,9 @@ describe('convertSchema', () => {
           createContext()
         )
       ).toStrictEqual({ enum: [123n, 456n] });
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'An option of the "picklist" schema is not JSON compatible.'
+      );
     });
 
     test('should convert union schema', () => {
@@ -680,6 +697,9 @@ describe('convertSchema', () => {
         // @ts-expect-error
         convertSchema({}, v.file(), { force: true }, createContext())
       ).toStrictEqual({});
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The "file" schema cannot be converted to JSON Schema.'
+      );
     });
   });
 });

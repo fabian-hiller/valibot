@@ -1,6 +1,8 @@
 import * as v from 'valibot';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { toJsonSchema } from './toJsonSchema.ts';
+
+console.warn = vi.fn();
 
 describe('toJsonSchema', () => {
   describe('should convert schema', () => {
@@ -67,6 +69,9 @@ describe('toJsonSchema', () => {
       expect(toJsonSchema(v.file(), { force: true })).toStrictEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
       });
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The "file" schema cannot be converted to JSON Schema.'
+      );
     });
 
     test('for invalid credit card action', () => {
@@ -76,6 +81,9 @@ describe('toJsonSchema', () => {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'string',
       });
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The "credit_card" action cannot be converted to JSON Schema.'
+      );
     });
   });
 });

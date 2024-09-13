@@ -1,6 +1,8 @@
 import * as v from 'valibot';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { convertAction } from './convertAction.ts';
+
+console.warn = vi.fn();
 
 describe('convertAction', () => {
   test('should convert description action', () => {
@@ -139,7 +141,13 @@ describe('convertAction', () => {
         v.length<unknown, 3>(3),
         { force: true }
       )
-    ).toStrictEqual({});
+    ).toStrictEqual({
+      minLength: 3,
+      maxLength: 3,
+    });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "length" action is not supported on type "undefined".'
+    );
     expect(
       convertAction(
         { type: 'object' },
@@ -147,7 +155,10 @@ describe('convertAction', () => {
         v.length<unknown, 3>(3),
         { force: true }
       )
-    ).toStrictEqual({ type: 'object' });
+    ).toStrictEqual({ type: 'object', minLength: 3, maxLength: 3 });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "length" action is not supported on type "object".'
+    );
   });
 
   test('should convert min length action for strings', () => {
@@ -209,7 +220,12 @@ describe('convertAction', () => {
         v.minLength<unknown, 3>(3),
         { force: true }
       )
-    ).toStrictEqual({});
+    ).toStrictEqual({
+      minLength: 3,
+    });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "min_length" action is not supported on type "undefined".'
+    );
     expect(
       convertAction(
         { type: 'object' },
@@ -217,7 +233,10 @@ describe('convertAction', () => {
         v.minLength<unknown, 3>(3),
         { force: true }
       )
-    ).toStrictEqual({ type: 'object' });
+    ).toStrictEqual({ type: 'object', minLength: 3 });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "min_length" action is not supported on type "object".'
+    );
   });
 
   test('should convert max length action for strings', () => {
@@ -279,7 +298,12 @@ describe('convertAction', () => {
         v.maxLength<unknown, 3>(3),
         { force: true }
       )
-    ).toStrictEqual({});
+    ).toStrictEqual({
+      maxLength: 3,
+    });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "max_length" action is not supported on type "undefined".'
+    );
     expect(
       convertAction(
         { type: 'object' },
@@ -287,7 +311,10 @@ describe('convertAction', () => {
         v.maxLength<unknown, 3>(3),
         { force: true }
       )
-    ).toStrictEqual({ type: 'object' });
+    ).toStrictEqual({ type: 'object', maxLength: 3 });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "max_length" action is not supported on type "object".'
+    );
   });
 
   test('should convert max value action for numbers', () => {
@@ -333,7 +360,12 @@ describe('convertAction', () => {
         v.maxValue<unknown, 3>(3),
         { force: true }
       )
-    ).toStrictEqual({});
+    ).toStrictEqual({
+      maximum: 3,
+    });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "max_value" action is not supported on type "undefined".'
+    );
     expect(
       convertAction(
         { type: 'string' },
@@ -341,7 +373,10 @@ describe('convertAction', () => {
         v.maxValue<string, 3>(3),
         { force: true }
       )
-    ).toStrictEqual({ type: 'string' });
+    ).toStrictEqual({ type: 'string', maximum: 3 });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "max_value" action is not supported on type "string".'
+    );
   });
 
   test('should convert min value action for numbers', () => {
@@ -387,7 +422,12 @@ describe('convertAction', () => {
         v.minValue<unknown, 3>(3),
         { force: true }
       )
-    ).toStrictEqual({});
+    ).toStrictEqual({
+      minimum: 3,
+    });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "min_value" action is not supported on type "undefined".'
+    );
     expect(
       convertAction(
         { type: 'string' },
@@ -395,7 +435,10 @@ describe('convertAction', () => {
         v.minValue<string, 3>(3),
         { force: true }
       )
-    ).toStrictEqual({ type: 'string' });
+    ).toStrictEqual({ type: 'string', minimum: 3 });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "min_value" action is not supported on type "string".'
+    );
   });
 
   test('should convert multiple of action', () => {
@@ -436,6 +479,9 @@ describe('convertAction', () => {
       type: 'string',
       pattern: '[a-z]',
     });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'RegExp flags are not supported by JSON Schema.'
+    );
   });
 
   test('should convert UUID action', () => {
@@ -496,7 +542,9 @@ describe('convertAction', () => {
         v.transform(parseInt),
         undefined
       )
-    ).toThrowError();
+    ).toThrowError(
+      'The "transform" action cannot be converted to JSON Schema.'
+    );
   });
 
   test('should force conversion for unsupported transform action', () => {
@@ -508,6 +556,9 @@ describe('convertAction', () => {
         { force: true }
       )
     ).toStrictEqual({});
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "transform" action cannot be converted to JSON Schema.'
+    );
     expect(
       convertAction(
         { type: 'string' },
@@ -516,5 +567,8 @@ describe('convertAction', () => {
         { force: true }
       )
     ).toStrictEqual({ type: 'string' });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "transform" action cannot be converted to JSON Schema.'
+    );
   });
 });

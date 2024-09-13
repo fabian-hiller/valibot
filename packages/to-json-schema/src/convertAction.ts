@@ -1,6 +1,7 @@
 import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
 import type { ConversionConfig } from './type.ts';
+import { throwOrWarn } from './utils/index.ts';
 
 // TODO: Add support for more actions (for example all regex-based actions)
 
@@ -109,47 +110,51 @@ export function convertAction(
     case 'length':
     case 'min_length':
     case 'max_length': {
-      if (jsonSchema.type === 'string') {
-        if (valibotAction.type !== 'max_length') {
-          jsonSchema.minLength = valibotAction.requirement;
-        }
-        if (valibotAction.type !== 'min_length') {
-          jsonSchema.maxLength = valibotAction.requirement;
-        }
-      } else if (jsonSchema.type === 'array') {
+      if (jsonSchema.type === 'array') {
         if (valibotAction.type !== 'max_length') {
           jsonSchema.minItems = valibotAction.requirement;
         }
         if (valibotAction.type !== 'min_length') {
           jsonSchema.maxItems = valibotAction.requirement;
         }
-      } else if (!config?.force) {
-        throw new Error(
-          `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`
-        );
+      } else {
+        if (jsonSchema.type !== 'string') {
+          throwOrWarn(
+            `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
+            config
+          );
+        }
+        if (valibotAction.type !== 'max_length') {
+          jsonSchema.minLength = valibotAction.requirement;
+        }
+        if (valibotAction.type !== 'min_length') {
+          jsonSchema.maxLength = valibotAction.requirement;
+        }
       }
       break;
     }
 
     case 'max_value': {
-      if (jsonSchema.type === 'number') {
-        jsonSchema.maximum = valibotAction.requirement as number;
-      } else if (!config?.force) {
-        throw new Error(
-          `The "max_value" action is not supported on type "${jsonSchema.type}".`
+      if (jsonSchema.type !== 'number') {
+        throwOrWarn(
+          `The "max_value" action is not supported on type "${jsonSchema.type}".`,
+          config
         );
       }
+      // @ts-expect-error
+      jsonSchema.maximum = valibotAction.requirement;
       break;
     }
 
     case 'min_value': {
-      if (jsonSchema.type === 'number') {
-        jsonSchema.minimum = valibotAction.requirement as number;
-      } else if (!config?.force) {
-        throw new Error(
-          `The "min_value" action is not supported on type "${jsonSchema.type}".`
+      if (jsonSchema.type !== 'number') {
+        throwOrWarn(
+          `The "min_value" action is not supported on type "${jsonSchema.type}".`,
+          config
         );
       }
+      // @ts-expect-error
+      jsonSchema.minimum = valibotAction.requirement;
       break;
     }
 
@@ -159,8 +164,8 @@ export function convertAction(
     }
 
     case 'regex': {
-      if (!config?.force && valibotAction.requirement.flags) {
-        throw new Error('RegExp flags are not supported by JSON Schema.');
+      if (valibotAction.requirement.flags) {
+        throwOrWarn('RegExp flags are not supported by JSON Schema.', config);
       }
       jsonSchema.pattern = valibotAction.requirement.source;
       break;
@@ -181,12 +186,11 @@ export function convertAction(
     }
 
     default: {
-      if (!config?.force) {
-        throw new Error(
-          // @ts-expect-error
-          `The "${valibotAction.type}" action cannot be converted to JSON Schema.`
-        );
-      }
+      throwOrWarn(
+        // @ts-expect-error
+        `The "${valibotAction.type}" action cannot be converted to JSON Schema.`,
+        config
+      );
     }
   }
   return jsonSchema;
