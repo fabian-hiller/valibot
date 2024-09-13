@@ -71,6 +71,45 @@ jobs:
         run: pnpm test
         working-directory: library
 
+  to_json_schema_prettier:
+    name: Run Prettier in packages/to-json-schema
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
+      - name: Prettier check
+        run: pnpm format.check
+        working-directory: packages/to-json-schema
+
+  to_json_schema_eslint:
+    name: Run ESLint in packages/to-json-schema
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
+      - name: ESLint check
+        run: pnpm lint
+        working-directory: packages/to-json-schema
+
+  to_json_schema_vitest:
+    name: Run Vitest in packages/to-json-schema
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: ./.github/actions/pnpm
+      - name: Vitest tests
+        run: pnpm test
+        working-directory: packages/to-json-schema
+
   website_prettier:
     name: Run Prettier in website
     needs: install

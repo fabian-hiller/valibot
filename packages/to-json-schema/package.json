@@ -1,0 +1,75 @@
+{
+  "name": "@valibot/to-json-schema",
+  "description": "The official JSON schema converter for Valibot",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Fabian Hiller",
+  "homepage": "https://valibot.dev",
+  "contributors": [
+    {
+      "name": "Guillaume Cornut"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabian-hiller/valibot"
+  },
+  "keywords": [
+    "valibot",
+    "schema",
+    "converter",
+    "json-schema"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "vitest --typecheck",
+    "coverage": "vitest run --coverage --isolate",
+    "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit",
+    "eslint.fix": "eslint \"src/**/*.ts*\" --fix",
+    "format": "prettier --write ./src",
+    "format.check": "prettier --check ./src",
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "@types/eslint": "^8.56.10",
+    "@types/json-schema": "^7.0.15",
+    "@types/node": "^20.12.2",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsdoc": "^48.5.2",
+    "eslint-plugin-security": "^2.1.1",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.3",
+    "valibot": "workspace:*",
+    "vite": "^5.3.3",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "1.6.0"
+  },
+  "peerDependencies": {
+    "valibot": ">=0.31.0 <1"
+  }
+}
