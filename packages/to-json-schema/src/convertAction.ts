@@ -58,7 +58,7 @@ type Action =
     >;
 
 /**
- * Converts any supported Valibot schema to the JSON Schema format.
+ * Converts any supported Valibot action to the JSON Schema format.
  *
  * @param jsonSchema The JSON Schema object.
  * @param valibotAction The Valibot action object.
