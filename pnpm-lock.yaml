@@ -138,8 +138,8 @@ importers:
         specifier: ^5.5.3
         version: 5.5.3
       valibot:
-        specifier: workspace:*
-        version: link:../../library
+        specifier: ^0.41.0
+        version: 0.41.0(typescript@5.5.3)
       vite:
         specifier: ^5.3.3
         version: 5.3.3(@types/node@20.14.9)
@@ -6855,6 +6855,14 @@ packages:
 
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
+
+  valibot@0.41.0:
+    resolution: {integrity: sha512-igDBb8CTYr8YTQlOKgaN9nSS0Be7z+WRuaeYqGf3Cjz3aKmSnqEmYnkfVjzIuumGqfHpa3fLIvMEAfhrpqN8ng==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
@@ -14572,6 +14580,10 @@ snapshots:
   uuid@9.0.1: {}
 
   v8-compile-cache-lib@3.0.1: {}
+
+  valibot@0.41.0(typescript@5.5.3):
+    optionalDependencies:
+      typescript: 5.5.3
 
   validate-npm-package-license@3.0.4:
     dependencies:
