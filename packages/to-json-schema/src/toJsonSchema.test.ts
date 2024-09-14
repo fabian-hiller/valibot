@@ -46,6 +46,53 @@ describe('toJsonSchema', () => {
         },
       });
     });
+
+    test('for recursive schema', () => {
+      const ul = v.object({
+        type: v.literal('ul'),
+        children: v.array(v.lazy(() => li)),
+      });
+      const li: v.GenericSchema = v.object({
+        type: v.literal('li'),
+        children: v.array(v.union([v.string(), ul])),
+      });
+      expect(
+        toJsonSchema(ul, {
+          definitions: { ul, li },
+        })
+      ).toStrictEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        $ref: '#/$defs/ul',
+        $defs: {
+          ul: {
+            additionalProperties: false,
+            properties: {
+              children: {
+                items: { $ref: '#/$defs/li' },
+                type: 'array',
+              },
+              type: { const: 'ul' },
+            },
+            required: ['type', 'children'],
+            type: 'object',
+          },
+          li: {
+            additionalProperties: false,
+            properties: {
+              children: {
+                items: {
+                  anyOf: [{ type: 'string' }, { $ref: '#/$defs/ul' }],
+                },
+                type: 'array',
+              },
+              type: { const: 'li' },
+            },
+            required: ['type', 'children'],
+            type: 'object',
+          },
+        },
+      });
+    });
   });
 
   describe('should throw error', () => {

@@ -658,33 +658,119 @@ describe('convertSchema', () => {
       });
     });
 
-    test('should convert lazy schema', () => {
+    test('should convert simple lazy schema without definitions', () => {
+      const stringSchema = v.string();
+      const lazyGetter = () => stringSchema;
+      const context = createContext();
       expect(
-        convertSchema(
-          {},
-          v.lazy(() => v.string()),
-          undefined,
-          createContext()
-        )
+        convertSchema({}, v.lazy(lazyGetter), undefined, context)
       ).toStrictEqual({ $ref: '#/$defs/0' });
-      const testSchema = v.string();
+      expect(context).toStrictEqual({
+        definitions: { '0': { type: 'string' } },
+        referenceMap: new Map().set(stringSchema, '0'),
+        getterMap: new Map().set(lazyGetter, stringSchema),
+      });
+    });
+
+    test('should convert simple lazy schema with definitions', () => {
+      const stringSchema = v.string();
+      const lazyGetter = () => stringSchema;
+      const context = createContext({
+        definitions: { testSchema: { type: 'string' } },
+        referenceMap: new Map().set(stringSchema, 'stringSchema'),
+      });
       expect(
         convertSchema(
           {},
-          v.lazy(() => testSchema),
-          undefined,
-          createContext({
-            definitions: { testSchema },
-            referenceMap: new Map().set(testSchema, 'testSchema'),
-          })
+          v.lazy(lazyGetter),
+          { definitions: { stringSchema } },
+          context
         )
-      ).toStrictEqual({ $ref: '#/$defs/testSchema' });
+      ).toStrictEqual({ $ref: '#/$defs/stringSchema' });
+      expect(context).toStrictEqual({
+        definitions: { testSchema: { type: 'string' } },
+        referenceMap: new Map().set(stringSchema, 'stringSchema'),
+        getterMap: new Map().set(lazyGetter, stringSchema),
+      });
+    });
+
+    test('should convert recursive lazy schema with static getter', () => {
+      // Returns a static reference that never changes
+      const lazyGetter = () => nodeSchema;
+      const nodeSchema: v.GenericSchema = v.object({
+        node: v.optional(v.lazy(lazyGetter)),
+      });
+      const context = createContext();
+      expect(
+        convertSchema(
+          {},
+          // @ts-expect-error
+          nodeSchema,
+          undefined,
+          context
+        )
+      ).toStrictEqual({
+        type: 'object',
+        properties: { node: { $ref: '#/$defs/1' } },
+        required: [],
+        additionalProperties: false,
+      });
+      expect(context).toStrictEqual({
+        definitions: {
+          '1': {
+            type: 'object',
+            properties: { node: { $ref: '#/$defs/1' } },
+            required: [],
+            additionalProperties: false,
+          },
+        },
+        referenceMap: new Map().set(nodeSchema, '1'),
+        getterMap: new Map().set(lazyGetter, nodeSchema),
+      });
+    });
+
+    test('should convert recursive lazy schema with dynamic getter', () => {
+      // Returns a dynamic reference that always changes
+      const lazyGetter = () => v.nullable(nodeSchema);
+      const nodeSchema: v.GenericSchema = v.object({
+        node: v.lazy(lazyGetter),
+      });
+      const context = createContext();
+      expect(
+        convertSchema(
+          {},
+          // @ts-expect-error
+          nodeSchema,
+          undefined,
+          context
+        )
+      ).toStrictEqual({
+        type: 'object',
+        properties: { node: { $ref: '#/$defs/2' } },
+        required: ['node'],
+        additionalProperties: false,
+      });
+      expect(context).toStrictEqual({
+        definitions: {
+          '2': {
+            anyOf: [
+              {
+                type: 'object',
+                properties: { node: { $ref: '#/$defs/2' } },
+                required: ['node'],
+                additionalProperties: false,
+              },
+              { type: 'null' },
+            ],
+          },
+        },
+        referenceMap: new Map().set(expect.any(Object), '2'),
+        getterMap: new Map().set(lazyGetter, expect.any(Object)),
+      });
     });
   });
 
   describe('other schemas', () => {
-    // TODO: Add all other unsupported Valibot schemas
-
     test('should throw error for unsupported file schema', () => {
       expect(() =>
         // @ts-expect-error

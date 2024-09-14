@@ -9,12 +9,12 @@ export interface ConversionConfig {
    * Whether to force conversion to JSON Schema even for incompatible schemas
    * and actions.
    */
-  force?: boolean;
+  readonly force?: boolean;
   /**
    * The schema definitions for constructing recursive schemas. If not
    * specified, the definitions are generated automatically.
    */
-  definitions?: Record<
+  readonly definitions?: Record<
     string,
     v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>
   >;
@@ -27,12 +27,19 @@ export interface ConversionContext {
   /**
    * The JSON Schema definitions.
    */
-  definitions: Record<string, JSONSchema7>;
+  readonly definitions: Record<string, JSONSchema7>;
   /**
    * The JSON Schema reference map.
    */
-  referenceMap: Map<
+  readonly referenceMap: Map<
     v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
     string
+  >;
+  /**
+   * The lazy schema getter map.
+   */
+  readonly getterMap: Map<
+    (input: unknown) => v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+    v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>
   >;
 }

@@ -118,7 +118,7 @@ export function convertSchema(
 ): JSONSchema7 {
   // If schema is in reference map, use reference and skip conversion
   const referenceId = context.referenceMap.get(valibotSchema);
-  if (referenceId) {
+  if (referenceId && referenceId in context.definitions) {
     jsonSchema.$ref = `#/$defs/${referenceId}`;
     return jsonSchema;
   }
@@ -393,20 +393,28 @@ export function convertSchema(
     }
 
     case 'lazy': {
-      // Get wrapped Valibot schema and its reference ID
-      const wrappedValibotSchema = valibotSchema.getter(undefined);
+      // Get wrapped Valibot schema
+      let wrappedValibotSchema = context.getterMap.get(valibotSchema.getter);
+
+      // Add wrapped Valibot schema to getter map, if necessary
+      if (!wrappedValibotSchema) {
+        wrappedValibotSchema = valibotSchema.getter(undefined);
+        context.getterMap.set(valibotSchema.getter, wrappedValibotSchema);
+      }
+
+      // Get reference ID of wrapped Valibot schema
       let referenceId = context.referenceMap.get(wrappedValibotSchema);
 
       // Add wrapped Valibot schema to reference map and definitions, if necessary
       if (!referenceId) {
         referenceId = `${refCount++}`;
+        context.referenceMap.set(wrappedValibotSchema, referenceId);
         context.definitions[referenceId] = convertSchema(
           {},
           wrappedValibotSchema as SchemaOrPipe,
           config,
           context
         );
-        context.referenceMap.set(wrappedValibotSchema, referenceId);
       }
 
       // Add reference to JSON Schema object

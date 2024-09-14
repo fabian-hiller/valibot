@@ -532,8 +532,6 @@ describe('convertAction', () => {
     });
   });
 
-  // TODO: Add all other unsupported Valibot actions
-
   test('should throw error for unsupported transform action', () => {
     expect(() =>
       convertAction(

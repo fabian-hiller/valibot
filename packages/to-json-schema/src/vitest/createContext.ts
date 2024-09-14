@@ -7,9 +7,12 @@ import type { ConversionContext } from '../type.ts';
  *
  * @returns A new conversion context.
  */
-export function createContext(initial?: ConversionContext): ConversionContext {
+export function createContext(
+  initial?: Omit<ConversionContext, 'getterMap'>
+): ConversionContext {
   return {
     definitions: initial?.definitions ?? {},
     referenceMap: initial?.referenceMap ?? new Map(),
+    getterMap: new Map(),
   };
 }
