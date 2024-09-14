@@ -26,7 +26,7 @@ jobs:
         run: pnpm build
         working-directory: library
       - name: Publish
-        run: pnpm publish --provenance --access public
+        run: pnpm publish --provenance --access public --no-git-checks
         working-directory: library
         continue-on-error: true
         env:
@@ -103,7 +103,7 @@ jobs:
         run: pnpm build
         working-directory: packages/to-json-schema
       - name: Publish
-        run: pnpm publish --provenance --access public
+        run: pnpm publish --provenance --access public --no-git-checks
         working-directory: packages/to-json-schema
         continue-on-error: true
         env:
