@@ -1,11 +1,181 @@
 ---
 title: rawCheckAsync
+description: Creates a raw check validation action.
 source: /actions/rawCheck/rawCheckAsync.ts
 contributors:
   - EltonLobo07
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # rawCheckAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/actions/rawCheck/rawCheckAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a raw check validation action.
+
+```ts
+const Action = v.rawCheckAsync<TInput>(action);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+
+## Parameters
+
+- `action` <Property {...properties.action} />
+
+### Explanation
+
+With `rawCheckAsync` you can freely validate the input with a custom `action` and add issues if necessary.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `rawCheckAsync` can be used.
+
+### Add users schema
+
+Object schema that ensures only the users that are not already in the group are added.
+
+> This `rawCheckAsync` validation action adds an issue for any invalid username and forwards it via `path` to the appropriate nested field.
+
+```ts
+import { isNewGroupUser } from '~/api';
+
+const AddUsersSchema = v.pipeAsync(
+  v.object({
+    groupId: v.pipe(v.string(), v.uuid()),
+    usernames: v.array(v.pipe(v.string(), v.nonEmpty())),
+  }),
+  v.rawCheckAsync(async ({ dataset, addIssue }) => {
+    if (!dataset.typed) {
+      return;
+    }
+    const { groupId, usernames } = dataset.value;
+    for (let index = 0; index < usernames.length; index++) {
+      const username = usernames[index];
+      if (await isNewGroupUser(username, groupId)) {
+        continue;
+      }
+      addIssue({
+        received: username,
+        message: 'The user is already in the group.',
+        path: [
+          {
+            type: 'object',
+            origin: 'value',
+            input: dataset.value,
+            key: 'usernames',
+            value: usernames,
+          },
+          {
+            type: 'array',
+            origin: 'value',
+            input: usernames,
+            key: index,
+            value: username,
+          },
+        ],
+      });
+    }
+  })
+);
+```
+
+## Related
+
+The following APIs can be combined with `rawCheckAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'undefinedable',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'customAsync',
+    'forwardAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'pipeAsync',
+    'recordAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'undefinedableAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>
