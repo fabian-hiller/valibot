@@ -24,14 +24,17 @@ export function toJsonSchema(
   // Add provided definitions to context, if necessary
   if (config?.definitions) {
     for (const key in config.definitions) {
-      context.definitions[key] = convertSchema(
+      context.referenceMap.set(config.definitions[key], key);
+    }
+
+    for (const key in config.definitions) {
+      convertSchema(
         {},
         // @ts-expect-error
         config.definitions[key],
         config,
         context
       );
-      context.referenceMap.set(config.definitions[key], key);
     }
   }
 
