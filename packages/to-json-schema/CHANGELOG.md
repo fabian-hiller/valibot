@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.1.1 (September 14, 2024)
 
 - Fix maximum call stack bug for recursive schemas
 - Fix invalid JSON Schema ouput for recursive schemas
