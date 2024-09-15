@@ -88,8 +88,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'string' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.length<string, 3>(3),
+        v.length<v.LengthInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -101,12 +100,7 @@ describe('convertAction', () => {
 
   test('should convert length action for arrays', () => {
     expect(
-      convertAction(
-        { type: 'array' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.length<unknown[], 3>(3),
-        undefined
-      )
+      convertAction({ type: 'array' }, v.length<v.LengthInput, 3>(3), undefined)
     ).toStrictEqual({
       type: 'array',
       minItems: 3,
@@ -116,18 +110,12 @@ describe('convertAction', () => {
 
   test('should throw error for length action with invalid type', () => {
     expect(() =>
-      convertAction(
-        {},
-        // @ts-expect-error FIXME: Something is wrong here
-        v.length<unknown, 3>(3),
-        undefined
-      )
+      convertAction({}, v.length<v.LengthInput, 3>(3), undefined)
     ).toThrowError('The "length" action is not supported on type "undefined".');
     expect(() =>
       convertAction(
         { type: 'object' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.length<unknown, 3>(3),
+        v.length<v.LengthInput, 3>(3),
         undefined
       )
     ).toThrowError('The "length" action is not supported on type "object".');
@@ -135,12 +123,7 @@ describe('convertAction', () => {
 
   test('should force conversion for length action with invalid type', () => {
     expect(
-      convertAction(
-        {},
-        // @ts-expect-error FIXME: Something is wrong here
-        v.length<unknown, 3>(3),
-        { force: true }
-      )
+      convertAction({}, v.length<v.LengthInput, 3>(3), { force: true })
     ).toStrictEqual({
       minLength: 3,
       maxLength: 3,
@@ -149,12 +132,9 @@ describe('convertAction', () => {
       'The "length" action is not supported on type "undefined".'
     );
     expect(
-      convertAction(
-        { type: 'object' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.length<unknown, 3>(3),
-        { force: true }
-      )
+      convertAction({ type: 'object' }, v.length<v.LengthInput, 3>(3), {
+        force: true,
+      })
     ).toStrictEqual({ type: 'object', minLength: 3, maxLength: 3 });
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "length" action is not supported on type "object".'
@@ -165,8 +145,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'string' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.minLength<string, 3>(3),
+        v.minLength<v.LengthInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -179,8 +158,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'array' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.minLength<unknown[], 3>(3),
+        v.minLength<v.LengthInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -191,20 +169,14 @@ describe('convertAction', () => {
 
   test('should throw error for min length action with invalid type', () => {
     expect(() =>
-      convertAction(
-        {},
-        // @ts-expect-error FIXME: Something is wrong here
-        v.minLength<unknown, 3>(3),
-        undefined
-      )
+      convertAction({}, v.minLength<v.LengthInput, 3>(3), undefined)
     ).toThrowError(
       'The "min_length" action is not supported on type "undefined".'
     );
     expect(() =>
       convertAction(
         { type: 'object' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.minLength<unknown, 3>(3),
+        v.minLength<v.LengthInput, 3>(3),
         undefined
       )
     ).toThrowError(
@@ -214,12 +186,7 @@ describe('convertAction', () => {
 
   test('should force conversion for min length action with invalid type', () => {
     expect(
-      convertAction(
-        {},
-        // @ts-expect-error FIXME: Something is wrong here
-        v.minLength<unknown, 3>(3),
-        { force: true }
-      )
+      convertAction({}, v.minLength<v.LengthInput, 3>(3), { force: true })
     ).toStrictEqual({
       minLength: 3,
     });
@@ -227,12 +194,9 @@ describe('convertAction', () => {
       'The "min_length" action is not supported on type "undefined".'
     );
     expect(
-      convertAction(
-        { type: 'object' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.minLength<unknown, 3>(3),
-        { force: true }
-      )
+      convertAction({ type: 'object' }, v.minLength<v.LengthInput, 3>(3), {
+        force: true,
+      })
     ).toStrictEqual({ type: 'object', minLength: 3 });
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "min_length" action is not supported on type "object".'
@@ -243,8 +207,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'string' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.maxLength<string, 3>(3),
+        v.maxLength<v.LengthInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -257,8 +220,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'array' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.maxLength<unknown[], 3>(3),
+        v.maxLength<v.LengthInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -269,20 +231,14 @@ describe('convertAction', () => {
 
   test('should throw error for max length action with invalid type', () => {
     expect(() =>
-      convertAction(
-        {},
-        // @ts-expect-error FIXME: Something is wrong here
-        v.maxLength<unknown, 3>(3),
-        undefined
-      )
+      convertAction({}, v.maxLength<v.LengthInput, 3>(3), undefined)
     ).toThrowError(
       'The "max_length" action is not supported on type "undefined".'
     );
     expect(() =>
       convertAction(
         { type: 'object' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.maxLength<unknown, 3>(3),
+        v.maxLength<v.LengthInput, 3>(3),
         undefined
       )
     ).toThrowError(
@@ -292,12 +248,7 @@ describe('convertAction', () => {
 
   test('should force conversion for max length action with invalid type', () => {
     expect(
-      convertAction(
-        {},
-        // @ts-expect-error FIXME: Something is wrong here
-        v.maxLength<unknown, 3>(3),
-        { force: true }
-      )
+      convertAction({}, v.maxLength<v.LengthInput, 3>(3), { force: true })
     ).toStrictEqual({
       maxLength: 3,
     });
@@ -305,12 +256,9 @@ describe('convertAction', () => {
       'The "max_length" action is not supported on type "undefined".'
     );
     expect(
-      convertAction(
-        { type: 'object' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.maxLength<unknown, 3>(3),
-        { force: true }
-      )
+      convertAction({ type: 'object' }, v.maxLength<v.LengthInput, 3>(3), {
+        force: true,
+      })
     ).toStrictEqual({ type: 'object', maxLength: 3 });
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "max_length" action is not supported on type "object".'
@@ -321,8 +269,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'number' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.maxValue<number, 3>(3),
+        v.maxValue<v.ValueInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -333,20 +280,14 @@ describe('convertAction', () => {
 
   test('should throw error for max value action with invalid type', () => {
     expect(() =>
-      convertAction(
-        {},
-        // @ts-expect-error FIXME: Something is wrong here
-        v.maxValue<unknown, 3>(3),
-        undefined
-      )
+      convertAction({}, v.maxValue<v.ValueInput, 3>(3), undefined)
     ).toThrowError(
       'The "max_value" action is not supported on type "undefined".'
     );
     expect(() =>
       convertAction(
         { type: 'string' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.maxValue<string, 3>(3),
+        v.maxValue<v.ValueInput, 3>(3),
         undefined
       )
     ).toThrowError('The "max_value" action is not supported on type "string".');
@@ -354,12 +295,7 @@ describe('convertAction', () => {
 
   test('should force conversion for max value action with invalid type', () => {
     expect(
-      convertAction(
-        {},
-        // @ts-expect-error FIXME: Something is wrong here
-        v.maxValue<unknown, 3>(3),
-        { force: true }
-      )
+      convertAction({}, v.maxValue<v.ValueInput, 3>(3), { force: true })
     ).toStrictEqual({
       maximum: 3,
     });
@@ -367,12 +303,9 @@ describe('convertAction', () => {
       'The "max_value" action is not supported on type "undefined".'
     );
     expect(
-      convertAction(
-        { type: 'string' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.maxValue<string, 3>(3),
-        { force: true }
-      )
+      convertAction({ type: 'string' }, v.maxValue<v.ValueInput, 3>(3), {
+        force: true,
+      })
     ).toStrictEqual({ type: 'string', maximum: 3 });
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "max_value" action is not supported on type "string".'
@@ -383,8 +316,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'number' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.minValue<number, 3>(3),
+        v.minValue<v.ValueInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -395,20 +327,14 @@ describe('convertAction', () => {
 
   test('should throw error for min value action with invalid type', () => {
     expect(() =>
-      convertAction(
-        {},
-        // @ts-expect-error FIXME: Something is wrong here
-        v.minValue<unknown, 3>(3),
-        undefined
-      )
+      convertAction({}, v.minValue<v.ValueInput, 3>(3), undefined)
     ).toThrowError(
       'The "min_value" action is not supported on type "undefined".'
     );
     expect(() =>
       convertAction(
         { type: 'string' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.minValue<string, 3>(3),
+        v.minValue<v.ValueInput, 3>(3),
         undefined
       )
     ).toThrowError('The "min_value" action is not supported on type "string".');
@@ -416,12 +342,7 @@ describe('convertAction', () => {
 
   test('should force conversion for min value action with invalid type', () => {
     expect(
-      convertAction(
-        {},
-        // @ts-expect-error FIXME: Something is wrong here
-        v.minValue<unknown, 3>(3),
-        { force: true }
-      )
+      convertAction({}, v.minValue<v.ValueInput, 3>(3), { force: true })
     ).toStrictEqual({
       minimum: 3,
     });
@@ -429,12 +350,9 @@ describe('convertAction', () => {
       'The "min_value" action is not supported on type "undefined".'
     );
     expect(
-      convertAction(
-        { type: 'string' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.minValue<string, 3>(3),
-        { force: true }
-      )
+      convertAction({ type: 'string' }, v.minValue<v.ValueInput, 3>(3), {
+        force: true,
+      })
     ).toStrictEqual({ type: 'string', minimum: 3 });
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "min_value" action is not supported on type "string".'
@@ -506,8 +424,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'boolean' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.value<boolean, true>(true),
+        v.value<v.ValueInput, true>(true),
         undefined
       )
     ).toStrictEqual({
@@ -517,8 +434,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'number' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.value<boolean, 123>(123),
+        v.value<v.ValueInput, 123>(123),
         undefined
       )
     ).toStrictEqual({
@@ -528,8 +444,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'string' },
-        // @ts-expect-error FIXME: Something is wrong here
-        v.value<string, 'foo'>('foo'),
+        v.value<v.ValueInput, 'foo'>('foo'),
         undefined
       )
     ).toStrictEqual({

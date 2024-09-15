@@ -200,7 +200,7 @@ describe('convertSchema', () => {
       expect(
         convertSchema(
           {},
-          // @ts-expect-error FIXME: Something is wrong here
+          // @ts-expect-error
           v.object({
             key1: v.string(),
             key2: v.optional(v.string()),
@@ -227,7 +227,7 @@ describe('convertSchema', () => {
       expect(
         convertSchema(
           {},
-          // @ts-expect-error FIXME: Something is wrong here
+          // @ts-expect-error
           v.objectWithRest(
             {
               key1: v.string(),
@@ -257,7 +257,7 @@ describe('convertSchema', () => {
       expect(
         convertSchema(
           {},
-          // @ts-expect-error FIXME: Something is wrong here
+          // @ts-expect-error
           v.looseObject({
             key1: v.string(),
             key2: v.optional(v.string()),
@@ -284,7 +284,7 @@ describe('convertSchema', () => {
       expect(
         convertSchema(
           {},
-          // @ts-expect-error FIXME: Something is wrong here
+          // @ts-expect-error
           v.strictObject({
             key1: v.string(),
             key2: v.optional(v.string()),
@@ -537,8 +537,13 @@ describe('convertSchema', () => {
         KEY4 = 123,
       }
       expect(
-        // @ts-expect-error FIXME: Something is wrong here
-        convertSchema({}, v.enum(TestEnum), undefined, createContext())
+        convertSchema(
+          {},
+          // @ts-expect-error
+          v.enum(TestEnum),
+          undefined,
+          createContext()
+        )
       ).toStrictEqual({
         enum: [0, 1, 'foo', 123],
       });
