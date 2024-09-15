@@ -184,3 +184,23 @@ const NumberSchema = v.pipe(
   v.transform((input) => (input < 10 ? null : input))
 );
 ```
+
+## Metadata
+
+In addition to the validation and transformation actions, a pipeline can also be used to add metadata to a schema. This can be useful when working with AI tools or for documentation purposes.
+
+<ApiList
+  label="Metadata actions"
+  items={['description', 'metadata', 'title']}
+/>
+
+```ts
+const UsernameSchema = v.pipe(
+  v.string(),
+  v.regex(/^[a-z0-9_-]{4,16}$/iu),
+  v.title('Username'),
+  v.description(
+    'A username must be between 4 and 16 characters long and can only contain letters, numbers, underscores and hyphens.'
+  )
+);
+```
