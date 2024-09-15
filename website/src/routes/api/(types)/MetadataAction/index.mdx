@@ -1,0 +1,25 @@
+---
+title: MetadataAction
+description: Metadata action type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# MetadataAction
+
+Metadata action type.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMetadata` <Property {...properties.TMetadata} />
+
+## Definition
+
+- `MetadataAction` <Property {...properties.BaseMetadata} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `metadata_` <Property {...properties['metadata_']} />

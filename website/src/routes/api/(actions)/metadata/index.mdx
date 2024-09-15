@@ -1,0 +1,123 @@
+---
+title: metadata
+description: Creates a custom metadata action.
+source: /actions/metadata/metadata.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# metadata
+
+Creates a custom metadata action.
+
+```ts
+const Action = v.metadata<TInput, TMetadata>(metadata_);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMetadata` <Property {...properties.TMetadata} />
+
+## Parameters
+
+- `metadata_` <Property {...properties['metadata_']} />
+
+### Explanation
+
+With `metadata` you can attach custom metadata to a schema. This can be useful when working with AI tools or for documentation purposes.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `metadata` can be used.
+
+### Profile table schema
+
+Schema to describe a profile table.
+
+```ts
+const ProfileTableSchema = v.pipe(
+  v.object({
+    username: v.pipe(v.string(), v.nonEmpty()),
+    email: v.pipe(v.string(), v.email()),
+    avatar: v.pipe(v.string(), v.url()),
+    description: v.pipe(v.string(), v.maxLength(500)),
+  }),
+  v.metadata({
+    table: 'profiles',
+    primaryKey: 'username',
+    indexes: ['email'],
+  })
+);
+```
+
+## Related
+
+The following APIs can be combined with `metadata`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'undefinedable',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
