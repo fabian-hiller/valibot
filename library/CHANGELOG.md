@@ -2,13 +2,13 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.42.0 (September 15, 2024)
 
 - Add `metadata` action to add custom metadata to a schema
 - Add `title` metadata action to add a title to a schema (discussion #826)
 - Add `decimal` action to validate integer and float strings (pull request #823)
-- Rename `NoPipe` type to `SchemaWithoutPipe`
 - Rename `decimal` action to `digits` (pull request #823)
+- Rename `NoPipe` type to `SchemaWithoutPipe`
 - Fix inference of generics in `IssueDotPath` type (issue #814)
 
 ## v0.41.0 (September 01, 2024)
