@@ -69,6 +69,7 @@ export * from './size/index.ts';
 export * from './someItem/index.ts';
 export * from './sortItems/index.ts';
 export * from './startsWith/index.ts';
+export * from './title/index.ts';
 export * from './toLowerCase/index.ts';
 export * from './toMaxValue/index.ts';
 export * from './toMinValue/index.ts';

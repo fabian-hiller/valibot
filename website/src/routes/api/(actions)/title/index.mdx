@@ -1,7 +1,7 @@
 ---
-title: description
-description: Creates a description metadata action.
-source: /actions/description/description.ts
+title: title
+description: Creates a title metadata action.
+source: /actions/title/title.ts
 contributors:
   - fabian-hiller
 ---
@@ -9,26 +9,26 @@ contributors:
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# description
+# title
 
-Creates a description metadata action.
+Creates a title metadata action.
 
 ```ts
-const Action = v.description<TInput, TDescription>(description_);
+const Action = v.title<TInput, TTitle>(title_);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
-- `TDescription` <Property {...properties.TDescription} />
+- `TTitle` <Property {...properties.TTitle} />
 
 ## Parameters
 
-- `description_` <Property {...properties['description_']} />
+- `title_` <Property {...properties['title_']} />
 
 ### Explanation
 
-With `description` you can describe the purpose of a schema. This can be useful when working with AI tools or for documentation purposes.
+With `title` you can give a title to a schema. This can be useful when working with AI tools or for documentation purposes.
 
 ## Returns
 
@@ -36,7 +36,7 @@ With `description` you can describe the purpose of a schema. This can be useful 
 
 ## Examples
 
-The following examples show how `description` can be used.
+The following examples show how `title` can be used.
 
 ### Username schema
 
@@ -55,7 +55,7 @@ const UsernameSchema = v.pipe(
 
 ## Related
 
-The following APIs can be combined with `description`.
+The following APIs can be combined with `title`.
 
 ### Schemas
 

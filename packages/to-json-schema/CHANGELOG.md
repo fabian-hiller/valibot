@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add support for `title` action
+
 ## v0.1.1 (September 14, 2024)
 
 - Fix maximum call stack bug for recursive schemas

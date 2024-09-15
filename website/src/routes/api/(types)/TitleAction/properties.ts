@@ -5,7 +5,7 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'any',
   },
-  TDescription: {
+  TTitle: {
     modifier: 'extends',
     type: 'string',
   },
@@ -26,21 +26,21 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'description',
+      value: 'title',
     },
   },
   reference: {
     type: {
       type: 'custom',
       modifier: 'typeof',
-      name: 'description',
-      href: '../description/',
+      name: 'title',
+      href: '../title/',
     },
   },
-  description: {
+  title: {
     type: {
       type: 'custom',
-      name: 'TDescription',
+      name: 'TTitle',
     },
   },
 };

@@ -55,7 +55,8 @@ type Action =
       number,
       number,
       v.ErrorMessage<v.MultipleOfIssue<number, number>> | undefined
-    >;
+    >
+  | v.TitleAction<unknown, string>;
 
 /**
  * Converts any supported Valibot action to the JSON Schema format.
@@ -168,6 +169,11 @@ export function convertAction(
         throwOrWarn('RegExp flags are not supported by JSON Schema.', config);
       }
       jsonSchema.pattern = valibotAction.requirement.source;
+      break;
+    }
+
+    case 'title': {
+      jsonSchema.title = valibotAction.title;
       break;
     }
 

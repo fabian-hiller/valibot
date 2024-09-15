@@ -484,6 +484,12 @@ describe('convertAction', () => {
     );
   });
 
+  test('should convert title action', () => {
+    expect(convertAction({}, v.title('test'), undefined)).toStrictEqual({
+      title: 'test',
+    });
+  });
+
   test('should convert UUID action', () => {
     expect(convertAction({}, v.uuid<string>(), undefined)).toStrictEqual({
       format: 'uuid',
