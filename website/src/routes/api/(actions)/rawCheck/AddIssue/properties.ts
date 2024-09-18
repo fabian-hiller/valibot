@@ -5,16 +5,17 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'any',
   },
-  action: {
+  AddIssue: {
     type: {
       type: 'function',
       params: [
         {
-          name: 'context',
+          name: 'info',
+          optional: true,
           type: {
             type: 'custom',
-            name: 'Context',
-            href: './Context/',
+            name: 'IssueInfo',
+            href: '../IssueInfo/',
             generics: [
               {
                 type: 'custom',
@@ -25,19 +26,6 @@ export const properties: Record<string, PropertyProps> = {
         },
       ],
       return: 'void',
-    },
-  },
-  Action: {
-    type: {
-      type: 'custom',
-      name: 'RawCheckAction',
-      href: '../RawCheckAction/',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TInput',
-        },
-      ],
     },
   },
 };
