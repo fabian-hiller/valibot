@@ -40,12 +40,12 @@ The following examples show how `rawCheckAsync` can be used.
 
 ### Add users schema
 
-Object schema that ensures only the users that are not already in the group are added.
+Object schema that ensures that only users not already in the group are included.
 
 > This `rawCheckAsync` validation action adds an issue for any invalid username and forwards it via `path` to the appropriate nested field.
 
 ```ts
-import { isNewGroupUser } from '~/api';
+import { isAlreadyInGroup } from '~/api';
 
 const AddUsersSchema = v.pipeAsync(
   v.object({
@@ -53,35 +53,33 @@ const AddUsersSchema = v.pipeAsync(
     usernames: v.array(v.pipe(v.string(), v.nonEmpty())),
   }),
   v.rawCheckAsync(async ({ dataset, addIssue }) => {
-    if (!dataset.typed) {
-      return;
-    }
-    const { groupId, usernames } = dataset.value;
-    for (let index = 0; index < usernames.length; index++) {
-      const username = usernames[index];
-      if (await isNewGroupUser(username, groupId)) {
-        continue;
-      }
-      addIssue({
-        received: username,
-        message: 'The user is already in the group.',
-        path: [
-          {
-            type: 'object',
-            origin: 'value',
-            input: dataset.value,
-            key: 'usernames',
-            value: usernames,
-          },
-          {
-            type: 'array',
-            origin: 'value',
-            input: usernames,
-            key: index,
-            value: username,
-          },
-        ],
-      });
+    if (dataset.typed) {
+      await Promise.all(
+        dataset.value.usernames.map(async (username, index) => {
+          if (await isAlreadyInGroup(username, dataset.value.groupId)) {
+            addIssue({
+              received: username,
+              message: 'The user is already in the group.',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'value',
+                  input: dataset.value,
+                  key: 'usernames',
+                  value: dataset.value.usernames,
+                },
+                {
+                  type: 'array',
+                  origin: 'value',
+                  input: dataset.value.usernames,
+                  key: index,
+                  value: username,
+                },
+              ],
+            });
+          }
+        })
+      );
     }
   })
 );
