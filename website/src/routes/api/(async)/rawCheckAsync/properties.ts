@@ -14,7 +14,7 @@ export const properties: Record<string, PropertyProps> = {
           type: {
             type: 'custom',
             name: 'Context',
-            href: './Context/',
+            href: '../rawCheck/Context/',
             generics: [
               {
                 type: 'custom',
@@ -24,14 +24,19 @@ export const properties: Record<string, PropertyProps> = {
           },
         },
       ],
-      return: 'void',
+      return: {
+        type: 'custom',
+        name: 'MaybePromise',
+        href: '../MaybePromise/',
+        generics: ['void'],
+      },
     },
   },
   Action: {
     type: {
       type: 'custom',
-      name: 'RawCheckAction',
-      href: '../RawCheckAction/',
+      name: 'RawCheckActionAsync',
+      href: '../RawCheckActionAsync/',
       generics: [
         {
           type: 'custom',

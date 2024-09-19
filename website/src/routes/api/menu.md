@@ -512,6 +512,7 @@
 - [PromiseIssue](/api/PromiseIssue/)
 - [PromiseSchema](/api/PromiseSchema/)
 - [RawCheckAction](/api/RawCheckAction/)
+- [RawCheckActionAsync](/api/RawCheckActionAsync/)
 - [RawCheckIssue](/api/RawCheckIssue/)
 - [RawTransformAction](/api/RawTransformAction/)
 - [RawTransformIssue](/api/RawTransformIssue/)
