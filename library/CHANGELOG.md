@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## vX.X.X (Month DD, YYYY)
+## v0.42.1 (September 20, 2024)
 
 - Fix function type declaration of `_run` property
 
