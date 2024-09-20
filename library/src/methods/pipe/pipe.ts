@@ -38,7 +38,7 @@ export type SchemaWithPipe<
    */
   readonly _run: (
     dataset: Dataset<unknown, never>,
-    config: Config<InferIssue<FirstTupleItem<TPipe>>>
+    config: Config<BaseIssue<unknown>>
   ) => Dataset<InferOutput<LastTupleItem<TPipe>>, InferIssue<TPipe[number]>>;
   /**
    * Input, output and issue type.

@@ -84,10 +84,10 @@ export type SchemaWithPartial<
        *
        * @internal
        */
-      _run(
+      readonly _run: (
         dataset: Dataset<unknown, never>,
-        config: Config<InferIssue<TSchema>>
-      ): Dataset<
+        config: Config<BaseIssue<unknown>>
+      ) => Dataset<
         InferObjectOutput<PartialEntries<TEntries, TKeys>>,
         InferIssue<TSchema>
       >;
@@ -121,10 +121,10 @@ export type SchemaWithPartial<
          *
          * @internal
          */
-        _run(
+        readonly _run: (
           dataset: Dataset<unknown, never>,
-          config: Config<InferIssue<TSchema>>
-        ): Dataset<
+          config: Config<BaseIssue<unknown>>
+        ) => Dataset<
           InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
             [key: string]: unknown;
           },
@@ -167,10 +167,10 @@ export type SchemaWithPartial<
            *
            * @internal
            */
-          _run(
+          readonly _run: (
             dataset: Dataset<unknown, never>,
-            config: Config<InferIssue<TSchema>>
-          ): Dataset<
+            config: Config<BaseIssue<unknown>>
+          ) => Dataset<
             InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
               [key: string]: InferOutput<TRest>;
             },

@@ -87,10 +87,10 @@ export type SchemaWithRequired<
        *
        * @internal
        */
-      _run(
+      readonly _run: (
         dataset: Dataset<unknown, never>,
-        config: Config<InferIssue<TSchema>>
-      ): Dataset<
+        config: Config<BaseIssue<unknown>>
+      ) => Dataset<
         InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>>,
         NonOptionalIssue | InferIssue<TSchema>
       >;
@@ -128,10 +128,10 @@ export type SchemaWithRequired<
          *
          * @internal
          */
-        _run(
+        readonly _run: (
           dataset: Dataset<unknown, never>,
-          config: Config<InferIssue<TSchema>>
-        ): Dataset<
+          config: Config<BaseIssue<unknown>>
+        ) => Dataset<
           InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
             [key: string]: unknown;
           },
@@ -176,10 +176,10 @@ export type SchemaWithRequired<
            *
            * @internal
            */
-          _run(
+          readonly _run: (
             dataset: Dataset<unknown, never>,
-            config: Config<InferIssue<TSchema>>
-          ): Dataset<
+            config: Config<BaseIssue<unknown>>
+          ) => Dataset<
             InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
               [key: string]: InferOutput<TRest>;
             },

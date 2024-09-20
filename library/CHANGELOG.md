@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Fix function type declaration of `_run` property
+
 ## v0.42.0 (September 15, 2024)
 
 - Add `metadata` action to add custom metadata to a schema

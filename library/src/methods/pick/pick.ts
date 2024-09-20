@@ -90,13 +90,10 @@ export type SchemaWithPick<
        *
        * @internal
        */
-      _run(
+      readonly _run: (
         dataset: Dataset<unknown, never>,
-        config: Config<
-          | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-          | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-        >
-      ): Dataset<
+        config: Config<BaseIssue<unknown>>
+      ) => Dataset<
         InferObjectOutput<Pick<TEntries, TKeys[number]>>,
         | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
         | InferObjectIssue<Pick<TEntries, TKeys[number]>>
@@ -138,13 +135,10 @@ export type SchemaWithPick<
          *
          * @internal
          */
-        _run(
+        readonly _run: (
           dataset: Dataset<unknown, never>,
-          config: Config<
-            | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-            | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-          >
-        ): Promise<
+          config: Config<BaseIssue<unknown>>
+        ) => Promise<
           Dataset<
             InferObjectOutput<Pick<TEntries, TKeys[number]>>,
             | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
@@ -183,13 +177,10 @@ export type SchemaWithPick<
            *
            * @internal
            */
-          _run(
+          readonly _run: (
             dataset: Dataset<unknown, never>,
-            config: Config<
-              | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-              | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-            >
-          ): Dataset<
+            config: Config<BaseIssue<unknown>>
+          ) => Dataset<
             InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
               [key: string]: unknown;
             },
@@ -234,13 +225,10 @@ export type SchemaWithPick<
              *
              * @internal
              */
-            _run(
+            readonly _run: (
               dataset: Dataset<unknown, never>,
-              config: Config<
-                | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-              >
-            ): Promise<
+              config: Config<BaseIssue<unknown>>
+            ) => Promise<
               Dataset<
                 InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
                   [key: string]: unknown;
@@ -290,14 +278,10 @@ export type SchemaWithPick<
                *
                * @internal
                */
-              _run(
+              readonly _run: (
                 dataset: Dataset<unknown, never>,
-                config: Config<
-                  | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                  | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-                  | InferIssue<TSchema['rest']>
-                >
-              ): Dataset<
+                config: Config<BaseIssue<unknown>>
+              ) => Dataset<
                 InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
                   [key: string]: InferOutput<TSchema['rest']>;
                 },
@@ -345,14 +329,10 @@ export type SchemaWithPick<
                  *
                  * @internal
                  */
-                _run(
+                readonly _run: (
                   dataset: Dataset<unknown, never>,
-                  config: Config<
-                    | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                    | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-                    | InferIssue<TSchema['rest']>
-                  >
-                ): Promise<
+                  config: Config<BaseIssue<unknown>>
+                ) => Promise<
                   Dataset<
                     InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
                       [key: string]: InferOutput<TSchema['rest']>;

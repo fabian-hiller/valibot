@@ -46,7 +46,7 @@ export interface BaseValidation<
    */
   readonly _run: (
     dataset: Dataset<TInput, BaseIssue<unknown>>,
-    config: Config<TIssue>
+    config: Config<BaseIssue<unknown>>
   ) => Dataset<TOutput, BaseIssue<unknown> | TIssue>;
   /**
    * Input, output and issue type.
@@ -97,7 +97,7 @@ export interface BaseValidationAsync<
    */
   readonly _run: (
     dataset: Dataset<TInput, BaseIssue<unknown>>,
-    config: Config<TIssue>
+    config: Config<BaseIssue<unknown>>
   ) => Promise<Dataset<TOutput, BaseIssue<unknown> | TIssue>>;
 }
 

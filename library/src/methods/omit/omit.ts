@@ -90,13 +90,10 @@ export type SchemaWithOmit<
        *
        * @internal
        */
-      _run(
+      readonly _run: (
         dataset: Dataset<unknown, never>,
-        config: Config<
-          | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-          | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-        >
-      ): Dataset<
+        config: Config<BaseIssue<unknown>>
+      ) => Dataset<
         InferObjectOutput<Omit<TEntries, TKeys[number]>>,
         | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
         | InferObjectIssue<Omit<TEntries, TKeys[number]>>
@@ -138,13 +135,10 @@ export type SchemaWithOmit<
          *
          * @internal
          */
-        _run(
+        readonly _run: (
           dataset: Dataset<unknown, never>,
-          config: Config<
-            | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-            | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-          >
-        ): Promise<
+          config: Config<BaseIssue<unknown>>
+        ) => Promise<
           Dataset<
             InferObjectOutput<Omit<TEntries, TKeys[number]>>,
             | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
@@ -183,13 +177,10 @@ export type SchemaWithOmit<
            *
            * @internal
            */
-          _run(
+          readonly _run: (
             dataset: Dataset<unknown, never>,
-            config: Config<
-              | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-              | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-            >
-          ): Dataset<
+            config: Config<BaseIssue<unknown>>
+          ) => Dataset<
             InferObjectOutput<Omit<TEntries, TKeys[number]>> & {
               [key: string]: unknown;
             },
@@ -234,13 +225,10 @@ export type SchemaWithOmit<
              *
              * @internal
              */
-            _run(
+            readonly _run: (
               dataset: Dataset<unknown, never>,
-              config: Config<
-                | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-              >
-            ): Promise<
+              config: Config<BaseIssue<unknown>>
+            ) => Promise<
               Dataset<
                 InferObjectOutput<Omit<TEntries, TKeys[number]>> & {
                   [key: string]: unknown;
@@ -290,14 +278,10 @@ export type SchemaWithOmit<
                *
                * @internal
                */
-              _run(
+              readonly _run: (
                 dataset: Dataset<unknown, never>,
-                config: Config<
-                  | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                  | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-                  | InferIssue<TSchema['rest']>
-                >
-              ): Dataset<
+                config: Config<BaseIssue<unknown>>
+              ) => Dataset<
                 InferObjectOutput<Omit<TEntries, TKeys[number]>> & {
                   [key: string]: InferOutput<TSchema['rest']>;
                 },
@@ -345,14 +329,10 @@ export type SchemaWithOmit<
                  *
                  * @internal
                  */
-                _run(
+                readonly _run: (
                   dataset: Dataset<unknown, never>,
-                  config: Config<
-                    | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                    | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-                    | InferIssue<TSchema['rest']>
-                  >
-                ): Promise<
+                  config: Config<BaseIssue<unknown>>
+                ) => Promise<
                   Dataset<
                     InferObjectOutput<Omit<TEntries, TKeys[number]>> & {
                       [key: string]: InferOutput<TSchema['rest']>;

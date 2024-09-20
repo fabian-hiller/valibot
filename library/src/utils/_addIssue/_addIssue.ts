@@ -61,7 +61,13 @@ interface Other<TContext extends Context> {
  * @internal
  */
 export function _addIssue<const TContext extends Context>(
-  context: TContext,
+  context: TContext & {
+    expects?: string | null;
+    requirement?: unknown;
+    message?:
+      | ErrorMessage<Extract<InferIssue<TContext>, { type: TContext['type'] }>>
+      | undefined;
+  },
   label: string,
   dataset: Dataset<unknown, BaseIssue<unknown>>,
   config: Config<InferIssue<TContext>>,
@@ -69,7 +75,6 @@ export function _addIssue<const TContext extends Context>(
 ): void {
   // Get expected and received string
   const input = other && 'input' in other ? other.input : dataset.value;
-  // @ts-expect-error
   const expected = other?.expected ?? context.expects ?? null;
   const received = other?.received ?? _stringify(input);
 
@@ -85,7 +90,6 @@ export function _addIssue<const TContext extends Context>(
     message: `Invalid ${label}: ${
       expected ? `Expected ${expected} but r` : 'R'
     }eceived ${received}`,
-    // @ts-expect-error
     requirement: context.requirement,
     path: other?.path,
     issues: other?.issues,
@@ -100,7 +104,6 @@ export function _addIssue<const TContext extends Context>(
   // Get custom issue message
   const message =
     other?.message ??
-    // @ts-expect-error
     context.message ??
     getSpecificMessage(context.reference, issue.lang) ??
     (isSchema ? getSchemaMessage(issue.lang) : null) ??
@@ -110,7 +113,11 @@ export function _addIssue<const TContext extends Context>(
   // If custom message if specified, override default message
   if (message) {
     // @ts-expect-error
-    issue.message = typeof message === 'function' ? message(issue) : message;
+    issue.message =
+      typeof message === 'function'
+        ? // @ts-expect-error
+          message(issue)
+        : message;
   }
 
   // If context is a schema, set typed to `false`

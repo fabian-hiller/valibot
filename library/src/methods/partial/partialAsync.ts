@@ -89,10 +89,10 @@ export type SchemaWithPartialAsync<
        *
        * @internal
        */
-      _run(
+      readonly _run: (
         dataset: Dataset<unknown, never>,
-        config: Config<InferIssue<TSchema>>
-      ): Promise<
+        config: Config<BaseIssue<unknown>>
+      ) => Promise<
         Dataset<
           InferObjectOutput<PartialEntries<TEntries, TKeys>>,
           InferIssue<TSchema>
@@ -128,10 +128,10 @@ export type SchemaWithPartialAsync<
          *
          * @internal
          */
-        _run(
+        readonly _run: (
           dataset: Dataset<unknown, never>,
-          config: Config<InferIssue<TSchema>>
-        ): Promise<
+          config: Config<BaseIssue<unknown>>
+        ) => Promise<
           Dataset<
             InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
               [key: string]: unknown;
@@ -176,10 +176,10 @@ export type SchemaWithPartialAsync<
            *
            * @internal
            */
-          _run(
+          readonly _run: (
             dataset: Dataset<unknown, never>,
-            config: Config<InferIssue<TSchema>>
-          ): Promise<
+            config: Config<BaseIssue<unknown>>
+          ) => Promise<
             Dataset<
               InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
                 [key: string]: InferOutput<TRest>;

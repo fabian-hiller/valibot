@@ -200,7 +200,6 @@ describe('convertSchema', () => {
       expect(
         convertSchema(
           {},
-          // @ts-expect-error
           v.object({
             key1: v.string(),
             key2: v.optional(v.string()),
@@ -227,7 +226,6 @@ describe('convertSchema', () => {
       expect(
         convertSchema(
           {},
-          // @ts-expect-error
           v.objectWithRest(
             {
               key1: v.string(),
@@ -257,7 +255,6 @@ describe('convertSchema', () => {
       expect(
         convertSchema(
           {},
-          // @ts-expect-error
           v.looseObject({
             key1: v.string(),
             key2: v.optional(v.string()),
@@ -284,7 +281,6 @@ describe('convertSchema', () => {
       expect(
         convertSchema(
           {},
-          // @ts-expect-error
           v.strictObject({
             key1: v.string(),
             key2: v.optional(v.string()),

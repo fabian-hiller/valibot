@@ -50,7 +50,7 @@ export type SchemaWithPipeAsync<
    */
   readonly _run: (
     dataset: Dataset<unknown, never>,
-    config: Config<InferIssue<FirstTupleItem<TPipe>>>
+    config: Config<BaseIssue<unknown>>
   ) => Promise<
     Dataset<InferOutput<LastTupleItem<TPipe>>, InferIssue<TPipe[number]>>
   >;

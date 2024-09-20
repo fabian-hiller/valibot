@@ -42,7 +42,7 @@ export interface BaseTransformation<
    */
   readonly _run: (
     dataset: TypedDataset<TInput, never>,
-    config: Config<TIssue>
+    config: Config<BaseIssue<unknown>>
   ) => Dataset<TOutput, TIssue>;
   /**
    * Input, output and issue type.
@@ -93,7 +93,7 @@ export interface BaseTransformationAsync<
    */
   readonly _run: (
     dataset: TypedDataset<TInput, never>,
-    config: Config<TIssue>
+    config: Config<BaseIssue<unknown>>
   ) => Promise<Dataset<TOutput, TIssue>>;
 }
 
