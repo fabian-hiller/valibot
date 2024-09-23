@@ -121,7 +121,7 @@ export function mimeType(
     ),
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (
         dataset.typed &&
         !this.requirement.includes(dataset.value.type as `${string}/${string}`)

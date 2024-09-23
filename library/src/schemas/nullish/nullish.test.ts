@@ -13,9 +13,16 @@ describe('nullish', () => {
       type: 'nullish',
       reference: nullish,
       expects: '(string | null | undefined)',
-      wrapped: { ...string(), _run: expect.any(Function) },
+      wrapped: {
+        ...string(),
+        '~standard': 1,
+        '~vendor': 'valibot',
+        '~validate': expect.any(Function),
+      },
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with never default', () => {
@@ -101,48 +108,54 @@ describe('nullish', () => {
     const schema6 = nullish(string(), () => 'foo');
 
     test('for undefined', () => {
-      expect(
-        schema1._run({ typed: false, value: undefined }, {})
-      ).toStrictEqual({ typed: true, value: null });
-      expect(
-        schema2._run({ typed: false, value: undefined }, {})
-      ).toStrictEqual({ typed: true, value: undefined });
-      expect(
-        schema3._run({ typed: false, value: undefined }, {})
-      ).toStrictEqual({ typed: true, value: 'foo' });
-      expect(
-        schema4._run({ typed: false, value: undefined }, {})
-      ).toStrictEqual({ typed: true, value: null });
-      expect(
-        schema5._run({ typed: false, value: undefined }, {})
-      ).toStrictEqual({ typed: true, value: undefined });
-      expect(
-        schema6._run({ typed: false, value: undefined }, {})
-      ).toStrictEqual({ typed: true, value: 'foo' });
-    });
-
-    test('for null', () => {
-      expect(schema1._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema1['~validate']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: null,
       });
-      expect(schema2._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema2['~validate']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(schema3._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema3['~validate']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(schema4._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema4['~validate']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: null,
       });
-      expect(schema5._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema5['~validate']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(schema6._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema6['~validate']({ value: undefined }, {})).toStrictEqual({
+        typed: true,
+        value: 'foo',
+      });
+    });
+
+    test('for null', () => {
+      expect(schema1['~validate']({ value: null }, {})).toStrictEqual({
+        typed: true,
+        value: null,
+      });
+      expect(schema2['~validate']({ value: null }, {})).toStrictEqual({
+        typed: true,
+        value: undefined,
+      });
+      expect(schema3['~validate']({ value: null }, {})).toStrictEqual({
+        typed: true,
+        value: 'foo',
+      });
+      expect(schema4['~validate']({ value: null }, {})).toStrictEqual({
+        typed: true,
+        value: null,
+      });
+      expect(schema5['~validate']({ value: null }, {})).toStrictEqual({
+        typed: true,
+        value: undefined,
+      });
+      expect(schema6['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });

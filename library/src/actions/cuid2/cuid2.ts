@@ -2,8 +2,8 @@ import { CUID2_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -92,11 +92,11 @@ export function cuid2(
     expects: null,
     requirement: CUID2_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Cuid2', dataset, config);
       }
-      return dataset as Dataset<string, Cuid2Issue<string>>;
+      return dataset as OutputDataset<string, Cuid2Issue<string>>;
     },
   };
 }

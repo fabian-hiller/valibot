@@ -1,4 +1,4 @@
-import type { BaseTransformation, TypedDataset } from '../../types/index.ts';
+import type { BaseTransformation, OutputDataset } from '../../types/index.ts';
 import type { ArrayInput } from '../types.ts';
 
 /**
@@ -58,10 +58,10 @@ export function reduceItems(
     async: false,
     operation,
     initial,
-    _run(dataset) {
+    '~validate'(dataset) {
       // @ts-expect-error
       dataset.value = dataset.value.reduce(this.operation, this.initial);
-      return dataset as TypedDataset<unknown, never>;
+      return dataset as OutputDataset<unknown, never>;
     },
   };
 }

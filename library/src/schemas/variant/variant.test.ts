@@ -3,10 +3,10 @@ import { decimal, email, url } from '../../actions/index.ts';
 import { pipe } from '../../methods/index.ts';
 import { EMAIL_REGEX } from '../../regex.ts';
 import type {
+  FailureDataset,
   InferIssue,
   InferOutput,
-  TypedDataset,
-  UntypedDataset,
+  PartialDataset,
 } from '../../types/index.ts';
 import { expectNoSchemaIssue } from '../../vitest/index.ts';
 import { bigint } from '../bigint/bigint.ts';
@@ -38,7 +38,9 @@ describe('variant', () => {
       key,
       options,
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -136,7 +138,7 @@ describe('variant', () => {
         object({ type: literal('foo') }),
         object({ type: literal('bar') }),
       ]);
-      expect(schema._run({ typed: false, value: 'foo' }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
         typed: false,
         value: 'foo',
         issues: [
@@ -149,13 +151,13 @@ describe('variant', () => {
             received: '"foo"',
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for empty options', () => {
       const schema = variant('type', []);
       const input = { type: 'foo' };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -177,7 +179,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for missing discriminator', () => {
@@ -186,7 +188,7 @@ describe('variant', () => {
         object({ type: literal('bar') }),
       ]);
       const input = { other: 123 };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -208,7 +210,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for invalid discriminator', () => {
@@ -217,7 +219,7 @@ describe('variant', () => {
         object({ type: literal('bar') }),
       ]);
       const input = { type: 'baz' };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -239,7 +241,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for nested missing discriminator', () => {
@@ -252,7 +254,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar' };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -274,7 +276,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for nested invalid discriminator', () => {
@@ -287,7 +289,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', other: 123 };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -309,7 +311,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first missing invalid discriminator', () => {
@@ -340,7 +342,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = {};
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -362,7 +364,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested missing discriminator', () => {
@@ -393,7 +395,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar' };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -415,7 +417,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested invalid discriminator', () => {
@@ -446,7 +448,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', subType2: 'baz-2' };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -468,7 +470,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested invalid discriminator', () => {
@@ -499,7 +501,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', subType1: 'invalid', subType2: 'invalid' };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -521,7 +523,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested invalid discriminator', () => {
@@ -556,7 +558,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', subType1: 'bar-1', subType2: 'invalid' };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -578,7 +580,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested invalid discriminator', () => {
@@ -613,7 +615,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', subType1: 'bar-1', subType2: 'invalid' };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -635,7 +637,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested invalid discriminator', () => {
@@ -674,7 +676,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', subType2: 'baz-2' };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -696,7 +698,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for untyped object', () => {
@@ -706,7 +708,7 @@ describe('variant', () => {
         object({ type: literal('baz'), other: number() }),
       ]);
       const input = { type: 'bar', other: null };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -728,7 +730,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for nested untyped object', () => {
@@ -740,7 +742,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', other: null };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -762,7 +764,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for multiple untyped objects', () => {
@@ -773,7 +775,7 @@ describe('variant', () => {
         object({ type: literal('bar'), other: boolean() }),
       ]);
       const input = { type: 'bar', other: null };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -795,7 +797,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for typed objects', () => {
@@ -806,7 +808,7 @@ describe('variant', () => {
       ]);
       type Schema = typeof schema;
       const input = { type: 'bar', other: 'hello' } as const;
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -829,7 +831,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+      } satisfies PartialDataset<InferOutput<Schema>, InferIssue<Schema>>);
     });
 
     test('for nested typed objects', () => {
@@ -842,7 +844,7 @@ describe('variant', () => {
       ]);
       type Schema = typeof schema;
       const input = { type: 'bar', other: 'hello' } as const;
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -865,7 +867,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+      } satisfies PartialDataset<InferOutput<Schema>, InferIssue<Schema>>);
     });
 
     test('for multiple typed objects', () => {
@@ -878,7 +880,7 @@ describe('variant', () => {
       ]);
       type Schema = typeof schema;
       const input = { type: 'foo', other: 'hello' } as const;
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -901,7 +903,7 @@ describe('variant', () => {
             ],
           },
         ],
-      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+      } satisfies PartialDataset<InferOutput<Schema>, InferIssue<Schema>>);
     });
   });
 });

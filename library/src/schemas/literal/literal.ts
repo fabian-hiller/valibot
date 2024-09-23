@@ -1,8 +1,9 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _stringify } from '../../utils/index.ts';
 
@@ -90,13 +91,16 @@ export function literal(
     async: false,
     literal: literal_,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       if (dataset.value === this.literal) {
+        // @ts-expect-error
         dataset.typed = true;
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as Dataset<Literal, LiteralIssue>;
+      return dataset as OutputDataset<Literal, LiteralIssue>;
     },
   };
 }

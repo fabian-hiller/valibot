@@ -1,3 +1,4 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -96,7 +97,9 @@ export function nonOptionalAsync(
     async: true,
     wrapped,
     message,
-    async _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    async '~validate'(dataset, config = getGlobalConfig()) {
       // If value is `undefined`, add issue and return dataset
       if (dataset.value === undefined) {
         _addIssue(this, 'type', dataset, config);
@@ -104,7 +107,7 @@ export function nonOptionalAsync(
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped._run(dataset, config);
+      return this.wrapped['~validate'](dataset, config);
     },
   };
 }

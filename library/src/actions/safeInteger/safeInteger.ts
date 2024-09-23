@@ -1,8 +1,8 @@
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -98,11 +98,11 @@ export function safeInteger(
     expects: null,
     requirement: Number.isSafeInteger,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'safe integer', dataset, config);
       }
-      return dataset as Dataset<number, SafeIntegerIssue<number>>;
+      return dataset as OutputDataset<number, SafeIntegerIssue<number>>;
     },
   };
 }

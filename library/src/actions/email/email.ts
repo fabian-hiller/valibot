@@ -2,8 +2,8 @@ import { EMAIL_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -102,11 +102,11 @@ export function email(
     async: false,
     requirement: EMAIL_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'email', dataset, config);
       }
-      return dataset as Dataset<string, EmailIssue<string>>;
+      return dataset as OutputDataset<string, EmailIssue<string>>;
     },
   };
 }

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
@@ -23,7 +23,9 @@ describe('mapAsync', () => {
       key,
       value,
       async: true,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -199,9 +201,7 @@ describe('mapAsync', () => {
         [2, 'baz'],
         [null, 'bar'],
       ]);
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -224,14 +224,13 @@ describe('mapAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with abort early', async () => {
       expect(
-        await schema._run(
+        await schema['~validate'](
           {
-            typed: false,
             value: new Map<unknown, unknown>([
               [0, 'foo'],
               [1, 123],
@@ -245,7 +244,7 @@ describe('mapAsync', () => {
         typed: false,
         value: new Map([[0, 'foo']]),
         issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for wrong nested values', async () => {
@@ -261,13 +260,7 @@ describe('mapAsync', () => {
         [new Map(), 'bar'],
       ]);
       expect(
-        await nestedSchema._run(
-          {
-            typed: false,
-            value: input,
-          },
-          {}
-        )
+        await nestedSchema['~validate']({ value: input }, {})
       ).toStrictEqual({
         typed: false,
         value: input,
@@ -320,7 +313,7 @@ describe('mapAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+      } satisfies FailureDataset<InferIssue<typeof nestedSchema>>);
     });
   });
 });

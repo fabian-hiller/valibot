@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { hash, type HashAction, type HashIssue } from './hash.ts';
 
@@ -11,7 +12,7 @@ describe('hash', () => {
       expects: null,
       requirement: expect.any(RegExp),
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -41,11 +42,22 @@ describe('hash', () => {
 
   describe('should return dataset without issues', () => {
     test('for untyped inputs', () => {
+      const issues: [StringIssue] = [
+        {
+          kind: 'schema',
+          type: 'string',
+          input: null,
+          expected: 'string',
+          received: 'null',
+          message: 'message',
+        },
+      ];
       expect(
-        hash(['md5'])._run({ typed: false, value: null }, {})
+        hash(['md5'])['~validate']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 

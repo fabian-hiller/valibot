@@ -2,8 +2,8 @@ import { ISO_WEEK_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -105,11 +105,11 @@ export function isoWeek(
     expects: null,
     requirement: ISO_WEEK_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'week', dataset, config);
       }
-      return dataset as Dataset<string, IsoWeekIssue<string>>;
+      return dataset as OutputDataset<string, IsoWeekIssue<string>>;
     },
   };
 }

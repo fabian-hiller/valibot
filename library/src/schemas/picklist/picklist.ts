@@ -1,9 +1,10 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   ErrorMessage,
   MaybeReadonly,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _joinExpects, _stringify } from '../../utils/index.ts';
 
@@ -91,14 +92,17 @@ export function picklist(
     async: false,
     options,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // @ts-expect-error
       if (this.options.includes(dataset.value)) {
+        // @ts-expect-error
         dataset.typed = true;
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as Dataset<PicklistOptions[number], PicklistIssue>;
+      return dataset as OutputDataset<PicklistOptions[number], PicklistIssue>;
     },
   };
 }

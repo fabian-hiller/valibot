@@ -1,8 +1,8 @@
 import { getDefault } from '../../methods/index.ts';
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   Default,
   InferInput,
   InferIssue,
@@ -88,27 +88,26 @@ export function undefinedable(
     expects: `(${wrapped.expects} | undefined)`,
     async: false,
     wrapped,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // If value is `undefined`, override it with default or return dataset
       if (dataset.value === undefined) {
         // If default is specified, override value of dataset
         if ('default' in this) {
-          dataset.value = getDefault(
-            this,
-            dataset as Dataset<undefined, never>,
-            config
-          );
+          dataset.value = getDefault(this, dataset, config);
         }
 
         // If value is still `undefined`, return dataset
         if (dataset.value === undefined) {
+          // @ts-expect-error
           dataset.typed = true;
           return dataset;
         }
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped._run(dataset, config);
+      return this.wrapped['~validate'](dataset, config);
     },
   };
 

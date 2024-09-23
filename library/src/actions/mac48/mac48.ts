@@ -2,8 +2,8 @@ import { MAC48_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -92,11 +92,11 @@ export function mac48(
     expects: null,
     requirement: MAC48_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, '48-bit MAC', dataset, config);
       }
-      return dataset as Dataset<string, Mac48Issue<string>>;
+      return dataset as OutputDataset<string, Mac48Issue<string>>;
     },
   };
 }

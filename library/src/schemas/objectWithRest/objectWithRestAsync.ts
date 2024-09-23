@@ -1,8 +1,8 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
-  Dataset,
   ErrorMessage,
   InferInput,
   InferIssue,
@@ -12,6 +12,7 @@ import type {
   InferOutput,
   ObjectEntriesAsync,
   ObjectPathItem,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
 import type { ObjectWithRestIssue } from './types.ts';
@@ -116,13 +117,16 @@ export function objectWithRestAsync(
     entries,
     rest,
     message,
-    async _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    async '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (input && typeof input === 'object') {
         // Set typed to `true` and value to blank object
+        // @ts-expect-error
         dataset.typed = true;
         dataset.value = {};
 
@@ -138,7 +142,7 @@ export function objectWithRestAsync(
               return [
                 key,
                 value,
-                await schema._run({ typed: false, value }, config),
+                await schema['~validate']({ value }, config),
               ] as const;
             })
           ),
@@ -156,7 +160,7 @@ export function objectWithRestAsync(
                   [
                     key,
                     value,
-                    await this.rest._run({ typed: false, value }, config),
+                    await this.rest['~validate']({ value }, config),
                   ] as const
               )
           ),
@@ -193,6 +197,7 @@ export function objectWithRestAsync(
 
             // If necessary, abort early
             if (config.abortEarly) {
+              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -200,6 +205,7 @@ export function objectWithRestAsync(
 
           // If not typed, set typed to `false`
           if (!valueDataset.typed) {
+            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -243,6 +249,7 @@ export function objectWithRestAsync(
 
               // If necessary, abort early
               if (config.abortEarly) {
+                // @ts-expect-error
                 dataset.typed = false;
                 break;
               }
@@ -250,6 +257,7 @@ export function objectWithRestAsync(
 
             // If not typed, set typed to `false`
             if (!valueDataset.typed) {
+              // @ts-expect-error
               dataset.typed = false;
             }
 
@@ -265,7 +273,7 @@ export function objectWithRestAsync(
       }
 
       // Return output dataset
-      return dataset as Dataset<
+      return dataset as OutputDataset<
         InferObjectOutput<ObjectEntriesAsync> & { [key: string]: unknown },
         | ObjectWithRestIssue
         | InferObjectIssue<ObjectEntriesAsync>

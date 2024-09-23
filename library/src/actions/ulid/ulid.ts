@@ -2,8 +2,8 @@ import { ULID_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -92,11 +92,11 @@ export function ulid(
     expects: null,
     requirement: ULID_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'ULID', dataset, config);
       }
-      return dataset as Dataset<string, UlidIssue<string>>;
+      return dataset as OutputDataset<string, UlidIssue<string>>;
     },
   };
 }

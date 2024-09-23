@@ -1,8 +1,9 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -76,10 +77,13 @@ export function date(
     expects: 'Date',
     async: false,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       if (dataset.value instanceof Date) {
         // @ts-expect-error
         if (!isNaN(dataset.value)) {
+          // @ts-expect-error
           dataset.typed = true;
         } else {
           _addIssue(this, 'type', dataset, config, {
@@ -89,7 +93,7 @@ export function date(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as Dataset<Date, DateIssue>;
+      return dataset as OutputDataset<Date, DateIssue>;
     },
   };
 }

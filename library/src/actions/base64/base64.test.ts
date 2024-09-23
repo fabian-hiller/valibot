@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { BASE64_REGEX } from '../../regex.ts';
+import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { base64, type Base64Action, type Base64Issue } from './base64.ts';
 
@@ -12,7 +13,7 @@ describe('base64', () => {
       expects: null,
       requirement: BASE64_REGEX,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -44,9 +45,22 @@ describe('base64', () => {
     const action = base64();
 
     test('for untyped inputs', () => {
-      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+      const issues: [StringIssue] = [
+        {
+          kind: 'schema',
+          type: 'string',
+          input: null,
+          expected: 'string',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        action['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 

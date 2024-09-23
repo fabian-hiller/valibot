@@ -1,8 +1,9 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseSchemaAsync,
-  Dataset,
   ErrorMessage,
   MaybePromise,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { CustomIssue } from './types.ts';
@@ -79,13 +80,16 @@ export function customAsync<TInput>(
     async: true,
     check,
     message,
-    async _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    async '~validate'(dataset, config = getGlobalConfig()) {
       if (await this.check(dataset.value)) {
+        // @ts-expect-error
         dataset.typed = true;
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as Dataset<TInput, CustomIssue>;
+      return dataset as OutputDataset<TInput, CustomIssue>;
     },
   };
 }

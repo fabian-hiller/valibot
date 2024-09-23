@@ -102,7 +102,7 @@ export function checkItems(
     expects: null,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed) {
         for (let index = 0; index < dataset.value.length; index++) {
           const item = dataset.value[index];

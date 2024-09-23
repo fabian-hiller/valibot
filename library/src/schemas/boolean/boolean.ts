@@ -1,8 +1,9 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -76,13 +77,16 @@ export function boolean(
     expects: 'boolean',
     async: false,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       if (typeof dataset.value === 'boolean') {
+        // @ts-expect-error
         dataset.typed = true;
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as Dataset<boolean, BooleanIssue>;
+      return dataset as OutputDataset<boolean, BooleanIssue>;
     },
   };
 }

@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { NumberIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { finite, type FiniteAction, type FiniteIssue } from './finite.ts';
 
@@ -11,7 +12,7 @@ describe('finite', () => {
       expects: null,
       requirement: expect.any(Function),
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -43,9 +44,22 @@ describe('finite', () => {
     const action = finite();
 
     test('for untyped inputs', () => {
-      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+      const issues: [NumberIssue] = [
+        {
+          kind: 'schema',
+          type: 'number',
+          input: null,
+          expected: 'number',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        action['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 

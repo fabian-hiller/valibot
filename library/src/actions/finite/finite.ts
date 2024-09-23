@@ -1,8 +1,8 @@
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -94,11 +94,11 @@ export function finite(
     expects: null,
     requirement: Number.isFinite,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'finite', dataset, config);
       }
-      return dataset as Dataset<number, FiniteIssue<number>>;
+      return dataset as OutputDataset<number, FiniteIssue<number>>;
     },
   };
 }

@@ -1,4 +1,4 @@
-import type { BaseTransformation, TypedDataset } from '../../types/index.ts';
+import type { BaseTransformation, OutputDataset } from '../../types/index.ts';
 
 /**
  * Transform action type.
@@ -35,11 +35,11 @@ export function transform<TInput, TOutput>(
     reference: transform,
     async: false,
     operation,
-    _run(dataset) {
+    '~validate'(dataset) {
       // @ts-expect-error
       dataset.value = this.operation(dataset.value);
       // @ts-expect-error
-      return dataset as TypedDataset<TOutput, never>;
+      return dataset as OutputDataset<TOutput, never>;
     },
   };
 }

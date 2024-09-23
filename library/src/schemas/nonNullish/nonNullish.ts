@@ -1,3 +1,4 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type {
@@ -79,7 +80,9 @@ export function nonNullish(
     async: false,
     wrapped,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // If value is `null` or `undefined`, add issue and return dataset
       if (dataset.value === null || dataset.value === undefined) {
         _addIssue(this, 'type', dataset, config);
@@ -87,7 +90,7 @@ export function nonNullish(
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped._run(dataset, config);
+      return this.wrapped['~validate'](dataset, config);
     },
   };
 }

@@ -13,9 +13,16 @@ describe('nullishAsync', () => {
       type: 'nullish',
       reference: nullishAsync,
       expects: '(string | null | undefined)',
-      wrapped: { ...string(), _run: expect.any(Function) },
+      wrapped: {
+        ...string(),
+        '~standard': 1,
+        '~vendor': 'valibot',
+        '~validate': expect.any(Function),
+      },
       async: true,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with never default', () => {
@@ -129,86 +136,68 @@ describe('nullishAsync', () => {
 
     test('for undefined', async () => {
       expect(
-        await schema1._run({ typed: false, value: undefined }, {})
+        await schema1['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: null });
       expect(
-        await schema2._run({ typed: false, value: undefined }, {})
+        await schema2['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: undefined });
       expect(
-        await schema3._run({ typed: false, value: undefined }, {})
+        await schema3['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: 'foo' });
       expect(
-        await schema4._run({ typed: false, value: undefined }, {})
+        await schema4['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: null });
       expect(
-        await schema5._run({ typed: false, value: undefined }, {})
+        await schema5['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: undefined });
       expect(
-        await schema6._run({ typed: false, value: undefined }, {})
+        await schema6['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: 'foo' });
       expect(
-        await schema7._run({ typed: false, value: undefined }, {})
+        await schema7['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: null });
       expect(
-        await schema8._run({ typed: false, value: undefined }, {})
+        await schema8['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: undefined });
       expect(
-        await schema9._run({ typed: false, value: undefined }, {})
+        await schema9['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: 'foo' });
     });
 
     test('for null', async () => {
-      expect(
-        await schema1._run({ typed: false, value: null }, {})
-      ).toStrictEqual({
+      expect(await schema1['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: null,
       });
-      expect(
-        await schema2._run({ typed: false, value: null }, {})
-      ).toStrictEqual({
+      expect(await schema2['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(
-        await schema3._run({ typed: false, value: null }, {})
-      ).toStrictEqual({
+      expect(await schema3['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(
-        await schema4._run({ typed: false, value: null }, {})
-      ).toStrictEqual({
+      expect(await schema4['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: null,
       });
-      expect(
-        await schema5._run({ typed: false, value: null }, {})
-      ).toStrictEqual({
+      expect(await schema5['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(
-        await schema6._run({ typed: false, value: null }, {})
-      ).toStrictEqual({
+      expect(await schema6['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(
-        await schema7._run({ typed: false, value: null }, {})
-      ).toStrictEqual({
+      expect(await schema7['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: null,
       });
-      expect(
-        await schema8._run({ typed: false, value: null }, {})
-      ).toStrictEqual({
+      expect(await schema8['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(
-        await schema9._run({ typed: false, value: null }, {})
-      ).toStrictEqual({
+      expect(await schema9['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });

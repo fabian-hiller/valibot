@@ -35,7 +35,10 @@ export function any(): AnySchema {
     reference: any,
     expects: 'any',
     async: false,
-    _run(dataset) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset) {
+      // @ts-expect-error
       dataset.typed = true;
       return dataset;
     },

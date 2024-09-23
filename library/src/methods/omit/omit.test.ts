@@ -8,7 +8,7 @@ import {
   objectWithRest,
   string,
 } from '../../schemas/index.ts';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssue } from '../../vitest/index.ts';
 import { omit } from './omit.ts';
 
@@ -38,12 +38,24 @@ describe('omit', () => {
         reference: object,
         expects: 'Object',
         entries: {
-          key2: { ...number(), _run: expect.any(Function) },
-          key4: { ...number(), _run: expect.any(Function) },
+          key2: {
+            ...number(),
+            '~standard': 1,
+            '~vendor': 'valibot',
+            '~validate': expect.any(Function),
+          },
+          key4: {
+            ...number(),
+            '~standard': 1,
+            '~vendor': 'valibot',
+            '~validate': expect.any(Function),
+          },
         },
         message: undefined,
         async: false,
-        _run: expect.any(Function),
+        '~standard': 1,
+        '~vendor': 'valibot',
+        '~validate': expect.any(Function),
       } satisfies typeof schema);
     });
 
@@ -54,11 +66,8 @@ describe('omit', () => {
 
       test('for unknown entries', () => {
         expect(
-          schema._run(
-            {
-              typed: false,
-              value: { key1: 'foo', key2: 123, key4: 456, other: null },
-            },
+          schema['~validate'](
+            { value: { key1: 'foo', key2: 123, key4: 456, other: null } },
             {}
           )
         ).toStrictEqual({
@@ -70,31 +79,31 @@ describe('omit', () => {
 
     describe('should return dataset with nested issues', () => {
       test('if a not omitted key is missing', () => {
-        expect(
-          schema._run({ typed: false, value: { key2: 123 } }, {})
-        ).toStrictEqual({
-          typed: false,
-          value: { key2: 123 },
-          issues: [
-            {
-              ...baseInfo,
-              kind: 'schema',
-              type: 'number',
-              input: undefined,
-              expected: 'number',
-              received: 'undefined',
-              path: [
-                {
-                  type: 'object',
-                  origin: 'value',
-                  input: { key2: 123 },
-                  key: 'key4',
-                  value: undefined,
-                },
-              ],
-            } satisfies NumberIssue,
-          ],
-        } satisfies UntypedDataset<InferIssue<typeof schema>>);
+        expect(schema['~validate']({ value: { key2: 123 } }, {})).toStrictEqual(
+          {
+            typed: false,
+            value: { key2: 123 },
+            issues: [
+              {
+                ...baseInfo,
+                kind: 'schema',
+                type: 'number',
+                input: undefined,
+                expected: 'number',
+                received: 'undefined',
+                path: [
+                  {
+                    type: 'object',
+                    origin: 'value',
+                    input: { key2: 123 },
+                    key: 'key4',
+                    value: undefined,
+                  },
+                ],
+              } satisfies NumberIssue,
+            ],
+          } satisfies FailureDataset<InferIssue<typeof schema>>
+        );
       });
     });
   });
@@ -109,13 +118,30 @@ describe('omit', () => {
         reference: objectWithRest,
         expects: 'Object',
         entries: {
-          key1: { ...string(), _run: expect.any(Function) },
-          key4: { ...number(), _run: expect.any(Function) },
+          key1: {
+            ...string(),
+            '~standard': 1,
+            '~vendor': 'valibot',
+            '~validate': expect.any(Function),
+          },
+          key4: {
+            ...number(),
+            '~standard': 1,
+            '~vendor': 'valibot',
+            '~validate': expect.any(Function),
+          },
         },
-        rest: { ...boolean(), _run: expect.any(Function) },
+        rest: {
+          ...boolean(),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
+        },
         message: undefined,
         async: false,
-        _run: expect.any(Function),
+        '~standard': 1,
+        '~vendor': 'valibot',
+        '~validate': expect.any(Function),
       } satisfies typeof schema);
     });
 
@@ -134,7 +160,7 @@ describe('omit', () => {
     describe('should return dataset with nested issues', () => {
       test('if a not omitted key is missing', () => {
         expect(
-          schema._run({ typed: false, value: { key1: 'foo' } }, {})
+          schema['~validate']({ value: { key1: 'foo' } }, {})
         ).toStrictEqual({
           typed: false,
           value: { key1: 'foo' },
@@ -157,13 +183,13 @@ describe('omit', () => {
               ],
             } satisfies NumberIssue,
           ],
-        } satisfies UntypedDataset<InferIssue<typeof schema>>);
+        } satisfies FailureDataset<InferIssue<typeof schema>>);
       });
 
       test('if an omitted key does not match rest', () => {
         expect(
-          schema._run(
-            { typed: false, value: { key1: 'foo', key2: null, key4: 456 } },
+          schema['~validate'](
+            { value: { key1: 'foo', key2: null, key4: 456 } },
             {}
           )
         ).toStrictEqual({
@@ -188,7 +214,7 @@ describe('omit', () => {
               ],
             } satisfies BooleanIssue,
           ],
-        } satisfies UntypedDataset<InferIssue<typeof schema>>);
+        } satisfies FailureDataset<InferIssue<typeof schema>>);
       });
     });
   });

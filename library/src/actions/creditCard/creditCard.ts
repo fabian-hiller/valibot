@@ -1,8 +1,8 @@
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _isLuhnAlgo } from '../../utils/index.ts';
 
@@ -135,11 +135,11 @@ export function creditCard(
         _isLuhnAlgo(sanitized)) as boolean;
     },
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'credit card', dataset, config);
       }
-      return dataset as Dataset<string, CreditCardIssue<string>>;
+      return dataset as OutputDataset<string, CreditCardIssue<string>>;
     },
   };
 }

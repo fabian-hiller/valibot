@@ -2,8 +2,8 @@ import { MAC64_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -92,11 +92,11 @@ export function mac64(
     expects: null,
     requirement: MAC64_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, '64-bit MAC', dataset, config);
       }
-      return dataset as Dataset<string, Mac64Issue<string>>;
+      return dataset as OutputDataset<string, Mac64Issue<string>>;
     },
   };
 }

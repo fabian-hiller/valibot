@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
@@ -25,7 +25,9 @@ describe('recordAsync', () => {
       key,
       value,
       async: true,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -185,15 +187,7 @@ describe('recordAsync', () => {
         baz: undefined,
         other: 4,
       };
-      expect(
-        await schema._run(
-          {
-            typed: false,
-            value: input,
-          },
-          {}
-        )
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: {
           foo: input.foo,
@@ -220,14 +214,13 @@ describe('recordAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with abort early', async () => {
       expect(
-        await schema._run(
+        await schema['~validate'](
           {
-            typed: false,
             value: {
               foo: 1,
               bar: '2',
@@ -241,7 +234,7 @@ describe('recordAsync', () => {
         typed: false,
         value: { foo: 1 },
         issues: [{ ...numberIssue1, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for wrong nested values', async () => {
@@ -255,7 +248,7 @@ describe('recordAsync', () => {
         key2: 123,
       };
       expect(
-        await nestedSchema._run({ typed: false, value: input }, {})
+        await nestedSchema['~validate']({ value: input }, {})
       ).toStrictEqual({
         typed: false,
         value: input,
@@ -302,7 +295,7 @@ describe('recordAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+      } satisfies FailureDataset<InferIssue<typeof nestedSchema>>);
     });
   });
 });

@@ -6,8 +6,9 @@ import type {
 } from '../../schemas/index.ts';
 import type {
   DeepPickN,
-  TypedDataset,
-  UntypedDataset,
+  FailureDataset,
+  PartialDataset,
+  SuccessDataset,
 } from '../../types/index.ts';
 import {
   type PartialCheckActionAsync,
@@ -34,7 +35,7 @@ describe('partialCheckAsync', () => {
       expects: null,
       requirement,
       async: true,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -118,7 +119,7 @@ describe('partialCheckAsync', () => {
 
   describe('should return same dataset', () => {
     test('if root is untyped', async () => {
-      const dataset: UntypedDataset<ObjectIssue> = {
+      const dataset: FailureDataset<ObjectIssue> = {
         typed: false,
         value: null,
         issues: [
@@ -133,7 +134,7 @@ describe('partialCheckAsync', () => {
           },
         ],
       };
-      expect(await action._run(dataset, {})).toStrictEqual(dataset);
+      expect(await action['~validate'](dataset, {})).toStrictEqual(dataset);
     });
 
     test('if part of path is untyped', async () => {
@@ -142,7 +143,7 @@ describe('partialCheckAsync', () => {
         tuple: [123, { key: 'foo' }, 456],
         other: 'bar',
       };
-      const dataset: UntypedDataset<ObjectIssue> = {
+      const dataset: FailureDataset<ObjectIssue> = {
         typed: false,
         value: input,
         issues: [
@@ -165,7 +166,7 @@ describe('partialCheckAsync', () => {
           },
         ],
       };
-      expect(await action._run(dataset, {})).toStrictEqual(dataset);
+      expect(await action['~validate'](dataset, {})).toStrictEqual(dataset);
     });
 
     test('if entire path is untyped', async () => {
@@ -174,7 +175,7 @@ describe('partialCheckAsync', () => {
         tuple: [123, { key: 'foo' }, 456],
         other: 'bar',
       };
-      const dataset: UntypedDataset<StringIssue> = {
+      const dataset: FailureDataset<StringIssue> = {
         typed: false,
         value: input,
         issues: [
@@ -204,11 +205,11 @@ describe('partialCheckAsync', () => {
           },
         ],
       };
-      expect(await action._run(dataset, {})).toStrictEqual(dataset);
+      expect(await action['~validate'](dataset, {})).toStrictEqual(dataset);
     });
 
     test('if validation returns true', async () => {
-      const dataset: TypedDataset<Input, never> = {
+      const dataset: SuccessDataset<Input> = {
         typed: true,
         value: {
           nested: { key: 'foo' },
@@ -216,7 +217,7 @@ describe('partialCheckAsync', () => {
           other: 'bar',
         },
       };
-      expect(await action._run(dataset, {})).toStrictEqual(dataset);
+      expect(await action['~validate'](dataset, {})).toStrictEqual(dataset);
     });
   });
 
@@ -227,11 +228,11 @@ describe('partialCheckAsync', () => {
         tuple: [123, { key: 'baz' }, 456],
         other: 'bar',
       };
-      const dataset: TypedDataset<Input, never> = {
+      const dataset: SuccessDataset<Input> = {
         typed: true,
         value: input,
       };
-      expect(await action._run(dataset, {})).toStrictEqual({
+      expect(await action['~validate'](dataset, {})).toStrictEqual({
         ...dataset,
         issues: [
           {
@@ -244,7 +245,7 @@ describe('partialCheckAsync', () => {
             requirement,
           },
         ],
-      } satisfies TypedDataset<Input, PartialCheckIssue<Selection>>);
+      } satisfies PartialDataset<Input, PartialCheckIssue<Selection>>);
     });
 
     test('if only unselected paths are untyped', async () => {
@@ -298,12 +299,12 @@ describe('partialCheckAsync', () => {
           },
         ],
       };
-      const dataset: UntypedDataset<NumberIssue | StringIssue> = {
+      const dataset: FailureDataset<NumberIssue | StringIssue> = {
         typed: false,
         value: input,
         issues: [firstIssue, secondIssue],
       };
-      expect(await action._run(dataset, {})).toStrictEqual({
+      expect(await action['~validate'](dataset, {})).toStrictEqual({
         ...dataset,
         issues: [
           firstIssue,
@@ -318,7 +319,7 @@ describe('partialCheckAsync', () => {
             requirement,
           },
         ],
-      } satisfies UntypedDataset<
+      } satisfies FailureDataset<
         NumberIssue | StringIssue | PartialCheckIssue<Selection>
       >);
     });

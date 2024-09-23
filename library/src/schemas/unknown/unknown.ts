@@ -30,7 +30,10 @@ export function unknown(): UnknownSchema {
     reference: unknown,
     expects: 'unknown',
     async: false,
-    _run(dataset) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset) {
+      // @ts-expect-error
       dataset.typed = true;
       return dataset;
     },

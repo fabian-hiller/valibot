@@ -1,7 +1,7 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   ErrorMessage,
   InferInput,
   InferIssue,
@@ -11,6 +11,7 @@ import type {
   InferOutput,
   ObjectEntries,
   ObjectPathItem,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
 import type { ObjectWithRestIssue } from './types.ts';
@@ -106,13 +107,16 @@ export function objectWithRest(
     entries,
     rest,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (input && typeof input === 'object') {
         // Set typed to `true` and value to blank object
+        // @ts-expect-error
         dataset.typed = true;
         dataset.value = {};
 
@@ -123,8 +127,8 @@ export function objectWithRest(
         for (const key in this.entries) {
           // Get and parse value of key
           const value = input[key as keyof typeof input];
-          const valueDataset = this.entries[key]._run(
-            { typed: false, value },
+          const valueDataset = this.entries[key]['~validate'](
+            { value },
             config
           );
 
@@ -157,6 +161,7 @@ export function objectWithRest(
 
             // If necessary, abort early
             if (config.abortEarly) {
+              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -164,6 +169,7 @@ export function objectWithRest(
 
           // If not typed, set typed to `false`
           if (!valueDataset.typed) {
+            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -180,10 +186,7 @@ export function objectWithRest(
           for (const key in input) {
             if (_isValidObjectKey(input, key) && !(key in this.entries)) {
               const value: unknown = input[key as keyof typeof input];
-              const valueDataset = this.rest._run(
-                { typed: false, value },
-                config
-              );
+              const valueDataset = this.rest['~validate']({ value }, config);
 
               // If there are issues, capture them
               if (valueDataset.issues) {
@@ -214,6 +217,7 @@ export function objectWithRest(
 
                 // If necessary, abort early
                 if (config.abortEarly) {
+                  // @ts-expect-error
                   dataset.typed = false;
                   break;
                 }
@@ -221,6 +225,7 @@ export function objectWithRest(
 
               // If not typed, set typed to `false`
               if (!valueDataset.typed) {
+                // @ts-expect-error
                 dataset.typed = false;
               }
 
@@ -237,7 +242,7 @@ export function objectWithRest(
       }
 
       // Return output dataset
-      return dataset as Dataset<
+      return dataset as OutputDataset<
         InferObjectOutput<ObjectEntries> & { [key: string]: unknown },
         | ObjectWithRestIssue
         | InferObjectIssue<ObjectEntries>

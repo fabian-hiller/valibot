@@ -22,20 +22,20 @@ describe('rawTransformAsync', () => {
       type: 'raw_transform',
       reference: rawTransformAsync,
       async: true,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     } satisfies RawTransformActionAsync<string, number>);
   });
 
   describe('should return dataset without issues', () => {
     test('for valid inputs', async () => {
       expect(
-        await action._run({ typed: true, value: 'foo' }, {})
+        await action['~validate']({ typed: true, value: 'foo' }, {})
       ).toStrictEqual({
         typed: true,
         value: 3,
       });
       expect(
-        await action._run({ typed: true, value: '123456789' }, {})
+        await action['~validate']({ typed: true, value: '123456789' }, {})
       ).toStrictEqual({
         typed: true,
         value: 9,
@@ -45,28 +45,28 @@ describe('rawTransformAsync', () => {
 
   describe('should return dataset with issues', () => {
     test('for invalid inputs', async () => {
-      expect(await action._run({ typed: true, value: 'fo' }, {})).toStrictEqual(
-        {
-          typed: false,
-          value: 'fo',
-          issues: [
-            {
-              kind: 'transformation',
-              type: 'raw_transform',
-              expected: null,
-              message: 'message',
-              input: 'fo',
-              received: '"fo"',
-              requirement: undefined,
-              path: undefined,
-              issues: undefined,
-              lang: undefined,
-              abortEarly: undefined,
-              abortPipeEarly: undefined,
-            },
-          ],
-        }
-      );
+      expect(
+        await action['~validate']({ typed: true, value: 'fo' }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: 'fo',
+        issues: [
+          {
+            kind: 'transformation',
+            type: 'raw_transform',
+            expected: null,
+            message: 'message',
+            input: 'fo',
+            received: '"fo"',
+            requirement: undefined,
+            path: undefined,
+            issues: undefined,
+            lang: undefined,
+            abortEarly: undefined,
+            abortPipeEarly: undefined,
+          },
+        ],
+      });
     });
   });
 });

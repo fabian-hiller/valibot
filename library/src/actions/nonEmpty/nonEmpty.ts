@@ -89,7 +89,7 @@ export function nonEmpty(
     async: false,
     expects: '!0',
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && dataset.value.length === 0) {
         _addIssue(this, 'length', dataset, config, {
           received: '0',

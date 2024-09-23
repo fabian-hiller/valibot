@@ -112,7 +112,7 @@ export function size(
     expects: `${requirement}`,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && dataset.value.size !== this.requirement) {
         _addIssue(this, 'size', dataset, config, {
           received: `${dataset.value.size}`,

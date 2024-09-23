@@ -1,9 +1,10 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   ErrorMessage,
   InferIssue,
+  OutputDataset,
   SetPathItem,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
@@ -81,20 +82,23 @@ export function set(
     async: false,
     value,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (input instanceof Set) {
         // Set typed to `true` and value to empty set
+        // @ts-expect-error
         dataset.typed = true;
         dataset.value = new Set();
 
         // Parse schema of each set value
         for (const inputValue of input) {
-          const valueDataset = this.value._run(
-            { typed: false, value: inputValue },
+          const valueDataset = this.value['~validate'](
+            { value: inputValue },
             config
           );
 
@@ -127,6 +131,7 @@ export function set(
 
             // If necessary, abort early
             if (config.abortEarly) {
+              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -134,6 +139,7 @@ export function set(
 
           // If not typed, set typed to `false`
           if (!valueDataset.typed) {
+            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -148,7 +154,10 @@ export function set(
       }
 
       // Return output dataset
-      return dataset as Dataset<Set<unknown>, SetIssue | BaseIssue<unknown>>;
+      return dataset as OutputDataset<
+        Set<unknown>,
+        SetIssue | BaseIssue<unknown>
+      >;
     },
   };
 }

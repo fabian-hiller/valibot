@@ -1,8 +1,8 @@
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -104,11 +104,11 @@ export function url(
       }
     },
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'URL', dataset, config);
       }
-      return dataset as Dataset<string, UrlIssue<string>>;
+      return dataset as OutputDataset<string, UrlIssue<string>>;
     },
   };
 }

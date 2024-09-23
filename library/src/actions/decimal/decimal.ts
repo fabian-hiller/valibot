@@ -2,8 +2,8 @@ import { DECIMAL_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -95,11 +95,11 @@ export function decimal(
     expects: null,
     requirement: DECIMAL_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'decimal', dataset, config);
       }
-      return dataset as Dataset<string, DecimalIssue<string>>;
+      return dataset as OutputDataset<string, DecimalIssue<string>>;
     },
   };
 }

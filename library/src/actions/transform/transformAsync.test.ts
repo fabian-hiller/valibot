@@ -11,7 +11,7 @@ describe('transformAsync', () => {
       reference: transformAsync,
       async: true,
       operation,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     } satisfies TransformActionAsync<string, number>);
   });
 
@@ -19,7 +19,7 @@ describe('transformAsync', () => {
     test('to length of string', async () => {
       const action = transformAsync(async (input: string) => input.length);
       expect(
-        await action._run({ typed: true, value: '123456' }, {})
+        await action['~validate']({ typed: true, value: '123456' }, {})
       ).toStrictEqual({
         typed: true,
         value: 6,
@@ -32,7 +32,7 @@ describe('transformAsync', () => {
         key2: 123,
       }));
       expect(
-        await action._run({ typed: true, value: { key1: 'foo' } }, {})
+        await action['~validate']({ typed: true, value: { key1: 'foo' } }, {})
       ).toStrictEqual({
         typed: true,
         value: { key1: 'foo', key2: 123 },

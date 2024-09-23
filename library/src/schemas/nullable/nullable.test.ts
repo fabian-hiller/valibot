@@ -13,9 +13,16 @@ describe('nullable', () => {
       type: 'nullable',
       reference: nullable,
       expects: '(string | null)',
-      wrapped: { ...string(), _run: expect.any(Function) },
+      wrapped: {
+        ...string(),
+        '~standard': 1,
+        '~vendor': 'valibot',
+        '~validate': expect.any(Function),
+      },
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with never default', () => {
@@ -80,19 +87,19 @@ describe('nullable', () => {
     const schema4 = nullable(string(), () => 'foo');
 
     test('for null', () => {
-      expect(schema1._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema1['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: null,
       });
-      expect(schema2._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema2['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(schema3._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema3['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: null,
       });
-      expect(schema4._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema4['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });

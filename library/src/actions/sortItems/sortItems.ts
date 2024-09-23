@@ -48,7 +48,7 @@ export function sortItems(
     reference: sortItems,
     async: false,
     operation,
-    _run(dataset) {
+    '~validate'(dataset) {
       dataset.value = dataset.value.sort(this.operation);
       return dataset;
     },

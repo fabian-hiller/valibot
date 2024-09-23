@@ -1,10 +1,11 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   ErrorMessage,
   InferInput,
   InferOutput,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _joinExpects } from '../../utils/index.ts';
 import type {
@@ -102,14 +103,18 @@ export function variant(
     key,
     options,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (input && typeof input === 'object') {
         // Create output dataset variable
-        let outputDataset: Dataset<unknown, BaseIssue<unknown>> | undefined;
+        let outputDataset:
+          | OutputDataset<unknown, BaseIssue<unknown>>
+          | undefined;
 
         // Create variables to store invalid discriminator information
         let maxDiscriminatorPriority = 0;
@@ -137,7 +142,7 @@ export function variant(
               for (const currentKey of allKeys) {
                 // If any discriminator is invalid, mark keys as invalid
                 if (
-                  schema.entries[currentKey]._run(
+                  schema.entries[currentKey]['~validate'](
                     // @ts-expect-error
                     { typed: false, value: input[currentKey] },
                     config
@@ -179,8 +184,8 @@ export function variant(
 
               // If all discriminators are valid, parse input with schema of option
               if (keysAreValid) {
-                const optionDataset = schema._run(
-                  { typed: false, value: input },
+                const optionDataset = schema['~validate'](
+                  { value: input },
                   config
                 );
 
@@ -236,7 +241,7 @@ export function variant(
       }
 
       // Finally, return  output dataset
-      return dataset as Dataset<
+      return dataset as OutputDataset<
         InferOutput<VariantOptions<string>[number]>,
         VariantIssue | BaseIssue<unknown>
       >;

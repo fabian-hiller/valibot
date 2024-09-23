@@ -1,9 +1,10 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchemaAsync,
-  Dataset,
   ErrorMessage,
   InferIssue,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _joinExpects } from '../../utils/index.ts';
 import type {
@@ -88,7 +89,9 @@ export function intersectAsync(
     async: true,
     options,
     message,
-    async _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    async '~validate'(dataset, config = getGlobalConfig()) {
       // Parse input with schema of options, if not empty
       if (this.options.length) {
         // Get input value from dataset
@@ -98,12 +101,13 @@ export function intersectAsync(
         let outputs: unknown[] | undefined;
 
         // Set typed initially to `true`
+        // @ts-expect-error
         dataset.typed = true;
 
         // Parse schema of each option async
         const optionDatasets = await Promise.all(
           this.options.map((schema) =>
-            schema._run({ typed: false, value: input }, config)
+            schema['~validate']({ value: input }, config)
           )
         );
 
@@ -121,6 +125,7 @@ export function intersectAsync(
 
             // If necessary, abort early
             if (config.abortEarly) {
+              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -128,6 +133,7 @@ export function intersectAsync(
 
           // If not typed, set typed to `false`
           if (!optionDataset.typed) {
+            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -169,7 +175,10 @@ export function intersectAsync(
       }
 
       // Return output dataset
-      return dataset as Dataset<never, IntersectIssue | BaseIssue<unknown>>;
+      return dataset as OutputDataset<
+        never,
+        IntersectIssue | BaseIssue<unknown>
+      >;
     },
   };
 }

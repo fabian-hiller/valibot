@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import type { TypedDataset } from '../../types/dataset.ts';
+import type { StringIssue } from '../../schemas/index.ts';
+import type { PartialDataset } from '../../types/dataset.ts';
 import { expectNoActionIssue } from '../../vitest/index.ts';
 import {
   checkItems,
@@ -17,7 +18,7 @@ describe('checkItems', () => {
       expects: null,
       requirement,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -56,9 +57,22 @@ describe('checkItems', () => {
     const action = checkItems<number[]>((item: number) => item > 9);
 
     test('for untyped inputs', () => {
-      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+      const issues: [StringIssue] = [
+        {
+          kind: 'schema',
+          type: 'string',
+          input: null,
+          expected: 'string',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        action['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 
@@ -89,7 +103,9 @@ describe('checkItems', () => {
 
     test('for invalid content', () => {
       const input = [-12, 345, 6, 10];
-      expect(action._run({ typed: true, value: input }, {})).toStrictEqual({
+      expect(
+        action['~validate']({ typed: true, value: input }, {})
+      ).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -122,7 +138,7 @@ describe('checkItems', () => {
             ],
           },
         ],
-      } satisfies TypedDataset<number[], CheckItemsIssue<number[]>>);
+      } satisfies PartialDataset<number[], CheckItemsIssue<number[]>>);
     });
   });
 });

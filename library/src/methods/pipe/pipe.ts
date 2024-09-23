@@ -1,15 +1,17 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   Config,
-  Dataset,
   FirstTupleItem,
   InferInput,
   InferIssue,
   InferOutput,
   LastTupleItem,
+  OutputDataset,
   PipeAction,
   PipeItem,
+  UnknownDataset,
 } from '../../types/index.ts';
 
 /**
@@ -21,13 +23,25 @@ export type SchemaWithPipe<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...PipeItem<any, unknown, BaseIssue<unknown>>[],
   ],
-> = Omit<FirstTupleItem<TPipe>, '_run' | '_types'> & {
+> = Omit<FirstTupleItem<TPipe>, '~types' | '~validate'> & {
   /**
    * The pipe items.
    */
   readonly pipe: TPipe;
   /**
-   * Parses unknown input.
+   * The input, output and issue type.
+   *
+   * @internal
+   */
+  readonly '~types'?:
+    | {
+        readonly input: InferInput<FirstTupleItem<TPipe>>;
+        readonly output: InferOutput<LastTupleItem<TPipe>>;
+        readonly issue: InferIssue<TPipe[number]>;
+      }
+    | undefined;
+  /**
+   * Parses unknown input values.
    *
    * @param dataset The input dataset.
    * @param config The configuration.
@@ -36,20 +50,13 @@ export type SchemaWithPipe<
    *
    * @internal
    */
-  readonly _run: (
-    dataset: Dataset<unknown, never>,
-    config: Config<BaseIssue<unknown>>
-  ) => Dataset<InferOutput<LastTupleItem<TPipe>>, InferIssue<TPipe[number]>>;
-  /**
-   * Input, output and issue type.
-   *
-   * @internal
-   */
-  readonly _types?: {
-    readonly input: InferInput<FirstTupleItem<TPipe>>;
-    readonly output: InferOutput<LastTupleItem<TPipe>>;
-    readonly issue: InferIssue<TPipe[number]>;
-  };
+  readonly '~validate': (
+    dataset: UnknownDataset,
+    config?: Config<BaseIssue<unknown>>
+  ) => OutputDataset<
+    InferOutput<LastTupleItem<TPipe>>,
+    InferIssue<TPipe[number]>
+  >;
 };
 
 /**
@@ -2639,7 +2646,7 @@ export function pipe<
   return {
     ...pipe[0],
     pipe,
-    _run(dataset, config) {
+    '~validate'(dataset, config = getGlobalConfig()) {
       // Execute pipeline items in sequence
       for (const item of pipe) {
         // Exclude metadata items from execution
@@ -2650,6 +2657,7 @@ export function pipe<
             dataset.issues &&
             (item.kind === 'schema' || item.kind === 'transformation')
           ) {
+            // @ts-expect-error
             dataset.typed = false;
             break;
           }
@@ -2660,7 +2668,7 @@ export function pipe<
             (!config.abortEarly && !config.abortPipeEarly)
           ) {
             // @ts-expect-error
-            dataset = item._run(dataset, config);
+            dataset = item['~validate'](dataset, config);
           }
         }
       }

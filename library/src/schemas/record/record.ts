@@ -1,10 +1,11 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   ErrorMessage,
   InferIssue,
   ObjectPathItem,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
 import type {
@@ -109,13 +110,16 @@ export function record(
     key,
     value,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (input && typeof input === 'object') {
         // Set typed to `true` and value to empty object
+        // @ts-expect-error
         dataset.typed = true;
         dataset.value = {};
 
@@ -128,8 +132,8 @@ export function record(
             const entryValue: unknown = input[entryKey as keyof typeof input];
 
             // Get dataset of key schema
-            const keyDataset = this.key._run(
-              { typed: false, value: entryKey },
+            const keyDataset = this.key['~validate'](
+              { value: entryKey },
               config
             );
 
@@ -158,14 +162,15 @@ export function record(
 
               // If necessary, abort early
               if (config.abortEarly) {
+                // @ts-expect-error
                 dataset.typed = false;
                 break;
               }
             }
 
             // Get dataset of value schema
-            const valueDataset = this.value._run(
-              { typed: false, value: entryValue },
+            const valueDataset = this.value['~validate'](
+              { value: entryValue },
               config
             );
 
@@ -198,6 +203,7 @@ export function record(
 
               // If necessary, abort early
               if (config.abortEarly) {
+                // @ts-expect-error
                 dataset.typed = false;
                 break;
               }
@@ -205,6 +211,7 @@ export function record(
 
             // If not typed, set typed to `false`
             if (!keyDataset.typed || !valueDataset.typed) {
+              // @ts-expect-error
               dataset.typed = false;
             }
 
@@ -222,7 +229,7 @@ export function record(
       }
 
       // Return output dataset
-      return dataset as Dataset<
+      return dataset as OutputDataset<
         Record<string | number | symbol, unknown>,
         RecordIssue | BaseIssue<unknown>
       >;

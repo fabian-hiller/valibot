@@ -8,7 +8,7 @@ describe('toLowerCase', () => {
       type: 'to_lower_case',
       reference: toLowerCase,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     } satisfies ToLowerCaseAction);
   });
 
@@ -17,7 +17,7 @@ describe('toLowerCase', () => {
 
     test('for string', () => {
       expect(
-        action._run({ typed: true, value: ' TeSt123 ' }, {})
+        action['~validate']({ typed: true, value: ' TeSt123 ' }, {})
       ).toStrictEqual({
         typed: true,
         value: ' test123 ',

@@ -2,8 +2,8 @@ import { IPV4_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -92,11 +92,11 @@ export function ipv4(
     expects: null,
     requirement: IPV4_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'IPv4', dataset, config);
       }
-      return dataset as Dataset<string, Ipv4Issue<string>>;
+      return dataset as OutputDataset<string, Ipv4Issue<string>>;
     },
   };
 }

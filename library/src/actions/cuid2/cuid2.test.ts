@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { CUID2_REGEX } from '../../regex.ts';
+import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { cuid2, type Cuid2Action, type Cuid2Issue } from './cuid2.ts';
 
@@ -12,7 +13,7 @@ describe('cuid2', () => {
       expects: null,
       requirement: CUID2_REGEX,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -44,9 +45,22 @@ describe('cuid2', () => {
     const action = cuid2();
 
     test('for untyped inputs', () => {
-      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+      const issues: [StringIssue] = [
+        {
+          kind: 'schema',
+          type: 'string',
+          input: null,
+          expected: 'string',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        action['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 

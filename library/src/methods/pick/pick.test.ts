@@ -9,7 +9,7 @@ import {
   string,
   type StringIssue,
 } from '../../schemas/index.ts';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssue } from '../../vitest/index.ts';
 import { pick } from './pick.ts';
 
@@ -39,12 +39,24 @@ describe('pick', () => {
         reference: object,
         expects: 'Object',
         entries: {
-          key1: { ...string(), _run: expect.any(Function) },
-          key3: { ...string(), _run: expect.any(Function) },
+          key1: {
+            ...string(),
+            '~standard': 1,
+            '~vendor': 'valibot',
+            '~validate': expect.any(Function),
+          },
+          key3: {
+            ...string(),
+            '~standard': 1,
+            '~vendor': 'valibot',
+            '~validate': expect.any(Function),
+          },
         },
         message: undefined,
         async: false,
-        _run: expect.any(Function),
+        '~standard': 1,
+        '~vendor': 'valibot',
+        '~validate': expect.any(Function),
       } satisfies typeof schema);
     });
 
@@ -55,11 +67,8 @@ describe('pick', () => {
 
       test('for unknown entries', () => {
         expect(
-          schema._run(
-            {
-              typed: false,
-              value: { key1: 'foo', key2: 123, key3: 'bar', other: null },
-            },
+          schema['~validate'](
+            { value: { key1: 'foo', key2: 123, key3: 'bar', other: null } },
             {}
           )
         ).toStrictEqual({
@@ -72,7 +81,7 @@ describe('pick', () => {
     describe('should return dataset with nested issues', () => {
       test('if a picked key is missing', () => {
         expect(
-          schema._run({ typed: false, value: { key3: 'bar' } }, {})
+          schema['~validate']({ value: { key3: 'bar' } }, {})
         ).toStrictEqual({
           typed: false,
           value: { key3: 'bar' },
@@ -95,7 +104,7 @@ describe('pick', () => {
               ],
             } satisfies StringIssue,
           ],
-        } satisfies UntypedDataset<InferIssue<typeof schema>>);
+        } satisfies FailureDataset<InferIssue<typeof schema>>);
       });
     });
   });
@@ -110,13 +119,30 @@ describe('pick', () => {
         reference: objectWithRest,
         expects: 'Object',
         entries: {
-          key2: { ...number(), _run: expect.any(Function) },
-          key3: { ...string(), _run: expect.any(Function) },
+          key2: {
+            ...number(),
+            '~standard': 1,
+            '~vendor': 'valibot',
+            '~validate': expect.any(Function),
+          },
+          key3: {
+            ...string(),
+            '~standard': 1,
+            '~vendor': 'valibot',
+            '~validate': expect.any(Function),
+          },
         },
-        rest: { ...boolean(), _run: expect.any(Function) },
+        rest: {
+          ...boolean(),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
+        },
         message: undefined,
         async: false,
-        _run: expect.any(Function),
+        '~standard': 1,
+        '~vendor': 'valibot',
+        '~validate': expect.any(Function),
       } satisfies typeof schema);
     });
 
@@ -135,7 +161,7 @@ describe('pick', () => {
     describe('should return dataset with nested issues', () => {
       test('if a picked key is missing', () => {
         expect(
-          schema._run({ typed: false, value: { key3: 'foo' } }, {})
+          schema['~validate']({ value: { key3: 'foo' } }, {})
         ).toStrictEqual({
           typed: false,
           value: { key3: 'foo' },
@@ -158,13 +184,13 @@ describe('pick', () => {
               ],
             } satisfies NumberIssue,
           ],
-        } satisfies UntypedDataset<InferIssue<typeof schema>>);
+        } satisfies FailureDataset<InferIssue<typeof schema>>);
       });
 
       test('if a not picked key does not match rest', () => {
         expect(
-          schema._run(
-            { typed: false, value: { key1: 'foo', key2: 123, key3: 'foo' } },
+          schema['~validate'](
+            { value: { key1: 'foo', key2: 123, key3: 'foo' } },
             {}
           )
         ).toStrictEqual({
@@ -189,7 +215,7 @@ describe('pick', () => {
               ],
             } satisfies BooleanIssue,
           ],
-        } satisfies UntypedDataset<InferIssue<typeof schema>>);
+        } satisfies FailureDataset<InferIssue<typeof schema>>);
       });
     });
   });

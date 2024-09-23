@@ -1,8 +1,8 @@
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -97,11 +97,11 @@ export function regex(
     expects: `${requirement}`,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'format', dataset, config);
       }
-      return dataset as Dataset<string, RegexIssue<string>>;
+      return dataset as OutputDataset<string, RegexIssue<string>>;
     },
   };
 }
