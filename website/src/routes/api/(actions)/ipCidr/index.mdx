@@ -1,0 +1,70 @@
+---
+title: ipCidr
+description: Creates an IP address in CIDR notation validation action.
+source: /actions/ipCidr/ipCidr.ts
+contributors:
+  - fabian-hiller
+  - L-Mario564
+---
+
+import { Link } from '@builder.io/qwik-city';
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# ipCidr
+
+Creates an [IP address](https://en.wikipedia.org/wiki/IP_address) in [CIDR notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) validation action.
+
+> This validation action accepts IPv4 and IPv6 addresses. For a more specific validation, you can also use <Link href="../ipv4Cidr/">`ipv4Cidr`</Link> or <Link href="../ipv6Cidr/">`ipv6Cidr`</Link>.
+
+```ts
+const Action = v.ipCidr<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `ipCidr` you can validate the formatting of a string. If the input is not an IP address in CIDR notation, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `ipCidr` can be used.
+
+### IP address in CIDR notation schema
+
+Schema to validate an IP address in CIDR notation.
+
+```ts
+const IpAddressCidrNotationSchema = v.pipe(
+  v.string(),
+  v.ipCidr('The IP address is badly formatted.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `ipCidr`.
+
+### Schemas
+
+<ApiList items={['any', 'custom', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
