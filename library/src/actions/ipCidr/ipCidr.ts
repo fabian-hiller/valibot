@@ -63,14 +63,14 @@ export interface IpCidrAction<
 }
 
 /**
- * Creates an [IP address in CIDR notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) validation action.
+ * Creates an [IP address](https://en.wikipedia.org/wiki/IP_address) in [CIDR notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) validation action.
  *
  * @returns An IP CIDR action.
  */
 export function ipCidr<TInput extends string>(): IpCidrAction<TInput, undefined>;
 
 /**
- * Creates an [IP address in CIDR notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) validation action.
+ * Creates an [IP address](https://en.wikipedia.org/wiki/IP_address) in [CIDR notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) validation action.
  *
  * @param message The error message.
  *
