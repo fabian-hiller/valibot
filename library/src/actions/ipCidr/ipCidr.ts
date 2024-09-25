@@ -67,7 +67,10 @@ export interface IpCidrAction<
  *
  * @returns An IP CIDR action.
  */
-export function ipCidr<TInput extends string>(): IpCidrAction<TInput, undefined>;
+export function ipCidr<TInput extends string>(): IpCidrAction<
+  TInput,
+  undefined
+>;
 
 /**
  * Creates an [IP address](https://en.wikipedia.org/wiki/IP_address) in [CIDR notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) validation action.

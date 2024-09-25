@@ -7,7 +7,9 @@ describe('ipCidr', () => {
     test('with undefined message', () => {
       type Action = IpCidrAction<string, undefined>;
       expectTypeOf(ipCidr<string>()).toEqualTypeOf<Action>();
-      expectTypeOf(ipCidr<string, undefined>(undefined)).toEqualTypeOf<Action>();
+      expectTypeOf(
+        ipCidr<string, undefined>(undefined)
+      ).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {

@@ -10,7 +10,8 @@ import { _addIssue } from '../../utils/index.ts';
 /**
  * IPv6 CIDR issue type.
  */
-export interface Ipv6CidrIssue<TInput extends string> extends BaseIssue<TInput> {
+export interface Ipv6CidrIssue<TInput extends string>
+  extends BaseIssue<TInput> {
   /**
    * The issue kind.
    */
@@ -67,7 +68,10 @@ export interface Ipv6CidrAction<
  *
  * @returns An IPv6 CIDR action.
  */
-export function ipv6Cidr<TInput extends string>(): Ipv6CidrAction<TInput, undefined>;
+export function ipv6Cidr<TInput extends string>(): Ipv6CidrAction<
+  TInput,
+  undefined
+>;
 
 /**
  * Creates an [IPv6](https://en.wikipedia.org/wiki/IPv6) in [CIDR notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) address validation action.

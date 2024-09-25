@@ -10,7 +10,8 @@ import { _addIssue } from '../../utils/index.ts';
 /**
  * IPv4 CIDR issue type.
  */
-export interface Ipv4CidrIssue<TInput extends string> extends BaseIssue<TInput> {
+export interface Ipv4CidrIssue<TInput extends string>
+  extends BaseIssue<TInput> {
   /**
    * The issue kind.
    */
@@ -67,7 +68,10 @@ export interface Ipv4CidrAction<
  *
  * @returns An IPv4 CIDR action.
  */
-export function ipv4Cidr<TInput extends string>(): Ipv4CidrAction<TInput, undefined>;
+export function ipv4Cidr<TInput extends string>(): Ipv4CidrAction<
+  TInput,
+  undefined
+>;
 
 /**
  * Creates an [IPv4](https://en.wikipedia.org/wiki/IPv4) address in [CIDR notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) validation action.

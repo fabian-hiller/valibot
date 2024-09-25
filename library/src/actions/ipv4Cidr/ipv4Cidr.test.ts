@@ -1,7 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import { IPV4_CIDR_REGEX } from '../../regex.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
-import { ipv4Cidr, type Ipv4CidrAction, type Ipv4CidrIssue } from './ipv4Cidr.ts';
+import {
+  ipv4Cidr,
+  type Ipv4CidrAction,
+  type Ipv4CidrIssue,
+} from './ipv4Cidr.ts';
 
 // TODO: Improve tests to cover all possible scenarios based on the regex used.
 
