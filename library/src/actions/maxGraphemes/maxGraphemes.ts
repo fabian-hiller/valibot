@@ -3,12 +3,12 @@ import type {
   BaseValidation,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _addIssue, _getGraphemeCount } from '../../utils/index.ts';
+import { _addIssue, _getGraphemes } from '../../utils/index.ts';
 
 /**
- * Max grapheme count issue type.
+ * Max graphemes issue type.
  */
-export interface MaxGraphemeCountIssue<
+export interface MaxGraphemesIssue<
   TInput extends string,
   TRequirement extends number,
 > extends BaseIssue<TInput> {
@@ -19,7 +19,7 @@ export interface MaxGraphemeCountIssue<
   /**
    * The issue type.
    */
-  readonly type: 'max_grapheme_count';
+  readonly type: 'max_graphemes';
   /**
    * The expected property.
    */
@@ -29,39 +29,39 @@ export interface MaxGraphemeCountIssue<
    */
   readonly received: `${number}`;
   /**
-   * The maximum grapheme count.
+   * The maximum graphemes.
    */
   readonly requirement: TRequirement;
 }
 
 /**
- * Max grapheme count action type.
+ * Max graphemes action type.
  */
-export interface MaxGraphemeCountAction<
+export interface MaxGraphemesAction<
   TInput extends string,
   TRequirement extends number,
   TMessage extends
-  | ErrorMessage<MaxGraphemeCountIssue<TInput, TRequirement>>
+  | ErrorMessage<MaxGraphemesIssue<TInput, TRequirement>>
   | undefined,
 > extends BaseValidation<
   TInput,
   TInput,
-  MaxGraphemeCountIssue<TInput, TRequirement>
+  MaxGraphemesIssue<TInput, TRequirement>
 > {
   /**
    * The action type.
    */
-  readonly type: 'max_grapheme_count';
+  readonly type: 'max_graphemes';
   /**
    * The action reference.
    */
-  readonly reference: typeof maxGraphemeCount;
+  readonly reference: typeof maxGraphemes;
   /**
    * The expected property.
    */
   readonly expects: `<=${TRequirement}`;
   /**
-   * The maximum grapheme count.
+   * The maximum graphemes.
    */
   readonly requirement: TRequirement;
   /**
@@ -71,50 +71,50 @@ export interface MaxGraphemeCountAction<
 }
 
 /**
- * Creates a max grapheme count validation action.
+ * Creates a max graphemes validation action.
  *
- * @param requirement The maximum grapheme count.
+ * @param requirement The maximum graphemes.
  *
- * @returns A max grapheme count action.
+ * @returns A max graphemes action.
  */
-export function maxGraphemeCount<
+export function maxGraphemes<
   TInput extends string,
   const TRequirement extends number,
 >(
   requirement: TRequirement,
-): MaxGraphemeCountAction<TInput, TRequirement, undefined>;
+): MaxGraphemesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a max grapheme count validation action.
+ * Creates a max graphemes validation action.
  *
- * @param requirement The maximum grapheme count.
+ * @param requirement The maximum graphemes.
  * @param message The error message.
  *
- * @returns A max grapheme count action.
+ * @returns A max graphemes action.
  */
-export function maxGraphemeCount<
+export function maxGraphemes<
   TInput extends string,
   const TRequirement extends number,
   const TMessage extends
-  | ErrorMessage<MaxGraphemeCountIssue<TInput, TRequirement>>
+  | ErrorMessage<MaxGraphemesIssue<TInput, TRequirement>>
   | undefined,
 >(
   requirement: TRequirement,
   message: TMessage
-): MaxGraphemeCountAction<TInput, TRequirement, TMessage>;
+): MaxGraphemesAction<TInput, TRequirement, TMessage>;
 
-export function maxGraphemeCount(
+export function maxGraphemes(
   requirement: number,
-  message?: ErrorMessage<MaxGraphemeCountIssue<string, number>>
-): MaxGraphemeCountAction<
+  message?: ErrorMessage<MaxGraphemesIssue<string, number>>
+): MaxGraphemesAction<
   string,
   number,
-  ErrorMessage<MaxGraphemeCountIssue<string, number>> | undefined
+  ErrorMessage<MaxGraphemesIssue<string, number>> | undefined
 > {
   return {
     kind: 'validation',
-    type: 'max_grapheme_count',
-    reference: maxGraphemeCount,
+    type: 'max_graphemes',
+    reference: maxGraphemes,
     async: false,
     expects: `<=${requirement}`,
     requirement,
@@ -123,9 +123,9 @@ export function maxGraphemeCount(
       if (!dataset.typed) {
         return dataset;
       }
-      const count = _getGraphemeCount(dataset.value);
+      const count = _getGraphemes(dataset.value);
       if (count > this.requirement) {
-        _addIssue(this, 'grapheme_count', dataset, config, {
+        _addIssue(this, 'graphemes', dataset, config, {
           received: `${count}`,
         });
       }

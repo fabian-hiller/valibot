@@ -3,12 +3,12 @@ import type {
   BaseValidation,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _addIssue, _getGraphemeCount } from '../../utils/index.ts';
+import { _addIssue, _getGraphemes } from '../../utils/index.ts';
 
 /**
- * Min grapheme count issue type.
+ * Min graphemes issue type.
  */
-export interface MinGraphemeCountIssue<
+export interface MinGraphemesIssue<
   TInput extends string,
   TRequirement extends number,
 > extends BaseIssue<TInput> {
@@ -19,7 +19,7 @@ export interface MinGraphemeCountIssue<
   /**
    * The issue type.
    */
-  readonly type: 'min_grapheme_count';
+  readonly type: 'min_graphemes';
   /**
    * The expected property.
    */
@@ -29,39 +29,39 @@ export interface MinGraphemeCountIssue<
    */
   readonly received: `${number}`;
   /**
-   * The minimum grapheme count.
+   * The minimum graphemes.
    */
   readonly requirement: TRequirement;
 }
 
 /**
- * Min grapheme count action type.
+ * Min graphemes action type.
  */
-export interface MinGraphemeCountAction<
+export interface MinGraphemesAction<
   TInput extends string,
   TRequirement extends number,
   TMessage extends
-  | ErrorMessage<MinGraphemeCountIssue<TInput, TRequirement>>
+  | ErrorMessage<MinGraphemesIssue<TInput, TRequirement>>
   | undefined,
 > extends BaseValidation<
   TInput,
   TInput,
-  MinGraphemeCountIssue<TInput, TRequirement>
+  MinGraphemesIssue<TInput, TRequirement>
 > {
   /**
    * The action type.
    */
-  readonly type: 'min_grapheme_count';
+  readonly type: 'min_graphemes';
   /**
    * The action reference.
    */
-  readonly reference: typeof minGraphemeCount;
+  readonly reference: typeof minGraphemes;
   /**
    * The expected property.
    */
   readonly expects: `>=${TRequirement}`;
   /**
-   * The minimum grapheme count.
+   * The minimum graphemes.
    */
   readonly requirement: TRequirement;
   /**
@@ -71,50 +71,50 @@ export interface MinGraphemeCountAction<
 }
 
 /**
- * Creates a min grapheme count validation action.
+ * Creates a min graphemes validation action.
  *
- * @param requirement The minimum grapheme count.
+ * @param requirement The minimum graphemes.
  *
- * @returns A min grapheme count action.
+ * @returns A min graphemes action.
  */
-export function minGraphemeCount<
+export function minGraphemes<
   TInput extends string,
   const TRequirement extends number,
 >(
   requirement: TRequirement,
-): MinGraphemeCountAction<TInput, TRequirement, undefined>;
+): MinGraphemesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a min grapheme count validation action.
+ * Creates a min graphemes validation action.
  *
- * @param requirement The minimum grapheme count.
+ * @param requirement The minimum graphemes.
  * @param message The error message.
  *
- * @returns A min grapheme count action.
+ * @returns A min graphemes action.
  */
-export function minGraphemeCount<
+export function minGraphemes<
   TInput extends string,
   const TRequirement extends number,
   const TMessage extends
-  | ErrorMessage<MinGraphemeCountIssue<TInput, TRequirement>>
+  | ErrorMessage<MinGraphemesIssue<TInput, TRequirement>>
   | undefined,
 >(
   requirement: TRequirement,
   message: TMessage
-): MinGraphemeCountAction<TInput, TRequirement, TMessage>;
+): MinGraphemesAction<TInput, TRequirement, TMessage>;
 
-export function minGraphemeCount(
+export function minGraphemes(
   requirement: number,
-  message?: ErrorMessage<MinGraphemeCountIssue<string, number>>
-): MinGraphemeCountAction<
+  message?: ErrorMessage<MinGraphemesIssue<string, number>>
+): MinGraphemesAction<
   string,
   number,
-  ErrorMessage<MinGraphemeCountIssue<string, number>> | undefined
+  ErrorMessage<MinGraphemesIssue<string, number>> | undefined
 > {
   return {
     kind: 'validation',
-    type: 'min_grapheme_count',
-    reference: minGraphemeCount,
+    type: 'min_graphemes',
+    reference: minGraphemes,
     async: false,
     expects: `>=${requirement}`,
     requirement,
@@ -123,9 +123,9 @@ export function minGraphemeCount(
       if (!dataset.typed) {
         return dataset;
       }
-      const count = _getGraphemeCount(dataset.value);
+      const count = _getGraphemes(dataset.value);
       if (count < this.requirement) {
-        _addIssue(this, 'grapheme_count', dataset, config, {
+        _addIssue(this, 'graphemes', dataset, config, {
           received: `${count}`,
         });
       }

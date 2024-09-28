@@ -3,8 +3,10 @@
  * @param input The input to be measured
  *
  * @returns The grapheme count of the input
+ *
+ * @internal
  */
-export function _getGraphemeCount(input: string): number {
+export function _getGraphemes(input: string): number {
   const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' });
 
   const segments = segmenter.segment(input);
