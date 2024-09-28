@@ -1,4 +1,5 @@
 export * from './_addIssue/index.ts';
+export * from './_getGraphemeCount/index.ts';
 export * from './_isLuhnAlgo/index.ts';
 export * from './_isValidObjectKey/index.ts';
 export * from './_joinExpects/index.ts';
