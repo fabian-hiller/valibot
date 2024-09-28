@@ -1,45 +1,41 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { checkItems, type CheckItemsAction } from './checkItems.ts';
+import {
+  type CheckItemsActionAsync,
+  checkItemsAsync,
+} from './checkItemsAsync.ts';
 import type { CheckItemsIssue } from './types.ts';
 
-describe('checkItems', () => {
+describe('checkItemsAsync', () => {
   describe('should return action object', () => {
+    const requirement = async (item: string) => Boolean(item);
+
     test('with undefined message', () => {
-      type Action = CheckItemsAction<string[], undefined>;
+      type Action = CheckItemsActionAsync<string[], undefined>;
       expectTypeOf(
-        checkItems<string[]>((item: string) => Boolean(item))
+        checkItemsAsync<string[]>(requirement)
       ).toEqualTypeOf<Action>();
       expectTypeOf(
-        checkItems<string[], undefined>(
-          (item: string) => Boolean(item),
-          undefined
-        )
+        checkItemsAsync<string[], undefined>(requirement, undefined)
       ).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
       expectTypeOf(
-        checkItems<string[], 'message'>(
-          (item: string) => Boolean(item),
-          'message'
-        )
-      ).toEqualTypeOf<CheckItemsAction<string[], 'message'>>();
+        checkItemsAsync<string[], 'message'>(requirement, 'message')
+      ).toEqualTypeOf<CheckItemsActionAsync<string[], 'message'>>();
     });
 
     test('with function message', () => {
       expectTypeOf(
-        checkItems<string[], () => string>(
-          (item: string) => Boolean(item),
-          () => 'message'
-        )
-      ).toEqualTypeOf<CheckItemsAction<string[], () => string>>();
+        checkItemsAsync<string[], () => string>(requirement, () => 'message')
+      ).toEqualTypeOf<CheckItemsActionAsync<string[], () => string>>();
     });
   });
 
   describe('should infer correct types', () => {
     type Input = ['foo', 123, true];
-    type Action = CheckItemsAction<Input, undefined>;
+    type Action = CheckItemsActionAsync<Input, undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
