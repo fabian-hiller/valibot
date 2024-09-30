@@ -86,7 +86,7 @@ export function bigint(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<bigint, BigintIssue>;
+      return dataset as unknown as OutputDataset<bigint, BigintIssue>;
     },
   };
 }

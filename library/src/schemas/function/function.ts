@@ -90,7 +90,7 @@ export function function_(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<
+      return dataset as unknown as OutputDataset<
         (...args: unknown[]) => unknown,
         FunctionIssue
       >;

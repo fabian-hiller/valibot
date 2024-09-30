@@ -86,7 +86,7 @@ export function void_(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<void, VoidIssue>;
+      return dataset as unknown as OutputDataset<void, VoidIssue>;
     },
   };
 }

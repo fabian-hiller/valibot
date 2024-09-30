@@ -129,7 +129,6 @@ export function strictTuple(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -137,7 +136,6 @@ export function strictTuple(
 
           // If not typed, set typed to `false`
           if (!itemDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -179,7 +177,7 @@ export function strictTuple(
       }
 
       // Return output dataset
-      return dataset as OutputDataset<
+      return dataset as unknown as OutputDataset<
         unknown[],
         StrictTupleIssue | BaseIssue<unknown>
       >;

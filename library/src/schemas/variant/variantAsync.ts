@@ -246,7 +246,7 @@ export function variantAsync(
       }
 
       // Finally, return  output dataset
-      return dataset as OutputDataset<
+      return dataset as unknown as OutputDataset<
         InferOutput<VariantOptionsAsync<string>[number]>,
         VariantIssue | BaseIssue<unknown>
       >;

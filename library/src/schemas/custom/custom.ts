@@ -86,7 +86,7 @@ export function custom<TInput>(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<TInput, CustomIssue>;
+      return dataset as unknown as OutputDataset<TInput, CustomIssue>;
     },
   };
 }

@@ -147,7 +147,6 @@ export function setAsync(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -155,7 +154,6 @@ export function setAsync(
 
           // If not typed, set typed to `false`
           if (!valueDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -170,7 +168,7 @@ export function setAsync(
       }
 
       // Return output dataset
-      return dataset as OutputDataset<
+      return dataset as unknown as OutputDataset<
         Set<unknown>,
         SetIssue | BaseIssue<unknown>
       >;

@@ -162,7 +162,6 @@ export function record(
 
               // If necessary, abort early
               if (config.abortEarly) {
-                // @ts-expect-error
                 dataset.typed = false;
                 break;
               }
@@ -203,7 +202,6 @@ export function record(
 
               // If necessary, abort early
               if (config.abortEarly) {
-                // @ts-expect-error
                 dataset.typed = false;
                 break;
               }
@@ -211,7 +209,6 @@ export function record(
 
             // If not typed, set typed to `false`
             if (!keyDataset.typed || !valueDataset.typed) {
-              // @ts-expect-error
               dataset.typed = false;
             }
 
@@ -229,7 +226,7 @@ export function record(
       }
 
       // Return output dataset
-      return dataset as OutputDataset<
+      return dataset as unknown as OutputDataset<
         Record<string | number | symbol, unknown>,
         RecordIssue | BaseIssue<unknown>
       >;

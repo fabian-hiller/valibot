@@ -241,7 +241,7 @@ export function variant(
       }
 
       // Finally, return  output dataset
-      return dataset as OutputDataset<
+      return dataset as unknown as OutputDataset<
         InferOutput<VariantOptions<string>[number]>,
         VariantIssue | BaseIssue<unknown>
       >;

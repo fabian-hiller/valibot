@@ -86,7 +86,7 @@ export function blob(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<Blob, BlobIssue>;
+      return dataset as unknown as OutputDataset<Blob, BlobIssue>;
     },
   };
 }

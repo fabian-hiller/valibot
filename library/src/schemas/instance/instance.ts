@@ -105,7 +105,10 @@ export function instance(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<InstanceType<Class>, InstanceIssue>;
+      return dataset as unknown as OutputDataset<
+        InstanceType<Class>,
+        InstanceIssue
+      >;
     },
   };
 }

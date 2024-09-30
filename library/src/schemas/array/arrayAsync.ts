@@ -146,7 +146,6 @@ export function arrayAsync(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -154,7 +153,6 @@ export function arrayAsync(
 
           // If not typed, set typed to `false`
           if (!itemDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -169,7 +167,7 @@ export function arrayAsync(
       }
 
       // Return output dataset
-      return dataset as OutputDataset<
+      return dataset as unknown as OutputDataset<
         unknown[],
         ArrayIssue | BaseIssue<unknown>
       >;

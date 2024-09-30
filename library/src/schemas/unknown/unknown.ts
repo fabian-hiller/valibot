@@ -1,4 +1,4 @@
-import type { BaseSchema } from '../../types/index.ts';
+import type { BaseSchema, SuccessDataset } from '../../types/index.ts';
 
 /**
  * Unknown schema type.
@@ -35,7 +35,7 @@ export function unknown(): UnknownSchema {
     '~validate'(dataset) {
       // @ts-expect-error
       dataset.typed = true;
-      return dataset;
+      return dataset as unknown as SuccessDataset<unknown>;
     },
   };
 }

@@ -7,6 +7,7 @@ import type {
   DefaultAsync,
   InferInput,
   InferIssue,
+  SuccessDataset,
 } from '../../types/index.ts';
 import type { InferOptionalOutput } from './types.ts';
 
@@ -113,7 +114,7 @@ export function optionalAsync(
         if (dataset.value === undefined) {
           // @ts-expect-error
           dataset.typed = true;
-          return dataset;
+          return dataset as unknown as SuccessDataset<unknown>;
         }
       }
 

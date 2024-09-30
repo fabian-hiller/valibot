@@ -111,7 +111,7 @@ export function enum_(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<string | number, EnumIssue>;
+      return dataset as unknown as OutputDataset<string | number, EnumIssue>;
     },
   };
 }

@@ -6,19 +6,16 @@ import type { BaseIssue } from './issue.ts';
 export interface UnknownDataset {
   /**
    * Whether is's typed.
-   * TODO: Should we keep this?
    */
-  typed?: never;
-  // typed?: false;
+  typed?: false;
   /**
    * The dataset value.
    */
   value: unknown;
   /**
    * The dataset issues.
-   * TODO: Should we keep this?
    */
-  issues?: never;
+  issues?: undefined;
 }
 
 /**
@@ -36,7 +33,7 @@ export interface SuccessDataset<TValue> {
   /**
    * The dataset issues.
    */
-  issues?: never;
+  issues?: undefined;
 }
 
 /**

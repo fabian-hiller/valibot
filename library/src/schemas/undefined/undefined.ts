@@ -86,7 +86,7 @@ export function undefined_(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<undefined, UndefinedIssue>;
+      return dataset as unknown as OutputDataset<undefined, UndefinedIssue>;
     },
   };
 }

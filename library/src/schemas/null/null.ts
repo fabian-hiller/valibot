@@ -86,7 +86,7 @@ export function null_(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<null, NullIssue>;
+      return dataset as unknown as OutputDataset<null, NullIssue>;
     },
   };
 }

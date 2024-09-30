@@ -114,7 +114,6 @@ export function intersect(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -122,7 +121,6 @@ export function intersect(
 
           // If not typed, set typed to `false`
           if (!optionDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -164,7 +162,7 @@ export function intersect(
       }
 
       // Return output dataset
-      return dataset as OutputDataset<
+      return dataset as unknown as OutputDataset<
         never,
         IntersectIssue | BaseIssue<unknown>
       >;

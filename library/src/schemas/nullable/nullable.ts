@@ -6,6 +6,7 @@ import type {
   Default,
   InferInput,
   InferIssue,
+  SuccessDataset,
 } from '../../types/index.ts';
 import type { InferNullableOutput } from './types.ts';
 
@@ -96,7 +97,7 @@ export function nullable(
         if (dataset.value === null) {
           // @ts-expect-error
           dataset.typed = true;
-          return dataset;
+          return dataset as unknown as SuccessDataset<unknown>;
         }
       }
 

@@ -161,7 +161,6 @@ export function objectWithRest(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -169,7 +168,6 @@ export function objectWithRest(
 
           // If not typed, set typed to `false`
           if (!valueDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -217,7 +215,6 @@ export function objectWithRest(
 
                 // If necessary, abort early
                 if (config.abortEarly) {
-                  // @ts-expect-error
                   dataset.typed = false;
                   break;
                 }
@@ -225,7 +222,6 @@ export function objectWithRest(
 
               // If not typed, set typed to `false`
               if (!valueDataset.typed) {
-                // @ts-expect-error
                 dataset.typed = false;
               }
 
@@ -242,7 +238,7 @@ export function objectWithRest(
       }
 
       // Return output dataset
-      return dataset as OutputDataset<
+      return dataset as unknown as OutputDataset<
         InferObjectOutput<ObjectEntries> & { [key: string]: unknown },
         | ObjectWithRestIssue
         | InferObjectIssue<ObjectEntries>

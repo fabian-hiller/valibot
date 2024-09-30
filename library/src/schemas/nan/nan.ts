@@ -85,7 +85,7 @@ export function nan(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<number, NanIssue>;
+      return dataset as unknown as OutputDataset<number, NanIssue>;
     },
   };
 }

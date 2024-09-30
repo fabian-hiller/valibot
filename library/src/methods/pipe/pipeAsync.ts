@@ -3043,7 +3043,6 @@ export function pipeAsync<
             dataset.issues &&
             (item.kind === 'schema' || item.kind === 'transformation')
           ) {
-            // @ts-expect-error
             dataset.typed = false;
             break;
           }
@@ -3060,7 +3059,7 @@ export function pipeAsync<
       }
 
       // Return output dataset
-      return dataset;
+      return dataset as unknown as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

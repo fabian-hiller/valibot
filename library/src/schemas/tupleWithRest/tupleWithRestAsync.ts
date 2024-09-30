@@ -187,7 +187,6 @@ export function tupleWithRestAsync(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -195,7 +194,6 @@ export function tupleWithRestAsync(
 
           // If not typed, set typed to `false`
           if (!itemDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -236,7 +234,6 @@ export function tupleWithRestAsync(
 
               // If necessary, abort early
               if (config.abortEarly) {
-                // @ts-expect-error
                 dataset.typed = false;
                 break;
               }
@@ -244,7 +241,6 @@ export function tupleWithRestAsync(
 
             // If not typed, set typed to `false`
             if (!itemDataset.typed) {
-              // @ts-expect-error
               dataset.typed = false;
             }
 
@@ -260,7 +256,7 @@ export function tupleWithRestAsync(
       }
 
       // Return output dataset
-      return dataset as OutputDataset<
+      return dataset as unknown as OutputDataset<
         unknown[],
         TupleWithRestIssue | BaseIssue<unknown>
       >;

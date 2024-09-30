@@ -93,7 +93,7 @@ export function date(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<Date, DateIssue>;
+      return dataset as unknown as OutputDataset<Date, DateIssue>;
     },
   };
 }

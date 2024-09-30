@@ -86,7 +86,10 @@ export function promise(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as OutputDataset<Promise<unknown>, PromiseIssue>;
+      return dataset as unknown as OutputDataset<
+        Promise<unknown>,
+        PromiseIssue
+      >;
     },
   };
 }
