@@ -32,8 +32,6 @@ describe('pipe', () => {
       pipe: [
         {
           ...string(),
-          '~standard': 1,
-          '~vendor': 'valibot',
           '~validate': expect.any(Function),
         },
         { ...description('text') },

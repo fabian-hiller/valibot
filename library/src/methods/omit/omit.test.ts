@@ -40,14 +40,10 @@ describe('omit', () => {
         entries: {
           key2: {
             ...number(),
-            '~standard': 1,
-            '~vendor': 'valibot',
             '~validate': expect.any(Function),
           },
           key4: {
             ...number(),
-            '~standard': 1,
-            '~vendor': 'valibot',
             '~validate': expect.any(Function),
           },
         },
@@ -120,21 +116,15 @@ describe('omit', () => {
         entries: {
           key1: {
             ...string(),
-            '~standard': 1,
-            '~vendor': 'valibot',
             '~validate': expect.any(Function),
           },
           key4: {
             ...number(),
-            '~standard': 1,
-            '~vendor': 'valibot',
             '~validate': expect.any(Function),
           },
         },
         rest: {
           ...boolean(),
-          '~standard': 1,
-          '~vendor': 'valibot',
           '~validate': expect.any(Function),
         },
         message: undefined,

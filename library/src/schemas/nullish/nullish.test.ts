@@ -15,8 +15,6 @@ describe('nullish', () => {
       expects: '(string | null | undefined)',
       wrapped: {
         ...string(),
-        '~standard': 1,
-        '~vendor': 'valibot',
         '~validate': expect.any(Function),
       },
       async: false,

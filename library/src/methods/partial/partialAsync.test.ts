@@ -43,26 +43,18 @@ describe('partialAsync', () => {
           entries: {
             key1: {
               ...optionalAsync(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: {
               ...optionalAsync(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...optionalAsync(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: {
               ...optionalAsync(entries.key4),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
           },
@@ -83,15 +75,11 @@ describe('partialAsync', () => {
           entries: {
             key1: {
               ...optionalAsync(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: entries.key2,
             key3: {
               ...optionalAsync(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: entries.key4,
@@ -167,26 +155,18 @@ describe('partialAsync', () => {
           entries: {
             key1: {
               ...optionalAsync(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: {
               ...optionalAsync(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...optionalAsync(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: {
               ...optionalAsync(entries.key4),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
           },
@@ -209,14 +189,10 @@ describe('partialAsync', () => {
             key1: entries.key1,
             key2: {
               ...optionalAsync(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...optionalAsync(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: entries.key4,

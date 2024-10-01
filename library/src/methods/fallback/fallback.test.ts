@@ -10,8 +10,6 @@ describe('fallback', () => {
     type Schema = typeof schema;
     const baseSchema: Omit<SchemaWithFallback<Schema, never>, 'fallback'> = {
       ...schema,
-      '~standard': 1,
-      '~vendor': 'valibot',
       '~validate': expect.any(Function),
     };
 
