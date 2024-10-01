@@ -3,7 +3,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -96,7 +95,7 @@ export function ip(
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'IP', dataset, config);
       }
-      return dataset as OutputDataset<string, IpIssue<string>>;
+      return dataset;
     },
   };
 }

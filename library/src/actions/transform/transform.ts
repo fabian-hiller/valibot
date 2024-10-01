@@ -1,4 +1,4 @@
-import type { BaseTransformation, OutputDataset } from '../../types/index.ts';
+import type { BaseTransformation, SuccessDataset } from '../../types/index.ts';
 
 /**
  * Transform action type.
@@ -38,8 +38,7 @@ export function transform<TInput, TOutput>(
     '~validate'(dataset) {
       // @ts-expect-error
       dataset.value = this.operation(dataset.value);
-      // @ts-expect-error
-      return dataset as OutputDataset<TOutput, never>;
+      return dataset as unknown as SuccessDataset<TOutput>;
     },
   };
 }

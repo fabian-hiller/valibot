@@ -1,4 +1,5 @@
 import type {
+  BaseIssue,
   BaseTransformationAsync,
   MaybePromise,
   OutputDataset,
@@ -56,8 +57,10 @@ export function rawTransformAsync<TInput, TOutput>(
       }
 
       // Return output dataset
-      // @ts-expect-error
-      return dataset as OutputDataset<TOutput, RawTransformIssue<TInput>>;
+      return dataset as unknown as OutputDataset<
+        TOutput,
+        BaseIssue<unknown> | RawTransformIssue<TInput>
+      >;
     },
   };
 }

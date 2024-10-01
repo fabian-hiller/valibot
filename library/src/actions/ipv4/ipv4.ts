@@ -3,7 +3,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -96,7 +95,7 @@ export function ipv4(
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'IPv4', dataset, config);
       }
-      return dataset as OutputDataset<string, Ipv4Issue<string>>;
+      return dataset;
     },
   };
 }

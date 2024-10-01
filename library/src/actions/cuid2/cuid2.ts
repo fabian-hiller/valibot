@@ -3,7 +3,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -96,7 +95,7 @@ export function cuid2(
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Cuid2', dataset, config);
       }
-      return dataset as OutputDataset<string, Cuid2Issue<string>>;
+      return dataset;
     },
   };
 }

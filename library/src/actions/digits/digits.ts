@@ -3,7 +3,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -99,7 +98,7 @@ export function digits(
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'digits', dataset, config);
       }
-      return dataset as OutputDataset<string, DigitsIssue<string>>;
+      return dataset;
     },
   };
 }

@@ -3,7 +3,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -99,7 +98,7 @@ export function base64(
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Base64', dataset, config);
       }
-      return dataset as OutputDataset<string, Base64Issue<string>>;
+      return dataset;
     },
   };
 }

@@ -2,7 +2,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -98,7 +97,7 @@ export function integer(
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'integer', dataset, config);
       }
-      return dataset as OutputDataset<number, IntegerIssue<number>>;
+      return dataset;
     },
   };
 }

@@ -3,7 +3,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _isLuhnAlgo } from '../../utils/index.ts';
 
@@ -106,7 +105,7 @@ export function imei(
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'IMEI', dataset, config);
       }
-      return dataset as OutputDataset<string, ImeiIssue<string>>;
+      return dataset;
     },
   };
 }
