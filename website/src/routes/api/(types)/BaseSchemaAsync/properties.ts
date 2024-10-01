@@ -18,17 +18,50 @@ export const properties: Record<string, PropertyProps> = {
       generics: ['unknown'],
     },
   },
-  kind: {
+  BaseSchemaAsync: {
+    modifier: 'extends',
     type: {
-      type: 'string',
-      value: 'schema',
+      type: 'custom',
+      name: 'Omit',
+      generics: [
+        {
+          type: 'custom',
+          name: 'BaseSchema',
+          href: '../BaseSchema/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+            {
+              type: 'custom',
+              name: 'TOutput',
+            },
+            {
+              type: 'custom',
+              name: 'TIssue',
+            },
+          ],
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'string',
+              value: 'reference',
+            },
+            {
+              type: 'string',
+              value: 'async',
+            },
+            {
+              type: 'string',
+              value: '~validate',
+            },
+          ],
+        },
+      ],
     },
-  },
-  type: {
-    type: 'string',
-  },
-  expects: {
-    type: 'string',
   },
   reference: {
     type: {
@@ -85,7 +118,7 @@ export const properties: Record<string, PropertyProps> = {
       value: true,
     },
   },
-  _run: {
+  '~validate': {
     type: {
       type: 'function',
       params: [
@@ -93,13 +126,13 @@ export const properties: Record<string, PropertyProps> = {
           name: 'dataset',
           type: {
             type: 'custom',
-            name: 'Dataset',
-            href: '../Dataset/',
-            generics: ['unknown', 'never'],
+            name: 'UnknownDataset',
+            href: '../UnknownDataset/',
           },
         },
         {
           name: 'config',
+          optional: true,
           type: {
             type: 'custom',
             name: 'Config',
@@ -107,7 +140,9 @@ export const properties: Record<string, PropertyProps> = {
             generics: [
               {
                 type: 'custom',
-                name: 'TIssue',
+                name: 'BaseIssue',
+                href: '../BaseIssue/',
+                generics: ['unknown'],
               },
             ],
           },
@@ -119,8 +154,8 @@ export const properties: Record<string, PropertyProps> = {
         generics: [
           {
             type: 'custom',
-            name: 'Dataset',
-            href: '../Dataset/',
+            name: 'OutputDataset',
+            href: '../OutputDataset/',
             generics: [
               {
                 type: 'custom',
@@ -134,40 +169,6 @@ export const properties: Record<string, PropertyProps> = {
           },
         ],
       },
-    },
-  },
-  _types: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'object',
-          entries: [
-            {
-              key: 'input',
-              value: {
-                type: 'custom',
-                name: 'TInput',
-              },
-            },
-            {
-              key: 'output',
-              value: {
-                type: 'custom',
-                name: 'TOutput',
-              },
-            },
-            {
-              key: 'issue',
-              value: {
-                type: 'custom',
-                name: 'TIssue',
-              },
-            },
-          ],
-        },
-        'undefined',
-      ],
     },
   },
 };

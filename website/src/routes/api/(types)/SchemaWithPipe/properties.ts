@@ -65,11 +65,11 @@ export const properties: Record<string, PropertyProps> = {
           options: [
             {
               type: 'string',
-              value: '_run',
+              value: '~types',
             },
             {
               type: 'string',
-              value: '_types',
+              value: '~validate',
             },
           ],
         },
@@ -82,88 +82,7 @@ export const properties: Record<string, PropertyProps> = {
       name: 'TPipe',
     },
   },
-  _run: {
-    type: {
-      type: 'function',
-      params: [
-        {
-          name: 'dataset',
-          type: {
-            type: 'custom',
-            name: 'Dataset',
-            href: '../Dataset/',
-            generics: ['unknown', 'never'],
-          },
-        },
-        {
-          name: 'config',
-          type: {
-            type: 'custom',
-            name: 'Config',
-            href: '../Config/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'InferIssue',
-                href: '../InferIssue/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'FirstTupleItem',
-                    href: '../FirstTupleItem/',
-                    generics: [
-                      {
-                        type: 'custom',
-                        name: 'TPipe',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        },
-      ],
-      return: {
-        type: 'custom',
-        name: 'Dataset',
-        href: '../Dataset/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'InferOutput',
-            href: '../InferOutput/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'LastTupleItem',
-                href: '../LastTupleItem/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TPipe',
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: 'custom',
-            name: 'InferIssue',
-            href: '../InferIssue/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'TPipe',
-                indexes: ['number'],
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  _types: {
+  '~types': {
     type: {
       type: 'union',
       options: [
@@ -231,6 +150,75 @@ export const properties: Record<string, PropertyProps> = {
         },
         'undefined',
       ],
+    },
+  },
+  '~validate': {
+    type: {
+      type: 'function',
+      params: [
+        {
+          name: 'dataset',
+          type: {
+            type: 'custom',
+            name: 'UnknownDataset',
+            href: '../UnknownDataset/',
+          },
+        },
+        {
+          name: 'config',
+          optional: true,
+          type: {
+            type: 'custom',
+            name: 'Config',
+            href: '../Config/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'BaseIssue',
+                href: '../BaseIssue/',
+                generics: ['unknown'],
+              },
+            ],
+          },
+        },
+      ],
+      return: {
+        type: 'custom',
+        name: 'OutputDataset',
+        href: '../OutputDataset/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'InferOutput',
+            href: '../InferOutput/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'LastTupleItem',
+                href: '../LastTupleItem/',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'TPipe',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: 'custom',
+            name: 'InferIssue',
+            href: '../InferIssue/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TPipe',
+                indexes: ['number'],
+              },
+            ],
+          },
+        ],
+      },
     },
   },
 };

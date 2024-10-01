@@ -1,6 +1,6 @@
 ---
-title: UntypedDataset
-description: Untyped dataset type.
+title: PartialDataset
+description: Partial dataset type.
 contributors:
   - fabian-hiller
 ---
@@ -8,12 +8,13 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# UntypedDataset
+# PartialDataset
 
-Untyped dataset type.
+Partial dataset type.
 
 ## Generics
 
+- `TValue` <Property {...properties.TValue} />
 - `TIssue` <Property {...properties.TIssue} />
 
 ## Definition

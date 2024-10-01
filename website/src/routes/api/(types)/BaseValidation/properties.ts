@@ -50,17 +50,13 @@ export const properties: Record<string, PropertyProps> = {
         type: 'custom',
         name: 'BaseValidation',
         generics: [
+          'any',
+          'any',
           {
             type: 'custom',
-            name: 'TInput',
-          },
-          {
-            type: 'custom',
-            name: 'TOutput',
-          },
-          {
-            type: 'custom',
-            name: 'TIssue',
+            name: 'BaseIssue',
+            href: '../BaseIssue/',
+            generics: ['unknown'],
           },
         ],
       },
@@ -72,84 +68,7 @@ export const properties: Record<string, PropertyProps> = {
       value: false,
     },
   },
-  _run: {
-    type: {
-      type: 'function',
-      params: [
-        {
-          name: 'dataset',
-          type: {
-            type: 'custom',
-            name: 'Dataset',
-            href: '../Dataset/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'TInput',
-              },
-              {
-                type: 'custom',
-                name: 'BaseIssue',
-                href: '../BaseIssue/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TInput',
-                  },
-                ],
-              },
-            ],
-          },
-        },
-        {
-          name: 'config',
-          type: {
-            type: 'custom',
-            name: 'Config',
-            href: '../Config/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'TIssue',
-              },
-            ],
-          },
-        },
-      ],
-      return: {
-        type: 'custom',
-        name: 'Dataset',
-        href: '../Dataset/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'TOutput',
-          },
-          {
-            type: 'union',
-            options: [
-              {
-                type: 'custom',
-                name: 'BaseIssue',
-                href: '../BaseIssue/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TInput',
-                  },
-                ],
-              },
-              {
-                type: 'custom',
-                name: 'TIssue',
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  _types: {
+  '~types': {
     type: {
       type: 'union',
       options: [
@@ -181,6 +100,73 @@ export const properties: Record<string, PropertyProps> = {
         },
         'undefined',
       ],
+    },
+  },
+  '~validate': {
+    type: {
+      type: 'function',
+      params: [
+        {
+          name: 'dataset',
+          type: {
+            type: 'custom',
+            name: 'OutputDataset',
+            href: '../OutputDataset/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TInput',
+              },
+              {
+                type: 'custom',
+                name: 'BaseIssue',
+                href: '../BaseIssue/',
+                generics: ['unknown'],
+              },
+            ],
+          },
+        },
+        {
+          name: 'config',
+          type: {
+            type: 'custom',
+            name: 'Config',
+            href: '../Config/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'TIssue',
+              },
+            ],
+          },
+        },
+      ],
+      return: {
+        type: 'custom',
+        name: 'OutputDataset',
+        href: '../OutputDataset/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'TOutput',
+          },
+          {
+            type: 'union',
+            options: [
+              {
+                type: 'custom',
+                name: 'BaseIssue',
+                href: '../BaseIssue/',
+                generics: ['unknown'],
+              },
+              {
+                type: 'custom',
+                name: 'TIssue',
+              },
+            ],
+          },
+        ],
+      },
     },
   },
 };
