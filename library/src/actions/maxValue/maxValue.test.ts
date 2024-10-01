@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { NumberIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { maxValue, type MaxValueAction } from './maxValue.ts';
 
@@ -13,7 +14,7 @@ describe('maxValue', () => {
       expects: '<=5',
       requirement: 5,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -43,9 +44,19 @@ describe('maxValue', () => {
 
   describe('should return dataset without issues', () => {
     test('for untyped inputs', () => {
-      expect(maxValue(1)._run({ typed: false, value: null }, {})).toStrictEqual(
-        { typed: false, value: null }
-      );
+      const issues: [NumberIssue] = [
+        {
+          kind: 'schema',
+          type: 'number',
+          input: null,
+          expected: 'number',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        maxValue(1)['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({ typed: false, value: null, issues });
     });
 
     test('for valid bigints', () => {

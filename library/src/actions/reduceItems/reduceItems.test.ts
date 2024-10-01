@@ -14,13 +14,13 @@ describe('reduceItems', () => {
       async: false,
       operation,
       initial,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     } satisfies ReduceItemsAction<number[], number>);
   });
 
   test('should transform input', () => {
     expect(
-      action._run({ typed: true, value: [9, -12, 345, 0, 999] }, {})
+      action['~validate']({ typed: true, value: [9, -12, 345, 0, 999] }, {})
     ).toStrictEqual({
       typed: true,
       value: 1341,

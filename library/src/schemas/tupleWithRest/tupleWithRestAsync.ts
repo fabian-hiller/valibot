@@ -1,9 +1,9 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   ArrayPathItem,
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
-  Dataset,
   ErrorMessage,
   InferInput,
   InferIssue,
@@ -11,6 +11,7 @@ import type {
   InferTupleInput,
   InferTupleIssue,
   InferTupleOutput,
+  OutputDataset,
   TupleItemsAsync,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
@@ -116,13 +117,16 @@ export function tupleWithRestAsync(
     items,
     rest,
     message,
-    async _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    async '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (Array.isArray(input)) {
         // Set typed to `true` and value to empty array
+        // @ts-expect-error
         dataset.typed = true;
         dataset.value = [];
 
@@ -135,7 +139,7 @@ export function tupleWithRestAsync(
               return [
                 key,
                 value,
-                await item._run({ typed: false, value }, config),
+                await item['~validate']({ value }, config),
               ] as const;
             })
           ),
@@ -146,7 +150,7 @@ export function tupleWithRestAsync(
               return [
                 key + this.items.length,
                 value,
-                await this.rest._run({ typed: false, value }, config),
+                await this.rest['~validate']({ value }, config),
               ] as const;
             })
           ),
@@ -252,7 +256,8 @@ export function tupleWithRestAsync(
       }
 
       // Return output dataset
-      return dataset as Dataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         unknown[],
         TupleWithRestIssue | BaseIssue<unknown>
       >;

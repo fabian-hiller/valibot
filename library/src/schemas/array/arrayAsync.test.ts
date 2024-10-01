@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
@@ -17,9 +17,11 @@ describe('array', () => {
       type: 'array',
       reference: arrayAsync,
       expects: 'Array',
-      item: { ...string(), _run: expect.any(Function) },
+      item,
       async: true,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -161,10 +163,7 @@ describe('array', () => {
 
     test('for wrong items', async () => {
       expect(
-        await schema._run(
-          { typed: false, value: ['foo', 123, 'baz', null] },
-          {}
-        )
+        await schema['~validate']({ value: ['foo', 123, 'baz', null] }, {})
       ).toStrictEqual({
         typed: false,
         value: ['foo', 123, 'baz', null],
@@ -188,27 +187,27 @@ describe('array', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with abort early', async () => {
       expect(
-        await schema._run(
-          { typed: false, value: ['foo', 123, 'baz', null] },
+        await schema['~validate'](
+          { value: ['foo', 123, 'baz', null] },
           { abortEarly: true }
         )
       ).toStrictEqual({
         typed: false,
         value: ['foo'],
         issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for wrong nested items', async () => {
       const nestedSchema = arrayAsync(schema);
       expect(
-        await nestedSchema._run(
-          { typed: false, value: [[123, 'foo'], 'bar', []] },
+        await nestedSchema['~validate'](
+          { value: [[123, 'foo'], 'bar', []] },
           {}
         )
       ).toStrictEqual({
@@ -257,7 +256,7 @@ describe('array', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+      } satisfies FailureDataset<InferIssue<typeof nestedSchema>>);
     });
   });
 });

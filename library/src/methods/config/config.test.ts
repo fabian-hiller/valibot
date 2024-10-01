@@ -7,16 +7,16 @@ describe('config', () => {
   test('should override config of schema', () => {
     const schema = string();
     // @ts-expect-error
-    schema._run = vi.fn(schema._run);
-    const dataset = { typed: false, value: 'foo' };
+    schema['~validate'] = vi.fn(schema['~validate']);
+    const dataset = { value: 'foo' };
     const globalConfig: Config<BaseIssue<unknown>> = {
       lang: 'de',
     };
     const localConfig: Config<BaseIssue<unknown>> = {
       abortPipeEarly: true,
     };
-    config(schema, localConfig)._run(dataset, globalConfig);
-    expect(schema._run).toHaveBeenCalledWith(dataset, {
+    config(schema, localConfig)['~validate'](dataset, globalConfig);
+    expect(schema['~validate']).toHaveBeenCalledWith(dataset, {
       ...globalConfig,
       ...localConfig,
     });
@@ -25,8 +25,8 @@ describe('config', () => {
   test('should override config of async schema', () => {
     const schema = objectAsync({ key: string() });
     // @ts-expect-error
-    schema._run = vi.fn(schema._run);
-    const dataset = { typed: false, value: { key: 'foo' } };
+    schema['~validate'] = vi.fn(schema['~validate']);
+    const dataset = { value: { key: 'foo' } };
     const globalConfig: Config<BaseIssue<unknown>> = {
       lang: 'de',
     };
@@ -34,8 +34,8 @@ describe('config', () => {
       abortEarly: true,
       lang: 'en',
     };
-    config(schema, localConfig)._run(dataset, globalConfig);
-    expect(schema._run).toHaveBeenCalledWith(dataset, {
+    config(schema, localConfig)['~validate'](dataset, globalConfig);
+    expect(schema['~validate']).toHaveBeenCalledWith(dataset, {
       ...globalConfig,
       ...localConfig,
     });

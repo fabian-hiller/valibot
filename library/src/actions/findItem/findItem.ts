@@ -1,4 +1,4 @@
-import type { BaseTransformation, TypedDataset } from '../../types/index.ts';
+import type { BaseTransformation, SuccessDataset } from '../../types/index.ts';
 import type { ArrayInput, ArrayRequirement } from '../types.ts';
 
 /**
@@ -40,10 +40,10 @@ export function findItem(
     reference: findItem,
     async: false,
     operation,
-    _run(dataset) {
+    '~validate'(dataset) {
       // @ts-expect-error
       dataset.value = dataset.value.find(this.operation);
-      return dataset as TypedDataset<unknown, never>;
+      return dataset as SuccessDataset<unknown | undefined>;
     },
   };
 }

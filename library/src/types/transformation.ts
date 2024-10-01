@@ -1,5 +1,5 @@
 import type { Config } from './config.ts';
-import type { Dataset, TypedDataset } from './dataset.ts';
+import type { OutputDataset, SuccessDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
 
 /**
@@ -31,7 +31,19 @@ export interface BaseTransformation<
    */
   readonly async: false;
   /**
-   * Transforms known input.
+   * The input, output and issue type.
+   *
+   * @internal
+   */
+  readonly '~types'?:
+    | {
+        readonly input: TInput;
+        readonly output: TOutput;
+        readonly issue: TIssue;
+      }
+    | undefined;
+  /**
+   * Transforms known input values.
    *
    * @param dataset The input dataset.
    * @param config The configuration.
@@ -40,20 +52,10 @@ export interface BaseTransformation<
    *
    * @internal
    */
-  readonly _run: (
-    dataset: TypedDataset<TInput, never>,
+  readonly '~validate': (
+    dataset: SuccessDataset<TInput>,
     config: Config<BaseIssue<unknown>>
-  ) => Dataset<TOutput, TIssue>;
-  /**
-   * Input, output and issue type.
-   *
-   * @internal
-   */
-  readonly _types?: {
-    readonly input: TInput;
-    readonly output: TOutput;
-    readonly issue: TIssue;
-  };
+  ) => OutputDataset<TOutput, BaseIssue<unknown> | TIssue>;
 }
 
 /**
@@ -65,7 +67,7 @@ export interface BaseTransformationAsync<
   TIssue extends BaseIssue<unknown>,
 > extends Omit<
     BaseTransformation<TInput, TOutput, TIssue>,
-    'reference' | 'async' | '_run'
+    'reference' | 'async' | '~validate'
   > {
   /**
    * The transformation reference.
@@ -82,7 +84,7 @@ export interface BaseTransformationAsync<
    */
   readonly async: true;
   /**
-   * Transforms known input.
+   * Transforms known input values.
    *
    * @param dataset The input dataset.
    * @param config The configuration.
@@ -91,10 +93,10 @@ export interface BaseTransformationAsync<
    *
    * @internal
    */
-  readonly _run: (
-    dataset: TypedDataset<TInput, never>,
+  readonly '~validate': (
+    dataset: SuccessDataset<TInput>,
     config: Config<BaseIssue<unknown>>
-  ) => Promise<Dataset<TOutput, TIssue>>;
+  ) => Promise<OutputDataset<TOutput, BaseIssue<unknown> | TIssue>>;
 }
 
 /**

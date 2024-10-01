@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { ArrayIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import {
   someItem,
@@ -16,7 +17,7 @@ describe('someItem', () => {
       expects: null,
       requirement,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -55,9 +56,22 @@ describe('someItem', () => {
     const action = someItem<number[]>((item: number) => item > 9);
 
     test('for untyped inputs', () => {
-      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+      const issues: [ArrayIssue] = [
+        {
+          kind: 'schema',
+          type: 'array',
+          input: null,
+          expected: 'Array',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        action['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 

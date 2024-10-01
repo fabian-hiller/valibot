@@ -3,7 +3,7 @@ import type {
   Config,
   ErrorMessage,
   IssuePathItem,
-  TypedDataset,
+  SuccessDataset,
 } from '../../types/index.ts';
 
 /**
@@ -41,7 +41,7 @@ type AddIssue<TInput> = (info?: IssueInfo<TInput>) => void;
  * Context type.
  */
 export interface Context<TInput> {
-  readonly dataset: TypedDataset<TInput, never>;
+  readonly dataset: SuccessDataset<TInput>;
   readonly config: Config<RawTransformIssue<TInput>>;
   readonly addIssue: AddIssue<TInput>;
   readonly NEVER: never;

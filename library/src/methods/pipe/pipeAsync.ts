@@ -1,18 +1,20 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
   Config,
-  Dataset,
   FirstTupleItem,
   InferInput,
   InferIssue,
   InferOutput,
   LastTupleItem,
+  OutputDataset,
   PipeAction,
   PipeActionAsync,
   PipeItem,
   PipeItemAsync,
+  UnknownDataset,
 } from '../../types/index.ts';
 
 /**
@@ -29,7 +31,7 @@ export type SchemaWithPipeAsync<
       | PipeItemAsync<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
     )[],
   ],
-> = Omit<FirstTupleItem<TPipe>, 'async' | '_run' | '_types'> & {
+> = Omit<FirstTupleItem<TPipe>, 'async' | '~types' | '~validate'> & {
   /**
    * The pipe items.
    */
@@ -39,7 +41,19 @@ export type SchemaWithPipeAsync<
    */
   readonly async: true;
   /**
-   * Parses unknown input.
+   * The input, output and issue type.
+   *
+   * @internal
+   */
+  readonly '~types'?:
+    | {
+        readonly input: InferInput<FirstTupleItem<TPipe>>;
+        readonly output: InferOutput<LastTupleItem<TPipe>>;
+        readonly issue: InferIssue<TPipe[number]>;
+      }
+    | undefined;
+  /**
+   * Parses unknown input values.
    *
    * @param dataset The input dataset.
    * @param config The configuration.
@@ -48,22 +62,12 @@ export type SchemaWithPipeAsync<
    *
    * @internal
    */
-  readonly _run: (
-    dataset: Dataset<unknown, never>,
-    config: Config<BaseIssue<unknown>>
+  readonly '~validate': (
+    dataset: UnknownDataset,
+    config?: Config<BaseIssue<unknown>>
   ) => Promise<
-    Dataset<InferOutput<LastTupleItem<TPipe>>, InferIssue<TPipe[number]>>
+    OutputDataset<InferOutput<LastTupleItem<TPipe>>, InferIssue<TPipe[number]>>
   >;
-  /**
-   * Input, output and issue type.
-   *
-   * @internal
-   */
-  readonly _types?: {
-    readonly input: InferInput<FirstTupleItem<TPipe>>;
-    readonly output: InferOutput<LastTupleItem<TPipe>>;
-    readonly issue: InferIssue<TPipe[number]>;
-  };
 };
 
 /**
@@ -3028,7 +3032,7 @@ export function pipeAsync<
     ...pipe[0],
     pipe,
     async: true,
-    async _run(dataset, config) {
+    async '~validate'(dataset, config = getGlobalConfig()) {
       // Execute pipeline items in sequence
       for (const item of pipe) {
         // Exclude metadata items from execution
@@ -3049,13 +3053,14 @@ export function pipeAsync<
             (!config.abortEarly && !config.abortPipeEarly)
           ) {
             // @ts-expect-error
-            dataset = await item._run(dataset, config);
+            dataset = await item['~validate'](dataset, config);
           }
         }
       }
 
       // Return output dataset
-      return dataset;
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

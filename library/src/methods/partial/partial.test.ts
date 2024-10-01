@@ -8,7 +8,7 @@ import {
   optional,
   string,
 } from '../../schemas/index.ts';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssue } from '../../vitest/index.ts';
 import { partial } from './partial.ts';
 
@@ -41,14 +41,28 @@ describe('partial', () => {
           reference: object,
           expects: 'Object',
           entries: {
-            key1: { ...optional(entries.key1), _run: expect.any(Function) },
-            key2: { ...optional(entries.key2), _run: expect.any(Function) },
-            key3: { ...optional(entries.key3), _run: expect.any(Function) },
-            key4: { ...optional(entries.key4), _run: expect.any(Function) },
+            key1: {
+              ...optional(entries.key1),
+              '~validate': expect.any(Function),
+            },
+            key2: {
+              ...optional(entries.key2),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...optional(entries.key3),
+              '~validate': expect.any(Function),
+            },
+            key4: {
+              ...optional(entries.key4),
+              '~validate': expect.any(Function),
+            },
           },
           message: undefined,
           async: false,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema1);
       });
 
@@ -59,14 +73,22 @@ describe('partial', () => {
           reference: object,
           expects: 'Object',
           entries: {
-            key1: { ...optional(entries.key1), _run: expect.any(Function) },
+            key1: {
+              ...optional(entries.key1),
+              '~validate': expect.any(Function),
+            },
             key2: entries.key2,
-            key3: { ...optional(entries.key3), _run: expect.any(Function) },
+            key3: {
+              ...optional(entries.key3),
+              '~validate': expect.any(Function),
+            },
             key4: entries.key4,
           },
           message: undefined,
           async: false,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema2);
       });
     });
@@ -87,9 +109,7 @@ describe('partial', () => {
     describe('should return dataset with nested issues', () => {
       test('if non-partialed keys are missing', () => {
         for (const input of [{}, { key1: 'foo', key3: 'bar' }]) {
-          expect(
-            schema2._run({ typed: false, value: input }, {})
-          ).toStrictEqual({
+          expect(schema2['~validate']({ value: input }, {})).toStrictEqual({
             typed: false,
             value: { ...input, key4: 123 },
             issues: [
@@ -111,7 +131,7 @@ describe('partial', () => {
                 ],
               },
             ],
-          } satisfies UntypedDataset<InferIssue<typeof schema2>>);
+          } satisfies FailureDataset<InferIssue<typeof schema2>>);
         }
       });
     });
@@ -131,15 +151,29 @@ describe('partial', () => {
           reference: objectWithRest,
           expects: 'Object',
           entries: {
-            key1: { ...optional(entries.key1), _run: expect.any(Function) },
-            key2: { ...optional(entries.key2), _run: expect.any(Function) },
-            key3: { ...optional(entries.key3), _run: expect.any(Function) },
-            key4: { ...optional(entries.key4), _run: expect.any(Function) },
+            key1: {
+              ...optional(entries.key1),
+              '~validate': expect.any(Function),
+            },
+            key2: {
+              ...optional(entries.key2),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...optional(entries.key3),
+              '~validate': expect.any(Function),
+            },
+            key4: {
+              ...optional(entries.key4),
+              '~validate': expect.any(Function),
+            },
           },
           rest,
           message: undefined,
           async: false,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema1);
       });
 
@@ -151,14 +185,22 @@ describe('partial', () => {
           expects: 'Object',
           entries: {
             key1: entries.key1,
-            key2: { ...optional(entries.key2), _run: expect.any(Function) },
-            key3: { ...optional(entries.key3), _run: expect.any(Function) },
+            key2: {
+              ...optional(entries.key2),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...optional(entries.key3),
+              '~validate': expect.any(Function),
+            },
             key4: entries.key4,
           },
           rest,
           message: undefined,
           async: false,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema2);
       });
     });
@@ -188,9 +230,7 @@ describe('partial', () => {
     describe('should return dataset with nested issues', () => {
       test('if non-partialed keys are missing', () => {
         for (const input of [{}, { key2: 123, key3: 'bar', other: true }]) {
-          expect(
-            schema2._run({ typed: false, value: input }, {})
-          ).toStrictEqual({
+          expect(schema2['~validate']({ value: input }, {})).toStrictEqual({
             typed: false,
             value: { ...input, key4: 123 },
             issues: [
@@ -212,7 +252,7 @@ describe('partial', () => {
                 ],
               },
             ],
-          } satisfies UntypedDataset<InferIssue<typeof schema2>>);
+          } satisfies FailureDataset<InferIssue<typeof schema2>>);
         }
       });
     });

@@ -27,7 +27,9 @@ describe('nonOptionalAsync', () => {
       expects: '!undefined',
       wrapped,
       async: true,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {

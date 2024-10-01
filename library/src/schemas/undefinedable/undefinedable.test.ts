@@ -13,9 +13,14 @@ describe('undefinedable', () => {
       type: 'undefinedable',
       reference: undefinedable,
       expects: '(string | undefined)',
-      wrapped: { ...string(), _run: expect.any(Function) },
+      wrapped: {
+        ...string(),
+        '~validate': expect.any(Function),
+      },
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with never default', () => {
@@ -80,27 +85,19 @@ describe('undefinedable', () => {
     const schema4 = undefinedable(string(), () => 'foo');
 
     test('for undefined', () => {
-      expect(
-        schema1._run({ typed: false, value: undefined }, {})
-      ).toStrictEqual({
+      expect(schema1['~validate']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(
-        schema2._run({ typed: false, value: undefined }, {})
-      ).toStrictEqual({
+      expect(schema2['~validate']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(
-        schema3._run({ typed: false, value: undefined }, {})
-      ).toStrictEqual({
+      expect(schema3['~validate']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(
-        schema4._run({ typed: false, value: undefined }, {})
-      ).toStrictEqual({
+      expect(schema4['~validate']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });

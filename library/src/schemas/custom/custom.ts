@@ -1,4 +1,9 @@
-import type { BaseSchema, Dataset, ErrorMessage } from '../../types/index.ts';
+import { getGlobalConfig } from '../../storages/index.ts';
+import type {
+  BaseSchema,
+  ErrorMessage,
+  OutputDataset,
+} from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { CustomIssue } from './types.ts';
 
@@ -72,13 +77,17 @@ export function custom<TInput>(
     async: false,
     check,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       if (this.check(dataset.value)) {
+        // @ts-expect-error
         dataset.typed = true;
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as Dataset<TInput, CustomIssue>;
+      // @ts-expect-error
+      return dataset as OutputDataset<TInput, CustomIssue>;
     },
   };
 }

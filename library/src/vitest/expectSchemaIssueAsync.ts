@@ -2,8 +2,8 @@ import { expect } from 'vitest';
 import type {
   BaseIssue,
   BaseSchemaAsync,
+  FailureDataset,
   InferIssue,
-  UntypedDataset,
 } from '../types/index.ts';
 import { _stringify } from '../utils/index.ts';
 
@@ -22,7 +22,7 @@ export async function expectSchemaIssueAsync<
   values: unknown[]
 ): Promise<void> {
   for (const value of values) {
-    expect(await schema._run({ typed: false, value }, {})).toStrictEqual({
+    expect(await schema['~validate']({ value }, {})).toStrictEqual({
       typed: false,
       value,
       issues: [
@@ -39,6 +39,6 @@ export async function expectSchemaIssueAsync<
           received: _stringify(value),
         },
       ],
-    } satisfies UntypedDataset<InferIssue<TSchema>>);
+    } satisfies FailureDataset<InferIssue<TSchema>>);
   }
 }

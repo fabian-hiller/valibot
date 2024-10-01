@@ -113,7 +113,7 @@ export function minBytes(
     expects: `>=${requirement}`,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed) {
         const length = new TextEncoder().encode(dataset.value).length;
         if (length < this.requirement) {

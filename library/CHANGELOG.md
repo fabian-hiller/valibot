@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Change types and implementation to support Standard Schema
+
 ## v0.42.1 (September 20, 2024)
 
 - Fix function type declaration of `_run` property

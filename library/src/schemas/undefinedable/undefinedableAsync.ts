@@ -1,12 +1,13 @@
 import { getDefault } from '../../methods/index.ts';
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
-  Dataset,
   DefaultAsync,
   InferInput,
   InferIssue,
+  SuccessDataset,
 } from '../../types/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
 
@@ -99,27 +100,27 @@ export function undefinedableAsync(
     expects: `(${wrapped.expects} | undefined)`,
     async: true,
     wrapped,
-    async _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    async '~validate'(dataset, config = getGlobalConfig()) {
       // If value is `undefined`, override it with default or return dataset
       if (dataset.value === undefined) {
         // If default is specified, override value of dataset
         if ('default' in this) {
-          dataset.value = await getDefault(
-            this,
-            dataset as Dataset<undefined, never>,
-            config
-          );
+          dataset.value = await getDefault(this, dataset, config);
         }
 
         // If value is still `undefined`, return dataset
         if (dataset.value === undefined) {
+          // @ts-expect-error
           dataset.typed = true;
-          return dataset;
+          // @ts-expect-error
+          return dataset as SuccessDataset<unknown>;
         }
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped._run(dataset, config);
+      return this.wrapped['~validate'](dataset, config);
     },
   };
 

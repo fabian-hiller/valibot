@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
@@ -19,7 +19,9 @@ describe('setAsync', () => {
       expects: 'Set',
       value,
       async: true,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -165,8 +167,8 @@ describe('setAsync', () => {
 
     test('for wrong values', async () => {
       expect(
-        await schema._run(
-          { typed: false, value: new Set(['foo', 123, 'baz', null]) },
+        await schema['~validate'](
+          { value: new Set(['foo', 123, 'baz', null]) },
           {}
         )
       ).toStrictEqual({
@@ -192,33 +194,27 @@ describe('setAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with abort early', async () => {
       expect(
-        await schema._run(
-          { typed: false, value: new Set(['foo', 123, 'baz', null]) },
+        await schema['~validate'](
+          { value: new Set(['foo', 123, 'baz', null]) },
           { abortEarly: true }
         )
       ).toStrictEqual({
         typed: false,
         value: new Set(['foo']),
         issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for wrong nested values', async () => {
       const nestedSchema = setAsync(schema);
       const input = new Set([new Set([123, 'foo']), 'bar', new Set()]);
       expect(
-        await nestedSchema._run(
-          {
-            typed: false,
-            value: input,
-          },
-          {}
-        )
+        await nestedSchema['~validate']({ value: input }, {})
       ).toStrictEqual({
         typed: false,
         value: input,
@@ -265,7 +261,7 @@ describe('setAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+      } satisfies FailureDataset<InferIssue<typeof nestedSchema>>);
     });
   });
 });

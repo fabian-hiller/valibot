@@ -25,7 +25,7 @@ export function trim(): TrimAction {
     type: 'trim',
     reference: trim,
     async: false,
-    _run(dataset) {
+    '~validate'(dataset) {
       dataset.value = dataset.value.trim();
       return dataset;
     },

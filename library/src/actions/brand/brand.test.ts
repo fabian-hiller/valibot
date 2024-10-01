@@ -9,12 +9,12 @@ describe('brand', () => {
       reference: brand,
       name: 'foo',
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     } satisfies BrandAction<string, 'foo'>);
   });
 
   test('should return same dataset', () => {
     const dataset = { typed: true, value: 'foo' } as const;
-    expect(brand('foo')._run(dataset, {})).toStrictEqual(dataset);
+    expect(brand('foo')['~validate'](dataset, {})).toStrictEqual(dataset);
   });
 });

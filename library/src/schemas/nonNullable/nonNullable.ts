@@ -1,4 +1,10 @@
-import type { BaseIssue, BaseSchema, ErrorMessage } from '../../types/index.ts';
+import { getGlobalConfig } from '../../storages/index.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  ErrorMessage,
+  FailureDataset,
+} from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type {
   InferNonNullableInput,
@@ -79,15 +85,18 @@ export function nonNullable(
     async: false,
     wrapped,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // If value is `null`, add issue and return dataset
       if (dataset.value === null) {
         _addIssue(this, 'type', dataset, config);
-        return dataset;
+        // @ts-expect-error
+        return dataset as FailureDataset<NonNullableIssue>;
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped._run(dataset, config);
+      return this.wrapped['~validate'](dataset, config);
     },
   };
 }

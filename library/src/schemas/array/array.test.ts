@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
 import { array, type ArraySchema } from './array.ts';
@@ -16,7 +16,9 @@ describe('array', () => {
       expects: 'Array',
       item,
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -150,7 +152,7 @@ describe('array', () => {
 
     test('for wrong items', () => {
       expect(
-        schema._run({ typed: false, value: ['foo', 123, 'baz', null] }, {})
+        schema['~validate']({ value: ['foo', 123, 'baz', null] }, {})
       ).toStrictEqual({
         typed: false,
         value: ['foo', 123, 'baz', null],
@@ -174,29 +176,26 @@ describe('array', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with abort early', () => {
       expect(
-        schema._run(
-          { typed: false, value: ['foo', 123, 'baz', null] },
+        schema['~validate'](
+          { value: ['foo', 123, 'baz', null] },
           { abortEarly: true }
         )
       ).toStrictEqual({
         typed: false,
         value: ['foo'],
         issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for wrong nested items', () => {
       const nestedSchema = array(schema);
       expect(
-        nestedSchema._run(
-          { typed: false, value: [[123, 'foo'], 'bar', []] },
-          {}
-        )
+        nestedSchema['~validate']({ value: [[123, 'foo'], 'bar', []] }, {})
       ).toStrictEqual({
         typed: false,
         value: [[123, 'foo'], 'bar', []],
@@ -243,7 +242,7 @@ describe('array', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+      } satisfies FailureDataset<InferIssue<typeof nestedSchema>>);
     });
   });
 });

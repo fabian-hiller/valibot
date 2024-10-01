@@ -2,7 +2,6 @@ import { HEXADECIMAL_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
@@ -99,11 +98,11 @@ export function hexadecimal(
     expects: null,
     requirement: HEXADECIMAL_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'hexadecimal', dataset, config);
       }
-      return dataset as Dataset<string, HexadecimalIssue<string>>;
+      return dataset;
     },
   };
 }

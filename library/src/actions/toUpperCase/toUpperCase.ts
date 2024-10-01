@@ -26,7 +26,7 @@ export function toUpperCase(): ToUpperCaseAction {
     type: 'to_upper_case',
     reference: toUpperCase,
     async: false,
-    _run(dataset) {
+    '~validate'(dataset) {
       dataset.value = dataset.value.toUpperCase();
       return dataset;
     },

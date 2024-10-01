@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { NumberIssue } from '../../schemas/index.ts';
 import { _stringify } from '../../utils/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { notValue, type NotValueAction } from './notValue.ts';
@@ -12,7 +13,7 @@ describe('notValue', () => {
       expects: '!5',
       requirement: 5,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -42,12 +43,23 @@ describe('notValue', () => {
 
   describe('should return dataset with issues', () => {
     test('for untyped inputs', () => {
-      expect(notValue(1)._run({ typed: false, value: null }, {})).toStrictEqual(
+      const issues: [NumberIssue] = [
         {
-          typed: false,
-          value: null,
-        }
-      );
+          kind: 'schema',
+          type: 'number',
+          input: null,
+          expected: 'number',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        notValue(1)['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: null,
+        issues,
+      });
     });
 
     test('for valid bigints', () => {

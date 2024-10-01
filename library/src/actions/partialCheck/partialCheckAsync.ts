@@ -97,7 +97,7 @@ export function partialCheckAsync(
     expects: null,
     requirement,
     message,
-    async _run(dataset, config) {
+    async '~validate'(dataset, config) {
       if (
         _isPartiallyTyped(dataset, pathList) &&
         // @ts-expect-error
