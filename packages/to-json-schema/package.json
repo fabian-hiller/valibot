@@ -64,12 +64,12 @@
     "eslint-plugin-security": "^2.1.1",
     "tsup": "^8.1.0",
     "typescript": "^5.5.3",
-    "valibot": "^0.42.0",
+    "valibot": "^1.0.0-beta.0",
     "vite": "^5.3.3",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "1.6.0"
   },
   "peerDependencies": {
-    "valibot": ">=0.31.0 <1"
+    "valibot": "^1.0.0"
   }
 }
