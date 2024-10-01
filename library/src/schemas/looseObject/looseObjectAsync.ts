@@ -180,7 +180,8 @@ export function looseObjectAsync(
       }
 
       // Return output dataset
-      return dataset as unknown as OutputDataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         InferObjectOutput<ObjectEntriesAsync> & { [key: string]: unknown },
         LooseObjectIssue | InferObjectIssue<ObjectEntriesAsync>
       >;

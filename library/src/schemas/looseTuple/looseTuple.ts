@@ -158,7 +158,8 @@ export function looseTuple(
       }
 
       // Return output dataset
-      return dataset as unknown as OutputDataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         unknown[],
         LooseTupleIssue | BaseIssue<unknown>
       >;

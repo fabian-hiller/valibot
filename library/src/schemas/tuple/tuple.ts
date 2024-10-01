@@ -160,7 +160,8 @@ export function tuple(
       }
 
       // Return output dataset
-      return dataset as unknown as OutputDataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         unknown[],
         TupleIssue | BaseIssue<unknown>
       >;

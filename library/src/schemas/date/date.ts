@@ -93,7 +93,8 @@ export function date(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<Date, DateIssue>;
+      // @ts-expect-error
+      return dataset as OutputDataset<Date, DateIssue>;
     },
   };
 }

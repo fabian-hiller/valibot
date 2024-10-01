@@ -190,7 +190,8 @@ export function strictObject(
       }
 
       // Return output dataset
-      return dataset as unknown as OutputDataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         InferObjectOutput<ObjectEntries>,
         StrictObjectIssue | InferObjectIssue<ObjectEntries>
       >;

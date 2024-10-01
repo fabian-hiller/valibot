@@ -35,7 +35,8 @@ export function unknown(): UnknownSchema {
     '~validate'(dataset) {
       // @ts-expect-error
       dataset.typed = true;
-      return dataset as unknown as SuccessDataset<unknown>;
+      // @ts-expect-error
+      return dataset as SuccessDataset<unknown>;
     },
   };
 }

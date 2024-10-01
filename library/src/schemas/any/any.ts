@@ -40,7 +40,8 @@ export function any(): AnySchema {
     '~validate'(dataset) {
       // @ts-expect-error
       dataset.typed = true;
-      return dataset as unknown as SuccessDataset<any>;
+      // @ts-expect-error
+      return dataset as SuccessDataset<any>;
     },
   };
 }

@@ -91,7 +91,8 @@ export function nonNullable(
       // If value is `null`, add issue and return dataset
       if (dataset.value === null) {
         _addIssue(this, 'type', dataset, config);
-        return dataset as unknown as FailureDataset<NonNullableIssue>;
+        // @ts-expect-error
+        return dataset as FailureDataset<NonNullableIssue>;
       }
 
       // Otherwise, return dataset of wrapped schema

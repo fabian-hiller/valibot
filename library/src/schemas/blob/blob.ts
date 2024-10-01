@@ -86,7 +86,8 @@ export function blob(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<Blob, BlobIssue>;
+      // @ts-expect-error
+      return dataset as OutputDataset<Blob, BlobIssue>;
     },
   };
 }

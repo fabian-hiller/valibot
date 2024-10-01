@@ -86,7 +86,8 @@ export function number(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<number, NumberIssue>;
+      // @ts-expect-error
+      return dataset as OutputDataset<number, NumberIssue>;
     },
   };
 }

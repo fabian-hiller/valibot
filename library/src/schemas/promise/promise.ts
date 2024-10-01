@@ -86,10 +86,8 @@ export function promise(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<
-        Promise<unknown>,
-        PromiseIssue
-      >;
+      // @ts-expect-error
+      return dataset as OutputDataset<Promise<unknown>, PromiseIssue>;
     },
   };
 }

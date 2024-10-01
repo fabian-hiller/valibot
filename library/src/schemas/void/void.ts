@@ -86,7 +86,8 @@ export function void_(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<void, VoidIssue>;
+      // @ts-expect-error
+      return dataset as OutputDataset<void, VoidIssue>;
     },
   };
 }

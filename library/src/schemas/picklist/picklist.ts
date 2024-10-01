@@ -102,10 +102,8 @@ export function picklist(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<
-        PicklistOptions[number],
-        PicklistIssue
-      >;
+      // @ts-expect-error
+      return dataset as OutputDataset<PicklistOptions[number], PicklistIssue>;
     },
   };
 }

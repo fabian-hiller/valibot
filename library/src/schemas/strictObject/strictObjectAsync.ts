@@ -198,7 +198,8 @@ export function strictObjectAsync(
       }
 
       // Return output dataset
-      return dataset as unknown as OutputDataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         InferObjectOutput<ObjectEntriesAsync>,
         StrictObjectIssue | InferObjectIssue<ObjectEntriesAsync>
       >;

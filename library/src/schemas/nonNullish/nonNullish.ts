@@ -91,7 +91,8 @@ export function nonNullish(
       // If value is `null` or `undefined`, add issue and return dataset
       if (dataset.value === null || dataset.value === undefined) {
         _addIssue(this, 'type', dataset, config);
-        return dataset as unknown as FailureDataset<NonNullishIssue>;
+        // @ts-expect-error
+        return dataset as FailureDataset<NonNullishIssue>;
       }
 
       // Otherwise, return dataset of wrapped schema

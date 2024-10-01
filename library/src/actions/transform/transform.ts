@@ -38,7 +38,8 @@ export function transform<TInput, TOutput>(
     '~validate'(dataset) {
       // @ts-expect-error
       dataset.value = this.operation(dataset.value);
-      return dataset as unknown as SuccessDataset<TOutput>;
+      // @ts-expect-error
+      return dataset as SuccessDataset<TOutput>;
     },
   };
 }

@@ -91,7 +91,8 @@ export function nonOptional(
       // If value is `undefined`, add issue and return dataset
       if (dataset.value === undefined) {
         _addIssue(this, 'type', dataset, config);
-        return dataset as unknown as FailureDataset<NonOptionalIssue>;
+        // @ts-expect-error
+        return dataset as FailureDataset<NonOptionalIssue>;
       }
 
       // Otherwise, return dataset of wrapped schema

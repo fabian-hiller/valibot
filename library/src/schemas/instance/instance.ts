@@ -105,10 +105,8 @@ export function instance(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<
-        InstanceType<Class>,
-        InstanceIssue
-      >;
+      // @ts-expect-error
+      return dataset as OutputDataset<InstanceType<Class>, InstanceIssue>;
     },
   };
 }

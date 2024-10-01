@@ -57,7 +57,8 @@ export function rawTransformAsync<TInput, TOutput>(
       }
 
       // Return output dataset
-      return dataset as unknown as OutputDataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         TOutput,
         BaseIssue<unknown> | RawTransformIssue<TInput>
       >;

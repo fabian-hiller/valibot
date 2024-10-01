@@ -86,7 +86,8 @@ export function boolean(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<boolean, BooleanIssue>;
+      // @ts-expect-error
+      return dataset as OutputDataset<boolean, BooleanIssue>;
     },
   };
 }

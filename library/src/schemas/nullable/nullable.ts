@@ -97,7 +97,8 @@ export function nullable(
         if (dataset.value === null) {
           // @ts-expect-error
           dataset.typed = true;
-          return dataset as unknown as SuccessDataset<unknown>;
+          // @ts-expect-error
+          return dataset as SuccessDataset<unknown>;
         }
       }
 

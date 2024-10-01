@@ -239,7 +239,8 @@ export function recordAsync(
       }
 
       // Return output dataset
-      return dataset as unknown as OutputDataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         Record<string | number | symbol, unknown>,
         RecordIssue | BaseIssue<unknown>
       >;

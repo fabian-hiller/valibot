@@ -86,7 +86,8 @@ export function null_(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<null, NullIssue>;
+      // @ts-expect-error
+      return dataset as OutputDataset<null, NullIssue>;
     },
   };
 }

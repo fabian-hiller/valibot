@@ -100,7 +100,8 @@ export function literal(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<Literal, LiteralIssue>;
+      // @ts-expect-error
+      return dataset as OutputDataset<Literal, LiteralIssue>;
     },
   };
 }

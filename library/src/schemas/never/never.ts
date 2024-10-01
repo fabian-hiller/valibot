@@ -81,7 +81,8 @@ export function never(
     '~vendor': 'valibot',
     '~validate'(dataset, config = getGlobalConfig()) {
       _addIssue(this, 'type', dataset, config);
-      return dataset as unknown as FailureDataset<NeverIssue>;
+      // @ts-expect-error
+      return dataset as FailureDataset<NeverIssue>;
     },
   };
 }

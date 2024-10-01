@@ -173,7 +173,8 @@ export function intersectAsync(
       }
 
       // Return output dataset
-      return dataset as unknown as OutputDataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         never,
         IntersectIssue | BaseIssue<unknown>
       >;

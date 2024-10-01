@@ -86,7 +86,8 @@ export function symbol(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<symbol, SymbolIssue>;
+      // @ts-expect-error
+      return dataset as OutputDataset<symbol, SymbolIssue>;
     },
   };
 }

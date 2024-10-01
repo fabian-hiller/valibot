@@ -115,7 +115,8 @@ export function nullishAsync(
         if (dataset.value === null || dataset.value === undefined) {
           // @ts-expect-error
           dataset.typed = true;
-          return dataset as unknown as SuccessDataset<unknown>;
+          // @ts-expect-error
+          return dataset as SuccessDataset<unknown>;
         }
       }
 

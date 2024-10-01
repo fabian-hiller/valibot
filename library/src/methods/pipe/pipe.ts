@@ -2673,7 +2673,8 @@ export function pipe<
       }
 
       // Return output dataset
-      return dataset as unknown as OutputDataset<unknown, BaseIssue<unknown>>;
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

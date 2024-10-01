@@ -90,7 +90,8 @@ export function function_(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as unknown as OutputDataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         (...args: unknown[]) => unknown,
         FunctionIssue
       >;
