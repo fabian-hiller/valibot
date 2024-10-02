@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## v1.0.0 (Month DD, YYYY)
 
 - Add new and missing actions to translations
+- Change Valibot peer dependency to v1.0.0
 
 ## v0.17.0 (July 26, 2024)
 
