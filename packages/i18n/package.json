@@ -96,6 +96,16 @@
         "default": "./ar/schema.cjs"
       }
     },
+    "./ar/base64": {
+      "import": {
+        "types": "./ar/base64.d.ts",
+        "default": "./ar/base64.js"
+      },
+      "require": {
+        "types": "./ar/base64.d.cts",
+        "default": "./ar/base64.cjs"
+      }
+    },
     "./ar/bic": {
       "import": {
         "types": "./ar/bic.d.ts",
@@ -136,6 +146,16 @@
         "default": "./ar/checkAsync.cjs"
       }
     },
+    "./ar/checkItems": {
+      "import": {
+        "types": "./ar/checkItems.d.ts",
+        "default": "./ar/checkItems.js"
+      },
+      "require": {
+        "types": "./ar/checkItems.d.cts",
+        "default": "./ar/checkItems.cjs"
+      }
+    },
     "./ar/creditCard": {
       "import": {
         "types": "./ar/creditCard.d.ts",
@@ -164,6 +184,16 @@
       "require": {
         "types": "./ar/decimal.d.cts",
         "default": "./ar/decimal.cjs"
+      }
+    },
+    "./ar/digits": {
+      "import": {
+        "types": "./ar/digits.d.ts",
+        "default": "./ar/digits.js"
+      },
+      "require": {
+        "types": "./ar/digits.d.cts",
+        "default": "./ar/digits.cjs"
       }
     },
     "./ar/email": {
@@ -204,6 +234,16 @@
       "require": {
         "types": "./ar/endsWith.d.cts",
         "default": "./ar/endsWith.cjs"
+      }
+    },
+    "./ar/everyItem": {
+      "import": {
+        "types": "./ar/everyItem.d.ts",
+        "default": "./ar/everyItem.js"
+      },
+      "require": {
+        "types": "./ar/everyItem.d.cts",
+        "default": "./ar/everyItem.cjs"
       }
     },
     "./ar/excludes": {
@@ -516,6 +556,16 @@
         "default": "./ar/multipleOf.cjs"
       }
     },
+    "./ar/nanoid": {
+      "import": {
+        "types": "./ar/nanoid.d.ts",
+        "default": "./ar/nanoid.js"
+      },
+      "require": {
+        "types": "./ar/nanoid.d.cts",
+        "default": "./ar/nanoid.cjs"
+      }
+    },
     "./ar/nonEmpty": {
       "import": {
         "types": "./ar/nonEmpty.d.ts",
@@ -576,6 +626,16 @@
         "default": "./ar/octal.cjs"
       }
     },
+    "./ar/partialCheck": {
+      "import": {
+        "types": "./ar/partialCheck.d.ts",
+        "default": "./ar/partialCheck.js"
+      },
+      "require": {
+        "types": "./ar/partialCheck.d.cts",
+        "default": "./ar/partialCheck.cjs"
+      }
+    },
     "./ar/regex": {
       "import": {
         "types": "./ar/regex.d.ts",
@@ -604,6 +664,16 @@
       "require": {
         "types": "./ar/size.d.cts",
         "default": "./ar/size.cjs"
+      }
+    },
+    "./ar/someItem": {
+      "import": {
+        "types": "./ar/someItem.d.ts",
+        "default": "./ar/someItem.js"
+      },
+      "require": {
+        "types": "./ar/someItem.d.cts",
+        "default": "./ar/someItem.cjs"
       }
     },
     "./ar/startsWith": {
@@ -676,6 +746,16 @@
         "default": "./ca/schema.cjs"
       }
     },
+    "./ca/base64": {
+      "import": {
+        "types": "./ca/base64.d.ts",
+        "default": "./ca/base64.js"
+      },
+      "require": {
+        "types": "./ca/base64.d.cts",
+        "default": "./ca/base64.cjs"
+      }
+    },
     "./ca/bic": {
       "import": {
         "types": "./ca/bic.d.ts",
@@ -716,6 +796,16 @@
         "default": "./ca/checkAsync.cjs"
       }
     },
+    "./ca/checkItems": {
+      "import": {
+        "types": "./ca/checkItems.d.ts",
+        "default": "./ca/checkItems.js"
+      },
+      "require": {
+        "types": "./ca/checkItems.d.cts",
+        "default": "./ca/checkItems.cjs"
+      }
+    },
     "./ca/creditCard": {
       "import": {
         "types": "./ca/creditCard.d.ts",
@@ -744,6 +834,16 @@
       "require": {
         "types": "./ca/decimal.d.cts",
         "default": "./ca/decimal.cjs"
+      }
+    },
+    "./ca/digits": {
+      "import": {
+        "types": "./ca/digits.d.ts",
+        "default": "./ca/digits.js"
+      },
+      "require": {
+        "types": "./ca/digits.d.cts",
+        "default": "./ca/digits.cjs"
       }
     },
     "./ca/email": {
@@ -784,6 +884,16 @@
       "require": {
         "types": "./ca/endsWith.d.cts",
         "default": "./ca/endsWith.cjs"
+      }
+    },
+    "./ca/everyItem": {
+      "import": {
+        "types": "./ca/everyItem.d.ts",
+        "default": "./ca/everyItem.js"
+      },
+      "require": {
+        "types": "./ca/everyItem.d.cts",
+        "default": "./ca/everyItem.cjs"
       }
     },
     "./ca/excludes": {
@@ -1096,6 +1206,16 @@
         "default": "./ca/multipleOf.cjs"
       }
     },
+    "./ca/nanoid": {
+      "import": {
+        "types": "./ca/nanoid.d.ts",
+        "default": "./ca/nanoid.js"
+      },
+      "require": {
+        "types": "./ca/nanoid.d.cts",
+        "default": "./ca/nanoid.cjs"
+      }
+    },
     "./ca/nonEmpty": {
       "import": {
         "types": "./ca/nonEmpty.d.ts",
@@ -1156,6 +1276,16 @@
         "default": "./ca/octal.cjs"
       }
     },
+    "./ca/partialCheck": {
+      "import": {
+        "types": "./ca/partialCheck.d.ts",
+        "default": "./ca/partialCheck.js"
+      },
+      "require": {
+        "types": "./ca/partialCheck.d.cts",
+        "default": "./ca/partialCheck.cjs"
+      }
+    },
     "./ca/regex": {
       "import": {
         "types": "./ca/regex.d.ts",
@@ -1184,6 +1314,16 @@
       "require": {
         "types": "./ca/size.d.cts",
         "default": "./ca/size.cjs"
+      }
+    },
+    "./ca/someItem": {
+      "import": {
+        "types": "./ca/someItem.d.ts",
+        "default": "./ca/someItem.js"
+      },
+      "require": {
+        "types": "./ca/someItem.d.cts",
+        "default": "./ca/someItem.cjs"
       }
     },
     "./ca/startsWith": {
@@ -1256,6 +1396,16 @@
         "default": "./de/schema.cjs"
       }
     },
+    "./de/base64": {
+      "import": {
+        "types": "./de/base64.d.ts",
+        "default": "./de/base64.js"
+      },
+      "require": {
+        "types": "./de/base64.d.cts",
+        "default": "./de/base64.cjs"
+      }
+    },
     "./de/bic": {
       "import": {
         "types": "./de/bic.d.ts",
@@ -1296,6 +1446,16 @@
         "default": "./de/checkAsync.cjs"
       }
     },
+    "./de/checkItems": {
+      "import": {
+        "types": "./de/checkItems.d.ts",
+        "default": "./de/checkItems.js"
+      },
+      "require": {
+        "types": "./de/checkItems.d.cts",
+        "default": "./de/checkItems.cjs"
+      }
+    },
     "./de/creditCard": {
       "import": {
         "types": "./de/creditCard.d.ts",
@@ -1324,6 +1484,16 @@
       "require": {
         "types": "./de/decimal.d.cts",
         "default": "./de/decimal.cjs"
+      }
+    },
+    "./de/digits": {
+      "import": {
+        "types": "./de/digits.d.ts",
+        "default": "./de/digits.js"
+      },
+      "require": {
+        "types": "./de/digits.d.cts",
+        "default": "./de/digits.cjs"
       }
     },
     "./de/email": {
@@ -1364,6 +1534,16 @@
       "require": {
         "types": "./de/endsWith.d.cts",
         "default": "./de/endsWith.cjs"
+      }
+    },
+    "./de/everyItem": {
+      "import": {
+        "types": "./de/everyItem.d.ts",
+        "default": "./de/everyItem.js"
+      },
+      "require": {
+        "types": "./de/everyItem.d.cts",
+        "default": "./de/everyItem.cjs"
       }
     },
     "./de/excludes": {
@@ -1676,6 +1856,16 @@
         "default": "./de/multipleOf.cjs"
       }
     },
+    "./de/nanoid": {
+      "import": {
+        "types": "./de/nanoid.d.ts",
+        "default": "./de/nanoid.js"
+      },
+      "require": {
+        "types": "./de/nanoid.d.cts",
+        "default": "./de/nanoid.cjs"
+      }
+    },
     "./de/nonEmpty": {
       "import": {
         "types": "./de/nonEmpty.d.ts",
@@ -1736,6 +1926,16 @@
         "default": "./de/octal.cjs"
       }
     },
+    "./de/partialCheck": {
+      "import": {
+        "types": "./de/partialCheck.d.ts",
+        "default": "./de/partialCheck.js"
+      },
+      "require": {
+        "types": "./de/partialCheck.d.cts",
+        "default": "./de/partialCheck.cjs"
+      }
+    },
     "./de/regex": {
       "import": {
         "types": "./de/regex.d.ts",
@@ -1764,6 +1964,16 @@
       "require": {
         "types": "./de/size.d.cts",
         "default": "./de/size.cjs"
+      }
+    },
+    "./de/someItem": {
+      "import": {
+        "types": "./de/someItem.d.ts",
+        "default": "./de/someItem.js"
+      },
+      "require": {
+        "types": "./de/someItem.d.cts",
+        "default": "./de/someItem.cjs"
       }
     },
     "./de/startsWith": {
@@ -1836,6 +2046,16 @@
         "default": "./es/schema.cjs"
       }
     },
+    "./es/base64": {
+      "import": {
+        "types": "./es/base64.d.ts",
+        "default": "./es/base64.js"
+      },
+      "require": {
+        "types": "./es/base64.d.cts",
+        "default": "./es/base64.cjs"
+      }
+    },
     "./es/bic": {
       "import": {
         "types": "./es/bic.d.ts",
@@ -1876,6 +2096,16 @@
         "default": "./es/checkAsync.cjs"
       }
     },
+    "./es/checkItems": {
+      "import": {
+        "types": "./es/checkItems.d.ts",
+        "default": "./es/checkItems.js"
+      },
+      "require": {
+        "types": "./es/checkItems.d.cts",
+        "default": "./es/checkItems.cjs"
+      }
+    },
     "./es/creditCard": {
       "import": {
         "types": "./es/creditCard.d.ts",
@@ -1904,6 +2134,16 @@
       "require": {
         "types": "./es/decimal.d.cts",
         "default": "./es/decimal.cjs"
+      }
+    },
+    "./es/digits": {
+      "import": {
+        "types": "./es/digits.d.ts",
+        "default": "./es/digits.js"
+      },
+      "require": {
+        "types": "./es/digits.d.cts",
+        "default": "./es/digits.cjs"
       }
     },
     "./es/email": {
@@ -1944,6 +2184,16 @@
       "require": {
         "types": "./es/endsWith.d.cts",
         "default": "./es/endsWith.cjs"
+      }
+    },
+    "./es/everyItem": {
+      "import": {
+        "types": "./es/everyItem.d.ts",
+        "default": "./es/everyItem.js"
+      },
+      "require": {
+        "types": "./es/everyItem.d.cts",
+        "default": "./es/everyItem.cjs"
       }
     },
     "./es/excludes": {
@@ -2256,6 +2506,16 @@
         "default": "./es/multipleOf.cjs"
       }
     },
+    "./es/nanoid": {
+      "import": {
+        "types": "./es/nanoid.d.ts",
+        "default": "./es/nanoid.js"
+      },
+      "require": {
+        "types": "./es/nanoid.d.cts",
+        "default": "./es/nanoid.cjs"
+      }
+    },
     "./es/nonEmpty": {
       "import": {
         "types": "./es/nonEmpty.d.ts",
@@ -2316,6 +2576,16 @@
         "default": "./es/octal.cjs"
       }
     },
+    "./es/partialCheck": {
+      "import": {
+        "types": "./es/partialCheck.d.ts",
+        "default": "./es/partialCheck.js"
+      },
+      "require": {
+        "types": "./es/partialCheck.d.cts",
+        "default": "./es/partialCheck.cjs"
+      }
+    },
     "./es/regex": {
       "import": {
         "types": "./es/regex.d.ts",
@@ -2344,6 +2614,16 @@
       "require": {
         "types": "./es/size.d.cts",
         "default": "./es/size.cjs"
+      }
+    },
+    "./es/someItem": {
+      "import": {
+        "types": "./es/someItem.d.ts",
+        "default": "./es/someItem.js"
+      },
+      "require": {
+        "types": "./es/someItem.d.cts",
+        "default": "./es/someItem.cjs"
       }
     },
     "./es/startsWith": {
@@ -2416,6 +2696,16 @@
         "default": "./fr/schema.cjs"
       }
     },
+    "./fr/base64": {
+      "import": {
+        "types": "./fr/base64.d.ts",
+        "default": "./fr/base64.js"
+      },
+      "require": {
+        "types": "./fr/base64.d.cts",
+        "default": "./fr/base64.cjs"
+      }
+    },
     "./fr/bic": {
       "import": {
         "types": "./fr/bic.d.ts",
@@ -2456,6 +2746,16 @@
         "default": "./fr/checkAsync.cjs"
       }
     },
+    "./fr/checkItems": {
+      "import": {
+        "types": "./fr/checkItems.d.ts",
+        "default": "./fr/checkItems.js"
+      },
+      "require": {
+        "types": "./fr/checkItems.d.cts",
+        "default": "./fr/checkItems.cjs"
+      }
+    },
     "./fr/creditCard": {
       "import": {
         "types": "./fr/creditCard.d.ts",
@@ -2484,6 +2784,16 @@
       "require": {
         "types": "./fr/decimal.d.cts",
         "default": "./fr/decimal.cjs"
+      }
+    },
+    "./fr/digits": {
+      "import": {
+        "types": "./fr/digits.d.ts",
+        "default": "./fr/digits.js"
+      },
+      "require": {
+        "types": "./fr/digits.d.cts",
+        "default": "./fr/digits.cjs"
       }
     },
     "./fr/email": {
@@ -2524,6 +2834,16 @@
       "require": {
         "types": "./fr/endsWith.d.cts",
         "default": "./fr/endsWith.cjs"
+      }
+    },
+    "./fr/everyItem": {
+      "import": {
+        "types": "./fr/everyItem.d.ts",
+        "default": "./fr/everyItem.js"
+      },
+      "require": {
+        "types": "./fr/everyItem.d.cts",
+        "default": "./fr/everyItem.cjs"
       }
     },
     "./fr/excludes": {
@@ -2836,6 +3156,16 @@
         "default": "./fr/multipleOf.cjs"
       }
     },
+    "./fr/nanoid": {
+      "import": {
+        "types": "./fr/nanoid.d.ts",
+        "default": "./fr/nanoid.js"
+      },
+      "require": {
+        "types": "./fr/nanoid.d.cts",
+        "default": "./fr/nanoid.cjs"
+      }
+    },
     "./fr/nonEmpty": {
       "import": {
         "types": "./fr/nonEmpty.d.ts",
@@ -2896,6 +3226,16 @@
         "default": "./fr/octal.cjs"
       }
     },
+    "./fr/partialCheck": {
+      "import": {
+        "types": "./fr/partialCheck.d.ts",
+        "default": "./fr/partialCheck.js"
+      },
+      "require": {
+        "types": "./fr/partialCheck.d.cts",
+        "default": "./fr/partialCheck.cjs"
+      }
+    },
     "./fr/regex": {
       "import": {
         "types": "./fr/regex.d.ts",
@@ -2924,6 +3264,16 @@
       "require": {
         "types": "./fr/size.d.cts",
         "default": "./fr/size.cjs"
+      }
+    },
+    "./fr/someItem": {
+      "import": {
+        "types": "./fr/someItem.d.ts",
+        "default": "./fr/someItem.js"
+      },
+      "require": {
+        "types": "./fr/someItem.d.cts",
+        "default": "./fr/someItem.cjs"
       }
     },
     "./fr/startsWith": {
@@ -2996,6 +3346,16 @@
         "default": "./hu/schema.cjs"
       }
     },
+    "./hu/base64": {
+      "import": {
+        "types": "./hu/base64.d.ts",
+        "default": "./hu/base64.js"
+      },
+      "require": {
+        "types": "./hu/base64.d.cts",
+        "default": "./hu/base64.cjs"
+      }
+    },
     "./hu/bic": {
       "import": {
         "types": "./hu/bic.d.ts",
@@ -3036,6 +3396,16 @@
         "default": "./hu/checkAsync.cjs"
       }
     },
+    "./hu/checkItems": {
+      "import": {
+        "types": "./hu/checkItems.d.ts",
+        "default": "./hu/checkItems.js"
+      },
+      "require": {
+        "types": "./hu/checkItems.d.cts",
+        "default": "./hu/checkItems.cjs"
+      }
+    },
     "./hu/creditCard": {
       "import": {
         "types": "./hu/creditCard.d.ts",
@@ -3064,6 +3434,16 @@
       "require": {
         "types": "./hu/decimal.d.cts",
         "default": "./hu/decimal.cjs"
+      }
+    },
+    "./hu/digits": {
+      "import": {
+        "types": "./hu/digits.d.ts",
+        "default": "./hu/digits.js"
+      },
+      "require": {
+        "types": "./hu/digits.d.cts",
+        "default": "./hu/digits.cjs"
       }
     },
     "./hu/email": {
@@ -3104,6 +3484,16 @@
       "require": {
         "types": "./hu/endsWith.d.cts",
         "default": "./hu/endsWith.cjs"
+      }
+    },
+    "./hu/everyItem": {
+      "import": {
+        "types": "./hu/everyItem.d.ts",
+        "default": "./hu/everyItem.js"
+      },
+      "require": {
+        "types": "./hu/everyItem.d.cts",
+        "default": "./hu/everyItem.cjs"
       }
     },
     "./hu/excludes": {
@@ -3416,6 +3806,16 @@
         "default": "./hu/multipleOf.cjs"
       }
     },
+    "./hu/nanoid": {
+      "import": {
+        "types": "./hu/nanoid.d.ts",
+        "default": "./hu/nanoid.js"
+      },
+      "require": {
+        "types": "./hu/nanoid.d.cts",
+        "default": "./hu/nanoid.cjs"
+      }
+    },
     "./hu/nonEmpty": {
       "import": {
         "types": "./hu/nonEmpty.d.ts",
@@ -3476,6 +3876,16 @@
         "default": "./hu/octal.cjs"
       }
     },
+    "./hu/partialCheck": {
+      "import": {
+        "types": "./hu/partialCheck.d.ts",
+        "default": "./hu/partialCheck.js"
+      },
+      "require": {
+        "types": "./hu/partialCheck.d.cts",
+        "default": "./hu/partialCheck.cjs"
+      }
+    },
     "./hu/regex": {
       "import": {
         "types": "./hu/regex.d.ts",
@@ -3504,6 +3914,16 @@
       "require": {
         "types": "./hu/size.d.cts",
         "default": "./hu/size.cjs"
+      }
+    },
+    "./hu/someItem": {
+      "import": {
+        "types": "./hu/someItem.d.ts",
+        "default": "./hu/someItem.js"
+      },
+      "require": {
+        "types": "./hu/someItem.d.cts",
+        "default": "./hu/someItem.cjs"
       }
     },
     "./hu/startsWith": {
@@ -3576,6 +3996,16 @@
         "default": "./id/schema.cjs"
       }
     },
+    "./id/base64": {
+      "import": {
+        "types": "./id/base64.d.ts",
+        "default": "./id/base64.js"
+      },
+      "require": {
+        "types": "./id/base64.d.cts",
+        "default": "./id/base64.cjs"
+      }
+    },
     "./id/bic": {
       "import": {
         "types": "./id/bic.d.ts",
@@ -3616,6 +4046,16 @@
         "default": "./id/checkAsync.cjs"
       }
     },
+    "./id/checkItems": {
+      "import": {
+        "types": "./id/checkItems.d.ts",
+        "default": "./id/checkItems.js"
+      },
+      "require": {
+        "types": "./id/checkItems.d.cts",
+        "default": "./id/checkItems.cjs"
+      }
+    },
     "./id/creditCard": {
       "import": {
         "types": "./id/creditCard.d.ts",
@@ -3644,6 +4084,16 @@
       "require": {
         "types": "./id/decimal.d.cts",
         "default": "./id/decimal.cjs"
+      }
+    },
+    "./id/digits": {
+      "import": {
+        "types": "./id/digits.d.ts",
+        "default": "./id/digits.js"
+      },
+      "require": {
+        "types": "./id/digits.d.cts",
+        "default": "./id/digits.cjs"
       }
     },
     "./id/email": {
@@ -3684,6 +4134,16 @@
       "require": {
         "types": "./id/endsWith.d.cts",
         "default": "./id/endsWith.cjs"
+      }
+    },
+    "./id/everyItem": {
+      "import": {
+        "types": "./id/everyItem.d.ts",
+        "default": "./id/everyItem.js"
+      },
+      "require": {
+        "types": "./id/everyItem.d.cts",
+        "default": "./id/everyItem.cjs"
       }
     },
     "./id/excludes": {
@@ -3996,6 +4456,16 @@
         "default": "./id/multipleOf.cjs"
       }
     },
+    "./id/nanoid": {
+      "import": {
+        "types": "./id/nanoid.d.ts",
+        "default": "./id/nanoid.js"
+      },
+      "require": {
+        "types": "./id/nanoid.d.cts",
+        "default": "./id/nanoid.cjs"
+      }
+    },
     "./id/nonEmpty": {
       "import": {
         "types": "./id/nonEmpty.d.ts",
@@ -4056,6 +4526,16 @@
         "default": "./id/octal.cjs"
       }
     },
+    "./id/partialCheck": {
+      "import": {
+        "types": "./id/partialCheck.d.ts",
+        "default": "./id/partialCheck.js"
+      },
+      "require": {
+        "types": "./id/partialCheck.d.cts",
+        "default": "./id/partialCheck.cjs"
+      }
+    },
     "./id/regex": {
       "import": {
         "types": "./id/regex.d.ts",
@@ -4084,6 +4564,16 @@
       "require": {
         "types": "./id/size.d.cts",
         "default": "./id/size.cjs"
+      }
+    },
+    "./id/someItem": {
+      "import": {
+        "types": "./id/someItem.d.ts",
+        "default": "./id/someItem.js"
+      },
+      "require": {
+        "types": "./id/someItem.d.cts",
+        "default": "./id/someItem.cjs"
       }
     },
     "./id/startsWith": {
@@ -4156,6 +4646,16 @@
         "default": "./it/schema.cjs"
       }
     },
+    "./it/base64": {
+      "import": {
+        "types": "./it/base64.d.ts",
+        "default": "./it/base64.js"
+      },
+      "require": {
+        "types": "./it/base64.d.cts",
+        "default": "./it/base64.cjs"
+      }
+    },
     "./it/bic": {
       "import": {
         "types": "./it/bic.d.ts",
@@ -4196,6 +4696,16 @@
         "default": "./it/checkAsync.cjs"
       }
     },
+    "./it/checkItems": {
+      "import": {
+        "types": "./it/checkItems.d.ts",
+        "default": "./it/checkItems.js"
+      },
+      "require": {
+        "types": "./it/checkItems.d.cts",
+        "default": "./it/checkItems.cjs"
+      }
+    },
     "./it/creditCard": {
       "import": {
         "types": "./it/creditCard.d.ts",
@@ -4224,6 +4734,16 @@
       "require": {
         "types": "./it/decimal.d.cts",
         "default": "./it/decimal.cjs"
+      }
+    },
+    "./it/digits": {
+      "import": {
+        "types": "./it/digits.d.ts",
+        "default": "./it/digits.js"
+      },
+      "require": {
+        "types": "./it/digits.d.cts",
+        "default": "./it/digits.cjs"
       }
     },
     "./it/email": {
@@ -4264,6 +4784,16 @@
       "require": {
         "types": "./it/endsWith.d.cts",
         "default": "./it/endsWith.cjs"
+      }
+    },
+    "./it/everyItem": {
+      "import": {
+        "types": "./it/everyItem.d.ts",
+        "default": "./it/everyItem.js"
+      },
+      "require": {
+        "types": "./it/everyItem.d.cts",
+        "default": "./it/everyItem.cjs"
       }
     },
     "./it/excludes": {
@@ -4576,6 +5106,16 @@
         "default": "./it/multipleOf.cjs"
       }
     },
+    "./it/nanoid": {
+      "import": {
+        "types": "./it/nanoid.d.ts",
+        "default": "./it/nanoid.js"
+      },
+      "require": {
+        "types": "./it/nanoid.d.cts",
+        "default": "./it/nanoid.cjs"
+      }
+    },
     "./it/nonEmpty": {
       "import": {
         "types": "./it/nonEmpty.d.ts",
@@ -4636,6 +5176,16 @@
         "default": "./it/octal.cjs"
       }
     },
+    "./it/partialCheck": {
+      "import": {
+        "types": "./it/partialCheck.d.ts",
+        "default": "./it/partialCheck.js"
+      },
+      "require": {
+        "types": "./it/partialCheck.d.cts",
+        "default": "./it/partialCheck.cjs"
+      }
+    },
     "./it/regex": {
       "import": {
         "types": "./it/regex.d.ts",
@@ -4664,6 +5214,16 @@
       "require": {
         "types": "./it/size.d.cts",
         "default": "./it/size.cjs"
+      }
+    },
+    "./it/someItem": {
+      "import": {
+        "types": "./it/someItem.d.ts",
+        "default": "./it/someItem.js"
+      },
+      "require": {
+        "types": "./it/someItem.d.cts",
+        "default": "./it/someItem.cjs"
       }
     },
     "./it/startsWith": {
@@ -4736,6 +5296,16 @@
         "default": "./ja/schema.cjs"
       }
     },
+    "./ja/base64": {
+      "import": {
+        "types": "./ja/base64.d.ts",
+        "default": "./ja/base64.js"
+      },
+      "require": {
+        "types": "./ja/base64.d.cts",
+        "default": "./ja/base64.cjs"
+      }
+    },
     "./ja/bic": {
       "import": {
         "types": "./ja/bic.d.ts",
@@ -4776,6 +5346,16 @@
         "default": "./ja/checkAsync.cjs"
       }
     },
+    "./ja/checkItems": {
+      "import": {
+        "types": "./ja/checkItems.d.ts",
+        "default": "./ja/checkItems.js"
+      },
+      "require": {
+        "types": "./ja/checkItems.d.cts",
+        "default": "./ja/checkItems.cjs"
+      }
+    },
     "./ja/creditCard": {
       "import": {
         "types": "./ja/creditCard.d.ts",
@@ -4804,6 +5384,16 @@
       "require": {
         "types": "./ja/decimal.d.cts",
         "default": "./ja/decimal.cjs"
+      }
+    },
+    "./ja/digits": {
+      "import": {
+        "types": "./ja/digits.d.ts",
+        "default": "./ja/digits.js"
+      },
+      "require": {
+        "types": "./ja/digits.d.cts",
+        "default": "./ja/digits.cjs"
       }
     },
     "./ja/email": {
@@ -4844,6 +5434,16 @@
       "require": {
         "types": "./ja/endsWith.d.cts",
         "default": "./ja/endsWith.cjs"
+      }
+    },
+    "./ja/everyItem": {
+      "import": {
+        "types": "./ja/everyItem.d.ts",
+        "default": "./ja/everyItem.js"
+      },
+      "require": {
+        "types": "./ja/everyItem.d.cts",
+        "default": "./ja/everyItem.cjs"
       }
     },
     "./ja/excludes": {
@@ -5156,6 +5756,16 @@
         "default": "./ja/multipleOf.cjs"
       }
     },
+    "./ja/nanoid": {
+      "import": {
+        "types": "./ja/nanoid.d.ts",
+        "default": "./ja/nanoid.js"
+      },
+      "require": {
+        "types": "./ja/nanoid.d.cts",
+        "default": "./ja/nanoid.cjs"
+      }
+    },
     "./ja/nonEmpty": {
       "import": {
         "types": "./ja/nonEmpty.d.ts",
@@ -5216,6 +5826,16 @@
         "default": "./ja/octal.cjs"
       }
     },
+    "./ja/partialCheck": {
+      "import": {
+        "types": "./ja/partialCheck.d.ts",
+        "default": "./ja/partialCheck.js"
+      },
+      "require": {
+        "types": "./ja/partialCheck.d.cts",
+        "default": "./ja/partialCheck.cjs"
+      }
+    },
     "./ja/regex": {
       "import": {
         "types": "./ja/regex.d.ts",
@@ -5244,6 +5864,16 @@
       "require": {
         "types": "./ja/size.d.cts",
         "default": "./ja/size.cjs"
+      }
+    },
+    "./ja/someItem": {
+      "import": {
+        "types": "./ja/someItem.d.ts",
+        "default": "./ja/someItem.js"
+      },
+      "require": {
+        "types": "./ja/someItem.d.cts",
+        "default": "./ja/someItem.cjs"
       }
     },
     "./ja/startsWith": {
@@ -5316,6 +5946,16 @@
         "default": "./kr/schema.cjs"
       }
     },
+    "./kr/base64": {
+      "import": {
+        "types": "./kr/base64.d.ts",
+        "default": "./kr/base64.js"
+      },
+      "require": {
+        "types": "./kr/base64.d.cts",
+        "default": "./kr/base64.cjs"
+      }
+    },
     "./kr/bic": {
       "import": {
         "types": "./kr/bic.d.ts",
@@ -5356,6 +5996,16 @@
         "default": "./kr/checkAsync.cjs"
       }
     },
+    "./kr/checkItems": {
+      "import": {
+        "types": "./kr/checkItems.d.ts",
+        "default": "./kr/checkItems.js"
+      },
+      "require": {
+        "types": "./kr/checkItems.d.cts",
+        "default": "./kr/checkItems.cjs"
+      }
+    },
     "./kr/creditCard": {
       "import": {
         "types": "./kr/creditCard.d.ts",
@@ -5384,6 +6034,16 @@
       "require": {
         "types": "./kr/decimal.d.cts",
         "default": "./kr/decimal.cjs"
+      }
+    },
+    "./kr/digits": {
+      "import": {
+        "types": "./kr/digits.d.ts",
+        "default": "./kr/digits.js"
+      },
+      "require": {
+        "types": "./kr/digits.d.cts",
+        "default": "./kr/digits.cjs"
       }
     },
     "./kr/email": {
@@ -5424,6 +6084,16 @@
       "require": {
         "types": "./kr/endsWith.d.cts",
         "default": "./kr/endsWith.cjs"
+      }
+    },
+    "./kr/everyItem": {
+      "import": {
+        "types": "./kr/everyItem.d.ts",
+        "default": "./kr/everyItem.js"
+      },
+      "require": {
+        "types": "./kr/everyItem.d.cts",
+        "default": "./kr/everyItem.cjs"
       }
     },
     "./kr/excludes": {
@@ -5736,6 +6406,16 @@
         "default": "./kr/multipleOf.cjs"
       }
     },
+    "./kr/nanoid": {
+      "import": {
+        "types": "./kr/nanoid.d.ts",
+        "default": "./kr/nanoid.js"
+      },
+      "require": {
+        "types": "./kr/nanoid.d.cts",
+        "default": "./kr/nanoid.cjs"
+      }
+    },
     "./kr/nonEmpty": {
       "import": {
         "types": "./kr/nonEmpty.d.ts",
@@ -5796,6 +6476,16 @@
         "default": "./kr/octal.cjs"
       }
     },
+    "./kr/partialCheck": {
+      "import": {
+        "types": "./kr/partialCheck.d.ts",
+        "default": "./kr/partialCheck.js"
+      },
+      "require": {
+        "types": "./kr/partialCheck.d.cts",
+        "default": "./kr/partialCheck.cjs"
+      }
+    },
     "./kr/regex": {
       "import": {
         "types": "./kr/regex.d.ts",
@@ -5824,6 +6514,16 @@
       "require": {
         "types": "./kr/size.d.cts",
         "default": "./kr/size.cjs"
+      }
+    },
+    "./kr/someItem": {
+      "import": {
+        "types": "./kr/someItem.d.ts",
+        "default": "./kr/someItem.js"
+      },
+      "require": {
+        "types": "./kr/someItem.d.cts",
+        "default": "./kr/someItem.cjs"
       }
     },
     "./kr/startsWith": {
@@ -5896,6 +6596,16 @@
         "default": "./nb/schema.cjs"
       }
     },
+    "./nb/base64": {
+      "import": {
+        "types": "./nb/base64.d.ts",
+        "default": "./nb/base64.js"
+      },
+      "require": {
+        "types": "./nb/base64.d.cts",
+        "default": "./nb/base64.cjs"
+      }
+    },
     "./nb/bic": {
       "import": {
         "types": "./nb/bic.d.ts",
@@ -5936,6 +6646,16 @@
         "default": "./nb/checkAsync.cjs"
       }
     },
+    "./nb/checkItems": {
+      "import": {
+        "types": "./nb/checkItems.d.ts",
+        "default": "./nb/checkItems.js"
+      },
+      "require": {
+        "types": "./nb/checkItems.d.cts",
+        "default": "./nb/checkItems.cjs"
+      }
+    },
     "./nb/creditCard": {
       "import": {
         "types": "./nb/creditCard.d.ts",
@@ -5964,6 +6684,16 @@
       "require": {
         "types": "./nb/decimal.d.cts",
         "default": "./nb/decimal.cjs"
+      }
+    },
+    "./nb/digits": {
+      "import": {
+        "types": "./nb/digits.d.ts",
+        "default": "./nb/digits.js"
+      },
+      "require": {
+        "types": "./nb/digits.d.cts",
+        "default": "./nb/digits.cjs"
       }
     },
     "./nb/email": {
@@ -6004,6 +6734,16 @@
       "require": {
         "types": "./nb/endsWith.d.cts",
         "default": "./nb/endsWith.cjs"
+      }
+    },
+    "./nb/everyItem": {
+      "import": {
+        "types": "./nb/everyItem.d.ts",
+        "default": "./nb/everyItem.js"
+      },
+      "require": {
+        "types": "./nb/everyItem.d.cts",
+        "default": "./nb/everyItem.cjs"
       }
     },
     "./nb/excludes": {
@@ -6316,6 +7056,16 @@
         "default": "./nb/multipleOf.cjs"
       }
     },
+    "./nb/nanoid": {
+      "import": {
+        "types": "./nb/nanoid.d.ts",
+        "default": "./nb/nanoid.js"
+      },
+      "require": {
+        "types": "./nb/nanoid.d.cts",
+        "default": "./nb/nanoid.cjs"
+      }
+    },
     "./nb/nonEmpty": {
       "import": {
         "types": "./nb/nonEmpty.d.ts",
@@ -6376,6 +7126,16 @@
         "default": "./nb/octal.cjs"
       }
     },
+    "./nb/partialCheck": {
+      "import": {
+        "types": "./nb/partialCheck.d.ts",
+        "default": "./nb/partialCheck.js"
+      },
+      "require": {
+        "types": "./nb/partialCheck.d.cts",
+        "default": "./nb/partialCheck.cjs"
+      }
+    },
     "./nb/regex": {
       "import": {
         "types": "./nb/regex.d.ts",
@@ -6404,6 +7164,16 @@
       "require": {
         "types": "./nb/size.d.cts",
         "default": "./nb/size.cjs"
+      }
+    },
+    "./nb/someItem": {
+      "import": {
+        "types": "./nb/someItem.d.ts",
+        "default": "./nb/someItem.js"
+      },
+      "require": {
+        "types": "./nb/someItem.d.cts",
+        "default": "./nb/someItem.cjs"
       }
     },
     "./nb/startsWith": {
@@ -6476,6 +7246,16 @@
         "default": "./nl/schema.cjs"
       }
     },
+    "./nl/base64": {
+      "import": {
+        "types": "./nl/base64.d.ts",
+        "default": "./nl/base64.js"
+      },
+      "require": {
+        "types": "./nl/base64.d.cts",
+        "default": "./nl/base64.cjs"
+      }
+    },
     "./nl/bic": {
       "import": {
         "types": "./nl/bic.d.ts",
@@ -6516,6 +7296,16 @@
         "default": "./nl/checkAsync.cjs"
       }
     },
+    "./nl/checkItems": {
+      "import": {
+        "types": "./nl/checkItems.d.ts",
+        "default": "./nl/checkItems.js"
+      },
+      "require": {
+        "types": "./nl/checkItems.d.cts",
+        "default": "./nl/checkItems.cjs"
+      }
+    },
     "./nl/creditCard": {
       "import": {
         "types": "./nl/creditCard.d.ts",
@@ -6544,6 +7334,16 @@
       "require": {
         "types": "./nl/decimal.d.cts",
         "default": "./nl/decimal.cjs"
+      }
+    },
+    "./nl/digits": {
+      "import": {
+        "types": "./nl/digits.d.ts",
+        "default": "./nl/digits.js"
+      },
+      "require": {
+        "types": "./nl/digits.d.cts",
+        "default": "./nl/digits.cjs"
       }
     },
     "./nl/email": {
@@ -6584,6 +7384,16 @@
       "require": {
         "types": "./nl/endsWith.d.cts",
         "default": "./nl/endsWith.cjs"
+      }
+    },
+    "./nl/everyItem": {
+      "import": {
+        "types": "./nl/everyItem.d.ts",
+        "default": "./nl/everyItem.js"
+      },
+      "require": {
+        "types": "./nl/everyItem.d.cts",
+        "default": "./nl/everyItem.cjs"
       }
     },
     "./nl/excludes": {
@@ -6896,6 +7706,16 @@
         "default": "./nl/multipleOf.cjs"
       }
     },
+    "./nl/nanoid": {
+      "import": {
+        "types": "./nl/nanoid.d.ts",
+        "default": "./nl/nanoid.js"
+      },
+      "require": {
+        "types": "./nl/nanoid.d.cts",
+        "default": "./nl/nanoid.cjs"
+      }
+    },
     "./nl/nonEmpty": {
       "import": {
         "types": "./nl/nonEmpty.d.ts",
@@ -6956,6 +7776,16 @@
         "default": "./nl/octal.cjs"
       }
     },
+    "./nl/partialCheck": {
+      "import": {
+        "types": "./nl/partialCheck.d.ts",
+        "default": "./nl/partialCheck.js"
+      },
+      "require": {
+        "types": "./nl/partialCheck.d.cts",
+        "default": "./nl/partialCheck.cjs"
+      }
+    },
     "./nl/regex": {
       "import": {
         "types": "./nl/regex.d.ts",
@@ -6984,6 +7814,16 @@
       "require": {
         "types": "./nl/size.d.cts",
         "default": "./nl/size.cjs"
+      }
+    },
+    "./nl/someItem": {
+      "import": {
+        "types": "./nl/someItem.d.ts",
+        "default": "./nl/someItem.js"
+      },
+      "require": {
+        "types": "./nl/someItem.d.cts",
+        "default": "./nl/someItem.cjs"
       }
     },
     "./nl/startsWith": {
@@ -7056,6 +7896,16 @@
         "default": "./pl/schema.cjs"
       }
     },
+    "./pl/base64": {
+      "import": {
+        "types": "./pl/base64.d.ts",
+        "default": "./pl/base64.js"
+      },
+      "require": {
+        "types": "./pl/base64.d.cts",
+        "default": "./pl/base64.cjs"
+      }
+    },
     "./pl/bic": {
       "import": {
         "types": "./pl/bic.d.ts",
@@ -7074,26 +7924,6 @@
       "require": {
         "types": "./pl/bytes.d.cts",
         "default": "./pl/bytes.cjs"
-      }
-    },
-    "./pl/creditCard": {
-      "import": {
-        "types": "./pl/creditCard.d.ts",
-        "default": "./pl/creditCard.js"
-      },
-      "require": {
-        "types": "./pl/creditCard.d.cts",
-        "default": "./pl/creditCard.cjs"
-      }
-    },
-    "./pl/cuid2": {
-      "import": {
-        "types": "./pl/cuid2.d.ts",
-        "default": "./pl/cuid2.js"
-      },
-      "require": {
-        "types": "./pl/cuid2.d.cts",
-        "default": "./pl/cuid2.cjs"
       }
     },
     "./pl/check": {
@@ -7116,6 +7946,36 @@
         "default": "./pl/checkAsync.cjs"
       }
     },
+    "./pl/checkItems": {
+      "import": {
+        "types": "./pl/checkItems.d.ts",
+        "default": "./pl/checkItems.js"
+      },
+      "require": {
+        "types": "./pl/checkItems.d.cts",
+        "default": "./pl/checkItems.cjs"
+      }
+    },
+    "./pl/creditCard": {
+      "import": {
+        "types": "./pl/creditCard.d.ts",
+        "default": "./pl/creditCard.js"
+      },
+      "require": {
+        "types": "./pl/creditCard.d.cts",
+        "default": "./pl/creditCard.cjs"
+      }
+    },
+    "./pl/cuid2": {
+      "import": {
+        "types": "./pl/cuid2.d.ts",
+        "default": "./pl/cuid2.js"
+      },
+      "require": {
+        "types": "./pl/cuid2.d.cts",
+        "default": "./pl/cuid2.cjs"
+      }
+    },
     "./pl/decimal": {
       "import": {
         "types": "./pl/decimal.d.ts",
@@ -7124,6 +7984,16 @@
       "require": {
         "types": "./pl/decimal.d.cts",
         "default": "./pl/decimal.cjs"
+      }
+    },
+    "./pl/digits": {
+      "import": {
+        "types": "./pl/digits.d.ts",
+        "default": "./pl/digits.js"
+      },
+      "require": {
+        "types": "./pl/digits.d.cts",
+        "default": "./pl/digits.cjs"
       }
     },
     "./pl/email": {
@@ -7164,6 +8034,16 @@
       "require": {
         "types": "./pl/endsWith.d.cts",
         "default": "./pl/endsWith.cjs"
+      }
+    },
+    "./pl/everyItem": {
+      "import": {
+        "types": "./pl/everyItem.d.ts",
+        "default": "./pl/everyItem.js"
+      },
+      "require": {
+        "types": "./pl/everyItem.d.cts",
+        "default": "./pl/everyItem.cjs"
       }
     },
     "./pl/excludes": {
@@ -7476,6 +8356,16 @@
         "default": "./pl/multipleOf.cjs"
       }
     },
+    "./pl/nanoid": {
+      "import": {
+        "types": "./pl/nanoid.d.ts",
+        "default": "./pl/nanoid.js"
+      },
+      "require": {
+        "types": "./pl/nanoid.d.cts",
+        "default": "./pl/nanoid.cjs"
+      }
+    },
     "./pl/nonEmpty": {
       "import": {
         "types": "./pl/nonEmpty.d.ts",
@@ -7536,6 +8426,16 @@
         "default": "./pl/octal.cjs"
       }
     },
+    "./pl/partialCheck": {
+      "import": {
+        "types": "./pl/partialCheck.d.ts",
+        "default": "./pl/partialCheck.js"
+      },
+      "require": {
+        "types": "./pl/partialCheck.d.cts",
+        "default": "./pl/partialCheck.cjs"
+      }
+    },
     "./pl/regex": {
       "import": {
         "types": "./pl/regex.d.ts",
@@ -7564,6 +8464,16 @@
       "require": {
         "types": "./pl/size.d.cts",
         "default": "./pl/size.cjs"
+      }
+    },
+    "./pl/someItem": {
+      "import": {
+        "types": "./pl/someItem.d.ts",
+        "default": "./pl/someItem.js"
+      },
+      "require": {
+        "types": "./pl/someItem.d.cts",
+        "default": "./pl/someItem.cjs"
       }
     },
     "./pl/startsWith": {
@@ -7636,6 +8546,16 @@
         "default": "./pt/schema.cjs"
       }
     },
+    "./pt/base64": {
+      "import": {
+        "types": "./pt/base64.d.ts",
+        "default": "./pt/base64.js"
+      },
+      "require": {
+        "types": "./pt/base64.d.cts",
+        "default": "./pt/base64.cjs"
+      }
+    },
     "./pt/bic": {
       "import": {
         "types": "./pt/bic.d.ts",
@@ -7676,6 +8596,16 @@
         "default": "./pt/checkAsync.cjs"
       }
     },
+    "./pt/checkItems": {
+      "import": {
+        "types": "./pt/checkItems.d.ts",
+        "default": "./pt/checkItems.js"
+      },
+      "require": {
+        "types": "./pt/checkItems.d.cts",
+        "default": "./pt/checkItems.cjs"
+      }
+    },
     "./pt/creditCard": {
       "import": {
         "types": "./pt/creditCard.d.ts",
@@ -7704,6 +8634,16 @@
       "require": {
         "types": "./pt/decimal.d.cts",
         "default": "./pt/decimal.cjs"
+      }
+    },
+    "./pt/digits": {
+      "import": {
+        "types": "./pt/digits.d.ts",
+        "default": "./pt/digits.js"
+      },
+      "require": {
+        "types": "./pt/digits.d.cts",
+        "default": "./pt/digits.cjs"
       }
     },
     "./pt/email": {
@@ -7744,6 +8684,16 @@
       "require": {
         "types": "./pt/endsWith.d.cts",
         "default": "./pt/endsWith.cjs"
+      }
+    },
+    "./pt/everyItem": {
+      "import": {
+        "types": "./pt/everyItem.d.ts",
+        "default": "./pt/everyItem.js"
+      },
+      "require": {
+        "types": "./pt/everyItem.d.cts",
+        "default": "./pt/everyItem.cjs"
       }
     },
     "./pt/excludes": {
@@ -8056,6 +9006,16 @@
         "default": "./pt/multipleOf.cjs"
       }
     },
+    "./pt/nanoid": {
+      "import": {
+        "types": "./pt/nanoid.d.ts",
+        "default": "./pt/nanoid.js"
+      },
+      "require": {
+        "types": "./pt/nanoid.d.cts",
+        "default": "./pt/nanoid.cjs"
+      }
+    },
     "./pt/nonEmpty": {
       "import": {
         "types": "./pt/nonEmpty.d.ts",
@@ -8116,6 +9076,16 @@
         "default": "./pt/octal.cjs"
       }
     },
+    "./pt/partialCheck": {
+      "import": {
+        "types": "./pt/partialCheck.d.ts",
+        "default": "./pt/partialCheck.js"
+      },
+      "require": {
+        "types": "./pt/partialCheck.d.cts",
+        "default": "./pt/partialCheck.cjs"
+      }
+    },
     "./pt/regex": {
       "import": {
         "types": "./pt/regex.d.ts",
@@ -8144,6 +9114,16 @@
       "require": {
         "types": "./pt/size.d.cts",
         "default": "./pt/size.cjs"
+      }
+    },
+    "./pt/someItem": {
+      "import": {
+        "types": "./pt/someItem.d.ts",
+        "default": "./pt/someItem.js"
+      },
+      "require": {
+        "types": "./pt/someItem.d.cts",
+        "default": "./pt/someItem.cjs"
       }
     },
     "./pt/startsWith": {
@@ -8216,6 +9196,16 @@
         "default": "./ro/schema.cjs"
       }
     },
+    "./ro/base64": {
+      "import": {
+        "types": "./ro/base64.d.ts",
+        "default": "./ro/base64.js"
+      },
+      "require": {
+        "types": "./ro/base64.d.cts",
+        "default": "./ro/base64.cjs"
+      }
+    },
     "./ro/bic": {
       "import": {
         "types": "./ro/bic.d.ts",
@@ -8256,6 +9246,16 @@
         "default": "./ro/checkAsync.cjs"
       }
     },
+    "./ro/checkItems": {
+      "import": {
+        "types": "./ro/checkItems.d.ts",
+        "default": "./ro/checkItems.js"
+      },
+      "require": {
+        "types": "./ro/checkItems.d.cts",
+        "default": "./ro/checkItems.cjs"
+      }
+    },
     "./ro/creditCard": {
       "import": {
         "types": "./ro/creditCard.d.ts",
@@ -8284,6 +9284,16 @@
       "require": {
         "types": "./ro/decimal.d.cts",
         "default": "./ro/decimal.cjs"
+      }
+    },
+    "./ro/digits": {
+      "import": {
+        "types": "./ro/digits.d.ts",
+        "default": "./ro/digits.js"
+      },
+      "require": {
+        "types": "./ro/digits.d.cts",
+        "default": "./ro/digits.cjs"
       }
     },
     "./ro/email": {
@@ -8324,6 +9334,16 @@
       "require": {
         "types": "./ro/endsWith.d.cts",
         "default": "./ro/endsWith.cjs"
+      }
+    },
+    "./ro/everyItem": {
+      "import": {
+        "types": "./ro/everyItem.d.ts",
+        "default": "./ro/everyItem.js"
+      },
+      "require": {
+        "types": "./ro/everyItem.d.cts",
+        "default": "./ro/everyItem.cjs"
       }
     },
     "./ro/excludes": {
@@ -8636,6 +9656,16 @@
         "default": "./ro/multipleOf.cjs"
       }
     },
+    "./ro/nanoid": {
+      "import": {
+        "types": "./ro/nanoid.d.ts",
+        "default": "./ro/nanoid.js"
+      },
+      "require": {
+        "types": "./ro/nanoid.d.cts",
+        "default": "./ro/nanoid.cjs"
+      }
+    },
     "./ro/nonEmpty": {
       "import": {
         "types": "./ro/nonEmpty.d.ts",
@@ -8696,6 +9726,16 @@
         "default": "./ro/octal.cjs"
       }
     },
+    "./ro/partialCheck": {
+      "import": {
+        "types": "./ro/partialCheck.d.ts",
+        "default": "./ro/partialCheck.js"
+      },
+      "require": {
+        "types": "./ro/partialCheck.d.cts",
+        "default": "./ro/partialCheck.cjs"
+      }
+    },
     "./ro/regex": {
       "import": {
         "types": "./ro/regex.d.ts",
@@ -8724,6 +9764,16 @@
       "require": {
         "types": "./ro/size.d.cts",
         "default": "./ro/size.cjs"
+      }
+    },
+    "./ro/someItem": {
+      "import": {
+        "types": "./ro/someItem.d.ts",
+        "default": "./ro/someItem.js"
+      },
+      "require": {
+        "types": "./ro/someItem.d.cts",
+        "default": "./ro/someItem.cjs"
       }
     },
     "./ro/startsWith": {
@@ -8796,6 +9846,16 @@
         "default": "./ru/schema.cjs"
       }
     },
+    "./ru/base64": {
+      "import": {
+        "types": "./ru/base64.d.ts",
+        "default": "./ru/base64.js"
+      },
+      "require": {
+        "types": "./ru/base64.d.cts",
+        "default": "./ru/base64.cjs"
+      }
+    },
     "./ru/bic": {
       "import": {
         "types": "./ru/bic.d.ts",
@@ -8836,6 +9896,16 @@
         "default": "./ru/checkAsync.cjs"
       }
     },
+    "./ru/checkItems": {
+      "import": {
+        "types": "./ru/checkItems.d.ts",
+        "default": "./ru/checkItems.js"
+      },
+      "require": {
+        "types": "./ru/checkItems.d.cts",
+        "default": "./ru/checkItems.cjs"
+      }
+    },
     "./ru/creditCard": {
       "import": {
         "types": "./ru/creditCard.d.ts",
@@ -8864,6 +9934,16 @@
       "require": {
         "types": "./ru/decimal.d.cts",
         "default": "./ru/decimal.cjs"
+      }
+    },
+    "./ru/digits": {
+      "import": {
+        "types": "./ru/digits.d.ts",
+        "default": "./ru/digits.js"
+      },
+      "require": {
+        "types": "./ru/digits.d.cts",
+        "default": "./ru/digits.cjs"
       }
     },
     "./ru/email": {
@@ -8904,6 +9984,16 @@
       "require": {
         "types": "./ru/endsWith.d.cts",
         "default": "./ru/endsWith.cjs"
+      }
+    },
+    "./ru/everyItem": {
+      "import": {
+        "types": "./ru/everyItem.d.ts",
+        "default": "./ru/everyItem.js"
+      },
+      "require": {
+        "types": "./ru/everyItem.d.cts",
+        "default": "./ru/everyItem.cjs"
       }
     },
     "./ru/excludes": {
@@ -9216,6 +10306,16 @@
         "default": "./ru/multipleOf.cjs"
       }
     },
+    "./ru/nanoid": {
+      "import": {
+        "types": "./ru/nanoid.d.ts",
+        "default": "./ru/nanoid.js"
+      },
+      "require": {
+        "types": "./ru/nanoid.d.cts",
+        "default": "./ru/nanoid.cjs"
+      }
+    },
     "./ru/nonEmpty": {
       "import": {
         "types": "./ru/nonEmpty.d.ts",
@@ -9276,6 +10376,16 @@
         "default": "./ru/octal.cjs"
       }
     },
+    "./ru/partialCheck": {
+      "import": {
+        "types": "./ru/partialCheck.d.ts",
+        "default": "./ru/partialCheck.js"
+      },
+      "require": {
+        "types": "./ru/partialCheck.d.cts",
+        "default": "./ru/partialCheck.cjs"
+      }
+    },
     "./ru/regex": {
       "import": {
         "types": "./ru/regex.d.ts",
@@ -9304,6 +10414,16 @@
       "require": {
         "types": "./ru/size.d.cts",
         "default": "./ru/size.cjs"
+      }
+    },
+    "./ru/someItem": {
+      "import": {
+        "types": "./ru/someItem.d.ts",
+        "default": "./ru/someItem.js"
+      },
+      "require": {
+        "types": "./ru/someItem.d.cts",
+        "default": "./ru/someItem.cjs"
       }
     },
     "./ru/startsWith": {
@@ -9376,6 +10496,16 @@
         "default": "./sl/schema.cjs"
       }
     },
+    "./sl/base64": {
+      "import": {
+        "types": "./sl/base64.d.ts",
+        "default": "./sl/base64.js"
+      },
+      "require": {
+        "types": "./sl/base64.d.cts",
+        "default": "./sl/base64.cjs"
+      }
+    },
     "./sl/bic": {
       "import": {
         "types": "./sl/bic.d.ts",
@@ -9416,6 +10546,16 @@
         "default": "./sl/checkAsync.cjs"
       }
     },
+    "./sl/checkItems": {
+      "import": {
+        "types": "./sl/checkItems.d.ts",
+        "default": "./sl/checkItems.js"
+      },
+      "require": {
+        "types": "./sl/checkItems.d.cts",
+        "default": "./sl/checkItems.cjs"
+      }
+    },
     "./sl/creditCard": {
       "import": {
         "types": "./sl/creditCard.d.ts",
@@ -9444,6 +10584,16 @@
       "require": {
         "types": "./sl/decimal.d.cts",
         "default": "./sl/decimal.cjs"
+      }
+    },
+    "./sl/digits": {
+      "import": {
+        "types": "./sl/digits.d.ts",
+        "default": "./sl/digits.js"
+      },
+      "require": {
+        "types": "./sl/digits.d.cts",
+        "default": "./sl/digits.cjs"
       }
     },
     "./sl/email": {
@@ -9484,6 +10634,16 @@
       "require": {
         "types": "./sl/endsWith.d.cts",
         "default": "./sl/endsWith.cjs"
+      }
+    },
+    "./sl/everyItem": {
+      "import": {
+        "types": "./sl/everyItem.d.ts",
+        "default": "./sl/everyItem.js"
+      },
+      "require": {
+        "types": "./sl/everyItem.d.cts",
+        "default": "./sl/everyItem.cjs"
       }
     },
     "./sl/excludes": {
@@ -9796,6 +10956,16 @@
         "default": "./sl/multipleOf.cjs"
       }
     },
+    "./sl/nanoid": {
+      "import": {
+        "types": "./sl/nanoid.d.ts",
+        "default": "./sl/nanoid.js"
+      },
+      "require": {
+        "types": "./sl/nanoid.d.cts",
+        "default": "./sl/nanoid.cjs"
+      }
+    },
     "./sl/nonEmpty": {
       "import": {
         "types": "./sl/nonEmpty.d.ts",
@@ -9856,6 +11026,16 @@
         "default": "./sl/octal.cjs"
       }
     },
+    "./sl/partialCheck": {
+      "import": {
+        "types": "./sl/partialCheck.d.ts",
+        "default": "./sl/partialCheck.js"
+      },
+      "require": {
+        "types": "./sl/partialCheck.d.cts",
+        "default": "./sl/partialCheck.cjs"
+      }
+    },
     "./sl/regex": {
       "import": {
         "types": "./sl/regex.d.ts",
@@ -9884,6 +11064,16 @@
       "require": {
         "types": "./sl/size.d.cts",
         "default": "./sl/size.cjs"
+      }
+    },
+    "./sl/someItem": {
+      "import": {
+        "types": "./sl/someItem.d.ts",
+        "default": "./sl/someItem.js"
+      },
+      "require": {
+        "types": "./sl/someItem.d.cts",
+        "default": "./sl/someItem.cjs"
       }
     },
     "./sl/startsWith": {
@@ -9956,6 +11146,16 @@
         "default": "./sv/schema.cjs"
       }
     },
+    "./sv/base64": {
+      "import": {
+        "types": "./sv/base64.d.ts",
+        "default": "./sv/base64.js"
+      },
+      "require": {
+        "types": "./sv/base64.d.cts",
+        "default": "./sv/base64.cjs"
+      }
+    },
     "./sv/bic": {
       "import": {
         "types": "./sv/bic.d.ts",
@@ -9996,6 +11196,16 @@
         "default": "./sv/checkAsync.cjs"
       }
     },
+    "./sv/checkItems": {
+      "import": {
+        "types": "./sv/checkItems.d.ts",
+        "default": "./sv/checkItems.js"
+      },
+      "require": {
+        "types": "./sv/checkItems.d.cts",
+        "default": "./sv/checkItems.cjs"
+      }
+    },
     "./sv/creditCard": {
       "import": {
         "types": "./sv/creditCard.d.ts",
@@ -10024,6 +11234,16 @@
       "require": {
         "types": "./sv/decimal.d.cts",
         "default": "./sv/decimal.cjs"
+      }
+    },
+    "./sv/digits": {
+      "import": {
+        "types": "./sv/digits.d.ts",
+        "default": "./sv/digits.js"
+      },
+      "require": {
+        "types": "./sv/digits.d.cts",
+        "default": "./sv/digits.cjs"
       }
     },
     "./sv/email": {
@@ -10064,6 +11284,16 @@
       "require": {
         "types": "./sv/endsWith.d.cts",
         "default": "./sv/endsWith.cjs"
+      }
+    },
+    "./sv/everyItem": {
+      "import": {
+        "types": "./sv/everyItem.d.ts",
+        "default": "./sv/everyItem.js"
+      },
+      "require": {
+        "types": "./sv/everyItem.d.cts",
+        "default": "./sv/everyItem.cjs"
       }
     },
     "./sv/excludes": {
@@ -10376,6 +11606,16 @@
         "default": "./sv/multipleOf.cjs"
       }
     },
+    "./sv/nanoid": {
+      "import": {
+        "types": "./sv/nanoid.d.ts",
+        "default": "./sv/nanoid.js"
+      },
+      "require": {
+        "types": "./sv/nanoid.d.cts",
+        "default": "./sv/nanoid.cjs"
+      }
+    },
     "./sv/nonEmpty": {
       "import": {
         "types": "./sv/nonEmpty.d.ts",
@@ -10436,6 +11676,16 @@
         "default": "./sv/octal.cjs"
       }
     },
+    "./sv/partialCheck": {
+      "import": {
+        "types": "./sv/partialCheck.d.ts",
+        "default": "./sv/partialCheck.js"
+      },
+      "require": {
+        "types": "./sv/partialCheck.d.cts",
+        "default": "./sv/partialCheck.cjs"
+      }
+    },
     "./sv/regex": {
       "import": {
         "types": "./sv/regex.d.ts",
@@ -10464,6 +11714,16 @@
       "require": {
         "types": "./sv/size.d.cts",
         "default": "./sv/size.cjs"
+      }
+    },
+    "./sv/someItem": {
+      "import": {
+        "types": "./sv/someItem.d.ts",
+        "default": "./sv/someItem.js"
+      },
+      "require": {
+        "types": "./sv/someItem.d.cts",
+        "default": "./sv/someItem.cjs"
       }
     },
     "./sv/startsWith": {
@@ -10536,6 +11796,16 @@
         "default": "./tr/schema.cjs"
       }
     },
+    "./tr/base64": {
+      "import": {
+        "types": "./tr/base64.d.ts",
+        "default": "./tr/base64.js"
+      },
+      "require": {
+        "types": "./tr/base64.d.cts",
+        "default": "./tr/base64.cjs"
+      }
+    },
     "./tr/bic": {
       "import": {
         "types": "./tr/bic.d.ts",
@@ -10576,6 +11846,16 @@
         "default": "./tr/checkAsync.cjs"
       }
     },
+    "./tr/checkItems": {
+      "import": {
+        "types": "./tr/checkItems.d.ts",
+        "default": "./tr/checkItems.js"
+      },
+      "require": {
+        "types": "./tr/checkItems.d.cts",
+        "default": "./tr/checkItems.cjs"
+      }
+    },
     "./tr/creditCard": {
       "import": {
         "types": "./tr/creditCard.d.ts",
@@ -10604,6 +11884,16 @@
       "require": {
         "types": "./tr/decimal.d.cts",
         "default": "./tr/decimal.cjs"
+      }
+    },
+    "./tr/digits": {
+      "import": {
+        "types": "./tr/digits.d.ts",
+        "default": "./tr/digits.js"
+      },
+      "require": {
+        "types": "./tr/digits.d.cts",
+        "default": "./tr/digits.cjs"
       }
     },
     "./tr/email": {
@@ -10644,6 +11934,16 @@
       "require": {
         "types": "./tr/endsWith.d.cts",
         "default": "./tr/endsWith.cjs"
+      }
+    },
+    "./tr/everyItem": {
+      "import": {
+        "types": "./tr/everyItem.d.ts",
+        "default": "./tr/everyItem.js"
+      },
+      "require": {
+        "types": "./tr/everyItem.d.cts",
+        "default": "./tr/everyItem.cjs"
       }
     },
     "./tr/excludes": {
@@ -10966,6 +12266,16 @@
         "default": "./tr/nonEmpty.cjs"
       }
     },
+    "./tr/nanoid": {
+      "import": {
+        "types": "./tr/nanoid.d.ts",
+        "default": "./tr/nanoid.js"
+      },
+      "require": {
+        "types": "./tr/nanoid.d.cts",
+        "default": "./tr/nanoid.cjs"
+      }
+    },
     "./tr/notBytes": {
       "import": {
         "types": "./tr/notBytes.d.ts",
@@ -11016,6 +12326,16 @@
         "default": "./tr/octal.cjs"
       }
     },
+    "./tr/partialCheck": {
+      "import": {
+        "types": "./tr/partialCheck.d.ts",
+        "default": "./tr/partialCheck.js"
+      },
+      "require": {
+        "types": "./tr/partialCheck.d.cts",
+        "default": "./tr/partialCheck.cjs"
+      }
+    },
     "./tr/regex": {
       "import": {
         "types": "./tr/regex.d.ts",
@@ -11044,6 +12364,16 @@
       "require": {
         "types": "./tr/size.d.cts",
         "default": "./tr/size.cjs"
+      }
+    },
+    "./tr/someItem": {
+      "import": {
+        "types": "./tr/someItem.d.ts",
+        "default": "./tr/someItem.js"
+      },
+      "require": {
+        "types": "./tr/someItem.d.cts",
+        "default": "./tr/someItem.cjs"
       }
     },
     "./tr/startsWith": {
@@ -11116,6 +12446,16 @@
         "default": "./uk/schema.cjs"
       }
     },
+    "./uk/base64": {
+      "import": {
+        "types": "./uk/base64.d.ts",
+        "default": "./uk/base64.js"
+      },
+      "require": {
+        "types": "./uk/base64.d.cts",
+        "default": "./uk/base64.cjs"
+      }
+    },
     "./uk/bic": {
       "import": {
         "types": "./uk/bic.d.ts",
@@ -11156,6 +12496,16 @@
         "default": "./uk/checkAsync.cjs"
       }
     },
+    "./uk/checkItems": {
+      "import": {
+        "types": "./uk/checkItems.d.ts",
+        "default": "./uk/checkItems.js"
+      },
+      "require": {
+        "types": "./uk/checkItems.d.cts",
+        "default": "./uk/checkItems.cjs"
+      }
+    },
     "./uk/creditCard": {
       "import": {
         "types": "./uk/creditCard.d.ts",
@@ -11184,6 +12534,16 @@
       "require": {
         "types": "./uk/decimal.d.cts",
         "default": "./uk/decimal.cjs"
+      }
+    },
+    "./uk/digits": {
+      "import": {
+        "types": "./uk/digits.d.ts",
+        "default": "./uk/digits.js"
+      },
+      "require": {
+        "types": "./uk/digits.d.cts",
+        "default": "./uk/digits.cjs"
       }
     },
     "./uk/email": {
@@ -11224,6 +12584,16 @@
       "require": {
         "types": "./uk/endsWith.d.cts",
         "default": "./uk/endsWith.cjs"
+      }
+    },
+    "./uk/everyItem": {
+      "import": {
+        "types": "./uk/everyItem.d.ts",
+        "default": "./uk/everyItem.js"
+      },
+      "require": {
+        "types": "./uk/everyItem.d.cts",
+        "default": "./uk/everyItem.cjs"
       }
     },
     "./uk/excludes": {
@@ -11536,6 +12906,16 @@
         "default": "./uk/multipleOf.cjs"
       }
     },
+    "./uk/nanoid": {
+      "import": {
+        "types": "./uk/nanoid.d.ts",
+        "default": "./uk/nanoid.js"
+      },
+      "require": {
+        "types": "./uk/nanoid.d.cts",
+        "default": "./uk/nanoid.cjs"
+      }
+    },
     "./uk/nonEmpty": {
       "import": {
         "types": "./uk/nonEmpty.d.ts",
@@ -11596,6 +12976,16 @@
         "default": "./uk/octal.cjs"
       }
     },
+    "./uk/partialCheck": {
+      "import": {
+        "types": "./uk/partialCheck.d.ts",
+        "default": "./uk/partialCheck.js"
+      },
+      "require": {
+        "types": "./uk/partialCheck.d.cts",
+        "default": "./uk/partialCheck.cjs"
+      }
+    },
     "./uk/regex": {
       "import": {
         "types": "./uk/regex.d.ts",
@@ -11624,6 +13014,16 @@
       "require": {
         "types": "./uk/size.d.cts",
         "default": "./uk/size.cjs"
+      }
+    },
+    "./uk/someItem": {
+      "import": {
+        "types": "./uk/someItem.d.ts",
+        "default": "./uk/someItem.js"
+      },
+      "require": {
+        "types": "./uk/someItem.d.cts",
+        "default": "./uk/someItem.cjs"
       }
     },
     "./uk/startsWith": {
@@ -11696,6 +13096,16 @@
         "default": "./zh-CN/schema.cjs"
       }
     },
+    "./zh-CN/base64": {
+      "import": {
+        "types": "./zh-CN/base64.d.ts",
+        "default": "./zh-CN/base64.js"
+      },
+      "require": {
+        "types": "./zh-CN/base64.d.cts",
+        "default": "./zh-CN/base64.cjs"
+      }
+    },
     "./zh-CN/bic": {
       "import": {
         "types": "./zh-CN/bic.d.ts",
@@ -11736,6 +13146,16 @@
         "default": "./zh-CN/checkAsync.cjs"
       }
     },
+    "./zh-CN/checkItems": {
+      "import": {
+        "types": "./zh-CN/checkItems.d.ts",
+        "default": "./zh-CN/checkItems.js"
+      },
+      "require": {
+        "types": "./zh-CN/checkItems.d.cts",
+        "default": "./zh-CN/checkItems.cjs"
+      }
+    },
     "./zh-CN/creditCard": {
       "import": {
         "types": "./zh-CN/creditCard.d.ts",
@@ -11764,6 +13184,16 @@
       "require": {
         "types": "./zh-CN/decimal.d.cts",
         "default": "./zh-CN/decimal.cjs"
+      }
+    },
+    "./zh-CN/digits": {
+      "import": {
+        "types": "./zh-CN/digits.d.ts",
+        "default": "./zh-CN/digits.js"
+      },
+      "require": {
+        "types": "./zh-CN/digits.d.cts",
+        "default": "./zh-CN/digits.cjs"
       }
     },
     "./zh-CN/email": {
@@ -11804,6 +13234,16 @@
       "require": {
         "types": "./zh-CN/endsWith.d.cts",
         "default": "./zh-CN/endsWith.cjs"
+      }
+    },
+    "./zh-CN/everyItem": {
+      "import": {
+        "types": "./zh-CN/everyItem.d.ts",
+        "default": "./zh-CN/everyItem.js"
+      },
+      "require": {
+        "types": "./zh-CN/everyItem.d.cts",
+        "default": "./zh-CN/everyItem.cjs"
       }
     },
     "./zh-CN/excludes": {
@@ -12116,6 +13556,16 @@
         "default": "./zh-CN/multipleOf.cjs"
       }
     },
+    "./zh-CN/nanoid": {
+      "import": {
+        "types": "./zh-CN/nanoid.d.ts",
+        "default": "./zh-CN/nanoid.js"
+      },
+      "require": {
+        "types": "./zh-CN/nanoid.d.cts",
+        "default": "./zh-CN/nanoid.cjs"
+      }
+    },
     "./zh-CN/nonEmpty": {
       "import": {
         "types": "./zh-CN/nonEmpty.d.ts",
@@ -12176,6 +13626,16 @@
         "default": "./zh-CN/octal.cjs"
       }
     },
+    "./zh-CN/partialCheck": {
+      "import": {
+        "types": "./zh-CN/partialCheck.d.ts",
+        "default": "./zh-CN/partialCheck.js"
+      },
+      "require": {
+        "types": "./zh-CN/partialCheck.d.cts",
+        "default": "./zh-CN/partialCheck.cjs"
+      }
+    },
     "./zh-CN/regex": {
       "import": {
         "types": "./zh-CN/regex.d.ts",
@@ -12204,6 +13664,16 @@
       "require": {
         "types": "./zh-CN/size.d.cts",
         "default": "./zh-CN/size.cjs"
+      }
+    },
+    "./zh-CN/someItem": {
+      "import": {
+        "types": "./zh-CN/someItem.d.ts",
+        "default": "./zh-CN/someItem.js"
+      },
+      "require": {
+        "types": "./zh-CN/someItem.d.cts",
+        "default": "./zh-CN/someItem.cjs"
       }
     },
     "./zh-CN/startsWith": {
@@ -12276,6 +13746,16 @@
         "default": "./zh-TW/schema.cjs"
       }
     },
+    "./zh-TW/base64": {
+      "import": {
+        "types": "./zh-TW/base64.d.ts",
+        "default": "./zh-TW/base64.js"
+      },
+      "require": {
+        "types": "./zh-TW/base64.d.cts",
+        "default": "./zh-TW/base64.cjs"
+      }
+    },
     "./zh-TW/bic": {
       "import": {
         "types": "./zh-TW/bic.d.ts",
@@ -12316,6 +13796,16 @@
         "default": "./zh-TW/creditCard.cjs"
       }
     },
+    "./zh-TW/checkItems": {
+      "import": {
+        "types": "./zh-TW/checkItems.d.ts",
+        "default": "./zh-TW/checkItems.js"
+      },
+      "require": {
+        "types": "./zh-TW/checkItems.d.cts",
+        "default": "./zh-TW/checkItems.cjs"
+      }
+    },
     "./zh-TW/checkAsync": {
       "import": {
         "types": "./zh-TW/checkAsync.d.ts",
@@ -12344,6 +13834,16 @@
       "require": {
         "types": "./zh-TW/decimal.d.cts",
         "default": "./zh-TW/decimal.cjs"
+      }
+    },
+    "./zh-TW/digits": {
+      "import": {
+        "types": "./zh-TW/digits.d.ts",
+        "default": "./zh-TW/digits.js"
+      },
+      "require": {
+        "types": "./zh-TW/digits.d.cts",
+        "default": "./zh-TW/digits.cjs"
       }
     },
     "./zh-TW/email": {
@@ -12384,6 +13884,16 @@
       "require": {
         "types": "./zh-TW/endsWith.d.cts",
         "default": "./zh-TW/endsWith.cjs"
+      }
+    },
+    "./zh-TW/everyItem": {
+      "import": {
+        "types": "./zh-TW/everyItem.d.ts",
+        "default": "./zh-TW/everyItem.js"
+      },
+      "require": {
+        "types": "./zh-TW/everyItem.d.cts",
+        "default": "./zh-TW/everyItem.cjs"
       }
     },
     "./zh-TW/excludes": {
@@ -12696,6 +14206,16 @@
         "default": "./zh-TW/multipleOf.cjs"
       }
     },
+    "./zh-TW/nanoid": {
+      "import": {
+        "types": "./zh-TW/nanoid.d.ts",
+        "default": "./zh-TW/nanoid.js"
+      },
+      "require": {
+        "types": "./zh-TW/nanoid.d.cts",
+        "default": "./zh-TW/nanoid.cjs"
+      }
+    },
     "./zh-TW/nonEmpty": {
       "import": {
         "types": "./zh-TW/nonEmpty.d.ts",
@@ -12756,6 +14276,16 @@
         "default": "./zh-TW/octal.cjs"
       }
     },
+    "./zh-TW/partialCheck": {
+      "import": {
+        "types": "./zh-TW/partialCheck.d.ts",
+        "default": "./zh-TW/partialCheck.js"
+      },
+      "require": {
+        "types": "./zh-TW/partialCheck.d.cts",
+        "default": "./zh-TW/partialCheck.cjs"
+      }
+    },
     "./zh-TW/regex": {
       "import": {
         "types": "./zh-TW/regex.d.ts",
@@ -12784,6 +14314,16 @@
       "require": {
         "types": "./zh-TW/size.d.cts",
         "default": "./zh-TW/size.cjs"
+      }
+    },
+    "./zh-TW/someItem": {
+      "import": {
+        "types": "./zh-TW/someItem.d.ts",
+        "default": "./zh-TW/someItem.js"
+      },
+      "require": {
+        "types": "./zh-TW/someItem.d.cts",
+        "default": "./zh-TW/someItem.cjs"
       }
     },
     "./zh-TW/startsWith": {
