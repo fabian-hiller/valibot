@@ -1,4 +1,5 @@
-import { useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { useSignal, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { isBrowser } from '@builder.io/qwik/build';
 
 /**
  * Creates a signal that is synchronized with localStorage.
@@ -12,7 +13,7 @@ export function useStorageSignal<T>(key: string, initialValue: T) {
   // Use signal
   const signal = useSignal<T>(initialValue);
 
-  // Get initial value from localStorage
+  // Get initial value from local storage
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const value = localStorage.getItem(key);
@@ -21,11 +22,12 @@ export function useStorageSignal<T>(key: string, initialValue: T) {
     }
   });
 
-  // Update localStorage when signal changes
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ track }) => {
-    const value = track(() => signal.value);
-    localStorage.setItem(key, JSON.stringify(value));
+  // Update local storage when signal changes
+  useTask$(({ track }) => {
+    const value = track(signal);
+    if (isBrowser) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
   });
 
   // Return signal
