@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## v1.0.0 (Month DD, YYYY)
+
+- Change Valibot peer dependency to v1.0.0
+
 ## v0.2.1 (September 30, 2024)
 
 - Fix type export for Deno (pull request #854)
