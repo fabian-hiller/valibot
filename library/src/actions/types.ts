@@ -36,6 +36,15 @@ export type LengthInput = string | ArrayLike<unknown>;
 export type SizeInput = Blob | Map<unknown, unknown> | Set<unknown>;
 
 /**
+ * Array requirement predicate.
+ */
+export type ArrayRequirementPredicate<TInput extends ArrayInput, TOuput extends TInput[number]> = (
+    item: TInput[number],
+    index: number,
+    array: TInput
+) => item is TOuput;
+
+/**
  * Value input type.
  */
 export type ValueInput = string | number | bigint | boolean | Date;
