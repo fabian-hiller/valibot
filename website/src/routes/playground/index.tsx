@@ -5,7 +5,6 @@ import {
   type Signal,
   useComputed$,
   useSignal,
-  useVisibleTask$,
 } from '@builder.io/qwik';
 import {
   type DocumentHead,
@@ -56,20 +55,6 @@ export default component$(() => {
   const code = useSignal<string>('');
   const logs = useSignal<[LogLevel, string][]>([]);
 
-  // Capture logs from iframe
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    window.addEventListener(
-      'message',
-      (event: MessageEvent<MessageEventData>) => {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (event.data.type === 'log') {
-          logs.value = [...logs.value, event.data.log];
-        }
-      }
-    );
-  });
-
   // Computed initial code of editor
   const initialCode = useComputed$(() => {
     const code = location.url.searchParams.get('code');
@@ -105,6 +90,16 @@ console.log(result);`;
   });
 
   /**
+   * Captures logs from the iframe.
+   */
+  const captureLogs = $((event: MessageEvent<MessageEventData>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (event.data.type === 'log') {
+      logs.value = [...logs.value, event.data.log];
+    }
+  });
+
+  /**
    * Clears the logs of the playground.
    */
   const clearLogs = $(() => {
@@ -116,7 +111,10 @@ console.log(result);`;
   });
 
   return (
-    <main class="flex w-full flex-1 flex-col lg:flex-row lg:space-x-10 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:space-x-14 2xl:self-center">
+    <main
+      class="flex w-full flex-1 flex-col lg:flex-row lg:space-x-10 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:space-x-14 2xl:self-center"
+      window:onMessage$={captureLogs}
+    >
       <div class="flex flex-1 lg:relative">
         <CodeEditor value={initialCode} model={model} onSave$={saveCode} />
         <EditorButtons
