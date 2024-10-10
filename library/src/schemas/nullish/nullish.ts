@@ -6,6 +6,7 @@ import type {
   Default,
   InferInput,
   InferIssue,
+  SuccessDataset,
 } from '../../types/index.ts';
 import type { InferNullishOutput } from './types.ts';
 
@@ -97,7 +98,8 @@ export function nullish(
         if (dataset.value === null || dataset.value === undefined) {
           // @ts-expect-error
           dataset.typed = true;
-          return dataset;
+          // @ts-expect-error
+          return dataset as SuccessDataset<unknown>;
         }
       }
 

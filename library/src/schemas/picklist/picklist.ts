@@ -102,6 +102,7 @@ export function picklist(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
+      // @ts-expect-error
       return dataset as OutputDataset<PicklistOptions[number], PicklistIssue>;
     },
   };

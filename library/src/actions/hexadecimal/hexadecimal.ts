@@ -3,7 +3,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -103,7 +102,7 @@ export function hexadecimal(
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'hexadecimal', dataset, config);
       }
-      return dataset as OutputDataset<string, HexadecimalIssue<string>>;
+      return dataset;
     },
   };
 }

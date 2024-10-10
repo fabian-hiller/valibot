@@ -197,7 +197,6 @@ export function objectWithRestAsync(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -205,7 +204,6 @@ export function objectWithRestAsync(
 
           // If not typed, set typed to `false`
           if (!valueDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -249,7 +247,6 @@ export function objectWithRestAsync(
 
               // If necessary, abort early
               if (config.abortEarly) {
-                // @ts-expect-error
                 dataset.typed = false;
                 break;
               }
@@ -257,7 +254,6 @@ export function objectWithRestAsync(
 
             // If not typed, set typed to `false`
             if (!valueDataset.typed) {
-              // @ts-expect-error
               dataset.typed = false;
             }
 
@@ -273,6 +269,7 @@ export function objectWithRestAsync(
       }
 
       // Return output dataset
+      // @ts-expect-error
       return dataset as OutputDataset<
         InferObjectOutput<ObjectEntriesAsync> & { [key: string]: unknown },
         | ObjectWithRestIssue

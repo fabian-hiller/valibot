@@ -85,6 +85,7 @@ export function nan(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
+      // @ts-expect-error
       return dataset as OutputDataset<number, NanIssue>;
     },
   };

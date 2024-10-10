@@ -17,12 +17,7 @@ describe('array', () => {
       type: 'array',
       reference: arrayAsync,
       expects: 'Array',
-      item: {
-        ...string(),
-        '~standard': 1,
-        '~vendor': 'valibot',
-        '~validate': expect.any(Function),
-      },
+      item,
       async: true,
       '~standard': 1,
       '~vendor': 'valibot',

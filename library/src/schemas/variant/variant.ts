@@ -241,6 +241,7 @@ export function variant(
       }
 
       // Finally, return  output dataset
+      // @ts-expect-error
       return dataset as OutputDataset<
         InferOutput<VariantOptions<string>[number]>,
         VariantIssue | BaseIssue<unknown>

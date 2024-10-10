@@ -6,6 +6,7 @@ import type {
   Default,
   InferInput,
   InferIssue,
+  SuccessDataset,
 } from '../../types/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
 
@@ -102,7 +103,8 @@ export function undefinedable(
         if (dataset.value === undefined) {
           // @ts-expect-error
           dataset.typed = true;
-          return dataset;
+          // @ts-expect-error
+          return dataset as SuccessDataset<unknown>;
         }
       }
 

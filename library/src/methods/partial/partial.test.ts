@@ -43,26 +43,18 @@ describe('partial', () => {
           entries: {
             key1: {
               ...optional(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: {
               ...optional(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...optional(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: {
               ...optional(entries.key4),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
           },
@@ -83,15 +75,11 @@ describe('partial', () => {
           entries: {
             key1: {
               ...optional(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: entries.key2,
             key3: {
               ...optional(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: entries.key4,
@@ -165,26 +153,18 @@ describe('partial', () => {
           entries: {
             key1: {
               ...optional(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: {
               ...optional(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...optional(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: {
               ...optional(entries.key4),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
           },
@@ -207,14 +187,10 @@ describe('partial', () => {
             key1: entries.key1,
             key2: {
               ...optional(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...optional(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: entries.key4,

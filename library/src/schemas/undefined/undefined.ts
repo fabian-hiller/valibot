@@ -86,6 +86,7 @@ export function undefined_(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
+      // @ts-expect-error
       return dataset as OutputDataset<undefined, UndefinedIssue>;
     },
   };

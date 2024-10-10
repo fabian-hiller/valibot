@@ -2,7 +2,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -98,7 +97,7 @@ export function finite(
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'finite', dataset, config);
       }
-      return dataset as OutputDataset<number, FiniteIssue<number>>;
+      return dataset;
     },
   };
 }

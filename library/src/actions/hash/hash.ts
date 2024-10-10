@@ -2,7 +2,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -132,7 +131,7 @@ export function hash(
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'hash', dataset, config);
       }
-      return dataset as OutputDataset<string, HashIssue<string>>;
+      return dataset;
     },
   };
 }

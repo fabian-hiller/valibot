@@ -1,4 +1,4 @@
-import type { BaseTransformation, OutputDataset } from '../../types/index.ts';
+import type { BaseTransformation, SuccessDataset } from '../../types/index.ts';
 
 /**
  * Brand symbol.
@@ -53,7 +53,7 @@ export function brand<TInput, TName extends BrandName>(
     async: false,
     name,
     '~validate'(dataset) {
-      return dataset as OutputDataset<TInput & Brand<TName>, never>;
+      return dataset as SuccessDataset<TInput & Brand<TName>>;
     },
   };
 }

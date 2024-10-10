@@ -3,7 +3,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -99,7 +98,7 @@ export function nanoid(
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Nano ID', dataset, config);
       }
-      return dataset as OutputDataset<string, NanoIDIssue<string>>;
+      return dataset;
     },
   };
 }

@@ -129,7 +129,6 @@ export function looseTuple(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -137,7 +136,6 @@ export function looseTuple(
 
           // If not typed, set typed to `false`
           if (!itemDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -160,6 +158,7 @@ export function looseTuple(
       }
 
       // Return output dataset
+      // @ts-expect-error
       return dataset as OutputDataset<
         unknown[],
         LooseTupleIssue | BaseIssue<unknown>

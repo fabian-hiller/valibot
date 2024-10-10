@@ -141,7 +141,6 @@ export function strictTupleAsync(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -149,7 +148,6 @@ export function strictTupleAsync(
 
           // If not typed, set typed to `false`
           if (!itemDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -191,6 +189,7 @@ export function strictTupleAsync(
       }
 
       // Return output dataset
+      // @ts-expect-error
       return dataset as OutputDataset<
         unknown[],
         StrictTupleIssue | BaseIssue<unknown>

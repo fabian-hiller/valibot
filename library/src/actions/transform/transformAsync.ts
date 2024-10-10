@@ -1,6 +1,6 @@
 import type {
   BaseTransformationAsync,
-  OutputDataset,
+  SuccessDataset,
 } from '../../types/index.ts';
 
 /**
@@ -42,7 +42,7 @@ export function transformAsync<TInput, TOutput>(
       // @ts-expect-error
       dataset.value = await this.operation(dataset.value);
       // @ts-expect-error
-      return dataset as OutputDataset<TOutput, never>;
+      return dataset as SuccessDataset<TOutput>;
     },
   };
 }

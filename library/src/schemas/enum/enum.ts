@@ -111,6 +111,7 @@ export function enum_(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
+      // @ts-expect-error
       return dataset as OutputDataset<string | number, EnumIssue>;
     },
   };

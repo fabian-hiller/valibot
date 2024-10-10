@@ -178,7 +178,6 @@ export function mapAsync(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -213,7 +212,6 @@ export function mapAsync(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -221,7 +219,6 @@ export function mapAsync(
 
           // If not typed, map typed to `false`
           if (!keyDataset.typed || !valueDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -236,6 +233,7 @@ export function mapAsync(
       }
 
       // Return output dataset
+      // @ts-expect-error
       return dataset as OutputDataset<
         Map<unknown, unknown>,
         MapIssue | BaseIssue<unknown>

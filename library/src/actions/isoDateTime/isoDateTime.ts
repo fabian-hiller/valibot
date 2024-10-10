@@ -3,7 +3,6 @@ import type {
   BaseIssue,
   BaseValidation,
   ErrorMessage,
-  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -115,7 +114,7 @@ export function isoDateTime(
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'date-time', dataset, config);
       }
-      return dataset as OutputDataset<string, IsoDateTimeIssue<string>>;
+      return dataset;
     },
   };
 }

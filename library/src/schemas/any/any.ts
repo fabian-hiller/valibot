@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { BaseSchema } from '../../types/index.ts';
+import type { BaseSchema, SuccessDataset } from '../../types/index.ts';
 
 /**
  * Any schema type.
@@ -40,7 +40,8 @@ export function any(): AnySchema {
     '~validate'(dataset) {
       // @ts-expect-error
       dataset.typed = true;
-      return dataset;
+      // @ts-expect-error
+      return dataset as SuccessDataset<any>;
     },
   };
 }

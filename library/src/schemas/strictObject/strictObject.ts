@@ -138,7 +138,6 @@ export function strictObject(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -146,7 +145,6 @@ export function strictObject(
 
           // If not typed, set typed to `false`
           if (!valueDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -192,6 +190,7 @@ export function strictObject(
       }
 
       // Return output dataset
+      // @ts-expect-error
       return dataset as OutputDataset<
         InferObjectOutput<ObjectEntries>,
         StrictObjectIssue | InferObjectIssue<ObjectEntries>

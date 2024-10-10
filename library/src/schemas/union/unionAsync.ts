@@ -9,6 +9,7 @@ import type {
   InferIssue,
   InferOutput,
   MaybeReadonly,
+  OutputDataset,
   PartialDataset,
   SuccessDataset,
 } from '../../types/index.ts';
@@ -183,7 +184,8 @@ export function unionAsync(
       }
 
       // Return output dataset
-      return dataset;
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

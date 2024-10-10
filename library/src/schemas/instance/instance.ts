@@ -105,6 +105,7 @@ export function instance(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
+      // @ts-expect-error
       return dataset as OutputDataset<InstanceType<Class>, InstanceIssue>;
     },
   };

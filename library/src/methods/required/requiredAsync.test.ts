@@ -47,26 +47,18 @@ describe('requiredAsync', () => {
           entries: {
             key1: {
               ...nonOptionalAsync(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: {
               ...nonOptionalAsync(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...nonOptionalAsync(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: {
               ...nonOptionalAsync(entries.key4),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
           },
@@ -87,15 +79,11 @@ describe('requiredAsync', () => {
           entries: {
             key1: {
               ...nonOptionalAsync(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: entries.key2,
             key3: {
               ...nonOptionalAsync(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: entries.key4,
@@ -264,26 +252,18 @@ describe('requiredAsync', () => {
           entries: {
             key1: {
               ...nonOptionalAsync(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: {
               ...nonOptionalAsync(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...nonOptionalAsync(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: {
               ...nonOptionalAsync(entries.key4),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
           },
@@ -306,14 +286,10 @@ describe('requiredAsync', () => {
             key1: entries.key1,
             key2: {
               ...nonOptionalAsync(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...nonOptionalAsync(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: entries.key4,

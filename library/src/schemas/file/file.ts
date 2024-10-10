@@ -86,6 +86,7 @@ export function file(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
+      // @ts-expect-error
       return dataset as OutputDataset<File, FileIssue>;
     },
   };

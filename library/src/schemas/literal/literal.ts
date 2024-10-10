@@ -100,6 +100,7 @@ export function literal(
       } else {
         _addIssue(this, 'type', dataset, config);
       }
+      // @ts-expect-error
       return dataset as OutputDataset<Literal, LiteralIssue>;
     },
   };

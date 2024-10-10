@@ -131,7 +131,6 @@ export function set(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -139,7 +138,6 @@ export function set(
 
           // If not typed, set typed to `false`
           if (!valueDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -154,6 +152,7 @@ export function set(
       }
 
       // Return output dataset
+      // @ts-expect-error
       return dataset as OutputDataset<
         Set<unknown>,
         SetIssue | BaseIssue<unknown>

@@ -2657,7 +2657,6 @@ export function pipe<
             dataset.issues &&
             (item.kind === 'schema' || item.kind === 'transformation')
           ) {
-            // @ts-expect-error
             dataset.typed = false;
             break;
           }
@@ -2674,7 +2673,8 @@ export function pipe<
       }
 
       // Return output dataset
-      return dataset;
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

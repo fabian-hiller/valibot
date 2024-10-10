@@ -18,8 +18,6 @@ describe('undefinedableAsync', () => {
       expects: '(string | undefined)',
       wrapped: {
         ...string(),
-        '~standard': 1,
-        '~vendor': 'valibot',
         '~validate': expect.any(Function),
       },
       async: true,

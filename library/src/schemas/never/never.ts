@@ -3,7 +3,7 @@ import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
-  OutputDataset,
+  FailureDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -81,7 +81,8 @@ export function never(
     '~vendor': 'valibot',
     '~validate'(dataset, config = getGlobalConfig()) {
       _addIssue(this, 'type', dataset, config);
-      return dataset as OutputDataset<never, NeverIssue>;
+      // @ts-expect-error
+      return dataset as FailureDataset<NeverIssue>;
     },
   };
 }

@@ -18,14 +18,50 @@ export const properties: Record<string, PropertyProps> = {
       generics: ['unknown'],
     },
   },
-  kind: {
+  BaseTransformationAsync: {
+    modifier: 'extends',
     type: {
-      type: 'string',
-      value: 'transformation',
+      type: 'custom',
+      name: 'Omit',
+      generics: [
+        {
+          type: 'custom',
+          name: 'BaseTransformation',
+          href: '../BaseTransformation/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+            {
+              type: 'custom',
+              name: 'TOutput',
+            },
+            {
+              type: 'custom',
+              name: 'TIssue',
+            },
+          ],
+        },
+        {
+          type: 'union',
+          options: [
+            {
+              type: 'string',
+              value: 'reference',
+            },
+            {
+              type: 'string',
+              value: 'async',
+            },
+            {
+              type: 'string',
+              value: '~validate',
+            },
+          ],
+        },
+      ],
     },
-  },
-  type: {
-    type: 'string',
   },
   reference: {
     type: {
@@ -48,17 +84,13 @@ export const properties: Record<string, PropertyProps> = {
             name: 'BaseTransformation',
             href: '../BaseTransformation/',
             generics: [
+              'any',
+              'any',
               {
                 type: 'custom',
-                name: 'TInput',
-              },
-              {
-                type: 'custom',
-                name: 'TOutput',
-              },
-              {
-                type: 'custom',
-                name: 'TIssue',
+                name: 'BaseIssue',
+                href: '../BaseIssue/',
+                generics: ['unknown'],
               },
             ],
           },
@@ -66,17 +98,13 @@ export const properties: Record<string, PropertyProps> = {
             type: 'custom',
             name: 'BaseTransformationAsync',
             generics: [
+              'any',
+              'any',
               {
                 type: 'custom',
-                name: 'TInput',
-              },
-              {
-                type: 'custom',
-                name: 'TOutput',
-              },
-              {
-                type: 'custom',
-                name: 'TIssue',
+                name: 'BaseIssue',
+                href: '../BaseIssue/',
+                generics: ['unknown'],
               },
             ],
           },
@@ -90,7 +118,7 @@ export const properties: Record<string, PropertyProps> = {
       value: true,
     },
   },
-  _run: {
+  '~validate': {
     type: {
       type: 'function',
       params: [
@@ -98,14 +126,13 @@ export const properties: Record<string, PropertyProps> = {
           name: 'dataset',
           type: {
             type: 'custom',
-            name: 'TypedDataset',
-            href: '../TypedDataset/',
+            name: 'SuccessDataset',
+            href: '../SuccessDataset/',
             generics: [
               {
                 type: 'custom',
                 name: 'TInput',
               },
-              'never',
             ],
           },
         },
@@ -118,7 +145,9 @@ export const properties: Record<string, PropertyProps> = {
             generics: [
               {
                 type: 'custom',
-                name: 'TIssue',
+                name: 'BaseIssue',
+                href: '../BaseIssue/',
+                generics: ['unknown'],
               },
             ],
           },
@@ -130,55 +159,32 @@ export const properties: Record<string, PropertyProps> = {
         generics: [
           {
             type: 'custom',
-            name: 'Dataset',
-            href: '../Dataset/',
+            name: 'OutputDataset',
+            href: '../OutputDataset/',
             generics: [
               {
                 type: 'custom',
                 name: 'TOutput',
               },
               {
-                type: 'custom',
-                name: 'TIssue',
+                type: 'union',
+                options: [
+                  {
+                    type: 'custom',
+                    name: 'BaseIssue',
+                    href: '../BaseIssue/',
+                    generics: ['unknown'],
+                  },
+                  {
+                    type: 'custom',
+                    name: 'TIssue',
+                  },
+                ],
               },
             ],
           },
         ],
       },
-    },
-  },
-  _types: {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'object',
-          entries: [
-            {
-              key: 'input',
-              value: {
-                type: 'custom',
-                name: 'TInput',
-              },
-            },
-            {
-              key: 'output',
-              value: {
-                type: 'custom',
-                name: 'TOutput',
-              },
-            },
-            {
-              key: 'issue',
-              value: {
-                type: 'custom',
-                name: 'TIssue',
-              },
-            },
-          ],
-        },
-        'undefined',
-      ],
     },
   },
 };

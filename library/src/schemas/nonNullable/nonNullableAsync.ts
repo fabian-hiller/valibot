@@ -4,6 +4,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  FailureDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type {
@@ -103,7 +104,8 @@ export function nonNullableAsync(
       // If value is `null`, add issue and return dataset
       if (dataset.value === null) {
         _addIssue(this, 'type', dataset, config);
-        return dataset;
+        // @ts-expect-error
+        return dataset as FailureDataset<NonNullableIssue>;
       }
 
       // Otherwise, return dataset of wrapped schema

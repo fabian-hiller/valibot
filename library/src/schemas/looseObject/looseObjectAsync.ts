@@ -146,7 +146,6 @@ export function looseObjectAsync(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -154,7 +153,6 @@ export function looseObjectAsync(
 
           // If not typed, set typed to `false`
           if (!valueDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -182,6 +180,7 @@ export function looseObjectAsync(
       }
 
       // Return output dataset
+      // @ts-expect-error
       return dataset as OutputDataset<
         InferObjectOutput<ObjectEntriesAsync> & { [key: string]: unknown },
         LooseObjectIssue | InferObjectIssue<ObjectEntriesAsync>

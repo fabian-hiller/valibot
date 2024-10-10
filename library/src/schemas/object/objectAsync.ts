@@ -153,7 +153,6 @@ export function objectAsync(
 
             // If necessary, abort early
             if (config.abortEarly) {
-              // @ts-expect-error
               dataset.typed = false;
               break;
             }
@@ -161,7 +160,6 @@ export function objectAsync(
 
           // If not typed, set typed to `false`
           if (!valueDataset.typed) {
-            // @ts-expect-error
             dataset.typed = false;
           }
 
@@ -178,6 +176,7 @@ export function objectAsync(
       }
 
       // Return output dataset
+      // @ts-expect-error
       return dataset as OutputDataset<
         InferObjectOutput<ObjectEntriesAsync>,
         ObjectIssue | InferObjectIssue<ObjectEntriesAsync>

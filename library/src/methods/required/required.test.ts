@@ -46,26 +46,18 @@ describe('required', () => {
           entries: {
             key1: {
               ...nonOptional(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: {
               ...nonOptional(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...nonOptional(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: {
               ...nonOptional(entries.key4),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
           },
@@ -86,15 +78,11 @@ describe('required', () => {
           entries: {
             key1: {
               ...nonOptional(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: entries.key2,
             key3: {
               ...nonOptional(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: entries.key4,
@@ -261,26 +249,18 @@ describe('required', () => {
           entries: {
             key1: {
               ...nonOptional(entries.key1),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key2: {
               ...nonOptional(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...nonOptional(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: {
               ...nonOptional(entries.key4),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
           },
@@ -303,14 +283,10 @@ describe('required', () => {
             key1: entries.key1,
             key2: {
               ...nonOptional(entries.key2),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key3: {
               ...nonOptional(entries.key3),
-              '~standard': 1,
-              '~vendor': 'valibot',
               '~validate': expect.any(Function),
             },
             key4: entries.key4,
