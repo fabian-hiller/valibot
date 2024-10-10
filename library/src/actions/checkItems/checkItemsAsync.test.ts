@@ -1,59 +1,65 @@
 import { describe, expect, test } from 'vitest';
 import type { StringIssue } from '../../schemas/index.ts';
 import type { PartialDataset } from '../../types/dataset.ts';
-import { expectNoActionIssue } from '../../vitest/index.ts';
-import { checkItems, type CheckItemsAction } from './checkItems.ts';
+import { expectNoActionIssueAsync } from '../../vitest/index.ts';
+import {
+  type CheckItemsActionAsync,
+  checkItemsAsync,
+} from './checkItemsAsync.ts';
 import type { CheckItemsIssue } from './types.ts';
 
-describe('checkItems', () => {
+describe('checkItemsAsync', () => {
   describe('should return action object', () => {
-    const requirement = (item: string) => item.startsWith('DE');
-    const baseAction: Omit<CheckItemsAction<string[], never>, 'message'> = {
+    const requirement = async (item: string) => item.startsWith('DE');
+    const baseAction: Omit<
+      CheckItemsActionAsync<string[], never>,
+      'message'
+    > = {
       kind: 'validation',
       type: 'check_items',
-      reference: checkItems,
+      reference: checkItemsAsync,
       expects: null,
       requirement,
-      async: false,
+      async: true,
       '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const action: CheckItemsAction<string[], undefined> = {
+      const action: CheckItemsActionAsync<string[], undefined> = {
         ...baseAction,
         message: undefined,
       };
-      expect(checkItems<string[]>(requirement)).toStrictEqual(action);
+      expect(checkItemsAsync<string[]>(requirement)).toStrictEqual(action);
       expect(
-        checkItems<string[], undefined>(requirement, undefined)
+        checkItemsAsync<string[], undefined>(requirement, undefined)
       ).toStrictEqual(action);
     });
 
     test('with string message', () => {
       const message = 'message';
       expect(
-        checkItems<string[], 'message'>(requirement, message)
+        checkItemsAsync<string[], 'message'>(requirement, message)
       ).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies CheckItemsAction<string[], 'message'>);
+      } satisfies CheckItemsActionAsync<string[], 'message'>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
       expect(
-        checkItems<string[], typeof message>(requirement, message)
+        checkItemsAsync<string[], typeof message>(requirement, message)
       ).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies CheckItemsAction<string[], typeof message>);
+      } satisfies CheckItemsActionAsync<string[], typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    const action = checkItems<number[]>((item: number) => item > 9);
+    const action = checkItemsAsync<number[]>(async (item: number) => item > 9);
 
-    test('for untyped inputs', () => {
+    test('for untyped inputs', async () => {
       const issues: [StringIssue] = [
         {
           kind: 'schema',
@@ -65,7 +71,7 @@ describe('checkItems', () => {
         },
       ];
       expect(
-        action['~validate']({ typed: false, value: null, issues }, {})
+        await action['~validate']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,
@@ -73,18 +79,18 @@ describe('checkItems', () => {
       });
     });
 
-    test('for empty array', () => {
-      expectNoActionIssue(action, [[]]);
+    test('for empty array', async () => {
+      await expectNoActionIssueAsync(action, [[]]);
     });
 
-    test('for valid content', () => {
-      expectNoActionIssue(action, [[10, 11, 12, 13, 99]]);
+    test('for valid content', async () => {
+      await expectNoActionIssueAsync(action, [[10, 11, 12, 13, 99]]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const requirement = (item: number) => item > 9;
-    const action = checkItems<number[], 'message'>(requirement, 'message');
+    const requirement = async (item: number) => item > 9;
+    const action = checkItemsAsync<number[], 'message'>(requirement, 'message');
 
     const baseIssue: Omit<CheckItemsIssue<number[]>, 'input' | 'received'> = {
       kind: 'validation',
@@ -98,10 +104,10 @@ describe('checkItems', () => {
       abortPipeEarly: undefined,
     };
 
-    test('for invalid content', () => {
+    test('for invalid content', async () => {
       const input = [-12, 345, 6, 10];
       expect(
-        action['~validate']({ typed: true, value: input }, {})
+        await action['~validate']({ typed: true, value: input }, {})
       ).toStrictEqual({
         typed: true,
         value: input,

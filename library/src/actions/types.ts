@@ -1,4 +1,4 @@
-import type { MaybeReadonly } from '../types';
+import type { MaybePromise, MaybeReadonly } from '../types';
 
 /**
  * Array input type.
@@ -13,6 +13,15 @@ export type ArrayRequirement<TInput extends ArrayInput> = (
   index: number,
   array: TInput
 ) => boolean;
+
+/**
+ * Array requirement async type.
+ */
+export type ArrayRequirementAsync<TInput extends ArrayInput> = (
+  item: TInput[number],
+  index: number,
+  array: TInput
+) => MaybePromise<boolean>;
 
 /**
  * Content input type.
