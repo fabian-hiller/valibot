@@ -80,6 +80,7 @@ export * from './trimEnd/index.ts';
 export * from './trimStart/index.ts';
 export * from './types.ts';
 export * from './ulid/index.ts';
+export * from './uniqueItems/index.ts';
 export * from './url/index.ts';
 export * from './uuid/index.ts';
 export * from './value/index.ts';
