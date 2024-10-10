@@ -58,7 +58,7 @@ describe('_subIssues', () => {
             issues: [emailIssue],
           } satisfies PartialDataset<string, EmailIssue<string>>,
         ])
-      ).toEqual([emailIssue]);
+      ).toStrictEqual([emailIssue]);
     });
 
     test('for single dataset with multiple issues', () => {
@@ -73,7 +73,7 @@ describe('_subIssues', () => {
             EmailIssue<string> | UrlIssue<string>
           >,
         ])
-      ).toEqual([emailIssue, urlIssue]);
+      ).toStrictEqual([emailIssue, urlIssue]);
     });
 
     test('for multiple datasets with single issue', () => {
@@ -93,7 +93,7 @@ describe('_subIssues', () => {
           string,
           EmailIssue<string> | UrlIssue<string>
         >[])
-      ).toEqual([emailIssue, urlIssue]);
+      ).toStrictEqual([emailIssue, urlIssue]);
     });
 
     test('for multiple datasets with multiple issues', () => {
@@ -113,7 +113,7 @@ describe('_subIssues', () => {
           string,
           EmailIssue<string> | UrlIssue<string>
         >[])
-      ).toEqual([emailIssue, urlIssue, emailIssue, urlIssue]);
+      ).toStrictEqual([emailIssue, urlIssue, emailIssue, urlIssue]);
     });
   });
 });
