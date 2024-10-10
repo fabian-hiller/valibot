@@ -1,13 +1,14 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   ArrayPathItem,
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
-  Dataset,
   ErrorMessage,
   InferInput,
   InferIssue,
   InferOutput,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { ArrayIssue } from './types.ts';
@@ -93,19 +94,22 @@ export function arrayAsync(
     async: true,
     item,
     message,
-    async _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    async '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (Array.isArray(input)) {
         // Set typed to `true` and value to empty array
+        // @ts-expect-error
         dataset.typed = true;
         dataset.value = [];
 
         // Parse schema of each item async
         const itemDatasets = await Promise.all(
-          input.map((value) => this.item._run({ typed: false, value }, config))
+          input.map((value) => this.item['~validate']({ value }, config))
         );
 
         // Process each item dataset
@@ -163,7 +167,11 @@ export function arrayAsync(
       }
 
       // Return output dataset
-      return dataset as Dataset<unknown[], ArrayIssue | BaseIssue<unknown>>;
+      // @ts-expect-error
+      return dataset as OutputDataset<
+        unknown[],
+        ArrayIssue | BaseIssue<unknown>
+      >;
     },
   };
 }

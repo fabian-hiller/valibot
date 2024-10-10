@@ -1,3 +1,4 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -59,8 +60,10 @@ export function lazyAsync<
     expects: 'unknown',
     async: true,
     getter,
-    async _run(dataset, config) {
-      return (await this.getter(dataset.value))._run(dataset, config);
+    '~standard': 1,
+    '~vendor': 'valibot',
+    async '~validate'(dataset, config = getGlobalConfig()) {
+      return (await this.getter(dataset.value))['~validate'](dataset, config);
     },
   };
 }

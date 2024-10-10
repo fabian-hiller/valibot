@@ -1,5 +1,5 @@
 import type { Config } from './config.ts';
-import type { Dataset } from './dataset.ts';
+import type { UnknownDataset } from './dataset.ts';
 import type { InferInput, InferIssue } from './infer.ts';
 import type { BaseIssue } from './issue.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
@@ -21,7 +21,7 @@ export type Default<
 > =
   | MaybeReadonly<InferInput<TWrapped> | TInput>
   | ((
-      dataset?: Dataset<TInput, never>,
+      dataset?: UnknownDataset,
       config?: Config<InferIssue<TWrapped>>
     ) => MaybeReadonly<InferInput<TWrapped> | TInput>);
 
@@ -36,7 +36,7 @@ export type DefaultAsync<
 > =
   | MaybeReadonly<InferInput<TWrapped> | TInput>
   | ((
-      dataset?: Dataset<TInput, never>,
+      dataset?: UnknownDataset,
       config?: Config<InferIssue<TWrapped>>
     ) => MaybePromise<MaybeReadonly<InferInput<TWrapped> | TInput>>);
 
@@ -62,7 +62,7 @@ export type DefaultValue<
     infer TInput
   >
     ? TDefault extends (
-        dataset?: Dataset<TInput, never>,
+        dataset?: UnknownDataset,
         config?: Config<InferIssue<TWrapped>>
       ) => MaybePromise<InferInput<TWrapped> | TInput>
       ? Awaited<ReturnType<TDefault>>

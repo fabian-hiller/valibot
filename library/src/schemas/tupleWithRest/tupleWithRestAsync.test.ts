@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
@@ -32,7 +32,9 @@ describe('tupleWithRestAsync', () => {
       items,
       rest,
       async: true,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -205,9 +207,7 @@ describe('tupleWithRestAsync', () => {
 
     test('for wrong items', async () => {
       const input = [123, 456, 'true', null, null, null];
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -230,23 +230,20 @@ describe('tupleWithRestAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with abort early', async () => {
       expect(
-        await schema._run(
-          {
-            typed: false,
-            value: [123, 456, 'true', null, null, null],
-          },
+        await schema['~validate'](
+          { value: [123, 456, 'true', null, null, null] },
           { abortEarly: true }
         )
       ).toStrictEqual({
         typed: false,
         value: [],
         issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for wrong nested items', async () => {
@@ -257,7 +254,7 @@ describe('tupleWithRestAsync', () => {
         null,
       ];
       expect(
-        await nestedSchema._run({ typed: false, value: input }, {})
+        await nestedSchema['~validate']({ value: input }, {})
       ).toStrictEqual({
         typed: false,
         value: input,
@@ -304,7 +301,7 @@ describe('tupleWithRestAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+      } satisfies FailureDataset<InferIssue<typeof nestedSchema>>);
     });
 
     const nullIssue: NullIssue = {
@@ -327,9 +324,7 @@ describe('tupleWithRestAsync', () => {
 
     test('for wrong rest', async () => {
       const input = ['foo', 456, true, null, 'null', null, undefined];
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -352,23 +347,20 @@ describe('tupleWithRestAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for wrong rest with abort early', async () => {
       expect(
-        await schema._run(
-          {
-            typed: false,
-            value: ['foo', 456, true, null, 'null', null, undefined],
-          },
+        await schema['~validate'](
+          { value: ['foo', 456, true, null, 'null', null, undefined] },
           { abortEarly: true }
         )
       ).toStrictEqual({
         typed: false,
         value: ['foo', 456, true, null],
         issues: [{ ...nullIssue, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
   });
 });

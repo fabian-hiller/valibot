@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { empty, type EmptyAction, type EmptyIssue } from './empty.ts';
 
@@ -10,7 +11,7 @@ describe('empty', () => {
       reference: empty,
       expects: '0',
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -42,9 +43,22 @@ describe('empty', () => {
     const action = empty();
 
     test('for untyped inputs', () => {
-      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+      const issues: [StringIssue] = [
+        {
+          kind: 'schema',
+          type: 'string',
+          input: null,
+          expected: 'string',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        action['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 

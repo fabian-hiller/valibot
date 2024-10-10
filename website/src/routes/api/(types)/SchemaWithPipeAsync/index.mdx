@@ -3,6 +3,7 @@ title: SchemaWithPipeAsync
 description: Schema with pipe async type.
 contributors:
   - EltonLobo07
+  - fabian-hiller
 ---
 
 import { Property } from '~/components';
@@ -21,5 +22,5 @@ Schema with pipe async type.
 - `SchemaWithPipeAsync` <Property {...properties.SchemaWithPipe} />
   - `pipe` <Property {...properties.pipe} />
   - `async` <Property {...properties.async} />
-  - `_run` {/* prettier-ignore */}<Property {...properties._run} />
-  - `_types` {/* prettier-ignore */}<Property {...properties._types} />
+  - `~types` <Property {...properties['~types']} />
+  - `~validate` <Property {...properties['~validate']} />

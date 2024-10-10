@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { EmailIssue, UrlIssue } from '../../../../actions/index.ts';
-import type { TypedDataset } from '../../../../types/index.ts';
+import type { PartialDataset } from '../../../../types/index.ts';
 import { _subIssues } from './_subIssues.ts';
 
 describe('_subIssues', () => {
@@ -56,9 +56,9 @@ describe('_subIssues', () => {
             typed: true,
             value: 'foo',
             issues: [emailIssue],
-          } satisfies TypedDataset<string, EmailIssue<string>>,
+          } satisfies PartialDataset<string, EmailIssue<string>>,
         ])
-      ).toEqual([emailIssue]);
+      ).toStrictEqual([emailIssue]);
     });
 
     test('for single dataset with multiple issues', () => {
@@ -68,12 +68,12 @@ describe('_subIssues', () => {
             typed: true,
             value: 'foo',
             issues: [emailIssue, urlIssue],
-          } satisfies TypedDataset<
+          } satisfies PartialDataset<
             string,
             EmailIssue<string> | UrlIssue<string>
           >,
         ])
-      ).toEqual([emailIssue, urlIssue]);
+      ).toStrictEqual([emailIssue, urlIssue]);
     });
 
     test('for multiple datasets with single issue', () => {
@@ -89,11 +89,11 @@ describe('_subIssues', () => {
             value: 'foo',
             issues: [urlIssue],
           },
-        ] satisfies TypedDataset<
+        ] satisfies PartialDataset<
           string,
           EmailIssue<string> | UrlIssue<string>
         >[])
-      ).toEqual([emailIssue, urlIssue]);
+      ).toStrictEqual([emailIssue, urlIssue]);
     });
 
     test('for multiple datasets with multiple issues', () => {
@@ -109,11 +109,11 @@ describe('_subIssues', () => {
             value: 'foo',
             issues: [emailIssue, urlIssue],
           },
-        ] satisfies TypedDataset<
+        ] satisfies PartialDataset<
           string,
           EmailIssue<string> | UrlIssue<string>
         >[])
-      ).toEqual([emailIssue, urlIssue, emailIssue, urlIssue]);
+      ).toStrictEqual([emailIssue, urlIssue, emailIssue, urlIssue]);
     });
   });
 });

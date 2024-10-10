@@ -8,7 +8,7 @@ import {
   optionalAsync,
   string,
 } from '../../schemas/index.ts';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssueAsync } from '../../vitest/index.ts';
 import { partialAsync } from './partialAsync.ts';
 
@@ -43,24 +43,26 @@ describe('partialAsync', () => {
           entries: {
             key1: {
               ...optionalAsync(entries.key1),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key2: {
               ...optionalAsync(entries.key2),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key3: {
               ...optionalAsync(entries.key3),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key4: {
               ...optionalAsync(entries.key4),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
           },
           message: undefined,
           async: true,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema1);
       });
 
@@ -73,18 +75,20 @@ describe('partialAsync', () => {
           entries: {
             key1: {
               ...optionalAsync(entries.key1),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key2: entries.key2,
             key3: {
               ...optionalAsync(entries.key3),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key4: entries.key4,
           },
           message: undefined,
           async: true,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema2);
       });
     });
@@ -106,7 +110,7 @@ describe('partialAsync', () => {
       test('if non-partialed keys are missing', async () => {
         for (const input of [{}, { key1: 'foo', key3: 'bar' }]) {
           expect(
-            await schema2._run({ typed: false, value: input }, {})
+            await schema2['~validate']({ value: input }, {})
           ).toStrictEqual({
             typed: false,
             value: { ...input, key4: 123 },
@@ -129,7 +133,7 @@ describe('partialAsync', () => {
                 ],
               },
             ],
-          } satisfies UntypedDataset<InferIssue<typeof schema2>>);
+          } satisfies FailureDataset<InferIssue<typeof schema2>>);
         }
       });
     });
@@ -151,25 +155,27 @@ describe('partialAsync', () => {
           entries: {
             key1: {
               ...optionalAsync(entries.key1),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key2: {
               ...optionalAsync(entries.key2),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key3: {
               ...optionalAsync(entries.key3),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key4: {
               ...optionalAsync(entries.key4),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
           },
           rest,
           message: undefined,
           async: true,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema1);
       });
 
@@ -183,18 +189,20 @@ describe('partialAsync', () => {
             key1: entries.key1,
             key2: {
               ...optionalAsync(entries.key2),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key3: {
               ...optionalAsync(entries.key3),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key4: entries.key4,
           },
           rest,
           message: undefined,
           async: true,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema2);
       });
     });
@@ -227,7 +235,7 @@ describe('partialAsync', () => {
       test('if non-partialed keys are missing', async () => {
         for (const input of [{}, { key2: 123, key3: 'bar', other: true }]) {
           expect(
-            await schema2._run({ typed: false, value: input }, {})
+            await schema2['~validate']({ value: input }, {})
           ).toStrictEqual({
             typed: false,
             value: { ...input, key4: 123 },
@@ -250,7 +258,7 @@ describe('partialAsync', () => {
                 ],
               },
             ],
-          } satisfies UntypedDataset<InferIssue<typeof schema2>>);
+          } satisfies FailureDataset<InferIssue<typeof schema2>>);
         }
       });
     });

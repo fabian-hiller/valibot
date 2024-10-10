@@ -2,6 +2,11 @@
 
 All notable changes to the library will be documented in this file.
 
+## v1.0.0 (Month DD, YYYY)
+
+- Add `checkItemsAsync` action (pull request #856)
+- Change types and implementation to support Standard Schema
+
 ## v0.42.1 (September 20, 2024)
 
 - Fix function type declaration of `_run` property

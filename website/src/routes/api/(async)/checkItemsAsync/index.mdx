@@ -1,0 +1,79 @@
+---
+title: checkItemsAsync
+description: Creates a check items validation action.
+source: /actions/checkItems/checkItemsAsync.ts
+contributors:
+  - EltonLobo07
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# checkItemsAsync
+
+Creates a check items validation action.
+
+```ts
+const Action = v.checkItemsAsync<TInput, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `checkItemsAsync` you can freely validate the items of an array and return `true` if they are valid or `false` otherwise. If an item does not match your `requirement`, you can use `message` to customize the error message.
+
+> The special thing about `checkItemsAsync` is that it automatically forwards each issue to the appropriate item.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `checkItemsAsync` can be used.
+
+### Cart items schema
+
+Schema to check an array of cart item objects.
+
+```ts
+import { getProductItem } from '~/api';
+
+const CartItemsSchema = v.pipeAsync(
+  v.array(
+    v.object({
+      itemId: v.pipe(v.string(), v.uuid()),
+      quantity: v.pipe(v.number(), v.minValue(1)),
+    })
+  ),
+  v.checkItemsAsync(async (input) => {
+    const productItem = await getProductItem(input.itemId);
+    return (productItem?.quantity ?? 0) >= input.quantity;
+  }, 'The required quantity is greater than available.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `checkItemsAsync`.
+
+### Schemas
+
+<ApiList items={['any', 'array', 'custom', 'instance', 'tuple', 'unknown']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList items={['arrayAsync', 'customAsync', 'pipeAsync', 'tupleAsync']} />

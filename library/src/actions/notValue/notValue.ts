@@ -113,7 +113,7 @@ export function notValue(
         : `!${_stringify(requirement)}`,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (
         dataset.typed &&
         this.requirement <= dataset.value &&

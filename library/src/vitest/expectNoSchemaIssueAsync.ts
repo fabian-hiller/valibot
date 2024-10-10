@@ -11,7 +11,7 @@ export async function expectNoSchemaIssueAsync<
   TSchema extends BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 >(schema: TSchema, values: InferInput<TSchema>[]): Promise<void> {
   for (const value of values) {
-    expect(await schema._run({ typed: false, value }, {})).toStrictEqual({
+    expect(await schema['~validate']({ value }, {})).toStrictEqual({
       typed: true,
       value,
     });

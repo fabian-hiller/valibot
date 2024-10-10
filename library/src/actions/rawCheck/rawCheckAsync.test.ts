@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { StringIssue } from '../../schemas/index.ts';
 import {
   expectActionIssueAsync,
   expectNoActionIssueAsync,
@@ -20,17 +21,28 @@ describe('rawCheckAsync', () => {
       reference: rawCheckAsync,
       expects: null,
       async: true,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     } satisfies RawCheckActionAsync<number>);
   });
 
   describe('should return dataset without issues', () => {
     test('for untyped inputs', async () => {
+      const issues: [StringIssue] = [
+        {
+          kind: 'schema',
+          type: 'string',
+          input: null,
+          expected: 'string',
+          received: 'null',
+          message: 'message',
+        },
+      ];
       expect(
-        await action._run({ typed: false, value: null }, {})
+        await action['~validate']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 

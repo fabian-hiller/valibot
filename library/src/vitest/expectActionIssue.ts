@@ -4,7 +4,7 @@ import type {
   BaseValidation,
   InferInput,
   InferIssue,
-  TypedDataset,
+  PartialDataset,
 } from '../types/index.ts';
 import { _stringify } from '../utils/index.ts';
 
@@ -26,7 +26,7 @@ export function expectActionIssue<
   getReceived?: (value: InferInput<TAction>) => string
 ): void {
   for (const value of values) {
-    expect(action._run({ typed: true, value }, {})).toStrictEqual({
+    expect(action['~validate']({ typed: true, value }, {})).toStrictEqual({
       typed: true,
       value,
       issues: [
@@ -43,6 +43,6 @@ export function expectActionIssue<
           ...baseIssue,
         },
       ],
-    } satisfies TypedDataset<typeof value, InferIssue<TAction>>);
+    } satisfies PartialDataset<typeof value, InferIssue<TAction>>);
   }
 }

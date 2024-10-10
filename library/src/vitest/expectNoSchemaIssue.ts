@@ -11,7 +11,7 @@ export function expectNoSchemaIssue<
   TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(schema: TSchema, values: InferInput<TSchema>[]): void {
   for (const value of values) {
-    expect(schema._run({ typed: false, value }, {})).toStrictEqual({
+    expect(schema['~validate']({ value }, {})).toStrictEqual({
       typed: true,
       value,
     });

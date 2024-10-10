@@ -13,10 +13,10 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   Config,
-  Dataset,
   InferInput,
   InferIssue,
   MaybePromise,
+  UnknownDataset,
 } from '../../types/index.ts';
 
 /**
@@ -112,7 +112,7 @@ export function getDefault<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
-  dataset?: Dataset<null | undefined, never>,
+  dataset?: UnknownDataset,
   config?: Config<InferIssue<TSchema>>
 ): InferDefault<TSchema> {
   // @ts-expect-error

@@ -4,7 +4,7 @@ import type {
   BaseValidationAsync,
   InferInput,
   InferIssue,
-  TypedDataset,
+  PartialDataset,
 } from '../types/index.ts';
 import { _stringify } from '../utils/index.ts';
 
@@ -26,23 +26,25 @@ export async function expectActionIssueAsync<
   getReceived?: (value: InferInput<TAction>) => string
 ): Promise<void> {
   for (const value of values) {
-    expect(await action._run({ typed: true, value }, {})).toStrictEqual({
-      typed: true,
-      value,
-      issues: [
-        {
-          requirement: undefined,
-          path: undefined,
-          issues: undefined,
-          lang: undefined,
-          abortEarly: undefined,
-          abortPipeEarly: undefined,
+    expect(await action['~validate']({ typed: true, value }, {})).toStrictEqual(
+      {
+        typed: true,
+        value,
+        issues: [
+          {
+            requirement: undefined,
+            path: undefined,
+            issues: undefined,
+            lang: undefined,
+            abortEarly: undefined,
+            abortPipeEarly: undefined,
 
-          input: value,
-          received: getReceived?.(value) ?? _stringify(value),
-          ...baseIssue,
-        },
-      ],
-    } satisfies TypedDataset<typeof value, InferIssue<TAction>>);
+            input: value,
+            received: getReceived?.(value) ?? _stringify(value),
+            ...baseIssue,
+          },
+        ],
+      } satisfies PartialDataset<typeof value, InferIssue<TAction>>
+    );
   }
 }

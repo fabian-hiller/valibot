@@ -14,14 +14,25 @@ export const properties: Record<string, PropertyProps> = {
       generics: ['unknown'],
     },
   },
-  Dataset: {
+  OutputDataset: {
     type: {
       type: 'union',
       options: [
         {
           type: 'custom',
-          name: 'TypedDataset',
-          href: '../TypedDataset/',
+          name: 'SuccessDataset',
+          href: '../SuccessDataset/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TValue',
+            },
+          ],
+        },
+        {
+          type: 'custom',
+          name: 'PartialDataset',
+          href: '../PartialDataset/',
           generics: [
             {
               type: 'custom',
@@ -35,8 +46,8 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'UntypedDataset',
-          href: '../UntypedDataset/',
+          name: 'FailureDataset',
+          href: '../FailureDataset/',
           generics: [
             {
               type: 'custom',

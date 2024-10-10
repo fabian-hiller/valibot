@@ -30,7 +30,7 @@ describe('safeParseAsync', () => {
       await safeParseAsync(objectAsync({ key: pipe(string(), minLength(5)) }), {
         key: 'foo',
       })
-    ).toEqual({
+    ).toStrictEqual({
       typed: true,
       success: false,
       output: { key: 'foo' },
@@ -64,7 +64,7 @@ describe('safeParseAsync', () => {
   test('should return untyped output with issues', async () => {
     expect(
       await safeParseAsync(objectAsync({ key: string() }), { key: 123 })
-    ).toEqual({
+    ).toStrictEqual({
       typed: false,
       success: false,
       output: { key: 123 },

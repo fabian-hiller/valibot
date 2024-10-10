@@ -117,7 +117,7 @@ export function multipleOf(
     expects: `%${requirement}`,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && dataset.value % this.requirement !== 0) {
         _addIssue(this, 'multiple', dataset, config);
       }

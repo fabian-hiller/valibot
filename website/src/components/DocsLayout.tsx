@@ -79,7 +79,7 @@ export const DocsLayout = component$(() => {
         </nav>
 
         {/* Article */}
-        <article class="mdx">
+        <article class="mdx flex flex-col">
           <Slot />
         </article>
 

@@ -1,4 +1,8 @@
-import type { BaseTransformation, Dataset } from '../../types/index.ts';
+import type {
+  BaseIssue,
+  BaseTransformation,
+  OutputDataset,
+} from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { Context, RawTransformIssue } from './types.ts';
 
@@ -32,7 +36,7 @@ export function rawTransform<TInput, TOutput>(
     type: 'raw_transform',
     reference: rawTransform,
     async: false,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       // Execute action and get its output
       const output = action({
         dataset,
@@ -53,7 +57,10 @@ export function rawTransform<TInput, TOutput>(
 
       // Return output dataset
       // @ts-expect-error
-      return dataset as Dataset<TOutput, RawTransformIssue<TInput>>;
+      return dataset as OutputDataset<
+        TOutput,
+        BaseIssue<unknown> | RawTransformIssue<TInput>
+      >;
     },
   };
 }

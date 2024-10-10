@@ -1,12 +1,13 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   ArrayPathItem,
   BaseIssue,
   BaseSchema,
-  Dataset,
   ErrorMessage,
   InferTupleInput,
   InferTupleIssue,
   InferTupleOutput,
+  OutputDataset,
   TupleItems,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
@@ -91,23 +92,23 @@ export function tuple(
     async: false,
     items,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (Array.isArray(input)) {
         // Set typed to `true` and value to empty array
+        // @ts-expect-error
         dataset.typed = true;
         dataset.value = [];
 
         // Parse schema of each tuple item
         for (let key = 0; key < this.items.length; key++) {
           const value = input[key];
-          const itemDataset = this.items[key]._run(
-            { typed: false, value },
-            config
-          );
+          const itemDataset = this.items[key]['~validate']({ value }, config);
 
           // If there are issues, capture them
           if (itemDataset.issues) {
@@ -159,7 +160,11 @@ export function tuple(
       }
 
       // Return output dataset
-      return dataset as Dataset<unknown[], TupleIssue | BaseIssue<unknown>>;
+      // @ts-expect-error
+      return dataset as OutputDataset<
+        unknown[],
+        TupleIssue | BaseIssue<unknown>
+      >;
     },
   };
 }

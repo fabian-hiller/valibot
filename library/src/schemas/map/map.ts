@@ -1,10 +1,11 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   ErrorMessage,
   InferIssue,
   MapPathItem,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { InferMapInput, InferMapOutput, MapIssue } from './types.ts';
@@ -97,23 +98,23 @@ export function map(
     key,
     value,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (input instanceof Map) {
         // Set typed to `true` and value to empty map
+        // @ts-expect-error
         dataset.typed = true;
         dataset.value = new Map();
 
         // Parse schema of each map entry
         for (const [inputKey, inputValue] of input) {
           // Get dataset of key schema
-          const keyDataset = this.key._run(
-            { typed: false, value: inputKey },
-            config
-          );
+          const keyDataset = this.key['~validate']({ value: inputKey }, config);
 
           // If there are issues, capture them
           if (keyDataset.issues) {
@@ -150,8 +151,8 @@ export function map(
           }
 
           // Get dataset of value schema
-          const valueDataset = this.value._run(
-            { typed: false, value: inputValue },
+          const valueDataset = this.value['~validate'](
+            { value: inputValue },
             config
           );
 
@@ -205,7 +206,8 @@ export function map(
       }
 
       // Return output dataset
-      return dataset as Dataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         Map<unknown, unknown>,
         MapIssue | BaseIssue<unknown>
       >;

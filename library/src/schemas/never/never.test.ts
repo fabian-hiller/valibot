@@ -10,7 +10,9 @@ describe('never', () => {
       reference: never,
       expects: 'never',
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {

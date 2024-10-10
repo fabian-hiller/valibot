@@ -2,7 +2,6 @@ import { HEX_COLOR_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
@@ -96,11 +95,11 @@ export function hexColor(
     expects: null,
     requirement: HEX_COLOR_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'hex color', dataset, config);
       }
-      return dataset as Dataset<string, HexColorIssue<string>>;
+      return dataset;
     },
   };
 }

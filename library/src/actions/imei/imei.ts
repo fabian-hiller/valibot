@@ -2,7 +2,6 @@ import { IMEI_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue, _isLuhnAlgo } from '../../utils/index.ts';
@@ -102,11 +101,11 @@ export function imei(
       return IMEI_REGEX.test(input) && _isLuhnAlgo(input);
     },
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'IMEI', dataset, config);
       }
-      return dataset as Dataset<string, ImeiIssue<string>>;
+      return dataset;
     },
   };
 }

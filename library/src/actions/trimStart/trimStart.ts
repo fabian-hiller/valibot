@@ -26,7 +26,7 @@ export function trimStart(): TrimStartAction {
     type: 'trim_start',
     reference: trimStart,
     async: false,
-    _run(dataset) {
+    '~validate'(dataset) {
       dataset.value = dataset.value.trimStart();
       return dataset;
     },

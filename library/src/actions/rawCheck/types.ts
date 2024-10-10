@@ -1,9 +1,9 @@
 import type {
   BaseIssue,
   Config,
-  Dataset,
   ErrorMessage,
   IssuePathItem,
+  OutputDataset,
 } from '../../types/index.ts';
 
 /**
@@ -41,7 +41,7 @@ type AddIssue<TInput> = (info?: IssueInfo<TInput>) => void;
  * Context type.
  */
 export interface Context<TInput> {
-  readonly dataset: Dataset<TInput, BaseIssue<unknown>>;
+  readonly dataset: OutputDataset<TInput, BaseIssue<unknown>>;
   readonly config: Config<RawCheckIssue<TInput>>;
   readonly addIssue: AddIssue<TInput>;
 }

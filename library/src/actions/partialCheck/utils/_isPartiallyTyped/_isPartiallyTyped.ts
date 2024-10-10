@@ -1,4 +1,4 @@
-import type { BaseIssue, Dataset } from '../../../../types/index.ts';
+import type { BaseIssue, OutputDataset } from '../../../../types/index.ts';
 
 /**
  * Checks if a dataset is partially typed.
@@ -9,7 +9,7 @@ import type { BaseIssue, Dataset } from '../../../../types/index.ts';
  * @returns Whether it is partially typed.
  */
 export function _isPartiallyTyped(
-  dataset: Dataset<unknown, BaseIssue<unknown>>,
+  dataset: OutputDataset<unknown, BaseIssue<unknown>>,
   pathList: readonly (readonly (string | number)[])[]
 ): boolean {
   // If issues exist, check if a specified path matches path of a schema issue

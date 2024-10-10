@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
@@ -29,7 +29,9 @@ describe('looseObjectAsync', () => {
       expects: 'Object',
       entries,
       async: true,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -211,7 +213,7 @@ describe('looseObjectAsync', () => {
     };
 
     test('for missing entries', async () => {
-      expect(await schema._run({ typed: false, value: {} }, {})).toStrictEqual({
+      expect(await schema['~validate']({ value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
         issues: [
@@ -234,14 +236,12 @@ describe('looseObjectAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for missing nested entries', async () => {
       const input = { key: 'value', nested: {} };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -270,17 +270,17 @@ describe('looseObjectAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with abort early', async () => {
       expect(
-        await schema._run({ typed: false, value: {} }, { abortEarly: true })
+        await schema['~validate']({ value: {} }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: {},
         issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
   });
 });

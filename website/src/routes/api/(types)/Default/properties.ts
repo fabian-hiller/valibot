@@ -60,15 +60,8 @@ export const properties: Record<string, PropertyProps> = {
               optional: true,
               type: {
                 type: 'custom',
-                name: 'Dataset',
-                href: '../Dataset/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TInput',
-                  },
-                  'never',
-                ],
+                name: 'UnknownDataset',
+                href: '../UnknownDataset/',
               },
             },
             {

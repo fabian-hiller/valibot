@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
@@ -22,7 +22,9 @@ describe('objectAsync', () => {
       expects: 'Object',
       entries,
       async: true,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -64,8 +66,8 @@ describe('objectAsync', () => {
 
     test('for unknown entries', async () => {
       expect(
-        await objectAsync({ key1: string() })._run(
-          { typed: false, value: { key1: 'foo', key2: 123, key3: null } },
+        await objectAsync({ key1: string() })['~validate'](
+          { value: { key1: 'foo', key2: 123, key3: null } },
           {}
         )
       ).toStrictEqual({
@@ -168,8 +170,8 @@ describe('objectAsync', () => {
 
     test('for unknown entries', async () => {
       expect(
-        await objectAsync({ key1: string() })._run(
-          { typed: false, value: { key1: 'foo', key2: 123, key3: null } },
+        await objectAsync({ key1: string() })['~validate'](
+          { value: { key1: 'foo', key2: 123, key3: null } },
           {}
         )
       ).toStrictEqual({
@@ -213,7 +215,7 @@ describe('objectAsync', () => {
     };
 
     test('for missing entries', async () => {
-      expect(await schema._run({ typed: false, value: {} }, {})).toStrictEqual({
+      expect(await schema['~validate']({ value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
         issues: [
@@ -236,15 +238,12 @@ describe('objectAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for missing nested entries', async () => {
       expect(
-        await schema._run(
-          { typed: false, value: { key: 'value', nested: {} } },
-          {}
-        )
+        await schema['~validate']({ value: { key: 'value', nested: {} } }, {})
       ).toStrictEqual({
         typed: false,
         value: { key: 'value', nested: {} },
@@ -274,17 +273,17 @@ describe('objectAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with abort early', async () => {
       expect(
-        await schema._run({ typed: false, value: {} }, { abortEarly: true })
+        await schema['~validate']({ value: {} }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: {},
         issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
   });
 });

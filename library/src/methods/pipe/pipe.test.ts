@@ -30,19 +30,33 @@ describe('pipe', () => {
       expects: 'string',
       message: undefined,
       pipe: [
-        { ...string(), _run: expect.any(Function) },
+        {
+          ...string(),
+          '~validate': expect.any(Function),
+        },
         { ...description('text') },
-        { ...trim(), _run: expect.any(Function) },
-        { ...minLength(1), _run: expect.any(Function) },
-        { ...decimal(), _run: expect.any(Function) },
+        {
+          ...trim(),
+          '~validate': expect.any(Function),
+        },
+        {
+          ...minLength(1),
+          '~validate': expect.any(Function),
+        },
+        {
+          ...decimal(),
+          '~validate': expect.any(Function),
+        },
       ],
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     } satisfies typeof schema);
   });
 
   test('should return dataset without issues', () => {
-    expect(schema._run({ typed: false, value: ' 123 ' }, {})).toStrictEqual({
+    expect(schema['~validate']({ value: ' 123 ' }, {})).toStrictEqual({
       typed: true,
       value: '123',
     });
@@ -78,7 +92,7 @@ describe('pipe', () => {
   };
 
   test('should return dataset with issues', () => {
-    expect(schema._run({ typed: false, value: '  ' }, {})).toStrictEqual({
+    expect(schema['~validate']({ value: '  ' }, {})).toStrictEqual({
       typed: true,
       value: '',
       issues: [minLengthIssue, decimalIssue],
@@ -88,7 +102,7 @@ describe('pipe', () => {
   describe('should break pipe if necessary', () => {
     test('for abort early config', () => {
       expect(
-        schema._run({ typed: false, value: '  ' }, { abortEarly: true })
+        schema['~validate']({ value: '  ' }, { abortEarly: true })
       ).toStrictEqual({
         typed: true,
         value: '',
@@ -98,7 +112,7 @@ describe('pipe', () => {
 
     test('for abort pipe early config', () => {
       expect(
-        schema._run({ typed: false, value: '  ' }, { abortPipeEarly: true })
+        schema['~validate']({ value: '  ' }, { abortPipeEarly: true })
       ).toStrictEqual({
         typed: true,
         value: '',
@@ -108,10 +122,7 @@ describe('pipe', () => {
 
     test('if next action is schema', () => {
       expect(
-        pipe(schema, string(), minLength(10))._run(
-          { typed: false, value: '  ' },
-          {}
-        )
+        pipe(schema, string(), minLength(10))['~validate']({ value: '  ' }, {})
       ).toStrictEqual({
         typed: false,
         value: '',
@@ -121,8 +132,8 @@ describe('pipe', () => {
 
     test('if next action is transformation', () => {
       expect(
-        pipe(schema, transform(parseInt), minValue(999))._run(
-          { typed: false, value: '  ' },
+        pipe(schema, transform(parseInt), minValue(999))['~validate'](
+          { value: '  ' },
           {}
         )
       ).toStrictEqual({
