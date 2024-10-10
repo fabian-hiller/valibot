@@ -14,24 +14,22 @@ export const properties: Record<string, PropertyProps> = {
       type: 'function',
       params: [
         {
-          name: 'params',
-          spread: true,
+          name: 'item',
           type: {
             type: 'custom',
-            name: 'Parameters',
-            generics: [
-              {
-                type: 'custom',
-                name: 'ArrayRequirement',
-                href: '../ArrayRequirement/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TInput',
-                  },
-                ],
-              },
-            ],
+            name: 'TInput',
+            indexes: ['number'],
+          },
+        },
+        {
+          name: 'index',
+          type: 'number',
+        },
+        {
+          name: 'array',
+          type: {
+            type: 'custom',
+            name: 'TInput',
           },
         },
       ],
@@ -39,25 +37,7 @@ export const properties: Record<string, PropertyProps> = {
         type: 'custom',
         name: 'MaybePromise',
         href: '../MaybePromise/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'ReturnType',
-            generics: [
-              {
-                type: 'custom',
-                name: 'ArrayRequirement',
-                href: '../ArrayRequirement/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TInput',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
+        generics: ['boolean'],
       },
     },
   },

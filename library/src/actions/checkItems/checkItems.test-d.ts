@@ -5,34 +5,25 @@ import type { CheckItemsIssue } from './types.ts';
 
 describe('checkItems', () => {
   describe('should return action object', () => {
+    const requirement = (item: string) => Boolean(item);
+
     test('with undefined message', () => {
       type Action = CheckItemsAction<string[], undefined>;
+      expectTypeOf(checkItems<string[]>(requirement)).toEqualTypeOf<Action>();
       expectTypeOf(
-        checkItems<string[]>((item: string) => Boolean(item))
-      ).toEqualTypeOf<Action>();
-      expectTypeOf(
-        checkItems<string[], undefined>(
-          (item: string) => Boolean(item),
-          undefined
-        )
+        checkItems<string[], undefined>(requirement, undefined)
       ).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
       expectTypeOf(
-        checkItems<string[], 'message'>(
-          (item: string) => Boolean(item),
-          'message'
-        )
+        checkItems<string[], 'message'>(requirement, 'message')
       ).toEqualTypeOf<CheckItemsAction<string[], 'message'>>();
     });
 
     test('with function message', () => {
       expectTypeOf(
-        checkItems<string[], () => string>(
-          (item: string) => Boolean(item),
-          () => 'message'
-        )
+        checkItems<string[], () => string>(requirement, () => 'message')
       ).toEqualTypeOf<CheckItemsAction<string[], () => string>>();
     });
   });

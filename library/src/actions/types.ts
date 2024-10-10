@@ -18,8 +18,10 @@ export type ArrayRequirement<TInput extends ArrayInput> = (
  * Array requirement async type.
  */
 export type ArrayRequirementAsync<TInput extends ArrayInput> = (
-  ...params: Parameters<ArrayRequirement<TInput>>
-) => MaybePromise<ReturnType<ArrayRequirement<TInput>>>;
+  item: TInput[number],
+  index: number,
+  array: TInput
+) => MaybePromise<boolean>;
 
 /**
  * Content input type.

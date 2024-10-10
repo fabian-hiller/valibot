@@ -186,6 +186,7 @@
 - [arrayAsync](/api/arrayAsync/)
 - [awaitAsync](/api/awaitAsync/)
 - [checkAsync](/api/checkAsync/)
+- [checkItemsAsync](/api/checkItemsAsync/)
 - [customAsync](/api/customAsync/)
 - [fallbackAsync](/api/fallbackAsync/)
 - [forwardAsync](/api/forwardAsync/)
