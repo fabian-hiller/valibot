@@ -52,17 +52,29 @@ describe('minValue', () => {
     });
 
     test('for valid non-bigints', () => {
-      expectNoActionIssue(minValue(123n), [
-        '123',
-        '+123',
-        ' 123 ',
-        '200',
+      expectNoActionIssue(minValue(10n), [
+        '+10',
+        ' 10 ',
+        '15',
+        10,
+        10.0,
+        13,
         Infinity,
-        123,
-        123.0,
-        1024,
-        new Date(123),
-        new Date(256),
+        new Date(10),
+        new Date(20),
+      ]);
+
+      expectNoActionIssue(minValue(1n), [
+        '1',
+        '+1',
+        ' 3 ',
+        1,
+        1.5,
+        12,
+        Infinity,
+        true,
+        new Date(1),
+        new Date(5),
       ]);
 
       expectNoActionIssue(minValue(0n), [
@@ -70,26 +82,15 @@ describe('minValue', () => {
         ' ',
         '0',
         ' 15 ',
-        0.5,
+        0,
         -0,
+        0.5,
         10,
         Infinity,
         false,
         true,
         new Date(0),
-        new Date(12),
-      ]);
-
-      expectNoActionIssue(minValue(-21n), [
-        '-15',
-        ' -21 ',
-        -21,
-        -20.5,
-        Infinity,
-        false,
-        true,
-        new Date(-21),
-        new Date(0),
+        new Date(5),
       ]);
     });
 
@@ -101,34 +102,34 @@ describe('minValue', () => {
     test('for valid non-booleans', () => {
       expectNoActionIssue(minValue(true), [
         '1',
-        ' 1 ',
+        '+1',
         '1.0',
-        '2',
-        Infinity,
+        ' 3 ',
         1,
-        1.0,
-        3,
-        1n,
-        5n,
+        1.5,
+        12,
+        Infinity,
         new Date(1),
-        new Date(10),
+        new Date(5),
+        1n,
+        4n,
       ]);
 
       expectNoActionIssue(minValue(false), [
         '',
         ' ',
         '0',
-        ' 0 ',
-        '0.',
-        '1',
-        Infinity,
+        '0.0',
+        ' 15 ',
+        0,
         -0,
-        2,
-        0.0,
-        0n,
-        3n,
+        0.5,
+        10,
+        Infinity,
         new Date(0),
         new Date(5),
+        0n,
+        4n,
       ]);
     });
 
@@ -142,53 +143,48 @@ describe('minValue', () => {
     });
 
     test('for valid non-dates', () => {
-      const date1 = new Date(101);
-      expectNoActionIssue(minValue(date1), [
-        '101',
-        ' 101 ',
-        '101.0',
-        '103',
-        101,
-        101.0,
-        105,
-        date1.getTime(),
+      expectNoActionIssue(minValue(new Date(10)), [
+        '+10',
+        '10.0',
+        ' 10 ',
+        '15',
+        10,
+        10.0,
+        13,
         Infinity,
-        101n,
-        110n,
+        10n,
+        12n,
       ]);
 
-      const date2 = new Date(-1);
-      expectNoActionIssue(minValue(date2), [
-        '-0.5',
-        '-1',
-        ' -1 ',
-        '-1.',
-        -1,
-        -1.0,
-        0,
-        date2.getTime(),
+      expectNoActionIssue(minValue(new Date(1)), [
+        '1',
+        '+1',
+        '1.0',
+        ' 3 ',
+        1,
+        1.5,
+        12,
         Infinity,
-        false,
         true,
-        -1n,
-        0n,
+        1n,
+        4n,
       ]);
 
-      const date3 = new Date(0);
-      expectNoActionIssue(minValue(date3), [
+      expectNoActionIssue(minValue(new Date(0)), [
         '',
         ' ',
         '0',
-        ' 0 ',
-        '0.',
+        '0.0',
+        ' 15 ',
+        0,
         -0,
-        0.0,
-        date3.getTime(),
+        0.5,
+        10,
         Infinity,
         false,
         true,
         0n,
-        15n,
+        4n,
       ]);
     });
 
@@ -197,44 +193,42 @@ describe('minValue', () => {
     });
 
     test('for valid non-numbers', () => {
-      expectNoActionIssue(minValue(120), [
-        '120',
-        '+120',
-        ' 120 ',
-        '120.0',
-        '256',
-        120n,
-        217n,
-        new Date(120),
-        new Date(515),
+      expectNoActionIssue(minValue(10), [
+        '+10',
+        '10.0',
+        ' 10 ',
+        '15',
+        new Date(10),
+        new Date(20),
+        10n,
+        12n,
+      ]);
+
+      expectNoActionIssue(minValue(1), [
+        '1',
+        '+1',
+        '1.0',
+        ' 3 ',
+        true,
+        new Date(1),
+        new Date(5),
+        1n,
+        4n,
       ]);
 
       expectNoActionIssue(minValue(0), [
         '',
         ' ',
-        '0.',
-        ' -0 ',
-        '12',
+        '0',
+        '-0',
+        '0.0',
+        ' 15 ',
         false,
         true,
-        0n,
-        3n,
         new Date(0),
-        new Date(100),
-      ]);
-
-      expectNoActionIssue(minValue(-50), [
-        '-50',
-        ' -50 ',
-        '-48',
-        '',
-        false,
-        true,
-        -50n,
-        -35n,
+        new Date(5),
         0n,
-        new Date(-50),
-        new Date(0),
+        4n,
       ]);
     });
 
@@ -243,40 +237,43 @@ describe('minValue', () => {
     });
 
     test('for valid non-strings', () => {
-      expectNoActionIssue(minValue('2018'), [
-        2018,
-        2018.0,
-        5001,
+      expectNoActionIssue(minValue('10'), [
+        10,
+        10.0,
+        13,
         Infinity,
-        2018n,
-        3000n,
-        new Date(2018),
-        new Date(2020),
+        new Date(10),
+        new Date(20),
+        10n,
+        12n,
+      ]);
+
+      expectNoActionIssue(minValue('1'), [
+        1,
+        1.0,
+        1.5,
+        12,
+        Infinity,
+        true,
+        new Date(1),
+        new Date(5),
+        1n,
+        4n,
       ]);
 
       expectNoActionIssue(minValue('0'), [
         0,
         -0,
+        0.0,
+        0.5,
+        10,
         Infinity,
         false,
         true,
-        0n,
-        1n,
-        5n,
         new Date(0),
-        new Date(12),
-      ]);
-
-      expectNoActionIssue(minValue('-7000'), [
-        -7000,
-        Infinity,
-        false,
-        true,
-        -6999n,
-        -7000n,
+        new Date(5),
         0n,
-        new Date(-7000),
-        new Date(0),
+        4n,
       ]);
     });
   });
@@ -301,21 +298,58 @@ describe('minValue', () => {
 
     test('for invalid non-bigints', () => {
       expectActionIssue(
-        minValue(-100n, 'message'),
-        { ...baseInfo, expected: '>=-100', requirement: -100n },
+        minValue(123n, 'message'),
+        { ...baseInfo, expected: '>=123', requirement: 123n },
         [
           'nan',
-          '- 100',
-          '-100px',
-          '-101',
-          ' -101 ',
-          '-100.',
-          -101,
-          -Infinity,
-          -1000,
+          '123px',
+          '+ 123',
+          '-124',
+          '-123',
+          '',
+          ' ',
+          '0.0',
+          ' 122 ',
+          '123.0',
+          -124,
+          -123,
+          0,
+          122,
+          122.5,
           NaN,
-          new Date(-101),
-          new Date(-200),
+          false,
+          true,
+          new Date(-124),
+          new Date(-123),
+          new Date(0),
+          new Date(122),
+        ],
+        getReceived
+      );
+
+      expectActionIssue(
+        minValue(1n, 'message'),
+        { ...baseInfo, expected: '>=1', requirement: 1n },
+        [
+          'nan',
+          '1px',
+          '+ 1',
+          '-2',
+          '-1',
+          '',
+          ' ',
+          '0',
+          ' 0.5 ',
+          '1.0',
+          -2,
+          -1,
+          0,
+          0.5,
+          NaN,
+          false,
+          new Date(-2),
+          new Date(-1),
+          new Date(0),
         ],
         getReceived
       );
@@ -326,35 +360,15 @@ describe('minValue', () => {
         [
           'nan',
           '0px',
-          '0.',
+          '+ 0',
+          '-0.5',
+          '-1',
           ' -1 ',
+          '0.0',
           -1,
-          -0.25,
-          -Infinity,
+          -0.5,
           NaN,
           new Date(-1),
-          new Date(-100),
-        ],
-        getReceived
-      );
-
-      expectActionIssue(
-        minValue(75n, 'message'),
-        { ...baseInfo, expected: '>=75', requirement: 75n },
-        [
-          'nan',
-          '75vw',
-          ' 75. ',
-          '12',
-          0,
-          70,
-          74.5,
-          -Infinity,
-          NaN,
-          false,
-          true,
-          new Date(0),
-          new Date(74),
         ],
         getReceived
       );
@@ -374,19 +388,16 @@ describe('minValue', () => {
         { ...baseInfo, expected: '>=false', requirement: false },
         [
           'nan',
-          '- 0',
-          '0rem',
+          '0px',
+          '+ 0',
           '-0.5',
+          '-1',
           ' -1 ',
-          -0.25,
           -1,
-          -5,
-          -Infinity,
+          -0.5,
           NaN,
-          -1n,
-          -12n,
           new Date(-1),
-          new Date(-100),
+          -1n,
         ],
         getReceived
       );
@@ -396,22 +407,25 @@ describe('minValue', () => {
         { ...baseInfo, expected: '>=true', requirement: true },
         [
           'nan',
+          '1px',
           '+ 1',
-          '1em',
+          '-2',
+          '-1',
           '',
           ' ',
           '0',
-          '-0.5',
-          '-10',
-          -0,
+          ' 0.5 ',
+          -2,
           -1,
-          -0.5,
-          -Infinity,
+          0,
+          0.5,
           NaN,
-          0n,
-          -12n,
+          new Date(-2),
+          new Date(-1),
           new Date(0),
-          new Date(-15),
+          -2n,
+          -1n,
+          0n,
         ],
         getReceived
       );
@@ -428,45 +442,59 @@ describe('minValue', () => {
     });
 
     test('for invalid non-dates', () => {
-      const date1 = new Date(100);
+      const date1 = new Date(123);
       expectActionIssue(
         minValue(date1, 'message'),
         { ...baseInfo, expected: `>=${date1.toJSON()}`, requirement: date1 },
         [
           'nan',
-          '+ 100',
-          '100$',
+          '123px',
+          '+ 123',
+          '-124',
+          '-123',
           '',
-          '99.5',
-          '98',
-          99.5,
-          95,
-          -Infinity,
+          ' ',
+          '0.0',
+          ' 122 ',
+          -124,
+          -123,
+          0,
+          122,
+          122.5,
           NaN,
           false,
           true,
+          -124n,
+          -123n,
           0n,
-          99n,
+          122n,
         ],
         getReceived
       );
 
-      const date2 = new Date(-105);
+      const date2 = new Date(1);
       expectActionIssue(
         minValue(date2, 'message'),
         { ...baseInfo, expected: `>=${date2.toJSON()}`, requirement: date2 },
         [
           'nan',
-          '- 105',
-          '-105deg',
-          ' -106 ',
-          '-105.5',
-          -105.25,
-          -108,
-          -Infinity,
+          '1px',
+          '+ 1',
+          '-2',
+          '-1',
+          '',
+          ' ',
+          '0',
+          ' 0.5 ',
+          -2,
+          -1,
+          0,
+          0.5,
           NaN,
-          -106n,
-          -1000n,
+          false,
+          -2n,
+          -1n,
+          0n,
         ],
         getReceived
       );
@@ -475,20 +503,7 @@ describe('minValue', () => {
       expectActionIssue(
         minValue(date3, 'message'),
         { ...baseInfo, expected: `>=${date3.toJSON()}`, requirement: date3 },
-        [
-          'nan',
-          '+ 0',
-          '-0.5',
-          '-1',
-          ' -1 ',
-          '-1.',
-          -0.25,
-          -1,
-          -Infinity,
-          NaN,
-          -1n,
-          -5n,
-        ],
+        ['nan', '0px', '+ 0', '-0.5', '-1', ' -1 ', -1, -0.5, NaN, -1n],
         getReceived
       );
     });
@@ -503,19 +518,52 @@ describe('minValue', () => {
 
     test('for invalid non-numbers', () => {
       expectActionIssue(
-        minValue(-10, 'message'),
-        { ...baseInfo, expected: '>=-10', requirement: -10 },
+        minValue(123, 'message'),
+        { ...baseInfo, expected: '>=123', requirement: 123 },
         [
           'nan',
-          '-10ch',
-          '- 10',
-          '-10.5',
-          ' -11 ',
-          '-11.0',
-          -11n,
-          -100n,
-          new Date(-11),
-          new Date(-212),
+          '123px',
+          '+ 123',
+          '-124',
+          '-123',
+          '',
+          ' ',
+          '0.0',
+          ' 122 ',
+          false,
+          true,
+          new Date(-124),
+          new Date(-123),
+          new Date(0),
+          new Date(122),
+          -124n,
+          -123n,
+          0n,
+          122n,
+        ],
+        getReceived
+      );
+
+      expectActionIssue(
+        minValue(1, 'message'),
+        { ...baseInfo, expected: '>=1', requirement: 1 },
+        [
+          'nan',
+          '1px',
+          '+ 1',
+          '-2',
+          '-1',
+          '',
+          ' ',
+          '0',
+          ' 0.5 ',
+          false,
+          new Date(-2),
+          new Date(-1),
+          new Date(0),
+          -2n,
+          -1n,
+          0n,
         ],
         getReceived
       );
@@ -523,28 +571,7 @@ describe('minValue', () => {
       expectActionIssue(
         minValue(0, 'message'),
         { ...baseInfo, expected: '>=0', requirement: 0 },
-        ['nan', '0px', '+ 0', '-0.5', ' -1 ', '-1.0', -1n, -10n, new Date(-1)],
-        getReceived
-      );
-
-      expectActionIssue(
-        minValue(21, 'message'),
-        { ...baseInfo, expected: '>=21', requirement: 21 },
-        [
-          'nan',
-          '+ 21',
-          '-21',
-          '',
-          '20.5',
-          '10',
-          -21n,
-          15n,
-          20n,
-          false,
-          true,
-          new Date(0),
-          new Date(20),
-        ],
+        ['nan', '0px', '+ 0', '-0.5', '-1', ' -1 ', new Date(-1), -1n],
         getReceived
       );
     });
@@ -559,36 +586,53 @@ describe('minValue', () => {
 
     test('for invalid non-strings', () => {
       expectActionIssue(
-        minValue('-20', 'message'),
-        { ...baseInfo, expected: '>="-20"', requirement: '-20' },
-        [-20.5, -21, -Infinity, NaN, -21n, -100n, new Date(-21), new Date(-35)],
+        minValue('123', 'message'),
+        { ...baseInfo, expected: '>="123"', requirement: '123' },
+        [
+          -124,
+          -123,
+          0,
+          122,
+          122.5,
+          NaN,
+          false,
+          true,
+          new Date(-124),
+          new Date(-123),
+          new Date(0),
+          new Date(122),
+          -124n,
+          -123n,
+          0n,
+          122n,
+        ],
+        getReceived
+      );
+
+      expectActionIssue(
+        minValue('1', 'message'),
+        { ...baseInfo, expected: '>="1"', requirement: '1' },
+        [
+          -2,
+          -1,
+          0,
+          0.5,
+          NaN,
+          false,
+          new Date(-2),
+          new Date(-1),
+          new Date(0),
+          -2n,
+          -1n,
+          0n,
+        ],
         getReceived
       );
 
       expectActionIssue(
         minValue('0', 'message'),
         { ...baseInfo, expected: '>="0"', requirement: '0' },
-        [-0.5, -1, -Infinity, NaN, -1n, -10n, new Date(-1), new Date(-100)],
-        getReceived
-      );
-
-      expectActionIssue(
-        minValue('42', 'message'),
-        { ...baseInfo, expected: '>="42"', requirement: '42' },
-        [
-          41.5,
-          0,
-          -42,
-          -Infinity,
-          NaN,
-          41n,
-          0n,
-          -42n,
-          false,
-          true,
-          new Date(41),
-          new Date(-42),
-        ],
+        [-1, -0.5, NaN, new Date(-1), -1n],
         getReceived
       );
     });
