@@ -1,7 +1,12 @@
 import { describe, expect, test } from 'vitest';
+import type { StringIssue } from '../../schemas/index.ts';
+import { _getGraphemeCount } from '../../utils/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
-import { graphemes, type GraphemesAction, type GraphemesIssue } from './graphemes.ts';
-import { _getGraphemes } from '../../utils/index.ts';
+import {
+  graphemes,
+  type GraphemesAction,
+  type GraphemesIssue,
+} from './graphemes.ts';
 
 describe('graphemes', () => {
   describe('should return action object', () => {
@@ -12,7 +17,7 @@ describe('graphemes', () => {
       expects: '5',
       requirement: 5,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -44,14 +49,31 @@ describe('graphemes', () => {
     const action = graphemes(5);
 
     test('for untyped inputs', () => {
-      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+      const issues: [StringIssue] = [
+        {
+          kind: 'schema',
+          type: 'string',
+          input: null,
+          expected: 'string',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        action['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 
     test('for valid strings', () => {
-      expectNoActionIssue(action, ['😀😀😀😀😀', '12345', 'hello']);
+      expectNoActionIssue(action, ['12345', '12 45', '1234 ', 'hello']);
+    });
+
+    test('for valid emoji', () => {
+      expectNoActionIssue(action, ['😀👋🏼🧩👩🏻‍🏫🫥']);
     });
   });
 
@@ -69,8 +91,17 @@ describe('graphemes', () => {
       expectActionIssue(
         action,
         baseIssue,
-        ['😀😀😀😀', '1234', 'foobar', '😀😀😀😀😀😀', '🧑‍💻'],
-        (value) => `${_getGraphemes(value)}`
+        ['', ' ', '1', '1234', '123 ', '123456', '12 456', '123456789'],
+        (value) => `${_getGraphemeCount(value)}`
+      );
+    });
+
+    test('for invalid emoji', () => {
+      expectActionIssue(
+        action,
+        baseIssue,
+        ['😀', '😀👋🏼🧩👩🏻‍🏫', '😀👋🏼🧩👩🏻‍🏫🫥🫠', '😀👋🏼🧩👩🏻‍🏫🫥🫠🧑‍💻👻🥎'],
+        (value) => `${_getGraphemeCount(value)}`
       );
     });
   });

@@ -3,7 +3,7 @@ import type {
   BaseValidation,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _addIssue, _getGraphemes } from '../../utils/index.ts';
+import { _addIssue, _getGraphemeCount } from '../../utils/index.ts';
 
 /**
  * Max graphemes issue type.
@@ -41,13 +41,13 @@ export interface MaxGraphemesAction<
   TInput extends string,
   TRequirement extends number,
   TMessage extends
-  | ErrorMessage<MaxGraphemesIssue<TInput, TRequirement>>
-  | undefined,
+    | ErrorMessage<MaxGraphemesIssue<TInput, TRequirement>>
+    | undefined,
 > extends BaseValidation<
-  TInput,
-  TInput,
-  MaxGraphemesIssue<TInput, TRequirement>
-> {
+    TInput,
+    TInput,
+    MaxGraphemesIssue<TInput, TRequirement>
+  > {
   /**
    * The action type.
    */
@@ -81,7 +81,7 @@ export function maxGraphemes<
   TInput extends string,
   const TRequirement extends number,
 >(
-  requirement: TRequirement,
+  requirement: TRequirement
 ): MaxGraphemesAction<TInput, TRequirement, undefined>;
 
 /**
@@ -96,8 +96,8 @@ export function maxGraphemes<
   TInput extends string,
   const TRequirement extends number,
   const TMessage extends
-  | ErrorMessage<MaxGraphemesIssue<TInput, TRequirement>>
-  | undefined,
+    | ErrorMessage<MaxGraphemesIssue<TInput, TRequirement>>
+    | undefined,
 >(
   requirement: TRequirement,
   message: TMessage
@@ -119,15 +119,14 @@ export function maxGraphemes(
     expects: `<=${requirement}`,
     requirement,
     message,
-    _run(dataset, config) {
-      if (!dataset.typed) {
-        return dataset;
-      }
-      const count = _getGraphemes(dataset.value);
-      if (count > this.requirement) {
-        _addIssue(this, 'graphemes', dataset, config, {
-          received: `${count}`,
-        });
+    '~validate'(dataset, config) {
+      if (dataset.typed) {
+        const count = _getGraphemeCount(dataset.value);
+        if (count > this.requirement) {
+          _addIssue(this, 'graphemes', dataset, config, {
+            received: `${count}`,
+          });
+        }
       }
       return dataset;
     },

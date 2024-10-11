@@ -1,25 +1,23 @@
 import { describe, expect, test } from 'vitest';
+import type { StringIssue } from '../../schemas/index.ts';
+import { _getGraphemeCount } from '../../utils/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import {
   minGraphemes,
   type MinGraphemesAction,
   type MinGraphemesIssue,
 } from './minGraphemes.ts';
-import { _getGraphemes } from '../../utils/index.ts';
 
 describe('minGraphemes', () => {
   describe('should return action object', () => {
-    const baseAction: Omit<
-      MinGraphemesAction<string, 5, never>,
-      'message'
-    > = {
+    const baseAction: Omit<MinGraphemesAction<string, 5, never>, 'message'> = {
       kind: 'validation',
       type: 'min_graphemes',
       reference: minGraphemes,
       expects: '>=5',
       requirement: 5,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -51,14 +49,41 @@ describe('minGraphemes', () => {
     const action = minGraphemes(5);
 
     test('for untyped inputs', () => {
-      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+      const issues: [StringIssue] = [
+        {
+          kind: 'schema',
+          type: 'string',
+          input: null,
+          expected: 'string',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        action['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 
     test('for valid strings', () => {
-      expectNoActionIssue(action, ['😀😀😀😀😀', '123456', 'foobarbaz123']);
+      expectNoActionIssue(action, [
+        '12345',
+        '1234 ',
+        '123456',
+        '123456789',
+        'foo bar baz',
+      ]);
+    });
+
+    test('for valid emoji', () => {
+      expectNoActionIssue(action, [
+        '😀👋🏼🧩👩🏻‍🏫🫥',
+        '😀👋🏼🧩👩🏻‍🏫🫥🫠',
+        '😀👋🏼🧩👩🏻‍🏫🫥🫠🧑‍💻👻🥎',
+      ]);
     });
   });
 
@@ -79,8 +104,17 @@ describe('minGraphemes', () => {
       expectActionIssue(
         action,
         baseIssue,
-        ['🧑🏻‍💻', '😀😀😀😀', 'foo'],
-        (value) => `${_getGraphemes(value)}`
+        ['', ' ', '1', 'foo', '1234', '12 4'],
+        (value) => `${_getGraphemeCount(value)}`
+      );
+    });
+
+    test('for invalid emoji', () => {
+      expectActionIssue(
+        action,
+        baseIssue,
+        ['😀', '😀👋🏼', '😀👋🏼🧩👩🏻‍🏫'],
+        (value) => `${_getGraphemeCount(value)}`
       );
     });
   });

@@ -30,19 +30,20 @@ describe('minGraphemes', () => {
   });
 
   describe('should infer correct types', () => {
-    type Action = MinGraphemesAction<string, 10, undefined>;
+    type Input = 'example string';
+    type Action = MinGraphemesAction<Input, 10, undefined>;
 
     test('of input', () => {
-      expectTypeOf<InferInput<Action>>().toEqualTypeOf<string>();
+      expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<Input>();
     });
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
-        MinGraphemesIssue<string, 10>
+        MinGraphemesIssue<Input, 10>
       >();
     });
   });

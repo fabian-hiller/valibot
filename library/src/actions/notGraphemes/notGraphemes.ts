@@ -3,7 +3,7 @@ import type {
   BaseValidation,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _addIssue, _getGraphemes } from '../../utils/index.ts';
+import { _addIssue, _getGraphemeCount } from '../../utils/index.ts';
 
 /**
  * Not graphemes issue type.
@@ -41,13 +41,13 @@ export interface NotGraphemesAction<
   TInput extends string,
   TRequirement extends number,
   TMessage extends
-  | ErrorMessage<NotGraphemesIssue<TInput, TRequirement>>
-  | undefined,
+    | ErrorMessage<NotGraphemesIssue<TInput, TRequirement>>
+    | undefined,
 > extends BaseValidation<
-  TInput,
-  TInput,
-  NotGraphemesIssue<TInput, TRequirement>
-> {
+    TInput,
+    TInput,
+    NotGraphemesIssue<TInput, TRequirement>
+  > {
   /**
    * The action type.
    */
@@ -96,8 +96,8 @@ export function notGraphemes<
   TInput extends string,
   const TRequirement extends number,
   const TMessage extends
-  | ErrorMessage<NotGraphemesIssue<TInput, TRequirement>>
-  | undefined,
+    | ErrorMessage<NotGraphemesIssue<TInput, TRequirement>>
+    | undefined,
 >(
   requirement: TRequirement,
   message: TMessage
@@ -119,11 +119,11 @@ export function notGraphemes(
     expects: `!${requirement}`,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed) {
-        const count = _getGraphemes(dataset.value);
+        const count = _getGraphemeCount(dataset.value);
         if (count === this.requirement) {
-          _addIssue(this, 'not_graphemes', dataset, config, {
+          _addIssue(this, 'graphemes', dataset, config, {
             received: `${count}`,
           });
         }

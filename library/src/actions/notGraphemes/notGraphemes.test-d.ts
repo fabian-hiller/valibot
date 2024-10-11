@@ -30,19 +30,20 @@ describe('notGraphemes', () => {
   });
 
   describe('should infer correct types', () => {
-    type Action = NotGraphemesAction<string, 10, undefined>;
+    type Input = 'example string';
+    type Action = NotGraphemesAction<Input, 10, undefined>;
 
     test('of input', () => {
-      expectTypeOf<InferInput<Action>>().toEqualTypeOf<string>();
+      expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<Input>();
     });
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
-        NotGraphemesIssue<string, 10>
+        NotGraphemesIssue<Input, 10>
       >();
     });
   });

@@ -3,7 +3,7 @@ import type {
   BaseValidation,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _addIssue, _getGraphemes } from '../../utils/index.ts';
+import { _addIssue, _getGraphemeCount } from '../../utils/index.ts';
 
 /**
  * Graphemes issue type.
@@ -41,8 +41,8 @@ export interface GraphemesAction<
   TInput extends string,
   TRequirement extends number,
   TMessage extends
-  | ErrorMessage<GraphemesIssue<TInput, TRequirement>>
-  | undefined,
+    | ErrorMessage<GraphemesIssue<TInput, TRequirement>>
+    | undefined,
 > extends BaseValidation<TInput, TInput, GraphemesIssue<TInput, TRequirement>> {
   /**
    * The action type.
@@ -90,8 +90,8 @@ export function graphemes<
   TInput extends string,
   const TRequirement extends number,
   const TMessage extends
-  | ErrorMessage<GraphemesIssue<TInput, TRequirement>>
-  | undefined,
+    | ErrorMessage<GraphemesIssue<TInput, TRequirement>>
+    | undefined,
 >(
   requirement: TRequirement,
   message: TMessage
@@ -113,15 +113,14 @@ export function graphemes(
     expects: `${requirement}`,
     requirement,
     message,
-    _run(dataset, config) {
-      if (!dataset.typed) {
-        return dataset;
-      }
-      const count = _getGraphemes(dataset.value);
-      if (count !== this.requirement) {
-        _addIssue(this, 'graphemes', dataset, config, {
-          received: `${count}`,
-        });
+    '~validate'(dataset, config) {
+      if (dataset.typed) {
+        const count = _getGraphemeCount(dataset.value);
+        if (count !== this.requirement) {
+          _addIssue(this, 'graphemes', dataset, config, {
+            received: `${count}`,
+          });
+        }
       }
       return dataset;
     },
