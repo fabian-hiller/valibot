@@ -7,6 +7,7 @@ All notable changes to the library will be documented in this file.
 - Add `checkItemsAsync` action (pull request #856)
 - Add `graphemes`, `maxGraphemes`, `minGraphemes` and `notGraphemes` action (pull request #853)
 - Change types and implementation to support Standard Schema
+- Refactor `bytes`, `maxBytes`, `minBytes` and `notBytes` action
 
 ## v0.42.1 (September 20, 2024)
 
