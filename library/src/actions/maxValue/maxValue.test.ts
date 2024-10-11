@@ -52,40 +52,63 @@ describe('maxValue', () => {
     });
 
     test('for valid non-bigints', () => {
-      expectNoActionIssue(maxValue(123n), [
-        '-124',
+      expectNoActionIssue(maxValue(10n), [
+        '-12',
+        '-10',
         '',
-        '1',
-        ' 123 ',
-        -Infinity,
+        ' ',
+        '0',
+        '10',
+        ' 10 ',
+        -10,
         0,
-        1,
-        123,
-        123.0,
+        10,
+        -Infinity,
+        -10.0,
+        0.0,
+        10.0,
         false,
         true,
-        new Date(-124),
+        new Date(-10),
         new Date(0),
-        new Date(123),
+        new Date(10),
+      ]);
+
+      expectNoActionIssue(maxValue(1n), [
+        '-2',
+        '-1',
+        '',
+        ' ',
+        '0',
+        ' 0 ',
+        '1',
+        -Infinity,
+        -2,
+        -1,
+        0,
+        0.0,
+        1,
+        false,
+        true,
+        new Date(-2),
+        new Date(-1),
+        new Date(0),
+        new Date(1),
       ]);
 
       expectNoActionIssue(maxValue(0n), [
+        '-1',
+        ' -1 ',
         ' ',
         '0',
+        -Infinity,
+        -1,
+        -1.0,
         -0.5,
         -0,
         false,
-        new Date(-12),
+        new Date(-1),
         new Date(0),
-      ]);
-
-      expectNoActionIssue(maxValue(-21n), [
-        '-23',
-        ' -21 ',
-        -21,
-        -21.5,
-        new Date(-100),
-        new Date(-21),
       ]);
     });
 
@@ -96,38 +119,49 @@ describe('maxValue', () => {
 
     test('for valid non-booleans', () => {
       expectNoActionIssue(maxValue(true), [
-        '-100',
+        '-2',
+        '-2.0',
+        '-1',
+        '-1.0',
         '',
+        ' ',
+        '0',
+        '0.0',
+        ' 0 ',
         '1',
-        ' 1 ',
         '1.0',
         -Infinity,
-        -0,
+        -2,
+        -1,
         0,
-        0.5,
+        0.0,
         1,
-        1.0,
-        -100n,
-        0n,
-        1n,
-        new Date(-10),
+        new Date(-2),
+        new Date(-1),
         new Date(0),
         new Date(1),
+        -2n,
+        -1n,
+        0n,
+        1n,
       ]);
 
       expectNoActionIssue(maxValue(false), [
         '-1',
+        '-1.0',
+        ' -1 ',
         ' ',
         '0',
-        ' 0 ',
         '0.0',
         -Infinity,
+        -1,
+        -1.0,
+        -0.5,
         -0,
-        0.0,
-        -100n,
-        0n,
-        new Date(-100),
+        new Date(-1),
         new Date(0),
+        -1n,
+        0n,
       ]);
     });
 
@@ -141,59 +175,74 @@ describe('maxValue', () => {
     });
 
     test('for valid non-dates', () => {
-      const date1 = new Date(101);
+      const date1 = new Date(10);
       expectNoActionIssue(maxValue(date1), [
-        '-101',
+        '-12',
+        '-10',
+        '-10.0',
+        '',
         ' ',
-        '99',
-        '101',
-        ' 101 ',
-        '101.0',
+        '0',
+        '0.0',
+        '10',
+        '10.0',
+        ' 10 ',
+        -10,
+        0,
+        10,
         -Infinity,
-        -101,
-        -0,
-        99,
-        101,
-        101.0,
-        date1.getTime(),
+        -10.0,
+        0.0,
+        10.0,
+        false,
+        true,
+        -10n,
+        0n,
+        10n,
+      ]);
+
+      const date2 = new Date(1);
+      expectNoActionIssue(maxValue(date2), [
+        '-2',
+        '-2.0',
+        '-1',
+        '-1.0',
+        '',
+        ' ',
+        '0',
+        '0.0',
+        ' 0 ',
+        '1',
+        '1.0',
+        -Infinity,
+        -2,
+        -1,
+        0,
+        0.0,
+        1,
         false,
         true,
         -2n,
-        0n,
-        99n,
-        101n,
-      ]);
-
-      const date2 = new Date(-1);
-      expectNoActionIssue(maxValue(date2), [
-        '-2',
-        '-1.5',
-        '-1',
-        ' -1 ',
-        '-1.',
-        -Infinity,
-        -1,
-        -1.0,
-        date2.getTime(),
-        -10n,
         -1n,
+        0n,
+        1n,
       ]);
 
       const date3 = new Date(0);
       expectNoActionIssue(maxValue(date3), [
         '-1',
-        '',
+        '-1.0',
+        ' -1 ',
         ' ',
         '0',
-        ' 0 ',
-        '0.',
+        '0.0',
         -Infinity,
+        -1,
+        -1.0,
         -0.5,
         -0,
-        0.0,
-        date3.getTime(),
         false,
-        -10n,
+        -1n,
         0n,
       ]);
     });
@@ -203,41 +252,63 @@ describe('maxValue', () => {
     });
 
     test('for valid non-numbers', () => {
-      expectNoActionIssue(maxValue(120), [
-        '-120',
+      expectNoActionIssue(maxValue(10), [
+        '-12',
+        '-10',
+        '-10.0',
         '',
-        ' 119 ',
-        '120',
-        '120.0',
+        ' ',
+        '0',
+        '0.0',
+        '10',
+        '10.0',
+        ' 10 ',
         false,
         true,
-        -100n,
-        0n,
-        120n,
-        new Date(-100),
+        new Date(-10),
         new Date(0),
-        new Date(120),
+        new Date(10),
+        -10n,
+        0n,
+        10n,
+      ]);
+
+      expectNoActionIssue(maxValue(1), [
+        '-2',
+        '-2.0',
+        '-1',
+        '-1.0',
+        '',
+        ' ',
+        '0',
+        '0.0',
+        ' 0 ',
+        '1',
+        '1.0',
+        false,
+        true,
+        new Date(-2),
+        new Date(-1),
+        new Date(0),
+        new Date(1),
+        -2n,
+        -1n,
+        0n,
+        1n,
       ]);
 
       expectNoActionIssue(maxValue(0), [
-        '',
-        '-0',
-        '-0.5',
+        '-1',
+        '-1.0',
+        ' -1 ',
+        ' ',
+        '0',
+        '0.0',
         false,
-        -120n,
-        0n,
-        new Date(-12),
+        new Date(-1),
         new Date(0),
-      ]);
-
-      expectNoActionIssue(maxValue(-50), [
-        '-51',
-        '-50.5',
-        ' -50 ',
-        -100n,
-        -50n,
-        new Date(-121),
-        new Date(-50),
+        -1n,
+        0n,
       ]);
     });
 
@@ -246,40 +317,54 @@ describe('maxValue', () => {
     });
 
     test('for valid non-strings', () => {
-      expectNoActionIssue(maxValue('2018'), [
-        -Infinity,
-        -1,
+      expectNoActionIssue(maxValue('10'), [
+        -10,
         0,
-        2000,
-        2018,
-        2018.0,
+        10,
+        -Infinity,
+        -10.0,
+        0.0,
+        10.0,
         false,
         true,
-        -225n,
-        0n,
-        2018n,
-        new Date(-101),
+        new Date(-10),
         new Date(0),
-        new Date(2018),
+        new Date(10),
+        -10n,
+        0n,
+        10n,
+      ]);
+
+      expectNoActionIssue(maxValue('1'), [
+        -Infinity,
+        -2,
+        -1,
+        0,
+        0.0,
+        1,
+        false,
+        true,
+        new Date(-2),
+        new Date(-1),
+        new Date(0),
+        new Date(1),
+        -2n,
+        -1n,
+        0n,
+        1n,
       ]);
 
       expectNoActionIssue(maxValue('0'), [
         -Infinity,
+        -1,
+        -1.0,
+        -0.5,
         -0,
         false,
+        new Date(-1),
+        new Date(0),
         -1n,
         0n,
-        new Date(-10),
-        new Date(0),
-      ]);
-
-      expectNoActionIssue(maxValue('-7000'), [
-        -Infinity,
-        -7000,
-        -8123n,
-        -7000n,
-        new Date(-10000),
-        new Date(-7000),
       ]);
     });
   });
@@ -304,28 +389,27 @@ describe('maxValue', () => {
 
     test('for invalid non-bigints', () => {
       expectActionIssue(
-        maxValue(-100n, 'message'),
-        { ...baseInfo, expected: '<=-100', requirement: -100n },
+        maxValue(123n, 'message'),
+        { ...baseInfo, expected: '<=123', requirement: 123n },
         [
           'nan',
-          '- 100',
-          '-100px',
-          '',
-          ' ',
-          '-99',
-          ' -99 ',
-          '-101.0',
-          -99,
-          0,
-          100,
+          '123px',
+          '+ 123',
+          '123.0',
+          '126',
+          124,
+          124.0,
           Infinity,
           NaN,
-          false,
-          true,
-          new Date(-99),
-          new Date(0),
-          new Date(100),
+          new Date(124),
         ],
+        getReceived
+      );
+
+      expectActionIssue(
+        maxValue(1n, 'message'),
+        { ...baseInfo, expected: '<=1', requirement: 1n },
+        ['nan', '1px', '+ 1', '1.0', '2', 2, 2.0, Infinity, NaN, new Date(2)],
         getReceived
       );
 
@@ -335,22 +419,17 @@ describe('maxValue', () => {
         [
           'nan',
           '0px',
-          '0.5',
-          '-0.5',
-          0.75,
+          '+ 0',
+          '0.0',
+          '1',
+          0.5,
           1,
+          1.0,
           Infinity,
           NaN,
           true,
           new Date(1),
         ],
-        getReceived
-      );
-
-      expectActionIssue(
-        maxValue(75n, 'message'),
-        { ...baseInfo, expected: '<=75', requirement: 75n },
-        ['nan', '75vw', ' 75.5 ', 75.5, 76, Infinity, NaN, new Date(80)],
         getReceived
       );
     });
@@ -367,42 +446,14 @@ describe('maxValue', () => {
       expectActionIssue(
         maxValue(false, 'message'),
         { ...baseInfo, expected: '<=false', requirement: false },
-        [
-          'nan',
-          '- 0',
-          '0rem',
-          '0.5',
-          '1',
-          ' 1 ',
-          '1.0',
-          0.5,
-          1,
-          Infinity,
-          NaN,
-          1n,
-          new Date(1),
-        ],
+        ['nan', '0px', '+ 0', '1', 0.5, 1, 1.0, Infinity, NaN, new Date(1), 1n],
         getReceived
       );
 
       expectActionIssue(
         maxValue(true, 'message'),
         { ...baseInfo, expected: '<=true', requirement: true },
-        [
-          'nan',
-          '+ 1',
-          '1em',
-          '1.5',
-          '10',
-          ' 10 ',
-          '10.0',
-          1.5,
-          10,
-          Infinity,
-          NaN,
-          2n,
-          new Date(3),
-        ],
+        ['nan', '1px', '+ 1', '2', 2, 2.0, Infinity, NaN, new Date(2), 2n],
         getReceived
       );
     });
@@ -418,49 +469,30 @@ describe('maxValue', () => {
     });
 
     test('for invalid non-dates', () => {
-      const date1 = new Date(100);
+      const date1 = new Date(123);
       expectActionIssue(
         maxValue(date1, 'message'),
         { ...baseInfo, expected: `<=${date1.toJSON()}`, requirement: date1 },
         [
           'nan',
-          '- 100',
-          '100$',
-          '100.5',
-          '105',
-          100.5,
-          101,
+          '123px',
+          '+ 123',
+          '123.5',
+          '126',
+          124,
+          124.0,
           Infinity,
           NaN,
-          101n,
-          1000n,
+          124n,
         ],
         getReceived
       );
 
-      const date2 = new Date(-105);
+      const date2 = new Date(1);
       expectActionIssue(
         maxValue(date2, 'message'),
         { ...baseInfo, expected: `<=${date2.toJSON()}`, requirement: date2 },
-        [
-          'nan',
-          '- 105',
-          '-105deg',
-          '-104',
-          ' ',
-          '105',
-          '1050',
-          -104.25,
-          -0,
-          105,
-          Infinity,
-          NaN,
-          false,
-          true,
-          -104n,
-          0n,
-          105n,
-        ],
+        ['nan', '1px', '+ 1', '2', 2, 2.0, Infinity, NaN, 2n],
         getReceived
       );
 
@@ -468,21 +500,7 @@ describe('maxValue', () => {
       expectActionIssue(
         maxValue(date3, 'message'),
         { ...baseInfo, expected: `<=${date3.toJSON()}`, requirement: date3 },
-        [
-          'nan',
-          '- 0',
-          '0.5',
-          '1',
-          ' 1 ',
-          '1.',
-          0.5,
-          10,
-          Infinity,
-          NaN,
-          true,
-          1n,
-          10n,
-        ],
+        ['nan', '0px', '+ 0', '1', 0.5, 1, 1.0, Infinity, NaN, true, 1n],
         getReceived
       );
     });
@@ -497,38 +515,23 @@ describe('maxValue', () => {
 
     test('for invalid non-numbers', () => {
       expectActionIssue(
-        maxValue(-10, 'message'),
-        { ...baseInfo, expected: '<=-10', requirement: -10 },
-        [
-          'nan',
-          '-10ch',
-          '- 10',
-          '-9',
-          ' -9 ',
-          '-9.0',
-          '',
-          '-0',
-          false,
-          true,
-          -9n,
-          -0n,
-          new Date(-9),
-          new Date(0),
-        ],
+        maxValue(123, 'message'),
+        { ...baseInfo, expected: '<=123', requirement: 123 },
+        ['nan', '123px', '+ 123', '126', new Date(124), 124n],
+        getReceived
+      );
+
+      expectActionIssue(
+        maxValue(1, 'message'),
+        { ...baseInfo, expected: '<=1', requirement: 1 },
+        ['nan', '1px', '+ 1', '2', new Date(2), 2n],
         getReceived
       );
 
       expectActionIssue(
         maxValue(0, 'message'),
         { ...baseInfo, expected: '<=0', requirement: 0 },
-        ['nan', '0px', '+ 0', true, 1n, new Date(1)],
-        getReceived
-      );
-
-      expectActionIssue(
-        maxValue(21, 'message'),
-        { ...baseInfo, expected: '<=21', requirement: 21 },
-        ['nan', '- 21', '21.25', '25', 22n, new Date(30)],
+        ['nan', '0px', '+ 0', '0.5', '1', true, new Date(1), 1n],
         getReceived
       );
     });
@@ -543,35 +546,23 @@ describe('maxValue', () => {
 
     test('for invalid non-strings', () => {
       expectActionIssue(
-        maxValue('-20', 'message'),
-        { ...baseInfo, expected: '<="-20"', requirement: '-20' },
-        [
-          -19,
-          -19.5,
-          0,
-          Infinity,
-          NaN,
-          false,
-          true,
-          -19n,
-          0n,
-          new Date(-19),
-          new Date(0),
-        ],
+        maxValue('123', 'message'),
+        { ...baseInfo, expected: '<="123"', requirement: '123' },
+        [123.5, 124, 124.0, Infinity, NaN, new Date(124), 124n],
+        getReceived
+      );
+
+      expectActionIssue(
+        maxValue('1', 'message'),
+        { ...baseInfo, expected: '<="1"', requirement: '1' },
+        [2, 2.0, Infinity, NaN, new Date(2), 2n],
         getReceived
       );
 
       expectActionIssue(
         maxValue('0', 'message'),
         { ...baseInfo, expected: '<="0"', requirement: '0' },
-        [0.75, 12, Infinity, NaN, true, 1n, new Date(10)],
-        getReceived
-      );
-
-      expectActionIssue(
-        maxValue('42', 'message'),
-        { ...baseInfo, expected: '<="42"', requirement: '42' },
-        [42.5, 102, Infinity, NaN, 45n, new Date(50)],
+        [0.5, 1, 1.0, Infinity, NaN, true, new Date(1), 1n],
         getReceived
       );
     });
