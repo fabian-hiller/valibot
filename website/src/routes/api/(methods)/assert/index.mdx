@@ -1,7 +1,7 @@
 ---
-title: safeParser
-description: Returns a function that parses an unknown input based on a schema.
-source: /methods/safeParser/safeParser.ts
+title: assert
+description: Checks if the input matches the scheme.
+source: /methods/assert/assert.ts
 contributors:
   - fabian-hiller
 ---
@@ -9,47 +9,40 @@ contributors:
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# safeParser
+# assert
 
-Returns a function that parses an unknown input based on a schema.
+Checks if the input matches the scheme.
+
+> As this is an assertion function, it can be used as a type guard.
 
 ```ts
-const safeParser = v.safeParser<TSchema, TConfig>(schema, config);
+v.assert<TSchema>(schema, input);
 ```
 
 ## Generics
 
 - `TSchema` <Property {...properties.TSchema} />
-- `TConfig` <Property {...properties.TConfig} />
 
 ## Parameters
 
 - `schema` <Property {...properties.schema} />
-- `config` <Property {...properties.config} />
-
-## Returns
-
-- `safeParser` <Property {...properties.safeParser} />
+- `input` <Property {...properties.input} />
 
 ## Example
 
-The following example show how `safeParser` can be used.
+The following example show how `assert` can be used.
 
 ```ts
 const EmailSchema = v.pipe(v.string(), v.email());
-const safeEmailParser = v.safeParser(EmailSchema);
-const result = safeEmailParser('jane@example.com');
+const data: unknown = 'jane@example.com';
 
-if (result.success) {
-  const email = result.output;
-} else {
-  console.log(result.issues);
-}
+v.assert(EmailSchema, data);
+const email = data; // string
 ```
 
 ## Related
 
-The following APIs can be combined with `safeParser`.
+The following APIs can be combined with `assert`.
 
 ### Schemas
 
@@ -110,7 +103,6 @@ The following APIs can be combined with `safeParser`.
     'assert',
     'config',
     'fallback',
-    'flatten',
     'keyof',
     'omit',
     'partial',
@@ -120,7 +112,3 @@ The following APIs can be combined with `safeParser`.
     'unwrap',
   ]}
 />
-
-### Utils
-
-<ApiList items={['getDotPath']} />

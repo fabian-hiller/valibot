@@ -50,6 +50,7 @@
 
 ## Methods
 
+- [assert](/api/assert/)
 - [config](/api/config/)
 - [fallback](/api/fallback/)
 - [flatten](/api/flatten/)

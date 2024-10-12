@@ -54,7 +54,7 @@ if (result.success) {
 
 ## Type guards
 
-Another way to validate data that can be useful in individual cases is to use a type guard. A type guard is an if-condition which, if `true`, sets the parsed data to the input type of a schema.
+Another way to validate data that can be useful in individual cases is to use a type guard. You can use either a type predicate with the <Link href="/api/is/">`is`</Link> method or an assertion function with the <Link href="/api/assert/">`assert`</Link> method.
 
 If a type guard is used, the issues of the validation cannot be accessed. Also, transformations have no effect and unknown keys of an object are not removed. Therefore, this approach is not as safe and powerful as the two previous ways. Also, due to a TypeScript limitation, it can currently only be used with synchronous schemas.
 
