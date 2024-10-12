@@ -47,6 +47,12 @@ module.exports = {
         },
       },
     ],
+    'jsdoc/check-tag-names': [
+      'error',
+      {
+        definedTags: ['alpha', 'beta'],
+      },
+    ],
 
     // Regexp
     'regexp/no-super-linear-move': 'error', // Prevent DoS regexps
