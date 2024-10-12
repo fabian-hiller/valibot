@@ -4,8 +4,6 @@ import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { ipv4, type Ipv4Action, type Ipv4Issue } from './ipv4.ts';
 
-// TODO: Improve tests to cover all possible scenarios based on the regex used.
-
 describe('ipv4', () => {
   describe('should return action object', () => {
     const baseAction: Omit<Ipv4Action<string, never>, 'message'> = {
@@ -70,8 +68,35 @@ describe('ipv4', () => {
       expectNoActionIssue(action, [
         '192.168.1.1',
         '127.0.0.1',
+        '10.10.10.10',
+        '90.90.90.90',
+        '50.60.70.80',
+        '100.100.100.100',
+        '190.190.190.190',
+        '150.150.150.150',
+        '200.200.200.200',
+        '240.240.240.240',
         '0.0.0.0',
+        '9.9.9.9',
+        '5.5.5.5',
+        '250.250.250.250',
         '255.255.255.255',
+        '19.19.19.19',
+        '99.99.99.99',
+        '59.69.79.89',
+        '109.109.109.109',
+        '199.199.199.199',
+        '159.159.159.159',
+        '209.209.209.209',
+        '249.249.249.249',
+        '15.15.15.15',
+        '95.95.95.95',
+        '55.65.75.85',
+        '105.105.105.105',
+        '195.195.195.195',
+        '155.155.155.155',
+        '205.205.205.205',
+        '245.245.245.245',
       ]);
     });
   });
@@ -87,7 +112,7 @@ describe('ipv4', () => {
     };
 
     test('for empty strings', () => {
-      expectActionIssue(action, baseIssue, ['', ' ', '\n']);
+      expectActionIssue(action, baseIssue, ['', ' ', '  ', '\n', '\t']);
     });
 
     test('for invalid IPv4 address', () => {
@@ -96,10 +121,20 @@ describe('ipv4', () => {
         '-1.0.0.0',
         '0..0.0.0',
         '1234.0.0.0',
-        '256.256.256.256',
         '1.2.3',
         '0.0.0.0.0',
         'a.a.a.a',
+        '+1.2.3.4',
+        ' 0.0.0.0',
+        '0.0.0.0 ',
+        '0.0 0.0',
+        '0-0-0-0',
+        '00.00.00.00',
+        '256.256.256.256',
+        '-1.-1.-1.-1',
+        '259.259.259.259',
+        '09.09.09.09',
+        '05.05.05.05',
       ]);
     });
 
@@ -109,6 +144,10 @@ describe('ipv4', () => {
         'FE80:0000:0000:0000:0202:B3FF:FE1E:8329',
         'fe80::1ff:fe23:4567:890a',
         '2001:db8:85a3:8d3:1319:8a2e:370:7348',
+        // IPv4-mapped IPv6
+        '::ffff:192.168.1.1',
+        '::ffff:0.0.0.0',
+        '::ffff:255.255.255.255',
       ]);
     });
   });
