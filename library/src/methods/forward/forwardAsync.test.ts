@@ -4,7 +4,7 @@ import {
   type CheckIssue,
   type MinLengthIssue,
 } from '../../actions/index.ts';
-import type { TypedDataset } from '../../types/index.ts';
+import type { PartialDataset, SuccessDataset } from '../../types/index.ts';
 import { forwardAsync } from './forwardAsync.ts';
 
 describe('forwardAsync', () => {
@@ -16,7 +16,7 @@ describe('forwardAsync', () => {
       await forwardAsync<Input, CheckIssue<Input>>(
         check(requirement, 'message'),
         ['nested', 1, 'key']
-      )._run({ typed: true, value: input }, {})
+      )['~validate']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,
@@ -58,7 +58,7 @@ describe('forwardAsync', () => {
           abortPipeEarly: undefined,
         },
       ],
-    } satisfies TypedDataset<Input, CheckIssue<Input>>);
+    } satisfies PartialDataset<Input, CheckIssue<Input>>);
   });
 
   test('should stop forwarding if path input is undefined', async () => {
@@ -69,7 +69,7 @@ describe('forwardAsync', () => {
       await forwardAsync<Input, CheckIssue<Input>>(
         check(requirement, 'message'),
         ['nested', 6, 'key']
-      )._run({ typed: true, value: input }, {})
+      )['~validate']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,
@@ -104,7 +104,7 @@ describe('forwardAsync', () => {
           abortPipeEarly: undefined,
         },
       ],
-    } satisfies TypedDataset<Input, CheckIssue<Input>>);
+    } satisfies PartialDataset<Input, CheckIssue<Input>>);
   });
 
   test('should only forward issues of wrapped action', async () => {
@@ -137,7 +137,7 @@ describe('forwardAsync', () => {
       await forwardAsync<Input, CheckIssue<Input>>(
         check(requirement, 'message'),
         ['nested', 1, 'key']
-      )._run(
+      )['~validate'](
         {
           typed: true,
           value: input,
@@ -189,7 +189,7 @@ describe('forwardAsync', () => {
           abortPipeEarly: undefined,
         },
       ],
-    } satisfies TypedDataset<
+    } satisfies PartialDataset<
       Input,
       MinLengthIssue<Input['nested'], 3> | CheckIssue<Input>
     >);
@@ -203,10 +203,10 @@ describe('forwardAsync', () => {
       await forwardAsync<Input, CheckIssue<Input>>(
         check(requirement, 'message'),
         ['nested', 6, 'key']
-      )._run({ typed: true, value: input }, {})
+      )['~validate']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,
-    } satisfies TypedDataset<Input, CheckIssue<Input>>);
+    } satisfies SuccessDataset<Input>);
   });
 });

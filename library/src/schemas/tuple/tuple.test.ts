@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { boolean } from '../boolean/boolean.ts';
 import { number } from '../number/index.ts';
@@ -19,7 +19,9 @@ describe('tuple', () => {
       expects: 'Array',
       items,
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -63,10 +65,7 @@ describe('tuple', () => {
 
     test('for unknown items', () => {
       expect(
-        schema._run(
-          { typed: false, value: ['foo', 123, null, true, undefined] },
-          {}
-        )
+        schema['~validate']({ value: ['foo', 123, null, true, undefined] }, {})
       ).toStrictEqual({
         typed: true,
         value: ['foo', 123],
@@ -145,10 +144,7 @@ describe('tuple', () => {
 
     test('for unknown items', () => {
       expect(
-        schema._run(
-          { typed: false, value: ['foo', 123, null, true, undefined] },
-          {}
-        )
+        schema['~validate']({ value: ['foo', 123, null, true, undefined] }, {})
       ).toStrictEqual({
         typed: true,
         value: ['foo', 123],
@@ -188,7 +184,7 @@ describe('tuple', () => {
 
     test('for wrong items', () => {
       const input = [123, 456, 'true'];
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -211,20 +207,17 @@ describe('tuple', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with abort early', () => {
       expect(
-        schema._run(
-          { typed: false, value: [123, 456, 'true'] },
-          { abortEarly: true }
-        )
+        schema['~validate']({ value: [123, 456, 'true'] }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: [],
         issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for wrong nested items', () => {
@@ -233,9 +226,7 @@ describe('tuple', () => {
         ['foo', '123', false],
         null,
       ];
-      expect(
-        nestedSchema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(nestedSchema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -281,7 +272,7 @@ describe('tuple', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+      } satisfies FailureDataset<InferIssue<typeof nestedSchema>>);
     });
   });
 });

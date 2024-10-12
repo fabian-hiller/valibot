@@ -1,3 +1,4 @@
+export * from './assert/index.ts';
 export * from './config/index.ts';
 export * from './fallback/index.ts';
 export * from './flatten/index.ts';

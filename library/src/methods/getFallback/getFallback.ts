@@ -3,10 +3,10 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   Config,
-  Dataset,
   InferIssue,
   InferOutput,
   MaybePromise,
+  OutputDataset,
 } from '../../types/index.ts';
 import type {
   SchemaWithFallback,
@@ -52,7 +52,7 @@ export function getFallback<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 >(
   schema: TSchema,
-  dataset?: Dataset<InferOutput<TSchema>, InferIssue<TSchema>>,
+  dataset?: OutputDataset<InferOutput<TSchema>, InferIssue<TSchema>>,
   config?: Config<InferIssue<TSchema>>
 ): InferFallback<TSchema> {
   // @ts-expect-error

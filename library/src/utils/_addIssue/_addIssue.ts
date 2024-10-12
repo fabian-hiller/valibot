@@ -12,11 +12,12 @@ import type {
   BaseValidation,
   BaseValidationAsync,
   Config,
-  Dataset,
   ErrorMessage,
   InferInput,
   InferIssue,
   IssuePathItem,
+  OutputDataset,
+  UnknownDataset,
 } from '../../types/index.ts';
 import { _stringify } from '../_stringify/index.ts';
 
@@ -69,7 +70,7 @@ export function _addIssue<const TContext extends Context>(
       | undefined;
   },
   label: string,
-  dataset: Dataset<unknown, BaseIssue<unknown>>,
+  dataset: UnknownDataset | OutputDataset<unknown, BaseIssue<unknown>>,
   config: Config<InferIssue<TContext>>,
   other?: Other<TContext>
 ): void {
@@ -129,6 +130,7 @@ export function _addIssue<const TContext extends Context>(
   if (dataset.issues) {
     dataset.issues.push(issue);
   } else {
+    // @ts-expect-error
     dataset.issues = [issue];
   }
 }

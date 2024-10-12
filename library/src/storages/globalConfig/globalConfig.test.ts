@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { Config } from '../../types/index.ts';
 import {
   deleteGlobalConfig,
   getGlobalConfig,
@@ -7,27 +8,41 @@ import {
 } from './globalConfig.ts';
 
 describe('config', () => {
-  const config: GlobalConfig = {
+  const initialConfig: Config<never> = {
+    lang: undefined,
+    message: undefined,
+    abortEarly: undefined,
+    abortPipeEarly: undefined,
+  };
+
+  const customConfig: GlobalConfig = {
     lang: 'en',
     abortEarly: true,
     abortPipeEarly: false,
   };
 
   test('should be undefined initially', () => {
-    expect(getGlobalConfig()).toEqual({});
+    expect(getGlobalConfig()).toStrictEqual(initialConfig);
   });
 
   test('should set and get global config', () => {
-    setGlobalConfig(config);
-    expect(getGlobalConfig()).toEqual(config);
+    setGlobalConfig(customConfig);
+    expect(getGlobalConfig()).toStrictEqual({
+      ...initialConfig,
+      ...customConfig,
+    });
   });
 
   test('should merge config argument', () => {
-    expect(getGlobalConfig({ lang: 'de' })).toEqual({ ...config, lang: 'de' });
+    expect(getGlobalConfig({ lang: 'de' })).toStrictEqual({
+      ...initialConfig,
+      ...customConfig,
+      lang: 'de',
+    });
   });
 
   test('should delete global config', () => {
     deleteGlobalConfig();
-    expect(getGlobalConfig()).toEqual({});
+    expect(getGlobalConfig()).toStrictEqual(initialConfig);
   });
 });

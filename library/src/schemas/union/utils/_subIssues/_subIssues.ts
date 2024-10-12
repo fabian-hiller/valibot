@@ -1,4 +1,4 @@
-import type { BaseIssue, Dataset } from '../../../../types/index.ts';
+import type { BaseIssue, OutputDataset } from '../../../../types/index.ts';
 
 /**
  * Returns the sub issues of the provided datasets for the union issue.
@@ -10,7 +10,7 @@ import type { BaseIssue, Dataset } from '../../../../types/index.ts';
  * @internal
  */
 export function _subIssues(
-  datasets: Dataset<unknown, BaseIssue<unknown>>[] | undefined
+  datasets: OutputDataset<unknown, BaseIssue<unknown>>[] | undefined
 ): [BaseIssue<unknown>, ...BaseIssue<unknown>[]] | undefined {
   let issues: [BaseIssue<unknown>, ...BaseIssue<unknown>[]] | undefined;
   if (datasets) {

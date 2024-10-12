@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { NumberIssue } from '../../schemas/index.ts';
 import { _stringify } from '../../utils/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { minValue, type MinValueAction } from './minValue.ts';
@@ -12,7 +13,7 @@ describe('minValue', () => {
       expects: '>=5',
       requirement: 5,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -42,9 +43,19 @@ describe('minValue', () => {
 
   describe('should return dataset without issues', () => {
     test('for untyped inputs', () => {
-      expect(minValue(1)._run({ typed: false, value: null }, {})).toStrictEqual(
-        { typed: false, value: null }
-      );
+      const issues: [NumberIssue] = [
+        {
+          kind: 'schema',
+          type: 'number',
+          input: null,
+          expected: 'number',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        minValue(1)['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({ typed: false, value: null, issues });
     });
 
     test('for valid bigints', () => {

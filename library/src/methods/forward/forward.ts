@@ -26,12 +26,12 @@ export function forward<
 ): BaseValidation<TInput, TInput, TIssue> {
   return {
     ...action,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       // Create copy of previous issues
       const prevIssues = dataset.issues && [...dataset.issues];
 
       // Run validation action
-      action._run(dataset, config);
+      action['~validate'](dataset, config);
 
       // If dataset contains issues, forward newly added issues
       if (dataset.issues) {

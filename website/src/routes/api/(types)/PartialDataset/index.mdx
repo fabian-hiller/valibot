@@ -1,0 +1,25 @@
+---
+title: PartialDataset
+description: Partial dataset type.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# PartialDataset
+
+Partial dataset type.
+
+## Generics
+
+- `TValue` <Property {...properties.TValue} />
+- `TIssue` <Property {...properties.TIssue} />
+
+## Definition
+
+- `UntypedDataset`
+  - `typed` <Property {...properties.typed} />
+  - `value` <Property {...properties.value} />
+  - `issues` <Property {...properties.issues} />

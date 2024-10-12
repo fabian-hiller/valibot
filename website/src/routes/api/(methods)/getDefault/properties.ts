@@ -49,14 +49,8 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         {
           type: 'custom',
-          name: 'Dataset',
-          generics: [
-            {
-              type: 'union',
-              options: ['null', 'undefined'],
-            },
-            'never',
-          ],
+          name: 'UnknownDataset',
+          href: '../UnknownDataset/',
         },
         'undefined',
       ],

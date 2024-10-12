@@ -42,8 +42,8 @@ export const properties: Record<string, PropertyProps> = {
   requirement: {
     type: {
       type: 'custom',
-      name: 'ArrayRequirement',
-      href: '../ArrayRequirement/',
+      name: 'ArrayRequirementAsync',
+      href: '../ArrayRequirementAsync/',
       generics: [
         {
           type: 'custom',

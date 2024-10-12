@@ -1,10 +1,11 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchemaAsync,
-  Dataset,
   ErrorMessage,
   InferInput,
   InferOutput,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _joinExpects } from '../../utils/index.ts';
 import type {
@@ -103,14 +104,18 @@ export function variantAsync(
     key,
     options,
     message,
-    async _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    async '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (input && typeof input === 'object') {
         // Create output dataset variable
-        let outputDataset: Dataset<unknown, BaseIssue<unknown>> | undefined;
+        let outputDataset:
+          | OutputDataset<unknown, BaseIssue<unknown>>
+          | undefined;
 
         // Create variables to store invalid discriminator information
         let maxDiscriminatorPriority = 0;
@@ -141,7 +146,7 @@ export function variantAsync(
                 // If any discriminator is invalid, mark keys as invalid
                 if (
                   (
-                    await schema.entries[currentKey]._run(
+                    await schema.entries[currentKey]['~validate'](
                       // @ts-expect-error
                       { typed: false, value: input[currentKey] },
                       config
@@ -184,8 +189,8 @@ export function variantAsync(
 
               // If all discriminators are valid, parse input with schema of option
               if (keysAreValid) {
-                const optionDataset = await schema._run(
-                  { typed: false, value: input },
+                const optionDataset = await schema['~validate'](
+                  { value: input },
                   config
                 );
 
@@ -241,7 +246,8 @@ export function variantAsync(
       }
 
       // Finally, return  output dataset
-      return dataset as Dataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         InferOutput<VariantOptionsAsync<string>[number]>,
         VariantIssue | BaseIssue<unknown>
       >;

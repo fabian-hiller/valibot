@@ -72,7 +72,7 @@ export const properties: Record<string, PropertyProps> = {
             },
             {
               type: 'string',
-              value: '_run',
+              value: '~validate',
             },
           ],
         },
@@ -91,7 +91,7 @@ export const properties: Record<string, PropertyProps> = {
       value: true,
     },
   },
-  _run: {
+  '~validate': {
     type: {
       type: 'function',
       params: [
@@ -99,13 +99,13 @@ export const properties: Record<string, PropertyProps> = {
           name: 'dataset',
           type: {
             type: 'custom',
-            name: 'Dataset',
-            href: '../Dataset/',
-            generics: ['unknown', 'never'],
+            name: 'UnknownDataset',
+            href: '../UnknownDataset/',
           },
         },
         {
           name: 'config',
+          optional: true,
           type: {
             type: 'custom',
             name: 'Config',
@@ -113,14 +113,9 @@ export const properties: Record<string, PropertyProps> = {
             generics: [
               {
                 type: 'custom',
-                name: 'InferIssue',
-                href: '../InferIssue/',
-                generics: [
-                  {
-                    type: 'custom',
-                    name: 'TSchema',
-                  },
-                ],
+                name: 'BaseIssue',
+                href: '../BaseIssue/',
+                generics: ['unknown'],
               },
             ],
           },
@@ -132,8 +127,8 @@ export const properties: Record<string, PropertyProps> = {
         generics: [
           {
             type: 'custom',
-            name: 'Dataset',
-            href: '../Dataset/',
+            name: 'OutputDataset',
+            href: '../OutputDataset/',
             generics: [
               {
                 type: 'custom',

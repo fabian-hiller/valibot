@@ -8,12 +8,12 @@ describe('readonly', () => {
       type: 'readonly',
       reference: readonly,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     } satisfies ReadonlyAction<{ key: string }>);
   });
 
   test('should return same dataset', () => {
     const dataset = { typed: true, value: { key: 'foo' } } as const;
-    expect(readonly()._run(dataset, {})).toStrictEqual(dataset);
+    expect(readonly()['~validate'](dataset, {})).toStrictEqual(dataset);
   });
 });

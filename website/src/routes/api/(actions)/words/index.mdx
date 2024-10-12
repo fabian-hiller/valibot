@@ -1,0 +1,74 @@
+---
+title: words
+description: Creates a words validation action.
+source: /actions/words/words.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# words
+
+Creates a [words](https://en.wikipedia.org/wiki/Word) validation action.
+
+```ts
+const Action = v.words<TInput, TLocales, TRequirement, TMessage>(
+  locales,
+  requirement,
+  message
+);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TLocales` <Property {...properties.TLocales} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `locales` <Property {...properties.locales} />
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `words` you can validate the words of a string based on the specified `locales`. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `words` can be used.
+
+### Words schema
+
+Schema to validate a string with 3 words.
+
+```ts
+const WordsSchema = v.pipe(
+  v.string(),
+  v.words('en', 3, 'Exactly 3 words are required.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `words`.
+
+### Schemas
+
+<ApiList items={['any', 'custom', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

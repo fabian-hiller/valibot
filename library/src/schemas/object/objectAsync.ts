@@ -1,12 +1,13 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseSchemaAsync,
-  Dataset,
   ErrorMessage,
   InferObjectInput,
   InferObjectIssue,
   InferObjectOutput,
   ObjectEntriesAsync,
   ObjectPathItem,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { ObjectIssue } from './types.ts';
@@ -93,13 +94,16 @@ export function objectAsync(
     async: true,
     entries,
     message,
-    async _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    async '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (input && typeof input === 'object') {
         // Set typed to `true` and value to blank object
+        // @ts-expect-error
         dataset.typed = true;
         dataset.value = {};
 
@@ -113,7 +117,7 @@ export function objectAsync(
             return [
               key,
               value,
-              await schema._run({ typed: false, value }, config),
+              await schema['~validate']({ value }, config),
             ] as const;
           })
         );
@@ -172,7 +176,8 @@ export function objectAsync(
       }
 
       // Return output dataset
-      return dataset as Dataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         InferObjectOutput<ObjectEntriesAsync>,
         ObjectIssue | InferObjectIssue<ObjectEntriesAsync>
       >;

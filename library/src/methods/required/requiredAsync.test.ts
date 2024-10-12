@@ -10,7 +10,7 @@ import {
   optionalAsync,
   string,
 } from '../../schemas/index.ts';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssueAsync } from '../../vitest/index.ts';
 import { requiredAsync } from './requiredAsync.ts';
 
@@ -47,24 +47,26 @@ describe('requiredAsync', () => {
           entries: {
             key1: {
               ...nonOptionalAsync(entries.key1),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key2: {
               ...nonOptionalAsync(entries.key2),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key3: {
               ...nonOptionalAsync(entries.key3),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key4: {
               ...nonOptionalAsync(entries.key4),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
           },
           message: undefined,
           async: true,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema1);
       });
 
@@ -77,18 +79,20 @@ describe('requiredAsync', () => {
           entries: {
             key1: {
               ...nonOptionalAsync(entries.key1),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key2: entries.key2,
             key3: {
               ...nonOptionalAsync(entries.key3),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key4: entries.key4,
           },
           message: undefined,
           async: true,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema2);
       });
     });
@@ -99,20 +103,18 @@ describe('requiredAsync', () => {
         await expectNoSchemaIssueAsync(schema1, [input1]);
         await expectNoSchemaIssueAsync(schema2, [input1]);
         const input2 = { key1: 'foo', key3: 'bar' };
-        expect(
-          await schema2._run({ typed: false, value: input2 }, {})
-        ).toStrictEqual({
-          typed: true,
-          value: { ...input2, key4: 123 },
-        });
+        expect(await schema2['~validate']({ value: input2 }, {})).toStrictEqual(
+          {
+            typed: true,
+            value: { ...input2, key4: 123 },
+          }
+        );
       });
     });
 
     describe('should return dataset with nested issues', () => {
       test('if requireded keys are missing', async () => {
-        expect(
-          await schema1._run({ typed: false, value: {} }, {})
-        ).toStrictEqual({
+        expect(await schema1['~validate']({ value: {} }, {})).toStrictEqual({
           typed: false,
           value: {},
           issues: [
@@ -185,12 +187,10 @@ describe('requiredAsync', () => {
               ],
             },
           ],
-        } satisfies UntypedDataset<InferIssue<typeof schema1>>);
+        } satisfies FailureDataset<InferIssue<typeof schema1>>);
 
         const input = { key2: 123, key4: null };
-        expect(
-          await schema2._run({ typed: false, value: input }, {})
-        ).toStrictEqual({
+        expect(await schema2['~validate']({ value: input }, {})).toStrictEqual({
           typed: false,
           value: { ...input, key4: 123 },
           issues: [
@@ -229,7 +229,7 @@ describe('requiredAsync', () => {
               ],
             },
           ],
-        } satisfies UntypedDataset<InferIssue<typeof schema2>>);
+        } satisfies FailureDataset<InferIssue<typeof schema2>>);
       });
     });
   });
@@ -252,25 +252,27 @@ describe('requiredAsync', () => {
           entries: {
             key1: {
               ...nonOptionalAsync(entries.key1),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key2: {
               ...nonOptionalAsync(entries.key2),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key3: {
               ...nonOptionalAsync(entries.key3),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key4: {
               ...nonOptionalAsync(entries.key4),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
           },
           rest,
           message: undefined,
           async: true,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema1);
       });
 
@@ -284,18 +286,20 @@ describe('requiredAsync', () => {
             key1: entries.key1,
             key2: {
               ...nonOptionalAsync(entries.key2),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key3: {
               ...nonOptionalAsync(entries.key3),
-              _run: expect.any(Function),
+              '~validate': expect.any(Function),
             },
             key4: entries.key4,
           },
           rest,
           message: undefined,
           async: true,
-          _run: expect.any(Function),
+          '~standard': 1,
+          '~vendor': 'valibot',
+          '~validate': expect.any(Function),
         } satisfies typeof schema2);
       });
     });
@@ -314,20 +318,18 @@ describe('requiredAsync', () => {
         // @ts-expect-error
         await expectNoSchemaIssueAsync(schema2, [input1]);
         const input2 = { key2: 123, key3: 'bar', other: true };
-        expect(
-          await schema2._run({ typed: false, value: input2 }, {})
-        ).toStrictEqual({
-          typed: true,
-          value: { ...input2, key4: 123 },
-        });
+        expect(await schema2['~validate']({ value: input2 }, {})).toStrictEqual(
+          {
+            typed: true,
+            value: { ...input2, key4: 123 },
+          }
+        );
       });
     });
 
     describe('should return dataset with nested issues', () => {
       test('if requireded keys are missing', async () => {
-        expect(
-          await schema1._run({ typed: false, value: {} }, {})
-        ).toStrictEqual({
+        expect(await schema1['~validate']({ value: {} }, {})).toStrictEqual({
           typed: false,
           value: {},
           issues: [
@@ -400,12 +402,10 @@ describe('requiredAsync', () => {
               ],
             },
           ],
-        } satisfies UntypedDataset<InferIssue<typeof schema1>>);
+        } satisfies FailureDataset<InferIssue<typeof schema1>>);
 
         const input = { key1: 'foo', key4: null, other: true };
-        expect(
-          await schema2._run({ typed: false, value: input }, {})
-        ).toStrictEqual({
+        expect(await schema2['~validate']({ value: input }, {})).toStrictEqual({
           typed: false,
           value: { ...input, key4: 123 },
           issues: [
@@ -444,7 +444,7 @@ describe('requiredAsync', () => {
               ],
             },
           ],
-        } satisfies UntypedDataset<InferIssue<typeof schema2>>);
+        } satisfies FailureDataset<InferIssue<typeof schema2>>);
       });
     });
   });

@@ -1,0 +1,74 @@
+---
+title: notWords
+description: Creates a not words validation action.
+source: /actions/notWords/notWords.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# notWords
+
+Creates a not [words](https://en.wikipedia.org/wiki/Word) validation action.
+
+```ts
+const Action = v.notWords<TInput, TLocales, TRequirement, TMessage>(
+  locales,
+  requirement,
+  message
+);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TLocales` <Property {...properties.TLocales} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `locales` <Property {...properties.locales} />
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `notWords` you can validate the words of a string based on the specified `locales`. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `notWords` can be used.
+
+### Not words schema
+
+Schema to validate a string with more or less than 5 words.
+
+```ts
+const NotWordsSchema = v.pipe(
+  v.string(),
+  v.notWords('en', 5, 'The string must not have 5 words.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `notWords`.
+
+### Schemas
+
+<ApiList items={['any', 'custom', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

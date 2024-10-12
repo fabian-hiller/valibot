@@ -20,7 +20,7 @@ export type InferInput<
     | BaseTransformation<any, unknown, BaseIssue<unknown>>
     | BaseTransformationAsync<any, unknown, BaseIssue<unknown>>
     | BaseMetadata<any>,
-> = NonNullable<TItem['_types']>['input'];
+> = NonNullable<TItem['~types']>['input'];
 
 /**
  * Infer output type.
@@ -34,7 +34,7 @@ export type InferOutput<
     | BaseTransformation<any, unknown, BaseIssue<unknown>>
     | BaseTransformationAsync<any, unknown, BaseIssue<unknown>>
     | BaseMetadata<any>,
-> = NonNullable<TItem['_types']>['output'];
+> = NonNullable<TItem['~types']>['output'];
 
 /**
  * Infer issue type.
@@ -48,4 +48,4 @@ export type InferIssue<
     | BaseTransformation<any, unknown, BaseIssue<unknown>>
     | BaseTransformationAsync<any, unknown, BaseIssue<unknown>>
     | BaseMetadata<any>,
-> = NonNullable<TItem['_types']>['issue'];
+> = NonNullable<TItem['~types']>['issue'];

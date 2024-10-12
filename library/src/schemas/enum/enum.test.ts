@@ -21,7 +21,9 @@ describe('enum_', () => {
         .filter(([key]) => isNaN(+key))
         .map(([, value]) => value),
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {

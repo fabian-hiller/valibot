@@ -24,8 +24,8 @@ export function parse<
   input: unknown,
   config?: Config<InferIssue<TSchema>>
 ): InferOutput<TSchema> {
-  const dataset = schema._run(
-    { typed: false, value: input },
+  const dataset = schema['~validate'](
+    { value: input },
     getGlobalConfig(config)
   );
   if (dataset.issues) {

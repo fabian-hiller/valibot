@@ -1,8 +1,9 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   ErrorMessage,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
@@ -76,13 +77,17 @@ export function promise(
     expects: 'Promise',
     async: false,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       if (dataset.value instanceof Promise) {
+        // @ts-expect-error
         dataset.typed = true;
       } else {
         _addIssue(this, 'type', dataset, config);
       }
-      return dataset as Dataset<Promise<unknown>, PromiseIssue>;
+      // @ts-expect-error
+      return dataset as OutputDataset<Promise<unknown>, PromiseIssue>;
     },
   };
 }

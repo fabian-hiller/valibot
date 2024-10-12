@@ -4,7 +4,7 @@ import {
   type CheckIssue,
   type MinLengthIssue,
 } from '../../actions/index.ts';
-import type { TypedDataset } from '../../types/index.ts';
+import type { PartialDataset, SuccessDataset } from '../../types/index.ts';
 import { forward } from './forward.ts';
 
 describe('forward', () => {
@@ -17,7 +17,7 @@ describe('forward', () => {
         'nested',
         1,
         'key',
-      ])._run({ typed: true, value: input }, {})
+      ])['~validate']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,
@@ -59,7 +59,7 @@ describe('forward', () => {
           abortPipeEarly: undefined,
         },
       ],
-    } satisfies TypedDataset<Input, CheckIssue<Input>>);
+    } satisfies PartialDataset<Input, CheckIssue<Input>>);
   });
 
   test('should stop forwarding if path input is undefined', () => {
@@ -71,7 +71,7 @@ describe('forward', () => {
         'nested',
         6,
         'key',
-      ])._run({ typed: true, value: input }, {})
+      ])['~validate']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,
@@ -106,7 +106,7 @@ describe('forward', () => {
           abortPipeEarly: undefined,
         },
       ],
-    } satisfies TypedDataset<Input, CheckIssue<Input>>);
+    } satisfies PartialDataset<Input, CheckIssue<Input>>);
   });
 
   test('should only forward issues of wrapped action', () => {
@@ -140,7 +140,7 @@ describe('forward', () => {
         'nested',
         1,
         'key',
-      ])._run(
+      ])['~validate'](
         {
           typed: true,
           value: input,
@@ -192,7 +192,7 @@ describe('forward', () => {
           abortPipeEarly: undefined,
         },
       ],
-    } satisfies TypedDataset<
+    } satisfies PartialDataset<
       Input,
       MinLengthIssue<Input['nested'], 3> | CheckIssue<Input>
     >);
@@ -207,10 +207,10 @@ describe('forward', () => {
         'nested',
         6,
         'key',
-      ])._run({ typed: true, value: input }, {})
+      ])['~validate']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,
-    } satisfies TypedDataset<Input, CheckIssue<Input>>);
+    } satisfies SuccessDataset<Input>);
   });
 });

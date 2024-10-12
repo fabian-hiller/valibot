@@ -3,10 +3,10 @@ import { decimal, email, url } from '../../actions/index.ts';
 import { pipe } from '../../methods/index.ts';
 import { EMAIL_REGEX } from '../../regex.ts';
 import type {
+  FailureDataset,
   InferIssue,
   InferOutput,
-  TypedDataset,
-  UntypedDataset,
+  PartialDataset,
 } from '../../types/index.ts';
 import { expectNoSchemaIssueAsync } from '../../vitest/index.ts';
 import { bigint } from '../bigint/bigint.ts';
@@ -41,7 +41,9 @@ describe('variantAsync', () => {
       key,
       options,
       async: true,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -139,9 +141,7 @@ describe('variantAsync', () => {
         object({ type: literal('foo') }),
         objectAsync({ type: literal('bar') }),
       ]);
-      expect(
-        await schema._run({ typed: false, value: 'foo' }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
         typed: false,
         value: 'foo',
         issues: [
@@ -154,15 +154,13 @@ describe('variantAsync', () => {
             received: '"foo"',
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for empty options', async () => {
       const schema = variantAsync('type', []);
       const input = { type: 'foo' };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -184,7 +182,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for missing discriminator', async () => {
@@ -193,9 +191,7 @@ describe('variantAsync', () => {
         objectAsync({ type: literal('bar') }),
       ]);
       const input = { other: 123 };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -217,7 +213,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for invalid discriminator', async () => {
@@ -226,9 +222,7 @@ describe('variantAsync', () => {
         objectAsync({ type: literal('bar') }),
       ]);
       const input = { type: 'baz' };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -250,7 +244,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for nested missing discriminator', async () => {
@@ -263,9 +257,7 @@ describe('variantAsync', () => {
         ]),
       ]);
       const input = { type: 'bar' };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -287,7 +279,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for nested invalid discriminator', async () => {
@@ -300,9 +292,7 @@ describe('variantAsync', () => {
         ]),
       ]);
       const input = { type: 'bar', other: 123 };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -324,7 +314,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first missing invalid discriminator', async () => {
@@ -355,9 +345,7 @@ describe('variantAsync', () => {
         ]),
       ]);
       const input = {};
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -379,7 +367,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested missing discriminator', async () => {
@@ -410,9 +398,7 @@ describe('variantAsync', () => {
         ]),
       ]);
       const input = { type: 'bar' };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -434,7 +420,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested invalid discriminator', async () => {
@@ -465,9 +451,7 @@ describe('variantAsync', () => {
         ]),
       ]);
       const input = { type: 'bar', subType2: 'baz-2' };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -489,7 +473,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested invalid discriminator', async () => {
@@ -520,9 +504,7 @@ describe('variantAsync', () => {
         ]),
       ]);
       const input = { type: 'bar', subType1: 'invalid', subType2: 'invalid' };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -544,7 +526,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested invalid discriminator', async () => {
@@ -579,9 +561,7 @@ describe('variantAsync', () => {
         ]),
       ]);
       const input = { type: 'bar', subType1: 'bar-1', subType2: 'invalid' };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -603,7 +583,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested invalid discriminator', async () => {
@@ -638,9 +618,7 @@ describe('variantAsync', () => {
         ]),
       ]);
       const input = { type: 'bar', subType1: 'bar-1', subType2: 'invalid' };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -662,7 +640,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for first nested invalid discriminator', async () => {
@@ -701,9 +679,7 @@ describe('variantAsync', () => {
         ]),
       ]);
       const input = { type: 'bar', subType2: 'baz-2' };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -725,7 +701,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for untyped object', async () => {
@@ -735,9 +711,7 @@ describe('variantAsync', () => {
         objectAsync({ type: literal('baz'), other: number() }),
       ]);
       const input = { type: 'bar', other: null };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -759,7 +733,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for nested untyped object', async () => {
@@ -771,9 +745,7 @@ describe('variantAsync', () => {
         ]),
       ]);
       const input = { type: 'bar', other: null };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -795,7 +767,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for multiple untyped objects', async () => {
@@ -806,9 +778,7 @@ describe('variantAsync', () => {
         objectAsync({ type: literal('bar'), other: boolean() }),
       ]);
       const input = { type: 'bar', other: null };
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -830,7 +800,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for typed objects', async () => {
@@ -841,9 +811,7 @@ describe('variantAsync', () => {
       ]);
       type Schema = typeof schema;
       const input = { type: 'bar', other: 'hello' } as const;
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -866,7 +834,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+      } satisfies PartialDataset<InferOutput<Schema>, InferIssue<Schema>>);
     });
 
     test('for nested typed objects', async () => {
@@ -879,9 +847,7 @@ describe('variantAsync', () => {
       ]);
       type Schema = typeof schema;
       const input = { type: 'bar', other: 'hello' } as const;
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -904,7 +870,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+      } satisfies PartialDataset<InferOutput<Schema>, InferIssue<Schema>>);
     });
 
     test('for multiple typed objects', async () => {
@@ -917,9 +883,7 @@ describe('variantAsync', () => {
       ]);
       type Schema = typeof schema;
       const input = { type: 'foo', other: 'hello' } as const;
-      expect(
-        await schema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -942,7 +906,7 @@ describe('variantAsync', () => {
             ],
           },
         ],
-      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+      } satisfies PartialDataset<InferOutput<Schema>, InferIssue<Schema>>);
     });
   });
 });

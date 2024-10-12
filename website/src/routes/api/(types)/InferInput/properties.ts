@@ -116,7 +116,7 @@ export const properties: Record<string, PropertyProps> = {
           indexes: [
             {
               type: 'string',
-              value: '_types',
+              value: '~types',
             },
           ],
         },

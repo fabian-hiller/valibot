@@ -1,12 +1,13 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseSchema,
-  Dataset,
   ErrorMessage,
   InferObjectInput,
   InferObjectIssue,
   InferObjectOutput,
   ObjectEntries,
   ObjectPathItem,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { ObjectIssue } from './types.ts';
@@ -90,13 +91,16 @@ export function object(
     async: false,
     entries,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (input && typeof input === 'object') {
         // Set typed to `true` and value to blank object
+        // @ts-expect-error
         dataset.typed = true;
         dataset.value = {};
 
@@ -107,8 +111,8 @@ export function object(
         for (const key in this.entries) {
           // Get and parse value of key
           const value: unknown = input[key as keyof typeof input];
-          const valueDataset = this.entries[key]._run(
-            { typed: false, value },
+          const valueDataset = this.entries[key]['~validate'](
+            { value },
             config
           );
 
@@ -164,7 +168,8 @@ export function object(
       }
 
       // Return output dataset
-      return dataset as Dataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         InferObjectOutput<ObjectEntries>,
         ObjectIssue | InferObjectIssue<ObjectEntries>
       >;

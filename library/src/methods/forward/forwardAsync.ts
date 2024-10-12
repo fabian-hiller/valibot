@@ -30,12 +30,12 @@ export function forwardAsync<
   return {
     ...action,
     async: true,
-    async _run(dataset, config) {
+    async '~validate'(dataset, config) {
       // Create copy of previous issues
       const prevIssues = dataset.issues && [...dataset.issues];
 
       // Run validation action
-      await action._run(dataset, config);
+      await action['~validate'](dataset, config);
 
       // If dataset contains issues, forward newly added issues
       if (dataset.issues) {

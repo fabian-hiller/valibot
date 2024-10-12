@@ -1,3 +1,4 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -21,8 +22,8 @@ export function config<
 >(schema: TSchema, config: Config<InferIssue<TSchema>>): TSchema {
   return {
     ...schema,
-    _run(dataset, config_) {
-      return schema._run(dataset, { ...config_, ...config });
+    '~validate'(dataset, config_ = getGlobalConfig()) {
+      return schema['~validate'](dataset, { ...config_, ...config });
     },
   };
 }

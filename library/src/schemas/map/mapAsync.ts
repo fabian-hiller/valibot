@@ -1,11 +1,12 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
-  Dataset,
   ErrorMessage,
   InferIssue,
   MapPathItem,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { InferMapInput, InferMapOutput, MapIssue } from './types.ts';
@@ -116,13 +117,16 @@ export function mapAsync(
     key,
     value,
     message,
-    async _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    async '~validate'(dataset, config = getGlobalConfig()) {
       // Get input value from dataset
       const input = dataset.value;
 
       // If root type is valid, check nested types
       if (input instanceof Map) {
         // Set typed to `true` and value to empty map
+        // @ts-expect-error
         dataset.typed = true;
         dataset.value = new Map();
 
@@ -132,8 +136,8 @@ export function mapAsync(
             Promise.all([
               inputKey,
               inputValue,
-              this.key._run({ typed: false, value: inputKey }, config),
-              this.value._run({ typed: false, value: inputValue }, config),
+              this.key['~validate']({ value: inputKey }, config),
+              this.value['~validate']({ value: inputValue }, config),
             ])
           )
         );
@@ -229,7 +233,8 @@ export function mapAsync(
       }
 
       // Return output dataset
-      return dataset as Dataset<
+      // @ts-expect-error
+      return dataset as OutputDataset<
         Map<unknown, unknown>,
         MapIssue | BaseIssue<unknown>
       >;

@@ -114,7 +114,7 @@ export function minValue(
     }`,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !(dataset.value >= this.requirement)) {
         _addIssue(this, 'value', dataset, config, {
           received:

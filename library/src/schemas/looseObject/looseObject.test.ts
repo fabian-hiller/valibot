@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { nullish } from '../nullish/index.ts';
 import { number } from '../number/index.ts';
@@ -20,7 +20,9 @@ describe('looseObject', () => {
       expects: 'Object',
       entries,
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -190,7 +192,7 @@ describe('looseObject', () => {
     };
 
     test('for missing entries', () => {
-      expect(schema._run({ typed: false, value: {} }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
         issues: [
@@ -213,12 +215,12 @@ describe('looseObject', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for missing nested entries', () => {
       const input = { key: 'value', nested: {} };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -247,17 +249,17 @@ describe('looseObject', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with abort early', () => {
       expect(
-        schema._run({ typed: false, value: {} }, { abortEarly: true })
+        schema['~validate']({ value: {} }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: {},
         issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
   });
 });

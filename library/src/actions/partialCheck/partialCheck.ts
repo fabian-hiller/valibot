@@ -96,7 +96,7 @@ export function partialCheck(
     expects: null,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (
         _isPartiallyTyped(dataset, pathList) &&
         // @ts-expect-error

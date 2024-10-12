@@ -1,35 +1,7 @@
-import type {
-  BaseIssue,
-  BaseValidation,
-  ErrorMessage,
-} from '../../types/index.ts';
+import type { BaseValidation, ErrorMessage } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { ArrayInput, ArrayRequirement } from '../types.ts';
-
-// TODO: Also add `checkItemsAsync` action
-
-/**
- * Check items issue type.
- */
-export interface CheckItemsIssue<TInput extends ArrayInput>
-  extends BaseIssue<TInput[number]> {
-  /**
-   * The issue kind.
-   */
-  readonly kind: 'validation';
-  /**
-   * The issue type.
-   */
-  readonly type: 'check_items';
-  /**
-   * The expected input.
-   */
-  readonly expected: null;
-  /**
-   * The validation function.
-   */
-  readonly requirement: ArrayRequirement<TInput>;
-}
+import type { CheckItemsIssue } from './types.ts';
 
 /**
  * Check items action type.
@@ -102,7 +74,7 @@ export function checkItems(
     expects: null,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed) {
         for (let index = 0; index < dataset.value.length; index++) {
           const item = dataset.value[index];

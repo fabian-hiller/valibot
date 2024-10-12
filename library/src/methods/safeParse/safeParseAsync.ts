@@ -26,8 +26,8 @@ export async function safeParseAsync<
   input: unknown,
   config?: Config<InferIssue<TSchema>>
 ): Promise<SafeParseResult<TSchema>> {
-  const dataset = await schema._run(
-    { typed: false, value: input },
+  const dataset = await schema['~validate'](
+    { value: input },
     getGlobalConfig(config)
   );
   return {

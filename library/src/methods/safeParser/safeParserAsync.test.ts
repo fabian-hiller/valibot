@@ -62,7 +62,7 @@ describe('safeParserAsync', () => {
           key: 'foo',
         }
       )
-    ).toEqual({
+    ).toStrictEqual({
       typed: true,
       success: false,
       output: { key: 'foo' },
@@ -96,7 +96,7 @@ describe('safeParserAsync', () => {
   test('should return untyped output with issues', async () => {
     expect(
       await safeParserAsync(objectAsync({ key: string() }))({ key: 123 })
-    ).toEqual({
+    ).toStrictEqual({
       typed: false,
       success: false,
       output: { key: 123 },

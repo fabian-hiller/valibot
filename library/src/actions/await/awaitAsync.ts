@@ -1,6 +1,6 @@
 import type {
   BaseTransformationAsync,
-  TypedDataset,
+  SuccessDataset,
 } from '../../types/index.ts';
 
 /**
@@ -31,9 +31,9 @@ export function awaitAsync<
     type: 'await',
     reference: awaitAsync,
     async: true,
-    async _run(dataset) {
+    async '~validate'(dataset) {
       dataset.value = await dataset.value;
-      return dataset as TypedDataset<Awaited<TInput>, never>;
+      return dataset as SuccessDataset<Awaited<TInput>>;
     },
   };
 }

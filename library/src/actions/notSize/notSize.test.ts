@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { MapIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { notSize, type NotSizeAction, type NotSizeIssue } from './notSize.ts';
 
@@ -11,7 +12,7 @@ describe('notSize', () => {
       expects: '!5',
       requirement: 5,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -43,9 +44,22 @@ describe('notSize', () => {
     const action = notSize(3);
 
     test('for untyped inputs', () => {
-      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+      const issues: [MapIssue] = [
+        {
+          kind: 'schema',
+          type: 'map',
+          input: null,
+          expected: 'Map',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        action['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 

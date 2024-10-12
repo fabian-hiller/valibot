@@ -3,7 +3,7 @@ import type {
   BaseValidation,
   ErrorMessage,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getByteCount } from '../../utils/index.ts';
 
 /**
  * Min bytes issue type.
@@ -113,9 +113,9 @@ export function minBytes(
     expects: `>=${requirement}`,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed) {
-        const length = new TextEncoder().encode(dataset.value).length;
+        const length = _getByteCount(dataset.value);
         if (length < this.requirement) {
           _addIssue(this, 'bytes', dataset, config, {
             received: `${length}`,

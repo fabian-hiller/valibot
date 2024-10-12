@@ -2,7 +2,6 @@ import { BASE64_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
@@ -95,11 +94,11 @@ export function base64(
     expects: null,
     requirement: BASE64_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Base64', dataset, config);
       }
-      return dataset as Dataset<string, Base64Issue<string>>;
+      return dataset;
     },
   };
 }

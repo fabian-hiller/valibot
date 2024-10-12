@@ -2,10 +2,10 @@ import { describe, expect, test } from 'vitest';
 import { email, minLength, url } from '../../actions/index.ts';
 import { pipe } from '../../methods/index.ts';
 import type {
+  FailureDataset,
   InferIssue,
   InferOutput,
-  TypedDataset,
-  UntypedDataset,
+  PartialDataset,
 } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { literal } from '../literal/literal.ts';
@@ -24,7 +24,9 @@ describe('union', () => {
       expects: '("foo" | "bar" | number)',
       options,
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -76,7 +78,7 @@ describe('union', () => {
     test('with single typed issue', () => {
       const schema = union([pipe(string(), minLength(5)), number()]);
       type Schema = typeof schema;
-      expect(schema._run({ typed: false, value: 'foo' }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
         issues: [
@@ -90,13 +92,13 @@ describe('union', () => {
             requirement: 5,
           },
         ],
-      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+      } satisfies PartialDataset<InferOutput<Schema>, InferIssue<Schema>>);
     });
 
     test('with multiple typed issues', () => {
       const schema = union([pipe(string(), email()), pipe(string(), url())]);
       type Schema = typeof schema;
-      expect(schema._run({ typed: false, value: 'foo' }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
         issues: [
@@ -131,7 +133,7 @@ describe('union', () => {
             ],
           },
         ],
-      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+      } satisfies PartialDataset<InferOutput<Schema>, InferIssue<Schema>>);
     });
 
     test('with zero untyped issue', () => {
@@ -149,7 +151,7 @@ describe('union', () => {
 
     test('with single untyped issue', () => {
       const schema = union([literal('foo')]);
-      expect(schema._run({ typed: false, value: 'bar' }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: 'bar' }, {})).toStrictEqual({
         typed: false,
         value: 'bar',
         issues: [
@@ -162,12 +164,12 @@ describe('union', () => {
             received: '"bar"',
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with multiple typed issues', () => {
       const schema = union([string(), number()]);
-      expect(schema._run({ typed: false, value: null }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: null }, {})).toStrictEqual({
         typed: false,
         value: null,
         issues: [
@@ -198,7 +200,7 @@ describe('union', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
   });
 });

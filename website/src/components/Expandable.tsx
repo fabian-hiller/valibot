@@ -1,10 +1,5 @@
-import {
-  $,
-  component$,
-  Slot,
-  useSignal,
-  useVisibleTask$,
-} from '@builder.io/qwik';
+import { $, component$, Slot, useSignal, useTask$ } from '@builder.io/qwik';
+import { isBrowser } from '@builder.io/qwik/build';
 import clsx from 'clsx';
 
 type ExpandableProps = {
@@ -33,10 +28,11 @@ export const Expandable = component$<ExpandableProps>(
     });
 
     // Expand or collapse content when expanded prop change
-    // eslint-disable-next-line qwik/no-use-visible-task
-    useVisibleTask$(({ track }) => {
+    useTask$(({ track }) => {
       track(() => expanded);
-      updateElementHeight();
+      if (isBrowser && element.value) {
+        updateElementHeight();
+      }
     });
 
     return (
