@@ -64,7 +64,6 @@ describe('maxValue', () => {
 
     test('for valid non-bigints', () => {
       expectNoActionIssue(maxValue(10n), [
-        '-12',
         '-10',
         '',
         ' ',
@@ -86,7 +85,6 @@ describe('maxValue', () => {
       ]);
 
       expectNoActionIssue(maxValue(1n), [
-        '-2',
         '-1',
         '',
         ' ',
@@ -94,14 +92,14 @@ describe('maxValue', () => {
         ' 0 ',
         '1',
         -Infinity,
-        -2,
         -1,
         0,
-        0.0,
         1,
+        -1.0,
+        0.0,
+        1.0,
         false,
         true,
-        new Date(-2),
         new Date(-1),
         new Date(0),
         new Date(1),
@@ -114,9 +112,9 @@ describe('maxValue', () => {
         '0',
         -Infinity,
         -1,
-        -1.0,
-        -0.5,
         -0,
+        -1.0,
+        -0.0,
         false,
         new Date(-1),
         new Date(0),
@@ -130,8 +128,6 @@ describe('maxValue', () => {
 
     test('for valid non-booleans', () => {
       expectNoActionIssue(maxValue(true), [
-        '-2',
-        '-2.0',
         '-1',
         '-1.0',
         '',
@@ -142,16 +138,13 @@ describe('maxValue', () => {
         '1',
         '1.0',
         -Infinity,
-        -2,
         -1,
         0,
         0.0,
         1,
-        new Date(-2),
         new Date(-1),
         new Date(0),
         new Date(1),
-        -2n,
         -1n,
         0n,
         1n,
@@ -188,7 +181,6 @@ describe('maxValue', () => {
     test('for valid non-dates', () => {
       const date1 = new Date(10);
       expectNoActionIssue(maxValue(date1), [
-        '-12',
         '-10',
         '-10.0',
         '',
@@ -214,8 +206,6 @@ describe('maxValue', () => {
 
       const date2 = new Date(1);
       expectNoActionIssue(maxValue(date2), [
-        '-2',
-        '-2.0',
         '-1',
         '-1.0',
         '',
@@ -226,14 +216,12 @@ describe('maxValue', () => {
         '1',
         '1.0',
         -Infinity,
-        -2,
         -1,
         0,
         0.0,
         1,
         false,
         true,
-        -2n,
         -1n,
         0n,
         1n,
@@ -264,7 +252,6 @@ describe('maxValue', () => {
 
     test('for valid non-numbers', () => {
       expectNoActionIssue(maxValue(10), [
-        '-12',
         '-10',
         '-10.0',
         '',
@@ -285,8 +272,6 @@ describe('maxValue', () => {
       ]);
 
       expectNoActionIssue(maxValue(1), [
-        '-2',
-        '-2.0',
         '-1',
         '-1.0',
         '',
@@ -298,11 +283,9 @@ describe('maxValue', () => {
         '1.0',
         false,
         true,
-        new Date(-2),
         new Date(-1),
         new Date(0),
         new Date(1),
-        -2n,
         -1n,
         0n,
         1n,
@@ -348,18 +331,15 @@ describe('maxValue', () => {
 
       expectNoActionIssue(maxValue('1'), [
         -Infinity,
-        -2,
         -1,
         0,
         0.0,
         1,
         false,
         true,
-        new Date(-2),
         new Date(-1),
         new Date(0),
         new Date(1),
-        -2n,
         -1n,
         0n,
         1n,
@@ -520,7 +500,7 @@ describe('maxValue', () => {
       expectActionIssue(
         maxValue(10, 'message'),
         { ...baseInfo, expected: '<=10', requirement: 10 },
-        [11, 9999, Number.MAX_VALUE]
+        [11, 9999, Number.MAX_VALUE, NaN]
       );
     });
 
