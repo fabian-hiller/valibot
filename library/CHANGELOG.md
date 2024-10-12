@@ -9,6 +9,7 @@ All notable changes to the library will be documented in this file.
 - Add `graphemes`, `maxGraphemes`, `minGraphemes` and `notGraphemes` action (pull request #853)
 - Add `words`, `maxWords`, `minWords` and `notWords` action
 - Change types and implementation to support Standard Schema
+- Change behaviour of `minValue` and `maxValue` for `NaN` (pull request #843)
 - Refactor `bytes`, `maxBytes`, `minBytes` and `notBytes` action
 
 ## v0.42.1 (September 20, 2024)
