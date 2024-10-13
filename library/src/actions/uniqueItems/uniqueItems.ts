@@ -87,26 +87,25 @@ export function uniqueItems(
     message,
     '~validate'(dataset, config) {
       if (dataset.typed) {
-        const checkMap = new Map<unknown, number[]>();
+        const set = new Set<unknown>();
+
         for (let index = 0; index < dataset.value.length; index++) {
           const item = dataset.value[index];
-          if (checkMap.has(item)) {
+          if (set.has(item)) {
             _addIssue(this, 'item', dataset, config, {
               input: item,
               path: [
-                // TODO: this is a placeholder value.
-                // I would appreciate it if you could take a look at the questions in the PR.
                 {
                   type: 'array',
                   origin: 'value',
                   input: dataset.value,
-                  key: 5,
+                  key: index,
                   value: item,
                 },
               ],
             });
           } else {
-            checkMap.set(item, []);
+            set.add(item);
           }
         }
       }

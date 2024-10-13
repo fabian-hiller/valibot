@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { StringIssue } from '../../schemas/index.ts';
+import type { PartialDataset } from '../../types/dataset.ts';
 import { expectNoActionIssue } from '../../vitest/index.ts';
 import {
   uniqueItems,
@@ -93,16 +94,44 @@ describe('uniqueItems', () => {
       abortPipeEarly: undefined,
     };
 
-    test.todo('for invalid(duplicated) content', () => {
-      // const input = [15, 5, 3, 15];
-      // expect(
-      //   action['~validate']({ typed: true, value: input }, {})
-      // ).toStrictEqual({
-      //   typed: true,
-      //   value: input,
-      //   issues: [
-      //   ],
-      // } satisfies PartialDataset<number[], UniqueItemsIssue<number[]>>);
+    test('for invalid(duplicated) content', () => {
+      const input = [5, 30, 2, 30, 8, 30];
+      expect(
+        action['~validate']({ typed: true, value: input }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: input,
+        issues: [
+          {
+            ...baseIssue,
+            input: input[3],
+            received: `${input[3]}`,
+            path: [
+              {
+                type: 'array',
+                origin: 'value',
+                input,
+                key: 3,
+                value: input[3],
+              },
+            ],
+          },
+          {
+            ...baseIssue,
+            input: input[5],
+            received: `${input[5]}`,
+            path: [
+              {
+                type: 'array',
+                origin: 'value',
+                input,
+                key: 5,
+                value: input[5],
+              },
+            ],
+          },
+        ],
+      } satisfies PartialDataset<number[], UniqueItemsIssue<number[]>>);
     });
   });
 });
