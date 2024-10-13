@@ -75,7 +75,7 @@ By default, I collect each issue during validation to give you detailed feedback
 
 ### Abort validation
 
-If you set `abortEarly` to `true` I immediately abort the validation after finding a first issue. If you just want to know if data matches a schema, but you don't care about the details, this can speed up the performance.
+If you set `abortEarly` to `true` I immediately abort the validation after finding the first issue. If you just want to know if data matches a schema, but you don't care about the details, this can speed up the performance.
 
 ```ts
 import * as v from 'valibot';
@@ -99,7 +99,7 @@ try {
 
 ### Abort pipeline
 
-If you only set `abortPipeEarly` to `true` I only abort the validation within a pipeline after I found a first issue. For example, if you want to show only the first error of a field when validating a form, you can use this option to speed up the performance of validation.
+If you only set `abortPipeEarly` to `true` I only abort the validation within a pipeline, after finding the first issue. For example, if you want to show only the first error of a field when validating a form, you can use this option to speed up the performance of validation.
 
 ```ts
 import * as v from 'valibot';
