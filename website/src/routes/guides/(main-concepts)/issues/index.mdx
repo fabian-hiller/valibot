@@ -1,7 +1,7 @@
 ---
 title: Issues
 description: >-
-  When validating unknown data against a schema, I collect detailed information
+  When validating unknown data against a schema, Valibot collects detailed information
   about each issue.
 contributors:
   - fabian-hiller
@@ -12,11 +12,11 @@ import { Link } from '@builder.io/qwik-city';
 
 # Issues
 
-When validating unknown data against a schema, I collect information about each issue and at the end, if there is at least one issue, I return them in an array. Each issue provides detailed information for you or your users to fix the problem.
+When validating unknown data against a schema, Valibot collects information about each issue. If there is at least one issue, these are returned in an array. Each issue provides detailed information for you or your users to fix the problem.
 
 ## Issue info
 
-The issues are an array of objects. In the following I will explain you exactly what information an issue contains and how this information can help you.
+A single issue conforms to the schema below.
 
 ```ts
 type BaseIssue = {
@@ -45,7 +45,7 @@ Each issue contains the following required information.
 
 #### Kind
 
-`kind` describes the kind of the problem. If an input does not match the data type, for example a number was passed instead of a string, `kind` has the value `'schema'`. In all other cases the reason is not the datatype but the actual content of the data. For example, if a string is invalid because it does not match a regex, `kind` has the value `'validation'`.
+`kind` describes the kind of the problem. If an input does not match the data type—for example a number was passed instead of a string—`kind` has the value `'schema'`. In all other cases, the reason is not the data type but the actual content of the data. For example, if a string is invalid because it does not match a regex, `kind` has the value `'validation'`.
 
 #### Type
 
@@ -105,7 +105,7 @@ const dotPath = issue.path.map((item) => item.key).join('.');
 
 ## Formatting
 
-For common use cases like forms, I can help you with small functions to format issues. However, once you understand how they work, you can easily format them yourself and put them in the right form for your use case.
+For common use cases such as form validation, Valibot includes small built-in functions for formatting issues. However, once you understand how they work, you can easily format them yourself and put them in the right form for your use case.
 
 ### Flatten errors
 

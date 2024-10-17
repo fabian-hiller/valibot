@@ -1,7 +1,7 @@
 ---
 title: Methods
 description: >-
-  Apart from `parse`, `safeParse` and `is`, I offer some more methods to make
+  Apart from `parse`, `safeParse`, and `is`, Valibot offers some more methods to make
   working with your schemas easier.
 contributors:
   - fabian-hiller
@@ -16,11 +16,11 @@ import { ApiList } from '~/components';
 
 # Methods
 
-Apart from <Link href="/api/parse/">`parse`</Link>, <Link href="/api/safeParse/">`safeParse`</Link> and <Link href="/api/is/">`is`</Link>, I offer some more methods to make working with your schemas easier. In the following I distinguish between schema, object and pipeline methods.
+Apart from <Link href="/api/parse/">`parse`</Link>, <Link href="/api/safeParse/">`safeParse`</Link>, and <Link href="/api/is/">`is`</Link>, Valibot offers some more methods to make working with your schemas easier: schema, object, and pipeline methods.
 
 ## Schema methods
 
-My schema methods either add additional functionality, simplify the handling or help you to use a schema, for example for validation or to extract specific information.
+Schema methods add functionality, simplify ergonomics, and help you use schemas for validation and data extraction.
 
 <ApiList
   label="Schema methods"
@@ -41,7 +41,7 @@ My schema methods either add additional functionality, simplify the handling or 
   ]}
 />
 
-> For more information on <Link href="/api/pipe/">`pipe`</Link>, see the <Link href="/guides/pipelines/">pipelines</Link> guide, for more information on validation methods, see the <Link href="/guides/parse-data/">parse data</Link> guide and for more information on <Link href="/api/flatten/">`flatten`</Link>, see the <Link href="/guides/issues/#formatting">issues</Link> guide.
+> For more information on <Link href="/api/pipe/">`pipe`</Link>, see the <Link href="/guides/pipelines/">pipelines</Link> guide. For more information on validation methods, see the <Link href="/guides/parse-data/">parse data</Link> guide. For more information on <Link href="/api/flatten/">`flatten`</Link>, see the <Link href="/guides/issues/#formatting">issues</Link> guide.
 
 ### Fallback
 
@@ -56,7 +56,7 @@ const stringOutput = v.parse(StringSchema, 123); // 'hello'
 
 ## Object methods
 
-My object methods make it easier for you to work with object schemas. They are strongly oriented towards the functionality of TypeScript.
+Object methods make it easier for you to work with object schemas. They are strongly oriented towards the functionality of TypeScript.
 
 <ApiList
   label="Object methods"
@@ -65,7 +65,7 @@ My object methods make it easier for you to work with object schemas. They are s
 
 ### TypeScript similarities
 
-I offer almost the same options as TypeScript. For example, you can make the values of an object optional with <Link href="/api/partial/">`partial`</Link> or make them required with <Link href="/api/required/">`required`</Link> and with <Link href="/api/pick/">`pick`</Link> or <Link href="/api/omit/">`omit`</Link>, you can include or exclude certain values of an existing schema.
+Like in TypeScript, you can make the values of an object optional with <Link href="/api/partial/">`partial`</Link>; make them required with <Link href="/api/required/">`required`</Link>; and even include/exclude certain values from an existing schema with <Link href="/api/pick/">`pick`</Link> and <Link href="/api/omit/">`omit`</Link>.
 
 ```ts
 import * as v from 'valibot';
@@ -85,7 +85,7 @@ const object2 = v.pick(object1, ['key1']);
 
 ## Pipeline methods
 
-My pipeline methods help you to modify the results of validations and transformations within a pipeline.
+Pipeline methods modify the results of validations and transformations within a pipeline.
 
 <ApiList label="Pipeline methods" items={['forward']} />
 
@@ -93,7 +93,11 @@ My pipeline methods help you to modify the results of validations and transforma
 
 ### Forward
 
-‎<Link href="/api/forward/">`forward`</Link> allows you to associate an issue with a nested schema. For example, if you want to check that both password entries in a registration form match, you can use it to forward the issue to the second password field in case of an error. This allows you to display the error message in the correct place.
+<Link href="/api/forward/">`forward`</Link> allows you to associate an issue
+with a nested schema. For example, if you want to check that both password
+entries in a registration form match, you can use it to forward the issue to the
+second password field in case of an error. This allows you to display the error
+message in the correct place.
 
 ```ts
 import * as v from 'valibot';

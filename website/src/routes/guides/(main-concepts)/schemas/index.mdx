@@ -17,11 +17,11 @@ import { ApiList } from '~/components';
 
 # Schemas
 
-Schemas allow you to validate a specific data type. They are similar to type definitions in TypeScript. Besides primitive values like strings and complex values like objects, I also support special cases like literals, unions and custom types.
+Schemas allow you to validate a specific data type. They are similar to type definitions in TypeScript. Aside from primitive values (such as strings) and complex values (such as objects), Valibot also supports special cases like literals, unions, and custom types.
 
 ## Primitive values
 
-I support the creation of schemas for any primitive data type. These are immutable values that are stored directly in the stack, unlike objects where only a reference to the heap is stored.
+Valibot supports the creation of schemas for any primitive data type. These are immutable values that are stored directly in the stack, unlike objects where only a reference to the heap is stored.
 
 <ApiList
   label="Primitive schemas"
@@ -50,9 +50,9 @@ const UndefinedSchema = v.undefined(); // undefined
 
 ## Complex values
 
-Among complex values I support objects, records, arrays, tuples as well as various other classes.
+Support for complex values includes objects, records, arrays, tuples, and various other classes.
 
-> For objects I provide various methods like <Link href="/api/pick/">`pick`</Link>, <Link href="/api/omit/">`omit`</Link>, <Link href="/api/partial/">`partial`</Link> and <Link href="/api/required/">`required`</Link>. Learn more about them <Link href="/guides/methods/#object-methods">here</Link>.
+> There are various methods for objects such as <Link href="/api/pick/">`pick`</Link>, <Link href="/api/omit/">`omit`</Link>, <Link href="/api/partial/">`partial`</Link> and <Link href="/api/required/">`required`</Link>. Learn more about them <Link href="/guides/methods/#object-methods">here</Link>.
 
 <ApiList
   label="Complex schemas"
@@ -101,7 +101,7 @@ const TupleWithRestSchema = v.tupleWithRest([v.string(), v.number()], v.null());
 
 ## Special cases
 
-Beyond primitive and complex values, I also provide schema functions for more special cases.
+Beyond primitive and complex values, there are also schema functions for more special cases.
 
 <ApiList
   label="Special schemas"
