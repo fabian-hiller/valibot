@@ -1,5 +1,6 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
+import type { FindItemActionPredicate } from './findItem.ts';
 import { findItem, type FindItemAction } from './findItem.ts';
 
 describe('findItem', () => {
@@ -21,6 +22,23 @@ describe('findItem', () => {
       expectTypeOf<InferOutput<Action>>().toEqualTypeOf<
         string | number | undefined
       >();
+    });
+
+    test('of issue', () => {
+      expectTypeOf<InferIssue<Action>>().toEqualTypeOf<never>();
+    });
+  });
+
+  describe('should infer types when using a type predicate', () => {
+    type Input = (string | number)[];
+    type Action = FindItemActionPredicate<Input, number>;
+
+    test('of input', () => {
+      expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
+    });
+
+    test('of output', () => {
+      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<number | undefined>();
     });
 
     test('of issue', () => {
