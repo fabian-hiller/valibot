@@ -71,6 +71,25 @@ const OptionalEntrySchema = v.object({
 });
 ```
 
+### Optional schema with a dependent default value
+
+Object schema with an optional `version` entry, where the default value depends on the `id` entry.
+
+```ts
+const OptionalEntrySchema = v.pipe(
+  v.object({
+    id: v.string(),
+    version: v.optional(v.string()),
+  }),
+  v.transform((input) => {
+    if (!input.version) {
+      input.version = getVersionFromId(input.id);
+    }
+    return input;
+  }),
+);
+```
+
 ### Unwrap optional schema
 
 Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `optional`.
