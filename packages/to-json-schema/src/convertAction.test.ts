@@ -490,4 +490,55 @@ describe('convertAction', () => {
       'The "transform" action cannot be converted to JSON Schema.'
     );
   });
+
+  test('should convert unique items action for array', () => {
+    expect(
+      convertAction(
+        {
+          type: 'array',
+        },
+        v.uniqueItems<v.ArrayInput>(),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'array',
+      uniqueItems: true,
+    });
+  });
+
+  test('should throw error for unique items action with invalid type', () => {
+    expect(() =>
+      convertAction({}, v.uniqueItems<v.ArrayInput>(), undefined)
+    ).toThrowError(
+      'The "unique_items" action is not supported on type "undefined".'
+    );
+    expect(() =>
+      convertAction(
+        { type: 'string' },
+        v.uniqueItems<v.ArrayInput>(),
+        undefined
+      )
+    ).toThrowError(
+      'The "unique_items" action is not supported on type "string".'
+    );
+  });
+
+  test('should force conversion for unique items action with invalid type', () => {
+    expect(
+      convertAction({}, v.uniqueItems<v.ArrayInput>(), { force: true })
+    ).toStrictEqual({
+      uniqueItems: true,
+    });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "unique_items" action is not supported on type "undefined".'
+    );
+    expect(
+      convertAction({ type: 'string' }, v.uniqueItems<v.ArrayInput>(), {
+        force: true,
+      })
+    ).toStrictEqual({ type: 'string', uniqueItems: true });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "unique_items" action is not supported on type "string".'
+    );
+  });
 });
