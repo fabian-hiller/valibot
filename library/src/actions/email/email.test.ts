@@ -159,6 +159,14 @@ describe('email', () => {
     test('for numerical domain', () => {
       expectNoActionIssue(action, ['email@123.com']);
     });
+
+    test('for punycode domain', () => {
+      expectNoActionIssue(action, ['email@xn--exmple-cua.com']);
+    });
+
+    test('for punycode tld', () => {
+      expectNoActionIssue(action, ['email@example.xn--6frz82g']);
+    });
   });
 
   describe('should return dataset with issues', () => {
