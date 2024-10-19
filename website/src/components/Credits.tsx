@@ -89,6 +89,7 @@ export const Credits = component$(() => {
           'hyunbinseo',
           'F0rce',
           'fabulousgk',
+          'jdgamble555',
           'caegdeveloper',
           'andrew-d-jackson',
           'dslatkin',
