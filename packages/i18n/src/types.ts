@@ -4,6 +4,7 @@ export type Language = {
   code:
     | 'ar'
     | 'ca'
+    | 'cs'
     | 'de'
     | 'en'
     | 'es'
