@@ -56,7 +56,11 @@ type Action =
       number,
       v.ErrorMessage<v.MultipleOfIssue<number, number>> | undefined
     >
-  | v.TitleAction<unknown, string>;
+  | v.TitleAction<unknown, string>
+  | v.UniqueItemsAction<
+      v.ArrayInput,
+      v.ErrorMessage<v.UniqueItemsIssue<v.ArrayInput>> | undefined
+    >;
 
 /**
  * Converts any supported Valibot action to the JSON Schema format.
@@ -188,6 +192,18 @@ export function convertAction(
       // schema in the pipeline anyway.
       // @ts-expect-error
       jsonSchema.const = valibotAction.requirement;
+      break;
+    }
+
+    case 'unique_items': {
+      if (jsonSchema.type !== 'array') {
+        throwOrWarn(
+          `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
+          config
+        );
+      }
+      jsonSchema.uniqueItems = true;
+
       break;
     }
 
