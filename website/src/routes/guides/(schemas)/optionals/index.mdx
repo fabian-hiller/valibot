@@ -62,3 +62,24 @@ const NullableDateSchema = v.nullable(v.date(), () => new Date());
 ```
 
 The previous example thus creates a new instance of the [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) class for each validation with `null` as input, which is then used as the default value.
+
+### Dependent default values
+
+In some cases, a default value for an optional field may depend on the value of another field in the same object. This can be achieved by using <Link href="/api/pipe/">`pipe`</Link> and <Link href="/api/transform/">`transform`</Link>.
+
+```ts
+const OptionalEntrySchema = v.pipe(
+  v.object({
+    id: v.string(),
+    version: v.optional(v.string()),
+  }),
+  v.transform((input) => {
+    if (!input.version) {
+      input.version = getVersionFromId(input.id);
+    }
+    return input;
+  }),
+);
+```
+
+In this example, the `version` entry is optional. If no `version` is provided, its value is dynamically determined by the `id` entry via the `getVersionFromId` function. This allows `version` to have a default that depends on the value of `id`.
