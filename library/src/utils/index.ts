@@ -1,5 +1,6 @@
 export * from './_addIssue/index.ts';
 export * from './_getByteCount/index.ts';
+export * from './_getCodePointCount/index.ts';
 export * from './_getGraphemeCount/index.ts';
 export * from './_getWordCount/index.ts';
 export * from './_isLuhnAlgo/index.ts';
