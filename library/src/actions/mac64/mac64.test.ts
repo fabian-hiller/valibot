@@ -88,6 +88,12 @@ describe('mac64', () => {
         'AAAA.AAAA.AAAA.AAAA',
         'ffff.ffff.ffff.ffff',
         'FFFF.FFFF.FFFF.FFFF',
+        '0000:0000:0000:0000',
+        '9999:9999:9999:9999',
+        'aaaa:aaaa:aaaa:aaaa',
+        'AAAA:AAAA:AAAA:AAAA',
+        'ffff:ffff:ffff:ffff',
+        'FFFF:FFFF:FFFF:FFFF',
       ]);
     });
   });
