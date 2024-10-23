@@ -8,7 +8,7 @@ import { _addIssue } from '../../utils/index.ts';
 /**
  * Possible jwt regex.
  */
-const POSSIBLE_JWT_REGEX = /^(?:[\w-]+\.){2}[\w-]+$/u;
+const POSSIBLE_JWT_REGEX = /^(?:[\w-]+\.){2}[\w-]*$/u;
 
 /**
  * The type of the [algorithm](https://datatracker.ietf.org/doc/html/rfc7518#section-3.1) used to sign the jwt.
@@ -151,10 +151,11 @@ export function jwt(
       if (!POSSIBLE_JWT_REGEX.test(input)) {
         return false;
       }
+      const [headerInput, , signatureInput] = input.split('.');
       try {
         // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/65494
         const header: unknown = JSON.parse(
-          atob(base64UrlToBase64(input.split('.')[0]))
+          atob(base64UrlToBase64(headerInput))
         );
         return (
           // `header` is an object
@@ -163,10 +164,12 @@ export function jwt(
           // has a `typ` property associated to `'JWT'`
           'typ' in header &&
           header.typ === 'JWT' &&
-          // no algorithm passed
-          (this.algorithm === undefined ||
-            // the passed algorithm matches the value of the `alg` property
-            ('alg' in header && header.alg === this.algorithm))
+          // the passed algorithm matches the value of the `alg` property
+          'alg' in header &&
+          header.alg === this.algorithm &&
+          (header.alg === 'none'
+            ? signatureInput.length === 0
+            : signatureInput.length > 0)
         );
       } catch {
         return false;
