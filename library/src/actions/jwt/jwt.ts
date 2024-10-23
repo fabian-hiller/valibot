@@ -78,7 +78,7 @@ export interface JwtIssue<TInput extends string> extends BaseIssue<TInput> {
  */
 export interface JwtAction<
   TInput extends string,
-  TAlgorithm extends Algorithm | undefined,
+  TAlgorithm extends Algorithm,
   TMessage extends ErrorMessage<JwtIssue<TInput>> | undefined,
 > extends BaseValidation<TInput, TInput, JwtIssue<TInput>> {
   /**
@@ -110,25 +110,13 @@ export interface JwtAction<
 /**
  * Creates a [jwt](https://en.wikipedia.org/wiki/JSON_Web_Token) validation action.
  *
- * @returns A jwt action.
- */
-export function jwt<TInput extends string>(): JwtAction<
-  TInput,
-  undefined,
-  undefined
->;
-
-/**
- * Creates a [jwt](https://en.wikipedia.org/wiki/JSON_Web_Token) validation action.
- *
  * @param algorithm The algorithm used to sign the jwt.
  *
  * @returns A jwt action.
  */
-export function jwt<
-  TInput extends string,
-  TAlgorithm extends Algorithm | undefined,
->(algorithm: TAlgorithm): JwtAction<TInput, TAlgorithm, undefined>;
+export function jwt<TInput extends string, TAlgorithm extends Algorithm>(
+  algorithm: TAlgorithm
+): JwtAction<TInput, TAlgorithm, undefined>;
 
 /**
  * Creates a [jwt](https://en.wikipedia.org/wiki/JSON_Web_Token) validation action.
@@ -140,7 +128,7 @@ export function jwt<
  */
 export function jwt<
   TInput extends string,
-  TAlgorithm extends Algorithm | undefined,
+  TAlgorithm extends Algorithm,
   const TMessage extends ErrorMessage<JwtIssue<TInput>> | undefined,
 >(
   algorithm: TAlgorithm,
@@ -148,13 +136,9 @@ export function jwt<
 ): JwtAction<TInput, TAlgorithm, TMessage>;
 
 export function jwt(
-  algorithm?: Algorithm,
+  algorithm: Algorithm,
   message?: ErrorMessage<JwtIssue<string>>
-): JwtAction<
-  string,
-  Algorithm | undefined,
-  ErrorMessage<JwtIssue<string>> | undefined
-> {
+): JwtAction<string, Algorithm, ErrorMessage<JwtIssue<string>> | undefined> {
   return {
     kind: 'validation',
     type: 'jwt',
