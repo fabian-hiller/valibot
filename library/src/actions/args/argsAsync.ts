@@ -82,7 +82,7 @@ export interface ArgsActionAsync<
 }
 
 /**
- * Creates a funtion arguments transformation action.
+ * Creates a function arguments transformation action.
  *
  * @param schema The arguments schema.
  *
