@@ -8,8 +8,8 @@ import {
 } from '@builder.io/qwik-city';
 import clsx from 'clsx';
 import { ActionButton, ButtonGroup, Expandable, TextLink } from '~/components';
-import { PlusIcon } from '~/icons';
-import { blurredCodeDarkUrl, blurredCodeLightUrl } from '~/images';
+import { PlayIcon, PlusIcon } from '~/icons';
+import { valibotTalkDarkUrl, valibotTalkLigthUrl } from '~/images';
 
 export const head: DocumentHead = {
   title: 'Valibot: The modular and type safe schema library',
@@ -85,22 +85,27 @@ export default component$(() => {
       <section class="w-full px-3 md:max-w-5xl xl:max-w-[1360px] xl:px-10">
         <div class="relative z-0 flex aspect-video w-full items-center justify-center overflow-hidden rounded-3xl border-[3px] border-slate-200 bg-white md:border-4 lg:rounded-[32px] dark:border-slate-800 dark:bg-gray-900">
           {[
-            { theme: 'dark', url: blurredCodeDarkUrl },
-            { theme: 'light', url: blurredCodeLightUrl },
+            { theme: 'dark', url: valibotTalkDarkUrl },
+            { theme: 'light', url: valibotTalkLigthUrl },
           ].map(({ theme, url }) => (
             <img
               key={url}
               class={clsx(
-                'absolute -z-10 h-full w-full object-cover object-left',
+                'absolute -z-10 h-full w-full object-cover object-center',
                 theme === 'dark' ? 'hidden dark:block' : 'dark:hidden'
               )}
               src={url}
-              alt="Blurred TypeScript code"
+              alt="Talk: Going fully modular with Valibot"
             />
           ))}
-          <p class="px-8 text-center leading-loose md:text-lg md:leading-loose lg:text-xl lg:leading-loose">
-            There will probably be a video at this point in the future
-          </p>
+          <a
+            class="focus-ring absolute flex h-10 w-16 animate-bounce items-center justify-center rounded-xl bg-sky-500/10 backdrop-blur hover:bg-sky-500/20 md:h-12 md:w-20 lg:h-16 lg:w-28 lg:backdrop-blur-lg dark:bg-sky-400/10 dark:hover:bg-sky-400/20"
+            href="https://youtu.be/AnXbYrGdxv0"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <PlayIcon class="h-4 text-sky-500 md:h-5 lg:h-6 dark:text-sky-400" />
+          </a>
         </div>
       </section>
 
