@@ -83,6 +83,7 @@ export const Credits = component$(() => {
       </p>
       <ul class="mt-4 flex flex-wrap gap-2 md:mt-5 lg:mt-6 lg:gap-3">
         {[
+          'antfu',
           'Thanaen',
           'osdiab',
           'ruiaraujo012',
@@ -90,6 +91,7 @@ export const Credits = component$(() => {
           'F0rce',
           'fabulousgk',
           'jdgamble555',
+          'isoden',
           'caegdeveloper',
           'andrew-d-jackson',
           'dslatkin',
