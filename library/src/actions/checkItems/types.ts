@@ -1,5 +1,5 @@
-import type { BaseIssue } from '../../types';
-import type { ArrayInput, ArrayRequirementAsync } from '../types';
+import type { BaseIssue } from '../../types/index.ts';
+import type { ArrayInput, ArrayRequirementAsync } from '../types.ts';
 
 /**
  * Check items issue type.
