@@ -25,9 +25,10 @@ type Reference = (
   | BaseTransformationAsync<unknown, unknown, BaseIssue<unknown>>;
 
 // Create specific message store
-let store:
-  | Map<Reference, Map<string | undefined, ErrorMessage<BaseIssue<unknown>>>>
-  | undefined;
+let store: Map<
+  Reference,
+  Map<string | undefined, ErrorMessage<BaseIssue<unknown>>>
+>;
 
 /**
  * Sets a specific error message.

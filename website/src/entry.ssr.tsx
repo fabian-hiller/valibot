@@ -27,5 +27,11 @@ export default function (opts: RenderToStreamOptions) {
       class: 'dark',
       ...opts.containerAttributes,
     },
+    prefetchStrategy: {
+      implementation: {
+        linkInsert: 'html-append',
+        linkRel: 'modulepreload',
+      },
+    },
   });
 }

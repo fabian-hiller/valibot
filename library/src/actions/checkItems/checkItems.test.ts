@@ -2,11 +2,8 @@ import { describe, expect, test } from 'vitest';
 import type { StringIssue } from '../../schemas/index.ts';
 import type { PartialDataset } from '../../types/dataset.ts';
 import { expectNoActionIssue } from '../../vitest/index.ts';
-import {
-  checkItems,
-  type CheckItemsAction,
-  type CheckItemsIssue,
-} from './checkItems.ts';
+import { checkItems, type CheckItemsAction } from './checkItems.ts';
+import type { CheckItemsIssue } from './types.ts';
 
 describe('checkItems', () => {
   describe('should return action object', () => {

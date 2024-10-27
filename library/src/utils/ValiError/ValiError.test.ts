@@ -28,6 +28,6 @@ describe('ValiError', () => {
     expect(error).toBeInstanceOf(ValiError);
     expect(error.name).toBe('ValiError');
     expect(error.message).toBe(minLengthIssue.message);
-    expect(error.issues).toEqual([minLengthIssue, urlIssue]);
+    expect(error.issues).toStrictEqual([minLengthIssue, urlIssue]);
   });
 });

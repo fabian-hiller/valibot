@@ -1,0 +1,114 @@
+---
+title: assert
+description: Checks if the input matches the scheme.
+source: /methods/assert/assert.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# assert
+
+Checks if the input matches the scheme.
+
+> As this is an assertion function, it can be used as a type guard.
+
+```ts
+v.assert<TSchema>(schema, input);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `input` <Property {...properties.input} />
+
+## Example
+
+The following example show how `assert` can be used.
+
+```ts
+const EmailSchema = v.pipe(v.string(), v.email());
+const data: unknown = 'jane@example.com';
+
+v.assert(EmailSchema, data);
+const email = data; // string
+```
+
+## Related
+
+The following APIs can be combined with `assert`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'undefinedable',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList
+  items={[
+    'assert',
+    'config',
+    'fallback',
+    'keyof',
+    'omit',
+    'partial',
+    'pick',
+    'pipe',
+    'required',
+    'unwrap',
+  ]}
+/>
