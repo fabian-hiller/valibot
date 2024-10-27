@@ -5,6 +5,7 @@ description: >-
   get started creating your first schema.
 contributors:
   - fabian-hiller
+  - BastiDood
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -12,13 +13,13 @@ import { ApiList } from '~/components';
 
 # Quick start
 
-My schema can be compared to a type definition in TypeScript. The big difference is that TypeScript types are "not executed" and are more or less a DX feature. A schema on the other hand, apart from the inferred type definition, can also be executed at runtime to guarantee type safety of unknown data.
+A Valibot schema can be compared to a type definition in TypeScript. The big difference is that TypeScript types are "not executed" and are more or less a DX feature. A schema on the other hand, apart from the inferred type definition, can also be executed at runtime to truly guarantee type safety of unknown data.
 
-> Until I reach v1, I welcome lots of feedback on the API, naming and implementation. Please create or reply to an [issue](https://github.com/fabian-hiller/valibot/issues) and help me become the best schema library for JavaScript and TypeScript.
+> Until Valibot reaches v1, feedback on the API, naming, and implementation is very welcome and much appreciated. Please create or reply to an [issue](https://github.com/fabian-hiller/valibot/issues) and help Valibot be the best schema library for JavaScript and TypeScript.
 
 ## Basic concept
 
-Similar to how types can be defined in TypeScript, my source code allows you to define a schema with various small functions. This applies to primitive values like strings as well as to more complex data sets like objects.
+Similar to how types can be defined in TypeScript, Valibot allows you to define a schema with various small functions. This applies to primitive values like strings as well as more complex data sets like objects.
 
 ```ts
 import * as v from 'valibot';
@@ -38,7 +39,7 @@ const LoginSchema = v.object({
 
 ## Pipelines
 
-In addition, I can help you to perform more detailed validations and transformations with the <Link href="/api/pipe/">`pipe`</Link> method. Thus, for example, it can be ensured that a string is an email and ends with a certain domain.
+In addition, pipelines enable you to perform more detailed validations and transformations with the <Link href="/api/pipe/">`pipe`</Link> method. Thus, for example, it can be ensured that a string is an email that ends with a certain domain.
 
 ```ts
 import * as v from 'valibot';
@@ -50,7 +51,7 @@ A pipeline must always start with a schema, followed by up to 19 validation or t
 
 ## Error messages
 
-If I detect an issue during validation, I create a specific issue object with various details and an error message. This error message can be overridden via the first optional argument of a schema or validation action.
+If an issue is detected during validation, the library emits a specific issue object that includes various details and an error message. This error message can be overridden via the first optional argument of a schema or validation action.
 
 ```ts
 import * as v from 'valibot';

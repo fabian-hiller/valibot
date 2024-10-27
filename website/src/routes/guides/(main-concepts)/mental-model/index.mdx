@@ -1,10 +1,11 @@
 ---
 title: Mental model
 description: >-
-  My mental model is mainly divided between schemas, methods, and actions. It is
-  crucial to understand this concept.
+  Valibot's mental model is mainly divided between schemas, methods, and
+  actions. It is crucial to understand this concept.
 contributors:
   - fabian-hiller
+  - BastiDood
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -13,7 +14,7 @@ import MentalModelLight from './mental-model-light.jpg?jsx';
 
 # Mental model
 
-My mental model is mainly divided between **schemas**, **methods**, and **actions**. Since each functionality is imported as its own function, it is crucial to understand this concept as it makes working with my modular API design much easier.
+Valibot's mental model is mainly divided between **schemas**, **methods**, and **actions**. Since each functionality is imported as its own function, it is crucial to understand this concept as it makes working with the modular API design much easier.
 
 <MentalModelDark
   alt="Code example with a schema, method and actions"
@@ -24,11 +25,11 @@ My mental model is mainly divided between **schemas**, **methods**, and **action
   class="dark:hidden"
 />
 
-> My <Link href="/api/">API reference</Link> gives you a great overview of all schemas, methods and actions, and at the end of a specific API reference we list all related schemas, methods and actions that can be combined with it.
+> The <Link href="/api/">API reference</Link> gives you a great overview of all schemas, methods, and actions. For each one, the corresponding reference page also lists down other related schemas, methods, and actions for better discoverability.
 
 ## Schemas
 
-Schemas are the starting point for using Valibot. They allow you to validate **a specific data type**, like a string, object or date. Each schema is independent. They can be reused or even nested to reflect more complex data structures.
+Schemas are the starting point for using Valibot. They allow you to validate **a specific data type**, like a string, object, or date. Each schema is independent. They can be reused or even nested to reflect more complex data structures.
 
 ```ts
 import * as v from 'valibot';

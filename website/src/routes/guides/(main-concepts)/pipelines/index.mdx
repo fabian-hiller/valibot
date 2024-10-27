@@ -9,6 +9,7 @@ contributors:
   - ariskemper
   - morinokami
   - daxeh
+  - BastiDood
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -16,7 +17,7 @@ import { ApiList } from '~/components';
 
 # Pipelines
 
-For detailed validations and transformations, a schema can be wrapped in a pipeline. Especially for schema functions like <Link href="/api/string/">`string`</Link>, <Link href="/api/number/">`number`</Link>, <Link href="/api/date/">`date`</Link>, <Link href="/api/object/">`object`</Link> and <Link href="/api/array/">`array`</Link> this feature is useful to validate further details apart from the raw data type.
+For detailed validations and transformations, a schema can be wrapped in a pipeline. Especially for schema functions like <Link href="/api/string/">`string`</Link>, <Link href="/api/number/">`number`</Link>, <Link href="/api/date/">`date`</Link>, <Link href="/api/object/">`object`</Link>, and <Link href="/api/array/">`array`</Link>, this feature is useful for validating properties beyond the raw data type.
 
 ## How it works
 
@@ -41,7 +42,7 @@ const EmailSchema = v.pipe(
 
 Pipeline validation actions examine the input and, if the input does not meet a certain condition, return an issue. If the input is valid, it is returned as the output and, if present, picked up by the next action in the pipeline.
 
-> If possible, I run a pipeline completely, even if an issue has occurred, to collect all possible issues. If you want me to abort the pipeline early after the first issue, you need to set the `abortPipeEarly` option to `true`. Learn more about this <Link href="/guides/parse-data/#configuration">here</Link>.
+> Whenever possible, pipelines are run completely, even if an issue has occurred, to collect all possible issues. If you want to abort the pipeline early after the first issue, you need to set the `abortPipeEarly` option to `true`. Learn more about this <Link href="/guides/parse-data/#configuration">here</Link>.
 
 <ApiList
   label="Validation actions"
@@ -119,7 +120,7 @@ Pipeline validation actions examine the input and, if the input does not meet a 
   ]}
 />
 
-Some of these actions can be combined with different schemas. For example, <Link href="/api/minValue/">`minValue`</Link> can be used to validate the minimum value of <Link href="/api/string/">`string`</Link>, <Link href="/api/number/">`number`</Link>, <Link href="/api/bigint/">`bigint`</Link> and <Link href="/api/date/">`date`</Link>.
+Some of these actions can be combined with different schemas. For example, <Link href="/api/minValue/">`minValue`</Link> can be used to validate the minimum value of <Link href="/api/string/">`string`</Link>, <Link href="/api/number/">`number`</Link>, <Link href="/api/bigint/">`bigint`</Link>, and <Link href="/api/date/">`date`</Link>.
 
 ```ts
 import * as v from 'valibot';
@@ -132,7 +133,7 @@ const DateSchema = v.pipe(v.date(), v.minValue(new Date()));
 
 ### Custom validation
 
-For custom validations, <Link href="/api/check/">`check`</Link> can be used. If the function passed as the first argument returns `false`, an issue is returned. Otherwise the input is considered valid.
+For custom validations, <Link href="/api/check/">`check`</Link> can be used. If the function passed as the first argument returns `false`, an issue is returned. Otherwise, the input is considered valid.
 
 ```ts
 import * as v from 'valibot';
