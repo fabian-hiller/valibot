@@ -2,7 +2,6 @@ import { NANO_ID_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
@@ -95,11 +94,11 @@ export function nanoid(
     expects: null,
     requirement: NANO_ID_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Nano ID', dataset, config);
       }
-      return dataset as Dataset<string, NanoIDIssue<string>>;
+      return dataset;
     },
   };
 }

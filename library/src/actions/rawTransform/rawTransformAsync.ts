@@ -1,7 +1,8 @@
 import type {
+  BaseIssue,
   BaseTransformationAsync,
-  Dataset,
   MaybePromise,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 import type { Context, RawTransformIssue } from './types.ts';
@@ -36,7 +37,7 @@ export function rawTransformAsync<TInput, TOutput>(
     type: 'raw_transform',
     reference: rawTransformAsync,
     async: true,
-    async _run(dataset, config) {
+    async '~validate'(dataset, config) {
       // Execute action and get its output
       const output = await action({
         dataset,
@@ -57,7 +58,10 @@ export function rawTransformAsync<TInput, TOutput>(
 
       // Return output dataset
       // @ts-expect-error
-      return dataset as Dataset<TOutput, RawTransformIssue<TInput>>;
+      return dataset as OutputDataset<
+        TOutput,
+        BaseIssue<unknown> | RawTransformIssue<TInput>
+      >;
     },
   };
 }

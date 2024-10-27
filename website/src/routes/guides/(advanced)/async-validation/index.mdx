@@ -1,9 +1,9 @@
 ---
 title: Async validation
 description: >-
-  By default, I validate each schema synchronously. This is usually the fastest
-  way to validate unknown data, but sometimes you need to validate something
-  asynchronously.
+  By default, Valibot validates each schema synchronously. This is usually the
+  fastest way to validate unknown data, but sometimes you need to validate
+  something asynchronously.
 contributors:
   - fabian-hiller
 ---
@@ -12,11 +12,11 @@ import { Link } from '@builder.io/qwik-city';
 
 # Async validation
 
-By default, I validate each schema synchronously. This is usually the fastest way to validate unknown data, but sometimes you need to validate something asynchronously. For example, you might want to check if a username already exists in your database.
+By default, Valibot validates each schema synchronously. This is usually the fastest way to validate unknown data, but sometimes you need to validate something asynchronously. For example, you might want to check if a username already exists in your database.
 
 ## How it works
 
-To be able to do this, I provide an asynchronous implementation when necessary. The only difference is that the asynchronous implementation is promise-based. Otherwise, the API and functionality is exactly the same.
+To be able to do this, Valibot provides an asynchronous implementation when necessary. The only difference is that the asynchronous implementation is promise-based. Otherwise, the API and functionality is exactly the same.
 
 ### Naming
 

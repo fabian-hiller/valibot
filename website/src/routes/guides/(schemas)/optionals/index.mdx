@@ -2,7 +2,8 @@
 title: Optionals
 description: >-
   It often happens that `undefined` or `null` should also be accepted. To make
-  the API more readable for this and to reduce boilerplate, I offer a shortcut.
+  the API more readable for this and to reduce boilerplate, Valibot offers a
+  shortcut.
 contributors:
   - fabian-hiller
 ---
@@ -11,11 +12,11 @@ import { Link } from '@builder.io/qwik-city';
 
 # Optionals
 
-It often happens that `undefined` or `null` should also be accepted instead of the value. To make the API more readable for this and to reduce boilerplate, I offer a shortcut for this functionality with <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link>, <Link href="/api/nullish/">`nullish`</Link> and <Link href="/api/undefinedable/">`undefinedable`</Link>.
+It often happens that `undefined` or `null` should also be accepted instead of the value. To make the API more readable for this and to reduce boilerplate, Valibot offers a shortcut for this functionality with <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link>, <Link href="/api/nullish/">`nullish`</Link> and <Link href="/api/undefinedable/">`undefinedable`</Link>.
 
 ## How it works
 
-To accept `undefined` or `null` besides your actual value, you just have to wrap the schema in <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link>, and <Link href="/api/undefinedable/">`undefinedable`</Link>.
+To accept `undefined` and/or `null` besides your actual value, you just have to wrap the schema in <Link href="/api/optional/">`optional`</Link>, <Link href="/api/nullable/">`nullable`</Link>, <Link href="/api/nullish/">`nullish`</Link>, or <Link href="/api/undefinedable/">`undefinedable`</Link>.
 
 ```ts
 import * as v from 'valibot';

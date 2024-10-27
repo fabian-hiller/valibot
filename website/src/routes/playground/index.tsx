@@ -2,10 +2,11 @@ import {
   $,
   component$,
   type NoSerialize,
+  type QRL,
   type Signal,
+  sync$,
   useComputed$,
   useSignal,
-  useVisibleTask$,
 } from '@builder.io/qwik';
 import {
   type DocumentHead,
@@ -56,20 +57,6 @@ export default component$(() => {
   const code = useSignal<string>('');
   const logs = useSignal<[LogLevel, string][]>([]);
 
-  // Capture logs from iframe
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    window.addEventListener(
-      'message',
-      (event: MessageEvent<MessageEventData>) => {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (event.data.type === 'log') {
-          logs.value = [...logs.value, event.data.log];
-        }
-      }
-    );
-  });
-
   // Computed initial code of editor
   const initialCode = useComputed$(() => {
     const code = location.url.searchParams.get('code');
@@ -105,6 +92,48 @@ console.log(result);`;
   });
 
   /**
+   * Executes the current code of the editor.
+   */
+  const executeCode = $(() => {
+    // Open side bar on smaller devices if it's closed
+    if (
+      window.innerWidth < 1024 &&
+      (!toggle.value || toggle.value.state === 'closed')
+    ) {
+      toggle.submit({ state: 'opened' });
+    }
+
+    // Update code of iframe
+    try {
+      code.value = `// ${Date.now()}\n\n${
+        transform(model.value!.getValue(), {
+          transforms: ['typescript'],
+        }).code
+      }`;
+
+      // Handle transform errors
+    } catch (error) {
+      logs.value = [
+        ...logs.value,
+        ['error', 'TypeScript syntax error detected'],
+      ];
+    }
+
+    // Track playground event
+    trackEvent('execute_playground_code');
+  });
+
+  /**
+   * Captures logs from the iframe.
+   */
+  const captureLogs = $((event: MessageEvent<MessageEventData>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (event.data.type === 'log') {
+      logs.value = [...logs.value, event.data.log];
+    }
+  });
+
+  /**
    * Clears the logs of the playground.
    */
   const clearLogs = $(() => {
@@ -115,26 +144,53 @@ console.log(result);`;
     trackEvent('clear_playground_logs');
   });
 
+  /**
+   * Handles keyboard keydown events.
+   */
+  const handleKeyDown = $((event: KeyboardEvent) => {
+    if (event.ctrlKey || event.metaKey) {
+      if (event.key === 'Enter') {
+        executeCode();
+      } else if (event.key === 'Backspace') {
+        clearLogs();
+      }
+    }
+  });
+
+  /**
+   * Prevents default behavior of keydown events.
+   */
+  const preventDefault = sync$((event: KeyboardEvent) => {
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      (event.key === 'Enter' || event.key === 'Backspace')
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  });
+
   return (
-    <main class="flex w-full flex-1 flex-col lg:flex-row lg:space-x-10 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:space-x-14 2xl:self-center">
+    <main
+      class="flex w-full flex-1 flex-col lg:flex-row lg:space-x-10 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:space-x-14 2xl:self-center"
+      window:onMessage$={captureLogs}
+      window:onKeyDown$={[preventDefault, handleKeyDown]}
+    >
       <div class="flex flex-1 lg:relative">
         <CodeEditor value={initialCode} model={model} onSave$={saveCode} />
         <EditorButtons
           class="!hidden lg:!absolute lg:right-10 lg:top-10 lg:!flex"
           model={model}
-          code={code}
-          logs={logs}
+          executeCode$={executeCode}
         />
       </div>
 
-      <SideBar class="lg:w-80 xl:w-96 2xl:w-[448px]" toggle={toggle}>
+      <SideBar class="lg:w-80 xl:w-96 2xl:w-[500px]" toggle={toggle}>
         <EditorButtons
           q:slot="buttons"
           class="mr-4 lg:hidden"
-          toggle={toggle}
           model={model}
-          code={code}
-          logs={logs}
+          executeCode$={executeCode}
         />
         <IconButton
           class="!absolute right-8 top-8 z-10 lg:right-10 lg:top-10"
@@ -322,14 +378,12 @@ console.log(result);`;
 
 type EditorButtonsProps = {
   class: string;
-  toggle?: ReturnType<typeof useSideBarToggle>;
   model: Signal<NoSerialize<monaco.editor.ITextModel>>;
-  code: Signal<string>;
-  logs: Signal<[LogLevel, string][]>;
+  executeCode$: QRL<() => void>;
 };
 
 const EditorButtons = component$<EditorButtonsProps>(
-  ({ toggle, code, model, logs, ...props }) => {
+  ({ model, executeCode$, ...props }) => {
     // Use navigate and location
     const navigate = useNavigate();
     const location = useLocation();
@@ -376,35 +430,6 @@ const EditorButtons = component$<EditorButtonsProps>(
       trackEvent('share_playground_code');
     });
 
-    /**
-     * Executes the current code of the editor.
-     */
-    const executeCode = $(() => {
-      // Open side bar if it's closed
-      if (!toggle?.value || toggle.value.state === 'closed') {
-        toggle?.submit({ state: 'opened' });
-      }
-
-      // Update code of iframe
-      try {
-        code.value = `// ${Date.now()}\n\n${
-          transform(model.value!.getValue(), {
-            transforms: ['typescript'],
-          }).code
-        }`;
-
-        // Handle transform errors
-      } catch (error) {
-        logs.value = [
-          ...logs.value,
-          ['error', 'TypeScript syntax error detected'],
-        ];
-      }
-
-      // Track playground event
-      trackEvent('execute_playground_code');
-    });
-
     return (
       <div class={clsx('flex space-x-6', props.class)}>
         <IconButton
@@ -438,7 +463,7 @@ const EditorButtons = component$<EditorButtonsProps>(
           variant="secondary"
           label="Execute code"
           hideLabel
-          onClick$={executeCode}
+          onClick$={executeCode$}
         >
           <PlayIcon class="h-[16px]" />
         </IconButton>

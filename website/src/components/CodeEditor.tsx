@@ -6,9 +6,12 @@ import {
   type QRL,
   type Signal,
   sync$,
+  useComputed$,
   useSignal,
+  useTask$,
   useVisibleTask$,
 } from '@builder.io/qwik';
+import { isBrowser } from '@builder.io/qwik/build';
 import * as monaco from 'monaco-editor';
 import { wireTmGrammars } from 'monaco-editor-textmate';
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
@@ -43,6 +46,11 @@ export const CodeEditor = component$<CodeEditorProps>(
     const editor =
       useSignal<NoSerialize<monaco.editor.IStandaloneCodeEditor>>();
 
+    // Compute editor theme name
+    const editorTheme = useComputed$(() =>
+      theme.value === 'dark' ? 'pace-dark' : 'pace-light'
+    );
+
     /**
      * Returns device specific editor options.
      */
@@ -58,13 +66,6 @@ export const CodeEditor = component$<CodeEditorProps>(
             padding: { top: 40, bottom: 40 },
             lineNumbersMinChars: 4,
           }
-    );
-
-    /**
-     * Returns theme name based on current theme.
-     */
-    const getThemeName = $(() =>
-      theme.value === 'dark' ? 'pace-dark' : 'pace-light'
     );
 
     // Initialize and setup Monaco editor
@@ -95,7 +96,7 @@ export const CodeEditor = component$<CodeEditorProps>(
           model: model.value,
           minimap: { enabled: false },
           scrollBeyondLastLine: false,
-          theme: await getThemeName(),
+          theme: editorTheme.value,
         })
       );
 
@@ -107,12 +108,13 @@ export const CodeEditor = component$<CodeEditorProps>(
     });
 
     // Update theme on change
-    // eslint-disable-next-line qwik/no-use-visible-task
-    useVisibleTask$(async ({ track }) => {
-      track(theme);
-      editor.value?.updateOptions({
-        theme: await getThemeName(),
-      });
+    useTask$(async ({ track }) => {
+      track(editorTheme);
+      if (isBrowser) {
+        editor.value?.updateOptions({
+          theme: editorTheme.value,
+        });
+      }
     });
 
     /**

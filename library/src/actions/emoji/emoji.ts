@@ -2,7 +2,6 @@ import { EMOJI_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
-  Dataset,
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
@@ -92,11 +91,11 @@ export function emoji(
     expects: null,
     requirement: EMOJI_REGEX,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'emoji', dataset, config);
       }
-      return dataset as Dataset<string, EmojiIssue<string>>;
+      return dataset;
     },
   };
 }

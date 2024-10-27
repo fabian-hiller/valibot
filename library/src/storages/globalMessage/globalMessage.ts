@@ -1,9 +1,7 @@
 import type { BaseIssue, ErrorMessage } from '../../types/index.ts';
 
 // Create global message store
-let store:
-  | Map<string | undefined, ErrorMessage<BaseIssue<unknown>>>
-  | undefined;
+let store: Map<string | undefined, ErrorMessage<BaseIssue<unknown>>>;
 
 /**
  * Sets a global error message.

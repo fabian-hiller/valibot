@@ -1,5 +1,5 @@
 import type { Config } from './config.ts';
-import type { Dataset } from './dataset.ts';
+import type { OutputDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
 
 /**
@@ -35,7 +35,19 @@ export interface BaseValidation<
    */
   readonly async: false;
   /**
-   * Validates known input.
+   * The input, output and issue type.
+   *
+   * @internal
+   */
+  readonly '~types'?:
+    | {
+        readonly input: TInput;
+        readonly output: TOutput;
+        readonly issue: TIssue;
+      }
+    | undefined;
+  /**
+   * Validates known input values.
    *
    * @param dataset The input dataset.
    * @param config The configuration.
@@ -44,20 +56,10 @@ export interface BaseValidation<
    *
    * @internal
    */
-  readonly _run: (
-    dataset: Dataset<TInput, BaseIssue<unknown>>,
-    config: Config<TIssue>
-  ) => Dataset<TOutput, BaseIssue<unknown> | TIssue>;
-  /**
-   * Input, output and issue type.
-   *
-   * @internal
-   */
-  readonly _types?: {
-    readonly input: TInput;
-    readonly output: TOutput;
-    readonly issue: TIssue;
-  };
+  readonly '~validate': (
+    dataset: OutputDataset<TInput, BaseIssue<unknown>>,
+    config: Config<BaseIssue<unknown>>
+  ) => OutputDataset<TOutput, BaseIssue<unknown> | TIssue>;
 }
 
 /**
@@ -69,7 +71,7 @@ export interface BaseValidationAsync<
   TIssue extends BaseIssue<unknown>,
 > extends Omit<
     BaseValidation<TInput, TOutput, TIssue>,
-    'reference' | 'async' | '_run'
+    'reference' | 'async' | '~validate'
   > {
   /**
    * The validation reference.
@@ -86,7 +88,7 @@ export interface BaseValidationAsync<
    */
   readonly async: true;
   /**
-   * Validates known input.
+   * Validates known input values.
    *
    * @param dataset The input dataset.
    * @param config The configuration.
@@ -95,10 +97,10 @@ export interface BaseValidationAsync<
    *
    * @internal
    */
-  readonly _run: (
-    dataset: Dataset<TInput, BaseIssue<unknown>>,
-    config: Config<TIssue>
-  ) => Promise<Dataset<TOutput, BaseIssue<unknown> | TIssue>>;
+  readonly '~validate': (
+    dataset: OutputDataset<TInput, BaseIssue<unknown>>,
+    config: Config<BaseIssue<unknown>>
+  ) => Promise<OutputDataset<TOutput, BaseIssue<unknown> | TIssue>>;
 }
 
 /**

@@ -1,2 +1,2 @@
 export * from './toJsonSchema.ts';
-export { ConversionConfig } from './type.ts';
+export type { ConversionConfig } from './type.ts';

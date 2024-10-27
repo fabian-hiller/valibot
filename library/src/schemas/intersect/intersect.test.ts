@@ -2,10 +2,10 @@ import { describe, expect, test } from 'vitest';
 import { minLength, minValue, transform } from '../../actions/index.ts';
 import { pipe } from '../../methods/index.ts';
 import type {
+  FailureDataset,
   InferIssue,
   InferOutput,
-  TypedDataset,
-  UntypedDataset,
+  PartialDataset,
 } from '../../types/index.ts';
 import { expectNoSchemaIssue } from '../../vitest/index.ts';
 import { array } from '../array/array.ts';
@@ -29,7 +29,9 @@ describe('intersect', () => {
       expects: 'Object',
       options,
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -88,7 +90,7 @@ describe('intersect', () => {
     test('for empty options', () => {
       const schema = intersect([]);
       const input = 'foo';
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -101,13 +103,13 @@ describe('intersect', () => {
             received: `"${input}"`,
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with untyped output', () => {
       const schema = intersect([string(), number()]);
       const input = 'foo';
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -120,7 +122,7 @@ describe('intersect', () => {
             received: `"${input}"`,
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with typed output', () => {
@@ -130,7 +132,7 @@ describe('intersect', () => {
       ]);
       type Schema = typeof schema;
       const input = { key1: 'foo', key2: -123 };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -171,7 +173,7 @@ describe('intersect', () => {
             ],
           },
         ],
-      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+      } satisfies PartialDataset<InferOutput<Schema>, InferIssue<Schema>>);
     });
 
     test('with abort early', () => {
@@ -181,7 +183,7 @@ describe('intersect', () => {
       ]);
       const input = { key1: 'foo', key2: -123 };
       expect(
-        schema._run({ typed: false, value: input }, { abortEarly: true })
+        schema['~validate']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: input,
@@ -206,7 +208,7 @@ describe('intersect', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for merge error', () => {
@@ -220,7 +222,7 @@ describe('intersect', () => {
         }),
       ]);
       const input = { key: 'foo' };
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -233,7 +235,7 @@ describe('intersect', () => {
             received: 'unknown',
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
   });
 });

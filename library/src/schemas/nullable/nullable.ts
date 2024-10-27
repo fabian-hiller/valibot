@@ -1,11 +1,12 @@
 import { getDefault } from '../../methods/index.ts';
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
-  Dataset,
   Default,
   InferInput,
   InferIssue,
+  SuccessDataset,
 } from '../../types/index.ts';
 import type { InferNullableOutput } from './types.ts';
 
@@ -82,27 +83,27 @@ export function nullable(
     expects: `(${wrapped.expects} | null)`,
     async: false,
     wrapped,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // If value is `null`, override it with default or return dataset
       if (dataset.value === null) {
         // If default is specified, override value of dataset
         if ('default' in this) {
-          dataset.value = getDefault(
-            this,
-            dataset as Dataset<null, never>,
-            config
-          );
+          dataset.value = getDefault(this, dataset, config);
         }
 
         // If value is still `null`, return dataset
         if (dataset.value === null) {
+          // @ts-expect-error
           dataset.typed = true;
-          return dataset;
+          // @ts-expect-error
+          return dataset as SuccessDataset<unknown>;
         }
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped._run(dataset, config);
+      return this.wrapped['~validate'](dataset, config);
     },
   };
 

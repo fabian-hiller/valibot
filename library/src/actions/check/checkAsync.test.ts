@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import type { StringIssue } from '../../schemas/index.ts';
 import {
   expectActionIssueAsync,
   expectNoActionIssueAsync,
@@ -16,7 +17,7 @@ describe('checkAsync', () => {
       expects: null,
       requirement,
       async: true,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -55,11 +56,22 @@ describe('checkAsync', () => {
     const action = checkAsync<number>(async (input) => input > 0);
 
     test('for untyped inputs', async () => {
+      const issues: [StringIssue] = [
+        {
+          kind: 'schema',
+          type: 'string',
+          input: null,
+          expected: 'string',
+          received: 'null',
+          message: 'message',
+        },
+      ];
       expect(
-        await action._run({ typed: false, value: null }, {})
+        await action['~validate']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 

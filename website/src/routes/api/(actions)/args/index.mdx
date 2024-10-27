@@ -1,0 +1,77 @@
+---
+title: args
+description: Creates a function arguments transformation action.
+source: /actions/args/args.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# args
+
+Creates a function arguments transformation action.
+
+```ts
+const Action = v.args<TInput, TSchema>(schema);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+
+### Explanation
+
+With `args` you can force the arguments of a function to match the given `schema`.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `args` can be used.
+
+### Function schema
+
+Schema of a function that transforms a string to a number.
+
+```ts
+const FunctionSchema = v.pipe(
+  v.function(),
+  v.args(v.tuple([v.pipe(v.string(), v.decimal())])),
+  v.returns(v.number())
+);
+```
+
+## Related
+
+The following APIs can be combined with `args`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'custom',
+    'looseTuple',
+    'function',
+    'strictTuple',
+    'tuple',
+    'tupleWithRest',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

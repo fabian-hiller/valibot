@@ -22,14 +22,13 @@ export const properties: Record<string, PropertyProps> = {
                 key: 'dataset',
                 value: {
                   type: 'custom',
-                  name: 'TypedDataset',
-                  href: '../TypedDataset/',
+                  name: 'SuccessDataset',
+                  href: '../SuccessDataset/',
                   generics: [
                     {
                       type: 'custom',
                       name: 'TInput',
                     },
-                    'never',
                   ],
                 },
               },

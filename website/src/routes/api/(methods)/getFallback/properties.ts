@@ -49,7 +49,8 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         {
           type: 'custom',
-          name: 'Dataset',
+          name: 'OutputDataset',
+          href: '../OutputDataset/',
           generics: [
             {
               type: 'custom',

@@ -1,5 +1,5 @@
 name: Setup
-description: Sets up Node.js and pnpm
+description: Sets up Node.js, Deno and pnpm
 
 runs:
   using: composite
@@ -16,6 +16,11 @@ runs:
         node-version: 20
         registry-url: 'https://registry.npmjs.org'
         cache: pnpm
+
+    - name: Setup Deno
+      uses: denoland/setup-deno@v2
+      with:
+        deno-version: v2.x
 
     - name: Install dependencies
       shell: bash

@@ -20,7 +20,7 @@ describe('fallbackAsync', () => {
     > = {
       ...schema,
       async: true,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with value fallback', () => {
@@ -57,20 +57,16 @@ describe('fallbackAsync', () => {
 
   describe('should return default dataset', () => {
     test('for valid input', async () => {
-      expect(await schema._run({ typed: false, value: 789 }, {})).toStrictEqual(
-        {
-          typed: true,
-          value: '789',
-        }
-      );
+      expect(await schema['~validate']({ value: 789 }, {})).toStrictEqual({
+        typed: true,
+        value: '789',
+      });
     });
   });
 
   describe('should return dataset with fallback', () => {
     test('for invalid input', async () => {
-      expect(
-        await schema._run({ typed: false, value: 'foo' }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
         typed: true,
         value: '123',
       });

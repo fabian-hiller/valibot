@@ -10,24 +10,24 @@ contributors:
 
 # Use cases
 
-Next, I would like to point out some use cases for which I am particularly well suited. I welcome [ideas](https://github.com/fabian-hiller/valibot/issues/new) for other use cases that I may not have thought of yet.
+Next, we would like to point out some use cases for which Valibot is particularly well suited. We welcome [ideas](https://github.com/fabian-hiller/valibot/issues/new) for other use cases that we may not have thought of yet.
 
 ## Server requests
 
 Since most API endpoints can be reached via the Internet, basically anyone can send a request and transmit data. It is therefore important to apply zero trust security and to check request data thoroughly before processing it further.
 
-This works particularly well with a schema, compared to if/else conditions, as even complex structures can be easily mapped. In addition, I automatically type the parsed data according to the schema, which improves type safety and thus makes your code more secure.
+This works particularly well with a schema, compared to if/else conditions, as even complex structures can be easily mapped. In addition, the library automatically type the parsed data according to the schema, which improves type safety and thus makes your code more secure.
 
 ## Form validation
 
-A schema can also be used for form validation. Due to my small bundle size and the possibility to individualize the error messages, I am particularly well suited for this. Also, fullstack frameworks like Next.js, Remix, and Nuxt allow the same schema to be used for validation in the browser as well as on the server, which reduces your code to the minimum.
+A schema can also be used for form validation. Due to Valibot's small bundle size and the possibility to individualize the error messages, the library is particularly well suited for this. Also, fullstack frameworks like Next.js, Remix, and Nuxt allow the same schema to be used for validation in the browser as well as on the server, which reduces your code to the minimum.
 
 [Modular Forms](https://modularforms.dev/react/guides/validate-your-fields#schema-validation), for example, offers validation based on a schema at form and field level. In addition, the form can be made type-safe using the schema, which also enables autocompletion during development. In combination with the right framework, a fully type-safe and progressively enhanced form can be created with few lines of code and a great experience for developers and end-users.
 
 ## Browser state
 
-The browser state, which is stored using cookies, search parameters or the local storage, can be accidentally or intentionally manipulated by the user. To ensure the functionality of an application, it can help to validate this data before processing. My schemas can be used for this, which also improves type safety.
+The browser state, which is stored using cookies, search parameters or the local storage, can be accidentally or intentionally manipulated by the user. To ensure the functionality of an application, it can help to validate this data before processing. Valibot can be used for this, which also improves type safety.
 
 ## Config files
 
-Library authors can also make use of me, for example, to match configuration files with a schema and, in the event of an error, provide clear indications of the cause and how to fix the problem. The same applies to environment variables to quickly detect configuration errors.
+Library authors can also make use of Valibot, for example, to match configuration files with a schema and, in the event of an error, provide clear indications of the cause and how to fix the problem. The same applies to environment variables to quickly detect configuration errors.

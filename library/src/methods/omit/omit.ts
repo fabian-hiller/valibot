@@ -17,7 +17,6 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   Config,
-  Dataset,
   ErrorMessage,
   InferInput,
   InferIssue,
@@ -28,7 +27,9 @@ import type {
   ObjectEntries,
   ObjectEntriesAsync,
   ObjectKeys,
+  OutputDataset,
   SchemaWithoutPipe,
+  UnknownDataset,
 } from '../../types/index.ts';
 
 /**
@@ -75,11 +76,25 @@ export type SchemaWithOmit<
       infer TEntries,
       ErrorMessage<StrictObjectIssue> | undefined
     >
-  ? Omit<TSchema, 'entries' | '_run' | '_types'> & {
+  ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
       /**
        * The object entries.
        */
       readonly entries: Omit<TEntries, TKeys[number]>;
+      /**
+       * The input, output and issue type.
+       *
+       * @internal
+       */
+      readonly '~types'?:
+        | {
+            readonly input: InferObjectInput<Omit<TEntries, TKeys[number]>>;
+            readonly output: InferObjectOutput<Omit<TEntries, TKeys[number]>>;
+            readonly issue:
+              | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
+              | InferObjectIssue<Omit<TEntries, TKeys[number]>>;
+          }
+        | undefined;
       /**
        * Parses unknown input.
        *
@@ -90,29 +105,14 @@ export type SchemaWithOmit<
        *
        * @internal
        */
-      _run(
-        dataset: Dataset<unknown, never>,
-        config: Config<
-          | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-          | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-        >
-      ): Dataset<
+      readonly '~validate': (
+        dataset: UnknownDataset,
+        config?: Config<BaseIssue<unknown>>
+      ) => OutputDataset<
         InferObjectOutput<Omit<TEntries, TKeys[number]>>,
         | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
         | InferObjectIssue<Omit<TEntries, TKeys[number]>>
       >;
-      /**
-       * Input, output and issue type.
-       *
-       * @internal
-       */
-      readonly _types?: {
-        readonly input: InferObjectInput<Omit<TEntries, TKeys[number]>>;
-        readonly output: InferObjectOutput<Omit<TEntries, TKeys[number]>>;
-        readonly issue:
-          | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-          | InferObjectIssue<Omit<TEntries, TKeys[number]>>;
-      };
     }
   : TSchema extends
         | ObjectSchemaAsync<
@@ -123,11 +123,25 @@ export type SchemaWithOmit<
             infer TEntries,
             ErrorMessage<StrictObjectIssue> | undefined
           >
-    ? Omit<TSchema, 'entries' | '_run' | '_types'> & {
+    ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
         /**
          * The object entries.
          */
         readonly entries: Omit<TEntries, TKeys[number]>;
+        /**
+         * The input, output and issue type.
+         *
+         * @internal
+         */
+        readonly '~types'?:
+          | {
+              readonly input: InferObjectInput<Omit<TEntries, TKeys[number]>>;
+              readonly output: InferObjectOutput<Omit<TEntries, TKeys[number]>>;
+              readonly issue:
+                | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
+                | InferObjectIssue<Omit<TEntries, TKeys[number]>>;
+            }
+          | undefined;
         /**
          * Parses unknown input.
          *
@@ -138,41 +152,48 @@ export type SchemaWithOmit<
          *
          * @internal
          */
-        _run(
-          dataset: Dataset<unknown, never>,
-          config: Config<
-            | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-            | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-          >
-        ): Promise<
-          Dataset<
+        readonly '~validate': (
+          dataset: UnknownDataset,
+          config?: Config<BaseIssue<unknown>>
+        ) => Promise<
+          OutputDataset<
             InferObjectOutput<Omit<TEntries, TKeys[number]>>,
             | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
             | InferObjectIssue<Omit<TEntries, TKeys[number]>>
           >
         >;
-        /**
-         * Input, output and issue type.
-         *
-         * @internal
-         */
-        readonly _types?: {
-          readonly input: InferObjectInput<Omit<TEntries, TKeys[number]>>;
-          readonly output: InferObjectOutput<Omit<TEntries, TKeys[number]>>;
-          readonly issue:
-            | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-            | InferObjectIssue<Omit<TEntries, TKeys[number]>>;
-        };
       }
     : TSchema extends LooseObjectSchema<
           infer TEntries,
           ErrorMessage<LooseObjectIssue> | undefined
         >
-      ? Omit<TSchema, 'entries' | '_run' | '_types'> & {
+      ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
           /**
            * The object entries.
            */
           readonly entries: Omit<TEntries, TKeys[number]>;
+          /**
+           * The input, output and issue type.
+           *
+           * @internal
+           */
+          readonly '~types'?:
+            | {
+                readonly input: InferObjectInput<
+                  Omit<TEntries, TKeys[number]>
+                > & {
+                  [key: string]: unknown;
+                };
+                readonly output: InferObjectOutput<
+                  Omit<TEntries, TKeys[number]>
+                > & {
+                  [key: string]: unknown;
+                };
+                readonly issue:
+                  | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
+                  | InferObjectIssue<Omit<TEntries, TKeys[number]>>;
+              }
+            | undefined;
           /**
            * Parses unknown input.
            *
@@ -183,47 +204,48 @@ export type SchemaWithOmit<
            *
            * @internal
            */
-          _run(
-            dataset: Dataset<unknown, never>,
-            config: Config<
-              | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-              | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-            >
-          ): Dataset<
+          readonly '~validate': (
+            dataset: UnknownDataset,
+            config?: Config<BaseIssue<unknown>>
+          ) => OutputDataset<
             InferObjectOutput<Omit<TEntries, TKeys[number]>> & {
               [key: string]: unknown;
             },
             | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
             | InferObjectIssue<Omit<TEntries, TKeys[number]>>
           >;
-          /**
-           * Input, output and issue type.
-           *
-           * @internal
-           */
-          readonly _types?: {
-            readonly input: InferObjectInput<Omit<TEntries, TKeys[number]>> & {
-              [key: string]: unknown;
-            };
-            readonly output: InferObjectOutput<
-              Omit<TEntries, TKeys[number]>
-            > & {
-              [key: string]: unknown;
-            };
-            readonly issue:
-              | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-              | InferObjectIssue<Omit<TEntries, TKeys[number]>>;
-          };
         }
       : TSchema extends LooseObjectSchemaAsync<
             infer TEntries,
             ErrorMessage<LooseObjectIssue> | undefined
           >
-        ? Omit<TSchema, 'entries' | '_run' | '_types'> & {
+        ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
             /**
              * The object entries.
              */
             readonly entries: Omit<TEntries, TKeys[number]>;
+            /**
+             * The input, output and issue type.
+             *
+             * @internal
+             */
+            readonly '~types'?:
+              | {
+                  readonly input: InferObjectInput<
+                    Omit<TEntries, TKeys[number]>
+                  > & {
+                    [key: string]: unknown;
+                  };
+                  readonly output: InferObjectOutput<
+                    Omit<TEntries, TKeys[number]>
+                  > & {
+                    [key: string]: unknown;
+                  };
+                  readonly issue:
+                    | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
+                    | InferObjectIssue<Omit<TEntries, TKeys[number]>>;
+                }
+              | undefined;
             /**
              * Parses unknown input.
              *
@@ -234,14 +256,11 @@ export type SchemaWithOmit<
              *
              * @internal
              */
-            _run(
-              dataset: Dataset<unknown, never>,
-              config: Config<
-                | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-              >
-            ): Promise<
-              Dataset<
+            readonly '~validate': (
+              dataset: UnknownDataset,
+              config?: Config<BaseIssue<unknown>>
+            ) => Promise<
+              OutputDataset<
                 InferObjectOutput<Omit<TEntries, TKeys[number]>> & {
                   [key: string]: unknown;
                 },
@@ -249,37 +268,38 @@ export type SchemaWithOmit<
                 | InferObjectIssue<Omit<TEntries, TKeys[number]>>
               >
             >;
-            /**
-             * Input, output and issue type.
-             *
-             * @internal
-             */
-            readonly _types?: {
-              readonly input: InferObjectInput<
-                Omit<TEntries, TKeys[number]>
-              > & {
-                [key: string]: unknown;
-              };
-              readonly output: InferObjectOutput<
-                Omit<TEntries, TKeys[number]>
-              > & {
-                [key: string]: unknown;
-              };
-              readonly issue:
-                | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                | InferObjectIssue<Omit<TEntries, TKeys[number]>>;
-            };
           }
         : TSchema extends ObjectWithRestSchema<
               infer TEntries,
               BaseSchema<unknown, unknown, BaseIssue<unknown>>,
               ErrorMessage<ObjectWithRestIssue> | undefined
             >
-          ? Omit<TSchema, 'entries' | '_run' | '_types'> & {
+          ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
               /**
                * The object entries.
                */
               readonly entries: Omit<TEntries, TKeys[number]>;
+              /**
+               * The input, output and issue type.
+               *
+               * @internal
+               */
+              readonly '~types'?:
+                | {
+                    readonly input: InferObjectInput<
+                      Omit<TEntries, TKeys[number]>
+                    > & {
+                      [key: string]: InferInput<TSchema['rest']>;
+                    };
+                    readonly output: InferObjectOutput<
+                      Omit<TEntries, TKeys[number]>
+                    > & { [key: string]: InferOutput<TSchema['rest']> };
+                    readonly issue:
+                      | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
+                      | InferObjectIssue<Omit<TEntries, TKeys[number]>>
+                      | InferIssue<TSchema['rest']>;
+                  }
+                | undefined;
               /**
                * Parses unknown input.
                *
@@ -290,14 +310,10 @@ export type SchemaWithOmit<
                *
                * @internal
                */
-              _run(
-                dataset: Dataset<unknown, never>,
-                config: Config<
-                  | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                  | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-                  | InferIssue<TSchema['rest']>
-                >
-              ): Dataset<
+              readonly '~validate': (
+                dataset: UnknownDataset,
+                config?: Config<BaseIssue<unknown>>
+              ) => OutputDataset<
                 InferObjectOutput<Omit<TEntries, TKeys[number]>> & {
                   [key: string]: InferOutput<TSchema['rest']>;
                 },
@@ -305,36 +321,41 @@ export type SchemaWithOmit<
                 | InferObjectIssue<Omit<TEntries, TKeys[number]>>
                 | InferIssue<TSchema['rest']>
               >;
-              /**
-               * Input, output and issue type.
-               *
-               * @internal
-               */
-              readonly _types?: {
-                readonly input: InferObjectInput<
-                  Omit<TEntries, TKeys[number]>
-                > & {
-                  [key: string]: InferInput<TSchema['rest']>;
-                };
-                readonly output: InferObjectOutput<
-                  Omit<TEntries, TKeys[number]>
-                > & { [key: string]: InferOutput<TSchema['rest']> };
-                readonly issue:
-                  | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                  | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-                  | InferIssue<TSchema['rest']>;
-              };
             }
           : TSchema extends ObjectWithRestSchemaAsync<
                 infer TEntries,
                 BaseSchema<unknown, unknown, BaseIssue<unknown>>,
                 ErrorMessage<ObjectWithRestIssue> | undefined
               >
-            ? Omit<TSchema, 'entries' | '_run' | '_types'> & {
+            ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
                 /**
                  * The object entries.
                  */
                 readonly entries: Omit<TEntries, TKeys[number]>;
+                /**
+                 * The input, output and issue type.
+                 *
+                 * @internal
+                 */
+                readonly '~types'?:
+                  | {
+                      readonly input: InferObjectInput<
+                        Omit<TEntries, TKeys[number]>
+                      > & {
+                        [key: string]: InferInput<TSchema['rest']>;
+                      };
+                      readonly output: InferObjectOutput<
+                        Omit<TEntries, TKeys[number]>
+                      > & { [key: string]: InferOutput<TSchema['rest']> };
+                      readonly issue:
+                        | Extract<
+                            InferIssue<TSchema>,
+                            { type: TSchema['type'] }
+                          >
+                        | InferObjectIssue<Omit<TEntries, TKeys[number]>>
+                        | InferIssue<TSchema['rest']>;
+                    }
+                  | undefined;
                 /**
                  * Parses unknown input.
                  *
@@ -345,15 +366,11 @@ export type SchemaWithOmit<
                  *
                  * @internal
                  */
-                _run(
-                  dataset: Dataset<unknown, never>,
-                  config: Config<
-                    | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                    | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-                    | InferIssue<TSchema['rest']>
-                  >
-                ): Promise<
-                  Dataset<
+                readonly '~validate': (
+                  dataset: UnknownDataset,
+                  config?: Config<BaseIssue<unknown>>
+                ) => Promise<
+                  OutputDataset<
                     InferObjectOutput<Omit<TEntries, TKeys[number]>> & {
                       [key: string]: InferOutput<TSchema['rest']>;
                     },
@@ -362,25 +379,6 @@ export type SchemaWithOmit<
                     | InferIssue<TSchema['rest']>
                   >
                 >;
-                /**
-                 * Input, output and issue type.
-                 *
-                 * @internal
-                 */
-                readonly _types?: {
-                  readonly input: InferObjectInput<
-                    Omit<TEntries, TKeys[number]>
-                  > & {
-                    [key: string]: InferInput<TSchema['rest']>;
-                  };
-                  readonly output: InferObjectOutput<
-                    Omit<TEntries, TKeys[number]>
-                  > & { [key: string]: InferOutput<TSchema['rest']> };
-                  readonly issue:
-                    | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                    | InferObjectIssue<Omit<TEntries, TKeys[number]>>
-                    | InferIssue<TSchema['rest']>;
-                };
               }
             : never;
 

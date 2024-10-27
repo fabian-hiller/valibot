@@ -4,7 +4,10 @@ import type {
   ObjectIssue,
   StringIssue,
 } from '../../../../schemas/index.ts';
-import type { TypedDataset, UntypedDataset } from '../../../../types/index.ts';
+import type {
+  FailureDataset,
+  SuccessDataset,
+} from '../../../../types/index.ts';
 import { _isPartiallyTyped } from './_isPartiallyTyped.ts';
 
 describe('_isPartiallyTyped', () => {
@@ -31,7 +34,7 @@ describe('_isPartiallyTyped', () => {
 
   describe('should return false', () => {
     test('if issue has no path', () => {
-      const dataset: UntypedDataset<ObjectIssue> = {
+      const dataset: FailureDataset<ObjectIssue> = {
         typed: false,
         value: null,
         issues: [
@@ -55,7 +58,7 @@ describe('_isPartiallyTyped', () => {
         tuple: [123, { key: 'foo' }, 456],
         other: 'bar',
       };
-      const dataset: UntypedDataset<ObjectIssue> = {
+      const dataset: FailureDataset<ObjectIssue> = {
         typed: false,
         value: input,
         issues: [
@@ -87,7 +90,7 @@ describe('_isPartiallyTyped', () => {
         tuple: [123, { key: 'foo' }, 456],
         other: 'bar',
       };
-      const dataset: UntypedDataset<StringIssue> = {
+      const dataset: FailureDataset<StringIssue> = {
         typed: false,
         value: input,
         issues: [
@@ -128,7 +131,7 @@ describe('_isPartiallyTyped', () => {
         tuple: [123, { key: 'baz' }, 456],
         other: 'bar',
       };
-      const dataset: TypedDataset<Input, never> = {
+      const dataset: SuccessDataset<Input> = {
         typed: true,
         value: input,
       };
@@ -141,7 +144,7 @@ describe('_isPartiallyTyped', () => {
         tuple: [123, { key: 'baz' }, null],
         other: null,
       };
-      const dataset: UntypedDataset<NumberIssue | StringIssue> = {
+      const dataset: FailureDataset<NumberIssue | StringIssue> = {
         typed: false,
         value: input,
         issues: [

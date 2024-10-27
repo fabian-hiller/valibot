@@ -12,14 +12,17 @@ describe('findItem', () => {
       reference: findItem,
       async: false,
       operation,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     } satisfies FindItemAction<number[]>);
   });
 
   describe('should transform input', () => {
     test('to searched item', () => {
       expect(
-        action._run({ typed: true, value: [-12, 9, 345, 10, 0, 999] }, {})
+        action['~validate'](
+          { typed: true, value: [-12, 9, 345, 10, 0, 999] },
+          {}
+        )
       ).toStrictEqual({
         typed: true,
         value: 345,
@@ -28,7 +31,7 @@ describe('findItem', () => {
 
     test('to undefined', () => {
       expect(
-        action._run({ typed: true, value: [-12, 9, 0] }, {})
+        action['~validate']({ typed: true, value: [-12, 9, 0] }, {})
       ).toStrictEqual({
         typed: true,
         value: undefined,

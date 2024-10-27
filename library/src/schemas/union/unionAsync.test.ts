@@ -2,10 +2,10 @@ import { describe, expect, test } from 'vitest';
 import { email, minLength, url } from '../../actions/index.ts';
 import { pipe } from '../../methods/index.ts';
 import type {
+  FailureDataset,
   InferIssue,
   InferOutput,
-  TypedDataset,
-  UntypedDataset,
+  PartialDataset,
 } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
@@ -27,7 +27,9 @@ describe('unionAsync', () => {
       expects: '("foo" | "bar" | number)',
       options,
       async: true,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -78,9 +80,7 @@ describe('unionAsync', () => {
     test('with single typed issue', async () => {
       const schema = unionAsync([pipe(string(), minLength(5)), number()]);
       type Schema = typeof schema;
-      expect(
-        await schema._run({ typed: false, value: 'foo' }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
         issues: [
@@ -94,7 +94,7 @@ describe('unionAsync', () => {
             requirement: 5,
           },
         ],
-      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+      } satisfies PartialDataset<InferOutput<Schema>, InferIssue<Schema>>);
     });
 
     test('with multiple typed issues', async () => {
@@ -103,9 +103,7 @@ describe('unionAsync', () => {
         pipe(string(), url()),
       ]);
       type Schema = typeof schema;
-      expect(
-        await schema._run({ typed: false, value: 'foo' }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
         issues: [
@@ -140,7 +138,7 @@ describe('unionAsync', () => {
             ],
           },
         ],
-      } satisfies TypedDataset<InferOutput<Schema>, InferIssue<Schema>>);
+      } satisfies PartialDataset<InferOutput<Schema>, InferIssue<Schema>>);
     });
 
     test('with zero untyped issue', async () => {
@@ -158,9 +156,7 @@ describe('unionAsync', () => {
 
     test('with single untyped issue', async () => {
       const schema = unionAsync([literal('foo')]);
-      expect(
-        await schema._run({ typed: false, value: 'bar' }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: 'bar' }, {})).toStrictEqual({
         typed: false,
         value: 'bar',
         issues: [
@@ -173,14 +169,12 @@ describe('unionAsync', () => {
             received: '"bar"',
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with multiple typed issues', async () => {
       const schema = unionAsync([string(), number()]);
-      expect(
-        await schema._run({ typed: false, value: null }, {})
-      ).toStrictEqual({
+      expect(await schema['~validate']({ value: null }, {})).toStrictEqual({
         typed: false,
         value: null,
         issues: [
@@ -211,7 +205,7 @@ describe('unionAsync', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
   });
 });

@@ -100,7 +100,7 @@ export function everyItem(
     expects: null,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !dataset.value.every(this.requirement)) {
         _addIssue(this, 'item', dataset, config);
       }

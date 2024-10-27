@@ -1,13 +1,16 @@
+import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
+  FailureDataset,
   InferInput,
   InferIssue,
   InferOutput,
   MaybeReadonly,
-  TypedDataset,
-  UntypedDataset,
+  OutputDataset,
+  PartialDataset,
+  SuccessDataset,
 } from '../../types/index.ts';
 import { _addIssue, _joinExpects } from '../../utils/index.ts';
 import type { UnionIssue } from './types.ts';
@@ -95,18 +98,20 @@ export function union(
     async: false,
     options,
     message,
-    _run(dataset, config) {
+    '~standard': 1,
+    '~vendor': 'valibot',
+    '~validate'(dataset, config = getGlobalConfig()) {
       // Create variables to collect datasets
-      let validDataset: TypedDataset<unknown, BaseIssue<unknown>> | undefined;
+      let validDataset: SuccessDataset<unknown> | undefined;
       let typedDatasets:
-        | TypedDataset<unknown, BaseIssue<unknown>>[]
+        | PartialDataset<unknown, BaseIssue<unknown>>[]
         | undefined;
-      let untypedDatasets: UntypedDataset<BaseIssue<unknown>>[] | undefined;
+      let untypedDatasets: FailureDataset<BaseIssue<unknown>>[] | undefined;
 
       // Parse schema of each option and collect datasets
       for (const schema of this.options) {
-        const optionDataset = schema._run(
-          { typed: false, value: dataset.value },
+        const optionDataset = schema['~validate'](
+          { value: dataset.value },
           config
         );
 
@@ -157,6 +162,7 @@ export function union(
         });
 
         // And set typed to `true`
+        // @ts-expect-error
         dataset.typed = true;
 
         // Otherwise, if there is exactly one untyped dataset, return it
@@ -174,7 +180,8 @@ export function union(
       }
 
       // Return output dataset
-      return dataset;
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

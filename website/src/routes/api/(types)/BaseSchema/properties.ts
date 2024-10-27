@@ -65,52 +65,19 @@ export const properties: Record<string, PropertyProps> = {
       value: false,
     },
   },
-  _run: {
+  '~standard': {
     type: {
-      type: 'function',
-      params: [
-        {
-          name: 'dataset',
-          type: {
-            type: 'custom',
-            name: 'Dataset',
-            href: '../Dataset/',
-            generics: ['unknown', 'never'],
-          },
-        },
-        {
-          name: 'config',
-          type: {
-            type: 'custom',
-            name: 'Config',
-            href: '../Config/',
-            generics: [
-              {
-                type: 'custom',
-                name: 'TIssue',
-              },
-            ],
-          },
-        },
-      ],
-      return: {
-        type: 'custom',
-        name: 'Dataset',
-        href: '../Dataset/',
-        generics: [
-          {
-            type: 'custom',
-            name: 'TOutput',
-          },
-          {
-            type: 'custom',
-            name: 'TIssue',
-          },
-        ],
-      },
+      type: 'number',
+      value: 1,
     },
   },
-  _types: {
+  '~vendor': {
+    type: {
+      type: 'string',
+      value: 'valibot',
+    },
+  },
+  '~types': {
     type: {
       type: 'union',
       options: [
@@ -142,6 +109,53 @@ export const properties: Record<string, PropertyProps> = {
         },
         'undefined',
       ],
+    },
+  },
+  '~validate': {
+    type: {
+      type: 'function',
+      params: [
+        {
+          name: 'dataset',
+          type: {
+            type: 'custom',
+            name: 'UnknownDataset',
+            href: '../UnknownDataset/',
+          },
+        },
+        {
+          name: 'config',
+          optional: true,
+          type: {
+            type: 'custom',
+            name: 'Config',
+            href: '../Config/',
+            generics: [
+              {
+                type: 'custom',
+                name: 'BaseIssue',
+                href: '../BaseIssue/',
+                generics: ['unknown'],
+              },
+            ],
+          },
+        },
+      ],
+      return: {
+        type: 'custom',
+        name: 'OutputDataset',
+        href: '../OutputDataset/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'TOutput',
+          },
+          {
+            type: 'custom',
+            name: 'TIssue',
+          },
+        ],
+      },
     },
   },
 };

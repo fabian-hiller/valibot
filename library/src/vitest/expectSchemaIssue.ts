@@ -2,8 +2,8 @@ import { expect } from 'vitest';
 import type {
   BaseIssue,
   BaseSchema,
+  FailureDataset,
   InferIssue,
-  UntypedDataset,
 } from '../types/index.ts';
 import { _stringify } from '../utils/index.ts';
 
@@ -24,7 +24,7 @@ export function expectSchemaIssue<
   received?: string
 ): void {
   for (const value of values) {
-    expect(schema._run({ typed: false, value }, {})).toStrictEqual({
+    expect(schema['~validate']({ value }, {})).toStrictEqual({
       typed: false,
       value,
       issues: [
@@ -41,6 +41,6 @@ export function expectSchemaIssue<
           received: received ?? _stringify(value),
         },
       ],
-    } satisfies UntypedDataset<InferIssue<TSchema>>);
+    } satisfies FailureDataset<InferIssue<TSchema>>);
   }
 }

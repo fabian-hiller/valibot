@@ -39,7 +39,7 @@ export function toMaxValue<
     reference: toMaxValue,
     async: false,
     requirement,
-    _run(dataset) {
+    '~validate'(dataset) {
       dataset.value =
         dataset.value > this.requirement ? this.requirement : dataset.value;
       return dataset;

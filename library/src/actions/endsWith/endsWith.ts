@@ -113,7 +113,7 @@ export function endsWith(
     expects: `"${requirement}"`,
     requirement,
     message,
-    _run(dataset, config) {
+    '~validate'(dataset, config) {
       if (dataset.typed && !dataset.value.endsWith(this.requirement)) {
         _addIssue(this, 'end', dataset, config, {
           received: `"${dataset.value.slice(-this.requirement.length)}"`,

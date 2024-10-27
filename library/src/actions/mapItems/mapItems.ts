@@ -49,7 +49,7 @@ export function mapItems(
     reference: mapItems,
     async: false,
     operation,
-    _run(dataset) {
+    '~validate'(dataset) {
       dataset.value = dataset.value.map(this.operation);
       return dataset;
     },

@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { HEXADECIMAL_REGEX } from '../../regex.ts';
+import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import {
   hexadecimal,
@@ -16,7 +17,7 @@ describe('hexadecimal', () => {
       expects: null,
       requirement: HEXADECIMAL_REGEX,
       async: false,
-      _run: expect.any(Function),
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -48,9 +49,22 @@ describe('hexadecimal', () => {
     const action = hexadecimal();
 
     test('for untyped inputs', () => {
-      expect(action._run({ typed: false, value: null }, {})).toStrictEqual({
+      const issues: [StringIssue] = [
+        {
+          kind: 'schema',
+          type: 'string',
+          input: null,
+          expected: 'string',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        action['~validate']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
         typed: false,
         value: null,
+        issues,
       });
     });
 

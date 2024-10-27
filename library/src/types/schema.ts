@@ -1,5 +1,5 @@
 import type { Config } from './config.ts';
-import type { Dataset } from './dataset.ts';
+import type { OutputDataset, UnknownDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
 
 /**
@@ -34,7 +34,31 @@ export interface BaseSchema<
    */
   readonly async: false;
   /**
-   * Parses unknown input.
+   * The Standard Schema version number.
+   *
+   * @internal
+   */
+  readonly '~standard': 1;
+  /**
+   * The vendor name of the schema.
+   *
+   * @internal
+   */
+  readonly '~vendor': 'valibot';
+  /**
+   * The input, output and issue type.
+   *
+   * @internal
+   */
+  readonly '~types'?:
+    | {
+        readonly input: TInput;
+        readonly output: TOutput;
+        readonly issue: TIssue;
+      }
+    | undefined;
+  /**
+   * Parses unknown input values.
    *
    * @param dataset The input dataset.
    * @param config The configuration.
@@ -43,20 +67,10 @@ export interface BaseSchema<
    *
    * @internal
    */
-  readonly _run: (
-    dataset: Dataset<unknown, never>,
-    config: Config<TIssue>
-  ) => Dataset<TOutput, TIssue>;
-  /**
-   * Input, output and issue type.
-   *
-   * @internal
-   */
-  readonly _types?: {
-    readonly input: TInput;
-    readonly output: TOutput;
-    readonly issue: TIssue;
-  };
+  readonly '~validate': (
+    dataset: UnknownDataset,
+    config?: Config<BaseIssue<unknown>>
+  ) => OutputDataset<TOutput, TIssue>;
 }
 
 /**
@@ -68,7 +82,7 @@ export interface BaseSchemaAsync<
   TIssue extends BaseIssue<unknown>,
 > extends Omit<
     BaseSchema<TInput, TOutput, TIssue>,
-    'reference' | 'async' | '_run'
+    'reference' | 'async' | '~validate'
   > {
   /**
    * The schema reference.
@@ -84,7 +98,7 @@ export interface BaseSchemaAsync<
    */
   readonly async: true;
   /**
-   * Parses unknown input.
+   * Parses unknown input values.
    *
    * @param dataset The input dataset.
    * @param config The configuration.
@@ -93,10 +107,10 @@ export interface BaseSchemaAsync<
    *
    * @internal
    */
-  readonly _run: (
-    dataset: Dataset<unknown, never>,
-    config: Config<TIssue>
-  ) => Promise<Dataset<TOutput, TIssue>>;
+  readonly '~validate': (
+    dataset: UnknownDataset,
+    config?: Config<BaseIssue<unknown>>
+  ) => Promise<OutputDataset<TOutput, TIssue>>;
 }
 
 /**

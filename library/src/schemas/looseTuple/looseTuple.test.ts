@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { InferIssue, UntypedDataset } from '../../types/index.ts';
+import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { boolean } from '../boolean/index.ts';
 import { number } from '../number/index.ts';
@@ -19,7 +19,9 @@ describe('looseTuple', () => {
       expects: 'Array',
       items,
       async: false,
-      _run: expect.any(Function),
+      '~standard': 1,
+      '~vendor': 'valibot',
+      '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -172,7 +174,7 @@ describe('looseTuple', () => {
 
     test('for wrong items', () => {
       const input = [123, 456, 'true'];
-      expect(schema._run({ typed: false, value: input }, {})).toStrictEqual({
+      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -195,20 +197,17 @@ describe('looseTuple', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('with abort early', () => {
       expect(
-        schema._run(
-          { typed: false, value: [123, 456, 'true'] },
-          { abortEarly: true }
-        )
+        schema['~validate']({ value: [123, 456, 'true'] }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: [],
         issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies UntypedDataset<InferIssue<typeof schema>>);
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     test('for wrong nested items', () => {
@@ -217,9 +216,7 @@ describe('looseTuple', () => {
         ['foo', '123', false],
         null,
       ];
-      expect(
-        nestedSchema._run({ typed: false, value: input }, {})
-      ).toStrictEqual({
+      expect(nestedSchema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -265,7 +262,7 @@ describe('looseTuple', () => {
             ],
           },
         ],
-      } satisfies UntypedDataset<InferIssue<typeof nestedSchema>>);
+      } satisfies FailureDataset<InferIssue<typeof nestedSchema>>);
     });
   });
 });

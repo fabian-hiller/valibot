@@ -14,7 +14,6 @@ import type {
   BaseIssue,
   BaseSchema,
   Config,
-  Dataset,
   ErrorMessage,
   InferInput,
   InferIssue,
@@ -23,7 +22,9 @@ import type {
   InferOutput,
   ObjectEntries,
   ObjectKeys,
+  OutputDataset,
   SchemaWithoutPipe,
+  UnknownDataset,
 } from '../../types/index.ts';
 
 /**
@@ -69,10 +70,22 @@ export type SchemaWithPartial<
       infer TEntries,
       ErrorMessage<StrictObjectIssue> | undefined
     >
-  ? Omit<TSchema, 'entries' | '_run' | '_types'> & {
+  ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
       /**
        * The object entries.
        */
+      /**
+       * The input, output and issue type.
+       *
+       * @internal
+       */
+      readonly '~types'?:
+        | {
+            readonly input: InferObjectInput<PartialEntries<TEntries, TKeys>>;
+            readonly output: InferObjectOutput<PartialEntries<TEntries, TKeys>>;
+            readonly issue: InferIssue<TSchema>;
+          }
+        | undefined;
       readonly entries: PartialEntries<TEntries, TKeys>;
       /**
        * Parses unknown input.
@@ -84,33 +97,43 @@ export type SchemaWithPartial<
        *
        * @internal
        */
-      _run(
-        dataset: Dataset<unknown, never>,
-        config: Config<InferIssue<TSchema>>
-      ): Dataset<
+      readonly '~validate': (
+        dataset: UnknownDataset,
+        config?: Config<BaseIssue<unknown>>
+      ) => OutputDataset<
         InferObjectOutput<PartialEntries<TEntries, TKeys>>,
         InferIssue<TSchema>
       >;
-      /**
-       * Input, output and issue type.
-       *
-       * @internal
-       */
-      readonly _types?: {
-        readonly input: InferObjectInput<PartialEntries<TEntries, TKeys>>;
-        readonly output: InferObjectOutput<PartialEntries<TEntries, TKeys>>;
-        readonly issue: InferIssue<TSchema>;
-      };
     }
   : TSchema extends LooseObjectSchema<
         infer TEntries,
         ErrorMessage<LooseObjectIssue> | undefined
       >
-    ? Omit<TSchema, 'entries' | '_run' | '_types'> & {
+    ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
         /**
          * The object entries.
          */
         readonly entries: PartialEntries<TEntries, TKeys>;
+        /**
+         * The input, output and issue type.
+         *
+         * @internal
+         */
+        readonly '~types'?:
+          | {
+              readonly input: InferObjectInput<
+                PartialEntries<TEntries, TKeys>
+              > & {
+                [key: string]: unknown;
+              };
+              readonly output: InferObjectOutput<
+                PartialEntries<TEntries, TKeys>
+              > & {
+                [key: string]: unknown;
+              };
+              readonly issue: InferIssue<TSchema>;
+            }
+          | undefined;
         /**
          * Parses unknown input.
          *
@@ -121,42 +144,44 @@ export type SchemaWithPartial<
          *
          * @internal
          */
-        _run(
-          dataset: Dataset<unknown, never>,
-          config: Config<InferIssue<TSchema>>
-        ): Dataset<
+        readonly '~validate': (
+          dataset: UnknownDataset,
+          config?: Config<BaseIssue<unknown>>
+        ) => OutputDataset<
           InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
             [key: string]: unknown;
           },
           InferIssue<TSchema>
         >;
-        /**
-         * Input, output and issue type.
-         *
-         * @internal
-         */
-        readonly _types?: {
-          readonly input: InferObjectInput<PartialEntries<TEntries, TKeys>> & {
-            [key: string]: unknown;
-          };
-          readonly output: InferObjectOutput<
-            PartialEntries<TEntries, TKeys>
-          > & {
-            [key: string]: unknown;
-          };
-          readonly issue: InferIssue<TSchema>;
-        };
       }
     : TSchema extends ObjectWithRestSchema<
           infer TEntries,
           infer TRest,
           ErrorMessage<ObjectWithRestIssue> | undefined
         >
-      ? Omit<TSchema, 'entries' | '_run' | '_types'> & {
+      ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
           /**
            * The object entries.
            */
           readonly entries: PartialEntries<TEntries, TKeys>;
+          /**
+           * The input, output and issue type.
+           *
+           * @internal
+           */
+          readonly '~types'?:
+            | {
+                readonly input: InferObjectInput<
+                  PartialEntries<TEntries, TKeys>
+                > & {
+                  [key: string]: InferInput<TRest>;
+                };
+                readonly output: InferObjectOutput<
+                  PartialEntries<TEntries, TKeys>
+                > & { [key: string]: InferOutput<TRest> };
+                readonly issue: InferIssue<TSchema>;
+              }
+            | undefined;
           /**
            * Parses unknown input.
            *
@@ -167,31 +192,15 @@ export type SchemaWithPartial<
            *
            * @internal
            */
-          _run(
-            dataset: Dataset<unknown, never>,
-            config: Config<InferIssue<TSchema>>
-          ): Dataset<
+          readonly '~validate': (
+            dataset: UnknownDataset,
+            config?: Config<BaseIssue<unknown>>
+          ) => OutputDataset<
             InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
               [key: string]: InferOutput<TRest>;
             },
             InferIssue<TSchema>
           >;
-          /**
-           * Input, output and issue type.
-           *
-           * @internal
-           */
-          readonly _types?: {
-            readonly input: InferObjectInput<
-              PartialEntries<TEntries, TKeys>
-            > & {
-              [key: string]: InferInput<TRest>;
-            };
-            readonly output: InferObjectOutput<
-              PartialEntries<TEntries, TKeys>
-            > & { [key: string]: InferOutput<TRest> };
-            readonly issue: InferIssue<TSchema>;
-          };
         }
       : never;
 

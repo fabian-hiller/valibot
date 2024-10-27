@@ -1,0 +1,71 @@
+---
+title: notGraphemes
+description: Creates a not graphemes validation action.
+source: /actions/notGraphemes/notGraphemes.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# notGraphemes
+
+Creates a not [graphemes](https://en.wikipedia.org/wiki/Grapheme) validation action.
+
+```ts
+const Action = v.notGraphemes<TInput, TRequirement, TMessage>(
+  requirement,
+  message
+);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `notGraphemes` you can validate the graphemes of a string. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `notGraphemes` can be used.
+
+### Not graphemes schema
+
+Schema to validate a string with more or less than 8 graphemes.
+
+```ts
+const NotGraphemesSchema = v.pipe(
+  v.string(),
+  v.notGraphemes(8, 'The string must not have 8 graphemes.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `notGraphemes`.
+
+### Schemas
+
+<ApiList items={['any', 'custom', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

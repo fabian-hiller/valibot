@@ -26,7 +26,7 @@ export function readonly<TInput>(): ReadonlyAction<TInput> {
     type: 'readonly',
     reference: readonly,
     async: false,
-    _run(dataset) {
+    '~validate'(dataset) {
       return dataset;
     },
   };
