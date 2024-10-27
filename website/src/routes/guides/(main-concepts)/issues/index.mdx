@@ -16,7 +16,7 @@ When validating unknown data against a schema, Valibot collects information abou
 
 ## Issue info
 
-A single issue conforms to the schema below.
+A single issue conforms to the TypeScript type definition below.
 
 ```ts
 type BaseIssue = {
@@ -45,7 +45,7 @@ Each issue contains the following required information.
 
 #### Kind
 
-`kind` describes the kind of the problem. If an input does not match the data type—for example a number was passed instead of a string—`kind` has the value `'schema'`. In all other cases, the reason is not the data type but the actual content of the data. For example, if a string is invalid because it does not match a regex, `kind` has the value `'validation'`.
+`kind` describes the kind of the problem. If an input does not match the data type, for example a number was passed instead of a string, `kind` has the value `'schema'`. In all other cases, the reason is not the data type but the actual content of the data. For example, if a string is invalid because it does not match a regex, `kind` has the value `'validation'`.
 
 #### Type
 
@@ -65,7 +65,7 @@ Each issue contains the following required information.
 
 #### Message
 
-`message` contains a human-understandable error message that can be fully customized as described in our <Link href="/guides/schemas/#error-messages">schemas</Link> and <Link href="/guides/internationalization/">internationalization</Link> guide.
+`message` contains a human-understandable error message that can be fully customized as described in our <Link href="/guides/quick-start/#error-messages">quick start</Link> and <Link href="/guides/internationalization/">internationalization</Link> guide.
 
 ### Optional info
 
@@ -92,7 +92,9 @@ type PathItem = {
 For example, you can use the following code to create a dot path.
 
 ```ts
-const dotPath = issue.path.map((item) => item.key).join('.');
+import * as v from 'valibot';
+
+const dotPath = v.getDotPath(issue);
 ```
 
 #### Issues
@@ -101,7 +103,7 @@ const dotPath = issue.path.map((item) => item.key).join('.');
 
 #### Config
 
-`lang` can be used as part of our <Link href="/guides/internationalization/">i18n feature</Link> to define the required language. `abortEarly` and `abortPipeEarly` gives you an info that the validation was aborted prematurely. You can find more info about this in the <Link href="/guides/parse-data/#abort-early">parse data</Link> guide. `skipPipe` indicates that the pipeline validation was skipped. These are all configurations that you can control yourself.
+`lang` can be used as part of our <Link href="/guides/internationalization/">i18n feature</Link> to define the required language. `abortEarly` and `abortPipeEarly` gives you an info that the validation was aborted prematurely. You can find more info about this in the <Link href="/guides/parse-data/#configuration">parse data</Link> guide. These are all configurations that you can control yourself.
 
 ## Formatting
 

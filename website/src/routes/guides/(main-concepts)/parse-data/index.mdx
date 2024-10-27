@@ -19,7 +19,7 @@ Now that you've learned how to create a schema, let's look at how you can use it
 
 ## Default way
 
-The <Link href="/api/parse/">`parse`</Link> method will throw a <Link href="/api/ValiError/">`ValiError`</Link> if the input does not match the schema. Therefore, you should use a `try`/`catch` block to catch errors. If the input matches the schema, it is valid and the output of the schema will be returned as the correct TypeScript type.
+The <Link href="/api/parse/">`parse`</Link> method will throw a <Link href="/api/ValiError/">`ValiError`</Link> if the input does not match the schema. Therefore, you should use a try/catch block to catch errors. If the input matches the schema, it is valid and the output of the schema will be returned with the correct TypeScript type.
 
 ```ts
 import * as v from 'valibot';
@@ -100,7 +100,7 @@ try {
 
 ### Abort pipeline
 
-If you only set `abortPipeEarly` to `true`, validation can only abort within a pipeline after finding the first issue. For example, if you want to show only the first error of a field when validating a form, you can use this option to improve validation performance.
+If you only set `abortPipeEarly` to `true`, the validation within a pipeline will only abort after finding the first issue. For example, if you only want to show the first error of a field when validating a form, you can use this option to improve performance.
 
 ```ts
 import * as v from 'valibot';
