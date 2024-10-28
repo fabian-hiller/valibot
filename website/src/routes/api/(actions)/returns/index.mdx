@@ -1,0 +1,115 @@
+---
+title: returns
+description: Creates a function return transformation action.
+source: /actions/returns/returns.ts
+contributors:
+  - fabian-hiller
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# returns
+
+Creates a function return transformation action.
+
+```ts
+const Action = v.returns<TInput, TSchema>(schema);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+
+### Explanation
+
+With `returns` you can force the returned value of a function to match the given `schema`.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `returns` can be used.
+
+### Function schema
+
+Schema of a function that transforms a string to a number.
+
+```ts
+const FunctionSchema = v.pipe(
+  v.function(),
+  v.args(v.tuple([v.pipe(v.string(), v.decimal())])),
+  v.returns(v.number())
+);
+```
+
+## Related
+
+The following APIs can be combined with `returns`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'undefinedable',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

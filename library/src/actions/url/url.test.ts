@@ -102,7 +102,7 @@ describe('url', () => {
       expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
-    test('for URL without scheme', () => {
+    test('for URL without schema', () => {
       expectActionIssue(action, baseIssue, [
         'example.com',
         'www.example.com/path',

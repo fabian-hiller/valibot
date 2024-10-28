@@ -53,7 +53,7 @@ const ObjectSchema = v.objectWithRest(
 
 To validate the value of an entry based on another entry, you can wrap you schema with the <Link href="/api/check/">`check`</Link> validation action in a pipeline. You can also use <Link href="/api/forward/">`forward`</Link> to assign the issue to a specific object key in the event of an error.
 
-> If you only want to validate specific entries, I recommend using <Link href="/api/partialCheck/">`partialCheck`</Link> instead as <Link href="/api/check/">`check`</Link> can only be executed if the input is fully typed.
+> If you only want to validate specific entries, we recommend using <Link href="/api/partialCheck/">`partialCheck`</Link> instead as <Link href="/api/check/">`check`</Link> can only be executed if the input is fully typed.
 
 ```ts
 import * as v from 'valibot';

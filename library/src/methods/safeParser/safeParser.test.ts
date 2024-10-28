@@ -58,7 +58,7 @@ describe('safeParser', () => {
   test('should return typed output with issues', () => {
     expect(
       safeParser(object({ key: pipe(string(), minLength(5)) }))({ key: 'foo' })
-    ).toEqual({
+    ).toStrictEqual({
       typed: true,
       success: false,
       output: { key: 'foo' },
@@ -90,7 +90,7 @@ describe('safeParser', () => {
   });
 
   test('should return untyped output with issues', () => {
-    expect(safeParser(object({ key: string() }))({ key: 123 })).toEqual({
+    expect(safeParser(object({ key: string() }))({ key: 123 })).toStrictEqual({
       typed: false,
       success: false,
       output: { key: 123 },
