@@ -30,20 +30,27 @@ describe('requiredAsync', () => {
     abortPipeEarly: undefined,
   } as const;
 
-  describe('object', () => {
+  describe('objectAsync', () => {
     const wrapped = objectAsync(entries);
     const schema1 = requiredAsync(wrapped);
     const schema2 = requiredAsync(wrapped, ['key1', 'key3']);
 
-    describe('should return schema objectAsync', () => {
-      // TODO: Add test for every overload signature
+    describe('should return schema object', () => {
+      const baseObjectAsync = {
+        kind: 'schema',
+        type: 'object',
+        reference: objectAsync,
+        expects: 'Object',
+        message: undefined,
+        async: true,
+        '~standard': 1,
+        '~vendor': 'valibot',
+        '~validate': expect.any(Function),
+      } as const;
 
-      test('with undefined keys', () => {
-        expect(schema1).toStrictEqual({
-          kind: 'schema',
-          type: 'object',
-          reference: objectAsync,
-          expects: 'Object',
+      test('with undefined keys and undefined message', () => {
+        const expected: typeof schema1 = {
+          ...baseObjectAsync,
           entries: {
             key1: {
               ...nonOptionalAsync(entries.key1),
@@ -62,20 +69,66 @@ describe('requiredAsync', () => {
               '~validate': expect.any(Function),
             },
           },
-          message: undefined,
-          async: true,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
-        } satisfies typeof schema1);
+        };
+        expect(schema1).toStrictEqual(expected);
+        expect(schema1, undefined).toStrictEqual(expected);
       });
 
-      test('with specific keys', () => {
-        expect(schema2).toStrictEqual({
-          kind: 'schema',
-          type: 'object',
-          reference: objectAsync,
-          expects: 'Object',
+      test('with undefined keys and string message', () => {
+        const message = 'message';
+        const schema = requiredAsync(wrapped, message);
+        expect(schema).toStrictEqual({
+          ...baseObjectAsync,
+          entries: {
+            key1: {
+              ...nonOptionalAsync(entries.key1, message),
+              '~validate': expect.any(Function),
+            },
+            key2: {
+              ...nonOptionalAsync(entries.key2, message),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...nonOptionalAsync(entries.key3, message),
+              '~validate': expect.any(Function),
+            },
+            key4: {
+              ...nonOptionalAsync(entries.key4, message),
+              '~validate': expect.any(Function),
+            },
+          },
+        } satisfies typeof schema);
+      });
+
+      test('with undefined keys and function message', () => {
+        const message = () => 'message';
+        const schema = requiredAsync(wrapped, message);
+        expect(schema).toStrictEqual({
+          ...baseObjectAsync,
+          entries: {
+            key1: {
+              ...nonOptionalAsync(entries.key1, message),
+              '~validate': expect.any(Function),
+            },
+            key2: {
+              ...nonOptionalAsync(entries.key2, message),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...nonOptionalAsync(entries.key3, message),
+              '~validate': expect.any(Function),
+            },
+            key4: {
+              ...nonOptionalAsync(entries.key4, message),
+              '~validate': expect.any(Function),
+            },
+          },
+        } satisfies typeof schema);
+      });
+
+      test('with specific keys and undefined message', () => {
+        const expected: typeof schema2 = {
+          ...baseObjectAsync,
           entries: {
             key1: {
               ...nonOptionalAsync(entries.key1),
@@ -88,17 +141,34 @@ describe('requiredAsync', () => {
             },
             key4: entries.key4,
           },
-          message: undefined,
-          async: true,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
-        } satisfies typeof schema2);
+        };
+        expect(schema2).toStrictEqual(expected);
+        expect(schema2, undefined).toStrictEqual(expected);
+      });
+
+      test('with specific keys and string message', () => {
+        const message = 'message';
+        const schema = requiredAsync(wrapped, ['key1', 'key3'], message);
+        expect(schema).toStrictEqual({
+          ...baseObjectAsync,
+          entries: {
+            key1: {
+              ...nonOptionalAsync(entries.key1, message),
+              '~validate': expect.any(Function),
+            },
+            key2: entries.key2,
+            key3: {
+              ...nonOptionalAsync(entries.key3, message),
+              '~validate': expect.any(Function),
+            },
+            key4: entries.key4,
+          },
+        } satisfies typeof schema);
       });
     });
 
     describe('should return dataset without nested issues', () => {
-      test('if requiredAsync keys are present', async () => {
+      test('if required keys are present', async () => {
         const input1 = { key1: 'foo', key2: 123, key3: 'bar', key4: 123 };
         await expectNoSchemaIssueAsync(schema1, [input1]);
         await expectNoSchemaIssueAsync(schema2, [input1]);
@@ -113,7 +183,7 @@ describe('requiredAsync', () => {
     });
 
     describe('should return dataset with nested issues', () => {
-      test('if requireded keys are missing', async () => {
+      test('if required keys are missing', async () => {
         expect(await schema1['~validate']({ value: {} }, {})).toStrictEqual({
           typed: false,
           value: {},
@@ -234,21 +304,29 @@ describe('requiredAsync', () => {
     });
   });
 
-  describe('objectWithRest', () => {
+  describe('objectWithRestAsync', () => {
     const rest = boolean();
     const wrapped = objectWithRestAsync(entries, rest);
     const schema1 = requiredAsync(wrapped);
     const schema2 = requiredAsync(wrapped, ['key2', 'key3']);
 
-    describe('should return schema objectAsync', () => {
-      // TODO: Add test for every overload signature
+    describe('should return schema object', () => {
+      const baseObjectWithRestAsync = {
+        kind: 'schema',
+        type: 'object_with_rest',
+        reference: objectWithRestAsync,
+        expects: 'Object',
+        rest,
+        message: undefined,
+        async: true,
+        '~standard': 1,
+        '~vendor': 'valibot',
+        '~validate': expect.any(Function),
+      } as const;
 
-      test('with undefined keys', () => {
-        expect(schema1).toStrictEqual({
-          kind: 'schema',
-          type: 'object_with_rest',
-          reference: objectWithRestAsync,
-          expects: 'Object',
+      test('with undefined keys and undefined message', () => {
+        const expected: typeof schema1 = {
+          ...baseObjectWithRestAsync,
           entries: {
             key1: {
               ...nonOptionalAsync(entries.key1),
@@ -267,21 +345,72 @@ describe('requiredAsync', () => {
               '~validate': expect.any(Function),
             },
           },
+        };
+        expect(schema1).toStrictEqual(expected);
+        expect(schema1, undefined).toStrictEqual(expected);
+      });
+
+      test('with undefined keys and string message', () => {
+        const message = 'message';
+        const schema = requiredAsync(wrapped, message);
+        expect(schema).toStrictEqual({
+          ...baseObjectWithRestAsync,
+          entries: {
+            key1: {
+              ...nonOptionalAsync(entries.key1, message),
+              '~validate': expect.any(Function),
+            },
+            key2: {
+              ...nonOptionalAsync(entries.key2, message),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...nonOptionalAsync(entries.key3, message),
+              '~validate': expect.any(Function),
+            },
+            key4: {
+              ...nonOptionalAsync(entries.key4, message),
+              '~validate': expect.any(Function),
+            },
+          },
           rest,
           message: undefined,
           async: true,
           '~standard': 1,
           '~vendor': 'valibot',
           '~validate': expect.any(Function),
-        } satisfies typeof schema1);
+        } satisfies typeof schema);
       });
 
-      test('with specific keys', () => {
-        expect(schema2).toStrictEqual({
-          kind: 'schema',
-          type: 'object_with_rest',
-          reference: objectWithRestAsync,
-          expects: 'Object',
+      test('with undefined keys and function message', () => {
+        const message = () => 'message';
+        const schema = requiredAsync(wrapped, message);
+        expect(schema).toStrictEqual({
+          ...baseObjectWithRestAsync,
+          entries: {
+            key1: {
+              ...nonOptionalAsync(entries.key1, message),
+              '~validate': expect.any(Function),
+            },
+            key2: {
+              ...nonOptionalAsync(entries.key2, message),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...nonOptionalAsync(entries.key3, message),
+              '~validate': expect.any(Function),
+            },
+            key4: {
+              ...nonOptionalAsync(entries.key4, message),
+              '~validate': expect.any(Function),
+            },
+          },
+        } satisfies typeof schema);
+      });
+
+      test('with specific keys und undefined message', () => {
+        const expected: typeof schema2 = {
+          ...baseObjectWithRestAsync,
           entries: {
             key1: entries.key1,
             key2: {
@@ -294,18 +423,54 @@ describe('requiredAsync', () => {
             },
             key4: entries.key4,
           },
-          rest,
-          message: undefined,
-          async: true,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
-        } satisfies typeof schema2);
+        };
+        expect(schema2).toStrictEqual(expected);
+        expect(schema2, undefined).toStrictEqual(expected);
+      });
+
+      test('with specific keys and string message', () => {
+        const message = 'message';
+        const schema = requiredAsync(wrapped, ['key2', 'key3'], message);
+        expect(schema).toStrictEqual({
+          ...baseObjectWithRestAsync,
+          entries: {
+            key1: entries.key1,
+            key2: {
+              ...nonOptionalAsync(entries.key2, message),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...nonOptionalAsync(entries.key3, message),
+              '~validate': expect.any(Function),
+            },
+            key4: entries.key4,
+          },
+        } satisfies typeof schema);
+      });
+
+      test('with specific keys and function message', () => {
+        const message = () => 'message';
+        const schema = requiredAsync(wrapped, ['key2', 'key3'], message);
+        expect(schema).toStrictEqual({
+          ...baseObjectWithRestAsync,
+          entries: {
+            key1: entries.key1,
+            key2: {
+              ...nonOptionalAsync(entries.key2, message),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...nonOptionalAsync(entries.key3, message),
+              '~validate': expect.any(Function),
+            },
+            key4: entries.key4,
+          },
+        } satisfies typeof schema);
       });
     });
 
     describe('should return dataset without nested issues', () => {
-      test('if requiredAsync keys are present', async () => {
+      test('if required keys are present', async () => {
         const input1 = {
           key1: 'foo',
           key2: 123,
@@ -328,7 +493,7 @@ describe('requiredAsync', () => {
     });
 
     describe('should return dataset with nested issues', () => {
-      test('if requireded keys are missing', async () => {
+      test('if required keys are missing', async () => {
         expect(await schema1['~validate']({ value: {} }, {})).toStrictEqual({
           typed: false,
           value: {},
