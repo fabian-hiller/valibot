@@ -33,129 +33,84 @@ describe('requiredAsync', () => {
     const wrapped = objectAsync(entries);
     type Wrapped = typeof wrapped;
     type Schema1 = SchemaWithRequiredAsync<Wrapped, undefined, undefined>;
-    type Schema1WithMsg = SchemaWithRequiredAsync<
-      Wrapped,
-      undefined,
-      'custom error message'
-    >;
     type Schema2 = SchemaWithRequiredAsync<
       Wrapped,
       ['key1', 'key3'],
       undefined
     >;
-    type Schema2WithMsg = SchemaWithRequiredAsync<
-      Wrapped,
-      ['key1', 'key3'],
-      'custom error message'
-    >;
 
     describe('should return schema object', () => {
       test('with undefined keys', () => {
         expectTypeOf(requiredAsync(wrapped)).toEqualTypeOf<Schema1>();
-      });
-
-      test('with undefined keys and custom required message', () => {
         expectTypeOf(
-          requiredAsync(wrapped, 'custom error message')
-        ).toEqualTypeOf<Schema1WithMsg>();
+          requiredAsync(wrapped, undefined)
+        ).toEqualTypeOf<Schema1>();
+        expectTypeOf(requiredAsync(wrapped, 'message')).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, undefined, 'message'>
+        >();
+        expectTypeOf(requiredAsync(wrapped, () => 'message')).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, undefined, () => string>
+        >();
       });
 
       test('with specific keys', () => {
         expectTypeOf(
           requiredAsync(wrapped, ['key1', 'key3'])
         ).toEqualTypeOf<Schema2>();
-      });
-
-      test('with specific keys and custom required message', () => {
         expectTypeOf(
-          requiredAsync(wrapped, ['key1', 'key3'], 'custom error message')
-        ).toEqualTypeOf<Schema2WithMsg>();
+          requiredAsync(wrapped, ['key1', 'key3'], undefined)
+        ).toEqualTypeOf<Schema2>();
+        expectTypeOf(
+          requiredAsync(wrapped, ['key1', 'key3'], 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, ['key1', 'key3'], 'message'>
+        >();
+        expectTypeOf(
+          requiredAsync(wrapped, ['key1', 'key3'], () => 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, ['key1', 'key3'], () => string>
+        >();
       });
     });
 
     describe('should infer correct types', () => {
-      describe('of input from schemas', () => {
-        test('with no custom required message', () => {
-          expectTypeOf<InferInput<Schema1>>().toEqualTypeOf<{
-            key1: string;
-            key2: number;
-            key3: string;
-            key4: number | null;
-          }>();
-          expectTypeOf<InferInput<Schema2>>().toEqualTypeOf<{
-            key1: string;
-            key2?: number;
-            key3: string;
-            key4?: number | null;
-          }>();
-        });
-
-        test('with custom required message', () => {
-          expectTypeOf<InferInput<Schema1WithMsg>>().toEqualTypeOf<{
-            key1: string;
-            key2: number;
-            key3: string;
-            key4: number | null;
-          }>();
-          expectTypeOf<InferInput<Schema2WithMsg>>().toEqualTypeOf<{
-            key1: string;
-            key2?: number;
-            key3: string;
-            key4?: number | null;
-          }>();
-        });
+      test('of input', () => {
+        expectTypeOf<InferInput<Schema1>>().toEqualTypeOf<{
+          key1: string;
+          key2: number;
+          key3: string;
+          key4: number | null;
+        }>();
+        expectTypeOf<InferInput<Schema2>>().toEqualTypeOf<{
+          key1: string;
+          key2?: number;
+          key3: string;
+          key4?: number | null;
+        }>();
       });
 
-      describe('of output from schemas', () => {
-        test('with no custom required message', () => {
-          expectTypeOf<InferOutput<Schema1>>().toEqualTypeOf<{
-            key1: string;
-            key2: number;
-            key3: string;
-            key4: number;
-          }>();
-          expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<{
-            key1: string;
-            key2?: number;
-            key3: string;
-            key4: number;
-          }>();
-        });
-
-        test('with custom required message', () => {
-          expectTypeOf<InferOutput<Schema1WithMsg>>().toEqualTypeOf<{
-            key1: string;
-            key2: number;
-            key3: string;
-            key4: number;
-          }>();
-          expectTypeOf<InferOutput<Schema2WithMsg>>().toEqualTypeOf<{
-            key1: string;
-            key2?: number;
-            key3: string;
-            key4: number;
-          }>();
-        });
+      test('of output', () => {
+        expectTypeOf<InferOutput<Schema1>>().toEqualTypeOf<{
+          key1: string;
+          key2: number;
+          key3: string;
+          key4: number;
+        }>();
+        expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<{
+          key1: string;
+          key2?: number;
+          key3: string;
+          key4: number;
+        }>();
       });
 
-      describe('of issue from schemas', () => {
-        test('with no custom required message', () => {
-          expectTypeOf<InferIssue<Schema1>>().toEqualTypeOf<
-            NonOptionalIssue | ObjectIssue | StringIssue | NumberIssue
-          >();
-          expectTypeOf<InferIssue<Schema2>>().toEqualTypeOf<
-            NonOptionalIssue | ObjectIssue | StringIssue | NumberIssue
-          >();
-        });
-
-        test('with custom required message', () => {
-          expectTypeOf<InferIssue<Schema1WithMsg>>().toEqualTypeOf<
-            NonOptionalIssue | ObjectIssue | StringIssue | NumberIssue
-          >();
-          expectTypeOf<InferIssue<Schema2WithMsg>>().toEqualTypeOf<
-            NonOptionalIssue | ObjectIssue | StringIssue | NumberIssue
-          >();
-        });
+      test('of issue', () => {
+        expectTypeOf<InferIssue<Schema1>>().toEqualTypeOf<
+          NonOptionalIssue | ObjectIssue | StringIssue | NumberIssue
+        >();
+        expectTypeOf<InferIssue<Schema2>>().toEqualTypeOf<
+          NonOptionalIssue | ObjectIssue | StringIssue | NumberIssue
+        >();
       });
     });
   });
@@ -164,161 +119,100 @@ describe('requiredAsync', () => {
     const wrapped = objectWithRestAsync(entries, boolean());
     type Wrapped = typeof wrapped;
     type Schema1 = SchemaWithRequiredAsync<Wrapped, undefined, undefined>;
-    type Schema1WithMsg = SchemaWithRequiredAsync<
-      Wrapped,
-      undefined,
-      'custom error message'
-    >;
     type Schema2 = SchemaWithRequiredAsync<
       Wrapped,
       ['key2', 'key3'],
       undefined
     >;
-    type Schema2WithMsg = SchemaWithRequiredAsync<
-      Wrapped,
-      ['key2', 'key3'],
-      'custom error message'
-    >;
 
     describe('should return schema object', () => {
       test('with undefined keys', () => {
         expectTypeOf(requiredAsync(wrapped)).toEqualTypeOf<Schema1>();
-      });
-
-      test('with undefined keys and custom required message', () => {
         expectTypeOf(
-          requiredAsync(wrapped, 'custom error message')
-        ).toEqualTypeOf<Schema1WithMsg>();
+          requiredAsync(wrapped, undefined)
+        ).toEqualTypeOf<Schema1>();
+        expectTypeOf(requiredAsync(wrapped, 'message')).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, undefined, 'message'>
+        >();
+        expectTypeOf(requiredAsync(wrapped, () => 'message')).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, undefined, () => string>
+        >();
       });
 
       test('with specific keys', () => {
         expectTypeOf(
           requiredAsync(wrapped, ['key2', 'key3'])
         ).toEqualTypeOf<Schema2>();
-      });
-
-      test('with specific keys and custom required message', () => {
         expectTypeOf(
-          requiredAsync(wrapped, ['key2', 'key3'], 'custom error message')
-        ).toEqualTypeOf<Schema2WithMsg>();
+          requiredAsync(wrapped, ['key2', 'key3'], undefined)
+        ).toEqualTypeOf<Schema2>();
+        expectTypeOf(
+          requiredAsync(wrapped, ['key2', 'key3'], 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, ['key2', 'key3'], 'message'>
+        >();
+        expectTypeOf(
+          requiredAsync(wrapped, ['key2', 'key3'], () => 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, ['key2', 'key3'], () => string>
+        >();
       });
     });
 
     describe('should infer correct types', () => {
-      describe('of input from schemas', () => {
-        test('with no custom required message', () => {
-          expectTypeOf<InferInput<Schema1>>().toEqualTypeOf<
-            {
-              key1: string;
-              key2: number;
-              key3: string;
-              key4: number | null;
-            } & { [key: string]: boolean }
-          >();
-          expectTypeOf<InferInput<Schema2>>().toEqualTypeOf<
-            {
-              key1?: string;
-              key2: number;
-              key3: string;
-              key4?: number | null;
-            } & { [key: string]: boolean }
-          >();
-        });
-
-        test('with custom required message', () => {
-          expectTypeOf<InferInput<Schema1WithMsg>>().toEqualTypeOf<
-            {
-              key1: string;
-              key2: number;
-              key3: string;
-              key4: number | null;
-            } & { [key: string]: boolean }
-          >();
-          expectTypeOf<InferInput<Schema2WithMsg>>().toEqualTypeOf<
-            {
-              key1?: string;
-              key2: number;
-              key3: string;
-              key4?: number | null;
-            } & { [key: string]: boolean }
-          >();
-        });
+      test('of input', () => {
+        expectTypeOf<InferInput<Schema1>>().toEqualTypeOf<
+          {
+            key1: string;
+            key2: number;
+            key3: string;
+            key4: number | null;
+          } & { [key: string]: boolean }
+        >();
+        expectTypeOf<InferInput<Schema2>>().toEqualTypeOf<
+          {
+            key1?: string;
+            key2: number;
+            key3: string;
+            key4?: number | null;
+          } & { [key: string]: boolean }
+        >();
       });
 
-      describe('of output from schemas', () => {
-        test('with no custom required message', () => {
-          expectTypeOf<InferOutput<Schema1>>().toEqualTypeOf<
-            {
-              key1: string;
-              key2: number;
-              key3: string;
-              key4: number;
-            } & { [key: string]: boolean }
-          >();
-          expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<
-            {
-              key1?: string;
-              key2: number;
-              key3: string;
-              key4: number;
-            } & { [key: string]: boolean }
-          >();
-        });
-
-        test('with custom required message', () => {
-          expectTypeOf<InferOutput<Schema1WithMsg>>().toEqualTypeOf<
-            {
-              key1: string;
-              key2: number;
-              key3: string;
-              key4: number;
-            } & { [key: string]: boolean }
-          >();
-          expectTypeOf<InferOutput<Schema2WithMsg>>().toEqualTypeOf<
-            {
-              key1?: string;
-              key2: number;
-              key3: string;
-              key4: number;
-            } & { [key: string]: boolean }
-          >();
-        });
+      test('of output', () => {
+        expectTypeOf<InferOutput<Schema1>>().toEqualTypeOf<
+          {
+            key1: string;
+            key2: number;
+            key3: string;
+            key4: number;
+          } & { [key: string]: boolean }
+        >();
+        expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<
+          {
+            key1?: string;
+            key2: number;
+            key3: string;
+            key4: number;
+          } & { [key: string]: boolean }
+        >();
       });
 
-      describe('of issue from schemas', () => {
-        test('with no custom required message', () => {
-          expectTypeOf<InferIssue<Schema1>>().toEqualTypeOf<
-            | NonOptionalIssue
-            | ObjectWithRestIssue
-            | NumberIssue
-            | StringIssue
-            | BooleanIssue
-          >();
-          expectTypeOf<InferIssue<Schema2>>().toEqualTypeOf<
-            | NonOptionalIssue
-            | ObjectWithRestIssue
-            | NumberIssue
-            | StringIssue
-            | BooleanIssue
-          >();
-        });
-
-        test('with custom required message', () => {
-          expectTypeOf<InferIssue<Schema1WithMsg>>().toEqualTypeOf<
-            | NonOptionalIssue
-            | ObjectWithRestIssue
-            | NumberIssue
-            | StringIssue
-            | BooleanIssue
-          >();
-          expectTypeOf<InferIssue<Schema2WithMsg>>().toEqualTypeOf<
-            | NonOptionalIssue
-            | ObjectWithRestIssue
-            | NumberIssue
-            | StringIssue
-            | BooleanIssue
-          >();
-        });
+      test('of issue', () => {
+        expectTypeOf<InferIssue<Schema1>>().toEqualTypeOf<
+          | NonOptionalIssue
+          | ObjectWithRestIssue
+          | NumberIssue
+          | StringIssue
+          | BooleanIssue
+        >();
+        expectTypeOf<InferIssue<Schema2>>().toEqualTypeOf<
+          | NonOptionalIssue
+          | ObjectWithRestIssue
+          | NumberIssue
+          | StringIssue
+          | BooleanIssue
+        >();
       });
     });
   });

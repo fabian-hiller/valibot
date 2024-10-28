@@ -21,33 +21,35 @@ describe('required', () => {
     key4: nullish(number(), () => 123),
   };
   const baseInfo = {
+    message: expect.any(String),
     requirement: undefined,
     issues: undefined,
     lang: undefined,
     abortEarly: undefined,
     abortPipeEarly: undefined,
   } as const;
-  const baseInfoWithAnyMsg = {
-    ...baseInfo,
-    message: expect.any(String),
-  } as const;
 
   describe('object', () => {
     const wrapped = object(entries);
     const schema1 = required(wrapped);
-    const schema1ErrMsg = 'custom error message 1';
-    const schema1WithMsg = required(wrapped, schema1ErrMsg);
     const schema2 = required(wrapped, ['key1', 'key3']);
-    const schema2ErrMsg = 'custom error message 2';
-    const schema2WithMsg = required(wrapped, ['key1', 'key3'], schema2ErrMsg);
 
     describe('should return schema object', () => {
-      test('with undefined keys', () => {
-        expect(schema1).toStrictEqual({
-          kind: 'schema',
-          type: 'object',
-          reference: object,
-          expects: 'Object',
+      const baseObjectSchema = {
+        kind: 'schema',
+        type: 'object',
+        reference: object,
+        expects: 'Object',
+        async: false,
+        message: undefined,
+        '~standard': 1,
+        '~vendor': 'valibot',
+        '~validate': expect.any(Function),
+      } as const;
+
+      test('with undefined keys and undefined message', () => {
+        const expected: typeof schema1 = {
+          ...baseObjectSchema,
           entries: {
             key1: {
               ...nonOptional(entries.key1),
@@ -66,52 +68,66 @@ describe('required', () => {
               '~validate': expect.any(Function),
             },
           },
-          message: undefined,
-          async: false,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
-        } satisfies typeof schema1);
+        };
+        expect(schema1).toStrictEqual(expected);
+        expect(schema1, undefined).toStrictEqual(expected);
       });
 
-      test('with undefined keys and custom required message', () => {
-        expect(schema1WithMsg).toStrictEqual({
-          kind: 'schema',
-          type: 'object',
-          reference: object,
-          expects: 'Object',
+      test('with undefined keys and string message', () => {
+        const message = 'message';
+        const schema = required(wrapped, message);
+        expect(schema).toStrictEqual({
+          ...baseObjectSchema,
           entries: {
             key1: {
-              ...nonOptional(entries.key1, schema1ErrMsg),
+              ...nonOptional(entries.key1, message),
               '~validate': expect.any(Function),
             },
             key2: {
-              ...nonOptional(entries.key2, schema1ErrMsg),
+              ...nonOptional(entries.key2, message),
               '~validate': expect.any(Function),
             },
             key3: {
-              ...nonOptional(entries.key3, schema1ErrMsg),
+              ...nonOptional(entries.key3, message),
               '~validate': expect.any(Function),
             },
             key4: {
-              ...nonOptional(entries.key4, schema1ErrMsg),
+              ...nonOptional(entries.key4, message),
               '~validate': expect.any(Function),
             },
           },
-          message: undefined,
-          async: false,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
-        } satisfies typeof schema1WithMsg);
+        } satisfies typeof schema);
       });
 
-      test('with specific keys', () => {
-        expect(schema2).toStrictEqual({
-          kind: 'schema',
-          type: 'object',
-          reference: object,
-          expects: 'Object',
+      test('with undefined keys and function message', () => {
+        const message = () => 'message';
+        const schema = required(wrapped, message);
+        expect(schema).toStrictEqual({
+          ...baseObjectSchema,
+          entries: {
+            key1: {
+              ...nonOptional(entries.key1, message),
+              '~validate': expect.any(Function),
+            },
+            key2: {
+              ...nonOptional(entries.key2, message),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...nonOptional(entries.key3, message),
+              '~validate': expect.any(Function),
+            },
+            key4: {
+              ...nonOptional(entries.key4, message),
+              '~validate': expect.any(Function),
+            },
+          },
+        } satisfies typeof schema);
+      });
+
+      test('with specific keys and undefined message', () => {
+        const expected: typeof schema2 = {
+          ...baseObjectSchema,
           entries: {
             key1: {
               ...nonOptional(entries.key1),
@@ -124,38 +140,49 @@ describe('required', () => {
             },
             key4: entries.key4,
           },
-          message: undefined,
-          async: false,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
-        } satisfies typeof schema2);
+        };
+        expect(schema2).toStrictEqual(expected);
+        expect(schema2, undefined).toStrictEqual(expected);
       });
 
-      test('with specific keys and custom required message', () => {
-        expect(schema2WithMsg).toStrictEqual({
-          kind: 'schema',
-          type: 'object',
-          reference: object,
-          expects: 'Object',
+      test('with specific keys and string message', () => {
+        const message = 'message';
+        const schema = required(wrapped, ['key1', 'key3'], message);
+        expect(schema).toStrictEqual({
+          ...baseObjectSchema,
           entries: {
             key1: {
-              ...nonOptional(entries.key1, schema2ErrMsg),
+              ...nonOptional(entries.key1, message),
               '~validate': expect.any(Function),
             },
             key2: entries.key2,
             key3: {
-              ...nonOptional(entries.key3, schema2ErrMsg),
+              ...nonOptional(entries.key3, message),
               '~validate': expect.any(Function),
             },
             key4: entries.key4,
           },
-          message: undefined,
-          async: false,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
-        } satisfies typeof schema2WithMsg);
+        } satisfies typeof schema);
+      });
+
+      test('with specific keys and function message', () => {
+        const message = () => 'message';
+        const schema = required(wrapped, ['key1', 'key3'], message);
+        expect(schema).toStrictEqual({
+          ...baseObjectSchema,
+          entries: {
+            key1: {
+              ...nonOptional(entries.key1, message),
+              '~validate': expect.any(Function),
+            },
+            key2: entries.key2,
+            key3: {
+              ...nonOptional(entries.key3, message),
+              '~validate': expect.any(Function),
+            },
+            key4: entries.key4,
+          },
+        } satisfies typeof schema);
       });
     });
 
@@ -163,17 +190,9 @@ describe('required', () => {
       test('if required keys are present', () => {
         const input1 = { key1: 'foo', key2: 123, key3: 'bar', key4: 123 };
         expectNoSchemaIssue(schema1, [input1]);
-        expectNoSchemaIssue(schema1WithMsg, [input1]);
         expectNoSchemaIssue(schema2, [input1]);
-        expectNoSchemaIssue(schema2WithMsg, [input1]);
         const input2 = { key1: 'foo', key3: 'bar' };
         expect(schema2['~validate']({ value: input2 }, {})).toStrictEqual({
-          typed: true,
-          value: { ...input2, key4: 123 },
-        });
-        expect(
-          schema2WithMsg['~validate']({ value: input2 }, {})
-        ).toStrictEqual({
           typed: true,
           value: { ...input2, key4: 123 },
         });
@@ -187,7 +206,7 @@ describe('required', () => {
           value: {},
           issues: [
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -204,7 +223,7 @@ describe('required', () => {
               ],
             },
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -221,7 +240,7 @@ describe('required', () => {
               ],
             },
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -238,7 +257,7 @@ describe('required', () => {
               ],
             },
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -257,93 +276,13 @@ describe('required', () => {
           ],
         } satisfies FailureDataset<InferIssue<typeof schema1>>);
 
-        expect(schema1WithMsg['~validate']({ value: {} }, {})).toStrictEqual({
-          typed: false,
-          value: {},
-          issues: [
-            {
-              ...baseInfo,
-              message: schema1ErrMsg,
-              kind: 'schema',
-              type: 'non_optional',
-              input: undefined,
-              expected: '!undefined',
-              received: 'undefined',
-              path: [
-                {
-                  type: 'object',
-                  origin: 'value',
-                  input: {},
-                  key: 'key1',
-                  value: undefined,
-                },
-              ],
-            },
-            {
-              ...baseInfo,
-              message: schema1ErrMsg,
-              kind: 'schema',
-              type: 'non_optional',
-              input: undefined,
-              expected: '!undefined',
-              received: 'undefined',
-              path: [
-                {
-                  type: 'object',
-                  origin: 'value',
-                  input: {},
-                  key: 'key2',
-                  value: undefined,
-                },
-              ],
-            },
-            {
-              ...baseInfo,
-              message: schema1ErrMsg,
-              kind: 'schema',
-              type: 'non_optional',
-              input: undefined,
-              expected: '!undefined',
-              received: 'undefined',
-              path: [
-                {
-                  type: 'object',
-                  origin: 'value',
-                  input: {},
-                  key: 'key3',
-                  value: undefined,
-                },
-              ],
-            },
-            {
-              ...baseInfo,
-              message: schema1ErrMsg,
-              kind: 'schema',
-              type: 'non_optional',
-              input: undefined,
-              expected: '!undefined',
-              received: 'undefined',
-              path: [
-                {
-                  type: 'object',
-                  origin: 'value',
-                  input: {},
-                  key: 'key4',
-                  value: undefined,
-                },
-              ],
-            },
-          ],
-        } satisfies FailureDataset<InferIssue<typeof schema1WithMsg>>);
-
         const input = { key2: 123, key4: null };
-
         expect(schema2['~validate']({ value: input }, {})).toStrictEqual({
           typed: false,
           value: { ...input, key4: 123 },
           issues: [
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -360,7 +299,7 @@ describe('required', () => {
               ],
             },
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -378,51 +317,6 @@ describe('required', () => {
             },
           ],
         } satisfies FailureDataset<InferIssue<typeof schema2>>);
-
-        expect(schema2WithMsg['~validate']({ value: input }, {})).toStrictEqual(
-          {
-            typed: false,
-            value: { ...input, key4: 123 },
-            issues: [
-              {
-                ...baseInfo,
-                message: schema2ErrMsg,
-                kind: 'schema',
-                type: 'non_optional',
-                input: undefined,
-                expected: '!undefined',
-                received: 'undefined',
-                path: [
-                  {
-                    type: 'object',
-                    origin: 'value',
-                    input,
-                    key: 'key1',
-                    value: undefined,
-                  },
-                ],
-              },
-              {
-                ...baseInfo,
-                message: schema2ErrMsg,
-                kind: 'schema',
-                type: 'non_optional',
-                input: undefined,
-                expected: '!undefined',
-                received: 'undefined',
-                path: [
-                  {
-                    type: 'object',
-                    origin: 'value',
-                    input,
-                    key: 'key3',
-                    value: undefined,
-                  },
-                ],
-              },
-            ],
-          } satisfies FailureDataset<InferIssue<typeof schema2WithMsg>>
-        );
       });
     });
   });
@@ -431,19 +325,25 @@ describe('required', () => {
     const rest = boolean();
     const wrapped = objectWithRest(entries, rest);
     const schema1 = required(wrapped);
-    const schema1ErrMsg = 'custom error message 1';
-    const schema1WithErrMsg = required(wrapped, schema1ErrMsg);
     const schema2 = required(wrapped, ['key2', 'key3']);
-    const schema2ErrMsg = 'custom error message 2';
-    const schema2WithMsg = required(wrapped, ['key2', 'key3'], schema2ErrMsg);
 
     describe('should return schema object', () => {
-      test('with undefined keys', () => {
-        expect(schema1).toStrictEqual({
-          kind: 'schema',
-          type: 'object_with_rest',
-          reference: objectWithRest,
-          expects: 'Object',
+      const baseObjectWithRestSchema = {
+        kind: 'schema',
+        type: 'object_with_rest',
+        reference: objectWithRest,
+        expects: 'Object',
+        rest,
+        message: undefined,
+        async: false,
+        '~standard': 1,
+        '~vendor': 'valibot',
+        '~validate': expect.any(Function),
+      } as const;
+
+      test('with undefined keys and undefined message', () => {
+        const expected: typeof schema1 = {
+          ...baseObjectWithRestSchema,
           entries: {
             key1: {
               ...nonOptional(entries.key1),
@@ -462,54 +362,66 @@ describe('required', () => {
               '~validate': expect.any(Function),
             },
           },
-          rest,
-          message: undefined,
-          async: false,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
-        } satisfies typeof schema1);
+        };
+        expect(schema1).toStrictEqual(expected);
+        expect(schema1, undefined).toStrictEqual(expected);
       });
 
-      test('with undefined keys and custom required message', () => {
-        expect(schema1WithErrMsg).toStrictEqual({
-          kind: 'schema',
-          type: 'object_with_rest',
-          reference: objectWithRest,
-          expects: 'Object',
+      test('with undefined keys and string message', () => {
+        const message = 'message';
+        const schema = required(wrapped, message);
+        expect(schema).toStrictEqual({
+          ...baseObjectWithRestSchema,
           entries: {
             key1: {
-              ...nonOptional(entries.key1, schema1ErrMsg),
+              ...nonOptional(entries.key1, message),
               '~validate': expect.any(Function),
             },
             key2: {
-              ...nonOptional(entries.key2, schema1ErrMsg),
+              ...nonOptional(entries.key2, message),
               '~validate': expect.any(Function),
             },
             key3: {
-              ...nonOptional(entries.key3, schema1ErrMsg),
+              ...nonOptional(entries.key3, message),
               '~validate': expect.any(Function),
             },
             key4: {
-              ...nonOptional(entries.key4, schema1ErrMsg),
+              ...nonOptional(entries.key4, message),
               '~validate': expect.any(Function),
             },
           },
-          rest,
-          message: undefined,
-          async: false,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
-        } satisfies typeof schema1WithErrMsg);
+        } satisfies typeof schema);
       });
 
-      test('with specific keys', () => {
-        expect(schema2).toStrictEqual({
-          kind: 'schema',
-          type: 'object_with_rest',
-          reference: objectWithRest,
-          expects: 'Object',
+      test('with undefined keys and function message', () => {
+        const message = () => 'message';
+        const schema = required(wrapped, message);
+        expect(schema).toStrictEqual({
+          ...baseObjectWithRestSchema,
+          entries: {
+            key1: {
+              ...nonOptional(entries.key1, message),
+              '~validate': expect.any(Function),
+            },
+            key2: {
+              ...nonOptional(entries.key2, message),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...nonOptional(entries.key3, message),
+              '~validate': expect.any(Function),
+            },
+            key4: {
+              ...nonOptional(entries.key4, message),
+              '~validate': expect.any(Function),
+            },
+          },
+        } satisfies typeof schema);
+      });
+
+      test('with specific keys and undefined message', () => {
+        const expected: typeof schema2 = {
+          ...baseObjectWithRestSchema,
           entries: {
             key1: entries.key1,
             key2: {
@@ -522,40 +434,49 @@ describe('required', () => {
             },
             key4: entries.key4,
           },
-          rest,
-          message: undefined,
-          async: false,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
-        } satisfies typeof schema2);
+        };
+        expect(schema2).toStrictEqual(expected);
+        expect(schema2, undefined).toStrictEqual(expected);
       });
 
-      test('with specific keys and custom required message', () => {
-        expect(schema2WithMsg).toStrictEqual({
-          kind: 'schema',
-          type: 'object_with_rest',
-          reference: objectWithRest,
-          expects: 'Object',
+      test('with specific keys and string message', () => {
+        const message = 'message';
+        const schema = required(wrapped, ['key2', 'key3'], message);
+        expect(schema).toStrictEqual({
+          ...baseObjectWithRestSchema,
           entries: {
             key1: entries.key1,
             key2: {
-              ...nonOptional(entries.key2, schema2ErrMsg),
+              ...nonOptional(entries.key2, message),
               '~validate': expect.any(Function),
             },
             key3: {
-              ...nonOptional(entries.key3, schema2ErrMsg),
+              ...nonOptional(entries.key3, message),
               '~validate': expect.any(Function),
             },
             key4: entries.key4,
           },
-          rest,
-          message: undefined,
-          async: false,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
-        } satisfies typeof schema2WithMsg);
+        } satisfies typeof schema);
+      });
+
+      test('with specific keys and function message', () => {
+        const message = () => 'message';
+        const schema = required(wrapped, ['key2', 'key3'], message);
+        expect(schema).toStrictEqual({
+          ...baseObjectWithRestSchema,
+          entries: {
+            key1: entries.key1,
+            key2: {
+              ...nonOptional(entries.key2, message),
+              '~validate': expect.any(Function),
+            },
+            key3: {
+              ...nonOptional(entries.key3, message),
+              '~validate': expect.any(Function),
+            },
+            key4: entries.key4,
+          },
+        } satisfies typeof schema);
       });
     });
 
@@ -571,19 +492,9 @@ describe('required', () => {
         // @ts-expect-error
         expectNoSchemaIssue(schema1, [input1]);
         // @ts-expect-error
-        expectNoSchemaIssue(schema1WithErrMsg, [input1]);
-        // @ts-expect-error
         expectNoSchemaIssue(schema2, [input1]);
-        // @ts-expect-error
-        expectNoSchemaIssue(schema2WithMsg, [input1]);
         const input2 = { key2: 123, key3: 'bar', other: true };
         expect(schema2['~validate']({ value: input2 }, {})).toStrictEqual({
-          typed: true,
-          value: { ...input2, key4: 123 },
-        });
-        expect(
-          schema2WithMsg['~validate']({ value: input2 }, {})
-        ).toStrictEqual({
           typed: true,
           value: { ...input2, key4: 123 },
         });
@@ -597,7 +508,7 @@ describe('required', () => {
           value: {},
           issues: [
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -614,7 +525,7 @@ describe('required', () => {
               ],
             },
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -631,7 +542,7 @@ describe('required', () => {
               ],
             },
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -648,7 +559,7 @@ describe('required', () => {
               ],
             },
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -667,95 +578,13 @@ describe('required', () => {
           ],
         } satisfies FailureDataset<InferIssue<typeof schema1>>);
 
-        expect(schema1WithErrMsg['~validate']({ value: {} }, {})).toStrictEqual(
-          {
-            typed: false,
-            value: {},
-            issues: [
-              {
-                ...baseInfo,
-                message: schema1ErrMsg,
-                kind: 'schema',
-                type: 'non_optional',
-                input: undefined,
-                expected: '!undefined',
-                received: 'undefined',
-                path: [
-                  {
-                    type: 'object',
-                    origin: 'value',
-                    input: {},
-                    key: 'key1',
-                    value: undefined,
-                  },
-                ],
-              },
-              {
-                ...baseInfo,
-                message: schema1ErrMsg,
-                kind: 'schema',
-                type: 'non_optional',
-                input: undefined,
-                expected: '!undefined',
-                received: 'undefined',
-                path: [
-                  {
-                    type: 'object',
-                    origin: 'value',
-                    input: {},
-                    key: 'key2',
-                    value: undefined,
-                  },
-                ],
-              },
-              {
-                ...baseInfo,
-                message: schema1ErrMsg,
-                kind: 'schema',
-                type: 'non_optional',
-                input: undefined,
-                expected: '!undefined',
-                received: 'undefined',
-                path: [
-                  {
-                    type: 'object',
-                    origin: 'value',
-                    input: {},
-                    key: 'key3',
-                    value: undefined,
-                  },
-                ],
-              },
-              {
-                ...baseInfo,
-                message: schema1ErrMsg,
-                kind: 'schema',
-                type: 'non_optional',
-                input: undefined,
-                expected: '!undefined',
-                received: 'undefined',
-                path: [
-                  {
-                    type: 'object',
-                    origin: 'value',
-                    input: {},
-                    key: 'key4',
-                    value: undefined,
-                  },
-                ],
-              },
-            ],
-          } satisfies FailureDataset<InferIssue<typeof schema1WithErrMsg>>
-        );
-
         const input = { key1: 'foo', key4: null, other: true };
-
         expect(schema2['~validate']({ value: input }, {})).toStrictEqual({
           typed: false,
           value: { ...input, key4: 123 },
           issues: [
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -772,7 +601,7 @@ describe('required', () => {
               ],
             },
             {
-              ...baseInfoWithAnyMsg,
+              ...baseInfo,
               kind: 'schema',
               type: 'non_optional',
               input: undefined,
@@ -790,51 +619,6 @@ describe('required', () => {
             },
           ],
         } satisfies FailureDataset<InferIssue<typeof schema2>>);
-
-        expect(schema2WithMsg['~validate']({ value: input }, {})).toStrictEqual(
-          {
-            typed: false,
-            value: { ...input, key4: 123 },
-            issues: [
-              {
-                ...baseInfo,
-                message: schema2ErrMsg,
-                kind: 'schema',
-                type: 'non_optional',
-                input: undefined,
-                expected: '!undefined',
-                received: 'undefined',
-                path: [
-                  {
-                    type: 'object',
-                    origin: 'value',
-                    input,
-                    key: 'key2',
-                    value: undefined,
-                  },
-                ],
-              },
-              {
-                ...baseInfo,
-                message: schema2ErrMsg,
-                kind: 'schema',
-                type: 'non_optional',
-                input: undefined,
-                expected: '!undefined',
-                received: 'undefined',
-                path: [
-                  {
-                    type: 'object',
-                    origin: 'value',
-                    input,
-                    key: 'key3',
-                    value: undefined,
-                  },
-                ],
-              },
-            ],
-          } satisfies FailureDataset<InferIssue<typeof schema2WithMsg>>
-        );
       });
     });
   });
