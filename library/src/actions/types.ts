@@ -1,4 +1,4 @@
-import type { MaybePromise, MaybeReadonly } from '../types';
+import type { MaybePromise, MaybeReadonly } from '../types/index.ts';
 
 /**
  * Array input type.

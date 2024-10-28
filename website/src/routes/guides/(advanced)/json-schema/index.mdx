@@ -1,7 +1,7 @@
 ---
 title: JSON Schema
 description: >-
-  This guide will show you how to convert my schemas to JSON Schema format.
+  This guide will show you how to convert Valibot schemas to JSON Schema format.
 contributors:
   - fabian-hiller
 ---
@@ -10,7 +10,7 @@ import { Link } from '@builder.io/qwik-city';
 
 # JSON Schema
 
-In favor of a larger feature set and smaller bundle size, I am not implemented with JSON Schema in mind. However, in some use cases, you may still need a JSON Schema. This guide will show you how to convert my schemas to JSON Schema format.
+In favor of a larger feature set and smaller bundle size, Valibot is not implemented with JSON Schema in mind. However, in some use cases, you may still need a JSON Schema. This guide will show you how to convert Valibot schemas to JSON Schema format.
 
 ## Valibot to JSON Schema
 
@@ -28,7 +28,7 @@ const JsonEmailSchema = toJsonSchema(ValibotEmailSchema); // { type: 'string', f
 
 ## Cons of JSON Schema
 
-My schemas intentionally do not output JSON Schema natively. This is because JSON Schema is limited to JSON-compliant data structures. In addition, more advanced features like transformations are not supported. Since I want to leverage the full power of TypeScript, I output a custom format instead.
+Valibot schemas intentionally do not output JSON Schema natively. This is because JSON Schema is limited to JSON-compliant data structures. In addition, more advanced features like transformations are not supported. Since we want to leverage the full power of TypeScript, we output a custom format instead.
 
 Another drawback of JSON Schema is that JSON Schema itself does not contain any validation logic. Therefore, an additional function is required that can validate the entire JSON Schema specification. This approach is usually not tree-shakable and results in a large bundle size.
 

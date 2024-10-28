@@ -1,24 +1,25 @@
 ---
 title: Infer types
 description: >-
-  Another cool feature that my schemas allow you to do is to infer the input and
-  output type. This makes your work even easier.
+  Another cool feature of schemas is the ability to infer input and output
+  types. This makes your work even easier.
 contributors:
   - fabian-hiller
   - gmaxlev
+  - BastiDood
 ---
 
 import { Link } from '@builder.io/qwik-city';
 
 # Infer types
 
-Another cool feature that my schemas allow you to do is to infer the input and output type. This makes your work even easier, because you don't have to create the type definition additionally.
+Another cool feature of schemas is the ability to infer input and output types. This makes your work even easier because you don't have to write the type definition yourself.
 
 ## Infer input types
 
 The input type of a schema corresponds to the TypeScript type that the incoming data of a schema must match to be valid. To extract this type you use the utility type <Link href="/api/InferInput/">`InferInput`</Link>.
 
-> You are probably interested in input type only in special cases. I recommend you to use the output type in most cases.
+> You are probably interested in the input type only in special cases. In most cases, the output type should be sufficient.
 
 ```ts
 import * as v from 'valibot';

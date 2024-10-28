@@ -6,19 +6,20 @@ description: >-
 contributors:
   - fabian-hiller
   - cmaciasjimenez
+  - BastiDood
 ---
 
 import { Link } from '@builder.io/qwik-city';
 
 # Parse data
 
-Now that you've learned how to create a schema, let's look at how you can use it to validate unknown data and make it type-safe. I offer 3 different ways for this. Just pick what you think fits your code best.
+Now that you've learned how to create a schema, let's look at how you can use it to validate unknown data and make it type-safe. There are three different ways to do this.
 
 > Each schema has a `~validate` method. However, this is an internal API and should only be used if you know what you are doing.
 
 ## Default way
 
-The <Link href="/api/parse/">`parse`</Link> method will throw a <Link href="/api/ValiError/">`ValiError`</Link> if the input does not match the schema. Therefore you should use a try/catch block to catch errors. If the input matches the schema, it is valid and the output of the schema will be returned typed.
+The <Link href="/api/parse/">`parse`</Link> method will throw a <Link href="/api/ValiError/">`ValiError`</Link> if the input does not match the schema. Therefore, you should use a try/catch block to catch errors. If the input matches the schema, it is valid and the output of the schema will be returned with the correct TypeScript type.
 
 ```ts
 import * as v from 'valibot';
@@ -37,7 +38,7 @@ try {
 
 If you want issues to be returned instead of thrown, you can use <Link href="/api/safeParse/">`safeParse`</Link>. The returned value then contains the `.success` property, which is `true` if the input is valid or `false` otherwise.
 
-If the input is valid, you can use `.output` to get the output of the schema validation. On the other hand, if the input was invalid, the issues found can be accessed via `.issues`.
+If the input is valid, you can use `.output` to get the output of the schema validation. Otherwise, if the input was invalid, the issues found can be accessed via `.issues`.
 
 ```ts
 import * as v from 'valibot';
@@ -71,11 +72,11 @@ if (v.is(EmailSchema, data)) {
 
 ## Configuration
 
-By default, I collect each issue during validation to give you detailed feedback on why the input does not match the schema. If this is not required in your use case, you can control this behavior with `abortEarly` and `abortPipeEarly` to improve the performance of validation.
+By default, Valibot exhaustively collects every issue during validation to give you detailed feedback on why the input does not match the schema. If this is not required for your use case, you can control this behavior with `abortEarly` and `abortPipeEarly` to improve the performance of validation.
 
 ### Abort validation
 
-If you set `abortEarly` to `true` I immediately abort the validation after finding the first issue. If you just want to know if data matches a schema, but you don't care about the details, this can speed up the performance.
+If you set `abortEarly` to `true`, data validation immediately aborts upon finding the first issue. If you just want to know if some data matches a schema, but you don't care about the details, this can improve performance.
 
 ```ts
 import * as v from 'valibot';
@@ -99,7 +100,7 @@ try {
 
 ### Abort pipeline
 
-If you only set `abortPipeEarly` to `true` I only abort the validation within a pipeline, after finding the first issue. For example, if you want to show only the first error of a field when validating a form, you can use this option to speed up the performance of validation.
+If you only set `abortPipeEarly` to `true`, the validation within a pipeline will only abort after finding the first issue. For example, if you only want to show the first error of a field when validating a form, you can use this option to improve performance.
 
 ```ts
 import * as v from 'valibot';
