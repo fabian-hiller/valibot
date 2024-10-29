@@ -45,7 +45,7 @@
   "scripts": {
     "test": "vitest --typecheck",
     "coverage": "vitest run --coverage --isolate",
-    "lint": "eslint \"src/**/*.ts*\" && deno check ./src/index.ts",
+    "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit && deno check ./src/index.ts",
     "lint.fix": "eslint \"src/**/*.ts*\" --fix",
     "format": "prettier --write ./src",
     "format.check": "prettier --check ./src",
