@@ -474,6 +474,44 @@ describe('convertSchema', () => {
       });
     });
 
+    test('should convert undefinedable schema without default', () => {
+      expect(
+        convertSchema(
+          {},
+          v.undefinedable(v.string()),
+          undefined,
+          createContext()
+        )
+      ).toStrictEqual({
+        type: 'string',
+      });
+    });
+
+    test('should convert undefinedable schema with default', () => {
+      expect(
+        convertSchema(
+          {},
+          v.undefinedable(v.string(), 'foo'),
+          undefined,
+          createContext()
+        )
+      ).toStrictEqual({
+        type: 'string',
+        default: 'foo',
+      });
+      expect(
+        convertSchema(
+          {},
+          v.undefinedable(v.string(), () => 'foo'),
+          undefined,
+          createContext()
+        )
+      ).toStrictEqual({
+        type: 'string',
+        default: 'foo',
+      });
+    });
+
     test('should convert supported literal schema', () => {
       expect(
         convertSchema({}, v.literal(true), undefined, createContext())
