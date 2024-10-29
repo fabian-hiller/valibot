@@ -9,9 +9,21 @@ import { nullishAsync, type NullishSchemaAsync } from './nullishAsync.ts';
 
 describe('nullishAsync', () => {
   describe('should return schema object', () => {
-    test('with never default', () => {
-      expectTypeOf(nullishAsync(string())).toEqualTypeOf<
-        NullishSchemaAsync<StringSchema<undefined>, never>
+    test('with undefined default', () => {
+      type Schema = NullishSchemaAsync<StringSchema<undefined>, undefined>;
+      expectTypeOf(nullishAsync(string())).toEqualTypeOf<Schema>();
+      expectTypeOf(nullishAsync(string(), undefined)).toEqualTypeOf<Schema>();
+    });
+
+    test('with undefined getter default', () => {
+      expectTypeOf(nullishAsync(string(), () => undefined)).toEqualTypeOf<
+        NullishSchemaAsync<StringSchema<undefined>, () => undefined>
+      >();
+    });
+
+    test('with async undefined getter default', () => {
+      expectTypeOf(nullishAsync(string(), async () => undefined)).toEqualTypeOf<
+        NullishSchemaAsync<StringSchema<undefined>, () => Promise<undefined>>
       >();
     });
 
@@ -30,24 +42,6 @@ describe('nullishAsync', () => {
     test('with async null getter default', () => {
       expectTypeOf(nullishAsync(string(), async () => null)).toEqualTypeOf<
         NullishSchemaAsync<StringSchema<undefined>, () => Promise<null>>
-      >();
-    });
-
-    test('with undefined default', () => {
-      expectTypeOf(nullishAsync(string(), undefined)).toEqualTypeOf<
-        NullishSchemaAsync<StringSchema<undefined>, undefined>
-      >();
-    });
-
-    test('with undefined getter default', () => {
-      expectTypeOf(nullishAsync(string(), () => undefined)).toEqualTypeOf<
-        NullishSchemaAsync<StringSchema<undefined>, () => undefined>
-      >();
-    });
-
-    test('with async undefined getter default', () => {
-      expectTypeOf(nullishAsync(string(), async () => undefined)).toEqualTypeOf<
-        NullishSchemaAsync<StringSchema<undefined>, () => Promise<undefined>>
       >();
     });
 
@@ -71,22 +65,21 @@ describe('nullishAsync', () => {
   });
 
   describe('should infer correct types', () => {
-    type Schema1 = NullishSchemaAsync<StringSchema<undefined>, never>;
+    type Schema1 = NullishSchemaAsync<StringSchema<undefined>, undefined>;
     type Schema2 = NullishSchemaAsync<StringSchema<undefined>, null>;
-    type Schema3 = NullishSchemaAsync<StringSchema<undefined>, undefined>;
-    type Schema4 = NullishSchemaAsync<StringSchema<undefined>, 'foo'>;
+    type Schema3 = NullishSchemaAsync<StringSchema<undefined>, 'foo'>;
+    type Schema4 = NullishSchemaAsync<StringSchema<undefined>, () => undefined>;
     type Schema5 = NullishSchemaAsync<StringSchema<undefined>, () => null>;
-    type Schema6 = NullishSchemaAsync<StringSchema<undefined>, () => undefined>;
-    type Schema7 = NullishSchemaAsync<StringSchema<undefined>, () => 'foo'>;
+    type Schema6 = NullishSchemaAsync<StringSchema<undefined>, () => 'foo'>;
+    type Schema7 = NullishSchemaAsync<
+      StringSchema<undefined>,
+      () => Promise<undefined>
+    >;
     type Schema8 = NullishSchemaAsync<
       StringSchema<undefined>,
       () => Promise<null>
     >;
     type Schema9 = NullishSchemaAsync<
-      StringSchema<undefined>,
-      () => Promise<undefined>
-    >;
-    type Schema10 = NullishSchemaAsync<
       StringSchema<undefined>,
       () => Promise<'foo'>
     >;
@@ -102,7 +95,6 @@ describe('nullishAsync', () => {
       expectTypeOf<InferInput<Schema7>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema8>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema9>>().toEqualTypeOf<Input>();
-      expectTypeOf<InferInput<Schema10>>().toEqualTypeOf<Input>();
     });
 
     test('of output', () => {
@@ -110,14 +102,13 @@ describe('nullishAsync', () => {
         string | null | undefined
       >();
       expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<string | null>();
-      expectTypeOf<InferOutput<Schema3>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema4>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema3>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema4>>().toEqualTypeOf<string | undefined>();
       expectTypeOf<InferOutput<Schema5>>().toEqualTypeOf<string | null>();
-      expectTypeOf<InferOutput<Schema6>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema7>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema6>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema7>>().toEqualTypeOf<string | undefined>();
       expectTypeOf<InferOutput<Schema8>>().toEqualTypeOf<string | null>();
-      expectTypeOf<InferOutput<Schema9>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema10>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema9>>().toEqualTypeOf<string>();
     });
 
     test('of issue', () => {
@@ -130,7 +121,6 @@ describe('nullishAsync', () => {
       expectTypeOf<InferIssue<Schema7>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema8>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema9>>().toEqualTypeOf<StringIssue>();
-      expectTypeOf<InferIssue<Schema10>>().toEqualTypeOf<StringIssue>();
     });
   });
 });

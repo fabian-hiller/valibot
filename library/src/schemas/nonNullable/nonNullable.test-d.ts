@@ -19,7 +19,7 @@ describe('nonNullable', () => {
   describe('should return schema object', () => {
     test('with undefined message', () => {
       type Schema = NonNullableSchema<
-        NullishSchema<StringSchema<undefined>, never>,
+        NullishSchema<StringSchema<undefined>, undefined>,
         undefined
       >;
       expectTypeOf(nonNullable(nullish(string()))).toEqualTypeOf<Schema>();
@@ -31,7 +31,7 @@ describe('nonNullable', () => {
     test('with string message', () => {
       expectTypeOf(nonNullable(nullish(string()), 'message')).toEqualTypeOf<
         NonNullableSchema<
-          NullishSchema<StringSchema<undefined>, never>,
+          NullishSchema<StringSchema<undefined>, undefined>,
           'message'
         >
       >();
@@ -42,7 +42,7 @@ describe('nonNullable', () => {
         nonNullable(nullish(string()), () => 'message')
       ).toEqualTypeOf<
         NonNullableSchema<
-          NullishSchema<StringSchema<undefined>, never>,
+          NullishSchema<StringSchema<undefined>, undefined>,
           () => string
         >
       >();

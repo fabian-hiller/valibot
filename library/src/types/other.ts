@@ -23,7 +23,8 @@ export type Default<
   | ((
       dataset?: UnknownDataset,
       config?: Config<InferIssue<TWrapped>>
-    ) => MaybeReadonly<InferInput<TWrapped> | TInput>);
+    ) => MaybeReadonly<InferInput<TWrapped> | TInput>)
+  | undefined;
 
 /**
  * Default async type.
@@ -38,7 +39,8 @@ export type DefaultAsync<
   | ((
       dataset?: UnknownDataset,
       config?: Config<InferIssue<TWrapped>>
-    ) => MaybePromise<MaybeReadonly<InferInput<TWrapped> | TInput>>);
+    ) => MaybePromise<MaybeReadonly<InferInput<TWrapped> | TInput>>)
+  | undefined;
 
 /**
  * Default value type.

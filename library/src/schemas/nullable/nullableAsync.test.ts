@@ -23,8 +23,16 @@ describe('nullableAsync', () => {
       '~validate': expect.any(Function),
     };
 
-    test('with never default', () => {
-      expect(nullableAsync(string())).toStrictEqual(baseSchema);
+    test('with undefined default', () => {
+      const expected: NullableSchemaAsync<
+        StringSchema<undefined>,
+        undefined
+      > = {
+        ...baseSchema,
+        default: undefined,
+      };
+      expect(nullableAsync(string())).toStrictEqual(expected);
+      expect(nullableAsync(string(), undefined)).toStrictEqual(expected);
     });
 
     test('with null default', () => {
@@ -87,10 +95,20 @@ describe('nullableAsync', () => {
   });
 
   describe('should return dataset without default', () => {
-    const schema = nullableAsync(string(), 'foo');
+    test('for undefined default', async () => {
+      await expectNoSchemaIssueAsync(nullableAsync(string()), [null, 'foo']);
+      await expectNoSchemaIssueAsync(nullableAsync(string(), undefined), [
+        null,
+        'foo',
+      ]);
+    });
 
     test('for wrapper type', async () => {
-      await expectNoSchemaIssueAsync(schema, ['', 'bar', '#$%']);
+      await expectNoSchemaIssueAsync(nullableAsync(string(), 'foo'), [
+        '',
+        'bar',
+        '#$%',
+      ]);
     });
   });
 

@@ -52,7 +52,7 @@ export interface NullableSchema<
  */
 export function nullable<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
->(wrapped: TWrapped): NullableSchema<TWrapped, never>;
+>(wrapped: TWrapped): NullableSchema<TWrapped, undefined>;
 
 /**
  * Creates a nullable schema.
@@ -69,27 +69,23 @@ export function nullable<
 
 export function nullable(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  ...args: unknown[]
+  default_?: unknown
 ): NullableSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown> {
-  // Create schema object
-  // @ts-expect-error
-  const schema: NullableSchema<
-    BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-    unknown
-  > = {
+  return {
     kind: 'schema',
     type: 'nullable',
     reference: nullable,
     expects: `(${wrapped.expects} | null)`,
     async: false,
     wrapped,
+    default: default_,
     '~standard': 1,
     '~vendor': 'valibot',
     '~validate'(dataset, config = getGlobalConfig()) {
       // If value is `null`, override it with default or return dataset
       if (dataset.value === null) {
         // If default is specified, override value of dataset
-        if ('default' in this) {
+        if (this.default !== undefined) {
           dataset.value = getDefault(this, dataset, config);
         }
 
@@ -106,13 +102,4 @@ export function nullable(
       return this.wrapped['~validate'](dataset, config);
     },
   };
-
-  // Add default if specified
-  if (0 in args) {
-    // @ts-expect-error
-    schema.default = args[0];
-  }
-
-  // Return schema object
-  return schema;
 }

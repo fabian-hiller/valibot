@@ -16,7 +16,7 @@ describe('nonOptional', () => {
   describe('should return schema object', () => {
     test('with undefined message', () => {
       type Schema = NonOptionalSchema<
-        NullishSchema<StringSchema<undefined>, never>,
+        NullishSchema<StringSchema<undefined>, undefined>,
         undefined
       >;
       expectTypeOf(nonOptional(nullish(string()))).toEqualTypeOf<Schema>();
@@ -28,7 +28,7 @@ describe('nonOptional', () => {
     test('with string message', () => {
       expectTypeOf(nonOptional(nullish(string()), 'message')).toEqualTypeOf<
         NonOptionalSchema<
-          NullishSchema<StringSchema<undefined>, never>,
+          NullishSchema<StringSchema<undefined>, undefined>,
           'message'
         >
       >();
@@ -39,7 +39,7 @@ describe('nonOptional', () => {
         nonOptional(nullish(string()), () => 'message')
       ).toEqualTypeOf<
         NonOptionalSchema<
-          NullishSchema<StringSchema<undefined>, never>,
+          NullishSchema<StringSchema<undefined>, undefined>,
           () => string
         >
       >();
@@ -48,7 +48,7 @@ describe('nonOptional', () => {
 
   describe('should infer correct types', () => {
     type Schema = NonOptionalSchema<
-      NullishSchema<StringSchema<undefined>, never>,
+      NullishSchema<StringSchema<undefined>, undefined>,
       undefined
     >;
 

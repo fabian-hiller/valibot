@@ -53,9 +53,9 @@ type PartialEntries<
 > = {
   [TKey in keyof TEntries]: TKeys extends readonly (keyof TEntries)[]
     ? TKey extends TKeys[number]
-      ? OptionalSchema<TEntries[TKey], never>
+      ? OptionalSchema<TEntries[TKey], undefined>
       : TEntries[TKey]
-    : OptionalSchema<TEntries[TKey], never>;
+    : OptionalSchema<TEntries[TKey], undefined>;
 };
 
 /**

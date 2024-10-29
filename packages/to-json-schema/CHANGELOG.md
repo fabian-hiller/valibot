@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## v1.0.0 (Month DD, YYYY)
 
 - Change Valibot peer dependency to v1.0.0
+- Change extraction of default value from `nullable`, `nullish` and `optional` schema
 
 ## v0.2.1 (September 30, 2024)
 

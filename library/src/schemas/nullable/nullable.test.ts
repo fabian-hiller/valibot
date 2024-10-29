@@ -23,8 +23,13 @@ describe('nullable', () => {
       '~validate': expect.any(Function),
     };
 
-    test('with never default', () => {
-      expect(nullable(string())).toStrictEqual(baseSchema);
+    test('with undefined default', () => {
+      const expected: NullableSchema<StringSchema<undefined>, undefined> = {
+        ...baseSchema,
+        default: undefined,
+      };
+      expect(nullable(string())).toStrictEqual(expected);
+      expect(nullable(string(), undefined)).toStrictEqual(expected);
     });
 
     test('with null default', () => {
@@ -71,10 +76,13 @@ describe('nullable', () => {
   });
 
   describe('should return dataset without default', () => {
-    const schema = nullable(string(), 'foo');
+    test('for undefined default', () => {
+      expectNoSchemaIssue(nullable(string()), [null, 'foo']);
+      expectNoSchemaIssue(nullable(string(), undefined), [null, 'foo']);
+    });
 
     test('for wrapper type', () => {
-      expectNoSchemaIssue(schema, ['', 'bar', '#$%']);
+      expectNoSchemaIssue(nullable(string(), 'foo'), ['', 'bar', '#$%']);
     });
   });
 

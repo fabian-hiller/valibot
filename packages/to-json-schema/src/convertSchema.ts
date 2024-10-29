@@ -314,7 +314,7 @@ export function convertSchema(
       ];
 
       // Add default value to JSON Schema, if available
-      if ('default' in valibotSchema) {
+      if (valibotSchema.default !== undefined) {
         // @ts-expect-error
         jsonSchema.default = v.getDefault(valibotSchema);
       }
@@ -332,7 +332,7 @@ export function convertSchema(
       );
 
       // Add default value to JSON Schema, if available
-      if ('default' in valibotSchema) {
+      if (valibotSchema.default !== undefined) {
         // @ts-expect-error
         jsonSchema.default = v.getDefault(valibotSchema);
       }
