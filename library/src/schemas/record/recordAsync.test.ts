@@ -157,6 +157,13 @@ describe('recordAsync', () => {
       abortPipeEarly: undefined,
     };
 
+    const input = {
+      foo: 1,
+      bar: '2',
+      baz: undefined,
+      other: 4,
+    };
+
     const numberIssue1: NumberIssue = {
       ...baseInfo,
       kind: 'schema',
@@ -168,25 +175,14 @@ describe('recordAsync', () => {
         {
           type: 'object',
           origin: 'value',
-          input: {
-            foo: 1,
-            bar: '2',
-            baz: undefined,
-            other: 4,
-          },
+          input,
           key: 'bar',
           value: '2',
         },
       ],
     };
 
-    test('for wrong values', async () => {
-      const input = {
-        foo: 1,
-        bar: '2',
-        baz: undefined,
-        other: 4,
-      };
+    test('for invalid values', async () => {
       expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: {
@@ -217,19 +213,44 @@ describe('recordAsync', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('with abort early', async () => {
+    test('with abort early for invalid key', async () => {
+      const input = {
+        foo: 1,
+        other: 2, // Invalid key
+        bar: '3', // Invalid value
+        baz: undefined, // Invalid value
+      };
       expect(
-        await schema['~validate'](
+        await schema['~validate']({ value: input }, { abortEarly: true })
+      ).toStrictEqual({
+        typed: false,
+        value: { foo: 1 },
+        issues: [
           {
-            value: {
-              foo: 1,
-              bar: '2',
-              baz: undefined,
-              other: 4,
-            },
+            ...baseInfo,
+            kind: 'schema',
+            type: 'picklist',
+            input: 'other',
+            expected: '("foo" | "bar" | "baz")',
+            received: '"other"',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input,
+                key: 'other',
+                value: 2,
+              },
+            ],
+            abortEarly: true,
           },
-          { abortEarly: true }
-        )
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('with abort early for invalid value', async () => {
+      expect(
+        await schema['~validate']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: { foo: 1 },
@@ -237,7 +258,7 @@ describe('recordAsync', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('for wrong nested values', async () => {
+    test('for invalid nested values', async () => {
       const nestedSchema = recordAsync(string(), schema);
       const input = {
         key1: {

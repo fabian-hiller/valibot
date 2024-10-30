@@ -162,6 +162,14 @@ describe('map', () => {
       abortPipeEarly: undefined,
     };
 
+    const input = new Map<unknown, unknown>([
+      [0, 'foo'],
+      [1, 123], // Invalid value
+      [2, 'baz'],
+      [null, 'bar'], // Invalid key
+      [4, null], // Invalid value
+    ]);
+
     const stringIssue: StringIssue = {
       ...baseInfo,
       kind: 'schema',
@@ -173,25 +181,14 @@ describe('map', () => {
         {
           type: 'map',
           origin: 'value',
-          input: new Map<unknown, unknown>([
-            [0, 'foo'],
-            [1, 123],
-            [2, 'baz'],
-            [null, 'bar'],
-          ]),
+          input,
           key: 1,
           value: 123,
         },
       ],
     };
 
-    test('for wrong values', () => {
-      const input = new Map<unknown, unknown>([
-        [0, 'foo'],
-        [1, 123],
-        [2, 'baz'],
-        [null, 'bar'],
-      ]);
+    test('for invalid values', () => {
       expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
@@ -214,23 +211,65 @@ describe('map', () => {
               },
             ],
           },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: null,
+            expected: 'string',
+            received: 'null',
+            path: [
+              {
+                type: 'map',
+                origin: 'value',
+                input,
+                key: 4,
+                value: null,
+              },
+            ],
+          },
         ],
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('with abort early', () => {
+    test('with abort early for invalid key', () => {
+      const input = new Map<unknown, unknown>([
+        [0, 'foo'],
+        ['1', 'bar'], // Invalid key
+        [2, 'baz'],
+        [3, 123], // Invalid value
+      ]);
       expect(
-        schema['~validate'](
+        schema['~validate']({ value: input }, { abortEarly: true })
+      ).toStrictEqual({
+        typed: false,
+        value: new Map([[0, 'foo']]),
+        issues: [
           {
-            value: new Map<unknown, unknown>([
-              [0, 'foo'],
-              [1, 123],
-              [2, 'baz'],
-              [null, 'bar'],
-            ]),
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: '1',
+            expected: 'number',
+            received: '"1"',
+            path: [
+              {
+                type: 'map',
+                origin: 'key',
+                input,
+                key: '1',
+                value: 'bar',
+              },
+            ],
+            abortEarly: true,
           },
-          { abortEarly: true }
-        )
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('with abort early for invalid value', () => {
+      expect(
+        schema['~validate']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: new Map([[0, 'foo']]),
@@ -238,7 +277,7 @@ describe('map', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('for wrong nested values', () => {
+    test('for invalid nested values', () => {
       const nestedSchema = map(schema, schema);
       const input = new Map<unknown, unknown>([
         [
@@ -249,6 +288,13 @@ describe('map', () => {
           new Map(),
         ],
         [new Map(), 'bar'],
+        [
+          new Map(),
+          new Map<unknown, unknown>([
+            [0, 'foo'],
+            ['1', 'bar'],
+          ]),
+        ],
       ]);
       expect(nestedSchema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
@@ -297,6 +343,36 @@ describe('map', () => {
                 origin: 'value',
                 input,
                 key: new Map(),
+                value: 'bar',
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: '1',
+            expected: 'number',
+            received: '"1"',
+            path: [
+              {
+                type: 'map',
+                origin: 'value',
+                input,
+                key: new Map(),
+                value: new Map<unknown, unknown>([
+                  [0, 'foo'],
+                  ['1', 'bar'],
+                ]),
+              },
+              {
+                type: 'map',
+                origin: 'key',
+                input: new Map<unknown, unknown>([
+                  [0, 'foo'],
+                  ['1', 'bar'],
+                ]),
+                key: '1',
                 value: 'bar',
               },
             ],

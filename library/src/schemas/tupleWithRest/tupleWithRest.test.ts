@@ -4,6 +4,7 @@ import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { boolean } from '../boolean/index.ts';
 import { null_, type NullIssue } from '../null/index.ts';
 import { number } from '../number/index.ts';
+import { object } from '../object/index.ts';
 import { optional } from '../optional/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
 import { tupleWithRest, type TupleWithRestSchema } from './tupleWithRest.ts';
@@ -168,6 +169,8 @@ describe('tupleWithRest', () => {
       abortPipeEarly: undefined,
     };
 
+    const input = [123, 456, 'true', null, null, null];
+
     const stringIssue: StringIssue = {
       ...baseInfo,
       kind: 'schema',
@@ -179,15 +182,14 @@ describe('tupleWithRest', () => {
         {
           type: 'array',
           origin: 'value',
-          input: [123, 456, 'true', null, null, null],
+          input,
           key: 0,
           value: 123,
         },
       ],
     };
 
-    test('for wrong items', () => {
-      const input = [123, 456, 'true', null, null, null];
+    test('for invalid items', () => {
       expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
@@ -216,10 +218,7 @@ describe('tupleWithRest', () => {
 
     test('with abort early', () => {
       expect(
-        schema['~validate'](
-          { value: [123, 456, 'true', null, null, null] },
-          { abortEarly: true }
-        )
+        schema['~validate']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: [],
@@ -227,7 +226,7 @@ describe('tupleWithRest', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('for wrong nested items', () => {
+    test('for invalid nested items', () => {
       const nestedSchema = tupleWithRest([schema, schema], null_());
       const input: [[string, string, boolean], null, null] = [
         ['foo', '123', false],
@@ -301,7 +300,7 @@ describe('tupleWithRest', () => {
       ],
     };
 
-    test('for wrong rest', () => {
+    test('for invalid rest', () => {
       const input = ['foo', 456, true, null, 'null', null, undefined];
       expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
@@ -329,7 +328,7 @@ describe('tupleWithRest', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('for wrong rest with abort early', () => {
+    test('for invalid rest with abort early', () => {
       expect(
         schema['~validate'](
           { value: ['foo', 456, true, null, 'null', null, undefined] },
@@ -340,6 +339,70 @@ describe('tupleWithRest', () => {
         value: ['foo', 456, true, null],
         issues: [{ ...nullIssue, abortEarly: true }],
       } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for invalid nested rest', () => {
+      const nestedSchema = tupleWithRest([string()], object({ key: number() }));
+      const input = [
+        'foo',
+        { key: '123' },
+        { key: 456 },
+        { key: null },
+      ] as const;
+      expect(nestedSchema['~validate']({ value: input }, {})).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: '123',
+            expected: 'number',
+            received: '"123"',
+            path: [
+              {
+                type: 'array',
+                origin: 'value',
+                input: input,
+                key: 1,
+                value: input[1],
+              },
+              {
+                type: 'object',
+                origin: 'value',
+                input: input[1],
+                key: 'key',
+                value: input[1].key,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: null,
+            expected: 'number',
+            received: 'null',
+            path: [
+              {
+                type: 'array',
+                origin: 'value',
+                input: input,
+                key: 3,
+                value: input[3],
+              },
+              {
+                type: 'object',
+                origin: 'value',
+                input: input[3],
+                key: 'key',
+                value: input[3].key,
+              },
+            ],
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof nestedSchema>>);
     });
   });
 });
