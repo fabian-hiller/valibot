@@ -179,6 +179,46 @@ describe('flatten', () => {
     });
   });
 
+  test('should return nested error with dot path', () => {
+    const nestedIssue: NumberIssue = {
+      ...commonIssueInfo,
+      kind: 'schema',
+      type: 'number',
+      input: 'foo',
+      expected: 'number',
+      received: '"foo"',
+      message: 'Invalid type: Expected number but received "foo"',
+      path: [
+        {
+          type: 'object',
+          origin: 'value',
+          input: { dot: [{ path: 'foo' }] },
+          key: 'dot',
+          value: [{ path: 'foo' }],
+        } satisfies ObjectPathItem,
+        {
+          type: 'array',
+          origin: 'value',
+          input: [{ path: 'foo' }],
+          key: 0,
+          value: { path: 'foo' },
+        } satisfies ArrayPathItem,
+        {
+          type: 'object',
+          origin: 'value',
+          input: { path: 'foo' },
+          key: 'path',
+          value: 'foo',
+        } satisfies ObjectPathItem,
+      ],
+    };
+    expect(flatten([nestedIssue])).toStrictEqual({
+      nested: {
+        'dot.0.path': ['Invalid type: Expected number but received "foo"'],
+      },
+    });
+  });
+
   test('should return single other error', () => {
     const otherIssue: NumberIssue = {
       ...commonIssueInfo,
