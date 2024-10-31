@@ -19,8 +19,6 @@ import { strictObjectAsync } from '../strictObject/index.ts';
 import { string } from '../string/index.ts';
 import { variantAsync, type VariantSchemaAsync } from './variantAsync.ts';
 
-// TODO: Add test for invalid type inputs
-
 describe('variantAsync', () => {
   describe('should return schema object', () => {
     const key = 'type' as const;
