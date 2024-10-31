@@ -6,12 +6,20 @@ import type { ConversionConfig } from '../type.ts';
  * @param message The message to throw or log.
  * @param config The conversion configuration.
  */
-export function throwOrWarn(
+export function handleError(
   message: string,
   config: ConversionConfig | undefined
 ): void {
-  if (!config?.force) {
-    throw new Error(message);
+  switch (config?.errorMode) {
+    case 'ignore': {
+      break;
+    }
+    case 'warn': {
+      console.warn(message);
+      break;
+    }
+    default: {
+      throw new Error(message);
+    }
   }
-  console.warn(message);
 }

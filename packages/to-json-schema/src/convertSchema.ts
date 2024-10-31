@@ -2,7 +2,7 @@ import type { JSONSchema7 } from 'json-schema';
 import * as v from 'valibot';
 import { convertAction } from './convertAction.ts';
 import type { ConversionConfig, ConversionContext } from './type.ts';
-import { throwOrWarn } from './utils/index.ts';
+import { handleError } from './utils/index.ts';
 
 /**
  * Schema type.
@@ -136,7 +136,7 @@ export function convertSchema(
       if (valibotPipeItem.kind === 'schema') {
         // If pipe has multiple schemas, throw or warn
         if (index > 0) {
-          throwOrWarn(
+          handleError(
             'A "pipe" with multiple schemas cannot be converted to JSON Schema.',
             config
           );
@@ -276,13 +276,13 @@ export function convertSchema(
 
     case 'record': {
       if ('pipe' in valibotSchema.key) {
-        throwOrWarn(
+        handleError(
           'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.',
           config
         );
       }
       if (valibotSchema.key.type !== 'string') {
-        throwOrWarn(
+        handleError(
           `The "record" schema with the "${valibotSchema.key.type}" schema for the key cannot be converted to JSON Schema.`,
           config
         );
@@ -351,7 +351,7 @@ export function convertSchema(
         typeof valibotSchema.literal !== 'number' &&
         typeof valibotSchema.literal !== 'string'
       ) {
-        throwOrWarn(
+        handleError(
           'The value of the "literal" schema is not JSON compatible.',
           config
         );
@@ -372,7 +372,7 @@ export function convertSchema(
           (option) => typeof option !== 'number' && typeof option !== 'string'
         )
       ) {
-        throwOrWarn(
+        handleError(
           'An option of the "picklist" schema is not JSON compatible.',
           config
         );
@@ -431,7 +431,7 @@ export function convertSchema(
     // Other schemas
 
     default: {
-      throwOrWarn(
+      handleError(
         // @ts-expect-error
         `The "${valibotSchema.type}" schema cannot be converted to JSON Schema.`,
         config

@@ -61,24 +61,27 @@ describe('convertSchema', () => {
     });
 
     test('should throw error for multiple schemas in pipe', () => {
-      expect(() =>
-        convertSchema(
-          {},
-          v.pipe(v.nullable(v.string()), v.string(), v.description('foo')),
-          undefined,
-          createContext()
-        )
-      ).toThrowError(
-        'A "pipe" with multiple schemas cannot be converted to JSON Schema.'
+      const schema = v.pipe(
+        v.nullable(v.string()),
+        v.string(),
+        v.description('foo')
       );
+      const error =
+        'A "pipe" with multiple schemas cannot be converted to JSON Schema.';
+      expect(() =>
+        convertSchema({}, schema, undefined, createContext())
+      ).toThrowError(error);
+      expect(() =>
+        convertSchema({}, schema, { errorMode: 'throw' }, createContext())
+      ).toThrowError(error);
     });
 
-    test('should force convertion for multiple schemas in pipe', () => {
+    test('should warn error for multiple schemas in pipe', () => {
       expect(
         convertSchema(
           {},
           v.pipe(v.nullable(v.string()), v.string(), v.description('foo')),
-          { force: true },
+          { errorMode: 'warn' },
           createContext()
         )
       ).toStrictEqual({
@@ -318,24 +321,23 @@ describe('convertSchema', () => {
     });
 
     test('should throw error for record schema with pipe in key', () => {
+      const schema = v.record(v.pipe(v.string(), v.email()), v.number());
+      const error =
+        'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.';
       expect(() =>
-        convertSchema(
-          {},
-          v.record(v.pipe(v.string(), v.email()), v.number()),
-          undefined,
-          createContext()
-        )
-      ).toThrowError(
-        'The "record" schema with a schema for the key that contains a "pipe" cannot be converted to JSON Schema.'
-      );
+        convertSchema({}, schema, undefined, createContext())
+      ).toThrowError(error);
+      expect(() =>
+        convertSchema({}, schema, { errorMode: 'throw' }, createContext())
+      ).toThrowError(error);
     });
 
-    test('should force convertion for record schema with pipe in key schema', () => {
+    test('should warn error for record schema with pipe in key schema', () => {
       expect(
         convertSchema(
           {},
           v.record(v.pipe(v.string(), v.email()), v.number()),
-          { force: true },
+          { errorMode: 'warn' },
           createContext()
         )
       ).toStrictEqual({
@@ -348,17 +350,16 @@ describe('convertSchema', () => {
     });
 
     test('should throw error for record schema with non-string schema key', () => {
+      // @ts-expect-error
+      const schema = v.record(v.number(), v.number());
+      const error =
+        'The "record" schema with the "number" schema for the key cannot be converted to JSON Schema.';
       expect(() =>
-        convertSchema(
-          {},
-          // @ts-expect-error
-          v.record(v.number(), v.number()),
-          undefined,
-          createContext()
-        )
-      ).toThrowError(
-        'The "record" schema with the "number" schema for the key cannot be converted to JSON Schema.'
-      );
+        convertSchema({}, schema, undefined, createContext())
+      ).toThrowError(error);
+      expect(() =>
+        convertSchema({}, schema, { errorMode: 'throw' }, createContext())
+      ).toThrowError(error);
     });
   });
 
@@ -531,21 +532,31 @@ describe('convertSchema', () => {
     });
 
     test('should throw error for unsupported literal schema', () => {
+      const schema1 = v.literal(123n);
+      const schema2 = v.literal(Symbol('foo'));
+      const error = 'The value of the "literal" schema is not JSON compatible.';
       expect(() =>
-        convertSchema({}, v.literal(123n), undefined, createContext())
-      ).toThrowError(
-        'The value of the "literal" schema is not JSON compatible.'
-      );
+        convertSchema({}, schema1, undefined, createContext())
+      ).toThrowError(error);
       expect(() =>
-        convertSchema({}, v.literal(Symbol('foo')), undefined, createContext())
-      ).toThrowError(
-        'The value of the "literal" schema is not JSON compatible.'
-      );
+        convertSchema({}, schema1, { errorMode: 'throw' }, createContext())
+      ).toThrowError(error);
+      expect(() =>
+        convertSchema({}, schema2, undefined, createContext())
+      ).toThrowError(error);
+      expect(() =>
+        convertSchema({}, schema2, { errorMode: 'throw' }, createContext())
+      ).toThrowError(error);
     });
 
-    test('should force conversion for unsupported literal schema', () => {
+    test('should warn error for unsupported literal schema', () => {
       expect(
-        convertSchema({}, v.literal(123n), { force: true }, createContext())
+        convertSchema(
+          {},
+          v.literal(123n),
+          { errorMode: 'warn' },
+          createContext()
+        )
       ).toStrictEqual({
         const: 123n,
       });
@@ -554,7 +565,12 @@ describe('convertSchema', () => {
       );
       const symbol = Symbol('foo');
       expect(
-        convertSchema({}, v.literal(symbol), { force: true }, createContext())
+        convertSchema(
+          {},
+          v.literal(symbol),
+          { errorMode: 'warn' },
+          createContext()
+        )
       ).toStrictEqual({
         const: symbol,
       });
@@ -588,26 +604,30 @@ describe('convertSchema', () => {
         convertSchema(
           {},
           v.picklist(['foo', 123, 'bar', 456]),
-          { force: false },
+          undefined,
           createContext()
         )
       ).toStrictEqual({ enum: ['foo', 123, 'bar', 456] });
     });
 
     test('should throw error for unsupported picklist schema', () => {
+      const schema = v.picklist([123n, 456n]);
+      const error =
+        'An option of the "picklist" schema is not JSON compatible.';
       expect(() =>
-        convertSchema({}, v.picklist([123n, 456n]), undefined, createContext())
-      ).toThrowError(
-        'An option of the "picklist" schema is not JSON compatible.'
-      );
+        convertSchema({}, schema, undefined, createContext())
+      ).toThrowError(error);
+      expect(() =>
+        convertSchema({}, schema, { errorMode: 'throw' }, createContext())
+      ).toThrowError(error);
     });
 
-    test('should force conversion for unsupported picklist schema', () => {
+    test('should warn error for unsupported picklist schema', () => {
       expect(
         convertSchema(
           {},
           v.picklist([123n, 456n]),
-          { force: true },
+          { errorMode: 'warn' },
           createContext()
         )
       ).toStrictEqual({ enum: [123n, 456n] });
@@ -811,16 +831,32 @@ describe('convertSchema', () => {
 
   describe('other schemas', () => {
     test('should throw error for unsupported file schema', () => {
+      const schema = v.file();
+      const error = 'The "file" schema cannot be converted to JSON Schema.';
       expect(() =>
-        // @ts-expect-error
-        convertSchema({}, v.file(), undefined, createContext())
-      ).toThrowError('The "file" schema cannot be converted to JSON Schema.');
+        convertSchema(
+          {},
+          // @ts-expect-error
+          schema,
+          undefined,
+          createContext()
+        )
+      ).toThrowError(error);
+      expect(() =>
+        convertSchema(
+          {},
+          // @ts-expect-error
+          schema,
+          { errorMode: 'throw' },
+          createContext()
+        )
+      ).toThrowError(error);
     });
 
-    test('should force conversion for unsupported file schema', () => {
+    test('should warn error for unsupported file schema', () => {
       expect(
         // @ts-expect-error
-        convertSchema({}, v.file(), { force: true }, createContext())
+        convertSchema({}, v.file(), { errorMode: 'warn' }, createContext())
       ).toStrictEqual({});
       expect(console.warn).toHaveBeenLastCalledWith(
         'The "file" schema cannot be converted to JSON Schema.'
