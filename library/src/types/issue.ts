@@ -250,9 +250,6 @@ export interface BaseIssue<TInput> extends Config<BaseIssue<TInput>> {
   readonly requirement?: unknown | undefined;
   /**
    * The issue path.
-   *
-   * TODO: Investigate if it is possible to make the path type safe based on the
-   * input.
    */
   readonly path?: [IssuePathItem, ...IssuePathItem[]] | undefined;
   /**

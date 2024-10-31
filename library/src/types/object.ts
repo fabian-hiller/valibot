@@ -81,10 +81,6 @@ export type ObjectKeys<
 
 /**
  * Question mark schema type.
- *
- * TODO: Document that for simplicity and bundle size, we currently do not
- * distinguish between `undefined` and missing keys when using `optional` and
- * `nullish`.
  */
 type QuestionMarkSchema =
   | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
