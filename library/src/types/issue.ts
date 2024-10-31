@@ -205,9 +205,6 @@ export interface UnknownPathItem {
 
 /**
  * Issue path item type.
- *
- * TODO: Document that the input of the path may be different from the input of
- * the issue.
  */
 export type IssuePathItem =
   | ArrayPathItem
