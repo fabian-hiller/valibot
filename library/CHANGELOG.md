@@ -14,6 +14,7 @@ All notable changes to the library will be documented in this file.
 - Change behaviour of `minValue` and `maxValue` for `NaN` (pull request #843)
 - Change type and behaviour of `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional`, `optionalAsync`, `undefinedable` and `undefinedableAsync` for undefined default value (issue #878)
 - Change type signature of `partialCheck` and `partialCheckAsync` action to add `.pathList` property in a type-safe way
+- Change type signature of `findItem` action to support type predicates (issue #867)
 - Refactor `bytes`, `maxBytes`, `minBytes` and `notBytes` action
 
 ## v0.42.1 (September 20, 2024)
