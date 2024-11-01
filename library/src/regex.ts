@@ -20,6 +20,12 @@ export const CUID2_REGEX: RegExp = /^[a-z][\da-z]*$/u;
 export const DECIMAL_REGEX: RegExp = /^[+-]?\d+(?:\.\d+)?$/u;
 
 /**
+ * [Domain name](https://en.wikipedia.org/wiki/Domain_name) regex.
+ */
+export const DOMAIN_NAME_REGEX: RegExp =
+  /^(?!-)([a-z0-9-]{1,63}(?<!-)\.)+[a-z]{2,6}$/iu;
+
+/**
  * [Digits](https://en.wikipedia.org/wiki/Numerical_digit) regex.
  */
 export const DIGITS_REGEX: RegExp = /^\d+$/u;
