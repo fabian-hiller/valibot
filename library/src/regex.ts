@@ -147,3 +147,8 @@ export const ULID_REGEX: RegExp = /^[\da-hjkmnp-tv-z]{26}$/iu;
  */
 export const UUID_REGEX: RegExp =
   /^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/iu;
+
+/**
+ * [Slug](https://en.wikipedia.org/wiki/Clean_URL#Slug) regex.
+ */
+export const SLUG_REGEX: RegExp = /^[\da-z]+(?:[-_][\da-z]+)*$/u;

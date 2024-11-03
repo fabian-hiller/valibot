@@ -75,6 +75,7 @@ export * from './regex/index.ts';
 export * from './returns/index.ts';
 export * from './safeInteger/index.ts';
 export * from './size/index.ts';
+export * from './slug/index.ts';
 export * from './someItem/index.ts';
 export * from './sortItems/index.ts';
 export * from './startsWith/index.ts';
