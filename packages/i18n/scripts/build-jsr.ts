@@ -4,6 +4,7 @@ import jsr from '../jsr.json';
 import package_ from '../package.json';
 import ar from '../src/ar';
 import ca from '../src/ca';
+import cs from '../src/cs';
 import de from '../src/de';
 import es from '../src/es';
 import fa from '../src/fa';
@@ -35,6 +36,7 @@ console.time('build');
 const languages = [
   ar,
   ca,
+  cs,
   de,
   es,
   fa,

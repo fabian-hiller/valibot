@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Add new and missing actions to translations
 - Add Farsi (fa) translations (pull request #838)
+- Add Czech (cs) translations (pull request #886)
 - Change Valibot peer dependency to v1.0.0
 
 ## v0.17.0 (July 26, 2024)
