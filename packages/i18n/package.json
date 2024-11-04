@@ -44,6 +44,7 @@
     "index.d.cts",
     "ar",
     "ca",
+    "cs",
     "de",
     "es",
     "fa",
@@ -1375,6 +1376,656 @@
       "require": {
         "types": "./ca/value.d.cts",
         "default": "./ca/value.cjs"
+      }
+    },
+    "./cs": {
+      "import": {
+        "types": "./cs/index.d.ts",
+        "default": "./cs/index.js"
+      },
+      "require": {
+        "types": "./cs/index.d.cts",
+        "default": "./cs/index.cjs"
+      }
+    },
+    "./cs/schema": {
+      "import": {
+        "types": "./cs/schema.d.ts",
+        "default": "./cs/schema.js"
+      },
+      "require": {
+        "types": "./cs/schema.d.cts",
+        "default": "./cs/schema.cjs"
+      }
+    },
+    "./cs/base64": {
+      "import": {
+        "types": "./cs/base64.d.ts",
+        "default": "./cs/base64.js"
+      },
+      "require": {
+        "types": "./cs/base64.d.cts",
+        "default": "./cs/base64.cjs"
+      }
+    },
+    "./cs/bic": {
+      "import": {
+        "types": "./cs/bic.d.ts",
+        "default": "./cs/bic.js"
+      },
+      "require": {
+        "types": "./cs/bic.d.cts",
+        "default": "./cs/bic.cjs"
+      }
+    },
+    "./cs/bytes": {
+      "import": {
+        "types": "./cs/bytes.d.ts",
+        "default": "./cs/bytes.js"
+      },
+      "require": {
+        "types": "./cs/bytes.d.cts",
+        "default": "./cs/bytes.cjs"
+      }
+    },
+    "./cs/check": {
+      "import": {
+        "types": "./cs/check.d.ts",
+        "default": "./cs/check.js"
+      },
+      "require": {
+        "types": "./cs/check.d.cts",
+        "default": "./cs/check.cjs"
+      }
+    },
+    "./cs/checkAsync": {
+      "import": {
+        "types": "./cs/checkAsync.d.ts",
+        "default": "./cs/checkAsync.js"
+      },
+      "require": {
+        "types": "./cs/checkAsync.d.cts",
+        "default": "./cs/checkAsync.cjs"
+      }
+    },
+    "./cs/checkItems": {
+      "import": {
+        "types": "./cs/checkItems.d.ts",
+        "default": "./cs/checkItems.js"
+      },
+      "require": {
+        "types": "./cs/checkItems.d.cts",
+        "default": "./cs/checkItems.cjs"
+      }
+    },
+    "./cs/creditCard": {
+      "import": {
+        "types": "./cs/creditCard.d.ts",
+        "default": "./cs/creditCard.js"
+      },
+      "require": {
+        "types": "./cs/creditCard.d.cts",
+        "default": "./cs/creditCard.cjs"
+      }
+    },
+    "./cs/cuid2": {
+      "import": {
+        "types": "./cs/cuid2.d.ts",
+        "default": "./cs/cuid2.js"
+      },
+      "require": {
+        "types": "./cs/cuid2.d.cts",
+        "default": "./cs/cuid2.cjs"
+      }
+    },
+    "./cs/decimal": {
+      "import": {
+        "types": "./cs/decimal.d.ts",
+        "default": "./cs/decimal.js"
+      },
+      "require": {
+        "types": "./cs/decimal.d.cts",
+        "default": "./cs/decimal.cjs"
+      }
+    },
+    "./cs/digits": {
+      "import": {
+        "types": "./cs/digits.d.ts",
+        "default": "./cs/digits.js"
+      },
+      "require": {
+        "types": "./cs/digits.d.cts",
+        "default": "./cs/digits.cjs"
+      }
+    },
+    "./cs/email": {
+      "import": {
+        "types": "./cs/email.d.ts",
+        "default": "./cs/email.js"
+      },
+      "require": {
+        "types": "./cs/email.d.cts",
+        "default": "./cs/email.cjs"
+      }
+    },
+    "./cs/emoji": {
+      "import": {
+        "types": "./cs/emoji.d.ts",
+        "default": "./cs/emoji.js"
+      },
+      "require": {
+        "types": "./cs/emoji.d.cts",
+        "default": "./cs/emoji.cjs"
+      }
+    },
+    "./cs/empty": {
+      "import": {
+        "types": "./cs/empty.d.ts",
+        "default": "./cs/empty.js"
+      },
+      "require": {
+        "types": "./cs/empty.d.cts",
+        "default": "./cs/empty.cjs"
+      }
+    },
+    "./cs/endsWith": {
+      "import": {
+        "types": "./cs/endsWith.d.ts",
+        "default": "./cs/endsWith.js"
+      },
+      "require": {
+        "types": "./cs/endsWith.d.cts",
+        "default": "./cs/endsWith.cjs"
+      }
+    },
+    "./cs/everyItem": {
+      "import": {
+        "types": "./cs/everyItem.d.ts",
+        "default": "./cs/everyItem.js"
+      },
+      "require": {
+        "types": "./cs/everyItem.d.cts",
+        "default": "./cs/everyItem.cjs"
+      }
+    },
+    "./cs/excludes": {
+      "import": {
+        "types": "./cs/excludes.d.ts",
+        "default": "./cs/excludes.js"
+      },
+      "require": {
+        "types": "./cs/excludes.d.cts",
+        "default": "./cs/excludes.cjs"
+      }
+    },
+    "./cs/finite": {
+      "import": {
+        "types": "./cs/finite.d.ts",
+        "default": "./cs/finite.js"
+      },
+      "require": {
+        "types": "./cs/finite.d.cts",
+        "default": "./cs/finite.cjs"
+      }
+    },
+    "./cs/hash": {
+      "import": {
+        "types": "./cs/hash.d.ts",
+        "default": "./cs/hash.js"
+      },
+      "require": {
+        "types": "./cs/hash.d.cts",
+        "default": "./cs/hash.cjs"
+      }
+    },
+    "./cs/hexColor": {
+      "import": {
+        "types": "./cs/hexColor.d.ts",
+        "default": "./cs/hexColor.js"
+      },
+      "require": {
+        "types": "./cs/hexColor.d.cts",
+        "default": "./cs/hexColor.cjs"
+      }
+    },
+    "./cs/hexadecimal": {
+      "import": {
+        "types": "./cs/hexadecimal.d.ts",
+        "default": "./cs/hexadecimal.js"
+      },
+      "require": {
+        "types": "./cs/hexadecimal.d.cts",
+        "default": "./cs/hexadecimal.cjs"
+      }
+    },
+    "./cs/imei": {
+      "import": {
+        "types": "./cs/imei.d.ts",
+        "default": "./cs/imei.js"
+      },
+      "require": {
+        "types": "./cs/imei.d.cts",
+        "default": "./cs/imei.cjs"
+      }
+    },
+    "./cs/includes": {
+      "import": {
+        "types": "./cs/includes.d.ts",
+        "default": "./cs/includes.js"
+      },
+      "require": {
+        "types": "./cs/includes.d.cts",
+        "default": "./cs/includes.cjs"
+      }
+    },
+    "./cs/integer": {
+      "import": {
+        "types": "./cs/integer.d.ts",
+        "default": "./cs/integer.js"
+      },
+      "require": {
+        "types": "./cs/integer.d.cts",
+        "default": "./cs/integer.cjs"
+      }
+    },
+    "./cs/ip": {
+      "import": {
+        "types": "./cs/ip.d.ts",
+        "default": "./cs/ip.js"
+      },
+      "require": {
+        "types": "./cs/ip.d.cts",
+        "default": "./cs/ip.cjs"
+      }
+    },
+    "./cs/ipv4": {
+      "import": {
+        "types": "./cs/ipv4.d.ts",
+        "default": "./cs/ipv4.js"
+      },
+      "require": {
+        "types": "./cs/ipv4.d.cts",
+        "default": "./cs/ipv4.cjs"
+      }
+    },
+    "./cs/ipv6": {
+      "import": {
+        "types": "./cs/ipv6.d.ts",
+        "default": "./cs/ipv6.js"
+      },
+      "require": {
+        "types": "./cs/ipv6.d.cts",
+        "default": "./cs/ipv6.cjs"
+      }
+    },
+    "./cs/isoDate": {
+      "import": {
+        "types": "./cs/isoDate.d.ts",
+        "default": "./cs/isoDate.js"
+      },
+      "require": {
+        "types": "./cs/isoDate.d.cts",
+        "default": "./cs/isoDate.cjs"
+      }
+    },
+    "./cs/isoDateTime": {
+      "import": {
+        "types": "./cs/isoDateTime.d.ts",
+        "default": "./cs/isoDateTime.js"
+      },
+      "require": {
+        "types": "./cs/isoDateTime.d.cts",
+        "default": "./cs/isoDateTime.cjs"
+      }
+    },
+    "./cs/isoTime": {
+      "import": {
+        "types": "./cs/isoTime.d.ts",
+        "default": "./cs/isoTime.js"
+      },
+      "require": {
+        "types": "./cs/isoTime.d.cts",
+        "default": "./cs/isoTime.cjs"
+      }
+    },
+    "./cs/isoTimeSecond": {
+      "import": {
+        "types": "./cs/isoTimeSecond.d.ts",
+        "default": "./cs/isoTimeSecond.js"
+      },
+      "require": {
+        "types": "./cs/isoTimeSecond.d.cts",
+        "default": "./cs/isoTimeSecond.cjs"
+      }
+    },
+    "./cs/isoTimestamp": {
+      "import": {
+        "types": "./cs/isoTimestamp.d.ts",
+        "default": "./cs/isoTimestamp.js"
+      },
+      "require": {
+        "types": "./cs/isoTimestamp.d.cts",
+        "default": "./cs/isoTimestamp.cjs"
+      }
+    },
+    "./cs/isoWeek": {
+      "import": {
+        "types": "./cs/isoWeek.d.ts",
+        "default": "./cs/isoWeek.js"
+      },
+      "require": {
+        "types": "./cs/isoWeek.d.cts",
+        "default": "./cs/isoWeek.cjs"
+      }
+    },
+    "./cs/length": {
+      "import": {
+        "types": "./cs/length.d.ts",
+        "default": "./cs/length.js"
+      },
+      "require": {
+        "types": "./cs/length.d.cts",
+        "default": "./cs/length.cjs"
+      }
+    },
+    "./cs/mac": {
+      "import": {
+        "types": "./cs/mac.d.ts",
+        "default": "./cs/mac.js"
+      },
+      "require": {
+        "types": "./cs/mac.d.cts",
+        "default": "./cs/mac.cjs"
+      }
+    },
+    "./cs/mac48": {
+      "import": {
+        "types": "./cs/mac48.d.ts",
+        "default": "./cs/mac48.js"
+      },
+      "require": {
+        "types": "./cs/mac48.d.cts",
+        "default": "./cs/mac48.cjs"
+      }
+    },
+    "./cs/mac64": {
+      "import": {
+        "types": "./cs/mac64.d.ts",
+        "default": "./cs/mac64.js"
+      },
+      "require": {
+        "types": "./cs/mac64.d.cts",
+        "default": "./cs/mac64.cjs"
+      }
+    },
+    "./cs/maxBytes": {
+      "import": {
+        "types": "./cs/maxBytes.d.ts",
+        "default": "./cs/maxBytes.js"
+      },
+      "require": {
+        "types": "./cs/maxBytes.d.cts",
+        "default": "./cs/maxBytes.cjs"
+      }
+    },
+    "./cs/maxLength": {
+      "import": {
+        "types": "./cs/maxLength.d.ts",
+        "default": "./cs/maxLength.js"
+      },
+      "require": {
+        "types": "./cs/maxLength.d.cts",
+        "default": "./cs/maxLength.cjs"
+      }
+    },
+    "./cs/maxSize": {
+      "import": {
+        "types": "./cs/maxSize.d.ts",
+        "default": "./cs/maxSize.js"
+      },
+      "require": {
+        "types": "./cs/maxSize.d.cts",
+        "default": "./cs/maxSize.cjs"
+      }
+    },
+    "./cs/maxValue": {
+      "import": {
+        "types": "./cs/maxValue.d.ts",
+        "default": "./cs/maxValue.js"
+      },
+      "require": {
+        "types": "./cs/maxValue.d.cts",
+        "default": "./cs/maxValue.cjs"
+      }
+    },
+    "./cs/mimeType": {
+      "import": {
+        "types": "./cs/mimeType.d.ts",
+        "default": "./cs/mimeType.js"
+      },
+      "require": {
+        "types": "./cs/mimeType.d.cts",
+        "default": "./cs/mimeType.cjs"
+      }
+    },
+    "./cs/minBytes": {
+      "import": {
+        "types": "./cs/minBytes.d.ts",
+        "default": "./cs/minBytes.js"
+      },
+      "require": {
+        "types": "./cs/minBytes.d.cts",
+        "default": "./cs/minBytes.cjs"
+      }
+    },
+    "./cs/minLength": {
+      "import": {
+        "types": "./cs/minLength.d.ts",
+        "default": "./cs/minLength.js"
+      },
+      "require": {
+        "types": "./cs/minLength.d.cts",
+        "default": "./cs/minLength.cjs"
+      }
+    },
+    "./cs/minSize": {
+      "import": {
+        "types": "./cs/minSize.d.ts",
+        "default": "./cs/minSize.js"
+      },
+      "require": {
+        "types": "./cs/minSize.d.cts",
+        "default": "./cs/minSize.cjs"
+      }
+    },
+    "./cs/minValue": {
+      "import": {
+        "types": "./cs/minValue.d.ts",
+        "default": "./cs/minValue.js"
+      },
+      "require": {
+        "types": "./cs/minValue.d.cts",
+        "default": "./cs/minValue.cjs"
+      }
+    },
+    "./cs/multipleOf": {
+      "import": {
+        "types": "./cs/multipleOf.d.ts",
+        "default": "./cs/multipleOf.js"
+      },
+      "require": {
+        "types": "./cs/multipleOf.d.cts",
+        "default": "./cs/multipleOf.cjs"
+      }
+    },
+    "./cs/nanoid": {
+      "import": {
+        "types": "./cs/nanoid.d.ts",
+        "default": "./cs/nanoid.js"
+      },
+      "require": {
+        "types": "./cs/nanoid.d.cts",
+        "default": "./cs/nanoid.cjs"
+      }
+    },
+    "./cs/nonEmpty": {
+      "import": {
+        "types": "./cs/nonEmpty.d.ts",
+        "default": "./cs/nonEmpty.js"
+      },
+      "require": {
+        "types": "./cs/nonEmpty.d.cts",
+        "default": "./cs/nonEmpty.cjs"
+      }
+    },
+    "./cs/notBytes": {
+      "import": {
+        "types": "./cs/notBytes.d.ts",
+        "default": "./cs/notBytes.js"
+      },
+      "require": {
+        "types": "./cs/notBytes.d.cts",
+        "default": "./cs/notBytes.cjs"
+      }
+    },
+    "./cs/notLength": {
+      "import": {
+        "types": "./cs/notLength.d.ts",
+        "default": "./cs/notLength.js"
+      },
+      "require": {
+        "types": "./cs/notLength.d.cts",
+        "default": "./cs/notLength.cjs"
+      }
+    },
+    "./cs/notSize": {
+      "import": {
+        "types": "./cs/notSize.d.ts",
+        "default": "./cs/notSize.js"
+      },
+      "require": {
+        "types": "./cs/notSize.d.cts",
+        "default": "./cs/notSize.cjs"
+      }
+    },
+    "./cs/notValue": {
+      "import": {
+        "types": "./cs/notValue.d.ts",
+        "default": "./cs/notValue.js"
+      },
+      "require": {
+        "types": "./cs/notValue.d.cts",
+        "default": "./cs/notValue.cjs"
+      }
+    },
+    "./cs/octal": {
+      "import": {
+        "types": "./cs/octal.d.ts",
+        "default": "./cs/octal.js"
+      },
+      "require": {
+        "types": "./cs/octal.d.cts",
+        "default": "./cs/octal.cjs"
+      }
+    },
+    "./cs/partialCheck": {
+      "import": {
+        "types": "./cs/partialCheck.d.ts",
+        "default": "./cs/partialCheck.js"
+      },
+      "require": {
+        "types": "./cs/partialCheck.d.cts",
+        "default": "./cs/partialCheck.cjs"
+      }
+    },
+    "./cs/regex": {
+      "import": {
+        "types": "./cs/regex.d.ts",
+        "default": "./cs/regex.js"
+      },
+      "require": {
+        "types": "./cs/regex.d.cts",
+        "default": "./cs/regex.cjs"
+      }
+    },
+    "./cs/safeInteger": {
+      "import": {
+        "types": "./cs/safeInteger.d.ts",
+        "default": "./cs/safeInteger.js"
+      },
+      "require": {
+        "types": "./cs/safeInteger.d.cts",
+        "default": "./cs/safeInteger.cjs"
+      }
+    },
+    "./cs/size": {
+      "import": {
+        "types": "./cs/size.d.ts",
+        "default": "./cs/size.js"
+      },
+      "require": {
+        "types": "./cs/size.d.cts",
+        "default": "./cs/size.cjs"
+      }
+    },
+    "./cs/someItem": {
+      "import": {
+        "types": "./cs/someItem.d.ts",
+        "default": "./cs/someItem.js"
+      },
+      "require": {
+        "types": "./cs/someItem.d.cts",
+        "default": "./cs/someItem.cjs"
+      }
+    },
+    "./cs/startsWith": {
+      "import": {
+        "types": "./cs/startsWith.d.ts",
+        "default": "./cs/startsWith.js"
+      },
+      "require": {
+        "types": "./cs/startsWith.d.cts",
+        "default": "./cs/startsWith.cjs"
+      }
+    },
+    "./cs/ulid": {
+      "import": {
+        "types": "./cs/ulid.d.ts",
+        "default": "./cs/ulid.js"
+      },
+      "require": {
+        "types": "./cs/ulid.d.cts",
+        "default": "./cs/ulid.cjs"
+      }
+    },
+    "./cs/url": {
+      "import": {
+        "types": "./cs/url.d.ts",
+        "default": "./cs/url.js"
+      },
+      "require": {
+        "types": "./cs/url.d.cts",
+        "default": "./cs/url.cjs"
+      }
+    },
+    "./cs/uuid": {
+      "import": {
+        "types": "./cs/uuid.d.ts",
+        "default": "./cs/uuid.js"
+      },
+      "require": {
+        "types": "./cs/uuid.d.cts",
+        "default": "./cs/uuid.cjs"
+      }
+    },
+    "./cs/value": {
+      "import": {
+        "types": "./cs/value.d.ts",
+        "default": "./cs/value.js"
+      },
+      "require": {
+        "types": "./cs/value.d.cts",
+        "default": "./cs/value.cjs"
       }
     },
     "./de": {

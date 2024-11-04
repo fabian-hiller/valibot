@@ -10,6 +10,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 | Catalan (ca)    | [#652][pr-527-url] | ✅     |
 | Chinese (zh-CN) | [#419][pr-419-url] | ✅     |
 | Chinese (zh-TW) | [#427][pr-427-url] | ✅     |
+| Czech (cs)      | [#886][pr-886-url] | ✅     |
 | Dutch (nl)      | [#438][pr-438-url] | ✅     |
 | English (en)    | [#397][pr-397-url] | ✅     |
 | Farsi (fa)      | [#838][pr-838-url] | ✅     |
@@ -54,6 +55,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 [pr-652-url]: https://github.com/fabian-hiller/valibot/pull/652
 [pr-683-url]: https://github.com/fabian-hiller/valibot/pull/683
 [pr-838-url]: https://github.com/fabian-hiller/valibot/pull/838
+[pr-886-url]: https://github.com/fabian-hiller/valibot/pull/886
 
 ## Getting started
 
