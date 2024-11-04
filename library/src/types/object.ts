@@ -81,10 +81,6 @@ export type ObjectKeys<
 
 /**
  * Question mark schema type.
- *
- * TODO: Document that for simplicity and bundle size, we currently do not
- * distinguish between `undefined` and missing keys when using `optional` and
- * `nullish`.
  */
 type QuestionMarkSchema =
   | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
@@ -103,11 +99,8 @@ type QuestionMarkSchema =
 /**
  * Has default type.
  */
-type HasDefault<TSchema extends QuestionMarkSchema> = [
-  TSchema['default'],
-] extends [never]
-  ? false
-  : true;
+type HasDefault<TSchema extends QuestionMarkSchema> =
+  undefined extends TSchema['default'] ? false : true;
 
 /**
  * Exact optional input type.
@@ -117,8 +110,8 @@ type ExactOptionalInput<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > = TSchema extends
-  | OptionalSchema<infer TWrapped, never>
-  | OptionalSchemaAsync<infer TWrapped, never>
+  | OptionalSchema<infer TWrapped, unknown>
+  | OptionalSchemaAsync<infer TWrapped, unknown>
   ? ExactOptionalInput<TWrapped>
   : InferInput<TSchema>;
 
@@ -130,8 +123,8 @@ type ExactOptionalOutput<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > = TSchema extends
-  | OptionalSchema<infer TWrapped, never>
-  | OptionalSchemaAsync<infer TWrapped, never>
+  | OptionalSchema<infer TWrapped, unknown>
+  | OptionalSchemaAsync<infer TWrapped, unknown>
   ? HasDefault<TSchema> extends true
     ? InferOutput<TSchema>
     : ExactOptionalOutput<TWrapped>
@@ -178,7 +171,7 @@ type OptionalOutputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
  */
 type InputWithQuestionMarks<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObject extends InferEntriesInput<TEntries> | InferEntriesOutput<TEntries>,
+  TObject extends InferEntriesInput<TEntries>,
 > = MarkOptional<TObject, OptionalInputKeys<TEntries>>;
 
 /**
@@ -186,7 +179,7 @@ type InputWithQuestionMarks<
  */
 type OutputWithQuestionMarks<
   TEntries extends ObjectEntries | ObjectEntriesAsync,
-  TObject extends InferEntriesInput<TEntries> | InferEntriesOutput<TEntries>,
+  TObject extends InferEntriesOutput<TEntries>,
 > = MarkOptional<TObject, OptionalOutputKeys<TEntries>>;
 
 /**

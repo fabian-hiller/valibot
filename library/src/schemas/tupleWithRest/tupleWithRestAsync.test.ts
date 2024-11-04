@@ -7,6 +7,7 @@ import {
 import { boolean } from '../boolean/index.ts';
 import { null_, type NullIssue } from '../null/index.ts';
 import { number } from '../number/index.ts';
+import { objectAsync } from '../object/index.ts';
 import { optionalAsync } from '../optional/index.ts';
 import { string, type StringIssue } from '../string/index.ts';
 import {
@@ -205,7 +206,7 @@ describe('tupleWithRestAsync', () => {
       ],
     };
 
-    test('for wrong items', async () => {
+    test('for invalid items', async () => {
       const input = [123, 456, 'true', null, null, null];
       expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
@@ -246,7 +247,7 @@ describe('tupleWithRestAsync', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('for wrong nested items', async () => {
+    test('for invalid nested items', async () => {
       const nestedSchema = tupleWithRestAsync([schema, schema], null_());
       const input: [[string, string, boolean], null, null] = [
         ['foo', '123', false],
@@ -322,7 +323,7 @@ describe('tupleWithRestAsync', () => {
       ],
     };
 
-    test('for wrong rest', async () => {
+    test('for invalid rest', async () => {
       const input = ['foo', 456, true, null, 'null', null, undefined];
       expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
@@ -350,7 +351,7 @@ describe('tupleWithRestAsync', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('for wrong rest with abort early', async () => {
+    test('for invalid rest with abort early', async () => {
       expect(
         await schema['~validate'](
           { value: ['foo', 456, true, null, 'null', null, undefined] },
@@ -361,6 +362,75 @@ describe('tupleWithRestAsync', () => {
         value: ['foo', 456, true, null],
         issues: [{ ...nullIssue, abortEarly: true }],
       } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for invalid nested rest', async () => {
+      const nestedSchema = tupleWithRestAsync(
+        [string()],
+        objectAsync({ key: number() })
+      );
+      const input = [
+        'foo',
+        { key: '123' },
+        { key: 456 },
+        { key: null },
+      ] as const;
+      expect(
+        await nestedSchema['~validate']({ value: input }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: '123',
+            expected: 'number',
+            received: '"123"',
+            path: [
+              {
+                type: 'array',
+                origin: 'value',
+                input: input,
+                key: 1,
+                value: input[1],
+              },
+              {
+                type: 'object',
+                origin: 'value',
+                input: input[1],
+                key: 'key',
+                value: input[1].key,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: null,
+            expected: 'number',
+            received: 'null',
+            path: [
+              {
+                type: 'array',
+                origin: 'value',
+                input: input,
+                key: 3,
+                value: input[3],
+              },
+              {
+                type: 'object',
+                origin: 'value',
+                input: input[3],
+                key: 'key',
+                value: input[3].key,
+              },
+            ],
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof nestedSchema>>);
     });
   });
 });

@@ -6,6 +6,7 @@ description: >-
   shortcut.
 contributors:
   - fabian-hiller
+  - fartinmartin
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -52,7 +53,7 @@ type OptionalStringOutput = v.Output<typeof OptionalStringSchema>; // string
 
 By providing a default value, the input type of the schema now differs from the output type. The schema in the example now accepts `string` and `undefined` as input, but returns a string as output in both cases.
 
-### Dynamic values
+### Dynamic default values
 
 In some cases it is necessary to generate the default value dynamically. For this purpose, a function that generates and returns the default value can also be passed as the second argument.
 
@@ -63,3 +64,23 @@ const NullableDateSchema = v.nullable(v.date(), () => new Date());
 ```
 
 The previous example thus creates a new instance of the [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) class for each validation with `null` as input, which is then used as the default value.
+
+### Dependent default values
+
+In rare cases, a default value for an optional entry may depend on the values of another entries in the same object. This can be achieved by using <Link href="/api/transform/">`transform`</Link> in the <Link href="/api/pipe/">`pipe`</Link> of the object.
+
+```ts
+const CalculationSchema = v.pipe(
+  v.object({
+    a: v.number(),
+    b: v.number(),
+    sum: v.optional(v.number()),
+  }),
+  v.transform((input) => {
+    if (input.sum === undefined) {
+      return { ...input, sum: input.a + input.b };
+    }
+    return input;
+  })
+);
+```

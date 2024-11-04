@@ -9,9 +9,15 @@ import { nullish, type NullishSchema } from './nullish.ts';
 
 describe('nullish', () => {
   describe('should return schema object', () => {
-    test('with never default', () => {
-      expectTypeOf(nullish(string())).toEqualTypeOf<
-        NullishSchema<StringSchema<undefined>, never>
+    test('with undefined default', () => {
+      type Schema = NullishSchema<StringSchema<undefined>, undefined>;
+      expectTypeOf(nullish(string())).toEqualTypeOf<Schema>();
+      expectTypeOf(nullish(string(), undefined)).toEqualTypeOf<Schema>();
+    });
+
+    test('with undefined getter default', () => {
+      expectTypeOf(nullish(string(), () => undefined)).toEqualTypeOf<
+        NullishSchema<StringSchema<undefined>, () => undefined>
       >();
     });
 
@@ -24,18 +30,6 @@ describe('nullish', () => {
     test('with null getter default', () => {
       expectTypeOf(nullish(string(), () => null)).toEqualTypeOf<
         NullishSchema<StringSchema<undefined>, () => null>
-      >();
-    });
-
-    test('with undefined default', () => {
-      expectTypeOf(nullish(string(), undefined)).toEqualTypeOf<
-        NullishSchema<StringSchema<undefined>, undefined>
-      >();
-    });
-
-    test('with undefined getter default', () => {
-      expectTypeOf(nullish(string(), () => undefined)).toEqualTypeOf<
-        NullishSchema<StringSchema<undefined>, () => undefined>
       >();
     });
 
@@ -53,13 +47,12 @@ describe('nullish', () => {
   });
 
   describe('should infer correct types', () => {
-    type Schema1 = NullishSchema<StringSchema<undefined>, never>;
+    type Schema1 = NullishSchema<StringSchema<undefined>, undefined>;
     type Schema2 = NullishSchema<StringSchema<undefined>, null>;
-    type Schema3 = NullishSchema<StringSchema<undefined>, undefined>;
-    type Schema4 = NullishSchema<StringSchema<undefined>, 'foo'>;
+    type Schema3 = NullishSchema<StringSchema<undefined>, 'foo'>;
+    type Schema4 = NullishSchema<StringSchema<undefined>, () => undefined>;
     type Schema5 = NullishSchema<StringSchema<undefined>, () => null>;
-    type Schema6 = NullishSchema<StringSchema<undefined>, () => undefined>;
-    type Schema7 = NullishSchema<StringSchema<undefined>, () => 'foo'>;
+    type Schema6 = NullishSchema<StringSchema<undefined>, () => 'foo'>;
 
     test('of input', () => {
       type Input = string | null | undefined;
@@ -69,7 +62,6 @@ describe('nullish', () => {
       expectTypeOf<InferInput<Schema4>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema5>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema6>>().toEqualTypeOf<Input>();
-      expectTypeOf<InferInput<Schema7>>().toEqualTypeOf<Input>();
     });
 
     test('of output', () => {
@@ -77,11 +69,10 @@ describe('nullish', () => {
         string | null | undefined
       >();
       expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<string | null>();
-      expectTypeOf<InferOutput<Schema3>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema4>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema3>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema4>>().toEqualTypeOf<string | undefined>();
       expectTypeOf<InferOutput<Schema5>>().toEqualTypeOf<string | null>();
-      expectTypeOf<InferOutput<Schema6>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema7>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema6>>().toEqualTypeOf<string>();
     });
 
     test('of issue', () => {
@@ -91,7 +82,6 @@ describe('nullish', () => {
       expectTypeOf<InferIssue<Schema4>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema5>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema6>>().toEqualTypeOf<StringIssue>();
-      expectTypeOf<InferIssue<Schema7>>().toEqualTypeOf<StringIssue>();
     });
   });
 });

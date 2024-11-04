@@ -57,7 +57,7 @@ export function nullableAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(wrapped: TWrapped): NullableSchemaAsync<TWrapped, never>;
+>(wrapped: TWrapped): NullableSchemaAsync<TWrapped, undefined>;
 
 /**
  * Creates a nullable schema.
@@ -81,32 +81,27 @@ export function nullableAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  ...args: unknown[]
+  default_?: unknown
 ): NullableSchemaAsync<
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   unknown
 > {
-  // Create schema object
-  // @ts-expect-error
-  const schema: NullableSchemaAsync<
-    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-    unknown
-  > = {
+  return {
     kind: 'schema',
     type: 'nullable',
     reference: nullableAsync,
     expects: `(${wrapped.expects} | null)`,
     async: true,
     wrapped,
+    default: default_,
     '~standard': 1,
     '~vendor': 'valibot',
     async '~validate'(dataset, config = getGlobalConfig()) {
       // If value is `null`, override it with default or return dataset
       if (dataset.value === null) {
         // If default is specified, override value of dataset
-        if ('default' in this) {
+        if (this.default !== undefined) {
           dataset.value = await getDefault(this, dataset, config);
         }
 
@@ -123,13 +118,4 @@ export function nullableAsync(
       return this.wrapped['~validate'](dataset, config);
     },
   };
-
-  // Add default if specified
-  if (0 in args) {
-    // @ts-expect-error
-    schema.default = args[0];
-  }
-
-  // Return schema object
-  return schema;
 }

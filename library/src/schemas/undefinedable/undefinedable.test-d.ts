@@ -9,16 +9,10 @@ import { undefinedable, type UndefinedableSchema } from './undefinedable.ts';
 
 describe('undefinedable', () => {
   describe('should return schema object', () => {
-    test('with never default', () => {
-      expectTypeOf(undefinedable(string())).toEqualTypeOf<
-        UndefinedableSchema<StringSchema<undefined>, never>
-      >();
-    });
-
     test('with undefined default', () => {
-      expectTypeOf(undefinedable(string(), undefined)).toEqualTypeOf<
-        UndefinedableSchema<StringSchema<undefined>, undefined>
-      >();
+      type Schema = UndefinedableSchema<StringSchema<undefined>, undefined>;
+      expectTypeOf(undefinedable(string())).toEqualTypeOf<Schema>();
+      expectTypeOf(undefinedable(string(), undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with undefined getter default', () => {
@@ -41,14 +35,13 @@ describe('undefinedable', () => {
   });
 
   describe('should infer correct types', () => {
-    type Schema1 = UndefinedableSchema<StringSchema<undefined>, never>;
-    type Schema2 = UndefinedableSchema<StringSchema<undefined>, undefined>;
-    type Schema3 = UndefinedableSchema<StringSchema<undefined>, 'foo'>;
-    type Schema4 = UndefinedableSchema<
+    type Schema1 = UndefinedableSchema<StringSchema<undefined>, undefined>;
+    type Schema2 = UndefinedableSchema<StringSchema<undefined>, 'foo'>;
+    type Schema3 = UndefinedableSchema<
       StringSchema<undefined>,
       () => undefined
     >;
-    type Schema5 = UndefinedableSchema<StringSchema<undefined>, () => 'foo'>;
+    type Schema4 = UndefinedableSchema<StringSchema<undefined>, () => 'foo'>;
 
     test('of input', () => {
       type Input = string | undefined;
@@ -56,15 +49,13 @@ describe('undefinedable', () => {
       expectTypeOf<InferInput<Schema2>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema3>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema4>>().toEqualTypeOf<Input>();
-      expectTypeOf<InferInput<Schema5>>().toEqualTypeOf<Input>();
     });
 
     test('of output', () => {
       expectTypeOf<InferOutput<Schema1>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema3>>().toEqualTypeOf<string>();
-      expectTypeOf<InferOutput<Schema4>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema5>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema3>>().toEqualTypeOf<string | undefined>();
+      expectTypeOf<InferOutput<Schema4>>().toEqualTypeOf<string>();
     });
 
     test('of issue', () => {
@@ -72,7 +63,6 @@ describe('undefinedable', () => {
       expectTypeOf<InferIssue<Schema2>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema3>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema4>>().toEqualTypeOf<StringIssue>();
-      expectTypeOf<InferIssue<Schema5>>().toEqualTypeOf<StringIssue>();
     });
   });
 });

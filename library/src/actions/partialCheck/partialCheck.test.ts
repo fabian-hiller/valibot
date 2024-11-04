@@ -22,23 +22,25 @@ describe('partialCheck', () => {
     type Selection = DeepPickN<Input, PathList>;
     const requirement = (input: Selection) => input.nested.key.includes('foo');
     const baseAction: Omit<
-      PartialCheckAction<Input, Selection, never>,
+      PartialCheckAction<Input, PathList, Selection, never>,
       'message'
     > = {
       kind: 'validation',
       type: 'partial_check',
       reference: partialCheck,
       expects: null,
+      pathList,
       requirement,
       async: false,
       '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const action: PartialCheckAction<Input, Selection, undefined> = {
-        ...baseAction,
-        message: undefined,
-      };
+      const action: PartialCheckAction<Input, PathList, Selection, undefined> =
+        {
+          ...baseAction,
+          message: undefined,
+        };
       expect(
         partialCheck<Input, PathList, Selection>(pathList, requirement)
       ).toStrictEqual(action);
@@ -62,7 +64,7 @@ describe('partialCheck', () => {
       ).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies PartialCheckAction<Input, Selection, 'message'>);
+      } satisfies PartialCheckAction<Input, PathList, Selection, 'message'>);
     });
 
     test('with function message', () => {
@@ -76,7 +78,12 @@ describe('partialCheck', () => {
       ).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies PartialCheckAction<Input, Selection, typeof message>);
+      } satisfies PartialCheckAction<
+        Input,
+        PathList,
+        Selection,
+        typeof message
+      >);
     });
   });
 

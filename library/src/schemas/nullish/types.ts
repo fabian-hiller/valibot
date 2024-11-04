@@ -16,7 +16,7 @@ export type InferNullishOutput<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   TDefault extends DefaultAsync<TWrapped, null | undefined>,
-> = [TDefault] extends [never]
+> = undefined extends TDefault
   ? InferOutput<TWrapped> | null | undefined
   : // FIXME: For schemas that transform the input to `null` or `undefined`
     // this implementation may result in an incorrect output type

@@ -22,7 +22,7 @@ describe('nonNullableAsync', () => {
   describe('should return schema object', () => {
     test('with undefined message', () => {
       type Schema = NonNullableSchemaAsync<
-        NullishSchemaAsync<StringSchema<undefined>, never>,
+        NullishSchemaAsync<StringSchema<undefined>, undefined>,
         undefined
       >;
       expectTypeOf(
@@ -38,7 +38,7 @@ describe('nonNullableAsync', () => {
         nonNullableAsync(nullishAsync(string()), 'message')
       ).toEqualTypeOf<
         NonNullableSchemaAsync<
-          NullishSchemaAsync<StringSchema<undefined>, never>,
+          NullishSchemaAsync<StringSchema<undefined>, undefined>,
           'message'
         >
       >();
@@ -49,7 +49,7 @@ describe('nonNullableAsync', () => {
         nonNullableAsync(nullishAsync(string()), () => 'message')
       ).toEqualTypeOf<
         NonNullableSchemaAsync<
-          NullishSchemaAsync<StringSchema<undefined>, never>,
+          NullishSchemaAsync<StringSchema<undefined>, undefined>,
           () => string
         >
       >();

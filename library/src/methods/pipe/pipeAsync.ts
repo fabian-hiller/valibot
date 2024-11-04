@@ -3019,6 +3019,28 @@ export function pipeAsync<
   ]
 >;
 
+/**
+ * Adds a pipeline to a schema, that can validate and transform its input.
+ *
+ * @param schema The root schema.
+ * @param items The pipe items.
+ *
+ * @returns A schema with a pipeline.
+ */
+export function pipeAsync<
+  const TSchema extends
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+  const TItems extends (
+    | PipeItem<InferOutput<TSchema>, InferOutput<TSchema>, BaseIssue<unknown>>
+    | PipeItemAsync<
+        InferOutput<TSchema>,
+        InferOutput<TSchema>,
+        BaseIssue<unknown>
+      >
+  )[],
+>(schema: TSchema, ...items: TItems): SchemaWithPipeAsync<[TSchema, ...TItems]>;
+
 export function pipeAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

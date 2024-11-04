@@ -67,12 +67,12 @@ Some Valibot features can't be mapped to JSON schema. For example, transformatio
 
 | Option      | Type                            | Note                                                                                                                      |
 | ----------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| force       | `boolean`                       | Whether to force conversion to JSON Schema even for incompatible schemas and actions.                                     |
+| errorMode   | `'throw' \| 'warn' \| 'ignore'` | The policy for handling incompatible schemas and actions.                                                                 |
 | definitions | `Record<string, GenericSchema>` | The schema definitions for constructing recursive schemas. If not specified, the definitions are generated automatically. |
 
-### Force conversion
+### Error mode
 
-To force the conversion of unsupported Valibot features, you can provide the `force: true` configuration. Without it, `toJsonSchema` will throw an error for unsupported features.
+The `errorMode` configuration controls how the converter handles unsupported schemas and actions. By default, the error mode is set to `'throw'`. To force the conversion of unsupported Valibot features, you can set it to `'ignore'`.
 
 > Unsupported schemas usually return an empty JSON schema (`{}`) and unsupported actions are usually ignored.
 
@@ -80,9 +80,9 @@ To force the conversion of unsupported Valibot features, you can provide the `fo
 import { toJsonSchema } from '@valibot/to-json-schema';
 import * as v from 'valibot';
 
-toJsonSchema(v.file(), { force: true }); // {}
+toJsonSchema(v.file(), { errorMode: 'ignore' }); // {}
 
-toJsonSchema(v.pipe(v.string(), v.creditCard()), { force: true }); // { type: "string" }
+toJsonSchema(v.pipe(v.string(), v.creditCard()), { errorMode: 'ignore' }); // { type: "string" }
 ```
 
 ### Definitions

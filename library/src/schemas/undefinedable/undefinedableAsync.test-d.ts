@@ -12,16 +12,15 @@ import {
 
 describe('undefinedableAsync', () => {
   describe('should return schema object', () => {
-    test('with never default', () => {
-      expectTypeOf(undefinedableAsync(string())).toEqualTypeOf<
-        UndefinedableSchemaAsync<StringSchema<undefined>, never>
-      >();
-    });
-
     test('with undefined default', () => {
-      expectTypeOf(undefinedableAsync(string(), undefined)).toEqualTypeOf<
-        UndefinedableSchemaAsync<StringSchema<undefined>, undefined>
-      >();
+      type Schema = UndefinedableSchemaAsync<
+        StringSchema<undefined>,
+        undefined
+      >;
+      expectTypeOf(undefinedableAsync(string())).toEqualTypeOf<Schema>();
+      expectTypeOf(
+        undefinedableAsync(string(), undefined)
+      ).toEqualTypeOf<Schema>();
     });
 
     test('with undefined getter default', () => {
@@ -63,22 +62,21 @@ describe('undefinedableAsync', () => {
   });
 
   describe('should infer correct types', () => {
-    type Schema1 = UndefinedableSchemaAsync<StringSchema<undefined>, never>;
-    type Schema2 = UndefinedableSchemaAsync<StringSchema<undefined>, undefined>;
-    type Schema3 = UndefinedableSchemaAsync<StringSchema<undefined>, 'foo'>;
-    type Schema4 = UndefinedableSchemaAsync<
+    type Schema1 = UndefinedableSchemaAsync<StringSchema<undefined>, undefined>;
+    type Schema2 = UndefinedableSchemaAsync<StringSchema<undefined>, 'foo'>;
+    type Schema3 = UndefinedableSchemaAsync<
       StringSchema<undefined>,
       () => undefined
     >;
-    type Schema5 = UndefinedableSchemaAsync<
+    type Schema4 = UndefinedableSchemaAsync<
       StringSchema<undefined>,
       () => 'foo'
     >;
-    type Schema6 = UndefinedableSchemaAsync<
+    type Schema5 = UndefinedableSchemaAsync<
       StringSchema<undefined>,
       () => Promise<undefined>
     >;
-    type Schema7 = UndefinedableSchemaAsync<
+    type Schema6 = UndefinedableSchemaAsync<
       StringSchema<undefined>,
       () => Promise<'foo'>
     >;
@@ -91,17 +89,15 @@ describe('undefinedableAsync', () => {
       expectTypeOf<InferInput<Schema4>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema5>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema6>>().toEqualTypeOf<Input>();
-      expectTypeOf<InferInput<Schema7>>().toEqualTypeOf<Input>();
     });
 
     test('of output', () => {
       expectTypeOf<InferOutput<Schema1>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema3>>().toEqualTypeOf<string>();
-      expectTypeOf<InferOutput<Schema4>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema5>>().toEqualTypeOf<string>();
-      expectTypeOf<InferOutput<Schema6>>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<InferOutput<Schema7>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema3>>().toEqualTypeOf<string | undefined>();
+      expectTypeOf<InferOutput<Schema4>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema5>>().toEqualTypeOf<string | undefined>();
+      expectTypeOf<InferOutput<Schema6>>().toEqualTypeOf<string>();
     });
 
     test('of issue', () => {
@@ -111,7 +107,6 @@ describe('undefinedableAsync', () => {
       expectTypeOf<InferIssue<Schema4>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema5>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema6>>().toEqualTypeOf<StringIssue>();
-      expectTypeOf<InferIssue<Schema7>>().toEqualTypeOf<StringIssue>();
     });
   });
 });

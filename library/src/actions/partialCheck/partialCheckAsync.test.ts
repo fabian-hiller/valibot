@@ -26,20 +26,26 @@ describe('partialCheckAsync', () => {
     const requirement = async (input: Selection) =>
       input.nested.key.includes('foo');
     const baseAction: Omit<
-      PartialCheckActionAsync<Input, Selection, never>,
+      PartialCheckActionAsync<Input, PathList, Selection, never>,
       'message'
     > = {
       kind: 'validation',
       type: 'partial_check',
       reference: partialCheckAsync,
       expects: null,
+      pathList,
       requirement,
       async: true,
       '~validate': expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const action: PartialCheckActionAsync<Input, Selection, undefined> = {
+      const action: PartialCheckActionAsync<
+        Input,
+        PathList,
+        Selection,
+        undefined
+      > = {
         ...baseAction,
         message: undefined,
       };
@@ -66,7 +72,12 @@ describe('partialCheckAsync', () => {
       ).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies PartialCheckActionAsync<Input, Selection, 'message'>);
+      } satisfies PartialCheckActionAsync<
+        Input,
+        PathList,
+        Selection,
+        'message'
+      >);
     });
 
     test('with function message', () => {
@@ -80,7 +91,12 @@ describe('partialCheckAsync', () => {
       ).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies PartialCheckActionAsync<Input, Selection, typeof message>);
+      } satisfies PartialCheckActionAsync<
+        Input,
+        PathList,
+        Selection,
+        typeof message
+      >);
     });
   });
 

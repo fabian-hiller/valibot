@@ -9,10 +9,10 @@ import { nullable, type NullableSchema } from './nullable.ts';
 
 describe('nullable', () => {
   describe('should return schema object', () => {
-    test('with never default', () => {
-      expectTypeOf(nullable(string())).toEqualTypeOf<
-        NullableSchema<StringSchema<undefined>, never>
-      >();
+    test('with undefined default', () => {
+      type Schema = NullableSchema<StringSchema<undefined>, undefined>;
+      expectTypeOf(nullable(string())).toEqualTypeOf<Schema>();
+      expectTypeOf(nullable(string(), undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with null default', () => {
@@ -41,7 +41,7 @@ describe('nullable', () => {
   });
 
   describe('should infer correct types', () => {
-    type Schema1 = NullableSchema<StringSchema<undefined>, never>;
+    type Schema1 = NullableSchema<StringSchema<undefined>, undefined>;
     type Schema2 = NullableSchema<StringSchema<undefined>, null>;
     type Schema3 = NullableSchema<StringSchema<undefined>, 'foo'>;
     type Schema4 = NullableSchema<StringSchema<undefined>, () => null>;

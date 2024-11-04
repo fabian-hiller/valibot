@@ -109,21 +109,24 @@ describe('convertAction', () => {
   });
 
   test('should throw error for length action with invalid type', () => {
+    const action = v.length<v.LengthInput, 3>(3);
+    const error1 = 'The "length" action is not supported on type "undefined".';
+    expect(() => convertAction({}, action, undefined)).toThrowError(error1);
     expect(() =>
-      convertAction({}, v.length<v.LengthInput, 3>(3), undefined)
-    ).toThrowError('The "length" action is not supported on type "undefined".');
+      convertAction({}, action, { errorMode: 'throw' })
+    ).toThrowError(error1);
+    const error2 = 'The "length" action is not supported on type "object".';
     expect(() =>
-      convertAction(
-        { type: 'object' },
-        v.length<v.LengthInput, 3>(3),
-        undefined
-      )
-    ).toThrowError('The "length" action is not supported on type "object".');
+      convertAction({ type: 'object' }, action, undefined)
+    ).toThrowError(error2);
+    expect(() =>
+      convertAction({ type: 'object' }, action, { errorMode: 'throw' })
+    ).toThrowError(error2);
   });
 
-  test('should force conversion for length action with invalid type', () => {
+  test('should warn error for length action with invalid type', () => {
     expect(
-      convertAction({}, v.length<v.LengthInput, 3>(3), { force: true })
+      convertAction({}, v.length<v.LengthInput, 3>(3), { errorMode: 'warn' })
     ).toStrictEqual({
       minLength: 3,
       maxLength: 3,
@@ -133,7 +136,7 @@ describe('convertAction', () => {
     );
     expect(
       convertAction({ type: 'object' }, v.length<v.LengthInput, 3>(3), {
-        force: true,
+        errorMode: 'warn',
       })
     ).toStrictEqual({ type: 'object', minLength: 3, maxLength: 3 });
     expect(console.warn).toHaveBeenLastCalledWith(
@@ -168,25 +171,25 @@ describe('convertAction', () => {
   });
 
   test('should throw error for min length action with invalid type', () => {
+    const action = v.minLength<v.LengthInput, 3>(3);
+    const error1 =
+      'The "min_length" action is not supported on type "undefined".';
+    expect(() => convertAction({}, action, undefined)).toThrowError(error1);
     expect(() =>
-      convertAction({}, v.minLength<v.LengthInput, 3>(3), undefined)
-    ).toThrowError(
-      'The "min_length" action is not supported on type "undefined".'
-    );
+      convertAction({}, action, { errorMode: 'throw' })
+    ).toThrowError(error1);
+    const error2 = 'The "min_length" action is not supported on type "object".';
     expect(() =>
-      convertAction(
-        { type: 'object' },
-        v.minLength<v.LengthInput, 3>(3),
-        undefined
-      )
-    ).toThrowError(
-      'The "min_length" action is not supported on type "object".'
-    );
+      convertAction({ type: 'object' }, action, undefined)
+    ).toThrowError(error2);
+    expect(() =>
+      convertAction({ type: 'object' }, action, { errorMode: 'throw' })
+    ).toThrowError(error2);
   });
 
-  test('should force conversion for min length action with invalid type', () => {
+  test('should warn error for min length action with invalid type', () => {
     expect(
-      convertAction({}, v.minLength<v.LengthInput, 3>(3), { force: true })
+      convertAction({}, v.minLength<v.LengthInput, 3>(3), { errorMode: 'warn' })
     ).toStrictEqual({
       minLength: 3,
     });
@@ -195,7 +198,7 @@ describe('convertAction', () => {
     );
     expect(
       convertAction({ type: 'object' }, v.minLength<v.LengthInput, 3>(3), {
-        force: true,
+        errorMode: 'warn',
       })
     ).toStrictEqual({ type: 'object', minLength: 3 });
     expect(console.warn).toHaveBeenLastCalledWith(
@@ -230,25 +233,25 @@ describe('convertAction', () => {
   });
 
   test('should throw error for max length action with invalid type', () => {
+    const action = v.maxLength<v.LengthInput, 3>(3);
+    const error1 =
+      'The "max_length" action is not supported on type "undefined".';
+    expect(() => convertAction({}, action, undefined)).toThrowError(error1);
     expect(() =>
-      convertAction({}, v.maxLength<v.LengthInput, 3>(3), undefined)
-    ).toThrowError(
-      'The "max_length" action is not supported on type "undefined".'
-    );
+      convertAction({}, action, { errorMode: 'throw' })
+    ).toThrowError(error1);
+    const error2 = 'The "max_length" action is not supported on type "object".';
     expect(() =>
-      convertAction(
-        { type: 'object' },
-        v.maxLength<v.LengthInput, 3>(3),
-        undefined
-      )
-    ).toThrowError(
-      'The "max_length" action is not supported on type "object".'
-    );
+      convertAction({ type: 'object' }, action, undefined)
+    ).toThrowError(error2);
+    expect(() =>
+      convertAction({ type: 'object' }, action, { errorMode: 'throw' })
+    ).toThrowError(error2);
   });
 
-  test('should force conversion for max length action with invalid type', () => {
+  test('should warn error for max length action with invalid type', () => {
     expect(
-      convertAction({}, v.maxLength<v.LengthInput, 3>(3), { force: true })
+      convertAction({}, v.maxLength<v.LengthInput, 3>(3), { errorMode: 'warn' })
     ).toStrictEqual({
       maxLength: 3,
     });
@@ -257,7 +260,7 @@ describe('convertAction', () => {
     );
     expect(
       convertAction({ type: 'object' }, v.maxLength<v.LengthInput, 3>(3), {
-        force: true,
+        errorMode: 'warn',
       })
     ).toStrictEqual({ type: 'object', maxLength: 3 });
     expect(console.warn).toHaveBeenLastCalledWith(
@@ -279,23 +282,25 @@ describe('convertAction', () => {
   });
 
   test('should throw error for max value action with invalid type', () => {
+    const action = v.maxValue<v.ValueInput, 3>(3);
+    const error1 =
+      'The "max_value" action is not supported on type "undefined".';
+    expect(() => convertAction({}, action, undefined)).toThrowError(error1);
     expect(() =>
-      convertAction({}, v.maxValue<v.ValueInput, 3>(3), undefined)
-    ).toThrowError(
-      'The "max_value" action is not supported on type "undefined".'
-    );
+      convertAction({}, action, { errorMode: 'throw' })
+    ).toThrowError(error1);
+    const error2 = 'The "max_value" action is not supported on type "string".';
     expect(() =>
-      convertAction(
-        { type: 'string' },
-        v.maxValue<v.ValueInput, 3>(3),
-        undefined
-      )
-    ).toThrowError('The "max_value" action is not supported on type "string".');
+      convertAction({ type: 'string' }, action, undefined)
+    ).toThrowError(error2);
+    expect(() =>
+      convertAction({ type: 'string' }, action, { errorMode: 'throw' })
+    ).toThrowError(error2);
   });
 
-  test('should force conversion for max value action with invalid type', () => {
+  test('should warn error for max value action with invalid type', () => {
     expect(
-      convertAction({}, v.maxValue<v.ValueInput, 3>(3), { force: true })
+      convertAction({}, v.maxValue<v.ValueInput, 3>(3), { errorMode: 'warn' })
     ).toStrictEqual({
       maximum: 3,
     });
@@ -304,7 +309,7 @@ describe('convertAction', () => {
     );
     expect(
       convertAction({ type: 'string' }, v.maxValue<v.ValueInput, 3>(3), {
-        force: true,
+        errorMode: 'warn',
       })
     ).toStrictEqual({ type: 'string', maximum: 3 });
     expect(console.warn).toHaveBeenLastCalledWith(
@@ -326,23 +331,25 @@ describe('convertAction', () => {
   });
 
   test('should throw error for min value action with invalid type', () => {
+    const action = v.minValue<v.ValueInput, 3>(3);
+    const error1 =
+      'The "min_value" action is not supported on type "undefined".';
+    expect(() => convertAction({}, action, undefined)).toThrowError(error1);
     expect(() =>
-      convertAction({}, v.minValue<v.ValueInput, 3>(3), undefined)
-    ).toThrowError(
-      'The "min_value" action is not supported on type "undefined".'
-    );
+      convertAction({}, action, { errorMode: 'throw' })
+    ).toThrowError(error1);
+    const error2 = 'The "min_value" action is not supported on type "string".';
     expect(() =>
-      convertAction(
-        { type: 'string' },
-        v.minValue<v.ValueInput, 3>(3),
-        undefined
-      )
-    ).toThrowError('The "min_value" action is not supported on type "string".');
+      convertAction({ type: 'string' }, action, undefined)
+    ).toThrowError(error2);
+    expect(() =>
+      convertAction({ type: 'string' }, action, { errorMode: 'throw' })
+    ).toThrowError(error2);
   });
 
-  test('should force conversion for min value action with invalid type', () => {
+  test('should warn error for min value action with invalid type', () => {
     expect(
-      convertAction({}, v.minValue<v.ValueInput, 3>(3), { force: true })
+      convertAction({}, v.minValue<v.ValueInput, 3>(3), { errorMode: 'warn' })
     ).toStrictEqual({
       minimum: 3,
     });
@@ -351,7 +358,7 @@ describe('convertAction', () => {
     );
     expect(
       convertAction({ type: 'string' }, v.minValue<v.ValueInput, 3>(3), {
-        force: true,
+        errorMode: 'warn',
       })
     ).toStrictEqual({ type: 'string', minimum: 3 });
     expect(console.warn).toHaveBeenLastCalledWith(
@@ -383,15 +390,18 @@ describe('convertAction', () => {
   });
 
   test('should throw error for unsupported regex action', () => {
+    const action = v.regex<string>(/[a-z]/im);
+    const error = 'RegExp flags are not supported by JSON Schema.';
+    expect(() => convertAction({}, action, undefined)).toThrowError(error);
     expect(() =>
-      convertAction({}, v.regex<string>(/[a-z]/im), undefined)
-    ).toThrowError('RegExp flags are not supported by JSON Schema.');
+      convertAction({}, action, { errorMode: 'throw' })
+    ).toThrowError(error);
   });
 
-  test('should force conversion for unsupported regex action', () => {
+  test('should warn error for unsupported regex action', () => {
     expect(
       convertAction({ type: 'string' }, v.regex<string>(/[a-z]/im), {
-        force: true,
+        errorMode: 'warn',
       })
     ).toStrictEqual({
       type: 'string',
@@ -454,25 +464,33 @@ describe('convertAction', () => {
   });
 
   test('should throw error for unsupported transform action', () => {
+    const action = v.transform(parseInt);
+    const error = 'The "transform" action cannot be converted to JSON Schema.';
     expect(() =>
       convertAction(
         {},
         // @ts-expect-error
-        v.transform(parseInt),
+        action,
         undefined
       )
-    ).toThrowError(
-      'The "transform" action cannot be converted to JSON Schema.'
-    );
+    ).toThrowError(error);
+    expect(() =>
+      convertAction(
+        {},
+        // @ts-expect-error
+        action,
+        { errorMode: 'throw' }
+      )
+    ).toThrowError(error);
   });
 
-  test('should force conversion for unsupported transform action', () => {
+  test('should warn error for unsupported transform action', () => {
     expect(
       convertAction(
         {},
         // @ts-expect-error
         v.transform(parseInt),
-        { force: true }
+        { errorMode: 'warn' }
       )
     ).toStrictEqual({});
     expect(console.warn).toHaveBeenLastCalledWith(
@@ -483,7 +501,7 @@ describe('convertAction', () => {
         { type: 'string' },
         // @ts-expect-error
         v.transform(parseInt),
-        { force: true }
+        { errorMode: 'warn' }
       )
     ).toStrictEqual({ type: 'string' });
     expect(console.warn).toHaveBeenLastCalledWith(

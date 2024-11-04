@@ -4,7 +4,10 @@ All notable changes to the library will be documented in this file.
 
 ## v1.0.0 (Month DD, YYYY)
 
+- Add support for `undefinedable` schema
 - Change Valibot peer dependency to v1.0.0
+- Change extraction of default value from `nullable`, `nullish` and `optional` schema
+- Change `force` to `errorMode` in config for better control (issue #889)
 
 ## v0.2.1 (September 30, 2024)
 

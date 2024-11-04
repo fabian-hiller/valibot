@@ -205,9 +205,6 @@ export interface UnknownPathItem {
 
 /**
  * Issue path item type.
- *
- * TODO: Document that the input of the path may be different from the input of
- * the issue.
  */
 export type IssuePathItem =
   | ArrayPathItem
@@ -250,9 +247,6 @@ export interface BaseIssue<TInput> extends Config<BaseIssue<TInput>> {
   readonly requirement?: unknown | undefined;
   /**
    * The issue path.
-   *
-   * TODO: Investigate if it is possible to make the path type safe based on the
-   * input.
    */
   readonly path?: [IssuePathItem, ...IssuePathItem[]] | undefined;
   /**

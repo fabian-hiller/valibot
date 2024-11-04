@@ -6,10 +6,9 @@ import type * as v from 'valibot';
  */
 export interface ConversionConfig {
   /**
-   * Whether to force conversion to JSON Schema even for incompatible schemas
-   * and actions.
+   * The policy for handling incompatible schemas and actions.
    */
-  readonly force?: boolean;
+  readonly errorMode?: 'throw' | 'warn' | 'ignore';
   /**
    * The schema definitions for constructing recursive schemas. If not
    * specified, the definitions are generated automatically.

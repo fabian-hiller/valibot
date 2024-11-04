@@ -52,7 +52,7 @@ export interface NullishSchema<
  */
 export function nullish<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
->(wrapped: TWrapped): NullishSchema<TWrapped, never>;
+>(wrapped: TWrapped): NullishSchema<TWrapped, undefined>;
 
 /**
  * Creates a nullish schema.
@@ -69,20 +69,16 @@ export function nullish<
 
 export function nullish(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  ...args: unknown[]
+  default_?: unknown
 ): NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown> {
-  // Create schema object
-  // @ts-expect-error
-  const schema: NullishSchema<
-    BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-    unknown
-  > = {
+  return {
     kind: 'schema',
     type: 'nullish',
     reference: nullish,
     expects: `(${wrapped.expects} | null | undefined)`,
     async: false,
     wrapped,
+    default: default_,
     '~standard': 1,
     '~vendor': 'valibot',
     '~validate'(dataset, config = getGlobalConfig()) {
@@ -90,7 +86,7 @@ export function nullish(
       // dataset
       if (dataset.value === null || dataset.value === undefined) {
         // If default is specified, override value of dataset
-        if ('default' in this) {
+        if (this.default !== undefined) {
           dataset.value = getDefault(this, dataset, config);
         }
 
@@ -107,13 +103,4 @@ export function nullish(
       return this.wrapped['~validate'](dataset, config);
     },
   };
-
-  // Add default if specified
-  if (0 in args) {
-    // @ts-expect-error
-    schema.default = args[0];
-  }
-
-  // Return schema object
-  return schema;
 }

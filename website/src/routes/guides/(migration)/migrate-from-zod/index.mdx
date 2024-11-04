@@ -53,6 +53,8 @@ const value = z.string().parse('foo');
 const value = v.parse(v.string(), 'foo');
 ```
 
+We recommend that you read our <Link href="../mental-model/">mental model</Link> guide to understand how the individual functions of Valibot's modular API work together.
+
 ## Change names
 
 Most of the names are the same as in Zod. However, there are some exceptions. The following table shows all names that have changed.
@@ -92,6 +94,7 @@ Most of the names are the same as in Zod. However, there are some exceptions. Th
 | `shape`              | `entries`                                                                                                                                   |
 | `strict`             | <Link href="/api/strictObject/">`strictObject`</Link>                                                                                       |
 | `strip`              | <Link href="/api/object/">`object`</Link>                                                                                                   |
+| `superRefine`        | <Link href="/api/rawCheck/">`rawCheck`</Link>, <Link href="/api/rawTransform/">`rawTransform`</Link>                                        |
 
 ## Other details
 
@@ -136,6 +139,12 @@ const NumberSchema = z.coerce.number();
 
 // To this
 const NumberSchema = v.pipe(v.unknown(), v.transform(Number));
+```
+
+Instead of <Link href="/api/unknown/">`unknown`</Link> as in the previous example, we usually recommend using a specific schema such as <Link href="/api/string/">`string`</Link> to improve type safety. This allows you, for example, to validate the formatting of the string with <Link href="/api/decimal/">`decimal`</Link> before transforming it to a number.
+
+```ts
+const NumberSchema = v.pipe(v.string(), v.decimal(), v.transform(Number));
 ```
 
 ### Async validation

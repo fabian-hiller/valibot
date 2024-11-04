@@ -32,16 +32,34 @@ describe('required', () => {
     type Schema2 = SchemaWithRequired<Wrapped, ['key1', 'key3'], undefined>;
 
     describe('should return schema object', () => {
-      // TODO: Add test for every overload signature
-
       test('with undefined keys', () => {
         expectTypeOf(required(wrapped)).toEqualTypeOf<Schema1>();
+        expectTypeOf(required(wrapped, undefined)).toEqualTypeOf<Schema1>();
+        expectTypeOf(required(wrapped, 'message')).toEqualTypeOf<
+          SchemaWithRequired<Wrapped, undefined, 'message'>
+        >();
+        expectTypeOf(required(wrapped, () => 'message')).toEqualTypeOf<
+          SchemaWithRequired<Wrapped, undefined, () => string>
+        >();
       });
 
       test('with specific keys', () => {
         expectTypeOf(
           required(wrapped, ['key1', 'key3'])
         ).toEqualTypeOf<Schema2>();
+        expectTypeOf(
+          required(wrapped, ['key1', 'key3'], undefined)
+        ).toEqualTypeOf<Schema2>();
+        expectTypeOf(
+          required(wrapped, ['key1', 'key3'], 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequired<Wrapped, ['key1', 'key3'], 'message'>
+        >();
+        expectTypeOf(
+          required(wrapped, ['key1', 'key3'], () => 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequired<Wrapped, ['key1', 'key3'], () => string>
+        >();
       });
     });
 
@@ -94,16 +112,34 @@ describe('required', () => {
     type Schema2 = SchemaWithRequired<Wrapped, ['key2', 'key3'], undefined>;
 
     describe('should return schema object', () => {
-      // TODO: Add test for every overload signature
-
       test('with undefined keys', () => {
         expectTypeOf(required(wrapped)).toEqualTypeOf<Schema1>();
+        expectTypeOf(required(wrapped, undefined)).toEqualTypeOf<Schema1>();
+        expectTypeOf(required(wrapped, 'message')).toEqualTypeOf<
+          SchemaWithRequired<Wrapped, undefined, 'message'>
+        >();
+        expectTypeOf(required(wrapped, () => 'message')).toEqualTypeOf<
+          SchemaWithRequired<Wrapped, undefined, () => string>
+        >();
       });
 
       test('with specific keys', () => {
         expectTypeOf(
           required(wrapped, ['key2', 'key3'])
         ).toEqualTypeOf<Schema2>();
+        expectTypeOf(
+          required(wrapped, ['key2', 'key3'], undefined)
+        ).toEqualTypeOf<Schema2>();
+        expectTypeOf(
+          required(wrapped, ['key2', 'key3'], 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequired<Wrapped, ['key2', 'key3'], 'message'>
+        >();
+        expectTypeOf(
+          required(wrapped, ['key2', 'key3'], () => 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequired<Wrapped, ['key2', 'key3'], () => string>
+        >();
       });
     });
 

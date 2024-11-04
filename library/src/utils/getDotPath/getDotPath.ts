@@ -6,8 +6,6 @@ import type {
   IssueDotPath,
 } from '../../types/index.ts';
 
-// TODO: Add type tests for getDotPath util
-
 /**
  * Creates and returns the dot path of an issue if possible.
  *

@@ -8,8 +8,6 @@ import type {
 } from '../../types/index.ts';
 import { getDotPath } from '../../utils/index.ts';
 
-// TODO: Add unit and type tests for flatten method
-
 /**
  * Flat errors type.
  */

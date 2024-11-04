@@ -57,7 +57,7 @@ export function nullishAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(wrapped: TWrapped): NullishSchemaAsync<TWrapped, never>;
+>(wrapped: TWrapped): NullishSchemaAsync<TWrapped, undefined>;
 
 /**
  * Creates a nullish schema.
@@ -81,25 +81,20 @@ export function nullishAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  ...args: unknown[]
+  default_?: unknown
 ): NullishSchemaAsync<
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   unknown
 > {
-  // Create schema object
-  // @ts-expect-error
-  const schema: NullishSchemaAsync<
-    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-    unknown
-  > = {
+  return {
     kind: 'schema',
     type: 'nullish',
     reference: nullishAsync,
     expects: `(${wrapped.expects} | null | undefined)`,
     async: true,
     wrapped,
+    default: default_,
     '~standard': 1,
     '~vendor': 'valibot',
     async '~validate'(dataset, config = getGlobalConfig()) {
@@ -107,7 +102,7 @@ export function nullishAsync(
       // dataset
       if (dataset.value === null || dataset.value === undefined) {
         // If default is specified, override value of dataset
-        if ('default' in this) {
+        if (this.default !== undefined) {
           dataset.value = await getDefault(this, dataset, config);
         }
 
@@ -124,13 +119,4 @@ export function nullishAsync(
       return this.wrapped['~validate'](dataset, config);
     },
   };
-
-  // Add default if specified
-  if (0 in args) {
-    // @ts-expect-error
-    schema.default = args[0];
-  }
-
-  // Return schema object
-  return schema;
 }

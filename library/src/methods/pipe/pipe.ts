@@ -2639,6 +2639,23 @@ export function pipe<
   ]
 >;
 
+/**
+ * Adds a pipeline to a schema, that can validate and transform its input.
+ *
+ * @param schema The root schema.
+ * @param items The pipe items.
+ *
+ * @returns A schema with a pipeline.
+ */
+export function pipe<
+  const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  const TItems extends PipeItem<
+    InferOutput<TSchema>,
+    InferOutput<TSchema>,
+    BaseIssue<unknown>
+  >[],
+>(schema: TSchema, ...items: TItems): SchemaWithPipe<[TSchema, ...TItems]>;
+
 export function pipe<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   const TItems extends PipeItem<unknown, unknown, BaseIssue<unknown>>[],
