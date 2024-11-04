@@ -103,7 +103,7 @@ for (const language of languages) {
   fs.writeFileSync(
     path.join(language.code, 'schema.ts'),
     `
-import { setSchemaMessage } from "jsr:@valibot/valibot@0";
+import { setSchemaMessage } from "jsr:@valibot/valibot@1";
 
 setSchemaMessage(
   ${language.schema.toString()},
@@ -125,7 +125,7 @@ setSchemaMessage(
     fs.writeFileSync(
       path.join(language.code, `${reference}.ts`),
       `
-import { setSpecificMessage, ${reference} } from "jsr:@valibot/valibot@0";
+import { setSpecificMessage, ${reference} } from "jsr:@valibot/valibot@1";
 
 setSpecificMessage(
   ${reference},
