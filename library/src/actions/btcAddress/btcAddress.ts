@@ -1,3 +1,4 @@
+import { BTC_ADDRESS_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
@@ -222,16 +223,16 @@ export function btcAddress<TInput extends string>(
     reference: btcAddress,
     expects: null,
     message,
+
     requirement(address) {
+      if (!BTC_ADDRESS_REGEX.test(address)) return false;
       if (
         address.toLowerCase().startsWith('bc1') ||
         address.toLowerCase().startsWith('tb1')
       ) {
-        const r =
-          address.startsWith('bc1p') || address.startsWith('tb1p')
-            ? Bech32.verify(address, 'bech32m')
-            : Bech32.verify(address, 'bech32');
-        return r;
+        return address.startsWith('bc1p') || address.startsWith('tb1p')
+          ? Bech32.verify(address, 'bech32m')
+          : Bech32.verify(address, 'bech32');
       }
 
       // Validate Base58 address
