@@ -10,12 +10,11 @@ import { _isPartiallyTyped } from './utils/index.ts';
 
 /**
  * Partial check action type.
- *
- * TODO: Should we add a `pathList` property?
  */
 export interface PartialCheckAction<
   TInput extends PartialInput,
-  TSelection extends PartialInput,
+  TPathList extends readonly PathKeys<TInput>[],
+  TSelection extends DeepPickN<TInput, TPathList>,
   TMessage extends ErrorMessage<PartialCheckIssue<TSelection>> | undefined,
 > extends BaseValidation<TInput, TInput, PartialCheckIssue<TSelection>> {
   /**
@@ -30,6 +29,10 @@ export interface PartialCheckAction<
    * The expected property.
    */
   readonly expects: null;
+  /**
+   * The selected paths.
+   */
+  readonly pathList: TPathList;
   /**
    * The validation function.
    */
@@ -55,7 +58,7 @@ export function partialCheck<
 >(
   pathList: TPathList,
   requirement: (input: TSelection) => boolean
-): PartialCheckAction<TInput, TSelection, undefined>;
+): PartialCheckAction<TInput, TPathList, TSelection, undefined>;
 
 /**
  * Creates a partial check validation action.
@@ -77,7 +80,7 @@ export function partialCheck<
   pathList: TPathList,
   requirement: (input: TSelection) => boolean,
   message: TMessage
-): PartialCheckAction<TInput, TSelection, TMessage>;
+): PartialCheckAction<TInput, TPathList, TSelection, TMessage>;
 
 export function partialCheck(
   pathList: PathKeys<PartialInput>[],
@@ -85,6 +88,7 @@ export function partialCheck(
   message?: ErrorMessage<PartialCheckIssue<PartialInput>>
 ): PartialCheckAction<
   PartialInput,
+  PathKeys<PartialInput>[],
   PartialInput,
   ErrorMessage<PartialCheckIssue<PartialInput>> | undefined
 > {
@@ -94,6 +98,7 @@ export function partialCheck(
     reference: partialCheck,
     async: false,
     expects: null,
+    pathList,
     requirement,
     message,
     '~validate'(dataset, config) {

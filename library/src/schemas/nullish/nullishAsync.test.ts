@@ -23,8 +23,29 @@ describe('nullishAsync', () => {
       '~validate': expect.any(Function),
     };
 
-    test('with never default', () => {
-      expect(nullishAsync(string())).toStrictEqual(baseSchema);
+    test('with undefined default', () => {
+      const expected: NullishSchemaAsync<StringSchema<undefined>, undefined> = {
+        ...baseSchema,
+        default: undefined,
+      };
+      expect(nullishAsync(string())).toStrictEqual(expected);
+      expect(nullishAsync(string(), undefined)).toStrictEqual(expected);
+    });
+
+    test('with undefined getter default', () => {
+      const getter = () => undefined;
+      expect(nullishAsync(string(), getter)).toStrictEqual({
+        ...baseSchema,
+        default: getter,
+      } satisfies NullishSchemaAsync<StringSchema<undefined>, typeof getter>);
+    });
+
+    test('with async undefined getter default', () => {
+      const getter = async () => undefined;
+      expect(nullishAsync(string(), getter)).toStrictEqual({
+        ...baseSchema,
+        default: getter,
+      } satisfies NullishSchemaAsync<StringSchema<undefined>, typeof getter>);
     });
 
     test('with null default', () => {
@@ -44,29 +65,6 @@ describe('nullishAsync', () => {
 
     test('with async null getter default', () => {
       const getter = async () => null;
-      expect(nullishAsync(string(), getter)).toStrictEqual({
-        ...baseSchema,
-        default: getter,
-      } satisfies NullishSchemaAsync<StringSchema<undefined>, typeof getter>);
-    });
-
-    test('with undefined default', () => {
-      expect(nullishAsync(string(), undefined)).toStrictEqual({
-        ...baseSchema,
-        default: undefined,
-      } satisfies NullishSchemaAsync<StringSchema<undefined>, undefined>);
-    });
-
-    test('with undefined getter default', () => {
-      const getter = () => undefined;
-      expect(nullishAsync(string(), getter)).toStrictEqual({
-        ...baseSchema,
-        default: getter,
-      } satisfies NullishSchemaAsync<StringSchema<undefined>, typeof getter>);
-    });
-
-    test('with async undefined getter default', () => {
-      const getter = async () => undefined;
       expect(nullishAsync(string(), getter)).toStrictEqual({
         ...baseSchema,
         default: getter,
@@ -114,22 +112,36 @@ describe('nullishAsync', () => {
   });
 
   describe('should return dataset without default', () => {
-    const schema = nullishAsync(string(), 'foo');
+    test('for undefined default', async () => {
+      await expectNoSchemaIssueAsync(nullishAsync(string()), [
+        undefined,
+        null,
+        'foo',
+      ]);
+      await expectNoSchemaIssueAsync(nullishAsync(string(), undefined), [
+        undefined,
+        null,
+        'foo',
+      ]);
+    });
 
     test('for wrapper type', async () => {
-      await expectNoSchemaIssueAsync(schema, ['', 'bar', '#$%']);
+      await expectNoSchemaIssueAsync(nullishAsync(string(), 'foo'), [
+        '',
+        'bar',
+        '#$%',
+      ]);
     });
   });
 
   describe('should return dataset with default', () => {
     const schema1 = nullishAsync(string(), null);
-    const schema2 = nullishAsync(string(), undefined);
     const schema3 = nullishAsync(string(), 'foo');
-    const schema4 = nullishAsync(string(), () => null);
-    const schema5 = nullishAsync(string(), () => undefined);
+    const schema4 = nullishAsync(string(), () => undefined);
+    const schema5 = nullishAsync(string(), () => null);
     const schema6 = nullishAsync(string(), () => 'foo');
-    const schema7 = nullishAsync(string(), async () => null);
-    const schema8 = nullishAsync(string(), async () => undefined);
+    const schema7 = nullishAsync(string(), async () => undefined);
+    const schema8 = nullishAsync(string(), async () => null);
     const schema9 = nullishAsync(string(), async () => 'foo');
 
     test('for undefined', async () => {
@@ -137,26 +149,23 @@ describe('nullishAsync', () => {
         await schema1['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: null });
       expect(
-        await schema2['~validate']({ value: undefined }, {})
-      ).toStrictEqual({ typed: true, value: undefined });
-      expect(
         await schema3['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: 'foo' });
       expect(
         await schema4['~validate']({ value: undefined }, {})
-      ).toStrictEqual({ typed: true, value: null });
+      ).toStrictEqual({ typed: true, value: undefined });
       expect(
         await schema5['~validate']({ value: undefined }, {})
-      ).toStrictEqual({ typed: true, value: undefined });
+      ).toStrictEqual({ typed: true, value: null });
       expect(
         await schema6['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: 'foo' });
       expect(
         await schema7['~validate']({ value: undefined }, {})
-      ).toStrictEqual({ typed: true, value: null });
+      ).toStrictEqual({ typed: true, value: undefined });
       expect(
         await schema8['~validate']({ value: undefined }, {})
-      ).toStrictEqual({ typed: true, value: undefined });
+      ).toStrictEqual({ typed: true, value: null });
       expect(
         await schema9['~validate']({ value: undefined }, {})
       ).toStrictEqual({ typed: true, value: 'foo' });
@@ -167,21 +176,17 @@ describe('nullishAsync', () => {
         typed: true,
         value: null,
       });
-      expect(await schema2['~validate']({ value: null }, {})).toStrictEqual({
-        typed: true,
-        value: undefined,
-      });
       expect(await schema3['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
       expect(await schema4['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
-        value: null,
+        value: undefined,
       });
       expect(await schema5['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
-        value: undefined,
+        value: null,
       });
       expect(await schema6['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
@@ -189,11 +194,11 @@ describe('nullishAsync', () => {
       });
       expect(await schema7['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
-        value: null,
+        value: undefined,
       });
       expect(await schema8['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,
-        value: undefined,
+        value: null,
       });
       expect(await schema9['~validate']({ value: null }, {})).toStrictEqual({
         typed: true,

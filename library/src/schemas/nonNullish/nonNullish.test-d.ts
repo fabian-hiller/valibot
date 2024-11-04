@@ -16,7 +16,7 @@ describe('nonNullish', () => {
   describe('should return schema object', () => {
     test('with undefined message', () => {
       type Schema = NonNullishSchema<
-        NullishSchema<StringSchema<undefined>, never>,
+        NullishSchema<StringSchema<undefined>, undefined>,
         undefined
       >;
       expectTypeOf(nonNullish(nullish(string()))).toEqualTypeOf<Schema>();
@@ -28,7 +28,7 @@ describe('nonNullish', () => {
     test('with string message', () => {
       expectTypeOf(nonNullish(nullish(string()), 'message')).toEqualTypeOf<
         NonNullishSchema<
-          NullishSchema<StringSchema<undefined>, never>,
+          NullishSchema<StringSchema<undefined>, undefined>,
           'message'
         >
       >();
@@ -39,7 +39,7 @@ describe('nonNullish', () => {
         nonNullish(nullish(string()), () => 'message')
       ).toEqualTypeOf<
         NonNullishSchema<
-          NullishSchema<StringSchema<undefined>, never>,
+          NullishSchema<StringSchema<undefined>, undefined>,
           () => string
         >
       >();
@@ -48,7 +48,7 @@ describe('nonNullish', () => {
 
   describe('should infer correct types', () => {
     type Schema = NonNullishSchema<
-      NullishSchema<StringSchema<undefined>, never>,
+      NullishSchema<StringSchema<undefined>, undefined>,
       undefined
     >;
 

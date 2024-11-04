@@ -142,6 +142,13 @@ describe('record', () => {
       abortPipeEarly: undefined,
     };
 
+    const input = {
+      foo: 1,
+      bar: '2', // Invalid value
+      baz: undefined, // Invalid value
+      other: 4, // Invalid key
+    };
+
     const numberIssue1: NumberIssue = {
       ...baseInfo,
       kind: 'schema',
@@ -153,25 +160,14 @@ describe('record', () => {
         {
           type: 'object',
           origin: 'value',
-          input: {
-            foo: 1,
-            bar: '2',
-            baz: undefined,
-            other: 4,
-          },
+          input,
           key: 'bar',
           value: '2',
         },
       ],
     };
 
-    test('for wrong values', () => {
-      const input = {
-        foo: 1,
-        bar: '2',
-        baz: undefined,
-        other: 4,
-      };
+    test('for invalid values', () => {
       expect(schema['~validate']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: {
@@ -202,19 +198,44 @@ describe('record', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('with abort early', () => {
+    test('with abort early for invalid key', () => {
+      const input = {
+        foo: 1,
+        other: 2, // Invalid key
+        bar: '3', // Invalid value
+        baz: undefined, // Invalid value
+      };
       expect(
-        schema['~validate'](
+        schema['~validate']({ value: input }, { abortEarly: true })
+      ).toStrictEqual({
+        typed: false,
+        value: { foo: 1 },
+        issues: [
           {
-            value: {
-              foo: 1,
-              bar: '2',
-              baz: undefined,
-              other: 4,
-            },
+            ...baseInfo,
+            kind: 'schema',
+            type: 'picklist',
+            input: 'other',
+            expected: '("foo" | "bar" | "baz")',
+            received: '"other"',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input,
+                key: 'other',
+                value: 2,
+              },
+            ],
+            abortEarly: true,
           },
-          { abortEarly: true }
-        )
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('with abort early for invalid value', () => {
+      expect(
+        schema['~validate']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: { foo: 1 },
@@ -222,7 +243,7 @@ describe('record', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('for wrong nested values', () => {
+    test('for invalid nested values', () => {
       const nestedSchema = record(string(), schema);
       const input = {
         key1: {

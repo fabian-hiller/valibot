@@ -1,21 +1,22 @@
 ---
 title: Issues
 description: >-
-  When validating unknown data against a schema, I collect detailed information
-  about each issue.
+  When validating unknown data against a schema, Valibot collects detailed
+  information about each issue.
 contributors:
   - fabian-hiller
+  - BastiDood
 ---
 
 import { Link } from '@builder.io/qwik-city';
 
 # Issues
 
-When validating unknown data against a schema, I collect information about each issue and at the end, if there is at least one issue, I return them in an array. Each issue provides detailed information for you or your users to fix the problem.
+When validating unknown data against a schema, Valibot collects information about each issue. If there is at least one issue, these are returned in an array. Each issue provides detailed information for you or your users to fix the problem.
 
 ## Issue info
 
-The issues are an array of objects. In the following I will explain you exactly what information an issue contains and how this information can help you.
+A single issue conforms to the TypeScript type definition below.
 
 ```ts
 type BaseIssue = {
@@ -44,7 +45,7 @@ Each issue contains the following required information.
 
 #### Kind
 
-`kind` describes the kind of the problem. If an input does not match the data type, for example a number was passed instead of a string, `kind` has the value `'schema'`. In all other cases the reason is not the datatype but the actual content of the data. For example, if a string is invalid because it does not match a regex, `kind` has the value `'validation'`.
+`kind` describes the kind of the problem. If an input does not match the data type, for example a number was passed instead of a string, `kind` has the value `'schema'`. In all other cases, the reason is not the data type but the actual content of the data. For example, if a string is invalid because it does not match a regex, `kind` has the value `'validation'`.
 
 #### Type
 
@@ -64,7 +65,7 @@ Each issue contains the following required information.
 
 #### Message
 
-`message` contains a human-understandable error message that can be fully customized as described in our <Link href="/guides/schemas/#error-messages">schemas</Link> and <Link href="/guides/internationalization/">internationalization</Link> guide.
+`message` contains a human-understandable error message that can be fully customized as described in our <Link href="/guides/quick-start/#error-messages">quick start</Link> and <Link href="/guides/internationalization/">internationalization</Link> guide.
 
 ### Optional info
 
@@ -77,6 +78,8 @@ Some issues contain further optional information.
 #### Path
 
 `path` is an array of objects that describes where an issue is located within complex data. Each path item contains the following information.
+
+> The `input` of a path item may differ from the `input` of its issue. This is because path items are subsequently added by parent schemas and are related to their input. Transformations of child schemas are not taken into account.
 
 ```ts
 type PathItem = {
@@ -91,7 +94,9 @@ type PathItem = {
 For example, you can use the following code to create a dot path.
 
 ```ts
-const dotPath = issue.path.map((item) => item.key).join('.');
+import * as v from 'valibot';
+
+const dotPath = v.getDotPath(issue);
 ```
 
 #### Issues
@@ -100,11 +105,11 @@ const dotPath = issue.path.map((item) => item.key).join('.');
 
 #### Config
 
-`lang` can be used as part of our <Link href="/guides/internationalization/">i18n feature</Link> to define the required language. `abortEarly` and `abortPipeEarly` gives you an info that the validation was aborted prematurely. You can find more info about this in the <Link href="/guides/parse-data/#abort-early">parse data</Link> guide. `skipPipe` indicates that the pipeline validation was skipped. These are all configurations that you can control yourself.
+`lang` can be used as part of our <Link href="/guides/internationalization/">i18n feature</Link> to define the required language. `abortEarly` and `abortPipeEarly` gives you an info that the validation was aborted prematurely. You can find more info about this in the <Link href="/guides/parse-data/#configuration">parse data</Link> guide. These are all configurations that you can control yourself.
 
 ## Formatting
 
-For common use cases like forms, I can help you with small functions to format issues. However, once you understand how they work, you can easily format them yourself and put them in the right form for your use case.
+For common use cases such as form validation, Valibot includes small built-in functions for formatting issues. However, once you understand how they work, you can easily format them yourself and put them in the right form for your use case.
 
 ### Flatten errors
 

@@ -3,7 +3,7 @@ import { findItem, type FindItemAction } from './findItem.ts';
 
 describe('findItem', () => {
   const operation = (item: number) => item > 9;
-  const action = findItem<number[]>(operation);
+  const action = findItem<number[], number>(operation);
 
   test('should return action object', () => {
     expect(action).toStrictEqual({
@@ -13,7 +13,7 @@ describe('findItem', () => {
       async: false,
       operation,
       '~validate': expect.any(Function),
-    } satisfies FindItemAction<number[]>);
+    } satisfies FindItemAction<number[], number>);
   });
 
   describe('should transform input', () => {

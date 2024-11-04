@@ -26,15 +26,16 @@ describe('undefinedableAsync', () => {
       '~validate': expect.any(Function),
     };
 
-    test('with never default', () => {
-      expect(undefinedableAsync(string())).toStrictEqual(baseSchema);
-    });
-
     test('with undefined default', () => {
-      expect(undefinedableAsync(string(), undefined)).toStrictEqual({
+      const expected: UndefinedableSchemaAsync<
+        StringSchema<undefined>,
+        undefined
+      > = {
         ...baseSchema,
         default: undefined,
-      } satisfies UndefinedableSchemaAsync<StringSchema<undefined>, undefined>);
+      };
+      expect(undefinedableAsync(string())).toStrictEqual(expected);
+      expect(undefinedableAsync(string(), undefined)).toStrictEqual(expected);
     });
 
     test('with undefined getter default', () => {
@@ -102,54 +103,60 @@ describe('undefinedableAsync', () => {
   });
 
   describe('should return dataset without default', () => {
-    const schema = undefinedableAsync(string(), 'foo');
+    test('for undefined default', async () => {
+      await expectNoSchemaIssueAsync(undefinedableAsync(string()), [
+        undefined,
+        'foo',
+      ]);
+      await expectNoSchemaIssueAsync(undefinedableAsync(string(), undefined), [
+        undefined,
+        'foo',
+      ]);
+    });
 
     test('for wrapper type', async () => {
-      await expectNoSchemaIssueAsync(schema, ['', 'bar', '#$%']);
+      await expectNoSchemaIssueAsync(undefinedableAsync(string(), 'foo'), [
+        '',
+        'bar',
+        '#$%',
+      ]);
     });
   });
 
   describe('should return dataset with default', () => {
-    const schema1 = undefinedableAsync(string(), undefined);
-    const schema2 = undefinedableAsync(string(), 'foo');
-    const schema3 = undefinedableAsync(string(), () => undefined);
-    const schema4 = undefinedableAsync(string(), () => 'foo');
-    const schema5 = undefinedableAsync(string(), async () => undefined);
-    const schema6 = undefinedableAsync(string(), async () => 'foo');
+    const schema1 = undefinedableAsync(string(), 'foo');
+    const schema2 = undefinedableAsync(string(), () => undefined);
+    const schema3 = undefinedableAsync(string(), () => 'foo');
+    const schema4 = undefinedableAsync(string(), async () => undefined);
+    const schema5 = undefinedableAsync(string(), async () => 'foo');
 
     test('for undefined', async () => {
       expect(
         await schema1['~validate']({ value: undefined }, {})
       ).toStrictEqual({
         typed: true,
-        value: undefined,
+        value: 'foo',
       });
       expect(
         await schema2['~validate']({ value: undefined }, {})
       ).toStrictEqual({
         typed: true,
-        value: 'foo',
+        value: undefined,
       });
       expect(
         await schema3['~validate']({ value: undefined }, {})
       ).toStrictEqual({
         typed: true,
-        value: undefined,
+        value: 'foo',
       });
       expect(
         await schema4['~validate']({ value: undefined }, {})
       ).toStrictEqual({
         typed: true,
-        value: 'foo',
-      });
-      expect(
-        await schema5['~validate']({ value: undefined }, {})
-      ).toStrictEqual({
-        typed: true,
         value: undefined,
       });
       expect(
-        await schema6['~validate']({ value: undefined }, {})
+        await schema5['~validate']({ value: undefined }, {})
       ).toStrictEqual({
         typed: true,
         value: 'foo',

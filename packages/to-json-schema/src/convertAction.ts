@@ -1,7 +1,7 @@
 import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
 import type { ConversionConfig } from './type.ts';
-import { throwOrWarn } from './utils/index.ts';
+import { handleError } from './utils/index.ts';
 
 // TODO: Add support for more actions (for example all regex-based actions)
 
@@ -120,7 +120,7 @@ export function convertAction(
         }
       } else {
         if (jsonSchema.type !== 'string') {
-          throwOrWarn(
+          handleError(
             `The "${valibotAction.type}" action is not supported on type "${jsonSchema.type}".`,
             config
           );
@@ -137,7 +137,7 @@ export function convertAction(
 
     case 'max_value': {
       if (jsonSchema.type !== 'number') {
-        throwOrWarn(
+        handleError(
           `The "max_value" action is not supported on type "${jsonSchema.type}".`,
           config
         );
@@ -149,7 +149,7 @@ export function convertAction(
 
     case 'min_value': {
       if (jsonSchema.type !== 'number') {
-        throwOrWarn(
+        handleError(
           `The "min_value" action is not supported on type "${jsonSchema.type}".`,
           config
         );
@@ -166,7 +166,7 @@ export function convertAction(
 
     case 'regex': {
       if (valibotAction.requirement.flags) {
-        throwOrWarn('RegExp flags are not supported by JSON Schema.', config);
+        handleError('RegExp flags are not supported by JSON Schema.', config);
       }
       jsonSchema.pattern = valibotAction.requirement.source;
       break;
@@ -192,7 +192,7 @@ export function convertAction(
     }
 
     default: {
-      throwOrWarn(
+      handleError(
         // @ts-expect-error
         `The "${valibotAction.type}" action cannot be converted to JSON Schema.`,
         config

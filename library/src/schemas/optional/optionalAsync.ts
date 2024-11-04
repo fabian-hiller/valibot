@@ -57,7 +57,7 @@ export function optionalAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(wrapped: TWrapped): OptionalSchemaAsync<TWrapped, never>;
+>(wrapped: TWrapped): OptionalSchemaAsync<TWrapped, undefined>;
 
 /**
  * Creates an optional schema.
@@ -81,32 +81,27 @@ export function optionalAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  ...args: unknown[]
+  default_?: unknown
 ): OptionalSchemaAsync<
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   unknown
 > {
-  // Create schema object
-  // @ts-expect-error
-  const schema: OptionalSchemaAsync<
-    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-    unknown
-  > = {
+  return {
     kind: 'schema',
     type: 'optional',
     reference: optionalAsync,
     expects: `(${wrapped.expects} | undefined)`,
     async: true,
     wrapped,
+    default: default_,
     '~standard': 1,
     '~vendor': 'valibot',
     async '~validate'(dataset, config = getGlobalConfig()) {
       // If value is `undefined`, override it with default or return dataset
       if (dataset.value === undefined) {
         // If default is specified, override value of dataset
-        if ('default' in this) {
+        if (this.default !== undefined) {
           dataset.value = await getDefault(this, dataset, config);
         }
 
@@ -123,13 +118,4 @@ export function optionalAsync(
       return this.wrapped['~validate'](dataset, config);
     },
   };
-
-  // Add default if specified
-  if (0 in args) {
-    // @ts-expect-error
-    schema.default = args[0];
-  }
-
-  // Return schema object
-  return schema;
 }

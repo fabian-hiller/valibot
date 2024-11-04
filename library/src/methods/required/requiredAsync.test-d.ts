@@ -39,17 +39,37 @@ describe('requiredAsync', () => {
       undefined
     >;
 
-    describe('should return schema objectAsync', () => {
-      // TODO: Add test for every overload signature
-
+    describe('should return schema object', () => {
       test('with undefined keys', () => {
         expectTypeOf(requiredAsync(wrapped)).toEqualTypeOf<Schema1>();
+        expectTypeOf(
+          requiredAsync(wrapped, undefined)
+        ).toEqualTypeOf<Schema1>();
+        expectTypeOf(requiredAsync(wrapped, 'message')).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, undefined, 'message'>
+        >();
+        expectTypeOf(requiredAsync(wrapped, () => 'message')).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, undefined, () => string>
+        >();
       });
 
       test('with specific keys', () => {
         expectTypeOf(
           requiredAsync(wrapped, ['key1', 'key3'])
         ).toEqualTypeOf<Schema2>();
+        expectTypeOf(
+          requiredAsync(wrapped, ['key1', 'key3'], undefined)
+        ).toEqualTypeOf<Schema2>();
+        expectTypeOf(
+          requiredAsync(wrapped, ['key1', 'key3'], 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, ['key1', 'key3'], 'message'>
+        >();
+        expectTypeOf(
+          requiredAsync(wrapped, ['key1', 'key3'], () => 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, ['key1', 'key3'], () => string>
+        >();
       });
     });
 
@@ -105,17 +125,37 @@ describe('requiredAsync', () => {
       undefined
     >;
 
-    describe('should return schema objectAsync', () => {
-      // TODO: Add test for every overload signature
-
+    describe('should return schema object', () => {
       test('with undefined keys', () => {
         expectTypeOf(requiredAsync(wrapped)).toEqualTypeOf<Schema1>();
+        expectTypeOf(
+          requiredAsync(wrapped, undefined)
+        ).toEqualTypeOf<Schema1>();
+        expectTypeOf(requiredAsync(wrapped, 'message')).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, undefined, 'message'>
+        >();
+        expectTypeOf(requiredAsync(wrapped, () => 'message')).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, undefined, () => string>
+        >();
       });
 
       test('with specific keys', () => {
         expectTypeOf(
           requiredAsync(wrapped, ['key2', 'key3'])
         ).toEqualTypeOf<Schema2>();
+        expectTypeOf(
+          requiredAsync(wrapped, ['key2', 'key3'], undefined)
+        ).toEqualTypeOf<Schema2>();
+        expectTypeOf(
+          requiredAsync(wrapped, ['key2', 'key3'], 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, ['key2', 'key3'], 'message'>
+        >();
+        expectTypeOf(
+          requiredAsync(wrapped, ['key2', 'key3'], () => 'message')
+        ).toEqualTypeOf<
+          SchemaWithRequiredAsync<Wrapped, ['key2', 'key3'], () => string>
+        >();
       });
     });
 

@@ -52,7 +52,7 @@ export interface OptionalSchema<
  */
 export function optional<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
->(wrapped: TWrapped): OptionalSchema<TWrapped, never>;
+>(wrapped: TWrapped): OptionalSchema<TWrapped, undefined>;
 
 /**
  * Creates a optional schema.
@@ -69,27 +69,23 @@ export function optional<
 
 export function optional(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  ...args: unknown[]
+  default_?: unknown
 ): OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown> {
-  // Create schema object
-  // @ts-expect-error
-  const schema: OptionalSchema<
-    BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-    unknown
-  > = {
+  return {
     kind: 'schema',
     type: 'optional',
     reference: optional,
     expects: `(${wrapped.expects} | undefined)`,
     async: false,
     wrapped,
+    default: default_,
     '~standard': 1,
     '~vendor': 'valibot',
     '~validate'(dataset, config = getGlobalConfig()) {
       // If value is `undefined`, override it with default or return dataset
       if (dataset.value === undefined) {
         // If default is specified, override value of dataset
-        if ('default' in this) {
+        if (this.default !== undefined) {
           dataset.value = getDefault(this, dataset, config);
         }
 
@@ -106,13 +102,4 @@ export function optional(
       return this.wrapped['~validate'](dataset, config);
     },
   };
-
-  // Add default if specified
-  if (0 in args) {
-    // @ts-expect-error
-    schema.default = args[0];
-  }
-
-  // Return schema object
-  return schema;
 }

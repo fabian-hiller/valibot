@@ -22,7 +22,12 @@ describe('partialCheckAsync', () => {
 
   describe('should return action object', () => {
     test('with undefined message', () => {
-      type Action = PartialCheckActionAsync<Input, Selection, undefined>;
+      type Action = PartialCheckActionAsync<
+        Input,
+        PathList,
+        Selection,
+        undefined
+      >;
       expectTypeOf(
         partialCheckAsync<Input, PathList, Selection>(pathList, requirement)
       ).toEqualTypeOf<Action>();
@@ -42,7 +47,9 @@ describe('partialCheckAsync', () => {
           requirement,
           'message'
         )
-      ).toEqualTypeOf<PartialCheckActionAsync<Input, Selection, 'message'>>();
+      ).toEqualTypeOf<
+        PartialCheckActionAsync<Input, PathList, Selection, 'message'>
+      >();
     });
 
     test('with function message', () => {
@@ -53,13 +60,18 @@ describe('partialCheckAsync', () => {
           () => 'message'
         )
       ).toEqualTypeOf<
-        PartialCheckActionAsync<Input, Selection, () => string>
+        PartialCheckActionAsync<Input, PathList, Selection, () => string>
       >();
     });
   });
 
   describe('should infer correct types', () => {
-    type Action = PartialCheckActionAsync<Input, Selection, undefined>;
+    type Action = PartialCheckActionAsync<
+      Input,
+      PathList,
+      Selection,
+      undefined
+    >;
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();

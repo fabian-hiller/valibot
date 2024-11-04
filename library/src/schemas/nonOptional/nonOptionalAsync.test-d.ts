@@ -19,7 +19,7 @@ describe('nonOptionalAsync', () => {
   describe('should return schema object', () => {
     test('with undefined message', () => {
       type Schema = NonOptionalSchemaAsync<
-        NullishSchemaAsync<StringSchema<undefined>, never>,
+        NullishSchemaAsync<StringSchema<undefined>, undefined>,
         undefined
       >;
       expectTypeOf(
@@ -35,7 +35,7 @@ describe('nonOptionalAsync', () => {
         nonOptionalAsync(nullishAsync(string()), 'message')
       ).toEqualTypeOf<
         NonOptionalSchemaAsync<
-          NullishSchemaAsync<StringSchema<undefined>, never>,
+          NullishSchemaAsync<StringSchema<undefined>, undefined>,
           'message'
         >
       >();
@@ -46,7 +46,7 @@ describe('nonOptionalAsync', () => {
         nonOptionalAsync(nullishAsync(string()), () => 'message')
       ).toEqualTypeOf<
         NonOptionalSchemaAsync<
-          NullishSchemaAsync<StringSchema<undefined>, never>,
+          NullishSchemaAsync<StringSchema<undefined>, undefined>,
           () => string
         >
       >();
@@ -55,7 +55,7 @@ describe('nonOptionalAsync', () => {
 
   describe('should infer correct types', () => {
     type Schema = NonOptionalSchemaAsync<
-      NullishSchemaAsync<StringSchema<undefined>, never>,
+      NullishSchemaAsync<StringSchema<undefined>, undefined>,
       undefined
     >;
 

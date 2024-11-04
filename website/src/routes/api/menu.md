@@ -74,6 +74,7 @@
 
 ## Actions
 
+- [args](/api/args/)
 - [base64](/api/base64/)
 - [bic](/api/bic/)
 - [brand](/api/brand/)
@@ -146,6 +147,7 @@
 - [readonly](/api/readonly/)
 - [reduceItems](/api/reduceItems/)
 - [regex](/api/regex/)
+- [returns](/api/returns/)
 - [safeInteger](/api/safeInteger/)
 - [size](/api/size/)
 - [someItem](/api/someItem/)
@@ -192,6 +194,7 @@
 
 ## Async
 
+- [argsAsync](/api/argsAsync/)
 - [arrayAsync](/api/arrayAsync/)
 - [awaitAsync](/api/awaitAsync/)
 - [checkAsync](/api/checkAsync/)
@@ -223,6 +226,7 @@
 - [rawTransformAsync](/api/rawTransformAsync/)
 - [recordAsync](/api/recordAsync/)
 - [requiredAsync](/api/requiredAsync/)
+- [returnsAsync](/api/returnsAsync/)
 - [safeParseAsync](/api/safeParseAsync/)
 - [safeParserAsync](/api/safeParserAsync/)
 - [setAsync](/api/setAsync/)
@@ -238,6 +242,7 @@
 ## Types
 
 - [AnySchema](/api/AnySchema/)
+- [ArgsAction](/api/ArgsAction/)
 - [ArrayInput](/api/ArrayInput/)
 - [ArrayIssue](/api/ArrayIssue/)
 - [ArrayPathItem](/api/ArrayPathItem/)
@@ -551,6 +556,7 @@
 - [ReduceItemsAction](/api/ReduceItemsAction/)
 - [RegexAction](/api/RegexAction/)
 - [RegexIssue](/api/RegexIssue/)
+- [ReturnsAction](/api/ReturnsAction/)
 - [SafeIntegerAction](/api/SafeIntegerAction/)
 - [SafeIntegerIssue](/api/SafeIntegerIssue/)
 - [SafeParser](/api/SafeParser/)

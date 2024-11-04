@@ -4,8 +4,6 @@ import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import { mac64, type Mac64Action, type Mac64Issue } from './mac64.ts';
 
-// TODO: Improve tests to cover all possible scenarios based on the regex used.
-
 describe('mac64', () => {
   describe('should return action object', () => {
     const baseAction: Omit<Mac64Action<string, never>, 'message'> = {
@@ -72,6 +70,30 @@ describe('mac64', () => {
         '00-1A-2B-3C-4D-5E-6F-70',
         '0025.96FF.FE12.3456',
         '0025:96FF:FE12:3456',
+        '00:00:00:00:00:00:00:00',
+        '99:99:99:99:99:99:99:99',
+        'aa:aa:aa:aa:aa:aa:aa:aa',
+        'AA:AA:AA:AA:AA:AA:AA:AA',
+        'ff:ff:ff:ff:ff:ff:ff:ff',
+        'FF:FF:FF:FF:FF:FF:FF:FF',
+        '00-00-00-00-00-00-00-00',
+        '99-99-99-99-99-99-99-99',
+        'aa-aa-aa-aa-aa-aa-aa-aa',
+        'AA-AA-AA-AA-AA-AA-AA-AA',
+        'ff-ff-ff-ff-ff-ff-ff-ff',
+        'FF-FF-FF-FF-FF-FF-FF-FF',
+        '0000.0000.0000.0000',
+        '9999.9999.9999.9999',
+        'aaaa.aaaa.aaaa.aaaa',
+        'AAAA.AAAA.AAAA.AAAA',
+        'ffff.ffff.ffff.ffff',
+        'FFFF.FFFF.FFFF.FFFF',
+        '0000:0000:0000:0000',
+        '9999:9999:9999:9999',
+        'aaaa:aaaa:aaaa:aaaa',
+        'AAAA:AAAA:AAAA:AAAA',
+        'ffff:ffff:ffff:ffff',
+        'FFFF:FFFF:FFFF:FFFF',
       ]);
     });
   });
@@ -95,6 +117,7 @@ describe('mac64', () => {
         'b6:05:20:67:f9:58',
         'b6-05-20-67-f9-58',
         'b605.2067.f958',
+        '0000.0000.0000',
       ]);
     });
 
@@ -104,6 +127,10 @@ describe('mac64', () => {
         '00:1A:2B:3C:4D',
         '00:1A:2B:3C:4D:5E:6F',
         '00:1A:2B:3C:4D:5E:6F:70:80',
+        '00-1G-2B-3C-4D-5E',
+        '00-1A-2B-3C-4D',
+        '00-1A-2B-3C-4D-5E-6F',
+        '00-1A-2B-3C-4D-5E-6F-70-80',
         'b605-2067-f958',
         '00_1A_2B_3C_4D_5E',
         '001A2B3C4D5E6F',
@@ -112,6 +139,45 @@ describe('mac64', () => {
         '001122334455',
         '00:1A:2B:3C:4D:5E:6F:70:ZZ',
         'GHIJ:KLNM:OPQR',
+        '0:0:0:0:0:0:0:0',
+        '000:000:000:000:000:000:000:000',
+        '00:00:00:00:00:00:00',
+        '00:00:00:00:00:00:00:00:00',
+        '0-0-0-0-0-0-0-0',
+        '000-000-000-000-000-000-000-000',
+        '00-00-00-00-00-00-00',
+        '00-00-00-00-00-00-00-00-00',
+        '000.000.000.000',
+        '00000.00000.00000.00000',
+        '0000.0000.0000.0000.0000',
+        '000:000:000:000',
+        '00000:00000:00000:00000',
+        '0000:0000:0000',
+        '0000:0000:0000:0000:0000',
+        '-10:-10:-10:-10:-10:-10:-10:-10',
+        '10000:10000:10000:10000:10000:10000:10000:10000',
+        'zzzz:zzzz:zzzz:zzzz:zzzz:zzzz:zzzz:zzzz',
+        'ZZZZ:ZZZZ:ZZZZ:ZZZZ:ZZZZ:ZZZZ:ZZZZ:ZZZZ',
+        'gggg:gggg:gggg:gggg:gggg:gggg:gggg:gggg',
+        'GGGG:GGGG:GGGG:GGGG:GGGG:GGGG:GGGG:GGGG',
+        '-10--10--10--10--10--10--10--10',
+        '10000-10000-10000-10000-10000-10000-10000-10000',
+        'zzzz-zzzz-zzzz-zzzz-zzzz-zzzz-zzzz-zzzz',
+        'ZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZ',
+        'gggg-gggg-gggg-gggg-gggg-gggg-gggg-gggg',
+        'GGGG-GGGG-GGGG-GGGG-GGGG-GGGG-GGGG-GGGG',
+        '-1000.-1000.-1000.-1000',
+        '10000.10000.10000.10000',
+        'zzzz.zzzz.zzzz.zzzz',
+        'ZZZZ.ZZZZ.ZZZZ.ZZZZ',
+        'gggg.gggg.gggg.gggg',
+        'GGGG.GGGG.GGGG.GGGG',
+        '-1000:-1000:-1000:-1000',
+        '10000:10000:10000:10000',
+        'zzzz:zzzz:zzzz:zzzz',
+        'ZZZZ:ZZZZ:ZZZZ:ZZZZ',
+        'gggg:gggg:gggg:gggg',
+        'GGGG:GGGG:GGGG:GGGG',
       ]);
     });
   });

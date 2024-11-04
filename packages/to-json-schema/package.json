@@ -1,7 +1,7 @@
 {
   "name": "@valibot/to-json-schema",
   "description": "The official JSON schema converter for Valibot",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0-beta.2",
   "license": "MIT",
   "author": "Fabian Hiller",
   "homepage": "https://valibot.dev",
@@ -45,8 +45,8 @@
   "scripts": {
     "test": "vitest --typecheck",
     "coverage": "vitest run --coverage --isolate",
-    "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit",
-    "eslint.fix": "eslint \"src/**/*.ts*\" --fix",
+    "lint": "eslint \"src/**/*.ts*\" && tsc --noEmit && deno check ./src/index.ts",
+    "lint.fix": "eslint \"src/**/*.ts*\" --fix",
     "format": "prettier --write ./src",
     "format.check": "prettier --check ./src",
     "build": "tsup"

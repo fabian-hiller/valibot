@@ -9,10 +9,10 @@ import { nullableAsync, type NullableSchemaAsync } from './nullableAsync.ts';
 
 describe('nullableAsync', () => {
   describe('should return schema object', () => {
-    test('with never default', () => {
-      expectTypeOf(nullableAsync(string())).toEqualTypeOf<
-        NullableSchemaAsync<StringSchema<undefined>, never>
-      >();
+    test('with undefined default', () => {
+      type Schema = NullableSchemaAsync<StringSchema<undefined>, undefined>;
+      expectTypeOf(nullableAsync(string())).toEqualTypeOf<Schema>();
+      expectTypeOf(nullableAsync(string(), undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with null default', () => {
@@ -53,7 +53,7 @@ describe('nullableAsync', () => {
   });
 
   describe('should infer correct types', () => {
-    type Schema1 = NullableSchemaAsync<StringSchema<undefined>, never>;
+    type Schema1 = NullableSchemaAsync<StringSchema<undefined>, undefined>;
     type Schema2 = NullableSchemaAsync<StringSchema<undefined>, null>;
     type Schema3 = NullableSchemaAsync<StringSchema<undefined>, 'foo'>;
     type Schema4 = NullableSchemaAsync<StringSchema<undefined>, () => null>;

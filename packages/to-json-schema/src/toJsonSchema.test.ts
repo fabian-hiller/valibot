@@ -100,6 +100,9 @@ describe('toJsonSchema', () => {
       expect(() => toJsonSchema(v.file())).toThrowError(
         'The "file" schema cannot be converted to JSON Schema.'
       );
+      expect(() => toJsonSchema(v.file(), { errorMode: 'throw' })).toThrowError(
+        'The "file" schema cannot be converted to JSON Schema.'
+      );
     });
 
     test('for invalid credit card action', () => {
@@ -108,12 +111,17 @@ describe('toJsonSchema', () => {
       ).toThrowError(
         'The "credit_card" action cannot be converted to JSON Schema.'
       );
+      expect(() =>
+        toJsonSchema(v.pipe(v.string(), v.creditCard()), { errorMode: 'throw' })
+      ).toThrowError(
+        'The "credit_card" action cannot be converted to JSON Schema.'
+      );
     });
   });
 
-  describe('should force conversion', () => {
+  describe('should warn error', () => {
     test('for invalid file schema', () => {
-      expect(toJsonSchema(v.file(), { force: true })).toStrictEqual({
+      expect(toJsonSchema(v.file(), { errorMode: 'warn' })).toStrictEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
       });
       expect(console.warn).toHaveBeenLastCalledWith(
@@ -123,7 +131,7 @@ describe('toJsonSchema', () => {
 
     test('for invalid credit card action', () => {
       expect(
-        toJsonSchema(v.pipe(v.string(), v.creditCard()), { force: true })
+        toJsonSchema(v.pipe(v.string(), v.creditCard()), { errorMode: 'warn' })
       ).toStrictEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'string',
@@ -131,6 +139,25 @@ describe('toJsonSchema', () => {
       expect(console.warn).toHaveBeenLastCalledWith(
         'The "credit_card" action cannot be converted to JSON Schema.'
       );
+    });
+  });
+
+  describe('should ignore error', () => {
+    test('for invalid file schema', () => {
+      expect(toJsonSchema(v.file(), { errorMode: 'ignore' })).toStrictEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+      });
+    });
+
+    test('for invalid credit card action', () => {
+      expect(
+        toJsonSchema(v.pipe(v.string(), v.creditCard()), {
+          errorMode: 'ignore',
+        })
+      ).toStrictEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'string',
+      });
     });
   });
 });

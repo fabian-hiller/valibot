@@ -7,6 +7,7 @@ import ca from '../src/ca';
 import cs from '../src/cs';
 import de from '../src/de';
 import es from '../src/es';
+import fa from '../src/fa';
 import fr from '../src/fr';
 import hu from '../src/hu';
 import id from '../src/id';
@@ -38,6 +39,7 @@ const languages = [
   cs,
   de,
   es,
+  fa,
   fr,
   id,
   it,

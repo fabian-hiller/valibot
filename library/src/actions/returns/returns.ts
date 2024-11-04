@@ -35,7 +35,7 @@ export interface ReturnsAction<
 }
 
 /**
- * Creates a funtion arguments transformation action.
+ * Creates a function return transformation action.
  *
  * @param schema The arguments schema.
  *

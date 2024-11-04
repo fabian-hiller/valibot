@@ -43,13 +43,13 @@ describe('objectAsync', () => {
       {
         key1: StringSchema<undefined>;
         key2: OptionalSchema<StringSchema<undefined>, 'foo'>;
-        key3: NullishSchema<StringSchema<undefined>, never>;
-        key4: ObjectSchemaAsync<{ key: NumberSchema<undefined> }, never>;
+        key3: NullishSchema<StringSchema<undefined>, undefined>;
+        key4: ObjectSchemaAsync<{ key: NumberSchema<undefined> }, undefined>;
         key5: SchemaWithPipe<[StringSchema<undefined>, ReadonlyAction<string>]>;
         key6: UndefinedableSchema<StringSchema<undefined>, 'bar'>;
         key7: SchemaWithPipe<
           [
-            OptionalSchema<StringSchema<undefined>, never>,
+            OptionalSchema<StringSchema<undefined>, undefined>,
             TransformAction<undefined | string, string>,
           ]
         >;
