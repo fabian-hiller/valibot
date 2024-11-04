@@ -5,6 +5,7 @@ import ar from '../src/ar';
 import ca from '../src/ca';
 import de from '../src/de';
 import es from '../src/es';
+import fa from '../src/fa';
 import fr from '../src/fr';
 import hu from '../src/hu';
 import id from '../src/id';
@@ -35,6 +36,7 @@ const languages = [
   ca,
   de,
   es,
+  fa,
   fr,
   hu,
   id,
