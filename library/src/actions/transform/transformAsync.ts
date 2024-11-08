@@ -38,7 +38,7 @@ export function transformAsync<TInput, TOutput>(
     reference: transformAsync,
     async: true,
     operation,
-    async '~validate'(dataset) {
+    async '~run'(dataset) {
       // @ts-expect-error
       dataset.value = await this.operation(dataset.value);
       // @ts-expect-error

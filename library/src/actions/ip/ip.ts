@@ -91,7 +91,7 @@ export function ip(
     expects: null,
     requirement: IP_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'IP', dataset, config);
       }

@@ -31,6 +31,20 @@ export interface BaseTransformation<
    */
   readonly async: false;
   /**
+   * Transforms known input values.
+   *
+   * @param dataset The input dataset.
+   * @param config The configuration.
+   *
+   * @returns The output dataset.
+   *
+   * @internal
+   */
+  readonly '~run': (
+    dataset: SuccessDataset<TInput>,
+    config: Config<BaseIssue<unknown>>
+  ) => OutputDataset<TOutput, BaseIssue<unknown> | TIssue>;
+  /**
    * The input, output and issue type.
    *
    * @internal
@@ -42,20 +56,6 @@ export interface BaseTransformation<
         readonly issue: TIssue;
       }
     | undefined;
-  /**
-   * Transforms known input values.
-   *
-   * @param dataset The input dataset.
-   * @param config The configuration.
-   *
-   * @returns The output dataset.
-   *
-   * @internal
-   */
-  readonly '~validate': (
-    dataset: SuccessDataset<TInput>,
-    config: Config<BaseIssue<unknown>>
-  ) => OutputDataset<TOutput, BaseIssue<unknown> | TIssue>;
 }
 
 /**
@@ -67,7 +67,7 @@ export interface BaseTransformationAsync<
   TIssue extends BaseIssue<unknown>,
 > extends Omit<
     BaseTransformation<TInput, TOutput, TIssue>,
-    'reference' | 'async' | '~validate'
+    'reference' | 'async' | '~run'
   > {
   /**
    * The transformation reference.
@@ -93,7 +93,7 @@ export interface BaseTransformationAsync<
    *
    * @internal
    */
-  readonly '~validate': (
+  readonly '~run': (
     dataset: SuccessDataset<TInput>,
     config: Config<BaseIssue<unknown>>
   ) => Promise<OutputDataset<TOutput, BaseIssue<unknown> | TIssue>>;

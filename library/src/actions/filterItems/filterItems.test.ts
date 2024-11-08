@@ -12,13 +12,13 @@ describe('filterItems', () => {
       reference: filterItems,
       async: false,
       operation,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     } satisfies FilterItemsAction<number[]>);
   });
 
   test('should transform input', () => {
     expect(
-      action['~validate']({ typed: true, value: [-12, 345, 0, 9, 10, 999] }, {})
+      action['~run']({ typed: true, value: [-12, 345, 0, 9, 10, 999] }, {})
     ).toStrictEqual({
       typed: true,
       value: [345, 10, 999],

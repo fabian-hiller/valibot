@@ -93,7 +93,7 @@ export function finite(
     expects: null,
     requirement: Number.isFinite,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'finite', dataset, config);
       }

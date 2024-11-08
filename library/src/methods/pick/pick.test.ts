@@ -41,20 +41,31 @@ describe('pick', () => {
         entries: {
           key1: {
             ...string(),
-
-            '~validate': expect.any(Function),
+            '~standard': {
+              version: 1,
+              vendor: 'valibot',
+              validate: expect.any(Function),
+            },
+            '~run': expect.any(Function),
           },
           key3: {
             ...string(),
-
-            '~validate': expect.any(Function),
+            '~standard': {
+              version: 1,
+              vendor: 'valibot',
+              validate: expect.any(Function),
+            },
+            '~run': expect.any(Function),
           },
         },
         message: undefined,
         async: false,
-        '~standard': 1,
-        '~vendor': 'valibot',
-        '~validate': expect.any(Function),
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
+        '~run': expect.any(Function),
       } satisfies typeof schema);
     });
 
@@ -65,7 +76,7 @@ describe('pick', () => {
 
       test('for unknown entries', () => {
         expect(
-          schema['~validate'](
+          schema['~run'](
             { value: { key1: 'foo', key2: 123, key3: 'bar', other: null } },
             {}
           )
@@ -78,9 +89,7 @@ describe('pick', () => {
 
     describe('should return dataset with nested issues', () => {
       test('if a picked key is missing', () => {
-        expect(
-          schema['~validate']({ value: { key3: 'bar' } }, {})
-        ).toStrictEqual({
+        expect(schema['~run']({ value: { key3: 'bar' } }, {})).toStrictEqual({
           typed: false,
           value: { key3: 'bar' },
           issues: [
@@ -119,24 +128,40 @@ describe('pick', () => {
         entries: {
           key2: {
             ...number(),
-
-            '~validate': expect.any(Function),
+            '~standard': {
+              version: 1,
+              vendor: 'valibot',
+              validate: expect.any(Function),
+            },
+            '~run': expect.any(Function),
           },
           key3: {
             ...string(),
-
-            '~validate': expect.any(Function),
+            '~standard': {
+              version: 1,
+              vendor: 'valibot',
+              validate: expect.any(Function),
+            },
+            '~run': expect.any(Function),
           },
         },
         rest: {
           ...boolean(),
-          '~validate': expect.any(Function),
+          '~standard': {
+            version: 1,
+            vendor: 'valibot',
+            validate: expect.any(Function),
+          },
+          '~run': expect.any(Function),
         },
         message: undefined,
         async: false,
-        '~standard': 1,
-        '~vendor': 'valibot',
-        '~validate': expect.any(Function),
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
+        '~run': expect.any(Function),
       } satisfies typeof schema);
     });
 
@@ -154,9 +179,7 @@ describe('pick', () => {
 
     describe('should return dataset with nested issues', () => {
       test('if a picked key is missing', () => {
-        expect(
-          schema['~validate']({ value: { key3: 'foo' } }, {})
-        ).toStrictEqual({
+        expect(schema['~run']({ value: { key3: 'foo' } }, {})).toStrictEqual({
           typed: false,
           value: { key3: 'foo' },
           issues: [
@@ -183,10 +206,7 @@ describe('pick', () => {
 
       test('if a not picked key does not match rest', () => {
         expect(
-          schema['~validate'](
-            { value: { key1: 'foo', key2: 123, key3: 'foo' } },
-            {}
-          )
+          schema['~run']({ value: { key1: 'foo', key2: 123, key3: 'foo' } }, {})
         ).toStrictEqual({
           typed: false,
           value: { key1: 'foo', key2: 123, key3: 'foo' },

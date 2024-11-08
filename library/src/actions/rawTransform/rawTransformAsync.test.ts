@@ -22,20 +22,20 @@ describe('rawTransformAsync', () => {
       type: 'raw_transform',
       reference: rawTransformAsync,
       async: true,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     } satisfies RawTransformActionAsync<string, number>);
   });
 
   describe('should return dataset without issues', () => {
     test('for valid inputs', async () => {
       expect(
-        await action['~validate']({ typed: true, value: 'foo' }, {})
+        await action['~run']({ typed: true, value: 'foo' }, {})
       ).toStrictEqual({
         typed: true,
         value: 3,
       });
       expect(
-        await action['~validate']({ typed: true, value: '123456789' }, {})
+        await action['~run']({ typed: true, value: '123456789' }, {})
       ).toStrictEqual({
         typed: true,
         value: 9,
@@ -46,7 +46,7 @@ describe('rawTransformAsync', () => {
   describe('should return dataset with issues', () => {
     test('for invalid inputs', async () => {
       expect(
-        await action['~validate']({ typed: true, value: 'fo' }, {})
+        await action['~run']({ typed: true, value: 'fo' }, {})
       ).toStrictEqual({
         typed: false,
         value: 'fo',

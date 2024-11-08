@@ -125,7 +125,7 @@ export function words(
     locales,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         const count = _getWordCount(this.locales, dataset.value);
         if (count !== this.requirement) {

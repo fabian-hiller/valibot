@@ -111,7 +111,7 @@ export function value(
         : _stringify(requirement),
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (
         dataset.typed &&
         !(

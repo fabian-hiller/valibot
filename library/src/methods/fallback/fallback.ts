@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -52,8 +51,8 @@ export function fallback<
   return {
     ...schema,
     fallback,
-    '~validate'(dataset, config = getGlobalConfig()) {
-      const outputDataset = schema['~validate'](dataset, config);
+    '~run'(dataset, config) {
+      const outputDataset = schema['~run'](dataset, config);
       return outputDataset.issues
         ? { typed: true, value: getFallback(this, outputDataset, config) }
         : outputDataset;

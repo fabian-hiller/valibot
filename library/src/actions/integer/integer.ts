@@ -93,7 +93,7 @@ export function integer(
     expects: null,
     requirement: Number.isInteger,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'integer', dataset, config);
       }

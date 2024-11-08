@@ -29,9 +29,12 @@ describe('strictObjectAsync', () => {
       expects: 'Object',
       entries,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -199,7 +202,7 @@ describe('strictObjectAsync', () => {
     };
 
     test('for missing entries', async () => {
-      expect(await schema['~validate']({ value: {} }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
         issues: [
@@ -227,7 +230,7 @@ describe('strictObjectAsync', () => {
 
     test('for missing nested entries', async () => {
       const input = { key: 'value', nested: {} };
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -261,7 +264,7 @@ describe('strictObjectAsync', () => {
 
     test('with abort early', async () => {
       expect(
-        await schema['~validate']({ value: {} }, { abortEarly: true })
+        await schema['~run']({ value: {} }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: {},
@@ -276,7 +279,7 @@ describe('strictObjectAsync', () => {
         other1: 'foo',
         other2: 123,
       };
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: { key: input.key, nested: input.nested },
         issues: [

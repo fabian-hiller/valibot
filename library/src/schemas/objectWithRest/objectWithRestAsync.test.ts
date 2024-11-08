@@ -36,9 +36,12 @@ describe('objectWithRestAsync', () => {
       entries,
       rest,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -214,7 +217,7 @@ describe('objectWithRestAsync', () => {
     };
 
     test('for missing entries', async () => {
-      expect(await schema['~validate']({ value: {} }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
         issues: [
@@ -242,7 +245,7 @@ describe('objectWithRestAsync', () => {
 
     test('for missing nested entries', async () => {
       const input = { key: 'value', nested: {} };
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -276,7 +279,7 @@ describe('objectWithRestAsync', () => {
 
     test('with abort early', async () => {
       expect(
-        await schema['~validate']({ value: {} }, { abortEarly: true })
+        await schema['~run']({ value: {} }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: {},
@@ -314,7 +317,7 @@ describe('objectWithRestAsync', () => {
         other1: null,
         other2: 'bar',
       };
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -342,7 +345,7 @@ describe('objectWithRestAsync', () => {
 
     test('for worng rest with abort early', async () => {
       expect(
-        await schema['~validate'](
+        await schema['~run'](
           {
             value: {
               key: 'foo',
@@ -369,7 +372,7 @@ describe('objectWithRestAsync', () => {
         nested: { key: 123 },
         other: ['true'],
       };
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

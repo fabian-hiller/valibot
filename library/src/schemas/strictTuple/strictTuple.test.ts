@@ -19,9 +19,12 @@ describe('strictTuple', () => {
       expects: 'Array',
       items,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -164,7 +167,7 @@ describe('strictTuple', () => {
 
     test('for wrong items', () => {
       const input = [123, 456, 'true'];
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -192,7 +195,7 @@ describe('strictTuple', () => {
 
     test('with abort early', () => {
       expect(
-        schema['~validate']({ value: [123, 456, 'true'] }, { abortEarly: true })
+        schema['~run']({ value: [123, 456, 'true'] }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: [],
@@ -206,7 +209,7 @@ describe('strictTuple', () => {
         ['foo', '123', false],
         null,
       ];
-      expect(nestedSchema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -257,7 +260,7 @@ describe('strictTuple', () => {
 
     test('for unknown items', () => {
       const input = ['foo', 123, true, null, undefined];
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: ['foo', 123, true],
         issues: [

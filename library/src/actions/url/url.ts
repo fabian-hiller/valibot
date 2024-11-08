@@ -103,7 +103,7 @@ export function url(
       }
     },
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'URL', dataset, config);
       }

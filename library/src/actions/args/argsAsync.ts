@@ -105,10 +105,10 @@ export function argsAsync(
     reference: argsAsync,
     async: false,
     schema,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       const func = dataset.value;
       dataset.value = async (...args) => {
-        const argsDataset = await schema['~validate']({ value: args }, config);
+        const argsDataset = await schema['~run']({ value: args }, config);
         if (argsDataset.issues) {
           throw new ValiError(argsDataset.issues);
         }

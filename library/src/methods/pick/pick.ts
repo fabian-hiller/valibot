@@ -76,11 +76,29 @@ export type SchemaWithPick<
       infer TEntries,
       ErrorMessage<StrictObjectIssue> | undefined
     >
-  ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+  ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
       /**
        * The object entries.
        */
       readonly entries: Pick<TEntries, TKeys[number]>;
+      /**
+       * Parses unknown input.
+       *
+       * @param dataset The input dataset.
+       * @param config The configuration.
+       *
+       * @returns The output dataset.
+       *
+       * @internal
+       */
+      readonly '~run': (
+        dataset: UnknownDataset,
+        config: Config<BaseIssue<unknown>>
+      ) => OutputDataset<
+        InferObjectOutput<Pick<TEntries, TKeys[number]>>,
+        | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
+        | InferObjectIssue<Pick<TEntries, TKeys[number]>>
+      >;
       /**
        * The input, output and issue type.
        *
@@ -95,24 +113,6 @@ export type SchemaWithPick<
               | InferObjectIssue<Pick<TEntries, TKeys[number]>>;
           }
         | undefined;
-      /**
-       * Parses unknown input.
-       *
-       * @param dataset The input dataset.
-       * @param config The configuration.
-       *
-       * @returns The output dataset.
-       *
-       * @internal
-       */
-      readonly '~validate': (
-        dataset: UnknownDataset,
-        config?: Config<BaseIssue<unknown>>
-      ) => OutputDataset<
-        InferObjectOutput<Pick<TEntries, TKeys[number]>>,
-        | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-        | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-      >;
     }
   : TSchema extends
         | ObjectSchemaAsync<
@@ -123,11 +123,31 @@ export type SchemaWithPick<
             infer TEntries,
             ErrorMessage<StrictObjectIssue> | undefined
           >
-    ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+    ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
         /**
          * The object entries.
          */
         readonly entries: Pick<TEntries, TKeys[number]>;
+        /**
+         * Parses unknown input.
+         *
+         * @param dataset The input dataset.
+         * @param config The configuration.
+         *
+         * @returns The output dataset.
+         *
+         * @internal
+         */
+        readonly '~run': (
+          dataset: UnknownDataset,
+          config: Config<BaseIssue<unknown>>
+        ) => Promise<
+          OutputDataset<
+            InferObjectOutput<Pick<TEntries, TKeys[number]>>,
+            | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
+            | InferObjectIssue<Pick<TEntries, TKeys[number]>>
+          >
+        >;
         /**
          * The input, output and issue type.
          *
@@ -142,36 +162,36 @@ export type SchemaWithPick<
                 | InferObjectIssue<Pick<TEntries, TKeys[number]>>;
             }
           | undefined;
-        /**
-         * Parses unknown input.
-         *
-         * @param dataset The input dataset.
-         * @param config The configuration.
-         *
-         * @returns The output dataset.
-         *
-         * @internal
-         */
-        readonly '~validate': (
-          dataset: UnknownDataset,
-          config?: Config<BaseIssue<unknown>>
-        ) => Promise<
-          OutputDataset<
-            InferObjectOutput<Pick<TEntries, TKeys[number]>>,
-            | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-            | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-          >
-        >;
       }
     : TSchema extends LooseObjectSchema<
           infer TEntries,
           ErrorMessage<LooseObjectIssue> | undefined
         >
-      ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+      ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
           /**
            * The object entries.
            */
           readonly entries: Pick<TEntries, TKeys[number]>;
+          /**
+           * Parses unknown input.
+           *
+           * @param dataset The input dataset.
+           * @param config The configuration.
+           *
+           * @returns The output dataset.
+           *
+           * @internal
+           */
+          readonly '~run': (
+            dataset: UnknownDataset,
+            config: Config<BaseIssue<unknown>>
+          ) => OutputDataset<
+            InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
+              [key: string]: unknown;
+            },
+            | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
+            | InferObjectIssue<Pick<TEntries, TKeys[number]>>
+          >;
           /**
            * The input, output and issue type.
            *
@@ -194,36 +214,38 @@ export type SchemaWithPick<
                   | InferObjectIssue<Pick<TEntries, TKeys[number]>>;
               }
             | undefined;
-          /**
-           * Parses unknown input.
-           *
-           * @param dataset The input dataset.
-           * @param config The configuration.
-           *
-           * @returns The output dataset.
-           *
-           * @internal
-           */
-          readonly '~validate': (
-            dataset: UnknownDataset,
-            config?: Config<BaseIssue<unknown>>
-          ) => OutputDataset<
-            InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
-              [key: string]: unknown;
-            },
-            | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-            | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-          >;
         }
       : TSchema extends LooseObjectSchemaAsync<
             infer TEntries,
             ErrorMessage<LooseObjectIssue> | undefined
           >
-        ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+        ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
             /**
              * The object entries.
              */
             readonly entries: Pick<TEntries, TKeys[number]>;
+            /**
+             * Parses unknown input.
+             *
+             * @param dataset The input dataset.
+             * @param config The configuration.
+             *
+             * @returns The output dataset.
+             *
+             * @internal
+             */
+            readonly '~run': (
+              dataset: UnknownDataset,
+              config: Config<BaseIssue<unknown>>
+            ) => Promise<
+              OutputDataset<
+                InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
+                  [key: string]: unknown;
+                },
+                | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
+                | InferObjectIssue<Pick<TEntries, TKeys[number]>>
+              >
+            >;
             /**
              * The input, output and issue type.
              *
@@ -246,39 +268,38 @@ export type SchemaWithPick<
                     | InferObjectIssue<Pick<TEntries, TKeys[number]>>;
                 }
               | undefined;
-            /**
-             * Parses unknown input.
-             *
-             * @param dataset The input dataset.
-             * @param config The configuration.
-             *
-             * @returns The output dataset.
-             *
-             * @internal
-             */
-            readonly '~validate': (
-              dataset: UnknownDataset,
-              config?: Config<BaseIssue<unknown>>
-            ) => Promise<
-              OutputDataset<
-                InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
-                  [key: string]: unknown;
-                },
-                | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-              >
-            >;
           }
         : TSchema extends ObjectWithRestSchema<
               infer TEntries,
               BaseSchema<unknown, unknown, BaseIssue<unknown>>,
               ErrorMessage<ObjectWithRestIssue> | undefined
             >
-          ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+          ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
               /**
                * The object entries.
                */
               readonly entries: Pick<TEntries, TKeys[number]>;
+              /**
+               * Parses unknown input.
+               *
+               * @param dataset The input dataset.
+               * @param config The configuration.
+               *
+               * @returns The output dataset.
+               *
+               * @internal
+               */
+              readonly '~run': (
+                dataset: UnknownDataset,
+                config: Config<BaseIssue<unknown>>
+              ) => OutputDataset<
+                InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
+                  [key: string]: InferOutput<TSchema['rest']>;
+                },
+                | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
+                | InferObjectIssue<Pick<TEntries, TKeys[number]>>
+                | InferIssue<TSchema['rest']>
+              >;
               /**
                * The input, output and issue type.
                *
@@ -300,38 +321,40 @@ export type SchemaWithPick<
                       | InferIssue<TSchema['rest']>;
                   }
                 | undefined;
-              /**
-               * Parses unknown input.
-               *
-               * @param dataset The input dataset.
-               * @param config The configuration.
-               *
-               * @returns The output dataset.
-               *
-               * @internal
-               */
-              readonly '~validate': (
-                dataset: UnknownDataset,
-                config?: Config<BaseIssue<unknown>>
-              ) => OutputDataset<
-                InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
-                  [key: string]: InferOutput<TSchema['rest']>;
-                },
-                | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-                | InferIssue<TSchema['rest']>
-              >;
             }
           : TSchema extends ObjectWithRestSchemaAsync<
                 infer TEntries,
                 BaseSchema<unknown, unknown, BaseIssue<unknown>>,
                 ErrorMessage<ObjectWithRestIssue> | undefined
               >
-            ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+            ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
                 /**
                  * The object entries.
                  */
                 readonly entries: Pick<TEntries, TKeys[number]>;
+                /**
+                 * Parses unknown input.
+                 *
+                 * @param dataset The input dataset.
+                 * @param config The configuration.
+                 *
+                 * @returns The output dataset.
+                 *
+                 * @internal
+                 */
+                readonly '~run': (
+                  dataset: UnknownDataset,
+                  config: Config<BaseIssue<unknown>>
+                ) => Promise<
+                  OutputDataset<
+                    InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
+                      [key: string]: InferOutput<TSchema['rest']>;
+                    },
+                    | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
+                    | InferObjectIssue<Pick<TEntries, TKeys[number]>>
+                    | InferIssue<TSchema['rest']>
+                  >
+                >;
                 /**
                  * The input, output and issue type.
                  *
@@ -356,29 +379,6 @@ export type SchemaWithPick<
                         | InferIssue<TSchema['rest']>;
                     }
                   | undefined;
-                /**
-                 * Parses unknown input.
-                 *
-                 * @param dataset The input dataset.
-                 * @param config The configuration.
-                 *
-                 * @returns The output dataset.
-                 *
-                 * @internal
-                 */
-                readonly '~validate': (
-                  dataset: UnknownDataset,
-                  config?: Config<BaseIssue<unknown>>
-                ) => Promise<
-                  OutputDataset<
-                    InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
-                      [key: string]: InferOutput<TSchema['rest']>;
-                    },
-                    | Extract<InferIssue<TSchema>, { type: TSchema['type'] }>
-                    | InferObjectIssue<Pick<TEntries, TKeys[number]>>
-                    | InferIssue<TSchema['rest']>
-                  >
-                >;
               }
             : never;
 

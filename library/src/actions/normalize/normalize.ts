@@ -51,7 +51,7 @@ export function normalize(
     reference: normalize,
     async: false,
     form,
-    '~validate'(dataset) {
+    '~run'(dataset) {
       dataset.value = dataset.value.normalize(this.form);
       return dataset;
     },

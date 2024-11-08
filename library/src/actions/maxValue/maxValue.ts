@@ -114,7 +114,7 @@ export function maxValue(
     }`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !(dataset.value <= this.requirement)) {
         _addIssue(this, 'value', dataset, config, {
           received:

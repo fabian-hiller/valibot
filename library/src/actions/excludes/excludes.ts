@@ -114,7 +114,7 @@ export function excludes(
     expects: `!${received}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       // @ts-expect-error
       if (dataset.typed && dataset.value.includes(this.requirement)) {
         _addIssue(this, 'content', dataset, config, { received });

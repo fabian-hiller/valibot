@@ -23,10 +23,7 @@ export function safeParse<
   input: unknown,
   config?: Config<InferIssue<TSchema>>
 ): SafeParseResult<TSchema> {
-  const dataset = schema['~validate'](
-    { value: input },
-    getGlobalConfig(config)
-  );
+  const dataset = schema['~run']({ value: input }, getGlobalConfig(config));
   return {
     typed: dataset.typed,
     success: !dataset.issues,

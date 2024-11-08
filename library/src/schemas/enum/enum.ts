@@ -1,11 +1,15 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _joinExpects, _stringify } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _joinExpects,
+  _stringify,
+} from '../../utils/index.ts';
 
 /**
  * Enum type.
@@ -101,9 +105,10 @@ export function enum_(
     enum: enum__,
     options,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // @ts-expect-error
       if (this.options.includes(dataset.value)) {
         // @ts-expect-error

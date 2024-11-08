@@ -35,6 +35,20 @@ export interface BaseValidation<
    */
   readonly async: false;
   /**
+   * Validates known input values.
+   *
+   * @param dataset The input dataset.
+   * @param config The configuration.
+   *
+   * @returns The output dataset.
+   *
+   * @internal
+   */
+  readonly '~run': (
+    dataset: OutputDataset<TInput, BaseIssue<unknown>>,
+    config: Config<BaseIssue<unknown>>
+  ) => OutputDataset<TOutput, BaseIssue<unknown> | TIssue>;
+  /**
    * The input, output and issue type.
    *
    * @internal
@@ -46,20 +60,6 @@ export interface BaseValidation<
         readonly issue: TIssue;
       }
     | undefined;
-  /**
-   * Validates known input values.
-   *
-   * @param dataset The input dataset.
-   * @param config The configuration.
-   *
-   * @returns The output dataset.
-   *
-   * @internal
-   */
-  readonly '~validate': (
-    dataset: OutputDataset<TInput, BaseIssue<unknown>>,
-    config: Config<BaseIssue<unknown>>
-  ) => OutputDataset<TOutput, BaseIssue<unknown> | TIssue>;
 }
 
 /**
@@ -71,7 +71,7 @@ export interface BaseValidationAsync<
   TIssue extends BaseIssue<unknown>,
 > extends Omit<
     BaseValidation<TInput, TOutput, TIssue>,
-    'reference' | 'async' | '~validate'
+    'reference' | 'async' | '~run'
   > {
   /**
    * The validation reference.
@@ -97,7 +97,7 @@ export interface BaseValidationAsync<
    *
    * @internal
    */
-  readonly '~validate': (
+  readonly '~run': (
     dataset: OutputDataset<TInput, BaseIssue<unknown>>,
     config: Config<BaseIssue<unknown>>
   ) => Promise<OutputDataset<TOutput, BaseIssue<unknown> | TIssue>>;

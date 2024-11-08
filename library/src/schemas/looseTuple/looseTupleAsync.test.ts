@@ -25,9 +25,12 @@ describe('looseTupleAsync', () => {
       expects: 'Array',
       items,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -193,7 +196,7 @@ describe('looseTupleAsync', () => {
 
     test('for wrong items', async () => {
       const input = [123, 456, 'true'];
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -221,7 +224,7 @@ describe('looseTupleAsync', () => {
 
     test('with abort early', async () => {
       expect(
-        await schema['~validate'](
+        await schema['~run'](
           { value: [123, 456, 'true'] },
           { abortEarly: true }
         )
@@ -238,9 +241,7 @@ describe('looseTupleAsync', () => {
         ['foo', '123', false],
         null,
       ];
-      expect(
-        await nestedSchema['~validate']({ value: input }, {})
-      ).toStrictEqual({
+      expect(await nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

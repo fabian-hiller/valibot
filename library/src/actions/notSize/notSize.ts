@@ -112,7 +112,7 @@ export function notSize(
     expects: `!${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && dataset.value.size === this.requirement) {
         _addIssue(this, 'size', dataset, config, {
           received: `${dataset.value.size}`,

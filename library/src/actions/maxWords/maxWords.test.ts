@@ -21,7 +21,7 @@ describe('maxWords', () => {
       locales: 'en',
       requirement: 3,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -64,7 +64,7 @@ describe('maxWords', () => {
         },
       ];
       expect(
-        action['~validate']({ typed: false, value: null, issues }, {})
+        action['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,

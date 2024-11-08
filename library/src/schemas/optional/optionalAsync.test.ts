@@ -15,12 +15,20 @@ describe('optionalAsync', () => {
       expects: '(string | undefined)',
       wrapped: {
         ...string(),
-        '~validate': expect.any(Function),
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
+        '~run': expect.any(Function),
       },
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined default', () => {
@@ -116,33 +124,23 @@ describe('optionalAsync', () => {
     const schema5 = optionalAsync(string(), async () => 'foo');
 
     test('for undefined', async () => {
-      expect(
-        await schema1['~validate']({ value: undefined }, {})
-      ).toStrictEqual({
+      expect(await schema1['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(
-        await schema2['~validate']({ value: undefined }, {})
-      ).toStrictEqual({
+      expect(await schema2['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(
-        await schema3['~validate']({ value: undefined }, {})
-      ).toStrictEqual({
+      expect(await schema3['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(
-        await schema4['~validate']({ value: undefined }, {})
-      ).toStrictEqual({
+      expect(await schema4['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(
-        await schema5['~validate']({ value: undefined }, {})
-      ).toStrictEqual({
+      expect(await schema5['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });

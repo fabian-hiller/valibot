@@ -53,7 +53,7 @@ export function findItem(
     reference: findItem,
     async: false,
     operation,
-    '~validate'(dataset) {
+    '~run'(dataset) {
       // @ts-expect-error
       dataset.value = dataset.value.find(this.operation);
       return dataset as SuccessDataset<unknown | undefined>;

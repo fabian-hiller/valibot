@@ -16,7 +16,7 @@ describe('forwardAsync', () => {
       await forwardAsync<Input, CheckIssue<Input>>(
         check(requirement, 'message'),
         ['nested', 1, 'key']
-      )['~validate']({ typed: true, value: input }, {})
+      )['~run']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,
@@ -69,7 +69,7 @@ describe('forwardAsync', () => {
       await forwardAsync<Input, CheckIssue<Input>>(
         check(requirement, 'message'),
         ['nested', 6, 'key']
-      )['~validate']({ typed: true, value: input }, {})
+      )['~run']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,
@@ -137,7 +137,7 @@ describe('forwardAsync', () => {
       await forwardAsync<Input, CheckIssue<Input>>(
         check(requirement, 'message'),
         ['nested', 1, 'key']
-      )['~validate'](
+      )['~run'](
         {
           typed: true,
           value: input,
@@ -203,7 +203,7 @@ describe('forwardAsync', () => {
       await forwardAsync<Input, CheckIssue<Input>>(
         check(requirement, 'message'),
         ['nested', 6, 'key']
-      )['~validate']({ typed: true, value: input }, {})
+      )['~run']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,

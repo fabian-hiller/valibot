@@ -74,7 +74,7 @@ export function checkItems(
     expects: null,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         for (let index = 0; index < dataset.value.length; index++) {
           const item = dataset.value[index];

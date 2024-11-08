@@ -20,9 +20,12 @@ describe('strictObject', () => {
       expects: 'Object',
       entries,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -180,7 +183,7 @@ describe('strictObject', () => {
     };
 
     test('for missing entries', () => {
-      expect(schema['~validate']({ value: {} }, {})).toStrictEqual({
+      expect(schema['~run']({ value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
         issues: [
@@ -208,7 +211,7 @@ describe('strictObject', () => {
 
     test('for missing nested entries', () => {
       const input = { key: 'value', nested: {} };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -241,13 +244,13 @@ describe('strictObject', () => {
     });
 
     test('with abort early', () => {
-      expect(
-        schema['~validate']({ value: {} }, { abortEarly: true })
-      ).toStrictEqual({
-        typed: false,
-        value: {},
-        issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies FailureDataset<InferIssue<typeof schema>>);
+      expect(schema['~run']({ value: {} }, { abortEarly: true })).toStrictEqual(
+        {
+          typed: false,
+          value: {},
+          issues: [{ ...stringIssue, abortEarly: true }],
+        } satisfies FailureDataset<InferIssue<typeof schema>>
+      );
     });
 
     test('for unknown entries', () => {
@@ -257,7 +260,7 @@ describe('strictObject', () => {
         other1: 'foo',
         other2: 123,
       };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: { key: input.key, nested: input.nested },
         issues: [

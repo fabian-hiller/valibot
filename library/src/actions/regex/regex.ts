@@ -96,7 +96,7 @@ export function regex(
     expects: `${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'format', dataset, config);
       }

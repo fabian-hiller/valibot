@@ -19,9 +19,12 @@ describe('setAsync', () => {
       expects: 'Set',
       value,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -167,10 +170,7 @@ describe('setAsync', () => {
 
     test('for wrong values', async () => {
       expect(
-        await schema['~validate'](
-          { value: new Set(['foo', 123, 'baz', null]) },
-          {}
-        )
+        await schema['~run']({ value: new Set(['foo', 123, 'baz', null]) }, {})
       ).toStrictEqual({
         typed: false,
         value: new Set(['foo', 123, 'baz', null]),
@@ -199,7 +199,7 @@ describe('setAsync', () => {
 
     test('with abort early', async () => {
       expect(
-        await schema['~validate'](
+        await schema['~run'](
           { value: new Set(['foo', 123, 'baz', null]) },
           { abortEarly: true }
         )
@@ -213,9 +213,7 @@ describe('setAsync', () => {
     test('for wrong nested values', async () => {
       const nestedSchema = setAsync(schema);
       const input = new Set([new Set([123, 'foo']), 'bar', new Set()]);
-      expect(
-        await nestedSchema['~validate']({ value: input }, {})
-      ).toStrictEqual({
+      expect(await nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

@@ -100,7 +100,7 @@ export function someItem(
     expects: null,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !dataset.value.some(this.requirement)) {
         _addIssue(this, 'item', dataset, config);
       }

@@ -10,7 +10,7 @@ describe('fallback', () => {
     type Schema = typeof schema;
     const baseSchema: Omit<SchemaWithFallback<Schema, never>, 'fallback'> = {
       ...schema,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with value fallback', () => {
@@ -36,7 +36,7 @@ describe('fallback', () => {
 
   describe('should return default dataset', () => {
     test('for valid input', () => {
-      expect(schema['~validate']({ value: 789 }, {})).toStrictEqual({
+      expect(schema['~run']({ value: 789 }, {})).toStrictEqual({
         typed: true,
         value: '789',
       });
@@ -45,7 +45,7 @@ describe('fallback', () => {
 
   describe('should return dataset with fallback', () => {
     test('for invalid input', () => {
-      expect(schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
+      expect(schema['~run']({ value: 'foo' }, {})).toStrictEqual({
         typed: true,
         value: '123',
       });

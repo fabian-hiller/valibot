@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseSchemaAsync,
   ErrorMessage,
@@ -9,7 +8,11 @@ import type {
   ObjectPathItem,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _isValidObjectKey,
+} from '../../utils/index.ts';
 import type { LooseObjectIssue } from './types.ts';
 
 /**
@@ -87,9 +90,10 @@ export function looseObjectAsync(
     async: true,
     entries,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -110,7 +114,7 @@ export function looseObjectAsync(
             return [
               key,
               value,
-              await schema['~validate']({ value }, config),
+              await schema['~run']({ value }, config),
             ] as const;
           })
         );

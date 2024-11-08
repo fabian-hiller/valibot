@@ -91,7 +91,7 @@ export function ipv4(
     expects: null,
     requirement: IPV4_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'IPv4', dataset, config);
       }

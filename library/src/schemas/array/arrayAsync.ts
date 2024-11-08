@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   ArrayPathItem,
   BaseIssue,
@@ -10,7 +9,7 @@ import type {
   InferOutput,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { ArrayIssue } from './types.ts';
 
 /**
@@ -94,9 +93,10 @@ export function arrayAsync(
     async: true,
     item,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -109,7 +109,7 @@ export function arrayAsync(
 
         // Parse schema of each item async
         const itemDatasets = await Promise.all(
-          input.map((value) => this.item['~validate']({ value }, config))
+          input.map((value) => this.item['~run']({ value }, config))
         );
 
         // Process each item dataset

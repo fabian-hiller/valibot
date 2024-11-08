@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseSchema,
   ErrorMessage,
@@ -9,7 +8,11 @@ import type {
   ObjectPathItem,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _isValidObjectKey,
+} from '../../utils/index.ts';
 import type { LooseObjectIssue } from './types.ts';
 
 /**
@@ -84,9 +87,10 @@ export function looseObject(
     async: false,
     entries,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -104,10 +108,7 @@ export function looseObject(
         for (const key in this.entries) {
           // Get and parse value of key
           const value = input[key as keyof typeof input];
-          const valueDataset = this.entries[key]['~validate'](
-            { value },
-            config
-          );
+          const valueDataset = this.entries[key]['~run']({ value }, config);
 
           // If there are issues, capture them
           if (valueDataset.issues) {

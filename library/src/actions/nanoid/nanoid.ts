@@ -94,7 +94,7 @@ export function nanoid(
     expects: null,
     requirement: NANO_ID_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Nano ID', dataset, config);
       }

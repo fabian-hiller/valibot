@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -34,7 +33,7 @@ export type SchemaWithFallbackAsync<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   TFallback extends FallbackAsync<TSchema>,
-> = Omit<TSchema, 'async' | '~validate'> & {
+> = Omit<TSchema, 'async' | '~run'> & {
   /**
    * The fallback value.
    */
@@ -53,9 +52,9 @@ export type SchemaWithFallbackAsync<
    *
    * @internal
    */
-  readonly '~validate': (
+  readonly '~run': (
     dataset: UnknownDataset,
-    config?: Config<BaseIssue<unknown>>
+    config: Config<BaseIssue<unknown>>
   ) => Promise<OutputDataset<InferOutput<TSchema>, InferIssue<TSchema>>>;
 };
 
@@ -80,8 +79,8 @@ export function fallbackAsync<
     ...schema,
     fallback,
     async: true,
-    async '~validate'(dataset, config = getGlobalConfig()) {
-      const outputDataset = await schema['~validate'](dataset, config);
+    async '~run'(dataset, config) {
+      const outputDataset = await schema['~run'](dataset, config);
       return outputDataset.issues
         ? {
             typed: true,

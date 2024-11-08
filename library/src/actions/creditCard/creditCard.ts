@@ -134,7 +134,7 @@ export function creditCard(
         _isLuhnAlgo(sanitized)) as boolean;
     },
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'credit card', dataset, config);
       }

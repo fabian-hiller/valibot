@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchemaAsync,
@@ -7,7 +6,11 @@ import type {
   InferOutput,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _joinExpects } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _joinExpects,
+} from '../../utils/index.ts';
 import type {
   InferVariantIssue,
   VariantIssue,
@@ -104,9 +107,10 @@ export function variantAsync(
     key,
     options,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -146,7 +150,7 @@ export function variantAsync(
                 // If any discriminator is invalid, mark keys as invalid
                 if (
                   (
-                    await schema.entries[currentKey]['~validate'](
+                    await schema.entries[currentKey]['~run'](
                       // @ts-expect-error
                       { typed: false, value: input[currentKey] },
                       config
@@ -189,7 +193,7 @@ export function variantAsync(
 
               // If all discriminators are valid, parse input with schema of option
               if (keysAreValid) {
-                const optionDataset = await schema['~validate'](
+                const optionDataset = await schema['~run'](
                   { value: input },
                   config
                 );

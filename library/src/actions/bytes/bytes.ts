@@ -108,7 +108,7 @@ export function bytes(
     expects: `${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         const length = _getByteCount(dataset.value);
         if (length !== this.requirement) {

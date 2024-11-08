@@ -86,7 +86,7 @@ export function empty(
     async: false,
     expects: '0',
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && dataset.value.length > 0) {
         _addIssue(this, 'length', dataset, config, {
           received: `${dataset.value.length}`,

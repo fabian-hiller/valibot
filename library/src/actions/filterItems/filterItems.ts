@@ -40,7 +40,7 @@ export function filterItems(
     reference: filterItems,
     async: false,
     operation,
-    '~validate'(dataset) {
+    '~run'(dataset) {
       dataset.value = dataset.value.filter(this.operation);
       return dataset;
     },

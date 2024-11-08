@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -8,7 +7,7 @@ import type {
   MapPathItem,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { InferMapInput, InferMapOutput, MapIssue } from './types.ts';
 
 /**
@@ -117,9 +116,10 @@ export function mapAsync(
     key,
     value,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -136,8 +136,8 @@ export function mapAsync(
             Promise.all([
               inputKey,
               inputValue,
-              this.key['~validate']({ value: inputKey }, config),
-              this.value['~validate']({ value: inputValue }, config),
+              this.key['~run']({ value: inputKey }, config),
+              this.value['~run']({ value: inputValue }, config),
             ])
           )
         );

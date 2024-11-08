@@ -37,7 +37,7 @@ export function rawTransformAsync<TInput, TOutput>(
     type: 'raw_transform',
     reference: rawTransformAsync,
     async: true,
-    async '~validate'(dataset, config) {
+    async '~run'(dataset, config) {
       // Execute action and get its output
       const output = await action({
         dataset,

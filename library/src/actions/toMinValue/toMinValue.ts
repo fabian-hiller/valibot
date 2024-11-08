@@ -39,7 +39,7 @@ export function toMinValue<
     reference: toMinValue,
     async: false,
     requirement,
-    '~validate'(dataset) {
+    '~run'(dataset) {
       dataset.value =
         dataset.value < this.requirement ? this.requirement : dataset.value;
       return dataset;

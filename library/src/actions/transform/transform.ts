@@ -35,7 +35,7 @@ export function transform<TInput, TOutput>(
     reference: transform,
     async: false,
     operation,
-    '~validate'(dataset) {
+    '~run'(dataset) {
       // @ts-expect-error
       dataset.value = this.operation(dataset.value);
       // @ts-expect-error

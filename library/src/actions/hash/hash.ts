@@ -127,7 +127,7 @@ export function hash(
       'iu'
     ),
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'hash', dataset, config);
       }

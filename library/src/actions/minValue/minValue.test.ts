@@ -13,7 +13,7 @@ describe('minValue', () => {
       expects: '>=5',
       requirement: 5,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -54,7 +54,7 @@ describe('minValue', () => {
         },
       ];
       expect(
-        minValue(1)['~validate']({ typed: false, value: null, issues }, {})
+        minValue(1)['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({ typed: false, value: null, issues });
     });
 

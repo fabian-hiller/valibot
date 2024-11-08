@@ -27,9 +27,12 @@ describe('tupleWithRest', () => {
       items,
       rest,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -190,7 +193,7 @@ describe('tupleWithRest', () => {
     };
 
     test('for invalid items', () => {
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -218,7 +221,7 @@ describe('tupleWithRest', () => {
 
     test('with abort early', () => {
       expect(
-        schema['~validate']({ value: input }, { abortEarly: true })
+        schema['~run']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: [],
@@ -233,7 +236,7 @@ describe('tupleWithRest', () => {
         null,
         null,
       ];
-      expect(nestedSchema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -302,7 +305,7 @@ describe('tupleWithRest', () => {
 
     test('for invalid rest', () => {
       const input = ['foo', 456, true, null, 'null', null, undefined];
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -330,7 +333,7 @@ describe('tupleWithRest', () => {
 
     test('for invalid rest with abort early', () => {
       expect(
-        schema['~validate'](
+        schema['~run'](
           { value: ['foo', 456, true, null, 'null', null, undefined] },
           { abortEarly: true }
         )
@@ -349,7 +352,7 @@ describe('tupleWithRest', () => {
         { key: 456 },
         { key: null },
       ] as const;
-      expect(nestedSchema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

@@ -21,7 +21,7 @@ describe('checkItemsAsync', () => {
       expects: null,
       requirement,
       async: true,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -71,7 +71,7 @@ describe('checkItemsAsync', () => {
         },
       ];
       expect(
-        await action['~validate']({ typed: false, value: null, issues }, {})
+        await action['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,
@@ -107,7 +107,7 @@ describe('checkItemsAsync', () => {
     test('for invalid content', async () => {
       const input = [-12, 345, 6, 10];
       expect(
-        await action['~validate']({ typed: true, value: input }, {})
+        await action['~run']({ typed: true, value: input }, {})
       ).toStrictEqual({
         typed: true,
         value: input,

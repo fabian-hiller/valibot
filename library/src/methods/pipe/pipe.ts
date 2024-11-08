@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -23,11 +22,28 @@ export type SchemaWithPipe<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...PipeItem<any, unknown, BaseIssue<unknown>>[],
   ],
-> = Omit<FirstTupleItem<TPipe>, '~types' | '~validate'> & {
+> = Omit<FirstTupleItem<TPipe>, '~run' | '~types'> & {
   /**
    * The pipe items.
    */
   readonly pipe: TPipe;
+  /**
+   * Parses unknown input values.
+   *
+   * @param dataset The input dataset.
+   * @param config The configuration.
+   *
+   * @returns The output dataset.
+   *
+   * @internal
+   */
+  readonly '~run': (
+    dataset: UnknownDataset,
+    config: Config<BaseIssue<unknown>>
+  ) => OutputDataset<
+    InferOutput<LastTupleItem<TPipe>>,
+    InferIssue<TPipe[number]>
+  >;
   /**
    * The input, output and issue type.
    *
@@ -40,23 +56,6 @@ export type SchemaWithPipe<
         readonly issue: InferIssue<TPipe[number]>;
       }
     | undefined;
-  /**
-   * Parses unknown input values.
-   *
-   * @param dataset The input dataset.
-   * @param config The configuration.
-   *
-   * @returns The output dataset.
-   *
-   * @internal
-   */
-  readonly '~validate': (
-    dataset: UnknownDataset,
-    config?: Config<BaseIssue<unknown>>
-  ) => OutputDataset<
-    InferOutput<LastTupleItem<TPipe>>,
-    InferIssue<TPipe[number]>
-  >;
 };
 
 /**
@@ -2663,7 +2662,7 @@ export function pipe<
   return {
     ...pipe[0],
     pipe,
-    '~validate'(dataset, config = getGlobalConfig()) {
+    '~run'(dataset, config) {
       // Execute pipeline items in sequence
       for (const item of pipe) {
         // Exclude metadata items from execution
@@ -2684,7 +2683,7 @@ export function pipe<
             (!config.abortEarly && !config.abortPipeEarly)
           ) {
             // @ts-expect-error
-            dataset = item['~validate'](dataset, config);
+            dataset = item['~run'](dataset, config);
           }
         }
       }

@@ -1,11 +1,10 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _stringify } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps, _stringify } from '../../utils/index.ts';
 
 /**
  * Literal type.
@@ -91,9 +90,10 @@ export function literal(
     async: false,
     literal: literal_,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (dataset.value === this.literal) {
         // @ts-expect-error
         dataset.typed = true;

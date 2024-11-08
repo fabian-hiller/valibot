@@ -1,11 +1,10 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
  * Number issue type.
@@ -77,9 +76,10 @@ export function number(
     expects: 'number',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (typeof dataset.value === 'number' && !isNaN(dataset.value)) {
         // @ts-expect-error
         dataset.typed = true;

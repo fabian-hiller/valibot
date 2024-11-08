@@ -110,7 +110,7 @@ export function isoDateTime(
     expects: null,
     requirement: ISO_DATE_TIME_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'date-time', dataset, config);
       }

@@ -58,7 +58,7 @@ export function reduceItems(
     async: false,
     operation,
     initial,
-    '~validate'(dataset) {
+    '~run'(dataset) {
       // @ts-expect-error
       dataset.value = dataset.value.reduce(this.operation, this.initial);
       return dataset as SuccessDataset<unknown>;

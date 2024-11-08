@@ -17,9 +17,12 @@ describe('lazy', () => {
       expects: 'unknown',
       getter,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     } satisfies LazySchema<StringSchema<undefined>>);
   });
 
@@ -84,7 +87,7 @@ describe('lazy', () => {
   test('should call getter with input', () => {
     const getter = vi.fn(() => string());
     const dataset = { value: 'foo' };
-    lazy(getter)['~validate'](dataset, {});
+    lazy(getter)['~run'](dataset, {});
     expect(getter).toHaveBeenCalledWith(dataset.value);
   });
 });

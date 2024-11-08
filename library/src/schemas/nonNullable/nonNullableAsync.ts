@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -6,7 +5,7 @@ import type {
   ErrorMessage,
   FailureDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type {
   InferNonNullableInput,
   InferNonNullableIssue,
@@ -98,9 +97,10 @@ export function nonNullableAsync(
     async: true,
     wrapped,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // If value is `null`, add issue and return dataset
       if (dataset.value === null) {
         _addIssue(this, 'type', dataset, config);
@@ -109,7 +109,7 @@ export function nonNullableAsync(
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~validate'](dataset, config);
+      return this.wrapped['~run'](dataset, config);
     },
   };
 }

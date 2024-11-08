@@ -91,7 +91,7 @@ export function bic(
     expects: null,
     requirement: BIC_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'BIC', dataset, config);
       }

@@ -1,5 +1,4 @@
 import { getDefault } from '../../methods/index.ts';
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -9,6 +8,7 @@ import type {
   InferIssue,
   SuccessDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
 
 /**
@@ -95,9 +95,10 @@ export function undefinedableAsync(
     async: true,
     wrapped,
     default: default_,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // If value is `undefined`, override it with default or return dataset
       if (dataset.value === undefined) {
         // If default is specified, override value of dataset
@@ -115,7 +116,7 @@ export function undefinedableAsync(
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~validate'](dataset, config);
+      return this.wrapped['~run'](dataset, config);
     },
   };
 }

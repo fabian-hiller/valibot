@@ -22,9 +22,12 @@ describe('objectAsync', () => {
       expects: 'Object',
       entries,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -66,7 +69,7 @@ describe('objectAsync', () => {
 
     test('for unknown entries', async () => {
       expect(
-        await objectAsync({ key1: string() })['~validate'](
+        await objectAsync({ key1: string() })['~run'](
           { value: { key1: 'foo', key2: 123, key3: null } },
           {}
         )
@@ -170,7 +173,7 @@ describe('objectAsync', () => {
 
     test('for unknown entries', async () => {
       expect(
-        await objectAsync({ key1: string() })['~validate'](
+        await objectAsync({ key1: string() })['~run'](
           { value: { key1: 'foo', key2: 123, key3: null } },
           {}
         )
@@ -215,7 +218,7 @@ describe('objectAsync', () => {
     };
 
     test('for missing entries', async () => {
-      expect(await schema['~validate']({ value: {} }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
         issues: [
@@ -243,7 +246,7 @@ describe('objectAsync', () => {
 
     test('for missing nested entries', async () => {
       expect(
-        await schema['~validate']({ value: { key: 'value', nested: {} } }, {})
+        await schema['~run']({ value: { key: 'value', nested: {} } }, {})
       ).toStrictEqual({
         typed: false,
         value: { key: 'value', nested: {} },
@@ -278,7 +281,7 @@ describe('objectAsync', () => {
 
     test('with abort early', async () => {
       expect(
-        await schema['~validate']({ value: {} }, { abortEarly: true })
+        await schema['~run']({ value: {} }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: {},

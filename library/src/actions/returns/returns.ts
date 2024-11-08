@@ -61,10 +61,10 @@ export function returns(
     reference: returns,
     async: false,
     schema,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       const func = dataset.value;
       dataset.value = (...args_) => {
-        const returnsDataset = this.schema['~validate'](
+        const returnsDataset = this.schema['~run'](
           { value: func(...args_) },
           config
         );

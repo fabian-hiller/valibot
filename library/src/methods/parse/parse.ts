@@ -24,10 +24,7 @@ export function parse<
   input: unknown,
   config?: Config<InferIssue<TSchema>>
 ): InferOutput<TSchema> {
-  const dataset = schema['~validate'](
-    { value: input },
-    getGlobalConfig(config)
-  );
+  const dataset = schema['~run']({ value: input }, getGlobalConfig(config));
   if (dataset.issues) {
     throw new ValiError(dataset.issues);
   }

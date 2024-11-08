@@ -26,7 +26,7 @@ export function trimEnd(): TrimEndAction {
     type: 'trim_end',
     reference: trimEnd,
     async: false,
-    '~validate'(dataset) {
+    '~run'(dataset) {
       dataset.value = dataset.value.trimEnd();
       return dataset;
     },

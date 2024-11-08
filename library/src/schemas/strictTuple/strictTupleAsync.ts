@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   ArrayPathItem,
   BaseIssue,
@@ -10,7 +9,7 @@ import type {
   OutputDataset,
   TupleItemsAsync,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { StrictTupleIssue } from './types.ts';
 
 /**
@@ -85,9 +84,10 @@ export function strictTupleAsync(
     async: true,
     items,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -102,11 +102,7 @@ export function strictTupleAsync(
         const itemDatasets = await Promise.all(
           this.items.map(async (item, key) => {
             const value = input[key];
-            return [
-              key,
-              value,
-              await item['~validate']({ value }, config),
-            ] as const;
+            return [key, value, await item['~run']({ value }, config)] as const;
           })
         );
 

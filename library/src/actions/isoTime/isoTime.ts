@@ -98,7 +98,7 @@ export function isoTime(
     expects: null,
     requirement: ISO_TIME_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'time', dataset, config);
       }

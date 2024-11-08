@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -8,7 +7,7 @@ import type {
   OutputDataset,
   SetPathItem,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { InferSetInput, InferSetOutput, SetIssue } from './types.ts';
 
 /**
@@ -92,9 +91,10 @@ export function setAsync(
     async: true,
     value,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -111,7 +111,7 @@ export function setAsync(
             async (inputValue) =>
               [
                 inputValue,
-                await this.value['~validate']({ value: inputValue }, config),
+                await this.value['~run']({ value: inputValue }, config),
               ] as const
           )
         );

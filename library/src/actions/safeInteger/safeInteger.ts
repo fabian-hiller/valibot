@@ -97,7 +97,7 @@ export function safeInteger(
     expects: null,
     requirement: Number.isSafeInteger,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'safe integer', dataset, config);
       }

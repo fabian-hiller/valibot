@@ -70,10 +70,10 @@ export function returnsAsync(
     reference: returnsAsync,
     async: false,
     schema,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       const func = dataset.value;
       dataset.value = async (...args_) => {
-        const returnsDataset = await this.schema['~validate'](
+        const returnsDataset = await this.schema['~run'](
           { value: await func(...args_) },
           config
         );

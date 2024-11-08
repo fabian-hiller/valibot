@@ -24,9 +24,12 @@ describe('union', () => {
       expects: '("foo" | "bar" | number)',
       options,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -78,7 +81,7 @@ describe('union', () => {
     test('with single typed issue', () => {
       const schema = union([pipe(string(), minLength(5)), number()]);
       type Schema = typeof schema;
-      expect(schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
+      expect(schema['~run']({ value: 'foo' }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
         issues: [
@@ -98,7 +101,7 @@ describe('union', () => {
     test('with multiple typed issues', () => {
       const schema = union([pipe(string(), email()), pipe(string(), url())]);
       type Schema = typeof schema;
-      expect(schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
+      expect(schema['~run']({ value: 'foo' }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
         issues: [
@@ -151,7 +154,7 @@ describe('union', () => {
 
     test('with single untyped issue', () => {
       const schema = union([literal('foo')]);
-      expect(schema['~validate']({ value: 'bar' }, {})).toStrictEqual({
+      expect(schema['~run']({ value: 'bar' }, {})).toStrictEqual({
         typed: false,
         value: 'bar',
         issues: [
@@ -169,7 +172,7 @@ describe('union', () => {
 
     test('with multiple typed issues', () => {
       const schema = union([string(), number()]);
-      expect(schema['~validate']({ value: null }, {})).toStrictEqual({
+      expect(schema['~run']({ value: null }, {})).toStrictEqual({
         typed: false,
         value: null,
         issues: [

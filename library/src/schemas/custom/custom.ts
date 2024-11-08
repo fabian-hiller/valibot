@@ -1,10 +1,9 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { CustomIssue } from './types.ts';
 
 /**
@@ -77,9 +76,10 @@ export function custom<TInput>(
     async: false,
     check,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (this.check(dataset.value)) {
         // @ts-expect-error
         dataset.typed = true;

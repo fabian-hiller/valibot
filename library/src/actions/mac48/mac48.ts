@@ -91,7 +91,7 @@ export function mac48(
     expects: null,
     requirement: MAC48_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, '48-bit MAC', dataset, config);
       }

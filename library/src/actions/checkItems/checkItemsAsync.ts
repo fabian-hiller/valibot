@@ -74,7 +74,7 @@ export function checkItemsAsync(
     expects: null,
     requirement,
     message,
-    async '~validate'(dataset, config) {
+    async '~run'(dataset, config) {
       if (dataset.typed) {
         const requirementResults = await Promise.all(
           dataset.value.map(this.requirement)

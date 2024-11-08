@@ -74,7 +74,7 @@ export function checkAsync(
     expects: null,
     requirement,
     message,
-    async '~validate'(dataset, config) {
+    async '~run'(dataset, config) {
       if (dataset.typed && !(await this.requirement(dataset.value))) {
         _addIssue(this, 'input', dataset, config);
       }

@@ -102,7 +102,7 @@ export function isoTimeSecond(
     expects: null,
     requirement: ISO_TIME_SECOND_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'time-second', dataset, config);
       }

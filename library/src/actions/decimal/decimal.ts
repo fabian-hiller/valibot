@@ -94,7 +94,7 @@ export function decimal(
     expects: null,
     requirement: DECIMAL_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'decimal', dataset, config);
       }

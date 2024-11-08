@@ -106,7 +106,7 @@ export function isoDate(
     expects: null,
     requirement: ISO_DATE_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'date', dataset, config);
       }

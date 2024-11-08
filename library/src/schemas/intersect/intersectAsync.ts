@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchemaAsync,
@@ -6,7 +5,11 @@ import type {
   InferIssue,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _joinExpects } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _joinExpects,
+} from '../../utils/index.ts';
 import type {
   InferIntersectInput,
   InferIntersectOutput,
@@ -89,9 +92,10 @@ export function intersectAsync(
     async: true,
     options,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Parse input with schema of options, if not empty
       if (this.options.length) {
         // Get input value from dataset
@@ -106,9 +110,7 @@ export function intersectAsync(
 
         // Parse schema of each option async
         const optionDatasets = await Promise.all(
-          this.options.map((schema) =>
-            schema['~validate']({ value: input }, config)
-          )
+          this.options.map((schema) => schema['~run']({ value: input }, config))
         );
 
         // Collect outputs of option datasets

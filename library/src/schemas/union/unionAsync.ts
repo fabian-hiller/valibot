@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -13,7 +12,11 @@ import type {
   PartialDataset,
   SuccessDataset,
 } from '../../types/index.ts';
-import { _addIssue, _joinExpects } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _joinExpects,
+} from '../../utils/index.ts';
 import type { UnionIssue } from './types.ts';
 import { _subIssues } from './utils/index.ts';
 
@@ -102,9 +105,10 @@ export function unionAsync(
     async: true,
     options,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Create variables to collect datasets
       let validDataset: SuccessDataset<unknown> | undefined;
       let typedDatasets:
@@ -114,7 +118,7 @@ export function unionAsync(
 
       // Parse schema of each option and collect datasets
       for (const schema of this.options) {
-        const optionDataset = await schema['~validate'](
+        const optionDataset = await schema['~run'](
           { value: dataset.value },
           config
         );

@@ -16,9 +16,12 @@ describe('set', () => {
       expects: 'Set',
       value,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -158,7 +161,7 @@ describe('set', () => {
 
     test('for wrong values', () => {
       expect(
-        schema['~validate']({ value: new Set(['foo', 123, 'baz', null]) }, {})
+        schema['~run']({ value: new Set(['foo', 123, 'baz', null]) }, {})
       ).toStrictEqual({
         typed: false,
         value: new Set(['foo', 123, 'baz', null]),
@@ -187,7 +190,7 @@ describe('set', () => {
 
     test('with abort early', () => {
       expect(
-        schema['~validate'](
+        schema['~run'](
           { value: new Set(['foo', 123, 'baz', null]) },
           { abortEarly: true }
         )
@@ -201,7 +204,7 @@ describe('set', () => {
     test('for wrong nested values', () => {
       const nestedSchema = set(schema);
       const input = new Set([new Set([123, 'foo']), 'bar', new Set()]);
-      expect(nestedSchema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

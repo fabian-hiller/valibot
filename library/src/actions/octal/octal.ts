@@ -91,7 +91,7 @@ export function octal(
     expects: null,
     requirement: OCTAL_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'octal', dataset, config);
       }

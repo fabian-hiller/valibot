@@ -91,7 +91,7 @@ export function ulid(
     expects: null,
     requirement: ULID_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'ULID', dataset, config);
       }

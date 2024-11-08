@@ -11,7 +11,7 @@ describe('transform', () => {
       reference: transform,
       async: false,
       operation,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     } satisfies TransformAction<string, number>);
   });
 
@@ -19,7 +19,7 @@ describe('transform', () => {
     test('to length of string', () => {
       const action = transform((input: string) => input.length);
       expect(
-        action['~validate']({ typed: true, value: '123456' }, {})
+        action['~run']({ typed: true, value: '123456' }, {})
       ).toStrictEqual({
         typed: true,
         value: 6,
@@ -32,7 +32,7 @@ describe('transform', () => {
         key2: 123,
       }));
       expect(
-        action['~validate']({ typed: true, value: { key1: 'foo' } }, {})
+        action['~run']({ typed: true, value: { key1: 'foo' } }, {})
       ).toStrictEqual({
         typed: true,
         value: { key1: 'foo', key2: 123 },

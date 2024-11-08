@@ -18,7 +18,7 @@ describe('isoTimeSecond', () => {
       expects: null,
       requirement: ISO_TIME_SECOND_REGEX,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -61,7 +61,7 @@ describe('isoTimeSecond', () => {
         },
       ];
       expect(
-        action['~validate']({ typed: false, value: null, issues }, {})
+        action['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,

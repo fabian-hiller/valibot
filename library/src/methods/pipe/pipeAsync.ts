@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -31,7 +30,7 @@ export type SchemaWithPipeAsync<
       | PipeItemAsync<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
     )[],
   ],
-> = Omit<FirstTupleItem<TPipe>, 'async' | '~types' | '~validate'> & {
+> = Omit<FirstTupleItem<TPipe>, 'async' | '~run' | '~types'> & {
   /**
    * The pipe items.
    */
@@ -40,6 +39,22 @@ export type SchemaWithPipeAsync<
    * Whether it's async.
    */
   readonly async: true;
+  /**
+   * Parses unknown input values.
+   *
+   * @param dataset The input dataset.
+   * @param config The configuration.
+   *
+   * @returns The output dataset.
+   *
+   * @internal
+   */
+  readonly '~run': (
+    dataset: UnknownDataset,
+    config: Config<BaseIssue<unknown>>
+  ) => Promise<
+    OutputDataset<InferOutput<LastTupleItem<TPipe>>, InferIssue<TPipe[number]>>
+  >;
   /**
    * The input, output and issue type.
    *
@@ -52,22 +67,6 @@ export type SchemaWithPipeAsync<
         readonly issue: InferIssue<TPipe[number]>;
       }
     | undefined;
-  /**
-   * Parses unknown input values.
-   *
-   * @param dataset The input dataset.
-   * @param config The configuration.
-   *
-   * @returns The output dataset.
-   *
-   * @internal
-   */
-  readonly '~validate': (
-    dataset: UnknownDataset,
-    config?: Config<BaseIssue<unknown>>
-  ) => Promise<
-    OutputDataset<InferOutput<LastTupleItem<TPipe>>, InferIssue<TPipe[number]>>
-  >;
 };
 
 /**
@@ -3054,7 +3053,7 @@ export function pipeAsync<
     ...pipe[0],
     pipe,
     async: true,
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    async '~run'(dataset, config) {
       // Execute pipeline items in sequence
       for (const item of pipe) {
         // Exclude metadata items from execution
@@ -3075,7 +3074,7 @@ export function pipeAsync<
             (!config.abortEarly && !config.abortPipeEarly)
           ) {
             // @ts-expect-error
-            dataset = await item['~validate'](dataset, config);
+            dataset = await item['~run'](dataset, config);
           }
         }
       }

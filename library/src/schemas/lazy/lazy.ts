@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -6,6 +5,7 @@ import type {
   InferIssue,
   InferOutput,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
  * Lazy schema type.
@@ -52,10 +52,11 @@ export function lazy<
     expects: 'unknown',
     async: false,
     getter,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
-      return this.getter(dataset.value)['~validate'](dataset, config);
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
+      return this.getter(dataset.value)['~run'](dataset, config);
     },
   };
 }

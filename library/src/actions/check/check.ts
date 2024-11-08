@@ -70,7 +70,7 @@ export function check(
     expects: null,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'input', dataset, config);
       }

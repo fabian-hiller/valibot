@@ -91,7 +91,7 @@ export function emoji(
     expects: null,
     requirement: EMOJI_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'emoji', dataset, config);
       }

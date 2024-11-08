@@ -17,12 +17,12 @@ describe('returnsAsync', () => {
       reference: returnsAsync,
       async: false,
       schema,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     } satisfies ReturnsActionAsync<Input, Schema>);
   });
 
   const func = async (arg1: unknown) => arg1;
-  const dataset = action['~validate']({ typed: true, value: func }, {});
+  const dataset = action['~run']({ typed: true, value: func }, {});
 
   test('should return new function', () => {
     expect(dataset).toStrictEqual({

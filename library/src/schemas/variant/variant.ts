@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -7,7 +6,11 @@ import type {
   InferOutput,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _joinExpects } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _joinExpects,
+} from '../../utils/index.ts';
 import type {
   InferVariantIssue,
   VariantIssue,
@@ -103,9 +106,10 @@ export function variant(
     key,
     options,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -142,7 +146,7 @@ export function variant(
               for (const currentKey of allKeys) {
                 // If any discriminator is invalid, mark keys as invalid
                 if (
-                  schema.entries[currentKey]['~validate'](
+                  schema.entries[currentKey]['~run'](
                     // @ts-expect-error
                     { typed: false, value: input[currentKey] },
                     config
@@ -184,10 +188,7 @@ export function variant(
 
               // If all discriminators are valid, parse input with schema of option
               if (keysAreValid) {
-                const optionDataset = schema['~validate'](
-                  { value: input },
-                  config
-                );
+                const optionDataset = schema['~run']({ value: input }, config);
 
                 // Store output dataset if necessary
                 // Hint: Only the first untyped or typed dataset is returned, and

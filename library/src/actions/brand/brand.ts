@@ -52,7 +52,7 @@ export function brand<TInput, TName extends BrandName>(
     reference: brand,
     async: false,
     name,
-    '~validate'(dataset) {
+    '~run'(dataset) {
       return dataset as SuccessDataset<TInput & Brand<TName>>;
     },
   };

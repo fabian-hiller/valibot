@@ -112,7 +112,7 @@ export function length(
     expects: `${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && dataset.value.length !== this.requirement) {
         _addIssue(this, 'length', dataset, config, {
           received: `${dataset.value.length}`,

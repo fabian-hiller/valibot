@@ -37,7 +37,7 @@ export function rawCheckAsync<TInput>(
     reference: rawCheckAsync,
     async: true,
     expects: null,
-    async '~validate'(dataset, config) {
+    async '~run'(dataset, config) {
       await action({
         dataset,
         config,

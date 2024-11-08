@@ -98,7 +98,7 @@ export function hexadecimal(
     expects: null,
     requirement: HEXADECIMAL_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'hexadecimal', dataset, config);
       }

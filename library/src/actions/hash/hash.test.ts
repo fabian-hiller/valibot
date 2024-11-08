@@ -12,7 +12,7 @@ describe('hash', () => {
       expects: null,
       requirement: expect.any(RegExp),
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -53,7 +53,7 @@ describe('hash', () => {
         },
       ];
       expect(
-        hash(['md5'])['~validate']({ typed: false, value: null, issues }, {})
+        hash(['md5'])['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,

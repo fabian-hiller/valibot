@@ -125,7 +125,7 @@ export function isoTimestamp(
     expects: null,
     requirement: ISO_TIMESTAMP_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'timestamp', dataset, config);
       }

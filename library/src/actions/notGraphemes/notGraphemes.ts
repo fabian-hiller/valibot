@@ -119,7 +119,7 @@ export function notGraphemes(
     expects: `!${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         const count = _getGraphemeCount(dataset.value);
         if (count === this.requirement) {

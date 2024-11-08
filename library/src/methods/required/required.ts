@@ -73,11 +73,28 @@ export type SchemaWithRequired<
       infer TEntries,
       ErrorMessage<StrictObjectIssue> | undefined
     >
-  ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+  ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
       /**
        * The object entries.
        */
       readonly entries: RequiredEntries<TEntries, TKeys, TMessage>;
+      /**
+       * Parses unknown input.
+       *
+       * @param dataset The input dataset.
+       * @param config The configuration.
+       *
+       * @returns The output dataset.
+       *
+       * @internal
+       */
+      readonly '~run': (
+        dataset: UnknownDataset,
+        config: Config<BaseIssue<unknown>>
+      ) => OutputDataset<
+        InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>>,
+        NonOptionalIssue | InferIssue<TSchema>
+      >;
       /**
        * The input, output and issue type.
        *
@@ -94,33 +111,35 @@ export type SchemaWithRequired<
             readonly issue: NonOptionalIssue | InferIssue<TSchema>;
           }
         | undefined;
-      /**
-       * Parses unknown input.
-       *
-       * @param dataset The input dataset.
-       * @param config The configuration.
-       *
-       * @returns The output dataset.
-       *
-       * @internal
-       */
-      readonly '~validate': (
-        dataset: UnknownDataset,
-        config?: Config<BaseIssue<unknown>>
-      ) => OutputDataset<
-        InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>>,
-        NonOptionalIssue | InferIssue<TSchema>
-      >;
     }
   : TSchema extends LooseObjectSchema<
         infer TEntries,
         ErrorMessage<LooseObjectIssue> | undefined
       >
-    ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+    ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
         /**
          * The object entries.
          */
         readonly entries: RequiredEntries<TEntries, TKeys, TMessage>;
+        /**
+         * Parses unknown input.
+         *
+         * @param dataset The input dataset.
+         * @param config The configuration.
+         *
+         * @returns The output dataset.
+         *
+         * @internal
+         */
+        readonly '~run': (
+          dataset: UnknownDataset,
+          config: Config<BaseIssue<unknown>>
+        ) => OutputDataset<
+          InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
+            [key: string]: unknown;
+          },
+          NonOptionalIssue | InferIssue<TSchema>
+        >;
         /**
          * The input, output and issue type.
          *
@@ -141,36 +160,36 @@ export type SchemaWithRequired<
               readonly issue: NonOptionalIssue | InferIssue<TSchema>;
             }
           | undefined;
-        /**
-         * Parses unknown input.
-         *
-         * @param dataset The input dataset.
-         * @param config The configuration.
-         *
-         * @returns The output dataset.
-         *
-         * @internal
-         */
-        readonly '~validate': (
-          dataset: UnknownDataset,
-          config?: Config<BaseIssue<unknown>>
-        ) => OutputDataset<
-          InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
-            [key: string]: unknown;
-          },
-          NonOptionalIssue | InferIssue<TSchema>
-        >;
       }
     : TSchema extends ObjectWithRestSchema<
           infer TEntries,
           infer TRest,
           ErrorMessage<ObjectWithRestIssue> | undefined
         >
-      ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+      ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
           /**
            * The object entries.
            */
           readonly entries: RequiredEntries<TEntries, TKeys, TMessage>;
+          /**
+           * Parses unknown input.
+           *
+           * @param dataset The input dataset.
+           * @param config The configuration.
+           *
+           * @returns The output dataset.
+           *
+           * @internal
+           */
+          readonly '~run': (
+            dataset: UnknownDataset,
+            config: Config<BaseIssue<unknown>>
+          ) => OutputDataset<
+            InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
+              [key: string]: InferOutput<TRest>;
+            },
+            NonOptionalIssue | InferIssue<TSchema>
+          >;
           /**
            * The input, output and issue type.
            *
@@ -189,25 +208,6 @@ export type SchemaWithRequired<
                 readonly issue: NonOptionalIssue | InferIssue<TSchema>;
               }
             | undefined;
-          /**
-           * Parses unknown input.
-           *
-           * @param dataset The input dataset.
-           * @param config The configuration.
-           *
-           * @returns The output dataset.
-           *
-           * @internal
-           */
-          readonly '~validate': (
-            dataset: UnknownDataset,
-            config?: Config<BaseIssue<unknown>>
-          ) => OutputDataset<
-            InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
-              [key: string]: InferOutput<TRest>;
-            },
-            NonOptionalIssue | InferIssue<TSchema>
-          >;
         }
       : never;
 

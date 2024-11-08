@@ -91,7 +91,7 @@ export function cuid2(
     expects: null,
     requirement: CUID2_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Cuid2', dataset, config);
       }

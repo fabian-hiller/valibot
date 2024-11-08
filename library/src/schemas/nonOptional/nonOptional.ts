@@ -1,11 +1,10 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   FailureDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type {
   InferNonOptionalInput,
   InferNonOptionalIssue,
@@ -85,9 +84,10 @@ export function nonOptional(
     async: false,
     wrapped,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // If value is `undefined`, add issue and return dataset
       if (dataset.value === undefined) {
         _addIssue(this, 'type', dataset, config);
@@ -96,7 +96,7 @@ export function nonOptional(
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~validate'](dataset, config);
+      return this.wrapped['~run'](dataset, config);
     },
   };
 }

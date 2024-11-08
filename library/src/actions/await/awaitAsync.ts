@@ -31,7 +31,7 @@ export function awaitAsync<
     type: 'await',
     reference: awaitAsync,
     async: true,
-    async '~validate'(dataset) {
+    async '~run'(dataset) {
       dataset.value = await dataset.value;
       return dataset as SuccessDataset<Awaited<TInput>>;
     },

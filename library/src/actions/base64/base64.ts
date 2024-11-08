@@ -94,7 +94,7 @@ export function base64(
     expects: null,
     requirement: BASE64_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Base64', dataset, config);
       }

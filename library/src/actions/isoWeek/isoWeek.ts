@@ -104,7 +104,7 @@ export function isoWeek(
     expects: null,
     requirement: ISO_WEEK_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'week', dataset, config);
       }

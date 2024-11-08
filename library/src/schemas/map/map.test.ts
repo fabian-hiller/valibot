@@ -20,9 +20,12 @@ describe('map', () => {
       key,
       value,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -189,7 +192,7 @@ describe('map', () => {
     };
 
     test('for invalid values', () => {
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -240,7 +243,7 @@ describe('map', () => {
         [3, 123], // Invalid value
       ]);
       expect(
-        schema['~validate']({ value: input }, { abortEarly: true })
+        schema['~run']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: new Map([[0, 'foo']]),
@@ -269,7 +272,7 @@ describe('map', () => {
 
     test('with abort early for invalid value', () => {
       expect(
-        schema['~validate']({ value: input }, { abortEarly: true })
+        schema['~run']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: new Map([[0, 'foo']]),
@@ -296,7 +299,7 @@ describe('map', () => {
           ]),
         ],
       ]);
-      expect(nestedSchema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

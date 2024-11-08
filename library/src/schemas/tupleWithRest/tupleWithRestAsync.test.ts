@@ -33,9 +33,12 @@ describe('tupleWithRestAsync', () => {
       items,
       rest,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -208,7 +211,7 @@ describe('tupleWithRestAsync', () => {
 
     test('for invalid items', async () => {
       const input = [123, 456, 'true', null, null, null];
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -236,7 +239,7 @@ describe('tupleWithRestAsync', () => {
 
     test('with abort early', async () => {
       expect(
-        await schema['~validate'](
+        await schema['~run'](
           { value: [123, 456, 'true', null, null, null] },
           { abortEarly: true }
         )
@@ -254,9 +257,7 @@ describe('tupleWithRestAsync', () => {
         null,
         null,
       ];
-      expect(
-        await nestedSchema['~validate']({ value: input }, {})
-      ).toStrictEqual({
+      expect(await nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -325,7 +326,7 @@ describe('tupleWithRestAsync', () => {
 
     test('for invalid rest', async () => {
       const input = ['foo', 456, true, null, 'null', null, undefined];
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -353,7 +354,7 @@ describe('tupleWithRestAsync', () => {
 
     test('for invalid rest with abort early', async () => {
       expect(
-        await schema['~validate'](
+        await schema['~run'](
           { value: ['foo', 456, true, null, 'null', null, undefined] },
           { abortEarly: true }
         )
@@ -375,9 +376,7 @@ describe('tupleWithRestAsync', () => {
         { key: 456 },
         { key: null },
       ] as const;
-      expect(
-        await nestedSchema['~validate']({ value: input }, {})
-      ).toStrictEqual({
+      expect(await nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

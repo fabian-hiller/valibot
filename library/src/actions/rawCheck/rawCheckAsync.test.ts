@@ -21,7 +21,7 @@ describe('rawCheckAsync', () => {
       reference: rawCheckAsync,
       expects: null,
       async: true,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     } satisfies RawCheckActionAsync<number>);
   });
 
@@ -38,7 +38,7 @@ describe('rawCheckAsync', () => {
         },
       ];
       expect(
-        await action['~validate']({ typed: false, value: null, issues }, {})
+        await action['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,

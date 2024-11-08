@@ -1,4 +1,5 @@
 import type { BaseSchema, SuccessDataset } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
  * Unknown schema type.
@@ -30,9 +31,10 @@ export function unknown(): UnknownSchema {
     reference: unknown,
     expects: 'unknown',
     async: false,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset) {
       // @ts-expect-error
       dataset.typed = true;
       // @ts-expect-error

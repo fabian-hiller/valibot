@@ -101,7 +101,7 @@ export function email(
     async: false,
     requirement: EMAIL_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'email', dataset, config);
       }

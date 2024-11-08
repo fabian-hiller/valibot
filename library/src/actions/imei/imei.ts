@@ -101,7 +101,7 @@ export function imei(
       return IMEI_REGEX.test(input) && _isLuhnAlgo(input);
     },
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'IMEI', dataset, config);
       }

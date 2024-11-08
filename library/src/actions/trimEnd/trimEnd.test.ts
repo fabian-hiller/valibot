@@ -8,7 +8,7 @@ describe('trimEnd', () => {
       type: 'trim_end',
       reference: trimEnd,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     } satisfies TrimEndAction);
   });
 
@@ -16,33 +16,29 @@ describe('trimEnd', () => {
     const action = trimEnd();
 
     test('for empty string', () => {
-      expect(action['~validate']({ typed: true, value: '' }, {})).toStrictEqual(
-        {
-          typed: true,
-          value: '',
-        }
-      );
-      expect(
-        action['~validate']({ typed: true, value: ' ' }, {})
-      ).toStrictEqual({
+      expect(action['~run']({ typed: true, value: '' }, {})).toStrictEqual({
+        typed: true,
+        value: '',
+      });
+      expect(action['~run']({ typed: true, value: ' ' }, {})).toStrictEqual({
         typed: true,
         value: '',
       });
     });
 
     test('with blanks at end', () => {
-      expect(
-        action['~validate']({ typed: true, value: 'foo  ' }, {})
-      ).toStrictEqual({
-        typed: true,
-        value: 'foo',
-      });
+      expect(action['~run']({ typed: true, value: 'foo  ' }, {})).toStrictEqual(
+        {
+          typed: true,
+          value: 'foo',
+        }
+      );
     });
   });
 
   test('should not trim start of string', () => {
     expect(
-      trimEnd()['~validate']({ typed: true, value: '  foo' }, {})
+      trimEnd()['~run']({ typed: true, value: '  foo' }, {})
     ).toStrictEqual({
       typed: true,
       value: '  foo',

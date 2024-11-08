@@ -91,7 +91,7 @@ export function mac64(
     expects: null,
     requirement: MAC64_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, '64-bit MAC', dataset, config);
       }

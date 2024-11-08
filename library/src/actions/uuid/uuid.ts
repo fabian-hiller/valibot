@@ -91,7 +91,7 @@ export function uuid(
     expects: null,
     requirement: UUID_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'UUID', dataset, config);
       }

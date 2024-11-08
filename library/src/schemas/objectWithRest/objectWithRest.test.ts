@@ -30,9 +30,12 @@ describe('objectWithRest', () => {
       entries,
       rest,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -200,7 +203,7 @@ describe('objectWithRest', () => {
     };
 
     test('for missing entries', () => {
-      expect(schema['~validate']({ value: {} }, {})).toStrictEqual({
+      expect(schema['~run']({ value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
         issues: [
@@ -228,7 +231,7 @@ describe('objectWithRest', () => {
 
     test('for missing nested entries', () => {
       const input = { key: 'value', nested: {} };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -261,13 +264,13 @@ describe('objectWithRest', () => {
     });
 
     test('with abort early', () => {
-      expect(
-        schema['~validate']({ value: {} }, { abortEarly: true })
-      ).toStrictEqual({
-        typed: false,
-        value: {},
-        issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies FailureDataset<InferIssue<typeof schema>>);
+      expect(schema['~run']({ value: {} }, { abortEarly: true })).toStrictEqual(
+        {
+          typed: false,
+          value: {},
+          issues: [{ ...stringIssue, abortEarly: true }],
+        } satisfies FailureDataset<InferIssue<typeof schema>>
+      );
     });
 
     const arrayIssue: ArrayIssue = {
@@ -300,7 +303,7 @@ describe('objectWithRest', () => {
         other1: null,
         other2: 'bar',
       };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -328,7 +331,7 @@ describe('objectWithRest', () => {
 
     test('for worng rest with abort early', () => {
       expect(
-        schema['~validate'](
+        schema['~run'](
           {
             value: {
               key: 'foo',
@@ -355,7 +358,7 @@ describe('objectWithRest', () => {
         nested: { key: 123 },
         other: ['true'],
       };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

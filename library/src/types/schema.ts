@@ -1,6 +1,7 @@
 import type { Config } from './config.ts';
 import type { OutputDataset, UnknownDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
+import type { StandardSchemaProps } from './standard.ts';
 
 /**
  * Base schema type.
@@ -34,17 +35,25 @@ export interface BaseSchema<
    */
   readonly async: false;
   /**
-   * The Standard Schema version number.
+   * The Standard Schema properties.
    *
    * @internal
    */
-  readonly '~standard': 1;
+  readonly '~standard': StandardSchemaProps<TInput, TOutput>;
   /**
-   * The vendor name of the schema.
+   * Parses unknown input values.
+   *
+   * @param dataset The input dataset.
+   * @param config The configuration.
+   *
+   * @returns The output dataset.
    *
    * @internal
    */
-  readonly '~vendor': 'valibot';
+  readonly '~run': (
+    dataset: UnknownDataset,
+    config: Config<BaseIssue<unknown>>
+  ) => OutputDataset<TOutput, TIssue>;
   /**
    * The input, output and issue type.
    *
@@ -57,20 +66,6 @@ export interface BaseSchema<
         readonly issue: TIssue;
       }
     | undefined;
-  /**
-   * Parses unknown input values.
-   *
-   * @param dataset The input dataset.
-   * @param config The configuration.
-   *
-   * @returns The output dataset.
-   *
-   * @internal
-   */
-  readonly '~validate': (
-    dataset: UnknownDataset,
-    config?: Config<BaseIssue<unknown>>
-  ) => OutputDataset<TOutput, TIssue>;
 }
 
 /**
@@ -82,7 +77,7 @@ export interface BaseSchemaAsync<
   TIssue extends BaseIssue<unknown>,
 > extends Omit<
     BaseSchema<TInput, TOutput, TIssue>,
-    'reference' | 'async' | '~validate'
+    'reference' | 'async' | '~run'
   > {
   /**
    * The schema reference.
@@ -107,9 +102,9 @@ export interface BaseSchemaAsync<
    *
    * @internal
    */
-  readonly '~validate': (
+  readonly '~run': (
     dataset: UnknownDataset,
-    config?: Config<BaseIssue<unknown>>
+    config: Config<BaseIssue<unknown>>
   ) => Promise<OutputDataset<TOutput, TIssue>>;
 }
 

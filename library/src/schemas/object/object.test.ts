@@ -19,9 +19,12 @@ describe('object', () => {
       expects: 'Object',
       entries,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -62,7 +65,7 @@ describe('object', () => {
 
     test('for unknown entries', () => {
       expect(
-        object({ key1: string() })['~validate'](
+        object({ key1: string() })['~run'](
           { value: { key1: 'foo', key2: 123, key3: null } },
           {}
         )
@@ -158,7 +161,7 @@ describe('object', () => {
 
     test('for unknown entries', () => {
       expect(
-        object({ key1: string() })['~validate'](
+        object({ key1: string() })['~run'](
           { value: { key1: 'foo', key2: 123, key3: null } },
           {}
         )
@@ -200,7 +203,7 @@ describe('object', () => {
     };
 
     test('for missing entries', () => {
-      expect(schema['~validate']({ value: {} }, {})).toStrictEqual({
+      expect(schema['~run']({ value: {} }, {})).toStrictEqual({
         typed: false,
         value: {},
         issues: [
@@ -228,7 +231,7 @@ describe('object', () => {
 
     test('for missing nested entries', () => {
       expect(
-        schema['~validate']({ value: { key: 'value', nested: {} } }, {})
+        schema['~run']({ value: { key: 'value', nested: {} } }, {})
       ).toStrictEqual({
         typed: false,
         value: { key: 'value', nested: {} },
@@ -262,13 +265,13 @@ describe('object', () => {
     });
 
     test('with abort early', () => {
-      expect(
-        schema['~validate']({ value: {} }, { abortEarly: true })
-      ).toStrictEqual({
-        typed: false,
-        value: {},
-        issues: [{ ...stringIssue, abortEarly: true }],
-      } satisfies FailureDataset<InferIssue<typeof schema>>);
+      expect(schema['~run']({ value: {} }, { abortEarly: true })).toStrictEqual(
+        {
+          typed: false,
+          value: {},
+          issues: [{ ...stringIssue, abortEarly: true }],
+        } satisfies FailureDataset<InferIssue<typeof schema>>
+      );
     });
   });
 });

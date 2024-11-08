@@ -117,7 +117,7 @@ export function startsWith(
     expects: `"${requirement}"`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !dataset.value.startsWith(this.requirement)) {
         _addIssue(this, 'start', dataset, config, {
           received: `"${dataset.value.slice(0, this.requirement.length)}"`,
