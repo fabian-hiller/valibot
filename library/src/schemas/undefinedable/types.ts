@@ -5,7 +5,6 @@ import type {
   DefaultAsync,
   DefaultValue,
   InferOutput,
-  NonOptional,
 } from '../../types/index.ts';
 
 /**
@@ -18,7 +17,4 @@ export type InferUndefinedableOutput<
   TDefault extends DefaultAsync<TWrapped, undefined>,
 > = undefined extends TDefault
   ? InferOutput<TWrapped> | undefined
-  : // FIXME: For schemas that transform the input to `undefined`, this
-    // implementation may result in an incorrect output type
-    | NonOptional<InferOutput<TWrapped>>
-      | Extract<DefaultValue<TDefault>, undefined>;
+  : InferOutput<TWrapped> | DefaultValue<TDefault>;
