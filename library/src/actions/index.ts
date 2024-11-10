@@ -64,6 +64,7 @@ export * from './notGraphemes/index.ts';
 export * from './notLength/index.ts';
 export * from './notSize/index.ts';
 export * from './notValue/index.ts';
+export * from './notValues/index.ts';
 export * from './notWords/index.ts';
 export * from './octal/index.ts';
 export * from './partialCheck/index.ts';
