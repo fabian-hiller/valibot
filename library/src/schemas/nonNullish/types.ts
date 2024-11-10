@@ -50,10 +50,7 @@ export type InferNonNullishOutput<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> =
-  // FIXME: For schemas that transform the input to `null` or `undefined`,
-  // this implementation may result in an incorrect output type
-  NonNullish<InferOutput<TWrapped>>;
+> = NonNullish<InferOutput<TWrapped>>;
 
 /**
  * Infer non nullish issue type.
