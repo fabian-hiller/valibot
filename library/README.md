@@ -81,5 +81,5 @@ I am completely free and licensed under the [MIT license](https://github.com/fab
 [jsr-url]: https://jsr.io/@valibot/valibot
 [discord-image]: https://img.shields.io/discord/1252985447273992222?label=Discord&style=flat-square
 [discord-url]: https://discord.gg/tkMjQACf2P
-[gurubase-image]: https://img.shields.io/badge/Gurubase-Ask%20Valibot%20Guru-006BFF&style=flat-square
+[gurubase-image]: https://img.shields.io/badge/Gurubase-Ask%20Valibot%20Guru-006BFF?style=flat-square
 [gurubase-url]: https://gurubase.io/g/valibot
