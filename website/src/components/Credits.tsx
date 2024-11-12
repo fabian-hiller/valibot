@@ -94,7 +94,7 @@ export const Credits = component$(() => {
           'isoden',
           'nickytonline',
           'caegdeveloper',
-          'andrew-d-jackson',
+          'andrew-3kb',
           'dslatkin',
         ].map((sponsor) => (
           <li key={sponsor}>
