@@ -3,7 +3,7 @@ import type {
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  FailureDataset,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type {
@@ -101,15 +101,19 @@ export function nonNullableAsync(
       return _getStandardProps(this);
     },
     async '~run'(dataset, config) {
-      // If value is `null`, add issue and return dataset
-      if (dataset.value === null) {
-        _addIssue(this, 'type', dataset, config);
-        // @ts-expect-error
-        return dataset as FailureDataset<NonNullableIssue>;
+      // If value is not `null`, run wrapped schema
+      if (dataset.value !== null) {
+        await this.wrapped['~run'](dataset, config);
       }
 
-      // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~run'](dataset, config);
+      // If value is `null`, add issue to dataset
+      if (dataset.value === null) {
+        _addIssue(this, 'type', dataset, config);
+      }
+
+      // Return output dataset
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

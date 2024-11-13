@@ -2,7 +2,7 @@ import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
-  FailureDataset,
+  OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type {
@@ -88,15 +88,19 @@ export function nonOptional(
       return _getStandardProps(this);
     },
     '~run'(dataset, config) {
-      // If value is `undefined`, add issue and return dataset
-      if (dataset.value === undefined) {
-        _addIssue(this, 'type', dataset, config);
-        // @ts-expect-error
-        return dataset as FailureDataset<NonOptionalIssue>;
+      // If value is not `undefined`, run wrapped schema
+      if (dataset.value !== undefined) {
+        this.wrapped['~run'](dataset, config);
       }
 
-      // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~run'](dataset, config);
+      // If value is `undefined`, add issue to dataset
+      if (dataset.value === undefined) {
+        _addIssue(this, 'type', dataset, config);
+      }
+
+      // Return output dataset
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

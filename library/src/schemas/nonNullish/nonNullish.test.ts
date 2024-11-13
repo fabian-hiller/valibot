@@ -1,4 +1,7 @@
 import { describe, expect, test } from 'vitest';
+import { transform } from '../../actions/index.ts';
+import { pipe } from '../../methods/index.ts';
+import type { FailureDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { nullish, type NullishSchema } from '../nullish/index.ts';
 import { string, type StringSchema } from '../string/index.ts';
@@ -72,20 +75,61 @@ describe('nonNullish', () => {
   });
 
   describe('should return dataset with issues', () => {
-    const schema = nonNullish(nullish(string()), 'message');
     const baseIssue: Omit<NonNullishIssue, 'input' | 'received'> = {
       kind: 'schema',
       type: 'non_nullish',
       expected: '(!null & !undefined)',
       message: 'message',
+      requirement: undefined,
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
     };
 
-    test('for null', () => {
-      expectSchemaIssue(schema, baseIssue, [null]);
+    test('for null input', () => {
+      expectSchemaIssue(nonNullish(nullish(string()), 'message'), baseIssue, [
+        null,
+      ]);
     });
 
-    test('for undefined', () => {
-      expectSchemaIssue(schema, baseIssue, [undefined]);
+    test('for undefined input', () => {
+      expectSchemaIssue(nonNullish(nullish(string()), 'message'), baseIssue, [
+        undefined,
+      ]);
+    });
+
+    test('for null output', () => {
+      expect(
+        nonNullish(
+          pipe(
+            string(),
+            transform(() => null)
+          ),
+          'message'
+        )['~run']({ value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: null,
+        issues: [{ ...baseIssue, input: null, received: 'null' }],
+      } satisfies FailureDataset<NonNullishIssue>);
+    });
+
+    test('for undefined output', () => {
+      expect(
+        nonNullish(
+          pipe(
+            string(),
+            transform(() => undefined)
+          ),
+          'message'
+        )['~run']({ value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: undefined,
+        issues: [{ ...baseIssue, input: undefined, received: 'undefined' }],
+      } satisfies FailureDataset<NonNullishIssue>);
     });
   });
 });
