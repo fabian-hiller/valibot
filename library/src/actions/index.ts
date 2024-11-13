@@ -93,4 +93,5 @@ export * from './ulid/index.ts';
 export * from './url/index.ts';
 export * from './uuid/index.ts';
 export * from './value/index.ts';
+export * from './values/index.ts';
 export * from './words/index.ts';
