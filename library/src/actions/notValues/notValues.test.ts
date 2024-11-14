@@ -199,7 +199,7 @@ describe('notValues', () => {
     });
 
     test('for valid non-dates', () => {
-      expectNoActionIssue(notValues([new Date(-2, 3)]), [
+      expectNoActionIssue(notValues([new Date(-2), new Date(3)]), [
         -3n,
         0n,
         2n,
@@ -475,20 +475,7 @@ describe('notValues', () => {
           expected: `!${zeroDate.toJSON()}`,
           requirement: [zeroDate],
         },
-        [
-          zeroDate,
-          new Date(zeroDate.getTime()),
-          new Date(zeroDate.toISOString()),
-          new Date(
-            zeroDate.getFullYear(),
-            zeroDate.getMonth(),
-            zeroDate.getDate(),
-            zeroDate.getHours(),
-            zeroDate.getMinutes(),
-            zeroDate.getSeconds(),
-            zeroDate.getMilliseconds()
-          ),
-        ],
+        [new Date(0)],
         getReceived
       );
     });

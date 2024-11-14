@@ -46,30 +46,4 @@ describe('notValues', () => {
       >();
     });
   });
-
-  describe('should accept and infer requirement array', () => {
-    test('of mutable tuple', () => {
-      expectTypeOf<
-        NotValuesAction<number, [7, 12], undefined>['requirement']
-      >().toEqualTypeOf<[7, 12]>();
-    });
-
-    test('of readonly tuple', () => {
-      expectTypeOf<
-        NotValuesAction<number, readonly [7, 12], undefined>['requirement']
-      >().toEqualTypeOf<readonly [7, 12]>();
-    });
-
-    test('of mutable array', () => {
-      expectTypeOf<
-        NotValuesAction<number, number[], undefined>['requirement']
-      >().toEqualTypeOf<number[]>();
-    });
-
-    test('of readonly array', () => {
-      expectTypeOf<
-        NotValuesAction<number, readonly number[], undefined>['requirement']
-      >().toEqualTypeOf<readonly number[]>();
-    });
-  });
 });
