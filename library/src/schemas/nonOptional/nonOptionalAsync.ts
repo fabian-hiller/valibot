@@ -103,7 +103,8 @@ export function nonOptionalAsync(
     async '~run'(dataset, config) {
       // If value is not `undefined`, run wrapped schema
       if (dataset.value !== undefined) {
-        await this.wrapped['~run'](dataset, config);
+        // @ts-expect-error
+        dataset = await this.wrapped['~run'](dataset, config);
       }
 
       // If value is `undefined`, add issue to dataset

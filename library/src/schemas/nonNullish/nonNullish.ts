@@ -90,7 +90,8 @@ export function nonNullish(
     '~run'(dataset, config) {
       // If value is not `null` and `undefined`, run wrapped schema
       if (!(dataset.value === null || dataset.value === undefined)) {
-        this.wrapped['~run'](dataset, config);
+        // @ts-expect-error
+        dataset = this.wrapped['~run'](dataset, config);
       }
 
       // If value is `null` or `undefined`, add issue to dataset
