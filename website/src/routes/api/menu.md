@@ -166,6 +166,7 @@
 - [url](/api/url/)
 - [uuid](/api/uuid/)
 - [value](/api/value/)
+- [values](/api/values/)
 - [words](/api/words/)
 
 ## Storages
@@ -629,8 +630,10 @@
 - [UuidAction](/api/UuidAction/)
 - [UuidIssue](/api/UuidIssue/)
 - [ValueAction](/api/ValueAction/)
+- [ValuesAction](/api/ValuesAction/)
 - [ValueInput](/api/ValueInput/)
 - [ValueIssue](/api/ValueIssue/)
+- [ValuesIssue](/api/ValuesIssue/)
 - [VariantIssue](/api/VariantIssue/)
 - [VariantOptions](/api/VariantOptions/)
 - [VariantOptionsAsync](/api/VariantOptionsAsync/)
