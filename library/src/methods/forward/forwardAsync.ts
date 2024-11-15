@@ -38,7 +38,7 @@ export function forwardAsync<
       const prevIssues = dataset.issues && [...dataset.issues];
 
       // Run validation action
-      await action['~run'](dataset, config);
+      dataset = await action['~run'](dataset, config);
 
       // If dataset contains issues, forward newly added issues
       if (dataset.issues) {

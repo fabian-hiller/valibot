@@ -90,11 +90,8 @@ export function nonOptional(
     '~run'(dataset, config) {
       // If value is not `undefined`, run wrapped schema
       if (dataset.value !== undefined) {
-        const outputDataset = this.wrapped['~run'](dataset, config);
-        if (outputDataset.typed) {
-          // @ts-expect-error
-          dataset.typed = true;
-        }
+        // @ts-expect-error
+        dataset = this.wrapped['~run'](dataset, config);
       }
 
       // If value is `undefined`, add issue to dataset
