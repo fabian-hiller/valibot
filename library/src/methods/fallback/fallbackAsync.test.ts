@@ -27,6 +27,11 @@ describe('fallbackAsync', () => {
       expect(fallbackAsync(schema, '123')).toStrictEqual({
         ...baseSchema,
         fallback: '123',
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
       } satisfies SchemaWithFallbackAsync<Schema, '123'>);
     });
 
@@ -35,6 +40,11 @@ describe('fallbackAsync', () => {
       expect(fallbackAsync(schema, fallbackArg)).toStrictEqual({
         ...baseSchema,
         fallback: fallbackArg,
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
       } satisfies SchemaWithFallbackAsync<Schema, typeof fallbackArg>);
     });
 
@@ -43,6 +53,11 @@ describe('fallbackAsync', () => {
       expect(fallbackAsync(schema, fallbackArg)).toStrictEqual({
         ...baseSchema,
         fallback: fallbackArg,
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
       } satisfies SchemaWithFallbackAsync<Schema, typeof fallbackArg>);
     });
   });
