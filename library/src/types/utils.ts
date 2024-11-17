@@ -76,22 +76,29 @@ export type UnionToTuple<TUnion> =
     : [];
 
 /**
+ * Checks if a type is `any`.
+ */
+type IsAny<Type> = 0 extends 1 & Type ? true : false;
+
+/**
  * Extracts tuples with path keys.
  */
 export type PathKeys<TValue> = MaybeReadonly<
-  TValue extends readonly unknown[]
-    ? number extends TValue['length']
-      ? [number] | [number, ...PathKeys<TValue[number]>]
-      : {
-          [TKey in keyof TValue]: TKey extends `${infer TIndex extends number}`
-            ? [TIndex] | [TIndex, ...PathKeys<TValue[TKey]>]
-            : never;
-        }[keyof TValue & number]
-    : TValue extends Record<string, unknown>
-      ? {
-          [TKey in keyof TValue]: [TKey] | [TKey, ...PathKeys<TValue[TKey]>];
-        }[keyof TValue]
-      : never
+  IsAny<TValue> extends true
+    ? never
+    : TValue extends readonly unknown[]
+      ? number extends TValue['length']
+        ? [number] | [number, ...PathKeys<TValue[number]>]
+        : {
+            [TKey in keyof TValue]: TKey extends `${infer TIndex extends number}`
+              ? [TIndex] | [TIndex, ...PathKeys<TValue[TKey]>]
+              : never;
+          }[keyof TValue & number]
+      : TValue extends Record<string, unknown>
+        ? {
+            [TKey in keyof TValue]: [TKey] | [TKey, ...PathKeys<TValue[TKey]>];
+          }[keyof TValue]
+        : never
 >;
 
 /**
