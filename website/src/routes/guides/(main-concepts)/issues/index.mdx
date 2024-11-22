@@ -6,6 +6,7 @@ description: >-
 contributors:
   - fabian-hiller
   - BastiDood
+  - EltonLobo07
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -120,12 +121,12 @@ import * as v from 'valibot';
 
 const ObjectSchema = v.object({
   key: v.string('Value of "key" is missing.'),
-  nested: v.object({
-    key: v.string('Value of "nested.key" is missing.'),
+  nestedObject: v.object({
+    key: v.string('Value of "nestedObject.key" is missing.'),
   }),
 });
 
-const result = v.safeParse(ObjectSchema, { nested: {} });
+const result = v.safeParse(ObjectSchema, { nestedObject: {} });
 
 if (result.issues) {
   console.log(v.flatten<typeof ObjectSchema>(result.issues));
@@ -148,7 +149,7 @@ The `result` returned in the code sample above this text contains the following 
         type: 'object',
         origin: 'value',
         input: {
-          nested: {},
+          nestedObject: {},
         },
         key: 'key',
       },
@@ -160,15 +161,15 @@ The `result` returned in the code sample above this text contains the following 
     input: undefined,
     expected: 'string',
     received: 'undefined',
-    message: 'Value of "nested.key" is missing.',
+    message: 'Value of "nestedObject.key" is missing.',
     path: [
       {
         type: 'object',
         origin: 'value',
         input: {
-          nested: {},
+          nestedObject: {},
         },
-        key: 'nested',
+        key: 'nestedObject',
         value: {},
       },
       {
@@ -188,7 +189,7 @@ However, with the help of <Link href="/api/flatten/">`flatten`</Link> the issues
 {
   nested: {
     key: ['Value of "key" is missing.'],
-    'nested.key': ['Value of "nested.key" is missing.']
-  }
-}
+    'nestedObject.key': ['Value of "nestedObject.key" is missing.'],
+  },
+};
 ```
