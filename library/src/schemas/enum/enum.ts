@@ -94,7 +94,7 @@ export function enum_(
   message?: ErrorMessage<EnumIssue>
 ): EnumSchema<Enum, ErrorMessage<EnumIssue> | undefined> {
   const options = Object.entries(enum__)
-    .filter(([key]) => isNaN(+key))
+    .filter(([key]) => (+key).toString() !== key)
     .map(([, value]) => value);
   return {
     kind: 'schema',
