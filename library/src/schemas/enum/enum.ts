@@ -18,6 +18,31 @@ export interface Enum {
   [key: string]: string | number;
 }
 
+type IsNumericString<K extends string> = K extends
+  | 'NaN'
+  | 'Infinity'
+  | '-Infinity'
+  ? true
+  : K extends `${infer V extends number}`
+    ? `${V}` extends K
+      ? true
+      : false
+    : false;
+/**
+ * enum_ only accepts enum values of string & non-numeric keys.
+ * This type-level function filters out numeric keys including Infinity and NaN.
+ *
+ * @example FilterEnumKeys<'foo' | '1' | 'Infinity' | 'NaN'> will be 'foo'.
+ */
+type FilterEnumKeys<K extends string> = K extends K
+  ? IsNumericString<K> extends true
+    ? never
+    : K
+  : never;
+type EnumValues<TEnum extends Enum> = TEnum[FilterEnumKeys<
+  string & keyof TEnum
+>];
+
 /**
  * Enum issue type.
  */
@@ -42,7 +67,7 @@ export interface EnumIssue extends BaseIssue<unknown> {
 export interface EnumSchema<
   TEnum extends Enum,
   TMessage extends ErrorMessage<EnumIssue> | undefined,
-> extends BaseSchema<TEnum[keyof TEnum], TEnum[keyof TEnum], EnumIssue> {
+> extends BaseSchema<EnumValues<TEnum>, EnumValues<TEnum>, EnumIssue> {
   /**
    * The schema type.
    */
@@ -58,7 +83,7 @@ export interface EnumSchema<
   /**
    * The enum options.
    */
-  readonly options: TEnum[keyof TEnum][];
+  readonly options: EnumValues<TEnum>[];
   /**
    * The error message.
    */
