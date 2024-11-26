@@ -1,4 +1,6 @@
 import { describe, expectTypeOf, test } from 'vitest';
+import type { TransformAction } from '../../actions/index.ts';
+import type { SchemaWithPipe } from '../../methods/index.ts';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import {
   string,
@@ -39,6 +41,12 @@ describe('optional', () => {
     type Schema2 = OptionalSchema<StringSchema<undefined>, 'foo'>;
     type Schema3 = OptionalSchema<StringSchema<undefined>, () => undefined>;
     type Schema4 = OptionalSchema<StringSchema<undefined>, () => 'foo'>;
+    type Schema5 = OptionalSchema<
+      SchemaWithPipe<
+        [StringSchema<undefined>, TransformAction<string, number>]
+      >,
+      'foo'
+    >;
 
     test('of input', () => {
       type Input = string | undefined;
@@ -46,6 +54,7 @@ describe('optional', () => {
       expectTypeOf<InferInput<Schema2>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema3>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema4>>().toEqualTypeOf<Input>();
+      expectTypeOf<InferInput<Schema5>>().toEqualTypeOf<Input>();
     });
 
     test('of output', () => {
@@ -53,6 +62,7 @@ describe('optional', () => {
       expectTypeOf<InferOutput<Schema2>>().toEqualTypeOf<string>();
       expectTypeOf<InferOutput<Schema3>>().toEqualTypeOf<string | undefined>();
       expectTypeOf<InferOutput<Schema4>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema5>>().toEqualTypeOf<number>();
     });
 
     test('of issue', () => {
@@ -60,6 +70,7 @@ describe('optional', () => {
       expectTypeOf<InferIssue<Schema2>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema3>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema4>>().toEqualTypeOf<StringIssue>();
+      expectTypeOf<InferIssue<Schema5>>().toEqualTypeOf<StringIssue>();
     });
   });
 });

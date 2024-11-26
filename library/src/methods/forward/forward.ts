@@ -34,7 +34,7 @@ export function forward<
       const prevIssues = dataset.issues && [...dataset.issues];
 
       // Run validation action
-      action['~run'](dataset, config);
+      dataset = action['~run'](dataset, config);
 
       // If dataset contains issues, forward newly added issues
       if (dataset.issues) {

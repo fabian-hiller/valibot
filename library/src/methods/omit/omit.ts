@@ -29,8 +29,10 @@ import type {
   ObjectKeys,
   OutputDataset,
   SchemaWithoutPipe,
+  StandardSchemaProps,
   UnknownDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
  * Schema type.
@@ -76,11 +78,20 @@ export type SchemaWithOmit<
       infer TEntries,
       ErrorMessage<StrictObjectIssue> | undefined
     >
-  ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+  ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
       /**
        * The object entries.
        */
       readonly entries: Omit<TEntries, TKeys[number]>;
+      /**
+       * The Standard Schema properties.
+       *
+       * @internal
+       */
+      readonly '~standard': StandardSchemaProps<
+        InferObjectInput<Omit<TEntries, TKeys[number]>>,
+        InferObjectOutput<Omit<TEntries, TKeys[number]>>
+      >;
       /**
        * Parses unknown input.
        *
@@ -123,11 +134,20 @@ export type SchemaWithOmit<
             infer TEntries,
             ErrorMessage<StrictObjectIssue> | undefined
           >
-    ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+    ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
         /**
          * The object entries.
          */
         readonly entries: Omit<TEntries, TKeys[number]>;
+        /**
+         * The Standard Schema properties.
+         *
+         * @internal
+         */
+        readonly '~standard': StandardSchemaProps<
+          InferObjectInput<Omit<TEntries, TKeys[number]>>,
+          InferObjectOutput<Omit<TEntries, TKeys[number]>>
+        >;
         /**
          * Parses unknown input.
          *
@@ -167,11 +187,24 @@ export type SchemaWithOmit<
           infer TEntries,
           ErrorMessage<LooseObjectIssue> | undefined
         >
-      ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+      ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
           /**
            * The object entries.
            */
           readonly entries: Omit<TEntries, TKeys[number]>;
+          /**
+           * The Standard Schema properties.
+           *
+           * @internal
+           */
+          readonly '~standard': StandardSchemaProps<
+            InferObjectInput<Omit<TEntries, TKeys[number]>> & {
+              [key: string]: unknown;
+            },
+            InferObjectInput<Omit<TEntries, TKeys[number]>> & {
+              [key: string]: unknown;
+            }
+          >;
           /**
            * Parses unknown input.
            *
@@ -219,11 +252,24 @@ export type SchemaWithOmit<
             infer TEntries,
             ErrorMessage<LooseObjectIssue> | undefined
           >
-        ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+        ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
             /**
              * The object entries.
              */
             readonly entries: Omit<TEntries, TKeys[number]>;
+            /**
+             * The Standard Schema properties.
+             *
+             * @internal
+             */
+            readonly '~standard': StandardSchemaProps<
+              InferObjectInput<Omit<TEntries, TKeys[number]>> & {
+                [key: string]: unknown;
+              },
+              InferObjectInput<Omit<TEntries, TKeys[number]>> & {
+                [key: string]: unknown;
+              }
+            >;
             /**
              * Parses unknown input.
              *
@@ -274,11 +320,24 @@ export type SchemaWithOmit<
               BaseSchema<unknown, unknown, BaseIssue<unknown>>,
               ErrorMessage<ObjectWithRestIssue> | undefined
             >
-          ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+          ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
               /**
                * The object entries.
                */
               readonly entries: Omit<TEntries, TKeys[number]>;
+              /**
+               * The Standard Schema properties.
+               *
+               * @internal
+               */
+              readonly '~standard': StandardSchemaProps<
+                InferObjectInput<Omit<TEntries, TKeys[number]>> & {
+                  [key: string]: InferInput<TSchema['rest']>;
+                },
+                InferObjectOutput<Omit<TEntries, TKeys[number]>> & {
+                  [key: string]: InferOutput<TSchema['rest']>;
+                }
+              >;
               /**
                * Parses unknown input.
                *
@@ -327,11 +386,24 @@ export type SchemaWithOmit<
                 BaseSchema<unknown, unknown, BaseIssue<unknown>>,
                 ErrorMessage<ObjectWithRestIssue> | undefined
               >
-            ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+            ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
                 /**
                  * The object entries.
                  */
                 readonly entries: Omit<TEntries, TKeys[number]>;
+                /**
+                 * The Standard Schema properties.
+                 *
+                 * @internal
+                 */
+                readonly '~standard': StandardSchemaProps<
+                  InferObjectInput<Omit<TEntries, TKeys[number]>> & {
+                    [key: string]: InferInput<TSchema['rest']>;
+                  },
+                  InferObjectOutput<Omit<TEntries, TKeys[number]>> & {
+                    [key: string]: InferOutput<TSchema['rest']>;
+                  }
+                >;
                 /**
                  * Parses unknown input.
                  *
@@ -407,5 +479,11 @@ export function omit<
 
   // Rerturn modified copy of schema
   // @ts-expect-error
-  return { ...schema, entries };
+  return {
+    ...schema,
+    entries,
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+  };
 }

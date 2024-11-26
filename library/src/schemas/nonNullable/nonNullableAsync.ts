@@ -103,7 +103,8 @@ export function nonNullableAsync(
     async '~run'(dataset, config) {
       // If value is not `null`, run wrapped schema
       if (dataset.value !== null) {
-        await this.wrapped['~run'](dataset, config);
+        // @ts-expect-error
+        dataset = await this.wrapped['~run'](dataset, config);
       }
 
       // If value is `null`, add issue to dataset

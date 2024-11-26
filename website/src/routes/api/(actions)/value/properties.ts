@@ -35,6 +35,10 @@ export const properties: Record<string, PropertyProps> = {
                   type: 'custom',
                   name: 'TInput',
                 },
+                {
+                  type: 'custom',
+                  name: 'TRequirement',
+                },
               ],
             },
           ],

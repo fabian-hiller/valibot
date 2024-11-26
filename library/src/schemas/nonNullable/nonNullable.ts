@@ -90,7 +90,8 @@ export function nonNullable(
     '~run'(dataset, config) {
       // If value is not `null`, run wrapped schema
       if (dataset.value !== null) {
-        this.wrapped['~run'](dataset, config);
+        // @ts-expect-error
+        dataset = this.wrapped['~run'](dataset, config);
       }
 
       // If value is `null`, add issue to dataset

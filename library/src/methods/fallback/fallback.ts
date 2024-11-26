@@ -6,6 +6,7 @@ import type {
   InferOutput,
   OutputDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 import { getFallback } from '../getFallback/index.ts';
 
 /**
@@ -51,6 +52,9 @@ export function fallback<
   return {
     ...schema,
     fallback,
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
     '~run'(dataset, config) {
       const outputDataset = schema['~run'](dataset, config);
       return outputDataset.issues
