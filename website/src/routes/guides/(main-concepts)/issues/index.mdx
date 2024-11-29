@@ -120,13 +120,13 @@ If you are only interested in the error messages of each issue to show them to y
 import * as v from 'valibot';
 
 const ObjectSchema = v.object({
-  key: v.string('Value of "key" is missing.'),
-  nestedObject: v.object({
-    key: v.string('Value of "nestedObject.key" is missing.'),
+  foo: v.string('Value of "foo" is missing.'),
+  bar: v.object({
+    baz: v.string('Value of "bar.baz" is missing.'),
   }),
 });
 
-const result = v.safeParse(ObjectSchema, { nestedObject: {} });
+const result = v.safeParse(ObjectSchema, { bar: {} });
 
 if (result.issues) {
   console.log(v.flatten<typeof ObjectSchema>(result.issues));
@@ -143,15 +143,15 @@ The `result` returned in the code sample above this text contains the following 
     input: undefined,
     expected: 'string',
     received: 'undefined',
-    message: 'Value of "key" is missing.',
+    message: 'Value of "foo" is missing.',
     path: [
       {
         type: 'object',
         origin: 'value',
         input: {
-          nestedObject: {},
+          bar: {},
         },
-        key: 'key',
+        key: 'foo',
       },
     ],
   },
@@ -161,22 +161,22 @@ The `result` returned in the code sample above this text contains the following 
     input: undefined,
     expected: 'string',
     received: 'undefined',
-    message: 'Value of "nestedObject.key" is missing.',
+    message: 'Value of "bar.baz" is missing.',
     path: [
       {
         type: 'object',
         origin: 'value',
         input: {
-          nestedObject: {},
+          bar: {},
         },
-        key: 'nestedObject',
+        key: 'bar',
         value: {},
       },
       {
         type: 'object',
         origin: 'value',
         input: {},
-        key: 'key',
+        key: 'baz',
       },
     ],
   },
@@ -188,8 +188,8 @@ However, with the help of <Link href="/api/flatten/">`flatten`</Link> the issues
 ```ts
 {
   nested: {
-    key: ['Value of "key" is missing.'],
-    'nestedObject.key': ['Value of "nestedObject.key" is missing.'],
+    foo: ['Value of "foo" is missing.'],
+    'bar.baz': ['Value of "bar.baz" is missing.'],
   },
 };
 ```
