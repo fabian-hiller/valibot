@@ -152,9 +152,7 @@ export function objectAsync(
         else {
           valueDatasets = [];
           while (valueDatasetsPromises.length > 0) {
-            const earliest = await Promise.race(
-              valueDatasetsPromises
-            );
+            const earliest = await Promise.race(valueDatasetsPromises);
 
             // Add earliest resolved value dataset to array
             valueDatasets.push(earliest);
