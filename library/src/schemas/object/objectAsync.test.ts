@@ -1,4 +1,6 @@
-import { describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { checkAsync } from '../../actions/index.ts';
+import { pipeAsync } from '../../index.ts';
 import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
@@ -287,6 +289,81 @@ describe('objectAsync', () => {
         value: {},
         issues: [{ ...stringIssue, abortEarly: true }],
       } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+  });
+
+  describe('should abort async validation early', () => {
+    function timeout<T>(ms: number, result: T): Promise<T> {
+      return new Promise((resolve) => setTimeout(resolve, ms, result));
+    }
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    test.only('with checkAsync', async () => {
+      const schema = objectAsync({
+        key1: string(),
+        key2: pipeAsync(
+          string(),
+          checkAsync(() => timeout(1000, true))
+        ),
+      });
+
+      const resultPromise = schema['~run'](
+        {
+          value: {
+            key1: 42,
+            key2: 'string',
+          },
+        },
+        { abortEarly: true }
+      );
+
+      const result = Promise.race([
+        resultPromise,
+        timeout(1, 'validation was not aborted early'),
+      ]);
+
+      // advance `timeout(0)` promise to resolve
+      await vi.advanceTimersToNextTimerAsync();
+
+      // assert that `result` is resolved to validation result
+      expect(await result).toStrictEqual({
+        issues: [
+          {
+            abortEarly: true,
+            abortPipeEarly: undefined,
+            expected: 'string',
+            input: 42,
+            issues: undefined,
+            kind: 'schema',
+            lang: undefined,
+            message: 'Invalid type: Expected string but received 42',
+            path: [
+              {
+                input: {
+                  key1: 42,
+                  key2: 'string',
+                },
+                key: 'key1',
+                origin: 'value',
+                type: 'object',
+                value: 42,
+              },
+            ],
+            received: '42',
+            requirement: undefined,
+            type: 'string',
+          },
+        ],
+        typed: false,
+        value: {},
+      });
     });
   });
 });
