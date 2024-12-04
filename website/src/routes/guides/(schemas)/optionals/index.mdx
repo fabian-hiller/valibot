@@ -79,11 +79,9 @@ const CalculationSchema = v.pipe(
     b: v.number(),
     sum: v.optional(v.number()),
   }),
-  v.transform((input) => {
-    return {
-      ...input,
-      sum: input.sum === undefined ? input.a + input.b : input.sum,
-    };
-  })
+  v.transform((input) => ({
+    ...input,
+    sum: input.sum === undefined ? input.a + input.b : input.sum,
+  }))
 );
 ```
