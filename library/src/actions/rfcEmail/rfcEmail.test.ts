@@ -2,15 +2,14 @@ import { describe, expect, test } from 'vitest';
 import { RFC_EMAIL_REGEX } from '../../regex.ts';
 import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
-import { rfcEmail } from './rfcEmail.ts';
-import { email, type EmailAction, type EmailIssue } from '../email/email.ts';
+import { rfcEmail, type RfcEmailAction, type RfcEmailIssue } from './rfcEmail.ts';
 
 describe('rfcEmail', () => {
   describe('should return action object', () => {
-    const baseAction: Omit<EmailAction<string, never>, 'message'> = {
+    const baseAction: Omit<RfcEmailAction<string, never>, 'message'> = {
       kind: 'validation',
-      type: 'email',
-      reference: email,
+      type: 'rfc_email',
+      reference: rfcEmail,
       expects: null,
       requirement: RFC_EMAIL_REGEX,
       async: false,
@@ -18,7 +17,7 @@ describe('rfcEmail', () => {
     };
 
     test('with undefined message', () => {
-      const action: EmailAction<string, undefined> = {
+      const action: RfcEmailAction<string, undefined> = {
         ...baseAction,
         message: undefined,
       };
@@ -30,7 +29,7 @@ describe('rfcEmail', () => {
       expect(rfcEmail('message')).toStrictEqual({
         ...baseAction,
         message: 'message',
-      } satisfies EmailAction<string, string>);
+      } satisfies RfcEmailAction<string, string>);
     });
 
     test('with function message', () => {
@@ -38,7 +37,7 @@ describe('rfcEmail', () => {
       expect(rfcEmail(message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies EmailAction<string, typeof message>);
+      } satisfies RfcEmailAction<string, typeof message>);
     });
   });
 
@@ -172,9 +171,9 @@ describe('rfcEmail', () => {
 
   describe('should return dataset with issues', () => {
     const action = rfcEmail('message');
-    const baseIssue: Omit<EmailIssue<string>, 'input' | 'received'> = {
+    const baseIssue: Omit<RfcEmailIssue<string>, 'input' | 'received'> = {
       kind: 'validation',
-      type: 'email',
+      type: 'rfc_email',
       expected: null,
       message: 'message',
       requirement: RFC_EMAIL_REGEX,
