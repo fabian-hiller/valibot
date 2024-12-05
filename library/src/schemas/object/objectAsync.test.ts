@@ -294,7 +294,7 @@ describe('objectAsync', () => {
 
   describe('should abort async validation early', () => {
     function timeout<T>(ms: number, result: T): Promise<T> {
-      return new Promise((resolve) => setTimeout(resolve, ms, result));
+      return new Promise((resolve) => setTimeout(() => resolve(result), ms));
     }
 
     beforeEach(() => {
@@ -305,7 +305,7 @@ describe('objectAsync', () => {
       vi.useRealTimers();
     });
 
-    test.only('with checkAsync', async () => {
+    test('with sync validation failed', async () => {
       const schema = objectAsync({
         key1: string(),
         key2: pipeAsync(
@@ -315,12 +315,7 @@ describe('objectAsync', () => {
       });
 
       const resultPromise = schema['~run'](
-        {
-          value: {
-            key1: 42,
-            key2: 'string',
-          },
-        },
+        { value: { key1: 42, key2: 'string' } },
         { abortEarly: true }
       );
 
@@ -329,7 +324,7 @@ describe('objectAsync', () => {
         timeout(1, 'validation was not aborted early'),
       ]);
 
-      // advance `timeout(0)` promise to resolve
+      // advance `timeout(1)` promise to resolve
       await vi.advanceTimersToNextTimerAsync();
 
       // assert that `result` is resolved to validation result
@@ -364,6 +359,130 @@ describe('objectAsync', () => {
         typed: false,
         value: {},
       });
+    });
+
+    test('with fast async validation failed', async () => {
+      const schema = objectAsync({
+        key1: pipeAsync(
+          string(),
+          checkAsync(() => timeout(1000, false))
+        ),
+        key2: pipeAsync(
+          string(),
+          checkAsync(() => timeout(5000, true))
+        ),
+      });
+
+      const resultPromise = schema['~run'](
+        { value: { key1: 'string', key2: 'string' } },
+        { abortEarly: true }
+      );
+
+      const result = Promise.race([
+        resultPromise,
+        timeout(2000, 'validation was not aborted early'),
+      ]);
+
+      // advance `timeout(1000)` validation promise and `timeout(2000)` limit promiseto resolve
+      await vi.advanceTimersByTimeAsync(3000);
+
+      // assert that `result` is resolved to validation result
+      expect(await result).toStrictEqual({
+        issues: [
+          {
+            abortEarly: true,
+            abortPipeEarly: undefined,
+            expected: null,
+            input: 'string',
+            issues: undefined,
+            kind: 'validation',
+            lang: undefined,
+            message: 'Invalid input: Received "string"',
+            path: [
+              {
+                input: {
+                  key1: 'string',
+                  key2: 'string',
+                },
+                key: 'key1',
+                origin: 'value',
+                type: 'object',
+                value: 'string',
+              },
+            ],
+            received: '"string"',
+            requirement: expect.any(Function),
+            type: 'check',
+          },
+        ],
+        typed: false,
+        value: {},
+      });
+    });
+
+    test('should not execute async validation at all in case of sync validation failure', async () => {
+      const watch = vi.fn();
+
+      const schema = objectAsync({
+        key1: string(),
+        key2: pipeAsync(
+          string(),
+          checkAsync(() => {
+            watch();
+            return timeout(1000, true);
+          })
+        ),
+      });
+
+      const resultPromise = schema['~run'](
+        { value: { key1: 42, key2: 'string' } },
+        { abortEarly: true }
+      );
+
+      const result = Promise.race([
+        resultPromise,
+        timeout(1, 'validation was not aborted early'),
+      ]);
+
+      // advance `timeout(1)` promise to resolve
+      await vi.advanceTimersToNextTimerAsync();
+
+      // assert that `result` is resolved to validation result
+      expect(await result).not.toEqual('validation was not aborted early');
+
+      // assert that `watch` was not called
+      // meaning that async validation was not executed
+      expect(watch).toHaveBeenCalledTimes(0);
+    });
+
+    test('async validation should be executed simultaneously', async () => {
+      const schema = objectAsync({
+        key1: pipeAsync(
+          string(),
+          checkAsync(() => timeout(1000, true))
+        ),
+        key2: pipeAsync(
+          string(),
+          checkAsync(() => timeout(1000, true))
+        ),
+      });
+
+      const resultPromise = schema['~run'](
+        { value: { key1: 'string', key2: 'string' } },
+        { abortEarly: true }
+      );
+
+      const result = Promise.race([
+        resultPromise,
+        timeout(1500, 'validation too long'), // ensure that async validation is not sequential
+      ]);
+
+      await vi.advanceTimersByTimeAsync(2000);
+
+      // assert that `result` is resolved to validation result
+      // meaning that async validation was executed simultaneously,
+      // both promises were resolved in 1000ms
+      expect(await result).not.toBe('validation too long');
     });
   });
 });
