@@ -7,6 +7,7 @@ description: >-
 contributors:
   - fabian-hiller
   - fartinmartin
+  - EltonLobo07
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -47,8 +48,8 @@ import * as v from 'valibot';
 
 const OptionalStringSchema = v.optional(v.string(), "I'm the default!");
 
-type OptionalStringInput = v.Input<typeof OptionalStringSchema>; // string | undefined
-type OptionalStringOutput = v.Output<typeof OptionalStringSchema>; // string
+type OptionalStringInput = v.InferInput<typeof OptionalStringSchema>; // string | undefined
+type OptionalStringOutput = v.InferOutput<typeof OptionalStringSchema>; // string
 ```
 
 By providing a default value, the input type of the schema now differs from the output type. The schema in the example now accepts `string` and `undefined` as input, but returns a string as output in both cases.
@@ -70,17 +71,17 @@ The previous example thus creates a new instance of the [`Date`](https://develop
 In rare cases, a default value for an optional entry may depend on the values of another entries in the same object. This can be achieved by using <Link href="/api/transform/">`transform`</Link> in the <Link href="/api/pipe/">`pipe`</Link> of the object.
 
 ```ts
+import * as v from 'valibot';
+
 const CalculationSchema = v.pipe(
   v.object({
     a: v.number(),
     b: v.number(),
     sum: v.optional(v.number()),
   }),
-  v.transform((input) => {
-    if (input.sum === undefined) {
-      return { ...input, sum: input.a + input.b };
-    }
-    return input;
-  })
+  v.transform((input) => ({
+    ...input,
+    sum: input.sum === undefined ? input.a + input.b : input.sum,
+  }))
 );
 ```
