@@ -12,14 +12,40 @@ type Action =
   | v.DescriptionAction<unknown, string>
   | v.EmailAction<string, v.ErrorMessage<v.EmailIssue<string>> | undefined>
   | v.IsoDateAction<string, v.ErrorMessage<v.IsoDateIssue<string>> | undefined>
+  | v.IsoTimeAction<string, v.ErrorMessage<v.IsoTimeIssue<string>> | undefined>
+  | v.IsoDateTimeAction<
+      string,
+      v.ErrorMessage<v.IsoDateTimeIssue<string>> | undefined
+    >
   | v.IsoTimestampAction<
       string,
       v.ErrorMessage<v.IsoTimestampIssue<string>> | undefined
     >
+  | v.Base64Action<string, v.ErrorMessage<v.Base64Issue<string>> | undefined>
   | v.Ipv4Action<string, v.ErrorMessage<v.Ipv4Issue<string>> | undefined>
   | v.Ipv6Action<string, v.ErrorMessage<v.Ipv6Issue<string>> | undefined>
   | v.UuidAction<string, v.ErrorMessage<v.UuidIssue<string>> | undefined>
+  | v.UrlAction<string, v.ErrorMessage<v.UrlIssue<string>> | undefined>
   | v.RegexAction<string, v.ErrorMessage<v.RegexIssue<string>> | undefined>
+  | v.StartsWithAction<
+      string,
+      string,
+      v.ErrorMessage<v.StartsWithIssue<string, string>> | undefined
+    >
+  | v.EndsWithAction<
+      string,
+      string,
+      v.ErrorMessage<v.EndsWithIssue<string, string>> | undefined
+    >
+  | v.IncludesAction<
+      string,
+      string,
+      v.ErrorMessage<v.IncludesIssue<string, string>> | undefined
+    >
+  | v.NonEmptyAction<
+      string,
+      v.ErrorMessage<v.NonEmptyIssue<string>> | undefined
+    >
   | v.IntegerAction<number, v.ErrorMessage<v.IntegerIssue<number>> | undefined>
   | v.LengthAction<
       v.LengthInput,
@@ -93,6 +119,12 @@ export function convertAction(
       break;
     }
 
+    case 'iso_time': {
+      jsonSchema.format = 'time';
+      break;
+    }
+
+    case 'iso_date_time':
     case 'iso_timestamp': {
       jsonSchema.format = 'date-time';
       break;
@@ -109,13 +141,21 @@ export function convertAction(
     }
 
     case 'length':
+    case 'non_empty':
     case 'min_length':
     case 'max_length': {
       if (jsonSchema.type === 'array') {
         if (valibotAction.type !== 'max_length') {
-          jsonSchema.minItems = valibotAction.requirement;
+          if (valibotAction.type === 'non_empty') {
+            jsonSchema.minItems = 1;
+          } else {
+            jsonSchema.minItems = valibotAction.requirement;
+          }
         }
-        if (valibotAction.type !== 'min_length') {
+        if (
+          valibotAction.type !== 'min_length' &&
+          valibotAction.type !== 'non_empty'
+        ) {
           jsonSchema.maxItems = valibotAction.requirement;
         }
       } else {
@@ -126,9 +166,16 @@ export function convertAction(
           );
         }
         if (valibotAction.type !== 'max_length') {
-          jsonSchema.minLength = valibotAction.requirement;
+          if (valibotAction.type === 'non_empty') {
+            jsonSchema.minLength = 1;
+          } else {
+            jsonSchema.minLength = valibotAction.requirement;
+          }
         }
-        if (valibotAction.type !== 'min_length') {
+        if (
+          valibotAction.type !== 'min_length' &&
+          valibotAction.type !== 'non_empty'
+        ) {
           jsonSchema.maxLength = valibotAction.requirement;
         }
       }
@@ -172,6 +219,21 @@ export function convertAction(
       break;
     }
 
+    case 'starts_with': {
+      jsonSchema.pattern = `^${valibotAction.requirement}`;
+      break;
+    }
+
+    case 'ends_with': {
+      jsonSchema.pattern = `${valibotAction.requirement}$`;
+      break;
+    }
+
+    case 'includes': {
+      jsonSchema.pattern = valibotAction.requirement;
+      break;
+    }
+
     case 'title': {
       jsonSchema.title = valibotAction.title;
       break;
@@ -179,6 +241,16 @@ export function convertAction(
 
     case 'uuid': {
       jsonSchema.format = 'uuid';
+      break;
+    }
+
+    case 'url': {
+      jsonSchema.format = 'uri';
+      break;
+    }
+
+    case 'base64': {
+      jsonSchema.contentEncoding = 'base64';
       break;
     }
 
