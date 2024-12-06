@@ -5,6 +5,7 @@ description: >-
   `instance`, `custom` and `lazy` that are not covered in the other guides.
 contributors:
   - fabian-hiller
+  - jhnns
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -70,4 +71,21 @@ const BinaryTreeSchema: v.GenericSchema<BinaryTree> = v.object({
   left: v.nullable(v.lazy(() => BinaryTreeSchema)),
   right: v.nullable(v.lazy(() => BinaryTreeSchema)),
 });
+```
+
+## JSON type schema
+
+Another practical use case for `lazy` is a schema for all possible `JSON` values. These are all values that can be serialized and deserialized without data loss via `JSON.stringify()` and `JSON.parse()`:
+
+```ts
+import * as v from 'valibot';
+
+const JsonPrimitiveSchema = v.union([v.string(), v.number(), v.boolean(), v.null()]);
+type JsonPrimitiveData = v.InferOutput<typeof JsonPrimitiveSchema>;
+
+const JsonSchema = v.lazy(
+  (): v.UnionSchema<any, undefined> =>
+    v.union([JsonPrimitiveSchema, v.array(JsonSchema), v.record(v.string(), JsonSchema)]),
+);
+type JsonData = JsonPrimitiveData | { [key: string]: JsonData } | Array<JsonData>;
 ```
