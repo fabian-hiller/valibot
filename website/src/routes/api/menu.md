@@ -600,6 +600,7 @@
 - [ToMinValueAction](/api/ToMinValueAction/)
 - [ToUpperCaseAction](/api/ToUpperCaseAction/)
 - [TransformAction](/api/TransformAction/)
+- [TransformActionAsync](/api/TransformActionAsync/)
 - [TrimAction](/api/TrimAction/)
 - [TrimEndAction](/api/TrimEndAction/)
 - [TrimStartAction](/api/TrimStartAction/)
