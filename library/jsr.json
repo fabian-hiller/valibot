@@ -4,7 +4,8 @@
   "exports": "./src/index.ts",
   "publish": {
     "include": [
-      "src/**/*.ts"
+      "src/**/*.ts",
+      "README.md"
     ]
   }
 }
