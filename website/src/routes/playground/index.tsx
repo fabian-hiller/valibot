@@ -7,6 +7,7 @@ import {
   sync$,
   useComputed$,
   useSignal,
+  useVisibleTask$,
 } from '@builder.io/qwik';
 import {
   type DocumentHead,
@@ -52,10 +53,11 @@ export default component$(() => {
   const location = useLocation();
   const toggle = useSideBarToggle();
 
-  // Use model, code and logs signals
+  // Use model, code, logs and logs element signals
   const model = useSignal<NoSerialize<monaco.editor.ITextModel>>();
   const code = useSignal<string>('');
   const logs = useSignal<[LogLevel, string][]>([]);
+  const logsElement = useSignal<HTMLOListElement>();
 
   // Computed initial code of editor
   const initialCode = useComputed$(() => {
@@ -170,6 +172,16 @@ console.log(result);`;
     }
   });
 
+  // Scroll to the latest log message
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    track(() => logs.value);
+
+    if (logsElement.value) {
+      logsElement.value.scrollTop = logsElement.value.scrollHeight;
+    }
+  });
+
   return (
     <main
       class="flex w-full flex-1 flex-col lg:flex-row lg:space-x-10 lg:px-10 lg:py-20 2xl:max-w-[1700px] 2xl:space-x-14 2xl:self-center"
@@ -202,7 +214,10 @@ console.log(result);`;
         >
           <BinIcon class="h-[18px]" />
         </IconButton>
-        <ol class="flex h-full flex-col items-start overflow-auto overscroll-contain px-8 py-9 lg:absolute lg:w-full lg:rounded-3xl lg:border-[3px] lg:border-slate-200 lg:p-10 lg:dark:border-slate-800">
+        <ol
+          ref={logsElement}
+          class="flex h-full flex-col items-start overflow-auto overscroll-contain px-8 py-9 lg:absolute lg:w-full lg:rounded-3xl lg:border-[3px] lg:border-slate-200 lg:p-10 lg:dark:border-slate-800"
+        >
           {logs.value.map(([level, message], index) => (
             <li key={index}>
               <pre class="lg:text-lg">
