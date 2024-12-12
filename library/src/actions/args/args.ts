@@ -13,7 +13,7 @@ import type {
   BaseSchema,
   BaseTransformation,
   ErrorMessage,
-  InferInput,
+  InferOutput,
   TupleItems,
 } from '../../types/index.ts';
 import { ValiError } from '../../utils/index.ts';
@@ -42,7 +42,7 @@ export interface ArgsAction<
   TSchema extends Schema,
 > extends BaseTransformation<
     TInput,
-    (...args: InferInput<TSchema>) => ReturnType<TInput>,
+    (...args: InferOutput<TSchema>) => ReturnType<TInput>,
     never
   > {
   /**
