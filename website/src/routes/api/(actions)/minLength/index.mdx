@@ -62,7 +62,7 @@ Schema to validate an array with a minimum length of 5 items.
 ```ts
 const MinArraySchema = v.pipe(
   v.array(v.number()),
-  v.minLength(5, 'The array must contain 3 numbers or more.')
+  v.minLength(5, 'The array must contain 5 numbers or more.')
 );
 ```
 
