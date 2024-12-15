@@ -7,7 +7,7 @@ import { _addIssue, _stringify } from '../../utils/index.ts';
 import type { ValueInput } from '../types.ts';
 
 /**
- * Gt value issue type.
+ * Greater than value issue type.
  */
 export interface GtValueIssue<
   TInput extends ValueInput,
@@ -32,7 +32,7 @@ export interface GtValueIssue<
 }
 
 /**
- * Gt value action type.
+ * Greater than value action type.
  */
 export interface GtValueAction<
   TInput extends ValueInput,
@@ -62,11 +62,11 @@ export interface GtValueAction<
 }
 
 /**
- * Creates a gt value validation action.
+ * Creates a greater than value validation action.
  *
  * @param requirement The greater than value.
  *
- * @returns A gt value action.
+ * @returns A greater than value action.
  */
 export function gtValue<
   TInput extends ValueInput,
@@ -74,12 +74,12 @@ export function gtValue<
 >(requirement: TRequirement): GtValueAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a gt value validation action.
+ * Creates a greater than value validation action.
  *
  * @param requirement The greater than value.
  * @param message The error message.
  *
- * @returns A gt value action.
+ * @returns A greater than value action.
  */
 export function gtValue<
   TInput extends ValueInput,
