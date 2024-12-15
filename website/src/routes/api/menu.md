@@ -342,6 +342,8 @@
 - [GlobalConfig](/api/GlobalConfig/)
 - [GraphemesAction](/api/GraphemesAction/)
 - [GraphemesIssue](/api/GraphemesIssue/)
+- [GtValueAction](/api/GtValueAction/)
+- [GtValueIssue](/api/GtValueIssue/)
 - [HashAction](/api/HashAction/)
 - [HashIssue](/api/HashIssue/)
 - [HashType](/api/HashType/)
