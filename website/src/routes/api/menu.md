@@ -96,6 +96,7 @@
 - [findItem](/api/findItem/)
 - [finite](/api/finite/)
 - [graphemes](/api/graphemes/)
+- [gtValue](/api/gtValue/)
 - [hash](/api/hash/)
 - [hexadecimal](/api/hexadecimal/)
 - [hexColor](/api/hexColor/)
