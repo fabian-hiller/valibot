@@ -11,7 +11,7 @@ import type { ValueInput } from '../types.ts';
  */
 export interface GtValueIssue<
   TInput extends ValueInput,
-  TRequirement extends ValueInput,
+  TRequirement extends TInput,
 > extends BaseIssue<TInput> {
   /**
    * The issue kind.
