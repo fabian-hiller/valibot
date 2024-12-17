@@ -43,7 +43,7 @@ export interface EndsWithAction<
   TMessage extends
     | ErrorMessage<EndsWithIssue<TInput, TRequirement>>
     | undefined,
-> extends BaseValidation<TInput, TInput, EndsWithIssue<TInput, TRequirement>> {
+> extends BaseValidation<TInput, `${TInput}${TRequirement}`, EndsWithIssue<TInput, TRequirement>> {
   /**
    * The action type.
    */
