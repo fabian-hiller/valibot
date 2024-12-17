@@ -37,7 +37,7 @@ describe('startsWith', () => {
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<`foo${string}`>();
     });
 
     test('of issue', () => {
