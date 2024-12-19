@@ -4,7 +4,7 @@ import {
   startsWith,
   type StartsWithAction,
   type StartsWithIssue,
-} from './startsWith.ts';
+} from './startsWith.ts'; 
 
 describe('startsWith', () => {
   describe('should return action object', () => {
@@ -31,6 +31,7 @@ describe('startsWith', () => {
 
   describe('should infer correct types', () => {
     type Action = StartsWithAction<string, 'foo', undefined>;
+    type Action2 = StartsWithAction<InferOutput<Action>, 'bar', undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<string>();
@@ -40,6 +41,10 @@ describe('startsWith', () => {
       expectTypeOf<InferOutput<Action>>().toEqualTypeOf<`foo${string}`>();
     });
 
+    test('of output after pipe', () => {
+      expectTypeOf<InferOutput<Action2>>().toEqualTypeOf<`bar${string}`>();
+    });
+
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
         StartsWithIssue<string, 'foo'>
@@ -47,3 +52,4 @@ describe('startsWith', () => {
     });
   });
 });
+ 

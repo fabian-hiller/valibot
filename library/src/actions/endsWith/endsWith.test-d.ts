@@ -31,6 +31,8 @@ describe('endsWith', () => {
 
   describe('should infer correct types', () => {
     type Action = EndsWithAction<string, 'foo', undefined>;
+    type Action2 = EndsWithAction<InferOutput<Action>, 'bar', undefined>;
+
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<string>();
@@ -38,6 +40,10 @@ describe('endsWith', () => {
 
     test('of output', () => {
       expectTypeOf<InferOutput<Action>>().toEqualTypeOf<`${string}foo`>();
+    });
+
+    test('of output after pipe', () => {
+      expectTypeOf<InferOutput<Action2>>().toEqualTypeOf<`${string}bar`>();
     });
 
     test('of issue', () => {
