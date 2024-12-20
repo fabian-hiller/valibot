@@ -10,7 +10,7 @@
     "noEmit": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ESNext"
+    "target": "ES2020"
   },
   "include": ["src"]
 }
