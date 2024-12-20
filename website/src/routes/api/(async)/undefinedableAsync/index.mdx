@@ -70,9 +70,14 @@ const UndefinedableUsernameSchema = v.undefinedableAsync(
 Schema to validate new user details.
 
 ```ts
+import { isEmailUnique, isUsernameUnique } from '~/api';
+
 const NewUserSchema = v.objectAsync({
-  // Assume the email is checked
-  email: v.pipe(v.string(), v.email()),
+  email: v.pipeAsync(
+    v.string(),
+    v.email(),
+    v.checkAsync(isEmailUnique, 'The email is not unique.')
+  ),
   username: v.undefinedableAsync(
     v.pipeAsync(
       v.string(),
