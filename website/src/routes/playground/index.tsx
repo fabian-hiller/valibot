@@ -53,11 +53,14 @@ export default component$(() => {
   const location = useLocation();
   const toggle = useSideBarToggle();
 
-  // Use model, code, logs and logs element signals
+  // Use model, code and logs signals
   const model = useSignal<NoSerialize<monaco.editor.ITextModel>>();
   const code = useSignal<string>('');
   const logs = useSignal<[LogLevel, string][]>([]);
+
+  // Use logs and last log element signals
   const logsElement = useSignal<HTMLOListElement>();
+  const lastLogElement = useSignal<Element | null>();
 
   // Computed initial code of editor
   const initialCode = useComputed$(() => {
@@ -172,14 +175,12 @@ console.log(result);`;
     }
   });
 
-  // Scroll to the latest log message
+  // Scroll newest logs into view
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     track(() => logs.value);
-
-    if (logsElement.value) {
-      logsElement.value.scrollTop = logsElement.value.scrollHeight;
-    }
+    lastLogElement.value?.nextElementSibling?.scrollIntoView();
+    lastLogElement.value = logsElement.value?.lastElementChild;
   });
 
   return (
@@ -216,10 +217,10 @@ console.log(result);`;
         </IconButton>
         <ol
           ref={logsElement}
-          class="flex h-full flex-col items-start overflow-auto overscroll-contain px-8 py-9 lg:absolute lg:w-full lg:rounded-3xl lg:border-[3px] lg:border-slate-200 lg:p-10 lg:dark:border-slate-800"
+          class="flex h-full flex-col items-start overflow-auto overscroll-contain scroll-smooth px-8 py-9 lg:absolute lg:w-full lg:rounded-3xl lg:border-[3px] lg:border-slate-200 lg:p-10 lg:dark:border-slate-800"
         >
           {logs.value.map(([level, message], index) => (
-            <li key={index}>
+            <li key={index} class="scroll-mx-8 scroll-my-9 lg:scroll-m-10">
               <pre class="lg:text-lg">
                 [
                 <span
