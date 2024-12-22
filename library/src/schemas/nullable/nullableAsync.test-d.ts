@@ -1,4 +1,6 @@
 import { describe, expectTypeOf, test } from 'vitest';
+import type { TransformActionAsync } from '../../actions/index.ts';
+import type { SchemaWithPipeAsync } from '../../methods/index.ts';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import {
   string,
@@ -66,6 +68,12 @@ describe('nullableAsync', () => {
       StringSchema<undefined>,
       () => Promise<'foo'>
     >;
+    type Schema8 = NullableSchemaAsync<
+      SchemaWithPipeAsync<
+        [StringSchema<undefined>, TransformActionAsync<string, number>]
+      >,
+      'foo'
+    >;
 
     test('of input', () => {
       type Input = string | null;
@@ -76,6 +84,7 @@ describe('nullableAsync', () => {
       expectTypeOf<InferInput<Schema5>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema6>>().toEqualTypeOf<Input>();
       expectTypeOf<InferInput<Schema7>>().toEqualTypeOf<Input>();
+      expectTypeOf<InferInput<Schema8>>().toEqualTypeOf<Input>();
     });
 
     test('of output', () => {
@@ -86,6 +95,7 @@ describe('nullableAsync', () => {
       expectTypeOf<InferOutput<Schema5>>().toEqualTypeOf<string>();
       expectTypeOf<InferOutput<Schema6>>().toEqualTypeOf<string | null>();
       expectTypeOf<InferOutput<Schema7>>().toEqualTypeOf<string>();
+      expectTypeOf<InferOutput<Schema8>>().toEqualTypeOf<number>();
     });
 
     test('of issue', () => {
@@ -96,6 +106,7 @@ describe('nullableAsync', () => {
       expectTypeOf<InferIssue<Schema5>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema6>>().toEqualTypeOf<StringIssue>();
       expectTypeOf<InferIssue<Schema7>>().toEqualTypeOf<StringIssue>();
+      expectTypeOf<InferIssue<Schema8>>().toEqualTypeOf<StringIssue>();
     });
   });
 });

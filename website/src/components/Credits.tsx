@@ -89,13 +89,11 @@ export const Credits = component$(() => {
           'ruiaraujo012',
           'hyunbinseo',
           'F0rce',
-          'fabulousgk',
+          'Unique-Pixels',
           'jdgamble555',
-          'isoden',
           'nickytonline',
+          'KubaJastrz',
           'caegdeveloper',
-          'luckasnix',
-          'andrew-3kb',
           'dslatkin',
         ].map((sponsor) => (
           <li key={sponsor}>
