@@ -9,6 +9,15 @@ describe('enum_', () => {
     option3 = 'baz',
   }
   type Options = typeof options;
+  const enumLikeObject = {
+    1: 'foo',
+    '1.7976931348623157e+308': 'bar',
+    '1.7976931348623157e308': 'baz',
+    '5e-324': 'qux',
+    NaN: 'NaN',
+    Infinity: 'Infinity',
+  } as const;
+  type EnumLikeObject = typeof enumLikeObject;
 
   describe('should return schema object', () => {
     const baseSchema: Omit<EnumSchema<Options, never>, 'message'> = {
@@ -53,6 +62,47 @@ describe('enum_', () => {
       } satisfies EnumSchema<Options, typeof message>);
     });
   });
+  describe('should return schema object for enum like object', () => {
+    const baseSchema: Omit<EnumSchema<EnumLikeObject, never>, 'message'> = {
+      kind: 'schema',
+      type: 'enum',
+      reference: enum_,
+      expects: '"baz"',
+      enum: enumLikeObject,
+      options: ['baz'],
+      async: false,
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
+    };
+
+    test('with undefined message', () => {
+      const schema: EnumSchema<EnumLikeObject, undefined> = {
+        ...baseSchema,
+        message: undefined,
+      };
+      expect(enum_(enumLikeObject)).toStrictEqual(schema);
+      expect(enum_(enumLikeObject, undefined)).toStrictEqual(schema);
+    });
+
+    test('with string message', () => {
+      expect(enum_(enumLikeObject, 'message')).toStrictEqual({
+        ...baseSchema,
+        message: 'message',
+      } satisfies EnumSchema<EnumLikeObject, 'message'>);
+    });
+
+    test('with function message', () => {
+      const message = () => 'message';
+      expect(enum_(enumLikeObject, message)).toStrictEqual({
+        ...baseSchema,
+        message,
+      } satisfies EnumSchema<EnumLikeObject, typeof message>);
+    });
+  });
 
   describe('should return dataset without issues', () => {
     test('for valid options', () => {
@@ -66,6 +116,18 @@ describe('enum_', () => {
     test('for valid values', () => {
       // @ts-expect-error
       expectNoSchemaIssue(enum_(options), ['foo', 'bar', 'baz']);
+    });
+  });
+
+  describe('should return dataset without issues for enum like object', () => {
+    test('for valid options', () => {
+      expectNoSchemaIssue(enum_(enumLikeObject), [
+        enumLikeObject['1.7976931348623157e308'],
+      ]);
+    });
+
+    test('for valid values', () => {
+      expectNoSchemaIssue(enum_(enumLikeObject), ['baz']);
     });
   });
 
@@ -135,6 +197,25 @@ describe('enum_', () => {
 
     test('for objects', () => {
       expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    });
+  });
+  describe('should return dataset with issues for enum like object', () => {
+    const schema = enum_(enumLikeObject, 'message');
+    const baseIssue: Omit<EnumIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'enum',
+      expected: '"baz"',
+      message: 'message',
+    };
+
+    test('for invalid options', () => {
+      expectSchemaIssue(schema, baseIssue, [
+        'foo',
+        'bar',
+        'qux',
+        'NaN',
+        'Infinity',
+      ]);
     });
   });
 });
