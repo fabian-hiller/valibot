@@ -98,6 +98,7 @@ export function minLength<
   message: TMessage
 ): MinLengthAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function minLength(
   requirement: number,
   message?: ErrorMessage<MinLengthIssue<LengthInput, number>>

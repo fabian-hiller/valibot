@@ -76,6 +76,7 @@ export function nonEmpty<
   const TMessage extends ErrorMessage<NonEmptyIssue<TInput>> | undefined,
 >(message: TMessage): NonEmptyAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonEmpty(
   message?: ErrorMessage<NonEmptyIssue<LengthInput>>
 ): NonEmptyAction<

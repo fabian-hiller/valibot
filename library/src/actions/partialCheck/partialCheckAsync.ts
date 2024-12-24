@@ -83,6 +83,7 @@ export function partialCheckAsync<
   message: TMessage
 ): PartialCheckActionAsync<TInput, TPathList, TSelection, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function partialCheckAsync(
   pathList: PathKeys<PartialInput>[],
   requirement: (input: PartialInput) => MaybePromise<boolean>,

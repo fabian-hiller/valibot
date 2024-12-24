@@ -28,6 +28,8 @@ export interface AnySchema extends BaseSchema<any, any, never> {
  * unknown data.
  *
  * @returns An any schema.
+ *
+ * @__NO_SIDE_EFFECTS__
  */
 export function any(): AnySchema {
   return {

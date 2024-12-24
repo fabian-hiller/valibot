@@ -66,6 +66,7 @@ export function bigint<
   const TMessage extends ErrorMessage<BigintIssue> | undefined,
 >(message: TMessage): BigintSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function bigint(
   message?: ErrorMessage<BigintIssue>
 ): BigintSchema<ErrorMessage<BigintIssue> | undefined> {

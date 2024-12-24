@@ -84,6 +84,7 @@ export function hexadecimal<
   const TMessage extends ErrorMessage<HexadecimalIssue<TInput>> | undefined,
 >(message: TMessage): HexadecimalAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function hexadecimal(
   message?: ErrorMessage<HexadecimalIssue<string>>
 ): HexadecimalAction<

@@ -69,6 +69,7 @@ export function nonNullish<
   const TMessage extends ErrorMessage<NonNullishIssue> | undefined,
 >(wrapped: TWrapped, message: TMessage): NonNullishSchema<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullish(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<NonNullishIssue> | undefined

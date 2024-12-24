@@ -19,6 +19,8 @@ export interface ToLowerCaseAction
  * Creates a to lower case transformation action.
  *
  * @returns A to lower case action.
+ * 
+ * @__NO_SIDE_EFFECTS__
  */
 export function toLowerCase(): ToLowerCaseAction {
   return {

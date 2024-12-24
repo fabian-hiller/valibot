@@ -28,6 +28,8 @@ export interface TransformActionAsync<TInput, TOutput>
  * @param operation The transformation operation.
  *
  * @returns A transform action.
+ * 
+ * @__NO_SIDE_EFFECTS__
  */
 export function transformAsync<TInput, TOutput>(
   operation: (input: TInput) => Promise<TOutput>

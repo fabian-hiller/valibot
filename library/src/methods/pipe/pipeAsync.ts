@@ -3051,6 +3051,7 @@ export function pipeAsync<
   )[],
 >(schema: TSchema, ...items: TItems): SchemaWithPipeAsync<[TSchema, ...TItems]>;
 
+// @__NO_SIDE_EFFECTS__
 export function pipeAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

@@ -58,6 +58,7 @@ export function safeParserAsync<
   const TConfig extends Config<InferIssue<TSchema>> | undefined,
 >(schema: TSchema, config: TConfig): SafeParserAsync<TSchema, TConfig>;
 
+// @__NO_SIDE_EFFECTS__
 export function safeParserAsync(
   schema:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

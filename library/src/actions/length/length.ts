@@ -96,6 +96,7 @@ export function length<
   message: TMessage
 ): LengthAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function length(
   requirement: number,
   message?: ErrorMessage<LengthIssue<LengthInput, number>>

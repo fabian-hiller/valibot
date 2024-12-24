@@ -74,6 +74,7 @@ export function intersectAsync<
   message: TMessage
 ): IntersectSchemaAsync<TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function intersectAsync(
   options: IntersectOptionsAsync,
   message?: ErrorMessage<IntersectIssue>

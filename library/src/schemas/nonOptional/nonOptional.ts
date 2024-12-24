@@ -69,6 +69,7 @@ export function nonOptional<
   const TMessage extends ErrorMessage<NonOptionalIssue> | undefined,
 >(wrapped: TWrapped, message: TMessage): NonOptionalSchema<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonOptional(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<NonOptionalIssue> | undefined

@@ -19,6 +19,8 @@ export interface ToUpperCaseAction
  * Creates a to upper case transformation action.
  *
  * @returns A to upper case action.
+ * 
+ * @__NO_SIDE_EFFECTS__
  */
 export function toUpperCase(): ToUpperCaseAction {
   return {
