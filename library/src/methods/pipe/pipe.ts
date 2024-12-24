@@ -2666,6 +2666,7 @@ export function pipe<
   >[],
 >(schema: TSchema, ...items: TItems): SchemaWithPipe<[TSchema, ...TItems]>;
 
+// @__NO_SIDE_EFFECTS__
 export function pipe<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   const TItems extends PipeItem<unknown, unknown, BaseIssue<unknown>>[],

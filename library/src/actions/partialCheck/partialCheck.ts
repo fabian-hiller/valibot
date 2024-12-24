@@ -82,6 +82,7 @@ export function partialCheck<
   message: TMessage
 ): PartialCheckAction<TInput, TPathList, TSelection, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function partialCheck(
   pathList: PathKeys<PartialInput>[],
   requirement: (input: PartialInput) => boolean,

@@ -77,6 +77,7 @@ export function nullableAsync<
   default_: TDefault
 ): NullableSchemaAsync<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function nullableAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

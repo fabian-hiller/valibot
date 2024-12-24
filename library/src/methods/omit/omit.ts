@@ -462,6 +462,8 @@ export type SchemaWithOmit<
  * @param keys The selected entries.
  *
  * @returns An object schema.
+ * 
+ * @__NO_SIDE_EFFECTS__
  */
 export function omit<
   const TSchema extends Schema,

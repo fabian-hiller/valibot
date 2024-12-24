@@ -97,6 +97,7 @@ export function notBytes<
   message: TMessage
 ): NotBytesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notBytes(
   requirement: number,
   message?: ErrorMessage<NotBytesIssue<string, number>>

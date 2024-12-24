@@ -101,6 +101,7 @@ export function multipleOf<
   message: TMessage
 ): MultipleOfAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function multipleOf(
   requirement: number,
   message?: ErrorMessage<MultipleOfIssue<number, number>>

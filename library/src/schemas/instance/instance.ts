@@ -83,6 +83,7 @@ export function instance<
   const TMessage extends ErrorMessage<InstanceIssue> | undefined,
 >(class_: TClass, message: TMessage): InstanceSchema<TClass, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function instance(
   class_: Class,
   message?: ErrorMessage<InstanceIssue>

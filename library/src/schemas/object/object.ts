@@ -78,6 +78,7 @@ export function object<
   const TMessage extends ErrorMessage<ObjectIssue> | undefined,
 >(entries: TEntries, message: TMessage): ObjectSchema<TEntries, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function object(
   entries: ObjectEntries,
   message?: ErrorMessage<ObjectIssue>

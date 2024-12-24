@@ -66,6 +66,7 @@ export function null_<
   const TMessage extends ErrorMessage<NullIssue> | undefined,
 >(message: TMessage): NullSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function null_(
   message?: ErrorMessage<NullIssue>
 ): NullSchema<ErrorMessage<NullIssue> | undefined> {

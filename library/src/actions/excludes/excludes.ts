@@ -94,6 +94,7 @@ export function excludes<
   message: TMessage
 ): ExcludesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function excludes(
   requirement: ContentRequirement<ContentInput>,
   message?: ErrorMessage<

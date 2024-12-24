@@ -75,6 +75,7 @@ export function looseObjectAsync<
   message: TMessage
 ): LooseObjectSchemaAsync<TEntries, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function looseObjectAsync(
   entries: ObjectEntriesAsync,
   message?: ErrorMessage<LooseObjectIssue>

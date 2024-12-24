@@ -58,6 +58,7 @@ export function check<
   message: TMessage
 ): CheckAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function check(
   requirement: (input: unknown) => boolean,
   message?: ErrorMessage<CheckIssue<unknown>>

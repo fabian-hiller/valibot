@@ -66,6 +66,7 @@ export function never<
   const TMessage extends ErrorMessage<NeverIssue> | undefined,
 >(message: TMessage): NeverSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function never(
   message?: ErrorMessage<NeverIssue>
 ): NeverSchema<ErrorMessage<NeverIssue> | undefined> {

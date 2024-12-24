@@ -96,6 +96,7 @@ export function argsAsync<
   TSchema extends Schema,
 >(schema: TSchema): ArgsActionAsync<TInput, TSchema>;
 
+// @__NO_SIDE_EFFECTS__
 export function argsAsync(
   schema: Schema
 ): ArgsActionAsync<(...args: unknown[]) => unknown, Schema> {

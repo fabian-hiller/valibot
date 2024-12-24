@@ -112,6 +112,7 @@ export function hash<
   message: TMessage
 ): HashAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function hash(
   types: [HashType, ...HashType[]],
   message?: ErrorMessage<HashIssue<string>>

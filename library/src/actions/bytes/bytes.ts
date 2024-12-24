@@ -92,6 +92,7 @@ export function bytes<
   message: TMessage
 ): BytesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function bytes(
   requirement: number,
   message?: ErrorMessage<BytesIssue<string, number>>

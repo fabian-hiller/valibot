@@ -66,6 +66,7 @@ export function file<
   const TMessage extends ErrorMessage<FileIssue> | undefined,
 >(message: TMessage): FileSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function file(
   message?: ErrorMessage<FileIssue>
 ): FileSchema<ErrorMessage<FileIssue> | undefined> {

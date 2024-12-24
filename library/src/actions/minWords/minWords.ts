@@ -110,6 +110,7 @@ export function minWords<
   message: TMessage
 ): MinWordsAction<TInput, TLocales, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function minWords(
   locales: Intl.LocalesArgument,
   requirement: number,

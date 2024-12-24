@@ -85,6 +85,7 @@ export function everyItem<
   message: TMessage
 ): EveryItemAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function everyItem(
   requirement: ArrayRequirement<unknown[]>,
   message?: ErrorMessage<EveryItemIssue<unknown[]>>

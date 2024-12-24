@@ -79,6 +79,7 @@ export function flatten<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 >(issues: [InferIssue<TSchema>, ...InferIssue<TSchema>[]]): FlatErrors<TSchema>;
 
+// @__NO_SIDE_EFFECTS__
 export function flatten(
   issues: [BaseIssue<unknown>, ...BaseIssue<unknown>[]]
 ): FlatErrors<undefined> {

@@ -79,6 +79,7 @@ export function nonNullableAsync<
   message: TMessage
 ): NonNullableSchemaAsync<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullableAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

@@ -97,6 +97,7 @@ export function graphemes<
   message: TMessage
 ): GraphemesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function graphemes(
   requirement: number,
   message?: ErrorMessage<GraphemesIssue<string, number>>

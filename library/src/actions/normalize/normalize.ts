@@ -42,6 +42,7 @@ export function normalize<TForm extends NormalizeForm | undefined>(
   form: TForm
 ): NormalizeAction<TForm>;
 
+// @__NO_SIDE_EFFECTS__
 export function normalize(
   form?: NormalizeForm
 ): NormalizeAction<NormalizeForm | undefined> {

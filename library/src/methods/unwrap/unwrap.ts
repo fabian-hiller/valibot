@@ -30,6 +30,8 @@ import type {
  * @param schema The schema to be unwrapped.
  *
  * @returns The unwrapped schema.
+ * 
+ * @__NO_SIDE_EFFECTS__
  */
 export function unwrap<
   TSchema extends

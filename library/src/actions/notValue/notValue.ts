@@ -94,6 +94,7 @@ export function notValue<
   message: TMessage
 ): NotValueAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notValue(
   requirement: ValueInput,
   message?: ErrorMessage<NotValueIssue<ValueInput, ValueInput>>

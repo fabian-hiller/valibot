@@ -93,6 +93,7 @@ export function isoWeek<
   const TMessage extends ErrorMessage<IsoWeekIssue<TInput>> | undefined,
 >(message: TMessage): IsoWeekAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function isoWeek(
   message?: ErrorMessage<IsoWeekIssue<string>>
 ): IsoWeekAction<string, ErrorMessage<IsoWeekIssue<string>> | undefined> {

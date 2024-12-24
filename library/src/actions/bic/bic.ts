@@ -80,6 +80,7 @@ export function bic<
   const TMessage extends ErrorMessage<BicIssue<TInput>> | undefined,
 >(message: TMessage): BicAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function bic(
   message?: ErrorMessage<BicIssue<string>>
 ): BicAction<string, ErrorMessage<BicIssue<string>> | undefined> {

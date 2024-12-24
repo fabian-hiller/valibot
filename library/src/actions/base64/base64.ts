@@ -83,6 +83,7 @@ export function base64<
   const TMessage extends ErrorMessage<Base64Issue<TInput>> | undefined,
 >(message: TMessage): Base64Action<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function base64(
   message?: ErrorMessage<Base64Issue<string>>
 ): Base64Action<string, ErrorMessage<Base64Issue<string>> | undefined> {

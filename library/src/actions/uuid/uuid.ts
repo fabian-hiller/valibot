@@ -80,6 +80,7 @@ export function uuid<
   const TMessage extends ErrorMessage<UuidIssue<TInput>> | undefined,
 >(message: TMessage): UuidAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function uuid(
   message?: ErrorMessage<UuidIssue<string>>
 ): UuidAction<string, ErrorMessage<UuidIssue<string>> | undefined> {

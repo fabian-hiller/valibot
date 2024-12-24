@@ -93,6 +93,7 @@ export function keyof<
   message: TMessage
 ): PicklistSchema<ObjectKeys<TSchema>, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function keyof(
   schema: Schema,
   message?: ErrorMessage<PicklistIssue>

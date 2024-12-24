@@ -50,7 +50,7 @@ module.exports = {
     'jsdoc/check-tag-names': [
       'error',
       {
-        definedTags: ['alpha', 'beta'],
+        definedTags: ['alpha', 'beta', '__NO_SIDE_EFFECTS__'],
       },
     ],
 

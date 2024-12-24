@@ -83,6 +83,7 @@ export function decimal<
   const TMessage extends ErrorMessage<DecimalIssue<TInput>> | undefined,
 >(message: TMessage): DecimalAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function decimal(
   message?: ErrorMessage<DecimalIssue<string>>
 ): DecimalAction<string, ErrorMessage<DecimalIssue<string>> | undefined> {

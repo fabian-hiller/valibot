@@ -18,6 +18,8 @@ export interface TrimAction extends BaseTransformation<string, string, never> {
  * Creates a trim transformation action.
  *
  * @returns A trim action.
+ * 
+ * @__NO_SIDE_EFFECTS__
  */
 export function trim(): TrimAction {
   return {

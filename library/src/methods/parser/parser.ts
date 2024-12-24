@@ -52,6 +52,7 @@ export function parser<
   const TConfig extends Config<InferIssue<TSchema>> | undefined,
 >(schema: TSchema, config: TConfig): Parser<TSchema, TConfig>;
 
+// @__NO_SIDE_EFFECTS__
 export function parser(
   schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   config?: Config<InferIssue<BaseSchema<unknown, unknown, BaseIssue<unknown>>>>

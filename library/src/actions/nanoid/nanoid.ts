@@ -83,6 +83,7 @@ export function nanoid<
   const TMessage extends ErrorMessage<NanoIDIssue<TInput>> | undefined,
 >(message: TMessage): NanoIDAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nanoid(
   message?: ErrorMessage<NanoIDIssue<string>>
 ): NanoIDAction<string, ErrorMessage<NanoIDIssue<string>> | undefined> {

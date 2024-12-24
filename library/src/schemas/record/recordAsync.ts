@@ -100,6 +100,7 @@ export function recordAsync<
   message: TMessage
 ): RecordSchemaAsync<TKey, TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function recordAsync(
   key:
     | BaseSchema<string, string | number | symbol, BaseIssue<unknown>>

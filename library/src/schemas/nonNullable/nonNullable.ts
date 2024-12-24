@@ -69,6 +69,7 @@ export function nonNullable<
   const TMessage extends ErrorMessage<NonNullableIssue> | undefined,
 >(wrapped: TWrapped, message: TMessage): NonNullableSchema<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullable(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<NonNullableIssue> | undefined

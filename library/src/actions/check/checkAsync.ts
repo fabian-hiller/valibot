@@ -62,6 +62,7 @@ export function checkAsync<
   message: TMessage
 ): CheckActionAsync<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function checkAsync(
   requirement: (input: unknown) => MaybePromise<boolean>,
   message?: ErrorMessage<CheckIssue<unknown>>

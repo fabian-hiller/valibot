@@ -76,6 +76,7 @@ export function empty<
   const TMessage extends ErrorMessage<EmptyIssue<TInput>> | undefined,
 >(message: TMessage): EmptyAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function empty(
   message?: ErrorMessage<EmptyIssue<LengthInput>>
 ): EmptyAction<LengthInput, ErrorMessage<EmptyIssue<LengthInput>> | undefined> {

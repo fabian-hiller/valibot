@@ -55,6 +55,7 @@ export function returnsAsync<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 >(schema: TSchema): ReturnsActionAsync<TInput, TSchema>;
 
+// @__NO_SIDE_EFFECTS__
 export function returnsAsync(
   schema:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

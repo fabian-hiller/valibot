@@ -79,6 +79,7 @@ export function nonNullishAsync<
   message: TMessage
 ): NonNullishSchemaAsync<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullishAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

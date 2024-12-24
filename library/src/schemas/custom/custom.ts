@@ -64,6 +64,7 @@ export function custom<
     | undefined,
 >(check: Check, message: TMessage): CustomSchema<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function custom<TInput>(
   check: Check,
   message?: ErrorMessage<CustomIssue>

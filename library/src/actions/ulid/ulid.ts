@@ -80,6 +80,7 @@ export function ulid<
   const TMessage extends ErrorMessage<UlidIssue<TInput>> | undefined,
 >(message: TMessage): UlidAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function ulid(
   message?: ErrorMessage<UlidIssue<string>>
 ): UlidAction<string, ErrorMessage<UlidIssue<string>> | undefined> {

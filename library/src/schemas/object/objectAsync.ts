@@ -78,6 +78,7 @@ export function objectAsync<
   const TMessage extends ErrorMessage<ObjectIssue> | undefined,
 >(entries: TEntries, message: TMessage): ObjectSchemaAsync<TEntries, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function objectAsync(
   entries: ObjectEntriesAsync,
   message?: ErrorMessage<ObjectIssue>

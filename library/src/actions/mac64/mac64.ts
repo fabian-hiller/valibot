@@ -80,6 +80,7 @@ export function mac64<
   const TMessage extends ErrorMessage<Mac64Issue<TInput>> | undefined,
 >(message: TMessage): Mac64Action<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function mac64(
   message?: ErrorMessage<Mac64Issue<string>>
 ): Mac64Action<string, ErrorMessage<Mac64Issue<string>> | undefined> {

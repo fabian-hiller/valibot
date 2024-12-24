@@ -114,6 +114,7 @@ export function creditCard<
   const TMessage extends ErrorMessage<CreditCardIssue<TInput>> | undefined,
 >(message: TMessage): CreditCardAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function creditCard(
   message?: ErrorMessage<CreditCardIssue<string>>
 ): CreditCardAction<string, ErrorMessage<CreditCardIssue<string>> | undefined> {

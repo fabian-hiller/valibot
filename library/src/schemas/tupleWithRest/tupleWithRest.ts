@@ -85,6 +85,7 @@ export function tupleWithRest<
   message: TMessage
 ): TupleWithRestSchema<TItems, TRest, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function tupleWithRest(
   items: TupleItems,
   rest: BaseSchema<unknown, unknown, BaseIssue<unknown>>,

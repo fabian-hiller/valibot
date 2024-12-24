@@ -67,6 +67,7 @@ export function optional<
   const TDefault extends Default<TWrapped, undefined>,
 >(wrapped: TWrapped, default_: TDefault): OptionalSchema<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function optional(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   default_?: unknown

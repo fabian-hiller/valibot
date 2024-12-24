@@ -69,6 +69,7 @@ export function strictTupleAsync<
   const TMessage extends ErrorMessage<StrictTupleIssue> | undefined,
 >(items: TItems, message: TMessage): StrictTupleSchemaAsync<TItems, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function strictTupleAsync(
   items: TupleItemsAsync,
   message?: ErrorMessage<StrictTupleIssue>

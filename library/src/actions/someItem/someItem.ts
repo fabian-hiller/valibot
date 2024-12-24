@@ -85,6 +85,7 @@ export function someItem<
   message: TMessage
 ): SomeItemAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function someItem(
   requirement: ArrayRequirement<unknown[]>,
   message?: ErrorMessage<SomeItemIssue<unknown[]>>

@@ -97,6 +97,7 @@ export function endsWith<
   message: TMessage
 ): EndsWithAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function endsWith(
   requirement: string,
   message?: ErrorMessage<EndsWithIssue<string, string>>

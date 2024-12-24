@@ -88,6 +88,7 @@ export function isoTimeSecond<
   const TMessage extends ErrorMessage<IsoTimeSecondIssue<TInput>> | undefined,
 >(message: TMessage): IsoTimeSecondAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function isoTimeSecond(
   message?: ErrorMessage<IsoTimeSecondIssue<string>>
 ): IsoTimeSecondAction<

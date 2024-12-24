@@ -84,6 +84,7 @@ export function regex<
   const TMessage extends ErrorMessage<RegexIssue<TInput>> | undefined,
 >(requirement: RegExp, message: TMessage): RegexAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function regex(
   requirement: RegExp,
   message?: ErrorMessage<RegexIssue<string>>

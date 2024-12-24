@@ -66,6 +66,7 @@ export function boolean<
   const TMessage extends ErrorMessage<BooleanIssue> | undefined,
 >(message: TMessage): BooleanSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function boolean(
   message?: ErrorMessage<BooleanIssue>
 ): BooleanSchema<ErrorMessage<BooleanIssue> | undefined> {

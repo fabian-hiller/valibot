@@ -79,6 +79,7 @@ export function tupleAsync<
   const TMessage extends ErrorMessage<TupleIssue> | undefined,
 >(items: TItems, message: TMessage): TupleSchemaAsync<TItems, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function tupleAsync(
   items: TupleItemsAsync,
   message?: ErrorMessage<TupleIssue>

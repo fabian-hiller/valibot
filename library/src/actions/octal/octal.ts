@@ -80,6 +80,7 @@ export function octal<
   const TMessage extends ErrorMessage<OctalIssue<TInput>> | undefined,
 >(message: TMessage): OctalAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function octal(
   message?: ErrorMessage<OctalIssue<string>>
 ): OctalAction<string, ErrorMessage<OctalIssue<string>> | undefined> {

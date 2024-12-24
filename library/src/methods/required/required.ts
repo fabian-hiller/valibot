@@ -311,6 +311,7 @@ export function required<
   message: TMessage
 ): SchemaWithRequired<TSchema, TKeys, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function required(
   schema: Schema,
   arg2?: ErrorMessage<NonOptionalIssue> | ObjectKeys<Schema>,

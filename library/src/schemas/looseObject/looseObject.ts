@@ -72,6 +72,7 @@ export function looseObject<
   const TMessage extends ErrorMessage<LooseObjectIssue> | undefined,
 >(entries: TEntries, message: TMessage): LooseObjectSchema<TEntries, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function looseObject(
   entries: ObjectEntries,
   message?: ErrorMessage<LooseObjectIssue>

@@ -84,6 +84,7 @@ export function picklist<
   const TMessage extends ErrorMessage<PicklistIssue> | undefined,
 >(options: TOptions, message: TMessage): PicklistSchema<TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function picklist(
   options: PicklistOptions,
   message?: ErrorMessage<PicklistIssue>

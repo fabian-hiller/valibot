@@ -71,6 +71,7 @@ export function strictObjectAsync<
   message: TMessage
 ): StrictObjectSchemaAsync<TEntries, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function strictObjectAsync(
   entries: ObjectEntriesAsync,
   message?: ErrorMessage<StrictObjectIssue>

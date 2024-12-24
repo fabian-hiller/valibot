@@ -462,6 +462,8 @@ export type SchemaWithPick<
  * @param keys The selected entries.
  *
  * @returns An object schema.
+ * 
+ * @__NO_SIDE_EFFECTS__
  */
 export function pick<
   const TSchema extends Schema,

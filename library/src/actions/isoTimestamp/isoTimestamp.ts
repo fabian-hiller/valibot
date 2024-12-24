@@ -111,6 +111,7 @@ export function isoTimestamp<
   const TMessage extends ErrorMessage<IsoTimestampIssue<TInput>> | undefined,
 >(message: TMessage): IsoTimestampAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function isoTimestamp(
   message?: ErrorMessage<IsoTimestampIssue<string>>
 ): IsoTimestampAction<

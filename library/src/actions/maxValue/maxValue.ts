@@ -94,6 +94,7 @@ export function maxValue<
   message: TMessage
 ): MaxValueAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function maxValue(
   requirement: ValueInput,
   message?: ErrorMessage<MaxValueIssue<ValueInput, ValueInput>>

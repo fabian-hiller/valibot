@@ -83,6 +83,7 @@ export function union<
     | undefined,
 >(options: TOptions, message: TMessage): UnionSchema<TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function union(
   options: UnionOptions,
   message?: ErrorMessage<UnionIssue<BaseIssue<unknown>>>

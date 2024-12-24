@@ -74,6 +74,7 @@ export function args<
   TSchema extends Schema,
 >(schema: TSchema): ArgsAction<TInput, TSchema>;
 
+// @__NO_SIDE_EFFECTS__
 export function args(
   schema: Schema
 ): ArgsAction<(...args: unknown[]) => unknown, Schema> {

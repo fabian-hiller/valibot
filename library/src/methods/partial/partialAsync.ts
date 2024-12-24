@@ -277,6 +277,7 @@ export function partialAsync<
   const TKeys extends ObjectKeys<TSchema>,
 >(schema: TSchema, keys: TKeys): SchemaWithPartialAsync<TSchema, TKeys>;
 
+// @__NO_SIDE_EFFECTS__
 export function partialAsync(
   schema: Schema,
   keys?: ObjectKeys<Schema>

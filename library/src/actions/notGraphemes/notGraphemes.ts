@@ -103,6 +103,7 @@ export function notGraphemes<
   message: TMessage
 ): NotGraphemesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notGraphemes(
   requirement: number,
   message?: ErrorMessage<NotGraphemesIssue<string, number>>

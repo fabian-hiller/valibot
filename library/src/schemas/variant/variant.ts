@@ -88,6 +88,7 @@ export function variant<
   message: TMessage
 ): VariantSchema<TKey, TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function variant(
   key: string,
   options: VariantOptions<string>,

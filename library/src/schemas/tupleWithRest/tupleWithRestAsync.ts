@@ -95,6 +95,7 @@ export function tupleWithRestAsync<
   message: TMessage
 ): TupleWithRestSchemaAsync<TItems, TRest, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function tupleWithRestAsync(
   items: TupleItemsAsync,
   rest:

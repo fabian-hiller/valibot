@@ -67,6 +67,7 @@ export function customAsync<
     | undefined,
 >(check: CheckAsync, message: TMessage): CustomSchemaAsync<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function customAsync<TInput>(
   check: CheckAsync,
   message?: ErrorMessage<CustomIssue>

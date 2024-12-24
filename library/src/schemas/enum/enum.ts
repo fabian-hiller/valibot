@@ -89,6 +89,7 @@ export function enum_<
   const TMessage extends ErrorMessage<EnumIssue> | undefined,
 >(enum__: TEnum, message: TMessage): EnumSchema<TEnum, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function enum_(
   enum__: Enum,
   message?: ErrorMessage<EnumIssue>

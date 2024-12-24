@@ -71,6 +71,7 @@ export function intersect<
   const TMessage extends ErrorMessage<IntersectIssue> | undefined,
 >(options: TOptions, message: TMessage): IntersectSchema<TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function intersect(
   options: IntersectOptions,
   message?: ErrorMessage<IntersectIssue>

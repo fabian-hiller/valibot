@@ -59,6 +59,7 @@ export function checkItems<
   message: TMessage
 ): CheckItemsAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function checkItems(
   requirement: ArrayRequirement<unknown[]>,
   message?: ErrorMessage<CheckItemsIssue<unknown[]>>

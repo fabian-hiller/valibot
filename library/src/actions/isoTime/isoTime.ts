@@ -87,6 +87,7 @@ export function isoTime<
   const TMessage extends ErrorMessage<IsoTimeIssue<TInput>> | undefined,
 >(message: TMessage): IsoTimeAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function isoTime(
   message?: ErrorMessage<IsoTimeIssue<string>>
 ): IsoTimeAction<string, ErrorMessage<IsoTimeIssue<string>> | undefined> {

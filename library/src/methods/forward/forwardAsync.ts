@@ -20,6 +20,8 @@ import type {
  * @param pathKeys The path keys.
  *
  * @returns The modified action.
+ * 
+ * @__NO_SIDE_EFFECTS__
  */
 export function forwardAsync<
   TInput extends Record<string, unknown> | ArrayLike<unknown>,

@@ -27,6 +27,8 @@ export interface RawCheckActionAsync<TInput>
  * @param action The validation action.
  *
  * @returns A raw check action.
+ * 
+ * @__NO_SIDE_EFFECTS__
  */
 export function rawCheckAsync<TInput>(
   action: (context: Context<TInput>) => MaybePromise<void>

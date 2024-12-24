@@ -80,6 +80,7 @@ export function ipv6<
   const TMessage extends ErrorMessage<Ipv6Issue<TInput>> | undefined,
 >(message: TMessage): Ipv6Action<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function ipv6(
   message?: ErrorMessage<Ipv6Issue<string>>
 ): Ipv6Action<string, ErrorMessage<Ipv6Issue<string>> | undefined> {

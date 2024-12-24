@@ -19,6 +19,8 @@ export interface ReadonlyAction<TInput>
  * Creates a readonly transformation action.
  *
  * @returns A readonly action.
+ * 
+ * @__NO_SIDE_EFFECTS__
  */
 export function readonly<TInput>(): ReadonlyAction<TInput> {
   return {

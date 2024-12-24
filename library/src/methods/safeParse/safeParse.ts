@@ -15,6 +15,8 @@ import type { SafeParseResult } from './types.ts';
  * @param config The parse configuration.
  *
  * @returns The parse result.
+ * 
+ * @__NO_SIDE_EFFECTS__
  */
 export function safeParse<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

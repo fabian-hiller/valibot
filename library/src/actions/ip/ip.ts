@@ -80,6 +80,7 @@ export function ip<
   const TMessage extends ErrorMessage<IpIssue<TInput>> | undefined,
 >(message: TMessage): IpAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function ip(
   message?: ErrorMessage<IpIssue<string>>
 ): IpAction<string, ErrorMessage<IpIssue<string>> | undefined> {

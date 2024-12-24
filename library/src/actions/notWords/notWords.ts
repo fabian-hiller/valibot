@@ -110,6 +110,7 @@ export function notWords<
   message: TMessage
 ): NotWordsAction<TInput, TLocales, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notWords(
   locales: Intl.LocalesArgument,
   requirement: number,
