@@ -25,6 +25,7 @@ export type Language = {
     | 'sv'
     | 'tr'
     | 'uk'
+    | 'vi'
     | 'zh-CN'
     | 'zh-TW';
   schema: ErrorMessage<BaseIssue<unknown>>;
