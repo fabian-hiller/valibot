@@ -31,6 +31,7 @@ import type {
  *
  * @returns The unwrapped schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function unwrap<
   TSchema extends
     | NonNullableSchema<

@@ -9,6 +9,7 @@ let segmenter: Intl.Segmenter;
  *
  * @internal
  */
+// @__NO_SIDE_EFFECTS__
 export function _getGraphemeCount(input: string): number {
   if (!segmenter) {
     segmenter = new Intl.Segmenter();

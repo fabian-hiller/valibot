@@ -66,6 +66,7 @@ export function set<
   const TMessage extends ErrorMessage<SetIssue> | undefined,
 >(value: TValue, message: TMessage): SetSchema<TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function set(
   value: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<SetIssue>

@@ -26,6 +26,7 @@ export interface DescriptionAction<TInput, TDescription extends string>
  *
  * @returns A description action.
  */
+// @__NO_SIDE_EFFECTS__
 export function description<TInput, TDescription extends string>(
   description_: TDescription
 ): DescriptionAction<TInput, TDescription> {

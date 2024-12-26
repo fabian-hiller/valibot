@@ -66,14 +66,21 @@ export type UnionToIntersect<TUnion> =
     : never;
 
 /**
- * Converts union to tuple type.
+ * Converts union to tuple type using an accumulator.
+ *
+ * For more information: {@link https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html#tail-recursion-elimination-on-conditional-types}
  */
-export type UnionToTuple<TUnion> =
+type UnionToTupleHelper<TUnion, TResult extends unknown[]> =
   UnionToIntersect<
     TUnion extends never ? never : () => TUnion
   > extends () => infer TLast
-    ? [...UnionToTuple<Exclude<TUnion, TLast>>, TLast]
-    : [];
+    ? UnionToTupleHelper<Exclude<TUnion, TLast>, [TLast, ...TResult]>
+    : TResult;
+
+/**
+ * Converts union to tuple type.
+ */
+export type UnionToTuple<TUnion> = UnionToTupleHelper<TUnion, []>;
 
 /**
  * Checks if a type is `any`.

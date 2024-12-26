@@ -82,6 +82,7 @@ export function integer<
   const TMessage extends ErrorMessage<IntegerIssue<TInput>> | undefined,
 >(message: TMessage): IntegerAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function integer(
   message?: ErrorMessage<IntegerIssue<number>>
 ): IntegerAction<number, ErrorMessage<IntegerIssue<number>> | undefined> {

@@ -70,6 +70,7 @@ export function undefinedable<
   default_: TDefault
 ): UndefinedableSchema<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function undefinedable(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   default_?: unknown

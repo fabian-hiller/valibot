@@ -77,6 +77,7 @@ export function undefinedableAsync<
   default_: TDefault
 ): UndefinedableSchemaAsync<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function undefinedableAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

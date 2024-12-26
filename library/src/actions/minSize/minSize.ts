@@ -96,6 +96,7 @@ export function minSize<
   message: TMessage
 ): MinSizeAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function minSize(
   requirement: number,
   message?: ErrorMessage<MinSizeIssue<SizeInput, number>>

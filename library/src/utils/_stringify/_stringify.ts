@@ -7,6 +7,7 @@
  *
  * @internal
  */
+// @__NO_SIDE_EFFECTS__
 export function _stringify(input: unknown): string {
   const type = typeof input;
   if (type === 'string') {

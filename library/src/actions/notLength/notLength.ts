@@ -98,6 +98,7 @@ export function notLength<
   message: TMessage
 ): NotLengthAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notLength(
   requirement: number,
   message?: ErrorMessage<NotLengthIssue<LengthInput, number>>

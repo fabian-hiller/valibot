@@ -89,6 +89,7 @@ export function variantAsync<
   message: TMessage
 ): VariantSchemaAsync<TKey, TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function variantAsync(
   key: string,
   options: VariantOptionsAsync<string>,

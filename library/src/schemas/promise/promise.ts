@@ -66,6 +66,7 @@ export function promise<
   const TMessage extends ErrorMessage<PromiseIssue> | undefined,
 >(message: TMessage): PromiseSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function promise(
   message?: ErrorMessage<PromiseIssue>
 ): PromiseSchema<ErrorMessage<PromiseIssue> | undefined> {

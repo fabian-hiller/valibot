@@ -69,6 +69,7 @@ export function looseTupleAsync<
   const TMessage extends ErrorMessage<LooseTupleIssue> | undefined,
 >(items: TItems, message: TMessage): LooseTupleSchemaAsync<TItems, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function looseTupleAsync(
   items: TupleItemsAsync,
   message?: ErrorMessage<LooseTupleIssue>

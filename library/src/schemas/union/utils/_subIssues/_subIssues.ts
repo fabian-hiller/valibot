@@ -9,6 +9,7 @@ import type { BaseIssue, OutputDataset } from '../../../../types/index.ts';
  *
  * @internal
  */
+// @__NO_SIDE_EFFECTS__
 export function _subIssues(
   datasets: OutputDataset<unknown, BaseIssue<unknown>>[] | undefined
 ): [BaseIssue<unknown>, ...BaseIssue<unknown>[]] | undefined {

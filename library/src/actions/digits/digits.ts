@@ -83,6 +83,7 @@ export function digits<
   const TMessage extends ErrorMessage<DigitsIssue<TInput>> | undefined,
 >(message: TMessage): DigitsAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function digits(
   message?: ErrorMessage<DigitsIssue<string>>
 ): DigitsAction<string, ErrorMessage<DigitsIssue<string>> | undefined> {
