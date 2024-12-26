@@ -99,6 +99,7 @@ export function objectWithRestAsync<
   message: TMessage
 ): ObjectWithRestSchemaAsync<TEntries, TRest, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function objectWithRestAsync(
   entries: ObjectEntriesAsync,
   rest:

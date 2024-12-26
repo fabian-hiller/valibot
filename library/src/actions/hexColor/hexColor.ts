@@ -84,6 +84,7 @@ export function hexColor<
   const TMessage extends ErrorMessage<HexColorIssue<TInput>> | undefined,
 >(message: TMessage): HexColorAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function hexColor(
   message?: ErrorMessage<HexColorIssue<string>>
 ): HexColorAction<string, ErrorMessage<HexColorIssue<string>> | undefined> {

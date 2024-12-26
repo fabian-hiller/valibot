@@ -95,6 +95,7 @@ export function isoDate<
   const TMessage extends ErrorMessage<IsoDateIssue<TInput>> | undefined,
 >(message: TMessage): IsoDateAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function isoDate(
   message?: ErrorMessage<IsoDateIssue<string>>
 ): IsoDateAction<string, ErrorMessage<IsoDateIssue<string>> | undefined> {

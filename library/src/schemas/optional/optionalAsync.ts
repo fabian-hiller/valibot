@@ -77,6 +77,7 @@ export function optionalAsync<
   default_: TDefault
 ): OptionalSchemaAsync<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function optionalAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

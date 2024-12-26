@@ -71,3 +71,30 @@ const BinaryTreeSchema: v.GenericSchema<BinaryTree> = v.object({
   right: v.nullable(v.lazy(() => BinaryTreeSchema)),
 });
 ```
+
+### JSON schema
+
+Another practical use case for `lazy` is a schema for all possible `JSON` values. These are all values that can be serialized and deserialized using `JSON.stringify()` and `JSON.parse()`.
+
+```ts
+import * as v from 'valibot';
+
+type JsonData =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: JsonData }
+  | JsonData[];
+
+const JsonSchema: v.GenericSchema<JsonData> = v.lazy(() =>
+  v.union([
+    v.string(),
+    v.number(),
+    v.boolean(),
+    v.null(),
+    v.record(v.string(), JsonSchema),
+    v.array(JsonSchema),
+  ])
+);
+```

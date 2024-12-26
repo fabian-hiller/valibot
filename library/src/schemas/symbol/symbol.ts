@@ -66,6 +66,7 @@ export function symbol<
   const TMessage extends ErrorMessage<SymbolIssue> | undefined,
 >(message: TMessage): SymbolSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function symbol(
   message?: ErrorMessage<SymbolIssue>
 ): SymbolSchema<ErrorMessage<SymbolIssue> | undefined> {

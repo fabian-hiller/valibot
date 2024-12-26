@@ -29,6 +29,7 @@ export interface RawTransformActionAsync<TInput, TOutput>
  *
  * @returns A raw transform action.
  */
+// @__NO_SIDE_EFFECTS__
 export function rawTransformAsync<TInput, TOutput>(
   action: (context: Context<TInput>) => MaybePromise<TOutput>
 ): RawTransformActionAsync<TInput, TOutput> {

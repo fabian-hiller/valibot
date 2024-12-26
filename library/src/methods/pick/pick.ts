@@ -463,6 +463,7 @@ export type SchemaWithPick<
  *
  * @returns An object schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function pick<
   const TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,

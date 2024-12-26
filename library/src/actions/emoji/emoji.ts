@@ -80,6 +80,7 @@ export function emoji<
   const TMessage extends ErrorMessage<EmojiIssue<TInput>> | undefined,
 >(message: TMessage): EmojiAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function emoji(
   message?: ErrorMessage<EmojiIssue<string>>
 ): EmojiAction<string, ErrorMessage<EmojiIssue<string>> | undefined> {

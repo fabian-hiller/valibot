@@ -28,6 +28,7 @@ export interface RawTransformAction<TInput, TOutput>
  *
  * @returns A raw transform action.
  */
+// @__NO_SIDE_EFFECTS__
 export function rawTransform<TInput, TOutput>(
   action: (context: Context<TInput>) => TOutput
 ): RawTransformAction<TInput, TOutput> {

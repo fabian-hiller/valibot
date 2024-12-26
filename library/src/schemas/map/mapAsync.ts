@@ -92,6 +92,7 @@ export function mapAsync<
   message: TMessage
 ): MapSchemaAsync<TKey, TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function mapAsync(
   key:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

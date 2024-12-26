@@ -28,6 +28,7 @@ export interface MetadataAction<
  *
  * @returns A metadata action.
  */
+// @__NO_SIDE_EFFECTS__
 export function metadata<
   TInput,
   const TMetadata extends Record<string, unknown>,

@@ -43,6 +43,7 @@ export interface BrandAction<TInput, TName extends BrandName>
  *
  * @returns A brand action.
  */
+// @__NO_SIDE_EFFECTS__
 export function brand<TInput, TName extends BrandName>(
   name: TName
 ): BrandAction<TInput, TName> {

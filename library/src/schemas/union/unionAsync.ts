@@ -87,6 +87,7 @@ export function unionAsync<
     | undefined,
 >(options: TOptions, message: TMessage): UnionSchemaAsync<TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function unionAsync(
   options: UnionOptionsAsync,
   message?: ErrorMessage<UnionIssue<BaseIssue<unknown>>>

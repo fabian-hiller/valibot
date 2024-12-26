@@ -10,6 +10,7 @@ let store: Map<Intl.LocalesArgument, Intl.Segmenter>;
  *
  * @internal
  */
+// @__NO_SIDE_EFFECTS__
 export function _getWordCount(
   locales: Intl.LocalesArgument,
   input: string

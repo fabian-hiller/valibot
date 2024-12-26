@@ -96,6 +96,7 @@ export function notSize<
   message: TMessage
 ): NotSizeAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notSize(
   requirement: number,
   message?: ErrorMessage<NotSizeIssue<SizeInput, number>>
