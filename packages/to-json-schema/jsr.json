@@ -1,5 +1,9 @@
 {
   "name": "@valibot/to-json-schema",
   "version": "1.0.0-beta.3",
-  "exports": "./src/index.ts"
+  "exports": "./src/index.ts",
+  "publish": {
+    "include": ["src/**/*.ts", "README.md"],
+    "exclude": ["src/**/*.test.ts", "src/vitest/**/*.ts"]
+  }
 }

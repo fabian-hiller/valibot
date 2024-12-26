@@ -4,6 +4,9 @@
   "exclude": [
     "scripts",
     "src",
+    "CHANGELOG.md",
+    "package.json",
+    "tsconfig.json",
     "!index.ts",
     "!ar",
     "!ca",
