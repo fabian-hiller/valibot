@@ -66,6 +66,7 @@ export function undefined_<
   const TMessage extends ErrorMessage<UndefinedIssue> | undefined,
 >(message: TMessage): UndefinedSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function undefined_(
   message?: ErrorMessage<UndefinedIssue>
 ): UndefinedSchema<ErrorMessage<UndefinedIssue> | undefined> {

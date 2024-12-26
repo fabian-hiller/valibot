@@ -29,6 +29,7 @@ export interface ToMinValueAction<
  *
  * @returns A to min value action.
  */
+// @__NO_SIDE_EFFECTS__
 export function toMinValue<
   TInput extends ValueInput,
   const TRequirement extends TInput,

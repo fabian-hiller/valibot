@@ -73,6 +73,7 @@ export function setAsync<
   const TMessage extends ErrorMessage<SetIssue> | undefined,
 >(value: TValue, message: TMessage): SetSchemaAsync<TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function setAsync(
   value:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

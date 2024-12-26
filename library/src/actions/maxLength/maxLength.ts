@@ -98,6 +98,7 @@ export function maxLength<
   message: TMessage
 ): MaxLengthAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function maxLength(
   requirement: number,
   message?: ErrorMessage<MaxLengthIssue<LengthInput, number>>

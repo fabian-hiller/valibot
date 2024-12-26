@@ -48,6 +48,7 @@ import type { InferDefaults } from './types.ts';
  *
  * @returns The default values.
  */
+// @__NO_SIDE_EFFECTS__
 export async function getDefaultsAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

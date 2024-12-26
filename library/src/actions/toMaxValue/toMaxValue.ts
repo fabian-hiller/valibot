@@ -29,6 +29,7 @@ export interface ToMaxValueAction<
  *
  * @returns A to max value action.
  */
+// @__NO_SIDE_EFFECTS__
 export function toMaxValue<
   TInput extends ValueInput,
   const TRequirement extends TInput,

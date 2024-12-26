@@ -83,6 +83,7 @@ export function safeInteger<
   const TMessage extends ErrorMessage<SafeIntegerIssue<TInput>> | undefined,
 >(message: TMessage): SafeIntegerAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function safeInteger(
   message?: ErrorMessage<SafeIntegerIssue<number>>
 ): SafeIntegerAction<

@@ -92,6 +92,7 @@ export function value<
   message: TMessage
 ): ValueAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function value(
   requirement: ValueInput,
   message?: ErrorMessage<ValueIssue<ValueInput, ValueInput>>

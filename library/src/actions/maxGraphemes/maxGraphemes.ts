@@ -103,6 +103,7 @@ export function maxGraphemes<
   message: TMessage
 ): MaxGraphemesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function maxGraphemes(
   requirement: number,
   message?: ErrorMessage<MaxGraphemesIssue<string, number>>

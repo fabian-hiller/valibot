@@ -106,6 +106,7 @@ export function words<
   message: TMessage
 ): WordsAction<TInput, TLocales, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function words(
   locales: Intl.LocalesArgument,
   requirement: number,

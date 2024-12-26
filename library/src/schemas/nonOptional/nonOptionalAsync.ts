@@ -79,6 +79,7 @@ export function nonOptionalAsync<
   message: TMessage
 ): NonOptionalSchemaAsync<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonOptionalAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

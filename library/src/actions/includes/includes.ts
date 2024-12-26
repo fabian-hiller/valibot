@@ -94,6 +94,7 @@ export function includes<
   message: TMessage
 ): IncludesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function includes(
   requirement: ContentRequirement<ContentInput>,
   message?: ErrorMessage<

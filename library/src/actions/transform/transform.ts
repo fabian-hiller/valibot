@@ -26,6 +26,7 @@ export interface TransformAction<TInput, TOutput>
  *
  * @returns A transform action.
  */
+// @__NO_SIDE_EFFECTS__
 export function transform<TInput, TOutput>(
   operation: (input: TInput) => TOutput
 ): TransformAction<TInput, TOutput> {

@@ -79,6 +79,7 @@ export function map<
   message: TMessage
 ): MapSchema<TKey, TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function map(
   key: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   value: BaseSchema<unknown, unknown, BaseIssue<unknown>>,

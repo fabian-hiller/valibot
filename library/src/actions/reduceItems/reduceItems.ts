@@ -47,6 +47,7 @@ export function reduceItems<TInput extends ArrayInput, TOutput>(
   initial: TOutput
 ): ReduceItemsAction<TInput, TOutput>;
 
+// @__NO_SIDE_EFFECTS__
 export function reduceItems(
   operation: ArrayAction<unknown[], unknown>,
   initial: unknown

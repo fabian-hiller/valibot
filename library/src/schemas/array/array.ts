@@ -68,6 +68,7 @@ export function array<
   const TMessage extends ErrorMessage<ArrayIssue> | undefined,
 >(item: TItem, message: TMessage): ArraySchema<TItem, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function array(
   item: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<ArrayIssue>

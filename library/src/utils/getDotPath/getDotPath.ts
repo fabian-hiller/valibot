@@ -28,6 +28,7 @@ export function getDotPath<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 >(issue: InferIssue<TSchema>): IssueDotPath<TSchema> | null;
 
+// @__NO_SIDE_EFFECTS__
 export function getDotPath(issue: BaseIssue<unknown>): string | null {
   if (issue.path) {
     let key = '';

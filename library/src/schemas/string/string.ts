@@ -66,6 +66,7 @@ export function string<
   const TMessage extends ErrorMessage<StringIssue> | undefined,
 >(message: TMessage): StringSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function string(
   message?: ErrorMessage<StringIssue>
 ): StringSchema<ErrorMessage<StringIssue> | undefined> {

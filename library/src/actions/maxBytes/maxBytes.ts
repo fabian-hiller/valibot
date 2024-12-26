@@ -97,6 +97,7 @@ export function maxBytes<
   message: TMessage
 ): MaxBytesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function maxBytes(
   requirement: number,
   message?: ErrorMessage<MaxBytesIssue<string, number>>

@@ -46,6 +46,7 @@ export type InferFallback<
  *
  * @returns The fallback value.
  */
+// @__NO_SIDE_EFFECTS__
 export function getFallback<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
