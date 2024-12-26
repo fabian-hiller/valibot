@@ -31,7 +31,7 @@ The official i18n translations for Valibot. See the [internationalization guide]
 | Swedish (sv)    | [#606][pr-606-url] | ✅     |
 | Turkish (tr)    | [#549][pr-549-url] | ✅     |
 | Ukrainian (uk)  | [#423][pr-423-url] | ✅     |
-| VietNam (vi)  | [#951][pr-951-url] | ✅     |
+| Vietnamese (vi) | [#951][pr-951-url] | ✅     |
 
 [pr-397-url]: https://github.com/fabian-hiller/valibot/pull/397
 [pr-418-url]: https://github.com/fabian-hiller/valibot/pull/418
