@@ -36,9 +36,8 @@ import type { InferFallbacks } from './types.ts';
  * @param schema The schema to get them from.
  *
  * @returns The fallback values.
- * 
- * @__NO_SIDE_EFFECTS__
  */
+// @__NO_SIDE_EFFECTS__
 export function getFallbacks<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

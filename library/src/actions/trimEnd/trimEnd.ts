@@ -19,9 +19,8 @@ export interface TrimEndAction
  * Creates a trim end transformation action.
  *
  * @returns A trim end action.
- * 
- * @__NO_SIDE_EFFECTS__
  */
+// @__NO_SIDE_EFFECTS__
 export function trimEnd(): TrimEndAction {
   return {
     kind: 'transformation',

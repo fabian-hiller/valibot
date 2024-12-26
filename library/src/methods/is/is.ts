@@ -8,9 +8,8 @@ import type { BaseIssue, BaseSchema, InferInput } from '../../types/index.ts';
  * @param input The input to be tested.
  *
  * @returns Whether the input matches the schema.
- * 
- * @__NO_SIDE_EFFECTS__
  */
+// @__NO_SIDE_EFFECTS__
 export function is<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(schema: TSchema, input: unknown): input is InferInput<TSchema> {

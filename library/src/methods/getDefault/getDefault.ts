@@ -105,9 +105,8 @@ export type InferDefault<
  * @param config The config if available.
  *
  * @returns The default value.
- * 
- * @__NO_SIDE_EFFECTS__
  */
+// @__NO_SIDE_EFFECTS__
 export function getDefault<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

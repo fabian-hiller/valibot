@@ -24,6 +24,7 @@ export function setGlobalConfig(config: GlobalConfig): void {
  *
  * @returns The configuration.
  */
+// @__NO_SIDE_EFFECTS__
 export function getGlobalConfig<const TIssue extends BaseIssue<unknown>>(
   config?: Config<TIssue>
 ): Config<TIssue> {

@@ -94,6 +94,7 @@ export function minValue<
   message: TMessage
 ): MinValueAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function minValue(
   requirement: ValueInput,
   message?: ErrorMessage<MinValueIssue<ValueInput, ValueInput>>

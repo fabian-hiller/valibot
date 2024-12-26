@@ -36,9 +36,8 @@ import type { InferDefaults } from './types.ts';
  * @param schema The schema to get them from.
  *
  * @returns The default values.
- * 
- * @__NO_SIDE_EFFECTS__
  */
+// @__NO_SIDE_EFFECTS__
 export function getDefaults<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

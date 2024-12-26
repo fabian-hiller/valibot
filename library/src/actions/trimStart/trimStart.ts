@@ -20,6 +20,7 @@ export interface TrimStartAction
  *
  * @returns A trim start action.
  */
+// @__NO_SIDE_EFFECTS__
 export function trimStart(): TrimStartAction {
   return {
     kind: 'transformation',

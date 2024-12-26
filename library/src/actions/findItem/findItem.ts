@@ -44,6 +44,7 @@ export function findItem<
   TOuput extends TInput[number],
 >(operation: ArrayRequirement<TInput, TOuput>): FindItemAction<TInput, TOuput>;
 
+// @__NO_SIDE_EFFECTS__
 export function findItem(
   operation: ArrayRequirement<unknown[], unknown>
 ): FindItemAction<unknown[], unknown> {

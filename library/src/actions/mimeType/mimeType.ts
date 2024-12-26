@@ -102,6 +102,7 @@ export function mimeType<
   message: TMessage
 ): MimeTypeAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function mimeType(
   requirement: Requirement,
   message?: ErrorMessage<MimeTypeIssue<Blob, Requirement>>

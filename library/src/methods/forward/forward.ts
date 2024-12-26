@@ -19,9 +19,8 @@ import type {
  * @param pathKeys The path keys.
  *
  * @returns The modified action.
- * 
- * @__NO_SIDE_EFFECTS__
  */
+// @__NO_SIDE_EFFECTS__
 export function forward<
   TInput extends Record<string, unknown> | ArrayLike<unknown>,
   TIssue extends BaseIssue<unknown>,

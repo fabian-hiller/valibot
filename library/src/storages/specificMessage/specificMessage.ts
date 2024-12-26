@@ -55,6 +55,7 @@ export function setSpecificMessage<const TReference extends Reference>(
  *
  * @returns The error message.
  */
+// @__NO_SIDE_EFFECTS__
 export function getSpecificMessage<const TReference extends Reference>(
   reference: TReference,
   lang?: string

@@ -9,6 +9,7 @@ let textEncoder: TextEncoder;
  *
  * @internal
  */
+// @__NO_SIDE_EFFECTS__
 export function _getByteCount(input: string): number {
   if (!textEncoder) {
     textEncoder = new TextEncoder();

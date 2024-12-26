@@ -45,9 +45,8 @@ export interface LazySchemaAsync<
  * @param getter The schema getter.
  *
  * @returns A lazy schema.
- * 
- * @__NO_SIDE_EFFECTS__
  */
+// @__NO_SIDE_EFFECTS__
 export function lazyAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
