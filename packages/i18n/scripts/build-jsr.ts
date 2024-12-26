@@ -66,7 +66,14 @@ const languages = [
 const rootImports: string[] = [];
 
 // Create exclude array
-const exclude: string[] = ['scripts', 'src', '!index.ts'];
+const exclude: string[] = [
+  'scripts',
+  'src',
+  'CHANGELOG.md',
+  'package.json',
+  'tsconfig.json',
+  '!index.ts',
+];
 
 // Create exports object with index file
 const exports: Record<string, string> = {
