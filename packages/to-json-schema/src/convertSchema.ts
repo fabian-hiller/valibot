@@ -89,8 +89,7 @@ type Schema =
       v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
       v.ErrorMessage<v.ArrayIssue> | undefined
     >
-  | v.LazySchema<v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>>
-  | v.DateSchema<v.ErrorMessage<v.DateIssue> | undefined>;
+  | v.LazySchema<v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>>;
 
 /**
  * Schema or pipe type.
@@ -196,14 +195,8 @@ export function convertSchema(
       break;
     }
 
-    case 'date':
     case 'string': {
       jsonSchema.type = 'string';
-
-      if (valibotSchema.type === 'date') {
-        jsonSchema.format = 'date';
-      }
-
       break;
     }
 
@@ -370,25 +363,16 @@ export function convertSchema(
 
     case 'enum':
     case 'picklist': {
-      let isStringArray = true;
-      let isNumberArray = true;
-
-      for (const option of valibotSchema.options) {
-        if (typeof option === 'string') {
-          isNumberArray = false;
-        } else if (typeof option === 'number') {
-          isStringArray = false;
-        } else {
-          handleError(
-            'An option of the "picklist" schema is not JSON compatible.',
-            config
-          );
-        }
+      if (
+        valibotSchema.options.some(
+          (option) => typeof option !== 'number' && typeof option !== 'string'
+        )
+      ) {
+        handleError(
+          'An option of the "picklist" schema is not JSON compatible.',
+          config
+        );
       }
-
-      if (isNumberArray) jsonSchema.type = 'number';
-      else if (isStringArray) jsonSchema.type = 'string';
-      else jsonSchema.type = ['string', 'number'];
 
       // @ts-expect-error
       jsonSchema.enum = valibotSchema.options;
