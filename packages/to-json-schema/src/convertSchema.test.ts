@@ -703,7 +703,6 @@ describe('convertSchema', () => {
               foo: { type: 'string' },
             },
             required: ['foo'],
-            additionalProperties: false,
           },
           {
             type: 'object',
@@ -711,7 +710,29 @@ describe('convertSchema', () => {
               bar: { type: 'number' },
             },
             required: ['bar'],
-            additionalProperties: false,
+          },
+        ],
+        unevaluatedProperties: false,
+      });
+    });
+
+    test('should unset unevaluatedProperties in extensible intersection', () => {
+      expect(
+        convertSchema(
+          {},
+          v.intersect([v.objectWithRest({ foo: v.string() }, v.string())]),
+          undefined,
+          createContext()
+        )
+      ).toStrictEqual({
+        allOf: [
+          {
+            type: 'object',
+            properties: {
+              foo: { type: 'string' },
+            },
+            required: ['foo'],
+            additionalProperties: { type: 'string' },
           },
         ],
       });

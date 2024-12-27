@@ -4,6 +4,10 @@ import { convertAction } from './convertAction.ts';
 import type { ConversionConfig, ConversionContext } from './type.ts';
 import { handleError } from './utils/index.ts';
 
+interface JSONSchema7Extended extends JSONSchema7 {
+  unevaluatedProperties?: boolean;
+}
+
 /**
  * Schema type.
  */
@@ -115,11 +119,11 @@ let refCount = 0;
  * @returns The converted JSON Schema.
  */
 export function convertSchema(
-  jsonSchema: JSONSchema7,
+  jsonSchema: JSONSchema7Extended,
   valibotSchema: SchemaOrPipe,
   config: ConversionConfig | undefined,
   context: ConversionContext
-): JSONSchema7 {
+): JSONSchema7Extended {
   // If schema is in reference map, use reference and skip conversion
   const referenceId = context.referenceMap.get(valibotSchema);
   if (referenceId && referenceId in context.definitions) {
@@ -391,9 +395,30 @@ export function convertSchema(
     }
 
     case 'intersect': {
-      jsonSchema.allOf = valibotSchema.options.map((option) =>
-        convertSchema({}, option as SchemaOrPipe, config, context)
-      );
+      let setUnevaluatedProperties = true;
+
+      jsonSchema.allOf = valibotSchema.options.map((option) => {
+        const childSchema = convertSchema(
+          {},
+          option as SchemaOrPipe,
+          config,
+          context
+        );
+
+        const { additionalProperties, ...withoutAdditionalProps } = childSchema;
+
+        if (additionalProperties === false) {
+          return withoutAdditionalProps;
+        }
+
+        setUnevaluatedProperties = false;
+
+        return childSchema;
+      });
+
+      if (setUnevaluatedProperties) {
+        jsonSchema.unevaluatedProperties = false;
+      }
       break;
     }
 
