@@ -221,7 +221,6 @@ describe('convertSchema', () => {
           key4: { anyOf: [{ type: 'number' }, { type: 'null' }] },
         },
         required: ['key1', 'key3'],
-        additionalProperties: false,
       });
     });
 
@@ -669,7 +668,6 @@ describe('convertSchema', () => {
               foo: { type: 'string' },
             },
             required: ['type', 'foo'],
-            additionalProperties: false,
           },
           {
             type: 'object',
@@ -678,7 +676,6 @@ describe('convertSchema', () => {
               bar: { type: 'number' },
             },
             required: ['type', 'bar'],
-            additionalProperties: false,
           },
         ],
       });
@@ -703,7 +700,6 @@ describe('convertSchema', () => {
               foo: { type: 'string' },
             },
             required: ['foo'],
-            additionalProperties: false,
           },
           {
             type: 'object',
@@ -711,7 +707,6 @@ describe('convertSchema', () => {
               bar: { type: 'number' },
             },
             required: ['bar'],
-            additionalProperties: false,
           },
         ],
       });
@@ -772,7 +767,6 @@ describe('convertSchema', () => {
         type: 'object',
         properties: { node: { $ref: '#/$defs/1' } },
         required: [],
-        additionalProperties: false,
       });
       expect(context).toStrictEqual({
         definitions: {
@@ -780,7 +774,6 @@ describe('convertSchema', () => {
             type: 'object',
             properties: { node: { $ref: '#/$defs/1' } },
             required: [],
-            additionalProperties: false,
           },
         },
         referenceMap: new Map().set(nodeSchema, '1'),
@@ -807,7 +800,6 @@ describe('convertSchema', () => {
         type: 'object',
         properties: { node: { $ref: '#/$defs/2' } },
         required: ['node'],
-        additionalProperties: false,
       });
       expect(context).toStrictEqual({
         definitions: {
@@ -817,7 +809,6 @@ describe('convertSchema', () => {
                 type: 'object',
                 properties: { node: { $ref: '#/$defs/2' } },
                 required: ['node'],
-                additionalProperties: false,
               },
               { type: 'null' },
             ],
