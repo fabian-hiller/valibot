@@ -20,9 +20,11 @@ describe('enum_', () => {
   type AbnormalOptions = typeof abnormalOptions;
   const enumLikeObject = {
     1: 'foo',
-    '1.7976931348623157e+308': 'bar',
-    '1.7976931348623157e308': 'baz',
-    '5e-324': 'qux',
+    bar: 1.7976931348623157e308,
+    '1.7976931348623157e+308': 'bar', // a reverse mapping entry
+    baz: 1.7976931348623155e308,
+    '1.7976931348623155e308': 'baz', // not a reverse mapping entry because it lacks '+' after 'e'
+    '5e-324': 'qux', // not a reverse mapping entry because its value does not belong to the enum
     NaN: 'NaN',
     Infinity: 'Infinity',
   } as const;
@@ -71,9 +73,14 @@ describe('enum_', () => {
         | abnormalOptions.option1
         | abnormalOptions.option2
         | abnormalOptions.option3
+        | abnormalOptions.Infinity
+        | AbnormalOptions['-Infinity']
+        | abnormalOptions.NaN
       >();
       expectTypeOf<InferInput<NormalSchema>>().toEqualTypeOf<normalOptions>;
-      expectTypeOf<InferInput<EnumLikeObjectSchema>>().toEqualTypeOf<'baz'>;
+      expectTypeOf<InferInput<EnumLikeObjectSchema>>().toEqualTypeOf<
+        'foo' | 1.7976931348623157e308 | 1.7976931348623155e308 | 'baz' | 'qux'
+      >();
     });
 
     test('of output', () => {
@@ -81,9 +88,14 @@ describe('enum_', () => {
         | abnormalOptions.option1
         | abnormalOptions.option2
         | abnormalOptions.option3
+        | abnormalOptions.Infinity
+        | AbnormalOptions['-Infinity']
+        | abnormalOptions.NaN
       >();
       expectTypeOf<InferOutput<NormalSchema>>().toEqualTypeOf<normalOptions>();
-      expectTypeOf<InferOutput<EnumLikeObjectSchema>>().toEqualTypeOf<'baz'>();
+      expectTypeOf<InferOutput<EnumLikeObjectSchema>>().toEqualTypeOf<
+        'foo' | 1.7976931348623157e308 | 1.7976931348623155e308 | 'baz' | 'qux'
+      >();
     });
 
     test('of issue', () => {

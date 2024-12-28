@@ -18,6 +18,9 @@ export interface Enum {
   [key: string]: string | number;
 }
 
+/**
+ * Checks if a string can be produced by Number.prototype.toString with radix=10.
+ */
 type IsNumericString<K extends string> = K extends
   | 'NaN'
   | 'Infinity'
@@ -28,20 +31,34 @@ type IsNumericString<K extends string> = K extends
       ? true
       : false
     : false;
+
+type OmitReverseMappingValue<
+  K extends string | number,
+  V,
+  Ks extends string | number,
+> = K extends number
+  ? number extends K
+    ? never
+    : Exclude<V, Ks>
+  : K extends string
+    ? IsNumericString<K> extends true
+      ? Exclude<V, Ks>
+      : V
+    : never;
+
 /**
- * enum_ only accepts enum values of string & non-numeric keys.
+ * enum_ only accepts enum values of string & non-numeric keys that has its reverse mapping.
  * This type-level function filters out numeric keys including Infinity and NaN.
  *
- * @example FilterEnumKeys<'foo' | '1' | 'Infinity' | 'NaN'> will be 'foo'.
+ * @example EnumValues<{ 1: NaN; NaN: 1; 2: 'foo' }> = NaN | 'foo'
  */
-type FilterEnumKeys<K extends string> = K extends K
-  ? IsNumericString<K> extends true
-    ? never
-    : K
-  : never;
-type EnumValues<TEnum extends Enum> = TEnum[FilterEnumKeys<
-  string & keyof TEnum
->];
+type EnumValues<TEnum extends Enum> = {
+  [K in (string | number) & keyof TEnum]: OmitReverseMappingValue<
+    K,
+    TEnum[K],
+    (string | number) & keyof TEnum
+  >;
+}[(string | number) & keyof TEnum];
 
 /**
  * Enum issue type.
