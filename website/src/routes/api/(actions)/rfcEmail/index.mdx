@@ -1,7 +1,7 @@
 ---
-title: email
-description: Creates an email validation action.
-source: /actions/email/email.ts
+title: rfcEmail
+description: Creates a RFC email validation action.
+source: /actions/rfcEmail/rfcEmail.ts
 contributors:
   - fabian-hiller
 ---
@@ -10,12 +10,12 @@ import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# email
+# rfcEmail
 
-Creates an [email](https://en.wikipedia.org/wiki/Email_address) validation action.
+Creates a [RFC email](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1) validation action.
 
 ```ts
-const Action = v.email<TInput, TMessage>(message);
+const Action = v.rfcEmail<TInput, TMessage>(message);
 ```
 
 ## Generics
@@ -29,9 +29,9 @@ const Action = v.email<TInput, TMessage>(message);
 
 ### Explanation
 
-With `email` you can validate the formatting of a string. If the input is not an email, you can use `message` to customize the error message.
+With `rfcEmail` you can validate the formatting of a string. If the input is not an email, you can use `message` to customize the error message.
 
-> This validation action intentionally only validates common email addresses. If you are interested in an action that covers the entire specification, please use the <Link href="../rfcEmail/">`rfcEmail`</Link> action instead.
+> This validation action intentionally validates the entire RFC 5322 specification. If you are interested in an action that only covers common email addresses, please use the <Link href="../email/">`email`</Link> action instead.
 
 ## Returns
 
@@ -39,7 +39,7 @@ With `email` you can validate the formatting of a string. If the input is not an
 
 ## Examples
 
-The following examples show how `email` can be used.
+The following examples show how `rfcEmail` can be used.
 
 ### Email schema
 
@@ -49,14 +49,14 @@ Schema to validate an email.
 const EmailSchema = v.pipe(
   v.string(),
   v.nonEmpty('Please enter your email.'),
-  v.email('The email is badly formatted.'),
+  v.rfcEmail('The email is badly formatted.'),
   v.maxLength(30, 'Your email is too long.')
 );
 ```
 
 ## Related
 
-The following APIs can be combined with `email`.
+The following APIs can be combined with `rfcEmail`.
 
 ### Schemas
 

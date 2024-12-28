@@ -1,48 +1,52 @@
 import { describe, expect, test } from 'vitest';
-import { EMAIL_REGEX } from '../../regex.ts';
+import { RFC_EMAIL_REGEX } from '../../regex.ts';
 import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
-import { email, type EmailAction, type EmailIssue } from './email.ts';
+import {
+  rfcEmail,
+  type RfcEmailAction,
+  type RfcEmailIssue,
+} from './rfcEmail.ts';
 
-describe('email', () => {
+describe('rfcEmail', () => {
   describe('should return action object', () => {
-    const baseAction: Omit<EmailAction<string, never>, 'message'> = {
+    const baseAction: Omit<RfcEmailAction<string, never>, 'message'> = {
       kind: 'validation',
-      type: 'email',
-      reference: email,
+      type: 'rfc_email',
+      reference: rfcEmail,
       expects: null,
-      requirement: EMAIL_REGEX,
+      requirement: RFC_EMAIL_REGEX,
       async: false,
       '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const action: EmailAction<string, undefined> = {
+      const action: RfcEmailAction<string, undefined> = {
         ...baseAction,
         message: undefined,
       };
-      expect(email()).toStrictEqual(action);
-      expect(email(undefined)).toStrictEqual(action);
+      expect(rfcEmail()).toStrictEqual(action);
+      expect(rfcEmail(undefined)).toStrictEqual(action);
     });
 
     test('with string message', () => {
-      expect(email('message')).toStrictEqual({
+      expect(rfcEmail('message')).toStrictEqual({
         ...baseAction,
         message: 'message',
-      } satisfies EmailAction<string, string>);
+      } satisfies RfcEmailAction<string, string>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(email(message)).toStrictEqual({
+      expect(rfcEmail(message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies EmailAction<string, typeof message>);
+      } satisfies RfcEmailAction<string, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    const action = email();
+    const action = rfcEmail();
 
     // General tests
 
@@ -88,6 +92,10 @@ describe('email', () => {
       expectNoActionIssue(action, ['+email@example.com']);
     });
 
+    test('for dot in beginning of local part', () => {
+      expectNoActionIssue(action, ['.email@example.com']);
+    });
+
     // End of local part
 
     test('for underscore in end of local part', () => {
@@ -102,10 +110,18 @@ describe('email', () => {
       expectNoActionIssue(action, ['email+@example.com']);
     });
 
+    test('for dot in end of local part', () => {
+      expectNoActionIssue(action, ['email.@example.com']);
+    });
+
     // Middle of local part
 
     test('for dot in local part', () => {
       expectNoActionIssue(action, ['firstname.lastname@example.com']);
+    });
+
+    test('for two following dots in local part', () => {
+      expectNoActionIssue(action, ['email..email@example.com']);
     });
 
     test('for underscore in local part', () => {
@@ -128,6 +144,10 @@ describe('email', () => {
 
     test('for underscore local part', () => {
       expectNoActionIssue(action, ['_______@example.com']);
+    });
+
+    test('for special chars in local part', () => {
+      expectNoActionIssue(action, ['#$&%@example.com']);
     });
 
     // Domain part variations
@@ -159,16 +179,36 @@ describe('email', () => {
     test('for numerical domain', () => {
       expectNoActionIssue(action, ['email@123.com']);
     });
+
+    test('for punycode domain', () => {
+      expectNoActionIssue(action, ['email@xn--exmple-cua.com']);
+    });
+
+    test('for punycode TLD', () => {
+      expectNoActionIssue(action, ['email@example.xn--6frz82g']);
+    });
+
+    test('for numerical TLD', () => {
+      expectNoActionIssue(action, ['email@example.123']);
+    });
+
+    test('for single char TLD', () => {
+      expectNoActionIssue(action, ['email@example.a']);
+    });
+
+    test('for missing TLD', () => {
+      expectNoActionIssue(action, ['email@example']);
+    });
   });
 
   describe('should return dataset with issues', () => {
-    const action = email('message');
-    const baseIssue: Omit<EmailIssue<string>, 'input' | 'received'> = {
+    const action = rfcEmail('message');
+    const baseIssue: Omit<RfcEmailIssue<string>, 'input' | 'received'> = {
       kind: 'validation',
-      type: 'email',
+      type: 'rfc_email',
       expected: null,
       message: 'message',
-      requirement: EMAIL_REGEX,
+      requirement: RFC_EMAIL_REGEX,
     };
 
     // General tests
@@ -214,15 +254,7 @@ describe('email', () => {
       expectActionIssue(action, baseIssue, ['email@.com']);
     });
 
-    test('for missing TLD', () => {
-      expectActionIssue(action, baseIssue, ['email@example']);
-    });
-
     // Invalid repeated chars
-
-    test('for two following dots in local part', () => {
-      expectActionIssue(action, baseIssue, ['email..email@example.com']);
-    });
 
     test('for two following @ symbols', () => {
       expectActionIssue(action, baseIssue, ['email@@example.com']);
@@ -230,16 +262,6 @@ describe('email', () => {
 
     test('for dot in end of domain name', () => {
       expectActionIssue(action, baseIssue, ['email@example..com']);
-    });
-
-    // Beginning and end of local part
-
-    test('for dot in beginning of local part', () => {
-      expectActionIssue(action, baseIssue, ['.email@example.com']);
-    });
-
-    test('for dot in end of local part', () => {
-      expectActionIssue(action, baseIssue, ['email.@example.com']);
     });
 
     // Beginning and end of domain part
@@ -272,23 +294,14 @@ describe('email', () => {
       expectActionIssue(action, baseIssue, ['email@example+.com']);
     });
 
-    test('for numerical TLD', () => {
-      expectActionIssue(action, baseIssue, ['email@example.123']);
-    });
-
-    test('for single char TLD', () => {
-      expectActionIssue(action, baseIssue, ['email@example.a']);
-    });
-
     // Other special cases
 
     test('for repeated domain part', () => {
       expectActionIssue(action, baseIssue, ['email@example@example.com']);
     });
 
-    test('for special chars', () => {
+    test('for special chars in domain part', () => {
       expectActionIssue(action, baseIssue, [
-        '#$&%@example.com',
         'email@#$&%.com',
         'email@example.#$&%',
       ]);
