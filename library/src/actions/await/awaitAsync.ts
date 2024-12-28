@@ -23,6 +23,7 @@ export interface AwaitActionAsync<TInput extends Promise<unknown>>
  *
  * @returns An await action.
  */
+// @__NO_SIDE_EFFECTS__
 export function awaitAsync<
   TInput extends Promise<unknown>,
 >(): AwaitActionAsync<TInput> {

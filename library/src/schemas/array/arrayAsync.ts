@@ -75,6 +75,7 @@ export function arrayAsync<
   const TMessage extends ErrorMessage<ArrayIssue> | undefined,
 >(item: TItem, message: TMessage): ArraySchemaAsync<TItem, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function arrayAsync(
   item:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

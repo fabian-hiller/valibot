@@ -66,6 +66,7 @@ export function void_<
   const TMessage extends ErrorMessage<VoidIssue> | undefined,
 >(message: TMessage): VoidSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function void_(
   message?: ErrorMessage<VoidIssue>
 ): VoidSchema<ErrorMessage<VoidIssue> | undefined> {

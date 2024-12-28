@@ -29,6 +29,7 @@ export interface AnySchema extends BaseSchema<any, any, never> {
  *
  * @returns An any schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function any(): AnySchema {
   return {
     kind: 'schema',

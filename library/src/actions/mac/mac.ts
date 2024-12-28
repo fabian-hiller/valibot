@@ -80,6 +80,7 @@ export function mac<
   const TMessage extends ErrorMessage<MacIssue<TInput>> | undefined,
 >(message: TMessage): MacAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function mac(
   message?: ErrorMessage<MacIssue<string>>
 ): MacAction<string, ErrorMessage<MacIssue<string>> | undefined> {

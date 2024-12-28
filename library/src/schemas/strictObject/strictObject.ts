@@ -68,6 +68,7 @@ export function strictObject<
   const TMessage extends ErrorMessage<StrictObjectIssue> | undefined,
 >(entries: TEntries, message: TMessage): StrictObjectSchema<TEntries, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function strictObject(
   entries: ObjectEntries,
   message?: ErrorMessage<StrictObjectIssue>

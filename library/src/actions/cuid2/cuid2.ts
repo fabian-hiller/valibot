@@ -80,6 +80,7 @@ export function cuid2<
   const TMessage extends ErrorMessage<Cuid2Issue<TInput>> | undefined,
 >(message: TMessage): Cuid2Action<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function cuid2(
   message?: ErrorMessage<Cuid2Issue<string>>
 ): Cuid2Action<string, ErrorMessage<Cuid2Issue<string>> | undefined> {

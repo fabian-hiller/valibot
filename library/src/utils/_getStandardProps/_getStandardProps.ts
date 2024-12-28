@@ -16,6 +16,7 @@ import type {
  *
  * @returns The Standard Schema properties.
  */
+// @__NO_SIDE_EFFECTS__
 export function _getStandardProps<
   TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

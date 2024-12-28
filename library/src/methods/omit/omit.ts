@@ -463,6 +463,7 @@ export type SchemaWithOmit<
  *
  * @returns An object schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function omit<
   const TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,

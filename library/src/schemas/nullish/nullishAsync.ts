@@ -77,6 +77,7 @@ export function nullishAsync<
   default_: TDefault
 ): NullishSchemaAsync<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function nullishAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

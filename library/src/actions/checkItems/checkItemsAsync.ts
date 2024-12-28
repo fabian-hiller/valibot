@@ -59,6 +59,7 @@ export function checkItemsAsync<
   message: TMessage
 ): CheckItemsActionAsync<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function checkItemsAsync(
   requirement: ArrayRequirementAsync<unknown[]>,
   message?: ErrorMessage<CheckItemsIssue<unknown[]>>

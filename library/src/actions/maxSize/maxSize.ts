@@ -96,6 +96,7 @@ export function maxSize<
   message: TMessage
 ): MaxSizeAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function maxSize(
   requirement: number,
   message?: ErrorMessage<MaxSizeIssue<SizeInput, number>>

@@ -66,6 +66,7 @@ export function number<
   const TMessage extends ErrorMessage<NumberIssue> | undefined,
 >(message: TMessage): NumberSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function number(
   message?: ErrorMessage<NumberIssue>
 ): NumberSchema<ErrorMessage<NumberIssue> | undefined> {

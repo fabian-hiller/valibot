@@ -85,6 +85,7 @@ export function url<
   const TMessage extends ErrorMessage<UrlIssue<TInput>> | undefined,
 >(message: TMessage): UrlAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function url(
   message?: ErrorMessage<UrlIssue<string>> | undefined
 ): UrlAction<string, ErrorMessage<UrlIssue<string>> | undefined> {

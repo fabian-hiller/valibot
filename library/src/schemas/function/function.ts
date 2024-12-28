@@ -70,6 +70,7 @@ export function function_<
   const TMessage extends ErrorMessage<FunctionIssue> | undefined,
 >(message: TMessage): FunctionSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function function_(
   message?: ErrorMessage<FunctionIssue>
 ): FunctionSchema<ErrorMessage<FunctionIssue> | undefined> {

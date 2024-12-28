@@ -82,6 +82,7 @@ export function finite<
   const TMessage extends ErrorMessage<FiniteIssue<TInput>> | undefined,
 >(message: TMessage): FiniteAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function finite(
   message?: ErrorMessage<FiniteIssue<number>>
 ): FiniteAction<number, ErrorMessage<FiniteIssue<number>> | undefined> {

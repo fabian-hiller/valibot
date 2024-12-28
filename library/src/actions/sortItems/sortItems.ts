@@ -39,6 +39,7 @@ export function sortItems<TInput extends ArrayInput>(
   operation?: ArrayAction<TInput>
 ): SortItemsAction<TInput>;
 
+// @__NO_SIDE_EFFECTS__
 export function sortItems(
   operation?: ArrayAction<unknown[]>
 ): SortItemsAction<unknown[]> {

@@ -79,6 +79,7 @@ export function tuple<
   const TMessage extends ErrorMessage<TupleIssue> | undefined,
 >(items: TItems, message: TMessage): TupleSchema<TItems, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function tuple(
   items: TupleItems,
   message?: ErrorMessage<TupleIssue>

@@ -65,6 +65,7 @@ export function nan<const TMessage extends ErrorMessage<NanIssue> | undefined>(
   message: TMessage
 ): NanSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nan(
   message?: ErrorMessage<NanIssue>
 ): NanSchema<ErrorMessage<NanIssue> | undefined> {

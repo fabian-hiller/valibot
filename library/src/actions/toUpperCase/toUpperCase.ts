@@ -20,6 +20,7 @@ export interface ToUpperCaseAction
  *
  * @returns A to upper case action.
  */
+// @__NO_SIDE_EFFECTS__
 export function toUpperCase(): ToUpperCaseAction {
   return {
     kind: 'transformation',

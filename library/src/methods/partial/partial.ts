@@ -266,6 +266,7 @@ export function partial<
   const TKeys extends ObjectKeys<TSchema>,
 >(schema: TSchema, keys: TKeys): SchemaWithPartial<TSchema, TKeys>;
 
+// @__NO_SIDE_EFFECTS__
 export function partial(
   schema: Schema,
   keys?: ObjectKeys<Schema>

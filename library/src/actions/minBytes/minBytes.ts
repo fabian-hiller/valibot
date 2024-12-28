@@ -97,6 +97,7 @@ export function minBytes<
   message: TMessage
 ): MinBytesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function minBytes(
   requirement: number,
   message?: ErrorMessage<MinBytesIssue<string, number>>

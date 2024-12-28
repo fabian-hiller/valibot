@@ -90,6 +90,7 @@ export function email<
   const TMessage extends ErrorMessage<EmailIssue<TInput>> | undefined,
 >(message: TMessage): EmailAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function email(
   message?: ErrorMessage<EmailIssue<string>>
 ): EmailAction<string, ErrorMessage<EmailIssue<string>> | undefined> {

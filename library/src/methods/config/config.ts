@@ -15,6 +15,7 @@ import { _getStandardProps } from '../../utils/index.ts';
  *
  * @returns The configured schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function config<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

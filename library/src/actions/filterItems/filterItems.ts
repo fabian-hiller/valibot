@@ -31,6 +31,7 @@ export function filterItems<TInput extends ArrayInput>(
   operation: ArrayRequirement<TInput>
 ): FilterItemsAction<TInput>;
 
+// @__NO_SIDE_EFFECTS__
 export function filterItems(
   operation: ArrayRequirement<unknown[]>
 ): FilterItemsAction<unknown[]> {
