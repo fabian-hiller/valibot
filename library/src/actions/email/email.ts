@@ -67,7 +67,7 @@ export interface EmailAction<
  *
  * Hint: This validation action intentionally only validates common email
  * addresses. If you are interested in an action that covers the entire
- * specification, please use the `rfcEmail` action.
+ * specification, please use the `rfcEmail` action instead.
  *
  * @returns An email action.
  */
@@ -79,7 +79,7 @@ export function email<TInput extends string>(): EmailAction<TInput, undefined>;
  *
  * Hint: This validation action intentionally only validates common email
  * addresses. If you are interested in an action that covers the entire
- * specification, please use the `rfcEmail` action.
+ * specification, please use the `rfcEmail` action instead.
  *
  * @param message The error message.
  *

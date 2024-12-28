@@ -66,6 +66,10 @@ export interface RfcEmailAction<
  * Creates a [RFC email](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1)
  * validation action.
  *
+ * Hint: This validation action intentionally validates the entire RFC 5322
+ * specification. If you are interested in an action that only covers common
+ * email addresses, please use the `email` action instead.
+ *
  * @returns A RFC email action.
  */
 export function rfcEmail<TInput extends string>(): RfcEmailAction<
@@ -76,6 +80,10 @@ export function rfcEmail<TInput extends string>(): RfcEmailAction<
 /**
  * Creates a [RFC email](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1)
  * validation action.
+ *
+ * Hint: This validation action intentionally validates the entire RFC 5322
+ * specification. If you are interested in an action that only covers common
+ * email addresses, please use the `email` action instead.
  *
  * @param message The error message.
  *
