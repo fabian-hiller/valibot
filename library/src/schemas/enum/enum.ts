@@ -119,7 +119,14 @@ export function enum_(
   message?: ErrorMessage<EnumIssue>
 ): EnumSchema<Enum, ErrorMessage<EnumIssue> | undefined> {
   const options = Object.entries(enum__)
-    .filter(([key]) => (+key).toString() !== key)
+    .filter(
+      ([key, value]) =>
+        !(
+          `${+key}` === key &&
+          typeof value === 'string' &&
+          Object.is(enum__[value], +key)
+        )
+    )
     .map(([, value]) => value);
   return {
     kind: 'schema',
