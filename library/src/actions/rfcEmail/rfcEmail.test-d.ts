@@ -1,7 +1,11 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
-import { rfcEmail, type RfcEmailIssue, type RfcEmailAction } from './rfcEmail.ts';
-import type {  } from '../email/email.ts';
+import type {} from '../email/email.ts';
+import {
+  rfcEmail,
+  type RfcEmailAction,
+  type RfcEmailIssue,
+} from './rfcEmail.ts';
 
 describe('rfcEmail', () => {
   describe('should return action object', () => {

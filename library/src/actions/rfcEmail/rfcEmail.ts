@@ -7,9 +7,10 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Email issue type.
+ * RFC email issue type.
  */
-export interface RfcEmailIssue<TInput extends string> extends BaseIssue<TInput> {
+export interface RfcEmailIssue<TInput extends string>
+  extends BaseIssue<TInput> {
   /**
    * The issue kind.
    */
@@ -27,7 +28,7 @@ export interface RfcEmailIssue<TInput extends string> extends BaseIssue<TInput> 
    */
   readonly received: `"${string}"`;
   /**
-   * The rfc email regex.
+   * The RFC email regex.
    */
   readonly requirement: RegExp;
 }
@@ -52,7 +53,7 @@ export interface RfcEmailAction<
    */
   readonly expects: null;
   /**
-   * The email regex.
+   * The RFC email regex.
    */
   readonly requirement: RegExp;
   /**
@@ -62,26 +63,30 @@ export interface RfcEmailAction<
 }
 
 /**
- * Creates an [email](https://en.wikipedia.org/wiki/Email_address) validation
- * action.
+ * Creates a [RFC email](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1)
+ * validation action.
  *
- * @returns An email action.
+ * @returns A RFC email action.
  */
-export function rfcEmail<TInput extends string>(): RfcEmailAction<TInput, undefined>;
+export function rfcEmail<TInput extends string>(): RfcEmailAction<
+  TInput,
+  undefined
+>;
 
 /**
- * Creates an [email](https://en.wikipedia.org/wiki/Email_address) validation
- * action.
+ * Creates a [RFC email](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1)
+ * validation action.
  *
  * @param message The error message.
  *
- * @returns An rfc email action.
+ * @returns A RFC email action.
  */
 export function rfcEmail<
   TInput extends string,
   const TMessage extends ErrorMessage<RfcEmailIssue<TInput>> | undefined,
 >(message: TMessage): RfcEmailAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function rfcEmail(
   message?: ErrorMessage<RfcEmailIssue<string>>
 ): RfcEmailAction<string, ErrorMessage<RfcEmailIssue<string>> | undefined> {
@@ -93,9 +98,9 @@ export function rfcEmail(
     async: false,
     requirement: RFC_EMAIL_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
-        _addIssue(this, 'rfc_email', dataset, config);
+        _addIssue(this, 'email', dataset, config);
       }
       return dataset;
     },

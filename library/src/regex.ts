@@ -25,18 +25,10 @@ export const DECIMAL_REGEX: RegExp = /^[+-]?\d+(?:\.\d+)?$/u;
 export const DIGITS_REGEX: RegExp = /^\d+$/u;
 
 /**
- * Email regex.
+ * [Email address](https://en.wikipedia.org/wiki/Email_address) regex.
  */
 export const EMAIL_REGEX: RegExp =
   /^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/iu;
-
-  /**
-   * Email regex for validation based on [RFC 5322](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1).
-   *
-   * Note: This regex was takne from the [HTML living standard specification](https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address) and does not perfectly represent RFC 5322.
-   */
-  export const RFC_EMAIL_REGEX: RegExp =
-    /^[\w.!#$%&'*+/=?^`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/iu;
 
 /**
  * Emoji regex from [emoji-regex-xs](https://github.com/slevithan/emoji-regex-xs) v1.0.0 (MIT license).
@@ -144,6 +136,14 @@ export const NANO_ID_REGEX: RegExp = /^[\w-]+$/u;
  * [Octal](https://en.wikipedia.org/wiki/Octal) regex.
  */
 export const OCTAL_REGEX: RegExp = /^(?:0o)?[0-7]+$/iu;
+
+/**
+ * [RFC 5322 email address](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1) regex.
+ *
+ * Hint: This regex was taken from the [HTML Living Standard Specification](https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address) and does not perfectly represent RFC 5322.
+ */
+export const RFC_EMAIL_REGEX: RegExp =
+  /^[\w.!#$%&'*+/=?^`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/iu;
 
 /**
  * [ULID](https://github.com/ulid/spec) regex.
