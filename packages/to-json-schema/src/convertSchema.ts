@@ -267,8 +267,8 @@ export function convertSchema(
           config,
           context
         );
-      } else {
-        jsonSchema.additionalProperties = valibotSchema.type === 'loose_object';
+      } else if (valibotSchema.type === 'strict_object') {
+        jsonSchema.additionalProperties = false;
       }
 
       break;
