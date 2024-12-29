@@ -275,7 +275,6 @@ describe('convertSchema', () => {
           key4: { anyOf: [{ type: 'number' }, { type: 'null' }] },
         },
         required: ['key1', 'key3'],
-        additionalProperties: true,
       });
     });
 

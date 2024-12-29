@@ -267,9 +267,6 @@ export function convertSchema(
           config,
           context
         );
-      } else if (valibotSchema.type === 'loose_object') {
-        // `true` has no validation effect, but might as well be explicit
-        jsonSchema.additionalProperties = true;
       } else if (valibotSchema.type === 'strict_object') {
         jsonSchema.additionalProperties = false;
       }
