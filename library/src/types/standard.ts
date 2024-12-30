@@ -50,7 +50,7 @@ export interface StandardFailureResult {
   /**
    * The issues of failed validation.
    */
-  readonly issues: ReadonlyArray<StandardIssue>;
+  readonly issues: readonly StandardIssue[];
 }
 
 /**
@@ -64,7 +64,7 @@ interface StandardIssue {
   /**
    * The path of the issue, if any.
    */
-  readonly path?: ReadonlyArray<PropertyKey | StandardPathSegment> | undefined;
+  readonly path?: readonly (PropertyKey | StandardPathSegment)[] | undefined;
 }
 
 /**

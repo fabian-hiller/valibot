@@ -117,7 +117,7 @@ console.log(result);`;
       }`;
 
       // Handle transform errors
-    } catch (error) {
+    } catch {
       logs.value = [
         ...logs.value,
         ['error', 'TypeScript syntax error detected'],

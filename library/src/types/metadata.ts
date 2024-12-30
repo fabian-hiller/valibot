@@ -36,4 +36,4 @@ export interface BaseMetadata<TInput> {
  * Generic metadata type.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface GenericMetadata<TInput = any> extends BaseMetadata<TInput> {}
+export type GenericMetadata<TInput = any> = BaseMetadata<TInput>;

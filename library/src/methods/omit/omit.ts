@@ -475,6 +475,7 @@ export function omit<
   };
   for (const key of keys) {
     // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete entries[key];
   }
 

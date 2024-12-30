@@ -111,17 +111,17 @@ export interface BaseSchemaAsync<
 /**
  * Generic schema type.
  */
-export interface GenericSchema<
+export type GenericSchema<
   TInput = unknown,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseSchema<TInput, TOutput, TIssue> {}
+> = BaseSchema<TInput, TOutput, TIssue>;
 
 /**
  * Generic schema async type.
  */
-export interface GenericSchemaAsync<
+export type GenericSchemaAsync<
   TInput = unknown,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseSchemaAsync<TInput, TOutput, TIssue> {}
+> = BaseSchemaAsync<TInput, TOutput, TIssue>;

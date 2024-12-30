@@ -258,7 +258,7 @@ export interface BaseIssue<TInput> extends Config<BaseIssue<TInput>> {
 /**
  * Generic issue type.
  */
-export interface GenericIssue<TInput = unknown> extends BaseIssue<TInput> {}
+export type GenericIssue<TInput = unknown> = BaseIssue<TInput>;
 
 /**
  * Dot path type.

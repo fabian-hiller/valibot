@@ -106,19 +106,19 @@ export interface BaseValidationAsync<
 /**
  * Generic validation type.
  */
-export interface GenericValidation<
+export type GenericValidation<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TInput = any,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseValidation<TInput, TOutput, TIssue> {}
+> = BaseValidation<TInput, TOutput, TIssue>;
 
 /**
  * Generic validation async type.
  */
-export interface GenericValidationAsync<
+export type GenericValidationAsync<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TInput = any,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseValidationAsync<TInput, TOutput, TIssue> {}
+> = BaseValidationAsync<TInput, TOutput, TIssue>;
