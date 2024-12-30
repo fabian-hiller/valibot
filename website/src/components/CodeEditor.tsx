@@ -139,7 +139,16 @@ export const CodeEditor = component$<CodeEditorProps>(
             plugins: [prettierPluginEstree, prettierPluginTypeScript],
             singleQuote: true,
           });
-          model.value!.setValue(prettier.formatted);
+          model.value!.pushEditOperations(
+            null,
+            [
+              {
+                range: model.value!.getFullModelRange(),
+                text: prettier.formatted,
+              },
+            ],
+            () => null
+          );
           editor.value!.setPosition(
             model.value!.getPositionAt(prettier.cursorOffset)
           );
