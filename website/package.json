@@ -31,38 +31,38 @@
   },
   "devDependencies": {
     "@mapbox/rehype-prism": "^0.9.0",
-    "@netlify/edge-functions": "^2.11.0",
+    "@netlify/edge-functions": "^2.11.1",
     "@types/eslint": "^8.56.12",
     "@types/mapbox__rehype-prism": "^0.8.3",
-    "@types/node": "^22.7.4",
+    "@types/node": "^22.10.2",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "@typescript-eslint/utils": "^7.18.0",
     "autoprefixer": "^10.4.20",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "eslint": "^8.57.1",
-    "eslint-plugin-qwik": "^1.9.0",
+    "eslint-plugin-qwik": "^1.12.0",
     "gray-matter": "^4.0.3",
-    "netlify-cli": "^17.36.4",
-    "postcss": "^8.4.47",
-    "prettier": "^3.3.3",
+    "netlify-cli": "^17.38.1",
+    "postcss": "^8.4.49",
+    "prettier": "^3.4.2",
     "rehype-external-links": "^3.0.0",
     "sharp": "^0.33.5",
-    "tailwindcss": "^3.4.13",
+    "tailwindcss": "^3.4.17",
     "tsm": "^2.3.0",
-    "typescript": "^5.6.2",
-    "undici": "^6.19.8",
+    "typescript": "^5.7.2",
+    "undici": "^7.2.0",
     "vercel": "^39.2.2",
-    "vite": "^5.4.8",
-    "vite-imagetools": "^7.0.4",
-    "vite-tsconfig-paths": "^4.3.2"
+    "vite": "^6.0.6",
+    "vite-imagetools": "^7.0.5",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
-    "@builder.io/qwik": "^1.9.0",
-    "@builder.io/qwik-city": "^1.9.0",
+    "@builder.io/qwik": "^1.12.0",
+    "@builder.io/qwik-city": "^1.12.0",
     "clsx": "^2.1.1",
     "lz-string": "^1.5.0",
-    "monaco-editor": "^0.52.0",
+    "monaco-editor": "^0.52.2",
     "monaco-editor-textmate": "^4.0.0",
     "monaco-textmate": "^3.0.1",
     "og-img": "^0.2.1",
@@ -71,6 +71,6 @@
     "valibot": "workspace:^"
   },
   "engines": {
-    "node": ">=15.0.0"
+    "node": ">=20.0.0"
   }
 }
