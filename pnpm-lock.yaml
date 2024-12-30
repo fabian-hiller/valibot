@@ -151,10 +151,10 @@ importers:
     dependencies:
       '@builder.io/qwik':
         specifier: ^1.12.0
-        version: 1.12.0(vite@6.0.6(@types/node@22.10.2)(jiti@2.4.2)(yaml@2.6.1))
+        version: 1.12.0(vite@5.4.11(@types/node@22.10.2))
       '@builder.io/qwik-city':
         specifier: ^1.12.0
-        version: 1.12.0(acorn@8.14.0)(rollup@4.29.1)(typescript@5.7.2)(vite@6.0.6(@types/node@22.10.2)(jiti@2.4.2)(yaml@2.6.1))
+        version: 1.12.0(acorn@8.14.0)(rollup@4.29.1)(typescript@5.7.2)(vite@5.4.11(@types/node@22.10.2))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -253,14 +253,14 @@ importers:
         specifier: ^39.2.2
         version: 39.2.2
       vite:
-        specifier: ^6.0.6
-        version: 6.0.6(@types/node@22.10.2)(jiti@2.4.2)(yaml@2.6.1)
+        specifier: ^5.4.11
+        version: 5.4.11(@types/node@22.10.2)
       vite-imagetools:
         specifier: ^7.0.5
         version: 7.0.5(rollup@4.29.1)
       vite-tsconfig-paths:
         specifier: ^5.1.4
-        version: 5.1.4(typescript@5.7.2)(vite@6.0.6(@types/node@22.10.2)(jiti@2.4.2)(yaml@2.6.1))
+        version: 5.1.4(typescript@5.7.2)(vite@5.4.11(@types/node@22.10.2))
 
 packages:
 
@@ -4267,6 +4267,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
@@ -4561,6 +4562,7 @@ packages:
 
   inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 
   inherits@2.0.1:
     resolution: {integrity: sha512-8nWq2nLTAwd02jTqJExUYFSD/fKq6VH9Y/oG2accc/kdI0V98Bag8d5a4gi3XHz73rDWa2PvTtvcWYquKqSENA==}
@@ -6509,6 +6511,7 @@ packages:
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rollup@4.29.1:
@@ -8097,7 +8100,7 @@ snapshots:
 
   '@bugsnag/safe-json-stringify@6.0.0': {}
 
-  '@builder.io/qwik-city@1.12.0(acorn@8.14.0)(rollup@4.29.1)(typescript@5.7.2)(vite@6.0.6(@types/node@22.10.2)(jiti@2.4.2)(yaml@2.6.1))':
+  '@builder.io/qwik-city@1.12.0(acorn@8.14.0)(rollup@4.29.1)(typescript@5.7.2)(vite@5.4.11(@types/node@22.10.2))':
     dependencies:
       '@mdx-js/mdx': 3.1.0(acorn@8.14.0)
       '@types/mdx': 2.0.13
@@ -8106,7 +8109,7 @@ snapshots:
       undici: 6.21.0
       valibot: 0.42.1(typescript@5.7.2)
       vfile: 6.0.2
-      vite: 6.0.6(@types/node@22.10.2)(jiti@2.4.2)(yaml@2.6.1)
+      vite: 5.4.11(@types/node@22.10.2)
       vite-imagetools: 7.0.5(rollup@4.29.1)
       zod: 3.22.4
     transitivePeerDependencies:
@@ -8115,10 +8118,10 @@ snapshots:
       - supports-color
       - typescript
 
-  '@builder.io/qwik@1.12.0(vite@6.0.6(@types/node@22.10.2)(jiti@2.4.2)(yaml@2.6.1))':
+  '@builder.io/qwik@1.12.0(vite@5.4.11(@types/node@22.10.2))':
     dependencies:
       csstype: 3.1.3
-      vite: 6.0.6(@types/node@22.10.2)(jiti@2.4.2)(yaml@2.6.1)
+      vite: 5.4.11(@types/node@22.10.2)
 
   '@codemod.com/workflow@0.0.3':
     dependencies:
@@ -16115,6 +16118,17 @@ snapshots:
       - sugarss
       - supports-color
       - terser
+
+  vite-tsconfig-paths@5.1.4(typescript@5.7.2)(vite@5.4.11(@types/node@22.10.2)):
+    dependencies:
+      debug: 4.4.0(supports-color@9.4.0)
+      globrex: 0.1.2
+      tsconfck: 3.1.4(typescript@5.7.2)
+    optionalDependencies:
+      vite: 5.4.11(@types/node@22.10.2)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   vite-tsconfig-paths@5.1.4(typescript@5.7.2)(vite@6.0.6(@types/node@22.10.2)(jiti@2.4.2)(yaml@2.6.1)):
     dependencies:
