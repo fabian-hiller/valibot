@@ -52,7 +52,7 @@ export const SideBar = component$<SideBarProps>(({ toggle, ...props }) => {
 
   // Close side bar when location pathname changes
   useTask$(({ track }) => {
-    track(() => location.url);
+    track(() => location.prevUrl);
     if (
       isOpen.value &&
       location.prevUrl &&

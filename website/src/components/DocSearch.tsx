@@ -149,7 +149,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
 
   // Close search when location changes
   useTask$(({ track }) => {
-    track(() => location.url);
+    track(() => location.prevUrl);
     if (isBrowser) {
       open.value = false;
     }
