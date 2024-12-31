@@ -41,7 +41,7 @@
     "autoprefixer": "^10.4.20",
     "dotenv": "^16.4.7",
     "eslint": "^8.57.1",
-    "eslint-plugin-qwik": "^1.12.0",
+    "eslint-plugin-qwik": "1.9",
     "gray-matter": "^4.0.3",
     "netlify-cli": "^17.38.1",
     "postcss": "^8.4.49",
@@ -58,8 +58,8 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
-    "@builder.io/qwik": "^1.12.0",
-    "@builder.io/qwik-city": "^1.12.0",
+    "@builder.io/qwik": "1.9",
+    "@builder.io/qwik-city": "1.9",
     "clsx": "^2.1.1",
     "lz-string": "^1.5.0",
     "monaco-editor": "^0.52.2",

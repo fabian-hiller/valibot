@@ -2,6 +2,8 @@ type EventName =
   | 'change_theme'
   | 'open_search'
   | 'select_search_item'
+  | 'copy_code_snippet'
+  | 'open_code_snippet_in_playground'
   | 'copy_playground_code'
   | 'share_playground_code'
   | 'save_playground_code'

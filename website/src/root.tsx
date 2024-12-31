@@ -1,9 +1,10 @@
-import { component$, isDev } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 import {
   QwikCityProvider,
   RouterOutlet,
   ServiceWorkerRegister,
 } from '@builder.io/qwik-city';
+import { isDev } from '@builder.io/qwik/build';
 import { Head } from './components';
 import './styles/root.css';
 import { disableTransitions } from './utils';
