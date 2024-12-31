@@ -259,9 +259,9 @@ export default component$(() => {
                     aria-expanded={isOpen}
                     aria-controls={`faq-${index}`}
                   >
-                    <h3 class="text-left font-medium leading-relaxed md:text-xl lg:text-2xl">
+                    <span class="text-left font-medium leading-relaxed md:text-xl lg:text-2xl">
                       {heading}
-                    </h3>
+                    </span>
                     <PlusIcon
                       class={clsx(
                         'mt-1.5 h-4 flex-shrink-0 transition-transform lg:h-5',

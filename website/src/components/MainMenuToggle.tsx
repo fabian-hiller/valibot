@@ -25,9 +25,9 @@ export const MainMenuToggle = component$<MainMenuToggleProps>(
         aria-label={`${open ? 'Close' : 'Open'} main menu`}
         aria-controls="main-menu"
       >
-        <div class="relative flex h-5 w-5 items-center justify-center md:h-[22px] md:w-[22px]">
+        <span class="relative flex h-5 w-5 items-center justify-center md:h-[22px] md:w-[22px]">
           {[...Array(3).keys()].map((index) => (
-            <div
+            <span
               key={index}
               class={clsx(
                 'absolute h-[1.5px] w-full rounded-full bg-slate-600 transition group-hover/button:bg-slate-900 dark:bg-slate-400 dark:group-hover/button:bg-slate-200',
@@ -37,7 +37,7 @@ export const MainMenuToggle = component$<MainMenuToggleProps>(
               )}
             />
           ))}
-        </div>
+        </span>
       </button>
     </Form>
   )

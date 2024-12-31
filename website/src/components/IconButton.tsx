@@ -24,7 +24,7 @@ export const IconButton = component$<IconButtonProps>(
       )}
       aria-label={label}
     >
-      <div
+      <span
         class={clsx(
           'flex h-10 w-10 items-center justify-center rounded-xl transition-colors',
           variant === 'primary' &&
@@ -34,15 +34,15 @@ export const IconButton = component$<IconButtonProps>(
         )}
       >
         <Slot />
-      </div>
+      </span>
       {!hideLabel && (
-        <div
+        <span
           class={clsx(
             'mx-4 transition-colors group-hover/button:text-slate-700 md:mx-6 md:text-lg lg:mx-8 lg:text-xl dark:group-hover/button:text-slate-200'
           )}
         >
           {label}
-        </div>
+        </span>
       )}
     </UnstyledButton>
   )
