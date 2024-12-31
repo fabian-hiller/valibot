@@ -14,7 +14,7 @@ import clsx from 'clsx';
 export const Navigation = component$(() => {
   const content = useContent();
   return (
-    <nav class="h-full overflow-auto overscroll-contain px-8 py-9 lg:w-60 lg:py-32 2xl:w-72">
+    <nav class="h-full overflow-auto overscroll-contain scroll-smooth px-8 py-9 lg:w-60 lg:py-32 2xl:w-72">
       <ul class="space-y-9 lg:space-y-12">
         {content.menu?.items?.map((item) => (
           <NavItem {...item} key={item.text} />
@@ -45,27 +45,38 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
 
   // Update indicator style when pathname changes
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ track }) => {
-    // Track URL pathname
-    const pathname = track(() => location.url.pathname);
+  useVisibleTask$(
+    ({ track }) => {
+      // Track URL pathname
+      const pathname = track(() => location.url.pathname);
 
-    // Get active list element by pathname and href
-    const activeElement = [...listElement.value!.children].find((e) =>
-      (e.children[0] as HTMLAnchorElement).href.endsWith(pathname)
-    ) as HTMLLIElement | undefined;
+      // Get active list element by pathname and href
+      const activeElement = [...listElement.value!.children].find((e) =>
+        (e.children[0] as HTMLAnchorElement).href.endsWith(pathname)
+      ) as HTMLLIElement | undefined;
 
-    // Update indicator style to active element or reset it to undefined
-    indicatorStyle.value = activeElement
-      ? {
-          top: `${activeElement.offsetTop}px`,
-          height: `${activeElement.offsetHeight}px`,
+      // Update indicator style to active element or reset it to undefined
+      indicatorStyle.value = activeElement
+        ? {
+            top: `${activeElement.offsetTop}px`,
+            height: `${activeElement.offsetHeight}px`,
+          }
+        : undefined;
+
+      // Scroll active element into view if needed
+      if (activeElement) {
+        const clientRect = activeElement.getBoundingClientRect();
+        if (clientRect.top < 0 || clientRect.bottom > window.innerHeight) {
+          activeElement.scrollIntoView({ block: 'center' });
         }
-      : undefined;
-  });
+      }
+    },
+    { strategy: 'document-idle' }
+  );
 
   return (
     <li class="space-y-6">
-      <div class="sticky -top-1 z-10 lg:static">
+      <div class="sticky -top-1 z-10 lg:-top-24">
         <h4
           class={clsx(
             'text-lg font-medium text-slate-900 dark:text-slate-200',
@@ -75,7 +86,7 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
         >
           {text}
         </h4>
-        <div class="pointer-events-none absolute -top-8 -z-10 h-24 w-full bg-gradient-to-b from-white via-white to-transparent opacity-90 lg:hidden dark:from-gray-900 dark:via-gray-900" />
+        <div class="pointer-events-none absolute -top-8 -z-10 h-24 w-full bg-gradient-to-b from-white via-white to-transparent opacity-90 dark:from-gray-900 dark:via-gray-900" />
       </div>
       <div class="relative">
         <ul
