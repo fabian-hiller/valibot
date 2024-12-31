@@ -46,8 +46,8 @@ const Pre = component$<PreProps>((props) => {
   });
 
   return (
-    <div class="code-wrapper group relative overflow-hidden rounded-2xl border-2 border-slate-200 lg:rounded-3xl lg:border-[3px] dark:border-slate-800">
-      <div class="absolute right-5 top-5 hidden space-x-6 group-hover:flex lg:right-10 lg:top-10">
+    <div class="code-wrapper group/code relative overflow-hidden rounded-2xl border-2 border-slate-200 lg:rounded-3xl lg:border-[3px] dark:border-slate-800">
+      <div class="absolute right-5 top-5 hidden space-x-5 group-hover/code:flex lg:right-10 lg:top-10">
         <IconButton
           type="button"
           variant="secondary"

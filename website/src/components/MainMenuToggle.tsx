@@ -16,7 +16,10 @@ export const MainMenuToggle = component$<MainMenuToggleProps>(
     <Form action={action}>
       <input name="state" type="hidden" value={open ? 'closed' : 'opened'} />
       <button
-        class={clsx('focus-ring group rounded-lg p-2', !open && 'rotate-180')}
+        class={clsx(
+          'focus-ring group/button rounded-lg p-2',
+          !open && 'rotate-180'
+        )}
         type="submit"
         aria-expanded={open}
         aria-label={`${open ? 'Close' : 'Open'} main menu`}
@@ -27,7 +30,7 @@ export const MainMenuToggle = component$<MainMenuToggleProps>(
             <div
               key={index}
               class={clsx(
-                'absolute h-[1.5px] w-full rounded-full bg-slate-600 transition group-hover:bg-slate-900 dark:bg-slate-400 dark:group-hover:bg-slate-200',
+                'absolute h-[1.5px] w-full rounded-full bg-slate-600 transition group-hover/button:bg-slate-900 dark:bg-slate-400 dark:group-hover/button:bg-slate-200',
                 index === 1 && open && 'opacity-0',
                 index === 0 && (open ? '-rotate-45' : '-translate-y-1.5'),
                 index === 2 && (open ? 'rotate-45' : 'translate-y-1.5')
