@@ -18,7 +18,7 @@ export const properties: Record<string, PropertyProps> = {
           type: {
             type: 'custom',
             name: 'Context',
-            href: './Context/',
+            href: '../rawTransform/Context/',
             generics: [
               {
                 type: 'custom',

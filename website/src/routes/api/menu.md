@@ -549,6 +549,7 @@
 - [RawCheckActionAsync](/api/RawCheckActionAsync/)
 - [RawCheckIssue](/api/RawCheckIssue/)
 - [RawTransformAction](/api/RawTransformAction/)
+- [RawTransformActionAsync](/api/RawTransformActionAsync/)
 - [RawTransformIssue](/api/RawTransformIssue/)
 - [ReadonlyAction](/api/ReadonlyAction/)
 - [RecordIssue](/api/RecordIssue/)
