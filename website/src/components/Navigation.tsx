@@ -81,21 +81,28 @@ const NavItem = component$<NavItemProps>(({ navElement, text, items }) => {
 
       // Scroll active element into view if needed
       if (activeElement) {
-        const parentClientRect = navElement.value!.getBoundingClientRect();
-        const childClientRect = activeElement.getBoundingClientRect();
-        if (
-          childClientRect.top < parentClientRect.top ||
-          childClientRect.bottom > parentClientRect.bottom
-        ) {
-          navElement.value!.scrollBy({
-            behavior: 'smooth',
-            top:
-              childClientRect.top -
-              parentClientRect.top -
-              parentClientRect.height / 2 +
-              childClientRect.height,
-          });
-        }
+        setTimeout(
+          () => {
+            const parentClientRect = navElement.value!.getBoundingClientRect();
+            if (parentClientRect.height > 0) {
+              const childClientRect = activeElement.getBoundingClientRect();
+              if (
+                childClientRect.top < parentClientRect.top ||
+                childClientRect.bottom > parentClientRect.bottom
+              ) {
+                navElement.value!.scrollBy({
+                  behavior: 'smooth',
+                  top:
+                    childClientRect.top -
+                    parentClientRect.top -
+                    parentClientRect.height / 2 +
+                    childClientRect.height,
+                });
+              }
+            }
+          },
+          window.innerWidth < 1024 ? 100 : 0
+        );
       }
     },
     { strategy: 'document-idle' }
