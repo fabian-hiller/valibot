@@ -1,4 +1,9 @@
-import { component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import {
+  component$,
+  type ReadonlySignal,
+  useSignal,
+  useVisibleTask$,
+} from '@builder.io/qwik';
 import {
   type ContentMenu,
   Link,
@@ -16,17 +21,18 @@ type NavigationProps = {
  * website.
  */
 export const Navigation = component$<NavigationProps>((props) => {
+  // Use content and nav element signal
   const content = useContent();
+  const navElement = useSignal<HTMLElement>();
+
   return (
     <nav
-      class={clsx(
-        'h-full overflow-auto overscroll-contain scroll-smooth',
-        props.class
-      )}
+      ref={navElement}
+      class={clsx('h-full overflow-auto overscroll-contain', props.class)}
     >
       <ul class="space-y-9 lg:space-y-12">
         {content.menu?.items?.map((item) => (
-          <NavItem {...item} key={item.text} />
+          <NavItem {...item} navElement={navElement} key={item.text} />
         ))}
       </ul>
     </nav>
@@ -34,6 +40,7 @@ export const Navigation = component$<NavigationProps>((props) => {
 });
 
 export type NavItemProps = {
+  navElement: ReadonlySignal<HTMLElement | undefined>;
   text: string;
   items?: ContentMenu[];
 };
@@ -41,7 +48,7 @@ export type NavItemProps = {
 /**
  * Single navigation main point that displays a heading and a navigation list.
  */
-const NavItem = component$<NavItemProps>(({ text, items }) => {
+const NavItem = component$<NavItemProps>(({ navElement, text, items }) => {
   // Use location
   const location = useLocation();
 
@@ -74,9 +81,20 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
 
       // Scroll active element into view if needed
       if (activeElement) {
-        const clientRect = activeElement.getBoundingClientRect();
-        if (clientRect.top < 0 || clientRect.bottom > window.innerHeight) {
-          activeElement.scrollIntoView({ block: 'center' });
+        const parentClientRect = navElement.value!.getBoundingClientRect();
+        const childClientRect = activeElement.getBoundingClientRect();
+        if (
+          childClientRect.top < parentClientRect.top ||
+          childClientRect.bottom > parentClientRect.bottom
+        ) {
+          navElement.value!.scrollBy({
+            behavior: 'smooth',
+            top:
+              childClientRect.top -
+              parentClientRect.top -
+              parentClientRect.height / 2 +
+              childClientRect.height,
+          });
         }
       }
     },
