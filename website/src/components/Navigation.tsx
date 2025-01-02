@@ -1,4 +1,9 @@
-import { component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import {
+  component$,
+  type ReadonlySignal,
+  useSignal,
+  useVisibleTask$,
+} from '@builder.io/qwik';
 import {
   type ContentMenu,
   Link,
@@ -7,17 +12,27 @@ import {
 } from '@builder.io/qwik-city';
 import clsx from 'clsx';
 
+type NavigationProps = {
+  class?: string;
+};
+
 /**
  * Navigation list used as a secondary navigation over a certain part of the
  * website.
  */
-export const Navigation = component$(() => {
+export const Navigation = component$<NavigationProps>((props) => {
+  // Use content and nav element signal
   const content = useContent();
+  const navElement = useSignal<HTMLElement>();
+
   return (
-    <nav class="h-full overflow-auto overscroll-contain scroll-smooth px-8 py-9 lg:w-60 lg:py-32 2xl:w-72">
+    <nav
+      ref={navElement}
+      class={clsx('h-full overflow-auto overscroll-contain', props.class)}
+    >
       <ul class="space-y-9 lg:space-y-12">
         {content.menu?.items?.map((item) => (
-          <NavItem {...item} key={item.text} />
+          <NavItem {...item} navElement={navElement} key={item.text} />
         ))}
       </ul>
     </nav>
@@ -25,6 +40,7 @@ export const Navigation = component$(() => {
 });
 
 export type NavItemProps = {
+  navElement: ReadonlySignal<HTMLElement | undefined>;
   text: string;
   items?: ContentMenu[];
 };
@@ -32,7 +48,7 @@ export type NavItemProps = {
 /**
  * Single navigation main point that displays a heading and a navigation list.
  */
-const NavItem = component$<NavItemProps>(({ text, items }) => {
+const NavItem = component$<NavItemProps>(({ navElement, text, items }) => {
   // Use location
   const location = useLocation();
 
@@ -65,10 +81,28 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
 
       // Scroll active element into view if needed
       if (activeElement) {
-        const clientRect = activeElement.getBoundingClientRect();
-        if (clientRect.top < 0 || clientRect.bottom > window.innerHeight) {
-          activeElement.scrollIntoView({ block: 'center' });
-        }
+        setTimeout(
+          () => {
+            const parentClientRect = navElement.value!.getBoundingClientRect();
+            if (parentClientRect.height > 0) {
+              const childClientRect = activeElement.getBoundingClientRect();
+              if (
+                childClientRect.top < parentClientRect.top ||
+                childClientRect.bottom > parentClientRect.bottom
+              ) {
+                navElement.value!.scrollBy({
+                  behavior: 'smooth',
+                  top:
+                    childClientRect.top -
+                    parentClientRect.top -
+                    parentClientRect.height / 2 +
+                    childClientRect.height,
+                });
+              }
+            }
+          },
+          window.innerWidth < 1024 ? 100 : 0
+        );
       }
     },
     { strategy: 'document-idle' }
