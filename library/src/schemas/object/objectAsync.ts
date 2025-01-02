@@ -1,4 +1,5 @@
 import type {
+  BaseIssue,
   BaseSchemaAsync,
   ErrorMessage,
   InferObjectInput,
@@ -112,16 +113,71 @@ export function objectAsync(
         // Hint: We do not distinguish between missing and `undefined` entries.
         // The reason for this decision is that it reduces the bundle size, and
         // we also expect that most users will expect this behavior.
-        const valueDatasets = await Promise.all(
-          Object.entries(this.entries).map(async ([key, schema]) => {
-            const value = input[key as keyof typeof input];
-            return [
-              key,
-              value,
-              await schema['~run']({ value }, config),
-            ] as const;
-          })
-        );
+
+        // Type of value dataset
+        type ValueDataset = [
+          /* key */ string,
+          /* value */ unknown,
+          /* result */ OutputDataset<unknown, BaseIssue<unknown>>,
+        ];
+
+        const isPromise = (value: unknown): value is PromiseLike<unknown> =>
+          typeof value === 'object' && value !== null && 'then' in value;
+
+        // Flag to abort early synchronously
+        let shouldAbortEarly = false;
+
+        // Array of value datasets
+        const valueDatasets: ValueDataset[] = [];
+
+        // Array of value datasets promises
+        const valueDatasetsAsync: Array<Promise<ValueDataset>> = [];
+
+        // Add each value dataset promise to array, but do not await them yet
+        for (const [key, schema] of Object.entries(this.entries)) {
+          const value = input[key as keyof typeof input];
+          const result = schema['~run']({ value }, config);
+
+          // If validation result is a promise - add promise to array, to await later
+          if (isPromise(result)) {
+            valueDatasetsAsync.push(
+              result.then((resolved) => [key, value, resolved])
+            );
+          }
+
+          // If got validation result synchronously - add it to result array right away
+          else {
+            // Add sync dataset to result array
+            valueDatasets.push([key, value, result]);
+
+            // If there are issues, abort early
+            if (config.abortEarly && result.issues) {
+              shouldAbortEarly = true;
+              break;
+            }
+          }
+        }
+
+        // Await for async datasets
+        if (valueDatasetsAsync.length > 0 && !shouldAbortEarly) {
+          await new Promise<void>((resolve) => {
+            let awaited = 0;
+            for (const promise of valueDatasetsAsync) {
+              promise.then((dataset) => {
+                if (awaited > -1) {
+                  valueDatasets.push(dataset);
+                  if (
+                    ++awaited === valueDatasetsAsync.length ||
+                    (dataset[2].issues && config.abortEarly)
+                  ) {
+                    awaited = -1;
+                    resolve();
+                  }
+                }
+              });
+            }
+          });
+        }
 
         // Process each value dataset
         for (const [key, value, valueDataset] of valueDatasets) {
