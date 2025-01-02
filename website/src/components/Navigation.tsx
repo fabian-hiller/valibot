@@ -7,14 +7,23 @@ import {
 } from '@builder.io/qwik-city';
 import clsx from 'clsx';
 
+type NavigationProps = {
+  class?: string;
+};
+
 /**
  * Navigation list used as a secondary navigation over a certain part of the
  * website.
  */
-export const Navigation = component$(() => {
+export const Navigation = component$<NavigationProps>((props) => {
   const content = useContent();
   return (
-    <nav class="h-full overflow-auto overscroll-contain scroll-smooth px-8 py-9 lg:w-60 lg:py-32 2xl:w-72">
+    <nav
+      class={clsx(
+        'h-full overflow-auto overscroll-contain scroll-smooth',
+        props.class
+      )}
+    >
       <ul class="space-y-9 lg:space-y-12">
         {content.menu?.items?.map((item) => (
           <NavItem {...item} key={item.text} />

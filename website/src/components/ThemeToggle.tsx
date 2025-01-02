@@ -37,7 +37,6 @@ export const ThemeToggle = component$<ThemeToggleProps>((props) => {
 
   return (
     <Form class={props.class} action={themeToggle}>
-      <input name="theme" type="hidden" value={nextTheme.value} />
       <SystemIcon type="submit" label={`Change theme to ${nextTheme.value}`}>
         <SunIcon class="hidden h-full dark:block" />
         <NightIcon class="h-full dark:hidden" />
