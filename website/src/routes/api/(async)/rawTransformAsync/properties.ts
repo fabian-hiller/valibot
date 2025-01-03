@@ -18,7 +18,7 @@ export const properties: Record<string, PropertyProps> = {
           type: {
             type: 'custom',
             name: 'Context',
-            href: './Context/',
+            href: '../rawTransform/Context/',
             generics: [
               {
                 type: 'custom',
@@ -30,15 +30,22 @@ export const properties: Record<string, PropertyProps> = {
       ],
       return: {
         type: 'custom',
-        name: 'TOutput',
+        name: 'MaybePromise',
+        href: '../MaybePromise/',
+        generics: [
+          {
+            type: 'custom',
+            name: 'TOutput',
+          },
+        ],
       },
     },
   },
   Action: {
     type: {
       type: 'custom',
-      name: 'RawTransformAction',
-      href: '../RawTransformAction/',
+      name: 'RawTransformActionAsync',
+      href: '../RawTransformActionAsync/',
       generics: [
         {
           type: 'custom',
