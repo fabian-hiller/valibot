@@ -49,9 +49,15 @@ export default component$(() => {
       <section class="px-4 text-center">
         <h1 class="font-lexend-exa text-[min(6.2vw,30px)] font-medium leading-normal text-slate-900 md:text-[34px] md:leading-normal lg:text-[40px] lg:leading-normal xl:text-5xl xl:leading-normal dark:text-slate-200">
           <span class="block">
-            Validate <span class="blur-[1px] xl:blur-[2px]">unknown</span>
+            Validate{' '}
+            <span class="cursor-default blur-[1px] duration-[2s] hover:blur-none xl:blur-[2px]">
+              unknown
+            </span>
           </span>{' '}
-          <span class="blur-[2px] xl:blur-[3px]">data</span> with confidence
+          <span class="cursor-default blur-[2px] duration-[2s] hover:blur-none xl:blur-[3px]">
+            data
+          </span>{' '}
+          with confidence
         </h1>
         <p class="mt-6 leading-loose md:mt-10 md:text-[17px] md:leading-loose lg:mt-14 lg:text-lg lg:leading-loose xl:text-[22px] xl:leading-loose">
           <span class="sm:block">
