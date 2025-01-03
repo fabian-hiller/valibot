@@ -64,26 +64,22 @@ const OrderSchema = v.pipeAsync(
       if (input.expectsFreeDelivery && total < FREE_DELIVERY_MIN_AMOUNT) {
         addIssue({
           label: 'order',
-          input,
-          expected: `totalAmount(cart) >= ${FREE_DELIVERY_MIN_AMOUNT}`,
-          received: `totalAmount(cart) = ${total}`,
-          message: `The order amount total must be at least ${FREE_DELIVERY_MIN_AMOUNT} for free delivery.`,
+          expected: `>=${FREE_DELIVERY_MIN_AMOUNT}`,
+          received: `${total}`,
+          message: `The total amount must be at least $${FREE_DELIVERY_MIN_AMOUNT} for free delivery.`,
           path: [
             {
               type: 'object',
+              origin: 'value',
               input,
               key: 'cart',
               value: input.cart,
-              origin: 'value',
             },
           ],
         });
         return NEVER;
       }
-      return {
-        cart: input.cart,
-        total,
-      };
+      return { ...input, total };
     }
   )
 );
