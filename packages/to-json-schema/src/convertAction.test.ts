@@ -508,4 +508,65 @@ describe('convertAction', () => {
       'The "transform" action cannot be converted to JSON Schema.'
     );
   });
+
+  test('should convert BIC action', () => {
+    expect(convertAction({ type: 'string' }, v.bic(), undefined)).toStrictEqual(
+      {
+        type: 'string',
+        pattern: v.BIC_REGEX.source,
+      }
+    );
+  });
+
+  test('should convert CUID2 action', () => {
+    expect(
+      convertAction({ type: 'string' }, v.cuid2(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.CUID2_REGEX.source,
+    });
+  });
+
+  test('should convert decimal action', () => {
+    expect(
+      convertAction({ type: 'string' }, v.decimal(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.DECIMAL_REGEX.source,
+    });
+  });
+
+  test('should convert digits action', () => {
+    expect(
+      convertAction({ type: 'string' }, v.digits(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.DIGITS_REGEX.source,
+    });
+  });
+
+  test('should convert empty action with strings', () => {
+    expect(
+      convertAction({ type: 'string' }, v.empty(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      maxLength: 0,
+    });
+  });
+
+  test('should convert empty action with arrays', () => {
+    expect(
+      convertAction({ type: 'array' }, v.empty(), undefined)
+    ).toStrictEqual({
+      type: 'array',
+      maxItems: 0,
+    });
+  });
+
+  test('should throw error for unsupported empty action', () => {
+    const error = 'The "empty" action is not supported on type "number".';
+    expect(() =>
+      convertAction({ type: 'number' }, v.empty(), undefined)
+    ).toThrowError(error);
+  });
 });

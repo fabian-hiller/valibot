@@ -1,5 +1,6 @@
 import type { JSONSchema7 } from 'json-schema';
 import type * as v from 'valibot';
+import { BIC_REGEX, CUID2_REGEX, DECIMAL_REGEX, DIGITS_REGEX } from 'valibot';
 import type { ConversionConfig } from './type.ts';
 import { handleError } from './utils/index.ts';
 
@@ -56,7 +57,15 @@ type Action =
       number,
       v.ErrorMessage<v.MultipleOfIssue<number, number>> | undefined
     >
-  | v.TitleAction<unknown, string>;
+  | v.TitleAction<unknown, string>
+  | v.BicAction<never, v.ErrorMessage<v.BicIssue<string>> | undefined>
+  | v.Cuid2Action<never, v.ErrorMessage<v.Cuid2Issue<string>> | undefined>
+  | v.DecimalAction<never, v.ErrorMessage<v.DecimalIssue<string>> | undefined>
+  | v.DigitsAction<never, v.ErrorMessage<v.DigitsIssue<string>> | undefined>
+  | v.EmptyAction<
+      v.LengthInput,
+      v.ErrorMessage<v.EmptyIssue<v.LengthInput>> | undefined
+    >;
 
 /**
  * Converts any supported Valibot action to the JSON Schema format.
@@ -188,6 +197,28 @@ export function convertAction(
       // schema in the pipeline anyway.
       // @ts-expect-error
       jsonSchema.const = valibotAction.requirement;
+      break;
+    }
+
+    case 'bic':
+    case 'cuid2':
+    case 'decimal':
+    case 'digits': {
+      jsonSchema.pattern = valibotAction.requirement.source;
+      break;
+    }
+
+    case 'empty': {
+      if (jsonSchema.type === 'string') {
+        jsonSchema.maxLength = 0;
+      } else if (jsonSchema.type === 'array') {
+        jsonSchema.maxItems = 0;
+      } else {
+        handleError(
+          `The "empty" action is not supported on type "${jsonSchema.type}".`,
+          config
+        );
+      }
       break;
     }
 
