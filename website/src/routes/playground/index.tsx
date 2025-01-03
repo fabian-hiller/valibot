@@ -184,7 +184,7 @@ export default component$(() => {
       <div class="flex flex-1 lg:relative">
         <CodeEditor value={initialCode} model={model} onSave$={saveCode} />
         <EditorButtons
-          class="!hidden lg:!absolute lg:right-10 lg:top-10 lg:!flex"
+          class="!hidden lg:!absolute lg:right-10 lg:top-10 lg:z-10 lg:!flex"
           model={model}
           executeCode$={executeCode}
         />
