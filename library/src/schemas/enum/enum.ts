@@ -19,6 +19,48 @@ export interface Enum {
 }
 
 /**
+ * Checks if a string can be produced by Number.prototype.toString with radix=10.
+ */
+type IsNumericString<K extends string> = K extends
+  | 'NaN'
+  | 'Infinity'
+  | '-Infinity'
+  ? true
+  : K extends `${infer V extends number}`
+    ? `${V}` extends K
+      ? true
+      : false
+    : false;
+
+type OmitReverseMappingValue<
+  K extends string | number,
+  V,
+  Ks extends string | number,
+> = K extends number
+  ? number extends K
+    ? never
+    : Exclude<V, Ks>
+  : K extends string
+    ? IsNumericString<K> extends true
+      ? Exclude<V, Ks>
+      : V
+    : never;
+
+/**
+ * enum_ only accepts enum values of string & non-numeric keys that has its reverse mapping.
+ * This type-level function filters out numeric keys including Infinity and NaN.
+ *
+ * @example EnumValues<{ 1: NaN; NaN: 1; 2: 'foo' }> = NaN | 'foo'
+ */
+type EnumValues<TEnum extends Enum> = {
+  [K in (string | number) & keyof TEnum]: OmitReverseMappingValue<
+    K,
+    TEnum[K],
+    (string | number) & keyof TEnum
+  >;
+}[(string | number) & keyof TEnum];
+
+/**
  * Enum issue type.
  */
 export interface EnumIssue extends BaseIssue<unknown> {
@@ -42,7 +84,7 @@ export interface EnumIssue extends BaseIssue<unknown> {
 export interface EnumSchema<
   TEnum extends Enum,
   TMessage extends ErrorMessage<EnumIssue> | undefined,
-> extends BaseSchema<TEnum[keyof TEnum], TEnum[keyof TEnum], EnumIssue> {
+> extends BaseSchema<EnumValues<TEnum>, EnumValues<TEnum>, EnumIssue> {
   /**
    * The schema type.
    */
@@ -58,7 +100,7 @@ export interface EnumSchema<
   /**
    * The enum options.
    */
-  readonly options: TEnum[keyof TEnum][];
+  readonly options: EnumValues<TEnum>[];
   /**
    * The error message.
    */
@@ -95,7 +137,14 @@ export function enum_(
   message?: ErrorMessage<EnumIssue>
 ): EnumSchema<Enum, ErrorMessage<EnumIssue> | undefined> {
   const options = Object.entries(enum__)
-    .filter(([key]) => isNaN(+key))
+    .filter(
+      ([key, value]) =>
+        !(
+          `${+key}` === key &&
+          typeof value === 'string' &&
+          Object.is(enum__[value], +key)
+        )
+    )
     .map(([, value]) => value);
   return {
     kind: 'schema',
