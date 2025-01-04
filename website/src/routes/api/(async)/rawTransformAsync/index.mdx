@@ -1,11 +1,179 @@
 ---
 title: rawTransformAsync
+description: Creates a raw transformation action.
 source: /actions/rawTransform/rawTransformAsync.ts
 contributors:
   - fabian-hiller
+  - santoshyadavdev
   - EltonLobo07
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # rawTransformAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/actions/rawTransform/rawTransformAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a raw transformation action.
+
+```ts
+const Action = v.rawTransformAsync<TInput, TOutput>(action);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Parameters
+
+- `action` <Property {...properties.action} />
+
+### Explanation
+
+With `rawTransformAsync` you can freely transform and validate the input with a custom `action` and add issues if necessary.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `rawTransformAsync` can be used.
+
+### Order schema
+
+Schema that rejects an order that does not meet a requirement when free delivery is expected.
+
+```ts
+import { getTotalAmount } from '~/api';
+import { FREE_DELIVERY_MIN_AMOUNT } from '~/constants';
+
+const OrderSchema = v.pipeAsync(
+  v.object({
+    cart: v.array(
+      v.object({
+        itemId: v.pipe(v.string(), v.uuid()),
+        quantity: v.pipe(v.number(), v.integer(), v.minValue(1)),
+      })
+    ),
+    expectsFreeDelivery: v.optional(v.boolean(), false),
+  }),
+  v.rawTransformAsync(
+    async ({ dataset: { value: input }, addIssue, NEVER }) => {
+      const total = await getTotalAmount(input.cart);
+      if (input.expectsFreeDelivery && total < FREE_DELIVERY_MIN_AMOUNT) {
+        addIssue({
+          label: 'order',
+          expected: `>=${FREE_DELIVERY_MIN_AMOUNT}`,
+          received: `${total}`,
+          message: `The total amount must be at least $${FREE_DELIVERY_MIN_AMOUNT} for free delivery.`,
+          path: [
+            {
+              type: 'object',
+              origin: 'value',
+              input,
+              key: 'cart',
+              value: input.cart,
+            },
+          ],
+        });
+        return NEVER;
+      }
+      return { ...input, total };
+    }
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `rawTransformAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'undefinedable',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'customAsync',
+    'forwardAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'pipeAsync',
+    'recordAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'undefinedableAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>

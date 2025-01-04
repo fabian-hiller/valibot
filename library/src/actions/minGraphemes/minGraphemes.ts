@@ -103,6 +103,7 @@ export function minGraphemes<
   message: TMessage
 ): MinGraphemesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function minGraphemes(
   requirement: number,
   message?: ErrorMessage<MinGraphemesIssue<string, number>>

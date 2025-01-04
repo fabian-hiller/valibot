@@ -15,6 +15,7 @@ type MergeDataset =
  *
  * @internal
  */
+// @__NO_SIDE_EFFECTS__
 export function _merge(value1: unknown, value2: unknown): MergeDataset {
   // Continue if data type of values match
   if (typeof value1 === typeof value2) {

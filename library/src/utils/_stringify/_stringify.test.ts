@@ -36,6 +36,7 @@ describe('_stringify', () => {
   });
 
   test('should return Function constructor name', () => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     expect(_stringify(() => {})).toBe('Function');
   });
 
@@ -46,6 +47,7 @@ describe('_stringify', () => {
   test('should return null as string', () => {
     expect(_stringify(null)).toBe('null');
     expect(_stringify(Object.create(null))).toBe('null');
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     function EmptyObject() {}
     EmptyObject.prototype = Object.create(null);
     // @ts-expect-error

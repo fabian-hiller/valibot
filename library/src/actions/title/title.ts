@@ -26,6 +26,7 @@ export interface TitleAction<TInput, TTitle extends string>
  *
  * @returns A title action.
  */
+// @__NO_SIDE_EFFECTS__
 export function title<TInput, TTitle extends string>(
   title_: TTitle
 ): TitleAction<TInput, TTitle> {

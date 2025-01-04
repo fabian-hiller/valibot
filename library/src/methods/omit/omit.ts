@@ -463,6 +463,7 @@ export type SchemaWithOmit<
  *
  * @returns An object schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function omit<
   const TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,
@@ -474,6 +475,7 @@ export function omit<
   };
   for (const key of keys) {
     // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete entries[key];
   }
 

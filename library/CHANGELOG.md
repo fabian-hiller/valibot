@@ -9,7 +9,9 @@ All notable changes to the library will be documented in this file.
 - Add `graphemes`, `maxGraphemes`, `minGraphemes` and `notGraphemes` action (pull request #853)
 - Add `words`, `maxWords`, `minWords` and `notWords` action
 - Add `args` and `returns` action to transform functions (issue #243)
+- Add `rfcEmail` action to validate RFC 5322 email addresses (pull request #912)
 - Add new overload signature to `pipe` and `pipeAync` method to support unlimited pipe items of same input and output type (issue #852)
+- Add `@__NO_SIDE_EFFECTS__` notation to improve tree shaking (pull request #995)
 - Change types and implementation to support Standard Schema
 - Change behaviour of `minValue` and `maxValue` for `NaN` (pull request #843)
 - Change type and behaviour of `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional`, `optionalAsync`, `undefinedable` and `undefinedableAsync` for undefined default value (issue #878)

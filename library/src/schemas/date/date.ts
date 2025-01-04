@@ -66,6 +66,7 @@ export function date<
   const TMessage extends ErrorMessage<DateIssue> | undefined,
 >(message: TMessage): DateSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function date(
   message?: ErrorMessage<DateIssue>
 ): DateSchema<ErrorMessage<DateIssue> | undefined> {

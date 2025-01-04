@@ -40,6 +40,7 @@ export function mapItems<TInput extends ArrayInput, TOutput>(
   operation: ArrayAction<TInput, TOutput>
 ): MapItemsAction<TInput, TOutput>;
 
+// @__NO_SIDE_EFFECTS__
 export function mapItems(
   operation: ArrayAction<unknown[], unknown>
 ): MapItemsAction<unknown[], unknown> {

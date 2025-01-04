@@ -3,8 +3,7 @@ import { BIC_REGEX } from '../../regex.ts';
 import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue } from '../../vitest/expectActionIssue.ts';
 import { expectNoActionIssue } from '../../vitest/expectNoActionIssue.ts';
-import type { BicIssue } from './bic.ts';
-import { bic, type BicAction } from './bic.ts';
+import { bic, type BicAction, type BicIssue } from './bic.ts';
 
 describe('bic', () => {
   describe('should return action object', () => {

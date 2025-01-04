@@ -20,6 +20,7 @@ export interface TrimEndAction
  *
  * @returns A trim end action.
  */
+// @__NO_SIDE_EFFECTS__
 export function trimEnd(): TrimEndAction {
   return {
     kind: 'transformation',

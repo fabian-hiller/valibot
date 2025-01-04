@@ -123,3 +123,13 @@ window.onerror = (...args) => {
     original(...args);
   };
 });
+
+// Listen for code messages
+window.addEventListener('message', (event) => {
+  if (event.data.type === 'code') {
+    const element = document.createElement('script');
+    element.type = 'module';
+    element.textContent = event.data.code;
+    document.head.appendChild(element);
+  }
+});

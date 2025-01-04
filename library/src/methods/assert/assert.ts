@@ -8,6 +8,7 @@ import { ValiError } from '../../utils/index.ts';
  * @param schema The schema to be used.
  * @param input The input to be tested.
  */
+// @__NO_SIDE_EFFECTS__
 export function assert<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(schema: TSchema, input: unknown): asserts input is InferInput<TSchema> {

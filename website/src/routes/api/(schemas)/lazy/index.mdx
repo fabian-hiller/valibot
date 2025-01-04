@@ -32,6 +32,8 @@ const Schema = v.lazy<TWrapped>(getter);
 
 The `getter` function is called lazily to retrieve the schema. This is necessary to be able to access the input through the first argument of the `getter` function and to avoid a circular dependency for recursive schemas.
 
+> Due to a TypeScript limitation, the input and output types of recursive schemas cannot be inferred automatically. Therefore, you must explicitly specify these types using <Link href="/api/GenericSchema/">`GenericSchema`</Link>. Please see the examples below.
+
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
@@ -43,8 +45,6 @@ The following examples show how `lazy` can be used.
 ### Binary tree schema
 
 Recursive schema to validate a binary tree.
-
-> Due to a TypeScript limitation, the input and output types of recursive schemas cannot be inferred automatically. Therefore, you must explicitly specify these types using <Link href="/api/GenericSchema/">`GenericSchema`</Link>.
 
 ```ts
 type BinaryTree = {
@@ -58,6 +58,33 @@ const BinaryTreeSchema: v.GenericSchema<BinaryTree> = v.object({
   left: v.nullable(v.lazy(() => BinaryTreeSchema)),
   right: v.nullable(v.lazy(() => BinaryTreeSchema)),
 });
+```
+
+### JSON data schema
+
+Schema to validate all possible `JSON` values.
+
+```ts
+import * as v from 'valibot';
+
+type JsonData =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: JsonData }
+  | JsonData[];
+
+const JsonSchema: v.GenericSchema<JsonData> = v.lazy(() =>
+  v.union([
+    v.string(),
+    v.number(),
+    v.boolean(),
+    v.null(),
+    v.record(v.string(), JsonSchema),
+    v.array(JsonSchema),
+  ])
+);
 ```
 
 ### Lazy union schema
@@ -170,6 +197,7 @@ The following APIs can be combined with `lazy`.
 
 <ApiList
   items={[
+    'args',
     'base64',
     'bic',
     'brand',
@@ -241,6 +269,8 @@ The following APIs can be combined with `lazy`.
     'readonly',
     'reduceItems',
     'regex',
+    'returns',
+    'rfcEmail',
     'safeInteger',
     'size',
     'someItem',

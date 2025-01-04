@@ -78,6 +78,7 @@ export function literal<
   const TMessage extends ErrorMessage<LiteralIssue> | undefined,
 >(literal_: TLiteral, message: TMessage): LiteralSchema<TLiteral, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function literal(
   literal_: Literal,
   message?: ErrorMessage<LiteralIssue>

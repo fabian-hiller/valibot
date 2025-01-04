@@ -57,7 +57,7 @@ export const Header = component$<HeaderProps>(({ searchOpen }) => {
 
   // Close main menu when location pathname changes
   useTask$(({ track }) => {
-    track(() => location.url);
+    track(() => location.prevUrl);
     if (
       isOpen.value &&
       location.prevUrl &&

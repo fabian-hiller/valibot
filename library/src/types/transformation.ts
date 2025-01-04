@@ -102,19 +102,19 @@ export interface BaseTransformationAsync<
 /**
  * Generic transformation type.
  */
-export interface GenericTransformation<
+export type GenericTransformation<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TInput = any,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseTransformation<TInput, TOutput, TIssue> {}
+> = BaseTransformation<TInput, TOutput, TIssue>;
 
 /**
  * Generic transformation async type.
  */
-export interface GenericTransformationAsync<
+export type GenericTransformationAsync<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TInput = any,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseTransformationAsync<TInput, TOutput, TIssue> {}
+> = BaseTransformationAsync<TInput, TOutput, TIssue>;

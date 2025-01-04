@@ -12,6 +12,7 @@ import { ValiError } from '../../utils/index.ts';
  *
  * @returns Whether its a ValiError.
  */
+// @__NO_SIDE_EFFECTS__
 export function isValiError<
   TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

@@ -17,6 +17,7 @@ import { ValiError } from '../../utils/index.ts';
  *
  * @returns The parsed input.
  */
+// @__NO_SIDE_EFFECTS__
 export function parse<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(

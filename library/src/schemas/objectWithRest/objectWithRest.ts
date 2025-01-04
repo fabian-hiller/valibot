@@ -92,6 +92,7 @@ export function objectWithRest<
   message: TMessage
 ): ObjectWithRestSchema<TEntries, TRest, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function objectWithRest(
   entries: ObjectEntries,
   rest: BaseSchema<unknown, unknown, BaseIssue<unknown>>,

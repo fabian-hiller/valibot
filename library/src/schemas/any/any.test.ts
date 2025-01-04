@@ -59,6 +59,7 @@ describe('any', () => {
     });
 
     test('for functions', () => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       expectNoSchemaIssue(schema, [() => {}, function () {}]);
     });
 

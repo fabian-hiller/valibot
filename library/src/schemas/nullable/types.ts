@@ -17,4 +17,4 @@ export type InferNullableOutput<
   TDefault extends DefaultAsync<TWrapped, null>,
 > = undefined extends TDefault
   ? InferOutput<TWrapped> | null
-  : InferOutput<TWrapped> | DefaultValue<TDefault>;
+  : InferOutput<TWrapped> | Extract<DefaultValue<TDefault>, null>;

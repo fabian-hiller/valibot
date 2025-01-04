@@ -88,6 +88,7 @@ export function imei<
   const TMessage extends ErrorMessage<ImeiIssue<TInput>> | undefined,
 >(message: TMessage): ImeiAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function imei(
   message?: ErrorMessage<ImeiIssue<string>>
 ): ImeiAction<string, ErrorMessage<ImeiIssue<string>> | undefined> {

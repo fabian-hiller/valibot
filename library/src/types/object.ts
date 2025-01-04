@@ -21,6 +21,7 @@ import type {
 import type { InferInput, InferIssue, InferOutput } from './infer.ts';
 import type { BaseIssue } from './issue.ts';
 import type { ErrorMessage } from './other.ts';
+import type { SchemaWithoutPipe } from './pipe.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type { MarkOptional, MaybeReadonly, Prettify } from './utils.ts';
 
@@ -123,8 +124,8 @@ type ExactOptionalOutput<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > = TSchema extends
-  | OptionalSchema<infer TWrapped, unknown>
-  | OptionalSchemaAsync<infer TWrapped, unknown>
+  | SchemaWithoutPipe<OptionalSchema<infer TWrapped, unknown>>
+  | SchemaWithoutPipe<OptionalSchemaAsync<infer TWrapped, unknown>>
   ? HasDefault<TSchema> extends true
     ? InferOutput<TSchema>
     : ExactOptionalOutput<TWrapped>
