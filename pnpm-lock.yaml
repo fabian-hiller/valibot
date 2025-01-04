@@ -173,12 +173,12 @@ importers:
       monaco-textmate:
         specifier: ^3.0.1
         version: 3.0.1(onigasm@2.2.5)
-      og-img:
-        specifier: ^0.2.1
-        version: 0.2.1
       onigasm:
         specifier: ^2.2.5
         version: 2.2.5
+      satori-html:
+        specifier: ^0.3.2
+        version: 0.3.2
       sucrase:
         specifier: ^3.35.0
         version: 3.35.0
@@ -1685,10 +1685,6 @@ packages:
 
   '@resvg/resvg-wasm@2.4.0':
     resolution: {integrity: sha512-C7c51Nn4yTxXFKvgh2txJFNweaVcfUPQxwEUFw4aWsCmfiBDJsTSwviIF8EcwjQ6k8bPyMWCl1vw4BdxE569Cg==}
-    engines: {node: '>= 10'}
-
-  '@resvg/resvg-wasm@2.6.2':
-    resolution: {integrity: sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw==}
     engines: {node: '>= 10'}
 
   '@rollup/pluginutils@4.2.1':
@@ -5751,9 +5747,6 @@ packages:
   ofetch@1.4.1:
     resolution: {integrity: sha512-QZj2DfGplQAr2oj9KzceK9Hwz6Whxazmn85yYeVuS3u9XTMOGMRx0kO95MQ+vLsj/S/NwBDMMLU5hpxvI6Tklw==}
 
-  og-img@0.2.1:
-    resolution: {integrity: sha512-hX13CeCoKlFcls9MSyA2IB06q9KNKYhnTJlVYqBnW53h//hQkVBZb3kwfCL1+o1I5zbh7JhIbsgTTrpWxckpgQ==}
-
   ohash@1.1.4:
     resolution: {integrity: sha512-FlDryZAahJmEF3VR3w1KogSEdWX3WhA5GPakFx4J81kEAiHyLMpdLLElS8n8dfNadMgAne/MywcvmogzscVt4g==}
 
@@ -6583,10 +6576,6 @@ packages:
 
   satori-html@0.3.2:
     resolution: {integrity: sha512-wjTh14iqADFKDK80e51/98MplTGfxz2RmIzh0GqShlf4a67+BooLywF17TvJPD6phO0Hxm7Mf1N5LtRYvdkYRA==}
-
-  satori@0.10.14:
-    resolution: {integrity: sha512-abovcqmwl97WKioxpkfuMeZmndB1TuDFY/R+FymrZyiGP+pMYomvgSzVPnbNMWHHESOPosVHGL352oFbdAnJcA==}
-    engines: {node: '>=16'}
 
   satori@0.12.0:
     resolution: {integrity: sha512-e0e+qQyeFwEszujN7SpWpRtZgww7Nh8lSO3bUn2spHZ5JpqEl3zJ3P14/JlWruxEwdgREs35ZnavrPrWaRVFDg==}
@@ -9296,8 +9285,6 @@ snapshots:
       config-chain: 1.1.13
 
   '@resvg/resvg-wasm@2.4.0': {}
-
-  '@resvg/resvg-wasm@2.6.2': {}
 
   '@rollup/pluginutils@4.2.1':
     dependencies:
@@ -14145,12 +14132,6 @@ snapshots:
       node-fetch-native: 1.6.4
       ufo: 1.5.4
 
-  og-img@0.2.1:
-    dependencies:
-      '@resvg/resvg-wasm': 2.6.2
-      satori: 0.10.14
-      satori-html: 0.3.2
-
   ohash@1.1.4: {}
 
   omit.js@2.0.2: {}
@@ -14997,19 +14978,6 @@ snapshots:
   satori-html@0.3.2:
     dependencies:
       ultrahtml: 1.5.3
-
-  satori@0.10.14:
-    dependencies:
-      '@shuding/opentype.js': 1.4.0-beta.0
-      css-background-parser: 0.1.0
-      css-box-shadow: 1.0.0-3
-      css-to-react-native: 3.2.0
-      emoji-regex: 10.4.0
-      escape-html: 1.0.3
-      linebreak: 1.1.0
-      parse-css-color: 0.2.1
-      postcss-value-parser: 4.2.0
-      yoga-wasm-web: 0.3.3
 
   satori@0.12.0:
     dependencies:
