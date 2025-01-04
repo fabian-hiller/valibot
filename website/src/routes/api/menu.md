@@ -245,6 +245,7 @@
 
 - [AnySchema](/api/AnySchema/)
 - [ArgsAction](/api/ArgsAction/)
+- [ArgsActionAsync](/api/ArgsActionAsync/)
 - [ArrayInput](/api/ArrayInput/)
 - [ArrayIssue](/api/ArrayIssue/)
 - [ArrayPathItem](/api/ArrayPathItem/)
@@ -560,6 +561,7 @@
 - [RegexAction](/api/RegexAction/)
 - [RegexIssue](/api/RegexIssue/)
 - [ReturnsAction](/api/ReturnsAction/)
+- [ReturnsActionAsync](/api/ReturnsActionAsync/)
 - [RfcEmailAction](/api/RfcEmailAction/)
 - [RfcEmailIssue](/api/RfcEmailIssue/)
 - [SafeIntegerAction](/api/SafeIntegerAction/)
