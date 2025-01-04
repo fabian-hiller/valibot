@@ -155,6 +155,9 @@ importers:
       '@builder.io/qwik-city':
         specifier: '1.9'
         version: 1.9.1(@types/node@22.10.2)(acorn@8.14.0)(rollup@4.29.1)(typescript@5.7.2)
+      '@vercel/og':
+        specifier: ^0.6.4
+        version: 0.6.4
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -258,6 +261,9 @@ importers:
       vite-imagetools:
         specifier: ^7.0.5
         version: 7.0.5(rollup@4.29.1)
+      vite-plugin-static-copy:
+        specifier: ^2.2.0
+        version: 2.2.0(vite@5.4.11(@types/node@22.10.2))
       vite-tsconfig-paths:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.7.2)(vite@5.4.11(@types/node@22.10.2))
@@ -1677,6 +1683,10 @@ packages:
     resolution: {integrity: sha512-c83qWb22rNRuB0UaVCI0uRPNRr8Z0FWnEIvT47jiHAmOIUHbBOg5XvV7pM5x+rKn9HRpjxquDbXYSXr3fAKFcw==}
     engines: {node: '>=12'}
 
+  '@resvg/resvg-wasm@2.4.0':
+    resolution: {integrity: sha512-C7c51Nn4yTxXFKvgh2txJFNweaVcfUPQxwEUFw4aWsCmfiBDJsTSwviIF8EcwjQ6k8bPyMWCl1vw4BdxE569Cg==}
+    engines: {node: '>= 10'}
+
   '@resvg/resvg-wasm@2.6.2':
     resolution: {integrity: sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw==}
     engines: {node: '>= 10'}
@@ -2049,6 +2059,10 @@ packages:
 
   '@vercel/node@5.0.0':
     resolution: {integrity: sha512-l917aGyDkaOhqfDrYSqy9sjd+Pv6K8mCsVyxzGv4kwmbhERpi8rS6aBmfIf4fDevEPYiOasftPHASbdnyHOe/g==}
+
+  '@vercel/og@0.6.4':
+    resolution: {integrity: sha512-+IB8fYbVHEAtLfhCXSRS61Q/OfBJTaPCXhvGvXTBIUfs9lqZMDesZ2UnvKYbnEYHSMgCzBaj5BOq66iePl8mjw==}
+    engines: {node: '>=16'}
 
   '@vercel/python@4.5.1':
     resolution: {integrity: sha512-nZX1oezs5E+Un5Pw21P7cEXV9WBohRSq8gDAqipu7KHFfdAQ7ubfBclRmDTGaHOiYvdLsJPiE599vsUfKKob/w==}
@@ -2955,6 +2969,10 @@ packages:
   css-color-keywords@1.0.0:
     resolution: {integrity: sha512-FyyrDHZKEjXDpNJYvVsV960FiqQyXc/LlYmsxl2BcdMb2WPx0OGRVgTg55rPSyLSNMqP52R9r8geSp7apN3Ofg==}
     engines: {node: '>=4'}
+
+  css-gradient-parser@0.0.16:
+    resolution: {integrity: sha512-3O5QdqgFRUbXvK1x5INf1YkBz1UKSWqrd63vWsum8MNHDBYD5urm3QtxZbKU259OrEXNM26lP/MPY3d1IGkBgA==}
+    engines: {node: '>=16'}
 
   css-select@5.1.0:
     resolution: {integrity: sha512-nwoRF1rvRRnnCqqY7updORDsuqKzqYJ28+oSMaJMMgOauh3fvwHqMS7EZpIPqK8GL+g9mKxF1vP/ZjSeNjEVHg==}
@@ -6570,6 +6588,10 @@ packages:
     resolution: {integrity: sha512-abovcqmwl97WKioxpkfuMeZmndB1TuDFY/R+FymrZyiGP+pMYomvgSzVPnbNMWHHESOPosVHGL352oFbdAnJcA==}
     engines: {node: '>=16'}
 
+  satori@0.12.0:
+    resolution: {integrity: sha512-e0e+qQyeFwEszujN7SpWpRtZgww7Nh8lSO3bUn2spHZ5JpqEl3zJ3P14/JlWruxEwdgREs35ZnavrPrWaRVFDg==}
+    engines: {node: '>=16'}
+
   saxes@6.0.0:
     resolution: {integrity: sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==}
     engines: {node: '>=v12.22.7'}
@@ -7599,6 +7621,12 @@ packages:
     resolution: {integrity: sha512-uPAwSr57kYjAUux+8E2j0q0Fxpn8M9VoyfGiRI8Kfktz9NcYMCenwY5RnZxnF1WTu3TGiYipirIzacLL3VVGFg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
+
+  vite-plugin-static-copy@2.2.0:
+    resolution: {integrity: sha512-ytMrKdR9iWEYHbUxs6x53m+MRl4SJsOSoMu1U1+Pfg0DjPeMlsRVx3RR5jvoonineDquIue83Oq69JvNsFSU5w==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    peerDependencies:
+      vite: ^5.0.0 || ^6.0.0
 
   vite-tsconfig-paths@5.1.4:
     resolution: {integrity: sha512-cYj0LRuLV2c2sMqhqhGpaO3LretdtMn/BVX4cPLanIZuwwrkVl+lK84E/miEXkCHWXuq65rhNN4rXsBcOB3S4w==}
@@ -8724,7 +8752,7 @@ snapshots:
   '@jridgewell/trace-mapping@0.3.25':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.4.15
+      '@jridgewell/sourcemap-codec': 1.5.0
 
   '@jridgewell/trace-mapping@0.3.9':
     dependencies:
@@ -9267,6 +9295,8 @@ snapshots:
       '@pnpm/network.ca-file': 1.0.2
       config-chain: 1.1.13
 
+  '@resvg/resvg-wasm@2.4.0': {}
+
   '@resvg/resvg-wasm@2.6.2': {}
 
   '@rollup/pluginutils@4.2.1':
@@ -9759,6 +9789,12 @@ snapshots:
       - '@swc/wasm'
       - encoding
       - supports-color
+
+  '@vercel/og@0.6.4':
+    dependencies:
+      '@resvg/resvg-wasm': 2.4.0
+      satori: 0.12.0
+      yoga-wasm-web: 0.3.3
 
   '@vercel/python@4.5.1': {}
 
@@ -10760,6 +10796,8 @@ snapshots:
   css-box-shadow@1.0.0-3: {}
 
   css-color-keywords@1.0.0: {}
+
+  css-gradient-parser@0.0.16: {}
 
   css-select@5.1.0:
     dependencies:
@@ -14973,6 +15011,20 @@ snapshots:
       postcss-value-parser: 4.2.0
       yoga-wasm-web: 0.3.3
 
+  satori@0.12.0:
+    dependencies:
+      '@shuding/opentype.js': 1.4.0-beta.0
+      css-background-parser: 0.1.0
+      css-box-shadow: 1.0.0-3
+      css-gradient-parser: 0.0.16
+      css-to-react-native: 3.2.0
+      emoji-regex: 10.4.0
+      escape-html: 1.0.3
+      linebreak: 1.1.0
+      parse-css-color: 0.2.1
+      postcss-value-parser: 4.2.0
+      yoga-wasm-web: 0.3.3
+
   saxes@6.0.0:
     dependencies:
       xmlchars: 2.2.0
@@ -16130,6 +16182,14 @@ snapshots:
       - sugarss
       - supports-color
       - terser
+
+  vite-plugin-static-copy@2.2.0(vite@5.4.11(@types/node@22.10.2)):
+    dependencies:
+      chokidar: 3.6.0
+      fast-glob: 3.3.2
+      fs-extra: 11.1.0
+      picocolors: 1.1.1
+      vite: 5.4.11(@types/node@22.10.2)
 
   vite-tsconfig-paths@5.1.4(typescript@5.7.2)(vite@5.4.11(@types/node@22.10.2)):
     dependencies:

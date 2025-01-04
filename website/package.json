@@ -55,11 +55,13 @@
     "vercel": "^39.2.2",
     "vite": "^5.4.11",
     "vite-imagetools": "^7.0.5",
+    "vite-plugin-static-copy": "^2.2.0",
     "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
     "@builder.io/qwik": "1.9",
     "@builder.io/qwik-city": "1.9",
+    "@vercel/og": "^0.6.4",
     "clsx": "^2.1.1",
     "lz-string": "^1.5.0",
     "monaco-editor": "^0.52.2",
