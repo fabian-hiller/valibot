@@ -19,46 +19,31 @@ export interface Enum {
 }
 
 /**
- * Checks if a string can be produced by Number.prototype.toString with radix=10.
+ * Enum values type.
  */
-type IsNumericString<K extends string> = K extends
-  | 'NaN'
-  | 'Infinity'
-  | '-Infinity'
-  ? true
-  : K extends `${infer V extends number}`
-    ? `${V}` extends K
-      ? true
-      : false
-    : false;
-
-type OmitReverseMappingValue<
-  K extends string | number,
-  V,
-  Ks extends string | number,
-> = K extends number
-  ? number extends K
-    ? never
-    : Exclude<V, Ks>
-  : K extends string
-    ? IsNumericString<K> extends true
-      ? Exclude<V, Ks>
-      : V
-    : never;
-
-/**
- * enum_ only accepts enum values of string & non-numeric keys that has its reverse mapping.
- * This type-level function filters out numeric keys including Infinity and NaN.
- *
- * @example EnumValues<{ 1: NaN; NaN: 1; 2: 'foo' }> = NaN | 'foo'
- */
-type EnumValues<TEnum extends Enum> = {
-  [K in (string | number) & keyof TEnum]: OmitReverseMappingValue<
-    K,
-    TEnum[K],
-    (string | number) & keyof TEnum
-  >;
-}[(string | number) & keyof TEnum];
+export type EnumValues<TEnum extends Enum> = {
+  [TKey in keyof TEnum]: TKey extends number
+    ? TEnum[TKey] extends string
+      ? TEnum[TEnum[TKey]] extends TKey
+        ? never
+        : TEnum[TKey]
+      : TEnum[TKey]
+    : TKey extends 'NaN' | 'Infinity' | '-Infinity'
+      ? TEnum[TKey] extends string
+        ? TEnum[TEnum[TKey]] extends number
+          ? never
+          : TEnum[TKey]
+        : TEnum[TKey]
+      : TKey extends `+${number}`
+        ? TEnum[TKey]
+        : TKey extends `${infer TNumber extends number}`
+          ? TEnum[TKey] extends string
+            ? TEnum[TEnum[TKey]] extends TNumber
+              ? never
+              : TEnum[TKey]
+            : TEnum[TKey]
+          : TEnum[TKey];
+}[keyof TEnum];
 
 /**
  * Enum issue type.
@@ -136,16 +121,16 @@ export function enum_(
   enum__: Enum,
   message?: ErrorMessage<EnumIssue>
 ): EnumSchema<Enum, ErrorMessage<EnumIssue> | undefined> {
-  const options = Object.entries(enum__)
-    .filter(
-      ([key, value]) =>
-        !(
-          `${+key}` === key &&
-          typeof value === 'string' &&
-          Object.is(enum__[value], +key)
-        )
-    )
-    .map(([, value]) => value);
+  const options: EnumValues<Enum>[] = [];
+  for (const key in enum__) {
+    if (
+      `${+key}` !== key ||
+      typeof enum__[key] !== 'string' ||
+      !Object.is(enum__[enum__[key]], +key)
+    ) {
+      options.push(enum__[key]);
+    }
+  }
   return {
     kind: 'schema',
     type: 'enum',

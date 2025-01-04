@@ -3,107 +3,144 @@ import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import { enum_, type EnumIssue, type EnumSchema } from './enum.ts';
 
 describe('enum_', () => {
-  enum normalOptions {
-    options1 = 'foo',
-    options2 = 'bar',
-    options3 = 'baz',
-  }
-  type NormalOptions = typeof normalOptions;
-  enum abnormalOptions {
-    option1 = 1.7976931348623157e308,
-    option2 = 5e-324,
+  enum normalEnum {
+    option1 = 'foo',
+    option2 = 'bar',
     option3 = 'baz',
-    'Infinity' = 1,
-    '-Infinity' = 2,
-    'NaN' = 3,
   }
-  type AbnormalOptions = typeof abnormalOptions;
-  const enumLikeObject = {
-    1: 'foo',
-    bar: 1.7976931348623157e308,
-    '1.7976931348623157e+308': 'bar', // a reverse mapping entry
-    baz: 1.7976931348623155e308,
-    '1.7976931348623155e308': 'baz', // not a reverse mapping entry because it lacks '+' after 'e'
-    '5e-324': 'qux', // not a reverse mapping entry because its value does not belong to the enum
-    NaN: 'NaN',
-    Infinity: 'Infinity',
-  } as const;
-  type EnumLikeObject = typeof enumLikeObject;
+  type NormalEnum = typeof normalEnum;
 
   describe('should return schema object', () => {
     test('with undefined message', () => {
-      type AbnormalSchema = EnumSchema<AbnormalOptions, undefined>;
-      expectTypeOf(enum_(abnormalOptions)).toEqualTypeOf<AbnormalSchema>();
-      expectTypeOf(
-        enum_(abnormalOptions, undefined)
-      ).toEqualTypeOf<AbnormalSchema>();
-      type NormalSchema = EnumSchema<NormalOptions, undefined>;
-      expectTypeOf(enum_(normalOptions)).toEqualTypeOf<NormalSchema>();
-      expectTypeOf(
-        enum_(normalOptions, undefined)
-      ).toEqualTypeOf<NormalSchema>();
+      type Schema = EnumSchema<NormalEnum, undefined>;
+      expectTypeOf(enum_(normalEnum)).toEqualTypeOf<Schema>();
+      expectTypeOf(enum_(normalEnum, undefined)).toEqualTypeOf<Schema>();
     });
 
     test('with string message', () => {
-      expectTypeOf(enum_(abnormalOptions, 'message')).toEqualTypeOf<
-        EnumSchema<AbnormalOptions, 'message'>
-      >();
-      expectTypeOf(enum_(normalOptions, 'message')).toEqualTypeOf<
-        EnumSchema<NormalOptions, 'message'>
+      expectTypeOf(enum_(normalEnum, 'message')).toEqualTypeOf<
+        EnumSchema<NormalEnum, 'message'>
       >();
     });
 
     test('with function message', () => {
-      expectTypeOf(enum_(abnormalOptions, () => 'message')).toEqualTypeOf<
-        EnumSchema<AbnormalOptions, () => string>
-      >();
-      expectTypeOf(enum_(normalOptions, () => 'message')).toEqualTypeOf<
-        EnumSchema<NormalOptions, () => string>
+      expectTypeOf(enum_(normalEnum, () => 'message')).toEqualTypeOf<
+        EnumSchema<NormalEnum, () => string>
       >();
     });
   });
 
   describe('should infer correct types', () => {
-    type AbnormalSchema = EnumSchema<AbnormalOptions, undefined>;
-    type NormalSchema = EnumSchema<NormalOptions, undefined>;
-    type EnumLikeObjectSchema = EnumSchema<EnumLikeObject, undefined>;
+    type NormalEnumSchema = EnumSchema<NormalEnum, undefined>;
 
     test('of input', () => {
-      expectTypeOf<InferInput<AbnormalSchema>>().toEqualTypeOf<
-        | abnormalOptions.option1
-        | abnormalOptions.option2
-        | abnormalOptions.option3
-        | abnormalOptions.Infinity
-        | AbnormalOptions['-Infinity']
-        | abnormalOptions.NaN
-      >();
-      expectTypeOf<InferInput<NormalSchema>>().toEqualTypeOf<normalOptions>;
-      expectTypeOf<InferInput<EnumLikeObjectSchema>>().toEqualTypeOf<
-        'foo' | 1.7976931348623157e308 | 1.7976931348623155e308 | 'baz' | 'qux'
-      >();
+      expectTypeOf<InferInput<NormalEnumSchema>>().toEqualTypeOf<normalEnum>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<AbnormalSchema>>().toEqualTypeOf<
-        | abnormalOptions.option1
-        | abnormalOptions.option2
-        | abnormalOptions.option3
-        | abnormalOptions.Infinity
-        | AbnormalOptions['-Infinity']
-        | abnormalOptions.NaN
-      >();
-      expectTypeOf<InferOutput<NormalSchema>>().toEqualTypeOf<normalOptions>();
-      expectTypeOf<InferOutput<EnumLikeObjectSchema>>().toEqualTypeOf<
-        'foo' | 1.7976931348623157e308 | 1.7976931348623155e308 | 'baz' | 'qux'
-      >();
+      expectTypeOf<InferOutput<NormalEnumSchema>>().toEqualTypeOf<normalEnum>();
     });
 
     test('of issue', () => {
-      expectTypeOf<InferIssue<AbnormalSchema>>().toEqualTypeOf<EnumIssue>();
-      expectTypeOf<InferIssue<NormalSchema>>().toEqualTypeOf<EnumIssue>();
+      expectTypeOf<InferIssue<NormalEnumSchema>>().toEqualTypeOf<EnumIssue>();
+    });
+  });
+
+  describe('should filter reverse mappings', () => {
+    test('of special enums', () => {
+      enum specialEnum {
+        option1 = 'foo',
+        option2 = 0,
+        option3,
+        'Infinity',
+        '-Infinity',
+        'NaN',
+      }
+      type SpecialEnum = typeof specialEnum;
+      type SpecialEnumSchema = EnumSchema<SpecialEnum, undefined>;
       expectTypeOf<
-        InferIssue<EnumLikeObjectSchema>
-      >().toEqualTypeOf<EnumIssue>();
+        InferInput<SpecialEnumSchema>
+      >().toEqualTypeOf<specialEnum>();
+      expectTypeOf<
+        InferOutput<SpecialEnumSchema>
+      >().toEqualTypeOf<specialEnum>();
+    });
+
+    test('of normal enum-like object', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const normalEnumLike = {
+        option0: 'foo',
+        option1: 1111,
+        option2: 2222,
+        option3: 3333,
+        option4: 4444,
+        option5: 5555,
+        option6: -6666,
+
+        // No reverse mappings
+        foo: 'option0', // Key is not a number
+        '+1111': 'option1', // Key is not a reverse mapped number
+        1234: 'option2', // Key does not match with reverse mapped value `2222`
+        '5678': 'option3', // Key does not match with reverse mapped value `3333`
+
+        // Reverse mappings
+        4444: 'option4',
+        '5555': 'option5',
+        '-6666': 'option6',
+      } as const;
+      type NormalEnumLike = typeof normalEnumLike;
+      type NormalEnumLikeSchema = EnumSchema<NormalEnumLike, undefined>;
+      expectTypeOf<InferInput<NormalEnumLikeSchema>>().toEqualTypeOf<
+        | 'foo'
+        | 1111
+        | 2222
+        | 3333
+        | 4444
+        | 5555
+        | -6666
+        | 'option0'
+        | 'option1'
+        | 'option2'
+        | 'option3'
+      >();
+      expectTypeOf<InferOutput<NormalEnumLikeSchema>>().toEqualTypeOf<
+        | 'foo'
+        | 1111
+        | 2222
+        | 3333
+        | 4444
+        | 5555
+        | -6666
+        | 'option0'
+        | 'option1'
+        | 'option2'
+        | 'option3'
+      >();
+    });
+
+    test('of special enum-like object', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const specialEnumLike = {
+        option0: 'foo',
+        option1: 1234,
+        option2: Infinity,
+        option3: -Infinity,
+        option4: NaN,
+
+        // Reverse mappings
+        '1234': 'option1',
+        Infinity: 'option2',
+        '-Infinity': 'option3',
+        NaN: 'option4',
+      } as const;
+      type SpecialEnumLike = typeof specialEnumLike;
+      type SpecialEnumLikeSchema = EnumSchema<SpecialEnumLike, undefined>;
+      expectTypeOf<InferInput<SpecialEnumLikeSchema>>().toEqualTypeOf<
+        'foo' | number
+      >();
+      expectTypeOf<InferOutput<SpecialEnumLikeSchema>>().toEqualTypeOf<
+        'foo' | number
+      >();
     });
   });
 });
