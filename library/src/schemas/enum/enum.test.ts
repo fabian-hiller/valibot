@@ -3,12 +3,12 @@ import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { enum_, type EnumIssue, type EnumSchema } from './enum.ts';
 
 describe('enum_', () => {
-  enum options {
+  enum normalEnum {
     option1 = 'foo',
     option2 = 'bar',
     option3 = 'baz',
   }
-  type Options = typeof options;
+  type Options = typeof normalEnum;
 
   describe('should return schema object', () => {
     const baseSchema: Omit<EnumSchema<Options, never>, 'message'> = {
@@ -16,10 +16,8 @@ describe('enum_', () => {
       type: 'enum',
       reference: enum_,
       expects: '("foo" | "bar" | "baz")',
-      enum: options,
-      options: Object.entries(options)
-        .filter(([key]) => isNaN(+key))
-        .map(([, value]) => value),
+      enum: normalEnum,
+      options: [normalEnum.option1, normalEnum.option2, normalEnum.option3],
       async: false,
       '~standard': {
         version: 1,
@@ -34,12 +32,12 @@ describe('enum_', () => {
         ...baseSchema,
         message: undefined,
       };
-      expect(enum_(options)).toStrictEqual(schema);
-      expect(enum_(options, undefined)).toStrictEqual(schema);
+      expect(enum_(normalEnum)).toStrictEqual(schema);
+      expect(enum_(normalEnum, undefined)).toStrictEqual(schema);
     });
 
     test('with string message', () => {
-      expect(enum_(options, 'message')).toStrictEqual({
+      expect(enum_(normalEnum, 'message')).toStrictEqual({
         ...baseSchema,
         message: 'message',
       } satisfies EnumSchema<Options, 'message'>);
@@ -47,7 +45,7 @@ describe('enum_', () => {
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(enum_(options, message)).toStrictEqual({
+      expect(enum_(normalEnum, message)).toStrictEqual({
         ...baseSchema,
         message,
       } satisfies EnumSchema<Options, typeof message>);
@@ -56,21 +54,21 @@ describe('enum_', () => {
 
   describe('should return dataset without issues', () => {
     test('for valid options', () => {
-      expectNoSchemaIssue(enum_(options), [
-        options.option1,
-        options.option2,
-        options.option3,
+      expectNoSchemaIssue(enum_(normalEnum), [
+        normalEnum.option1,
+        normalEnum.option2,
+        normalEnum.option3,
       ]);
     });
 
     test('for valid values', () => {
       // @ts-expect-error
-      expectNoSchemaIssue(enum_(options), ['foo', 'bar', 'baz']);
+      expectNoSchemaIssue(enum_(normalEnum), ['foo', 'bar', 'baz']);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const schema = enum_(options, 'message');
+    const schema = enum_(normalEnum, 'message');
     const baseIssue: Omit<EnumIssue, 'input' | 'received'> = {
       kind: 'schema',
       type: 'enum',
@@ -136,6 +134,102 @@ describe('enum_', () => {
 
     test('for objects', () => {
       expectSchemaIssue(schema, baseIssue, [{}, { key: 'value' }]);
+    });
+  });
+
+  describe('should filter reverse mappings', () => {
+    test('of special enums', () => {
+      enum specialEnum {
+        option1 = 'foo',
+        option2 = 0,
+        option3,
+        'Infinity',
+        '-Infinity',
+        'NaN',
+      }
+      expect(enum_(specialEnum)).toMatchObject({
+        enum: specialEnum,
+        expects: '("foo" | 0 | 1 | 2 | 3 | 4)',
+        options: [
+          specialEnum.option1,
+          specialEnum.option2,
+          specialEnum.option3,
+          specialEnum['Infinity'],
+          specialEnum['-Infinity'],
+          specialEnum['NaN'],
+        ],
+      } satisfies Pick<
+        EnumSchema<typeof specialEnum, undefined>,
+        'enum' | 'expects' | 'options'
+      >);
+    });
+
+    test('of normal enum-like object', () => {
+      const normalEnumLike = {
+        option0: 'foo',
+        option1: 1111,
+        option2: 2222,
+        option3: 3333,
+        option4: 4444,
+        option5: 5555,
+        option6: -6666,
+
+        // No reverse mappings
+        foo: 'option0', // Key is not a number
+        '+1111': 'option1', // Key is not a reverse mapped number
+        1234: 'option2', // Key does not match with reverse mapped value `2222`
+        '5678': 'option3', // Key does not match with reverse mapped value `3333`
+
+        // Reverse mappings
+        4444: 'option4',
+        '5555': 'option5',
+        '-6666': 'option6',
+      } as const;
+      expect(enum_(normalEnumLike)).toMatchObject({
+        enum: normalEnumLike,
+        expects:
+          '("option2" | "option3" | "foo" | 1111 | 2222 | 3333 | 4444 | 5555 | -6666 | "option0" | "option1")',
+        options: [
+          'option2',
+          'option3',
+          'foo',
+          1111,
+          2222,
+          3333,
+          4444,
+          5555,
+          -6666,
+          'option0',
+          'option1',
+        ],
+      } satisfies Pick<
+        EnumSchema<typeof normalEnumLike, undefined>,
+        'expects' | 'enum' | 'options'
+      >);
+    });
+
+    test('of special enum-like object', () => {
+      const specialEnumLike = {
+        option0: 'foo',
+        option1: 1234,
+        option2: Infinity,
+        option3: -Infinity,
+        option4: NaN,
+
+        // Reverse mappings
+        '1234': 'option1',
+        Infinity: 'option2',
+        '-Infinity': 'option3',
+        NaN: 'option4',
+      } as const;
+      expect(enum_(specialEnumLike)).toMatchObject({
+        enum: specialEnumLike,
+        expects: '("foo" | 1234 | Infinity | -Infinity | NaN)',
+        options: ['foo', 1234, Infinity, -Infinity, NaN],
+      } satisfies Pick<
+        EnumSchema<typeof specialEnumLike, undefined>,
+        'expects' | 'enum' | 'options'
+      >);
     });
   });
 });

@@ -20,6 +20,7 @@ All notable changes to the library will be documented in this file.
 - Refactor `bytes`, `maxBytes`, `minBytes` and `notBytes` action
 - Fix implementation of `nonOptional`, `nonOptionalAsync`, `nonNullable`, `nonNullableAsync`, `nonNullish` and `nonNullishAsync` schema in edge cases (issue #909)
 - Fix instantiation error for `any` in `PathKeys` type (issue #929)
+- Fix options filtering in `enum_` schema (pull request #941)
 
 ## v0.42.1 (September 20, 2024)
 
