@@ -70,7 +70,7 @@ export default component$(() => {
             variant="primary"
             label="Get started"
             type="link"
-            href="/guides/"
+            href="/guides/introduction/"
           />
           <ActionButton
             variant="secondary"
@@ -298,7 +298,7 @@ export default component$(() => {
           variant="primary"
           label="Get started"
           type="link"
-          href="/guides/"
+          href="/guides/introduction/"
         />
         <ActionButton
           variant="secondary"
