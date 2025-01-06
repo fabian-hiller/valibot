@@ -20,6 +20,7 @@ export * from './Property';
 export * from './RoutingIndicator';
 export * from './SearchToggle';
 export * from './SideBar';
+export * from './SpeedInsights';
 export * from './Spinner';
 export * from './SystemIcon';
 export * from './TextLink';
