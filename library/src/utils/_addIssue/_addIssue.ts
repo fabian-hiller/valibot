@@ -61,7 +61,6 @@ interface Other<TContext extends Context> {
  *
  * @internal
  */
-// @__NO_SIDE_EFFECTS__
 export function _addIssue<const TContext extends Context>(
   context: TContext & {
     expects?: string | null;
