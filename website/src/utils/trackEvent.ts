@@ -1,5 +1,6 @@
 type EventName =
   | 'change_theme'
+  | 'change_chapters'
   | 'open_search'
   | 'select_search_item'
   | 'copy_code_snippet'

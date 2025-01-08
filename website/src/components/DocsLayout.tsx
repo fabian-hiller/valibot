@@ -20,6 +20,7 @@ import {
   PenIcon,
 } from '~/icons';
 import { useChapters, useChaptersToggle } from '~/routes/plugin@chapters';
+import { trackEvent } from '~/utils';
 import '../styles/pace.css';
 import { Chapters } from './Chapters';
 import { Credits } from './Credits';
@@ -119,7 +120,7 @@ export const DocsLayout = component$(() => {
             sourcePath={documentHead.frontmatter.source}
             prevPage={prevPage.value}
             nextPage={nextPage.value}
-            showChapters={showChapters}
+            chapters={chapters}
             chaptersToggle={chaptersToggle}
           />
         </nav>
@@ -182,7 +183,7 @@ type NavButtonsProps = {
   sourcePath: string | undefined;
   prevPage: ContentMenu | undefined;
   nextPage: ContentMenu | undefined;
-  showChapters?: ReadonlySignal<boolean>;
+  chapters?: ReadonlySignal<boolean>;
   chaptersToggle?: ReturnType<typeof useChaptersToggle>;
 };
 
@@ -190,14 +191,7 @@ type NavButtonsProps = {
  * Buttons to navigate to the previous or next page.
  */
 export const NavButtons = component$<NavButtonsProps>(
-  ({
-    pageIndex,
-    sourcePath,
-    prevPage,
-    nextPage,
-    showChapters,
-    chaptersToggle,
-  }) => (
+  ({ pageIndex, sourcePath, prevPage, nextPage, chapters, chaptersToggle }) => (
     <>
       {pageIndex !== -1 && (
         <>
@@ -230,11 +224,17 @@ export const NavButtons = component$<NavButtonsProps>(
         </>
       )}
       {chaptersToggle && (
-        <Form class="hidden xl:block" action={chaptersToggle}>
+        <Form
+          class="hidden xl:block"
+          action={chaptersToggle}
+          onSubmit$={() =>
+            trackEvent('change_chapters', { enabled: !chapters!.value })
+          }
+        >
           <IconButton
             variant="secondary"
             type="submit"
-            label={showChapters!.value ? 'Hide chapters' : 'Show chapters'}
+            label={chapters!.value ? 'Hide chapters' : 'Show chapters'}
             hideLabel
           >
             <MenuIcon class="h-[18px]" />
