@@ -361,7 +361,11 @@ export function convertSchema(
       break;
     }
 
-    case 'enum':
+    case 'enum': {
+      jsonSchema.enum = valibotSchema.options;
+      break;
+    }
+
     case 'picklist': {
       if (
         valibotSchema.options.some(
@@ -373,7 +377,6 @@ export function convertSchema(
           config
         );
       }
-
       // @ts-expect-error
       jsonSchema.enum = valibotSchema.options;
       break;
