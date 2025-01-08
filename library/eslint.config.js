@@ -61,7 +61,7 @@ export default tseslint.config(
         },
       ],
 
-      // Regexp
+      // RegExp
       'regexp/no-super-linear-move': 'error', // Prevent DoS regexps
       'regexp/no-control-character': 'error', // Avoid unneeded regexps characters
       'regexp/no-octal': 'error', // Avoid unneeded regexps characters
@@ -90,6 +90,9 @@ export default tseslint.config(
       // JSDoc
       'jsdoc/require-param-type': 'off',
       'jsdoc/require-returns-type': 'off',
+
+      // RegExp
+      'regexp/use-ignore-case': 'off', // We sometimes don't use the i flag for a better JSON Schema compatibility
 
       // Security
       'security/detect-object-injection': 'off', // Too many false positives
