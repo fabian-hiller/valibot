@@ -219,21 +219,6 @@ export function convertAction(
       break;
     }
 
-    case 'starts_with': {
-      jsonSchema.pattern = `^${valibotAction.requirement}`;
-      break;
-    }
-
-    case 'ends_with': {
-      jsonSchema.pattern = `${valibotAction.requirement}$`;
-      break;
-    }
-
-    case 'includes': {
-      jsonSchema.pattern = valibotAction.requirement;
-      break;
-    }
-
     case 'title': {
       jsonSchema.title = valibotAction.title;
       break;
