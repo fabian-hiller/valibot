@@ -27,21 +27,6 @@ type Action =
   | v.UuidAction<string, v.ErrorMessage<v.UuidIssue<string>> | undefined>
   | v.UrlAction<string, v.ErrorMessage<v.UrlIssue<string>> | undefined>
   | v.RegexAction<string, v.ErrorMessage<v.RegexIssue<string>> | undefined>
-  | v.StartsWithAction<
-      string,
-      string,
-      v.ErrorMessage<v.StartsWithIssue<string, string>> | undefined
-    >
-  | v.EndsWithAction<
-      string,
-      string,
-      v.ErrorMessage<v.EndsWithIssue<string, string>> | undefined
-    >
-  | v.IncludesAction<
-      string,
-      string,
-      v.ErrorMessage<v.IncludesIssue<string, string>> | undefined
-    >
   | v.NonEmptyAction<
       string,
       v.ErrorMessage<v.NonEmptyIssue<string>> | undefined
