@@ -47,7 +47,8 @@ export interface NullishSchemaAsync<
 }
 
 /**
- * Creates a nullish schema.
+ * Creates a nullish schema that allows both null and undefined values.
+ * Type: T | null | undefined
  *
  * @param wrapped The wrapped schema.
  *
@@ -60,7 +61,8 @@ export function nullishAsync<
 >(wrapped: TWrapped): NullishSchemaAsync<TWrapped, undefined>;
 
 /**
- * Creates a nullish schema.
+ * Creates a nullish schema that allows both null and undefined values.
+ * Type: T | null | undefined
  *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
