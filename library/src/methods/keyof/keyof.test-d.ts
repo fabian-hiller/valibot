@@ -36,8 +36,7 @@ describe('keyof', () => {
   });
 
   describe('should infer correct types', () => {
-    const schema = keyof(objectSchema);
-    type Schema = typeof schema;
+    type Schema = PicklistSchema<Options, undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Schema>>().toEqualTypeOf<'foo' | 'bar' | 'baz'>();

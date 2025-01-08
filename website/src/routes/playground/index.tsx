@@ -28,6 +28,8 @@ import { useResetSignal } from '~/hooks';
 import { BinIcon, CheckIcon, CopyIcon, PlayIcon, ShareIcon } from '~/icons';
 import { trackEvent } from '~/utils';
 import valibotCode from '../../../../library/dist/index.min.js?url';
+import editorCode from './editorCode.ts?raw';
+import iframeCode from './iframeCode.js?raw';
 
 type LogLevel = 'log' | 'info' | 'debug' | 'warn' | 'error';
 
@@ -53,33 +55,19 @@ export default component$(() => {
   const location = useLocation();
   const toggle = useSideBarToggle();
 
-  // Use model, code and logs signals
+  // Use model and logs signals
   const model = useSignal<NoSerialize<monaco.editor.ITextModel>>();
-  const code = useSignal<string>('');
   const logs = useSignal<[LogLevel, string][]>([]);
 
-  // Use logs and last log element signals
+  // Use iframe, logs and last log element signals
+  const iframeElement = useSignal<HTMLIFrameElement>();
   const logsElement = useSignal<HTMLOListElement>();
   const lastLogElement = useSignal<Element | null>();
 
   // Computed initial code of editor
   const initialCode = useComputed$(() => {
     const code = location.url.searchParams.get('code');
-    return code
-      ? lz.decompressFromEncodedURIComponent(code)
-      : `import * as v from 'valibot';
-
-const Schema = v.object({
-  email: v.pipe(v.string(), v.email()),
-  password: v.pipe(v.string(), v.minLength(8)),
-});
-
-const result = v.safeParse(Schema, {
-  email: 'jane@example.com',
-  password: '12345678',
-});
-
-console.log(result);`;
+    return code ? lz.decompressFromEncodedURIComponent(code) : editorCode;
   });
 
   /**
@@ -110,14 +98,18 @@ console.log(result);`;
 
     // Update code of iframe
     try {
-      code.value = `// ${Date.now()}\n\n${
-        transform(model.value!.getValue(), {
-          transforms: ['typescript'],
-        }).code
-      }`;
+      iframeElement.value!.contentWindow!.postMessage(
+        {
+          type: 'code',
+          code: transform(model.value!.getValue(), {
+            transforms: ['typescript'],
+          }).code,
+        },
+        '*'
+      );
 
       // Handle transform errors
-    } catch (error) {
+    } catch {
       logs.value = [
         ...logs.value,
         ['error', 'TypeScript syntax error detected'],
@@ -178,7 +170,7 @@ console.log(result);`;
   // Scroll newest logs into view
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
-    track(() => logs.value);
+    track(logs);
     lastLogElement.value?.nextElementSibling?.scrollIntoView();
     lastLogElement.value = logsElement.value?.lastElementChild;
   });
@@ -192,7 +184,7 @@ console.log(result);`;
       <div class="flex flex-1 lg:relative">
         <CodeEditor value={initialCode} model={model} onSave$={saveCode} />
         <EditorButtons
-          class="!hidden lg:!absolute lg:right-10 lg:top-10 lg:!flex"
+          class="!hidden lg:!absolute lg:right-10 lg:top-10 lg:z-10 lg:!flex"
           model={model}
           executeCode$={executeCode}
         />
@@ -242,152 +234,25 @@ console.log(result);`;
         </ol>
       </SideBar>
 
-      {code.value && (
-        <iframe
-          hidden
-          sandbox="allow-scripts"
-          srcdoc={`
-<!DOCTYPE html>
-<html>
-  <head>
-    <script type="importmap">
-      { "imports": { "valibot": "${valibotCode}" } }
-    </script>
-    <script type="module">
-      // Create list of JSON tokens
-      const jsonTokens = [
-        ['whitespace', /^\\s+/],
-        ['brace', /^[{}]/],
-        ['bracket', /^[[\\]]/],
-        ['colon', /^:/],
-        ['comma', /^,/],
-        ['key', /^"(?:\\\\.|[^"\\\\])*"(?=:)/],
-        ['undefined', /^"\\[undefined\\]"/],
-        ['instance', /^"\\[[A-Z]\\w*\\]"/],
-        ['string', /^"(?:\\\\.|[^"\\\\])*"/],
-        ['number', /^-?\\d+(?:\\.\\d+)?(?:e[+-]?\\d+)?/i],
-        ['boolean', /^true|^false/],
-        ['null', /^null/],
-        ['unknown', /^.+/],
-      ];
-      
-      /**
-       * Stringify, prettify and colorize log arguments.
-       *
-       * @param args The log arguments.
-       *
-       * @returns The stringified output.
-       */
-      function stringify(args) {
-        return args
-          .map((arg) => {
-            // If argument is an error, stringify it
-            if (arg instanceof Error) {
-              return arg.stack ?? \`$\{arg.name}: $\{arg.message}\`;
-            }
-      
-            // Otherwise, convert argument to JSON string
-            let jsonString = JSON.stringify(
-              arg,
-              (_, value) => {
-                // Get type of value
-                const type = typeof value;
-      
-                // If it is a bigint, convert it to a number
-                if (type === 'bigint') {
-                  return Number(value);
-                }
-      
-                // If it is a non supported object, convert it to its constructor name
-                if (value && (type === 'object' || type === 'function')) {
-                  const name = Object.getPrototypeOf(value).constructor.name;
-                  if (name !== 'Object' && name !== 'Array') {
-                    return \`[$\{name}]\`;
-                  }
-                }
-
-                // If it is undefined, convert it to a string
-                if (value === undefined) {
-                  return '[undefined]';
-                }
-      
-                // Otherwise, return value as is
-                return value;
-              },
-              2
-            );
-      
-            // Transform and colorize specific JSON tokens
-            const output = [];
-            while (jsonString) {
-              for (const [token, regex] of jsonTokens) {
-                const match = regex.exec(jsonString);
-                if (match) {
-                  const substring = match[0];
-                  jsonString = jsonString.substring(substring.length);
-                  if (token === 'key') {
-                    output.push(
-                      \`<span class="text-slate-700 dark:text-slate-300">$\{substring.slice(1, -1)}</span>\`
-                    );
-                  } else if (token === 'instance') {
-                    output.push(
-                      \`<span class="text-sky-600 dark:text-sky-400">$\{substring.slice(2, -2)}</span>\`
-                    );
-                  } else if (token === 'string') {
-                    output.push(
-                      \`<span class="text-yellow-600 dark:text-amber-200">$\{substring}</span>\`
-                    );
-                  } else if (token === 'number') {
-                    output.push(
-                      \`<span class="text-purple-600 dark:text-purple-400">$\{substring}</span>\`
-                    );
-                  } else if (token === 'boolean' || token === 'null') {
-                    output.push(
-                      \`<span class="text-teal-600 dark:text-teal-400">$\{substring}</span>\`
-                    );
-                  } else if (token === 'undefined') {
-                    output.push(
-                      \`<span class="text-teal-600 dark:text-teal-400">$\{substring.slice(2, -2)}</span>\`
-                    );
-                  } else {
-                    output.push(substring);
-                  }
-                  break;
-                }
-              }
-            }
-      
-            // Return transformed and colorized output
-            return output.join('');
-          })
-          .join(', ');
-      }
-      
-      // Forward errors to parent window
-      window.onerror = (...args) => {
-        parent.postMessage(
-          { type: 'log', log: ['error', stringify([args[4]])] },
-          '*'
-        );
-      };
-      
-      // Forward logs to parent window
-      ['log', 'info', 'debug', 'warn', 'error'].forEach((level) => {
-        const original = console[level];
-        console[level] = (...args) => {
-          parent.postMessage({ type: 'log', log: [level, stringify(args)] }, '*');
-          original(...args);
-        };
-      });
-    
-      ${code.value}
-    </script>
-  </head>
-  <body></body>
-</html>
-          `}
-        />
-      )}
+      <iframe
+        ref={iframeElement}
+        hidden
+        sandbox="allow-scripts"
+        srcdoc={`
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <script type="importmap">
+                { "imports": { "valibot": "${valibotCode}" } }
+              </script>
+              <script>
+                ${iframeCode}
+              </script>
+            </head>
+            <body></body>
+          </html>
+        `}
+      />
     </main>
   );
 });

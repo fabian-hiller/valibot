@@ -40,7 +40,6 @@ describe('toJsonSchema', () => {
               age: { type: 'number' },
             },
             required: ['name', 'email'],
-            additionalProperties: false,
             description: 'foo',
           },
         },
@@ -65,7 +64,6 @@ describe('toJsonSchema', () => {
         $ref: '#/$defs/ul',
         $defs: {
           ul: {
-            additionalProperties: false,
             properties: {
               children: {
                 items: { $ref: '#/$defs/li' },
@@ -77,7 +75,6 @@ describe('toJsonSchema', () => {
             type: 'object',
           },
           li: {
-            additionalProperties: false,
             properties: {
               children: {
                 items: {

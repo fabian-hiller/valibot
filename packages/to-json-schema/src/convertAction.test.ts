@@ -5,6 +5,18 @@ import { convertAction } from './convertAction.ts';
 console.warn = vi.fn();
 
 describe('convertAction', () => {
+  test('should convert base64 action', () => {
+    expect(convertAction({}, v.base64<string>(), undefined)).toStrictEqual({
+      contentEncoding: 'base64',
+    });
+    expect(
+      convertAction({ type: 'string' }, v.base64<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      contentEncoding: 'base64',
+    });
+  });
+
   test('should convert description action', () => {
     expect(convertAction({}, v.description('test'), undefined)).toStrictEqual({
       description: 'test',
@@ -34,32 +46,6 @@ describe('convertAction', () => {
     });
   });
 
-  test('should convert ISO date action', () => {
-    expect(convertAction({}, v.isoDate<string>(), undefined)).toStrictEqual({
-      format: 'date',
-    });
-    expect(
-      convertAction({ type: 'string' }, v.isoDate<string>(), undefined)
-    ).toStrictEqual({
-      type: 'string',
-      format: 'date',
-    });
-  });
-
-  test('should convert ISO timestamp action', () => {
-    expect(
-      convertAction({}, v.isoTimestamp<string>(), undefined)
-    ).toStrictEqual({
-      format: 'date-time',
-    });
-    expect(
-      convertAction({ type: 'string' }, v.isoTimestamp<string>(), undefined)
-    ).toStrictEqual({
-      type: 'string',
-      format: 'date-time',
-    });
-  });
-
   test('should convert IPv4 action', () => {
     expect(convertAction({}, v.ipv4<string>(), undefined)).toStrictEqual({
       format: 'ipv4',
@@ -81,6 +67,58 @@ describe('convertAction', () => {
     ).toStrictEqual({
       type: 'string',
       format: 'ipv6',
+    });
+  });
+
+  test('should convert ISO date action', () => {
+    expect(convertAction({}, v.isoDate<string>(), undefined)).toStrictEqual({
+      format: 'date',
+    });
+    expect(
+      convertAction({ type: 'string' }, v.isoDate<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      format: 'date',
+    });
+  });
+
+  test('should convert ISO date time action', () => {
+    expect(convertAction({}, v.isoDateTime<string>(), undefined)).toStrictEqual(
+      {
+        format: 'date-time',
+      }
+    );
+    expect(
+      convertAction({ type: 'string' }, v.isoDateTime<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      format: 'date-time',
+    });
+  });
+
+  test('should convert ISO time action', () => {
+    expect(convertAction({}, v.isoTime<string>(), undefined)).toStrictEqual({
+      format: 'time',
+    });
+    expect(
+      convertAction({ type: 'string' }, v.isoTime<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      format: 'time',
+    });
+  });
+
+  test('should convert ISO timestamp action', () => {
+    expect(
+      convertAction({}, v.isoTimestamp<string>(), undefined)
+    ).toStrictEqual({
+      format: 'date-time',
+    });
+    expect(
+      convertAction({ type: 'string' }, v.isoTimestamp<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      format: 'date-time',
     });
   });
 
@@ -141,68 +179,6 @@ describe('convertAction', () => {
     ).toStrictEqual({ type: 'object', minLength: 3, maxLength: 3 });
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "length" action is not supported on type "object".'
-    );
-  });
-
-  test('should convert min length action for strings', () => {
-    expect(
-      convertAction(
-        { type: 'string' },
-        v.minLength<v.LengthInput, 3>(3),
-        undefined
-      )
-    ).toStrictEqual({
-      type: 'string',
-      minLength: 3,
-    });
-  });
-
-  test('should convert min length action for arrays', () => {
-    expect(
-      convertAction(
-        { type: 'array' },
-        v.minLength<v.LengthInput, 3>(3),
-        undefined
-      )
-    ).toStrictEqual({
-      type: 'array',
-      minItems: 3,
-    });
-  });
-
-  test('should throw error for min length action with invalid type', () => {
-    const action = v.minLength<v.LengthInput, 3>(3);
-    const error1 =
-      'The "min_length" action is not supported on type "undefined".';
-    expect(() => convertAction({}, action, undefined)).toThrowError(error1);
-    expect(() =>
-      convertAction({}, action, { errorMode: 'throw' })
-    ).toThrowError(error1);
-    const error2 = 'The "min_length" action is not supported on type "object".';
-    expect(() =>
-      convertAction({ type: 'object' }, action, undefined)
-    ).toThrowError(error2);
-    expect(() =>
-      convertAction({ type: 'object' }, action, { errorMode: 'throw' })
-    ).toThrowError(error2);
-  });
-
-  test('should warn error for min length action with invalid type', () => {
-    expect(
-      convertAction({}, v.minLength<v.LengthInput, 3>(3), { errorMode: 'warn' })
-    ).toStrictEqual({
-      minLength: 3,
-    });
-    expect(console.warn).toHaveBeenLastCalledWith(
-      'The "min_length" action is not supported on type "undefined".'
-    );
-    expect(
-      convertAction({ type: 'object' }, v.minLength<v.LengthInput, 3>(3), {
-        errorMode: 'warn',
-      })
-    ).toStrictEqual({ type: 'object', minLength: 3 });
-    expect(console.warn).toHaveBeenLastCalledWith(
-      'The "min_length" action is not supported on type "object".'
     );
   });
 
@@ -317,6 +293,68 @@ describe('convertAction', () => {
     );
   });
 
+  test('should convert min length action for strings', () => {
+    expect(
+      convertAction(
+        { type: 'string' },
+        v.minLength<v.LengthInput, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'string',
+      minLength: 3,
+    });
+  });
+
+  test('should convert min length action for arrays', () => {
+    expect(
+      convertAction(
+        { type: 'array' },
+        v.minLength<v.LengthInput, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'array',
+      minItems: 3,
+    });
+  });
+
+  test('should throw error for min length action with invalid type', () => {
+    const action = v.minLength<v.LengthInput, 3>(3);
+    const error1 =
+      'The "min_length" action is not supported on type "undefined".';
+    expect(() => convertAction({}, action, undefined)).toThrowError(error1);
+    expect(() =>
+      convertAction({}, action, { errorMode: 'throw' })
+    ).toThrowError(error1);
+    const error2 = 'The "min_length" action is not supported on type "object".';
+    expect(() =>
+      convertAction({ type: 'object' }, action, undefined)
+    ).toThrowError(error2);
+    expect(() =>
+      convertAction({ type: 'object' }, action, { errorMode: 'throw' })
+    ).toThrowError(error2);
+  });
+
+  test('should warn error for min length action with invalid type', () => {
+    expect(
+      convertAction({}, v.minLength<v.LengthInput, 3>(3), { errorMode: 'warn' })
+    ).toStrictEqual({
+      minLength: 3,
+    });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "min_length" action is not supported on type "undefined".'
+    );
+    expect(
+      convertAction({ type: 'object' }, v.minLength<v.LengthInput, 3>(3), {
+        errorMode: 'warn',
+      })
+    ).toStrictEqual({ type: 'object', minLength: 3 });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "min_length" action is not supported on type "object".'
+    );
+  });
+
   test('should convert min value action for numbers', () => {
     expect(
       convertAction(
@@ -380,6 +418,60 @@ describe('convertAction', () => {
     });
   });
 
+  test('should convert non empty action for strings', () => {
+    expect(
+      convertAction({ type: 'string' }, v.nonEmpty(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      minLength: 1,
+    });
+  });
+
+  test('should convert non empty action for arrays', () => {
+    expect(
+      convertAction({ type: 'array' }, v.nonEmpty(), undefined)
+    ).toStrictEqual({
+      type: 'array',
+      minItems: 1,
+    });
+  });
+
+  test('should throw error for non empty action with invalid type', () => {
+    const action = v.nonEmpty();
+    const error1 =
+      'The "non_empty" action is not supported on type "undefined".';
+    expect(() => convertAction({}, action, undefined)).toThrowError(error1);
+    expect(() =>
+      convertAction({}, action, { errorMode: 'throw' })
+    ).toThrowError(error1);
+    const error2 = 'The "non_empty" action is not supported on type "object".';
+    expect(() =>
+      convertAction({ type: 'object' }, action, undefined)
+    ).toThrowError(error2);
+    expect(() =>
+      convertAction({ type: 'object' }, action, { errorMode: 'throw' })
+    ).toThrowError(error2);
+  });
+
+  test('should warn error for non empty action with invalid type', () => {
+    expect(
+      convertAction({}, v.nonEmpty(), { errorMode: 'warn' })
+    ).toStrictEqual({
+      minLength: 1,
+    });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "non_empty" action is not supported on type "undefined".'
+    );
+    expect(
+      convertAction({ type: 'object' }, v.nonEmpty(), {
+        errorMode: 'warn',
+      })
+    ).toStrictEqual({ type: 'object', minLength: 1 });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "non_empty" action is not supported on type "object".'
+    );
+  });
+
   test('should convert supported regex action', () => {
     expect(
       convertAction({ type: 'string' }, v.regex<string>(/[a-zA-Z]/), undefined)
@@ -415,6 +507,18 @@ describe('convertAction', () => {
   test('should convert title action', () => {
     expect(convertAction({}, v.title('test'), undefined)).toStrictEqual({
       title: 'test',
+    });
+  });
+
+  test('should convert url action', () => {
+    expect(convertAction({}, v.url<string>(), undefined)).toStrictEqual({
+      format: 'uri',
+    });
+    expect(
+      convertAction({ type: 'string' }, v.url<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      format: 'uri',
     });
   });
 

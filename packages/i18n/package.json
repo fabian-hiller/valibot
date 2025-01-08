@@ -28,9 +28,9 @@
     "build.jsr": "tsm ./scripts/build-jsr.ts"
   },
   "devDependencies": {
-    "@types/node": "^20.12.2",
+    "@types/node": "^22.10.2",
     "tsm": "^2.3.0",
-    "typescript": "^5.5.3",
+    "typescript": "^5.7.2",
     "valibot": "workspace:*"
   },
   "peerDependencies": {

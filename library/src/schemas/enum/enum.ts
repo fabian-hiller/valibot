@@ -19,6 +19,33 @@ export interface Enum {
 }
 
 /**
+ * Enum values type.
+ */
+export type EnumValues<TEnum extends Enum> = {
+  [TKey in keyof TEnum]: TKey extends number
+    ? TEnum[TKey] extends string
+      ? TEnum[TEnum[TKey]] extends TKey
+        ? never
+        : TEnum[TKey]
+      : TEnum[TKey]
+    : TKey extends 'NaN' | 'Infinity' | '-Infinity'
+      ? TEnum[TKey] extends string
+        ? TEnum[TEnum[TKey]] extends number
+          ? never
+          : TEnum[TKey]
+        : TEnum[TKey]
+      : TKey extends `+${number}`
+        ? TEnum[TKey]
+        : TKey extends `${infer TNumber extends number}`
+          ? TEnum[TKey] extends string
+            ? TEnum[TEnum[TKey]] extends TNumber
+              ? never
+              : TEnum[TKey]
+            : TEnum[TKey]
+          : TEnum[TKey];
+}[keyof TEnum];
+
+/**
  * Enum issue type.
  */
 export interface EnumIssue extends BaseIssue<unknown> {
@@ -42,7 +69,7 @@ export interface EnumIssue extends BaseIssue<unknown> {
 export interface EnumSchema<
   TEnum extends Enum,
   TMessage extends ErrorMessage<EnumIssue> | undefined,
-> extends BaseSchema<TEnum[keyof TEnum], TEnum[keyof TEnum], EnumIssue> {
+> extends BaseSchema<EnumValues<TEnum>, EnumValues<TEnum>, EnumIssue> {
   /**
    * The schema type.
    */
@@ -58,7 +85,7 @@ export interface EnumSchema<
   /**
    * The enum options.
    */
-  readonly options: TEnum[keyof TEnum][];
+  readonly options: EnumValues<TEnum>[];
   /**
    * The error message.
    */
@@ -94,9 +121,16 @@ export function enum_(
   enum__: Enum,
   message?: ErrorMessage<EnumIssue>
 ): EnumSchema<Enum, ErrorMessage<EnumIssue> | undefined> {
-  const options = Object.entries(enum__)
-    .filter(([key]) => isNaN(+key))
-    .map(([, value]) => value);
+  const options: EnumValues<Enum>[] = [];
+  for (const key in enum__) {
+    if (
+      `${+key}` !== key ||
+      typeof enum__[key] !== 'string' ||
+      !Object.is(enum__[enum__[key]], +key)
+    ) {
+      options.push(enum__[key]);
+    }
+  }
   return {
     kind: 'schema',
     type: 'enum',

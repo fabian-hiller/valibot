@@ -31,7 +31,6 @@ export type MaybePromise<TValue> = TValue | Promise<TValue>;
  * Hint: This type has no effect and is only used so that TypeScript displays
  * the final type in the preview instead of the utility types used.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type Prettify<TObject> = { [TKey in keyof TObject]: TObject[TKey] } & {};
 
 /**

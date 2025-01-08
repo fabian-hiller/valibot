@@ -11,6 +11,7 @@ import { ValiError } from './ValiError.ts';
 
 describe('ValiError', () => {
   test('should infer issues from schema', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const schema = pipe(string(), minLength(10), url());
     const error = new ValiError<typeof schema>([
       {

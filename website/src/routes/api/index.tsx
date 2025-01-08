@@ -40,7 +40,7 @@ export default component$(() => {
         (item) =>
           item.items && (
             <Fragment key={item.text}>
-              <h2>{item.text}</h2>
+              <h2 id={item.text.toLowerCase()}>{item.text}</h2>
               <ApiList items={item.items.map((i) => i.text)} />
             </Fragment>
           )

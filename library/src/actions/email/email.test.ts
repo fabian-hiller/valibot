@@ -152,7 +152,7 @@ describe('email', () => {
       expectNoActionIssue(action, ['email@example.co.uk']);
     });
 
-    test('for subdomain and country code TDL', () => {
+    test('for subdomain and country code TLD', () => {
       expectNoActionIssue(action, ['email@subdomain.example.co.uk']);
     });
 

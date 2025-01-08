@@ -5,9 +5,11 @@ All notable changes to the library will be documented in this file.
 ## v1.0.0 (Month DD, YYYY)
 
 - Add support for `undefinedable` schema
+- Add support for `base64`, `isoTime`, `isoDateTime`, `nonEmpty` and `url` action (pull request #962)
 - Change Valibot peer dependency to v1.0.0
 - Change extraction of default value from `nullable`, `nullish` and `optional` schema
 - Change `force` to `errorMode` in config for better control (issue #889)
+- Change `additionalProperties` for `object` and `looseObject` schema (pull request #1001)
 
 ## v0.2.1 (September 30, 2024)
 
