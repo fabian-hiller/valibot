@@ -6,6 +6,7 @@ All notable changes to the library will be documented in this file.
 
 - Add support for `undefinedable` schema
 - Add support for `base64`, `isoTime`, `isoDateTime`, `nonEmpty` and `url` action (pull request #962)
+- Add support for `bic`, `cuid2`, `empty`, `decimal`, `digits`, `emoji`, `hex_color`, `hexadecimal`, `nanoid`, `octal` and `ulid` action (pull request #998)
 - Change Valibot peer dependency to v1.0.0
 - Change extraction of default value from `nullable`, `nullish` and `optional` schema
 - Change `force` to `errorMode` in config for better control (issue #889)

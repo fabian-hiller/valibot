@@ -17,6 +17,54 @@ describe('convertAction', () => {
     });
   });
 
+  test('should convert bic action', () => {
+    expect(convertAction({}, v.bic<string>(), undefined)).toStrictEqual({
+      pattern: v.BIC_REGEX.source,
+    });
+    expect(
+      convertAction({ type: 'string' }, v.bic<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.BIC_REGEX.source,
+    });
+  });
+
+  test('should convert cuid2 action', () => {
+    expect(convertAction({}, v.cuid2<string>(), undefined)).toStrictEqual({
+      pattern: v.CUID2_REGEX.source,
+    });
+    expect(
+      convertAction({ type: 'string' }, v.cuid2<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.CUID2_REGEX.source,
+    });
+  });
+
+  test('should convert decimal action', () => {
+    expect(convertAction({}, v.decimal<string>(), undefined)).toStrictEqual({
+      pattern: v.DECIMAL_REGEX.source,
+    });
+    expect(
+      convertAction({ type: 'string' }, v.decimal<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.DECIMAL_REGEX.source,
+    });
+  });
+
+  test('should convert digits action', () => {
+    expect(convertAction({}, v.digits<string>(), undefined)).toStrictEqual({
+      pattern: v.DIGITS_REGEX.source,
+    });
+    expect(
+      convertAction({ type: 'string' }, v.digits<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.DIGITS_REGEX.source,
+    });
+  });
+
   test('should convert description action', () => {
     expect(convertAction({}, v.description('test'), undefined)).toStrictEqual({
       description: 'test',
@@ -32,6 +80,95 @@ describe('convertAction', () => {
     ).toStrictEqual({
       type: 'string',
       format: 'email',
+    });
+  });
+
+  test('should convert emoji action', () => {
+    expect(convertAction({}, v.emoji<string>(), undefined)).toStrictEqual({
+      pattern: v.EMOJI_REGEX.source,
+    });
+    expect(
+      convertAction({ type: 'string' }, v.emoji<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.EMOJI_REGEX.source,
+    });
+  });
+
+  test('should convert empty action for strings', () => {
+    expect(
+      convertAction({ type: 'string' }, v.empty(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      maxLength: 0,
+    });
+  });
+
+  test('should convert empty action for arrays', () => {
+    expect(
+      convertAction({ type: 'array' }, v.empty(), undefined)
+    ).toStrictEqual({
+      type: 'array',
+      maxItems: 0,
+    });
+  });
+
+  test('should throw error for empty action with invalid type', () => {
+    const action = v.empty();
+    const error1 = 'The "empty" action is not supported on type "undefined".';
+    expect(() => convertAction({}, action, undefined)).toThrowError(error1);
+    expect(() =>
+      convertAction({}, action, { errorMode: 'throw' })
+    ).toThrowError(error1);
+    const error2 = 'The "empty" action is not supported on type "object".';
+    expect(() =>
+      convertAction({ type: 'object' }, action, undefined)
+    ).toThrowError(error2);
+    expect(() =>
+      convertAction({ type: 'object' }, action, { errorMode: 'throw' })
+    ).toThrowError(error2);
+  });
+
+  test('should warn error for empty action with invalid type', () => {
+    expect(convertAction({}, v.empty(), { errorMode: 'warn' })).toStrictEqual({
+      maxLength: 0,
+    });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "empty" action is not supported on type "undefined".'
+    );
+    expect(
+      convertAction({ type: 'object' }, v.empty(), {
+        errorMode: 'warn',
+      })
+    ).toStrictEqual({ type: 'object', maxLength: 0 });
+    expect(console.warn).toHaveBeenLastCalledWith(
+      'The "empty" action is not supported on type "object".'
+    );
+  });
+
+  test('should convert hexadecimal action', () => {
+    expect(convertAction({}, v.hexadecimal<string>(), undefined)).toStrictEqual(
+      {
+        pattern: v.HEXADECIMAL_REGEX.source,
+      }
+    );
+    expect(
+      convertAction({ type: 'string' }, v.hexadecimal<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.HEXADECIMAL_REGEX.source,
+    });
+  });
+
+  test('should convert hex color action', () => {
+    expect(convertAction({}, v.hexColor<string>(), undefined)).toStrictEqual({
+      pattern: v.HEX_COLOR_REGEX.source,
+    });
+    expect(
+      convertAction({ type: 'string' }, v.hexColor<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.HEX_COLOR_REGEX.source,
     });
   });
 
@@ -418,6 +555,18 @@ describe('convertAction', () => {
     });
   });
 
+  test('should convert Nano ID action', () => {
+    expect(convertAction({}, v.nanoid<string>(), undefined)).toStrictEqual({
+      pattern: v.NANO_ID_REGEX.source,
+    });
+    expect(
+      convertAction({ type: 'string' }, v.nanoid<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.NANO_ID_REGEX.source,
+    });
+  });
+
   test('should convert non empty action for strings', () => {
     expect(
       convertAction({ type: 'string' }, v.nonEmpty(), undefined)
@@ -472,6 +621,18 @@ describe('convertAction', () => {
     );
   });
 
+  test('should convert octal action', () => {
+    expect(convertAction({}, v.octal<string>(), undefined)).toStrictEqual({
+      pattern: v.OCTAL_REGEX.source,
+    });
+    expect(
+      convertAction({ type: 'string' }, v.octal<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.OCTAL_REGEX.source,
+    });
+  });
+
   test('should convert supported regex action', () => {
     expect(
       convertAction({ type: 'string' }, v.regex<string>(/[a-zA-Z]/), undefined)
@@ -507,6 +668,18 @@ describe('convertAction', () => {
   test('should convert title action', () => {
     expect(convertAction({}, v.title('test'), undefined)).toStrictEqual({
       title: 'test',
+    });
+  });
+
+  test('should convert ULID action', () => {
+    expect(convertAction({}, v.ulid<string>(), undefined)).toStrictEqual({
+      pattern: v.ULID_REGEX.source,
+    });
+    expect(
+      convertAction({ type: 'string' }, v.ulid<string>(), undefined)
+    ).toStrictEqual({
+      type: 'string',
+      pattern: v.ULID_REGEX.source,
     });
   });
 
