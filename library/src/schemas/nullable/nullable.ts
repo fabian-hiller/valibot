@@ -44,8 +44,7 @@ export interface NullableSchema<
 }
 
 /**
- * Creates a nullable schema that allows null values but not undefined.
- * Type: T | null
+ * Creates a nullable schema that allows null values.
  *
  * @param wrapped The wrapped schema.
  *
@@ -56,8 +55,7 @@ export function nullable<
 >(wrapped: TWrapped): NullableSchema<TWrapped, undefined>;
 
 /**
- * Creates a nullable schema that allows null values but not undefined.
- * Type: T | null
+ * Creates a nullable schema that allows null values.
  *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
