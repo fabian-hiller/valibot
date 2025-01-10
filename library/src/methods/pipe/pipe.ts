@@ -10,7 +10,7 @@ import type {
   OutputDataset,
   PipeAction,
   PipeItem,
-  StandardSchemaProps,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
@@ -34,7 +34,7 @@ export type SchemaWithPipe<
    *
    * @internal
    */
-  readonly '~standard': StandardSchemaProps<
+  readonly '~standard': StandardProps<
     InferInput<FirstTupleItem<TPipe>>,
     InferOutput<LastTupleItem<TPipe>>
   >;

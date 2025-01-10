@@ -1,7 +1,7 @@
 import type { Config } from './config.ts';
 import type { OutputDataset, UnknownDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
-import type { StandardSchemaProps } from './standard.ts';
+import type { StandardProps } from './standard.ts';
 
 /**
  * Base schema type.
@@ -39,7 +39,7 @@ export interface BaseSchema<
    *
    * @internal
    */
-  readonly '~standard': StandardSchemaProps<TInput, TOutput>;
+  readonly '~standard': StandardProps<TInput, TOutput>;
   /**
    * Parses unknown input values.
    *

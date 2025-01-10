@@ -29,7 +29,7 @@ import type {
   ObjectKeys,
   OutputDataset,
   SchemaWithoutPipe,
-  StandardSchemaProps,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
@@ -88,7 +88,7 @@ export type SchemaWithPick<
        *
        * @internal
        */
-      readonly '~standard': StandardSchemaProps<
+      readonly '~standard': StandardProps<
         InferObjectInput<Pick<TEntries, TKeys[number]>>,
         InferObjectOutput<Pick<TEntries, TKeys[number]>>
       >;
@@ -144,7 +144,7 @@ export type SchemaWithPick<
          *
          * @internal
          */
-        readonly '~standard': StandardSchemaProps<
+        readonly '~standard': StandardProps<
           InferObjectInput<Pick<TEntries, TKeys[number]>>,
           InferObjectOutput<Pick<TEntries, TKeys[number]>>
         >;
@@ -197,7 +197,7 @@ export type SchemaWithPick<
            *
            * @internal
            */
-          readonly '~standard': StandardSchemaProps<
+          readonly '~standard': StandardProps<
             InferObjectInput<Pick<TEntries, TKeys[number]>> & {
               [key: string]: unknown;
             },
@@ -262,7 +262,7 @@ export type SchemaWithPick<
              *
              * @internal
              */
-            readonly '~standard': StandardSchemaProps<
+            readonly '~standard': StandardProps<
               InferObjectInput<Pick<TEntries, TKeys[number]>> & {
                 [key: string]: unknown;
               },
@@ -330,7 +330,7 @@ export type SchemaWithPick<
                *
                * @internal
                */
-              readonly '~standard': StandardSchemaProps<
+              readonly '~standard': StandardProps<
                 InferObjectInput<Pick<TEntries, TKeys[number]>> & {
                   [key: string]: InferInput<TSchema['rest']>;
                 },
@@ -396,7 +396,7 @@ export type SchemaWithPick<
                  *
                  * @internal
                  */
-                readonly '~standard': StandardSchemaProps<
+                readonly '~standard': StandardProps<
                   InferObjectInput<Pick<TEntries, TKeys[number]>> & {
                     [key: string]: InferInput<TSchema['rest']>;
                   },

@@ -1,7 +1,7 @@
 /**
  * The Standard Schema properties interface.
  */
-export interface StandardSchemaProps<Input, Output> {
+export interface StandardProps<Input, Output> {
   /**
    * The version number of the standard.
    */
@@ -56,7 +56,7 @@ export interface StandardFailureResult {
 /**
  * The issue interface of the failure output.
  */
-interface StandardIssue {
+export interface StandardIssue {
   /**
    * The error message of the issue.
    */
@@ -64,15 +64,15 @@ interface StandardIssue {
   /**
    * The path of the issue, if any.
    */
-  readonly path?: readonly (PropertyKey | StandardPathSegment)[] | undefined;
+  readonly path?: readonly (PropertyKey | StandardPathItem)[] | undefined;
 }
 
 /**
- * The path segment interface of the issue.
+ * The path item interface of the issue.
  */
-interface StandardPathSegment {
+export interface StandardPathItem {
   /**
-   * The key representing a path segment.
+   * The key of the path item.
    */
   readonly key: PropertyKey;
 }
@@ -80,7 +80,7 @@ interface StandardPathSegment {
 /**
  * The base types interface of Standard Schema.
  */
-interface StandardTypes<Input, Output> {
+export interface StandardTypes<Input, Output> {
   /**
    * The input type of the schema.
    */

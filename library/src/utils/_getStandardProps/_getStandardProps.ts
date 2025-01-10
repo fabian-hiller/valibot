@@ -5,8 +5,8 @@ import type {
   BaseSchemaAsync,
   InferInput,
   InferOutput,
+  StandardProps,
   StandardResult,
-  StandardSchemaProps,
 } from '../../types/index.ts';
 
 /**
@@ -21,9 +21,7 @@ export function _getStandardProps<
   TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(
-  context: TSchema
-): StandardSchemaProps<InferInput<TSchema>, InferOutput<TSchema>> {
+>(context: TSchema): StandardProps<InferInput<TSchema>, InferOutput<TSchema>> {
   return {
     version: 1,
     vendor: 'valibot',

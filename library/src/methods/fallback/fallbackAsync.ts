@@ -8,7 +8,7 @@ import type {
   InferOutput,
   MaybePromise,
   OutputDataset,
-  StandardSchemaProps,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
@@ -50,7 +50,7 @@ export type SchemaWithFallbackAsync<
    *
    * @internal
    */
-  readonly '~standard': StandardSchemaProps<
+  readonly '~standard': StandardProps<
     InferInput<TSchema>,
     InferOutput<TSchema>
   >;

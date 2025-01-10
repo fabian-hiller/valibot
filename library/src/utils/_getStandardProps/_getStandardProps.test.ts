@@ -5,7 +5,7 @@ import { array, object, string } from '../../schemas/index.ts';
 import { deleteGlobalConfig, setGlobalConfig } from '../../storages/index.ts';
 import type {
   StandardFailureResult,
-  StandardSchemaProps,
+  StandardProps,
   StandardSuccessResult,
 } from '../../types/index.ts';
 import { _getStandardProps } from './_getStandardProps.ts';
@@ -16,7 +16,7 @@ describe('_getStandardProps', () => {
       version: 1,
       vendor: 'valibot',
       validate: expect.any(Function),
-    } satisfies StandardSchemaProps<string, string>);
+    } satisfies StandardProps<string, string>);
   });
 
   test('should validate simple input', () => {
