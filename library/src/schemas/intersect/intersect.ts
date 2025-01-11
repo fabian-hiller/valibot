@@ -19,7 +19,7 @@ import type {
 import { _merge } from './utils/index.ts';
 
 /**
- * Intersect schema type.
+ * Intersect schema interface.
  */
 export interface IntersectSchema<
   TOptions extends IntersectOptions,

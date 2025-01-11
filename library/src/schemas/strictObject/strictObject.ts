@@ -12,7 +12,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { StrictObjectIssue } from './types.ts';
 
 /**
- * Strict object schema type.
+ * Strict object schema interface.
  */
 export interface StrictObjectSchema<
   TEntries extends ObjectEntries,

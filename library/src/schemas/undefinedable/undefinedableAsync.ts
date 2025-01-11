@@ -12,7 +12,7 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
 
 /**
- * Undefinedable schema async type.
+ * Undefinedable schema async interface.
  */
 export interface UndefinedableSchemaAsync<
   TWrapped extends

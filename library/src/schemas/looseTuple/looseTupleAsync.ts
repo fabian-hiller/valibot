@@ -13,7 +13,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { LooseTupleIssue } from './types.ts';
 
 /**
- * Loose tuple schema async type.
+ * Loose tuple schema async interface.
  */
 export interface LooseTupleSchemaAsync<
   TItems extends TupleItemsAsync,

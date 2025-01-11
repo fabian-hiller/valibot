@@ -30,7 +30,7 @@ import type { variant } from './variant.ts';
 import type { variantAsync } from './variantAsync.ts';
 
 /**
- * Variant issue type.
+ * Variant issue interface.
  */
 export interface VariantIssue extends BaseIssue<unknown> {
   /**
@@ -48,7 +48,7 @@ export interface VariantIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Variant option schema type.
+ * Variant option schema interface.
  */
 export interface VariantOptionSchema<TKey extends string>
   extends BaseSchema<unknown, unknown, VariantIssue | BaseIssue<unknown>> {
@@ -60,7 +60,7 @@ export interface VariantOptionSchema<TKey extends string>
 }
 
 /**
- * Variant option schema async type.
+ * Variant option schema async interface.
  */
 export interface VariantOptionSchemaAsync<TKey extends string>
   extends BaseSchemaAsync<unknown, unknown, VariantIssue | BaseIssue<unknown>> {

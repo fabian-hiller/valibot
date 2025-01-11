@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getWordCount } from '../../utils/index.ts';
 
 /**
- * Not words issue type.
+ * Not words issue interface.
  */
 export interface NotWordsIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface NotWordsIssue<
 }
 
 /**
- * Not words action type.
+ * Not words action interface.
  */
 export interface NotWordsAction<
   TInput extends string,

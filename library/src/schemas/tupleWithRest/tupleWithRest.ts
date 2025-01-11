@@ -16,7 +16,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { TupleWithRestIssue } from './types.ts';
 
 /**
- * Tuple with rest schema type.
+ * Tuple with rest schema interface.
  */
 export interface TupleWithRestSchema<
   TItems extends TupleItems,

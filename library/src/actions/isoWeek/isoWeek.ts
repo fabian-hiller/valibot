@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * ISO week issue type.
+ * ISO week issue interface.
  */
 export interface IsoWeekIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface IsoWeekIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * ISO week action type.
+ * ISO week action interface.
  */
 export interface IsoWeekAction<
   TInput extends string,

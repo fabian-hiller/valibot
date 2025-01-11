@@ -9,7 +9,7 @@ import type { PartialCheckIssue, PartialInput } from './types.ts';
 import { _isPartiallyTyped } from './utils/index.ts';
 
 /**
- * Partial check action type.
+ * Partial check action interface.
  */
 export interface PartialCheckAction<
   TInput extends PartialInput,

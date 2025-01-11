@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * 64-bit MAC issue type.
+ * 64-bit MAC issue interface.
  */
 export interface Mac64Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface Mac64Issue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * 64-bit MAC action type.
+ * 64-bit MAC action interface.
  */
 export interface Mac64Action<
   TInput extends string,

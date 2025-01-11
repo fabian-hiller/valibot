@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * IP issue type.
+ * IP issue interface.
  */
 export interface IpIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface IpIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * IP action type.
+ * IP action interface.
  */
 export interface IpAction<
   TInput extends string,

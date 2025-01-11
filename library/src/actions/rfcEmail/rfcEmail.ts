@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * RFC email issue type.
+ * RFC email issue interface.
  */
 export interface RfcEmailIssue<TInput extends string>
   extends BaseIssue<TInput> {
@@ -34,7 +34,7 @@ export interface RfcEmailIssue<TInput extends string>
 }
 
 /**
- * RFC email action type.
+ * RFC email action interface.
  */
 export interface RfcEmailAction<
   TInput extends string,

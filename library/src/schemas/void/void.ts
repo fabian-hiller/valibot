@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Void issue type.
+ * Void issue interface.
  */
 export interface VoidIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface VoidIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Void schema type.
+ * Void schema interface.
  */
 export interface VoidSchema<
   TMessage extends ErrorMessage<VoidIssue> | undefined,

@@ -31,7 +31,7 @@ const HASH_LENGTHS = {
 export type HashType = keyof typeof HASH_LENGTHS;
 
 /**
- * Hash issue type.
+ * Hash issue interface.
  */
 export interface HashIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -57,7 +57,7 @@ export interface HashIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Hash action type.
+ * Hash action interface.
  */
 export interface HashAction<
   TInput extends string,

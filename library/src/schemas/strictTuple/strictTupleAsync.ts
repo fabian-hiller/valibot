@@ -13,7 +13,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { StrictTupleIssue } from './types.ts';
 
 /**
- * Strict tuple schema async type.
+ * Strict tuple schema async interface.
  */
 export interface StrictTupleSchemaAsync<
   TItems extends TupleItemsAsync,

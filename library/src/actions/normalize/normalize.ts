@@ -6,7 +6,7 @@ import type { BaseTransformation } from '../../types/index.ts';
 export type NormalizeForm = 'NFC' | 'NFD' | 'NFKC' | 'NFKD';
 
 /**
- * Normalize action type.
+ * Normalize action interface.
  */
 export interface NormalizeAction<TForm extends NormalizeForm | undefined>
   extends BaseTransformation<string, string, never> {

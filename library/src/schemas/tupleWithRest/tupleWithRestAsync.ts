@@ -17,7 +17,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { TupleWithRestIssue } from './types.ts';
 
 /**
- * Tuple with rest schema async type.
+ * Tuple with rest schema async interface.
  */
 export interface TupleWithRestSchemaAsync<
   TItems extends TupleItemsAsync,

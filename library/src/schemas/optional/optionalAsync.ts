@@ -12,7 +12,7 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferOptionalOutput } from './types.ts';
 
 /**
- * Optional schema async type.
+ * Optional schema async interface.
  */
 export interface OptionalSchemaAsync<
   TWrapped extends

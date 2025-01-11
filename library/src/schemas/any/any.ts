@@ -3,7 +3,7 @@ import type { BaseSchema, SuccessDataset } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Any schema type.
+ * Any schema interface.
  */
 export interface AnySchema extends BaseSchema<any, any, never> {
   /**

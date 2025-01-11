@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Octal issue type.
+ * Octal issue interface.
  */
 export interface OctalIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface OctalIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Octal action type.
+ * Octal action interface.
  */
 export interface OctalAction<
   TInput extends string,

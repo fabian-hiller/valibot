@@ -1,7 +1,7 @@
 import type { BaseIssue } from '../../types/index.ts';
 
 /**
- * Strict object issue type.
+ * Strict object issue interface.
  */
 export interface StrictObjectIssue extends BaseIssue<unknown> {
   /**

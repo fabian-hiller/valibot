@@ -7,7 +7,7 @@ import { _addIssue, _stringify } from '../../utils/index.ts';
 import type { ValueInput } from '../types.ts';
 
 /**
- * Value issue type.
+ * Value issue interface.
  */
 export interface ValueIssue<
   TInput extends ValueInput,
@@ -32,7 +32,7 @@ export interface ValueIssue<
 }
 
 /**
- * Value action type.
+ * Value action interface.
  */
 export interface ValueAction<
   TInput extends ValueInput,

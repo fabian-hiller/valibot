@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { LengthInput } from '../types.ts';
 
 /**
- * Empty issue type.
+ * Empty issue interface.
  */
 export interface EmptyIssue<TInput extends LengthInput>
   extends BaseIssue<TInput> {
@@ -30,7 +30,7 @@ export interface EmptyIssue<TInput extends LengthInput>
 }
 
 /**
- * Empty action type.
+ * Empty action interface.
  */
 export interface EmptyAction<
   TInput extends LengthInput,

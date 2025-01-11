@@ -8,7 +8,7 @@ import type {
 import { safeParseAsync, type SafeParseResult } from '../safeParse/index.ts';
 
 /**
- * The safe parser async type.
+ * The safe parser async interface.
  */
 export interface SafeParserAsync<
   TSchema extends

@@ -2,7 +2,7 @@ import type { BaseTransformation } from '../../types/index.ts';
 import type { ValueInput } from '../types.ts';
 
 /**
- * To min value action type.
+ * To min value action interface.
  */
 export interface ToMinValueAction<
   TInput extends ValueInput,

@@ -19,7 +19,7 @@ import type {
 import { _merge } from './utils/index.ts';
 
 /**
- * Intersect schema async type.
+ * Intersect schema async interface.
  */
 export interface IntersectSchemaAsync<
   TOptions extends IntersectOptionsAsync,

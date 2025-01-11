@@ -12,7 +12,7 @@ type ArrayRequirement<
   | ((item: TInput[number], index: number, array: TInput) => boolean);
 
 /**
- * Find item action type.
+ * Find item action interface.
  */
 export interface FindItemAction<
   TInput extends ArrayInput,

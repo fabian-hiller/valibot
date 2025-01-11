@@ -16,7 +16,7 @@ import {
 import type { LooseObjectIssue } from './types.ts';
 
 /**
- * Object schema async type.
+ * Object schema async interface.
  */
 export interface LooseObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,

@@ -3,7 +3,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { Context, RawCheckIssue } from './types.ts';
 
 /**
- * Raw check action type.
+ * Raw check action interface.
  */
 export interface RawCheckAction<TInput>
   extends BaseValidation<TInput, TInput, RawCheckIssue<TInput>> {

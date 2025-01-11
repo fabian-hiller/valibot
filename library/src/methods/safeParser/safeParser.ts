@@ -7,7 +7,7 @@ import type {
 import { safeParse, type SafeParseResult } from '../safeParse/index.ts';
 
 /**
- * The safe parser type.
+ * The safe parser interface.
  */
 export interface SafeParser<
   TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

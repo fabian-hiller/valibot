@@ -31,7 +31,7 @@ export type UnionOptionsAsync = MaybeReadonly<
 >;
 
 /**
- * Union schema async type.
+ * Union schema async interface.
  */
 export interface UnionSchemaAsync<
   TOptions extends UnionOptionsAsync,

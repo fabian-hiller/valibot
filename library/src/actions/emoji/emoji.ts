@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Emoji issue type.
+ * Emoji issue interface.
  */
 export interface EmojiIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface EmojiIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Emoji action type.
+ * Emoji action interface.
  */
 export interface EmojiAction<
   TInput extends string,

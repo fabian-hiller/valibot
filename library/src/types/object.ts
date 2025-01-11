@@ -26,14 +26,14 @@ import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type { MarkOptional, MaybeReadonly, Prettify } from './utils.ts';
 
 /**
- * Object entries type.
+ * Object entries interface.
  */
 export interface ObjectEntries {
   [key: string]: BaseSchema<unknown, unknown, BaseIssue<unknown>>;
 }
 
 /**
- * Object entries async type.
+ * Object entries async interface.
  */
 export interface ObjectEntriesAsync {
   [key: string]:

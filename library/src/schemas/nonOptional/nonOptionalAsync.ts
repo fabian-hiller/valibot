@@ -14,7 +14,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non optional schema async type.
+ * Non optional schema async interface.
  */
 export interface NonOptionalSchemaAsync<
   TWrapped extends

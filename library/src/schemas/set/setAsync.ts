@@ -11,7 +11,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { InferSetInput, InferSetOutput, SetIssue } from './types.ts';
 
 /**
- * Set schema async type.
+ * Set schema async interface.
  */
 export interface SetSchemaAsync<
   TValue extends

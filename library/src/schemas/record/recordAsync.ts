@@ -19,7 +19,7 @@ import type {
 } from './types.ts';
 
 /**
- * Record schema async type.
+ * Record schema async interface.
  */
 export interface RecordSchemaAsync<
   TKey extends

@@ -10,7 +10,7 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Lazy schema async type.
+ * Lazy schema async interface.
  */
 export interface LazySchemaAsync<
   TWrapped extends

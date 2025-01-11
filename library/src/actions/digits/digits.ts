@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Digits issue type.
+ * Digits issue interface.
  */
 export interface DigitsIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface DigitsIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Digits action type.
+ * Digits action interface.
  */
 export interface DigitsAction<
   TInput extends string,

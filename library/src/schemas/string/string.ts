@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * String issue type.
+ * String issue interface.
  */
 export interface StringIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface StringIssue extends BaseIssue<unknown> {
 }
 
 /**
- * String schema type.
+ * String schema interface.
  */
 export interface StringSchema<
   TMessage extends ErrorMessage<StringIssue> | undefined,

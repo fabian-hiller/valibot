@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * ISO timestamp issue type.
+ * ISO timestamp issue interface.
  */
 export interface IsoTimestampIssue<TInput extends string>
   extends BaseIssue<TInput> {
@@ -34,7 +34,7 @@ export interface IsoTimestampIssue<TInput extends string>
 }
 
 /**
- * ISO timestamp action type.
+ * ISO timestamp action interface.
  */
 export interface IsoTimestampAction<
   TInput extends string,

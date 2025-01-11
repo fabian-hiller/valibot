@@ -2,7 +2,7 @@ import type { BaseTransformation } from '../../types/index.ts';
 import type { ArrayInput, ArrayRequirement } from '../types.ts';
 
 /**
- * Filter items action type.
+ * Filter items action interface.
  */
 export interface FilterItemsAction<TInput extends ArrayInput>
   extends BaseTransformation<TInput, TInput, never> {

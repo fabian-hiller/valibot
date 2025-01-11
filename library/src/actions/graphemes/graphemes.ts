@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getGraphemeCount } from '../../utils/index.ts';
 
 /**
- * Graphemes issue type.
+ * Graphemes issue interface.
  */
 export interface GraphemesIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface GraphemesIssue<
 }
 
 /**
- * Graphemes action type.
+ * Graphemes action interface.
  */
 export interface GraphemesAction<
   TInput extends string,

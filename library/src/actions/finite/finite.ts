@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Finite issue type.
+ * Finite issue interface.
  */
 export interface FiniteIssue<TInput extends number> extends BaseIssue<TInput> {
   /**
@@ -32,7 +32,7 @@ export interface FiniteIssue<TInput extends number> extends BaseIssue<TInput> {
 }
 
 /**
- * Finite action type.
+ * Finite action interface.
  */
 export interface FiniteAction<
   TInput extends number,

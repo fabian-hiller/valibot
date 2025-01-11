@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * URL issue type.
+ * URL issue interface.
  */
 export interface UrlIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -32,7 +32,7 @@ export interface UrlIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * URL action type.
+ * URL action interface.
  */
 export interface UrlAction<
   TInput extends string,

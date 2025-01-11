@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getByteCount } from '../../utils/index.ts';
 
 /**
- * Max bytes issue type.
+ * Max bytes issue interface.
  */
 export interface MaxBytesIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface MaxBytesIssue<
 }
 
 /**
- * Max bytes action type.
+ * Max bytes action interface.
  */
 export interface MaxBytesAction<
   TInput extends string,

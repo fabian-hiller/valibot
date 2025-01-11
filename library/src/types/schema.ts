@@ -4,7 +4,7 @@ import type { BaseIssue } from './issue.ts';
 import type { StandardProps } from './standard.ts';
 
 /**
- * Base schema type.
+ * Base schema interface.
  */
 export interface BaseSchema<
   TInput,
@@ -69,7 +69,7 @@ export interface BaseSchema<
 }
 
 /**
- * Base schema async type.
+ * Base schema async interface.
  */
 export interface BaseSchemaAsync<
   TInput,

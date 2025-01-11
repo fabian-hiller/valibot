@@ -12,7 +12,7 @@ type ArrayAction<TInput extends ArrayInput, TOutput> = (
 ) => TOutput;
 
 /**
- * Reduce items action type.
+ * Reduce items action interface.
  */
 export interface ReduceItemsAction<TInput extends ArrayInput, TOutput>
   extends BaseTransformation<TInput, TOutput, never> {

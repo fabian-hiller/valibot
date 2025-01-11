@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * BIC issue type.
+ * BIC issue interface.
  */
 export interface BicIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface BicIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * BIC action type.
+ * BIC action interface.
  */
 export interface BicAction<
   TInput extends string,

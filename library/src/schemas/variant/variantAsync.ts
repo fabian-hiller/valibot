@@ -20,7 +20,7 @@ import type {
 } from './types.ts';
 
 /**
- * Variant schema async type.
+ * Variant schema async interface.
  */
 export interface VariantSchemaAsync<
   TKey extends string,

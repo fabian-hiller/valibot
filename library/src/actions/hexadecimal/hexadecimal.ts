@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Hexadecimal issue type.
+ * Hexadecimal issue interface.
  */
 export interface HexadecimalIssue<TInput extends string>
   extends BaseIssue<TInput> {
@@ -34,7 +34,7 @@ export interface HexadecimalIssue<TInput extends string>
 }
 
 /**
- * Hexadecimal action type.
+ * Hexadecimal action interface.
  */
 export interface HexadecimalAction<
   TInput extends string,

@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { CheckIssue } from './types.ts';
 
 /**
- * Check action async type.
+ * Check action async interface.
  */
 export interface CheckActionAsync<
   TInput,

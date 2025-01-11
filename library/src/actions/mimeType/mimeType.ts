@@ -11,7 +11,7 @@ import { _addIssue, _joinExpects } from '../../utils/index.ts';
 type Requirement = readonly `${string}/${string}`[];
 
 /**
- * MIME type issue type.
+ * MIME type issue interface.
  */
 export interface MimeTypeIssue<
   TInput extends Blob,
@@ -40,7 +40,7 @@ export interface MimeTypeIssue<
 }
 
 /**
- * MIME type action type.
+ * MIME type action interface.
  */
 export interface MimeTypeAction<
   TInput extends Blob,

@@ -18,7 +18,7 @@ import type {
 } from './types.ts';
 
 /**
- * Record schema type.
+ * Record schema interface.
  */
 export interface RecordSchema<
   TKey extends BaseSchema<string, string | number | symbol, BaseIssue<unknown>>,

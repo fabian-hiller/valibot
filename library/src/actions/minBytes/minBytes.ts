@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getByteCount } from '../../utils/index.ts';
 
 /**
- * Min bytes issue type.
+ * Min bytes issue interface.
  */
 export interface MinBytesIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface MinBytesIssue<
 }
 
 /**
- * Min bytes action type.
+ * Min bytes action interface.
  */
 export interface MinBytesAction<
   TInput extends string,

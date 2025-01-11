@@ -9,7 +9,7 @@ import type {
 import { parseAsync } from '../parse/index.ts';
 
 /**
- * The parser async type.
+ * The parser async interface.
  */
 export interface ParserAsync<
   TSchema extends

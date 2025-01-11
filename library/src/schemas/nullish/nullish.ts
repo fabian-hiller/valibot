@@ -11,7 +11,7 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullishOutput } from './types.ts';
 
 /**
- * Nullish schema type.
+ * Nullish schema interface.
  */
 export interface NullishSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

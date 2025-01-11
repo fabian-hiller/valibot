@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getByteCount } from '../../utils/index.ts';
 
 /**
- * Not bytes issue type.
+ * Not bytes issue interface.
  */
 export interface NotBytesIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface NotBytesIssue<
 }
 
 /**
- * Not bytes action type.
+ * Not bytes action interface.
  */
 export interface NotBytesAction<
   TInput extends string,

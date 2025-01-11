@@ -11,7 +11,7 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferOptionalOutput } from './types.ts';
 
 /**
- * Optional schema type.
+ * Optional schema interface.
  */
 export interface OptionalSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

@@ -11,7 +11,7 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
 
 /**
- * Undefinedable schema type.
+ * Undefinedable schema interface.
  */
 export interface UndefinedableSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

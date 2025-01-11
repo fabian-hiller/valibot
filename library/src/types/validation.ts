@@ -3,7 +3,7 @@ import type { OutputDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
 
 /**
- * Base validation type.
+ * Base validation interface.
  */
 export interface BaseValidation<
   TInput,
@@ -63,7 +63,7 @@ export interface BaseValidation<
 }
 
 /**
- * Base validation async type.
+ * Base validation async interface.
  */
 export interface BaseValidationAsync<
   TInput,

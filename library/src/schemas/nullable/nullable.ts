@@ -11,7 +11,7 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullableOutput } from './types.ts';
 
 /**
- * Nullable schema type.
+ * Nullable schema interface.
  */
 export interface NullableSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

@@ -12,7 +12,7 @@ import type { CustomIssue } from './types.ts';
 type Check = (input: unknown) => boolean;
 
 /**
- * Custom schema type.
+ * Custom schema interface.
  */
 export interface CustomSchema<
   TInput,
