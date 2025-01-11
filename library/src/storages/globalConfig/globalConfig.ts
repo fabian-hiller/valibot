@@ -35,6 +35,8 @@ export function getGlobalConfig<const TIssue extends BaseIssue<unknown>>(
     message: config?.message,
     abortEarly: config?.abortEarly ?? store?.abortEarly,
     abortPipeEarly: config?.abortPipeEarly ?? store?.abortPipeEarly,
+    exactOptionalProperties:
+      config?.exactOptionalProperties ?? store?.exactOptionalProperties,
   };
 }
 

@@ -97,6 +97,7 @@ export function _addIssue<const TContext extends Context>(
     lang: config.lang,
     abortEarly: config.abortEarly,
     abortPipeEarly: config.abortPipeEarly,
+    exactOptionalProperties: config.exactOptionalProperties,
   };
 
   // Check if context is a schema

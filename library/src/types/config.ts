@@ -14,11 +14,15 @@ export interface Config<TIssue extends BaseIssue<unknown>> {
    */
   readonly message?: ErrorMessage<TIssue> | undefined;
   /**
-   * Whether it was abort early.
+   * Whether it should be aborted early.
    */
   readonly abortEarly?: boolean | undefined;
   /**
-   * Whether the pipe was abort early.
+   * Whether a pipe should be aborted early.
    */
   readonly abortPipeEarly?: boolean | undefined;
+  /**
+   * Whether to apply stricter rules to optional properties.
+   */
+  readonly exactOptionalProperties?: boolean | undefined;
 }
