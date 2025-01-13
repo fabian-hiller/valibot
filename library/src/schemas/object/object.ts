@@ -110,53 +110,80 @@ export function object(
         // The reason for this decision is that it reduces the bundle size, and
         // we also expect that most users will expect this behavior.
         for (const key in this.entries) {
-          // Get and parse value of key
+          // Get value of key
           const value: unknown = input[key as keyof typeof input];
-          const valueDataset = this.entries[key]['~run']({ value }, config);
 
-          // If there are issues, capture them
-          if (valueDataset.issues) {
-            // Create object path item
-            const pathItem: ObjectPathItem = {
-              type: 'object',
-              origin: 'value',
-              input: input as Record<string, unknown>,
-              key,
-              value,
-            };
+          // If key is missing and optional, continue
+          if (!(key in input)) {
+            if (this.entries[key].type === 'optional') {
+              continue;
 
-            // Add modified entry dataset issues to issues
-            for (const issue of valueDataset.issues) {
-              if (issue.path) {
-                issue.path.unshift(pathItem);
-              } else {
+              // Otherwise, if key is missing and required, add issue
+            } else {
+              _addIssue(this, 'type', dataset, config, {
+                expected: `"${key}"`,
+                received: 'undefined',
+                input: value,
+                path: [
+                  {
+                    type: 'object',
+                    origin: 'key',
+                    input: input as Record<string, unknown>,
+                    key,
+                    value,
+                  },
+                ],
+              });
+            }
+
+            // Otherwise, parse value of key and continue
+          } else {
+            const valueDataset = this.entries[key]['~run']({ value }, config);
+
+            // If there are issues, capture them
+            if (valueDataset.issues) {
+              // Create object path item
+              const pathItem: ObjectPathItem = {
+                type: 'object',
+                origin: 'value',
+                input: input as Record<string, unknown>,
+                key,
+                value,
+              };
+
+              // Add modified entry dataset issues to issues
+              for (const issue of valueDataset.issues) {
+                if (issue.path) {
+                  issue.path.unshift(pathItem);
+                } else {
+                  // @ts-expect-error
+                  issue.path = [pathItem];
+                }
                 // @ts-expect-error
-                issue.path = [pathItem];
+                dataset.issues?.push(issue);
               }
-              // @ts-expect-error
-              dataset.issues?.push(issue);
-            }
-            if (!dataset.issues) {
-              // @ts-expect-error
-              dataset.issues = valueDataset.issues;
+              if (!dataset.issues) {
+                // @ts-expect-error
+                dataset.issues = valueDataset.issues;
+              }
+
+              // If necessary, abort early
+              if (config.abortEarly) {
+                dataset.typed = false;
+                break;
+              }
             }
 
-            // If necessary, abort early
-            if (config.abortEarly) {
+            // If not typed, set typed to `false`
+            if (!valueDataset.typed) {
               dataset.typed = false;
-              break;
             }
-          }
 
-          // If not typed, set typed to `false`
-          if (!valueDataset.typed) {
-            dataset.typed = false;
-          }
-
-          // Add entry to dataset if necessary
-          if (valueDataset.value !== undefined || key in input) {
-            // @ts-expect-error
-            dataset.value[key] = valueDataset.value;
+            // Add entry to dataset if necessary
+            if (valueDataset.value !== undefined || key in input) {
+              // @ts-expect-error
+              dataset.value[key] = valueDataset.value;
+            }
           }
         }
 

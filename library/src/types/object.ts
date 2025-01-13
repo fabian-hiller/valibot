@@ -21,7 +21,6 @@ import type {
 import type { InferInput, InferIssue, InferOutput } from './infer.ts';
 import type { BaseIssue } from './issue.ts';
 import type { ErrorMessage } from './other.ts';
-import type { SchemaWithoutPipe } from './pipe.ts';
 import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type { MarkOptional, MaybeReadonly, Prettify } from './utils.ts';
 
@@ -104,45 +103,17 @@ type HasDefault<TSchema extends QuestionMarkSchema> =
   undefined extends TSchema['default'] ? false : true;
 
 /**
- * Exact optional input type.
- */
-type ExactOptionalInput<
-  TSchema extends
-    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> = TSchema extends
-  | OptionalSchema<infer TWrapped, unknown>
-  | OptionalSchemaAsync<infer TWrapped, unknown>
-  ? ExactOptionalInput<TWrapped>
-  : InferInput<TSchema>;
-
-/**
- * Exact optional output type.
- */
-type ExactOptionalOutput<
-  TSchema extends
-    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> = TSchema extends
-  | SchemaWithoutPipe<OptionalSchema<infer TWrapped, unknown>>
-  | SchemaWithoutPipe<OptionalSchemaAsync<infer TWrapped, unknown>>
-  ? HasDefault<TSchema> extends true
-    ? InferOutput<TSchema>
-    : ExactOptionalOutput<TWrapped>
-  : InferOutput<TSchema>;
-
-/**
  * Infer entries input type.
  */
 type InferEntriesInput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
-  -readonly [TKey in keyof TEntries]: ExactOptionalInput<TEntries[TKey]>;
+  -readonly [TKey in keyof TEntries]: InferInput<TEntries[TKey]>;
 };
 
 /**
  * Infer entries output type.
  */
 type InferEntriesOutput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
-  -readonly [TKey in keyof TEntries]: ExactOptionalOutput<TEntries[TKey]>;
+  -readonly [TKey in keyof TEntries]: InferOutput<TEntries[TKey]>;
 };
 
 /**

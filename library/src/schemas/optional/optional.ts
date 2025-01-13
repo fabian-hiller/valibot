@@ -5,10 +5,9 @@ import type {
   Default,
   InferInput,
   InferIssue,
-  SuccessDataset,
+  InferOutput,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
-import type { InferOptionalOutput } from './types.ts';
 
 /**
  * Optional schema type.
@@ -17,8 +16,8 @@ export interface OptionalSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   TDefault extends Default<TWrapped, undefined>,
 > extends BaseSchema<
-    InferInput<TWrapped> | undefined,
-    InferOptionalOutput<TWrapped, TDefault>,
+    InferInput<TWrapped>,
+    InferOutput<TWrapped>,
     InferIssue<TWrapped>
   > {
   /**
@@ -32,7 +31,7 @@ export interface OptionalSchema<
   /**
    * The expected property.
    */
-  readonly expects: `(${TWrapped['expects']} | undefined)`;
+  readonly expects: TWrapped['expects'];
   /**
    * The wrapped schema.
    */
@@ -76,7 +75,7 @@ export function optional(
     kind: 'schema',
     type: 'optional',
     reference: optional,
-    expects: `(${wrapped.expects} | undefined)`,
+    expects: wrapped.expects,
     async: false,
     wrapped,
     default: default_,
@@ -84,20 +83,9 @@ export function optional(
       return _getStandardProps(this);
     },
     '~run'(dataset, config) {
-      // If value is `undefined`, override it with default or return dataset
-      if (dataset.value === undefined) {
-        // If default is specified, override value of dataset
-        if (this.default !== undefined) {
-          dataset.value = getDefault(this, dataset, config);
-        }
-
-        // If value is still `undefined`, return dataset
-        if (dataset.value === undefined) {
-          // @ts-expect-error
-          dataset.typed = true;
-          // @ts-expect-error
-          return dataset as SuccessDataset<unknown>;
-        }
+      // If value is `undefined` and default is specified, override value
+      if (dataset.value === undefined && this.default !== undefined) {
+        dataset.value = getDefault(this, dataset, config);
       }
 
       // Otherwise, return dataset of wrapped schema

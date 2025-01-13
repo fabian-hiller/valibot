@@ -6,10 +6,9 @@ import type {
   DefaultAsync,
   InferInput,
   InferIssue,
-  SuccessDataset,
+  InferOutput,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
-import type { InferOptionalOutput } from './types.ts';
 
 /**
  * Optional schema async type.
@@ -20,8 +19,8 @@ export interface OptionalSchemaAsync<
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   TDefault extends DefaultAsync<TWrapped, undefined>,
 > extends BaseSchemaAsync<
-    InferInput<TWrapped> | undefined,
-    InferOptionalOutput<TWrapped, TDefault>,
+    InferInput<TWrapped>,
+    InferOutput<TWrapped>,
     InferIssue<TWrapped>
   > {
   /**
@@ -35,7 +34,7 @@ export interface OptionalSchemaAsync<
   /**
    * The expected property.
    */
-  readonly expects: `(${TWrapped['expects']} | undefined)`;
+  readonly expects: TWrapped['expects'];
   /**
    * The wrapped schema.
    */
@@ -92,7 +91,7 @@ export function optionalAsync(
     kind: 'schema',
     type: 'optional',
     reference: optionalAsync,
-    expects: `(${wrapped.expects} | undefined)`,
+    expects: wrapped.expects,
     async: true,
     wrapped,
     default: default_,
@@ -100,20 +99,9 @@ export function optionalAsync(
       return _getStandardProps(this);
     },
     async '~run'(dataset, config) {
-      // If value is `undefined`, override it with default or return dataset
-      if (dataset.value === undefined) {
-        // If default is specified, override value of dataset
-        if (this.default !== undefined) {
-          dataset.value = await getDefault(this, dataset, config);
-        }
-
-        // If value is still `undefined`, return dataset
-        if (dataset.value === undefined) {
-          // @ts-expect-error
-          dataset.typed = true;
-          // @ts-expect-error
-          return dataset as SuccessDataset<unknown>;
-        }
+      // If value is `undefined` and default is specified, override value
+      if (dataset.value === undefined && this.default !== undefined) {
+        dataset.value = await getDefault(this, dataset, config);
       }
 
       // Otherwise, return dataset of wrapped schema
