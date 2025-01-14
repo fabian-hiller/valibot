@@ -1,3 +1,4 @@
+import { getDefault } from '../../methods/index.ts';
 import type {
   BaseSchema,
   ErrorMessage,
@@ -113,10 +114,17 @@ export function object(
           // Get value of key
           const value: unknown = input[key as keyof typeof input];
 
-          // If key is missing and optional, continue
+          // If key is missing and optional, use default if available
           if (!(key in input)) {
-            if (this.entries[key].type === 'optional') {
-              continue;
+            if (
+              this.entries[key].type === 'optional' ||
+              this.entries[key].type === 'nullish'
+            ) {
+              // @ts-expect-error
+              if (this.entries[key].default !== undefined) {
+                // @ts-expect-error
+                dataset.value[key] = getDefault(this.entries[key]);
+              }
 
               // Otherwise, if key is missing and required, add issue
             } else {
@@ -180,10 +188,8 @@ export function object(
             }
 
             // Add entry to dataset if necessary
-            if (valueDataset.value !== undefined || key in input) {
-              // @ts-expect-error
-              dataset.value[key] = valueDataset.value;
-            }
+            // @ts-expect-error
+            dataset.value[key] = valueDataset.value;
           }
         }
 
