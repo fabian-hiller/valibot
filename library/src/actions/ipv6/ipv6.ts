@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * IPv6 issue type.
+ * IPv6 issue interface.
  */
 export interface Ipv6Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface Ipv6Issue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * IPv6 action type.
+ * IPv6 action interface.
  */
 export interface Ipv6Action<
   TInput extends string,

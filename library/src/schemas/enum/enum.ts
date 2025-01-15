@@ -12,7 +12,7 @@ import {
 } from '../../utils/index.ts';
 
 /**
- * Enum type.
+ * Enum interface.
  */
 export interface Enum {
   [key: string]: string | number;
@@ -46,7 +46,7 @@ export type EnumValues<TEnum extends Enum> = {
 }[keyof TEnum];
 
 /**
- * Enum issue type.
+ * Enum issue interface.
  */
 export interface EnumIssue extends BaseIssue<unknown> {
   /**
@@ -64,7 +64,7 @@ export interface EnumIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Enum schema type.
+ * Enum schema interface.
  */
 export interface EnumSchema<
   TEnum extends Enum,

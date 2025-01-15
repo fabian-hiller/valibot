@@ -7,7 +7,7 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Raw check issue type.
+ * Raw check issue interface.
  */
 export interface RawCheckIssue<TInput> extends BaseIssue<TInput> {
   /**
@@ -21,7 +21,7 @@ export interface RawCheckIssue<TInput> extends BaseIssue<TInput> {
 }
 
 /**
- * Issue info type.
+ * Issue info interface.
  */
 interface IssueInfo<TInput> {
   label?: string | undefined;
@@ -38,7 +38,7 @@ interface IssueInfo<TInput> {
 type AddIssue<TInput> = (info?: IssueInfo<TInput>) => void;
 
 /**
- * Context type.
+ * Context interface.
  */
 export interface Context<TInput> {
   readonly dataset: OutputDataset<TInput, BaseIssue<unknown>>;

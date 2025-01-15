@@ -16,7 +16,7 @@ import {
 import type { LooseObjectIssue } from './types.ts';
 
 /**
- * Loose object schema type.
+ * Loose object schema interface.
  */
 export interface LooseObjectSchema<
   TEntries extends ObjectEntries,

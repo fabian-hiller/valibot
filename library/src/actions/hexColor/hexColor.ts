@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Hex color issue type.
+ * Hex color issue interface.
  */
 export interface HexColorIssue<TInput extends string>
   extends BaseIssue<TInput> {
@@ -34,7 +34,7 @@ export interface HexColorIssue<TInput extends string>
 }
 
 /**
- * Hex color action type.
+ * Hex color action interface.
  */
 export interface HexColorAction<
   TInput extends string,

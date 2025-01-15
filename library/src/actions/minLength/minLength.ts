@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { LengthInput } from '../types.ts';
 
 /**
- * Min length issue type.
+ * Min length issue interface.
  */
 export interface MinLengthIssue<
   TInput extends LengthInput,
@@ -36,7 +36,7 @@ export interface MinLengthIssue<
 }
 
 /**
- * Min length action type.
+ * Min length action interface.
  */
 export interface MinLengthAction<
   TInput extends LengthInput,

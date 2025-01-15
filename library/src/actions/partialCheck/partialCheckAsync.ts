@@ -10,7 +10,7 @@ import type { PartialCheckIssue, PartialInput } from './types.ts';
 import { _isPartiallyTyped } from './utils/index.ts';
 
 /**
- * Partial check action async type.
+ * Partial check action async interface.
  */
 export interface PartialCheckActionAsync<
   TInput extends PartialInput,

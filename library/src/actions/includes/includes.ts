@@ -7,7 +7,7 @@ import { _addIssue, _stringify } from '../../utils/index.ts';
 import type { ContentInput, ContentRequirement } from '../types.ts';
 
 /**
- * Includes issue type.
+ * Includes issue interface.
  */
 export interface IncludesIssue<
   TInput extends ContentInput,
@@ -32,7 +32,7 @@ export interface IncludesIssue<
 }
 
 /**
- * Includes action type.
+ * Includes action interface.
  */
 export interface IncludesAction<
   TInput extends ContentInput,

@@ -4,7 +4,7 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Await action async type.
+ * Await action async interface.
  */
 export interface AwaitActionAsync<TInput extends Promise<unknown>>
   extends BaseTransformationAsync<TInput, Awaited<TInput>, never> {

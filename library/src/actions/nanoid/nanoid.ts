@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Nano ID issue type.
+ * Nano ID issue interface.
  */
 export interface NanoIDIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface NanoIDIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Nano ID action type.
+ * Nano ID action interface.
  */
 export interface NanoIDAction<
   TInput extends string,

@@ -1,7 +1,7 @@
 import type { BaseIssue } from '../../types/index.ts';
 
 /**
- * Array issue type.
+ * Array issue interface.
  */
 export interface ArrayIssue extends BaseIssue<unknown> {
   /**

@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Boolean issue type.
+ * Boolean issue interface.
  */
 export interface BooleanIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface BooleanIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Boolean schema type.
+ * Boolean schema interface.
  */
 export interface BooleanSchema<
   TMessage extends ErrorMessage<BooleanIssue> | undefined,

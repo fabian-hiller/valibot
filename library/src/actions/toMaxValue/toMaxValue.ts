@@ -2,7 +2,7 @@ import type { BaseTransformation } from '../../types/index.ts';
 import type { ValueInput } from '../types.ts';
 
 /**
- * To max value action type.
+ * To max value action interface.
  */
 export interface ToMaxValueAction<
   TInput extends ValueInput,

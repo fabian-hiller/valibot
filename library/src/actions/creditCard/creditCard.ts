@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _isLuhnAlgo } from '../../utils/index.ts';
 
 /**
- * Credit card issue type.
+ * Credit card issue interface.
  */
 export interface CreditCardIssue<TInput extends string>
   extends BaseIssue<TInput> {
@@ -33,7 +33,7 @@ export interface CreditCardIssue<TInput extends string>
 }
 
 /**
- * Credit card action type.
+ * Credit card action interface.
  */
 export interface CreditCardAction<
   TInput extends string,

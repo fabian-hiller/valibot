@@ -14,7 +14,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non nullable schema async type.
+ * Non nullable schema async interface.
  */
 export interface NonNullableSchemaAsync<
   TWrapped extends

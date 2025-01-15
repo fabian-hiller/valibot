@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * MAC issue type.
+ * MAC issue interface.
  */
 export interface MacIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface MacIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * MAC action type.
+ * MAC action interface.
  */
 export interface MacAction<
   TInput extends string,

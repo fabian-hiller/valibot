@@ -2,7 +2,7 @@ import type { BaseIssue } from './issue.ts';
 import type { ErrorMessage } from './other.ts';
 
 /**
- * Config type.
+ * Config interface.
  */
 export interface Config<TIssue extends BaseIssue<unknown>> {
   /**

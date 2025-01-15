@@ -12,7 +12,7 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullishOutput } from './types.ts';
 
 /**
- * Nullish schema async type.
+ * Nullish schema async interface.
  */
 export interface NullishSchemaAsync<
   TWrapped extends

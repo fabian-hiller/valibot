@@ -11,7 +11,7 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Optional schema async type.
+ * Optional schema async interface.
  */
 export interface OptionalSchemaAsync<
   TWrapped extends

@@ -12,7 +12,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { ArrayIssue } from './types.ts';
 
 /**
- * Array schema type.
+ * Array schema interface.
  */
 export interface ArraySchema<
   TItem extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

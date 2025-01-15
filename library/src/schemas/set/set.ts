@@ -10,7 +10,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { InferSetInput, InferSetOutput, SetIssue } from './types.ts';
 
 /**
- * Set schema type.
+ * Set schema interface.
  */
 export interface SetSchema<
   TValue extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

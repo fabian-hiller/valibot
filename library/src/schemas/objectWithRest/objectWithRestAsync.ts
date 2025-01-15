@@ -21,7 +21,7 @@ import {
 import type { ObjectWithRestIssue } from './types.ts';
 
 /**
- * Object schema async type.
+ * Object schema async interface.
  */
 export interface ObjectWithRestSchemaAsync<
   TEntries extends ObjectEntriesAsync,

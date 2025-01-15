@@ -4,7 +4,7 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Transform action async type.
+ * Transform action async interface.
  */
 export interface TransformActionAsync<TInput, TOutput>
   extends BaseTransformationAsync<TInput, TOutput, never> {

@@ -6,7 +6,7 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Intersect issue type.
+ * Intersect issue interface.
  */
 export interface IntersectIssue extends BaseIssue<unknown> {
   /**

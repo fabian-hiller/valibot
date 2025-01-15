@@ -1,7 +1,7 @@
 import type { BaseTransformation } from '../../types/index.ts';
 
 /**
- * Trim start action type.
+ * Trim start action interface.
  */
 export interface TrimStartAction
   extends BaseTransformation<string, string, never> {

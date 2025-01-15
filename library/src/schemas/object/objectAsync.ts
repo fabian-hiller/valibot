@@ -12,7 +12,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { ObjectIssue } from './types.ts';
 
 /**
- * Object schema async type.
+ * Object schema async interface.
  */
 export interface ObjectSchemaAsync<
   TEntries extends ObjectEntriesAsync,

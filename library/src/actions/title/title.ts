@@ -1,7 +1,7 @@
 import type { BaseMetadata } from '../../types/index.ts';
 
 /**
- * Title action type.
+ * Title action interface.
  */
 export interface TitleAction<TInput, TTitle extends string>
   extends BaseMetadata<TInput> {

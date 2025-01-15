@@ -1,7 +1,7 @@
 /**
  * The Standard Schema properties interface.
  */
-export interface StandardProps<Input, Output> {
+export interface StandardProps<TInput, TOutput> {
   /**
    * The version number of the standard.
    */
@@ -15,28 +15,28 @@ export interface StandardProps<Input, Output> {
    */
   readonly validate: (
     value: unknown
-  ) => StandardResult<Output> | Promise<StandardResult<Output>>;
+  ) => StandardResult<TOutput> | Promise<StandardResult<TOutput>>;
   /**
    * Inferred types associated with the schema.
    */
-  readonly types?: StandardTypes<Input, Output> | undefined;
+  readonly types?: StandardTypes<TInput, TOutput> | undefined;
 }
 
 /**
  * The result interface of the validate function.
  */
-export type StandardResult<Output> =
-  | StandardSuccessResult<Output>
+export type StandardResult<TOutput> =
+  | StandardSuccessResult<TOutput>
   | StandardFailureResult;
 
 /**
  * The result interface if validation succeeds.
  */
-export interface StandardSuccessResult<Output> {
+export interface StandardSuccessResult<TOutput> {
   /**
    * The typed output value.
    */
-  readonly value: Output;
+  readonly value: TOutput;
   /**
    * The non-existent issues.
    */
@@ -78,15 +78,15 @@ export interface StandardPathItem {
 }
 
 /**
- * The base types interface of Standard Schema.
+ * The Standard Schema types interface.
  */
-export interface StandardTypes<Input, Output> {
+export interface StandardTypes<TInput, TOutput> {
   /**
    * The input type of the schema.
    */
-  readonly input: Input;
+  readonly input: TInput;
   /**
    * The output type of the schema.
    */
-  readonly output: Output;
+  readonly output: TOutput;
 }

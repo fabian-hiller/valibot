@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Integer issue type.
+ * Integer issue interface.
  */
 export interface IntegerIssue<TInput extends number> extends BaseIssue<TInput> {
   /**
@@ -32,7 +32,7 @@ export interface IntegerIssue<TInput extends number> extends BaseIssue<TInput> {
 }
 
 /**
- * Integer action type.
+ * Integer action interface.
  */
 export interface IntegerAction<
   TInput extends number,

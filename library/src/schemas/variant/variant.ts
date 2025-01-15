@@ -19,7 +19,7 @@ import type {
 } from './types.ts';
 
 /**
- * Variant schema type.
+ * Variant schema interface.
  */
 export interface VariantSchema<
   TKey extends string,

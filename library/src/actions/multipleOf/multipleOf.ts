@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Multiple of issue type.
+ * Multiple of issue interface.
  */
 export interface MultipleOfIssue<
   TInput extends number,
@@ -35,7 +35,7 @@ export interface MultipleOfIssue<
 }
 
 /**
- * Multiple of action type.
+ * Multiple of action interface.
  */
 export interface MultipleOfAction<
   TInput extends number,

@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * ISO date issue type.
+ * ISO date issue interface.
  */
 export interface IsoDateIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface IsoDateIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * ISO date action type.
+ * ISO date action interface.
  */
 export interface IsoDateAction<
   TInput extends string,

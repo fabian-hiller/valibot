@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Date issue type.
+ * Date issue interface.
  */
 export interface DateIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface DateIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Date schema type.
+ * Date schema interface.
  */
 export interface DateSchema<
   TMessage extends ErrorMessage<DateIssue> | undefined,

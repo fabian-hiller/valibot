@@ -27,7 +27,7 @@ export type UnionOptions = MaybeReadonly<
 >;
 
 /**
- * Union schema type.
+ * Union schema interface.
  */
 export interface UnionSchema<
   TOptions extends UnionOptions,

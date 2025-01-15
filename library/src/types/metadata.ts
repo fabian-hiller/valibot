@@ -1,5 +1,5 @@
 /**
- * Base metadata type.
+ * Base metadata interface.
  */
 export interface BaseMetadata<TInput> {
   /**

@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * UUID issue type.
+ * UUID issue interface.
  */
 export interface UuidIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface UuidIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * UUID action type.
+ * UUID action interface.
  */
 export interface UuidAction<
   TInput extends string,

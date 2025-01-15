@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { Context, RawTransformIssue } from './types.ts';
 
 /**
- * Raw transform action type.
+ * Raw transform action interface.
  */
 export interface RawTransformAction<TInput, TOutput>
   extends BaseTransformation<TInput, TOutput, RawTransformIssue<TInput>> {

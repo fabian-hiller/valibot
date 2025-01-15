@@ -10,7 +10,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { InferMapInput, InferMapOutput, MapIssue } from './types.ts';
 
 /**
- * Map schema type.
+ * Map schema interface.
  */
 export interface MapSchema<
   TKey extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

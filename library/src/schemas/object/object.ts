@@ -13,7 +13,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { ObjectIssue } from './types.ts';
 
 /**
- * Object schema type.
+ * Object schema interface.
  */
 export interface ObjectSchema<
   TEntries extends ObjectEntries,

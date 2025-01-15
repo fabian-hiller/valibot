@@ -4,7 +4,7 @@ import type { ArrayInput, ArrayRequirement } from '../types.ts';
 import type { CheckItemsIssue } from './types.ts';
 
 /**
- * Check items action type.
+ * Check items action interface.
  */
 export interface CheckItemsAction<
   TInput extends ArrayInput,

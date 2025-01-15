@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Cuid2 issue type.
+ * Cuid2 issue interface.
  */
 export interface Cuid2Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface Cuid2Issue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Cuid2 action type.
+ * Cuid2 action interface.
  */
 export interface Cuid2Action<
   TInput extends string,

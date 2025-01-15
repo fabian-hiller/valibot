@@ -10,7 +10,7 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Optional schema type.
+ * Optional schema interface.
  */
 export interface OptionalSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

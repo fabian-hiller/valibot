@@ -11,7 +11,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { InferMapInput, InferMapOutput, MapIssue } from './types.ts';
 
 /**
- * Map schema async type.
+ * Map schema async interface.
  */
 export interface MapSchemaAsync<
   TKey extends

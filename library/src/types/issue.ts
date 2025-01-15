@@ -74,7 +74,7 @@ import type { TupleItems, TupleItemsAsync } from './tuple.ts';
 import type { FirstTupleItem, MaybeReadonly } from './utils.ts';
 
 /**
- * Array path item type.
+ * Array path item interface.
  */
 export interface ArrayPathItem {
   /**
@@ -100,7 +100,7 @@ export interface ArrayPathItem {
 }
 
 /**
- * Map path item type.
+ * Map path item interface.
  */
 export interface MapPathItem {
   /**
@@ -126,7 +126,7 @@ export interface MapPathItem {
 }
 
 /**
- * Object path item type.
+ * Object path item interface.
  */
 export interface ObjectPathItem {
   /**
@@ -152,7 +152,7 @@ export interface ObjectPathItem {
 }
 
 /**
- * Set path item type.
+ * Set path item interface.
  */
 export interface SetPathItem {
   /**
@@ -178,7 +178,7 @@ export interface SetPathItem {
 }
 
 /**
- * Unknown path item type.
+ * Unknown path item interface.
  */
 export interface UnknownPathItem {
   /**
@@ -214,7 +214,7 @@ export type IssuePathItem =
   | UnknownPathItem;
 
 /**
- * Base issue type.
+ * Base issue interface.
  */
 export interface BaseIssue<TInput> extends Config<BaseIssue<TInput>> {
   /**

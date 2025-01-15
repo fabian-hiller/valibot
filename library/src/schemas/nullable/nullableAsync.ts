@@ -12,7 +12,7 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullableOutput } from './types.ts';
 
 /**
- * Nullable schema async type.
+ * Nullable schema async interface.
  */
 export interface NullableSchemaAsync<
   TWrapped extends

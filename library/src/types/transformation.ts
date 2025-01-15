@@ -3,7 +3,7 @@ import type { OutputDataset, SuccessDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
 
 /**
- * Base transformation type.
+ * Base transformation interface.
  */
 export interface BaseTransformation<
   TInput,
@@ -59,7 +59,7 @@ export interface BaseTransformation<
 }
 
 /**
- * Base transformation async type.
+ * Base transformation async interface.
  */
 export interface BaseTransformationAsync<
   TInput,

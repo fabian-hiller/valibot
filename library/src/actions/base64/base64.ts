@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Base64 issue type.
+ * Base64 issue interface.
  */
 export interface Base64Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface Base64Issue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Base64 action type.
+ * Base64 action interface.
  */
 export interface Base64Action<
   TInput extends string,

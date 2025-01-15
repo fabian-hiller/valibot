@@ -8,7 +8,7 @@ import type {
 import { parse } from '../parse/index.ts';
 
 /**
- * The parser type.
+ * The parser interface.
  */
 export interface Parser<
   TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

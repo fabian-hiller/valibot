@@ -13,7 +13,7 @@ import type { CustomIssue } from './types.ts';
 type CheckAsync = (input: unknown) => MaybePromise<boolean>;
 
 /**
- * Custom schema async type.
+ * Custom schema async interface.
  */
 export interface CustomSchemaAsync<
   TInput,

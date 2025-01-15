@@ -1,7 +1,7 @@
 import type { BaseTransformation, SuccessDataset } from '../../types/index.ts';
 
 /**
- * Transform action type.
+ * Transform action interface.
  */
 export interface TransformAction<TInput, TOutput>
   extends BaseTransformation<TInput, TOutput, never> {

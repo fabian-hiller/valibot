@@ -13,7 +13,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non nullish schema type.
+ * Non nullish schema interface.
  */
 export interface NonNullishSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

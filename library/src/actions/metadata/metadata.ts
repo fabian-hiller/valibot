@@ -1,7 +1,7 @@
 import type { BaseMetadata } from '../../types/index.ts';
 
 /**
- * Metadata action type.
+ * Metadata action interface.
  */
 export interface MetadataAction<
   TInput,

@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { LengthInput } from '../types.ts';
 
 /**
- * Max length issue type.
+ * Max length issue interface.
  */
 export interface MaxLengthIssue<
   TInput extends LengthInput,
@@ -36,7 +36,7 @@ export interface MaxLengthIssue<
 }
 
 /**
- * Max length action type.
+ * Max length action interface.
  */
 export interface MaxLengthAction<
   TInput extends LengthInput,

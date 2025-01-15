@@ -1,7 +1,7 @@
 import type { BaseTransformation } from '../../types/index.ts';
 
 /**
- * Readonly action type.
+ * Readonly action interface.
  */
 export interface ReadonlyAction<TInput>
   extends BaseTransformation<TInput, Readonly<TInput>, never> {

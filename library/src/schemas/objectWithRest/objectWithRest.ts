@@ -20,7 +20,7 @@ import {
 import type { ObjectWithRestIssue } from './types.ts';
 
 /**
- * Object with rest schema type.
+ * Object with rest schema interface.
  */
 export interface ObjectWithRestSchema<
   TEntries extends ObjectEntries,

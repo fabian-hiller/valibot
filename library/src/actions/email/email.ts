@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Email issue type.
+ * Email issue interface.
  */
 export interface EmailIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface EmailIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Email action type.
+ * Email action interface.
  */
 export interface EmailAction<
   TInput extends string,
