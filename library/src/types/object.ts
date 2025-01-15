@@ -4,8 +4,6 @@ import type {
   LooseObjectIssue,
   LooseObjectSchema,
   LooseObjectSchemaAsync,
-  NullishSchema,
-  NullishSchemaAsync,
   ObjectIssue,
   ObjectSchema,
   ObjectSchemaAsync,
@@ -28,7 +26,9 @@ import type { MarkOptional, MaybeReadonly, Prettify } from './utils.ts';
  * Object entries type.
  */
 export interface ObjectEntries {
-  [key: string]: BaseSchema<unknown, unknown, BaseIssue<unknown>>;
+  [key: string]:
+    | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>;
 }
 
 /**
@@ -37,7 +37,13 @@ export interface ObjectEntries {
 export interface ObjectEntriesAsync {
   [key: string]:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>;
+    | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+    | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
+    | OptionalSchemaAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >;
 }
 
 /**
@@ -83,24 +89,12 @@ export type ObjectKeys<
  * Question mark schema type.
  */
 type QuestionMarkSchema =
-  | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
-  | NullishSchemaAsync<
-      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-      unknown
-    >
   | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
   | OptionalSchemaAsync<
       | BaseSchema<unknown, unknown, BaseIssue<unknown>>
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       unknown
     >;
-
-/**
- * Has default type.
- */
-type HasDefault<TSchema extends QuestionMarkSchema> =
-  undefined extends TSchema['default'] ? false : true;
 
 /**
  * Infer entries input type.
@@ -130,10 +124,8 @@ type OptionalInputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
  */
 type OptionalOutputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
   [TKey in keyof TEntries]: TEntries[TKey] extends QuestionMarkSchema
-    ? undefined extends InferOutput<TEntries[TKey]>
-      ? HasDefault<TEntries[TKey]> extends false
-        ? TKey
-        : never
+    ? undefined extends TEntries[TKey]['default']
+      ? TKey
       : never
     : never;
 }[keyof TEntries];
