@@ -106,13 +106,22 @@ export function object(
         dataset.typed = true;
         dataset.value = {};
 
-        // Parse schema of each entry
+        // Process each object entry of schema
         for (const key in this.entries) {
-          // If key is not missing, parse value of key
-          if (key in input) {
-            const valueDataset = this.entries[key]['~run'](
+          // If key is present or its an optional schema with a default value,
+          // parse input or default value of key
+          if (
+            key in input ||
+            (this.entries[key].type === 'optional' &&
               // @ts-expect-error
-              { value: input[key] },
+              this.entries[key].default !== undefined)
+          ) {
+            const valueDataset = this.entries[key]['~run'](
+              {
+                value:
+                  // @ts-expect-error
+                  key in input ? input[key] : getDefault(this.entries[key]),
+              },
               config
             );
 
@@ -160,33 +169,22 @@ export function object(
             // @ts-expect-error
             dataset.value[key] = valueDataset.value;
 
-            // Otherwise, if key is missing and optional, use default value
-            // if available
-          } else {
-            if (this.entries[key].type === 'optional') {
-              // @ts-expect-error
-              if (this.entries[key].default !== undefined) {
-                // @ts-expect-error
-                dataset.value[key] = getDefault(this.entries[key]);
-              }
-
-              // Otherwise, if key is missing and required, add issue
-            } else {
-              _addIssue(this, 'key', dataset, config, {
-                input: undefined,
-                expected: `"${key}"`,
-                path: [
-                  {
-                    type: 'object',
-                    origin: 'key',
-                    input: input as Record<string, unknown>,
-                    key,
-                    // @ts-expect-error
-                    value: input[key],
-                  },
-                ],
-              });
-            }
+            // Otherwise, if key is missing and required, add issue
+          } else if (this.entries[key].type !== 'optional') {
+            _addIssue(this, 'key', dataset, config, {
+              input: undefined,
+              expected: `"${key}"`,
+              path: [
+                {
+                  type: 'object',
+                  origin: 'key',
+                  input: input as Record<string, unknown>,
+                  key,
+                  // @ts-expect-error
+                  value: input[key],
+                },
+              ],
+            });
           }
         }
 

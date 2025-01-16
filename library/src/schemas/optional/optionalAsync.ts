@@ -1,4 +1,3 @@
-import { getDefault } from '../../methods/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -99,12 +98,6 @@ export function optionalAsync(
       return _getStandardProps(this);
     },
     async '~run'(dataset, config) {
-      // If value is `undefined` and default is specified, override value
-      if (dataset.value === undefined && this.default !== undefined) {
-        dataset.value = await getDefault(this, dataset, config);
-      }
-
-      // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
   };
