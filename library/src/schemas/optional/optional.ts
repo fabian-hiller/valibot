@@ -13,7 +13,7 @@ import { _getStandardProps } from '../../utils/index.ts';
  */
 export interface OptionalSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends Default<TWrapped, undefined>,
+  TDefault extends Default<TWrapped, never>,
 > extends BaseSchema<
     InferInput<TWrapped>,
     InferOutput<TWrapped>,
@@ -62,7 +62,7 @@ export function optional<
  */
 export function optional<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-  const TDefault extends Default<TWrapped, undefined>,
+  const TDefault extends Default<TWrapped, never>,
 >(wrapped: TWrapped, default_: TDefault): OptionalSchema<TWrapped, TDefault>;
 
 // @__NO_SIDE_EFFECTS__

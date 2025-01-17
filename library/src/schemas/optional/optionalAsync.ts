@@ -16,7 +16,7 @@ export interface OptionalSchemaAsync<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends DefaultAsync<TWrapped, undefined>,
+  TDefault extends DefaultAsync<TWrapped, never>,
 > extends BaseSchemaAsync<
     InferInput<TWrapped>,
     InferOutput<TWrapped>,
@@ -69,7 +69,7 @@ export function optionalAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TDefault extends DefaultAsync<TWrapped, undefined>,
+  const TDefault extends DefaultAsync<TWrapped, never>,
 >(
   wrapped: TWrapped,
   default_: TDefault

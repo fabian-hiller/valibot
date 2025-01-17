@@ -49,8 +49,8 @@ describe('object', () => {
         key6: UndefinedableSchema<StringSchema<undefined>, 'bar'>;
         key7: SchemaWithPipe<
           [
-            OptionalSchema<StringSchema<undefined>, undefined>,
-            TransformAction<undefined | string, string>,
+            OptionalSchema<StringSchema<undefined>, () => 'foo'>,
+            TransformAction<string, number>,
           ]
         >;
       },
@@ -61,7 +61,7 @@ describe('object', () => {
       expectTypeOf<InferInput<Schema>>().toEqualTypeOf<{
         key1: string;
         key2?: string;
-        key3?: string | null | undefined;
+        key3: string | null | undefined;
         key4: { key: number };
         key5: string;
         key6: string | undefined;
@@ -73,11 +73,11 @@ describe('object', () => {
       expectTypeOf<InferOutput<Schema>>().toEqualTypeOf<{
         key1: string;
         key2: string;
-        key3?: string | null | undefined;
+        key3: string | null | undefined;
         key4: { key: number };
         readonly key5: string;
         key6: string;
-        key7: string;
+        key7: number;
       }>();
     });
 

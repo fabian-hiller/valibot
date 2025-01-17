@@ -116,14 +116,12 @@ export function object(
               // @ts-expect-error
               this.entries[key].default !== undefined)
           ) {
-            const valueDataset = this.entries[key]['~run'](
-              {
-                value:
-                  // @ts-expect-error
-                  key in input ? input[key] : getDefault(this.entries[key]),
-              },
-              config
-            );
+            const value: unknown =
+              key in input
+                ? // @ts-expect-error
+                  input[key]
+                : getDefault(this.entries[key]);
+            const valueDataset = this.entries[key]['~run']({ value }, config);
 
             // If there are issues, capture them
             if (valueDataset.issues) {
@@ -133,8 +131,7 @@ export function object(
                 origin: 'value',
                 input: input as Record<string, unknown>,
                 key,
-                // @ts-expect-error
-                value: input[key],
+                value,
               };
 
               // Add modified entry dataset issues to issues
@@ -165,7 +162,7 @@ export function object(
               dataset.typed = false;
             }
 
-            // Add entry to dataset if necessary
+            // Add entry to dataset
             // @ts-expect-error
             dataset.value[key] = valueDataset.value;
 
@@ -185,6 +182,11 @@ export function object(
                 },
               ],
             });
+
+            // If necessary, abort early
+            if (config.abortEarly) {
+              break;
+            }
           }
         }
 
