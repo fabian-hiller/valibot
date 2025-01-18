@@ -8,9 +8,13 @@ describe('entriesFromObjects', () => {
     const barSchema = object({ bar: string() });
     const overrideSchema = object({ foo: optional(number()) });
 
+    test('for empty schema', () => {
+      expect(entriesFromObjects()).toStrictEqual({})
+      expect(entriesFromObjects(object({}))).toStrictEqual({})
+    })
+
     test('for single schema', () => {
       expect(entriesFromObjects(fooSchema)).toStrictEqual(fooSchema.entries)
-
     });
 
     test('for multi schema', () => {
