@@ -1,18 +1,71 @@
-import type { ObjectSchema } from '../../schemas/index.ts';
-import type { ObjectEntries } from '../../types/index.ts';
+import type {
+  ObjectSchema ,
+  LooseObjectIssue,
+  LooseObjectSchema,
+  LooseObjectSchemaAsync,
+  ObjectIssue,
+  ObjectSchemaAsync,
+  ObjectWithRestIssue,
+  ObjectWithRestSchema,
+  ObjectWithRestSchemaAsync,
+  StrictObjectIssue,
+  StrictObjectSchema,
+  StrictObjectSchemaAsync,
+} from '../../schemas/index.ts';
+import type {
+  ObjectEntries ,
+  BaseIssue,
+  BaseSchema,
+  BaseSchemaAsync,
+  ErrorMessage,
+  ObjectEntriesAsync,
+} from '../../types/index.ts';
 
-type Merge<A extends object, B extends object> = Omit<A, keyof B> & B
+/**
+ * Schema type.
+ */
+type Schema =
+  | LooseObjectSchema<ObjectEntries, ErrorMessage<LooseObjectIssue> | undefined>
+  | LooseObjectSchemaAsync<
+      ObjectEntriesAsync,
+      ErrorMessage<LooseObjectIssue> | undefined
+    >
+  | ObjectSchema<ObjectEntries, ErrorMessage<ObjectIssue> | undefined>
+  | ObjectSchemaAsync<ObjectEntriesAsync, ErrorMessage<ObjectIssue> | undefined>
+  | ObjectWithRestSchema<
+      ObjectEntries,
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      ErrorMessage<ObjectWithRestIssue> | undefined
+    >
+  | ObjectWithRestSchemaAsync<
+      ObjectEntriesAsync,
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      ErrorMessage<ObjectWithRestIssue> | undefined
+    >
+  | StrictObjectSchema<
+      ObjectEntries,
+      ErrorMessage<StrictObjectIssue> | undefined
+    >
+  | StrictObjectSchemaAsync<
+      ObjectEntriesAsync,
+      ErrorMessage<StrictObjectIssue> | undefined
+    >;
+
+// Type Utils
+type MergeObject<A extends object, B extends object> = Omit<A, keyof B> & B
 
 type Flatten<T> = { [K in keyof T]: T[K] };
 
-type MergedEntries<TSchemas extends ObjectSchema<ObjectEntries, undefined>[]> = Flatten<
-  TSchemas extends [infer First, ...infer Rest]
-    ? First extends ObjectSchema<infer FirstEntries, undefined>
-      ? Rest extends ObjectSchema<ObjectEntries, undefined>[]
-        ? Merge<FirstEntries, MergedEntries<Rest>>
-        : FirstEntries
-      : unknown
+type MergedEntries<TSchemas extends Schema[]> = Flatten<
+  TSchemas extends [infer TFirstSchema, ...infer TRestSchemas]
+  ? TFirstSchema extends Schema
+    ? TRestSchemas extends Schema[]
+      ? MergeObject<TFirstSchema['entries'], MergedEntries<TRestSchemas>>
+      : TFirstSchema['entries']
     : object
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  : {}
 >;
 
 /**
@@ -24,7 +77,7 @@ type MergedEntries<TSchemas extends ObjectSchema<ObjectEntries, undefined>[]> = 
  */
 // @__NO_SIDE_EFFECTS__
 export function entriesFromObjects<
-  TSchemas extends ObjectSchema<ObjectEntries, undefined>[]
+  const TSchemas extends Schema[]
 >(
   ...schemas: TSchemas
 ): MergedEntries<TSchemas> {
