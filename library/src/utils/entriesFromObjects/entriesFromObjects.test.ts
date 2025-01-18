@@ -9,31 +9,29 @@ describe('entriesFromObjects', () => {
     const overrideSchema = object({ foo: optional(number()) });
 
     test('for empty schema', () => {
-      expect(entriesFromObjects()).toStrictEqual({})
-      expect(entriesFromObjects(object({}))).toStrictEqual({})
-    })
+      expect(entriesFromObjects()).toStrictEqual({});
+      expect(entriesFromObjects(object({}))).toStrictEqual({});
+    });
 
     test('for single schema', () => {
-      expect(entriesFromObjects(fooSchema)).toStrictEqual(fooSchema.entries)
+      expect(entriesFromObjects(fooSchema)).toStrictEqual(fooSchema.entries);
     });
 
     test('for multi schema', () => {
       expect(entriesFromObjects(fooSchema, barSchema)).toStrictEqual({
         ...fooSchema.entries,
-        ...barSchema.entries
-      })
+        ...barSchema.entries,
+      });
     });
 
     test('for override schema', () => {
-      expect(entriesFromObjects(
-        fooSchema,
-        barSchema,
-        overrideSchema
-      )).toStrictEqual({
+      expect(
+        entriesFromObjects(fooSchema, barSchema, overrideSchema)
+      ).toStrictEqual({
         ...fooSchema.entries,
         ...barSchema.entries,
-        ...overrideSchema.entries
-      })
+        ...overrideSchema.entries,
+      });
     });
   });
 });

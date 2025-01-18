@@ -1,9 +1,9 @@
 import type {
-  ObjectSchema ,
   LooseObjectIssue,
   LooseObjectSchema,
   LooseObjectSchemaAsync,
   ObjectIssue,
+  ObjectSchema,
   ObjectSchemaAsync,
   ObjectWithRestIssue,
   ObjectWithRestSchema,
@@ -13,11 +13,11 @@ import type {
   StrictObjectSchemaAsync,
 } from '../../schemas/index.ts';
 import type {
-  ObjectEntries ,
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
+  ObjectEntries,
   ObjectEntriesAsync,
 } from '../../types/index.ts';
 
@@ -53,19 +53,19 @@ type Schema =
     >;
 
 // Type Utils
-type MergeObject<A extends object, B extends object> = Omit<A, keyof B> & B
+type MergeObject<A extends object, B extends object> = Omit<A, keyof B> & B;
 
 type Flatten<T> = { [K in keyof T]: T[K] };
 
 type MergedEntries<TSchemas extends Schema[]> = Flatten<
   TSchemas extends [infer TFirstSchema, ...infer TRestSchemas]
-  ? TFirstSchema extends Schema
-    ? TRestSchemas extends Schema[]
-      ? MergeObject<TFirstSchema['entries'], MergedEntries<TRestSchemas>>
-      : TFirstSchema['entries']
-    : object
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  : {}
+    ? TFirstSchema extends Schema
+      ? TRestSchemas extends Schema[]
+        ? MergeObject<TFirstSchema['entries'], MergedEntries<TRestSchemas>>
+        : TFirstSchema['entries']
+      : object
+    : // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+      {}
 >;
 
 /**
@@ -76,9 +76,7 @@ type MergedEntries<TSchemas extends Schema[]> = Flatten<
  * @returns The object entries.
  */
 // @__NO_SIDE_EFFECTS__
-export function entriesFromObjects<
-  const TSchemas extends Schema[]
->(
+export function entriesFromObjects<const TSchemas extends Schema[]>(
   ...schemas: TSchemas
 ): MergedEntries<TSchemas> {
   const entries = {} as MergedEntries<TSchemas>;
