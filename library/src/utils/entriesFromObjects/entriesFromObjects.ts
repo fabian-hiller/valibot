@@ -85,7 +85,8 @@ export function entriesFromObjects<
   schema: TSchema,
   ...schemas: TSchemas
 ): MergedEntries<[TSchema, ...TSchemas]> {
-  const entries = schema.entries as MergedEntries<[TSchema, ...TSchemas]>;
+  const entries = {} as MergedEntries<[TSchema, ...TSchemas]>;
+  Object.assign(entries, schema.entries);
   for (const schema of schemas) {
     Object.assign(entries, schema.entries);
   }
