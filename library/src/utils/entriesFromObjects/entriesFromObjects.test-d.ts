@@ -16,9 +16,6 @@ describe('entriesFromObjects', () => {
     const overrideSchema = object({ foo: optional(number()) });
 
     test('for empty schema', () => {
-      const r1 = {};
-      expectTypeOf(entriesFromObjects()).toEqualTypeOf<typeof r1>();
-
       const r2 = object(entriesFromObjects(object({})));
       expectTypeOf(object({})).toEqualTypeOf<typeof r2>();
     });

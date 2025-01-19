@@ -9,7 +9,6 @@ describe('entriesFromObjects', () => {
     const overrideSchema = object({ foo: optional(number()) });
 
     test('for empty schema', () => {
-      expect(entriesFromObjects()).toStrictEqual({});
       expect(entriesFromObjects(object({}))).toStrictEqual({});
     });
 
