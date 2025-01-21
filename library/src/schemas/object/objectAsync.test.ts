@@ -4,12 +4,13 @@ import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
 } from '../../vitest/index.ts';
+import { any } from '../any/index.ts';
+import { exactOptional, exactOptionalAsync } from '../exactOptional/index.ts';
 import { nullish, nullishAsync } from '../nullish/index.ts';
 import { number } from '../number/index.ts';
 import { optional, optionalAsync } from '../optional/index.ts';
 import { string } from '../string/index.ts';
-import { undefined_ } from '../undefined/index.ts';
-import { unionAsync } from '../union/index.ts';
+import { unknown } from '../unknown/index.ts';
 import { objectAsync, type ObjectSchemaAsync } from './objectAsync.ts';
 import type { ObjectIssue } from './types.ts';
 
@@ -157,14 +158,71 @@ describe('objectAsync', () => {
       );
     });
 
+    test('for exact optional entry', async () => {
+      await expectNoSchemaIssueAsync(
+        objectAsync({ key: exactOptional(string()) }),
+        [{}, { key: 'foo' }]
+      );
+      await expectNoSchemaIssueAsync(
+        objectAsync({ key: exactOptionalAsync(string()) }),
+        [{}, { key: 'foo' }]
+      );
+    });
+
+    test('for exact optional entry with default', async () => {
+      // Sync
+      expect(
+        await objectAsync({ key: exactOptional(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: exactOptional(string(), () => 'foo') })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+
+      // Async
+      expect(
+        await objectAsync({ key: exactOptionalAsync(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: exactOptionalAsync(string(), () => 'foo') })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+    });
+
     test('for optional entry', async () => {
       await expectNoSchemaIssueAsync(objectAsync({ key: optional(string()) }), [
         {},
+        { key: undefined },
         { key: 'foo' },
       ]);
+      await expectNoSchemaIssueAsync(
+        objectAsync({ key: optionalAsync(string()) }),
+        [{}, { key: undefined }, { key: 'foo' }]
+      );
     });
 
     test('for optional entry with default', async () => {
+      // Sync
       expect(
         await objectAsync({ key: optional(string(), 'foo') })['~run'](
           { value: {} },
@@ -175,11 +233,60 @@ describe('objectAsync', () => {
         value: { key: 'foo' },
       });
       expect(
+        await objectAsync({ key: optional(string(), () => 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
         await objectAsync({
-          key: optionalAsync(
-            unionAsync([string(), undefined_()]),
-            async () => undefined
-          ),
+          key: optional(string(), () => undefined),
+        })['~run']({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
+
+      // Async
+      expect(
+        await objectAsync({ key: optionalAsync(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: optionalAsync(string(), () => 'foo') })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({
+          key: optionalAsync(string(), () => undefined),
+        })['~run']({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
+      expect(
+        await objectAsync({ key: optionalAsync(string(), async () => 'foo') })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({
+          key: optionalAsync(string(), async () => undefined),
         })['~run']({ value: {} }, {})
       ).toStrictEqual({
         typed: true,
@@ -189,10 +296,134 @@ describe('objectAsync', () => {
 
     test('for nullish entry', async () => {
       await expectNoSchemaIssueAsync(objectAsync({ key: nullish(number()) }), [
+        {},
         { key: undefined },
         { key: null },
         { key: 123 },
       ]);
+      await expectNoSchemaIssueAsync(
+        objectAsync({ key: nullishAsync(number()) }),
+        [{}, { key: undefined }, { key: null }, { key: 123 }]
+      );
+    });
+
+    test('for nullish entry with default', async () => {
+      // Sync
+      expect(
+        await objectAsync({ key: nullish(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: nullish(string(), null) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        await objectAsync({ key: nullish(string(), () => 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: nullish(string(), () => null) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        await objectAsync({ key: nullish(string(), () => undefined) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
+
+      // Async
+      expect(
+        await objectAsync({ key: nullishAsync(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), null) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), () => 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), () => null) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), () => undefined) })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), async () => 'foo') })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), async () => null) })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        await objectAsync({
+          key: nullishAsync(string(), async () => undefined),
+        })['~run']({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
     });
 
     test('for unknown entries', async () => {
@@ -373,6 +604,50 @@ describe('objectAsync', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
+    test('for missing any and unknown entry', async () => {
+      const schema = objectAsync({ key1: any(), key2: unknown() });
+      expect(await schema['~run']({ value: {} }, {})).toStrictEqual({
+        typed: false,
+        value: {},
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: '"key1"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input: {},
+                key: 'key1',
+                value: undefined,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: '"key2"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input: {},
+                key: 'key2',
+                value: undefined,
+              },
+            ],
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
     test('for invalid entries', async () => {
       const input = { key1: false, key2: 123, nested: null };
       expect(await schema['~run']({ value: input }, {})).toStrictEqual({
@@ -529,9 +804,12 @@ describe('objectAsync', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('for undefined optional entry', async () => {
-      const schema = objectAsync({ key: optionalAsync(string()) });
-      const input = { key: undefined };
+    test('for invalid exact optional entry', async () => {
+      const schema = objectAsync({
+        key1: exactOptional(string()),
+        key2: exactOptionalAsync(string()),
+      });
+      const input = { key1: undefined, key2: undefined };
       expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
@@ -548,35 +826,24 @@ describe('objectAsync', () => {
                 type: 'object',
                 origin: 'value',
                 input,
-                key: 'key',
+                key: 'key1',
                 value: undefined,
               },
             ],
           },
-        ],
-      } satisfies FailureDataset<InferIssue<typeof schema>>);
-    });
-
-    test('for missing nullish entry', async () => {
-      const schema = objectAsync({ key: nullishAsync(string()) });
-      const input = {};
-      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
-        typed: false,
-        value: input,
-        issues: [
           {
             ...baseInfo,
             kind: 'schema',
-            type: 'object',
+            type: 'string',
             input: undefined,
-            expected: '"key"',
+            expected: 'string',
             received: 'undefined',
             path: [
               {
                 type: 'object',
-                origin: 'key',
+                origin: 'value',
                 input,
-                key: 'key',
+                key: 'key2',
                 value: undefined,
               },
             ],

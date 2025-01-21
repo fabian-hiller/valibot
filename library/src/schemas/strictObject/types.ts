@@ -15,5 +15,5 @@ export interface StrictObjectIssue extends BaseIssue<unknown> {
   /**
    * The expected property.
    */
-  readonly expected: 'Object' | 'never';
+  readonly expected: 'Object' | `"${string}"` | 'never';
 }

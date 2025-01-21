@@ -3,7 +3,6 @@ import {
   boolean,
   type BooleanIssue,
   number,
-  type NumberIssue,
   object,
   objectWithRest,
   string,
@@ -95,20 +94,20 @@ describe('omit', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'number',
+              type: 'object',
               input: undefined,
-              expected: 'number',
+              expected: '"key4"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: { key2: 123 },
                   key: 'key4',
                   value: undefined,
                 },
               ],
-            } satisfies NumberIssue,
+            },
           ],
         } satisfies FailureDataset<InferIssue<typeof schema>>);
       });
@@ -185,20 +184,20 @@ describe('omit', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'number',
+              type: 'object_with_rest',
               input: undefined,
-              expected: 'number',
+              expected: '"key4"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: { key1: 'foo' },
                   key: 'key4',
                   value: undefined,
                 },
               ],
-            } satisfies NumberIssue,
+            },
           ],
         } satisfies FailureDataset<InferIssue<typeof schema>>);
       });

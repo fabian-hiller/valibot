@@ -108,20 +108,24 @@ export function object(
 
         // Process each object entry of schema
         for (const key in this.entries) {
+          const valueSchema = this.entries[key];
+
           // If key is present or its an optional schema with a default value,
-          // parse input or default value of key
+          // parse input of key or default value
           if (
             key in input ||
-            (this.entries[key].type === 'optional' &&
+            ((valueSchema.type === 'exact_optional' ||
+              valueSchema.type === 'optional' ||
+              valueSchema.type === 'nullish') &&
               // @ts-expect-error
-              this.entries[key].default !== undefined)
+              valueSchema.default !== undefined)
           ) {
             const value: unknown =
               key in input
                 ? // @ts-expect-error
                   input[key]
-                : getDefault(this.entries[key]);
-            const valueDataset = this.entries[key]['~run']({ value }, config);
+                : getDefault(valueSchema);
+            const valueDataset = valueSchema['~run']({ value }, config);
 
             // If there are issues, capture them
             if (valueDataset.issues) {
@@ -167,7 +171,11 @@ export function object(
             dataset.value[key] = valueDataset.value;
 
             // Otherwise, if key is missing and required, add issue
-          } else if (this.entries[key].type !== 'optional') {
+          } else if (
+            valueSchema.type !== 'exact_optional' &&
+            valueSchema.type !== 'optional' &&
+            valueSchema.type !== 'nullish'
+          ) {
             _addIssue(this, 'key', dataset, config, {
               input: undefined,
               expected: `"${key}"`,

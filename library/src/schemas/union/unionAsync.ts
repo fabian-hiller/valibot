@@ -18,6 +18,7 @@ import {
   _joinExpects,
 } from '../../utils/index.ts';
 import type { UnionIssue } from './types.ts';
+import type { union } from './union.ts';
 import { _subIssues } from './utils/index.ts';
 
 /**
@@ -50,7 +51,7 @@ export interface UnionSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof unionAsync;
+  readonly reference: typeof union | typeof unionAsync;
   /**
    * The union options.
    */

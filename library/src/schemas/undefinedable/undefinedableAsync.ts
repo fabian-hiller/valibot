@@ -10,6 +10,7 @@ import type {
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
+import type { undefinedable } from './undefinedable.ts';
 
 /**
  * Undefinedable schema async interface.
@@ -31,7 +32,7 @@ export interface UndefinedableSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof undefinedableAsync;
+  readonly reference: typeof undefinedable | typeof undefinedableAsync;
   /**
    * The expected property.
    */

@@ -10,6 +10,7 @@ import type {
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { object } from './object.ts';
 import type { ObjectIssue } from './types.ts';
 
 /**
@@ -30,7 +31,7 @@ export interface ObjectSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof objectAsync;
+  readonly reference: typeof object | typeof objectAsync;
   /**
    * The expected property.
    */
@@ -110,37 +111,41 @@ export function objectAsync(
         dataset.value = {};
 
         // If key is present or its an optional schema with a default value,
-        // parse input or default value of key asynchronously
+        // parse input of key or default value asynchronously
         const valueDatasets = await Promise.all(
-          Object.entries(this.entries).map(async ([key, schema]) => {
+          Object.entries(this.entries).map(async ([key, valueSchema]) => {
             if (
               key in input ||
-              (this.entries[key].type === 'optional' &&
+              ((valueSchema.type === 'exact_optional' ||
+                valueSchema.type === 'optional' ||
+                valueSchema.type === 'nullish') &&
                 // @ts-expect-error
-                this.entries[key].default !== undefined)
+                valueSchema.default !== undefined)
             ) {
               const value: unknown =
                 key in input
                   ? // @ts-expect-error
                     input[key]
-                  : await getDefault(this.entries[key]);
+                  : await getDefault(valueSchema);
               return [
                 key,
                 value,
-                await schema['~run']({ value }, config),
+                valueSchema,
+                await valueSchema['~run']({ value }, config),
               ] as const;
             }
             return [
               key,
               // @ts-expect-error
               input[key] as unknown,
+              valueSchema,
               null,
             ] as const;
           })
         );
 
         // Process each object entry of schema
-        for (const [key, value, valueDataset] of valueDatasets) {
+        for (const [key, value, valueSchema, valueDataset] of valueDatasets) {
           // If key is present or its an optional schema with a default value,
           // process its value dataset
           if (valueDataset) {
@@ -188,7 +193,11 @@ export function objectAsync(
             dataset.value[key] = valueDataset.value;
 
             // Otherwise, if key is missing and required, add issue
-          } else if (this.entries[key].type !== 'optional') {
+          } else if (
+            valueSchema.type !== 'exact_optional' &&
+            valueSchema.type !== 'optional' &&
+            valueSchema.type !== 'nullish'
+          ) {
             _addIssue(this, 'key', dataset, config, {
               input: undefined,
               expected: `"${key}"`,

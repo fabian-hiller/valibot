@@ -7,6 +7,7 @@ import type {
   InferIssue,
   InferOutput,
   MaybePromise,
+  MaybeReadonly,
   OutputDataset,
   StandardProps,
   UnknownDataset,
@@ -22,11 +23,11 @@ export type FallbackAsync<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > =
-  | InferOutput<TSchema>
+  | MaybeReadonly<InferOutput<TSchema>>
   | ((
       dataset?: OutputDataset<InferOutput<TSchema>, InferIssue<TSchema>>,
       config?: Config<InferIssue<TSchema>>
-    ) => MaybePromise<InferOutput<TSchema>>);
+    ) => MaybePromise<MaybeReadonly<InferOutput<TSchema>>>);
 
 /**
  * Schema with fallback async type.

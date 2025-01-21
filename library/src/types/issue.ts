@@ -3,6 +3,8 @@ import type {
   ArrayIssue,
   ArraySchema,
   ArraySchemaAsync,
+  ExactOptionalSchema,
+  ExactOptionalSchemaAsync,
   IntersectIssue,
   IntersectSchema,
   IntersectSchemaAsync,
@@ -497,6 +499,17 @@ export type IssueDotPath<
                                           | DotPath<number, TRest>
                                       : // Wrapped (sync)
                                         TSchema extends
+                                            | ExactOptionalSchema<
+                                                infer TWrapped,
+                                                Default<
+                                                  BaseSchema<
+                                                    unknown,
+                                                    unknown,
+                                                    BaseIssue<unknown>
+                                                  >,
+                                                  never
+                                                >
+                                              >
                                             | LazySchema<infer TWrapped>
                                             | NonNullableSchema<
                                                 infer TWrapped,
@@ -560,6 +573,22 @@ export type IssueDotPath<
                                         ? IssueDotPath<TWrapped>
                                         : // Wrapped (async)
                                           TSchema extends
+                                              | ExactOptionalSchemaAsync<
+                                                  infer TWrapped,
+                                                  DefaultAsync<
+                                                    | BaseSchema<
+                                                        unknown,
+                                                        unknown,
+                                                        BaseIssue<unknown>
+                                                      >
+                                                    | BaseSchemaAsync<
+                                                        unknown,
+                                                        unknown,
+                                                        BaseIssue<unknown>
+                                                      >,
+                                                    never
+                                                  >
+                                                >
                                               | LazySchemaAsync<infer TWrapped>
                                               | NonNullableSchemaAsync<
                                                   infer TWrapped,

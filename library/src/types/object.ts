@@ -1,9 +1,13 @@
 import type { ReadonlyAction } from '../actions/index.ts';
 import type { SchemaWithPipe, SchemaWithPipeAsync } from '../methods/index.ts';
 import type {
+  ExactOptionalSchema,
+  ExactOptionalSchemaAsync,
   LooseObjectIssue,
   LooseObjectSchema,
   LooseObjectSchemaAsync,
+  NullishSchema,
+  NullishSchemaAsync,
   ObjectIssue,
   ObjectSchema,
   ObjectSchemaAsync,
@@ -23,12 +27,43 @@ import type { BaseSchema, BaseSchemaAsync } from './schema.ts';
 import type { MarkOptional, MaybeReadonly, Prettify } from './utils.ts';
 
 /**
+ * Optional entry schema type.
+ */
+type OptionalEntrySchema =
+  | ExactOptionalSchema<
+      BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+      unknown
+    >
+  | NullishSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
+  | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>;
+
+/**
+ * Optional entry schema async type.
+ */
+type OptionalEntrySchemaAsync =
+  | ExactOptionalSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      unknown
+    >
+  | NullishSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      unknown
+    >
+  | OptionalSchemaAsync<
+      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+      unknown
+    >;
+
+/**
  * Object entries interface.
  */
 export interface ObjectEntries {
   [key: string]:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-    | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>;
+    | OptionalEntrySchema;
 }
 
 /**
@@ -38,12 +73,8 @@ export interface ObjectEntriesAsync {
   [key: string]:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-    | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
-    | OptionalSchemaAsync<
-        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-        unknown
-      >;
+    | OptionalEntrySchema
+    | OptionalEntrySchemaAsync;
 }
 
 /**
@@ -86,17 +117,6 @@ export type ObjectKeys<
 > = MaybeReadonly<[keyof TSchema['entries'], ...(keyof TSchema['entries'])[]]>;
 
 /**
- * Question mark schema type.
- */
-type QuestionMarkSchema =
-  | OptionalSchema<BaseSchema<unknown, unknown, BaseIssue<unknown>>, unknown>
-  | OptionalSchemaAsync<
-      | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-      | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-      unknown
-    >;
-
-/**
  * Infer entries input type.
  */
 type InferEntriesInput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
@@ -114,7 +134,9 @@ type InferEntriesOutput<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
  * Optional input keys type.
  */
 type OptionalInputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
-  [TKey in keyof TEntries]: TEntries[TKey] extends QuestionMarkSchema
+  [TKey in keyof TEntries]: TEntries[TKey] extends
+    | OptionalEntrySchema
+    | OptionalEntrySchemaAsync
     ? TKey
     : never;
 }[keyof TEntries];
@@ -123,7 +145,9 @@ type OptionalInputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
  * Optional output keys type.
  */
 type OptionalOutputKeys<TEntries extends ObjectEntries | ObjectEntriesAsync> = {
-  [TKey in keyof TEntries]: TEntries[TKey] extends QuestionMarkSchema
+  [TKey in keyof TEntries]: TEntries[TKey] extends
+    | OptionalEntrySchema
+    | OptionalEntrySchemaAsync
     ? undefined extends TEntries[TKey]['default']
       ? TKey
       : never

@@ -8,6 +8,7 @@ import type {
   SetPathItem,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { set } from './set.ts';
 import type { InferSetInput, InferSetOutput, SetIssue } from './types.ts';
 
 /**
@@ -30,7 +31,7 @@ export interface SetSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof setAsync;
+  readonly reference: typeof set | typeof setAsync;
   /**
    * The expected property.
    */

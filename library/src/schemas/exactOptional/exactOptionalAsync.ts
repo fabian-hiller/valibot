@@ -1,4 +1,3 @@
-import { getDefault } from '../../methods/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -6,37 +5,36 @@ import type {
   DefaultAsync,
   InferInput,
   InferIssue,
-  SuccessDataset,
+  InferOutput,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
-import type { nullable } from './nullable.ts';
-import type { InferNullableOutput } from './types.ts';
+import type { exactOptional } from './exactOptional.ts';
 
 /**
- * Nullable schema async interface.
+ * Exact optional schema async interface.
  */
-export interface NullableSchemaAsync<
+export interface ExactOptionalSchemaAsync<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  TDefault extends DefaultAsync<TWrapped, null>,
+  TDefault extends DefaultAsync<TWrapped, never>,
 > extends BaseSchemaAsync<
-    InferInput<TWrapped> | null,
-    InferNullableOutput<TWrapped, TDefault>,
+    InferInput<TWrapped>,
+    InferOutput<TWrapped>,
     InferIssue<TWrapped>
   > {
   /**
    * The schema type.
    */
-  readonly type: 'nullable';
+  readonly type: 'exact_optional';
   /**
    * The schema reference.
    */
-  readonly reference: typeof nullable | typeof nullableAsync;
+  readonly reference: typeof exactOptional | typeof exactOptionalAsync;
   /**
    * The expected property.
    */
-  readonly expects: `(${TWrapped['expects']} | null)`;
+  readonly expects: TWrapped['expects'];
   /**
    * The wrapped schema.
    */
@@ -48,52 +46,52 @@ export interface NullableSchemaAsync<
 }
 
 /**
- * Creates a nullable schema.
+ * Creates an exact optional schema.
  *
  * @param wrapped The wrapped schema.
  *
- * @returns A nullable schema.
+ * @returns An exact optional schema.
  */
-export function nullableAsync<
+export function exactOptionalAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(wrapped: TWrapped): NullableSchemaAsync<TWrapped, undefined>;
+>(wrapped: TWrapped): ExactOptionalSchemaAsync<TWrapped, undefined>;
 
 /**
- * Creates a nullable schema.
+ * Creates an exact optional schema.
  *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
  *
- * @returns A nullable schema.
+ * @returns An exact optional schema.
  */
-export function nullableAsync<
+export function exactOptionalAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-  const TDefault extends DefaultAsync<TWrapped, null>,
+  const TDefault extends DefaultAsync<TWrapped, never>,
 >(
   wrapped: TWrapped,
   default_: TDefault
-): NullableSchemaAsync<TWrapped, TDefault>;
+): ExactOptionalSchemaAsync<TWrapped, TDefault>;
 
 // @__NO_SIDE_EFFECTS__
-export function nullableAsync(
+export function exactOptionalAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   default_?: unknown
-): NullableSchemaAsync<
+): ExactOptionalSchemaAsync<
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   unknown
 > {
   return {
     kind: 'schema',
-    type: 'nullable',
-    reference: nullableAsync,
-    expects: `(${wrapped.expects} | null)`,
+    type: 'exact_optional',
+    reference: exactOptionalAsync,
+    expects: wrapped.expects,
     async: true,
     wrapped,
     default: default_,
@@ -101,23 +99,6 @@ export function nullableAsync(
       return _getStandardProps(this);
     },
     async '~run'(dataset, config) {
-      // If value is `null`, override it with default or return dataset
-      if (dataset.value === null) {
-        // If default is specified, override value of dataset
-        if (this.default !== undefined) {
-          dataset.value = await getDefault(this, dataset, config);
-        }
-
-        // If value is still `null`, return dataset
-        if (dataset.value === null) {
-          // @ts-expect-error
-          dataset.typed = true;
-          // @ts-expect-error
-          return dataset as SuccessDataset<unknown>;
-        }
-      }
-
-      // Otherwise, return dataset of wrapped schema
       return this.wrapped['~run'](dataset, config);
     },
   };

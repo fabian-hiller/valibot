@@ -8,6 +8,7 @@ import type {
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { map } from './map.ts';
 import type { InferMapInput, InferMapOutput, MapIssue } from './types.ts';
 
 /**
@@ -33,7 +34,7 @@ export interface MapSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof mapAsync;
+  readonly reference: typeof map | typeof mapAsync;
   /**
    * The expected property.
    */

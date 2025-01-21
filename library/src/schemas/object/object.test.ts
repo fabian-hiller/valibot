@@ -1,12 +1,13 @@
 import { describe, expect, test } from 'vitest';
 import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { any } from '../any/index.ts';
+import { exactOptional } from '../exactOptional/exactOptional.ts';
 import { nullish } from '../nullish/index.ts';
 import { number } from '../number/index.ts';
 import { optional } from '../optional/index.ts';
 import { string } from '../string/index.ts';
-import { undefined_ } from '../undefined/index.ts';
-import { union } from '../union/index.ts';
+import { unknown } from '../unknown/index.ts';
 import { object, type ObjectSchema } from './object.ts';
 import type { ObjectIssue } from './types.ts';
 
@@ -144,9 +145,38 @@ describe('object', () => {
       ]);
     });
 
+    test('for exact optional entry', () => {
+      expectNoSchemaIssue(object({ key: exactOptional(string()) }), [
+        {},
+        { key: 'foo' },
+      ]);
+    });
+
+    test('for exact optional entry with default', () => {
+      expect(
+        object({ key: exactOptional(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        object({ key: exactOptional(string(), () => 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+    });
+
     test('for optional entry', () => {
       expectNoSchemaIssue(object({ key: optional(string()) }), [
         {},
+        { key: undefined },
         { key: 'foo' },
       ]);
     });
@@ -159,8 +189,17 @@ describe('object', () => {
         value: { key: 'foo' },
       });
       expect(
+        object({ key: optional(string(), () => 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
         object({
-          key: optional(union([string(), undefined_()]), () => undefined),
+          key: optional(string(), () => undefined),
         })['~run']({ value: {} }, {})
       ).toStrictEqual({
         typed: true,
@@ -170,10 +209,53 @@ describe('object', () => {
 
     test('for nullish entry', () => {
       expectNoSchemaIssue(object({ key: nullish(number()) }), [
+        {},
         { key: undefined },
         { key: null },
         { key: 123 },
       ]);
+    });
+
+    test('for nullish entry with default', () => {
+      expect(
+        object({ key: nullish(string(), 'foo') })['~run']({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        object({ key: nullish(string(), null) })['~run']({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        object({ key: nullish(string(), () => 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        object({ key: nullish(string(), () => null) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        object({ key: nullish(string(), () => undefined) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
     });
 
     test('for unknown entries', () => {
@@ -354,6 +436,50 @@ describe('object', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
+    test('for missing any and unknown entry', () => {
+      const schema = object({ key1: any(), key2: unknown() });
+      expect(schema['~run']({ value: {} }, {})).toStrictEqual({
+        typed: false,
+        value: {},
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: '"key1"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input: {},
+                key: 'key1',
+                value: undefined,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: '"key2"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input: {},
+                key: 'key2',
+                value: undefined,
+              },
+            ],
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
     test('for invalid entries', () => {
       const input = { key1: false, key2: 123, nested: null };
       expect(schema['~run']({ value: input }, {})).toStrictEqual({
@@ -510,8 +636,8 @@ describe('object', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('for undefined optional entry', () => {
-      const schema = object({ key: optional(string()) });
+    test('for invalid exact optional entry', () => {
+      const schema = object({ key: exactOptional(string()) });
       const input = { key: undefined };
       expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
@@ -528,34 +654,6 @@ describe('object', () => {
               {
                 type: 'object',
                 origin: 'value',
-                input,
-                key: 'key',
-                value: undefined,
-              },
-            ],
-          },
-        ],
-      } satisfies FailureDataset<InferIssue<typeof schema>>);
-    });
-
-    test('for missing nullish entry', () => {
-      const schema = object({ key: nullish(string()) });
-      const input = {};
-      expect(schema['~run']({ value: input }, {})).toStrictEqual({
-        typed: false,
-        value: input,
-        issues: [
-          {
-            ...baseInfo,
-            kind: 'schema',
-            type: 'object',
-            input: undefined,
-            expected: '"key"',
-            received: 'undefined',
-            path: [
-              {
-                type: 'object',
-                origin: 'key',
                 input,
                 key: 'key',
                 value: undefined,

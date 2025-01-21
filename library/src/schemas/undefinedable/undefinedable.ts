@@ -44,23 +44,23 @@ export interface UndefinedableSchema<
 }
 
 /**
- * Creates a undefinedable schema.
+ * Creates an undefinedable schema.
  *
  * @param wrapped The wrapped schema.
  *
- * @returns A undefinedable schema.
+ * @returns An undefinedable schema.
  */
 export function undefinedable<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(wrapped: TWrapped): UndefinedableSchema<TWrapped, undefined>;
 
 /**
- * Creates a undefinedable schema.
+ * Creates an undefinedable schema.
  *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
  *
- * @returns A undefinedable schema.
+ * @returns An undefinedable schema.
  */
 export function undefinedable<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

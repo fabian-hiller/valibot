@@ -14,6 +14,7 @@ import type {
   TupleItemsAsync,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { tupleWithRest } from './tupleWithRest.ts';
 import type { TupleWithRestIssue } from './types.ts';
 
 /**
@@ -37,7 +38,7 @@ export interface TupleWithRestSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof tupleWithRestAsync;
+  readonly reference: typeof tupleWithRest | typeof tupleWithRestAsync;
   /**
    * The expected property.
    */
