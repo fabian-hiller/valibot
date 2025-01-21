@@ -90,10 +90,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'lazyAsync',
-      href: '../lazyAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'lazy',
+          href: '../lazy/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'lazyAsync',
+          href: '../lazyAsync/',
+        },
+      ],
     },
   },
   expects: {

@@ -91,10 +91,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'strictObjectAsync',
-      href: '../strictObjectAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'strictObject',
+          href: '../strictObject/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'strictObjectAsync',
+          href: '../strictObjectAsync/',
+        },
+      ],
     },
   },
   expects: {

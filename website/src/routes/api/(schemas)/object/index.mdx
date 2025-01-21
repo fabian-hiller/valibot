@@ -35,8 +35,6 @@ With `object` you can validate the data type of the input and whether the conten
 
 > This schema removes unknown entries. The output will only include the entries you specify. To include unknown entries, use <Link href="../looseObject/">`looseObject`</Link>. To return an issue for unknown entries, use <Link href="../strictObject/">`strictObject`</Link>. To include and validate unknown entries, use <Link href="../objectWithRest/">`objectWithRest`</Link>.
 
-> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
-
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
@@ -111,6 +109,7 @@ The following APIs can be combined with `object`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
