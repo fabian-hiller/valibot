@@ -20,6 +20,7 @@ All notable changes to the library will be documented in this file.
 - Change type signature of `findItem` action to support type predicates (issue #867)
 - Change validation of missing object entries in `looseObject`, `looseObjectAsync`, `object`, `objectAsync`, `objectWithRest`, `objectWithRestAsync`, `strictObject` and `strictObject` (PR #1013)
 - Change type signature of `optional` and `optionalAsync` when used within an object schema (PR #1013)
+- Change `MarkOptional` type to fix order of entries and TS error when using generic schemas (issue #1021)
 - Refactor `bytes`, `maxBytes`, `minBytes` and `notBytes` action
 - Fix implementation of `nonOptional`, `nonOptionalAsync`, `nonNullable`, `nonNullableAsync`, `nonNullish` and `nonNullishAsync` schema in edge cases (issue #909)
 - Fix instantiation error for `any` in `PathKeys` type (issue #929)
