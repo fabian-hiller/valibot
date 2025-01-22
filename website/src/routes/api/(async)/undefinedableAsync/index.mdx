@@ -98,9 +98,9 @@ const NewUserSchema = v.objectAsync({
 */
 ```
 
-### Username schema
+### Unwrap undefinedable schema
 
-Schema that accepts a unique username.
+Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `undefinedableAsync`.
 
 ```ts
 import { isUsernameUnique } from '~/api';
@@ -133,6 +133,7 @@ The following APIs can be combined with `undefinedableAsync`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -206,6 +207,7 @@ The following APIs can be combined with `undefinedableAsync`.
     'awaitAsync',
     'checkAsync',
     'customAsync',
+    'exactOptionalAsync',
     'fallbackAsync',
     'getDefaultsAsync',
     'getFallbacksAsync',

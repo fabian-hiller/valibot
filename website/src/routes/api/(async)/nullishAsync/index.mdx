@@ -96,9 +96,9 @@ const NewUserSchema = v.objectAsync({
 */
 ```
 
-### Username schema
+### Unwrap nullish schema
 
-Schema that accepts a unique username.
+Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `nullishAsync`.
 
 ```ts
 import { isUsernameUnique } from '~/api';
@@ -131,6 +131,7 @@ The following APIs can be combined with `nullishAsync`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -204,6 +205,7 @@ The following APIs can be combined with `nullishAsync`.
     'awaitAsync',
     'checkAsync',
     'customAsync',
+    'exactOptionalAsync',
     'fallbackAsync',
     'getDefaultsAsync',
     'getFallbacksAsync',

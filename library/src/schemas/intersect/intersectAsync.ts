@@ -10,6 +10,7 @@ import {
   _getStandardProps,
   _joinExpects,
 } from '../../utils/index.ts';
+import type { intersect } from './intersect.ts';
 import type {
   InferIntersectInput,
   InferIntersectOutput,
@@ -36,7 +37,7 @@ export interface IntersectSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof intersectAsync;
+  readonly reference: typeof intersect | typeof intersectAsync;
   /**
    * The intersect options.
    */

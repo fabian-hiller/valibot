@@ -63,9 +63,9 @@ const NullableUsernameSchema = v.nullableAsync(
 );
 ```
 
-### Username schema
+### Unwrap nullable schema
 
-Schema that accepts a unique username.
+Use <Link href="../unwrap/">`unwrap`</Link> to undo the effect of `nullableAsync`.
 
 ```ts
 import { isUsernameUnique } from '~/api';
@@ -98,6 +98,7 @@ The following APIs can be combined with `nullableAsync`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -171,6 +172,7 @@ The following APIs can be combined with `nullableAsync`.
     'awaitAsync',
     'checkAsync',
     'customAsync',
+    'exactOptionalAsync',
     'fallbackAsync',
     'getDefaultsAsync',
     'getFallbacksAsync',

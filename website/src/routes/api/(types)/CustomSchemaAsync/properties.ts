@@ -57,10 +57,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'customAsync',
-      href: '../customAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'custom',
+          href: '../custom/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'customAsync',
+          href: '../customAsync/',
+        },
+      ],
     },
   },
   expects: {

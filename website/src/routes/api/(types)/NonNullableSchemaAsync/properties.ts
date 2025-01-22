@@ -120,10 +120,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'nonNullableAsync',
-      href: '../nonNullableAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'nonNullable',
+          href: '../nonNullable/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'nonNullableAsync',
+          href: '../nonNullableAsync/',
+        },
+      ],
     },
   },
   expects: {

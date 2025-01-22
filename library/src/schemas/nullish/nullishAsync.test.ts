@@ -1,6 +1,13 @@
 import { describe, expect, test } from 'vitest';
-import { expectNoSchemaIssueAsync } from '../../vitest/index.ts';
-import { string, type StringSchema } from '../string/index.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
+import {
+  string,
+  type StringIssue,
+  type StringSchema,
+} from '../string/index.ts';
 import { nullishAsync, type NullishSchemaAsync } from './nullishAsync.ts';
 
 describe('nullishAsync', () => {
@@ -116,6 +123,20 @@ describe('nullishAsync', () => {
 
     test('for null', async () => {
       await expectNoSchemaIssueAsync(schema, [null]);
+    });
+  });
+
+  describe('should return dataset with issues', () => {
+    const schema = nullishAsync(string('message'));
+    const baseIssue: Omit<StringIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'string',
+      expected: 'string',
+      message: 'message',
+    };
+
+    test('for invalid wrapper type', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [123, true, {}]);
     });
   });
 

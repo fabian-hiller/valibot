@@ -65,7 +65,7 @@ export interface VariantOptionSchema<TKey extends string>
 export interface VariantOptionSchemaAsync<TKey extends string>
   extends BaseSchemaAsync<unknown, unknown, VariantIssue | BaseIssue<unknown>> {
   readonly type: 'variant';
-  readonly reference: typeof variantAsync;
+  readonly reference: typeof variant | typeof variantAsync;
   readonly key: string;
   readonly options: VariantOptionsAsync<TKey>;
   readonly message: ErrorMessage<VariantIssue> | undefined;

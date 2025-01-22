@@ -10,6 +10,7 @@ import type {
   TupleItemsAsync,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { tuple } from './tuple.ts';
 import type { TupleIssue } from './types.ts';
 
 /**
@@ -30,7 +31,7 @@ export interface TupleSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof tupleAsync;
+  readonly reference: typeof tuple | typeof tupleAsync;
   /**
    * The expected property.
    */

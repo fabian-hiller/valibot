@@ -12,6 +12,7 @@ import {
   _getStandardProps,
   _isValidObjectKey,
 } from '../../utils/index.ts';
+import type { record } from './record.ts';
 import type {
   InferRecordInput,
   InferRecordOutput,
@@ -41,7 +42,7 @@ export interface RecordSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof recordAsync;
+  readonly reference: typeof record | typeof recordAsync;
   /**
    * The expected property.
    */

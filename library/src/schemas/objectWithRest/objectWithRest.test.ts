@@ -1,15 +1,18 @@
 import { describe, expect, test } from 'vitest';
 import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import { any } from '../any/index.ts';
 import { array } from '../array/array.ts';
 import type { ArrayIssue } from '../array/types.ts';
 import { boolean } from '../boolean/index.ts';
+import { exactOptional } from '../exactOptional/index.ts';
 import { never } from '../never/index.ts';
 import { nullish } from '../nullish/index.ts';
 import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
 import { optional } from '../optional/index.ts';
-import { string, type StringIssue } from '../string/index.ts';
+import { string } from '../string/index.ts';
+import { unknown } from '../unknown/index.ts';
 import { objectWithRest, type ObjectWithRestSchema } from './objectWithRest.ts';
 import type { ObjectWithRestIssue } from './types.ts';
 
@@ -150,6 +153,33 @@ describe('objectWithRest', () => {
       );
     });
 
+    test('for exact optional entry', () => {
+      expectNoSchemaIssue(
+        objectWithRest({ key: exactOptional(string()) }, number()),
+        // @ts-expect-error
+        [{}, { key: 'foo' }]
+      );
+    });
+
+    test('for exact optional entry with default', () => {
+      expect(
+        objectWithRest({ key: exactOptional(string(), 'foo') }, number())[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        objectWithRest({ key: exactOptional(string(), () => 'foo') }, number())[
+          '~run'
+        ]({ value: { other: 123 } }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo', other: 123 },
+      });
+    });
+
     test('for optional entry', () => {
       expectNoSchemaIssue(
         objectWithRest({ key: optional(string()) }, number()),
@@ -158,20 +188,94 @@ describe('objectWithRest', () => {
       );
     });
 
+    test('for optional entry with default', () => {
+      expect(
+        objectWithRest({ key: optional(string(), 'foo') }, number())['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        objectWithRest({ key: optional(string(), () => 'foo') }, number())[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        objectWithRest({ key: optional(string(), () => undefined) }, number())[
+          '~run'
+        ]({ value: { other: 123 } }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined, other: 123 },
+      });
+    });
+
     test('for nullish entry', () => {
       expectNoSchemaIssue(
         objectWithRest({ key: nullish(number()) }, number()),
         // @ts-expect-error
-        [{}, { key: undefined, other: 123 }, { key: null }, { key: 123 }]
+        [{}, { key: undefined }, { key: null, other: 123 }, { key: 123 }]
       );
+    });
+
+    test('for nullish entry with default', () => {
+      expect(
+        objectWithRest({ key: nullish(string(), 'foo') }, number())['~run'](
+          { value: { other: 123 } },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo', other: 123 },
+      });
+      expect(
+        objectWithRest({ key: nullish(string(), null) }, number())['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        objectWithRest({ key: nullish(string(), () => 'foo') }, number())[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        objectWithRest({ key: nullish(string(), () => null) }, number())[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        objectWithRest({ key: nullish(string(), () => undefined) }, number())[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
     });
   });
 
   describe('should return dataset with nested issues', () => {
     const schema = objectWithRest(
       {
-        key: string(),
-        nested: object({ key: number() }),
+        key1: string(),
+        key2: number(),
+        nested: objectWithRest({ key1: string(), key2: number() }, number()),
       },
       array(boolean())
     );
@@ -185,42 +289,41 @@ describe('objectWithRest', () => {
       abortPipeEarly: undefined,
     };
 
-    const stringIssue: StringIssue = {
-      ...baseInfo,
-      kind: 'schema',
-      type: 'string',
-      input: undefined,
-      expected: 'string',
-      received: 'undefined',
-      path: [
-        {
-          type: 'object',
-          origin: 'value',
-          input: {},
-          key: 'key',
-          value: undefined,
-        },
-      ],
-    };
-
     test('for missing entries', () => {
-      expect(schema['~run']({ value: {} }, {})).toStrictEqual({
+      const input = { key2: 123, other: [true, false] };
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
-        value: {},
+        value: input,
         issues: [
-          stringIssue,
           {
             ...baseInfo,
             kind: 'schema',
-            type: 'object',
+            type: 'object_with_rest',
             input: undefined,
-            expected: 'Object',
+            expected: '"key1"',
             received: 'undefined',
             path: [
               {
                 type: 'object',
-                origin: 'value',
-                input: {},
+                origin: 'key',
+                input,
+                key: 'key1',
+                value: undefined,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object_with_rest',
+            input: undefined,
+            expected: '"nested"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input,
                 key: 'nested',
                 value: undefined,
               },
@@ -231,7 +334,7 @@ describe('objectWithRest', () => {
     });
 
     test('for missing nested entries', () => {
-      const input = { key: 'value', nested: {} };
+      const input = { key1: 'value', nested: { other: 123 } };
       expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
@@ -239,23 +342,64 @@ describe('objectWithRest', () => {
           {
             ...baseInfo,
             kind: 'schema',
-            type: 'number',
+            type: 'object_with_rest',
             input: undefined,
-            expected: 'number',
+            expected: '"key2"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input,
+                key: 'key2',
+                value: undefined,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object_with_rest',
+            input: undefined,
+            expected: '"key1"',
             received: 'undefined',
             path: [
               {
                 type: 'object',
                 origin: 'value',
-                input: { key: 'value', nested: {} },
+                input,
                 key: 'nested',
-                value: {},
+                value: input.nested,
               },
               {
                 type: 'object',
+                origin: 'key',
+                input: input.nested,
+                key: 'key1',
+                value: undefined,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object_with_rest',
+            input: undefined,
+            expected: '"key2"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
                 origin: 'value',
-                input: {},
-                key: 'key',
+                input,
+                key: 'nested',
+                value: input.nested,
+              },
+              {
+                type: 'object',
+                origin: 'key',
+                input: input.nested,
+                key: 'key2',
                 value: undefined,
               },
             ],
@@ -264,14 +408,263 @@ describe('objectWithRest', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('with abort early', () => {
-      expect(schema['~run']({ value: {} }, { abortEarly: true })).toStrictEqual(
-        {
-          typed: false,
-          value: {},
-          issues: [{ ...stringIssue, abortEarly: true }],
-        } satisfies FailureDataset<InferIssue<typeof schema>>
-      );
+    test('for missing entries with abort early', () => {
+      const input = { key2: 123 };
+      expect(
+        schema['~run']({ value: input }, { abortEarly: true })
+      ).toStrictEqual({
+        typed: false,
+        value: {},
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object_with_rest',
+            input: undefined,
+            expected: '"key1"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input,
+                key: 'key1',
+                value: undefined,
+              },
+            ],
+            abortEarly: true,
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for missing any and unknown entry', () => {
+      const schema = objectWithRest({ key1: any(), key2: unknown() }, number());
+      expect(schema['~run']({ value: {} }, {})).toStrictEqual({
+        typed: false,
+        value: {},
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object_with_rest',
+            input: undefined,
+            expected: '"key1"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input: {},
+                key: 'key1',
+                value: undefined,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object_with_rest',
+            input: undefined,
+            expected: '"key2"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input: {},
+                key: 'key2',
+                value: undefined,
+              },
+            ],
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for invalid entries', () => {
+      const input = { key1: false, key2: 123, nested: null, other: [false] };
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: false,
+            expected: 'string',
+            received: 'false',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key1',
+                value: false,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object_with_rest',
+            input: null,
+            expected: 'Object',
+            received: 'null',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'nested',
+                value: null,
+              },
+            ],
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for invalid nested entries', () => {
+      const input = {
+        key1: 'value',
+        key2: 'value',
+        nested: {
+          key1: 123,
+          key2: null,
+          other: 123,
+        },
+      };
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: 'value',
+            expected: 'number',
+            received: '"value"',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key2',
+                value: input.key2,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: 123,
+            expected: 'string',
+            received: '123',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'nested',
+                value: input.nested,
+              },
+              {
+                type: 'object',
+                origin: 'value',
+                input: input.nested,
+                key: 'key1',
+                value: input.nested.key1,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: null,
+            expected: 'number',
+            received: 'null',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'nested',
+                value: input.nested,
+              },
+              {
+                type: 'object',
+                origin: 'value',
+                input: input.nested,
+                key: 'key2',
+                value: input.nested.key2,
+              },
+            ],
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for invalid entries with abort early', () => {
+      const input = { key1: false, key2: 123, nested: null };
+      expect(
+        schema['~run']({ value: input }, { abortEarly: true })
+      ).toStrictEqual({
+        typed: false,
+        value: {},
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: false,
+            expected: 'string',
+            received: 'false',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key1',
+                value: false,
+              },
+            ],
+            abortEarly: true,
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for invalid exact optional entry', () => {
+      const schema = objectWithRest({ key: exactOptional(string()) }, number());
+      const input = { key: undefined };
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: undefined,
+            expected: 'string',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key',
+                value: undefined,
+              },
+            ],
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
     const arrayIssue: ArrayIssue = {
@@ -286,8 +679,9 @@ describe('objectWithRest', () => {
           type: 'object',
           origin: 'value',
           input: {
-            key: 'foo',
-            nested: { key: 123 },
+            key1: 'foo',
+            key2: 123,
+            nested: { key1: 'foo', key2: 123 },
             other1: null,
             other2: 'bar',
           },
@@ -299,8 +693,9 @@ describe('objectWithRest', () => {
 
     test('for wrong rest', () => {
       const input = {
-        key: 'foo',
-        nested: { key: 123 },
+        key1: 'foo',
+        key2: 123,
+        nested: { key1: 'foo', key2: 123 },
         other1: null,
         other2: 'bar',
       };
@@ -330,13 +725,14 @@ describe('objectWithRest', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('for worng rest with abort early', () => {
+    test('for wrong rest with abort early', () => {
       expect(
         schema['~run'](
           {
             value: {
-              key: 'foo',
-              nested: { key: 123 },
+              key1: 'foo',
+              key2: 123,
+              nested: { key1: 'foo', key2: 123 },
               other1: null,
               other2: 'bar',
             },
@@ -346,8 +742,9 @@ describe('objectWithRest', () => {
       ).toStrictEqual({
         typed: false,
         value: {
-          key: 'foo',
-          nested: { key: 123 },
+          key1: 'foo',
+          key2: 123,
+          nested: { key1: 'foo', key2: 123 },
         },
         issues: [{ ...arrayIssue, abortEarly: true }],
       } satisfies FailureDataset<InferIssue<typeof schema>>);
@@ -355,8 +752,9 @@ describe('objectWithRest', () => {
 
     test('for wrong nested rest', () => {
       const input = {
-        key: 'foo',
-        nested: { key: 123 },
+        key1: 'foo',
+        key2: 123,
+        nested: { key1: 'foo', key2: 123 },
         other: ['true'],
       };
       expect(schema['~run']({ value: input }, {})).toStrictEqual({

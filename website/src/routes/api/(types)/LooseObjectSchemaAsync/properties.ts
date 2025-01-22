@@ -125,10 +125,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'looseObjectAsync',
-      href: '../looseObjectAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'looseObject',
+          href: '../looseObject/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'looseObjectAsync',
+          href: '../looseObjectAsync/',
+        },
+      ],
     },
   },
   expects: {

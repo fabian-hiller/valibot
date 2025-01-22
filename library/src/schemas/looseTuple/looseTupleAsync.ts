@@ -10,6 +10,7 @@ import type {
   TupleItemsAsync,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { looseTuple } from './looseTuple.ts';
 import type { LooseTupleIssue } from './types.ts';
 
 /**
@@ -30,7 +31,7 @@ export interface LooseTupleSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof looseTupleAsync;
+  readonly reference: typeof looseTuple | typeof looseTupleAsync;
   /**
    * The expected property.
    */

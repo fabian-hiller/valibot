@@ -1,4 +1,6 @@
 import type {
+  ExactOptionalSchema,
+  ExactOptionalSchemaAsync,
   NonNullableIssue,
   NonNullableSchema,
   NonNullableSchemaAsync,
@@ -34,6 +36,15 @@ import type {
 // @__NO_SIDE_EFFECTS__
 export function unwrap<
   TSchema extends
+    | ExactOptionalSchema<
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >
+    | ExactOptionalSchemaAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >
     | NonNullableSchema<
         BaseSchema<unknown, unknown, BaseIssue<unknown>>,
         ErrorMessage<NonNullableIssue> | undefined

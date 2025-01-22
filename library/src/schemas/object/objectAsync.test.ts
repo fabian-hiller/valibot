@@ -4,10 +4,13 @@ import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
 } from '../../vitest/index.ts';
-import { nullish } from '../nullish/index.ts';
+import { any } from '../any/index.ts';
+import { exactOptional, exactOptionalAsync } from '../exactOptional/index.ts';
+import { nullish, nullishAsync } from '../nullish/index.ts';
 import { number } from '../number/index.ts';
-import { optional } from '../optional/index.ts';
-import { string, type StringIssue } from '../string/index.ts';
+import { optional, optionalAsync } from '../optional/index.ts';
+import { string } from '../string/index.ts';
+import { unknown } from '../unknown/index.ts';
 import { objectAsync, type ObjectSchemaAsync } from './objectAsync.ts';
 import type { ObjectIssue } from './types.ts';
 
@@ -155,13 +158,140 @@ describe('objectAsync', () => {
       );
     });
 
+    test('for exact optional entry', async () => {
+      await expectNoSchemaIssueAsync(
+        objectAsync({ key: exactOptional(string()) }),
+        [{}, { key: 'foo' }]
+      );
+      await expectNoSchemaIssueAsync(
+        objectAsync({ key: exactOptionalAsync(string()) }),
+        [{}, { key: 'foo' }]
+      );
+    });
+
+    test('for exact optional entry with default', async () => {
+      // Sync
+      expect(
+        await objectAsync({ key: exactOptional(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: exactOptional(string(), () => 'foo') })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+
+      // Async
+      expect(
+        await objectAsync({ key: exactOptionalAsync(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: exactOptionalAsync(string(), () => 'foo') })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+    });
+
     test('for optional entry', async () => {
       await expectNoSchemaIssueAsync(objectAsync({ key: optional(string()) }), [
         {},
-        // @ts-expect-error
         { key: undefined },
         { key: 'foo' },
       ]);
+      await expectNoSchemaIssueAsync(
+        objectAsync({ key: optionalAsync(string()) }),
+        [{}, { key: undefined }, { key: 'foo' }]
+      );
+    });
+
+    test('for optional entry with default', async () => {
+      // Sync
+      expect(
+        await objectAsync({ key: optional(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: optional(string(), () => 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({
+          key: optional(string(), () => undefined),
+        })['~run']({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
+
+      // Async
+      expect(
+        await objectAsync({ key: optionalAsync(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: optionalAsync(string(), () => 'foo') })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({
+          key: optionalAsync(string(), () => undefined),
+        })['~run']({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
+      expect(
+        await objectAsync({ key: optionalAsync(string(), async () => 'foo') })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({
+          key: optionalAsync(string(), async () => undefined),
+        })['~run']({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
     });
 
     test('for nullish entry', async () => {
@@ -171,6 +301,129 @@ describe('objectAsync', () => {
         { key: null },
         { key: 123 },
       ]);
+      await expectNoSchemaIssueAsync(
+        objectAsync({ key: nullishAsync(number()) }),
+        [{}, { key: undefined }, { key: null }, { key: 123 }]
+      );
+    });
+
+    test('for nullish entry with default', async () => {
+      // Sync
+      expect(
+        await objectAsync({ key: nullish(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: nullish(string(), null) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        await objectAsync({ key: nullish(string(), () => 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: nullish(string(), () => null) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        await objectAsync({ key: nullish(string(), () => undefined) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
+
+      // Async
+      expect(
+        await objectAsync({ key: nullishAsync(string(), 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), null) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), () => 'foo') })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), () => null) })['~run'](
+          { value: {} },
+          {}
+        )
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), () => undefined) })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), async () => 'foo') })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: 'foo' },
+      });
+      expect(
+        await objectAsync({ key: nullishAsync(string(), async () => null) })[
+          '~run'
+        ]({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: null },
+      });
+      expect(
+        await objectAsync({
+          key: nullishAsync(string(), async () => undefined),
+        })['~run']({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key: undefined },
+      });
     });
 
     test('for unknown entries', async () => {
@@ -188,8 +441,9 @@ describe('objectAsync', () => {
 
   describe('should return dataset with nested issues', () => {
     const schema = objectAsync({
-      key: string(),
-      nested: objectAsync({ key: number() }),
+      key1: string(),
+      key2: number(),
+      nested: objectAsync({ key1: string(), key2: number() }),
     });
 
     const baseInfo = {
@@ -201,42 +455,41 @@ describe('objectAsync', () => {
       abortPipeEarly: undefined,
     };
 
-    const stringIssue: StringIssue = {
-      ...baseInfo,
-      kind: 'schema',
-      type: 'string',
-      input: undefined,
-      expected: 'string',
-      received: 'undefined',
-      path: [
-        {
-          type: 'object',
-          origin: 'value',
-          input: {},
-          key: 'key',
-          value: undefined,
-        },
-      ],
-    };
-
     test('for missing entries', async () => {
-      expect(await schema['~run']({ value: {} }, {})).toStrictEqual({
+      const input = { key2: 123 };
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
-        value: {},
+        value: input,
         issues: [
-          stringIssue,
           {
             ...baseInfo,
             kind: 'schema',
             type: 'object',
             input: undefined,
-            expected: 'Object',
+            expected: '"key1"',
             received: 'undefined',
             path: [
               {
                 type: 'object',
-                origin: 'value',
-                input: {},
+                origin: 'key',
+                input,
+                key: 'key1',
+                value: undefined,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: '"nested"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input,
                 key: 'nested',
                 value: undefined,
               },
@@ -247,32 +500,72 @@ describe('objectAsync', () => {
     });
 
     test('for missing nested entries', async () => {
-      expect(
-        await schema['~run']({ value: { key: 'value', nested: {} } }, {})
-      ).toStrictEqual({
+      const input = { key1: 'value', nested: {} };
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
-        value: { key: 'value', nested: {} },
+        value: input,
         issues: [
           {
             ...baseInfo,
             kind: 'schema',
-            type: 'number',
+            type: 'object',
             input: undefined,
-            expected: 'number',
+            expected: '"key2"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input,
+                key: 'key2',
+                value: undefined,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: '"key1"',
             received: 'undefined',
             path: [
               {
                 type: 'object',
                 origin: 'value',
-                input: { key: 'value', nested: {} },
+                input,
                 key: 'nested',
                 value: {},
               },
               {
                 type: 'object',
+                origin: 'key',
+                input: input.nested,
+                key: 'key1',
+                value: undefined,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: '"key2"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
                 origin: 'value',
-                input: {},
-                key: 'key',
+                input,
+                key: 'nested',
+                value: {},
+              },
+              {
+                type: 'object',
+                origin: 'key',
+                input: input.nested,
+                key: 'key2',
                 value: undefined,
               },
             ],
@@ -281,13 +574,281 @@ describe('objectAsync', () => {
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
 
-    test('with abort early', async () => {
+    test('for missing entries with abort early', async () => {
+      const input = { key2: 123 };
       expect(
-        await schema['~run']({ value: {} }, { abortEarly: true })
+        await schema['~run']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: {},
-        issues: [{ ...stringIssue, abortEarly: true }],
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: '"key1"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input,
+                key: 'key1',
+                value: undefined,
+              },
+            ],
+            abortEarly: true,
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for missing any and unknown entry', async () => {
+      const schema = objectAsync({ key1: any(), key2: unknown() });
+      expect(await schema['~run']({ value: {} }, {})).toStrictEqual({
+        typed: false,
+        value: {},
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: '"key1"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input: {},
+                key: 'key1',
+                value: undefined,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: undefined,
+            expected: '"key2"',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'key',
+                input: {},
+                key: 'key2',
+                value: undefined,
+              },
+            ],
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for invalid entries', async () => {
+      const input = { key1: false, key2: 123, nested: null };
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: false,
+            expected: 'string',
+            received: 'false',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key1',
+                value: false,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'object',
+            input: null,
+            expected: 'Object',
+            received: 'null',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'nested',
+                value: null,
+              },
+            ],
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for invalid nested entries', async () => {
+      const input = {
+        key1: 'value',
+        key2: 'value',
+        nested: {
+          key1: 123,
+          key2: null,
+        },
+      };
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: 'value',
+            expected: 'number',
+            received: '"value"',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key2',
+                value: input.key2,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: 123,
+            expected: 'string',
+            received: '123',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'nested',
+                value: input.nested,
+              },
+              {
+                type: 'object',
+                origin: 'value',
+                input: input.nested,
+                key: 'key1',
+                value: input.nested.key1,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'number',
+            input: null,
+            expected: 'number',
+            received: 'null',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'nested',
+                value: input.nested,
+              },
+              {
+                type: 'object',
+                origin: 'value',
+                input: input.nested,
+                key: 'key2',
+                value: input.nested.key2,
+              },
+            ],
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for invalid entries with abort early', async () => {
+      const input = { key1: false, key2: 123, nested: null };
+      expect(
+        await schema['~run']({ value: input }, { abortEarly: true })
+      ).toStrictEqual({
+        typed: false,
+        value: {},
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: false,
+            expected: 'string',
+            received: 'false',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key1',
+                value: false,
+              },
+            ],
+            abortEarly: true,
+          },
+        ],
+      } satisfies FailureDataset<InferIssue<typeof schema>>);
+    });
+
+    test('for invalid exact optional entry', async () => {
+      const schema = objectAsync({
+        key1: exactOptional(string()),
+        key2: exactOptionalAsync(string()),
+      });
+      const input = { key1: undefined, key2: undefined };
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: undefined,
+            expected: 'string',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key1',
+                value: undefined,
+              },
+            ],
+          },
+          {
+            ...baseInfo,
+            kind: 'schema',
+            type: 'string',
+            input: undefined,
+            expected: 'string',
+            received: 'undefined',
+            path: [
+              {
+                type: 'object',
+                origin: 'value',
+                input,
+                key: 'key2',
+                value: undefined,
+              },
+            ],
+          },
+        ],
       } satisfies FailureDataset<InferIssue<typeof schema>>);
     });
   });

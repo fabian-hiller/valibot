@@ -103,10 +103,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'variantAsync',
-      href: '../variantAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'variant',
+          href: '../variant/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'variantAsync',
+          href: '../variantAsync/',
+        },
+      ],
     },
   },
   expects: {

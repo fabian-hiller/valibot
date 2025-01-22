@@ -22,20 +22,15 @@ export const properties: Record<string, PropertyProps> = {
   TDefault: {
     modifier: 'extends',
     type: {
-      type: 'union',
-      options: [
+      type: 'custom',
+      name: 'Default',
+      href: '../Default/',
+      generics: [
         {
           type: 'custom',
-          name: 'Default',
-          href: '../Default/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TWrapped',
-            },
-          ],
+          name: 'TWrapped',
         },
-        'never',
+        'null',
       ],
     },
   },

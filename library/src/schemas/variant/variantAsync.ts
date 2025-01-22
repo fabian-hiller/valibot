@@ -18,6 +18,7 @@ import type {
   VariantOptionSchema,
   VariantOptionSchemaAsync,
 } from './types.ts';
+import type { variant } from './variant.ts';
 
 /**
  * Variant schema async interface.
@@ -38,7 +39,7 @@ export interface VariantSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof variantAsync;
+  readonly reference: typeof variant | typeof variantAsync;
   /**
    * The expected property.
    */
