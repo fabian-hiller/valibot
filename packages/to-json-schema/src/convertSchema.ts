@@ -50,6 +50,10 @@ type Schema =
       v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
       v.ErrorMessage<v.ObjectWithRestIssue> | undefined
     >
+  | v.ExactOptionalSchema<
+      v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+      v.Default<v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>, undefined>
+    >
   | v.OptionalSchema<
       v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
       v.Default<v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>, undefined>
@@ -326,6 +330,7 @@ export function convertSchema(
       break;
     }
 
+    case 'exact_optional':
     case 'optional':
     case 'undefinedable': {
       // Convert wrapped schema to JSON Schema
