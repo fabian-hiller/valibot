@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { fallback } from '../../methods/index.ts';
 import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { any } from '../any/index.ts';
@@ -143,6 +144,18 @@ describe('object', () => {
       expectNoSchemaIssue(object({ nested: object({ key: string() }) }), [
         { nested: { key: 'foo' } },
       ]);
+    });
+
+    test('for missing entries with fallback', () => {
+      expect(
+        object({
+          key1: fallback(string(), 'foo'),
+          key2: fallback(number(), () => 123),
+        })['~run']({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key1: 'foo', key2: 123 },
+      });
     });
 
     test('for exact optional entry', () => {
