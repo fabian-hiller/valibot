@@ -7,6 +7,8 @@ import type {
   MaybeReadonly,
   ObjectEntries,
   ObjectEntriesAsync,
+  OptionalEntrySchema,
+  OptionalEntrySchemaAsync,
 } from '../../types/index.ts';
 import type {
   LooseObjectIssue,
@@ -78,7 +80,7 @@ export interface VariantOptionSchemaAsync<TKey extends string>
  */
 type VariantObjectEntries<TKey extends string> = Record<
   TKey,
-  BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  BaseSchema<unknown, unknown, BaseIssue<unknown>> | OptionalEntrySchema
 > &
   ObjectEntries;
 
@@ -89,6 +91,8 @@ type VariantObjectEntriesAsync<TKey extends string> = Record<
   TKey,
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+  | OptionalEntrySchema
+  | OptionalEntrySchemaAsync
 > &
   ObjectEntriesAsync;
 

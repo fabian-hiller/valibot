@@ -29,7 +29,7 @@ import type { MarkOptional, MaybeReadonly, Prettify } from './utils.ts';
 /**
  * Optional entry schema type.
  */
-type OptionalEntrySchema =
+export type OptionalEntrySchema =
   | ExactOptionalSchema<
       BaseSchema<unknown, unknown, BaseIssue<unknown>>,
       unknown
@@ -40,7 +40,7 @@ type OptionalEntrySchema =
 /**
  * Optional entry schema async type.
  */
-type OptionalEntrySchemaAsync =
+export type OptionalEntrySchemaAsync =
   | ExactOptionalSchemaAsync<
       | BaseSchema<unknown, unknown, BaseIssue<unknown>>
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,

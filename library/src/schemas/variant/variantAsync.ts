@@ -150,14 +150,19 @@ export function variantAsync(
               // information about invalid discriminator keys if not
               for (const currentKey of allKeys) {
                 // If any discriminator is invalid, mark keys as invalid
+                const discriminatorSchema = schema.entries[currentKey];
                 if (
-                  (
-                    await schema.entries[currentKey]['~run'](
-                      // @ts-expect-error
-                      { typed: false, value: input[currentKey] },
-                      config
-                    )
-                  ).issues
+                  currentKey in input
+                    ? (
+                        await discriminatorSchema['~run'](
+                          // @ts-expect-error
+                          { typed: false, value: input[currentKey] },
+                          config
+                        )
+                      ).issues
+                    : discriminatorSchema.type !== 'exact_optional' &&
+                      discriminatorSchema.type !== 'optional' &&
+                      discriminatorSchema.type !== 'nullish'
                 ) {
                   keysAreValid = false;
 
