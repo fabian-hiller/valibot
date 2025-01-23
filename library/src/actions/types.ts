@@ -48,3 +48,8 @@ export type SizeInput = Blob | Map<unknown, unknown> | Set<unknown>;
  * Value input type.
  */
 export type ValueInput = string | number | bigint | boolean | Date;
+
+/**
+ * Object input type.
+ */
+export type ObjectInput = Record<string | number | symbol, unknown>;
