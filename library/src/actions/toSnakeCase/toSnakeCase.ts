@@ -64,16 +64,19 @@ export function toSnakeCase(
     async: false,
     selectedKeys,
     '~run'(dataset) {
-      const keys = this.selectedKeys ?? Object.keys(dataset.value);
-      for (const key of keys) {
-        const transformedKey = snakeCase(key);
-        if (key === transformedKey) {
-          continue;
+      const input = dataset.value;
+      dataset.value = {};
+      const allKeys = Object.keys(input);
+      const selectedKeys = new Set(this.selectedKeys ?? allKeys);
+      for (const key of allKeys) {
+        let destKey = key;
+        if (
+          !selectedKeys.has(destKey) ||
+          (destKey = snakeCase(key)) === key ||
+          !Object.hasOwn(input, destKey)
+        ) {
+          dataset.value[destKey] = input[key];
         }
-        if (!Object.hasOwn(dataset.value, transformedKey)) {
-          dataset.value[transformedKey] = dataset.value[key];
-        }
-        delete dataset.value[key];
       }
       return dataset as SuccessDataset<
         Output<ObjectInput, SelectedStringKeys<ObjectInput> | undefined>

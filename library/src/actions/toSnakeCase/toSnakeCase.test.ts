@@ -1,8 +1,9 @@
 import { describe, expect, test } from 'vitest';
-import { toSnakeCase, ToSnakeCaseAction } from './toSnakeCase';
+import { toSnakeCase, type ToSnakeCaseAction } from './toSnakeCase.ts';
 
 describe('toSnakeCase', () => {
   describe('should return action object', () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     type Input = {
       1: boolean;
       foo: boolean;

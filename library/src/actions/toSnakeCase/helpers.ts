@@ -2,6 +2,7 @@
  * Converts a string to snake case.
  *
  * @param input The string to be converted.
+ *
  * @returns The snake case of the input.
  */
 export function snakeCase(input: string): string {

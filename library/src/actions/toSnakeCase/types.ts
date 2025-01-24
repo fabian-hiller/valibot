@@ -46,6 +46,7 @@ type UnionToTuples<
     ? TResult
     : // conditional type to trigger distribution
       // See: https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#distributive-conditional-types
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       TInput extends any
       ? UnionToTuples<
           Exclude<TInputCopy, TInput>,
