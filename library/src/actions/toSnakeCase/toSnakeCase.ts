@@ -1,7 +1,7 @@
 import type { BaseTransformation, SuccessDataset } from '../../types/index.ts';
-import type { ObjectInput } from '../types.ts';
+import type { ObjectInput, SelectedStringKeys } from '../types.ts';
 import { snakeCase } from './helpers.ts';
-import type { Output, SelectedStringKeys } from './types.ts';
+import type { Output } from './types.ts';
 
 /**
  * To snake case action interface.

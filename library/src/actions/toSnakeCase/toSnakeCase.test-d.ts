@@ -1,7 +1,7 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types';
+import type { SelectedStringKeys } from '../types.ts';
 import { toSnakeCase, type ToSnakeCaseAction } from './toSnakeCase.ts';
-import type { SelectedStringKeys } from './types';
 
 describe('toSnakeCase', () => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
