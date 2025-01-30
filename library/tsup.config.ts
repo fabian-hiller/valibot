@@ -1,3 +1,4 @@
+import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { defineConfig } from 'tsup';
 
 export default defineConfig([
@@ -8,6 +9,7 @@ export default defineConfig([
     minify: false,
     dts: true,
     outDir: './dist',
+    target: ['es2022', ...browserslistToEsbuild()],
   },
   {
     entry: ['./src/index.ts'],
@@ -19,5 +21,6 @@ export default defineConfig([
     outExtension: ({ format }) => ({
       js: format === 'cjs' ? '.min.cjs' : '.min.js',
     }),
+    target: ['es2022', ...browserslistToEsbuild()],
   },
 ]);
