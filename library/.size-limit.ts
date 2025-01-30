@@ -1,0 +1,10 @@
+import type { SizeLimitConfig } from 'size-limit';
+
+module.exports = [
+  {
+    name: `import * as v from 'valibot' (ESM)`,
+    path: ['dist/index.js'],
+    import: '*',
+    limit: '10.4KB',
+  },
+] satisfies SizeLimitConfig;
