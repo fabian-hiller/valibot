@@ -49,11 +49,19 @@
     "lint.fix": "eslint \"src/**/*.ts*\" --fix",
     "format": "prettier --write ./src",
     "format.check": "prettier --check ./src",
+    "check.size": "size-limit",
+    "check.dist": "es-check --not './dist/*.map.js' -v es2022 --module './dist/**/*.js'",
     "build": "tsup"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@size-limit/file": "11.1.6",
+    "@size-limit/webpack": "11.1.6",
     "@vitest/coverage-v8": "^2.1.8",
+    "@types/node": "^22.12.0",
+    "browserslist": "4.24.4",
+    "browserslist-to-esbuild": "2.1.1",
+    "es-check": "8.0.1",
     "eslint": "^9.17.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsdoc": "^50.6.1",
@@ -66,7 +74,8 @@
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.6",
-    "vitest": "2.1.8"
+    "vitest": "2.1.8",
+    "webpack": "5.97.1"
   },
   "peerDependencies": {
     "typescript": ">=5"
