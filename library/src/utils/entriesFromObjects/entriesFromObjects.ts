@@ -55,19 +55,23 @@ type Schema =
 // Type Utils
 type MergeObject<A extends object, B extends object> = Omit<A, keyof B> & B;
 
-type Flatten<T> = { [K in keyof T]: T[K] };
-
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-type MergedEntries<TSchemas extends Schema[]> = Flatten<
-  TSchemas extends [infer TFirstSchema, ...infer TRestSchemas]
-    ? TFirstSchema extends Schema
-      ? TRestSchemas extends Schema[]
-        ? MergeObject<TFirstSchema['entries'], MergedEntries<TRestSchemas>>
-        : TFirstSchema['entries']
-      : {}
+type _MergedEntries<TSchemas extends Schema[]> = TSchemas extends [
+  infer TFirstSchema,
+  ...infer TRestSchemas,
+]
+  ? TFirstSchema extends Schema
+    ? TRestSchemas extends Schema[]
+      ? MergeObject<TFirstSchema['entries'], _MergedEntries<TRestSchemas>>
+      : TFirstSchema['entries']
     : {}
->;
+  : {};
 /* eslint-enable @typescript-eslint/no-empty-object-type */
+
+type Flatten<T> = { [K in keyof T]: T[K] } & {};
+type MergedEntries<TSchemas extends Schema[]> = Flatten<
+  _MergedEntries<TSchemas>
+>;
 
 /**
  * Creates a new object entries definition from existing object schemas.
