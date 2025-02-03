@@ -641,6 +641,7 @@
 - [UnionIssue](/api/UnionIssue/)
 - [UnionSchema](/api/UnionSchema/)
 - [UnionSchemaAsync](/api/UnionSchemaAsync/)
+- [UnknownDataset](/api/UnknownDataset/)
 - [UnknownPathItem](/api/UnknownPathItem/)
 - [UnknownSchema](/api/UnknownSchema/)
 - [UrlAction](/api/UrlAction/)
