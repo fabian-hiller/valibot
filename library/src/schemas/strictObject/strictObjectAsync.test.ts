@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { fallback, fallbackAsync } from '../../methods/index.ts';
 import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
@@ -151,6 +152,21 @@ describe('strictObjectAsync', () => {
         strictObjectAsync({ nested: objectAsync({ key: string() }) }),
         [{ nested: { key: 'foo' } }]
       );
+    });
+
+    test('for missing entries with fallback', async () => {
+      expect(
+        await strictObjectAsync({
+          key1: fallback(string(), 'foo'),
+          key2: fallback(number(), () => 123),
+          key3: fallbackAsync(string(), 'bar'),
+          key4: fallbackAsync(number(), () => 456),
+          key5: fallbackAsync(string(), async () => 'baz'),
+        })['~run']({ value: {} }, {})
+      ).toStrictEqual({
+        typed: true,
+        value: { key1: 'foo', key2: 123, key3: 'bar', key4: 456, key5: 'baz' },
+      });
     });
 
     test('for exact optional entry', async () => {

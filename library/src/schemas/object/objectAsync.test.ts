@@ -166,10 +166,11 @@ describe('objectAsync', () => {
           key2: fallback(number(), () => 123),
           key3: fallbackAsync(string(), 'bar'),
           key4: fallbackAsync(number(), () => 456),
+          key5: fallbackAsync(string(), async () => 'baz'),
         })['~run']({ value: {} }, {})
       ).toStrictEqual({
         typed: true,
-        value: { key1: 'foo', key2: 123, key3: 'bar', key4: 456 },
+        value: { key1: 'foo', key2: 123, key3: 'bar', key4: 456, key5: 'baz' },
       });
     });
 

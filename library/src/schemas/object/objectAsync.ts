@@ -196,7 +196,7 @@ export function objectAsync(
             // @ts-expect-error
           } else if (valueSchema.fallback !== undefined) {
             // @ts-expect-error
-            dataset.value[key] = getFallback(valueSchema);
+            dataset.value[key] = await getFallback(valueSchema);
 
             // Otherwise, if key is missing and required, add issue
           } else if (

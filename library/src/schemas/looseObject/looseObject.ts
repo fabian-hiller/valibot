@@ -1,4 +1,4 @@
-import { getDefault } from '../../methods/index.ts';
+import { getDefault, getFallback } from '../../methods/index.ts';
 import type {
   BaseSchema,
   ErrorMessage,
@@ -166,6 +166,12 @@ export function looseObject(
             // Add entry to dataset
             // @ts-expect-error
             dataset.value[key] = valueDataset.value;
+
+            // Otherwise, if key is missing but has a fallback, use it
+            // @ts-expect-error
+          } else if (valueSchema.fallback !== undefined) {
+            // @ts-expect-error
+            dataset.value[key] = getFallback(valueSchema);
 
             // Otherwise, if key is missing and required, add issue
           } else if (
