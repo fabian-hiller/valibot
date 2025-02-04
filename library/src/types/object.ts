@@ -1,5 +1,10 @@
 import type { ReadonlyAction } from '../actions/index.ts';
-import type { SchemaWithPipe, SchemaWithPipeAsync } from '../methods/index.ts';
+import type {
+  SchemaWithFallback,
+  SchemaWithFallbackAsync,
+  SchemaWithPipe,
+  SchemaWithPipeAsync,
+} from '../methods/index.ts';
 import type {
   ExactOptionalSchema,
   ExactOptionalSchemaAsync,
@@ -63,6 +68,10 @@ export type OptionalEntrySchemaAsync =
 export interface ObjectEntries {
   [key: string]:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+    | SchemaWithFallback<
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >
     | OptionalEntrySchema;
 }
 
@@ -73,6 +82,15 @@ export interface ObjectEntriesAsync {
   [key: string]:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+    | SchemaWithFallback<
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >
+    | SchemaWithFallbackAsync<
+        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
+        unknown
+      >
     | OptionalEntrySchema
     | OptionalEntrySchemaAsync;
 }
