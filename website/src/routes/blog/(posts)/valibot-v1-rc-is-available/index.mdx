@@ -1,0 +1,104 @@
+---
+cover: Valibot v1 RC
+title: Valibot v1 RC is now available
+description: >-
+  Many of you have been waiting for our first stable release, and with this
+  blog post I am happy to announce that we are very very close.
+published: 2025-02-10
+authors:
+  - fabian-hiller
+  - EltonLobo07
+contributors:
+  - fabian-hiller
+---
+
+import { Link } from '@builder.io/qwik-city';
+import MentalModelDark from './mental-model-dark.jpg?jsx';
+import MentalModelLight from './mental-model-light.jpg?jsx';
+import MonthlyDownloads from './monthly-downloads.jpg?jsx';
+import ObjectPropsOrder from './object-props-order.jpg?jsx';
+
+After taking three steps back about a year ago to rewrite the entire library from scratch, Valibot has come back stronger than ever. In the past 12 months, the project has grown from 300k monthly downloads on npm to now more than 4 million. Many of you have been waiting for our first stable release, and with this blog post I am happy to announce that we are very very close.
+
+<MonthlyDownloads alt="Monthly downloads of Valibot in the past 12 months" />
+
+With this announcement post we want to look back on our work of the last months and show you the new features and functions you will enjoy when you upgrade to Valibot v1 RC.
+
+## Better API design
+
+In June 2024 we released v0.31.0 and introduced our new <Link href="/api/pipe">`pipe`</Link> API. I recommend reading <Link href="../valibot-v0.31.0-is-finally-available/">the blog post</Link> we published at the time to learn more. Even though it was a big change, we got a lot of positive feedback. That's why we kept the new mental model and have continued to improve the new API since then.
+
+<MentalModelDark
+  alt="Code example with a schema, method and actions"
+  class="hidden dark:block"
+/>
+<MentalModelLight
+  alt="Code example with a schema, method and actions"
+  class="dark:hidden"
+/>
+
+## Better compatibility
+
+A few months later, in September 2024, we intensified our work on [Standard Schema](https://standardschema.dev/). What had been just [an idea](https://x.com/colinhacks/status/1634284724796661761) was now starting to take shape. Together with Colin, the creator of [Zod](https://zod.dev/), we developed a first draft of the specification and investigated how it could be integrated into our libraries. Later, David, the creator of [ArkType](https://arktype.io/), joined us to help us get the details right.
+
+Standard Schema could be a game changer for the further adoption and growth of Valibot, but also for the JavaScript ecosystem in general. If you haven't heard of it yet, you should definitely check it out. Thanks to Colin and David for this great collaboration!
+
+Another part of our ecosystem compatibility efforts has been to develop and provide an official JSON Schema solution. Together with [@gcornut](https://github.com/gcornut), we created a new package called `@valibot/to-json-schema` that can convert Valibot schemas to their JSON Schema representation. I am proud of our implementation because it is fast, highly efficient (1.67 kB gzip), and can handle complex cases such as recursion. If you are interested in this topic, please have a look at our <Link href="/guides/json-schema/">JSON Schema guide</Link>.
+
+```ts
+import { toJsonSchema } from '@valibot/to-json-schema';
+import * as v from 'valibot';
+
+const ValibotEmailSchema = v.pipe(v.string(), v.email());
+const JsonEmailSchema = toJsonSchema(ValibotEmailSchema);
+// -> { type: 'string', format: 'email' }
+```
+
+## Better documentation
+
+A few weeks ago we made some nice UI and UX improvements to Valibot's documentation and playground. For example, there is now a "play" button to open the code snippets of our guides directly in our playground. Also, you can now enable chapter navigation in Valibot's documentation to make it easier to navigate through the content of a page.
+
+I would also like to point out that [@EltonLobo07](https://github.com/EltonLobo07) finalized the last pages of our <Link href="/api/">API</Link> reference. With more than 600 pages, this was a huge effort driven by several community members over the last year. Thanks to everyone who contributed!
+
+## Better object schema
+
+Our initial object schema implementation was good, but not perfect. It could not distinguish between missing and present but undefined properties, resulting in mismatches between validation logic and generated TypeScript types in edge cases.
+
+Over the past few weeks, we have fixed these issues and are now able to fully support TypeScript's [`exactOptionalPropertyTypes` configuration](https://www.typescriptlang.org/tsconfig/#exactOptionalPropertyTypes). We also fixed the order of optional properties in the generated TypeScript types. Thanks to [@andersk](https://github.com/andersk) for driving this effort!
+
+<ObjectPropsOrder alt="Code example showing the order fix of optional object properties" />
+
+## Better tree shaking
+
+[@antfu](https://github.com/antfu) himself created [a PR](https://github.com/fabian-hiller/valibot/pull/995) in December 2024 to further improve Valibot's three shaking capabilities. If you use some of your schemas only for their TypeScript type but not at runtime, for example to validate unknown data, they can now be fully tree-shaken and excluded from your production build, reducing the bundle size of your application even further.
+
+## Other highlights
+
+In addition to these bigger changes, we shipped many new functions and improved the implementation of existing ones. For example, we added a <Link href="/api/function/">`function`</Link> and <Link href="/api/promise/">`promise`</Link> schema along with <Link href="/api/args/">`args`</Link>, <Link href="/api/returns/">`returns`</Link>, and <Link href="/api/awaitAsync/">`awaitAsync`</Link> actions to support validation of JavaScript functions and promises.
+
+We also shipped a <Link href="/api/rawCheck/">`rawCheck`</Link> and <Link href="/api/rawTransform/">`rawTransform`</Link> action to give you full control in edge cases. They allow you to hook into the raw implementation of <Link href="/api/pipe/">`pipe`</Link> to write advanced validation and transformation logic.
+
+Another cool addition to Valibot's capabilities is our new <Link href="/guides/pipelines/#metadata">metadata feature</Link>. This is especially useful for documentation purposes and for deep integration of the schema library with other libraries. For example, an ORM could now provide its own metadata actions such as `primaryKey` built on top of Valibot instead of writing everything from scratch.
+
+```ts
+import * as o from 'orm-actions';
+import * as v from 'valibot';
+
+const UserTableSchema = v.pipe(
+  v.object({
+    id: v.pipe(v.number(), v.integer(), o.primaryKey()),
+    name: v.pipe(v.string(), v.nonEmpty(), o.index()),
+    email: v.pipe(v.string(), v.email(), o.index()),
+    // ...
+  }),
+  o.table('users')
+);
+```
+
+There are many more exciting functions like <Link href="/api/assert/">`assert`</Link>, <Link href="/api/rfcEmail/">`rfcEmail`</Link> and <Link href="/api/maxWords/">`maxWords`</Link>. Please have a look at the release on GitHub and our API reference for more details.
+
+## What's next?
+
+Many more validation actions like `ltValue`, `gtValue`, `values`, `notValues`, `slug`, `toSnakeCase`, `btcAddress` and `jwt` are already implemented and will be reviewed and merged soon. This shows the great advantage of a modular architecture, as we can add more and more features without increasing the size of your individual bundle. One day, everything you need will be just a Valibot action away. 😎
+
+We expect Valibot to reach v1 in 3 to 6 weeks. Please upgrade now to give us lots of feedback in the meantime. An official migration guide will be available soon, but most of you who are already on >=v0.31.0 will most likely be able to upgrade without touching any existing code.
