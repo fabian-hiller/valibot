@@ -17,11 +17,11 @@ import ChapterNavDark from './chapter-nav-dark.jpg?jsx';
 import ChapterNavLight from './chapter-nav-light.jpg?jsx';
 import MentalModelDark from './mental-model-dark.jpg?jsx';
 import MentalModelLight from './mental-model-light.jpg?jsx';
-import MonthlyDownloads from './monthly-downloads.jpg?jsx';
+import MonthlyDownloads from './monthly-downloads.webp?jsx';
 import ObjectFixDark from './object-fix-dark.jpg?jsx';
 import ObjectFixLight from './object-fix-light.jpg?jsx';
 
-After taking three steps back about a year ago to rewrite the entire library from scratch, Valibot has come back stronger than ever. In the past 12 months, the project has grown from 300k monthly downloads on npm to now more than 4 million. Many of you have been waiting for our first stable release, and with this blog post I am happy to announce that we are very very close.
+After taking three steps back about a year ago to rewrite the entire library from scratch, Valibot has come back stronger than ever. In the past 12 months, the project has grown from 300k monthly downloads on npm to now more than 4.5 million. Many of you have been waiting for our first stable release, and with this blog post I am happy to announce that we are very very close.
 
 <MonthlyDownloads alt="Monthly downloads of Valibot in the past 12 months" />
 
@@ -29,7 +29,7 @@ With this announcement post we want to look back on our work of the last months 
 
 ## Better API design
 
-In June 2024 we released v0.31.0, introducing our new <Link href="/api/pipe">`pipe`</Link> API and massively improving Valibot's type safety. I recommend reading <Link href="../valibot-v0.31.0-is-finally-available/">the blog post</Link> we published at the time to learn more. Even though it was a big change, we got a lot of positive feedback. That's why we kept the new mental model and have continued to improve the new API since then.
+In June 2024 we released v0.31.0, introducing our new <Link href="/api/pipe">`pipe`</Link> API and massively improving Valibot's type safety. I recommend reading <Link href="../valibot-v0.31.0-is-finally-available/">the blog post</Link> we published at the time to learn more. Even though it was a big change, we got a lot of positive feedback. That's why we kept <Link href="/guides/mental-model/">the new mental model</Link> and have continued to improve the new API since then.
 
 <MentalModelDark
   alt="Code example with a schema, method and actions"
@@ -42,9 +42,9 @@ In June 2024 we released v0.31.0, introducing our new <Link href="/api/pipe">`pi
 
 ## Better compatibility
 
-A few months later, in September 2024, we intensified our work on [Standard Schema](https://standardschema.dev/). What had been just [an idea](https://x.com/colinhacks/status/1634284724796661761) was now starting to take shape. Together with Colin, the creator of [Zod](https://zod.dev/), we developed a first draft of the specification and investigated how it could be integrated into our libraries. Later, David, the creator of [ArkType](https://arktype.io/), joined us to help us get the details right.
+A few months later, in September 2024, we intensified our work on [Standard Schema](https://standardschema.dev/). What had been just [an idea](https://x.com/colinhacks/status/1634284724796661761) was now starting to take shape. Together with [@colinhacks](https://github.com/colinhacks), the creator of [Zod](https://zod.dev/), we developed a first draft of the specification and investigated how it could be integrated into our libraries. Later, [@ssalbdivad](https://github.com/ssalbdivad), the creator of [ArkType](https://arktype.io/), joined us to help us get the details right.
 
-Standard Schema could be a game changer for the further adoption and growth of Valibot, but also for the JavaScript ecosystem in general. If you haven't heard of it yet, you should definitely check it out. Thanks to Colin and David for this great collaboration!
+Standard Schema could be a game-changer not only for the further adoption and growth of Valibot, but also for the JavaScript ecosystem in general. If you haven't heard of it yet, you should definitely check it out. Thanks to Colin and David for this great collaboration!
 
 Another part of our ecosystem compatibility efforts has been to develop and provide an official JSON Schema solution. Together with [@gcornut](https://github.com/gcornut), we created a new package called `@valibot/to-json-schema` that can convert Valibot schemas to their JSON Schema representation. I am proud of our implementation because it is fast, highly efficient (1.67 kB gzip), and can handle complex cases such as recursion. If you are interested in this topic, please have a look at our <Link href="/guides/json-schema/">JSON Schema guide</Link>.
 
@@ -74,7 +74,7 @@ Over the past few weeks, we have fixed these issues and are now able to fully su
 
 ## Better tree shaking
 
-[@antfu](https://github.com/antfu) himself created [a PR](https://github.com/fabian-hiller/valibot/pull/995) in December 2024 to further improve Valibot's three shaking capabilities. If you use some of your schemas only for their TypeScript type but not at runtime, for example to validate unknown data, they can now be fully tree-shaken and excluded from your production build, reducing the bundle size of your application even further.
+[@antfu](https://github.com/antfu) himself created [a PR](https://github.com/fabian-hiller/valibot/pull/995) in December 2024 to further improve Valibot's tree shaking capabilities. If you use some of your schemas only for their TypeScript type but not at runtime, for example to validate unknown data, they can now be fully tree-shaken and excluded from your production build, reducing the bundle size of your application even further.
 
 ## Better documentation
 
@@ -118,6 +118,6 @@ There are many more new exciting functions like <Link href="/api/assert/">`asser
 
 ## What's next?
 
-Many more validation actions like `ltValue`, `gtValue`, `values`, `notValues`, `slug`, `toSnakeCase`, `btcAddress` and `jwt` are already implemented and will be reviewed and merged soon. This shows the great advantage of a modular architecture, as we can add more and more features without increasing the size of your individual bundle. One day, everything you need will be just a Valibot action away. 😎
+Many more validation actions like `ltValue`, `gtValue`, `values`, `notValues`, `slug`, `toSnakeCase` and `btcAddress` are already implemented and will be reviewed and merged soon. This shows the great advantage of a modular architecture, as we can add more and more features without increasing the size of your individual bundle. One day, everything you need will be just a Valibot action away. 😎
 
 We expect Valibot to reach v1 in 3 to 6 weeks. Please upgrade now to give us lots of feedback in the meantime. An official migration guide will be available soon, but most of you who are already on >=v0.31.0 will most likely be able to upgrade without touching any existing code.
