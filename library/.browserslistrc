@@ -1,0 +1,9 @@
+# Supported browsers
+defaults
+chrome >= 96
+firefox >= 105
+edge >= 113
+safari >= 15
+ios >= 15
+opera >= 103
+not dead
