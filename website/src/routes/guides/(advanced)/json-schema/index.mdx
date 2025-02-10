@@ -23,7 +23,8 @@ import { toJsonSchema } from '@valibot/to-json-schema';
 import * as v from 'valibot';
 
 const ValibotEmailSchema = v.pipe(v.string(), v.email());
-const JsonEmailSchema = toJsonSchema(ValibotEmailSchema); // { type: 'string', format: 'email' }
+const JsonEmailSchema = toJsonSchema(ValibotEmailSchema);
+// -> { type: 'string', format: 'email' }
 ```
 
 ## Cons of JSON Schema
