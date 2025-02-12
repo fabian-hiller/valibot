@@ -1,0 +1,66 @@
+---
+title: base64url
+description: Creates a base64url validation action.
+source: /actions/base64url/base64url.ts
+contributors:
+  - EltonLobo07
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# base64url
+
+Creates a [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) validation action.
+
+```ts
+const Action = v.base64url<TInput, TMessage>(message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `base64url` you can validate the formatting of a string. If the input is not a Base64url string, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `base64url` can be used.
+
+### Base64url schema
+
+Schema to validate a Base64url string.
+
+```ts
+const Base64urlSchema = v.pipe(
+  v.string(),
+  v.base64url('The data is badly encoded.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `base64url`.
+
+### Schemas
+
+<ApiList items={['any', 'custom', 'string', 'unknown']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
