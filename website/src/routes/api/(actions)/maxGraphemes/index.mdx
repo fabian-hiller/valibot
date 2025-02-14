@@ -35,6 +35,10 @@ const Action = v.maxGraphemes<TInput, TRequirement, TMessage>(
 
 With `maxGraphemes` you can validate the graphemes of a string. If the input does not match the `requirement`, you can use `message` to customize the error message.
 
+Warning: The number of characters per grapheme is _unlimited_, so you are required to combine `maxGraphemes` with another length limitter, e.g. `maxLength`. As an example, the following text is composed of just 5 graphemes, but each of them contains an astonishing more than 150 characters.
+
+> Z̸̢̢̧̢̡̡̡̧̯͔͕͖̣̤̼̼̗̳̼͈̖̠̜̮̝͖͔͙̺̪̹̞͉̤̟͖͖̹͉̟̙̟̗̰̼͈̖̭̞̟̻̝͖̙̟͕̣͓̭̣̭͉̲̘̥̗͔̱͙̪̼͈̥̲̣͙̤̥͚̩̫̮̖̘̪̯̝̘̻̯̞̰̭̼͕̹̩̟̝̞̊̋̈́̎̏̆̇̄̓̈͛̒͛̆̊͌̔̈́̐̅̈͛̏̔̍͗́̉͋̓̓̓̒̇̾̽̂̓̈̃͒͆́̏̀͒̇̀̍́̍̃̒̈́̈́̑̎͋͛̀̿̌͂̌̾̌͂͒̉̎̈́͐̒̕͜͜͜͜͜͠͝͝͠͝͝͝͝͠ͅͅa̶̧̨̡̡̧̧̨̢̢̧̧̡̧̡̡̧̛͇̮̙̼̫͎̳̰̩̖̤͚͎̤͕͍̘̞̞̠̰̠͎͉͙̝͓͇̝̲̩͖̻̤̥̞̠͙̪͎̬̘̠̼̬̤̳̣̳̝̮͉͓̻͚̤͓̜͉̭͎͚̫̱̹̜͈̭͈͎̦͇͕̺̰̜̮̼̟͓̺̝̠̫̯̺̠̱̞̘͈̖̻̫̟̰͔͖̘̫͍̥͓̟̩̯͙̳̥̯͈̺̮͍̰̮̮̥͔̮͊̈̇̈́̉͂͒͗͌̈́͑̈́͋̈́͌̕͜͜͜͝͠͠ͅͅͅļ̷̡̡̡̛̛̛̛̛̛̝̩̺̤̖͈̗̦̥̩̫̻̖̦̣̻̤̩̂̋͐̽̍͛̈́͛̿͊̀̑̋̍̂͆̑̀̎͑͒̆͊̌͒̉͊̈́́̄͑̐̊̂̓͛͐̇̃͛̔̈́̌̒́̓̎̿̓͐̌̋̀̅̇̾̂͆̊̆̈́͆̉́͊͋́̊̈́̇͊̂̒̑̉̌͑̿͐̓͆͋̎̋͛̒̆̎̊͊̉͋̽͋̂̿̂͛̃͒̓̒͒̈́̈̓̓̅̌̊̇̊̎̆͛͗͑͘̕̕̕͘͘͝͝͝͝͠͝͝͝͝͝ḡ̸̡̢̢̧̡̢̨̨̛̛̛̛̛̛̱͚͙̗̲̪̝̫̱͇̯̝͇͔̮̦̬̬͕̺̬͈͚̜̜̯̩͚̼̖̹̼͓̘͎͙̻͇͍͖̲̖̩͙͇͚̗͍͓͔̜͙͇̯̣̲̲̻̩̮̭̞͚̖̫̰͚͇̱͇͕̣͍̦̯̬̙̮͎̪̘̭͔͙̘̪̬͉̻̫̭̫̻̼͔̤͈͍͍̜̥̠͓̤̼̪̰̼͇̮̭͓͈͕͎̟̮̣̠̻̭̦̦̞̝͍͉͎͇̲͛̽͆̓͒̓͊́̈̈́̍͆̀̓̾̍̿̀̽̏͛͛̋̏̐̽̈́̊͛̅̂͗̌̀̿͒̃̈́̽̀̐̈̽̆̾̄̊͆́̓̾͐͐̎̊́̈̎̆̆͌̂́̀͗̄͛͗̅̎̅̿́̎̂̑̓̾͐͆̓͌̀̚̚͘̚̕̕͘̚͜͜͝͝͝͝͝͠ͅͅͅͅͅo̴̢̢̢̧̡̢̧̧̢̡̨̨̢͖͉̙͚̰̠̱͉̞̞̳̜͕͚̬̹̬̠̙̺̰̠̞͙̟̞͚̳̬͖̤̝̘͈̻̙̰̩̥̰̠̯̻̩̦͓̭̳̘̼̖͓̘͓͈͈̻̭̮̗̯̣̖͇̙̣͕͔̦̙͚̘͕̜͚̙͉̪̭̳͎̞͎̦͈͖̲̟̠̟͖̬̼̬͎̖̟̣͌͛̇͗̿̿̒́̌̏̀̈́̆̑̀̉͂̅͗̀̍̿͑͊̎̂́̄́̓̍͗̃̅̕͘̕͜͝͝͝ͅͅͅͅ
+
 ## Returns
 
 - `Action` <Property {...properties.Action} />
