@@ -21,6 +21,7 @@ export * from './filterItems/index.ts';
 export * from './findItem/index.ts';
 export * from './finite/index.ts';
 export * from './graphemes/index.ts';
+export * from './gtValue/index.ts';
 export * from './hash/index.ts';
 export * from './hexadecimal/index.ts';
 export * from './hexColor/index.ts';
