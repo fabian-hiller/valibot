@@ -1,10 +1,162 @@
 ---
 title: returnsAsync
+description: Creates a function return transformation action.
 source: /actions/returns/returnsAsync.ts
 contributors:
   - fabian-hiller
 ---
 
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
 # returnsAsync
 
-> The content of this page is not yet ready. Until then, please use the [source code](https://github.com/fabian-hiller/valibot/blob/main/library/src/actions/returns/returnsAsync.ts) or take a look at [issue #287](https://github.com/fabian-hiller/valibot/issues/287) to help us extend the API reference.
+Creates a function return transformation action.
+
+```ts
+const Action = v.returnsAsync<TInput, TSchema>(schema);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+
+### Explanation
+
+With `returnsAsync` you can force the returned value of a function to match the given `schema`.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `returnsAsync` can be used.
+
+### Product function schema
+
+Schema of a function that returns a product by its ID.
+
+```ts
+import { isValidProductId } from '~/api';
+
+const ProductFunctionSchema = v.pipeAsync(
+  v.function(),
+  v.argsAsync(
+    v.tupleAsync([v.pipeAsync(v.string(), v.checkAsync(isValidProductId))])
+  ),
+  v.returnsAsync(
+    v.pipeAsync(
+      v.promise(),
+      v.awaitAsync(),
+      v.object({
+        id: v.string(),
+        name: v.string(),
+        price: v.number(),
+      })
+    )
+  )
+);
+```
+
+## Related
+
+The following APIs can be combined with `returnsAsync`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
+    'exactOptional',
+    'file',
+    'function',
+    'instance',
+    'intersect',
+    'lazy',
+    'literal',
+    'looseObject',
+    'looseTuple',
+    'map',
+    'nan',
+    'never',
+    'nonNullable',
+    'nonNullish',
+    'nonOptional',
+    'null',
+    'nullable',
+    'nullish',
+    'number',
+    'object',
+    'objectWithRest',
+    'optional',
+    'picklist',
+    'promise',
+    'record',
+    'set',
+    'strictObject',
+    'strictTuple',
+    'string',
+    'symbol',
+    'tuple',
+    'tupleWithRest',
+    'undefined',
+    'undefinedable',
+    'union',
+    'unknown',
+    'variant',
+    'void',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'customAsync',
+    'exactOptionalAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'pipeAsync',
+    'recordAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'undefinedableAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>

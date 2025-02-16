@@ -7,7 +7,7 @@ import { _addIssue, _stringify } from '../../utils/index.ts';
 import type { ValueInput } from '../types.ts';
 
 /**
- * Not value issue type.
+ * Not value issue interface.
  */
 export interface NotValueIssue<
   TInput extends ValueInput,
@@ -32,7 +32,7 @@ export interface NotValueIssue<
 }
 
 /**
- * Not value action type.
+ * Not value action interface.
  */
 export interface NotValueAction<
   TInput extends ValueInput,
@@ -94,6 +94,7 @@ export function notValue<
   message: TMessage
 ): NotValueAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notValue(
   requirement: ValueInput,
   message?: ErrorMessage<NotValueIssue<ValueInput, ValueInput>>

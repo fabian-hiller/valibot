@@ -13,7 +13,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { LooseTupleIssue } from './types.ts';
 
 /**
- * Loose tuple schema type.
+ * Loose tuple schema interface.
  */
 export interface LooseTupleSchema<
   TItems extends TupleItems,
@@ -69,6 +69,7 @@ export function looseTuple<
   const TMessage extends ErrorMessage<LooseTupleIssue> | undefined,
 >(items: TItems, message: TMessage): LooseTupleSchema<TItems, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function looseTuple(
   items: TupleItems,
   message?: ErrorMessage<LooseTupleIssue>

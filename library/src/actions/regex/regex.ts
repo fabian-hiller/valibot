@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Regex issue type.
+ * Regex issue interface.
  */
 export interface RegexIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -32,7 +32,7 @@ export interface RegexIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Regex action type.
+ * Regex action interface.
  */
 export interface RegexAction<
   TInput extends string,
@@ -84,6 +84,7 @@ export function regex<
   const TMessage extends ErrorMessage<RegexIssue<TInput>> | undefined,
 >(requirement: RegExp, message: TMessage): RegexAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function regex(
   requirement: RegExp,
   message?: ErrorMessage<RegexIssue<string>>

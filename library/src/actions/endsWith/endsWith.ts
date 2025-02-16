@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Ends with issue type.
+ * Ends with issue interface.
  */
 export interface EndsWithIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface EndsWithIssue<
 }
 
 /**
- * Ends with action type.
+ * Ends with action interface.
  */
 export interface EndsWithAction<
   TInput extends string,
@@ -97,6 +97,7 @@ export function endsWith<
   message: TMessage
 ): EndsWithAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function endsWith(
   requirement: string,
   message?: ErrorMessage<EndsWithIssue<string, string>>

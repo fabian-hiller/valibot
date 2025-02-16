@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { LengthInput } from '../types.ts';
 
 /**
- * Not length issue type.
+ * Not length issue interface.
  */
 export interface NotLengthIssue<
   TInput extends LengthInput,
@@ -36,7 +36,7 @@ export interface NotLengthIssue<
 }
 
 /**
- * Not length action type.
+ * Not length action interface.
  */
 export interface NotLengthAction<
   TInput extends LengthInput,
@@ -98,6 +98,7 @@ export function notLength<
   message: TMessage
 ): NotLengthAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notLength(
   requirement: number,
   message?: ErrorMessage<NotLengthIssue<LengthInput, number>>

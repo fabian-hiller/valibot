@@ -6,6 +6,7 @@
  *
  * @returns Whether it matches.
  */
+// @__NO_SIDE_EFFECTS__
 export function isOfKind<
   const TKind extends TObject['kind'],
   const TObject extends { kind: string },

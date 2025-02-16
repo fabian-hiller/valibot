@@ -9,10 +9,11 @@ import type {
   SuccessDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
+import type { nullable } from './nullable.ts';
 import type { InferNullableOutput } from './types.ts';
 
 /**
- * Nullable schema async type.
+ * Nullable schema async interface.
  */
 export interface NullableSchemaAsync<
   TWrapped extends
@@ -31,7 +32,7 @@ export interface NullableSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nullableAsync;
+  readonly reference: typeof nullable | typeof nullableAsync;
   /**
    * The expected property.
    */
@@ -77,6 +78,7 @@ export function nullableAsync<
   default_: TDefault
 ): NullableSchemaAsync<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function nullableAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

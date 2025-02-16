@@ -1,7 +1,7 @@
 import type { BaseIssue } from '../../types/index.ts';
 
 /**
- * Loose object issue type.
+ * Loose object issue interface.
  */
 export interface LooseObjectIssue extends BaseIssue<unknown> {
   /**
@@ -15,5 +15,5 @@ export interface LooseObjectIssue extends BaseIssue<unknown> {
   /**
    * The expected property.
    */
-  readonly expected: 'Object';
+  readonly expected: 'Object' | `"${string}"`;
 }

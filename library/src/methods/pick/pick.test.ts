@@ -3,11 +3,9 @@ import {
   boolean,
   type BooleanIssue,
   number,
-  type NumberIssue,
   object,
   objectWithRest,
   string,
-  type StringIssue,
 } from '../../schemas/index.ts';
 import type { FailureDataset, InferIssue } from '../../types/index.ts';
 import { expectNoSchemaIssue } from '../../vitest/index.ts';
@@ -96,20 +94,20 @@ describe('pick', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'string',
+              type: 'object',
               input: undefined,
-              expected: 'string',
+              expected: '"key1"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: { key3: 'bar' },
                   key: 'key1',
                   value: undefined,
                 },
               ],
-            } satisfies StringIssue,
+            },
           ],
         } satisfies FailureDataset<InferIssue<typeof schema>>);
       });
@@ -186,20 +184,20 @@ describe('pick', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'number',
+              type: 'object_with_rest',
               input: undefined,
-              expected: 'number',
+              expected: '"key2"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: { key3: 'foo' },
                   key: 'key2',
                   value: undefined,
                 },
               ],
-            } satisfies NumberIssue,
+            },
           ],
         } satisfies FailureDataset<InferIssue<typeof schema>>);
       });

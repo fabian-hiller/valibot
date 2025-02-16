@@ -1,10 +1,10 @@
 import type { Config } from './config.ts';
 import type { OutputDataset, UnknownDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
-import type { StandardSchemaProps } from './standard.ts';
+import type { StandardProps } from './standard.ts';
 
 /**
- * Base schema type.
+ * Base schema interface.
  */
 export interface BaseSchema<
   TInput,
@@ -39,7 +39,7 @@ export interface BaseSchema<
    *
    * @internal
    */
-  readonly '~standard': StandardSchemaProps<TInput, TOutput>;
+  readonly '~standard': StandardProps<TInput, TOutput>;
   /**
    * Parses unknown input values.
    *
@@ -69,7 +69,7 @@ export interface BaseSchema<
 }
 
 /**
- * Base schema async type.
+ * Base schema async interface.
  */
 export interface BaseSchemaAsync<
   TInput,
@@ -111,17 +111,17 @@ export interface BaseSchemaAsync<
 /**
  * Generic schema type.
  */
-export interface GenericSchema<
+export type GenericSchema<
   TInput = unknown,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseSchema<TInput, TOutput, TIssue> {}
+> = BaseSchema<TInput, TOutput, TIssue>;
 
 /**
  * Generic schema async type.
  */
-export interface GenericSchemaAsync<
+export type GenericSchemaAsync<
   TInput = unknown,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseSchemaAsync<TInput, TOutput, TIssue> {}
+> = BaseSchemaAsync<TInput, TOutput, TIssue>;

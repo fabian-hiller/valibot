@@ -107,6 +107,7 @@ describe('set', () => {
     });
 
     test('for functions', () => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       expectSchemaIssue(schema, baseIssue, [() => {}, function () {}]);
     });
 

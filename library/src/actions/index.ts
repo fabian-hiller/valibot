@@ -74,6 +74,7 @@ export * from './readonly/index.ts';
 export * from './reduceItems/index.ts';
 export * from './regex/index.ts';
 export * from './returns/index.ts';
+export * from './rfcEmail/index.ts';
 export * from './safeInteger/index.ts';
 export * from './size/index.ts';
 export * from './someItem/index.ts';

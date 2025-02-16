@@ -10,7 +10,7 @@ type ArrayAction<TInput extends ArrayInput> = (
 ) => number;
 
 /**
- * Sort items action type.
+ * Sort items action interface.
  */
 export interface SortItemsAction<TInput extends ArrayInput>
   extends BaseTransformation<TInput, TInput, never> {
@@ -39,6 +39,7 @@ export function sortItems<TInput extends ArrayInput>(
   operation?: ArrayAction<TInput>
 ): SortItemsAction<TInput>;
 
+// @__NO_SIDE_EFFECTS__
 export function sortItems(
   operation?: ArrayAction<unknown[]>
 ): SortItemsAction<unknown[]> {

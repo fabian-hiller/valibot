@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getWordCount } from '../../utils/index.ts';
 
 /**
- * Words issue type.
+ * Words issue interface.
  */
 export interface WordsIssue<TInput extends string, TRequirement extends number>
   extends BaseIssue<TInput> {
@@ -33,7 +33,7 @@ export interface WordsIssue<TInput extends string, TRequirement extends number>
 }
 
 /**
- * Words action type.
+ * Words action interface.
  */
 export interface WordsAction<
   TInput extends string,
@@ -106,6 +106,7 @@ export function words<
   message: TMessage
 ): WordsAction<TInput, TLocales, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function words(
   locales: Intl.LocalesArgument,
   requirement: number,

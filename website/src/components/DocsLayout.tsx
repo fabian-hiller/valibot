@@ -1,12 +1,28 @@
-import { component$, Slot, useComputed$ } from '@builder.io/qwik';
+import {
+  component$,
+  type ReadonlySignal,
+  Slot,
+  useComputed$,
+} from '@builder.io/qwik';
 import {
   type ContentMenu,
+  Form,
   useContent,
   useDocumentHead,
   useLocation,
 } from '@builder.io/qwik-city';
-import { ArrowLeftIcon, ArrowRightIcon, GitHubIcon, PenIcon } from '~/icons';
+import clsx from 'clsx';
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  GitHubIcon,
+  MenuIcon,
+  PenIcon,
+} from '~/icons';
+import { useChapters, useChaptersToggle } from '~/routes/plugin@chapters';
+import { trackEvent } from '~/utils';
 import '../styles/pace.css';
+import { Chapters } from './Chapters';
 import { Credits } from './Credits';
 import { IconButton } from './IconButton';
 import { Navigation } from './Navigation';
@@ -18,11 +34,15 @@ type NavItem = ContentMenu & { group: string };
  * Provides the layout for the documentation pages.
  */
 export const DocsLayout = component$(() => {
-  // Use location, content, docuemnt head and side bar toggle
+  // Use location, content, docuemnt head and chapters
   const location = useLocation();
   const content = useContent();
   const documentHead = useDocumentHead();
+  const chapters = useChapters();
+
+  // Use side bar and chapters toggle
   const sideBarToggle = useSideBarToggle();
+  const chaptersToggle = useChaptersToggle();
 
   // Compute navigation items
   const navItems = useComputed$(
@@ -52,8 +72,18 @@ export const DocsLayout = component$(() => {
     () => navItems.value[navIndex.value + 1]
   );
 
+  // Optimistically compute whether to show chapters
+  const showChapters = useComputed$(() =>
+    chaptersToggle.isRunning ? !chapters.value : chapters.value
+  );
+
   return (
-    <div class="flex w-full max-w-screen-xl flex-1 flex-col-reverse self-center lg:flex-row">
+    <div
+      class={clsx(
+        'flex w-full flex-1 flex-col-reverse self-center lg:flex-row',
+        showChapters.value ? 'max-w-screen-2xl' : 'max-w-screen-xl'
+      )}
+    >
       {/* Side bar navigation */}
       <SideBar class="lg:max-h-[calc(100vh-70px)]" toggle={sideBarToggle}>
         <div q:slot="buttons" class="mr-4 flex space-x-6 lg:hidden">
@@ -64,17 +94,34 @@ export const DocsLayout = component$(() => {
             nextPage={nextPage.value}
           />
         </div>
-        <Navigation />
+        <Navigation
+          class={clsx(
+            'px-8 py-9 lg:w-60 lg:py-32',
+            showChapters.value ? '2xl:w-64' : '2xl:w-72'
+          )}
+        />
       </SideBar>
 
-      <main class="relative flex-1 py-12 md:py-20 lg:w-px lg:py-32 lg:pl-9">
+      <main
+        class={clsx(
+          'relative flex-1 py-12 md:py-20 lg:w-px lg:py-32',
+          showChapters.value ? 'lg:px-9' : 'lg:pl-9'
+        )}
+      >
         {/* Navigation buttons */}
-        <nav class="hidden px-8 lg:absolute lg:right-0 lg:flex lg:space-x-6 lg:px-10">
+        <nav
+          class={clsx(
+            'hidden px-8 lg:absolute lg:flex lg:space-x-6 lg:px-10',
+            showChapters.value ? 'lg:right-9' : 'lg:right-0'
+          )}
+        >
           <NavButtons
             pageIndex={navIndex.value}
             sourcePath={documentHead.frontmatter.source}
             prevPage={prevPage.value}
             nextPage={nextPage.value}
+            chapters={chapters}
+            chaptersToggle={chaptersToggle}
           />
         </nav>
 
@@ -121,6 +168,12 @@ export const DocsLayout = component$(() => {
         {/* Credits */}
         <Credits />
       </main>
+
+      {showChapters.value && (
+        <aside class="hidden xl:block xl:w-60 xl:px-8 xl:py-32 2xl:w-64">
+          <Chapters />
+        </aside>
+      )}
     </div>
   );
 });
@@ -130,13 +183,15 @@ type NavButtonsProps = {
   sourcePath: string | undefined;
   prevPage: ContentMenu | undefined;
   nextPage: ContentMenu | undefined;
+  chapters?: ReadonlySignal<boolean>;
+  chaptersToggle?: ReturnType<typeof useChaptersToggle>;
 };
 
 /**
  * Buttons to navigate to the previous or next page.
  */
 export const NavButtons = component$<NavButtonsProps>(
-  ({ pageIndex, sourcePath, prevPage, nextPage }) => (
+  ({ pageIndex, sourcePath, prevPage, nextPage, chapters, chaptersToggle }) => (
     <>
       {pageIndex !== -1 && (
         <>
@@ -166,19 +221,37 @@ export const NavButtons = component$<NavButtonsProps>(
           ) : (
             <div class="w-10" />
           )}
-          {sourcePath && (
-            <IconButton
-              variant="secondary"
-              type="link"
-              href={`https://github.com/fabian-hiller/valibot/blob/main/library/src${sourcePath}`}
-              target="_blank"
-              label="Source code"
-              hideLabel
-            >
-              <GitHubIcon class="h-[18px]" />
-            </IconButton>
-          )}
         </>
+      )}
+      {chaptersToggle && (
+        <Form
+          class="hidden xl:block"
+          action={chaptersToggle}
+          onSubmit$={() =>
+            trackEvent('change_chapters', { enabled: !chapters!.value })
+          }
+        >
+          <IconButton
+            variant="secondary"
+            type="submit"
+            label={chapters!.value ? 'Hide chapters' : 'Show chapters'}
+            hideLabel
+          >
+            <MenuIcon class="h-[18px]" />
+          </IconButton>
+        </Form>
+      )}
+      {sourcePath && (
+        <IconButton
+          variant="secondary"
+          type="link"
+          href={`https://github.com/fabian-hiller/valibot/blob/main/library/src${sourcePath}`}
+          target="_blank"
+          label="Source code"
+          hideLabel
+        >
+          <GitHubIcon class="h-[18px]" />
+        </IconButton>
       )}
     </>
   )

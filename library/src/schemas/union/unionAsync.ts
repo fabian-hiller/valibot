@@ -18,6 +18,7 @@ import {
   _joinExpects,
 } from '../../utils/index.ts';
 import type { UnionIssue } from './types.ts';
+import type { union } from './union.ts';
 import { _subIssues } from './utils/index.ts';
 
 /**
@@ -31,7 +32,7 @@ export type UnionOptionsAsync = MaybeReadonly<
 >;
 
 /**
- * Union schema async type.
+ * Union schema async interface.
  */
 export interface UnionSchemaAsync<
   TOptions extends UnionOptionsAsync,
@@ -50,7 +51,7 @@ export interface UnionSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof unionAsync;
+  readonly reference: typeof union | typeof unionAsync;
   /**
    * The union options.
    */
@@ -87,6 +88,7 @@ export function unionAsync<
     | undefined,
 >(options: TOptions, message: TMessage): UnionSchemaAsync<TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function unionAsync(
   options: UnionOptionsAsync,
   message?: ErrorMessage<UnionIssue<BaseIssue<unknown>>>

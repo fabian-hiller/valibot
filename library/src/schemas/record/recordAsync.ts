@@ -12,6 +12,7 @@ import {
   _getStandardProps,
   _isValidObjectKey,
 } from '../../utils/index.ts';
+import type { record } from './record.ts';
 import type {
   InferRecordInput,
   InferRecordOutput,
@@ -19,7 +20,7 @@ import type {
 } from './types.ts';
 
 /**
- * Record schema async type.
+ * Record schema async interface.
  */
 export interface RecordSchemaAsync<
   TKey extends
@@ -41,7 +42,7 @@ export interface RecordSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof recordAsync;
+  readonly reference: typeof record | typeof recordAsync;
   /**
    * The expected property.
    */
@@ -100,6 +101,7 @@ export function recordAsync<
   message: TMessage
 ): RecordSchemaAsync<TKey, TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function recordAsync(
   key:
     | BaseSchema<string, string | number | symbol, BaseIssue<unknown>>

@@ -15,6 +15,7 @@ export default defineConfig(() => {
           rehypeAutolinkHeadings: true,
         },
         mdx: {
+          providerImportSource: '~/hooks/useMDXComponents.tsx',
           rehypePlugins: [
             // @ts-expect-error
             rehypePrism,

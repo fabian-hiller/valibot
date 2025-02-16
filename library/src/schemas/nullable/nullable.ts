@@ -11,7 +11,7 @@ import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullableOutput } from './types.ts';
 
 /**
- * Nullable schema type.
+ * Nullable schema interface.
  */
 export interface NullableSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -67,6 +67,7 @@ export function nullable<
   const TDefault extends Default<TWrapped, null>,
 >(wrapped: TWrapped, default_: TDefault): NullableSchema<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function nullable(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   default_?: unknown

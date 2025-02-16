@@ -6,6 +6,7 @@ import type {
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { nonNullish } from './nonNullish.ts';
 import type {
   InferNonNullishInput,
   InferNonNullishIssue,
@@ -14,7 +15,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non nullish schema async type.
+ * Non nullish schema async interface.
  */
 export interface NonNullishSchemaAsync<
   TWrapped extends
@@ -33,7 +34,7 @@ export interface NonNullishSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nonNullishAsync;
+  readonly reference: typeof nonNullish | typeof nonNullishAsync;
   /**
    * The expected property.
    */
@@ -79,6 +80,7 @@ export function nonNullishAsync<
   message: TMessage
 ): NonNullishSchemaAsync<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullishAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

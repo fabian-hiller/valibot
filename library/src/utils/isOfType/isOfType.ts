@@ -6,6 +6,7 @@
  *
  * @returns Whether it matches.
  */
+// @__NO_SIDE_EFFECTS__
 export function isOfType<
   const TType extends TObject['type'],
   const TObject extends { type: string },

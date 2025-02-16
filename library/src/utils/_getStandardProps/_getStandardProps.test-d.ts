@@ -2,17 +2,17 @@ import { describe, expectTypeOf, test } from 'vitest';
 import { transform } from '../../actions/index.ts';
 import { pipe } from '../../methods/index.ts';
 import { object, string } from '../../schemas/index.ts';
-import type { StandardSchemaProps } from '../../types/index.ts';
+import type { StandardProps } from '../../types/index.ts';
 import { _getStandardProps } from './_getStandardProps.ts';
 
 describe('_getStandardProps', () => {
   test('should return spec properties', () => {
     expectTypeOf(_getStandardProps(string())).toEqualTypeOf<
-      StandardSchemaProps<string, string>
+      StandardProps<string, string>
     >();
     expectTypeOf(
       _getStandardProps(pipe(string(), transform(Number)))
-    ).toEqualTypeOf<StandardSchemaProps<string, number>>();
+    ).toEqualTypeOf<StandardProps<string, number>>();
     expectTypeOf(
       _getStandardProps(
         pipe(
@@ -21,7 +21,7 @@ describe('_getStandardProps', () => {
         )
       )
     ).toEqualTypeOf<
-      StandardSchemaProps<{ foo: string }, { foo: string; bar: number }>
+      StandardProps<{ foo: string }, { foo: string; bar: number }>
     >();
   });
 });

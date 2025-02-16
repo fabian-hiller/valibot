@@ -301,14 +301,14 @@ describe('required', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'non_optional',
+              type: 'object',
               input: undefined,
-              expected: '!undefined',
+              expected: '"key1"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: {},
                   key: 'key1',
                   value: undefined,
@@ -318,14 +318,14 @@ describe('required', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'non_optional',
+              type: 'object',
               input: undefined,
-              expected: '!undefined',
+              expected: '"key2"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: {},
                   key: 'key2',
                   value: undefined,
@@ -335,14 +335,14 @@ describe('required', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'non_optional',
+              type: 'object',
               input: undefined,
-              expected: '!undefined',
+              expected: '"key3"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: {},
                   key: 'key3',
                   value: undefined,
@@ -352,14 +352,14 @@ describe('required', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'non_optional',
+              type: 'object',
               input: undefined,
-              expected: '!undefined',
+              expected: '"key4"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: {},
                   key: 'key4',
                   value: undefined,
@@ -377,6 +377,55 @@ describe('required', () => {
             {
               ...baseInfo,
               kind: 'schema',
+              type: 'object',
+              input: undefined,
+              expected: '"key1"',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'key',
+                  input,
+                  key: 'key1',
+                  value: undefined,
+                },
+              ],
+            },
+            {
+              ...baseInfo,
+              kind: 'schema',
+              type: 'object',
+              input: undefined,
+              expected: '"key3"',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'key',
+                  input,
+                  key: 'key3',
+                  value: undefined,
+                },
+              ],
+            },
+          ],
+        } satisfies FailureDataset<InferIssue<typeof schema2>>);
+      });
+
+      test('if required keys are undefined', () => {
+        const input1 = {
+          key1: undefined,
+          key2: undefined,
+          key3: undefined,
+          key4: undefined,
+        };
+        expect(schema1['~run']({ value: input1 }, {})).toStrictEqual({
+          typed: false,
+          value: input1,
+          issues: [
+            {
+              ...baseInfo,
+              kind: 'schema',
               type: 'non_optional',
               input: undefined,
               expected: '!undefined',
@@ -385,7 +434,7 @@ describe('required', () => {
                 {
                   type: 'object',
                   origin: 'value',
-                  input,
+                  input: input1,
                   key: 'key1',
                   value: undefined,
                 },
@@ -402,7 +451,88 @@ describe('required', () => {
                 {
                   type: 'object',
                   origin: 'value',
-                  input,
+                  input: input1,
+                  key: 'key2',
+                  value: undefined,
+                },
+              ],
+            },
+            {
+              ...baseInfo,
+              kind: 'schema',
+              type: 'non_optional',
+              input: undefined,
+              expected: '!undefined',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'value',
+                  input: input1,
+                  key: 'key3',
+                  value: undefined,
+                },
+              ],
+            },
+            {
+              ...baseInfo,
+              kind: 'schema',
+              type: 'non_optional',
+              input: undefined,
+              expected: '!undefined',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'value',
+                  input: input1,
+                  key: 'key4',
+                  value: undefined,
+                },
+              ],
+            },
+          ],
+        } satisfies FailureDataset<InferIssue<typeof schema1>>);
+
+        const input2 = {
+          key1: undefined,
+          key2: 123,
+          key3: undefined,
+          key4: null,
+        };
+        expect(schema2['~run']({ value: input2 }, {})).toStrictEqual({
+          typed: false,
+          value: { ...input2, key4: 123 },
+          issues: [
+            {
+              ...baseInfo,
+              kind: 'schema',
+              type: 'non_optional',
+              input: undefined,
+              expected: '!undefined',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'value',
+                  input: input2,
+                  key: 'key1',
+                  value: undefined,
+                },
+              ],
+            },
+            {
+              ...baseInfo,
+              kind: 'schema',
+              type: 'non_optional',
+              input: undefined,
+              expected: '!undefined',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'value',
+                  input: input2,
                   key: 'key3',
                   value: undefined,
                 },
@@ -696,14 +826,14 @@ describe('required', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'non_optional',
+              type: 'object_with_rest',
               input: undefined,
-              expected: '!undefined',
+              expected: '"key1"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: {},
                   key: 'key1',
                   value: undefined,
@@ -713,14 +843,14 @@ describe('required', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'non_optional',
+              type: 'object_with_rest',
               input: undefined,
-              expected: '!undefined',
+              expected: '"key2"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: {},
                   key: 'key2',
                   value: undefined,
@@ -730,14 +860,14 @@ describe('required', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'non_optional',
+              type: 'object_with_rest',
               input: undefined,
-              expected: '!undefined',
+              expected: '"key3"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: {},
                   key: 'key3',
                   value: undefined,
@@ -747,14 +877,14 @@ describe('required', () => {
             {
               ...baseInfo,
               kind: 'schema',
-              type: 'non_optional',
+              type: 'object_with_rest',
               input: undefined,
-              expected: '!undefined',
+              expected: '"key4"',
               received: 'undefined',
               path: [
                 {
                   type: 'object',
-                  origin: 'value',
+                  origin: 'key',
                   input: {},
                   key: 'key4',
                   value: undefined,
@@ -772,6 +902,55 @@ describe('required', () => {
             {
               ...baseInfo,
               kind: 'schema',
+              type: 'object_with_rest',
+              input: undefined,
+              expected: '"key2"',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'key',
+                  input,
+                  key: 'key2',
+                  value: undefined,
+                },
+              ],
+            },
+            {
+              ...baseInfo,
+              kind: 'schema',
+              type: 'object_with_rest',
+              input: undefined,
+              expected: '"key3"',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'key',
+                  input,
+                  key: 'key3',
+                  value: undefined,
+                },
+              ],
+            },
+          ],
+        } satisfies FailureDataset<InferIssue<typeof schema2>>);
+      });
+
+      test('if required keys are undefined', () => {
+        const input1 = {
+          key1: undefined,
+          key2: undefined,
+          key3: undefined,
+          key4: undefined,
+        };
+        expect(schema1['~run']({ value: input1 }, {})).toStrictEqual({
+          typed: false,
+          value: input1,
+          issues: [
+            {
+              ...baseInfo,
+              kind: 'schema',
               type: 'non_optional',
               input: undefined,
               expected: '!undefined',
@@ -780,7 +959,24 @@ describe('required', () => {
                 {
                   type: 'object',
                   origin: 'value',
-                  input,
+                  input: input1,
+                  key: 'key1',
+                  value: undefined,
+                },
+              ],
+            },
+            {
+              ...baseInfo,
+              kind: 'schema',
+              type: 'non_optional',
+              input: undefined,
+              expected: '!undefined',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'value',
+                  input: input1,
                   key: 'key2',
                   value: undefined,
                 },
@@ -797,7 +993,72 @@ describe('required', () => {
                 {
                   type: 'object',
                   origin: 'value',
-                  input,
+                  input: input1,
+                  key: 'key3',
+                  value: undefined,
+                },
+              ],
+            },
+            {
+              ...baseInfo,
+              kind: 'schema',
+              type: 'non_optional',
+              input: undefined,
+              expected: '!undefined',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'value',
+                  input: input1,
+                  key: 'key4',
+                  value: undefined,
+                },
+              ],
+            },
+          ],
+        } satisfies FailureDataset<InferIssue<typeof schema1>>);
+
+        const input2 = {
+          key1: 'foo',
+          key2: undefined,
+          key3: undefined,
+          key4: null,
+          other: true,
+        };
+        expect(schema2['~run']({ value: input2 }, {})).toStrictEqual({
+          typed: false,
+          value: { ...input2, key4: 123 },
+          issues: [
+            {
+              ...baseInfo,
+              kind: 'schema',
+              type: 'non_optional',
+              input: undefined,
+              expected: '!undefined',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'value',
+                  input: input2,
+                  key: 'key2',
+                  value: undefined,
+                },
+              ],
+            },
+            {
+              ...baseInfo,
+              kind: 'schema',
+              type: 'non_optional',
+              input: undefined,
+              expected: '!undefined',
+              received: 'undefined',
+              path: [
+                {
+                  type: 'object',
+                  origin: 'value',
+                  input: input2,
                   key: 'key3',
                   value: undefined,
                 },

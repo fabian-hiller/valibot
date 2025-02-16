@@ -17,7 +17,7 @@ import type {
 } from '../union/index.ts';
 
 /**
- * Non optional issue type.
+ * Non optional issue interface.
  */
 export interface NonOptionalIssue extends BaseIssue<unknown> {
   /**

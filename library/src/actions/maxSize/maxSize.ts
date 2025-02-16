@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { SizeInput } from '../types.ts';
 
 /**
- * Max size issue type.
+ * Max size issue interface.
  */
 export interface MaxSizeIssue<
   TInput extends SizeInput,
@@ -36,7 +36,7 @@ export interface MaxSizeIssue<
 }
 
 /**
- * Max size action type.
+ * Max size action interface.
  */
 export interface MaxSizeAction<
   TInput extends SizeInput,
@@ -96,6 +96,7 @@ export function maxSize<
   message: TMessage
 ): MaxSizeAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function maxSize(
   requirement: number,
   message?: ErrorMessage<MaxSizeIssue<SizeInput, number>>

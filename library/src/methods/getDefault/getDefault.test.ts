@@ -1,5 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import {
+  exactOptional,
+  exactOptionalAsync,
   nullable,
   nullableAsync,
   nullish,
@@ -9,7 +11,10 @@ import {
   optional,
   optionalAsync,
   string,
+  undefinedable,
+  undefinedableAsync,
 } from '../../schemas/index.ts';
+import { pipe, pipeAsync } from '../pipe/index.ts';
 import { getDefault } from './getDefault.ts';
 
 describe('getDefault', () => {
@@ -17,6 +22,37 @@ describe('getDefault', () => {
     expect(getDefault(string())).toBeUndefined();
     expect(getDefault(number())).toBeUndefined();
     expect(getDefault(object({}))).toBeUndefined();
+  });
+
+  describe('should return exact optional default', () => {
+    test('for undefined value', async () => {
+      expect(getDefault(exactOptional(string()))).toBeUndefined();
+      expect(getDefault(exactOptional(string(), undefined))).toBeUndefined();
+    });
+
+    test('for direct value', () => {
+      expect(getDefault(exactOptional(string(), 'foo'))).toBe('foo');
+      expect(getDefault(exactOptionalAsync(string(), 'foo'))).toBe('foo');
+    });
+
+    test('for value getter', () => {
+      expect(getDefault(exactOptional(string(), () => 'foo'))).toBe('foo');
+      expect(getDefault(exactOptionalAsync(string(), () => 'foo'))).toBe('foo');
+    });
+
+    test('for asycn value getter', async () => {
+      expect(
+        await getDefault(exactOptionalAsync(string(), async () => 'foo'))
+      ).toBe('foo');
+    });
+
+    test('for schema with pipe', () => {
+      expect(getDefault(pipe(exactOptional(string(), 'foo')))).toBe('foo');
+      expect(getDefault(pipeAsync(exactOptional(string(), 'foo')))).toBe('foo');
+      expect(getDefault(pipeAsync(exactOptionalAsync(string(), 'foo')))).toBe(
+        'foo'
+      );
+    });
   });
 
   describe('should return optional default', () => {
@@ -43,6 +79,12 @@ describe('getDefault', () => {
       expect(await getDefault(optionalAsync(string(), async () => 'foo'))).toBe(
         'foo'
       );
+    });
+
+    test('for schema with pipe', () => {
+      expect(getDefault(pipe(optional(string(), 'foo')))).toBe('foo');
+      expect(getDefault(pipeAsync(optional(string(), 'foo')))).toBe('foo');
+      expect(getDefault(pipeAsync(optionalAsync(string(), 'foo')))).toBe('foo');
     });
   });
 
@@ -73,6 +115,12 @@ describe('getDefault', () => {
       expect(await getDefault(nullableAsync(string(), async () => 'foo'))).toBe(
         'foo'
       );
+    });
+
+    test('for schema with pipe', () => {
+      expect(getDefault(pipe(nullable(string(), 'foo')))).toBe('foo');
+      expect(getDefault(pipeAsync(nullable(string(), 'foo')))).toBe('foo');
+      expect(getDefault(pipeAsync(nullableAsync(string(), 'foo')))).toBe('foo');
     });
   });
 
@@ -106,6 +154,49 @@ describe('getDefault', () => {
 
     test('for value getter', async () => {
       expect(await getDefault(nullishAsync(string(), async () => 'foo'))).toBe(
+        'foo'
+      );
+    });
+
+    test('for schema with pipe', () => {
+      expect(getDefault(pipe(nullish(string(), 'foo')))).toBe('foo');
+      expect(getDefault(pipeAsync(nullish(string(), 'foo')))).toBe('foo');
+      expect(getDefault(pipeAsync(nullishAsync(string(), 'foo')))).toBe('foo');
+    });
+  });
+
+  describe('should return undefinedable default', () => {
+    test('for undefined value', async () => {
+      expect(getDefault(undefinedable(string()))).toBeUndefined();
+      expect(getDefault(undefinedable(string(), undefined))).toBeUndefined();
+      expect(
+        getDefault(undefinedable(string(), () => undefined))
+      ).toBeUndefined();
+      expect(
+        await getDefault(undefinedableAsync(string(), async () => undefined))
+      ).toBeUndefined();
+    });
+
+    test('for direct value', () => {
+      expect(getDefault(undefinedable(string(), 'foo'))).toBe('foo');
+      expect(getDefault(undefinedableAsync(string(), 'foo'))).toBe('foo');
+    });
+
+    test('for value getter', () => {
+      expect(getDefault(undefinedable(string(), () => 'foo'))).toBe('foo');
+      expect(getDefault(undefinedableAsync(string(), () => 'foo'))).toBe('foo');
+    });
+
+    test('for asycn value getter', async () => {
+      expect(
+        await getDefault(undefinedableAsync(string(), async () => 'foo'))
+      ).toBe('foo');
+    });
+
+    test('for schema with pipe', () => {
+      expect(getDefault(pipe(undefinedable(string(), 'foo')))).toBe('foo');
+      expect(getDefault(pipeAsync(undefinedable(string(), 'foo')))).toBe('foo');
+      expect(getDefault(pipeAsync(undefinedableAsync(string(), 'foo')))).toBe(
         'foo'
       );
     });

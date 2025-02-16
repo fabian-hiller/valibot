@@ -143,9 +143,6 @@
   }
 
   /* Code */
-  .mdx pre {
-    @apply overflow-x-auto rounded-2xl border-2 border-slate-200 p-5 leading-relaxed text-slate-700 md:text-lg md:leading-relaxed lg:rounded-3xl lg:border-[3px] lg:p-10 lg:text-xl lg:leading-relaxed dark:border-slate-800 dark:text-slate-300;
-  }
   .mdx :not(pre) > code {
     @apply rounded-lg bg-slate-100 px-2 py-1 text-slate-700 dark:bg-gray-800 dark:text-slate-300;
   }
@@ -160,7 +157,7 @@
   .mdx > :is(ul, ol) {
     @apply ml-12 mr-8 lg:ml-14 lg:mr-10;
   }
-  .mdx > :is(img, pre, .table-wrapper) {
+  .mdx > :is(img, .code-wrapper, .table-wrapper) {
     @apply mx-3 lg:mx-10 2xl:mx-0;
   }
 

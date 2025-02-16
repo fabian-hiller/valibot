@@ -10,6 +10,7 @@ import {
   _getStandardProps,
   _joinExpects,
 } from '../../utils/index.ts';
+import type { intersect } from './intersect.ts';
 import type {
   InferIntersectInput,
   InferIntersectOutput,
@@ -19,7 +20,7 @@ import type {
 import { _merge } from './utils/index.ts';
 
 /**
- * Intersect schema async type.
+ * Intersect schema async interface.
  */
 export interface IntersectSchemaAsync<
   TOptions extends IntersectOptionsAsync,
@@ -36,7 +37,7 @@ export interface IntersectSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof intersectAsync;
+  readonly reference: typeof intersect | typeof intersectAsync;
   /**
    * The intersect options.
    */
@@ -74,6 +75,7 @@ export function intersectAsync<
   message: TMessage
 ): IntersectSchemaAsync<TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function intersectAsync(
   options: IntersectOptionsAsync,
   message?: ErrorMessage<IntersectIssue>

@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getWordCount } from '../../utils/index.ts';
 
 /**
- * Max words issue type.
+ * Max words issue interface.
  */
 export interface MaxWordsIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface MaxWordsIssue<
 }
 
 /**
- * Max words action type.
+ * Max words action interface.
  */
 export interface MaxWordsAction<
   TInput extends string,
@@ -110,6 +110,7 @@ export function maxWords<
   message: TMessage
 ): MaxWordsAction<TInput, TLocales, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function maxWords(
   locales: Intl.LocalesArgument,
   requirement: number,

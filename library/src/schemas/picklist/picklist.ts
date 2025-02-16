@@ -18,7 +18,7 @@ import {
 export type PicklistOptions = MaybeReadonly<(string | number | bigint)[]>;
 
 /**
- * Picklist issue type.
+ * Picklist issue interface.
  */
 export interface PicklistIssue extends BaseIssue<unknown> {
   /**
@@ -36,7 +36,7 @@ export interface PicklistIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Picklist schema type.
+ * Picklist schema interface.
  */
 export interface PicklistSchema<
   TOptions extends PicklistOptions,
@@ -84,6 +84,7 @@ export function picklist<
   const TMessage extends ErrorMessage<PicklistIssue> | undefined,
 >(options: TOptions, message: TMessage): PicklistSchema<TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function picklist(
   options: PicklistOptions,
   message?: ErrorMessage<PicklistIssue>

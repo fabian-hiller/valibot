@@ -68,41 +68,7 @@ export const properties: Record<string, PropertyProps> = {
       value: false,
     },
   },
-  '~types': {
-    type: {
-      type: 'union',
-      options: [
-        {
-          type: 'object',
-          entries: [
-            {
-              key: 'input',
-              value: {
-                type: 'custom',
-                name: 'TInput',
-              },
-            },
-            {
-              key: 'output',
-              value: {
-                type: 'custom',
-                name: 'TOutput',
-              },
-            },
-            {
-              key: 'issue',
-              value: {
-                type: 'custom',
-                name: 'TIssue',
-              },
-            },
-          ],
-        },
-        'undefined',
-      ],
-    },
-  },
-  '~validate': {
+  '~run': {
     type: {
       type: 'function',
       params: [
@@ -167,6 +133,40 @@ export const properties: Record<string, PropertyProps> = {
           },
         ],
       },
+    },
+  },
+  '~types': {
+    type: {
+      type: 'union',
+      options: [
+        {
+          type: 'object',
+          entries: [
+            {
+              key: 'input',
+              value: {
+                type: 'custom',
+                name: 'TInput',
+              },
+            },
+            {
+              key: 'output',
+              value: {
+                type: 'custom',
+                name: 'TOutput',
+              },
+            },
+            {
+              key: 'issue',
+              value: {
+                type: 'custom',
+                name: 'TIssue',
+              },
+            },
+          ],
+        },
+        'undefined',
+      ],
     },
   },
 };

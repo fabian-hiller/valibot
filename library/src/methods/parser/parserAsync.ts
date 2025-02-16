@@ -9,7 +9,7 @@ import type {
 import { parseAsync } from '../parse/index.ts';
 
 /**
- * The parser async type.
+ * The parser async interface.
  */
 export interface ParserAsync<
   TSchema extends
@@ -59,6 +59,7 @@ export function parserAsync<
   const TConfig extends Config<InferIssue<TSchema>> | undefined,
 >(schema: TSchema, config: TConfig): ParserAsync<TSchema, TConfig>;
 
+// @__NO_SIDE_EFFECTS__
 export function parserAsync(
   schema:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

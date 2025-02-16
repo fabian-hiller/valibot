@@ -1,7 +1,7 @@
 import type { BaseIssue } from './issue.ts';
 
 /**
- * Unknown dataset type.
+ * Unknown dataset interface.
  */
 export interface UnknownDataset {
   /**
@@ -19,7 +19,7 @@ export interface UnknownDataset {
 }
 
 /**
- * Success dataset type.
+ * Success dataset interface.
  */
 export interface SuccessDataset<TValue> {
   /**
@@ -37,7 +37,7 @@ export interface SuccessDataset<TValue> {
 }
 
 /**
- * Partial dataset type.
+ * Partial dataset interface.
  */
 export interface PartialDataset<TValue, TIssue extends BaseIssue<unknown>> {
   /**
@@ -55,7 +55,7 @@ export interface PartialDataset<TValue, TIssue extends BaseIssue<unknown>> {
 }
 
 /**
- * Failure dataset type.
+ * Failure dataset interface.
  */
 export interface FailureDataset<TIssue extends BaseIssue<unknown>> {
   /**

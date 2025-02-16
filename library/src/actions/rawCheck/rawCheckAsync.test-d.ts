@@ -5,9 +5,12 @@ import type { RawCheckIssue } from './types.ts';
 
 describe('rawCheckAsync', () => {
   test('should return action object', () => {
-    expectTypeOf(rawCheckAsync<string>(async () => {})).toEqualTypeOf<
-      RawCheckActionAsync<string>
-    >();
+    expectTypeOf(
+      rawCheckAsync<string>(
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        async () => {}
+      )
+    ).toEqualTypeOf<RawCheckActionAsync<string>>();
   });
 
   describe('should infer correct types', () => {

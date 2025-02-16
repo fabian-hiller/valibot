@@ -9,10 +9,11 @@ import type {
   SuccessDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
+import type { nullish } from './nullish.ts';
 import type { InferNullishOutput } from './types.ts';
 
 /**
- * Nullish schema async type.
+ * Nullish schema async interface.
  */
 export interface NullishSchemaAsync<
   TWrapped extends
@@ -31,7 +32,7 @@ export interface NullishSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nullishAsync;
+  readonly reference: typeof nullish | typeof nullishAsync;
   /**
    * The expected property.
    */
@@ -77,6 +78,7 @@ export function nullishAsync<
   default_: TDefault
 ): NullishSchemaAsync<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function nullishAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

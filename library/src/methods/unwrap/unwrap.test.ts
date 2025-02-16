@@ -1,5 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import {
+  exactOptional,
+  exactOptionalAsync,
   nonNullable,
   nonNullableAsync,
   nonNullish,
@@ -13,11 +15,23 @@ import {
   optional,
   optionalAsync,
   string,
+  undefinedable,
+  undefinedableAsync,
 } from '../../schemas/index.ts';
+import { fallback, fallbackAsync } from '../fallback/index.ts';
+import { pipe, pipeAsync } from '../pipe/index.ts';
 import { unwrap } from './unwrap.ts';
 
 describe('unwrap', () => {
   const wrapped = string();
+
+  test('should unwrap exactOptional', () => {
+    expect(unwrap(exactOptional(wrapped))).toBe(wrapped);
+  });
+
+  test('should unwrap exactOptionalAsync', () => {
+    expect(unwrap(exactOptionalAsync(wrapped))).toBe(wrapped);
+  });
 
   test('should unwrap nonNullable', () => {
     expect(unwrap(nonNullable(wrapped))).toBe(wrapped);
@@ -65,5 +79,25 @@ describe('unwrap', () => {
 
   test('should unwrap optionalAsync', () => {
     expect(unwrap(optionalAsync(wrapped))).toBe(wrapped);
+  });
+
+  test('should unwrap undefinedable', () => {
+    expect(unwrap(undefinedable(wrapped))).toBe(wrapped);
+  });
+
+  test('should unwrap undefinedableAsync', () => {
+    expect(unwrap(undefinedableAsync(wrapped))).toBe(wrapped);
+  });
+
+  test('should unwrap schema with pipe', () => {
+    expect(unwrap(pipe(optional(wrapped)))).toBe(wrapped);
+    expect(unwrap(pipeAsync(optional(wrapped)))).toBe(wrapped);
+    expect(unwrap(pipeAsync(optionalAsync(wrapped)))).toBe(wrapped);
+  });
+
+  test('should unwrap schema with fallback', () => {
+    expect(unwrap(fallback(optional(wrapped), 'foo'))).toBe(wrapped);
+    expect(unwrap(fallbackAsync(optional(wrapped), 'foo'))).toBe(wrapped);
+    expect(unwrap(fallbackAsync(optionalAsync(wrapped), 'foo'))).toBe(wrapped);
   });
 });

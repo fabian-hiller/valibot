@@ -11,14 +11,14 @@ export declare const BrandSymbol: unique symbol;
 export type BrandName = string | number | symbol;
 
 /**
- * Brand type.
+ * Brand interface.
  */
 export interface Brand<TName extends BrandName> {
   [BrandSymbol]: { [TValue in TName]: TValue };
 }
 
 /**
- * Brand action type.
+ * Brand action interface.
  */
 export interface BrandAction<TInput, TName extends BrandName>
   extends BaseTransformation<TInput, TInput & Brand<TName>, never> {
@@ -43,6 +43,7 @@ export interface BrandAction<TInput, TName extends BrandName>
  *
  * @returns A brand action.
  */
+// @__NO_SIDE_EFFECTS__
 export function brand<TInput, TName extends BrandName>(
   name: TName
 ): BrandAction<TInput, TName> {

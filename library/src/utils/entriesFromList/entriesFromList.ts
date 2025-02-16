@@ -12,6 +12,7 @@ import type {
  *
  * @returns The object entries.
  */
+// @__NO_SIDE_EFFECTS__
 export function entriesFromList<
   const TList extends readonly (string | number | symbol)[],
   const TSchema extends

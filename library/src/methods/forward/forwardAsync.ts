@@ -21,6 +21,7 @@ import type {
  *
  * @returns The modified action.
  */
+// @__NO_SIDE_EFFECTS__
 export function forwardAsync<
   TInput extends Record<string, unknown> | ArrayLike<unknown>,
   TIssue extends BaseIssue<unknown>,

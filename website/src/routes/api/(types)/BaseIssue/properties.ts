@@ -15,7 +15,6 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'BaseIssue',
-          href: '../BaseIssue/',
           generics: [
             {
               type: 'custom',
@@ -109,7 +108,6 @@ export const properties: Record<string, PropertyProps> = {
             {
               type: 'custom',
               name: 'BaseIssue',
-              href: '../BaseIssue/',
               generics: [
                 {
                   type: 'custom',
@@ -123,7 +121,6 @@ export const properties: Record<string, PropertyProps> = {
               item: {
                 type: 'custom',
                 name: 'BaseIssue',
-                href: '../BaseIssue/',
                 generics: [
                   {
                     type: 'custom',

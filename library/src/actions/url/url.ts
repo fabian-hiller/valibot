@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * URL issue type.
+ * URL issue interface.
  */
 export interface UrlIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -32,7 +32,7 @@ export interface UrlIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * URL action type.
+ * URL action interface.
  */
 export interface UrlAction<
   TInput extends string,
@@ -85,6 +85,7 @@ export function url<
   const TMessage extends ErrorMessage<UrlIssue<TInput>> | undefined,
 >(message: TMessage): UrlAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function url(
   message?: ErrorMessage<UrlIssue<string>> | undefined
 ): UrlAction<string, ErrorMessage<UrlIssue<string>> | undefined> {
