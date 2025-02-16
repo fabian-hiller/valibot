@@ -1,36 +1,50 @@
 import { describe, expect, test } from 'vitest';
-import { number, object, optional, string } from '../../schemas/index.ts';
+import {
+  boolean,
+  number,
+  object,
+  objectAsync,
+  string,
+} from '../../schemas/index.ts';
 import { entriesFromObjects } from './entriesFromObjects.ts';
 
 describe('entriesFromObjects', () => {
   describe('should return objects entries', () => {
-    const fooSchema = object({ foo: string() });
-    const barSchema = object({ bar: string() });
-    const overrideSchema = object({ foo: optional(number()) });
+    const schema1 = object({ foo: string(), bar: string() });
+    const schema2 = objectAsync({ baz: number(), qux: number() });
+    const schema3 = object({ foo: boolean(), baz: boolean() });
 
-    test('for empty schema', () => {
-      expect(entriesFromObjects(object({}))).toStrictEqual({});
+    test('for missing schema', () => {
+      expect(
+        // @ts-expect-error
+        entriesFromObjects([])
+      ).toStrictEqual({});
     });
 
     test('for single schema', () => {
-      expect(entriesFromObjects(fooSchema)).toStrictEqual(fooSchema.entries);
+      expect(entriesFromObjects([schema1])).toStrictEqual(schema1.entries);
     });
 
-    test('for multi schema', () => {
-      expect(entriesFromObjects(fooSchema, barSchema)).toStrictEqual({
-        ...fooSchema.entries,
-        ...barSchema.entries,
+    test('for multiple schemes', () => {
+      expect(entriesFromObjects([schema1, schema2])).toStrictEqual({
+        ...schema1.entries,
+        ...schema2.entries,
       });
     });
 
-    test('for override schema', () => {
-      expect(
-        entriesFromObjects(fooSchema, barSchema, overrideSchema)
-      ).toStrictEqual({
-        ...fooSchema.entries,
-        ...barSchema.entries,
-        ...overrideSchema.entries,
+    test('with overwrites', () => {
+      expect(entriesFromObjects([schema1, schema2, schema3])).toStrictEqual({
+        ...schema1.entries,
+        ...schema2.entries,
+        ...schema3.entries,
       });
+    });
+
+    test('for empty entries', () => {
+      expect(entriesFromObjects([object({})])).toStrictEqual({});
+      expect(entriesFromObjects([object({}), objectAsync({})])).toStrictEqual(
+        {}
+      );
     });
   });
 });

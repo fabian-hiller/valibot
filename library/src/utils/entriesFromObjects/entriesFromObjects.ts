@@ -19,6 +19,7 @@ import type {
   ErrorMessage,
   ObjectEntries,
   ObjectEntriesAsync,
+  Prettify,
 } from '../../types/index.ts';
 
 /**
@@ -52,47 +53,65 @@ type Schema =
       ErrorMessage<StrictObjectIssue> | undefined
     >;
 
-// Type Utils
-type MergeObject<A extends object, B extends object> = Omit<A, keyof B> & B;
+/**
+ * Merge entries type.
+ */
+type MergeEntries<
+  TFirstEntries extends ObjectEntries | ObjectEntriesAsync,
+  TRestEntries extends ObjectEntries | ObjectEntriesAsync,
+> = Prettify<
+  {
+    [TKey in keyof TFirstEntries as TKey extends Exclude<
+      keyof TFirstEntries,
+      keyof TRestEntries
+    >
+      ? TKey
+      : never]: TFirstEntries[TKey];
+  } & TRestEntries
+>;
 
-/* eslint-disable @typescript-eslint/no-empty-object-type */
-type _MergedEntries<TSchemas extends Schema[]> = TSchemas extends [
-  infer TFirstSchema,
-  ...infer TRestSchemas,
+/**
+ * Recursive merge type.
+ */
+type RecursiveMerge<TSchemas extends [Schema, ...Schema[]]> = TSchemas extends [
+  infer TFirstSchema extends Schema,
 ]
-  ? TFirstSchema extends Schema
-    ? TRestSchemas extends Schema[]
-      ? MergeObject<TFirstSchema['entries'], _MergedEntries<TRestSchemas>>
-      : TFirstSchema['entries']
-    : {}
-  : {};
-/* eslint-enable @typescript-eslint/no-empty-object-type */
+  ? TFirstSchema['entries']
+  : TSchemas extends [
+        infer TFirstSchema extends Schema,
+        ...infer TRestSchemas extends [Schema, ...Schema[]],
+      ]
+    ? MergeEntries<TFirstSchema['entries'], RecursiveMerge<TRestSchemas>>
+    : never;
 
-type Flatten<T> = { [K in keyof T]: T[K] } & {};
-type MergedEntries<TSchemas extends Schema[]> = Flatten<
-  _MergedEntries<TSchemas>
+/**
+ * Merged entries types.
+ */
+type MergedEntries<TSchemas extends [Schema, ...Schema[]]> = Prettify<
+  RecursiveMerge<TSchemas>
 >;
 
 /**
  * Creates a new object entries definition from existing object schemas.
  *
- * @param schema The first schema to extract the entries from.
- * @param schemas The rest schemas to merge the entries from.
+ * @param schemas The schemas to merge the entries from.
  *
  * @returns The object entries from the schemas.
+ *
+ * @beta
  */
-// @__NO_SIDE_EFFECTS__
 export function entriesFromObjects<
-  const TSchema extends Schema,
-  const TSchemas extends Schema[],
->(
-  schema: TSchema,
-  ...schemas: TSchemas
-): MergedEntries<[TSchema, ...TSchemas]> {
-  const entries = {} as MergedEntries<[TSchema, ...TSchemas]>;
-  Object.assign(entries, schema.entries);
+  const TSchemas extends [Schema, ...Schema[]],
+>(schemas: TSchemas): MergedEntries<TSchemas>;
+
+// @__NO_SIDE_EFFECTS__
+export function entriesFromObjects(
+  schemas: [Schema, ...Schema[]]
+): MergedEntries<[Schema, ...Schema[]]> {
+  const entries = {};
   for (const schema of schemas) {
     Object.assign(entries, schema.entries);
   }
+  // @ts-expect-error
   return entries;
 }

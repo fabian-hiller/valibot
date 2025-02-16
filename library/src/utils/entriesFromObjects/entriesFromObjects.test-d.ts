@@ -1,61 +1,63 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expectTypeOf, test } from 'vitest';
 import {
+  boolean,
+  type BooleanSchema,
   number,
+  type NumberSchema,
   object,
   objectAsync,
-  optional,
   string,
+  type StringSchema,
 } from '../../schemas/index.ts';
 import { entriesFromObjects } from './entriesFromObjects.ts';
 
 describe('entriesFromObjects', () => {
   describe('should return objects entries', () => {
-    const fooSchema = object({ foo: string() });
-    const barSchema = object({ bar: string() });
-    const overrideSchema = object({ foo: optional(number()) });
+    const schema1 = object({ foo: string(), bar: string() });
+    const schema2 = objectAsync({ baz: number(), qux: number() });
+    const schema3 = object({ foo: boolean(), baz: boolean() });
 
-    test('for empty schema', () => {
-      const r2 = object(entriesFromObjects(object({})));
-      expectTypeOf(object({})).toEqualTypeOf<typeof r2>();
+    test('for missing schema', () => {
+      expectTypeOf(
+        // @ts-expect-error
+        entriesFromObjects([])
+      ).toEqualTypeOf<never>();
     });
 
     test('for single schema', () => {
-      const o = object(entriesFromObjects(fooSchema));
-      expectTypeOf(o).toEqualTypeOf<typeof fooSchema>();
+      expectTypeOf(entriesFromObjects([schema1])).toEqualTypeOf<{
+        readonly foo: StringSchema<undefined>;
+        readonly bar: StringSchema<undefined>;
+      }>();
     });
 
-    test('for multi schema', () => {
-      const foobar = object({
-        ...fooSchema.entries,
-        ...barSchema.entries,
-      });
-
-      const o = object(entriesFromObjects(fooSchema, barSchema));
-      expectTypeOf(o).toEqualTypeOf<typeof foobar>();
+    test('for multiple schemes', () => {
+      expectTypeOf(entriesFromObjects([schema1, schema2])).toEqualTypeOf<{
+        readonly foo: StringSchema<undefined>;
+        readonly bar: StringSchema<undefined>;
+        readonly baz: NumberSchema<undefined>;
+        readonly qux: NumberSchema<undefined>;
+      }>();
     });
 
-    test('for override schema', () => {
-      const foobarOverride = object({
-        ...fooSchema.entries,
-        ...barSchema.entries,
-        ...overrideSchema.entries,
-      });
-
-      const o = object(
-        entriesFromObjects(fooSchema, barSchema, overrideSchema)
-      );
-      expectTypeOf(o).toEqualTypeOf<typeof foobarOverride>();
+    test('with overwrites', () => {
+      expectTypeOf(
+        entriesFromObjects([schema1, schema2, schema3])
+      ).toEqualTypeOf<{
+        readonly bar: StringSchema<undefined>;
+        readonly qux: NumberSchema<undefined>;
+        readonly foo: BooleanSchema<undefined>;
+        readonly baz: BooleanSchema<undefined>;
+      }>();
     });
 
-    test('for async object schema', () => {
-      const asyncFooSchema = objectAsync(entriesFromObjects(fooSchema));
-
-      const o = objectAsync(entriesFromObjects(asyncFooSchema));
-      expectTypeOf(o).toEqualTypeOf<typeof asyncFooSchema>();
-
-      const o2 = object(entriesFromObjects(asyncFooSchema));
-      expectTypeOf(o2).toEqualTypeOf<typeof fooSchema>();
+    test('for empty entries', () => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+      expectTypeOf(entriesFromObjects([object({})])).toEqualTypeOf<{}>();
+      expectTypeOf(
+        entriesFromObjects([object({}), objectAsync({})])
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+      ).toEqualTypeOf<{}>();
     });
   });
 });
