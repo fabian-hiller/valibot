@@ -8,10 +8,11 @@ import type {
   SetPathItem,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { set } from './set.ts';
 import type { InferSetInput, InferSetOutput, SetIssue } from './types.ts';
 
 /**
- * Set schema async type.
+ * Set schema async interface.
  */
 export interface SetSchemaAsync<
   TValue extends
@@ -30,7 +31,7 @@ export interface SetSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof setAsync;
+  readonly reference: typeof set | typeof setAsync;
   /**
    * The expected property.
    */
@@ -73,6 +74,7 @@ export function setAsync<
   const TMessage extends ErrorMessage<SetIssue> | undefined,
 >(value: TValue, message: TMessage): SetSchemaAsync<TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function setAsync(
   value:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

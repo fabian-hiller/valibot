@@ -1,6 +1,11 @@
 import { component$ } from '@builder.io/qwik';
-import { QwikCityProvider, RouterOutlet } from '@builder.io/qwik-city';
-import { Head } from './components';
+import {
+  QwikCityProvider,
+  RouterOutlet,
+  ServiceWorkerRegister,
+} from '@builder.io/qwik-city';
+import { isDev } from '@builder.io/qwik/build';
+import { Head, SpeedInsights } from './components';
 import './styles/root.css';
 import { disableTransitions } from './utils';
 
@@ -12,6 +17,8 @@ export default component$(() => (
       window:onResize$={() => disableTransitions()}
     >
       <RouterOutlet />
+      {!isDev && <SpeedInsights />}
+      {!isDev && <ServiceWorkerRegister />}
     </body>
   </QwikCityProvider>
 ));

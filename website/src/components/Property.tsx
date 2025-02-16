@@ -364,10 +364,12 @@ const Definition = component$<DefinitionProps>(({ parent, data }) => (
           <>
             {'<'}
             {data.generics.map((generic, index) => (
-              <Fragment key={index}>
-                {index > 0 && ', '}
+              <span key={index} class="inline-block">
                 <Definition parent={data.type} data={generic} />
-              </Fragment>
+                {index < data.generics!.length - 1 && (
+                  <span class="whitespace-pre">, </span>
+                )}
+              </span>
             ))}
             {'>'}
           </>

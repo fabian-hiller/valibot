@@ -1,7 +1,7 @@
 {
   "name": "valibot",
   "description": "The modular and type safe schema library for validating structural data",
-  "version": "1.0.0-beta.9",
+  "version": "1.0.0-rc.0",
   "license": "MIT",
   "author": "Fabian Hiller",
   "homepage": "https://valibot.dev",
@@ -52,22 +52,21 @@
     "build": "tsup"
   },
   "devDependencies": {
-    "@types/eslint": "^8.56.10",
-    "@typescript-eslint/eslint-plugin": "^7.15.0",
-    "@typescript-eslint/parser": "^7.15.0",
-    "@vitest/coverage-v8": "^1.6.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsdoc": "^48.5.2",
-    "eslint-plugin-redos-detector": "^2.4.0",
-    "eslint-plugin-regexp": "^2.6.0",
-    "eslint-plugin-security": "^2.1.1",
-    "jsdom": "^24.1.0",
+    "@eslint/js": "^9.17.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "eslint": "^9.17.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsdoc": "^50.6.1",
+    "eslint-plugin-redos-detector": "^3.1.0",
+    "eslint-plugin-regexp": "^2.7.0",
+    "eslint-plugin-security": "^3.0.1",
+    "jsdom": "^25.0.1",
     "tsm": "^2.3.0",
-    "tsup": "^8.1.0",
-    "typescript": "^5.5.3",
-    "vite": "^5.3.3",
-    "vitest": "1.6.0"
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^6.0.6",
+    "vitest": "2.1.8"
   },
   "peerDependencies": {
     "typescript": ">=5"

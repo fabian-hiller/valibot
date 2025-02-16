@@ -1,7 +1,7 @@
 import type { BaseIssue } from '../../types/index.ts';
 
 /**
- * Strict tuple issue type.
+ * Strict tuple issue interface.
  */
 export interface StrictTupleIssue extends BaseIssue<unknown> {
   /**

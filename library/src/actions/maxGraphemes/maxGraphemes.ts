@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getGraphemeCount } from '../../utils/index.ts';
 
 /**
- * Max graphemes issue type.
+ * Max graphemes issue interface.
  */
 export interface MaxGraphemesIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface MaxGraphemesIssue<
 }
 
 /**
- * Max graphemes action type.
+ * Max graphemes action interface.
  */
 export interface MaxGraphemesAction<
   TInput extends string,
@@ -103,6 +103,7 @@ export function maxGraphemes<
   message: TMessage
 ): MaxGraphemesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function maxGraphemes(
   requirement: number,
   message?: ErrorMessage<MaxGraphemesIssue<string, number>>

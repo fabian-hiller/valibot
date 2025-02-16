@@ -10,9 +10,10 @@ import type {
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
+import type { undefinedable } from './undefinedable.ts';
 
 /**
- * Undefinedable schema async type.
+ * Undefinedable schema async interface.
  */
 export interface UndefinedableSchemaAsync<
   TWrapped extends
@@ -31,7 +32,7 @@ export interface UndefinedableSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof undefinedableAsync;
+  readonly reference: typeof undefinedable | typeof undefinedableAsync;
   /**
    * The expected property.
    */
@@ -77,6 +78,7 @@ export function undefinedableAsync<
   default_: TDefault
 ): UndefinedableSchemaAsync<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function undefinedableAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

@@ -8,9 +8,10 @@ import type {
   MaybePromise,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
+import type { lazy } from './lazy.ts';
 
 /**
- * Lazy schema async type.
+ * Lazy schema async interface.
  */
 export interface LazySchemaAsync<
   TWrapped extends
@@ -28,7 +29,7 @@ export interface LazySchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof lazyAsync;
+  readonly reference: typeof lazy | typeof lazyAsync;
   /**
    * The expected property.
    */
@@ -46,6 +47,7 @@ export interface LazySchemaAsync<
  *
  * @returns A lazy schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function lazyAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

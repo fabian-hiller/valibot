@@ -7,7 +7,7 @@ import type {
 import { safeParse, type SafeParseResult } from '../safeParse/index.ts';
 
 /**
- * The safe parser type.
+ * The safe parser interface.
  */
 export interface SafeParser<
   TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -51,6 +51,7 @@ export function safeParser<
   const TConfig extends Config<InferIssue<TSchema>> | undefined,
 >(schema: TSchema, config: TConfig): SafeParser<TSchema, TConfig>;
 
+// @__NO_SIDE_EFFECTS__
 export function safeParser(
   schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   config?: Config<InferIssue<BaseSchema<unknown, unknown, BaseIssue<unknown>>>>

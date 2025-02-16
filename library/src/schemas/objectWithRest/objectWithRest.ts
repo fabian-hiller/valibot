@@ -1,3 +1,4 @@
+import { getDefault, getFallback } from '../../methods/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -20,7 +21,7 @@ import {
 import type { ObjectWithRestIssue } from './types.ts';
 
 /**
- * Object with rest schema type.
+ * Object with rest schema interface.
  */
 export interface ObjectWithRestSchema<
   TEntries extends ObjectEntries,
@@ -92,6 +93,7 @@ export function objectWithRest<
   message: TMessage
 ): ObjectWithRestSchema<TEntries, TRest, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function objectWithRest(
   entries: ObjectEntries,
   rest: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -124,58 +126,101 @@ export function objectWithRest(
         dataset.typed = true;
         dataset.value = {};
 
-        // Parse schema of each entry
-        // Hint: We do not distinguish between missing and `undefined` entries.
-        // The reason for this decision is that it reduces the bundle size, and
-        // we also expect that most users will expect this behavior.
+        // Process each object entry of schema
         for (const key in this.entries) {
-          // Get and parse value of key
-          const value = input[key as keyof typeof input];
-          const valueDataset = this.entries[key]['~run']({ value }, config);
+          const valueSchema = this.entries[key];
 
-          // If there are issues, capture them
-          if (valueDataset.issues) {
-            // Create object path item
-            const pathItem: ObjectPathItem = {
-              type: 'object',
-              origin: 'value',
-              input: input as Record<string, unknown>,
-              key,
-              value,
-            };
+          // If key is present or its an optional schema with a default value,
+          // parse input of key or default value
+          if (
+            key in input ||
+            ((valueSchema.type === 'exact_optional' ||
+              valueSchema.type === 'optional' ||
+              valueSchema.type === 'nullish') &&
+              // @ts-expect-error
+              valueSchema.default !== undefined)
+          ) {
+            const value: unknown =
+              key in input
+                ? // @ts-expect-error
+                  input[key]
+                : getDefault(valueSchema);
+            const valueDataset = valueSchema['~run']({ value }, config);
 
-            // Add modified entry dataset issues to issues
-            for (const issue of valueDataset.issues) {
-              if (issue.path) {
-                issue.path.unshift(pathItem);
-              } else {
+            // If there are issues, capture them
+            if (valueDataset.issues) {
+              // Create object path item
+              const pathItem: ObjectPathItem = {
+                type: 'object',
+                origin: 'value',
+                input: input as Record<string, unknown>,
+                key,
+                value,
+              };
+
+              // Add modified entry dataset issues to issues
+              for (const issue of valueDataset.issues) {
+                if (issue.path) {
+                  issue.path.unshift(pathItem);
+                } else {
+                  // @ts-expect-error
+                  issue.path = [pathItem];
+                }
                 // @ts-expect-error
-                issue.path = [pathItem];
+                dataset.issues?.push(issue);
               }
-              // @ts-expect-error
-              dataset.issues?.push(issue);
+              if (!dataset.issues) {
+                // @ts-expect-error
+                dataset.issues = valueDataset.issues;
+              }
+
+              // If necessary, abort early
+              if (config.abortEarly) {
+                dataset.typed = false;
+                break;
+              }
             }
-            if (!dataset.issues) {
-              // @ts-expect-error
-              dataset.issues = valueDataset.issues;
+
+            // If not typed, set typed to `false`
+            if (!valueDataset.typed) {
+              dataset.typed = false;
             }
+
+            // Add entry to dataset
+            // @ts-expect-error
+            dataset.value[key] = valueDataset.value;
+
+            // Otherwise, if key is missing but has a fallback, use it
+            // @ts-expect-error
+          } else if (valueSchema.fallback !== undefined) {
+            // @ts-expect-error
+            dataset.value[key] = getFallback(valueSchema);
+
+            // Otherwise, if key is missing and required, add issue
+          } else if (
+            valueSchema.type !== 'exact_optional' &&
+            valueSchema.type !== 'optional' &&
+            valueSchema.type !== 'nullish'
+          ) {
+            _addIssue(this, 'key', dataset, config, {
+              input: undefined,
+              expected: `"${key}"`,
+              path: [
+                {
+                  type: 'object',
+                  origin: 'key',
+                  input: input as Record<string, unknown>,
+                  key,
+                  // @ts-expect-error
+                  value: input[key],
+                },
+              ],
+            });
 
             // If necessary, abort early
             if (config.abortEarly) {
-              dataset.typed = false;
               break;
             }
-          }
-
-          // If not typed, set typed to `false`
-          if (!valueDataset.typed) {
-            dataset.typed = false;
-          }
-
-          // Add entry to dataset if necessary
-          if (valueDataset.value !== undefined || key in input) {
-            // @ts-expect-error
-            dataset.value[key] = valueDataset.value;
           }
         }
 
@@ -184,8 +229,11 @@ export function objectWithRest(
         if (!dataset.issues || !config.abortEarly) {
           for (const key in input) {
             if (_isValidObjectKey(input, key) && !(key in this.entries)) {
-              const value: unknown = input[key as keyof typeof input];
-              const valueDataset = this.rest['~run']({ value }, config);
+              const valueDataset = this.rest['~run'](
+                // @ts-expect-error
+                { value: input[key] },
+                config
+              );
 
               // If there are issues, capture them
               if (valueDataset.issues) {
@@ -195,7 +243,8 @@ export function objectWithRest(
                   origin: 'value',
                   input: input as Record<string, unknown>,
                   key,
-                  value,
+                  // @ts-expect-error
+                  value: input[key],
                 };
 
                 // Add modified entry dataset issues to issues

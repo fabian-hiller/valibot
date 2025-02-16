@@ -12,7 +12,7 @@ type ArrayRequirement<
   | ((item: TInput[number], index: number, array: TInput) => boolean);
 
 /**
- * Find item action type.
+ * Find item action interface.
  */
 export interface FindItemAction<
   TInput extends ArrayInput,
@@ -44,6 +44,7 @@ export function findItem<
   TOuput extends TInput[number],
 >(operation: ArrayRequirement<TInput, TOuput>): FindItemAction<TInput, TOuput>;
 
+// @__NO_SIDE_EFFECTS__
 export function findItem(
   operation: ArrayRequirement<unknown[], unknown>
 ): FindItemAction<unknown[], unknown> {

@@ -25,7 +25,7 @@ import type {
   ObjectKeys,
   OutputDataset,
   SchemaWithoutPipe,
-  StandardSchemaProps,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
@@ -87,7 +87,7 @@ export type SchemaWithPartialAsync<
        *
        * @internal
        */
-      readonly '~standard': StandardSchemaProps<
+      readonly '~standard': StandardProps<
         InferObjectInput<PartialEntries<TEntries, TKeys>>,
         InferObjectOutput<PartialEntries<TEntries, TKeys>>
       >;
@@ -137,7 +137,7 @@ export type SchemaWithPartialAsync<
          *
          * @internal
          */
-        readonly '~standard': StandardSchemaProps<
+        readonly '~standard': StandardProps<
           InferObjectInput<PartialEntries<TEntries, TKeys>> & {
             [key: string]: unknown;
           },
@@ -202,7 +202,7 @@ export type SchemaWithPartialAsync<
            *
            * @internal
            */
-          readonly '~standard': StandardSchemaProps<
+          readonly '~standard': StandardProps<
             InferObjectInput<PartialEntries<TEntries, TKeys>> & {
               [key: string]: InferInput<TRest>;
             },
@@ -277,6 +277,7 @@ export function partialAsync<
   const TKeys extends ObjectKeys<TSchema>,
 >(schema: TSchema, keys: TKeys): SchemaWithPartialAsync<TSchema, TKeys>;
 
+// @__NO_SIDE_EFFECTS__
 export function partialAsync(
   schema: Schema,
   keys?: ObjectKeys<Schema>

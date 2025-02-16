@@ -26,7 +26,7 @@ import type {
   ObjectKeys,
   OutputDataset,
   SchemaWithoutPipe,
-  StandardSchemaProps,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
@@ -90,7 +90,7 @@ export type SchemaWithRequiredAsync<
        *
        * @internal
        */
-      readonly '~standard': StandardSchemaProps<
+      readonly '~standard': StandardProps<
         InferObjectInput<RequiredEntries<TEntries, TKeys, TMessage>>,
         InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>>
       >;
@@ -144,7 +144,7 @@ export type SchemaWithRequiredAsync<
          *
          * @internal
          */
-        readonly '~standard': StandardSchemaProps<
+        readonly '~standard': StandardProps<
           InferObjectInput<RequiredEntries<TEntries, TKeys, TMessage>> & {
             [key: string]: unknown;
           },
@@ -209,7 +209,7 @@ export type SchemaWithRequiredAsync<
            *
            * @internal
            */
-          readonly '~standard': StandardSchemaProps<
+          readonly '~standard': StandardProps<
             InferObjectInput<RequiredEntries<TEntries, TKeys, TMessage>> & {
               [key: string]: InferInput<TRest>;
             },
@@ -325,6 +325,7 @@ export function requiredAsync<
   message: TMessage
 ): SchemaWithRequiredAsync<TSchema, TKeys, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function requiredAsync(
   schema: Schema,
   arg2?: ErrorMessage<NonOptionalIssue> | ObjectKeys<Schema>,

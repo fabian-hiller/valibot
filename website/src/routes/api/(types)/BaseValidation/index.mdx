@@ -1,6 +1,6 @@
 ---
 title: BaseValidation
-description: Base action type.
+description: Base action interface.
 contributors:
   - fabian-hiller
 ---
@@ -10,7 +10,7 @@ import { properties } from './properties';
 
 # BaseValidation
 
-Base action type.
+Base action interface.
 
 ## Generics
 
@@ -26,5 +26,5 @@ Base action type.
   - `reference` <Property {...properties.reference} />
   - `expects` <Property {...properties.expects} />
   - `async` <Property {...properties.async} />
+  - `~run` <Property {...properties['~run']} />
   - `~types` <Property {...properties['~types']} />
-  - `~validate` <Property {...properties['~validate']} />

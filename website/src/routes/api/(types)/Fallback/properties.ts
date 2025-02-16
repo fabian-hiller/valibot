@@ -26,12 +26,19 @@ export const properties: Record<string, PropertyProps> = {
       options: [
         {
           type: 'custom',
-          name: 'InferOutput',
-          href: '../InferOutput/',
+          name: 'MaybeReadonly',
+          href: '../MaybeReadonly/',
           generics: [
             {
               type: 'custom',
-              name: 'TSchema',
+              name: 'InferOutput',
+              href: '../InferOutput/',
+              generics: [
+                {
+                  type: 'custom',
+                  name: 'TSchema',
+                },
+              ],
             },
           ],
         },
@@ -96,12 +103,19 @@ export const properties: Record<string, PropertyProps> = {
           ],
           return: {
             type: 'custom',
-            name: 'InferOutput',
-            href: '../InferOutput/',
+            name: 'MaybeReadonly',
+            href: '../MaybeReadonly/',
             generics: [
               {
                 type: 'custom',
-                name: 'TSchema',
+                name: 'InferOutput',
+                href: '../InferOutput/',
+                generics: [
+                  {
+                    type: 'custom',
+                    name: 'TSchema',
+                  },
+                ],
               },
             ],
           },

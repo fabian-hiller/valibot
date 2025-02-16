@@ -5,6 +5,7 @@ import type {
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { custom } from './custom.ts';
 import type { CustomIssue } from './types.ts';
 
 /**
@@ -13,7 +14,7 @@ import type { CustomIssue } from './types.ts';
 type CheckAsync = (input: unknown) => MaybePromise<boolean>;
 
 /**
- * Custom schema async type.
+ * Custom schema async interface.
  */
 export interface CustomSchemaAsync<
   TInput,
@@ -26,7 +27,7 @@ export interface CustomSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof customAsync;
+  readonly reference: typeof custom | typeof customAsync;
   /**
    * The expected property.
    */
@@ -67,6 +68,7 @@ export function customAsync<
     | undefined,
 >(check: CheckAsync, message: TMessage): CustomSchemaAsync<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function customAsync<TInput>(
   check: CheckAsync,
   message?: ErrorMessage<CustomIssue>

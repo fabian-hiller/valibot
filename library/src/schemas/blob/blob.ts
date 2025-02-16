@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Blob issue type.
+ * Blob issue interface.
  */
 export interface BlobIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface BlobIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Blob schema type.
+ * Blob schema interface.
  */
 export interface BlobSchema<
   TMessage extends ErrorMessage<BlobIssue> | undefined,
@@ -66,6 +66,7 @@ export function blob<
   const TMessage extends ErrorMessage<BlobIssue> | undefined,
 >(message: TMessage): BlobSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function blob(
   message?: ErrorMessage<BlobIssue>
 ): BlobSchema<ErrorMessage<BlobIssue> | undefined> {

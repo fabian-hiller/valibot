@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { ArrayInput, ArrayRequirement } from '../types.ts';
 
 /**
- * Some item issue type.
+ * Some item issue interface.
  */
 export interface SomeItemIssue<TInput extends ArrayInput>
   extends BaseIssue<TInput> {
@@ -30,7 +30,7 @@ export interface SomeItemIssue<TInput extends ArrayInput>
 }
 
 /**
- * Some item action type.
+ * Some item action interface.
  */
 export interface SomeItemAction<
   TInput extends ArrayInput,
@@ -85,6 +85,7 @@ export function someItem<
   message: TMessage
 ): SomeItemAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function someItem(
   requirement: ArrayRequirement<unknown[]>,
   message?: ErrorMessage<SomeItemIssue<unknown[]>>

@@ -36,7 +36,6 @@ describe('await getFallbacksAsync', () => {
 
   describe('should return object defaults', () => {
     test('for empty object', async () => {
-      // eslint-disable-next-line @typescript-eslint/ban-types
       expect(await getFallbacksAsync(object({}))).toStrictEqual({});
     });
 

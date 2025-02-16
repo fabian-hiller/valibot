@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * ISO week issue type.
+ * ISO week issue interface.
  */
 export interface IsoWeekIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface IsoWeekIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * ISO week action type.
+ * ISO week action interface.
  */
 export interface IsoWeekAction<
   TInput extends string,
@@ -93,6 +93,7 @@ export function isoWeek<
   const TMessage extends ErrorMessage<IsoWeekIssue<TInput>> | undefined,
 >(message: TMessage): IsoWeekAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function isoWeek(
   message?: ErrorMessage<IsoWeekIssue<string>>
 ): IsoWeekAction<string, ErrorMessage<IsoWeekIssue<string>> | undefined> {

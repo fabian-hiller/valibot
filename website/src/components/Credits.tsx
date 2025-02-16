@@ -8,6 +8,7 @@ import {
   HdmLogo,
   NetlifyLogo,
   PaceLogo,
+  StainlessLogo,
   VercelLogo,
 } from '~/logos';
 
@@ -62,9 +63,10 @@ export const Credits = component$(() => {
           { Logo: BuilderLogo, href: 'https://www.builder.io' },
           { Logo: HdmLogo, href: 'https://www.hdm-stuttgart.de' },
           { Logo: DailyDevLogo, href: 'https://daily.dev/' },
-          { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
-          { Logo: AlgoliaLogo, href: 'https://www.algolia.com' },
+          { Logo: StainlessLogo, href: 'https://www.stainless.com/' },
           { Logo: VercelLogo, href: 'https://vercel.com' },
+          { Logo: AlgoliaLogo, href: 'https://www.algolia.com' },
+          { Logo: NetlifyLogo, href: 'https://www.netlify.com' },
           { Logo: DigitalOceanLogo, href: 'https://www.digitalocean.com/' },
         ].map(({ Logo, href }) => (
           <li key={href}>
@@ -89,13 +91,12 @@ export const Credits = component$(() => {
           'ruiaraujo012',
           'hyunbinseo',
           'F0rce',
-          'fabulousgk',
+          'Unique-Pixels',
           'jdgamble555',
           'nickytonline',
           'KubaJastrz',
+          'andrewmd5',
           'caegdeveloper',
-          'luckasnix',
-          'andrew-3kb',
           'dslatkin',
         ].map((sponsor) => (
           <li key={sponsor}>

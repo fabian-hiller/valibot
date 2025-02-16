@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getWordCount } from '../../utils/index.ts';
 
 /**
- * Min words issue type.
+ * Min words issue interface.
  */
 export interface MinWordsIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface MinWordsIssue<
 }
 
 /**
- * Min words action type.
+ * Min words action interface.
  */
 export interface MinWordsAction<
   TInput extends string,
@@ -110,6 +110,7 @@ export function minWords<
   message: TMessage
 ): MinWordsAction<TInput, TLocales, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function minWords(
   locales: Intl.LocalesArgument,
   requirement: number,

@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * IPv4 issue type.
+ * IPv4 issue interface.
  */
 export interface Ipv4Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface Ipv4Issue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * IPv4 action type.
+ * IPv4 action interface.
  */
 export interface Ipv4Action<
   TInput extends string,
@@ -80,6 +80,7 @@ export function ipv4<
   const TMessage extends ErrorMessage<Ipv4Issue<TInput>> | undefined,
 >(message: TMessage): Ipv4Action<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function ipv4(
   message?: ErrorMessage<Ipv4Issue<string>>
 ): Ipv4Action<string, ErrorMessage<Ipv4Issue<string>> | undefined> {

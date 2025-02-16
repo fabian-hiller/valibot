@@ -14,7 +14,7 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Record issue type.
+ * Record issue interface.
  */
 export interface RecordIssue extends BaseIssue<unknown> {
   /**

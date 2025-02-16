@@ -8,7 +8,7 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Lazy schema type.
+ * Lazy schema interface.
  */
 export interface LazySchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -42,6 +42,7 @@ export interface LazySchema<
  *
  * @returns A lazy schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function lazy<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(getter: (input: unknown) => TWrapped): LazySchema<TWrapped> {

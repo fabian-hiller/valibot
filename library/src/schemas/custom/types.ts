@@ -1,7 +1,7 @@
 import type { BaseIssue } from '../../types/index.ts';
 
 /**
- * Custom issue type.
+ * Custom issue interface.
  */
 export interface CustomIssue extends BaseIssue<unknown> {
   /**

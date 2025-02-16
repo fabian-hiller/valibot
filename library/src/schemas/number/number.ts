@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Number issue type.
+ * Number issue interface.
  */
 export interface NumberIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface NumberIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Number schema type.
+ * Number schema interface.
  */
 export interface NumberSchema<
   TMessage extends ErrorMessage<NumberIssue> | undefined,
@@ -66,6 +66,7 @@ export function number<
   const TMessage extends ErrorMessage<NumberIssue> | undefined,
 >(message: TMessage): NumberSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function number(
   message?: ErrorMessage<NumberIssue>
 ): NumberSchema<ErrorMessage<NumberIssue> | undefined> {

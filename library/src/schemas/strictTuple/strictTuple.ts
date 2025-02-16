@@ -13,7 +13,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { StrictTupleIssue } from './types.ts';
 
 /**
- * Strict tuple schema type.
+ * Strict tuple schema interface.
  */
 export interface StrictTupleSchema<
   TItems extends TupleItems,
@@ -69,6 +69,7 @@ export function strictTuple<
   const TMessage extends ErrorMessage<StrictTupleIssue> | undefined,
 >(items: TItems, message: TMessage): StrictTupleSchema<TItems, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function strictTuple(
   items: TupleItems,
   message?: ErrorMessage<StrictTupleIssue>
@@ -149,9 +150,8 @@ export function strictTuple(
           !(dataset.issues && config.abortEarly) &&
           this.items.length < input.length
         ) {
-          const value = input[items.length];
           _addIssue(this, 'type', dataset, config, {
-            input: value,
+            input: input[this.items.length],
             expected: 'never',
             path: [
               {
@@ -159,7 +159,7 @@ export function strictTuple(
                 origin: 'value',
                 input,
                 key: this.items.length,
-                value,
+                value: input[this.items.length],
               },
             ],
           });

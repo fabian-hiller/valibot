@@ -4,6 +4,23 @@ import type { BaseIssue, Config } from '../../types/index.ts';
 import { config } from './config.ts';
 
 describe('config', () => {
+  test('should return copy of passed schema', () => {
+    expect(config(string(), {})).toStrictEqual({
+      kind: 'schema',
+      type: 'string',
+      reference: string,
+      expects: 'string',
+      async: false,
+      message: undefined,
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
+    });
+  });
+
   test('should override config of schema', () => {
     const schema = string();
     // @ts-expect-error

@@ -13,7 +13,7 @@ import type {
   PipeActionAsync,
   PipeItem,
   PipeItemAsync,
-  StandardSchemaProps,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
@@ -46,7 +46,7 @@ export type SchemaWithPipeAsync<
    *
    * @internal
    */
-  readonly '~standard': StandardSchemaProps<
+  readonly '~standard': StandardProps<
     InferInput<FirstTupleItem<TPipe>>,
     InferOutput<LastTupleItem<TPipe>>
   >;
@@ -3051,6 +3051,7 @@ export function pipeAsync<
   )[],
 >(schema: TSchema, ...items: TItems): SchemaWithPipeAsync<[TSchema, ...TItems]>;
 
+// @__NO_SIDE_EFFECTS__
 export function pipeAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

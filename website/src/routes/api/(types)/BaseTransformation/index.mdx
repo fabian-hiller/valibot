@@ -1,6 +1,6 @@
 ---
 title: BaseTransformation
-description: Base transformation type.
+description: Base transformation interface.
 contributors:
   - fabian-hiller
 ---
@@ -10,7 +10,7 @@ import { properties } from './properties';
 
 # BaseTransformation
 
-Base transformation type.
+Base transformation interface.
 
 ## Generics
 
@@ -25,5 +25,5 @@ Base transformation type.
   - `type` <Property {...properties.type} />
   - `reference` <Property {...properties.reference} />
   - `async` <Property {...properties.async} />
+  - `~run` <Property {...properties['~run']} />
   - `~types` <Property {...properties['~types']} />
-  - `~validate` <Property {...properties['~validate']} />

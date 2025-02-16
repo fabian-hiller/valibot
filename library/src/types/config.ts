@@ -2,7 +2,7 @@ import type { BaseIssue } from './issue.ts';
 import type { ErrorMessage } from './other.ts';
 
 /**
- * Config type.
+ * Config interface.
  */
 export interface Config<TIssue extends BaseIssue<unknown>> {
   /**
@@ -14,11 +14,11 @@ export interface Config<TIssue extends BaseIssue<unknown>> {
    */
   readonly message?: ErrorMessage<TIssue> | undefined;
   /**
-   * Whether it was abort early.
+   * Whether it should be aborted early.
    */
   readonly abortEarly?: boolean | undefined;
   /**
-   * Whether the pipe was abort early.
+   * Whether a pipe should be aborted early.
    */
   readonly abortPipeEarly?: boolean | undefined;
 }

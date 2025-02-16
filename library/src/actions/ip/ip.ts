@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * IP issue type.
+ * IP issue interface.
  */
 export interface IpIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface IpIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * IP action type.
+ * IP action interface.
  */
 export interface IpAction<
   TInput extends string,
@@ -80,6 +80,7 @@ export function ip<
   const TMessage extends ErrorMessage<IpIssue<TInput>> | undefined,
 >(message: TMessage): IpAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function ip(
   message?: ErrorMessage<IpIssue<string>>
 ): IpAction<string, ErrorMessage<IpIssue<string>> | undefined> {
