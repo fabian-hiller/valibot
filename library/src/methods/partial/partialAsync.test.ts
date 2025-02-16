@@ -43,26 +43,49 @@ describe('partialAsync', () => {
           entries: {
             key1: {
               ...optionalAsync(entries.key1),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
             key2: {
               ...optionalAsync(entries.key2),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
             key3: {
               ...optionalAsync(entries.key3),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
             key4: {
               ...optionalAsync(entries.key4),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
           },
           message: undefined,
           async: true,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
+          '~standard': {
+            version: 1,
+            vendor: 'valibot',
+            validate: expect.any(Function),
+          },
+          '~run': expect.any(Function),
         } satisfies typeof schema1);
       });
 
@@ -75,20 +98,33 @@ describe('partialAsync', () => {
           entries: {
             key1: {
               ...optionalAsync(entries.key1),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
             key2: entries.key2,
             key3: {
               ...optionalAsync(entries.key3),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
             key4: entries.key4,
           },
           message: undefined,
           async: true,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
+          '~standard': {
+            version: 1,
+            vendor: 'valibot',
+            validate: expect.any(Function),
+          },
+          '~run': expect.any(Function),
         } satisfies typeof schema2);
       });
     });
@@ -109,23 +145,21 @@ describe('partialAsync', () => {
     describe('should return dataset with nested issues', () => {
       test('if non-partialed keys are missing', async () => {
         for (const input of [{}, { key1: 'foo', key3: 'bar' }]) {
-          expect(
-            await schema2['~validate']({ value: input }, {})
-          ).toStrictEqual({
+          expect(await schema2['~run']({ value: input }, {})).toStrictEqual({
             typed: false,
             value: { ...input, key4: 123 },
             issues: [
               {
                 ...baseInfo,
                 kind: 'schema',
-                type: 'number',
+                type: 'object',
                 input: undefined,
-                expected: 'number',
+                expected: '"key2"',
                 received: 'undefined',
                 path: [
                   {
                     type: 'object',
-                    origin: 'value',
+                    origin: 'key',
                     input: input,
                     key: 'key2',
                     value: undefined,
@@ -155,27 +189,50 @@ describe('partialAsync', () => {
           entries: {
             key1: {
               ...optionalAsync(entries.key1),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
             key2: {
               ...optionalAsync(entries.key2),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
             key3: {
               ...optionalAsync(entries.key3),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
             key4: {
               ...optionalAsync(entries.key4),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
           },
           rest,
           message: undefined,
           async: true,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
+          '~standard': {
+            version: 1,
+            vendor: 'valibot',
+            validate: expect.any(Function),
+          },
+          '~run': expect.any(Function),
         } satisfies typeof schema1);
       });
 
@@ -189,20 +246,33 @@ describe('partialAsync', () => {
             key1: entries.key1,
             key2: {
               ...optionalAsync(entries.key2),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
             key3: {
               ...optionalAsync(entries.key3),
-              '~validate': expect.any(Function),
+              '~standard': {
+                version: 1,
+                vendor: 'valibot',
+                validate: expect.any(Function),
+              },
+              '~run': expect.any(Function),
             },
             key4: entries.key4,
           },
           rest,
           message: undefined,
           async: true,
-          '~standard': 1,
-          '~vendor': 'valibot',
-          '~validate': expect.any(Function),
+          '~standard': {
+            version: 1,
+            vendor: 'valibot',
+            validate: expect.any(Function),
+          },
+          '~run': expect.any(Function),
         } satisfies typeof schema2);
       });
     });
@@ -234,23 +304,21 @@ describe('partialAsync', () => {
     describe('should return dataset with nested issues', () => {
       test('if non-partialed keys are missing', async () => {
         for (const input of [{}, { key2: 123, key3: 'bar', other: true }]) {
-          expect(
-            await schema2['~validate']({ value: input }, {})
-          ).toStrictEqual({
+          expect(await schema2['~run']({ value: input }, {})).toStrictEqual({
             typed: false,
             value: { ...input, key4: 123 },
             issues: [
               {
                 ...baseInfo,
                 kind: 'schema',
-                type: 'string',
+                type: 'object_with_rest',
                 input: undefined,
-                expected: 'string',
+                expected: '"key1"',
                 received: 'undefined',
                 path: [
                   {
                     type: 'object',
-                    origin: 'value',
+                    origin: 'key',
                     input: input,
                     key: 'key1',
                     value: undefined,

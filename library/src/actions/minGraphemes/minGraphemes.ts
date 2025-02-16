@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getGraphemeCount } from '../../utils/index.ts';
 
 /**
- * Min graphemes issue type.
+ * Min graphemes issue interface.
  */
 export interface MinGraphemesIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface MinGraphemesIssue<
 }
 
 /**
- * Min graphemes action type.
+ * Min graphemes action interface.
  */
 export interface MinGraphemesAction<
   TInput extends string,
@@ -103,6 +103,7 @@ export function minGraphemes<
   message: TMessage
 ): MinGraphemesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function minGraphemes(
   requirement: number,
   message?: ErrorMessage<MinGraphemesIssue<string, number>>
@@ -119,7 +120,7 @@ export function minGraphemes(
     expects: `>=${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         const count = _getGraphemeCount(dataset.value);
         if (count < this.requirement) {

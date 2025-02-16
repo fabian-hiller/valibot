@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getByteCount } from '../../utils/index.ts';
 
 /**
- * Not bytes issue type.
+ * Not bytes issue interface.
  */
 export interface NotBytesIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface NotBytesIssue<
 }
 
 /**
- * Not bytes action type.
+ * Not bytes action interface.
  */
 export interface NotBytesAction<
   TInput extends string,
@@ -97,6 +97,7 @@ export function notBytes<
   message: TMessage
 ): NotBytesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notBytes(
   requirement: number,
   message?: ErrorMessage<NotBytesIssue<string, number>>
@@ -113,7 +114,7 @@ export function notBytes(
     expects: `!${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         const length = _getByteCount(dataset.value);
         if (length === this.requirement) {

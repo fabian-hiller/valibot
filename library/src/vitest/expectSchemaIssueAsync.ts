@@ -22,7 +22,7 @@ export async function expectSchemaIssueAsync<
   values: unknown[]
 ): Promise<void> {
   for (const value of values) {
-    expect(await schema['~validate']({ value }, {})).toStrictEqual({
+    expect(await schema['~run']({ value }, {})).toStrictEqual({
       typed: false,
       value,
       issues: [
@@ -33,7 +33,6 @@ export async function expectSchemaIssueAsync<
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-
           ...baseIssue,
           input: value,
           received: _stringify(value),

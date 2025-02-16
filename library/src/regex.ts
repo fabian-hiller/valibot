@@ -25,7 +25,7 @@ export const DECIMAL_REGEX: RegExp = /^[+-]?\d+(?:\.\d+)?$/u;
 export const DIGITS_REGEX: RegExp = /^\d+$/u;
 
 /**
- * Email regex.
+ * [Email address](https://en.wikipedia.org/wiki/Email_address) regex.
  */
 export const EMAIL_REGEX: RegExp =
   /^[\w+-]+(?:\.[\w+-]+)*@[\da-z]+(?:[.-][\da-z]+)*\.[a-z]{2,}$/iu;
@@ -42,14 +42,18 @@ export const EMOJI_REGEX: RegExp =
 
 /**
  * [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) regex.
+ *
+ * Hint: We decided against the `i` flag for better JSON Schema compatibility.
  */
-export const HEXADECIMAL_REGEX: RegExp = /^(?:0[hx])?[\da-f]+$/iu;
+export const HEXADECIMAL_REGEX: RegExp = /^(?:0[hx])?[\da-fA-F]+$/u;
 
 /**
  * [Hex color](https://en.wikipedia.org/wiki/Web_colors#Hex_triplet) regex.
+ *
+ * Hint: We decided against the `i` flag for better JSON Schema compatibility.
  */
 export const HEX_COLOR_REGEX: RegExp =
-  /^#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/iu;
+  /^#(?:[\da-fA-F]{3,4}|[\da-fA-F]{6}|[\da-fA-F]{8})$/u;
 
 /**
  * [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity) regex.
@@ -135,12 +139,22 @@ export const NANO_ID_REGEX: RegExp = /^[\w-]+$/u;
 /**
  * [Octal](https://en.wikipedia.org/wiki/Octal) regex.
  */
-export const OCTAL_REGEX: RegExp = /^(?:0o)?[0-7]+$/iu;
+export const OCTAL_REGEX: RegExp = /^(?:0o)?[0-7]+$/u;
+
+/**
+ * [RFC 5322 email address](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1) regex.
+ *
+ * Hint: This regex was taken from the [HTML Living Standard Specification](https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address) and does not perfectly represent RFC 5322.
+ */
+export const RFC_EMAIL_REGEX: RegExp =
+  /^[\w.!#$%&'*+/=?^`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/iu;
 
 /**
  * [ULID](https://github.com/ulid/spec) regex.
+ *
+ * Hint: We decided against the `i` flag for better JSON Schema compatibility.
  */
-export const ULID_REGEX: RegExp = /^[\da-hjkmnp-tv-z]{26}$/iu;
+export const ULID_REGEX: RegExp = /^[\da-hjkmnp-tv-zA-HJKMNP-TV-Z]{26}$/u;
 
 /**
  * [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) regex.

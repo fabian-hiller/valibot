@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -8,9 +7,11 @@ import type {
   InferOutput,
   MaybePromise,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
+import type { lazy } from './lazy.ts';
 
 /**
- * Lazy schema async type.
+ * Lazy schema async interface.
  */
 export interface LazySchemaAsync<
   TWrapped extends
@@ -28,7 +29,7 @@ export interface LazySchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof lazyAsync;
+  readonly reference: typeof lazy | typeof lazyAsync;
   /**
    * The expected property.
    */
@@ -46,6 +47,7 @@ export interface LazySchemaAsync<
  *
  * @returns A lazy schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function lazyAsync<
   const TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
@@ -60,10 +62,11 @@ export function lazyAsync<
     expects: 'unknown',
     async: true,
     getter,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
-      return (await this.getter(dataset.value))['~validate'](dataset, config);
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
+      return (await this.getter(dataset.value))['~run'](dataset, config);
     },
   };
 }

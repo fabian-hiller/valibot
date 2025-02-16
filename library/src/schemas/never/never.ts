@@ -1,14 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   FailureDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Never issue type.
+ * Never issue interface.
  */
 export interface NeverIssue extends BaseIssue<unknown> {
   /**
@@ -26,7 +25,7 @@ export interface NeverIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Never schema type.
+ * Never schema interface.
  */
 export interface NeverSchema<
   TMessage extends ErrorMessage<NeverIssue> | undefined,
@@ -67,6 +66,7 @@ export function never<
   const TMessage extends ErrorMessage<NeverIssue> | undefined,
 >(message: TMessage): NeverSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function never(
   message?: ErrorMessage<NeverIssue>
 ): NeverSchema<ErrorMessage<NeverIssue> | undefined> {
@@ -77,9 +77,10 @@ export function never(
     expects: 'never',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       _addIssue(this, 'type', dataset, config);
       // @ts-expect-error
       return dataset as FailureDataset<NeverIssue>;

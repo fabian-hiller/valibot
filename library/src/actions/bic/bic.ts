@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * BIC issue type.
+ * BIC issue interface.
  */
 export interface BicIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface BicIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * BIC action type.
+ * BIC action interface.
  */
 export interface BicAction<
   TInput extends string,
@@ -80,6 +80,7 @@ export function bic<
   const TMessage extends ErrorMessage<BicIssue<TInput>> | undefined,
 >(message: TMessage): BicAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function bic(
   message?: ErrorMessage<BicIssue<string>>
 ): BicAction<string, ErrorMessage<BicIssue<string>> | undefined> {
@@ -91,7 +92,7 @@ export function bic(
     expects: null,
     requirement: BIC_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'BIC', dataset, config);
       }

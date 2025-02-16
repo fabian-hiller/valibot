@@ -7,6 +7,7 @@ contributors:
   - morinokami
   - jasperteo
   - kazizi55
+  - EltonLobo07
 ---
 
 import { ApiList, Property } from '~/components';
@@ -88,6 +89,7 @@ The following APIs can be combined with `string`.
 <ApiList
   items={[
     'array',
+    'exactOptional',
     'intersect',
     'lazy',
     'looseObject',
@@ -152,6 +154,7 @@ The following APIs can be combined with `string`.
     'endsWith',
     'excludes',
     'graphemes',
+    'gtValue',
     'hash',
     'hexadecimal',
     'hexColor',
@@ -167,6 +170,7 @@ The following APIs can be combined with `string`.
     'isoTimestamp',
     'isoWeek',
     'length',
+    'ltValue',
     'mac',
     'mac48',
     'mac64',
@@ -187,12 +191,14 @@ The following APIs can be combined with `string`.
     'notGraphemes',
     'notLength',
     'notValue',
+    'notValues',
     'notWords',
     'octal',
     'rawCheck',
     'rawTransform',
     'readonly',
     'regex',
+    'rfcEmail',
     'startsWith',
     'title',
     'toLowerCase',
@@ -207,6 +213,7 @@ The following APIs can be combined with `string`.
     'url',
     'uuid',
     'value',
+    'values',
     'words',
   ]}
 />

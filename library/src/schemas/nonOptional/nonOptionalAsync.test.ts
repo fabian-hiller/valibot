@@ -1,4 +1,7 @@
 import { describe, expect, test } from 'vitest';
+import { transform } from '../../actions/index.ts';
+import { pipeAsync } from '../../methods/index.ts';
+import type { FailureDataset } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
@@ -27,9 +30,12 @@ describe('nonOptionalAsync', () => {
       expects: '!undefined',
       wrapped,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -75,16 +81,43 @@ describe('nonOptionalAsync', () => {
   });
 
   describe('should return dataset with issues', () => {
-    const schema = nonOptionalAsync(nullishAsync(string()), 'message');
-    const baseIssue: Omit<NonOptionalIssue, 'input' | 'received'> = {
+    const nonOptionalIssue: NonOptionalIssue = {
       kind: 'schema',
       type: 'non_optional',
+      input: undefined,
+      received: 'undefined',
       expected: '!undefined',
       message: 'message',
+      requirement: undefined,
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
     };
 
-    test('for undefined', async () => {
-      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
+    test('for undefined input', async () => {
+      await expectSchemaIssueAsync(
+        nonOptionalAsync(nullishAsync(string()), 'message'),
+        nonOptionalIssue,
+        [undefined]
+      );
+    });
+
+    test('for undefined output', async () => {
+      expect(
+        await nonOptionalAsync(
+          pipeAsync(
+            string(),
+            transform(() => undefined)
+          ),
+          'message'
+        )['~run']({ value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: undefined,
+        issues: [nonOptionalIssue],
+      } satisfies FailureDataset<NonOptionalIssue>);
     });
   });
 });

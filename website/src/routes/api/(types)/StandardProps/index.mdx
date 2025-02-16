@@ -1,0 +1,26 @@
+---
+title: StandardProps
+description: The Standard Schema properties interface.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# StandardProps
+
+The Standard Schema properties interface.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `StandardProps`
+  - `version` <Property {...properties.version} />
+  - `vendor` <Property {...properties.vendor} />
+  - `validate` <Property {...properties.validate} />
+  - `types` <Property {...properties.types} />

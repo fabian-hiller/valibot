@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { SizeInput } from '../types.ts';
 
 /**
- * Min size issue type.
+ * Min size issue interface.
  */
 export interface MinSizeIssue<
   TInput extends SizeInput,
@@ -36,7 +36,7 @@ export interface MinSizeIssue<
 }
 
 /**
- * Min size action type.
+ * Min size action interface.
  */
 export interface MinSizeAction<
   TInput extends SizeInput,
@@ -96,6 +96,7 @@ export function minSize<
   message: TMessage
 ): MinSizeAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function minSize(
   requirement: number,
   message?: ErrorMessage<MinSizeIssue<SizeInput, number>>
@@ -112,7 +113,7 @@ export function minSize(
     expects: `>=${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && dataset.value.size < this.requirement) {
         _addIssue(this, 'size', dataset, config, {
           received: `${dataset.value.size}`,

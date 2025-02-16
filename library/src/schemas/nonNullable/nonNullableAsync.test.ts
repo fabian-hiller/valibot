@@ -1,4 +1,7 @@
 import { describe, expect, test } from 'vitest';
+import { transform } from '../../actions/index.ts';
+import { pipeAsync } from '../../methods/index.ts';
+import type { FailureDataset } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
@@ -27,9 +30,12 @@ describe('nonNullableAsync', () => {
       expects: '!null',
       wrapped,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -75,16 +81,43 @@ describe('nonNullableAsync', () => {
   });
 
   describe('should return dataset with issues', () => {
-    const schema = nonNullableAsync(nullishAsync(string()), 'message');
-    const baseIssue: Omit<NonNullableIssue, 'input' | 'received'> = {
+    const nonNullableIssue: NonNullableIssue = {
       kind: 'schema',
       type: 'non_nullable',
+      input: null,
+      received: 'null',
       expected: '!null',
       message: 'message',
+      requirement: undefined,
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
     };
 
-    test('for null', async () => {
-      await expectSchemaIssueAsync(schema, baseIssue, [null]);
+    test('for null input', async () => {
+      await expectSchemaIssueAsync(
+        nonNullableAsync(nullishAsync(string()), 'message'),
+        nonNullableIssue,
+        [null]
+      );
+    });
+
+    test('for null output', async () => {
+      expect(
+        await nonNullableAsync(
+          pipeAsync(
+            string(),
+            transform(() => null)
+          ),
+          'message'
+        )['~run']({ value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: null,
+        issues: [nonNullableIssue],
+      } satisfies FailureDataset<NonNullableIssue>);
     });
   });
 });

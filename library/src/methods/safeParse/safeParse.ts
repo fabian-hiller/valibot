@@ -16,6 +16,7 @@ import type { SafeParseResult } from './types.ts';
  *
  * @returns The parse result.
  */
+// @__NO_SIDE_EFFECTS__
 export function safeParse<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(
@@ -23,10 +24,7 @@ export function safeParse<
   input: unknown,
   config?: Config<InferIssue<TSchema>>
 ): SafeParseResult<TSchema> {
-  const dataset = schema['~validate'](
-    { value: input },
-    getGlobalConfig(config)
-  );
+  const dataset = schema['~run']({ value: input }, getGlobalConfig(config));
   return {
     typed: dataset.typed,
     success: !dataset.issues,

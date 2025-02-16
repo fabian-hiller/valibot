@@ -1,14 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Bigint issue type.
+ * Bigint issue interface.
  */
 export interface BigintIssue extends BaseIssue<unknown> {
   /**
@@ -26,7 +25,7 @@ export interface BigintIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Bigint schema type.
+ * Bigint schema interface.
  */
 export interface BigintSchema<
   TMessage extends ErrorMessage<BigintIssue> | undefined,
@@ -67,6 +66,7 @@ export function bigint<
   const TMessage extends ErrorMessage<BigintIssue> | undefined,
 >(message: TMessage): BigintSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function bigint(
   message?: ErrorMessage<BigintIssue>
 ): BigintSchema<ErrorMessage<BigintIssue> | undefined> {
@@ -77,9 +77,10 @@ export function bigint(
     expects: 'bigint',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (typeof dataset.value === 'bigint') {
         // @ts-expect-error
         dataset.typed = true;

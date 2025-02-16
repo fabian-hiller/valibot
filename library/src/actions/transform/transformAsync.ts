@@ -4,7 +4,7 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Transform action async type.
+ * Transform action async interface.
  */
 export interface TransformActionAsync<TInput, TOutput>
   extends BaseTransformationAsync<TInput, TOutput, never> {
@@ -29,6 +29,7 @@ export interface TransformActionAsync<TInput, TOutput>
  *
  * @returns A transform action.
  */
+// @__NO_SIDE_EFFECTS__
 export function transformAsync<TInput, TOutput>(
   operation: (input: TInput) => Promise<TOutput>
 ): TransformActionAsync<TInput, TOutput> {
@@ -38,7 +39,7 @@ export function transformAsync<TInput, TOutput>(
     reference: transformAsync,
     async: true,
     operation,
-    async '~validate'(dataset) {
+    async '~run'(dataset) {
       // @ts-expect-error
       dataset.value = await this.operation(dataset.value);
       // @ts-expect-error

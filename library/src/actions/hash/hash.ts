@@ -31,7 +31,7 @@ const HASH_LENGTHS = {
 export type HashType = keyof typeof HASH_LENGTHS;
 
 /**
- * Hash issue type.
+ * Hash issue interface.
  */
 export interface HashIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -57,7 +57,7 @@ export interface HashIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Hash action type.
+ * Hash action interface.
  */
 export interface HashAction<
   TInput extends string,
@@ -112,6 +112,7 @@ export function hash<
   message: TMessage
 ): HashAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function hash(
   types: [HashType, ...HashType[]],
   message?: ErrorMessage<HashIssue<string>>
@@ -127,7 +128,7 @@ export function hash(
       'iu'
     ),
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'hash', dataset, config);
       }

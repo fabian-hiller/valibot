@@ -1,12 +1,12 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  FailureDataset,
+  OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { nonNullish } from './nonNullish.ts';
 import type {
   InferNonNullishInput,
   InferNonNullishIssue,
@@ -15,7 +15,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non nullish schema async type.
+ * Non nullish schema async interface.
  */
 export interface NonNullishSchemaAsync<
   TWrapped extends
@@ -34,7 +34,7 @@ export interface NonNullishSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nonNullishAsync;
+  readonly reference: typeof nonNullish | typeof nonNullishAsync;
   /**
    * The expected property.
    */
@@ -80,6 +80,7 @@ export function nonNullishAsync<
   message: TMessage
 ): NonNullishSchemaAsync<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullishAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
@@ -98,18 +99,24 @@ export function nonNullishAsync(
     async: true,
     wrapped,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
-      // If value is `null` or `undefined`, add issue and return dataset
-      if (dataset.value === null || dataset.value === undefined) {
-        _addIssue(this, 'type', dataset, config);
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
+      // If value is not `null` and `undefined`, run wrapped schema
+      if (!(dataset.value === null || dataset.value === undefined)) {
         // @ts-expect-error
-        return dataset as FailureDataset<NonNullishIssue>;
+        dataset = await this.wrapped['~run'](dataset, config);
       }
 
-      // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~validate'](dataset, config);
+      // If value is `null` or `undefined`, add issue to dataset
+      if (dataset.value === null || dataset.value === undefined) {
+        _addIssue(this, 'type', dataset, config);
+      }
+
+      // Return output dataset
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

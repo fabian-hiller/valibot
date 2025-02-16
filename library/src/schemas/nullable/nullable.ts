@@ -1,5 +1,4 @@
 import { getDefault } from '../../methods/index.ts';
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -8,10 +7,11 @@ import type {
   InferIssue,
   SuccessDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullableOutput } from './types.ts';
 
 /**
- * Nullable schema type.
+ * Nullable schema interface.
  */
 export interface NullableSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -67,6 +67,7 @@ export function nullable<
   const TDefault extends Default<TWrapped, null>,
 >(wrapped: TWrapped, default_: TDefault): NullableSchema<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function nullable(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   default_?: unknown
@@ -79,9 +80,10 @@ export function nullable(
     async: false,
     wrapped,
     default: default_,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // If value is `null`, override it with default or return dataset
       if (dataset.value === null) {
         // If default is specified, override value of dataset
@@ -99,7 +101,7 @@ export function nullable(
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~validate'](dataset, config);
+      return this.wrapped['~run'](dataset, config);
     },
   };
 }

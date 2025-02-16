@@ -1,4 +1,9 @@
-import { component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import {
+  component$,
+  type ReadonlySignal,
+  useSignal,
+  useVisibleTask$,
+} from '@builder.io/qwik';
 import {
   type ContentMenu,
   Link,
@@ -7,17 +12,27 @@ import {
 } from '@builder.io/qwik-city';
 import clsx from 'clsx';
 
+type NavigationProps = {
+  class?: string;
+};
+
 /**
  * Navigation list used as a secondary navigation over a certain part of the
  * website.
  */
-export const Navigation = component$(() => {
+export const Navigation = component$<NavigationProps>((props) => {
+  // Use content and nav element signal
   const content = useContent();
+  const navElement = useSignal<HTMLElement>();
+
   return (
-    <nav class="h-full overflow-auto overscroll-contain px-8 py-9 lg:w-60 lg:py-32 2xl:w-72">
+    <nav
+      ref={navElement}
+      class={clsx('h-full overflow-auto overscroll-contain', props.class)}
+    >
       <ul class="space-y-9 lg:space-y-12">
         {content.menu?.items?.map((item) => (
-          <NavItem {...item} key={item.text} />
+          <NavItem {...item} navElement={navElement} key={item.text} />
         ))}
       </ul>
     </nav>
@@ -25,6 +40,7 @@ export const Navigation = component$(() => {
 });
 
 export type NavItemProps = {
+  navElement: ReadonlySignal<HTMLElement | undefined>;
   text: string;
   items?: ContentMenu[];
 };
@@ -32,7 +48,7 @@ export type NavItemProps = {
 /**
  * Single navigation main point that displays a heading and a navigation list.
  */
-const NavItem = component$<NavItemProps>(({ text, items }) => {
+const NavItem = component$<NavItemProps>(({ navElement, text, items }) => {
   // Use location
   const location = useLocation();
 
@@ -45,27 +61,56 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
 
   // Update indicator style when pathname changes
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ track }) => {
-    // Track URL pathname
-    const pathname = track(() => location.url.pathname);
+  useVisibleTask$(
+    ({ track }) => {
+      // Track URL pathname
+      const pathname = track(() => location.url.pathname);
 
-    // Get active list element by pathname and href
-    const activeElement = [...listElement.value!.children].find((e) =>
-      (e.children[0] as HTMLAnchorElement).href.endsWith(pathname)
-    ) as HTMLLIElement | undefined;
+      // Get active list element by pathname and href
+      const activeElement = [...listElement.value!.children].find((e) =>
+        (e.children[0] as HTMLAnchorElement).href.endsWith(pathname)
+      ) as HTMLLIElement | undefined;
 
-    // Update indicator style to active element or reset it to undefined
-    indicatorStyle.value = activeElement
-      ? {
-          top: `${activeElement.offsetTop}px`,
-          height: `${activeElement.offsetHeight}px`,
-        }
-      : undefined;
-  });
+      // Update indicator style to active element or reset it to undefined
+      indicatorStyle.value = activeElement
+        ? {
+            top: `${activeElement.offsetTop}px`,
+            height: `${activeElement.offsetHeight}px`,
+          }
+        : undefined;
+
+      // Scroll active element into view if needed
+      if (activeElement) {
+        setTimeout(
+          () => {
+            const parentClientRect = navElement.value!.getBoundingClientRect();
+            if (parentClientRect.height > 0) {
+              const childClientRect = activeElement.getBoundingClientRect();
+              if (
+                childClientRect.top < parentClientRect.top ||
+                childClientRect.bottom > parentClientRect.bottom
+              ) {
+                navElement.value!.scrollBy({
+                  behavior: 'smooth',
+                  top:
+                    childClientRect.top -
+                    parentClientRect.top -
+                    parentClientRect.height / 2 +
+                    childClientRect.height,
+                });
+              }
+            }
+          },
+          window.innerWidth < 1024 ? 100 : 0
+        );
+      }
+    },
+    { strategy: 'document-idle' }
+  );
 
   return (
     <li class="space-y-6">
-      <div class="sticky -top-1 z-10 lg:static">
+      <div class="sticky -top-1 z-10 lg:-top-24">
         <h4
           class={clsx(
             'text-lg font-medium text-slate-900 dark:text-slate-200',
@@ -75,7 +120,7 @@ const NavItem = component$<NavItemProps>(({ text, items }) => {
         >
           {text}
         </h4>
-        <div class="pointer-events-none absolute -top-8 -z-10 h-24 w-full bg-gradient-to-b from-white via-white to-transparent opacity-90 lg:hidden dark:from-gray-900 dark:via-gray-900" />
+        <div class="pointer-events-none absolute -top-8 -z-10 h-24 w-full bg-gradient-to-b from-white via-white to-transparent opacity-90 dark:from-gray-900 dark:via-gray-900" />
       </div>
       <div class="relative">
         <ul

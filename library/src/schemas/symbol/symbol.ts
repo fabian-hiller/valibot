@@ -1,14 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Symbol issue type.
+ * Symbol issue interface.
  */
 export interface SymbolIssue extends BaseIssue<unknown> {
   /**
@@ -26,7 +25,7 @@ export interface SymbolIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Symbol schema type.
+ * Symbol schema interface.
  */
 export interface SymbolSchema<
   TMessage extends ErrorMessage<SymbolIssue> | undefined,
@@ -67,6 +66,7 @@ export function symbol<
   const TMessage extends ErrorMessage<SymbolIssue> | undefined,
 >(message: TMessage): SymbolSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function symbol(
   message?: ErrorMessage<SymbolIssue>
 ): SymbolSchema<ErrorMessage<SymbolIssue> | undefined> {
@@ -77,9 +77,10 @@ export function symbol(
     expects: 'symbol',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (typeof dataset.value === 'symbol') {
         // @ts-expect-error
         dataset.typed = true;

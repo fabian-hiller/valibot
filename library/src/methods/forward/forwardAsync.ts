@@ -21,6 +21,7 @@ import type {
  *
  * @returns The modified action.
  */
+// @__NO_SIDE_EFFECTS__
 export function forwardAsync<
   TInput extends Record<string, unknown> | ArrayLike<unknown>,
   TIssue extends BaseIssue<unknown>,
@@ -33,12 +34,12 @@ export function forwardAsync<
   return {
     ...action,
     async: true,
-    async '~validate'(dataset, config) {
+    async '~run'(dataset, config) {
       // Create copy of previous issues
       const prevIssues = dataset.issues && [...dataset.issues];
 
       // Run validation action
-      await action['~validate'](dataset, config);
+      dataset = await action['~run'](dataset, config);
 
       // If dataset contains issues, forward newly added issues
       if (dataset.issues) {

@@ -48,3 +48,43 @@ export type SchemaWithoutPipe<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > = TSchema & { pipe?: never };
+
+/**
+ * Generic pipe action type.
+ */
+export type GenericPipeAction<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TInput = any,
+  TOutput = TInput,
+  TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
+> = PipeAction<TInput, TOutput, TIssue>;
+
+/**
+ * Generic pipe action async type.
+ */
+export type GenericPipeActionAsync<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TInput = any,
+  TOutput = TInput,
+  TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
+> = PipeActionAsync<TInput, TOutput, TIssue>;
+
+/**
+ * Generic pipe item type.
+ */
+export type GenericPipeItem<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TInput = any,
+  TOutput = TInput,
+  TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
+> = PipeItem<TInput, TOutput, TIssue>;
+
+/**
+ * Generic pipe item async type.
+ */
+export type GenericPipeItemAsync<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TInput = any,
+  TOutput = TInput,
+  TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
+> = PipeItemAsync<TInput, TOutput, TIssue>;

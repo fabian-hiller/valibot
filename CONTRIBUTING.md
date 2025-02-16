@@ -53,6 +53,7 @@ Submit a [new issue][newissue] if there is a feature to be added, or if a bug wa
 You can ask for any help or clarifications from the collaborators.
 
 - [Fabian Hiller](https://github.com/fabian-hiller)
+- [Elton Lobo](https://github.com/EltonLobo07)
 - [Aris Kemper](https://github.com/ariskemper)
 
 [fork]: https://help.github.com/articles/fork-a-repo/

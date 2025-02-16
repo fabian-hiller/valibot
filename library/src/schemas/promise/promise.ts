@@ -1,14 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Promise issue type.
+ * Promise issue interface.
  */
 export interface PromiseIssue extends BaseIssue<unknown> {
   /**
@@ -26,7 +25,7 @@ export interface PromiseIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Promise schema type.
+ * Promise schema interface.
  */
 export interface PromiseSchema<
   TMessage extends ErrorMessage<PromiseIssue> | undefined,
@@ -67,6 +66,7 @@ export function promise<
   const TMessage extends ErrorMessage<PromiseIssue> | undefined,
 >(message: TMessage): PromiseSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function promise(
   message?: ErrorMessage<PromiseIssue>
 ): PromiseSchema<ErrorMessage<PromiseIssue> | undefined> {
@@ -77,9 +77,10 @@ export function promise(
     expects: 'Promise',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (dataset.value instanceof Promise) {
         // @ts-expect-error
         dataset.typed = true;

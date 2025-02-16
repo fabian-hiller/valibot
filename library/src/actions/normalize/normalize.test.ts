@@ -8,7 +8,7 @@ describe('normalize', () => {
       type: 'normalize',
       reference: normalize,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined form', () => {
@@ -29,13 +29,13 @@ describe('normalize', () => {
   describe('should normalize string', () => {
     test('with undefined form', () => {
       expect(
-        normalize()['~validate']({ typed: true, value: '\u00F1' }, {})
+        normalize()['~run']({ typed: true, value: '\u00F1' }, {})
       ).toStrictEqual({
         typed: true,
         value: 'ñ',
       });
       expect(
-        normalize()['~validate']({ typed: true, value: '\u006E\u0303' }, {})
+        normalize()['~run']({ typed: true, value: '\u006E\u0303' }, {})
       ).toStrictEqual({
         typed: true,
         value: 'ñ',
@@ -44,16 +44,13 @@ describe('normalize', () => {
 
     test('with defined form', () => {
       expect(
-        normalize('NFKD')['~validate']({ typed: true, value: '\uFB00' }, {})
+        normalize('NFKD')['~run']({ typed: true, value: '\uFB00' }, {})
       ).toStrictEqual({
         typed: true,
         value: 'ff',
       });
       expect(
-        normalize('NFKD')['~validate'](
-          { typed: true, value: '\u0066\u0066' },
-          {}
-        )
+        normalize('NFKD')['~run']({ typed: true, value: '\u0066\u0066' }, {})
       ).toStrictEqual({
         typed: true,
         value: 'ff',

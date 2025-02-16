@@ -3,8 +3,7 @@ import { BIC_REGEX } from '../../regex.ts';
 import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue } from '../../vitest/expectActionIssue.ts';
 import { expectNoActionIssue } from '../../vitest/expectNoActionIssue.ts';
-import type { BicIssue } from './bic.ts';
-import { bic, type BicAction } from './bic.ts';
+import { bic, type BicAction, type BicIssue } from './bic.ts';
 
 describe('bic', () => {
   describe('should return action object', () => {
@@ -15,7 +14,7 @@ describe('bic', () => {
       expects: null,
       requirement: BIC_REGEX,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -58,7 +57,7 @@ describe('bic', () => {
         },
       ];
       expect(
-        action['~validate']({ typed: false, value: null, issues }, {})
+        action['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,

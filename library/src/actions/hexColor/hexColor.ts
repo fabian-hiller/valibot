@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Hex color issue type.
+ * Hex color issue interface.
  */
 export interface HexColorIssue<TInput extends string>
   extends BaseIssue<TInput> {
@@ -34,7 +34,7 @@ export interface HexColorIssue<TInput extends string>
 }
 
 /**
- * Hex color action type.
+ * Hex color action interface.
  */
 export interface HexColorAction<
   TInput extends string,
@@ -84,6 +84,7 @@ export function hexColor<
   const TMessage extends ErrorMessage<HexColorIssue<TInput>> | undefined,
 >(message: TMessage): HexColorAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function hexColor(
   message?: ErrorMessage<HexColorIssue<string>>
 ): HexColorAction<string, ErrorMessage<HexColorIssue<string>> | undefined> {
@@ -95,7 +96,7 @@ export function hexColor(
     expects: null,
     requirement: HEX_COLOR_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'hex color', dataset, config);
       }

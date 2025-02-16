@@ -1,6 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import { expectNoSchemaIssue } from '../../vitest/index.ts';
-import { string, type StringSchema } from '../string/index.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import {
+  string,
+  type StringIssue,
+  type StringSchema,
+} from '../string/index.ts';
 import { undefinedable, type UndefinedableSchema } from './undefinedable.ts';
 
 describe('undefinedable', () => {
@@ -15,12 +19,20 @@ describe('undefinedable', () => {
       expects: '(string | undefined)',
       wrapped: {
         ...string(),
-        '~validate': expect.any(Function),
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
+        '~run': expect.any(Function),
       },
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined default', () => {
@@ -71,6 +83,24 @@ describe('undefinedable', () => {
     });
   });
 
+  describe('should return dataset with issues', () => {
+    const schema = undefinedable(string('message'));
+    const baseIssue: Omit<StringIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'string',
+      expected: 'string',
+      message: 'message',
+    };
+
+    test('for invalid wrapper type', () => {
+      expectSchemaIssue(schema, baseIssue, [123, true, {}]);
+    });
+
+    test('for null', () => {
+      expectSchemaIssue(schema, baseIssue, [null]);
+    });
+  });
+
   describe('should return dataset without default', () => {
     test('for undefined default', () => {
       expectNoSchemaIssue(undefinedable(string()), [undefined, 'foo']);
@@ -91,15 +121,15 @@ describe('undefinedable', () => {
     const schema3 = undefinedable(string(), () => 'foo');
 
     test('for undefined', () => {
-      expect(schema1['~validate']({ value: undefined }, {})).toStrictEqual({
+      expect(schema1['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(schema2['~validate']({ value: undefined }, {})).toStrictEqual({
+      expect(schema2['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(schema3['~validate']({ value: undefined }, {})).toStrictEqual({
+      expect(schema3['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });

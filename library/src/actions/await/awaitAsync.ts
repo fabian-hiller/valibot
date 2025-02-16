@@ -4,7 +4,7 @@ import type {
 } from '../../types/index.ts';
 
 /**
- * Await action async type.
+ * Await action async interface.
  */
 export interface AwaitActionAsync<TInput extends Promise<unknown>>
   extends BaseTransformationAsync<TInput, Awaited<TInput>, never> {
@@ -23,6 +23,7 @@ export interface AwaitActionAsync<TInput extends Promise<unknown>>
  *
  * @returns An await action.
  */
+// @__NO_SIDE_EFFECTS__
 export function awaitAsync<
   TInput extends Promise<unknown>,
 >(): AwaitActionAsync<TInput> {
@@ -31,7 +32,7 @@ export function awaitAsync<
     type: 'await',
     reference: awaitAsync,
     async: true,
-    async '~validate'(dataset) {
+    async '~run'(dataset) {
       dataset.value = await dataset.value;
       return dataset as SuccessDataset<Awaited<TInput>>;
     },

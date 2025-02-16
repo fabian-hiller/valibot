@@ -1,11 +1,10 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
-  FailureDataset,
+  OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type {
   InferNonNullableInput,
   InferNonNullableIssue,
@@ -14,7 +13,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non nullable schema type.
+ * Non nullable schema interface.
  */
 export interface NonNullableSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -70,6 +69,7 @@ export function nonNullable<
   const TMessage extends ErrorMessage<NonNullableIssue> | undefined,
 >(wrapped: TWrapped, message: TMessage): NonNullableSchema<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullable(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<NonNullableIssue> | undefined
@@ -85,18 +85,24 @@ export function nonNullable(
     async: false,
     wrapped,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
-      // If value is `null`, add issue and return dataset
-      if (dataset.value === null) {
-        _addIssue(this, 'type', dataset, config);
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
+      // If value is not `null`, run wrapped schema
+      if (dataset.value !== null) {
         // @ts-expect-error
-        return dataset as FailureDataset<NonNullableIssue>;
+        dataset = this.wrapped['~run'](dataset, config);
       }
 
-      // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~validate'](dataset, config);
+      // If value is `null`, add issue to dataset
+      if (dataset.value === null) {
+        _addIssue(this, 'type', dataset, config);
+      }
+
+      // Return output dataset
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

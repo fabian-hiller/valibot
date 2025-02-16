@@ -17,7 +17,7 @@ import type {
 } from '../union/index.ts';
 
 /**
- * Non nullable issue type.
+ * Non nullable issue interface.
  */
 export interface NonNullableIssue extends BaseIssue<unknown> {
   /**
@@ -50,10 +50,7 @@ export type InferNonNullableOutput<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> =
-  // FIXME: For schemas that transform the input to `null`, this
-  // implementation may result in an incorrect output type
-  NonNullable<InferOutput<TWrapped>>;
+> = NonNullable<InferOutput<TWrapped>>;
 
 /**
  * Infer non nullable issue type.

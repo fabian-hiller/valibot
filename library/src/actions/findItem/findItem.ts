@@ -1,11 +1,23 @@
 import type { BaseTransformation, SuccessDataset } from '../../types/index.ts';
-import type { ArrayInput, ArrayRequirement } from '../types.ts';
+import type { ArrayInput } from '../types.ts';
 
 /**
- * Find item action type.
+ * Array requirement type.
  */
-export interface FindItemAction<TInput extends ArrayInput>
-  extends BaseTransformation<TInput, TInput[number] | undefined, never> {
+type ArrayRequirement<
+  TInput extends ArrayInput,
+  TOuput extends TInput[number],
+> =
+  | ((item: TInput[number], index: number, array: TInput) => item is TOuput)
+  | ((item: TInput[number], index: number, array: TInput) => boolean);
+
+/**
+ * Find item action interface.
+ */
+export interface FindItemAction<
+  TInput extends ArrayInput,
+  TOuput extends TInput[number],
+> extends BaseTransformation<TInput, TOuput | undefined, never> {
   /**
    * The action type.
    */
@@ -17,7 +29,7 @@ export interface FindItemAction<TInput extends ArrayInput>
   /**
    * The find item operation.
    */
-  readonly operation: ArrayRequirement<TInput>;
+  readonly operation: ArrayRequirement<TInput, TOuput>;
 }
 
 /**
@@ -27,20 +39,22 @@ export interface FindItemAction<TInput extends ArrayInput>
  *
  * @returns A find item action.
  */
-export function findItem<TInput extends ArrayInput>(
-  operation: ArrayRequirement<TInput>
-): FindItemAction<TInput>;
+export function findItem<
+  TInput extends ArrayInput,
+  TOuput extends TInput[number],
+>(operation: ArrayRequirement<TInput, TOuput>): FindItemAction<TInput, TOuput>;
 
+// @__NO_SIDE_EFFECTS__
 export function findItem(
-  operation: ArrayRequirement<unknown[]>
-): FindItemAction<unknown[]> {
+  operation: ArrayRequirement<unknown[], unknown>
+): FindItemAction<unknown[], unknown> {
   return {
     kind: 'transformation',
     type: 'find_item',
     reference: findItem,
     async: false,
     operation,
-    '~validate'(dataset) {
+    '~run'(dataset) {
       // @ts-expect-error
       dataset.value = dataset.value.find(this.operation);
       return dataset as SuccessDataset<unknown | undefined>;

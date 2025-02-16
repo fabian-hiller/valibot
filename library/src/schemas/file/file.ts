@@ -1,14 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * File issue type.
+ * File issue interface.
  */
 export interface FileIssue extends BaseIssue<unknown> {
   /**
@@ -26,7 +25,7 @@ export interface FileIssue extends BaseIssue<unknown> {
 }
 
 /**
- * File schema type.
+ * File schema interface.
  */
 export interface FileSchema<
   TMessage extends ErrorMessage<FileIssue> | undefined,
@@ -67,6 +66,7 @@ export function file<
   const TMessage extends ErrorMessage<FileIssue> | undefined,
 >(message: TMessage): FileSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function file(
   message?: ErrorMessage<FileIssue>
 ): FileSchema<ErrorMessage<FileIssue> | undefined> {
@@ -77,9 +77,10 @@ export function file(
     expects: 'File',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (dataset.value instanceof File) {
         // @ts-expect-error
         dataset.typed = true;

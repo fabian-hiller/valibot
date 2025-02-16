@@ -74,6 +74,29 @@ export const Head = component$(() => {
       <link rel="icon" type="image/png" sizes="16x16" href="/icon-16px.png" />
       <link rel="apple-touch-icon" sizes="180x180" href="/icon-180px.jpg" />
 
+      {/* Preload fonts */}
+      <link
+        rel="preload"
+        href="/fonts/lexend-exa-500.woff2"
+        as="font"
+        type="font/woff2"
+        crossOrigin=""
+      />
+      <link
+        rel="preload"
+        href="/fonts/lexend-500.woff2"
+        as="font"
+        type="font/woff2"
+        crossOrigin=""
+      />
+      <link
+        rel="preload"
+        href="/fonts/lexend-400.woff2"
+        as="font"
+        type="font/woff2"
+        crossOrigin=""
+      />
+
       {/* Open Graph metadata */}
       <meta property="og:type" content={ogType.value} />
       <meta property="og:url" content={location.url.href} />

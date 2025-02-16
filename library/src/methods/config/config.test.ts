@@ -4,10 +4,27 @@ import type { BaseIssue, Config } from '../../types/index.ts';
 import { config } from './config.ts';
 
 describe('config', () => {
+  test('should return copy of passed schema', () => {
+    expect(config(string(), {})).toStrictEqual({
+      kind: 'schema',
+      type: 'string',
+      reference: string,
+      expects: 'string',
+      async: false,
+      message: undefined,
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
+    });
+  });
+
   test('should override config of schema', () => {
     const schema = string();
     // @ts-expect-error
-    schema['~validate'] = vi.fn(schema['~validate']);
+    schema['~run'] = vi.fn(schema['~run']);
     const dataset = { value: 'foo' };
     const globalConfig: Config<BaseIssue<unknown>> = {
       lang: 'de',
@@ -15,8 +32,8 @@ describe('config', () => {
     const localConfig: Config<BaseIssue<unknown>> = {
       abortPipeEarly: true,
     };
-    config(schema, localConfig)['~validate'](dataset, globalConfig);
-    expect(schema['~validate']).toHaveBeenCalledWith(dataset, {
+    config(schema, localConfig)['~run'](dataset, globalConfig);
+    expect(schema['~run']).toHaveBeenCalledWith(dataset, {
       ...globalConfig,
       ...localConfig,
     });
@@ -25,7 +42,7 @@ describe('config', () => {
   test('should override config of async schema', () => {
     const schema = objectAsync({ key: string() });
     // @ts-expect-error
-    schema['~validate'] = vi.fn(schema['~validate']);
+    schema['~run'] = vi.fn(schema['~run']);
     const dataset = { value: { key: 'foo' } };
     const globalConfig: Config<BaseIssue<unknown>> = {
       lang: 'de',
@@ -34,8 +51,8 @@ describe('config', () => {
       abortEarly: true,
       lang: 'en',
     };
-    config(schema, localConfig)['~validate'](dataset, globalConfig);
-    expect(schema['~validate']).toHaveBeenCalledWith(dataset, {
+    config(schema, localConfig)['~run'](dataset, globalConfig);
+    expect(schema['~run']).toHaveBeenCalledWith(dataset, {
       ...globalConfig,
       ...localConfig,
     });

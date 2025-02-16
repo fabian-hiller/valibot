@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   ArrayPathItem,
   BaseIssue,
@@ -10,11 +9,12 @@ import type {
   OutputDataset,
   TupleItemsAsync,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { tuple } from './tuple.ts';
 import type { TupleIssue } from './types.ts';
 
 /**
- * Tuple schema async type.
+ * Tuple schema async interface.
  */
 export interface TupleSchemaAsync<
   TItems extends TupleItemsAsync,
@@ -31,7 +31,7 @@ export interface TupleSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof tupleAsync;
+  readonly reference: typeof tuple | typeof tupleAsync;
   /**
    * The expected property.
    */
@@ -80,6 +80,7 @@ export function tupleAsync<
   const TMessage extends ErrorMessage<TupleIssue> | undefined,
 >(items: TItems, message: TMessage): TupleSchemaAsync<TItems, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function tupleAsync(
   items: TupleItemsAsync,
   message?: ErrorMessage<TupleIssue>
@@ -92,9 +93,10 @@ export function tupleAsync(
     async: true,
     items,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -109,11 +111,7 @@ export function tupleAsync(
         const itemDatasets = await Promise.all(
           this.items.map(async (item, key) => {
             const value = input[key];
-            return [
-              key,
-              value,
-              await item['~validate']({ value }, config),
-            ] as const;
+            return [key, value, await item['~run']({ value }, config)] as const;
           })
         );
 

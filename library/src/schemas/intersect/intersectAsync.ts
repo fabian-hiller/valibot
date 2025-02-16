@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchemaAsync,
@@ -6,7 +5,12 @@ import type {
   InferIssue,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _joinExpects } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _joinExpects,
+} from '../../utils/index.ts';
+import type { intersect } from './intersect.ts';
 import type {
   InferIntersectInput,
   InferIntersectOutput,
@@ -16,7 +20,7 @@ import type {
 import { _merge } from './utils/index.ts';
 
 /**
- * Intersect schema async type.
+ * Intersect schema async interface.
  */
 export interface IntersectSchemaAsync<
   TOptions extends IntersectOptionsAsync,
@@ -33,7 +37,7 @@ export interface IntersectSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof intersectAsync;
+  readonly reference: typeof intersect | typeof intersectAsync;
   /**
    * The intersect options.
    */
@@ -71,6 +75,7 @@ export function intersectAsync<
   message: TMessage
 ): IntersectSchemaAsync<TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function intersectAsync(
   options: IntersectOptionsAsync,
   message?: ErrorMessage<IntersectIssue>
@@ -89,9 +94,10 @@ export function intersectAsync(
     async: true,
     options,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Parse input with schema of options, if not empty
       if (this.options.length) {
         // Get input value from dataset
@@ -106,9 +112,7 @@ export function intersectAsync(
 
         // Parse schema of each option async
         const optionDatasets = await Promise.all(
-          this.options.map((schema) =>
-            schema['~validate']({ value: input }, config)
-          )
+          this.options.map((schema) => schema['~run']({ value: input }, config))
         );
 
         // Collect outputs of option datasets

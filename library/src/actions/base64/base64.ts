@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Base64 issue type.
+ * Base64 issue interface.
  */
 export interface Base64Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface Base64Issue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Base64 action type.
+ * Base64 action interface.
  */
 export interface Base64Action<
   TInput extends string,
@@ -83,6 +83,7 @@ export function base64<
   const TMessage extends ErrorMessage<Base64Issue<TInput>> | undefined,
 >(message: TMessage): Base64Action<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function base64(
   message?: ErrorMessage<Base64Issue<string>>
 ): Base64Action<string, ErrorMessage<Base64Issue<string>> | undefined> {
@@ -94,7 +95,7 @@ export function base64(
     expects: null,
     requirement: BASE64_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Base64', dataset, config);
       }

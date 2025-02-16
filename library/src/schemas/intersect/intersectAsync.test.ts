@@ -30,9 +30,12 @@ describe('intersectAsync', () => {
       expects: 'Object',
       options,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -91,7 +94,7 @@ describe('intersectAsync', () => {
     test('for empty options', async () => {
       const schema = intersectAsync([]);
       const input = 'foo';
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -110,7 +113,7 @@ describe('intersectAsync', () => {
     test('with untyped output', async () => {
       const schema = intersectAsync([string(), number()]);
       const input = 'foo';
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -133,7 +136,7 @@ describe('intersectAsync', () => {
       ]);
       type Schema = typeof schema;
       const input = { key1: 'foo', key2: -123 };
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -184,7 +187,7 @@ describe('intersectAsync', () => {
       ]);
       const input = { key1: 'foo', key2: -123 };
       expect(
-        await schema['~validate']({ value: input }, { abortEarly: true })
+        await schema['~run']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: input,
@@ -223,7 +226,7 @@ describe('intersectAsync', () => {
         }),
       ]);
       const input = { key: 'foo' };
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

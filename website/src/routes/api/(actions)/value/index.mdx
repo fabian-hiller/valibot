@@ -4,8 +4,10 @@ description: Creates a value validation action.
 source: /actions/value/value.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
 ---
 
+import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
@@ -31,6 +33,8 @@ const Action = v.value<TInput, TRequirement, TMessage>(requirement, message);
 ### Explanation
 
 With `value` you can validate the value of a string, number, boolean or date. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+> This action does not change the type of the pipeline. Use the <Link href="../literal/">`literal`</Link> schema instead if you want the type to match a specific value.
 
 ## Returns
 

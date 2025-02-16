@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Cuid2 issue type.
+ * Cuid2 issue interface.
  */
 export interface Cuid2Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface Cuid2Issue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Cuid2 action type.
+ * Cuid2 action interface.
  */
 export interface Cuid2Action<
   TInput extends string,
@@ -80,6 +80,7 @@ export function cuid2<
   const TMessage extends ErrorMessage<Cuid2Issue<TInput>> | undefined,
 >(message: TMessage): Cuid2Action<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function cuid2(
   message?: ErrorMessage<Cuid2Issue<string>>
 ): Cuid2Action<string, ErrorMessage<Cuid2Issue<string>> | undefined> {
@@ -91,7 +92,7 @@ export function cuid2(
     expects: null,
     requirement: CUID2_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Cuid2', dataset, config);
       }

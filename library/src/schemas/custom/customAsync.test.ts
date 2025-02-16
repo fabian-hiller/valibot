@@ -19,9 +19,12 @@ describe('customAsync', () => {
       expects: 'unknown',
       check: isPixelString,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -119,7 +122,9 @@ describe('customAsync', () => {
 
     test('for functions', async () => {
       await expectSchemaIssueAsync(schema, baseIssue, [
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         () => {},
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         function () {},
       ]);
     });

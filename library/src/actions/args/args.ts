@@ -74,6 +74,7 @@ export function args<
   TSchema extends Schema,
 >(schema: TSchema): ArgsAction<TInput, TSchema>;
 
+// @__NO_SIDE_EFFECTS__
 export function args(
   schema: Schema
 ): ArgsAction<(...args: unknown[]) => unknown, Schema> {
@@ -83,10 +84,10 @@ export function args(
     reference: args,
     async: false,
     schema,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       const func = dataset.value;
       dataset.value = (...args_) => {
-        const argsDataset = this.schema['~validate']({ value: args_ }, config);
+        const argsDataset = this.schema['~run']({ value: args_ }, config);
         if (argsDataset.issues) {
           throw new ValiError(argsDataset.issues);
         }

@@ -109,6 +109,7 @@ Beyond primitive and complex values, there are also schema functions for more sp
     'any',
     'custom',
     'enum',
+    'exactOptional',
     'instance',
     'intersect',
     'lazy',
@@ -136,6 +137,7 @@ import * as v from 'valibot';
 const AnySchema = v.any(); // any
 const CustomSchema = v.custom<`${number}px`>(isPixelString); // `${number}px`
 const EnumSchema = v.enum(Direction); // Direction
+const ExactOptionalSchema = v.exactOptional(v.string()); // string
 const InstanceSchema = v.instance(Error); // Error
 const LazySchema = v.lazy(() => v.string()); // string
 const IntersectSchema = v.intersect([v.string(), v.literal('a')]); // string & 'a'

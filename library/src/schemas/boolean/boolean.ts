@@ -1,14 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Boolean issue type.
+ * Boolean issue interface.
  */
 export interface BooleanIssue extends BaseIssue<unknown> {
   /**
@@ -26,7 +25,7 @@ export interface BooleanIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Boolean schema type.
+ * Boolean schema interface.
  */
 export interface BooleanSchema<
   TMessage extends ErrorMessage<BooleanIssue> | undefined,
@@ -67,6 +66,7 @@ export function boolean<
   const TMessage extends ErrorMessage<BooleanIssue> | undefined,
 >(message: TMessage): BooleanSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function boolean(
   message?: ErrorMessage<BooleanIssue>
 ): BooleanSchema<ErrorMessage<BooleanIssue> | undefined> {
@@ -77,9 +77,10 @@ export function boolean(
     expects: 'boolean',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (typeof dataset.value === 'boolean') {
         // @ts-expect-error
         dataset.typed = true;

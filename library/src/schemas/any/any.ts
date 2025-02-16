@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BaseSchema, SuccessDataset } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Any schema type.
+ * Any schema interface.
  */
 export interface AnySchema extends BaseSchema<any, any, never> {
   /**
@@ -28,6 +29,7 @@ export interface AnySchema extends BaseSchema<any, any, never> {
  *
  * @returns An any schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function any(): AnySchema {
   return {
     kind: 'schema',
@@ -35,9 +37,10 @@ export function any(): AnySchema {
     reference: any,
     expects: 'any',
     async: false,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset) {
       // @ts-expect-error
       dataset.typed = true;
       // @ts-expect-error

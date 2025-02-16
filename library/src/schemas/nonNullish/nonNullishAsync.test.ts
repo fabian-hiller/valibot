@@ -1,4 +1,7 @@
 import { describe, expect, test } from 'vitest';
+import { transform } from '../../actions/index.ts';
+import { pipeAsync } from '../../methods/index.ts';
+import type { FailureDataset } from '../../types/index.ts';
 import {
   expectNoSchemaIssueAsync,
   expectSchemaIssueAsync,
@@ -27,9 +30,12 @@ describe('nonNullishAsync', () => {
       expects: '(!null & !undefined)',
       wrapped,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -75,20 +81,65 @@ describe('nonNullishAsync', () => {
   });
 
   describe('should return dataset with issues', () => {
-    const schema = nonNullishAsync(nullishAsync(string()), 'message');
     const baseIssue: Omit<NonNullishIssue, 'input' | 'received'> = {
       kind: 'schema',
       type: 'non_nullish',
       expected: '(!null & !undefined)',
       message: 'message',
+      requirement: undefined,
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
     };
 
-    test('for null', async () => {
-      await expectSchemaIssueAsync(schema, baseIssue, [null]);
+    test('for null input', async () => {
+      await expectSchemaIssueAsync(
+        nonNullishAsync(nullishAsync(string()), 'message'),
+        baseIssue,
+        [null]
+      );
     });
 
-    test('for undefined', async () => {
-      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
+    test('for undefined input', async () => {
+      await expectSchemaIssueAsync(
+        nonNullishAsync(nullishAsync(string()), 'message'),
+        baseIssue,
+        [undefined]
+      );
+    });
+
+    test('for null output', async () => {
+      expect(
+        await nonNullishAsync(
+          pipeAsync(
+            string(),
+            transform(() => null)
+          ),
+          'message'
+        )['~run']({ value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: null,
+        issues: [{ ...baseIssue, input: null, received: 'null' }],
+      } satisfies FailureDataset<NonNullishIssue>);
+    });
+
+    test('for undefined output', async () => {
+      expect(
+        await nonNullishAsync(
+          pipeAsync(
+            string(),
+            transform(() => undefined)
+          ),
+          'message'
+        )['~run']({ value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: undefined,
+        issues: [{ ...baseIssue, input: undefined, received: 'undefined' }],
+      } satisfies FailureDataset<NonNullishIssue>);
     });
   });
 });

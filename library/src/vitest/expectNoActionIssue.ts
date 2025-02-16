@@ -12,7 +12,7 @@ export function expectNoActionIssue<
   TAction extends BaseValidation<any, unknown, BaseIssue<unknown>>,
 >(action: TAction, values: InferInput<TAction>[]): void {
   for (const value of values) {
-    expect(action['~validate']({ typed: true, value }, {})).toStrictEqual({
+    expect(action['~run']({ typed: true, value }, {})).toStrictEqual({
       typed: true,
       value,
     });

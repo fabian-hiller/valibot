@@ -2,7 +2,7 @@ import type { BaseTransformation } from '../../types/index.ts';
 import type { ValueInput } from '../types.ts';
 
 /**
- * To min value action type.
+ * To min value action interface.
  */
 export interface ToMinValueAction<
   TInput extends ValueInput,
@@ -29,6 +29,7 @@ export interface ToMinValueAction<
  *
  * @returns A to min value action.
  */
+// @__NO_SIDE_EFFECTS__
 export function toMinValue<
   TInput extends ValueInput,
   const TRequirement extends TInput,
@@ -39,7 +40,7 @@ export function toMinValue<
     reference: toMinValue,
     async: false,
     requirement,
-    '~validate'(dataset) {
+    '~run'(dataset) {
       dataset.value =
         dataset.value < this.requirement ? this.requirement : dataset.value;
       return dataset;

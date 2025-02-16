@@ -9,8 +9,9 @@ import type { BaseIssue, BaseSchema, InferInput } from '../../types/index.ts';
  *
  * @returns Whether the input matches the schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function is<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(schema: TSchema, input: unknown): input is InferInput<TSchema> {
-  return !schema['~validate']({ value: input }, { abortEarly: true }).issues;
+  return !schema['~run']({ value: input }, { abortEarly: true }).issues;
 }

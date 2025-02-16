@@ -1,7 +1,7 @@
 import type { BaseIssue } from '../../types/index.ts';
 
 /**
- * Object with rest issue type.
+ * Object with rest issue interface.
  */
 export interface ObjectWithRestIssue extends BaseIssue<unknown> {
   /**
@@ -15,5 +15,5 @@ export interface ObjectWithRestIssue extends BaseIssue<unknown> {
   /**
    * The expected property.
    */
-  readonly expected: 'Object';
+  readonly expected: 'Object' | `"${string}"`;
 }

@@ -15,6 +15,7 @@ backups
 # Services
 .vscode
 .netlify
+.vercel
 
 # Others
 logs

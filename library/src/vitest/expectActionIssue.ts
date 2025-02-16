@@ -26,7 +26,7 @@ export function expectActionIssue<
   getReceived?: (value: InferInput<TAction>) => string
 ): void {
   for (const value of values) {
-    expect(action['~validate']({ typed: true, value }, {})).toStrictEqual({
+    expect(action['~run']({ typed: true, value }, {})).toStrictEqual({
       typed: true,
       value,
       issues: [
@@ -37,7 +37,6 @@ export function expectActionIssue<
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-
           input: value,
           received: getReceived?.(value) ?? _stringify(value),
           ...baseIssue,

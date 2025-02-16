@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Emoji issue type.
+ * Emoji issue interface.
  */
 export interface EmojiIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface EmojiIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Emoji action type.
+ * Emoji action interface.
  */
 export interface EmojiAction<
   TInput extends string,
@@ -80,6 +80,7 @@ export function emoji<
   const TMessage extends ErrorMessage<EmojiIssue<TInput>> | undefined,
 >(message: TMessage): EmojiAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function emoji(
   message?: ErrorMessage<EmojiIssue<string>>
 ): EmojiAction<string, ErrorMessage<EmojiIssue<string>> | undefined> {
@@ -91,7 +92,7 @@ export function emoji(
     expects: null,
     requirement: EMOJI_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'emoji', dataset, config);
       }

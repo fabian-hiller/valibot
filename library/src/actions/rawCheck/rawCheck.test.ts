@@ -18,7 +18,7 @@ describe('rawCheck', () => {
       reference: rawCheck,
       expects: null,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     } satisfies RawCheckAction<number>);
   });
 
@@ -35,7 +35,7 @@ describe('rawCheck', () => {
         },
       ];
       expect(
-        action['~validate']({ typed: false, value: null, issues }, {})
+        action['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,

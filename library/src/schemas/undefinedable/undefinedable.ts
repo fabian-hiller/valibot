@@ -1,5 +1,4 @@
 import { getDefault } from '../../methods/index.ts';
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -8,10 +7,11 @@ import type {
   InferIssue,
   SuccessDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 import type { InferUndefinedableOutput } from './types.ts';
 
 /**
- * Undefinedable schema type.
+ * Undefinedable schema interface.
  */
 export interface UndefinedableSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -44,23 +44,23 @@ export interface UndefinedableSchema<
 }
 
 /**
- * Creates a undefinedable schema.
+ * Creates an undefinedable schema.
  *
  * @param wrapped The wrapped schema.
  *
- * @returns A undefinedable schema.
+ * @returns An undefinedable schema.
  */
 export function undefinedable<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(wrapped: TWrapped): UndefinedableSchema<TWrapped, undefined>;
 
 /**
- * Creates a undefinedable schema.
+ * Creates an undefinedable schema.
  *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
  *
- * @returns A undefinedable schema.
+ * @returns An undefinedable schema.
  */
 export function undefinedable<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -70,6 +70,7 @@ export function undefinedable<
   default_: TDefault
 ): UndefinedableSchema<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function undefinedable(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   default_?: unknown
@@ -85,9 +86,10 @@ export function undefinedable(
     async: false,
     wrapped,
     default: default_,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // If value is `undefined`, override it with default or return dataset
       if (dataset.value === undefined) {
         // If default is specified, override value of dataset
@@ -105,7 +107,7 @@ export function undefinedable(
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~validate'](dataset, config);
+      return this.wrapped['~run'](dataset, config);
     },
   };
 }

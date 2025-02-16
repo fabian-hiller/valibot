@@ -22,9 +22,12 @@ describe('tupleAsync', () => {
       expects: 'Array',
       items,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -68,10 +71,7 @@ describe('tupleAsync', () => {
 
     test('for unknown items', async () => {
       expect(
-        await schema['~validate'](
-          { value: ['foo', 123, null, true, undefined] },
-          {}
-        )
+        await schema['~run']({ value: ['foo', 123, null, true, undefined] }, {})
       ).toStrictEqual({
         typed: true,
         value: ['foo', 123],
@@ -125,7 +125,9 @@ describe('tupleAsync', () => {
 
     test('for functions', async () => {
       await expectSchemaIssueAsync(schema, baseIssue, [
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         () => {},
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         function () {},
       ]);
     });
@@ -156,10 +158,7 @@ describe('tupleAsync', () => {
 
     test('for unknown items', async () => {
       expect(
-        await schema['~validate'](
-          { value: ['foo', 123, null, true, undefined] },
-          {}
-        )
+        await schema['~run']({ value: ['foo', 123, null, true, undefined] }, {})
       ).toStrictEqual({
         typed: true,
         value: ['foo', 123],
@@ -199,7 +198,7 @@ describe('tupleAsync', () => {
 
     test('for wrong items', async () => {
       const input = [123, 456, 'true'];
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -227,7 +226,7 @@ describe('tupleAsync', () => {
 
     test('with abort early', async () => {
       expect(
-        await schema['~validate'](
+        await schema['~run'](
           { value: [123, 456, 'true'] },
           { abortEarly: true }
         )
@@ -244,9 +243,7 @@ describe('tupleAsync', () => {
         ['foo', '123', false],
         null,
       ];
-      expect(
-        await nestedSchema['~validate']({ value: input }, {})
-      ).toStrictEqual({
+      expect(await nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

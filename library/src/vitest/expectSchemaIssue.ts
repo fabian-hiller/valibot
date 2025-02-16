@@ -24,7 +24,7 @@ export function expectSchemaIssue<
   received?: string
 ): void {
   for (const value of values) {
-    expect(schema['~validate']({ value }, {})).toStrictEqual({
+    expect(schema['~run']({ value }, {})).toStrictEqual({
       typed: false,
       value,
       issues: [
@@ -35,7 +35,6 @@ export function expectSchemaIssue<
           lang: undefined,
           abortEarly: undefined,
           abortPipeEarly: undefined,
-
           ...baseIssue,
           input: value,
           received: received ?? _stringify(value),

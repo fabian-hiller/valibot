@@ -1,11 +1,10 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _stringify } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps, _stringify } from '../../utils/index.ts';
 
 /**
  * Literal type.
@@ -13,7 +12,7 @@ import { _addIssue, _stringify } from '../../utils/index.ts';
 export type Literal = bigint | boolean | number | string | symbol;
 
 /**
- * Literal issue type.
+ * Literal issue interface.
  */
 export interface LiteralIssue extends BaseIssue<unknown> {
   /**
@@ -31,7 +30,7 @@ export interface LiteralIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Literal schema type.
+ * Literal schema interface.
  */
 export interface LiteralSchema<
   TLiteral extends Literal,
@@ -79,6 +78,7 @@ export function literal<
   const TMessage extends ErrorMessage<LiteralIssue> | undefined,
 >(literal_: TLiteral, message: TMessage): LiteralSchema<TLiteral, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function literal(
   literal_: Literal,
   message?: ErrorMessage<LiteralIssue>
@@ -91,9 +91,10 @@ export function literal(
     async: false,
     literal: literal_,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (dataset.value === this.literal) {
         // @ts-expect-error
         dataset.typed = true;

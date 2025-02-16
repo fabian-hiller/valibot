@@ -1,7 +1,7 @@
 import type { BaseMetadata } from '../../types/index.ts';
 
 /**
- * Title action type.
+ * Title action interface.
  */
 export interface TitleAction<TInput, TTitle extends string>
   extends BaseMetadata<TInput> {
@@ -26,6 +26,7 @@ export interface TitleAction<TInput, TTitle extends string>
  *
  * @returns A title action.
  */
+// @__NO_SIDE_EFFECTS__
 export function title<TInput, TTitle extends string>(
   title_: TTitle
 ): TitleAction<TInput, TTitle> {

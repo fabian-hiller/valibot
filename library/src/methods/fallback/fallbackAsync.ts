@@ -1,15 +1,18 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
   Config,
+  InferInput,
   InferIssue,
   InferOutput,
   MaybePromise,
+  MaybeReadonly,
   OutputDataset,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 import { getFallback } from '../getFallback/index.ts';
 
 /**
@@ -20,11 +23,11 @@ export type FallbackAsync<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
 > =
-  | InferOutput<TSchema>
+  | MaybeReadonly<InferOutput<TSchema>>
   | ((
       dataset?: OutputDataset<InferOutput<TSchema>, InferIssue<TSchema>>,
       config?: Config<InferIssue<TSchema>>
-    ) => MaybePromise<InferOutput<TSchema>>);
+    ) => MaybePromise<MaybeReadonly<InferOutput<TSchema>>>);
 
 /**
  * Schema with fallback async type.
@@ -34,7 +37,7 @@ export type SchemaWithFallbackAsync<
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
   TFallback extends FallbackAsync<TSchema>,
-> = Omit<TSchema, 'async' | '~validate'> & {
+> = Omit<TSchema, 'async' | '~standard' | '~run'> & {
   /**
    * The fallback value.
    */
@@ -43,6 +46,15 @@ export type SchemaWithFallbackAsync<
    * Whether it's async.
    */
   readonly async: true;
+  /**
+   * The Standard Schema properties.
+   *
+   * @internal
+   */
+  readonly '~standard': StandardProps<
+    InferInput<TSchema>,
+    InferOutput<TSchema>
+  >;
   /**
    * Parses unknown input values.
    *
@@ -53,9 +65,9 @@ export type SchemaWithFallbackAsync<
    *
    * @internal
    */
-  readonly '~validate': (
+  readonly '~run': (
     dataset: UnknownDataset,
-    config?: Config<BaseIssue<unknown>>
+    config: Config<BaseIssue<unknown>>
   ) => Promise<OutputDataset<InferOutput<TSchema>, InferIssue<TSchema>>>;
 };
 
@@ -67,6 +79,7 @@ export type SchemaWithFallbackAsync<
  *
  * @returns The passed schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function fallbackAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
@@ -80,8 +93,11 @@ export function fallbackAsync<
     ...schema,
     fallback,
     async: true,
-    async '~validate'(dataset, config = getGlobalConfig()) {
-      const outputDataset = await schema['~validate'](dataset, config);
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
+      const outputDataset = await schema['~run'](dataset, config);
       return outputDataset.issues
         ? {
             typed: true,

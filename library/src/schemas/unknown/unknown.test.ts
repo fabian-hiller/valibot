@@ -10,9 +10,12 @@ describe('unknown', () => {
       reference: unknown,
       expects: 'unknown',
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     } satisfies UnknownSchema);
   });
 
@@ -56,6 +59,7 @@ describe('unknown', () => {
     });
 
     test('for functions', () => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       expectNoSchemaIssue(schema, [() => {}, function () {}]);
     });
 

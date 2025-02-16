@@ -4,7 +4,7 @@ import type { ArrayInput, ArrayRequirementAsync } from '../types.ts';
 import type { CheckItemsIssue } from './types.ts';
 
 /**
- * Check items action async type.
+ * Check items action async interface.
  */
 export interface CheckItemsActionAsync<
   TInput extends ArrayInput,
@@ -59,6 +59,7 @@ export function checkItemsAsync<
   message: TMessage
 ): CheckItemsActionAsync<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function checkItemsAsync(
   requirement: ArrayRequirementAsync<unknown[]>,
   message?: ErrorMessage<CheckItemsIssue<unknown[]>>
@@ -74,7 +75,7 @@ export function checkItemsAsync(
     expects: null,
     requirement,
     message,
-    async '~validate'(dataset, config) {
+    async '~run'(dataset, config) {
       if (dataset.typed) {
         const requirementResults = await Promise.all(
           dataset.value.map(this.requirement)

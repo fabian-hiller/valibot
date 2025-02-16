@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   ArrayPathItem,
   BaseIssue,
@@ -9,11 +8,11 @@ import type {
   InferOutput,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { ArrayIssue } from './types.ts';
 
 /**
- * Array schema type.
+ * Array schema interface.
  */
 export interface ArraySchema<
   TItem extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -69,6 +68,7 @@ export function array<
   const TMessage extends ErrorMessage<ArrayIssue> | undefined,
 >(item: TItem, message: TMessage): ArraySchema<TItem, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function array(
   item: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<ArrayIssue>
@@ -84,9 +84,10 @@ export function array(
     async: false,
     item,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -100,7 +101,7 @@ export function array(
         // Parse schema of each array item
         for (let key = 0; key < input.length; key++) {
           const value = input[key];
-          const itemDataset = this.item['~validate']({ value }, config);
+          const itemDataset = this.item['~run']({ value }, config);
 
           // If there are issues, capture them
           if (itemDataset.issues) {

@@ -1,7 +1,7 @@
 import type { BaseTransformation, SuccessDataset } from '../../types/index.ts';
 
 /**
- * Transform action type.
+ * Transform action interface.
  */
 export interface TransformAction<TInput, TOutput>
   extends BaseTransformation<TInput, TOutput, never> {
@@ -26,6 +26,7 @@ export interface TransformAction<TInput, TOutput>
  *
  * @returns A transform action.
  */
+// @__NO_SIDE_EFFECTS__
 export function transform<TInput, TOutput>(
   operation: (input: TInput) => TOutput
 ): TransformAction<TInput, TOutput> {
@@ -35,7 +36,7 @@ export function transform<TInput, TOutput>(
     reference: transform,
     async: false,
     operation,
-    '~validate'(dataset) {
+    '~run'(dataset) {
       // @ts-expect-error
       dataset.value = this.operation(dataset.value);
       // @ts-expect-error

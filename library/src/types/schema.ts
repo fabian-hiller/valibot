@@ -1,9 +1,10 @@
 import type { Config } from './config.ts';
 import type { OutputDataset, UnknownDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
+import type { StandardProps } from './standard.ts';
 
 /**
- * Base schema type.
+ * Base schema interface.
  */
 export interface BaseSchema<
   TInput,
@@ -34,17 +35,25 @@ export interface BaseSchema<
    */
   readonly async: false;
   /**
-   * The Standard Schema version number.
+   * The Standard Schema properties.
    *
    * @internal
    */
-  readonly '~standard': 1;
+  readonly '~standard': StandardProps<TInput, TOutput>;
   /**
-   * The vendor name of the schema.
+   * Parses unknown input values.
+   *
+   * @param dataset The input dataset.
+   * @param config The configuration.
+   *
+   * @returns The output dataset.
    *
    * @internal
    */
-  readonly '~vendor': 'valibot';
+  readonly '~run': (
+    dataset: UnknownDataset,
+    config: Config<BaseIssue<unknown>>
+  ) => OutputDataset<TOutput, TIssue>;
   /**
    * The input, output and issue type.
    *
@@ -57,24 +66,10 @@ export interface BaseSchema<
         readonly issue: TIssue;
       }
     | undefined;
-  /**
-   * Parses unknown input values.
-   *
-   * @param dataset The input dataset.
-   * @param config The configuration.
-   *
-   * @returns The output dataset.
-   *
-   * @internal
-   */
-  readonly '~validate': (
-    dataset: UnknownDataset,
-    config?: Config<BaseIssue<unknown>>
-  ) => OutputDataset<TOutput, TIssue>;
 }
 
 /**
- * Base schema async type.
+ * Base schema async interface.
  */
 export interface BaseSchemaAsync<
   TInput,
@@ -82,7 +77,7 @@ export interface BaseSchemaAsync<
   TIssue extends BaseIssue<unknown>,
 > extends Omit<
     BaseSchema<TInput, TOutput, TIssue>,
-    'reference' | 'async' | '~validate'
+    'reference' | 'async' | '~run'
   > {
   /**
    * The schema reference.
@@ -107,26 +102,26 @@ export interface BaseSchemaAsync<
    *
    * @internal
    */
-  readonly '~validate': (
+  readonly '~run': (
     dataset: UnknownDataset,
-    config?: Config<BaseIssue<unknown>>
+    config: Config<BaseIssue<unknown>>
   ) => Promise<OutputDataset<TOutput, TIssue>>;
 }
 
 /**
  * Generic schema type.
  */
-export interface GenericSchema<
+export type GenericSchema<
   TInput = unknown,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseSchema<TInput, TOutput, TIssue> {}
+> = BaseSchema<TInput, TOutput, TIssue>;
 
 /**
  * Generic schema async type.
  */
-export interface GenericSchemaAsync<
+export type GenericSchemaAsync<
   TInput = unknown,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseSchemaAsync<TInput, TOutput, TIssue> {}
+> = BaseSchemaAsync<TInput, TOutput, TIssue>;

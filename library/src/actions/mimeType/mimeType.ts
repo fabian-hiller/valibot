@@ -11,7 +11,7 @@ import { _addIssue, _joinExpects } from '../../utils/index.ts';
 type Requirement = readonly `${string}/${string}`[];
 
 /**
- * MIME type issue type.
+ * MIME type issue interface.
  */
 export interface MimeTypeIssue<
   TInput extends Blob,
@@ -40,7 +40,7 @@ export interface MimeTypeIssue<
 }
 
 /**
- * MIME type action type.
+ * MIME type action interface.
  */
 export interface MimeTypeAction<
   TInput extends Blob,
@@ -102,6 +102,7 @@ export function mimeType<
   message: TMessage
 ): MimeTypeAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function mimeType(
   requirement: Requirement,
   message?: ErrorMessage<MimeTypeIssue<Blob, Requirement>>
@@ -121,7 +122,7 @@ export function mimeType(
     ),
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (
         dataset.typed &&
         !this.requirement.includes(dataset.value.type as `${string}/${string}`)

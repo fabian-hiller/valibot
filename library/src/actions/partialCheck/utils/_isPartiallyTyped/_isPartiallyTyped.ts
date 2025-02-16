@@ -8,6 +8,7 @@ import type { BaseIssue, OutputDataset } from '../../../../types/index.ts';
  *
  * @returns Whether it is partially typed.
  */
+// @__NO_SIDE_EFFECTS__
 export function _isPartiallyTyped(
   dataset: OutputDataset<unknown, BaseIssue<unknown>>,
   pathList: readonly (readonly (string | number)[])[]

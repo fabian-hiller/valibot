@@ -1,5 +1,4 @@
 import { getDefault } from '../../methods/index.ts';
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -8,10 +7,11 @@ import type {
   InferIssue,
   SuccessDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 import type { InferNullishOutput } from './types.ts';
 
 /**
- * Nullish schema type.
+ * Nullish schema interface.
  */
 export interface NullishSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -67,6 +67,7 @@ export function nullish<
   const TDefault extends Default<TWrapped, null | undefined>,
 >(wrapped: TWrapped, default_: TDefault): NullishSchema<TWrapped, TDefault>;
 
+// @__NO_SIDE_EFFECTS__
 export function nullish(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   default_?: unknown
@@ -79,9 +80,10 @@ export function nullish(
     async: false,
     wrapped,
     default: default_,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // If value is `null` or `undefined`, override it with default or return
       // dataset
       if (dataset.value === null || dataset.value === undefined) {
@@ -100,7 +102,7 @@ export function nullish(
       }
 
       // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~validate'](dataset, config);
+      return this.wrapped['~run'](dataset, config);
     },
   };
 }

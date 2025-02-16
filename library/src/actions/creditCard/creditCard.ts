@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _isLuhnAlgo } from '../../utils/index.ts';
 
 /**
- * Credit card issue type.
+ * Credit card issue interface.
  */
 export interface CreditCardIssue<TInput extends string>
   extends BaseIssue<TInput> {
@@ -33,7 +33,7 @@ export interface CreditCardIssue<TInput extends string>
 }
 
 /**
- * Credit card action type.
+ * Credit card action interface.
  */
 export interface CreditCardAction<
   TInput extends string,
@@ -85,6 +85,7 @@ const PROVIDER_REGEX_LIST = [
   // JCB
   /^(?:2131|1800|35\d{3})\d{11}$/u,
   // Mastercard
+  // eslint-disable-next-line redos-detector/no-unsafe-regex
   /^5[1-5]\d{2}|(?:222\d|22[3-9]\d|2[3-6]\d{2}|27[01]\d|2720)\d{12}$/u,
   // UnionPay
   /^(?:6[27]\d{14,17}|81\d{14,17})$/u,
@@ -114,6 +115,7 @@ export function creditCard<
   const TMessage extends ErrorMessage<CreditCardIssue<TInput>> | undefined,
 >(message: TMessage): CreditCardAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function creditCard(
   message?: ErrorMessage<CreditCardIssue<string>>
 ): CreditCardAction<string, ErrorMessage<CreditCardIssue<string>> | undefined> {
@@ -134,7 +136,7 @@ export function creditCard(
         _isLuhnAlgo(sanitized)) as boolean;
     },
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'credit card', dataset, config);
       }

@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   ArrayPathItem,
   BaseIssue,
@@ -14,11 +13,12 @@ import type {
   OutputDataset,
   TupleItemsAsync,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { tupleWithRest } from './tupleWithRest.ts';
 import type { TupleWithRestIssue } from './types.ts';
 
 /**
- * Tuple with rest schema async type.
+ * Tuple with rest schema async interface.
  */
 export interface TupleWithRestSchemaAsync<
   TItems extends TupleItemsAsync,
@@ -38,7 +38,7 @@ export interface TupleWithRestSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof tupleWithRestAsync;
+  readonly reference: typeof tupleWithRest | typeof tupleWithRestAsync;
   /**
    * The expected property.
    */
@@ -96,6 +96,7 @@ export function tupleWithRestAsync<
   message: TMessage
 ): TupleWithRestSchemaAsync<TItems, TRest, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function tupleWithRestAsync(
   items: TupleItemsAsync,
   rest:
@@ -117,9 +118,10 @@ export function tupleWithRestAsync(
     items,
     rest,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -139,7 +141,7 @@ export function tupleWithRestAsync(
               return [
                 key,
                 value,
-                await item['~validate']({ value }, config),
+                await item['~run']({ value }, config),
               ] as const;
             })
           ),
@@ -150,7 +152,7 @@ export function tupleWithRestAsync(
               return [
                 key + this.items.length,
                 value,
-                await this.rest['~validate']({ value }, config),
+                await this.rest['~run']({ value }, config),
               ] as const;
             })
           ),

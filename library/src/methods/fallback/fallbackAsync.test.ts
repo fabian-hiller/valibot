@@ -20,13 +20,18 @@ describe('fallbackAsync', () => {
     > = {
       ...schema,
       async: true,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with value fallback', () => {
       expect(fallbackAsync(schema, '123')).toStrictEqual({
         ...baseSchema,
         fallback: '123',
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
       } satisfies SchemaWithFallbackAsync<Schema, '123'>);
     });
 
@@ -35,6 +40,11 @@ describe('fallbackAsync', () => {
       expect(fallbackAsync(schema, fallbackArg)).toStrictEqual({
         ...baseSchema,
         fallback: fallbackArg,
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
       } satisfies SchemaWithFallbackAsync<Schema, typeof fallbackArg>);
     });
 
@@ -43,6 +53,11 @@ describe('fallbackAsync', () => {
       expect(fallbackAsync(schema, fallbackArg)).toStrictEqual({
         ...baseSchema,
         fallback: fallbackArg,
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
       } satisfies SchemaWithFallbackAsync<Schema, typeof fallbackArg>);
     });
   });
@@ -57,7 +72,7 @@ describe('fallbackAsync', () => {
 
   describe('should return default dataset', () => {
     test('for valid input', async () => {
-      expect(await schema['~validate']({ value: 789 }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: 789 }, {})).toStrictEqual({
         typed: true,
         value: '789',
       });
@@ -66,7 +81,7 @@ describe('fallbackAsync', () => {
 
   describe('should return dataset with fallback', () => {
     test('for invalid input', async () => {
-      expect(await schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: 'foo' }, {})).toStrictEqual({
         typed: true,
         value: '123',
       });

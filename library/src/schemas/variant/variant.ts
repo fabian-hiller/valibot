@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -7,7 +6,11 @@ import type {
   InferOutput,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _joinExpects } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _joinExpects,
+} from '../../utils/index.ts';
 import type {
   InferVariantIssue,
   VariantIssue,
@@ -16,7 +19,7 @@ import type {
 } from './types.ts';
 
 /**
- * Variant schema type.
+ * Variant schema interface.
  */
 export interface VariantSchema<
   TKey extends string,
@@ -85,6 +88,7 @@ export function variant<
   message: TMessage
 ): VariantSchema<TKey, TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function variant(
   key: string,
   options: VariantOptions<string>,
@@ -103,9 +107,10 @@ export function variant(
     key,
     options,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -141,12 +146,17 @@ export function variant(
               // information about invalid discriminator keys if not
               for (const currentKey of allKeys) {
                 // If any discriminator is invalid, mark keys as invalid
+                const discriminatorSchema = schema.entries[currentKey];
                 if (
-                  schema.entries[currentKey]['~validate'](
-                    // @ts-expect-error
-                    { typed: false, value: input[currentKey] },
-                    config
-                  ).issues
+                  currentKey in input
+                    ? discriminatorSchema['~run'](
+                        // @ts-expect-error
+                        { typed: false, value: input[currentKey] },
+                        config
+                      ).issues
+                    : discriminatorSchema.type !== 'exact_optional' &&
+                      discriminatorSchema.type !== 'optional' &&
+                      discriminatorSchema.type !== 'nullish'
                 ) {
                   keysAreValid = false;
 
@@ -184,10 +194,7 @@ export function variant(
 
               // If all discriminators are valid, parse input with schema of option
               if (keysAreValid) {
-                const optionDataset = schema['~validate'](
-                  { value: input },
-                  config
-                );
+                const optionDataset = schema['~run']({ value: input }, config);
 
                 // Store output dataset if necessary
                 // Hint: Only the first untyped or typed dataset is returned, and

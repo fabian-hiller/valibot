@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * 48-bit MAC issue type.
+ * 48-bit MAC issue interface.
  */
 export interface Mac48Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface Mac48Issue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * 48-bit MAC action type.
+ * 48-bit MAC action interface.
  */
 export interface Mac48Action<
   TInput extends string,
@@ -80,6 +80,7 @@ export function mac48<
   const TMessage extends ErrorMessage<Mac48Issue<TInput>> | undefined,
 >(message: TMessage): Mac48Action<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function mac48(
   message?: ErrorMessage<Mac48Issue<string>>
 ): Mac48Action<string, ErrorMessage<Mac48Issue<string>> | undefined> {
@@ -91,7 +92,7 @@ export function mac48(
     expects: null,
     requirement: MAC48_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, '48-bit MAC', dataset, config);
       }

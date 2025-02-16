@@ -1,11 +1,10 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
-  FailureDataset,
+  OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type {
   InferNonOptionalInput,
   InferNonOptionalIssue,
@@ -14,7 +13,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non optional schema type.
+ * Non optional schema interface.
  */
 export interface NonOptionalSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -70,6 +69,7 @@ export function nonOptional<
   const TMessage extends ErrorMessage<NonOptionalIssue> | undefined,
 >(wrapped: TWrapped, message: TMessage): NonOptionalSchema<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonOptional(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<NonOptionalIssue> | undefined
@@ -85,18 +85,24 @@ export function nonOptional(
     async: false,
     wrapped,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
-      // If value is `undefined`, add issue and return dataset
-      if (dataset.value === undefined) {
-        _addIssue(this, 'type', dataset, config);
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
+      // If value is not `undefined`, run wrapped schema
+      if (dataset.value !== undefined) {
         // @ts-expect-error
-        return dataset as FailureDataset<NonOptionalIssue>;
+        dataset = this.wrapped['~run'](dataset, config);
       }
 
-      // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~validate'](dataset, config);
+      // If value is `undefined`, add issue to dataset
+      if (dataset.value === undefined) {
+        _addIssue(this, 'type', dataset, config);
+      }
+
+      // Return output dataset
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Nano ID issue type.
+ * Nano ID issue interface.
  */
 export interface NanoIDIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface NanoIDIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Nano ID action type.
+ * Nano ID action interface.
  */
 export interface NanoIDAction<
   TInput extends string,
@@ -83,6 +83,7 @@ export function nanoid<
   const TMessage extends ErrorMessage<NanoIDIssue<TInput>> | undefined,
 >(message: TMessage): NanoIDAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nanoid(
   message?: ErrorMessage<NanoIDIssue<string>>
 ): NanoIDAction<string, ErrorMessage<NanoIDIssue<string>> | undefined> {
@@ -94,7 +95,7 @@ export function nanoid(
     expects: null,
     requirement: NANO_ID_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'Nano ID', dataset, config);
       }

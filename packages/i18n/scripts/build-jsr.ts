@@ -4,8 +4,10 @@ import jsr from '../jsr.json';
 import package_ from '../package.json';
 import ar from '../src/ar';
 import ca from '../src/ca';
+import cs from '../src/cs';
 import de from '../src/de';
 import es from '../src/es';
+import fa from '../src/fa';
 import fr from '../src/fr';
 import hu from '../src/hu';
 import id from '../src/id';
@@ -22,6 +24,7 @@ import sl from '../src/sl';
 import sv from '../src/sv';
 import tr from '../src/tr';
 import uk from '../src/uk';
+import vi from '../src/vi';
 import zhCN from '../src/zh-CN';
 import zhTW from '../src/zh-TW';
 
@@ -34,8 +37,10 @@ console.time('build');
 const languages = [
   ar,
   ca,
+  cs,
   de,
   es,
+  fa,
   fr,
   id,
   it,
@@ -52,6 +57,7 @@ const languages = [
   sv,
   tr,
   uk,
+  vi,
   zhCN,
   zhTW,
 ];
@@ -60,7 +66,14 @@ const languages = [
 const rootImports: string[] = [];
 
 // Create exclude array
-const exclude: string[] = ['scripts', 'src', '!index.ts'];
+const exclude: string[] = [
+  'scripts',
+  'src',
+  'CHANGELOG.md',
+  'package.json',
+  'tsconfig.json',
+  '!index.ts',
+];
 
 // Create exports object with index file
 const exports: Record<string, string> = {
@@ -99,7 +112,7 @@ for (const language of languages) {
   fs.writeFileSync(
     path.join(language.code, 'schema.ts'),
     `
-import { setSchemaMessage } from "jsr:@valibot/valibot@0";
+import { setSchemaMessage } from "jsr:@valibot/valibot@1.0.0-beta.3";
 
 setSchemaMessage(
   ${language.schema.toString()},
@@ -121,7 +134,7 @@ setSchemaMessage(
     fs.writeFileSync(
       path.join(language.code, `${reference}.ts`),
       `
-import { setSpecificMessage, ${reference} } from "jsr:@valibot/valibot@0";
+import { setSpecificMessage, ${reference} } from "jsr:@valibot/valibot@1.0.0-beta.3";
 
 setSpecificMessage(
   ${reference},

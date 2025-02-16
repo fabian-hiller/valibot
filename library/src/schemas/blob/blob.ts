@@ -1,14 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Blob issue type.
+ * Blob issue interface.
  */
 export interface BlobIssue extends BaseIssue<unknown> {
   /**
@@ -26,7 +25,7 @@ export interface BlobIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Blob schema type.
+ * Blob schema interface.
  */
 export interface BlobSchema<
   TMessage extends ErrorMessage<BlobIssue> | undefined,
@@ -67,6 +66,7 @@ export function blob<
   const TMessage extends ErrorMessage<BlobIssue> | undefined,
 >(message: TMessage): BlobSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function blob(
   message?: ErrorMessage<BlobIssue>
 ): BlobSchema<ErrorMessage<BlobIssue> | undefined> {
@@ -77,9 +77,10 @@ export function blob(
     expects: 'Blob',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (dataset.value instanceof Blob) {
         // @ts-expect-error
         dataset.typed = true;

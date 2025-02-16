@@ -23,9 +23,12 @@ describe('mapAsync', () => {
       key,
       value,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -121,7 +124,9 @@ describe('mapAsync', () => {
 
     test('for functions', async () => {
       await expectSchemaIssueAsync(schema, baseIssue, [
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         () => {},
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         function () {},
       ]);
     });
@@ -198,7 +203,7 @@ describe('mapAsync', () => {
     };
 
     test('for invalid values', async () => {
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -249,7 +254,7 @@ describe('mapAsync', () => {
         [3, 123], // Invalid value
       ]);
       expect(
-        await schema['~validate']({ value: input }, { abortEarly: true })
+        await schema['~run']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: new Map([[0, 'foo']]),
@@ -278,7 +283,7 @@ describe('mapAsync', () => {
 
     test('with abort early for invalid value', async () => {
       expect(
-        await schema['~validate']({ value: input }, { abortEarly: true })
+        await schema['~run']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: new Map([[0, 'foo']]),
@@ -305,9 +310,7 @@ describe('mapAsync', () => {
           ]),
         ],
       ]);
-      expect(
-        await nestedSchema['~validate']({ value: input }, {})
-      ).toStrictEqual({
+      expect(await nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

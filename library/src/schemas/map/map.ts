@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -7,11 +6,11 @@ import type {
   MapPathItem,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { InferMapInput, InferMapOutput, MapIssue } from './types.ts';
 
 /**
- * Map schema type.
+ * Map schema interface.
  */
 export interface MapSchema<
   TKey extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -80,6 +79,7 @@ export function map<
   message: TMessage
 ): MapSchema<TKey, TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function map(
   key: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   value: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -98,9 +98,10 @@ export function map(
     key,
     value,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -114,7 +115,7 @@ export function map(
         // Parse schema of each map entry
         for (const [inputKey, inputValue] of input) {
           // Get dataset of key schema
-          const keyDataset = this.key['~validate']({ value: inputKey }, config);
+          const keyDataset = this.key['~run']({ value: inputKey }, config);
 
           // If there are issues, capture them
           if (keyDataset.issues) {
@@ -151,7 +152,7 @@ export function map(
           }
 
           // Get dataset of value schema
-          const valueDataset = this.value['~validate'](
+          const valueDataset = this.value['~run'](
             { value: inputValue },
             config
           );

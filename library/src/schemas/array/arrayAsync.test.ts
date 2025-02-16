@@ -19,9 +19,12 @@ describe('array', () => {
       expects: 'Array',
       item,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -107,7 +110,9 @@ describe('array', () => {
 
     test('for functions', async () => {
       await expectSchemaIssueAsync(schema, baseIssue, [
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         () => {},
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         function () {},
       ]);
     });
@@ -163,7 +168,7 @@ describe('array', () => {
 
     test('for wrong items', async () => {
       expect(
-        await schema['~validate']({ value: ['foo', 123, 'baz', null] }, {})
+        await schema['~run']({ value: ['foo', 123, 'baz', null] }, {})
       ).toStrictEqual({
         typed: false,
         value: ['foo', 123, 'baz', null],
@@ -192,7 +197,7 @@ describe('array', () => {
 
     test('with abort early', async () => {
       expect(
-        await schema['~validate'](
+        await schema['~run'](
           { value: ['foo', 123, 'baz', null] },
           { abortEarly: true }
         )
@@ -206,10 +211,7 @@ describe('array', () => {
     test('for wrong nested items', async () => {
       const nestedSchema = arrayAsync(schema);
       expect(
-        await nestedSchema['~validate'](
-          { value: [[123, 'foo'], 'bar', []] },
-          {}
-        )
+        await nestedSchema['~run']({ value: [[123, 'foo'], 'bar', []] }, {})
       ).toStrictEqual({
         typed: false,
         value: [[123, 'foo'], 'bar', []],

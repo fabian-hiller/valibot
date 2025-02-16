@@ -24,6 +24,7 @@ export function setGlobalMessage(
  *
  * @returns The error message.
  */
+// @__NO_SIDE_EFFECTS__
 export function getGlobalMessage(
   lang?: string
 ): ErrorMessage<BaseIssue<unknown>> | undefined {

@@ -7,7 +7,7 @@ import { _addIssue, _stringify } from '../../utils/index.ts';
 import type { ContentInput, ContentRequirement } from '../types.ts';
 
 /**
- * Includes issue type.
+ * Includes issue interface.
  */
 export interface IncludesIssue<
   TInput extends ContentInput,
@@ -32,7 +32,7 @@ export interface IncludesIssue<
 }
 
 /**
- * Includes action type.
+ * Includes action interface.
  */
 export interface IncludesAction<
   TInput extends ContentInput,
@@ -94,6 +94,7 @@ export function includes<
   message: TMessage
 ): IncludesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function includes(
   requirement: ContentRequirement<ContentInput>,
   message?: ErrorMessage<
@@ -114,7 +115,7 @@ export function includes(
     expects,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       // @ts-expect-error
       if (dataset.typed && !dataset.value.includes(this.requirement)) {
         _addIssue(this, 'content', dataset, config, {

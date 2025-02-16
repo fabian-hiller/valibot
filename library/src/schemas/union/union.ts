@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -12,7 +11,11 @@ import type {
   PartialDataset,
   SuccessDataset,
 } from '../../types/index.ts';
-import { _addIssue, _joinExpects } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _joinExpects,
+} from '../../utils/index.ts';
 import type { UnionIssue } from './types.ts';
 import { _subIssues } from './utils/index.ts';
 
@@ -24,7 +27,7 @@ export type UnionOptions = MaybeReadonly<
 >;
 
 /**
- * Union schema type.
+ * Union schema interface.
  */
 export interface UnionSchema<
   TOptions extends UnionOptions,
@@ -80,6 +83,7 @@ export function union<
     | undefined,
 >(options: TOptions, message: TMessage): UnionSchema<TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function union(
   options: UnionOptions,
   message?: ErrorMessage<UnionIssue<BaseIssue<unknown>>>
@@ -98,9 +102,10 @@ export function union(
     async: false,
     options,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // Create variables to collect datasets
       let validDataset: SuccessDataset<unknown> | undefined;
       let typedDatasets:
@@ -110,10 +115,7 @@ export function union(
 
       // Parse schema of each option and collect datasets
       for (const schema of this.options) {
-        const optionDataset = schema['~validate'](
-          { value: dataset.value },
-          config
-        );
+        const optionDataset = schema['~run']({ value: dataset.value }, config);
 
         // If typed, add it to valid or typed datasets
         if (optionDataset.typed) {

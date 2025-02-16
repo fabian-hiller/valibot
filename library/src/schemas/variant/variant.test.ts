@@ -11,10 +11,13 @@ import type {
 import { expectNoSchemaIssue } from '../../vitest/index.ts';
 import { bigint } from '../bigint/bigint.ts';
 import { boolean } from '../boolean/index.ts';
+import { exactOptional } from '../exactOptional/index.ts';
 import { literal } from '../literal/literal.ts';
 import { null_ } from '../null/null.ts';
+import { nullish } from '../nullish/index.ts';
 import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
+import { optional } from '../optional/index.ts';
 import { strictObject } from '../strictObject/index.ts';
 import { string } from '../string/index.ts';
 import { variant, type VariantSchema } from './variant.ts';
@@ -36,9 +39,12 @@ describe('variant', () => {
       key,
       options,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -118,6 +124,33 @@ describe('variant', () => {
         [{ type: 'foo' }, { type: 'bar' }, { type: null }]
       );
     });
+
+    test('for optional discriminators', () => {
+      expectNoSchemaIssue(
+        variant('type', [
+          object({ type: literal('foo') }),
+          object({ type: exactOptional(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: 'bar' }]
+      );
+      expectNoSchemaIssue(
+        variant('type', [
+          object({ type: literal('foo') }),
+          object({ type: optional(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: undefined }, { type: 'bar' }]
+      );
+      expectNoSchemaIssue(
+        variant('type', [
+          object({ type: literal('foo') }),
+          object({ type: nullish(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: null }, { type: undefined }, { type: 'bar' }]
+      );
+    });
   });
 
   describe('should return dataset with issues', () => {
@@ -136,7 +169,7 @@ describe('variant', () => {
         object({ type: literal('foo') }),
         object({ type: literal('bar') }),
       ]);
-      expect(schema['~validate']({ value: 'foo' }, {})).toStrictEqual({
+      expect(schema['~run']({ value: 'foo' }, {})).toStrictEqual({
         typed: false,
         value: 'foo',
         issues: [
@@ -155,7 +188,7 @@ describe('variant', () => {
     test('for empty options', () => {
       const schema = variant('type', []);
       const input = { type: 'foo' };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -186,7 +219,7 @@ describe('variant', () => {
         object({ type: literal('bar') }),
       ]);
       const input = { other: 123 };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -217,7 +250,7 @@ describe('variant', () => {
         object({ type: literal('bar') }),
       ]);
       const input = { type: 'baz' };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -252,7 +285,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar' };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -287,7 +320,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', other: 123 };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -340,7 +373,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = {};
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -393,7 +426,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar' };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -446,7 +479,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', subType2: 'baz-2' };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -499,7 +532,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', subType1: 'invalid', subType2: 'invalid' };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -556,7 +589,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', subType1: 'bar-1', subType2: 'invalid' };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -613,7 +646,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', subType1: 'bar-1', subType2: 'invalid' };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -674,7 +707,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', subType2: 'baz-2' };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -706,7 +739,7 @@ describe('variant', () => {
         object({ type: literal('baz'), other: number() }),
       ]);
       const input = { type: 'bar', other: null };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -740,7 +773,7 @@ describe('variant', () => {
         ]),
       ]);
       const input = { type: 'bar', other: null };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -773,7 +806,7 @@ describe('variant', () => {
         object({ type: literal('bar'), other: boolean() }),
       ]);
       const input = { type: 'bar', other: null };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -806,7 +839,7 @@ describe('variant', () => {
       ]);
       type Schema = typeof schema;
       const input = { type: 'bar', other: 'hello' } as const;
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -842,7 +875,7 @@ describe('variant', () => {
       ]);
       type Schema = typeof schema;
       const input = { type: 'bar', other: 'hello' } as const;
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -878,7 +911,7 @@ describe('variant', () => {
       ]);
       type Schema = typeof schema;
       const input = { type: 'foo', other: 'hello' } as const;
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [

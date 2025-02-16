@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   ArrayPathItem,
   BaseIssue,
@@ -10,11 +9,11 @@ import type {
   OutputDataset,
   TupleItems,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { TupleIssue } from './types.ts';
 
 /**
- * Tuple schema type.
+ * Tuple schema interface.
  */
 export interface TupleSchema<
   TItems extends TupleItems,
@@ -80,6 +79,7 @@ export function tuple<
   const TMessage extends ErrorMessage<TupleIssue> | undefined,
 >(items: TItems, message: TMessage): TupleSchema<TItems, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function tuple(
   items: TupleItems,
   message?: ErrorMessage<TupleIssue>
@@ -92,9 +92,10 @@ export function tuple(
     async: false,
     items,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -108,7 +109,7 @@ export function tuple(
         // Parse schema of each tuple item
         for (let key = 0; key < this.items.length; key++) {
           const value = input[key];
-          const itemDataset = this.items[key]['~validate']({ value }, config);
+          const itemDataset = this.items[key]['~run']({ value }, config);
 
           // If there are issues, capture them
           if (itemDataset.issues) {

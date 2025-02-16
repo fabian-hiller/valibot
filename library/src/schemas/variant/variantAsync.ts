@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchemaAsync,
@@ -7,7 +6,11 @@ import type {
   InferOutput,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _joinExpects } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _joinExpects,
+} from '../../utils/index.ts';
 import type {
   InferVariantIssue,
   VariantIssue,
@@ -15,9 +18,10 @@ import type {
   VariantOptionSchema,
   VariantOptionSchemaAsync,
 } from './types.ts';
+import type { variant } from './variant.ts';
 
 /**
- * Variant schema async type.
+ * Variant schema async interface.
  */
 export interface VariantSchemaAsync<
   TKey extends string,
@@ -35,7 +39,7 @@ export interface VariantSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof variantAsync;
+  readonly reference: typeof variant | typeof variantAsync;
   /**
    * The expected property.
    */
@@ -86,6 +90,7 @@ export function variantAsync<
   message: TMessage
 ): VariantSchemaAsync<TKey, TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function variantAsync(
   key: string,
   options: VariantOptionsAsync<string>,
@@ -104,9 +109,10 @@ export function variantAsync(
     key,
     options,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -144,14 +150,19 @@ export function variantAsync(
               // information about invalid discriminator keys if not
               for (const currentKey of allKeys) {
                 // If any discriminator is invalid, mark keys as invalid
+                const discriminatorSchema = schema.entries[currentKey];
                 if (
-                  (
-                    await schema.entries[currentKey]['~validate'](
-                      // @ts-expect-error
-                      { typed: false, value: input[currentKey] },
-                      config
-                    )
-                  ).issues
+                  currentKey in input
+                    ? (
+                        await discriminatorSchema['~run'](
+                          // @ts-expect-error
+                          { typed: false, value: input[currentKey] },
+                          config
+                        )
+                      ).issues
+                    : discriminatorSchema.type !== 'exact_optional' &&
+                      discriminatorSchema.type !== 'optional' &&
+                      discriminatorSchema.type !== 'nullish'
                 ) {
                   keysAreValid = false;
 
@@ -189,7 +200,7 @@ export function variantAsync(
 
               // If all discriminators are valid, parse input with schema of option
               if (keysAreValid) {
-                const optionDataset = await schema['~validate'](
+                const optionDataset = await schema['~run'](
                   { value: input },
                   config
                 );

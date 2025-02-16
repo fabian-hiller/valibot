@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { CheckIssue } from './types.ts';
 
 /**
- * Check action async type.
+ * Check action async interface.
  */
 export interface CheckActionAsync<
   TInput,
@@ -62,6 +62,7 @@ export function checkAsync<
   message: TMessage
 ): CheckActionAsync<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function checkAsync(
   requirement: (input: unknown) => MaybePromise<boolean>,
   message?: ErrorMessage<CheckIssue<unknown>>
@@ -74,7 +75,7 @@ export function checkAsync(
     expects: null,
     requirement,
     message,
-    async '~validate'(dataset, config) {
+    async '~run'(dataset, config) {
       if (dataset.typed && !(await this.requirement(dataset.value))) {
         _addIssue(this, 'input', dataset, config);
       }

@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * MAC issue type.
+ * MAC issue interface.
  */
 export interface MacIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface MacIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * MAC action type.
+ * MAC action interface.
  */
 export interface MacAction<
   TInput extends string,
@@ -80,6 +80,7 @@ export function mac<
   const TMessage extends ErrorMessage<MacIssue<TInput>> | undefined,
 >(message: TMessage): MacAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function mac(
   message?: ErrorMessage<MacIssue<string>>
 ): MacAction<string, ErrorMessage<MacIssue<string>> | undefined> {
@@ -91,7 +92,7 @@ export function mac(
     expects: null,
     requirement: MAC_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'MAC', dataset, config);
       }

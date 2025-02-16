@@ -1,14 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Undefined issue type.
+ * Undefined issue interface.
  */
 export interface UndefinedIssue extends BaseIssue<unknown> {
   /**
@@ -26,7 +25,7 @@ export interface UndefinedIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Undefined schema type.
+ * Undefined schema interface.
  */
 export interface UndefinedSchema<
   TMessage extends ErrorMessage<UndefinedIssue> | undefined,
@@ -67,6 +66,7 @@ export function undefined_<
   const TMessage extends ErrorMessage<UndefinedIssue> | undefined,
 >(message: TMessage): UndefinedSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function undefined_(
   message?: ErrorMessage<UndefinedIssue>
 ): UndefinedSchema<ErrorMessage<UndefinedIssue> | undefined> {
@@ -77,9 +77,10 @@ export function undefined_(
     expects: 'undefined',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (dataset.value === undefined) {
         // @ts-expect-error
         dataset.typed = true;

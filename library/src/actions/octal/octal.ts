@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Octal issue type.
+ * Octal issue interface.
  */
 export interface OctalIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface OctalIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Octal action type.
+ * Octal action interface.
  */
 export interface OctalAction<
   TInput extends string,
@@ -80,6 +80,7 @@ export function octal<
   const TMessage extends ErrorMessage<OctalIssue<TInput>> | undefined,
 >(message: TMessage): OctalAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function octal(
   message?: ErrorMessage<OctalIssue<string>>
 ): OctalAction<string, ErrorMessage<OctalIssue<string>> | undefined> {
@@ -91,7 +92,7 @@ export function octal(
     expects: null,
     requirement: OCTAL_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'octal', dataset, config);
       }

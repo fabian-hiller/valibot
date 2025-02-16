@@ -1,11 +1,10 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
-  FailureDataset,
+  OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type {
   InferNonNullishInput,
   InferNonNullishIssue,
@@ -14,7 +13,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non nullish schema type.
+ * Non nullish schema interface.
  */
 export interface NonNullishSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -70,6 +69,7 @@ export function nonNullish<
   const TMessage extends ErrorMessage<NonNullishIssue> | undefined,
 >(wrapped: TWrapped, message: TMessage): NonNullishSchema<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullish(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<NonNullishIssue> | undefined
@@ -85,18 +85,24 @@ export function nonNullish(
     async: false,
     wrapped,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
-      // If value is `null` or `undefined`, add issue and return dataset
-      if (dataset.value === null || dataset.value === undefined) {
-        _addIssue(this, 'type', dataset, config);
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
+      // If value is not `null` and `undefined`, run wrapped schema
+      if (!(dataset.value === null || dataset.value === undefined)) {
         // @ts-expect-error
-        return dataset as FailureDataset<NonNullishIssue>;
+        dataset = this.wrapped['~run'](dataset, config);
       }
 
-      // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~validate'](dataset, config);
+      // If value is `null` or `undefined`, add issue to dataset
+      if (dataset.value === null || dataset.value === undefined) {
+        _addIssue(this, 'type', dataset, config);
+      }
+
+      // Return output dataset
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

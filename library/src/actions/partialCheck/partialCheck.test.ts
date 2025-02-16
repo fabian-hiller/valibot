@@ -32,7 +32,7 @@ describe('partialCheck', () => {
       pathList,
       requirement,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -93,11 +93,7 @@ describe('partialCheck', () => {
     tuple: [number, { key: string }, number];
     other: string;
   };
-  const pathList = [
-    ['nested', 'key'],
-    ['tuple', 1, 'key'],
-  ] as const;
-  type PathList = typeof pathList;
+  type PathList = [['nested', 'key'], ['tuple', 1, 'key']];
   type Selection = DeepPickN<Input, PathList>;
   const requirement = (input: Selection) =>
     input.nested.key === input.tuple[1].key;
@@ -137,7 +133,7 @@ describe('partialCheck', () => {
           },
         ],
       };
-      expect(action['~validate'](dataset, {})).toStrictEqual(dataset);
+      expect(action['~run'](dataset, {})).toStrictEqual(dataset);
     });
 
     test('if part of path is untyped', () => {
@@ -169,7 +165,7 @@ describe('partialCheck', () => {
           },
         ],
       };
-      expect(action['~validate'](dataset, {})).toStrictEqual(dataset);
+      expect(action['~run'](dataset, {})).toStrictEqual(dataset);
     });
 
     test('if entire path is untyped', () => {
@@ -208,7 +204,7 @@ describe('partialCheck', () => {
           },
         ],
       };
-      expect(action['~validate'](dataset, {})).toStrictEqual(dataset);
+      expect(action['~run'](dataset, {})).toStrictEqual(dataset);
     });
 
     test('if validation returns true', () => {
@@ -220,7 +216,7 @@ describe('partialCheck', () => {
           other: 'bar',
         },
       };
-      expect(action['~validate'](dataset, {})).toStrictEqual(dataset);
+      expect(action['~run'](dataset, {})).toStrictEqual(dataset);
     });
   });
 
@@ -235,7 +231,7 @@ describe('partialCheck', () => {
         typed: true,
         value: input,
       };
-      expect(action['~validate'](dataset, {})).toStrictEqual({
+      expect(action['~run'](dataset, {})).toStrictEqual({
         ...dataset,
         issues: [
           {
@@ -307,7 +303,7 @@ describe('partialCheck', () => {
         value: input,
         issues: [firstIssue, secondIssue],
       };
-      expect(action['~validate'](dataset, {})).toStrictEqual({
+      expect(action['~run'](dataset, {})).toStrictEqual({
         ...dataset,
         issues: [
           firstIssue,

@@ -6,6 +6,7 @@ export * from './boolean/index.ts';
 export * from './custom/index.ts';
 export * from './date/index.ts';
 export * from './enum/index.ts';
+export * from './exactOptional/index.ts';
 export * from './file/index.ts';
 export * from './function/index.ts';
 export * from './instance/index.ts';

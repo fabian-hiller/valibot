@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getGraphemeCount } from '../../utils/index.ts';
 
 /**
- * Not graphemes issue type.
+ * Not graphemes issue interface.
  */
 export interface NotGraphemesIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface NotGraphemesIssue<
 }
 
 /**
- * Not graphemes action type.
+ * Not graphemes action interface.
  */
 export interface NotGraphemesAction<
   TInput extends string,
@@ -103,6 +103,7 @@ export function notGraphemes<
   message: TMessage
 ): NotGraphemesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notGraphemes(
   requirement: number,
   message?: ErrorMessage<NotGraphemesIssue<string, number>>
@@ -119,7 +120,7 @@ export function notGraphemes(
     expects: `!${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         const count = _getGraphemeCount(dataset.value);
         if (count === this.requirement) {

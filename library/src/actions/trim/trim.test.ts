@@ -8,7 +8,7 @@ describe('trim', () => {
       type: 'trim',
       reference: trim,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     } satisfies TrimAction);
   });
 
@@ -16,41 +16,37 @@ describe('trim', () => {
     const action = trim();
 
     test('for empty string', () => {
-      expect(action['~validate']({ typed: true, value: '' }, {})).toStrictEqual(
-        {
-          typed: true,
-          value: '',
-        }
-      );
-      expect(
-        action['~validate']({ typed: true, value: ' ' }, {})
-      ).toStrictEqual({
+      expect(action['~run']({ typed: true, value: '' }, {})).toStrictEqual({
+        typed: true,
+        value: '',
+      });
+      expect(action['~run']({ typed: true, value: ' ' }, {})).toStrictEqual({
         typed: true,
         value: '',
       });
     });
 
     test('with blanks at start', () => {
-      expect(
-        action['~validate']({ typed: true, value: '  foo' }, {})
-      ).toStrictEqual({
-        typed: true,
-        value: 'foo',
-      });
+      expect(action['~run']({ typed: true, value: '  foo' }, {})).toStrictEqual(
+        {
+          typed: true,
+          value: 'foo',
+        }
+      );
     });
 
     test('with blanks at end', () => {
-      expect(
-        action['~validate']({ typed: true, value: 'foo  ' }, {})
-      ).toStrictEqual({
-        typed: true,
-        value: 'foo',
-      });
+      expect(action['~run']({ typed: true, value: 'foo  ' }, {})).toStrictEqual(
+        {
+          typed: true,
+          value: 'foo',
+        }
+      );
     });
 
     test('with blanks at start and end', () => {
       expect(
-        action['~validate']({ typed: true, value: '  foo  ' }, {})
+        action['~run']({ typed: true, value: '  foo  ' }, {})
       ).toStrictEqual({
         typed: true,
         value: 'foo',

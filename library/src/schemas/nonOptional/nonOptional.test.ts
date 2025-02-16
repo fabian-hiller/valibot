@@ -1,4 +1,7 @@
 import { describe, expect, test } from 'vitest';
+import { transform } from '../../actions/index.ts';
+import { pipe } from '../../methods/index.ts';
+import type { FailureDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { nullish, type NullishSchema } from '../nullish/index.ts';
 import { string, type StringSchema } from '../string/index.ts';
@@ -21,9 +24,12 @@ describe('nonOptional', () => {
       expects: '!undefined',
       wrapped,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -69,16 +75,43 @@ describe('nonOptional', () => {
   });
 
   describe('should return dataset with issues', () => {
-    const schema = nonOptional(nullish(string()), 'message');
-    const baseIssue: Omit<NonOptionalIssue, 'input' | 'received'> = {
+    const nonOptionalIssue: NonOptionalIssue = {
       kind: 'schema',
       type: 'non_optional',
+      input: undefined,
+      received: 'undefined',
       expected: '!undefined',
       message: 'message',
+      requirement: undefined,
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
     };
 
-    test('for undefined', () => {
-      expectSchemaIssue(schema, baseIssue, [undefined]);
+    test('for undefined input', () => {
+      expectSchemaIssue(
+        nonOptional(nullish(string()), 'message'),
+        nonOptionalIssue,
+        [undefined]
+      );
+    });
+
+    test('for undefined output', () => {
+      expect(
+        nonOptional(
+          pipe(
+            string(),
+            transform(() => undefined)
+          ),
+          'message'
+        )['~run']({ value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: undefined,
+        issues: [nonOptionalIssue],
+      } satisfies FailureDataset<NonOptionalIssue>);
     });
   });
 });

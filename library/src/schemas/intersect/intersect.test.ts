@@ -29,9 +29,12 @@ describe('intersect', () => {
       expects: 'Object',
       options,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -90,7 +93,7 @@ describe('intersect', () => {
     test('for empty options', () => {
       const schema = intersect([]);
       const input = 'foo';
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -109,7 +112,7 @@ describe('intersect', () => {
     test('with untyped output', () => {
       const schema = intersect([string(), number()]);
       const input = 'foo';
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [
@@ -132,7 +135,7 @@ describe('intersect', () => {
       ]);
       type Schema = typeof schema;
       const input = { key1: 'foo', key2: -123 };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: true,
         value: input,
         issues: [
@@ -183,7 +186,7 @@ describe('intersect', () => {
       ]);
       const input = { key1: 'foo', key2: -123 };
       expect(
-        schema['~validate']({ value: input }, { abortEarly: true })
+        schema['~run']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: input,
@@ -222,7 +225,7 @@ describe('intersect', () => {
         }),
       ]);
       const input = { key: 'foo' };
-      expect(schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

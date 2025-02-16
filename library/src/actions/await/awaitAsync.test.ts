@@ -11,16 +11,13 @@ describe('awaitAsync', () => {
       type: 'await',
       reference: awaitAsync,
       async: true,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     } satisfies AwaitActionAsync<Input>);
   });
 
   test('should await promise', async () => {
     expect(
-      await action['~validate'](
-        { typed: true, value: Promise.resolve('foo') },
-        {}
-      )
+      await action['~run']({ typed: true, value: Promise.resolve('foo') }, {})
     ).toStrictEqual({
       typed: true,
       value: 'foo',

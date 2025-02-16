@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Safe integer issue type.
+ * Safe integer issue interface.
  */
 export interface SafeIntegerIssue<TInput extends number>
   extends BaseIssue<TInput> {
@@ -33,7 +33,7 @@ export interface SafeIntegerIssue<TInput extends number>
 }
 
 /**
- * Safe integer action type.
+ * Safe integer action interface.
  */
 export interface SafeIntegerAction<
   TInput extends number,
@@ -83,6 +83,7 @@ export function safeInteger<
   const TMessage extends ErrorMessage<SafeIntegerIssue<TInput>> | undefined,
 >(message: TMessage): SafeIntegerAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function safeInteger(
   message?: ErrorMessage<SafeIntegerIssue<number>>
 ): SafeIntegerAction<
@@ -97,7 +98,7 @@ export function safeInteger(
     expects: null,
     requirement: Number.isSafeInteger,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'safe integer', dataset, config);
       }

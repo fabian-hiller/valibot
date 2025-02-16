@@ -25,9 +25,12 @@ describe('recordAsync', () => {
       key,
       value,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -119,7 +122,9 @@ describe('recordAsync', () => {
 
     test('for functions', async () => {
       await expectSchemaIssueAsync(schema, baseIssue, [
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         () => {},
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         function () {},
       ]);
     });
@@ -183,7 +188,7 @@ describe('recordAsync', () => {
     };
 
     test('for invalid values', async () => {
-      expect(await schema['~validate']({ value: input }, {})).toStrictEqual({
+      expect(await schema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: {
           foo: input.foo,
@@ -221,7 +226,7 @@ describe('recordAsync', () => {
         baz: undefined, // Invalid value
       };
       expect(
-        await schema['~validate']({ value: input }, { abortEarly: true })
+        await schema['~run']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: { foo: 1 },
@@ -250,7 +255,7 @@ describe('recordAsync', () => {
 
     test('with abort early for invalid value', async () => {
       expect(
-        await schema['~validate']({ value: input }, { abortEarly: true })
+        await schema['~run']({ value: input }, { abortEarly: true })
       ).toStrictEqual({
         typed: false,
         value: { foo: 1 },
@@ -268,9 +273,7 @@ describe('recordAsync', () => {
         },
         key2: 123,
       };
-      expect(
-        await nestedSchema['~validate']({ value: input }, {})
-      ).toStrictEqual({
+      expect(await nestedSchema['~run']({ value: input }, {})).toStrictEqual({
         typed: false,
         value: input,
         issues: [

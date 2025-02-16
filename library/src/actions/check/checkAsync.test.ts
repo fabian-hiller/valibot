@@ -17,7 +17,7 @@ describe('checkAsync', () => {
       expects: null,
       requirement,
       async: true,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -67,7 +67,7 @@ describe('checkAsync', () => {
         },
       ];
       expect(
-        await action['~validate']({ typed: false, value: null, issues }, {})
+        await action['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,

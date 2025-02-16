@@ -16,11 +16,9 @@ export async function expectNoActionIssueAsync<
   TAction extends BaseValidationAsync<any, unknown, BaseIssue<unknown>>,
 >(action: TAction, values: InferInput<TAction>[]): Promise<void> {
   for (const value of values) {
-    expect(await action['~validate']({ typed: true, value }, {})).toStrictEqual(
-      {
-        typed: true,
-        value,
-      }
-    );
+    expect(await action['~run']({ typed: true, value }, {})).toStrictEqual({
+      typed: true,
+      value,
+    });
   }
 }

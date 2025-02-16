@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { LengthInput } from '../types.ts';
 
 /**
- * Non empty issue type.
+ * Non empty issue interface.
  */
 export interface NonEmptyIssue<TInput extends LengthInput>
   extends BaseIssue<TInput> {
@@ -30,7 +30,7 @@ export interface NonEmptyIssue<TInput extends LengthInput>
 }
 
 /**
- * Non empty action type.
+ * Non empty action interface.
  */
 export interface NonEmptyAction<
   TInput extends LengthInput,
@@ -76,6 +76,7 @@ export function nonEmpty<
   const TMessage extends ErrorMessage<NonEmptyIssue<TInput>> | undefined,
 >(message: TMessage): NonEmptyAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonEmpty(
   message?: ErrorMessage<NonEmptyIssue<LengthInput>>
 ): NonEmptyAction<
@@ -89,7 +90,7 @@ export function nonEmpty(
     async: false,
     expects: '!0',
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && dataset.value.length === 0) {
         _addIssue(this, 'length', dataset, config, {
           received: '0',

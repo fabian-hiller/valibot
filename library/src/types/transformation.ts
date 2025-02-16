@@ -3,7 +3,7 @@ import type { OutputDataset, SuccessDataset } from './dataset.ts';
 import type { BaseIssue } from './issue.ts';
 
 /**
- * Base transformation type.
+ * Base transformation interface.
  */
 export interface BaseTransformation<
   TInput,
@@ -31,6 +31,20 @@ export interface BaseTransformation<
    */
   readonly async: false;
   /**
+   * Transforms known input values.
+   *
+   * @param dataset The input dataset.
+   * @param config The configuration.
+   *
+   * @returns The output dataset.
+   *
+   * @internal
+   */
+  readonly '~run': (
+    dataset: SuccessDataset<TInput>,
+    config: Config<BaseIssue<unknown>>
+  ) => OutputDataset<TOutput, BaseIssue<unknown> | TIssue>;
+  /**
    * The input, output and issue type.
    *
    * @internal
@@ -42,24 +56,10 @@ export interface BaseTransformation<
         readonly issue: TIssue;
       }
     | undefined;
-  /**
-   * Transforms known input values.
-   *
-   * @param dataset The input dataset.
-   * @param config The configuration.
-   *
-   * @returns The output dataset.
-   *
-   * @internal
-   */
-  readonly '~validate': (
-    dataset: SuccessDataset<TInput>,
-    config: Config<BaseIssue<unknown>>
-  ) => OutputDataset<TOutput, BaseIssue<unknown> | TIssue>;
 }
 
 /**
- * Base transformation async type.
+ * Base transformation async interface.
  */
 export interface BaseTransformationAsync<
   TInput,
@@ -67,7 +67,7 @@ export interface BaseTransformationAsync<
   TIssue extends BaseIssue<unknown>,
 > extends Omit<
     BaseTransformation<TInput, TOutput, TIssue>,
-    'reference' | 'async' | '~validate'
+    'reference' | 'async' | '~run'
   > {
   /**
    * The transformation reference.
@@ -93,7 +93,7 @@ export interface BaseTransformationAsync<
    *
    * @internal
    */
-  readonly '~validate': (
+  readonly '~run': (
     dataset: SuccessDataset<TInput>,
     config: Config<BaseIssue<unknown>>
   ) => Promise<OutputDataset<TOutput, BaseIssue<unknown> | TIssue>>;
@@ -102,19 +102,19 @@ export interface BaseTransformationAsync<
 /**
  * Generic transformation type.
  */
-export interface GenericTransformation<
+export type GenericTransformation<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TInput = any,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseTransformation<TInput, TOutput, TIssue> {}
+> = BaseTransformation<TInput, TOutput, TIssue>;
 
 /**
  * Generic transformation async type.
  */
-export interface GenericTransformationAsync<
+export type GenericTransformationAsync<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TInput = any,
   TOutput = TInput,
   TIssue extends BaseIssue<unknown> = BaseIssue<unknown>,
-> extends BaseTransformationAsync<TInput, TOutput, TIssue> {}
+> = BaseTransformationAsync<TInput, TOutput, TIssue>;

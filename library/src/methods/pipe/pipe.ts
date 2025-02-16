@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -11,8 +10,10 @@ import type {
   OutputDataset,
   PipeAction,
   PipeItem,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
  * Schema with pipe type.
@@ -23,11 +24,37 @@ export type SchemaWithPipe<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...PipeItem<any, unknown, BaseIssue<unknown>>[],
   ],
-> = Omit<FirstTupleItem<TPipe>, '~types' | '~validate'> & {
+> = Omit<FirstTupleItem<TPipe>, '~standard' | '~run' | '~types'> & {
   /**
    * The pipe items.
    */
   readonly pipe: TPipe;
+  /**
+   * The Standard Schema properties.
+   *
+   * @internal
+   */
+  readonly '~standard': StandardProps<
+    InferInput<FirstTupleItem<TPipe>>,
+    InferOutput<LastTupleItem<TPipe>>
+  >;
+  /**
+   * Parses unknown input values.
+   *
+   * @param dataset The input dataset.
+   * @param config The configuration.
+   *
+   * @returns The output dataset.
+   *
+   * @internal
+   */
+  readonly '~run': (
+    dataset: UnknownDataset,
+    config: Config<BaseIssue<unknown>>
+  ) => OutputDataset<
+    InferOutput<LastTupleItem<TPipe>>,
+    InferIssue<TPipe[number]>
+  >;
   /**
    * The input, output and issue type.
    *
@@ -40,23 +67,6 @@ export type SchemaWithPipe<
         readonly issue: InferIssue<TPipe[number]>;
       }
     | undefined;
-  /**
-   * Parses unknown input values.
-   *
-   * @param dataset The input dataset.
-   * @param config The configuration.
-   *
-   * @returns The output dataset.
-   *
-   * @internal
-   */
-  readonly '~validate': (
-    dataset: UnknownDataset,
-    config?: Config<BaseIssue<unknown>>
-  ) => OutputDataset<
-    InferOutput<LastTupleItem<TPipe>>,
-    InferIssue<TPipe[number]>
-  >;
 };
 
 /**
@@ -2639,6 +2649,24 @@ export function pipe<
   ]
 >;
 
+/**
+ * Adds a pipeline to a schema, that can validate and transform its input.
+ *
+ * @param schema The root schema.
+ * @param items The pipe items.
+ *
+ * @returns A schema with a pipeline.
+ */
+export function pipe<
+  const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+  const TItems extends PipeItem<
+    InferOutput<TSchema>,
+    InferOutput<TSchema>,
+    BaseIssue<unknown>
+  >[],
+>(schema: TSchema, ...items: TItems): SchemaWithPipe<[TSchema, ...TItems]>;
+
+// @__NO_SIDE_EFFECTS__
 export function pipe<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   const TItems extends PipeItem<unknown, unknown, BaseIssue<unknown>>[],
@@ -2646,7 +2674,10 @@ export function pipe<
   return {
     ...pipe[0],
     pipe,
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // Execute pipeline items in sequence
       for (const item of pipe) {
         // Exclude metadata items from execution
@@ -2667,7 +2698,7 @@ export function pipe<
             (!config.abortEarly && !config.abortPipeEarly)
           ) {
             // @ts-expect-error
-            dataset = item['~validate'](dataset, config);
+            dataset = item['~run'](dataset, config);
           }
         }
       }

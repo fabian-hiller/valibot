@@ -5,7 +5,6 @@ import type {
   DefaultAsync,
   DefaultValue,
   InferOutput,
-  NonNullish,
 } from '../../types/index.ts';
 
 /**
@@ -18,7 +17,4 @@ export type InferNullishOutput<
   TDefault extends DefaultAsync<TWrapped, null | undefined>,
 > = undefined extends TDefault
   ? InferOutput<TWrapped> | null | undefined
-  : // FIXME: For schemas that transform the input to `null` or `undefined`
-    // this implementation may result in an incorrect output type
-    | NonNullish<InferOutput<TWrapped>>
-      | Extract<DefaultValue<TDefault>, null | undefined>;
+  : InferOutput<TWrapped> | Extract<DefaultValue<TDefault>, null | undefined>;

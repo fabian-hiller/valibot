@@ -4,6 +4,7 @@ description: Changes the local configuration of a schema.
 source: /methods/config/config.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
 ---
 
 import { ApiList, Property } from '~/components';
@@ -82,6 +83,7 @@ The following APIs can be combined with `config`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -151,6 +153,7 @@ The following APIs can be combined with `config`.
 
 <ApiList
   items={[
+    'args',
     'base64',
     'bic',
     'brand',
@@ -172,6 +175,7 @@ The following APIs can be combined with `config`.
     'findItem',
     'finite',
     'graphemes',
+    'gtValue',
     'hash',
     'hexadecimal',
     'hexColor',
@@ -188,6 +192,7 @@ The following APIs can be combined with `config`.
     'isoTimestamp',
     'isoWeek',
     'length',
+    'ltValue',
     'mac',
     'mac48',
     'mac64',
@@ -214,6 +219,7 @@ The following APIs can be combined with `config`.
     'notLength',
     'notSize',
     'notValue',
+    'notValues',
     'notWords',
     'octal',
     'partialCheck',
@@ -222,6 +228,8 @@ The following APIs can be combined with `config`.
     'readonly',
     'reduceItems',
     'regex',
+    'returns',
+    'rfcEmail',
     'safeInteger',
     'size',
     'someItem',
@@ -240,6 +248,7 @@ The following APIs can be combined with `config`.
     'url',
     'uuid',
     'value',
+    'values',
     'words',
   ]}
 />
@@ -247,3 +256,38 @@ The following APIs can be combined with `config`.
 ### Utils
 
 <ApiList items={['isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'customAsync',
+    'exactOptionalAsync',
+    'fallbackAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'partialAsync',
+    'pipeAsync',
+    'recordAsync',
+    'requiredAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>

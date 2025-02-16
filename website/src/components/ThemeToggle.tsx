@@ -1,6 +1,5 @@
-import { component$, useComputed$, useTask$ } from '@builder.io/qwik';
+import { $, component$, useComputed$ } from '@builder.io/qwik';
 import { Form } from '@builder.io/qwik-city';
-import { isBrowser } from '@builder.io/qwik/build';
 import { NightIcon, SunIcon } from '~/icons';
 import { useTheme, useThemeToggle } from '~/routes/plugin@theme';
 import { disableTransitions, trackEvent } from '~/utils';
@@ -19,25 +18,24 @@ export const ThemeToggle = component$<ThemeToggleProps>((props) => {
   const theme = useTheme();
   const themeToggle = useThemeToggle();
 
-  // Disable CSS transitions while changing theme
-  useTask$(({ track }) => {
-    const isRunning = track(() => themeToggle.isRunning);
-    if (isBrowser && !isRunning) {
-      disableTransitions();
-
-      // Tracke change theme event
-      trackEvent('change_theme', { theme: theme.value });
-    }
-  });
-
   // Compute value of next theme
   const nextTheme = useComputed$(() =>
     theme.value === 'dark' ? 'light' : 'dark'
   );
 
+  /**
+   * Handles client-side theme change actions.
+   */
+  const changeTheme = $(() => {
+    // Disable CSS transitions
+    disableTransitions();
+
+    // Tracke change theme event
+    trackEvent('change_theme', { theme: nextTheme.value });
+  });
+
   return (
-    <Form class={props.class} action={themeToggle}>
-      <input name="theme" type="hidden" value={nextTheme.value} />
+    <Form class={props.class} action={themeToggle} onSubmit$={changeTheme}>
       <SystemIcon type="submit" label={`Change theme to ${nextTheme.value}`}>
         <SunIcon class="hidden h-full dark:block" />
         <NightIcon class="h-full dark:hidden" />

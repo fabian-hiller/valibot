@@ -25,8 +25,10 @@ import type {
   ObjectKeys,
   OutputDataset,
   SchemaWithoutPipe,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
  * Schema type.
@@ -75,11 +77,39 @@ export type SchemaWithPartialAsync<
       infer TEntries,
       ErrorMessage<StrictObjectIssue> | undefined
     >
-  ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+  ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
       /**
        * The object entries.
        */
       readonly entries: PartialEntries<TEntries, TKeys>;
+      /**
+       * The Standard Schema properties.
+       *
+       * @internal
+       */
+      readonly '~standard': StandardProps<
+        InferObjectInput<PartialEntries<TEntries, TKeys>>,
+        InferObjectOutput<PartialEntries<TEntries, TKeys>>
+      >;
+      /**
+       * Parses unknown input.
+       *
+       * @param dataset The input dataset.
+       * @param config The configuration.
+       *
+       * @returns The output dataset.
+       *
+       * @internal
+       */
+      readonly '~run': (
+        dataset: UnknownDataset,
+        config: Config<BaseIssue<unknown>>
+      ) => Promise<
+        OutputDataset<
+          InferObjectOutput<PartialEntries<TEntries, TKeys>>,
+          InferIssue<TSchema>
+        >
+      >;
       /**
        * The input, output and issue type.
        *
@@ -92,35 +122,50 @@ export type SchemaWithPartialAsync<
             readonly issue: InferIssue<TSchema>;
           }
         | undefined;
-      /**
-       * Parses unknown input.
-       *
-       * @param dataset The input dataset.
-       * @param config The configuration.
-       *
-       * @returns The output dataset.
-       *
-       * @internal
-       */
-      readonly '~validate': (
-        dataset: UnknownDataset,
-        config?: Config<BaseIssue<unknown>>
-      ) => Promise<
-        OutputDataset<
-          InferObjectOutput<PartialEntries<TEntries, TKeys>>,
-          InferIssue<TSchema>
-        >
-      >;
     }
   : TSchema extends LooseObjectSchemaAsync<
         infer TEntries,
         ErrorMessage<LooseObjectIssue> | undefined
       >
-    ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+    ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
         /**
          * The object entries.
          */
         readonly entries: PartialEntries<TEntries, TKeys>;
+        /**
+         * The Standard Schema properties.
+         *
+         * @internal
+         */
+        readonly '~standard': StandardProps<
+          InferObjectInput<PartialEntries<TEntries, TKeys>> & {
+            [key: string]: unknown;
+          },
+          InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
+            [key: string]: unknown;
+          }
+        >;
+        /**
+         * Parses unknown input.
+         *
+         * @param dataset The input dataset.
+         * @param config The configuration.
+         *
+         * @returns The output dataset.
+         *
+         * @internal
+         */
+        readonly '~run': (
+          dataset: UnknownDataset,
+          config: Config<BaseIssue<unknown>>
+        ) => Promise<
+          OutputDataset<
+            InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
+              [key: string]: unknown;
+            },
+            InferIssue<TSchema>
+          >
+        >;
         /**
          * The input, output and issue type.
          *
@@ -141,38 +186,51 @@ export type SchemaWithPartialAsync<
               readonly issue: InferIssue<TSchema>;
             }
           | undefined;
-        /**
-         * Parses unknown input.
-         *
-         * @param dataset The input dataset.
-         * @param config The configuration.
-         *
-         * @returns The output dataset.
-         *
-         * @internal
-         */
-        readonly '~validate': (
-          dataset: UnknownDataset,
-          config?: Config<BaseIssue<unknown>>
-        ) => Promise<
-          OutputDataset<
-            InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
-              [key: string]: unknown;
-            },
-            InferIssue<TSchema>
-          >
-        >;
       }
     : TSchema extends ObjectWithRestSchemaAsync<
           infer TEntries,
           infer TRest,
           ErrorMessage<ObjectWithRestIssue> | undefined
         >
-      ? Omit<TSchema, 'entries' | '~types' | '~validate'> & {
+      ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
           /**
            * The object entries.
            */
           readonly entries: PartialEntries<TEntries, TKeys>;
+          /**
+           * The Standard Schema properties.
+           *
+           * @internal
+           */
+          readonly '~standard': StandardProps<
+            InferObjectInput<PartialEntries<TEntries, TKeys>> & {
+              [key: string]: InferInput<TRest>;
+            },
+            InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
+              [key: string]: InferOutput<TRest>;
+            }
+          >;
+          /**
+           * Parses unknown input.
+           *
+           * @param dataset The input dataset.
+           * @param config The configuration.
+           *
+           * @returns The output dataset.
+           *
+           * @internal
+           */
+          readonly '~run': (
+            dataset: UnknownDataset,
+            config: Config<BaseIssue<unknown>>
+          ) => Promise<
+            OutputDataset<
+              InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
+                [key: string]: InferOutput<TRest>;
+              },
+              InferIssue<TSchema>
+            >
+          >;
           /**
            * The input, output and issue type.
            *
@@ -191,27 +249,6 @@ export type SchemaWithPartialAsync<
                 readonly issue: InferIssue<TSchema>;
               }
             | undefined;
-          /**
-           * Parses unknown input.
-           *
-           * @param dataset The input dataset.
-           * @param config The configuration.
-           *
-           * @returns The output dataset.
-           *
-           * @internal
-           */
-          readonly '~validate': (
-            dataset: UnknownDataset,
-            config?: Config<BaseIssue<unknown>>
-          ) => Promise<
-            OutputDataset<
-              InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
-                [key: string]: InferOutput<TRest>;
-              },
-              InferIssue<TSchema>
-            >
-          >;
         }
       : never;
 
@@ -240,6 +277,7 @@ export function partialAsync<
   const TKeys extends ObjectKeys<TSchema>,
 >(schema: TSchema, keys: TKeys): SchemaWithPartialAsync<TSchema, TKeys>;
 
+// @__NO_SIDE_EFFECTS__
 export function partialAsync(
   schema: Schema,
   keys?: ObjectKeys<Schema>
@@ -255,5 +293,11 @@ export function partialAsync(
   }
 
   // Return modified copy of schema
-  return { ...schema, entries };
+  return {
+    ...schema,
+    entries,
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+  };
 }

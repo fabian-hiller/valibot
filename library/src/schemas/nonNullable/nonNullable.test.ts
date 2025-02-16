@@ -1,4 +1,7 @@
 import { describe, expect, test } from 'vitest';
+import { transform } from '../../actions/index.ts';
+import { pipe } from '../../methods/index.ts';
+import type { FailureDataset } from '../../types/index.ts';
 import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
 import { nullish, type NullishSchema } from '../nullish/index.ts';
 import { string, type StringSchema } from '../string/index.ts';
@@ -21,9 +24,12 @@ describe('nonNullable', () => {
       expects: '!null',
       wrapped,
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -69,16 +75,43 @@ describe('nonNullable', () => {
   });
 
   describe('should return dataset with issues', () => {
-    const schema = nonNullable(nullish(string()), 'message');
-    const baseIssue: Omit<NonNullableIssue, 'input' | 'received'> = {
+    const nonNullableIssue: NonNullableIssue = {
       kind: 'schema',
       type: 'non_nullable',
+      input: null,
+      received: 'null',
       expected: '!null',
       message: 'message',
+      requirement: undefined,
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
     };
 
-    test('for null', () => {
-      expectSchemaIssue(schema, baseIssue, [null]);
+    test('for null input', () => {
+      expectSchemaIssue(
+        nonNullable(nullish(string()), 'message'),
+        nonNullableIssue,
+        [null]
+      );
+    });
+
+    test('for null output', () => {
+      expect(
+        nonNullable(
+          pipe(
+            string(),
+            transform(() => null)
+          ),
+          'message'
+        )['~run']({ value: 'foo' }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: null,
+        issues: [nonNullableIssue],
+      } satisfies FailureDataset<NonNullableIssue>);
     });
   });
 });

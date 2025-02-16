@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getByteCount } from '../../utils/index.ts';
 
 /**
- * Min bytes issue type.
+ * Min bytes issue interface.
  */
 export interface MinBytesIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface MinBytesIssue<
 }
 
 /**
- * Min bytes action type.
+ * Min bytes action interface.
  */
 export interface MinBytesAction<
   TInput extends string,
@@ -97,6 +97,7 @@ export function minBytes<
   message: TMessage
 ): MinBytesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function minBytes(
   requirement: number,
   message?: ErrorMessage<MinBytesIssue<string, number>>
@@ -113,7 +114,7 @@ export function minBytes(
     expects: `>=${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         const length = _getByteCount(dataset.value);
         if (length < this.requirement) {

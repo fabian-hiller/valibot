@@ -1,12 +1,12 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
   ErrorMessage,
-  FailureDataset,
+  OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { nonNullable } from './nonNullable.ts';
 import type {
   InferNonNullableInput,
   InferNonNullableIssue,
@@ -15,7 +15,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non nullable schema async type.
+ * Non nullable schema async interface.
  */
 export interface NonNullableSchemaAsync<
   TWrapped extends
@@ -34,7 +34,7 @@ export interface NonNullableSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nonNullableAsync;
+  readonly reference: typeof nonNullable | typeof nonNullableAsync;
   /**
    * The expected property.
    */
@@ -80,6 +80,7 @@ export function nonNullableAsync<
   message: TMessage
 ): NonNullableSchemaAsync<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullableAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
@@ -98,18 +99,24 @@ export function nonNullableAsync(
     async: true,
     wrapped,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
-      // If value is `null`, add issue and return dataset
-      if (dataset.value === null) {
-        _addIssue(this, 'type', dataset, config);
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
+      // If value is not `null`, run wrapped schema
+      if (dataset.value !== null) {
         // @ts-expect-error
-        return dataset as FailureDataset<NonNullableIssue>;
+        dataset = await this.wrapped['~run'](dataset, config);
       }
 
-      // Otherwise, return dataset of wrapped schema
-      return this.wrapped['~validate'](dataset, config);
+      // If value is `null`, add issue to dataset
+      if (dataset.value === null) {
+        _addIssue(this, 'type', dataset, config);
+      }
+
+      // Return output dataset
+      // @ts-expect-error
+      return dataset as OutputDataset<unknown, BaseIssue<unknown>>;
     },
   };
 }

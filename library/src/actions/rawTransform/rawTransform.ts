@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { Context, RawTransformIssue } from './types.ts';
 
 /**
- * Raw transform action type.
+ * Raw transform action interface.
  */
 export interface RawTransformAction<TInput, TOutput>
   extends BaseTransformation<TInput, TOutput, RawTransformIssue<TInput>> {
@@ -28,6 +28,7 @@ export interface RawTransformAction<TInput, TOutput>
  *
  * @returns A raw transform action.
  */
+// @__NO_SIDE_EFFECTS__
 export function rawTransform<TInput, TOutput>(
   action: (context: Context<TInput>) => TOutput
 ): RawTransformAction<TInput, TOutput> {
@@ -36,7 +37,7 @@ export function rawTransform<TInput, TOutput>(
     type: 'raw_transform',
     reference: rawTransform,
     async: false,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       // Execute action and get its output
       const output = action({
         dataset,

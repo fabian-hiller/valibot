@@ -13,8 +13,7 @@ export const PostCover = component$<PostCoverProps>(({ variant, label }) => (
   <div
     class={clsx(
       'relative flex aspect-video select-none items-center justify-center overflow-hidden rounded-xl border-2 border-slate-200 dark:border-slate-800',
-      variant === 'blog' &&
-        'duration-100 group-hover:-translate-y-1 lg:rounded-2xl',
+      variant === 'blog' && 'duration-100 hover:-translate-y-1 lg:rounded-2xl',
       variant === 'post' &&
         'mx-3 lg:mx-10 lg:rounded-[32px] lg:border-[3px] 2xl:mx-0'
     )}

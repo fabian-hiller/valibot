@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -7,7 +6,11 @@ import type {
   ObjectPathItem,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _isValidObjectKey,
+} from '../../utils/index.ts';
 import type {
   InferRecordInput,
   InferRecordOutput,
@@ -15,7 +18,7 @@ import type {
 } from './types.ts';
 
 /**
- * Record schema type.
+ * Record schema interface.
  */
 export interface RecordSchema<
   TKey extends BaseSchema<string, string | number | symbol, BaseIssue<unknown>>,
@@ -92,6 +95,7 @@ export function record<
   message: TMessage
 ): RecordSchema<TKey, TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function record(
   key: BaseSchema<string, string | number | symbol, BaseIssue<unknown>>,
   value: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -110,9 +114,10 @@ export function record(
     key,
     value,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -132,10 +137,7 @@ export function record(
             const entryValue: unknown = input[entryKey as keyof typeof input];
 
             // Get dataset of key schema
-            const keyDataset = this.key['~validate'](
-              { value: entryKey },
-              config
-            );
+            const keyDataset = this.key['~run']({ value: entryKey }, config);
 
             // If there are issues, capture them
             if (keyDataset.issues) {
@@ -168,7 +170,7 @@ export function record(
             }
 
             // Get dataset of value schema
-            const valueDataset = this.value['~validate'](
+            const valueDataset = this.value['~run'](
               { value: entryValue },
               config
             );

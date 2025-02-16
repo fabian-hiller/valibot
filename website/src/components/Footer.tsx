@@ -9,7 +9,7 @@ export const Footer = component$(() => (
     <div>&copy; {new Date().getFullYear()} Fabian Hiller</div>
     <nav class="space-x-5 lg:space-x-12">
       {[
-        { label: 'Imprint', href: '/imprint/' },
+        { label: 'Contact', href: '/contact/' },
         { label: 'Privacy', href: '/privacy/' },
       ].map(({ label, href }) => (
         <TextLink key={href} href={href}>

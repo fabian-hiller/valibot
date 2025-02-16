@@ -8,7 +8,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { Context, RawTransformIssue } from './types.ts';
 
 /**
- * Raw transform action async type.
+ * Raw transform action async interface.
  */
 export interface RawTransformActionAsync<TInput, TOutput>
   extends BaseTransformationAsync<TInput, TOutput, RawTransformIssue<TInput>> {
@@ -29,6 +29,7 @@ export interface RawTransformActionAsync<TInput, TOutput>
  *
  * @returns A raw transform action.
  */
+// @__NO_SIDE_EFFECTS__
 export function rawTransformAsync<TInput, TOutput>(
   action: (context: Context<TInput>) => MaybePromise<TOutput>
 ): RawTransformActionAsync<TInput, TOutput> {
@@ -37,7 +38,7 @@ export function rawTransformAsync<TInput, TOutput>(
     type: 'raw_transform',
     reference: rawTransformAsync,
     async: true,
-    async '~validate'(dataset, config) {
+    async '~run'(dataset, config) {
       // Execute action and get its output
       const output = await action({
         dataset,

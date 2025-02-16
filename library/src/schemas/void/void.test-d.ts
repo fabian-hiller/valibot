@@ -25,10 +25,12 @@ describe('void', () => {
     type Schema = VoidSchema<undefined>;
 
     test('of input', () => {
+      // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
       expectTypeOf<InferInput<Schema>>().toEqualTypeOf<void>();
     });
 
     test('of output', () => {
+      // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
       expectTypeOf<InferOutput<Schema>>().toEqualTypeOf<void>();
     });
 

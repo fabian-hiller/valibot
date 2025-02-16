@@ -1,12 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   Config,
   InferIssue,
   InferOutput,
+  MaybeReadonly,
   OutputDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 import { getFallback } from '../getFallback/index.ts';
 
 /**
@@ -15,11 +16,11 @@ import { getFallback } from '../getFallback/index.ts';
 export type Fallback<
   TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 > =
-  | InferOutput<TSchema>
+  | MaybeReadonly<InferOutput<TSchema>>
   | ((
       dataset?: OutputDataset<InferOutput<TSchema>, InferIssue<TSchema>>,
       config?: Config<InferIssue<TSchema>>
-    ) => InferOutput<TSchema>);
+    ) => MaybeReadonly<InferOutput<TSchema>>);
 
 /**
  * Schema with fallback type.
@@ -42,6 +43,7 @@ export type SchemaWithFallback<
  *
  * @returns The passed schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function fallback<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   const TFallback extends Fallback<TSchema>,
@@ -52,8 +54,11 @@ export function fallback<
   return {
     ...schema,
     fallback,
-    '~validate'(dataset, config = getGlobalConfig()) {
-      const outputDataset = schema['~validate'](dataset, config);
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
+      const outputDataset = schema['~run'](dataset, config);
       return outputDataset.issues
         ? { typed: true, value: getFallback(this, outputDataset, config) }
         : outputDataset;

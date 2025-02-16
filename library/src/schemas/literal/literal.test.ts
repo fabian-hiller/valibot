@@ -11,9 +11,12 @@ describe('literal', () => {
       literal: 123,
       expects: '123',
       async: false,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -98,6 +101,7 @@ describe('literal', () => {
           Symbol('123'),
           {},
           [],
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           () => {},
         ]
       );
@@ -107,6 +111,7 @@ describe('literal', () => {
       expectSchemaIssue(
         literal(false, 'message'),
         { ...baseIssue, expected: 'false' },
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         [0n, true, null, 0, undefined, '', Symbol(), {}, [], () => {}]
       );
     });
@@ -128,6 +133,7 @@ describe('literal', () => {
           Symbol('123'),
           {},
           [],
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           () => {},
         ]
       );
@@ -149,6 +155,7 @@ describe('literal', () => {
           Symbol('123'),
           {},
           [],
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           () => {},
         ]
       );
@@ -169,6 +176,7 @@ describe('literal', () => {
           Symbol(),
           {},
           [],
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           () => {},
         ]
       );

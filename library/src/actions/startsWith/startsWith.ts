@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Starts with issue type.
+ * Starts with issue interface.
  */
 export interface StartsWithIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface StartsWithIssue<
 }
 
 /**
- * Starts with action type.
+ * Starts with action interface.
  */
 export interface StartsWithAction<
   TInput extends string,
@@ -101,6 +101,7 @@ export function startsWith<
   message: TMessage
 ): StartsWithAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function startsWith(
   requirement: string,
   message?: ErrorMessage<StartsWithIssue<string, string>>
@@ -117,7 +118,7 @@ export function startsWith(
     expects: `"${requirement}"`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !dataset.value.startsWith(this.requirement)) {
         _addIssue(this, 'start', dataset, config, {
           received: `"${dataset.value.slice(0, this.requirement.length)}"`,

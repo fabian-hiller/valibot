@@ -7,7 +7,7 @@ import { _addIssue } from '../../utils/index.ts';
 import type { LengthInput } from '../types.ts';
 
 /**
- * Empty issue type.
+ * Empty issue interface.
  */
 export interface EmptyIssue<TInput extends LengthInput>
   extends BaseIssue<TInput> {
@@ -30,7 +30,7 @@ export interface EmptyIssue<TInput extends LengthInput>
 }
 
 /**
- * Empty action type.
+ * Empty action interface.
  */
 export interface EmptyAction<
   TInput extends LengthInput,
@@ -76,6 +76,7 @@ export function empty<
   const TMessage extends ErrorMessage<EmptyIssue<TInput>> | undefined,
 >(message: TMessage): EmptyAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function empty(
   message?: ErrorMessage<EmptyIssue<LengthInput>>
 ): EmptyAction<LengthInput, ErrorMessage<EmptyIssue<LengthInput>> | undefined> {
@@ -86,7 +87,7 @@ export function empty(
     async: false,
     expects: '0',
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && dataset.value.length > 0) {
         _addIssue(this, 'length', dataset, config, {
           received: `${dataset.value.length}`,

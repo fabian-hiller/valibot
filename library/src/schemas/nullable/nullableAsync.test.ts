@@ -1,6 +1,13 @@
 import { describe, expect, test } from 'vitest';
-import { expectNoSchemaIssueAsync } from '../../vitest/index.ts';
-import { string, type StringSchema } from '../string/index.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
+import {
+  string,
+  type StringIssue,
+  type StringSchema,
+} from '../string/index.ts';
 import { nullableAsync, type NullableSchemaAsync } from './nullableAsync.ts';
 
 describe('nullableAsync', () => {
@@ -15,12 +22,20 @@ describe('nullableAsync', () => {
       expects: '(string | null)',
       wrapped: {
         ...string(),
-        '~validate': expect.any(Function),
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
+        '~run': expect.any(Function),
       },
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined default', () => {
@@ -94,6 +109,24 @@ describe('nullableAsync', () => {
     });
   });
 
+  describe('should return dataset with issues', () => {
+    const schema = nullableAsync(string('message'));
+    const baseIssue: Omit<StringIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'string',
+      expected: 'string',
+      message: 'message',
+    };
+
+    test('for invalid wrapper type', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [123, true, {}]);
+    });
+
+    test('for undefined', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [undefined]);
+    });
+  });
+
   describe('should return dataset without default', () => {
     test('for undefined default', async () => {
       await expectNoSchemaIssueAsync(nullableAsync(string()), [null, 'foo']);
@@ -121,27 +154,27 @@ describe('nullableAsync', () => {
     const schema6 = nullableAsync(string(), async () => 'foo');
 
     test('for null', async () => {
-      expect(await schema1['~validate']({ value: null }, {})).toStrictEqual({
+      expect(await schema1['~run']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: null,
       });
-      expect(await schema2['~validate']({ value: null }, {})).toStrictEqual({
+      expect(await schema2['~run']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(await schema3['~validate']({ value: null }, {})).toStrictEqual({
+      expect(await schema3['~run']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: null,
       });
-      expect(await schema4['~validate']({ value: null }, {})).toStrictEqual({
+      expect(await schema4['~run']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(await schema5['~validate']({ value: null }, {})).toStrictEqual({
+      expect(await schema5['~run']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: null,
       });
-      expect(await schema6['~validate']({ value: null }, {})).toStrictEqual({
+      expect(await schema6['~run']({ value: null }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });

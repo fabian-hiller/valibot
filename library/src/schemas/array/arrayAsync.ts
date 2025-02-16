@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   ArrayPathItem,
   BaseIssue,
@@ -10,11 +9,12 @@ import type {
   InferOutput,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { array } from './array.ts';
 import type { ArrayIssue } from './types.ts';
 
 /**
- * Array schema type.
+ * Array schema interface.
  */
 export interface ArraySchemaAsync<
   TItem extends
@@ -33,7 +33,7 @@ export interface ArraySchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof arrayAsync;
+  readonly reference: typeof array | typeof arrayAsync;
   /**
    * The expected property.
    */
@@ -76,6 +76,7 @@ export function arrayAsync<
   const TMessage extends ErrorMessage<ArrayIssue> | undefined,
 >(item: TItem, message: TMessage): ArraySchemaAsync<TItem, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function arrayAsync(
   item:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
@@ -94,9 +95,10 @@ export function arrayAsync(
     async: true,
     item,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -109,7 +111,7 @@ export function arrayAsync(
 
         // Parse schema of each item async
         const itemDatasets = await Promise.all(
-          input.map((value) => this.item['~validate']({ value }, config))
+          input.map((value) => this.item['~run']({ value }, config))
         );
 
         // Process each item dataset

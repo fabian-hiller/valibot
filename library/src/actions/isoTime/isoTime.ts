@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * ISO time issue type.
+ * ISO time issue interface.
  */
 export interface IsoTimeIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface IsoTimeIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * ISO time action type.
+ * ISO time action interface.
  */
 export interface IsoTimeAction<
   TInput extends string,
@@ -87,6 +87,7 @@ export function isoTime<
   const TMessage extends ErrorMessage<IsoTimeIssue<TInput>> | undefined,
 >(message: TMessage): IsoTimeAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function isoTime(
   message?: ErrorMessage<IsoTimeIssue<string>>
 ): IsoTimeAction<string, ErrorMessage<IsoTimeIssue<string>> | undefined> {
@@ -98,7 +99,7 @@ export function isoTime(
     expects: null,
     requirement: ISO_TIME_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'time', dataset, config);
       }

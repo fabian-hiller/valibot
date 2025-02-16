@@ -9,7 +9,7 @@ import type { PartialCheckIssue, PartialInput } from './types.ts';
 import { _isPartiallyTyped } from './utils/index.ts';
 
 /**
- * Partial check action type.
+ * Partial check action interface.
  */
 export interface PartialCheckAction<
   TInput extends PartialInput,
@@ -82,6 +82,7 @@ export function partialCheck<
   message: TMessage
 ): PartialCheckAction<TInput, TPathList, TSelection, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function partialCheck(
   pathList: PathKeys<PartialInput>[],
   requirement: (input: PartialInput) => boolean,
@@ -101,7 +102,7 @@ export function partialCheck(
     pathList,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (
         _isPartiallyTyped(dataset, pathList) &&
         // @ts-expect-error

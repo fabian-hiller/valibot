@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -8,7 +7,12 @@ import type {
   ObjectPathItem,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _isValidObjectKey } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _isValidObjectKey,
+} from '../../utils/index.ts';
+import type { record } from './record.ts';
 import type {
   InferRecordInput,
   InferRecordOutput,
@@ -16,7 +20,7 @@ import type {
 } from './types.ts';
 
 /**
- * Record schema async type.
+ * Record schema async interface.
  */
 export interface RecordSchemaAsync<
   TKey extends
@@ -38,7 +42,7 @@ export interface RecordSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof recordAsync;
+  readonly reference: typeof record | typeof recordAsync;
   /**
    * The expected property.
    */
@@ -97,6 +101,7 @@ export function recordAsync<
   message: TMessage
 ): RecordSchemaAsync<TKey, TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function recordAsync(
   key:
     | BaseSchema<string, string | number | symbol, BaseIssue<unknown>>
@@ -121,9 +126,10 @@ export function recordAsync(
     key,
     value,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -144,8 +150,8 @@ export function recordAsync(
               Promise.all([
                 entryKey,
                 entryValue,
-                this.key['~validate']({ value: entryKey }, config),
-                this.value['~validate']({ value: entryValue }, config),
+                this.key['~run']({ value: entryKey }, config),
+                this.value['~run']({ value: entryValue }, config),
               ])
             )
         );

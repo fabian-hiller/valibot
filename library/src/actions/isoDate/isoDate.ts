@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * ISO date issue type.
+ * ISO date issue interface.
  */
 export interface IsoDateIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface IsoDateIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * ISO date action type.
+ * ISO date action interface.
  */
 export interface IsoDateAction<
   TInput extends string,
@@ -95,6 +95,7 @@ export function isoDate<
   const TMessage extends ErrorMessage<IsoDateIssue<TInput>> | undefined,
 >(message: TMessage): IsoDateAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function isoDate(
   message?: ErrorMessage<IsoDateIssue<string>>
 ): IsoDateAction<string, ErrorMessage<IsoDateIssue<string>> | undefined> {
@@ -106,7 +107,7 @@ export function isoDate(
     expects: null,
     requirement: ISO_DATE_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'date', dataset, config);
       }

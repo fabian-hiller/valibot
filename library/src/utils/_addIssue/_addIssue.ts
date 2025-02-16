@@ -37,7 +37,7 @@ type Context =
   | BaseTransformationAsync<any, unknown, BaseIssue<unknown>>;
 
 /**
- * Other type.
+ * Other interface.
  */
 interface Other<TContext extends Context> {
   input?: unknown | undefined;

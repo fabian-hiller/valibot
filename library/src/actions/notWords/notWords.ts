@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getWordCount } from '../../utils/index.ts';
 
 /**
- * Not words issue type.
+ * Not words issue interface.
  */
 export interface NotWordsIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface NotWordsIssue<
 }
 
 /**
- * Not words action type.
+ * Not words action interface.
  */
 export interface NotWordsAction<
   TInput extends string,
@@ -110,6 +110,7 @@ export function notWords<
   message: TMessage
 ): NotWordsAction<TInput, TLocales, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function notWords(
   locales: Intl.LocalesArgument,
   requirement: number,
@@ -129,7 +130,7 @@ export function notWords(
     locales,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         const count = _getWordCount(this.locales, dataset.value);
         if (count === this.requirement) {

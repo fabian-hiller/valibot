@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -8,11 +7,12 @@ import type {
   OutputDataset,
   SetPathItem,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { set } from './set.ts';
 import type { InferSetInput, InferSetOutput, SetIssue } from './types.ts';
 
 /**
- * Set schema async type.
+ * Set schema async interface.
  */
 export interface SetSchemaAsync<
   TValue extends
@@ -31,7 +31,7 @@ export interface SetSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof setAsync;
+  readonly reference: typeof set | typeof setAsync;
   /**
    * The expected property.
    */
@@ -74,6 +74,7 @@ export function setAsync<
   const TMessage extends ErrorMessage<SetIssue> | undefined,
 >(value: TValue, message: TMessage): SetSchemaAsync<TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function setAsync(
   value:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
@@ -92,9 +93,10 @@ export function setAsync(
     async: true,
     value,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    async '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    async '~run'(dataset, config) {
       // Get input value from dataset
       const input = dataset.value;
 
@@ -111,7 +113,7 @@ export function setAsync(
             async (inputValue) =>
               [
                 inputValue,
-                await this.value['~validate']({ value: inputValue }, config),
+                await this.value['~run']({ value: inputValue }, config),
               ] as const
           )
         );

@@ -31,17 +31,15 @@ export type MaybePromise<TValue> = TValue | Promise<TValue>;
  * Hint: This type has no effect and is only used so that TypeScript displays
  * the final type in the preview instead of the utility types used.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type Prettify<TObject> = { [TKey in keyof TObject]: TObject[TKey] } & {};
 
 /**
  * Marks specific keys as optional.
  */
-export type MarkOptional<TObject, TKeys extends keyof TObject> = Omit<
+export type MarkOptional<
   TObject,
-  TKeys
-> &
-  Partial<Pick<TObject, TKeys>>;
+  TKeys extends keyof TObject,
+> = Partial<TObject> & Required<Omit<TObject, TKeys>>;
 
 /**
  * Extracts first tuple item.
@@ -66,32 +64,46 @@ export type UnionToIntersect<TUnion> =
     : never;
 
 /**
- * Converts union to tuple type.
+ * Converts union to tuple type using an accumulator.
+ *
+ * For more information: {@link https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html#tail-recursion-elimination-on-conditional-types}
  */
-export type UnionToTuple<TUnion> =
+type UnionToTupleHelper<TUnion, TResult extends unknown[]> =
   UnionToIntersect<
     TUnion extends never ? never : () => TUnion
   > extends () => infer TLast
-    ? [...UnionToTuple<Exclude<TUnion, TLast>>, TLast]
-    : [];
+    ? UnionToTupleHelper<Exclude<TUnion, TLast>, [TLast, ...TResult]>
+    : TResult;
+
+/**
+ * Converts union to tuple type.
+ */
+export type UnionToTuple<TUnion> = UnionToTupleHelper<TUnion, []>;
+
+/**
+ * Checks if a type is `any`.
+ */
+type IsAny<Type> = 0 extends 1 & Type ? true : false;
 
 /**
  * Extracts tuples with path keys.
  */
 export type PathKeys<TValue> = MaybeReadonly<
-  TValue extends readonly unknown[]
-    ? number extends TValue['length']
-      ? [number] | [number, ...PathKeys<TValue[number]>]
-      : {
-          [TKey in keyof TValue]: TKey extends `${infer TIndex extends number}`
-            ? [TIndex] | [TIndex, ...PathKeys<TValue[TKey]>]
-            : never;
-        }[keyof TValue & number]
-    : TValue extends Record<string, unknown>
-      ? {
-          [TKey in keyof TValue]: [TKey] | [TKey, ...PathKeys<TValue[TKey]>];
-        }[keyof TValue]
-      : never
+  IsAny<TValue> extends true
+    ? never
+    : TValue extends readonly unknown[]
+      ? number extends TValue['length']
+        ? [number] | [number, ...PathKeys<TValue[number]>]
+        : {
+            [TKey in keyof TValue]: TKey extends `${infer TIndex extends number}`
+              ? [TIndex] | [TIndex, ...PathKeys<TValue[TKey]>]
+              : never;
+          }[keyof TValue & number]
+      : TValue extends Record<string, unknown>
+        ? {
+            [TKey in keyof TValue]: [TKey] | [TKey, ...PathKeys<TValue[TKey]>];
+          }[keyof TValue]
+        : never
 >;
 
 /**

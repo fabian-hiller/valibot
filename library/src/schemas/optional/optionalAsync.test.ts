@@ -1,6 +1,13 @@
 import { describe, expect, test } from 'vitest';
-import { expectNoSchemaIssueAsync } from '../../vitest/index.ts';
-import { string, type StringSchema } from '../string/index.ts';
+import {
+  expectNoSchemaIssueAsync,
+  expectSchemaIssueAsync,
+} from '../../vitest/index.ts';
+import {
+  string,
+  type StringIssue,
+  type StringSchema,
+} from '../string/index.ts';
 import { optionalAsync, type OptionalSchemaAsync } from './optionalAsync.ts';
 
 describe('optionalAsync', () => {
@@ -15,12 +22,20 @@ describe('optionalAsync', () => {
       expects: '(string | undefined)',
       wrapped: {
         ...string(),
-        '~validate': expect.any(Function),
+        '~standard': {
+          version: 1,
+          vendor: 'valibot',
+          validate: expect.any(Function),
+        },
+        '~run': expect.any(Function),
       },
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     };
 
     test('with undefined default', () => {
@@ -87,6 +102,24 @@ describe('optionalAsync', () => {
     });
   });
 
+  describe('should return dataset with issues', () => {
+    const schema = optionalAsync(string('message'));
+    const baseIssue: Omit<StringIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'string',
+      expected: 'string',
+      message: 'message',
+    };
+
+    test('for invalid wrapper type', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [123, true, {}]);
+    });
+
+    test('for null', async () => {
+      await expectSchemaIssueAsync(schema, baseIssue, [null]);
+    });
+  });
+
   describe('should return dataset without default', () => {
     test('for undefined default', async () => {
       await expectNoSchemaIssueAsync(optionalAsync(string()), [
@@ -116,33 +149,23 @@ describe('optionalAsync', () => {
     const schema5 = optionalAsync(string(), async () => 'foo');
 
     test('for undefined', async () => {
-      expect(
-        await schema1['~validate']({ value: undefined }, {})
-      ).toStrictEqual({
+      expect(await schema1['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(
-        await schema2['~validate']({ value: undefined }, {})
-      ).toStrictEqual({
+      expect(await schema2['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(
-        await schema3['~validate']({ value: undefined }, {})
-      ).toStrictEqual({
+      expect(await schema3['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });
-      expect(
-        await schema4['~validate']({ value: undefined }, {})
-      ).toStrictEqual({
+      expect(await schema4['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: undefined,
       });
-      expect(
-        await schema5['~validate']({ value: undefined }, {})
-      ).toStrictEqual({
+      expect(await schema5['~run']({ value: undefined }, {})).toStrictEqual({
         typed: true,
         value: 'foo',
       });

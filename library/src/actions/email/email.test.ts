@@ -13,7 +13,7 @@ describe('email', () => {
       expects: null,
       requirement: EMAIL_REGEX,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -58,7 +58,7 @@ describe('email', () => {
         },
       ];
       expect(
-        action['~validate']({ typed: false, value: null, issues }, {})
+        action['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,
@@ -152,7 +152,7 @@ describe('email', () => {
       expectNoActionIssue(action, ['email@example.co.uk']);
     });
 
-    test('for subdomain and country code TDL', () => {
+    test('for subdomain and country code TLD', () => {
       expectNoActionIssue(action, ['email@subdomain.example.co.uk']);
     });
 

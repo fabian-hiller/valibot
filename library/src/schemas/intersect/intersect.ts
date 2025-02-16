@@ -1,4 +1,3 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
@@ -6,7 +5,11 @@ import type {
   InferIssue,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue, _joinExpects } from '../../utils/index.ts';
+import {
+  _addIssue,
+  _getStandardProps,
+  _joinExpects,
+} from '../../utils/index.ts';
 import type {
   InferIntersectInput,
   InferIntersectOutput,
@@ -16,7 +19,7 @@ import type {
 import { _merge } from './utils/index.ts';
 
 /**
- * Intersect schema type.
+ * Intersect schema interface.
  */
 export interface IntersectSchema<
   TOptions extends IntersectOptions,
@@ -68,6 +71,7 @@ export function intersect<
   const TMessage extends ErrorMessage<IntersectIssue> | undefined,
 >(options: TOptions, message: TMessage): IntersectSchema<TOptions, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function intersect(
   options: IntersectOptions,
   message?: ErrorMessage<IntersectIssue>
@@ -83,9 +87,10 @@ export function intersect(
     async: false,
     options,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       // Parse input with schema of options, if not empty
       if (this.options.length) {
         // Get input value from dataset
@@ -100,7 +105,7 @@ export function intersect(
 
         // Parse schema of each option and collect outputs
         for (const schema of this.options) {
-          const optionDataset = schema['~validate']({ value: input }, config);
+          const optionDataset = schema['~run']({ value: input }, config);
 
           // If there are issues, capture them
           if (optionDataset.issues) {

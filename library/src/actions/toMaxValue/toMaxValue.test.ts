@@ -11,35 +11,35 @@ describe('toMaxValue', () => {
       reference: toMaxValue,
       requirement: 10,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     } satisfies ToMaxValueAction<number, 10>);
   });
 
   test('should transform to max value', () => {
     const outputDataset = { typed: true, value: 10 };
-    expect(action['~validate']({ typed: true, value: 10 }, {})).toStrictEqual(
+    expect(action['~run']({ typed: true, value: 10 }, {})).toStrictEqual(
       outputDataset
     );
-    expect(action['~validate']({ typed: true, value: 11 }, {})).toStrictEqual(
+    expect(action['~run']({ typed: true, value: 11 }, {})).toStrictEqual(
       outputDataset
     );
     expect(
-      action['~validate']({ typed: true, value: Number.MAX_VALUE }, {})
+      action['~run']({ typed: true, value: Number.MAX_VALUE }, {})
     ).toStrictEqual(outputDataset);
   });
 
   test('should not transform value', () => {
     expect(
-      action['~validate']({ typed: true, value: Number.MIN_VALUE }, {})
+      action['~run']({ typed: true, value: Number.MIN_VALUE }, {})
     ).toStrictEqual({
       typed: true,
       value: Number.MIN_VALUE,
     });
-    expect(action['~validate']({ typed: true, value: 0 }, {})).toStrictEqual({
+    expect(action['~run']({ typed: true, value: 0 }, {})).toStrictEqual({
       typed: true,
       value: 0,
     });
-    expect(action['~validate']({ typed: true, value: 9 }, {})).toStrictEqual({
+    expect(action['~run']({ typed: true, value: 9 }, {})).toStrictEqual({
       typed: true,
       value: 9,
     });

@@ -178,10 +178,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'mapAsync',
-      href: '../mapAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'map',
+          href: '../map/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'mapAsync',
+          href: '../mapAsync/',
+        },
+      ],
     },
   },
   expects: {

@@ -13,7 +13,7 @@ describe('octal', () => {
       expects: null,
       requirement: OCTAL_REGEX,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -56,7 +56,7 @@ describe('octal', () => {
         },
       ];
       expect(
-        action['~validate']({ typed: false, value: null, issues }, {})
+        action['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,
@@ -87,15 +87,6 @@ describe('octal', () => {
         '0o777777777777',
         '0o01234567',
         '0o1234567',
-      ]);
-    });
-
-    test('for 0O prefix', () => {
-      expectNoActionIssue(action, [
-        '0O000000000000000',
-        '0O777777777777',
-        '0O01234567',
-        '0O1234567',
       ]);
     });
   });

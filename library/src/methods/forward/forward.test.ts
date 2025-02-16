@@ -17,7 +17,7 @@ describe('forward', () => {
         'nested',
         1,
         'key',
-      ])['~validate']({ typed: true, value: input }, {})
+      ])['~run']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,
@@ -71,7 +71,7 @@ describe('forward', () => {
         'nested',
         6,
         'key',
-      ])['~validate']({ typed: true, value: input }, {})
+      ])['~run']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,
@@ -140,7 +140,7 @@ describe('forward', () => {
         'nested',
         1,
         'key',
-      ])['~validate'](
+      ])['~run'](
         {
           typed: true,
           value: input,
@@ -207,7 +207,7 @@ describe('forward', () => {
         'nested',
         6,
         'key',
-      ])['~validate']({ typed: true, value: input }, {})
+      ])['~run']({ typed: true, value: input }, {})
     ).toStrictEqual({
       typed: true,
       value: input,

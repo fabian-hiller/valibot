@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * 64-bit MAC issue type.
+ * 64-bit MAC issue interface.
  */
 export interface Mac64Issue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface Mac64Issue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * 64-bit MAC action type.
+ * 64-bit MAC action interface.
  */
 export interface Mac64Action<
   TInput extends string,
@@ -80,6 +80,7 @@ export function mac64<
   const TMessage extends ErrorMessage<Mac64Issue<TInput>> | undefined,
 >(message: TMessage): Mac64Action<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function mac64(
   message?: ErrorMessage<Mac64Issue<string>>
 ): Mac64Action<string, ErrorMessage<Mac64Issue<string>> | undefined> {
@@ -91,7 +92,7 @@ export function mac64(
     expects: null,
     requirement: MAC64_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, '64-bit MAC', dataset, config);
       }

@@ -6,7 +6,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Integer issue type.
+ * Integer issue interface.
  */
 export interface IntegerIssue<TInput extends number> extends BaseIssue<TInput> {
   /**
@@ -32,7 +32,7 @@ export interface IntegerIssue<TInput extends number> extends BaseIssue<TInput> {
 }
 
 /**
- * Integer action type.
+ * Integer action interface.
  */
 export interface IntegerAction<
   TInput extends number,
@@ -82,6 +82,7 @@ export function integer<
   const TMessage extends ErrorMessage<IntegerIssue<TInput>> | undefined,
 >(message: TMessage): IntegerAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function integer(
   message?: ErrorMessage<IntegerIssue<number>>
 ): IntegerAction<number, ErrorMessage<IntegerIssue<number>> | undefined> {
@@ -93,7 +94,7 @@ export function integer(
     expects: null,
     requirement: Number.isInteger,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement(dataset.value)) {
         _addIssue(this, 'integer', dataset, config);
       }

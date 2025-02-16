@@ -1,14 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Date issue type.
+ * Date issue interface.
  */
 export interface DateIssue extends BaseIssue<unknown> {
   /**
@@ -26,7 +25,7 @@ export interface DateIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Date schema type.
+ * Date schema interface.
  */
 export interface DateSchema<
   TMessage extends ErrorMessage<DateIssue> | undefined,
@@ -67,6 +66,7 @@ export function date<
   const TMessage extends ErrorMessage<DateIssue> | undefined,
 >(message: TMessage): DateSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function date(
   message?: ErrorMessage<DateIssue>
 ): DateSchema<ErrorMessage<DateIssue> | undefined> {
@@ -77,9 +77,10 @@ export function date(
     expects: 'Date',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (dataset.value instanceof Date) {
         // @ts-expect-error
         if (!isNaN(dataset.value)) {

@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * UUID issue type.
+ * UUID issue interface.
  */
 export interface UuidIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface UuidIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * UUID action type.
+ * UUID action interface.
  */
 export interface UuidAction<
   TInput extends string,
@@ -80,6 +80,7 @@ export function uuid<
   const TMessage extends ErrorMessage<UuidIssue<TInput>> | undefined,
 >(message: TMessage): UuidAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function uuid(
   message?: ErrorMessage<UuidIssue<string>>
 ): UuidAction<string, ErrorMessage<UuidIssue<string>> | undefined> {
@@ -91,7 +92,7 @@ export function uuid(
     expects: null,
     requirement: UUID_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'UUID', dataset, config);
       }

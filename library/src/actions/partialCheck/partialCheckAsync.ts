@@ -10,7 +10,7 @@ import type { PartialCheckIssue, PartialInput } from './types.ts';
 import { _isPartiallyTyped } from './utils/index.ts';
 
 /**
- * Partial check action async type.
+ * Partial check action async interface.
  */
 export interface PartialCheckActionAsync<
   TInput extends PartialInput,
@@ -83,6 +83,7 @@ export function partialCheckAsync<
   message: TMessage
 ): PartialCheckActionAsync<TInput, TPathList, TSelection, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function partialCheckAsync(
   pathList: PathKeys<PartialInput>[],
   requirement: (input: PartialInput) => MaybePromise<boolean>,
@@ -102,7 +103,7 @@ export function partialCheckAsync(
     pathList,
     requirement,
     message,
-    async '~validate'(dataset, config) {
+    async '~run'(dataset, config) {
       if (
         _isPartiallyTyped(dataset, pathList) &&
         // @ts-expect-error

@@ -1,14 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Void issue type.
+ * Void issue interface.
  */
 export interface VoidIssue extends BaseIssue<unknown> {
   /**
@@ -26,7 +25,7 @@ export interface VoidIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Void schema type.
+ * Void schema interface.
  */
 export interface VoidSchema<
   TMessage extends ErrorMessage<VoidIssue> | undefined,
@@ -67,6 +66,7 @@ export function void_<
   const TMessage extends ErrorMessage<VoidIssue> | undefined,
 >(message: TMessage): VoidSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function void_(
   message?: ErrorMessage<VoidIssue>
 ): VoidSchema<ErrorMessage<VoidIssue> | undefined> {
@@ -77,9 +77,10 @@ export function void_(
     expects: 'void',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (dataset.value === undefined) {
         // @ts-expect-error
         dataset.typed = true;

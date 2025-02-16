@@ -8,6 +8,7 @@
  *
  * @internal
  */
+// @__NO_SIDE_EFFECTS__
 export function _joinExpects(values: string[], separator: '&' | '|'): string {
   // Create list without duplicates
   const list = [...new Set(values)];

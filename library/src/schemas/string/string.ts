@@ -1,14 +1,13 @@
-import { getGlobalConfig } from '../../storages/index.ts';
 import type {
   BaseIssue,
   BaseSchema,
   ErrorMessage,
   OutputDataset,
 } from '../../types/index.ts';
-import { _addIssue } from '../../utils/index.ts';
+import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * String issue type.
+ * String issue interface.
  */
 export interface StringIssue extends BaseIssue<unknown> {
   /**
@@ -26,7 +25,7 @@ export interface StringIssue extends BaseIssue<unknown> {
 }
 
 /**
- * String schema type.
+ * String schema interface.
  */
 export interface StringSchema<
   TMessage extends ErrorMessage<StringIssue> | undefined,
@@ -67,6 +66,7 @@ export function string<
   const TMessage extends ErrorMessage<StringIssue> | undefined,
 >(message: TMessage): StringSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function string(
   message?: ErrorMessage<StringIssue>
 ): StringSchema<ErrorMessage<StringIssue> | undefined> {
@@ -77,9 +77,10 @@ export function string(
     expects: 'string',
     async: false,
     message,
-    '~standard': 1,
-    '~vendor': 'valibot',
-    '~validate'(dataset, config = getGlobalConfig()) {
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+    '~run'(dataset, config) {
       if (typeof dataset.value === 'string') {
         // @ts-expect-error
         dataset.typed = true;

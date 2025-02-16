@@ -6,7 +6,7 @@ import type {
 import { _addIssue, _getByteCount } from '../../utils/index.ts';
 
 /**
- * Max bytes issue type.
+ * Max bytes issue interface.
  */
 export interface MaxBytesIssue<
   TInput extends string,
@@ -35,7 +35,7 @@ export interface MaxBytesIssue<
 }
 
 /**
- * Max bytes action type.
+ * Max bytes action interface.
  */
 export interface MaxBytesAction<
   TInput extends string,
@@ -97,6 +97,7 @@ export function maxBytes<
   message: TMessage
 ): MaxBytesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function maxBytes(
   requirement: number,
   message?: ErrorMessage<MaxBytesIssue<string, number>>
@@ -113,7 +114,7 @@ export function maxBytes(
     expects: `<=${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         const length = _getByteCount(dataset.value);
         if (length > this.requirement) {

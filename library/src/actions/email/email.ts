@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Email issue type.
+ * Email issue interface.
  */
 export interface EmailIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface EmailIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Email action type.
+ * Email action interface.
  */
 export interface EmailAction<
   TInput extends string,
@@ -67,7 +67,7 @@ export interface EmailAction<
  *
  * Hint: This validation action intentionally only validates common email
  * addresses. If you are interested in an action that covers the entire
- * specification, please see issue [#204](https://github.com/fabian-hiller/valibot/issues/204).
+ * specification, please use the `rfcEmail` action instead.
  *
  * @returns An email action.
  */
@@ -79,7 +79,7 @@ export function email<TInput extends string>(): EmailAction<TInput, undefined>;
  *
  * Hint: This validation action intentionally only validates common email
  * addresses. If you are interested in an action that covers the entire
- * specification, please see issue [#204](https://github.com/fabian-hiller/valibot/issues/204).
+ * specification, please use the `rfcEmail` action instead.
  *
  * @param message The error message.
  *
@@ -90,6 +90,7 @@ export function email<
   const TMessage extends ErrorMessage<EmailIssue<TInput>> | undefined,
 >(message: TMessage): EmailAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function email(
   message?: ErrorMessage<EmailIssue<string>>
 ): EmailAction<string, ErrorMessage<EmailIssue<string>> | undefined> {
@@ -101,7 +102,7 @@ export function email(
     async: false,
     requirement: EMAIL_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
         _addIssue(this, 'email', dataset, config);
       }

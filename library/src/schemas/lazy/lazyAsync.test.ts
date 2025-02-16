@@ -20,9 +20,12 @@ describe('lazyAsync', () => {
       expects: 'unknown',
       getter,
       async: true,
-      '~standard': 1,
-      '~vendor': 'valibot',
-      '~validate': expect.any(Function),
+      '~standard': {
+        version: 1,
+        vendor: 'valibot',
+        validate: expect.any(Function),
+      },
+      '~run': expect.any(Function),
     } satisfies LazySchemaAsync<StringSchema<undefined>>);
   });
 
@@ -80,7 +83,9 @@ describe('lazyAsync', () => {
 
     test('for functions', async () => {
       await expectSchemaIssueAsync(schema, baseIssue, [
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         () => {},
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         function () {},
       ]);
     });
@@ -93,7 +98,7 @@ describe('lazyAsync', () => {
   test('should call getter with input', () => {
     const getter = vi.fn(() => string());
     const dataset = { value: 'foo' };
-    lazyAsync(getter)['~validate'](dataset, {});
+    lazyAsync(getter)['~run'](dataset, {});
     expect(getter).toHaveBeenCalledWith(dataset.value);
   });
 });

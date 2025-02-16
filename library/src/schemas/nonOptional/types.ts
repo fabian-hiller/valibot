@@ -17,7 +17,7 @@ import type {
 } from '../union/index.ts';
 
 /**
- * Non optional issue type.
+ * Non optional issue interface.
  */
 export interface NonOptionalIssue extends BaseIssue<unknown> {
   /**
@@ -50,10 +50,7 @@ export type InferNonOptionalOutput<
   TWrapped extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
-> =
-  // FIXME: For schemas that transform the input to `undefined`, this
-  // implementation may result in an incorrect output type
-  NonOptional<InferOutput<TWrapped>>;
+> = NonOptional<InferOutput<TWrapped>>;
 
 /**
  * Infer non optional issue type.
