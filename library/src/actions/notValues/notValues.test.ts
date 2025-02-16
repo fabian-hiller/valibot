@@ -66,42 +66,48 @@ describe('notValues', () => {
     });
 
     test('for valid bigints', () => {
-      expectNoActionIssue(notValues([-10n, 12n]), [-12n, 0n, 10n]);
+      expectNoActionIssue(notValues([10n, 11n, 12n]), [
+        -123n,
+        0n,
+        9n,
+        13n,
+        123n,
+      ]);
     });
 
     test('for valid non-bigints', () => {
-      expectNoActionIssue(notValues([-10n, 12n]), [
-        -12,
-        0,
-        10,
-        -12.0,
-        0.0,
-        10.0,
-        '-12',
-        '0',
-        '10',
-        '-12.0',
-        '0.0',
-        '10.0',
+      expectNoActionIssue(notValues([10n, 11n, 12n]), [
+        9,
+        13,
+        9.0,
+        13.0,
+        '9',
+        '13',
+        '9.0',
+        '13.0',
         '',
         ' ',
-        new Date(-12),
-        new Date(0),
-        new Date(10),
+        new Date(9),
+        new Date(13),
         true,
         false,
       ]);
+      expectNoActionIssue(notValues([1n]), [
+        0,
+        0.0,
+        '0',
+        ' 0 ',
+        '',
+        ' ',
+        false,
+        new Date(0),
+      ]);
       expectNoActionIssue(notValues([0n]), [
-        -1,
         1,
-        -1.0,
         1.0,
-        '-1',
-        ' -1 ',
         '1',
         ' 1 ',
         true,
-        new Date(-1),
         new Date(1),
       ]);
     });
@@ -113,59 +119,44 @@ describe('notValues', () => {
 
     test('for valid non-booleans', () => {
       expectNoActionIssue(notValues([true]), [
-        -1n,
         0n,
-        2n,
-        -1,
         0,
-        2,
-        -1.0,
         0.0,
-        2.0,
-        '-1',
         '0',
-        '2',
-        '-1.0',
         '0.0',
-        '2.0',
+        ' 0 ',
         '',
         ' ',
-        new Date(-1),
         new Date(0),
-        new Date(2),
+      ]);
+      expectNoActionIssue(notValues([true]), [
+        123n,
+        123,
+        123.0,
+        '123',
+        '123.0',
+        'foo',
+        'true',
+        new Date(123),
       ]);
       expectNoActionIssue(notValues([false]), [
-        -1n,
         1n,
-        -1,
         1,
-        -1.0,
         1.0,
-        '-1',
         '1',
-        '-1.0',
         '1.0',
-        ' -1 ',
         ' 1 ',
-        new Date(-1),
         new Date(1),
       ]);
-      expectNoActionIssue(notValues([false, true]), [
-        -1n,
-        2n,
-        -1,
-        2,
-        -1.0,
-        2.0,
-        '-1',
-        '2',
-        '-1.0',
-        '2.0',
+      expectNoActionIssue(notValues([false]), [
+        123n,
+        123,
+        123.0,
+        '123',
+        '123.0',
         'foo',
         'false',
-        'true',
-        new Date(-1),
-        new Date(2),
+        new Date(123),
       ]);
     });
 
@@ -199,49 +190,57 @@ describe('notValues', () => {
     });
 
     test('for valid non-dates', () => {
-      expectNoActionIssue(notValues([new Date(-2), new Date(3)]), [
-        -3n,
-        0n,
-        2n,
-        -3,
+      expectNoActionIssue(
+        notValues([new Date(10), new Date(11), new Date(12)]),
+        [
+          9n,
+          13n,
+          9,
+          13,
+          9.0,
+          13.0,
+          '9',
+          '13',
+          '9.0',
+          '13.0',
+          '',
+          ' ',
+          true,
+          false,
+        ]
+      );
+      expectNoActionIssue(notValues([new Date(1)]), [
         0,
-        2,
-        -3.0,
         0.0,
-        2.0,
-        '-3',
+        0n,
         '0',
-        '2',
-        '-3.0',
         '0.0',
-        '2.0',
+        ' 0 ',
         '',
         ' ',
         false,
-        true,
       ]);
       expectNoActionIssue(notValues([new Date(0)]), [
-        -1,
         1,
-        -1.0,
         1.0,
-        -1n,
         1n,
-        '-1',
         '1',
+        '1.0',
+        ' 1 ',
         true,
       ]);
     });
 
     test('for valid numbers', () => {
-      expectNoActionIssue(notValues([-2, 3]), [
-        -3,
-        0,
-        2,
-        -3.0,
-        0.0,
-        2.0,
+      expectNoActionIssue(notValues([10, 11, 12]), [
         -Infinity,
+        Number.MIN_VALUE,
+        -10,
+        -9,
+        9,
+        13,
+        9999,
+        Number.MAX_VALUE,
         Infinity,
         NaN,
       ]);
@@ -258,34 +257,37 @@ describe('notValues', () => {
     });
 
     test('for valid non-numbers', () => {
-      expectNoActionIssue(notValues([-2, 3]), [
-        -3n,
-        0n,
-        2n,
-        '-3',
-        '0',
-        '2',
-        '-3.0',
-        '0.0',
-        '2.0',
+      expectNoActionIssue(notValues([10, 11, 12]), [
+        9n,
+        13n,
+        '9',
+        '13',
+        '9.0',
+        '13.0',
         '',
         ' ',
-        new Date(-3),
-        new Date(0),
-        new Date(2),
-        false,
+        new Date(9),
+        new Date(13),
         true,
+        false,
+      ]);
+      expectNoActionIssue(notValues([1]), [
+        0n,
+        '0',
+        '0.0',
+        ' 0 ',
+        '',
+        ' ',
+        false,
+        new Date(0),
       ]);
       expectNoActionIssue(notValues([0]), [
-        -1n,
         1n,
-        '-1',
         '1',
-        '-1.0',
         '1.0',
-        new Date(-1),
-        new Date(1),
+        ' 1 ',
         true,
+        new Date(1),
       ]);
     });
 
@@ -319,33 +321,20 @@ describe('notValues', () => {
     });
 
     test('for valid non-strings', () => {
-      expectNoActionIssue(notValues(['-2', '3']), [
-        -3n,
-        0n,
-        2n,
-        -3,
-        0,
-        2,
-        -3.0,
-        0.0,
-        2.0,
-        new Date(-3),
-        new Date(0),
-        new Date(2),
+      expectNoActionIssue(notValues(['10', '11', '12']), [
+        9n,
+        13n,
+        9,
+        13,
+        9.0,
+        13.0,
+        new Date(9),
+        new Date(13),
         true,
         false,
       ]);
-      expectNoActionIssue(notValues(['0']), [
-        -1n,
-        1n,
-        -1,
-        1,
-        -1.0,
-        1.0,
-        true,
-        new Date(-1),
-        new Date(1),
-      ]);
+      expectNoActionIssue(notValues(['1']), [0n, 0, 0.0, false, new Date(0)]);
+      expectNoActionIssue(notValues(['0']), [1n, 1, 1.0, true, new Date(1)]);
     });
   });
 
@@ -373,15 +362,41 @@ describe('notValues', () => {
 
     test('for invalid non-bigints', () => {
       expectActionIssue(
-        notValues([-2n, 3n], 'message'),
-        { ...baseInfo, expected: '!(-2 | 3)', requirement: [-2n, 3n] },
-        [-2, 3, -2.0, 3.0, '-2', '3', new Date(-2), new Date(3)],
+        notValues([10n, 11n, 12n], 'message'),
+        {
+          ...baseInfo,
+          expected: '!(10 | 11 | 12)',
+          requirement: [10n, 11n, 12n],
+        },
+        [
+          10,
+          11,
+          12,
+          10.0,
+          11.0,
+          12.0,
+          '10',
+          '11',
+          '12',
+          ' 10 ',
+          ' 11 ',
+          ' 12 ',
+          new Date(10),
+          new Date(11),
+          new Date(12),
+        ],
+        getReceived
+      );
+      expectActionIssue(
+        notValues([1n], 'message'),
+        { ...baseInfo, expected: '!1', requirement: [1n] },
+        [1, 1.0, '1', ' 1 ', true, new Date(1)],
         getReceived
       );
       expectActionIssue(
         notValues([0n], 'message'),
         { ...baseInfo, expected: '!0', requirement: [0n] },
-        [0, 0.0, '0', '', ' ', false, new Date(0)],
+        [0, 0.0, '0', ' 0 ', '', ' ', false, new Date(0)],
         getReceived
       );
     });
@@ -475,33 +490,56 @@ describe('notValues', () => {
           expected: `!${zeroDate.toJSON()}`,
           requirement: [zeroDate],
         },
-        [new Date(0)],
+        [zeroDate, new Date(0)],
         getReceived
       );
     });
 
     test('for invalid non-dates', () => {
-      const negDate = new Date(-2);
-      const posDate = new Date(1);
+      const date1 = new Date(10);
+      const date2 = new Date(11);
+      const date3 = new Date(12);
       expectActionIssue(
-        notValues([negDate, posDate], 'message'),
+        notValues([date1, date2, date3], 'message'),
         {
           ...baseInfo,
-          expected: `!(${negDate.toJSON()} | ${posDate.toJSON()})`,
-          requirement: [negDate, posDate],
+          expected: `!(${date1.toJSON()} | ${date2.toJSON()} | ${date3.toJSON()})`,
+          requirement: [date1, date2, date3],
         },
-        [-2, 1, -2.0, 1.0, -2n, 1n, '-2', '1', '-2.0', '1.0', true],
+        [
+          10,
+          11,
+          12,
+          10.0,
+          11.0,
+          12.0,
+          10n,
+          11n,
+          12n,
+          '10',
+          '11',
+          '12',
+          '10.0',
+          '11.0',
+          '12.0',
+          ' 10 ',
+          ' 11 ',
+          ' 12 ',
+        ],
         getReceived
       );
-      const zeroDate = new Date(0);
+      const date4 = new Date(1);
       expectActionIssue(
-        notValues([zeroDate], 'message'),
-        {
-          ...baseInfo,
-          expected: `!${zeroDate.toJSON()}`,
-          requirement: [zeroDate],
-        },
-        [0, 0.0, 0n, '0', '0.0', '', ' ', false],
+        notValues([date4], 'message'),
+        { ...baseInfo, expected: `!${date4.toJSON()}`, requirement: [date4] },
+        [1, 1.0, 1n, '1', '1.0', ' 1 ', true],
+        getReceived
+      );
+      const date5 = new Date(0);
+      expectActionIssue(
+        notValues([date5], 'message'),
+        { ...baseInfo, expected: `!${date5.toJSON()}`, requirement: [date5] },
+        [0, 0.0, 0n, '0', '0.0', ' 0 ', '', ' ', false],
         getReceived
       );
     });
@@ -522,15 +560,37 @@ describe('notValues', () => {
 
     test('for invalid non-numbers', () => {
       expectActionIssue(
-        notValues([-2, 1], 'message'),
-        { ...baseInfo, expected: '!(-2 | 1)', requirement: [-2, 1] },
-        [-2n, 1n, '-2', '1', '-2.0', '1.0', true, new Date(-2), new Date(1)],
+        notValues([10, 11, 12], 'message'),
+        { ...baseInfo, expected: '!(10 | 11 | 12)', requirement: [10, 11, 12] },
+        [
+          10n,
+          11n,
+          12n,
+          '10',
+          '11',
+          '12',
+          '10.0',
+          '11.0',
+          '12.0',
+          ' 10 ',
+          ' 11 ',
+          ' 12 ',
+          new Date(10),
+          new Date(11),
+          new Date(12),
+        ],
+        getReceived
+      );
+      expectActionIssue(
+        notValues([1], 'message'),
+        { ...baseInfo, expected: '!1', requirement: [1] },
+        [1n, '1', '1.0', ' 1 ', true, new Date(1)],
         getReceived
       );
       expectActionIssue(
         notValues([0], 'message'),
         { ...baseInfo, expected: '!0', requirement: [0] },
-        [0n, '0', '0.0', '', ' ', false, new Date(0)],
+        [0n, '0', '0.0', ' 0 ', '', ' ', false, new Date(0)],
         getReceived
       );
     });
@@ -559,9 +619,32 @@ describe('notValues', () => {
 
     test('for invalid non-strings', () => {
       expectActionIssue(
-        notValues(['-2', '1'], 'message'),
-        { ...baseInfo, expected: '!("-2" | "1")', requirement: ['-2', '1'] },
-        [-2n, 1n, -2, 1, -2.0, 1.0, true, new Date(-2), new Date(1)],
+        notValues(['10', '11', '12'], 'message'),
+        {
+          ...baseInfo,
+          expected: '!("10" | "11" | "12")',
+          requirement: ['10', '11', '12'],
+        },
+        [
+          10n,
+          11n,
+          12n,
+          10,
+          11,
+          12,
+          10.0,
+          11.0,
+          12.0,
+          new Date(10),
+          new Date(11),
+          new Date(12),
+        ],
+        getReceived
+      );
+      expectActionIssue(
+        notValues(['1'], 'message'),
+        { ...baseInfo, expected: '!"1"', requirement: ['1'] },
+        [1n, 1, 1.0, true, new Date(1)],
         getReceived
       );
       expectActionIssue(

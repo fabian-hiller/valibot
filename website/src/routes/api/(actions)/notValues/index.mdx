@@ -4,6 +4,7 @@ description: Creates a not values validation action.
 source: /actions/notValues/notValues.ts
 contributors:
   - EltonLobo07
+  - fabian-hiller
 ---
 
 import { ApiList, Property } from '~/components';
@@ -45,12 +46,12 @@ The following examples show how `notValues` can be used.
 
 ### Number schema
 
-Schema to validate a number that does not match any of the values in the requirement.
+Schema to validate a number that is not 10, 11 or 12.
 
 ```ts
 const NumberSchema = v.pipe(
   v.number(),
-  v.notValues([1, 5, 10, 100], 'The number cannot be used.')
+  v.notValues([10, 11, 12], 'The number must not be 10, 11 or 12.')
 );
 ```
 

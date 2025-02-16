@@ -4,6 +4,7 @@ description: Creates a values validation action.
 source: /actions/values/values.ts
 contributors:
   - EltonLobo07
+  - fabian-hiller
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -33,7 +34,7 @@ const Action = v.values<TInput, TRequirement, TMessage>(requirement, message);
 
 With `values` you can validate the value of a string, number, boolean or date. If the input does not match one of the values in the `requirement`, you can use `message` to customize the error message.
 
-> This action does not change the type of the pipeline. Use <Link href="../picklist/">`picklist`</Link> if the pipeline's type should be changed to the union of the values present in the requirement.
+> This action does not change the type of the pipeline. Use the <Link href="../picklist/">`picklist`</Link> schema instead if you want the type to match the union of specific values.
 
 ## Returns
 
@@ -50,7 +51,7 @@ Schema to validate a number with specific values.
 ```ts
 const NumberSchema = v.pipe(
   v.number(),
-  v.values([1, 5, 10, 100], 'The number must be one of the allowed numbers.')
+  v.values([5, 15, 20], 'The number must be one of the allowed numbers.')
 );
 ```
 

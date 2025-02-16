@@ -11,7 +11,7 @@ import type { ValueInput } from '../types.ts';
  */
 export interface ValuesIssue<
   TInput extends ValueInput,
-  TRequirement extends ReadonlyArray<TInput>,
+  TRequirement extends readonly TInput[],
 > extends BaseIssue<TInput> {
   /**
    * The issue kind.
@@ -36,7 +36,7 @@ export interface ValuesIssue<
  */
 export interface ValuesAction<
   TInput extends ValueInput,
-  TRequirement extends ReadonlyArray<TInput>,
+  TRequirement extends readonly TInput[],
   TMessage extends ErrorMessage<ValuesIssue<TInput, TRequirement>> | undefined,
 > extends BaseValidation<TInput, TInput, ValuesIssue<TInput, TRequirement>> {
   /**
@@ -70,7 +70,7 @@ export interface ValuesAction<
  */
 export function values<
   TInput extends ValueInput,
-  const TRequirement extends ReadonlyArray<TInput>,
+  const TRequirement extends readonly TInput[],
 >(requirement: TRequirement): ValuesAction<TInput, TRequirement, undefined>;
 
 /**
@@ -83,7 +83,7 @@ export function values<
  */
 export function values<
   TInput extends ValueInput,
-  const TRequirement extends ReadonlyArray<TInput>,
+  const TRequirement extends readonly TInput[],
   const TMessage extends
     | ErrorMessage<ValuesIssue<TInput, TRequirement>>
     | undefined,
@@ -92,13 +92,14 @@ export function values<
   message: TMessage
 ): ValuesAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function values(
-  requirement: ReadonlyArray<ValueInput>,
-  message?: ErrorMessage<ValuesIssue<ValueInput, ReadonlyArray<ValueInput>>>
+  requirement: readonly ValueInput[],
+  message?: ErrorMessage<ValuesIssue<ValueInput, readonly ValueInput[]>>
 ): ValuesAction<
   ValueInput,
-  ReadonlyArray<ValueInput>,
-  ErrorMessage<ValuesIssue<ValueInput, ReadonlyArray<ValueInput>>> | undefined
+  readonly ValueInput[],
+  ErrorMessage<ValuesIssue<ValueInput, readonly ValueInput[]>> | undefined
 > {
   return {
     kind: 'validation',

@@ -12,14 +12,12 @@ export const properties: Record<string, PropertyProps> = {
   TRequirement: {
     modifier: 'extends',
     type: {
-      type: 'custom',
-      name: 'ReadonlyArray',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TInput',
-        },
-      ],
+      modifier: 'readonly',
+      type: 'array',
+      item: {
+        type: 'custom',
+        name: 'TInput',
+      },
     },
   },
   BaseIssue: {
