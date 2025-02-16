@@ -10,6 +10,7 @@ All notable changes to the library will be documented in this file.
 - Add `words`, `maxWords`, `minWords` and `notWords` action
 - Add `args` and `returns` action to transform functions (issue #243)
 - Add `rfcEmail` action to validate RFC 5322 email addresses (pull request #912)
+- Add `ltValue` action for less than validation (pull request #985)
 - Add new overload signature to `pipe` and `pipeAync` method to support unlimited pipe items of same input and output type (issue #852)
 - Add `@__NO_SIDE_EFFECTS__` notation to improve tree shaking (pull request #995)
 - Add `exactOptional` and `exactOptionalAsync` schema (PR #1013)

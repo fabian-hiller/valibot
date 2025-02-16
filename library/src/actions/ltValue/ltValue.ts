@@ -92,6 +92,7 @@ export function ltValue<
   message: TMessage
 ): LtValueAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function ltValue(
   requirement: ValueInput,
   message?: ErrorMessage<LtValueIssue<ValueInput, ValueInput>>

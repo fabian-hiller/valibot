@@ -65,22 +65,30 @@ describe('ltValue', () => {
     test('for valid non-bigints', () => {
       expectNoActionIssue(ltValue(10n), [
         '-10',
-        ' 9 ',
+        '',
+        ' ',
+        '0',
         '9',
-        9.5,
+        ' 9 ',
+        -10,
+        0,
         9,
-        9.0,
         -Infinity,
+        -10.0,
+        0.0,
+        9.0,
+        9.5,
         false,
         true,
         new Date(-10),
         new Date(0),
         new Date(9),
-        new Date(9.5),
       ]);
 
       expectNoActionIssue(ltValue(1n), [
         '-1',
+        '',
+        ' ',
         ' 0 ',
         '0',
         -1,
@@ -91,7 +99,6 @@ describe('ltValue', () => {
         false,
         new Date(-1),
         new Date(0),
-        new Date(0.5),
       ]);
 
       expectNoActionIssue(ltValue(0n), [
@@ -102,7 +109,6 @@ describe('ltValue', () => {
         -1.0,
         -Infinity,
         new Date(-1),
-        new Date(-1.5),
       ]);
     });
 
@@ -123,7 +129,6 @@ describe('ltValue', () => {
         -Infinity,
         new Date(-1),
         new Date(0),
-        new Date(0.5),
         -1n,
         0n,
       ]);
@@ -137,7 +142,6 @@ describe('ltValue', () => {
         -1.0,
         -Infinity,
         new Date(-1),
-        new Date(-1.5),
         -1n,
       ]);
     });
@@ -172,6 +176,8 @@ describe('ltValue', () => {
       const date2 = new Date(1);
       expectNoActionIssue(ltValue(date2), [
         '-1',
+        '',
+        ' ',
         ' 0 ',
         '0',
         '0.5',
@@ -208,12 +214,13 @@ describe('ltValue', () => {
         ' 9 ',
         '9',
         '9.5',
+        '',
+        ' ',
         false,
         true,
         new Date(-10),
         new Date(0),
         new Date(9),
-        new Date(9.5),
         -10n,
         0n,
         9n,
@@ -224,10 +231,11 @@ describe('ltValue', () => {
         ' 0 ',
         '0',
         '0.5',
+        '',
+        ' ',
         false,
         new Date(-1),
         new Date(0),
-        new Date(0.5),
         -1n,
         0n,
       ]);
@@ -237,7 +245,6 @@ describe('ltValue', () => {
         ' -1 ',
         '-0.5',
         new Date(-1),
-        new Date(-1.5),
         -1n,
       ]);
     });
@@ -248,6 +255,8 @@ describe('ltValue', () => {
 
     test('for valid non-strings', () => {
       expectNoActionIssue(ltValue('10'), [
+        -10,
+        0,
         9.5,
         9,
         9.0,
@@ -257,7 +266,6 @@ describe('ltValue', () => {
         new Date(-10),
         new Date(0),
         new Date(9),
-        new Date(9.5),
         -10n,
         0n,
         9n,
@@ -271,7 +279,6 @@ describe('ltValue', () => {
         false,
         new Date(-1),
         new Date(0),
-        new Date(0.5),
         -1n,
         0n,
       ]);
@@ -282,7 +289,6 @@ describe('ltValue', () => {
         -1.0,
         -Infinity,
         new Date(-1),
-        new Date(-1.5),
         -1n,
       ]);
     });
@@ -323,7 +329,6 @@ describe('ltValue', () => {
           Infinity,
           NaN,
           new Date(123),
-          new Date(123.5),
           new Date(124),
         ],
         getReceived
@@ -368,7 +373,6 @@ describe('ltValue', () => {
           false,
           true,
           new Date(0),
-          new Date(0.5),
           new Date(1),
         ],
         getReceived
@@ -405,9 +409,7 @@ describe('ltValue', () => {
           1.0,
           Infinity,
           NaN,
-          new Date(-0.5),
           new Date(0),
-          new Date(0.5),
           new Date(1),
           0n,
           1n,
@@ -430,7 +432,6 @@ describe('ltValue', () => {
           Infinity,
           NaN,
           new Date(1),
-          new Date(1.5),
           new Date(2),
           1n,
           2n,
@@ -538,7 +539,6 @@ describe('ltValue', () => {
           '124',
           '124.0',
           new Date(123),
-          new Date(123.5),
           new Date(124),
           123n,
           124n,
@@ -576,7 +576,6 @@ describe('ltValue', () => {
           false,
           true,
           new Date(0),
-          new Date(0.5),
           new Date(1),
           0n,
           1n,
@@ -604,7 +603,6 @@ describe('ltValue', () => {
           Infinity,
           NaN,
           new Date(123),
-          new Date(123.5),
           new Date(124),
           123n,
           124n,
@@ -615,19 +613,7 @@ describe('ltValue', () => {
       expectActionIssue(
         ltValue('1', 'message'),
         { ...baseInfo, expected: '<"1"', requirement: '1' },
-        [
-          1,
-          1.0,
-          2,
-          Infinity,
-          NaN,
-          true,
-          new Date(1),
-          new Date(1.5),
-          new Date(2),
-          1n,
-          2n,
-        ],
+        [1, 1.0, 2, Infinity, NaN, true, new Date(1), new Date(2), 1n, 2n],
         getReceived
       );
 
@@ -644,7 +630,6 @@ describe('ltValue', () => {
           false,
           true,
           new Date(0),
-          new Date(0.5),
           new Date(1),
           0n,
           1n,
