@@ -182,10 +182,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'tupleWithRestAsync',
-      href: '../tupleWithRestAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'tupleWithRest',
+          href: '../tupleWithRest/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'tupleWithRestAsync',
+          href: '../tupleWithRestAsync/',
+        },
+      ],
     },
   },
   expects: {

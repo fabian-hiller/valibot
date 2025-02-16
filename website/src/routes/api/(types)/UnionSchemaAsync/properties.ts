@@ -121,10 +121,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'unionAsync',
-      href: '../unionAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'union',
+          href: '../union/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'unionAsync',
+          href: '../unionAsync/',
+        },
+      ],
     },
   },
   options: {

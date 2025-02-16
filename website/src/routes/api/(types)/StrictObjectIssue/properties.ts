@@ -24,8 +24,31 @@ export const properties: Record<string, PropertyProps> = {
   },
   expected: {
     type: {
-      type: 'string',
-      value: 'Object',
+      type: 'union',
+      options: [
+        {
+          type: 'string',
+          value: 'Object',
+        },
+        {
+          type: 'template',
+          parts: [
+            {
+              type: 'string',
+              value: '"',
+            },
+            'string',
+            {
+              type: 'string',
+              value: '"',
+            },
+          ],
+        },
+        {
+          type: 'string',
+          value: 'never',
+        },
+      ],
     },
   },
 };

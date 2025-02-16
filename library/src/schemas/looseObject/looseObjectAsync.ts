@@ -1,3 +1,4 @@
+import { getDefault, getFallback } from '../../methods/index.ts';
 import type {
   BaseSchemaAsync,
   ErrorMessage,
@@ -13,6 +14,7 @@ import {
   _getStandardProps,
   _isValidObjectKey,
 } from '../../utils/index.ts';
+import type { looseObject } from './looseObject.ts';
 import type { LooseObjectIssue } from './types.ts';
 
 /**
@@ -33,7 +35,7 @@ export interface LooseObjectSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof looseObjectAsync;
+  readonly reference: typeof looseObject | typeof looseObjectAsync;
   /**
    * The expected property.
    */
@@ -105,66 +107,118 @@ export function looseObjectAsync(
         dataset.typed = true;
         dataset.value = {};
 
-        // Parse schema of each entry
-        // Hint: We do not distinguish between missing and `undefined` entries.
-        // The reason for this decision is that it reduces the bundle size, and
-        // we also expect that most users will expect this behavior.
+        // If key is present or its an optional schema with a default value,
+        // parse input of key or default value asynchronously
         const valueDatasets = await Promise.all(
-          Object.entries(this.entries).map(async ([key, schema]) => {
-            const value = input[key as keyof typeof input];
+          Object.entries(this.entries).map(async ([key, valueSchema]) => {
+            if (
+              key in input ||
+              ((valueSchema.type === 'exact_optional' ||
+                valueSchema.type === 'optional' ||
+                valueSchema.type === 'nullish') &&
+                // @ts-expect-error
+                valueSchema.default !== undefined)
+            ) {
+              const value: unknown =
+                key in input
+                  ? // @ts-expect-error
+                    input[key]
+                  : await getDefault(valueSchema);
+              return [
+                key,
+                value,
+                valueSchema,
+                await valueSchema['~run']({ value }, config),
+              ] as const;
+            }
             return [
               key,
-              value,
-              await schema['~run']({ value }, config),
+              // @ts-expect-error
+              input[key] as unknown,
+              valueSchema,
+              null,
             ] as const;
           })
         );
 
-        // Process each value dataset
-        for (const [key, value, valueDataset] of valueDatasets) {
-          // If there are issues, capture them
-          if (valueDataset.issues) {
-            // Create object path item
-            const pathItem: ObjectPathItem = {
-              type: 'object',
-              origin: 'value',
-              input: input as Record<string, unknown>,
-              key,
-              value,
-            };
+        // Process each object entry of schema
+        for (const [key, value, valueSchema, valueDataset] of valueDatasets) {
+          // If key is present or its an optional schema with a default value,
+          // process its value dataset
+          if (valueDataset) {
+            // If there are issues, capture them
+            if (valueDataset.issues) {
+              // Create object path item
+              const pathItem: ObjectPathItem = {
+                type: 'object',
+                origin: 'value',
+                input: input as Record<string, unknown>,
+                key,
+                value,
+              };
 
-            // Add modified entry dataset issues to issues
-            for (const issue of valueDataset.issues) {
-              if (issue.path) {
-                issue.path.unshift(pathItem);
-              } else {
+              // Add modified entry dataset issues to issues
+              for (const issue of valueDataset.issues) {
+                if (issue.path) {
+                  issue.path.unshift(pathItem);
+                } else {
+                  // @ts-expect-error
+                  issue.path = [pathItem];
+                }
                 // @ts-expect-error
-                issue.path = [pathItem];
+                dataset.issues?.push(issue);
               }
-              // @ts-expect-error
-              dataset.issues?.push(issue);
+              if (!dataset.issues) {
+                // @ts-expect-error
+                dataset.issues = valueDataset.issues;
+              }
+
+              // If necessary, abort early
+              if (config.abortEarly) {
+                dataset.typed = false;
+                break;
+              }
             }
-            if (!dataset.issues) {
-              // @ts-expect-error
-              dataset.issues = valueDataset.issues;
+
+            // If not typed, set typed to `false`
+            if (!valueDataset.typed) {
+              dataset.typed = false;
             }
+
+            // Add entry to dataset
+            // @ts-expect-error
+            dataset.value[key] = valueDataset.value;
+
+            // Otherwise, if key is missing but has a fallback, use it
+            // @ts-expect-error
+          } else if (valueSchema.fallback !== undefined) {
+            // @ts-expect-error
+            dataset.value[key] = await getFallback(valueSchema);
+
+            // Otherwise, if key is missing and required, add issue
+          } else if (
+            valueSchema.type !== 'exact_optional' &&
+            valueSchema.type !== 'optional' &&
+            valueSchema.type !== 'nullish'
+          ) {
+            _addIssue(this, 'key', dataset, config, {
+              input: undefined,
+              expected: `"${key}"`,
+              path: [
+                {
+                  type: 'object',
+                  origin: 'key',
+                  input: input as Record<string, unknown>,
+                  key,
+                  value,
+                },
+              ],
+            });
 
             // If necessary, abort early
             if (config.abortEarly) {
-              dataset.typed = false;
               break;
             }
-          }
-
-          // If not typed, set typed to `false`
-          if (!valueDataset.typed) {
-            dataset.typed = false;
-          }
-
-          // Add entry to dataset if necessary
-          if (valueDataset.value !== undefined || key in input) {
-            // @ts-expect-error
-            dataset.value[key] = valueDataset.value;
           }
         }
 

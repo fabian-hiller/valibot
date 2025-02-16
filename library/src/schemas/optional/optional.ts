@@ -44,23 +44,23 @@ export interface OptionalSchema<
 }
 
 /**
- * Creates a optional schema.
+ * Creates an optional schema.
  *
  * @param wrapped The wrapped schema.
  *
- * @returns A optional schema.
+ * @returns An optional schema.
  */
 export function optional<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
 >(wrapped: TWrapped): OptionalSchema<TWrapped, undefined>;
 
 /**
- * Creates a optional schema.
+ * Creates an optional schema.
  *
  * @param wrapped The wrapped schema.
  * @param default_ The default value.
  *
- * @returns A optional schema.
+ * @returns An optional schema.
  */
 export function optional<
   const TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,

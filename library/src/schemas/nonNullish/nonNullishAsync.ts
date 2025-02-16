@@ -6,6 +6,7 @@ import type {
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { nonNullish } from './nonNullish.ts';
 import type {
   InferNonNullishInput,
   InferNonNullishIssue,
@@ -33,7 +34,7 @@ export interface NonNullishSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nonNullishAsync;
+  readonly reference: typeof nonNullish | typeof nonNullishAsync;
   /**
    * The expected property.
    */

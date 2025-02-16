@@ -152,14 +152,14 @@ describe('partial', () => {
               {
                 ...baseInfo,
                 kind: 'schema',
-                type: 'number',
+                type: 'object',
                 input: undefined,
-                expected: 'number',
+                expected: '"key2"',
                 received: 'undefined',
                 path: [
                   {
                     type: 'object',
-                    origin: 'value',
+                    origin: 'key',
                     input: input,
                     key: 'key2',
                     value: undefined,
@@ -309,14 +309,14 @@ describe('partial', () => {
               {
                 ...baseInfo,
                 kind: 'schema',
-                type: 'string',
+                type: 'object_with_rest',
                 input: undefined,
-                expected: 'string',
+                expected: '"key1"',
                 received: 'undefined',
                 path: [
                   {
                     type: 'object',
-                    origin: 'value',
+                    origin: 'key',
                     input: input,
                     key: 'key1',
                     value: undefined,

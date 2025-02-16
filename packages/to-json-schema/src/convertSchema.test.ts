@@ -440,6 +440,44 @@ describe('convertSchema', () => {
       });
     });
 
+    test('should convert exact optional schema without default', () => {
+      expect(
+        convertSchema(
+          {},
+          v.exactOptional(v.string()),
+          undefined,
+          createContext()
+        )
+      ).toStrictEqual({
+        type: 'string',
+      });
+    });
+
+    test('should convert exact optional schema with default', () => {
+      expect(
+        convertSchema(
+          {},
+          v.exactOptional(v.string(), 'foo'),
+          undefined,
+          createContext()
+        )
+      ).toStrictEqual({
+        type: 'string',
+        default: 'foo',
+      });
+      expect(
+        convertSchema(
+          {},
+          v.exactOptional(v.string(), () => 'foo'),
+          undefined,
+          createContext()
+        )
+      ).toStrictEqual({
+        type: 'string',
+        default: 'foo',
+      });
+    });
+
     test('should convert optional schema without default', () => {
       expect(
         convertSchema({}, v.optional(v.string()), undefined, createContext())

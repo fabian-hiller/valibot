@@ -1,6 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import { expectNoSchemaIssue } from '../../vitest/index.ts';
-import { string, type StringSchema } from '../string/index.ts';
+import { expectNoSchemaIssue, expectSchemaIssue } from '../../vitest/index.ts';
+import {
+  string,
+  type StringIssue,
+  type StringSchema,
+} from '../string/index.ts';
 import { nullable, type NullableSchema } from './nullable.ts';
 
 describe('nullable', () => {
@@ -80,6 +84,24 @@ describe('nullable', () => {
 
     test('for null', () => {
       expectNoSchemaIssue(schema, [null]);
+    });
+  });
+
+  describe('should return dataset with issues', () => {
+    const schema = nullable(string('message'));
+    const baseIssue: Omit<StringIssue, 'input' | 'received'> = {
+      kind: 'schema',
+      type: 'string',
+      expected: 'string',
+      message: 'message',
+    };
+
+    test('for invalid wrapper type', () => {
+      expectSchemaIssue(schema, baseIssue, [123, true, {}]);
+    });
+
+    test('for undefined', () => {
+      expectSchemaIssue(schema, baseIssue, [undefined]);
     });
   });
 

@@ -15,5 +15,5 @@ export interface LooseObjectIssue extends BaseIssue<unknown> {
   /**
    * The expected property.
    */
-  readonly expected: 'Object';
+  readonly expected: 'Object' | `"${string}"`;
 }

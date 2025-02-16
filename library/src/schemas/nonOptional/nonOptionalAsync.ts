@@ -6,6 +6,7 @@ import type {
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { nonOptional } from './nonOptional.ts';
 import type {
   InferNonOptionalInput,
   InferNonOptionalIssue,
@@ -33,7 +34,7 @@ export interface NonOptionalSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nonOptionalAsync;
+  readonly reference: typeof nonOptional | typeof nonOptionalAsync;
   /**
    * The expected property.
    */

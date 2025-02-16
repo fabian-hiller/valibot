@@ -9,6 +9,7 @@ import type {
   SuccessDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
+import type { optional } from './optional.ts';
 import type { InferOptionalOutput } from './types.ts';
 
 /**
@@ -31,7 +32,7 @@ export interface OptionalSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof optionalAsync;
+  readonly reference: typeof optional | typeof optionalAsync;
   /**
    * The expected property.
    */

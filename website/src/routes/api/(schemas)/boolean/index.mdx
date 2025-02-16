@@ -5,6 +5,7 @@ source: /schemas/boolean/boolean.ts
 contributors:
   - fabian-hiller
   - wout-junius
+  - EltonLobo07
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -58,6 +59,7 @@ The following APIs can be combined with `boolean`.
 <ApiList
   items={[
     'array',
+    'exactOptional',
     'intersect',
     'lazy',
     'looseObject',
@@ -109,11 +111,14 @@ The following APIs can be combined with `boolean`.
     'check',
     'brand',
     'description',
+    'gtValue',
+    'ltValue',
     'maxValue',
     'maxWords',
     'metadata',
     'minValue',
     'notValue',
+    'notValues',
     'rawCheck',
     'rawTransform',
     'readonly',
@@ -122,6 +127,7 @@ The following APIs can be combined with `boolean`.
     'toMinValue',
     'transform',
     'value',
+    'values',
   ]}
 />
 

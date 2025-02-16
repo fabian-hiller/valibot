@@ -35,8 +35,6 @@ With `objectAsync` you can validate the data type of the input and whether the c
 
 > This schema removes unknown entries. The output will only include the entries you specify. To include unknown entries, use <Link href="../looseObjectAsync/">`looseObjectAsync`</Link>. To return an issue for unknown entries, use <Link href="../strictObjectAsync/">`strictObjectAsync`</Link>. To include and validate unknown entries, use <Link href="../objectWithRestAsync/">`objectWithRestAsync`</Link>.
 
-> This schema does not distinguish between missing and `undefined` entries. The reason for this decision is that it reduces the bundle size, and we also expect that most users will expect this behavior.
-
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
@@ -81,6 +79,7 @@ The following APIs can be combined with `objectAsync`.
     'custom',
     'date',
     'enum',
+    'exactOptional',
     'file',
     'function',
     'instance',
@@ -155,6 +154,7 @@ The following APIs can be combined with `objectAsync`.
     'arrayAsync',
     'checkAsync',
     'customAsync',
+    'exactOptionalAsync',
     'fallbackAsync',
     'forwardAsync',
     'getDefaultsAsync',

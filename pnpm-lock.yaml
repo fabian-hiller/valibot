@@ -135,8 +135,8 @@ importers:
         specifier: ^8.18.2
         version: 8.18.2(eslint@9.17.0(jiti@2.4.2))(typescript@5.7.2)
       valibot:
-        specifier: 1.0.0-beta.9
-        version: 1.0.0-beta.9(typescript@5.7.2)
+        specifier: 1.0.0-rc.0
+        version: 1.0.0-rc.0(typescript@5.7.2)
       vite:
         specifier: ^6.0.6
         version: 6.0.6(@types/node@22.10.2)(jiti@2.4.2)(yaml@2.6.1)
@@ -7589,8 +7589,8 @@ packages:
       typescript:
         optional: true
 
-  valibot@1.0.0-beta.9:
-    resolution: {integrity: sha512-yEX8gMAZ2R1yI2uwOO4NCtVnJQx36zn3vD0omzzj9FhcoblvPukENIiRZXKZwCnqSeV80bMm8wNiGhQ0S8fiww==}
+  valibot@1.0.0-rc.0:
+    resolution: {integrity: sha512-9ZUrOXOejY/WaIn8p0Z469R1qBAwNJeqq8jzOIDsl1qR8gqtObHQmyHLFli0UCkcGiTco5kH6/KPLWsTWE9b2g==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
@@ -16089,7 +16089,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.7.2
 
-  valibot@1.0.0-beta.9(typescript@5.7.2):
+  valibot@1.0.0-rc.0(typescript@5.7.2):
     optionalDependencies:
       typescript: 5.7.2
 

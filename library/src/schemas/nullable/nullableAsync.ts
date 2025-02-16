@@ -9,6 +9,7 @@ import type {
   SuccessDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
+import type { nullable } from './nullable.ts';
 import type { InferNullableOutput } from './types.ts';
 
 /**
@@ -31,7 +32,7 @@ export interface NullableSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nullableAsync;
+  readonly reference: typeof nullable | typeof nullableAsync;
   /**
    * The expected property.
    */

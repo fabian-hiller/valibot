@@ -10,6 +10,7 @@ import type {
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { array } from './array.ts';
 import type { ArrayIssue } from './types.ts';
 
 /**
@@ -32,7 +33,7 @@ export interface ArraySchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof arrayAsync;
+  readonly reference: typeof array | typeof arrayAsync;
   /**
    * The expected property.
    */

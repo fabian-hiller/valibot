@@ -150,9 +150,8 @@ export function strictTuple(
           !(dataset.issues && config.abortEarly) &&
           this.items.length < input.length
         ) {
-          const value = input[items.length];
           _addIssue(this, 'type', dataset, config, {
-            input: value,
+            input: input[this.items.length],
             expected: 'never',
             path: [
               {
@@ -160,7 +159,7 @@ export function strictTuple(
                 origin: 'value',
                 input,
                 key: this.items.length,
-                value,
+                value: input[this.items.length],
               },
             ],
           });

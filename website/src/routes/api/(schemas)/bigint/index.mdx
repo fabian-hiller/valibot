@@ -4,6 +4,7 @@ description: Creates a bigint schema.
 source: /schemas/bigint/bigint.ts
 contributors:
   - fabian-hiller
+  - EltonLobo07
 ---
 
 import { ApiList, Property } from '~/components';
@@ -62,6 +63,7 @@ The following APIs can be combined with `bigint`.
 <ApiList
   items={[
     'array',
+    'exactOptional',
     'intersect',
     'lazy',
     'looseObject',
@@ -113,10 +115,13 @@ The following APIs can be combined with `bigint`.
     'check',
     'brand',
     'description',
+    'gtValue',
+    'ltValue',
     'maxValue',
     'metadata',
     'minValue',
     'notValue',
+    'notValues',
     'rawCheck',
     'rawTransform',
     'readonly',
@@ -125,6 +130,7 @@ The following APIs can be combined with `bigint`.
     'toMinValue',
     'transform',
     'value',
+    'values',
   ]}
 />
 

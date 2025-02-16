@@ -9,6 +9,7 @@ import type {
   SuccessDataset,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
+import type { nullish } from './nullish.ts';
 import type { InferNullishOutput } from './types.ts';
 
 /**
@@ -31,7 +32,7 @@ export interface NullishSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nullishAsync;
+  readonly reference: typeof nullish | typeof nullishAsync;
   /**
    * The expected property.
    */

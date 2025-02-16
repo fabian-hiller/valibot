@@ -36,10 +36,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'transformAsync',
-      href: '../transformAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'transform',
+          href: '../transform/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'transformAsync',
+          href: '../transformAsync/',
+        },
+      ],
     },
   },
   operation: {

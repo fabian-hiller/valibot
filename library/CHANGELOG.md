@@ -10,13 +10,22 @@ All notable changes to the library will be documented in this file.
 - Add `words`, `maxWords`, `minWords` and `notWords` action
 - Add `args` and `returns` action to transform functions (issue #243)
 - Add `rfcEmail` action to validate RFC 5322 email addresses (pull request #912)
+- Add `gtValue` and `ltValue` action for greater than and less than validation (pull request #978, #985)
+- Add `values` and `notValues` action to validate values (pull request #919)
+- Add `slug` action to validate URL slugs (pull request #910)
 - Add new overload signature to `pipe` and `pipeAync` method to support unlimited pipe items of same input and output type (issue #852)
 - Add `@__NO_SIDE_EFFECTS__` notation to improve tree shaking (pull request #995)
+- Add `exactOptional` and `exactOptionalAsync` schema (PR #1013)
 - Change types and implementation to support Standard Schema
 - Change behaviour of `minValue` and `maxValue` for `NaN` (pull request #843)
 - Change type and behaviour of `nullable`, `nullableAsync`, `nullish`, `nullishAsync`, `optional`, `optionalAsync`, `undefinedable` and `undefinedableAsync` for undefined default value (issue #878)
 - Change type signature of `partialCheck` and `partialCheckAsync` action to add `.pathList` property in a type-safe way
 - Change type signature of `findItem` action to support type predicates (issue #867)
+- Change validation of missing object entries in `looseObject`, `looseObjectAsync`, `object`, `objectAsync`, `objectWithRest`, `objectWithRestAsync`, `strictObject` and `strictObject` (PR #1013)
+- Change type signature of `optional` and `optionalAsync` when used within an object schema (PR #1013)
+- Change `MarkOptional` type to fix order of entries and TS error when using generic schemas (issue #1021)
+- Change `VariantOption` and `VariantOptionAsync` type to fix TS error when using generic schemas (issue #842)
+- Change implementation of `variant` and `variantAsync` to support optional discriminators using `exactOptional`, `exactOptionalAsync`, `optional`, `optionalAsync`, `nullish` or `nullishAsync`
 - Refactor `bytes`, `maxBytes`, `minBytes` and `notBytes` action
 - Fix implementation of `nonOptional`, `nonOptionalAsync`, `nonNullable`, `nonNullableAsync`, `nonNullish` and `nonNullishAsync` schema in edge cases (issue #909)
 - Fix instantiation error for `any` in `PathKeys` type (issue #929)

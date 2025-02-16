@@ -10,6 +10,7 @@ import type {
   TupleItemsAsync,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { strictTuple } from './strictTuple.ts';
 import type { StrictTupleIssue } from './types.ts';
 
 /**
@@ -30,7 +31,7 @@ export interface StrictTupleSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof strictTupleAsync;
+  readonly reference: typeof strictTuple | typeof strictTupleAsync;
   /**
    * The expected property.
    */
@@ -158,9 +159,8 @@ export function strictTupleAsync(
           !(dataset.issues && config.abortEarly) &&
           this.items.length < input.length
         ) {
-          const value = input[items.length];
           _addIssue(this, 'type', dataset, config, {
-            input: value,
+            input: input[this.items.length],
             expected: 'never',
             path: [
               {
@@ -168,7 +168,7 @@ export function strictTupleAsync(
                 origin: 'value',
                 input,
                 key: this.items.length,
-                value,
+                value: input[this.items.length],
               },
             ],
           });

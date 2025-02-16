@@ -150,6 +150,11 @@ export const RFC_EMAIL_REGEX: RegExp =
   /^[\w.!#$%&'*+/=?^`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/iu;
 
 /**
+ * [Slug](https://en.wikipedia.org/wiki/Clean_URL#Slug) regex.
+ */
+export const SLUG_REGEX: RegExp = /^[\da-z]+(?:[-_][\da-z]+)*$/u;
+
+/**
  * [ULID](https://github.com/ulid/spec) regex.
  *
  * Hint: We decided against the `i` flag for better JSON Schema compatibility.

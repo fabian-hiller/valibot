@@ -11,10 +11,13 @@ import type {
 import { expectNoSchemaIssue } from '../../vitest/index.ts';
 import { bigint } from '../bigint/bigint.ts';
 import { boolean } from '../boolean/index.ts';
+import { exactOptional } from '../exactOptional/index.ts';
 import { literal } from '../literal/literal.ts';
 import { null_ } from '../null/null.ts';
+import { nullish } from '../nullish/index.ts';
 import { number } from '../number/index.ts';
 import { object } from '../object/index.ts';
+import { optional } from '../optional/index.ts';
 import { strictObject } from '../strictObject/index.ts';
 import { string } from '../string/index.ts';
 import { variant, type VariantSchema } from './variant.ts';
@@ -119,6 +122,33 @@ describe('variant', () => {
           ]),
         ]),
         [{ type: 'foo' }, { type: 'bar' }, { type: null }]
+      );
+    });
+
+    test('for optional discriminators', () => {
+      expectNoSchemaIssue(
+        variant('type', [
+          object({ type: literal('foo') }),
+          object({ type: exactOptional(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: 'bar' }]
+      );
+      expectNoSchemaIssue(
+        variant('type', [
+          object({ type: literal('foo') }),
+          object({ type: optional(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: undefined }, { type: 'bar' }]
+      );
+      expectNoSchemaIssue(
+        variant('type', [
+          object({ type: literal('foo') }),
+          object({ type: nullish(literal('bar')) }),
+          object({ type: literal('baz') }),
+        ]),
+        [{}, { type: null }, { type: undefined }, { type: 'bar' }]
       );
     });
   });

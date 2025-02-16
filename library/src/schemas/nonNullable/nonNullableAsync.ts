@@ -6,6 +6,7 @@ import type {
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { nonNullable } from './nonNullable.ts';
 import type {
   InferNonNullableInput,
   InferNonNullableIssue,
@@ -33,7 +34,7 @@ export interface NonNullableSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nonNullableAsync;
+  readonly reference: typeof nonNullable | typeof nonNullableAsync;
   /**
    * The expected property.
    */

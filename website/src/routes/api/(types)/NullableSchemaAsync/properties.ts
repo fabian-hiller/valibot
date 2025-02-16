@@ -114,10 +114,21 @@ export const properties: Record<string, PropertyProps> = {
   },
   reference: {
     type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'nullableAsync',
-      href: '../nullableAsync/',
+      type: 'union',
+      options: [
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'nullable',
+          href: '../nullable/',
+        },
+        {
+          type: 'custom',
+          modifier: 'typeof',
+          name: 'nullableAsync',
+          href: '../nullableAsync/',
+        },
+      ],
     },
   },
   expects: {
