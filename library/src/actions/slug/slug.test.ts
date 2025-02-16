@@ -13,7 +13,7 @@ describe('slug', () => {
       expects: null,
       requirement: SLUG_REGEX,
       async: false,
-      '~validate': expect.any(Function),
+      '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
@@ -56,7 +56,7 @@ describe('slug', () => {
         },
       ];
       expect(
-        action['~validate']({ typed: false, value: null, issues }, {})
+        action['~run']({ typed: false, value: null, issues }, {})
       ).toStrictEqual({
         typed: false,
         value: null,
@@ -64,7 +64,7 @@ describe('slug', () => {
       });
     });
 
-    test('for valid words', () => {
+    test('for valid single word', () => {
       expectNoActionIssue(action, [
         'a',
         'z',
@@ -81,7 +81,7 @@ describe('slug', () => {
       ]);
     });
 
-    test('for valid words separated by valid separators', () => {
+    test('for valid separated words', () => {
       expectNoActionIssue(action, [
         'a-a',
         'a_a',
@@ -124,7 +124,7 @@ describe('slug', () => {
       expectActionIssue(action, baseIssue, ['', ' ', '\n']);
     });
 
-    test('for strings containing invalid characters', () => {
+    test('for strings with invalid chars', () => {
       expectActionIssue(action, baseIssue, [
         // rfc3986 valid characters
         'A',
@@ -204,7 +204,7 @@ describe('slug', () => {
       ]);
     });
 
-    test('for strings that start or end with separators', () => {
+    test('for separators at start or end', () => {
       expectActionIssue(action, baseIssue, [
         '-hello',
         '_hello',

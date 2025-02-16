@@ -80,6 +80,7 @@ export function slug<
   const TMessage extends ErrorMessage<SlugIssue<TInput>> | undefined,
 >(message: TMessage): SlugAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function slug(
   message?: ErrorMessage<SlugIssue<string>>
 ): SlugAction<string, ErrorMessage<SlugIssue<string>> | undefined> {
@@ -91,9 +92,9 @@ export function slug(
     expects: null,
     requirement: SLUG_REGEX,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
-        _addIssue(this, 'Slug', dataset, config);
+        _addIssue(this, 'slug', dataset, config);
       }
       return dataset;
     },
