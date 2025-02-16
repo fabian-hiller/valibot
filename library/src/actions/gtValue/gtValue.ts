@@ -92,6 +92,7 @@ export function gtValue<
   message: TMessage
 ): GtValueAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function gtValue(
   requirement: ValueInput,
   message?: ErrorMessage<GtValueIssue<ValueInput, ValueInput>>
