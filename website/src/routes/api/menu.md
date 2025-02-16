@@ -194,6 +194,7 @@
 ## Utils
 
 - [entriesFromList](/api/entriesFromList/)
+- [entriesFromObjects](/api/entriesFromObjects/)
 - [getDotPath](/api/getDotPath/)
 - [isOfKind](/api/isOfKind/)
 - [isOfType](/api/isOfType/)
