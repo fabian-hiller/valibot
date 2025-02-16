@@ -13,7 +13,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non nullable schema type.
+ * Non nullable schema interface.
  */
 export interface NonNullableSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -69,6 +69,7 @@ export function nonNullable<
   const TMessage extends ErrorMessage<NonNullableIssue> | undefined,
 >(wrapped: TWrapped, message: TMessage): NonNullableSchema<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullable(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<NonNullableIssue> | undefined
@@ -90,7 +91,8 @@ export function nonNullable(
     '~run'(dataset, config) {
       // If value is not `null`, run wrapped schema
       if (dataset.value !== null) {
-        this.wrapped['~run'](dataset, config);
+        // @ts-expect-error
+        dataset = this.wrapped['~run'](dataset, config);
       }
 
       // If value is `null`, add issue to dataset

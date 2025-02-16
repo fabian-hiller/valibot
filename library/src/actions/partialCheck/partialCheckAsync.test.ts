@@ -106,11 +106,7 @@ describe('partialCheckAsync', () => {
     tuple: [number, { key: string }, number];
     other: string;
   };
-  const pathList = [
-    ['nested', 'key'],
-    ['tuple', 1, 'key'],
-  ] as const;
-  type PathList = typeof pathList;
+  type PathList = [['nested', 'key'], ['tuple', 1, 'key']];
   type Selection = DeepPickN<Input, PathList>;
   const requirement = async (input: Selection) =>
     input.nested.key === input.tuple[1].key;

@@ -13,7 +13,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non nullish schema type.
+ * Non nullish schema interface.
  */
 export interface NonNullishSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -69,6 +69,7 @@ export function nonNullish<
   const TMessage extends ErrorMessage<NonNullishIssue> | undefined,
 >(wrapped: TWrapped, message: TMessage): NonNullishSchema<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullish(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<NonNullishIssue> | undefined
@@ -90,7 +91,8 @@ export function nonNullish(
     '~run'(dataset, config) {
       // If value is not `null` and `undefined`, run wrapped schema
       if (!(dataset.value === null || dataset.value === undefined)) {
-        this.wrapped['~run'](dataset, config);
+        // @ts-expect-error
+        dataset = this.wrapped['~run'](dataset, config);
       }
 
       // If value is `null` or `undefined`, add issue to dataset

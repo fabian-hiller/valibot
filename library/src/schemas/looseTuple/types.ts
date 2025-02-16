@@ -1,7 +1,7 @@
 import type { BaseIssue } from '../../types/index.ts';
 
 /**
- * Loose tuple issue type.
+ * Loose tuple issue interface.
  */
 export interface LooseTupleIssue extends BaseIssue<unknown> {
   /**

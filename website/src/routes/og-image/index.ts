@@ -1,5 +1,11 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
-import { fetchFont, html, ImageResponse } from 'og-img';
+import { ImageResponse } from '@vercel/og';
+import { html } from 'satori-html';
+
+async function fetchFont(url: string) {
+  const response = await fetch(url);
+  return response.arrayBuffer();
+}
 
 export const onGet: RequestHandler = async ({ cacheControl, send, url }) => {
   // Disable caching
@@ -14,10 +20,17 @@ export const onGet: RequestHandler = async ({ cacheControl, send, url }) => {
   const iconUrl = import.meta.env.PUBLIC_WEBSITE_URL + '/icon-192px.png';
   const fontDirUrl = import.meta.env.PUBLIC_WEBSITE_URL + '/fonts';
 
+  // Fetch font data
+  const [lexend400Data, lexend500Data, lexendExa500Data] = await Promise.all([
+    fetchFont(fontDirUrl + '/lexend-400.ttf'),
+    fetchFont(fontDirUrl + '/lexend-500.ttf'),
+    fetchFont(fontDirUrl + '/lexend-exa-500.ttf'),
+  ]);
+
   // Create Lexend 400 font object
   const lexend400 = {
     name: 'Lexend',
-    data: await fetchFont(fontDirUrl + '/lexend-400.ttf'),
+    data: lexend400Data,
     style: 'normal',
     weight: 400,
   } as const;
@@ -25,7 +38,7 @@ export const onGet: RequestHandler = async ({ cacheControl, send, url }) => {
   // Create Lexend 500 font object
   const lexend500 = {
     name: 'Lexend',
-    data: await fetchFont(fontDirUrl + '/lexend-500.ttf'),
+    data: lexend500Data,
     style: 'normal',
     weight: 500,
   } as const;
@@ -33,7 +46,7 @@ export const onGet: RequestHandler = async ({ cacheControl, send, url }) => {
   // Create Lexend Exa 500 font object
   const lexendExa500 = {
     name: 'Lexend Exa',
-    data: await fetchFont(fontDirUrl + '/lexend-exa-500.ttf'),
+    data: lexendExa500Data,
     style: 'normal',
     weight: 500,
   } as const;

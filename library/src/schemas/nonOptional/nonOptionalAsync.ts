@@ -6,6 +6,7 @@ import type {
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { nonOptional } from './nonOptional.ts';
 import type {
   InferNonOptionalInput,
   InferNonOptionalIssue,
@@ -14,7 +15,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non optional schema async type.
+ * Non optional schema async interface.
  */
 export interface NonOptionalSchemaAsync<
   TWrapped extends
@@ -33,7 +34,7 @@ export interface NonOptionalSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nonOptionalAsync;
+  readonly reference: typeof nonOptional | typeof nonOptionalAsync;
   /**
    * The expected property.
    */
@@ -79,6 +80,7 @@ export function nonOptionalAsync<
   message: TMessage
 ): NonOptionalSchemaAsync<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonOptionalAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
@@ -103,7 +105,8 @@ export function nonOptionalAsync(
     async '~run'(dataset, config) {
       // If value is not `undefined`, run wrapped schema
       if (dataset.value !== undefined) {
-        await this.wrapped['~run'](dataset, config);
+        // @ts-expect-error
+        dataset = await this.wrapped['~run'](dataset, config);
       }
 
       // If value is `undefined`, add issue to dataset

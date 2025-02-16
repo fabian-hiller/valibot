@@ -1,6 +1,6 @@
 ---
 title: BaseSchema
-description: Base schema type.
+description: Base schema interface.
 contributors:
   - fabian-hiller
   - kazizi55
@@ -11,7 +11,7 @@ import { properties } from './properties';
 
 # BaseSchema
 
-Base schema type.
+Base schema interface.
 
 ## Generics
 
@@ -28,6 +28,5 @@ Base schema type.
   - `expects` <Property {...properties.expects} />
   - `async` <Property {...properties.async} />
   - `~standard` <Property {...properties['~standard']} />
-  - `~vendor` <Property {...properties['~vendor']} />
+  - `~run` <Property {...properties['~run']} />
   - `~types` <Property {...properties['~types']} />
-  - `~validate` <Property {...properties['~validate']} />

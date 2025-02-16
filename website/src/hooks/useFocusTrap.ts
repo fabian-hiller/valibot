@@ -12,8 +12,8 @@ export function useFocusTrap(
   active: Signal<boolean>
 ) {
   useTask$(({ track, cleanup }) => {
-    if (track(() => active.value)) {
-      const rootElementValue = track(() => rootElement.value);
+    if (track(active)) {
+      const rootElementValue = track(rootElement);
       if (rootElementValue) {
         // Get current active element
         const { activeElement } = document;

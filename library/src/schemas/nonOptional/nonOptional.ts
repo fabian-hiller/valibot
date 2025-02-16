@@ -13,7 +13,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non optional schema type.
+ * Non optional schema interface.
  */
 export interface NonOptionalSchema<
   TWrapped extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -69,6 +69,7 @@ export function nonOptional<
   const TMessage extends ErrorMessage<NonOptionalIssue> | undefined,
 >(wrapped: TWrapped, message: TMessage): NonOptionalSchema<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonOptional(
   wrapped: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<NonOptionalIssue> | undefined
@@ -90,7 +91,8 @@ export function nonOptional(
     '~run'(dataset, config) {
       // If value is not `undefined`, run wrapped schema
       if (dataset.value !== undefined) {
-        this.wrapped['~run'](dataset, config);
+        // @ts-expect-error
+        dataset = this.wrapped['~run'](dataset, config);
       }
 
       // If value is `undefined`, add issue to dataset

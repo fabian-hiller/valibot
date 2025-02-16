@@ -8,10 +8,11 @@ import type {
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { map } from './map.ts';
 import type { InferMapInput, InferMapOutput, MapIssue } from './types.ts';
 
 /**
- * Map schema async type.
+ * Map schema async interface.
  */
 export interface MapSchemaAsync<
   TKey extends
@@ -33,7 +34,7 @@ export interface MapSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof mapAsync;
+  readonly reference: typeof map | typeof mapAsync;
   /**
    * The expected property.
    */
@@ -92,6 +93,7 @@ export function mapAsync<
   message: TMessage
 ): MapSchemaAsync<TKey, TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function mapAsync(
   key:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>

@@ -109,8 +109,8 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
 
   // Do stuff when search is opened or closed
   useTask$(({ track }) => {
-    track(() => inputElement.value);
-    track(() => open.value);
+    track(inputElement);
+    track(open);
     if (isBrowser && inputElement.value) {
       // Focus input and block background scrolling when search is opened
       if (open.value) {
@@ -149,7 +149,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
 
   // Close search when location changes
   useTask$(({ track }) => {
-    track(() => location.url);
+    track(() => location.prevUrl);
     if (isBrowser) {
       open.value = false;
     }
@@ -157,7 +157,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
 
   // Update search result and active index when input changes
   useTask$(({ track, cleanup }) => {
-    const currentInput = track(() => input.value);
+    const currentInput = track(input);
     if (isBrowser) {
       // Reset error state
       error.value = false;
@@ -257,7 +257,7 @@ export const DocSearch = component$<DocSearchProps>(({ open }) => {
               }
 
               // Update state in case of an error
-            } catch (_) {
+            } catch {
               error.value = true;
             }
           }, 150);
@@ -524,8 +524,8 @@ const SearchItem = component$<SearchItemProps>(
 
     // Scroll element into view if active
     useTask$(({ track }) => {
-      track(() => element.value);
-      track(() => active.value);
+      track(element);
+      track(active);
       if (isBrowser && element.value && active.value) {
         element.value.scrollIntoView({ block: 'nearest' });
       }

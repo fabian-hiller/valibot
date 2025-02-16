@@ -6,7 +6,7 @@ import type { BaseIssue, MaybePromise } from '../../types/index.ts';
 export type PartialInput = Record<string, unknown> | ArrayLike<unknown>;
 
 /**
- * Partial check issue type.
+ * Partial check issue interface.
  */
 export interface PartialCheckIssue<TInput extends PartialInput>
   extends BaseIssue<TInput> {

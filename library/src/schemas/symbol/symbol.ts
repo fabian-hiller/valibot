@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Symbol issue type.
+ * Symbol issue interface.
  */
 export interface SymbolIssue extends BaseIssue<unknown> {
   /**
@@ -25,7 +25,7 @@ export interface SymbolIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Symbol schema type.
+ * Symbol schema interface.
  */
 export interface SymbolSchema<
   TMessage extends ErrorMessage<SymbolIssue> | undefined,
@@ -66,6 +66,7 @@ export function symbol<
   const TMessage extends ErrorMessage<SymbolIssue> | undefined,
 >(message: TMessage): SymbolSchema<TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function symbol(
   message?: ErrorMessage<SymbolIssue>
 ): SymbolSchema<ErrorMessage<SymbolIssue> | undefined> {

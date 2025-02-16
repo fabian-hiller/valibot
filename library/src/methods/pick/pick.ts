@@ -29,8 +29,10 @@ import type {
   ObjectKeys,
   OutputDataset,
   SchemaWithoutPipe,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
  * The schema type.
@@ -76,11 +78,20 @@ export type SchemaWithPick<
       infer TEntries,
       ErrorMessage<StrictObjectIssue> | undefined
     >
-  ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+  ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
       /**
        * The object entries.
        */
       readonly entries: Pick<TEntries, TKeys[number]>;
+      /**
+       * The Standard Schema properties.
+       *
+       * @internal
+       */
+      readonly '~standard': StandardProps<
+        InferObjectInput<Pick<TEntries, TKeys[number]>>,
+        InferObjectOutput<Pick<TEntries, TKeys[number]>>
+      >;
       /**
        * Parses unknown input.
        *
@@ -123,11 +134,20 @@ export type SchemaWithPick<
             infer TEntries,
             ErrorMessage<StrictObjectIssue> | undefined
           >
-    ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+    ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
         /**
          * The object entries.
          */
         readonly entries: Pick<TEntries, TKeys[number]>;
+        /**
+         * The Standard Schema properties.
+         *
+         * @internal
+         */
+        readonly '~standard': StandardProps<
+          InferObjectInput<Pick<TEntries, TKeys[number]>>,
+          InferObjectOutput<Pick<TEntries, TKeys[number]>>
+        >;
         /**
          * Parses unknown input.
          *
@@ -167,11 +187,24 @@ export type SchemaWithPick<
           infer TEntries,
           ErrorMessage<LooseObjectIssue> | undefined
         >
-      ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+      ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
           /**
            * The object entries.
            */
           readonly entries: Pick<TEntries, TKeys[number]>;
+          /**
+           * The Standard Schema properties.
+           *
+           * @internal
+           */
+          readonly '~standard': StandardProps<
+            InferObjectInput<Pick<TEntries, TKeys[number]>> & {
+              [key: string]: unknown;
+            },
+            InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
+              [key: string]: unknown;
+            }
+          >;
           /**
            * Parses unknown input.
            *
@@ -219,11 +252,24 @@ export type SchemaWithPick<
             infer TEntries,
             ErrorMessage<LooseObjectIssue> | undefined
           >
-        ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+        ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
             /**
              * The object entries.
              */
             readonly entries: Pick<TEntries, TKeys[number]>;
+            /**
+             * The Standard Schema properties.
+             *
+             * @internal
+             */
+            readonly '~standard': StandardProps<
+              InferObjectInput<Pick<TEntries, TKeys[number]>> & {
+                [key: string]: unknown;
+              },
+              InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
+                [key: string]: unknown;
+              }
+            >;
             /**
              * Parses unknown input.
              *
@@ -274,11 +320,24 @@ export type SchemaWithPick<
               BaseSchema<unknown, unknown, BaseIssue<unknown>>,
               ErrorMessage<ObjectWithRestIssue> | undefined
             >
-          ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+          ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
               /**
                * The object entries.
                */
               readonly entries: Pick<TEntries, TKeys[number]>;
+              /**
+               * The Standard Schema properties.
+               *
+               * @internal
+               */
+              readonly '~standard': StandardProps<
+                InferObjectInput<Pick<TEntries, TKeys[number]>> & {
+                  [key: string]: InferInput<TSchema['rest']>;
+                },
+                InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
+                  [key: string]: InferOutput<TSchema['rest']>;
+                }
+              >;
               /**
                * Parses unknown input.
                *
@@ -327,11 +386,24 @@ export type SchemaWithPick<
                 BaseSchema<unknown, unknown, BaseIssue<unknown>>,
                 ErrorMessage<ObjectWithRestIssue> | undefined
               >
-            ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+            ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
                 /**
                  * The object entries.
                  */
                 readonly entries: Pick<TEntries, TKeys[number]>;
+                /**
+                 * The Standard Schema properties.
+                 *
+                 * @internal
+                 */
+                readonly '~standard': StandardProps<
+                  InferObjectInput<Pick<TEntries, TKeys[number]>> & {
+                    [key: string]: InferInput<TSchema['rest']>;
+                  },
+                  InferObjectOutput<Pick<TEntries, TKeys[number]>> & {
+                    [key: string]: InferOutput<TSchema['rest']>;
+                  }
+                >;
                 /**
                  * Parses unknown input.
                  *
@@ -391,6 +463,7 @@ export type SchemaWithPick<
  *
  * @returns An object schema.
  */
+// @__NO_SIDE_EFFECTS__
 export function pick<
   const TSchema extends Schema,
   const TKeys extends ObjectKeys<TSchema>,
@@ -405,5 +478,11 @@ export function pick<
 
   // Return modified copy of schema
   // @ts-expect-error
-  return { ...schema, entries };
+  return {
+    ...schema,
+    entries,
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+  };
 }

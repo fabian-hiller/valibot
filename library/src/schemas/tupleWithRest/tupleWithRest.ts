@@ -16,7 +16,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { TupleWithRestIssue } from './types.ts';
 
 /**
- * Tuple with rest schema type.
+ * Tuple with rest schema interface.
  */
 export interface TupleWithRestSchema<
   TItems extends TupleItems,
@@ -85,6 +85,7 @@ export function tupleWithRest<
   message: TMessage
 ): TupleWithRestSchema<TItems, TRest, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function tupleWithRest(
   items: TupleItems,
   rest: BaseSchema<unknown, unknown, BaseIssue<unknown>>,

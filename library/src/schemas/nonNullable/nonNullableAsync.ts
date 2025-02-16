@@ -6,6 +6,7 @@ import type {
   OutputDataset,
 } from '../../types/index.ts';
 import { _addIssue, _getStandardProps } from '../../utils/index.ts';
+import type { nonNullable } from './nonNullable.ts';
 import type {
   InferNonNullableInput,
   InferNonNullableIssue,
@@ -14,7 +15,7 @@ import type {
 } from './types.ts';
 
 /**
- * Non nullable schema async type.
+ * Non nullable schema async interface.
  */
 export interface NonNullableSchemaAsync<
   TWrapped extends
@@ -33,7 +34,7 @@ export interface NonNullableSchemaAsync<
   /**
    * The schema reference.
    */
-  readonly reference: typeof nonNullableAsync;
+  readonly reference: typeof nonNullable | typeof nonNullableAsync;
   /**
    * The expected property.
    */
@@ -79,6 +80,7 @@ export function nonNullableAsync<
   message: TMessage
 ): NonNullableSchemaAsync<TWrapped, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function nonNullableAsync(
   wrapped:
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
@@ -103,7 +105,8 @@ export function nonNullableAsync(
     async '~run'(dataset, config) {
       // If value is not `null`, run wrapped schema
       if (dataset.value !== null) {
-        await this.wrapped['~run'](dataset, config);
+        // @ts-expect-error
+        dataset = await this.wrapped['~run'](dataset, config);
       }
 
       // If value is `null`, add issue to dataset

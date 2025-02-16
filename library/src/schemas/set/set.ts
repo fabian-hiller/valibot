@@ -10,7 +10,7 @@ import { _addIssue, _getStandardProps } from '../../utils/index.ts';
 import type { InferSetInput, InferSetOutput, SetIssue } from './types.ts';
 
 /**
- * Set schema type.
+ * Set schema interface.
  */
 export interface SetSchema<
   TValue extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
@@ -66,6 +66,7 @@ export function set<
   const TMessage extends ErrorMessage<SetIssue> | undefined,
 >(value: TValue, message: TMessage): SetSchema<TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function set(
   value: BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   message?: ErrorMessage<SetIssue>

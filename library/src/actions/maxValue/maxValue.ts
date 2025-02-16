@@ -7,7 +7,7 @@ import { _addIssue, _stringify } from '../../utils/index.ts';
 import type { ValueInput } from '../types.ts';
 
 /**
- * Max value issue type.
+ * Max value issue interface.
  */
 export interface MaxValueIssue<
   TInput extends ValueInput,
@@ -32,7 +32,7 @@ export interface MaxValueIssue<
 }
 
 /**
- * Max value action type.
+ * Max value action interface.
  */
 export interface MaxValueAction<
   TInput extends ValueInput,
@@ -94,6 +94,7 @@ export function maxValue<
   message: TMessage
 ): MaxValueAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function maxValue(
   requirement: ValueInput,
   message?: ErrorMessage<MaxValueIssue<ValueInput, ValueInput>>

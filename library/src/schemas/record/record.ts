@@ -18,7 +18,7 @@ import type {
 } from './types.ts';
 
 /**
- * Record schema type.
+ * Record schema interface.
  */
 export interface RecordSchema<
   TKey extends BaseSchema<string, string | number | symbol, BaseIssue<unknown>>,
@@ -95,6 +95,7 @@ export function record<
   message: TMessage
 ): RecordSchema<TKey, TValue, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function record(
   key: BaseSchema<string, string | number | symbol, BaseIssue<unknown>>,
   value: BaseSchema<unknown, unknown, BaseIssue<unknown>>,

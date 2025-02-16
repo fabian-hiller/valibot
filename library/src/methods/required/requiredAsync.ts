@@ -26,8 +26,10 @@ import type {
   ObjectKeys,
   OutputDataset,
   SchemaWithoutPipe,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
  * Schema type.
@@ -78,11 +80,20 @@ export type SchemaWithRequiredAsync<
       infer TEntries,
       ErrorMessage<StrictObjectIssue> | undefined
     >
-  ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+  ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
       /**
        * The object entries.
        */
       readonly entries: RequiredEntries<TEntries, TKeys, TMessage>;
+      /**
+       * The Standard Schema properties.
+       *
+       * @internal
+       */
+      readonly '~standard': StandardProps<
+        InferObjectInput<RequiredEntries<TEntries, TKeys, TMessage>>,
+        InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>>
+      >;
       /**
        * Parses unknown input.
        *
@@ -123,11 +134,24 @@ export type SchemaWithRequiredAsync<
         infer TEntries,
         ErrorMessage<LooseObjectIssue> | undefined
       >
-    ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+    ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
         /**
          * The object entries.
          */
         readonly entries: RequiredEntries<TEntries, TKeys, TMessage>;
+        /**
+         * The Standard Schema properties.
+         *
+         * @internal
+         */
+        readonly '~standard': StandardProps<
+          InferObjectInput<RequiredEntries<TEntries, TKeys, TMessage>> & {
+            [key: string]: unknown;
+          },
+          InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
+            [key: string]: unknown;
+          }
+        >;
         /**
          * Parses unknown input.
          *
@@ -175,11 +199,24 @@ export type SchemaWithRequiredAsync<
           infer TRest,
           ErrorMessage<ObjectWithRestIssue> | undefined
         >
-      ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+      ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
           /**
            * The object entries.
            */
           readonly entries: RequiredEntries<TEntries, TKeys, TMessage>;
+          /**
+           * The Standard Schema properties.
+           *
+           * @internal
+           */
+          readonly '~standard': StandardProps<
+            InferObjectInput<RequiredEntries<TEntries, TKeys, TMessage>> & {
+              [key: string]: InferInput<TRest>;
+            },
+            InferObjectOutput<RequiredEntries<TEntries, TKeys, TMessage>> & {
+              [key: string]: InferOutput<TRest>;
+            }
+          >;
           /**
            * Parses unknown input.
            *
@@ -288,6 +325,7 @@ export function requiredAsync<
   message: TMessage
 ): SchemaWithRequiredAsync<TSchema, TKeys, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function requiredAsync(
   schema: Schema,
   arg2?: ErrorMessage<NonOptionalIssue> | ObjectKeys<Schema>,
@@ -318,5 +356,11 @@ export function requiredAsync(
   }
 
   // Return modified copy of schema
-  return { ...schema, entries };
+  return {
+    ...schema,
+    entries,
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+  };
 }

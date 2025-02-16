@@ -7,7 +7,7 @@ import { _addIssue, _stringify } from '../../utils/index.ts';
 import type { ValueInput } from '../types.ts';
 
 /**
- * Min value issue type.
+ * Min value issue interface.
  */
 export interface MinValueIssue<
   TInput extends ValueInput,
@@ -32,7 +32,7 @@ export interface MinValueIssue<
 }
 
 /**
- * Min value action type.
+ * Min value action interface.
  */
 export interface MinValueAction<
   TInput extends ValueInput,
@@ -94,6 +94,7 @@ export function minValue<
   message: TMessage
 ): MinValueAction<TInput, TRequirement, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function minValue(
   requirement: ValueInput,
   message?: ErrorMessage<MinValueIssue<ValueInput, ValueInput>>

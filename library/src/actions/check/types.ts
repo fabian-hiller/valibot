@@ -1,7 +1,7 @@
 import type { BaseIssue, MaybePromise } from '../../types/index.ts';
 
 /**
- * Check issue type.
+ * Check issue interface.
  */
 export interface CheckIssue<TInput> extends BaseIssue<TInput> {
   /**

@@ -10,8 +10,10 @@ import type {
   OutputDataset,
   PipeAction,
   PipeItem,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
  * Schema with pipe type.
@@ -22,11 +24,20 @@ export type SchemaWithPipe<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...PipeItem<any, unknown, BaseIssue<unknown>>[],
   ],
-> = Omit<FirstTupleItem<TPipe>, '~run' | '~types'> & {
+> = Omit<FirstTupleItem<TPipe>, '~standard' | '~run' | '~types'> & {
   /**
    * The pipe items.
    */
   readonly pipe: TPipe;
+  /**
+   * The Standard Schema properties.
+   *
+   * @internal
+   */
+  readonly '~standard': StandardProps<
+    InferInput<FirstTupleItem<TPipe>>,
+    InferOutput<LastTupleItem<TPipe>>
+  >;
   /**
    * Parses unknown input values.
    *
@@ -2655,6 +2666,7 @@ export function pipe<
   >[],
 >(schema: TSchema, ...items: TItems): SchemaWithPipe<[TSchema, ...TItems]>;
 
+// @__NO_SIDE_EFFECTS__
 export function pipe<
   const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>,
   const TItems extends PipeItem<unknown, unknown, BaseIssue<unknown>>[],
@@ -2662,6 +2674,9 @@ export function pipe<
   return {
     ...pipe[0],
     pipe,
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
     '~run'(dataset, config) {
       // Execute pipeline items in sequence
       for (const item of pipe) {

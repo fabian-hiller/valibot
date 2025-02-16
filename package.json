@@ -11,9 +11,9 @@
   },
   "private": true,
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "prettier": "^3.3.2",
-    "prettier-plugin-tailwindcss": "^0.6.5",
-    "typescript": "5.5.3"
+    "@trivago/prettier-plugin-sort-imports": "^5.2.0",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "typescript": "5.7.2"
   }
 }

@@ -7,7 +7,7 @@ import type {
 import { _addIssue, _isLuhnAlgo } from '../../utils/index.ts';
 
 /**
- * IMEI issue type.
+ * IMEI issue interface.
  */
 export interface ImeiIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface ImeiIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * IMEI action type.
+ * IMEI action interface.
  */
 export interface ImeiAction<
   TInput extends string,
@@ -88,6 +88,7 @@ export function imei<
   const TMessage extends ErrorMessage<ImeiIssue<TInput>> | undefined,
 >(message: TMessage): ImeiAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function imei(
   message?: ErrorMessage<ImeiIssue<string>>
 ): ImeiAction<string, ErrorMessage<ImeiIssue<string>> | undefined> {

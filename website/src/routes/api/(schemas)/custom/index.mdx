@@ -5,6 +5,7 @@ source: /schemas/custom/custom.ts
 contributors:
   - fabian-hiller
   - morinokami
+  - EltonLobo07
 ---
 
 import { ApiList, Property } from '~/components';
@@ -63,6 +64,7 @@ The following APIs can be combined with `custom`.
 <ApiList
   items={[
     'array',
+    'exactOptional',
     'intersect',
     'lazy',
     'looseObject',
@@ -111,6 +113,7 @@ The following APIs can be combined with `custom`.
 
 <ApiList
   items={[
+    'args',
     'base64',
     'bic',
     'brand',
@@ -148,6 +151,7 @@ The following APIs can be combined with `custom`.
     'isoTimestamp',
     'isoWeek',
     'length',
+    'ltValue',
     'mac',
     'mac48',
     'mac64',
@@ -182,6 +186,8 @@ The following APIs can be combined with `custom`.
     'readonly',
     'reduceItems',
     'regex',
+    'returns',
+    'rfcEmail',
     'safeInteger',
     'size',
     'someItem',

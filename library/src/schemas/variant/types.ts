@@ -5,6 +5,10 @@ import type {
   ErrorMessage,
   InferIssue,
   MaybeReadonly,
+  ObjectEntries,
+  ObjectEntriesAsync,
+  OptionalEntrySchema,
+  OptionalEntrySchemaAsync,
 } from '../../types/index.ts';
 import type {
   LooseObjectIssue,
@@ -30,7 +34,7 @@ import type { variant } from './variant.ts';
 import type { variantAsync } from './variantAsync.ts';
 
 /**
- * Variant issue type.
+ * Variant issue interface.
  */
 export interface VariantIssue extends BaseIssue<unknown> {
   /**
@@ -48,7 +52,7 @@ export interface VariantIssue extends BaseIssue<unknown> {
 }
 
 /**
- * Variant option schema type.
+ * Variant option schema interface.
  */
 export interface VariantOptionSchema<TKey extends string>
   extends BaseSchema<unknown, unknown, VariantIssue | BaseIssue<unknown>> {
@@ -60,36 +64,57 @@ export interface VariantOptionSchema<TKey extends string>
 }
 
 /**
- * Variant option schema async type.
+ * Variant option schema async interface.
  */
 export interface VariantOptionSchemaAsync<TKey extends string>
   extends BaseSchemaAsync<unknown, unknown, VariantIssue | BaseIssue<unknown>> {
   readonly type: 'variant';
-  readonly reference: typeof variantAsync;
+  readonly reference: typeof variant | typeof variantAsync;
   readonly key: string;
   readonly options: VariantOptionsAsync<TKey>;
   readonly message: ErrorMessage<VariantIssue> | undefined;
 }
 
 /**
+ * Variant object entries type.
+ */
+type VariantObjectEntries<TKey extends string> = Record<
+  TKey,
+  BaseSchema<unknown, unknown, BaseIssue<unknown>> | OptionalEntrySchema
+> &
+  ObjectEntries;
+
+/**
+ * Variant object entries async type.
+ */
+type VariantObjectEntriesAsync<TKey extends string> = Record<
+  TKey,
+  | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+  | OptionalEntrySchema
+  | OptionalEntrySchemaAsync
+> &
+  ObjectEntriesAsync;
+
+/**
  * Variant option type.
  */
 type VariantOption<TKey extends string> =
   | LooseObjectSchema<
-      Record<TKey, BaseSchema<unknown, unknown, BaseIssue<unknown>>>,
+      VariantObjectEntries<TKey>,
       ErrorMessage<LooseObjectIssue> | undefined
     >
   | ObjectSchema<
-      Record<TKey, BaseSchema<unknown, unknown, BaseIssue<unknown>>>,
+      VariantObjectEntries<TKey>,
       ErrorMessage<ObjectIssue> | undefined
     >
   | ObjectWithRestSchema<
-      Record<TKey, BaseSchema<unknown, unknown, BaseIssue<unknown>>>,
+      VariantObjectEntries<TKey>,
       BaseSchema<unknown, unknown, BaseIssue<unknown>>,
       ErrorMessage<ObjectWithRestIssue> | undefined
     >
   | StrictObjectSchema<
-      Record<TKey, BaseSchema<unknown, unknown, BaseIssue<unknown>>>,
+      VariantObjectEntries<TKey>,
       ErrorMessage<StrictObjectIssue> | undefined
     >
   | VariantOptionSchema<TKey>;
@@ -99,37 +124,21 @@ type VariantOption<TKey extends string> =
  */
 type VariantOptionAsync<TKey extends string> =
   | LooseObjectSchemaAsync<
-      Record<
-        TKey,
-        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-      >,
+      VariantObjectEntriesAsync<TKey>,
       ErrorMessage<LooseObjectIssue> | undefined
     >
   | ObjectSchemaAsync<
-      Record<
-        TKey,
-        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-      >,
+      VariantObjectEntriesAsync<TKey>,
       ErrorMessage<ObjectIssue> | undefined
     >
   | ObjectWithRestSchemaAsync<
-      Record<
-        TKey,
-        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-      >,
+      VariantObjectEntriesAsync<TKey>,
       | BaseSchema<unknown, unknown, BaseIssue<unknown>>
       | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
       ErrorMessage<ObjectWithRestIssue> | undefined
     >
   | StrictObjectSchemaAsync<
-      Record<
-        TKey,
-        | BaseSchema<unknown, unknown, BaseIssue<unknown>>
-        | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
-      >,
+      VariantObjectEntriesAsync<TKey>,
       ErrorMessage<StrictObjectIssue> | undefined
     >
   | VariantOptionSchemaAsync<TKey>;

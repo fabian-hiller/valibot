@@ -20,6 +20,7 @@ import type {
  *
  * @returns The modified action.
  */
+// @__NO_SIDE_EFFECTS__
 export function forward<
   TInput extends Record<string, unknown> | ArrayLike<unknown>,
   TIssue extends BaseIssue<unknown>,
@@ -34,7 +35,7 @@ export function forward<
       const prevIssues = dataset.issues && [...dataset.issues];
 
       // Run validation action
-      action['~run'](dataset, config);
+      dataset = action['~run'](dataset, config);
 
       // If dataset contains issues, forward newly added issues
       if (dataset.issues) {

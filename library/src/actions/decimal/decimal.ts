@@ -7,7 +7,7 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Decimal issue type.
+ * Decimal issue interface.
  */
 export interface DecimalIssue<TInput extends string> extends BaseIssue<TInput> {
   /**
@@ -33,7 +33,7 @@ export interface DecimalIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
- * Decimal action type.
+ * Decimal action interface.
  */
 export interface DecimalAction<
   TInput extends string,
@@ -83,6 +83,7 @@ export function decimal<
   const TMessage extends ErrorMessage<DecimalIssue<TInput>> | undefined,
 >(message: TMessage): DecimalAction<TInput, TMessage>;
 
+// @__NO_SIDE_EFFECTS__
 export function decimal(
   message?: ErrorMessage<DecimalIssue<string>>
 ): DecimalAction<string, ErrorMessage<DecimalIssue<string>> | undefined> {

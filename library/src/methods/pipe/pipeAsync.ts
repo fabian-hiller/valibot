@@ -13,8 +13,10 @@ import type {
   PipeActionAsync,
   PipeItem,
   PipeItemAsync,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
  * Schema with pipe async type.
@@ -30,7 +32,7 @@ export type SchemaWithPipeAsync<
       | PipeItemAsync<any, unknown, BaseIssue<unknown>> // eslint-disable-line @typescript-eslint/no-explicit-any
     )[],
   ],
-> = Omit<FirstTupleItem<TPipe>, 'async' | '~run' | '~types'> & {
+> = Omit<FirstTupleItem<TPipe>, 'async' | '~standard' | '~run' | '~types'> & {
   /**
    * The pipe items.
    */
@@ -39,6 +41,15 @@ export type SchemaWithPipeAsync<
    * Whether it's async.
    */
   readonly async: true;
+  /**
+   * The Standard Schema properties.
+   *
+   * @internal
+   */
+  readonly '~standard': StandardProps<
+    InferInput<FirstTupleItem<TPipe>>,
+    InferOutput<LastTupleItem<TPipe>>
+  >;
   /**
    * Parses unknown input values.
    *
@@ -3040,6 +3051,7 @@ export function pipeAsync<
   )[],
 >(schema: TSchema, ...items: TItems): SchemaWithPipeAsync<[TSchema, ...TItems]>;
 
+// @__NO_SIDE_EFFECTS__
 export function pipeAsync<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
@@ -3053,6 +3065,9 @@ export function pipeAsync<
     ...pipe[0],
     pipe,
     async: true,
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
     async '~run'(dataset, config) {
       // Execute pipeline items in sequence
       for (const item of pipe) {

@@ -1,0 +1,23 @@
+---
+title: StandardSuccessResult
+description: The result interface if validation succeeds.
+contributors:
+  - fabian-hiller
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# StandardSuccessResult
+
+The result interface if validation succeeds.
+
+## Generics
+
+- `TOutput` <Property {...properties.TOutput} />
+
+## Definition
+
+- `StandardSuccessResult`
+  - `value` <Property {...properties.value} />
+  - `issues` <Property {...properties.issues} />

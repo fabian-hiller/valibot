@@ -25,8 +25,10 @@ import type {
   ObjectKeys,
   OutputDataset,
   SchemaWithoutPipe,
+  StandardProps,
   UnknownDataset,
 } from '../../types/index.ts';
+import { _getStandardProps } from '../../utils/index.ts';
 
 /**
  * Schema type.
@@ -75,11 +77,20 @@ export type SchemaWithPartialAsync<
       infer TEntries,
       ErrorMessage<StrictObjectIssue> | undefined
     >
-  ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+  ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
       /**
        * The object entries.
        */
       readonly entries: PartialEntries<TEntries, TKeys>;
+      /**
+       * The Standard Schema properties.
+       *
+       * @internal
+       */
+      readonly '~standard': StandardProps<
+        InferObjectInput<PartialEntries<TEntries, TKeys>>,
+        InferObjectOutput<PartialEntries<TEntries, TKeys>>
+      >;
       /**
        * Parses unknown input.
        *
@@ -116,11 +127,24 @@ export type SchemaWithPartialAsync<
         infer TEntries,
         ErrorMessage<LooseObjectIssue> | undefined
       >
-    ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+    ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
         /**
          * The object entries.
          */
         readonly entries: PartialEntries<TEntries, TKeys>;
+        /**
+         * The Standard Schema properties.
+         *
+         * @internal
+         */
+        readonly '~standard': StandardProps<
+          InferObjectInput<PartialEntries<TEntries, TKeys>> & {
+            [key: string]: unknown;
+          },
+          InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
+            [key: string]: unknown;
+          }
+        >;
         /**
          * Parses unknown input.
          *
@@ -168,11 +192,24 @@ export type SchemaWithPartialAsync<
           infer TRest,
           ErrorMessage<ObjectWithRestIssue> | undefined
         >
-      ? Omit<TSchema, 'entries' | '~run' | '~types'> & {
+      ? Omit<TSchema, 'entries' | '~standard' | '~run' | '~types'> & {
           /**
            * The object entries.
            */
           readonly entries: PartialEntries<TEntries, TKeys>;
+          /**
+           * The Standard Schema properties.
+           *
+           * @internal
+           */
+          readonly '~standard': StandardProps<
+            InferObjectInput<PartialEntries<TEntries, TKeys>> & {
+              [key: string]: InferInput<TRest>;
+            },
+            InferObjectOutput<PartialEntries<TEntries, TKeys>> & {
+              [key: string]: InferOutput<TRest>;
+            }
+          >;
           /**
            * Parses unknown input.
            *
@@ -240,6 +277,7 @@ export function partialAsync<
   const TKeys extends ObjectKeys<TSchema>,
 >(schema: TSchema, keys: TKeys): SchemaWithPartialAsync<TSchema, TKeys>;
 
+// @__NO_SIDE_EFFECTS__
 export function partialAsync(
   schema: Schema,
   keys?: ObjectKeys<Schema>
@@ -255,5 +293,11 @@ export function partialAsync(
   }
 
   // Return modified copy of schema
-  return { ...schema, entries };
+  return {
+    ...schema,
+    entries,
+    get '~standard'() {
+      return _getStandardProps(this);
+    },
+  };
 }

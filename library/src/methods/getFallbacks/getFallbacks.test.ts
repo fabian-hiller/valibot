@@ -26,7 +26,6 @@ describe('getFallbacks', () => {
 
   describe('should return object defaults', () => {
     test('for empty object', () => {
-      // eslint-disable-next-line @typescript-eslint/ban-types
       expect(getFallbacks(object({}))).toStrictEqual({});
     });
 
