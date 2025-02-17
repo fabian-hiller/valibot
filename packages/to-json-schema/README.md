@@ -59,6 +59,7 @@ Some Valibot features can't be mapped to JSON schema. For example, transformatio
 | `minLength`    | ⚠️     | Only in combination with `string` and `array` schemas |
 | `minValue`     | ⚠️     | Only in combination with `number` schema              |
 | `multipleOf`   | ✅     |                                                       |
+| `readonly`     | ✅     |                                                       |
 | `regex`        | ⚠️     | RexExp flags are not supported in JSON schema         |
 | `uuid`         | ✅     |                                                       |
 | `value`        | ✅     |                                                       |
