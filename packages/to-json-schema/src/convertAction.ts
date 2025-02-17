@@ -76,6 +76,7 @@ type Action =
       v.ErrorMessage<v.NonEmptyIssue<v.LengthInput>> | undefined
     >
   | v.OctalAction<string, v.ErrorMessage<v.OctalIssue<string>> | undefined>
+  | v.ReadonlyAction<unknown>
   | v.RegexAction<string, v.ErrorMessage<v.RegexIssue<string>> | undefined>
   | v.TitleAction<unknown, string>
   | v.UlidAction<string, v.ErrorMessage<v.UlidIssue<string>> | undefined>
@@ -265,6 +266,11 @@ export function convertAction(
         }
         jsonSchema.minLength = 1;
       }
+      break;
+    }
+
+    case 'readonly': {
+      jsonSchema.readOnly = true;
       break;
     }
 
