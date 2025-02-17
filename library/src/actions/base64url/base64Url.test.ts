@@ -1,52 +1,52 @@
 import { describe, expect, test } from 'vitest';
-import { BASE64URL_REGEX } from '../../regex.ts';
+import { BASE64_URL_REGEX } from '../../regex.ts';
 import type { StringIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import {
-  base64url,
-  type Base64urlAction,
-  type Base64urlIssue,
-} from './base64url.ts';
+  base64Url,
+  type Base64UrlAction,
+  type Base64UrlIssue,
+} from './base64Url.ts';
 
-describe('base64url', () => {
+describe('base64Url', () => {
   describe('should return action object', () => {
-    const baseAction: Omit<Base64urlAction<string, never>, 'message'> = {
+    const baseAction: Omit<Base64UrlAction<string, never>, 'message'> = {
       kind: 'validation',
-      type: 'base64url',
-      reference: base64url,
+      type: 'base64_url',
+      reference: base64Url,
       expects: null,
-      requirement: BASE64URL_REGEX,
+      requirement: BASE64_URL_REGEX,
       async: false,
       '~run': expect.any(Function),
     };
 
     test('with undefined message', () => {
-      const action: Base64urlAction<string, undefined> = {
+      const action: Base64UrlAction<string, undefined> = {
         ...baseAction,
         message: undefined,
       };
-      expect(base64url()).toStrictEqual(action);
-      expect(base64url(undefined)).toStrictEqual(action);
+      expect(base64Url()).toStrictEqual(action);
+      expect(base64Url(undefined)).toStrictEqual(action);
     });
 
     test('with string message', () => {
-      expect(base64url('message')).toStrictEqual({
+      expect(base64Url('message')).toStrictEqual({
         ...baseAction,
         message: 'message',
-      } satisfies Base64urlAction<string, string>);
+      } satisfies Base64UrlAction<string, string>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(base64url(message)).toStrictEqual({
+      expect(base64Url(message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies Base64urlAction<string, typeof message>);
+      } satisfies Base64UrlAction<string, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    const action = base64url();
+    const action = base64Url();
 
     test('for untyped inputs', () => {
       const issues: [StringIssue] = [
@@ -118,13 +118,13 @@ describe('base64url', () => {
   });
 
   describe('should return dataset with issues', () => {
-    const action = base64url('message');
-    const baseIssue: Omit<Base64urlIssue<string>, 'input' | 'received'> = {
+    const action = base64Url('message');
+    const baseIssue: Omit<Base64UrlIssue<string>, 'input' | 'received'> = {
       kind: 'validation',
-      type: 'base64url',
+      type: 'base64_url',
       expected: null,
       message: 'message',
-      requirement: BASE64URL_REGEX,
+      requirement: BASE64_URL_REGEX,
     };
 
     test('for blank strings', () => {

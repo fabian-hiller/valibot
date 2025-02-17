@@ -7,7 +7,7 @@ export const BASE64_REGEX: RegExp =
 /**
  * [Base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) regex.
  */
-export const BASE64URL_REGEX: RegExp =
+export const BASE64_URL_REGEX: RegExp =
   /^(?:[\w-]{4})*(?:[\w-]{2}(?:==)?|[\w-]{3}=?)?$/iu;
 
 /**

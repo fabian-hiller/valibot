@@ -1,4 +1,4 @@
-import { BASE64URL_REGEX } from '../../regex.ts';
+import { BASE64_URL_REGEX } from '../../regex.ts';
 import type {
   BaseIssue,
   BaseValidation,
@@ -7,9 +7,9 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Base64url issue interface.
+ * Base64Url issue interface.
  */
-export interface Base64urlIssue<TInput extends string>
+export interface Base64UrlIssue<TInput extends string>
   extends BaseIssue<TInput> {
   /**
    * The issue kind.
@@ -18,7 +18,7 @@ export interface Base64urlIssue<TInput extends string>
   /**
    * The issue type.
    */
-  readonly type: 'base64url';
+  readonly type: 'base64_url';
   /**
    * The expected property.
    */
@@ -28,32 +28,32 @@ export interface Base64urlIssue<TInput extends string>
    */
   readonly received: `"${string}"`;
   /**
-   * The Base64url regex.
+   * The base64 url regex.
    */
   readonly requirement: RegExp;
 }
 
 /**
- * Base64url action interface.
+ * Base64Url action interface.
  */
-export interface Base64urlAction<
+export interface Base64UrlAction<
   TInput extends string,
-  TMessage extends ErrorMessage<Base64urlIssue<TInput>> | undefined,
-> extends BaseValidation<TInput, TInput, Base64urlIssue<TInput>> {
+  TMessage extends ErrorMessage<Base64UrlIssue<TInput>> | undefined,
+> extends BaseValidation<TInput, TInput, Base64UrlIssue<TInput>> {
   /**
    * The action type.
    */
-  readonly type: 'base64url';
+  readonly type: 'base64_url';
   /**
    * The action reference.
    */
-  readonly reference: typeof base64url;
+  readonly reference: typeof base64Url;
   /**
    * The expected property.
    */
   readonly expects: null;
   /**
-   * The Base64url regex.
+   * The base64 url regex.
    */
   readonly requirement: RegExp;
   /**
@@ -63,42 +63,42 @@ export interface Base64urlAction<
 }
 
 /**
- * Creates a [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) validation action.
+ * Creates a [base64 url](https://en.wikipedia.org/wiki/Base64#URL_applications) validation action.
  *
- * @returns A base64url action.
+ * @returns A base64 url action.
  */
-export function base64url<TInput extends string>(): Base64urlAction<
+export function base64Url<TInput extends string>(): Base64UrlAction<
   TInput,
   undefined
 >;
 
 /**
- * Creates a [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) validation action.
+ * Creates a [base64 url](https://en.wikipedia.org/wiki/Base64#URL_applications) validation action.
  *
  * @param message The error message.
  *
- * @returns A base64url action.
+ * @returns A base64 url action.
  */
-export function base64url<
+export function base64Url<
   TInput extends string,
-  const TMessage extends ErrorMessage<Base64urlIssue<TInput>> | undefined,
->(message: TMessage): Base64urlAction<TInput, TMessage>;
+  const TMessage extends ErrorMessage<Base64UrlIssue<TInput>> | undefined,
+>(message: TMessage): Base64UrlAction<TInput, TMessage>;
 
 // @__NO_SIDE_EFFECTS__
-export function base64url(
-  message?: ErrorMessage<Base64urlIssue<string>>
-): Base64urlAction<string, ErrorMessage<Base64urlIssue<string>> | undefined> {
+export function base64Url(
+  message?: ErrorMessage<Base64UrlIssue<string>>
+): Base64UrlAction<string, ErrorMessage<Base64UrlIssue<string>> | undefined> {
   return {
     kind: 'validation',
-    type: 'base64url',
-    reference: base64url,
+    type: 'base64_url',
+    reference: base64Url,
     async: false,
     expects: null,
-    requirement: BASE64URL_REGEX,
+    requirement: BASE64_URL_REGEX,
     message,
     '~run'(dataset, config) {
       if (dataset.typed && !this.requirement.test(dataset.value)) {
-        _addIssue(this, 'Base64url', dataset, config);
+        _addIssue(this, 'Base64Url', dataset, config);
       }
       return dataset;
     },

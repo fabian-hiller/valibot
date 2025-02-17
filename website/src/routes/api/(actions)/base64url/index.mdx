@@ -1,7 +1,7 @@
 ---
-title: base64url
-description: Creates a base64url validation action.
-source: /actions/base64url/base64url.ts
+title: base64Url
+description: Creates a base64 url validation action.
+source: /actions/base64Url/base64Url.ts
 contributors:
   - EltonLobo07
 ---
@@ -9,12 +9,12 @@ contributors:
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# base64url
+# base64Url
 
-Creates a [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) validation action.
+Creates a [base64 url](https://en.wikipedia.org/wiki/Base64#URL_applications) validation action.
 
 ```ts
-const Action = v.base64url<TInput, TMessage>(message);
+const Action = v.base64Url<TInput, TMessage>(message);
 ```
 
 ## Generics
@@ -28,7 +28,7 @@ const Action = v.base64url<TInput, TMessage>(message);
 
 ### Explanation
 
-With `base64url` you can validate the formatting of a string. If the input is not a Base64url string, you can use `message` to customize the error message.
+With `base64Url` you can validate the formatting of a string. If the input is not a base64 url string, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -36,22 +36,22 @@ With `base64url` you can validate the formatting of a string. If the input is no
 
 ## Examples
 
-The following examples show how `base64url` can be used.
+The following examples show how `base64Url` can be used.
 
-### Base64url schema
+### Base64Url schema
 
-Schema to validate a Base64url string.
+Schema to validate a base64 url string.
 
 ```ts
-const Base64urlSchema = v.pipe(
+const Base64UrlSchema = v.pipe(
   v.string(),
-  v.base64url('The data is badly encoded.')
+  v.base64Url('The data is badly encoded.')
 );
 ```
 
 ## Related
 
-The following APIs can be combined with `base64url`.
+The following APIs can be combined with `base64Url`.
 
 ### Schemas
 

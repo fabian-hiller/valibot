@@ -1,36 +1,36 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import {
-  base64url,
-  type Base64urlAction,
-  type Base64urlIssue,
-} from './base64url.ts';
+  base64Url,
+  type Base64UrlAction,
+  type Base64UrlIssue,
+} from './base64Url.ts';
 
-describe('base64url', () => {
+describe('base64Url', () => {
   describe('should return action object', () => {
     test('with undefined message', () => {
-      type Action = Base64urlAction<string, undefined>;
-      expectTypeOf(base64url<string>()).toEqualTypeOf<Action>();
+      type Action = Base64UrlAction<string, undefined>;
+      expectTypeOf(base64Url<string>()).toEqualTypeOf<Action>();
       expectTypeOf(
-        base64url<string, undefined>(undefined)
+        base64Url<string, undefined>(undefined)
       ).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
-      expectTypeOf(base64url<string, 'message'>('message')).toEqualTypeOf<
-        Base64urlAction<string, 'message'>
+      expectTypeOf(base64Url<string, 'message'>('message')).toEqualTypeOf<
+        Base64UrlAction<string, 'message'>
       >();
     });
 
     test('with function message', () => {
       expectTypeOf(
-        base64url<string, () => string>(() => 'message')
-      ).toEqualTypeOf<Base64urlAction<string, () => string>>();
+        base64Url<string, () => string>(() => 'message')
+      ).toEqualTypeOf<Base64UrlAction<string, () => string>>();
     });
   });
 
   describe('should infer correct types', () => {
-    type Action = Base64urlAction<string, undefined>;
+    type Action = Base64UrlAction<string, undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<string>();
@@ -42,7 +42,7 @@ describe('base64url', () => {
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
-        Base64urlIssue<string>
+        Base64UrlIssue<string>
       >();
     });
   });

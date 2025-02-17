@@ -17,8 +17,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'Base64urlIssue',
-              href: '../Base64urlIssue/',
+              name: 'Base64UrlIssue',
+              href: '../Base64UrlIssue/',
               generics: [
                 {
                   type: 'custom',
@@ -41,8 +41,8 @@ export const properties: Record<string, PropertyProps> = {
   Action: {
     type: {
       type: 'custom',
-      name: 'Base64urlAction',
-      href: '../Base64urlAction/',
+      name: 'Base64UrlAction',
+      href: '../Base64UrlAction/',
       generics: [
         {
           type: 'custom',
