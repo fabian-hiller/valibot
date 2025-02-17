@@ -13,6 +13,7 @@ All notable changes to the library will be documented in this file.
 - Add `gtValue` and `ltValue` action for greater than and less than validation (pull request #978, #985)
 - Add `values` and `notValues` action for easier multi-value validation (pull request #919)
 - Add `slug` action to validate URL slugs (pull request #910)
+- Add support for `ReadonlyMap` and `ReadonlySet` to `readonly` action (issue #1059)
 - Add `entriesFromObjects` util to improve tree shaking (pull request #1023)
 - Add new overload signature to `pipe` and `pipeAync` method to support unlimited pipe items of same input and output type (issue #852)
 - Add `@__NO_SIDE_EFFECTS__` notation to improve tree shaking (pull request #995)
