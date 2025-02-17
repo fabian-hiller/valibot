@@ -6,6 +6,7 @@ contributors:
   - fabian-hiller
 ---
 
+import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
@@ -35,9 +36,7 @@ const Action = v.maxGraphemes<TInput, TRequirement, TMessage>(
 
 With `maxGraphemes` you can validate the graphemes of a string. If the input does not match the `requirement`, you can use `message` to customize the error message.
 
-Warning: The number of characters per grapheme is _unlimited_, so you are required to combine `maxGraphemes` with another length limitter, e.g. `maxLength`. As an example, the following text is composed of just 5 graphemes, but each of them contains an astonishing more than 150 characters.
-
-> Z̸̢̢̧̢̡̡̡̧̯͔͕͖̣̤̼̼̗̳̼͈̖̠̜̮̝͖͔͙̺̪̹̞͉̤̟͖͖̹͉̟̙̟̗̰̼͈̖̭̞̟̻̝͖̙̟͕̣͓̭̣̭͉̲̘̥̗͔̱͙̪̼͈̥̲̣͙̤̥͚̩̫̮̖̘̪̯̝̘̻̯̞̰̭̼͕̹̩̟̝̞̊̋̈́̎̏̆̇̄̓̈͛̒͛̆̊͌̔̈́̐̅̈͛̏̔̍͗́̉͋̓̓̓̒̇̾̽̂̓̈̃͒͆́̏̀͒̇̀̍́̍̃̒̈́̈́̑̎͋͛̀̿̌͂̌̾̌͂͒̉̎̈́͐̒̕͜͜͜͜͜͠͝͝͠͝͝͝͝͠ͅͅa̶̧̨̡̡̧̧̨̢̢̧̧̡̧̡̡̧̛͇̮̙̼̫͎̳̰̩̖̤͚͎̤͕͍̘̞̞̠̰̠͎͉͙̝͓͇̝̲̩͖̻̤̥̞̠͙̪͎̬̘̠̼̬̤̳̣̳̝̮͉͓̻͚̤͓̜͉̭͎͚̫̱̹̜͈̭͈͎̦͇͕̺̰̜̮̼̟͓̺̝̠̫̯̺̠̱̞̘͈̖̻̫̟̰͔͖̘̫͍̥͓̟̩̯͙̳̥̯͈̺̮͍̰̮̮̥͔̮͊̈̇̈́̉͂͒͗͌̈́͑̈́͋̈́͌̕͜͜͜͝͠͠ͅͅͅļ̷̡̡̡̛̛̛̛̛̛̝̩̺̤̖͈̗̦̥̩̫̻̖̦̣̻̤̩̂̋͐̽̍͛̈́͛̿͊̀̑̋̍̂͆̑̀̎͑͒̆͊̌͒̉͊̈́́̄͑̐̊̂̓͛͐̇̃͛̔̈́̌̒́̓̎̿̓͐̌̋̀̅̇̾̂͆̊̆̈́͆̉́͊͋́̊̈́̇͊̂̒̑̉̌͑̿͐̓͆͋̎̋͛̒̆̎̊͊̉͋̽͋̂̿̂͛̃͒̓̒͒̈́̈̓̓̅̌̊̇̊̎̆͛͗͑͘̕̕̕͘͘͝͝͝͝͠͝͝͝͝͝ḡ̸̡̢̢̧̡̢̨̨̛̛̛̛̛̛̱͚͙̗̲̪̝̫̱͇̯̝͇͔̮̦̬̬͕̺̬͈͚̜̜̯̩͚̼̖̹̼͓̘͎͙̻͇͍͖̲̖̩͙͇͚̗͍͓͔̜͙͇̯̣̲̲̻̩̮̭̞͚̖̫̰͚͇̱͇͕̣͍̦̯̬̙̮͎̪̘̭͔͙̘̪̬͉̻̫̭̫̻̼͔̤͈͍͍̜̥̠͓̤̼̪̰̼͇̮̭͓͈͕͎̟̮̣̠̻̭̦̦̞̝͍͉͎͇̲͛̽͆̓͒̓͊́̈̈́̍͆̀̓̾̍̿̀̽̏͛͛̋̏̐̽̈́̊͛̅̂͗̌̀̿͒̃̈́̽̀̐̈̽̆̾̄̊͆́̓̾͐͐̎̊́̈̎̆̆͌̂́̀͗̄͛͗̅̎̅̿́̎̂̑̓̾͐͆̓͌̀̚̚͘̚̕̕͘̚͜͜͝͝͝͝͝͠ͅͅͅͅͅo̴̢̢̢̧̡̢̧̧̢̡̨̨̢͖͉̙͚̰̠̱͉̞̞̳̜͕͚̬̹̬̠̙̺̰̠̞͙̟̞͚̳̬͖̤̝̘͈̻̙̰̩̥̰̠̯̻̩̦͓̭̳̘̼̖͓̘͓͈͈̻̭̮̗̯̣̖͇̙̣͕͔̦̙͚̘͕̜͚̙͉̪̭̳͎̞͎̦͈͖̲̟̠̟͖̬̼̬͎̖̟̣͌͛̇͗̿̿̒́̌̏̀̈́̆̑̀̉͂̅͗̀̍̿͑͊̎̂́̄́̓̍͗̃̅̕͘̕͜͝͝͝ͅͅͅͅ
+> Hint: The number of characters per grapheme is not limited. You may want to consider combining `maxGraphemes` with <Link href="../maxLength/">`maxLength`</Link> or <Link href="../maxBytes/">`maxBytes`</Link> to set a stricter limit.
 
 ## Returns
 
