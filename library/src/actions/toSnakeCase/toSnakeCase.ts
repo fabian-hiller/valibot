@@ -44,7 +44,7 @@ export function toSnakeCase<TInput extends ObjectInput>(): ToSnakeCaseAction<
 export function toSnakeCase<
   TInput extends ObjectInput,
   TSelectedKeys extends SelectedStringKeys<TInput>,
->(selectedKeys: TSelectedKeys): ToSnakeCaseAction<TInput, TSelectedKeys>;
+>(selectedKeys: [...TSelectedKeys]): ToSnakeCaseAction<TInput, TSelectedKeys>;
 
 /**
  * Creates a to snake case transformation action.
@@ -69,14 +69,8 @@ export function toSnakeCase(
       const allKeys = Object.keys(input);
       const selectedKeys = new Set(this.selectedKeys ?? allKeys);
       for (const key of allKeys) {
-        let destKey = key;
-        if (
-          !selectedKeys.has(destKey) ||
-          (destKey = snakeCase(key)) === key ||
-          !Object.hasOwn(input, destKey)
-        ) {
-          dataset.value[destKey] = input[key];
-        }
+        dataset.value[selectedKeys.has(key) ? snakeCase(key) : key] =
+          input[key];
       }
       return dataset as SuccessDataset<
         Output<ObjectInput, SelectedStringKeys<ObjectInput> | undefined>
