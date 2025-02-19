@@ -1,4 +1,5 @@
 export * from './AlgoliaLogo';
+export * from './BoltLogo';
 export * from './BuilderLogo';
 export * from './DailyDevLogo';
 export * from './DigitalOceanLogo';
