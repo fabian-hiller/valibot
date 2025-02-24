@@ -1,0 +1,83 @@
+---
+title: toSnakeCase
+description: Creates a to snake case transformation action.
+source: /actions/toSnakeCase/toSnakeCase.ts
+contributors:
+  - EltonLobo07
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# toSnakeCase
+
+Creates a to snake case transformation action.
+
+```ts
+const AllKeysAction = v.toSnakeCase<TInput>();
+const SelectedKeysAction = v.toSnakeCase<TInput, TSelectedKeys>(selectedKeys);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TSelectedKeys` <Property {...properties.TRequirement} />
+
+## Parameters
+
+- `selectedKeys` <Property {...properties.selectedKeys} />
+
+### Explanation
+
+With `toSnakeCase` you can enforce a minimum value for a number, date or string. If the input does not meet the `requirement`, it will be changed to its value.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `toMinValue` can be used.
+
+### Number schema
+
+Schema to enforce a minimum value for a number.
+
+```ts
+const NumberSchema = v.pipe(v.number(), v.toMinValue(100));
+```
+
+### Date schema
+
+Schema to enforce a minimum value for a date.
+
+```ts
+const DateSchema = v.pipe(v.date(), v.toMinValue(new Date('1999-12-31')));
+```
+
+## Related
+
+The following APIs can be combined with `toMinValue`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'any',
+    'bigint',
+    'boolean',
+    'custom',
+    'date',
+    'number',
+    'string',
+    'unknown',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
