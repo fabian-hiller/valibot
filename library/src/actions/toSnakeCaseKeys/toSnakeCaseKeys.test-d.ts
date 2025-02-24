@@ -1,8 +1,11 @@
 import { describe, expectTypeOf, test } from 'vitest';
-import type { InferInput, InferIssue, InferOutput } from '../../types';
-import { toSnakeCase, type ToSnakeCaseAction } from './toSnakeCase.ts';
+import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
+import {
+  toSnakeCaseKeys,
+  type ToSnakeCaseKeysAction,
+} from './toSnakeCaseKeys.ts';
 
-describe('toSnakeCase', () => {
+describe('toSnakeCaseKeys', () => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   type Input = {
     // numeric key
@@ -25,8 +28,8 @@ describe('toSnakeCase', () => {
     '---ABC--DEF---': '---ABC--DEF---';
   };
 
-  type ActionWithoutSelection = ToSnakeCaseAction<Input, undefined>;
-  type ActionWithSelection = ToSnakeCaseAction<
+  type ActionWithoutSelection = ToSnakeCaseKeysAction<Input, undefined>;
+  type ActionWithSelection = ToSnakeCaseKeysAction<
     Input,
     [
       'foo',
@@ -44,13 +47,13 @@ describe('toSnakeCase', () => {
   describe('should return action object', () => {
     test('with no selected keys', () => {
       expectTypeOf(
-        toSnakeCase<Input>()
+        toSnakeCaseKeys<Input>()
       ).toEqualTypeOf<ActionWithoutSelection>();
     });
 
     test('with selected keys', () => {
       expectTypeOf(
-        toSnakeCase<
+        toSnakeCaseKeys<
           Input,
           [
             'foo',
@@ -134,7 +137,7 @@ describe('toSnakeCase', () => {
         };
 
         expectTypeOf<
-          InferOutput<ToSnakeCaseAction<InputWithDuplicates, undefined>>
+          InferOutput<ToSnakeCaseKeysAction<InputWithDuplicates, undefined>>
         >().toEqualTypeOf<{
           foo: 'foo';
           foo_bar: 'foo_bar' | 'fooBar';
@@ -142,7 +145,7 @@ describe('toSnakeCase', () => {
         }>();
         expectTypeOf<
           InferOutput<
-            ToSnakeCaseAction<
+            ToSnakeCaseKeysAction<
               InputWithDuplicates,
               ['fooBar', 'Hello World', 'hello_World']
             >

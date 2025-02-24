@@ -1,7 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import { toSnakeCase, type ToSnakeCaseAction } from './toSnakeCase.ts';
+import {
+  toSnakeCaseKeys,
+  type ToSnakeCaseKeysAction,
+} from './toSnakeCaseKeys.ts';
 
-describe('toSnakeCase', () => {
+describe('toSnakeCaseKeys', () => {
   describe('should return action object', () => {
     // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     type Input = {
@@ -12,30 +15,30 @@ describe('toSnakeCase', () => {
     };
 
     test('with no selected keys', () => {
-      expect(toSnakeCase<Input>()).toStrictEqual({
+      expect(toSnakeCaseKeys<Input>()).toStrictEqual({
         kind: 'transformation',
-        type: 'to_snake_case',
-        reference: toSnakeCase,
+        type: 'to_snake_case_keys',
+        reference: toSnakeCaseKeys,
         async: false,
         selectedKeys: undefined,
         '~run': expect.any(Function),
-      } satisfies ToSnakeCaseAction<Input, undefined>);
+      } satisfies ToSnakeCaseKeysAction<Input, undefined>);
     });
 
     test('with selected keys', () => {
-      expect(toSnakeCase<Input, ['fooBar']>(['fooBar'])).toStrictEqual({
+      expect(toSnakeCaseKeys<Input, ['fooBar']>(['fooBar'])).toStrictEqual({
         kind: 'transformation',
-        type: 'to_snake_case',
-        reference: toSnakeCase,
+        type: 'to_snake_case_keys',
+        reference: toSnakeCaseKeys,
         async: false,
         selectedKeys: ['fooBar'],
         '~run': expect.any(Function),
-      } satisfies ToSnakeCaseAction<Input, ['fooBar']>);
+      } satisfies ToSnakeCaseKeysAction<Input, ['fooBar']>);
     });
   });
 
   test('should transform all keys', () => {
-    const action = toSnakeCase();
+    const action = toSnakeCaseKeys();
     expect(
       action['~run'](
         {
@@ -93,7 +96,7 @@ describe('toSnakeCase', () => {
       while iterating over the object's keys using `Object.keys`
     */
   test('should handle duplicate keys properly when transforming all keys', () => {
-    const action = toSnakeCase();
+    const action = toSnakeCaseKeys();
     expect(
       action['~run'](
         {
@@ -144,7 +147,7 @@ describe('toSnakeCase', () => {
       'object.key': 'object.key',
       '---ABC--DEF---': '---ABC--DEF---',
     };
-    const action = toSnakeCase<
+    const action = toSnakeCaseKeys<
       typeof input,
       ['camelCase', 'kebab-case', '__init__', '---ABC--DEF---']
     >(['camelCase', 'kebab-case', '__init__', '---ABC--DEF---']);
@@ -182,7 +185,7 @@ describe('toSnakeCase', () => {
       _hello: '_hello',
       hello_: 'hello_',
     };
-    const action = toSnakeCase<
+    const action = toSnakeCaseKeys<
       typeof input,
       ['fooBar', 'Hello World', 'hello_World', '   ', 'hello_']
     >(['fooBar', 'Hello World', 'hello_World', '   ', 'hello_']);

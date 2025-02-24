@@ -4,20 +4,20 @@ import { snakeCase } from './helpers.ts';
 import type { Output } from './types.ts';
 
 /**
- * To snake case action interface.
+ * To snake case keys action interface.
  */
-export interface ToSnakeCaseAction<
+export interface ToSnakeCaseKeysAction<
   TInput extends ObjectInput,
   TSelectedKeys extends SelectedStringKeys<TInput> | undefined,
 > extends BaseTransformation<TInput, Output<TInput, TSelectedKeys>, never> {
   /**
    * The action type.
    */
-  readonly type: 'to_snake_case';
+  readonly type: 'to_snake_case_keys';
   /**
    * The action reference.
    */
-  readonly reference: typeof toSnakeCase;
+  readonly reference: typeof toSnakeCaseKeys;
   /**
    * The keys to be transformed.
    */
@@ -25,42 +25,46 @@ export interface ToSnakeCaseAction<
 }
 
 /**
- * Creates a to snake case transformation action.
+ * Creates a to snake case keys transformation action.
  *
- * @returns A to snake case action.
+ * @returns A to snake case keys action.
  */
-export function toSnakeCase<TInput extends ObjectInput>(): ToSnakeCaseAction<
-  TInput,
-  undefined
->;
+export function toSnakeCaseKeys<
+  TInput extends ObjectInput,
+>(): ToSnakeCaseKeysAction<TInput, undefined>;
 
 /**
- * Creates a to snake case transformation action.
+ * Creates a to snake case keys transformation action.
  *
  * @param selectedKeys The keys to be transformed.
  *
- * @returns A to snake case action.
+ * @returns A to snake case keys action.
  */
-export function toSnakeCase<
+export function toSnakeCaseKeys<
   TInput extends ObjectInput,
   TSelectedKeys extends SelectedStringKeys<TInput>,
->(selectedKeys: [...TSelectedKeys]): ToSnakeCaseAction<TInput, TSelectedKeys>;
+>(
+  selectedKeys: [...TSelectedKeys]
+): ToSnakeCaseKeysAction<TInput, TSelectedKeys>;
 
 /**
- * Creates a to snake case transformation action.
+ * Creates a to snake case keys transformation action.
  *
  * @param selectedKeys The keys to be transformed.
  *
- * @returns A to snake case action.
+ * @returns A to snake case keys action.
  */
 // @__NO_SIDE_EFFECTS__
-export function toSnakeCase(
+export function toSnakeCaseKeys(
   selectedKeys?: SelectedStringKeys<ObjectInput>
-): ToSnakeCaseAction<ObjectInput, SelectedStringKeys<ObjectInput> | undefined> {
+): ToSnakeCaseKeysAction<
+  ObjectInput,
+  SelectedStringKeys<ObjectInput> | undefined
+> {
   return {
     kind: 'transformation',
-    type: 'to_snake_case',
-    reference: toSnakeCase,
+    type: 'to_snake_case_keys',
+    reference: toSnakeCaseKeys,
     async: false,
     selectedKeys,
     '~run'(dataset) {
