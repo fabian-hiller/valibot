@@ -33,6 +33,7 @@ All notable changes to the library will be documented in this file.
 - Fix instantiation error for `any` in `PathKeys` type (issue #929)
 - Fix TypeScript error of `keyof` method for objects with many keys (pull request #988)
 - Fix options filtering in `enum_` schema (pull request #941)
+- Fix `partialCheck` and `partialCheckAsync` action for typed data with issues
 
 ## v0.42.1 (September 20, 2024)
 

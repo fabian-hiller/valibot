@@ -10,6 +10,7 @@ import type {
   PartialDataset,
   SuccessDataset,
 } from '../../types/index.ts';
+import type { MinLengthIssue } from '../minLength/index.ts';
 import {
   type PartialCheckActionAsync,
   partialCheckAsync,
@@ -234,7 +235,7 @@ describe('partialCheckAsync', () => {
   });
 
   describe('should add issue to dataset', () => {
-    test('if there are no issues', async () => {
+    test('if there are no previous issues', async () => {
       const input: Input = {
         nested: { key: 'foo' },
         tuple: [123, { key: 'baz' }, 456],
@@ -260,7 +261,63 @@ describe('partialCheckAsync', () => {
       } satisfies PartialDataset<Input, PartialCheckIssue<Selection>>);
     });
 
-    test('if only unselected paths are untyped', async () => {
+    test('if there are previous issues but the dataset is typed', async () => {
+      const input: Input = {
+        nested: { key: 'foo' },
+        tuple: [123, { key: 'baz' }, 456],
+        other: 'bar',
+      };
+      const firstIssue: MinLengthIssue<string, 5> = {
+        ...baseInfo,
+        kind: 'validation',
+        type: 'min_length',
+        input: 'foo',
+        expected: '>=5',
+        received: '3',
+        requirement: 5,
+        path: [
+          {
+            type: 'object',
+            origin: 'value',
+            input,
+            key: 'nested',
+            value: input.nested,
+          },
+          {
+            type: 'object',
+            origin: 'value',
+            input: input.nested,
+            key: 'key',
+            value: input.nested.key,
+          },
+        ],
+      };
+      const dataset: PartialDataset<Input, MinLengthIssue<string, 5>> = {
+        typed: true,
+        value: input,
+        issues: [firstIssue],
+      };
+      expect(await action['~run'](dataset, {})).toStrictEqual({
+        ...dataset,
+        issues: [
+          firstIssue,
+          {
+            ...baseInfo,
+            kind: 'validation',
+            type: 'partial_check',
+            input: input,
+            expected: null,
+            received: 'Object',
+            requirement,
+          },
+        ],
+      } satisfies PartialDataset<
+        Input,
+        MinLengthIssue<string, 5> | PartialCheckIssue<Selection>
+      >);
+    });
+
+    test('if there are previous issues but only with unrelated paths', async () => {
       const input: {
         nested: { key: string };
         tuple: [number, { key: string }, null];

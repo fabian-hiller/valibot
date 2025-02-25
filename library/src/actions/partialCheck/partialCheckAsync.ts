@@ -105,7 +105,7 @@ export function partialCheckAsync(
     message,
     async '~run'(dataset, config) {
       if (
-        _isPartiallyTyped(dataset, pathList) &&
+        (dataset.typed || _isPartiallyTyped(dataset, pathList)) &&
         // @ts-expect-error
         !(await this.requirement(dataset.value))
       ) {
