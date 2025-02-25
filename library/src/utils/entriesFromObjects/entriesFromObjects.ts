@@ -73,21 +73,20 @@ type MergeEntries<
 /**
  * Recursive merge type.
  */
-type RecursiveMerge<TSchemas extends [Schema, ...Schema[]]> = TSchemas extends [
-  infer TFirstSchema extends Schema,
-]
-  ? TFirstSchema['entries']
-  : TSchemas extends [
-        infer TFirstSchema extends Schema,
-        ...infer TRestSchemas extends [Schema, ...Schema[]],
-      ]
-    ? MergeEntries<TFirstSchema['entries'], RecursiveMerge<TRestSchemas>>
-    : never;
+type RecursiveMerge<TSchemas extends readonly [Schema, ...Schema[]]> =
+  TSchemas extends readonly [infer TFirstSchema extends Schema]
+    ? TFirstSchema['entries']
+    : TSchemas extends readonly [
+          infer TFirstSchema extends Schema,
+          ...infer TRestSchemas extends readonly [Schema, ...Schema[]],
+        ]
+      ? MergeEntries<TFirstSchema['entries'], RecursiveMerge<TRestSchemas>>
+      : never;
 
 /**
  * Merged entries types.
  */
-type MergedEntries<TSchemas extends [Schema, ...Schema[]]> = Prettify<
+type MergedEntries<TSchemas extends readonly [Schema, ...Schema[]]> = Prettify<
   RecursiveMerge<TSchemas>
 >;
 
@@ -101,7 +100,7 @@ type MergedEntries<TSchemas extends [Schema, ...Schema[]]> = Prettify<
  * @beta
  */
 export function entriesFromObjects<
-  const TSchemas extends [Schema, ...Schema[]],
+  const TSchemas extends readonly [Schema, ...Schema[]],
 >(schemas: TSchemas): MergedEntries<TSchemas>;
 
 // @__NO_SIDE_EFFECTS__
