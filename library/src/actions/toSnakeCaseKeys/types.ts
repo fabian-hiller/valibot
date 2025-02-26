@@ -19,13 +19,13 @@ export type Output<
 >;
 
 type Whitespace =
-  | ' '
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#white_space
   | '\t'
-  | '\n'
-  | '\r'
   | '\v'
   | '\f'
+  | ' '
   | '\u00A0'
+  | '\uFEFF'
   | '\u1680'
   | '\u2000'
   | '\u2001'
@@ -38,16 +38,20 @@ type Whitespace =
   | '\u2008'
   | '\u2009'
   | '\u200A'
-  | '\u200B'
   | '\u202F'
   | '\u205F'
-  | '\u3000';
+  | '\u3000'
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#line_terminators
+  | '\n'
+  | '\r'
+  | '\u2028'
+  | '\u2029';
 
 type SnakeCaseSeparator = '_';
 
 type Separator = Whitespace | SnakeCaseSeparator | '-' | '.';
 
-type IsSeparator<T> = T extends Separator ? true : false;
+type IsSeparator<T extends string> = T extends Separator ? true : false;
 
 type IsUpperCase<T extends string> =
   T extends Uppercase<T> ? (T extends Lowercase<T> ? false : true) : false;
@@ -61,7 +65,7 @@ type TrimStart<T extends string> = T extends `${Whitespace}${infer TRemaining}`
 /**
  * To snake case type.
  */
-type ToSnakeCase<T extends string> = ToSnakeCaseHelper<TrimStart<T>>;
+export type ToSnakeCase<T extends string> = ToSnakeCaseHelper<TrimStart<T>>;
 
 type ToSnakeCaseHelper<
   T extends string,

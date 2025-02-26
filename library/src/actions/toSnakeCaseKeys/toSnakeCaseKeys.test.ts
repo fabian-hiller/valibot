@@ -44,24 +44,13 @@ describe('toSnakeCaseKeys', () => {
         {
           typed: true,
           value: {
-            // numeric key
             321: '321',
             foo: 'foo',
-            // standard cases
             'Hello World': 'Hello World',
             camelCase: 'camelCase',
             PascalCase: 'PascalCase',
             'kebab-case': 'kebab-case',
             UPPER_SNAKE_CASE: 'UPPER_SNAKE_CASE',
-            // edge cases
-            '   ': '   ',
-            '   test   ': '   test   ',
-            __init__: '__init__',
-            'I ❤️ valibot': 'I ❤️ valibot',
-            'MixOf Styles': 'MixOf Styles',
-            aÅ: 'aÅ',
-            'object.key': 'object.key',
-            '---ABC--DEF---': '---ABC--DEF---',
           },
         },
         {}
@@ -76,14 +65,6 @@ describe('toSnakeCaseKeys', () => {
         pascal_case: 'PascalCase',
         kebab_case: 'kebab-case',
         upper_snake_case: 'UPPER_SNAKE_CASE',
-        '': '   ',
-        test: '   test   ',
-        init: '__init__',
-        'i_❤️_valibot': 'I ❤️ valibot',
-        mix_of_styles: 'MixOf Styles',
-        a_å: 'aÅ',
-        object_key: 'object.key',
-        abc_def: '---ABC--DEF---',
       },
     });
   });
@@ -107,10 +88,6 @@ describe('toSnakeCaseKeys', () => {
             'hello world': 'hello world',
             'Hello World': 'Hello World',
             hello_World: 'hello_World',
-            '': '',
-            '   ': '   ',
-            _hello: '_hello',
-            hello_: 'hello_',
           },
         },
         {}
@@ -120,37 +97,24 @@ describe('toSnakeCaseKeys', () => {
       value: {
         foo_bar: 'fooBar',
         hello_world: 'hello_World',
-        '': '   ',
-        hello: 'hello_',
       },
     });
   });
 
   test('should transform selected keys', () => {
     const input = {
-      // numeric key
       321: '321',
       foo: 'foo',
-      // standard cases
       'Hello World': 'Hello World',
       camelCase: 'camelCase',
       PascalCase: 'PascalCase',
       'kebab-case': 'kebab-case',
       UPPER_SNAKE_CASE: 'UPPER_SNAKE_CASE',
-      // edge cases
-      '   ': '   ',
-      '   test   ': '   test   ',
-      __init__: '__init__',
-      'I ❤️ valibot': 'I ❤️ valibot',
-      'MixOf Styles': 'MixOf Styles',
-      aÅ: 'aÅ',
-      'object.key': 'object.key',
-      '---ABC--DEF---': '---ABC--DEF---',
     };
-    const action = toSnakeCaseKeys<
-      typeof input,
-      ['camelCase', 'kebab-case', '__init__', '---ABC--DEF---']
-    >(['camelCase', 'kebab-case', '__init__', '---ABC--DEF---']);
+    const action = toSnakeCaseKeys<typeof input, ['camelCase', 'kebab-case']>([
+      'camelCase',
+      'kebab-case',
+    ]);
     expect(action['~run']({ typed: true, value: input }, {})).toStrictEqual({
       typed: true,
       value: {
@@ -161,14 +125,6 @@ describe('toSnakeCaseKeys', () => {
         PascalCase: 'PascalCase',
         kebab_case: 'kebab-case',
         UPPER_SNAKE_CASE: 'UPPER_SNAKE_CASE',
-        '   ': '   ',
-        '   test   ': '   test   ',
-        init: '__init__',
-        'I ❤️ valibot': 'I ❤️ valibot',
-        'MixOf Styles': 'MixOf Styles',
-        aÅ: 'aÅ',
-        'object.key': 'object.key',
-        abc_def: '---ABC--DEF---',
       },
     });
   });
@@ -180,24 +136,17 @@ describe('toSnakeCaseKeys', () => {
       'hello world': 'hello world',
       'Hello World': 'Hello World',
       hello_World: 'hello_World',
-      '': '',
-      '   ': '   ',
-      _hello: '_hello',
-      hello_: 'hello_',
     };
     const action = toSnakeCaseKeys<
       typeof input,
-      ['fooBar', 'Hello World', 'hello_World', '   ', 'hello_']
-    >(['fooBar', 'Hello World', 'hello_World', '   ', 'hello_']);
+      ['fooBar', 'Hello World', 'hello_World']
+    >(['fooBar', 'Hello World', 'hello_World']);
     expect(action['~run']({ typed: true, value: input }, {})).toStrictEqual({
       typed: true,
       value: {
         foo_bar: 'fooBar',
         'hello world': 'hello world',
         hello_world: 'hello_World',
-        '': '   ',
-        _hello: '_hello',
-        hello: 'hello_',
       },
     });
   });

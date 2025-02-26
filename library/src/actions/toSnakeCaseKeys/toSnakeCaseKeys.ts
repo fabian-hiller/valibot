@@ -1,6 +1,6 @@
 import type { BaseTransformation, SuccessDataset } from '../../types/index.ts';
+import { snakeCase } from '../toSnakeCase/helpers.ts';
 import type { ObjectInput, SelectedStringKeys } from '../types.ts';
-import { snakeCase } from './helpers.ts';
 import type { Output } from './types.ts';
 
 /**
