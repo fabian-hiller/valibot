@@ -129,7 +129,7 @@ describe('_addIssue', () => {
       expect(dataset.issues?.[0].message).toBe(contextMessage);
     });
 
-    test("from context object even when it's empty", () => {
+    test('from context object with empty string', () => {
       setSpecificMessage(string, specificMessage);
       setSchemaMessage(() => schemaMessage);
       setGlobalMessage(globalMessage);
@@ -153,7 +153,7 @@ describe('_addIssue', () => {
       expect(dataset.issues?.[0].message).toBe(specificMessage);
     });
 
-    test("from specific storage even when it's empty", () => {
+    test('from specific storage with empty string', () => {
       setSpecificMessage(string, '');
       setSchemaMessage(() => schemaMessage);
       setGlobalMessage(globalMessage);
@@ -176,7 +176,7 @@ describe('_addIssue', () => {
       expect(dataset.issues?.[0].message).toBe(schemaMessage);
     });
 
-    test("from schema storage even when it's empty", () => {
+    test('from schema storage with empty string', () => {
       setSchemaMessage(() => '');
       setGlobalMessage(globalMessage);
       const dataset: UnknownDataset = { value: null };
@@ -211,7 +211,7 @@ describe('_addIssue', () => {
       expect(dataset.issues?.[0].message).toBe(configMessage);
     });
 
-    test("from config object even when it's empty", () => {
+    test('from config object with empty string', () => {
       setGlobalMessage(globalMessage);
       const dataset: UnknownDataset = { value: null };
       _addIssue(string(), 'type', dataset, {
@@ -229,7 +229,7 @@ describe('_addIssue', () => {
       expect(dataset.issues?.[0].message).toBe(globalMessage);
     });
 
-    test("from global storage even when it's empty", () => {
+    test('from global storage with empty string', () => {
       setGlobalMessage('');
       const dataset: UnknownDataset = { value: null };
       _addIssue(string(), 'type', dataset, {});
