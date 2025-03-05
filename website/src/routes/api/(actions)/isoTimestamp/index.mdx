@@ -19,6 +19,8 @@ Formats: `yyyy-mm-ddThh:mm:ss.sssZ`, `yyyy-mm-ddThh:mm:ss.sss±hh:mm`, `yyyy-mm-
 
 > The regex used cannot validate the maximum number of days based on year and month. For example, "2023-06-31T00:00:00.000Z" is valid although June has only 30 days.
 
+> The regex also allows a space as a separator between the date and time parts instead of the "T" character.
+
 ```ts
 const Action = v.isoTimestamp<TInput, TMessage>(message);
 ```

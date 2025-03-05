@@ -28,6 +28,7 @@ All notable changes to the library will be documented in this file.
 - Change `MarkOptional` type to fix order of entries and TS error when using generic schemas (issue #1021)
 - Change `VariantOption` and `VariantOptionAsync` type to fix TS error when using generic schemas (issue #842)
 - Change implementation of `variant` and `variantAsync` to support optional discriminators using `exactOptional`, `exactOptionalAsync`, `optional`, `optionalAsync`, `nullish` or `nullishAsync`
+- Change `ISO_DATE_TIME_REGEX` and `ISO_TIMESTAMP_REGEX` to support space as separator (pull request #1064)
 - Refactor `bytes`, `maxBytes`, `minBytes` and `notBytes` action
 - Fix implementation of `nonOptional`, `nonOptionalAsync`, `nonNullable`, `nonNullableAsync`, `nonNullish` and `nonNullishAsync` schema in edge cases (issue #909)
 - Fix instantiation error for `any` in `PathKeys` type (issue #929)
