@@ -104,7 +104,7 @@ export function partialCheck(
     message,
     '~run'(dataset, config) {
       if (
-        _isPartiallyTyped(dataset, pathList) &&
+        (dataset.typed || _isPartiallyTyped(dataset, pathList)) &&
         // @ts-expect-error
         !this.requirement(dataset.value)
       ) {

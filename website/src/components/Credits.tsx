@@ -100,6 +100,7 @@ export const Credits = component$(() => {
           'andrewmd5',
           'caegdeveloper',
           'dslatkin',
+          'BrianCurliss',
         ].map((sponsor) => (
           <li key={sponsor}>
             <a
