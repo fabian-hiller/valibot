@@ -144,12 +144,11 @@ export const OCTAL_REGEX: RegExp = /^(?:0o)?[0-7]+$/u;
 /**
  * [RFC 5322 email address](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1) regex.
  *
- * Hint: This regex is equivalent to the one exemplified in the [HTML Living Standard Specification](https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address) as of 2025-03-03 and does not perfectly represent RFC 5322.
+ * Hint: This regex was taken from the [HTML Living Standard Specification](https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address) and does not perfectly represent RFC 5322.
  */
 export const RFC_EMAIL_REGEX: RegExp =
-  // modification: (1) shorten [0-9a-zA-Z_] to \w (2) use i flag to shorten all [a-zA-Z] to [a-z] (3) remove unnecessary escape of / in [...]
-  // eslint-disable-next-line regexp/require-unicode-regexp -- U+017F and U+212A match \w in iu mode so we have to disable the rule.
-  /^[\w.!#$%&'*+/=?^`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/i;
+  // eslint-disable-next-line regexp/prefer-w, no-useless-escape, regexp/no-useless-escape, regexp/require-unicode-regexp
+  /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 /**
  * [Slug](https://en.wikipedia.org/wiki/Clean_URL#Slug) regex.
