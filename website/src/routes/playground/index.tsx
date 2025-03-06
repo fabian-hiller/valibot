@@ -78,6 +78,10 @@ export default component$(() => {
    * Changes the width of the side bar via pointer move.
    */
   const changeSideBarWidth = $(() => {
+    // Disable text selection and overflow while resizing
+    document.body.style.userSelect = 'none';
+    editorElement.value!.style.overflow = 'hidden';
+
     // Create function to change side bar width
     let currentWidth = sideBarElement.value!.clientWidth;
     const maxWidth = Math.min(1700, window.innerWidth) * 0.6;
@@ -88,14 +92,12 @@ export default component$(() => {
       }
     };
 
-    // Create function to reset overflow and remove event listener
+    // Create function to reset styles and remove event listener
     const onPointerUp = () => {
+      document.body.style.userSelect = '';
       editorElement.value!.style.overflow = '';
       window.removeEventListener('pointermove', onPointerMove);
     };
-
-    // Set editor overflow to hidden while resizing
-    editorElement.value!.style.overflow = 'hidden';
 
     // Add pointer move and up event listeners
     window.addEventListener('pointermove', onPointerMove);
