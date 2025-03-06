@@ -1,0 +1,1 @@
+import * as v from '../dist/index.js';
