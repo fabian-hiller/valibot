@@ -6,7 +6,7 @@ const COOKIE_NAME = 'chapters';
  * Returns whether chapters are enabled.
  */
 export const useChapters = routeLoader$(
-  ({ cookie }) => cookie.get(COOKIE_NAME)?.value === 'true'
+  ({ cookie }) => (cookie.get(COOKIE_NAME)?.value ?? 'true') === 'true'
 );
 
 /**
