@@ -1,4 +1,21 @@
-const SNAKE_CASE_SEPARATOR = '_';
+const snakeCaseSeparator = '_';
+
+const separators = new Set([
+  '', // represents all whitespaces (trim the character before performing the membership check)
+  snakeCaseSeparator,
+  '-',
+  '.',
+]);
+
+const isSeparator = (ch: string) => separators.has(ch.trim());
+
+const isUpperCase = (ch: string) =>
+  ch === ch.toUpperCase() && ch !== ch.toLowerCase();
+
+const isNotEmpty = (arr: readonly unknown[]) => arr.length > 0;
+
+const isTopSnakeCaseSeparator = (chs: readonly string[]) =>
+  chs.at(-1) === snakeCaseSeparator;
 
 /**
  * Converts a string to snake case.
@@ -9,32 +26,29 @@ const SNAKE_CASE_SEPARATOR = '_';
  */
 export function snakeCase(input: string): string {
   const res: string[] = [];
-  let wasPrevChUpperCase = false;
+  let wasPrevUpperCase = false;
   for (const ch of input.trimStart()) {
-    const lowerCaseCh = ch.toLowerCase();
-    const isWhiteSpace = ch.trim() === '';
-    const isSeparator =
-      isWhiteSpace || ch === SNAKE_CASE_SEPARATOR || ch === '-' || ch === '.';
-    const isUpperCase = ch === ch.toUpperCase() && ch !== lowerCaseCh;
-    if (isSeparator) {
-      if (res.length > 0 && res[res.length - 1] !== SNAKE_CASE_SEPARATOR) {
-        res.push(SNAKE_CASE_SEPARATOR);
-      }
-    } else if (isUpperCase) {
+    const isCurUpperCase = isUpperCase(ch);
+    if (isCurUpperCase) {
       if (
-        res.length > 0 &&
-        res[res.length - 1] !== SNAKE_CASE_SEPARATOR &&
-        !wasPrevChUpperCase
+        isNotEmpty(res) &&
+        !isTopSnakeCaseSeparator(res) &&
+        !wasPrevUpperCase
       ) {
-        res.push(SNAKE_CASE_SEPARATOR);
+        res.push(snakeCaseSeparator);
       }
-      res.push(lowerCaseCh);
-    } else {
+      res.push(ch.toLowerCase());
+    } else if (!isSeparator(ch)) {
+      // `ch` is a lowercase character
       res.push(ch);
     }
-    wasPrevChUpperCase = isUpperCase;
+    // `ch` is a separator
+    else if (isNotEmpty(res) && !isTopSnakeCaseSeparator(res)) {
+      res.push(snakeCaseSeparator);
+    }
+    wasPrevUpperCase = isCurUpperCase;
   }
-  if (res.length > 0 && res[res.length - 1] === SNAKE_CASE_SEPARATOR) {
+  if (isTopSnakeCaseSeparator(res)) {
     res.pop();
   }
   return res.join('');
