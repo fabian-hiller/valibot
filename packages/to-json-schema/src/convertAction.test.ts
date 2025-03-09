@@ -633,6 +633,12 @@ describe('convertAction', () => {
     });
   });
 
+  test('should convert readonly action', () => {
+    expect(convertAction({}, v.readonly(), undefined)).toStrictEqual({
+      readOnly: true
+    });
+  });
+
   test('should convert supported regex action', () => {
     expect(
       convertAction({ type: 'string' }, v.regex<string>(/[a-zA-Z]/), undefined)
