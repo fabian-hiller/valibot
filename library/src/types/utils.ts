@@ -81,6 +81,11 @@ type UnionToTupleHelper<TUnion, TResult extends unknown[]> =
 export type UnionToTuple<TUnion> = UnionToTupleHelper<TUnion, []>;
 
 /**
+ * Checks if a type is `never`.
+ */
+export type IsNever<T> = [T] extends [never] ? true : false;
+
+/**
  * Checks if a type is `any`.
  */
 type IsAny<Type> = 0 extends 1 & Type ? true : false;
