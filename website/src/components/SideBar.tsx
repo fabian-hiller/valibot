@@ -1,6 +1,7 @@
 import {
   $,
   component$,
+  type Signal,
   Slot,
   useComputed$,
   useSignal,
@@ -26,6 +27,7 @@ export const useSideBarToggle = globalAction$(
 );
 
 type SideBarProps = {
+  ref?: Signal<HTMLElement | undefined>;
   class?: string;
   toggle: ReturnType<typeof useSideBarToggle>;
 };
@@ -34,7 +36,7 @@ type SideBarProps = {
  * Sidebar that can be extended from the bottom on smaller devices and
  * displayed on the side next to the main content on larger ones.
  */
-export const SideBar = component$<SideBarProps>(({ toggle, ...props }) => {
+export const SideBar = component$<SideBarProps>(({ ref, toggle, ...props }) => {
   // Use location and element signal
   const location = useLocation();
   const element = useSignal<HTMLElement>();
@@ -78,7 +80,10 @@ export const SideBar = component$<SideBarProps>(({ toggle, ...props }) => {
         isOpen.value ? 'z-30' : 'z-10',
         props.class
       )}
-      ref={element}
+      ref={(element_) => {
+        if (ref) ref.value = element_;
+        element.value = element_;
+      }}
       window:onResize$={handleResize}
     >
       {/* Content */}

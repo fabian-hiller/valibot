@@ -1,21 +1,30 @@
-import { routeAction$, routeLoader$ } from '@builder.io/qwik-city';
+import {
+  type RequestEventAction,
+  routeAction$,
+  routeLoader$,
+} from '@builder.io/qwik-city';
 
 const COOKIE_NAME = 'theme';
 
 /**
+ * Returns the value of the theme cookie.
+ */
+function getCookie(request: RequestEventAction) {
+  return request.cookie.get(COOKIE_NAME)?.value ?? 'dark';
+}
+
+/**
  * Returns the current theme.
  */
-export const useTheme = routeLoader$(({ cookie }) =>
-  cookie.get(COOKIE_NAME)?.value === 'light' ? 'light' : 'dark'
-);
+export const useTheme = routeLoader$((request) => getCookie(request));
 
 /**
  * Toggles the theme by changing the theme cookie.
  */
-export const useThemeToggle = routeAction$((_, { cookie }) => {
-  cookie.set(
+export const useThemeToggle = routeAction$((_, request) => {
+  request.cookie.set(
     COOKIE_NAME,
-    cookie.get(COOKIE_NAME)?.value === 'light' ? 'dark' : 'light',
+    getCookie(request) === 'dark' ? 'light' : 'dark',
     {
       httpOnly: true,
       maxAge: 31557600, // 1 year

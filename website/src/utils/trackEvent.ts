@@ -9,7 +9,9 @@ type EventName =
   | 'share_playground_code'
   | 'save_playground_code'
   | 'execute_playground_code'
-  | 'clear_playground_logs';
+  | 'clear_playground_logs'
+  | 'resize_playground';
+
 type EventData = { [key: string]: string | number | boolean | undefined };
 
 declare global {
