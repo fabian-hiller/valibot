@@ -84,6 +84,17 @@ describe('isoDateTime', () => {
         '9999-12-31 23:59',
       ]);
     });
+
+    test('for timezone offset', () => {
+      expectNoActionIssue(action, [
+        '2025-03-12T16:57Z',
+        '2025-03-12T16:57+00:00',
+        '2025-03-12T16:57-00:00',
+        '2025-03-12T16:57+08:00',
+        '2025-03-12T16:57-08:00',
+        '2025-03-12T16:57+08:45',
+      ]);
+    });
   });
 
   describe('should return dataset with issues', () => {
@@ -193,6 +204,19 @@ describe('isoDateTime', () => {
         '0000-01-01T00:000', // 3 digits
         '0000-01-01T00:60', // 60
         '0000-01-01T00:99', // 99
+      ]);
+    });
+
+    test('for invalid timezone offset', () => {
+      expectActionIssue(action, baseIssue, [
+        '2025-03-12T16:57T08:00', // invalid separator
+        '2025-03-12T16:57+13:00', // invalid hour
+        '2025-03-12T16:57+08:42', // invalid minute
+        '2025-03-12T16:57+08:', // missing digits
+        '2025-03-12T16:57+08:0', // 1 digit
+        '2025-03-12T16:57+08:000', // 3 digits
+        '2025-03-12T16:57+08:60', // 60
+        '2025-03-12T16:57+08:99', // 99
       ]);
     });
   });
