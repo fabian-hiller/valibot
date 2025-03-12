@@ -89,7 +89,7 @@ export const ISO_DATE_REGEX: RegExp =
  * [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date-time regex.
  */
 export const ISO_DATE_TIME_REGEX: RegExp =
-  /^\d{4}-(?:0[1-9]|1[0-2])-(?:[12]\d|0[1-9]|3[01])[T ](?:0\d|1\d|2[0-3]):[0-5]\d(?::[0-5]\d)?(?:Z|[\+-](?:0\d|1[012]):(?:0\d|1[012]))?$/u;
+  /^\d{4}-(?:0[1-9]|1[0-2])-(?:[12]\d|0[1-9]|3[01])[T ](?:0\d|1\d|2[0-3]):[0-5]\d(?::[0-5]\d)?(?:Z|[\+-](?:0\d|1[012]):(?:[0-5]0|[14]5))?$/u;
 
 /**
  * [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) time regex.
