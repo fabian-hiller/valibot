@@ -557,7 +557,6 @@
 - [PartialCheckIssue](/api/PartialCheckIssue/)
 - [PartialDataset](/api/PartialDataset/)
 - [PartialInput](/api/PartialInput/)
-- [PathKeys](/api/PathKeys/)
 - [PicklistOptions](/api/PicklistOptions/)
 - [PicklistIssue](/api/PicklistIssue/)
 - [PicklistSchema](/api/PicklistSchema/)
