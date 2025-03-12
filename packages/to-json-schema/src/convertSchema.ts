@@ -101,8 +101,12 @@ type Schema =
 type SchemaOrPipe =
   | Schema
   | v.SchemaWithPipe<
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [Schema, ...(Schema | v.PipeAction<any, any, v.BaseIssue<unknown>>)[]]
+      // @ts-ignore // TODO: Remove comment
+      readonly [
+        Schema,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ...(Schema | v.PipeAction<any, any, v.BaseIssue<unknown>>)[],
+      ]
     >;
 
 // Create global reference count
