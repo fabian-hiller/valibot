@@ -51,6 +51,7 @@ type DefinitionData =
     }
   | {
       type: 'tuple';
+      modifier?: string;
       items: DefinitionData[];
     }
   | {
@@ -240,16 +241,21 @@ const Definition = component$<DefinitionProps>(({ parent, data }) => (
         <span class="text-slate-600 dark:text-slate-400">[]</span>
       </span>
     ) : data.type === 'tuple' ? (
-      <span class="text-slate-600 dark:text-slate-400">
-        [
-        {data.items.map((item, index) => (
-          <Fragment key={index}>
-            {index > 0 && ', '}
-            <Definition parent={data.type} data={item} />
-          </Fragment>
-        ))}
-        ]
-      </span>
+      <>
+        {data.modifier && (
+          <span class="text-red-600 dark:text-red-400">{data.modifier} </span>
+        )}
+        <span class="text-slate-600 dark:text-slate-400">
+          [
+          {data.items.map((item, index) => (
+            <Fragment key={index}>
+              {index > 0 && ', '}
+              <Definition parent={data.type} data={item} />
+            </Fragment>
+          ))}
+          ]
+        </span>
+      </>
     ) : data.type === 'function' ? (
       <span class="text-slate-600 dark:text-slate-400">
         {(parent === 'union' ||
