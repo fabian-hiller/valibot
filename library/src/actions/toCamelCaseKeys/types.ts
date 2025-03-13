@@ -1,4 +1,4 @@
-import type { IsNever } from '../../types';
+import type { IsNever } from '../../types/index.ts';
 
 /**
  * Object input type.
