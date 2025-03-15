@@ -1,21 +1,44 @@
-const snakeCaseSeparator = '_';
-
-const separators = new Set([
-  '', // represents all whitespaces (trim the character before performing the membership check)
-  snakeCaseSeparator,
+const separators: Set<string> = new Set<string>([
+  '', // represents all whitespaces (trim the character before the membership check)
+  '_',
   '-',
   '.',
 ]);
 
-const isSeparator = (ch: string) => separators.has(ch.trim());
+const isSeparator = (ch: string): boolean => separators.has(ch.trim());
 
-const isUpperCase = (ch: string) =>
+const isUpperCase = (ch: string): boolean =>
   ch === ch.toUpperCase() && ch !== ch.toLowerCase();
 
-const isNotEmpty = (arr: readonly unknown[]) => arr.length > 0;
+type Transformer = (
+  ch: string,
+  isWordStart: boolean,
+  isFirstCh: boolean,
+  wasPrevUpperCase: boolean
+) => string;
 
-const isTopSnakeCaseSeparator = (chs: readonly string[]) =>
-  chs.at(-1) === snakeCaseSeparator;
+type ToTargetCase = (input: string) => string;
+
+function createToTargetCase(transformer: Transformer): ToTargetCase {
+  return function (input) {
+    const res: string[] = [];
+    let prevCh: string | null = null;
+    for (const ch of input) {
+      if (!isSeparator(ch)) {
+        res.push(
+          transformer(
+            ch,
+            prevCh === null || isSeparator(prevCh),
+            res.length === 0,
+            prevCh !== null && isUpperCase(prevCh)
+          )
+        );
+      }
+      prevCh = ch;
+    }
+    return res.join('');
+  };
+}
 
 /**
  * Converts a string to snake case.
@@ -24,32 +47,15 @@ const isTopSnakeCaseSeparator = (chs: readonly string[]) =>
  *
  * @returns The snake case of the input.
  */
-export function snakeCase(input: string): string {
-  const res: string[] = [];
-  let wasPrevUpperCase = false;
-  for (const ch of input.trimStart()) {
-    const isCurUpperCase = isUpperCase(ch);
-    if (isCurUpperCase) {
-      if (
-        isNotEmpty(res) &&
-        !isTopSnakeCaseSeparator(res) &&
-        !wasPrevUpperCase
-      ) {
-        res.push(snakeCaseSeparator);
-      }
-      res.push(ch.toLowerCase());
-    } else if (!isSeparator(ch)) {
-      // `ch` is a lowercase character
-      res.push(ch);
+export const snakeCase: ToTargetCase = createToTargetCase(
+  (ch, isWordStart, isFirstCh, wasPrevUpperCase) => {
+    if (isWordStart) {
+      return isFirstCh ? ch.toLowerCase() : `_${ch.toLowerCase()}`;
     }
-    // `ch` is a separator
-    else if (isNotEmpty(res) && !isTopSnakeCaseSeparator(res)) {
-      res.push(snakeCaseSeparator);
-    }
-    wasPrevUpperCase = isCurUpperCase;
+    return isUpperCase(ch)
+      ? wasPrevUpperCase
+        ? ch.toLowerCase()
+        : `_${ch.toLowerCase()}`
+      : ch;
   }
-  if (isTopSnakeCaseSeparator(res)) {
-    res.pop();
-  }
-  return res.join('');
-}
+);
