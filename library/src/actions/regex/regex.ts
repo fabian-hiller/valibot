@@ -66,18 +66,22 @@ export interface RegexAction<
  * @param requirement The regex pattern.
  *
  * @returns A regex action.
- */
+ * 
+ * Note: You probably shouldn't use the global flag `g` on your regex pattern. More in the [docs](https://valibot.dev/api/regex/#explanation)
+*/
 export function regex<TInput extends string>(
   requirement: RegExp
 ): RegexAction<TInput, undefined>;
 
 /**
  * Creates a [regex](https://en.wikipedia.org/wiki/Regular_expression) validation action.
- *
- * @param requirement The regex pattern.
- * @param message The error message.
- *
- * @returns A regex action.
+*
+* @param requirement The regex pattern.
+* @param message The error message.
+*
+* @returns A regex action.
+ * 
+ * Note: You probably shouldn't use the global flag `g` on your regex pattern. More in the [docs](https://valibot.dev/api/regex/#explanation)
  */
 export function regex<
   TInput extends string,
