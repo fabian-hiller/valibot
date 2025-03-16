@@ -21,9 +21,7 @@ export type Output<
 
 type Whitespace = (typeof whitespaces)[number];
 
-type SnakeCaseSeparator = '_';
-
-type Separator = Whitespace | SnakeCaseSeparator | '-' | '.';
+type Separator = Whitespace | '_' | '-' | '.';
 
 type IsSeparator<T extends string> = T extends Separator ? true : false;
 
@@ -32,46 +30,39 @@ type IsUpperCase<T extends string> =
 
 type IsEmpty<T extends string> = T extends '' ? true : false;
 
-type TrimStart<T extends string> = T extends `${Whitespace}${infer TRemaining}`
-  ? TrimStart<TRemaining>
-  : T;
+type IsWordStart<TPrevCh extends string | null> = [TPrevCh] extends [string]
+  ? IsSeparator<TPrevCh>
+  : true;
+
+type WasPrevUpperCase<TPrevCh extends string | null> = [TPrevCh] extends [
+  string,
+]
+  ? IsUpperCase<TPrevCh>
+  : false;
+
+type ToSnakeCaseHelper<
+  TInput extends string,
+  TPrevCh extends string | null = null,
+  TResult extends string = '',
+> = TInput extends `${infer TCh}${infer TRest}`
+  ? IsSeparator<TCh> extends false
+    ? IsWordStart<TPrevCh> extends true
+      ? ToSnakeCaseHelper<
+          TRest,
+          TCh,
+          `${TResult}${IsEmpty<TResult> extends true ? '' : '_'}${Lowercase<TCh>}`
+        >
+      : IsUpperCase<TCh> extends true
+        ? ToSnakeCaseHelper<
+            TRest,
+            TCh,
+            `${TResult}${WasPrevUpperCase<TPrevCh> extends true ? '' : '_'}${Lowercase<TCh>}`
+          >
+        : ToSnakeCaseHelper<TRest, TCh, `${TResult}${TCh}`>
+    : ToSnakeCaseHelper<TRest, TCh, TResult>
+  : TResult;
 
 /**
  * To snake case type.
  */
-export type ToSnakeCase<T extends string> = ToSnakeCaseHelper<TrimStart<T>>;
-
-type ToSnakeCaseHelper<
-  T extends string,
-  TResult extends string = '',
-  TWasLastAddedSeparator extends boolean = false,
-  TWasPrevChUpperCase extends boolean = false,
-> = T extends `${infer TCh}${infer TRemaining}`
-  ? IsSeparator<TCh> extends true
-    ? IsEmpty<TResult> extends false
-      ? TWasLastAddedSeparator extends false
-        ? ToSnakeCaseHelper<
-            TRemaining,
-            `${TResult}${SnakeCaseSeparator}`,
-            true,
-            false
-          >
-        : ToSnakeCaseHelper<TRemaining, TResult, TWasLastAddedSeparator, false>
-      : ToSnakeCaseHelper<TRemaining, TResult, TWasLastAddedSeparator, false>
-    : IsUpperCase<TCh> extends true
-      ? ToSnakeCaseHelper<
-          TRemaining,
-          `${TResult}${IsEmpty<TResult> extends false
-            ? TWasLastAddedSeparator extends false
-              ? TWasPrevChUpperCase extends false
-                ? SnakeCaseSeparator
-                : ''
-              : ''
-            : ''}${Lowercase<TCh>}`,
-          false,
-          true
-        >
-      : ToSnakeCaseHelper<TRemaining, `${TResult}${TCh}`, false, false>
-  : TResult extends `${infer TRest extends string}${SnakeCaseSeparator}`
-    ? TRest
-    : TResult;
+export type ToSnakeCase<TInput extends string> = ToSnakeCaseHelper<TInput>;
