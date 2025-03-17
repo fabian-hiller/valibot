@@ -37,7 +37,7 @@ describe('toSnakeCaseKeys', () => {
     });
   });
 
-  test('should transform all keys', () => {
+  test('should transform all keys of an object containing no duplicate keys', () => {
     const action = toSnakeCaseKeys();
     expect(
       action['~run'](
@@ -46,8 +46,8 @@ describe('toSnakeCaseKeys', () => {
           value: {
             321: '321',
             foo: 'foo',
-            'Hello World': 'Hello World',
-            camelCase: 'camelCase',
+            'HELLO WORLD': 'HELLO WORLD',
+            toURL: 'toURL',
             PascalCase: 'PascalCase',
             'kebab-case': 'kebab-case',
             UPPER_SNAKE_CASE: 'UPPER_SNAKE_CASE',
@@ -60,8 +60,8 @@ describe('toSnakeCaseKeys', () => {
       value: {
         321: '321',
         foo: 'foo',
-        hello_world: 'Hello World',
-        camel_case: 'camelCase',
+        hello_world: 'HELLO WORLD',
+        to_url: 'toURL',
         pascal_case: 'PascalCase',
         kebab_case: 'kebab-case',
         upper_snake_case: 'UPPER_SNAKE_CASE',
@@ -76,7 +76,7 @@ describe('toSnakeCaseKeys', () => {
       a key is said to be the latest if it appears at the end 
       while iterating over the object's keys using `Object.keys`
     */
-  test('should handle duplicate keys properly when transforming all keys', () => {
+  test('should transform all keys of an object containing duplicate keys', () => {
     const action = toSnakeCaseKeys();
     expect(
       action['~run'](
@@ -87,7 +87,6 @@ describe('toSnakeCaseKeys', () => {
             fooBar: 'fooBar',
             'hello world': 'hello world',
             'Hello World': 'Hello World',
-            hello_World: 'hello_World',
           },
         },
         {}
@@ -96,40 +95,31 @@ describe('toSnakeCaseKeys', () => {
       typed: true,
       value: {
         foo_bar: 'fooBar',
-        hello_world: 'hello_World',
+        hello_world: 'Hello World',
       },
     });
   });
 
-  test('should transform selected keys', () => {
+  test('should transform selected keys of an object containing no duplicate keys', () => {
     const input = {
-      321: '321',
-      foo: 'foo',
-      'Hello World': 'Hello World',
-      camelCase: 'camelCase',
-      PascalCase: 'PascalCase',
+      toURL: 'toURL',
       'kebab-case': 'kebab-case',
       UPPER_SNAKE_CASE: 'UPPER_SNAKE_CASE',
     };
-    const action = toSnakeCaseKeys<typeof input, ['camelCase', 'kebab-case']>([
-      'camelCase',
-      'kebab-case',
-    ]);
+    const action = toSnakeCaseKeys<typeof input, ['toURL', 'UPPER_SNAKE_CASE']>(
+      ['toURL', 'UPPER_SNAKE_CASE']
+    );
     expect(action['~run']({ typed: true, value: input }, {})).toStrictEqual({
       typed: true,
       value: {
-        321: '321',
-        foo: 'foo',
-        'Hello World': 'Hello World',
-        camel_case: 'camelCase',
-        PascalCase: 'PascalCase',
-        kebab_case: 'kebab-case',
-        UPPER_SNAKE_CASE: 'UPPER_SNAKE_CASE',
+        to_url: 'toURL',
+        'kebab-case': 'kebab-case',
+        upper_snake_case: 'UPPER_SNAKE_CASE',
       },
     });
   });
 
-  test('should handle duplicate keys properly when transforming selected keys', () => {
+  test('should transform selected keys of an object containing duplicate keys', () => {
     const input = {
       foo_bar: 'foo_bar',
       fooBar: 'fooBar',

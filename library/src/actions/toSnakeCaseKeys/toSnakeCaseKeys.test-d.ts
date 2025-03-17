@@ -12,20 +12,23 @@ describe('toSnakeCaseKeys', () => {
     321: '321';
     // standard
     foo: 'foo';
-    'Hello World': 'Hello World';
+    'hello world': 'hello world';
+    'HELLO WORLDD': 'HELLO WORLDD';
     camelCase?: 'camelCase';
+    toURL: 'toURL';
     readonly PascalCase: 'PascalCase';
-    readonly 'kebab-case'?: 'kebab-case';
+    'kebab-case'?: 'kebab-case';
     UPPER_SNAKE_CASE: 'UPPER_SNAKE_CASE';
     // edge cases
-    '   ': '   ';
-    '   test   '?: '   test   ';
-    readonly __init__: '__init__';
-    readonly 'I ❤️ valibot'?: 'I ❤️ valibot';
-    'MixOf Styles': 'MixOf Styles';
+    '  hi  bye  ': '  hi  bye  ';
+    __LEFT__right__: '__LEFT__right__';
+    '--up--DOWN--': '--up--DOWN--';
+    readonly '..leftDiagonal..rightDiagonal..'?: '..leftDiagonal..rightDiagonal..';
+    'U R L': 'U R L';
+    'I ❤️ valibot': 'I ❤️ valibot';
     aÅ: 'aÅ';
-    'object.key': 'object.key';
-    '---ABC--DEF---': '---ABC--DEF---';
+    iC: 'iC';
+    IC: 'IC';
   };
 
   type ActionWithoutSelection = ToSnakeCaseKeysAction<Input, undefined>;
@@ -33,13 +36,13 @@ describe('toSnakeCaseKeys', () => {
     Input,
     [
       'foo',
-      'Hello World',
-      'camelCase',
+      'HELLO WORLDD',
+      'toURL',
       'PascalCase',
       'kebab-case',
-      '   test   ',
-      '__init__',
-      'object.key',
+      '  hi  bye  ',
+      '__LEFT__right__',
+      '..leftDiagonal..rightDiagonal..',
       'I ❤️ valibot',
     ]
   >;
@@ -57,24 +60,24 @@ describe('toSnakeCaseKeys', () => {
           Input,
           [
             'foo',
-            'Hello World',
-            'camelCase',
+            'HELLO WORLDD',
+            'toURL',
             'PascalCase',
             'kebab-case',
-            '   test   ',
-            '__init__',
-            'object.key',
+            '  hi  bye  ',
+            '__LEFT__right__',
+            '..leftDiagonal..rightDiagonal..',
             'I ❤️ valibot',
           ]
         >([
           'foo',
-          'Hello World',
-          'camelCase',
+          'HELLO WORLDD',
+          'toURL',
           'PascalCase',
           'kebab-case',
-          '   test   ',
-          '__init__',
-          'object.key',
+          '  hi  bye  ',
+          '__LEFT__right__',
+          '..leftDiagonal..rightDiagonal..',
           'I ❤️ valibot',
         ])
       ).toEqualTypeOf<ActionWithSelection>();
@@ -92,43 +95,48 @@ describe('toSnakeCaseKeys', () => {
         expectTypeOf<InferOutput<ActionWithoutSelection>>().toEqualTypeOf<{
           321: '321';
           foo: 'foo';
-          hello_world: 'Hello World';
+          hello_world: 'hello world';
+          hello_worldd: 'HELLO WORLDD';
           camel_case?: 'camelCase';
+          to_url: 'toURL';
           readonly pascal_case: 'PascalCase';
-          readonly kebab_case?: 'kebab-case';
+          kebab_case?: 'kebab-case';
           upper_snake_case: 'UPPER_SNAKE_CASE';
-          '': '   ';
-          test?: '   test   ';
-          readonly init: '__init__';
-          readonly 'i_❤️_valibot'?: 'I ❤️ valibot';
-          mix_of_styles: 'MixOf Styles';
+          hi_bye: '  hi  bye  ';
+          left_right: '__LEFT__right__';
+          up_down: '--up--DOWN--';
+          readonly left_diagonal_right_diagonal?: '..leftDiagonal..rightDiagonal..';
+          u_r_l: 'U R L';
+          'i_❤️_valibot': 'I ❤️ valibot';
           a_å: 'aÅ';
-          object_key: 'object.key';
-          abc_def: '---ABC--DEF---';
+          i_c: 'iC';
+          ic: 'IC';
         }>();
         expectTypeOf<InferOutput<ActionWithSelection>>().toEqualTypeOf<{
           321: '321';
           foo: 'foo';
-          hello_world: 'Hello World';
-          camel_case?: 'camelCase';
+          'hello world': 'hello world';
+          hello_worldd: 'HELLO WORLDD';
+          camelCase?: 'camelCase';
+          to_url: 'toURL';
           readonly pascal_case: 'PascalCase';
-          readonly kebab_case?: 'kebab-case';
+          kebab_case?: 'kebab-case';
           UPPER_SNAKE_CASE: 'UPPER_SNAKE_CASE';
-          '   ': '   ';
-          test?: '   test   ';
-          readonly init: '__init__';
-          readonly 'i_❤️_valibot'?: 'I ❤️ valibot';
-          'MixOf Styles': 'MixOf Styles';
+          hi_bye: '  hi  bye  ';
+          left_right: '__LEFT__right__';
+          '--up--DOWN--': '--up--DOWN--';
+          readonly left_diagonal_right_diagonal?: '..leftDiagonal..rightDiagonal..';
+          'U R L': 'U R L';
+          'i_❤️_valibot': 'I ❤️ valibot';
           aÅ: 'aÅ';
-          object_key: 'object.key';
-          '---ABC--DEF---': '---ABC--DEF---';
+          iC: 'iC';
+          IC: 'IC';
         }>();
       });
 
       test('with duplicate keys', () => {
         // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
         type InputWithDuplicates = {
-          foo: 'foo';
           foo_bar: 'foo_bar';
           fooBar: 'fooBar';
           'hello world': 'hello world';
@@ -139,8 +147,7 @@ describe('toSnakeCaseKeys', () => {
         expectTypeOf<
           InferOutput<ToSnakeCaseKeysAction<InputWithDuplicates, undefined>>
         >().toEqualTypeOf<{
-          foo: 'foo';
-          foo_bar: 'foo_bar' | 'fooBar';
+          foo_bar: 'fooBar' | 'foo_bar';
           hello_world: 'hello world' | 'Hello World' | 'hello_World';
         }>();
         expectTypeOf<
@@ -151,7 +158,6 @@ describe('toSnakeCaseKeys', () => {
             >
           >
         >().toEqualTypeOf<{
-          foo: 'foo';
           foo_bar: 'foo_bar' | 'fooBar';
           'hello world': 'hello world';
           hello_world: 'Hello World' | 'hello_World';

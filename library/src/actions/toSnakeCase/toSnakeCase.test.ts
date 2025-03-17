@@ -25,7 +25,7 @@ describe('toSnakeCase', () => {
       }
     };
 
-    test('when string is empty or contains only whitespace', () => {
+    test('when the input is empty or contains only whitespaces', () => {
       expectNoMismatch([['', '']]);
       expectNoMismatch([
         ['\t', ''],
@@ -56,26 +56,30 @@ describe('toSnakeCase', () => {
       ]);
     });
 
-    test('when form of the string belongs to a commonly used case', () => {
+    test('when the input belongs to a commonly used case', () => {
       expectNoMismatch([
-        ['camelCase', 'camel_case'],
-        ['PascalCase', 'pascal_case'],
-        ['kebab-case', 'kebab_case'],
-        ['UPPER_SNAKE_CASE', 'upper_snake_case'],
+        ['hello world', 'hello_world'], // lower case
+        ['HELLO WORLD', 'hello_world'], // upper case
+        ['camelCase', 'camel_case'], // camel case
+        ['toURL', 'to_url'], // camel case with an acronym
+        ['PascalCase', 'pascal_case'], // pascal case
+        ['kebab-case', 'kebab_case'], // kebab case
+        ['snake_case', 'snake_case'], // snake case
+        ['UPPER_SNAKE_CASE', 'upper_snake_case'], // upper snake case
       ]);
     });
 
-    test('when string is in any form', () => {
+    test('when the input is any valid string', () => {
       expectNoMismatch([
-        ['foo', 'foo'],
-        ['Hello World', 'hello_world'],
-        ['   test   ', 'test'],
-        ['__init__', 'init'],
-        ['i ❤️ valibot', 'i_❤️_valibot'],
-        ['MixOf Styles', 'mix_of_styles'],
+        ['  hi  bye  ', 'hi_bye'],
+        ['__LEFT__right__', 'left_right'],
+        ['--up--DOWN--', 'up_down'],
+        ['..leftDiagonal..rightDiagonal..', 'left_diagonal_right_diagonal'],
+        ['U R L', 'u_r_l'],
+        ['I ❤️ valibot', 'i_❤️_valibot'],
         ['aÅ', 'a_å'],
-        ['object.key', 'object_key'],
-        ['---ABC--DEF---', 'abc_def'],
+        ['iC', 'i_c'],
+        ['IC', 'ic'],
       ]);
     });
   });
