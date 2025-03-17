@@ -120,7 +120,7 @@ describe('decimal', () => {
       expectActionIssue(action, baseIssue, [' 1', '1 ', ' 1 ', '1 2']);
     });
 
-    test('for invalid seperators', () => {
+    test('for invalid separators', () => {
       expectActionIssue(action, baseIssue, ['1,000', '1_000', '1 000']);
     });
 
