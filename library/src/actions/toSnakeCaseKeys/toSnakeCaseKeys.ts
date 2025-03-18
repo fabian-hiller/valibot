@@ -1,5 +1,5 @@
 import type { BaseTransformation, SuccessDataset } from '../../types/index.ts';
-import { snakeCase } from '../toSnakeCase/helpers.ts';
+import { _snakeCase } from '../../utils/index.ts';
 import type { ObjectInput, SelectedStringKeys } from '../types.ts';
 import type { Output } from './types.ts';
 
@@ -73,7 +73,7 @@ export function toSnakeCaseKeys(
       const allKeys = Object.keys(input);
       const selectedKeys = new Set(this.selectedKeys ?? allKeys);
       for (const key of allKeys) {
-        dataset.value[selectedKeys.has(key) ? snakeCase(key) : key] =
+        dataset.value[selectedKeys.has(key) ? _snakeCase(key) : key] =
           input[key];
       }
       return dataset as SuccessDataset<

@@ -1,8 +1,14 @@
-import type { whitespaces } from '../toSnakeCase/helpers.ts';
+import type {
+  IsEmpty,
+  IsSeparator,
+  IsUpperCase,
+  IsWordStart,
+  WasPrevUpperCase,
+} from '../../utils/_caseTransform/index.ts';
 import type {
   ObjectInput,
   SelectedStringKeys,
-  TransformedObjectOutput,
+  TransformedKeysObject,
 } from '../types.ts';
 
 /**
@@ -11,7 +17,7 @@ import type {
 export type Output<
   TInput extends ObjectInput,
   TSelectedKeys extends SelectedStringKeys<TInput> | undefined,
-> = TransformedObjectOutput<
+> = TransformedKeysObject<
   TInput,
   TSelectedKeys,
   {
@@ -19,27 +25,14 @@ export type Output<
   }
 >;
 
-type Whitespace = (typeof whitespaces)[number];
+/**
+ * To snake case type.
+ */
+export type ToSnakeCase<TInput extends string> = ToSnakeCaseHelper<TInput>;
 
-type Separator = Whitespace | '_' | '-' | '.';
-
-type IsSeparator<T extends string> = T extends Separator ? true : false;
-
-type IsUpperCase<T extends string> =
-  T extends Uppercase<T> ? (T extends Lowercase<T> ? false : true) : false;
-
-type IsEmpty<T extends string> = T extends '' ? true : false;
-
-type IsWordStart<TPrevCh extends string | null> = [TPrevCh] extends [string]
-  ? IsSeparator<TPrevCh>
-  : true;
-
-type WasPrevUpperCase<TPrevCh extends string | null> = [TPrevCh] extends [
-  string,
-]
-  ? IsUpperCase<TPrevCh>
-  : false;
-
+/**
+ * To snake case helper type.
+ */
 type ToSnakeCaseHelper<
   TInput extends string,
   TPrevCh extends string | null = null,
@@ -61,8 +54,3 @@ type ToSnakeCaseHelper<
         : ToSnakeCaseHelper<TRest, TCh, `${TResult}${TCh}`>
     : ToSnakeCaseHelper<TRest, TCh, TResult>
   : TResult;
-
-/**
- * To snake case type.
- */
-export type ToSnakeCase<TInput extends string> = ToSnakeCaseHelper<TInput>;

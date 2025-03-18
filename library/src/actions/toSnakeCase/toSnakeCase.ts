@@ -1,5 +1,5 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import { snakeCase } from './helpers.ts';
+import { _snakeCase } from '../../utils/index.ts';
 
 /**
  * To snake case action interface.
@@ -29,7 +29,7 @@ export function toSnakeCase(): ToSnakeCaseAction {
     reference: toSnakeCase,
     async: false,
     '~run'(dataset) {
-      dataset.value = snakeCase(dataset.value);
+      dataset.value = _snakeCase(dataset.value);
       return dataset;
     },
   };

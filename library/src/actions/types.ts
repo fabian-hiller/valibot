@@ -59,26 +59,19 @@ export type ObjectInput = Record<string | number | symbol, unknown>;
  */
 export type SelectedStringKeys<T extends ObjectInput> = (keyof T & string)[];
 
-export type TransformedObjectOutput<
+/**
+ * Transformed keys object type.
+ */
+export type TransformedKeysObject<
   TInput extends ObjectInput,
   TSelectedKeys extends SelectedStringKeys<TInput> | undefined,
   TKeyToTransformedKey extends Record<keyof TInput & string, string>,
-> = TransformedObjectOutputHelper<TInput, TSelectedKeys, TKeyToTransformedKey>;
+> = TransformedKeysObjectHelper<TInput, TSelectedKeys, TKeyToTransformedKey>;
 
 /**
- * String tuple to union type.
+ * Transformed keys object helper type.
  */
-type StringTupleToUnion<
-  T extends string[] | undefined,
-  TResult extends string = never,
-> = T extends [infer TCh extends string, ...infer TRemaining extends string[]]
-  ? StringTupleToUnion<TRemaining, TResult | TCh>
-  : TResult;
-
-/**
- * Transformed object output helper type.
- */
-type TransformedObjectOutputHelper<
+type TransformedKeysObjectHelper<
   TInput extends ObjectInput,
   TSelectedKeys extends SelectedStringKeys<TInput> | undefined,
   TKeyToTransformedKey extends Record<keyof TInput & string, string>,
@@ -94,3 +87,16 @@ type TransformedObjectOutputHelper<
         : K
     : K]: TInput[K];
 };
+
+/**
+ * String tuple to union type.
+ */
+type StringTupleToUnion<
+  TInput extends string[] | undefined,
+  TResult extends string = never,
+> = TInput extends [
+  infer TCh extends string,
+  ...infer TRemaining extends string[],
+]
+  ? StringTupleToUnion<TRemaining, TResult | TCh>
+  : TResult;
