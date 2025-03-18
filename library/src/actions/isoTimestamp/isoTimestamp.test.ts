@@ -150,7 +150,7 @@ describe('isoTimestamp', () => {
       ]);
     });
 
-    test('for missing seperators', () => {
+    test('for missing separators', () => {
       expectActionIssue(action, baseIssue, [
         '000001-01T00:00:00.000Z',
         '0000-0101T00:00:00.000Z',
@@ -163,7 +163,7 @@ describe('isoTimestamp', () => {
       ]);
     });
 
-    test('for double seperators', () => {
+    test('for double separators', () => {
       expectActionIssue(action, baseIssue, [
         '0000--01-01T00:00:00.000Z',
         '0000-01--01T00:00:00.000Z',
