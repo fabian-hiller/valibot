@@ -83,6 +83,7 @@ export * from './title/index.ts';
 export * from './toLowerCase/index.ts';
 export * from './toMaxValue/index.ts';
 export * from './toMinValue/index.ts';
+export * from './toSnakeCase/index.ts';
 export * from './toSnakeCaseKeys/index.ts';
 export * from './toUpperCase/index.ts';
 export * from './transform/index.ts';
