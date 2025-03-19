@@ -16,7 +16,7 @@ Hello, I am Valibot and I would like to help you validate data easily using a sc
 ## Highlights
 
 - Fully type safe with static type inference
-- Small bundle size starting at less than 600 bytes
+- Small bundle size starting at less than 700 bytes
 - Validate everything from strings to complex objects
 - Open source and fully tested with 100 % coverage
 - Many transformation and validation actions included

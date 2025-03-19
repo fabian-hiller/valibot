@@ -130,7 +130,7 @@ export default component$(() => {
             {
               emoji: '📦',
               heading: 'Small bundle size',
-              text: 'Due to the modular design of our API the bundle size starts at less than 600 bytes',
+              text: 'Due to the modular design of our API the bundle size starts at less than 700 bytes',
             },
             {
               emoji: '🚧',
