@@ -34,7 +34,7 @@
     "valibot": "workspace:*"
   },
   "peerDependencies": {
-    "valibot": "^1.0.0 || ^1.0.0-beta || ^1.0.0-rc"
+    "valibot": "^1.0.0"
   },
   "files": [
     "index.ts",
