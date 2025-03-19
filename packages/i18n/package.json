@@ -17899,14 +17899,14 @@
         "default": "./zh-TW/check.cjs"
       }
     },
-    "./zh-TW/creditCard": {
+    "./zh-TW/checkAsync": {
       "import": {
-        "types": "./zh-TW/creditCard.d.ts",
-        "default": "./zh-TW/creditCard.js"
+        "types": "./zh-TW/checkAsync.d.ts",
+        "default": "./zh-TW/checkAsync.js"
       },
       "require": {
-        "types": "./zh-TW/creditCard.d.cts",
-        "default": "./zh-TW/creditCard.cjs"
+        "types": "./zh-TW/checkAsync.d.cts",
+        "default": "./zh-TW/checkAsync.cjs"
       }
     },
     "./zh-TW/checkItems": {
@@ -17919,16 +17919,6 @@
         "default": "./zh-TW/checkItems.cjs"
       }
     },
-    "./zh-TW/checkAsync": {
-      "import": {
-        "types": "./zh-TW/checkAsync.d.ts",
-        "default": "./zh-TW/checkAsync.js"
-      },
-      "require": {
-        "types": "./zh-TW/checkAsync.d.cts",
-        "default": "./zh-TW/checkAsync.cjs"
-      }
-    },
     "./zh-TW/checkItemsAsync": {
       "import": {
         "types": "./zh-TW/checkItemsAsync.d.ts",
@@ -17937,6 +17927,16 @@
       "require": {
         "types": "./zh-TW/checkItemsAsync.d.cts",
         "default": "./zh-TW/checkItemsAsync.cjs"
+      }
+    },
+    "./zh-TW/creditCard": {
+      "import": {
+        "types": "./zh-TW/creditCard.d.ts",
+        "default": "./zh-TW/creditCard.js"
+      },
+      "require": {
+        "types": "./zh-TW/creditCard.d.cts",
+        "default": "./zh-TW/creditCard.cjs"
       }
     },
     "./zh-TW/cuid2": {
