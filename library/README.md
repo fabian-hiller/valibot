@@ -29,7 +29,7 @@ First you create a schema that describes a structured data set. A schema can be 
 
 <!-- prettier-ignore -->
 ```ts
-import * as v from 'valibot'; // 1.24 kB
+import * as v from 'valibot'; // 1.31 kB
 
 // Create login schema with email and password
 const LoginSchema = v.object({
@@ -37,14 +37,18 @@ const LoginSchema = v.object({
   password: v.pipe(v.string(), v.minLength(8)),
 });
 
-// Infer output TypeScript type of login schema
-type LoginData = v.InferOutput<typeof LoginSchema>; // { email: string; password: string }
+// Infer output TypeScript type of login schema as
+// { email: string; password: string }
+type LoginData = v.InferOutput<typeof LoginSchema>;
 
-// Throws error for `email` and `password`
-v.parse(LoginSchema, { email: '', password: '' });
+// Throws error for email and password
+const output1 = v.parse(LoginSchema, { email: '', password: '' });
 
 // Returns data as { email: string; password: string }
-v.parse(LoginSchema, { email: 'jane@example.com', password: '12345678' });
+const output2 = v.parse(LoginSchema, {
+  email: 'jane@example.com',
+  password: '12345678',
+});
 ```
 
 Apart from `parse` I also offer a non-exception-based API with `safeParse` and a type guard function with `is`. You can read more about it [here](https://valibot.dev/guides/parse-data/).
