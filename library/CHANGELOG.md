@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## v1.0.0 (Month DD, YYYY)
+## v1.0.0 (March 18, 2025)
 
 - Add `assert` method to assert values (issue #862)
 - Add `checkItemsAsync` action (pull request #856)
