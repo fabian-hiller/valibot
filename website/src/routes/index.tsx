@@ -192,9 +192,9 @@ export default component$(() => {
                   >
                     MIT License
                   </TextLink>
-                  . We finance the development from our own funds. If your
-                  company would like to support us, you can take a look at our
-                  sponsor page on{' '}
+                  . However, we rely on partners and sponsors to fund the
+                  project. If your company would like to support us, you can
+                  take a look at our sponsor page on{' '}
                   <TextLink
                     href="https://github.com/sponsors/fabian-hiller"
                     target="_blank"
@@ -242,8 +242,8 @@ export default component$(() => {
                   ability to reduce the bundle size to a minimum through tree
                   shaking and code splitting. Depending on the schema, Valibot
                   can reduce the bundle size up to 95% compared to Zod.
-                  Especially for client-side validation of forms, this can be a
-                  big advantage.
+                  Especially for client-side validation of forms and serverless
+                  environments this can be a big advantage.
                 </>
               ),
             },
