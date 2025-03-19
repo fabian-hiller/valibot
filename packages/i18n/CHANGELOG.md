@@ -2,7 +2,7 @@
 
 All notable changes to the library will be documented in this file.
 
-## v1.0.0 (Month DD, YYYY)
+## v1.0.0 (March 19, 2025)
 
 - Add new and missing actions to translations
 - Add Farsi (fa) translations (pull request #838)
