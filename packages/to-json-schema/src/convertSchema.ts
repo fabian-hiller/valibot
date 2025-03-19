@@ -101,7 +101,6 @@ type Schema =
 type SchemaOrPipe =
   | Schema
   | v.SchemaWithPipe<
-      // @ts-ignore // TODO: Remove comment
       readonly [
         Schema,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
