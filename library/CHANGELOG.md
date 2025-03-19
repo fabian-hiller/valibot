@@ -33,6 +33,7 @@ All notable changes to the library will be documented in this file.
 - Change pipe tuple of `pipe` and `pipeAsync` to be readonly by default
 - Change `forward`, `forwardCheck`, `partialCheck` and `partialCheckAsync` to improve TypeScript performance (issue #987)
 - Change `DECIMAL_REGEX` to support floats that start with a dot (pull request #1086)
+- Change exports to export only public types to reduce noise
 - Refactor `bytes`, `maxBytes`, `minBytes` and `notBytes` action
 - Fix implementation of `nonOptional`, `nonOptionalAsync`, `nonNullable`, `nonNullableAsync`, `nonNullish` and `nonNullishAsync` schema in edge cases (issue #909)
 - Fix instantiation error for `any` in `PathKeys` type (issue #929)
