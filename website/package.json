@@ -25,6 +25,7 @@
     "lint": "eslint \"src/**/*.ts*\"",
     "preview": "qwik build preview && vite preview --open",
     "sitemap": "tsm ./scripts/sitemap.ts",
+    "llms": "tsm ./scripts/llms.ts",
     "sources": "tsm ./scripts/sources.ts",
     "start": "vite --open --mode ssr",
     "qwik": "qwik"
