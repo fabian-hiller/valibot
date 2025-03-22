@@ -116,7 +116,7 @@ export function postalCode<TInput extends string, CountryCode>(
 export function postalCode<
   TInput extends string,
   CountryCode,
-  const TMessage extends
+  TMessage extends
     | ErrorMessage<PostalCodeIssue<TInput, CountryCode>>
     | undefined,
 >(
