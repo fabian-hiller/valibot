@@ -76,7 +76,7 @@ export function isbn<TInput extends string>(): IsbnAction<TInput, undefined>;
  */
 export function isbn<
   TInput extends string,
-  const TMessage extends ErrorMessage<IsbnIssue<TInput>> | undefined,
+  TMessage extends ErrorMessage<IsbnIssue<TInput>> | undefined,
 >(message: TMessage): IsbnAction<TInput, TMessage>;
 
 // @__NO_SIDE_EFFECTS__
