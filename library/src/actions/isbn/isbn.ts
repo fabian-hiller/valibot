@@ -72,7 +72,7 @@ export function isbn<TInput extends string>(): IsbnAction<TInput, undefined>;
  *
  * @param message The error message.
  *
- * @returns A credit card action.
+ * @returns An ISBN validation action.
  */
 export function isbn<
   TInput extends string,
