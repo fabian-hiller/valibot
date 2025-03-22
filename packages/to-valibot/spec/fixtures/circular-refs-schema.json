@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "person": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "spouse": {
+          "$ref": "#/definitions/person"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/person"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "company": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "employees": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/employee"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "employee": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "company": {
+          "$ref": "#/definitions/company"
+        },
+        "manager": {
+          "$ref": "#/definitions/employee"
+        },
+        "subordinates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/employee"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "family": {
+      "$ref": "#/definitions/person"
+    },
+    "organization": {
+      "$ref": "#/definitions/company"
+    }
+  },
+  "required": [
+    "family",
+    "organization"
+  ]
+}

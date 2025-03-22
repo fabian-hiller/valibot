@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Medium Refs Schema",
+  "definitions": {
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "street",
+        "city",
+        "country"
+      ]
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
+      },
+      "required": [
+        "phone",
+        "email"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "name": {
+      "type": "string"
+    },
+    "billingAddress": {
+      "$ref": "#/definitions/address"
+    },
+    "shippingAddress": {
+      "$ref": "#/definitions/address"
+    },
+    "primaryContact": {
+      "$ref": "#/definitions/contact"
+    },
+    "secondaryContacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/contact"
+      },
+      "maxItems": 3
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "billingAddress",
+    "primaryContact"
+  ]
+}

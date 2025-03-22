@@ -1,0 +1,178 @@
+openapi: 3.1.0
+info:
+  title: API with Shared Schema Components
+  version: 1.0.0
+  description: This API schema demonstrates two main components sharing a third schema with various data types and constraints
+
+paths:
+  /example:
+    get:
+      summary: Example endpoint
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MainComponent1'
+
+components:
+  schemas:
+    # First main component schema
+    MainComponent1:
+      type: object
+      required:
+        - id
+        - name
+        - sharedData
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the component
+        name:
+          type: string
+          minLength: 3
+          maxLength: 50
+          pattern: '^[A-Za-z0-9\s]+$'
+          description: Name with alphanumeric characters only
+        requiredCount:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+          description: Count with min/max constraints
+        isActive:
+          type: boolean
+          description: Whether the component is active
+        tags:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          maxItems: 10
+          uniqueItems: true
+          description: Array of unique tag strings
+        decimalValue:
+          type: number
+          format: double
+          minimum: 0.1
+          maximum: 99.9
+          multipleOf: 0.1
+          description: Decimal value with constraints
+        sharedData:
+          $ref: '#/components/schemas/SharedComponent'
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+    
+    # Second main component schema
+    MainComponent2:
+      type: object
+      required:
+        - code
+        - sharedData
+      properties:
+        code:
+          type: string
+          minLength: 5
+          maxLength: 10
+          description: Component code
+        priority:
+          type: integer
+          enum: [1, 2, 3, 5, 8]
+          description: Priority level using Fibonacci sequence
+        floatRange:
+          type: number
+          format: float
+          exclusiveMinimum: 0
+          exclusiveMaximum: 10
+          description: Float value with exclusive range constraints
+        options:
+          type: array
+          items:
+            type: object
+            required:
+              - optionId
+              - optionValue
+            properties:
+              optionId:
+                type: string
+              optionValue:
+                type: boolean
+          maxItems: 5
+          description: Array of option objects
+        enabledFeatures:
+          type: array
+          items:
+            type: string
+            enum: ["feature1", "feature2", "feature3"]
+          description: List of enabled features
+        statusHistory:
+          type: object
+          additionalProperties:
+            type: string
+            format: date-time
+          description: History of status changes with timestamps
+        sharedData:
+          $ref: '#/components/schemas/SharedComponent'
+        lastUpdated:
+          type: string
+          format: date
+          description: Last update date
+    
+    # Shared component schema used by both main components
+    SharedComponent:
+      type: object
+      required:
+        - sharedId
+        - category
+      properties:
+        sharedId:
+          type: string
+          format: uuid
+          description: Unique identifier for the shared component
+        category:
+          type: string
+          enum: ["Type A", "Type B", "Type C"]
+          description: Category classification
+        validityPeriod:
+          type: integer
+          minimum: 30
+          maximum: 365
+          description: Validity period in days
+        isPublic:
+          type: boolean
+          default: false
+          description: Whether the component is publicly accessible
+        metadata:
+          type: object
+          properties:
+            version:
+              type: string
+              pattern: '^\d+\.\d+\.\d+$'
+              description: Semantic versioning string
+            owner:
+              type: string
+            description:
+              type: string
+              maxLength: 500
+          required:
+            - version
+          description: Additional metadata
+        scores:
+          type: array
+          items:
+            type: number
+            minimum: 0
+            maximum: 10
+          minItems: 3
+          maxItems: 10
+          description: Array of score values
+        tags:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: Array of unique tag identifiers
