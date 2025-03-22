@@ -63,7 +63,7 @@ export interface IsbnAction<
 /**
  * Creates a [ISBN](https://en.wikipedia.org/wiki/ISBN) validation action.
  *
- * @returns A Credit card action.
+ * @returns An ISBN validation action.
  */
 export function isbn<TInput extends string>(): IsbnAction<TInput, undefined>;
 
