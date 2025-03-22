@@ -1,15 +1,10 @@
-# (WIP) to-valibot
+# (OpenAPI Declaration, JSON Schema) to Valibot
 
-Schemas, definitions and more converter to [valibot](https://valibot.dev/) schemas.
+Utility to convert JSON Schemas and OpenAPI Declarations to [Valibot](https://valibot.dev) schemas.
 
-## Unsupported features (TODO list)
-- Description Field
-- anyOf / allOf / oneOf / not
-- Discriminated union member of array
-- Tuples (prefixItems)
+## Example usage
 
-## Usage
-
+### 1. Converting list of OpenAPI Declarations in .json format to Valibot
 ```ts
 import { valibotGenerator } from "@valibot/to-valibot";
 
@@ -17,15 +12,116 @@ const generate = valibotGenerator({
   outDir: "./src/types",
 });
 
-const schemas = []; // Fetch, Import, Read from file system - however you like
-// or
-const schema = ''; // Stringified OpenAPI Declaration or JSON Schema
-// or
-const schema = []; // OpenAPI JSON Declaration or JSON Schema
-generate({
-  format: 'openapi-yaml',
+const schemas = await Promise.all([
+  fetch("http://api.example.org/v2/api-docs?group=my-awesome-api").then(r => r.json()),
+  fetch("http://api.example.org/v2/api-docs?group=other-api").then(r => r.json()),
+  fetch("http://api.example.org/v2/api-docs?group=legacy-api").then(r => r.json()),
+]);
+
+await generate({
+  format: 'openapi-json',
   schemas,
-  // or
-  schema
 });
 ```
+
+### 2. Converting OpenAPI Declarations in .yaml format to Valibot
+```ts
+import { readFile } from "node:fs/promises";;
+import { valibotGenerator } from "@valibot/to-valibot";
+
+const generate = valibotGenerator({
+  outDir: "./src/types",
+});
+
+const schema = readFile("./declarations/my-awesome-api.yaml");
+
+await generate({
+  format: 'openapi-yaml',
+  schema,
+});
+```
+
+### 3. Converting JSON Schema to Valibot
+```ts
+import { readFile } from "node:fs/promises";;
+import { valibotGenerator } from "@valibot/to-valibot";
+import schema from "~/schemas/my-api.json";
+
+const generate = valibotGenerator({
+  outDir: "./src/types",
+});
+
+await generate({
+  format: 'json',
+  schema,
+});
+```
+
+## API
+
+### valibotGenerator
+
+`valibotGenerator` accepts options object with these parameters
+
+| Name    | Type    | Required  | Description                                                       |
+| ------- | ------- | --------- | ----------------------------------------------------------------- |
+| outDir  | string  | yes       | Declare in which directory generated schema(s) should be written  |
+
+### generate
+
+`generate` function returned by `valibotGenerator` accepts different set of options, depending on format.
+
+| Name     | Type           | Required  | Description                                   |
+| -------- | -------------- | --------- | --------------------------------------------- |
+| format   | 'openapi-yaml' | yes       | Format specification for the generated output |
+| schema   | string         | no*       | Single schema to be processed                 |
+| schemas  | string[]       | no*       | Multiple schemas to be processed              |
+\* Either `schema` OR `schemas` must be provided, but not both.
+
+| Name     | Type                     | Required  | Description                                   |
+| -------- | ------------------------ | --------- | --------------------------------------------- |
+| format   | 'openapi-json' \| 'json' | yes       | Format specification for the generated output |
+| schema   | string \| object         | no*       | Single schema to be processed                 |
+| schemas  | (string \| object)[]     | no*       | Multiple schemas to be processed              |
+\* Either `schema` OR `schemas` must be provided, but not both.
+
+
+## Supported features
+
+Same set of features are supported both in OpenAPI Declarations and JSON Schemas
+
+| Feature             | Status | Note                                                                |
+| ------------------- | ------ | ------------------------------------------------------------------- |
+| required            | ✅     |                                                                     |
+| description         | ❌     |                                                                     |
+|---------------------|--------|---------------------------------------------------------------------|
+| string              | ✅     |                                                                     |
+| enum                | ✅     |                                                                     |
+| minLength           | ✅     |                                                                     |
+| maxLength           | ✅     |                                                                     |
+| format="email"      | ✅     |                                                                     |
+| format="uuid"       | ✅     |                                                                     |
+| format="date-time"  | ✅     |                                                                     |
+| pattern             | ✅     |                                                                     |
+|---------------------|--------|---------------------------------------------------------------------|
+| number              | ✅     |                                                                     |
+| exclusiveMaximum    | ✅     |                                                                     |
+| exclusiveMinium     | ✅     |                                                                     |
+| maximum             | ✅     |                                                                     |
+| minium              | ✅     |                                                                     |
+| multipleOf          | ✅     |                                                                     |
+|---------------------|--------|---------------------------------------------------------------------|
+| array               | ⚠️      | Only single array item kind is supported for now                    |
+| minItems            | ✅     |                                                                     |
+| maxItems            | ✅     |                                                                     |
+| uniqueItems         | ✅     |                                                                     |
+|---------------------|--------|---------------------------------------------------------------------|
+| object              | ✅     |                                                                     |
+|---------------------|--------|---------------------------------------------------------------------|
+| boolean             | ✅     |                                                                     |
+| null                | ✅     |                                                                     |
+|---------------------|--------|---------------------------------------------------------------------|
+| anyOf               | ❌     |                                                                     |
+| allOf               | ❌     |                                                                     |
+| oneOf               | ❌     |                                                                     |
+| not                 | ❌     |                                                                     |
