@@ -1,9 +1,9 @@
 const topologicalSort = <T>(
   objects: Record<string, T>,
-  dependsOn: Record<string, Array<string>>
+  dependsOn: Record<string, string[]>
 ) => {
   const visited = new Set();
-  const entries: Array<[string, T]> = [];
+  const entries: [string, T][] = [];
 
   const visit = (name: string) => {
     if (visited.has(name)) return;
@@ -14,7 +14,7 @@ const topologicalSort = <T>(
       visit(dependency);
     }
 
-    entries.push([name, objects[name]!]);
+    entries.push([name, objects[name]]);
   };
 
   Object.keys(objects).forEach((name) => visit(name));

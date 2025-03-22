@@ -1,5 +1,6 @@
 {
   "name": "@valibot/to-valibot",
+  "version": "0.0.0",
   "license": "MIT",
   "author": "Rokas Muningis",
   "repository": {
@@ -23,23 +24,31 @@
     }
   },
   "scripts": {
-    "test": "vitest",
-    "build": "tsup",
-    "prettier": "prettier lib \"spec/*.spec.ts\" --write"
+    "test": "vitest --typecheck",
+    "coverage": "vitest run --coverage --isolate",
+    "lint": "eslint \"lib/**/*.ts*\" && tsc --noEmit && deno check ./src/index.ts",
+    "lint.fix": "eslint \"lib/**/*.ts*\" --fix",
+    "format": "prettier --write ./src",
+    "format.check": "prettier --check ./src",
+    "build": "tsup"
   },
   "peerDependencies": {
     "typescript": "5.8.2",
-    "valibot": "1.0.0",
+    "valibot": "^1.0.0",
     "yaml": "2.7.0"
   },
-  "dependencies": {
-    "valibot": "1.0.0",
-    "vitest": "^3.0.9"
-  },
   "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "eslint": "^9.21.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsdoc": "^50.6.3",
+    "eslint-plugin-security": "^3.0.1",
+    "globals": "^16.0.0",
+    "typescript-eslint": "^8.25.0",
     "@trivago/prettier-plugin-sort-imports": "5.2.2",
     "prettier": "3.5.3",
     "tsup": "8.4.0",
+    "vitest": "^3.0.9",
     "yaml": "2.7.0"
   }
 }

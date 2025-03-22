@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { findAndHandleCircularReferences } from './circular-refs';
+import { findAndHandleCircularReferences } from './circular-refs.ts';
 
 describe('#findAndHandleCircularReferences()', () => {
   it('should find self-referencing schemas', () => {

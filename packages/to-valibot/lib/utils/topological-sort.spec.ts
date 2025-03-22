@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { topologicalSort } from './topological-sort';
+import { topologicalSort } from './topological-sort.ts';
 
 describe('#topologicalSort()', () => {
   it('should sort provided objects', () => {

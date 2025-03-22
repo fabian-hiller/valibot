@@ -1,0 +1,9 @@
+{
+  "name": "@valibot/to-valibot",
+  "version": "0.0.0",
+  "exports": "./src/index.ts",
+  "publish": {
+    "include": ["lib/**/*.ts", "README.md"],
+    "exclude": ["lib/**/*.spec.ts", "spec/**/*"]
+  }
+}

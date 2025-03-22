@@ -1,6 +1,6 @@
 import { writeFile } from 'node:fs/promises';
-import { ValibotGenerator } from './parser-and-generator';
-import { slugify } from './utils/basic';
+import { ValibotGenerator } from './parser-and-generator.ts';
+import { slugify } from './utils/basic.ts';
 
 interface GeneratorOptions {
   outDir: string;

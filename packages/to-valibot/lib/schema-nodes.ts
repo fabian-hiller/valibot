@@ -7,7 +7,7 @@ type ExtractRequiredKeys<T extends object> = {
 
 type HasProps<T extends object> = keyof T extends never ? false : true;
 
-type MethodNodeBase<Name extends string, Value extends unknown> = {
+type MethodNodeBase<Name extends string, Value> = {
   name: Name;
   value: Value;
 };
@@ -25,7 +25,7 @@ type Action<Node extends ActionNode> = Node extends { value: infer V }
 
 type ActionNodeBase<
   Name extends string,
-  Value extends unknown = undefined,
+  Value = undefined,
 > = Value extends undefined
   ? {
       name: Name;
@@ -185,7 +185,7 @@ const schemaNodeNull: NodeFactory<SchemaNodeNull> = (props) => ({
 });
 
 type SchemaNodeLiteral = SchemaNodeBase<'literal'> & {
-  value?: any;
+  value?: string | number;
 };
 const schemaNodeLiteral: NodeFactory<SchemaNodeLiteral> = (props) => ({
   name: 'literal',
@@ -201,7 +201,7 @@ const schemaNodeOptional: NodeFactory<SchemaNodeOptional> = (props) => ({
 });
 
 type SchemaNodeReference = SchemaNodeBase<'$ref'> & {
-  ref?: string;
+  ref: string;
   lazy?: boolean;
 };
 const schemaNodeReference: NodeFactory<SchemaNodeReference> = (props) => ({

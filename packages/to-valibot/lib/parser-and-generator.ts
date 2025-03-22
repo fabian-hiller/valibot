@@ -35,7 +35,7 @@ import {
   schemaNodeReference,
   schemaNodeString,
   schemaNodeUnion,
-} from './schema-nodes';
+} from './schema-nodes.ts';
 import type {
   JSONSchema,
   JSONSchemaArray,
@@ -43,10 +43,10 @@ import type {
   JSONSchemaNumber,
   JSONSchemaObject,
   JSONSchemaString,
-} from './types';
-import { appendSchema, capitalize, normalizeTitle } from './utils/basic';
-import { findAndHandleCircularReferences } from './utils/circular-refs';
-import { topologicalSort } from './utils/topological-sort';
+} from './types.ts';
+import { appendSchema, capitalize, normalizeTitle } from './utils/basic.ts';
+import { findAndHandleCircularReferences } from './utils/circular-refs.ts';
+import { topologicalSort } from './utils/topological-sort.ts';
 
 const OpenAPISchema = object({
   info: object({
@@ -89,34 +89,32 @@ const customRules = {
 } as const;
 type CustomRules = keyof typeof customRules;
 
-const allowedImports = [
-  'CheckItemsAction',
-  'GenericSchema',
-  'InferOutput',
-  'array',
-  'boolean',
-  'check',
-  'checkItems',
-  'email',
-  'lazy',
-  'literal',
-  'maxLength',
-  'maxValue',
-  'minLength',
-  'minValue',
-  'multipleOf',
-  'null',
-  'number',
-  'object',
-  'optional',
-  'pipe',
-  'regex',
-  'string',
-  'union',
-  'uuid',
-  'isoDateTime',
-] as const;
-type AllowedImports = (typeof allowedImports)[number];
+type AllowedImports = 
+  | 'CheckItemsAction'
+  | 'GenericSchema'
+  | 'InferOutput'
+  | 'array'
+  | 'boolean'
+  | 'check'
+  | 'checkItems'
+  | 'email'
+  | 'lazy'
+  | 'literal'
+  | 'maxLength'
+  | 'maxValue'
+  | 'minLength'
+  | 'minValue'
+  | 'multipleOf'
+  | 'null'
+  | 'number'
+  | 'object'
+  | 'optional'
+  | 'pipe'
+  | 'regex'
+  | 'string'
+  | 'union'
+  | 'uuid'
+  | 'isoDateTime';
 
 class ValibotGenerator {
   private root:
@@ -131,11 +129,11 @@ class ValibotGenerator {
     return this.root.title;
   }
 
-  private refs: Map<string, string> = new Map();
+  private refs = new Map<string, string>();
   private schemas: Record<string, AnyNode> = {};
   private dependsOn: Record<string, string[]> = {};
-  private usedImports: Set<AllowedImports> = new Set();
-  private customRules: Set<CustomRules> = new Set();
+  private usedImports = new Set<AllowedImports>();
+  private customRules = new Set<CustomRules>();
 
   private __currentSchema: string | null = null;
 
@@ -214,8 +212,8 @@ class ValibotGenerator {
       switch (node.name) {
         case '$ref':
           if (
-            (selfReferencing.includes(node.ref!) && schemaName === node.ref) ||
-            circularReferences[schemaName]?.includes(node.ref!)
+            (selfReferencing.includes(node.ref) && schemaName === node.ref) ||
+            circularReferences[schemaName]?.includes(node.ref)
           ) {
             this.usedImports.add('GenericSchema');
             this.usedImports.add('lazy');
@@ -375,7 +373,7 @@ class ValibotGenerator {
         case 'null':
           return this.parseNullType();
         default:
-          throw new Error(`Unsupported type: ${(schema as any).type}`);
+          throw new Error(`Unsupported type: ${(schema).type}`);
       }
     } else
       throw new Error(
@@ -550,7 +548,7 @@ class ValibotGenerator {
         return node.name;
       }
       case '$ref': {
-        return node.ref!.replace(/Schema/, '');
+        return node.ref.replace(/Schema/, '');
       }
       case 'array': {
         if (!node.value) return `any[]`;
@@ -593,9 +591,10 @@ class ValibotGenerator {
     switch (node.name) {
       case '$ref':
         if (node.lazy) return `lazy(() => ${node.ref})`;
-        return node.ref!;
+        return node.ref;
       case 'array':
-        return `array(${this.generateNodeCode(node.value!, depth)})`;
+        if (!node.value) return 'array()';
+        return `array(${this.generateNodeCode(node.value, depth)})`;
       case 'boolean':
         return 'boolean()';
       case 'email':
