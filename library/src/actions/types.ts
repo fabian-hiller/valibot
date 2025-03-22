@@ -1,4 +1,11 @@
-import type { IsNever, MaybePromise, MaybeReadonly } from '../types/index.ts';
+import type {
+  IsNever,
+  MaybePromise,
+  MaybeReadonly,
+  OptionalKeys,
+  Prettify,
+  ReadonlyKeys,
+} from '../types/index.ts';
 
 /**
  * Array input type.
@@ -57,7 +64,8 @@ export type ObjectInput = Record<string | number | symbol, unknown>;
 /**
  * Selected string keys type.
  */
-export type SelectedStringKeys<T extends ObjectInput> = (keyof T & string)[];
+export type SelectedStringKeys<TInput extends ObjectInput> =
+  StringKeyOf<TInput>[];
 
 /**
  * Transformed keys object type.
@@ -65,38 +73,97 @@ export type SelectedStringKeys<T extends ObjectInput> = (keyof T & string)[];
 export type TransformedKeysObject<
   TInput extends ObjectInput,
   TSelectedKeys extends SelectedStringKeys<TInput> | undefined,
-  TKeyToTransformedKey extends Record<keyof TInput & string, string>,
-> = TransformedKeysObjectHelper<TInput, TSelectedKeys, TKeyToTransformedKey>;
+  TKeyToTransformed extends Record<StringKeyOf<TInput>, string>,
+> = TransformedKeysObjectHelper<
+  TInput,
+  TSelectedKeys extends SelectedStringKeys<TInput>
+    ? TSelectedKeys[number]
+    : StringKeyOf<TInput>,
+  TKeyToTransformed
+>;
+
+/**
+ * Extract string keys of the object.
+ */
+type StringKeyOf<TObj extends ObjectInput> = keyof TObj & string;
+
+/**
+ * Check if at least one key is readonly.
+ */
+type AtLeastOneReadonly<TKey extends string, TReadonlyKey extends string> =
+  IsNever<TReadonlyKey & TKey> extends true ? false : true;
 
 /**
  * Transformed keys object helper type.
  */
 type TransformedKeysObjectHelper<
   TInput extends ObjectInput,
-  TSelectedKeys extends SelectedStringKeys<TInput> | undefined,
-  TKeyToTransformedKey extends Record<keyof TInput & string, string>,
-  // helpers to reduce computation
-  TSelectedUnion extends string = StringTupleToUnion<TSelectedKeys>,
-  TSelectedUnionIsNever extends boolean = IsNever<TSelectedUnion>,
-> = {
-  [K in keyof TInput as K extends string
-    ? TSelectedUnionIsNever extends true
-      ? TKeyToTransformedKey[K]
-      : K extends TSelectedUnion
-        ? TKeyToTransformedKey[K]
+  TSelectedKeys extends StringKeyOf<TInput>,
+  TKeyToTransformed extends Record<StringKeyOf<TInput>, string>,
+  TTransformedToKey extends Record<
+    string,
+    StringKeyOf<TInput>
+  > = GetTransformedToKey<TInput, TSelectedKeys, TKeyToTransformed>,
+  TOptionalKeys extends StringKeyOf<TInput> = OptionalKeys<TInput> & string,
+  TReadonlyKeys extends StringKeyOf<TInput> = ReadonlyKeys<TInput> & string,
+> = Prettify<
+  // optional and readonly
+  {
+    readonly [K in keyof TTransformedToKey as TTransformedToKey[K] extends TOptionalKeys
+      ? AtLeastOneReadonly<TTransformedToKey[K], TReadonlyKeys> extends true
+        ? K
+        : never
+      : never]?: TInput[TTransformedToKey[K]];
+  } & {
+    // only optional
+    [K in keyof TTransformedToKey as TTransformedToKey[K] extends TOptionalKeys
+      ? AtLeastOneReadonly<TTransformedToKey[K], TReadonlyKeys> extends true
+        ? never
         : K
-    : K]: TInput[K];
-};
+      : never]?: TInput[TTransformedToKey[K]];
+  } & Required<{
+      // only readonly
+      readonly [K in keyof TTransformedToKey as AtLeastOneReadonly<
+        TTransformedToKey[K],
+        TReadonlyKeys
+      > extends true
+        ? TTransformedToKey[K] extends TOptionalKeys
+          ? never
+          : K
+        : never]?: TInput[TTransformedToKey[K]];
+    }> &
+    Required<{
+      // strictly not optional or readonly
+      [K in keyof TTransformedToKey as AtLeastOneReadonly<
+        TTransformedToKey[K],
+        TReadonlyKeys
+      > extends true
+        ? never
+        : TTransformedToKey[K] extends TOptionalKeys
+          ? never
+          : K]?: TInput[TTransformedToKey[K]];
+    }> & {
+      // rest of non-string
+      [K in keyof TInput as K extends string ? never : K]: TInput[K];
+    }
+>;
 
 /**
- * String tuple to union type.
+ * Get transformed to key type.
  */
-type StringTupleToUnion<
-  TInput extends string[] | undefined,
-  TResult extends string = never,
-> = TInput extends [
-  infer TCh extends string,
-  ...infer TRemaining extends string[],
-]
-  ? StringTupleToUnion<TRemaining, TResult | TCh>
-  : TResult;
+type GetTransformedToKey<
+  TInput extends ObjectInput,
+  TSelectedKeys extends StringKeyOf<TInput>,
+  TKeyToTransformed extends Record<StringKeyOf<TInput>, string>,
+  TIsSelectedKeysNever extends boolean = IsNever<TSelectedKeys>,
+> = {
+  -readonly [K in keyof TInput as K extends string
+    ? TIsSelectedKeysNever extends true
+      ? K
+      : K extends TSelectedKeys
+        ? K extends keyof TKeyToTransformed
+          ? TKeyToTransformed[K]
+          : K
+        : K
+    : never]-?: K extends string ? K : never;
+};

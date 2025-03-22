@@ -188,3 +188,28 @@ export type DeepPickN<
     ? DeepMerge<DeepPick<TInput, TPathKeys>, DeepPickN<TInput, TRest>>
     : DeepPick<TInput, TPathKeys>
   : TInput;
+
+/**
+ * Get keys that are optional in the object.
+ */
+export type OptionalKeys<TObj> = keyof {
+  [Key in keyof TObj as Omit<TObj, Key> extends TObj ? Key : never]: TObj[Key];
+};
+
+/**
+ * If equals type.
+ */
+type IfEquals<X, Y, A = X, B = never> =
+  (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? A : B;
+
+/**
+ * Get keys that are readonly in the object.
+ */
+export type ReadonlyKeys<TObj> = {
+  [P in keyof TObj]-?: IfEquals<
+    { [Q in P]: TObj[P] },
+    { -readonly [Q in P]: TObj[P] },
+    never,
+    P
+  >;
+}[keyof TObj];

@@ -11,31 +11,28 @@ describe('toSnakeCaseKeys', () => {
     // numeric
     321: '321';
     // standard
-    foo: 'foo';
     'hello world': 'hello world';
     'HELLO WORLDD': 'HELLO WORLDD';
-    camelCase?: 'camelCase';
     toURL: 'toURL';
-    readonly PascalCase: 'PascalCase';
-    'kebab-case'?: 'kebab-case';
+    PascalCase: 'PascalCase';
+    'kebab-case': 'kebab-case';
     UPPER_SNAKE_CASE: 'UPPER_SNAKE_CASE';
     // edge cases
     '  hi  bye  ': '  hi  bye  ';
     __LEFT__right__: '__LEFT__right__';
     '--up--DOWN--': '--up--DOWN--';
-    readonly '..leftDiagonal..rightDiagonal..'?: '..leftDiagonal..rightDiagonal..';
+    '..leftDiagonal..rightDiagonal..': '..leftDiagonal..rightDiagonal..';
     'U R L': 'U R L';
     'I ❤️ valibot': 'I ❤️ valibot';
     aÅ: 'aÅ';
-    iC: 'iC';
     IC: 'IC';
   };
 
   type ActionWithoutSelection = ToSnakeCaseKeysAction<Input, undefined>;
+
   type ActionWithSelection = ToSnakeCaseKeysAction<
     Input,
     [
-      'foo',
       'HELLO WORLDD',
       'toURL',
       'PascalCase',
@@ -59,7 +56,6 @@ describe('toSnakeCaseKeys', () => {
         toSnakeCaseKeys<
           Input,
           [
-            'foo',
             'HELLO WORLDD',
             'toURL',
             'PascalCase',
@@ -70,7 +66,6 @@ describe('toSnakeCaseKeys', () => {
             'I ❤️ valibot',
           ]
         >([
-          'foo',
           'HELLO WORLDD',
           'toURL',
           'PascalCase',
@@ -91,80 +86,220 @@ describe('toSnakeCaseKeys', () => {
     });
 
     describe('of output', () => {
-      test('with no duplicate keys', () => {
+      test('having no duplicates', () => {
         expectTypeOf<InferOutput<ActionWithoutSelection>>().toEqualTypeOf<{
           321: '321';
-          foo: 'foo';
           hello_world: 'hello world';
           hello_worldd: 'HELLO WORLDD';
-          camel_case?: 'camelCase';
           to_url: 'toURL';
-          readonly pascal_case: 'PascalCase';
-          kebab_case?: 'kebab-case';
+          pascal_case: 'PascalCase';
+          kebab_case: 'kebab-case';
           upper_snake_case: 'UPPER_SNAKE_CASE';
           hi_bye: '  hi  bye  ';
           left_right: '__LEFT__right__';
           up_down: '--up--DOWN--';
-          readonly left_diagonal_right_diagonal?: '..leftDiagonal..rightDiagonal..';
+          left_diagonal_right_diagonal: '..leftDiagonal..rightDiagonal..';
           u_r_l: 'U R L';
           'i_❤️_valibot': 'I ❤️ valibot';
           a_å: 'aÅ';
-          i_c: 'iC';
           ic: 'IC';
         }>();
         expectTypeOf<InferOutput<ActionWithSelection>>().toEqualTypeOf<{
           321: '321';
-          foo: 'foo';
           'hello world': 'hello world';
           hello_worldd: 'HELLO WORLDD';
-          camelCase?: 'camelCase';
           to_url: 'toURL';
-          readonly pascal_case: 'PascalCase';
-          kebab_case?: 'kebab-case';
+          pascal_case: 'PascalCase';
+          kebab_case: 'kebab-case';
           UPPER_SNAKE_CASE: 'UPPER_SNAKE_CASE';
           hi_bye: '  hi  bye  ';
           left_right: '__LEFT__right__';
           '--up--DOWN--': '--up--DOWN--';
-          readonly left_diagonal_right_diagonal?: '..leftDiagonal..rightDiagonal..';
+          left_diagonal_right_diagonal: '..leftDiagonal..rightDiagonal..';
           'U R L': 'U R L';
           'i_❤️_valibot': 'I ❤️ valibot';
           aÅ: 'aÅ';
-          iC: 'iC';
           IC: 'IC';
         }>();
       });
 
-      test('with duplicate keys', () => {
+      describe('having string duplicates', () => {
+        test('with no modifiers', () => {
+          // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+          type InputWithDuplicates = {
+            foo_bar: 'foo_bar';
+            fooBar: 'fooBar';
+            'hello world': 'hello world';
+            'Hello World': 'Hello World';
+            hello_World: 'hello_World';
+          };
+
+          expectTypeOf<
+            InferOutput<ToSnakeCaseKeysAction<InputWithDuplicates, undefined>>
+          >().toEqualTypeOf<{
+            foo_bar: 'fooBar' | 'foo_bar';
+            hello_world: 'hello world' | 'Hello World' | 'hello_World';
+          }>();
+
+          expectTypeOf<
+            InferOutput<
+              ToSnakeCaseKeysAction<
+                InputWithDuplicates,
+                ['fooBar', 'Hello World', 'hello_World']
+              >
+            >
+          >().toEqualTypeOf<{
+            foo_bar: 'foo_bar' | 'fooBar';
+            'hello world': 'hello world';
+            hello_world: 'Hello World' | 'hello_World';
+          }>();
+        });
+
+        test('with optional modifiers', () => {
+          // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+          type InputWithDuplicates = {
+            foo_bar?: 'foo_bar';
+            fooBar?: 'fooBar';
+            'hello world'?: 'hello world';
+            'Hello World'?: 'Hello World';
+            hello_World?: 'hello_World';
+          };
+
+          expectTypeOf<
+            InferOutput<ToSnakeCaseKeysAction<InputWithDuplicates, undefined>>
+          >().toEqualTypeOf<{
+            foo_bar?: 'fooBar' | 'foo_bar';
+            hello_world?: 'hello world' | 'Hello World' | 'hello_World';
+          }>();
+
+          expectTypeOf<
+            InferOutput<
+              ToSnakeCaseKeysAction<
+                InputWithDuplicates,
+                ['fooBar', 'Hello World', 'hello_World']
+              >
+            >
+          >().toEqualTypeOf<{
+            foo_bar?: 'foo_bar' | 'fooBar';
+            'hello world'?: 'hello world';
+            hello_world?: 'Hello World' | 'hello_World';
+          }>();
+        });
+
+        test('with optional modifiers except for one duplicate', () => {
+          // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+          type InputWithDuplicates = {
+            foo_bar: 'foo_bar';
+            fooBar?: 'fooBar';
+            'hello world'?: 'hello world';
+            'Hello World': 'Hello World';
+            hello_World?: 'hello_World';
+          };
+
+          expectTypeOf<
+            InferOutput<ToSnakeCaseKeysAction<InputWithDuplicates, undefined>>
+          >().toEqualTypeOf<{
+            foo_bar: 'fooBar' | 'foo_bar';
+            hello_world: 'hello world' | 'Hello World' | 'hello_World';
+          }>();
+
+          expectTypeOf<
+            InferOutput<
+              ToSnakeCaseKeysAction<
+                InputWithDuplicates,
+                ['fooBar', 'Hello World', 'hello_World']
+              >
+            >
+          >().toEqualTypeOf<{
+            foo_bar: 'foo_bar' | 'fooBar';
+            'hello world'?: 'hello world';
+            hello_world: 'Hello World' | 'hello_World';
+          }>();
+        });
+
+        test('with at least one readonly duplicate', () => {
+          // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+          type InputWithDuplicates = {
+            readonly foo_bar: 'foo_bar';
+            fooBar: 'fooBar';
+            'hello world': 'hello world';
+            'Hello World': 'Hello World';
+            readonly hello_World: 'hello_World';
+          };
+
+          expectTypeOf<
+            InferOutput<ToSnakeCaseKeysAction<InputWithDuplicates, undefined>>
+          >().toEqualTypeOf<{
+            readonly foo_bar: 'fooBar' | 'foo_bar';
+            readonly hello_world: 'hello world' | 'Hello World' | 'hello_World';
+          }>();
+
+          expectTypeOf<
+            InferOutput<
+              ToSnakeCaseKeysAction<
+                InputWithDuplicates,
+                ['fooBar', 'Hello World', 'hello_World']
+              >
+            >
+          >().toEqualTypeOf<{
+            readonly foo_bar: 'foo_bar' | 'fooBar';
+            'hello world': 'hello world';
+            readonly hello_world: 'Hello World' | 'hello_World';
+          }>();
+        });
+
+        test('with all optional and at least one readonly duplicate', () => {
+          // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+          type InputWithDuplicates = {
+            readonly foo_bar?: 'foo_bar';
+            fooBar?: 'fooBar';
+            'hello world'?: 'hello world';
+            'Hello World'?: 'Hello World';
+            readonly hello_World?: 'hello_World';
+          };
+
+          expectTypeOf<
+            InferOutput<ToSnakeCaseKeysAction<InputWithDuplicates, undefined>>
+          >().toEqualTypeOf<{
+            readonly foo_bar?: 'fooBar' | 'foo_bar';
+            readonly hello_world?:
+              | 'hello world'
+              | 'Hello World'
+              | 'hello_World';
+          }>();
+
+          expectTypeOf<
+            InferOutput<
+              ToSnakeCaseKeysAction<
+                InputWithDuplicates,
+                ['fooBar', 'Hello World', 'hello_World']
+              >
+            >
+          >().toEqualTypeOf<{
+            readonly foo_bar?: 'foo_bar' | 'fooBar';
+            'hello world'?: 'hello world';
+            readonly hello_world?: 'Hello World' | 'hello_World';
+          }>();
+        });
+      });
+
+      test('having a number duplicate', () => {
         // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
         type InputWithDuplicates = {
-          foo_bar: 'foo_bar';
-          fooBar: 'fooBar';
-          'hello world': 'hello world';
-          'Hello World': 'Hello World';
-          hello_World: 'hello_World';
+          123: 123;
+          ' 123 ': ' 123 ';
         };
 
         expectTypeOf<
           InferOutput<ToSnakeCaseKeysAction<InputWithDuplicates, undefined>>
-        >().toEqualTypeOf<{
-          foo_bar: 'fooBar' | 'foo_bar';
-          hello_world: 'hello world' | 'Hello World' | 'hello_World';
-        }>();
+        >().toEqualTypeOf<never>();
+
         expectTypeOf<
-          InferOutput<
-            ToSnakeCaseKeysAction<
-              InputWithDuplicates,
-              ['fooBar', 'Hello World', 'hello_World']
-            >
-          >
-        >().toEqualTypeOf<{
-          foo_bar: 'foo_bar' | 'fooBar';
-          'hello world': 'hello world';
-          hello_world: 'Hello World' | 'hello_World';
-        }>();
+          InferOutput<ToSnakeCaseKeysAction<InputWithDuplicates, [' 123 ']>>
+        >().toEqualTypeOf<never>();
       });
 
-      test('with whitespace keys', () => {
+      test('having whitespace keys', () => {
         expectTypeOf<
           InferOutput<
             ToSnakeCaseKeysAction<
