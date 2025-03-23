@@ -63,7 +63,7 @@ const JSONSchemaSchema = object({
   $schema: string(),
   title: string(),
   type: string(),
-  description: string(),
+  description: optional(string()),
   definitions: optional(
     record(
       string(),

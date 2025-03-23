@@ -36,26 +36,22 @@
         "properties": {
           "id": {
             "type": "string",
-            "format": "uuid",
-            "description": "Unique identifier for the component"
+            "format": "uuid"
           },
           "name": {
             "type": "string",
             "minLength": 3,
             "maxLength": 50,
-            "pattern": "^[A-Za-z0-9\\s]+$",
-            "description": "Name with alphanumeric characters only"
+            "pattern": "^[A-Za-z0-9\\s]+$"
           },
           "requiredCount": {
             "type": "integer",
             "minimum": 1,
             "maximum": 100,
-            "default": 10,
-            "description": "Count with min/max constraints"
+            "default": 10
           },
           "isActive": {
-            "type": "boolean",
-            "description": "Whether the component is active"
+            "type": "boolean"
           },
           "tags": {
             "type": "array",
@@ -64,24 +60,21 @@
             },
             "minItems": 1,
             "maxItems": 10,
-            "uniqueItems": true,
-            "description": "Array of unique tag strings"
+            "uniqueItems": true
           },
           "decimalValue": {
             "type": "number",
             "format": "double",
             "minimum": 0.1,
             "maximum": 99.9,
-            "multipleOf": 0.1,
-            "description": "Decimal value with constraints"
+            "multipleOf": 0.1
           },
           "sharedData": {
             "$ref": "#/components/schemas/SharedComponent"
           },
           "createdAt": {
             "type": "string",
-            "format": "date-time",
-            "description": "Creation timestamp"
+            "format": "date-time"
           }
         }
       },
@@ -95,8 +88,7 @@
           "code": {
             "type": "string",
             "minLength": 5,
-            "maxLength": 10,
-            "description": "Component code"
+            "maxLength": 10
           },
           "priority": {
             "type": "integer",
@@ -106,15 +98,13 @@
               3,
               5,
               8
-            ],
-            "description": "Priority level using Fibonacci sequence"
+            ]
           },
           "floatRange": {
             "type": "number",
             "format": "float",
             "exclusiveMinimum": 0,
-            "exclusiveMaximum": 10,
-            "description": "Float value with exclusive range constraints"
+            "exclusiveMaximum": 10
           },
           "options": {
             "type": "array",
@@ -133,8 +123,7 @@
                 }
               }
             },
-            "maxItems": 5,
-            "description": "Array of option objects"
+            "maxItems": 5
           },
           "enabledFeatures": {
             "type": "array",
@@ -145,24 +134,21 @@
                 "feature2",
                 "feature3"
               ]
-            },
-            "description": "List of enabled features"
+            }
           },
           "statusHistory": {
             "type": "object",
             "additionalProperties": {
               "type": "string",
               "format": "date-time"
-            },
-            "description": "History of status changes with timestamps"
+            }
           },
           "sharedData": {
             "$ref": "#/components/schemas/SharedComponent"
           },
           "lastUpdated": {
             "type": "string",
-            "format": "date",
-            "description": "Last update date"
+            "format": "date"
           }
         }
       },
@@ -175,8 +161,7 @@
         "properties": {
           "sharedId": {
             "type": "string",
-            "format": "uuid",
-            "description": "Unique identifier for the shared component"
+            "format": "uuid"
           },
           "category": {
             "type": "string",
@@ -184,27 +169,23 @@
               "Type A",
               "Type B",
               "Type C"
-            ],
-            "description": "Category classification"
+            ]
           },
           "validityPeriod": {
             "type": "integer",
             "minimum": 30,
-            "maximum": 365,
-            "description": "Validity period in days"
+            "maximum": 365
           },
           "isPublic": {
             "type": "boolean",
-            "default": false,
-            "description": "Whether the component is publicly accessible"
+            "default": false
           },
           "metadata": {
             "type": "object",
             "properties": {
               "version": {
                 "type": "string",
-                "pattern": "^\\d+\\.\\d+\\.\\d+$",
-                "description": "Semantic versioning string"
+                "pattern": "^\\d+\\.\\d+\\.\\d+$"
               },
               "owner": {
                 "type": "string"
@@ -216,8 +197,7 @@
             },
             "required": [
               "version"
-            ],
-            "description": "Additional metadata"
+            ]
           },
           "scores": {
             "type": "array",
@@ -227,16 +207,14 @@
               "maximum": 10
             },
             "minItems": 3,
-            "maxItems": 10,
-            "description": "Array of score values"
+            "maxItems": 10
           },
           "tags": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "uniqueItems": true,
-            "description": "Array of unique tag identifiers"
+            "uniqueItems": true
           }
         }
       }
