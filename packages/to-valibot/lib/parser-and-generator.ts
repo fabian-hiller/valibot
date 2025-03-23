@@ -1,8 +1,8 @@
 import {
+  type InferOutput,
   any,
   array,
   check,
-  InferOutput,
   object,
   optional,
   parse,
@@ -12,6 +12,8 @@ import {
 } from 'valibot';
 import { parse as parseYaml } from 'yaml';
 import {
+  type ActionNode,
+  type AnyNode,
   actionDescription,
   actionEmail,
   actionIsoDateTime,
@@ -20,11 +22,9 @@ import {
   actionMinLength,
   actionMinValue,
   actionMultipleOf,
-  ActionNode,
   actionRegex,
   actionUniqueItems,
   actionUUID,
-  AnyNode,
   methodPipe,
   schemaNodeArray,
   schemaNodeBoolean,
@@ -128,7 +128,7 @@ class ValibotGenerator {
         title: string;
       };
 
-  get title() {
+  get title(): string {
     return this.root.title;
   }
 
@@ -145,7 +145,7 @@ class ValibotGenerator {
     format: 'openapi-json' | 'openapi-yaml' | 'json'
   );
   constructor(content: object, format: 'openapi-json' | 'json');
-  constructor(content: any, format: 'openapi-json' | 'openapi-yaml' | 'json') {
+  constructor(content: string | object, format: 'openapi-json' | 'openapi-yaml' | 'json') {
     switch (format) {
       case 'openapi-json': {
         const parsed = parse(
@@ -160,7 +160,7 @@ class ValibotGenerator {
         return this;
       }
       case 'openapi-yaml': {
-        const parsed = parse(OpenAPISchema, parseYaml(content));
+        const parsed = parse(OpenAPISchema, parseYaml(content as string));
         this.root = {
           value: parsed.components.schemas,
           format,
@@ -183,7 +183,7 @@ class ValibotGenerator {
     }
   }
 
-  public generate() {
+  public generate(): string {
     switch (this.root.format) {
       case 'openapi-json':
       case 'openapi-yaml': {
@@ -210,7 +210,11 @@ class ValibotGenerator {
         for (const imp of customRules[node.name as CustomRules].imports) {
           this.usedImports.add(imp);
         }
-      } else this.usedImports.add(node.name as any);
+      } else {
+        // above if statement with `node.name in customRules` does not help
+        // inferring that those strings should be omitted
+        this.usedImports.add(node.name as Exclude<AllowedImports, CustomRules>);
+      }
 
       switch (node.name) {
         case '$ref':
@@ -316,7 +320,7 @@ class ValibotGenerator {
     this.schemas[name] = this.parseObjectType({
       type: 'object',
       properties: values.properties,
-      required: values.required,
+      required: values.required ?? [],
       description: values.description,
     });
   }
@@ -390,14 +394,11 @@ class ValibotGenerator {
     required: boolean
   ): AnyNode {
     const actions: ActionNode[] = [];
-    const content = schema.enum!.map((value) => {
-      const val =
-        schema.type === 'string'
-          ? `'${value}'`
-          : schema.type === 'number' || schema.type === 'integer'
-            ? value
-            : null;
-      return schemaNodeLiteral({ value: val });
+    const content = schema.enum!.map((v) => {
+      const value = schema.type === 'string'
+        ? `'${v}'`
+        : v;
+      return schemaNodeLiteral({ value });
     });
 
     if (schema.description !== undefined) {

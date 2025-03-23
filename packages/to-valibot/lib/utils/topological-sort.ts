@@ -1,7 +1,7 @@
 const topologicalSort = <T>(
   objects: Record<string, T>,
   dependsOn: Record<string, string[]>
-) => {
+): [string, T][] => {
   const visited = new Set();
   const entries: [string, T][] = [];
 

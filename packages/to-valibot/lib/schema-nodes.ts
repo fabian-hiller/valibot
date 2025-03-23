@@ -2,7 +2,7 @@ type ExtractAdditionalProps<T extends { name: string }> = {
   [K in keyof T as K extends keyof { name: string } ? never : K]: T[K];
 };
 type ExtractRequiredKeys<T extends object> = {
-  [K in keyof T]-?: {} extends Pick<T, K> ? never : K;
+  [K in keyof T]-?: object extends Pick<T, K> ? never : K;
 }[keyof T];
 
 type HasProps<T extends object> = keyof T extends never ? false : true;
@@ -29,13 +29,13 @@ type ActionNodeBase<
 > = Value extends undefined
   ? {
       name: Name;
-      message?: string;
+      message?: string | undefined;
       custom?: true;
     }
   : {
       value: Value;
       name: Name;
-      message?: string;
+      message?: string | undefined;
       custom?: true;
     };
 

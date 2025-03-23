@@ -1,6 +1,6 @@
 const findAndHandleCircularReferences = (
   dependenciesMap: Record<string, string[]>
-) => {
+): { selfReferencing: string[]; circularReferences: Record<string, string[]> } => {
   const selfReferencing: string[] = [];
   const circularReferencesSet: Record<string, Set<string>> = {};
 

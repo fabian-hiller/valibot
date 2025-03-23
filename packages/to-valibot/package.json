@@ -26,10 +26,10 @@
   "scripts": {
     "test": "vitest --typecheck",
     "coverage": "vitest run --coverage --isolate",
-    "lint": "eslint \"lib/**/*.ts*\" && tsc --noEmit && deno check ./src/index.ts",
+    "lint": "eslint \"lib/**/*.ts*\" && tsc --noEmit && deno check ./lib/index.ts",
     "lint.fix": "eslint \"lib/**/*.ts*\" --fix",
-    "format": "prettier --write ./src",
-    "format.check": "prettier --check ./src",
+    "format": "prettier --write ./lib",
+    "format.check": "prettier --check ./lib",
     "build": "tsup"
   },
   "peerDependencies": {
@@ -39,15 +39,16 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
-    "eslint": "^9.21.0",
+    "@trivago/prettier-plugin-sort-imports": "5.2.2",
+    "@types/node": "^22.13.5",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsdoc": "^50.6.3",
     "eslint-plugin-security": "^3.0.1",
+    "eslint": "^9.21.0",
     "globals": "^16.0.0",
-    "typescript-eslint": "^8.25.0",
-    "@trivago/prettier-plugin-sort-imports": "5.2.2",
     "prettier": "3.5.3",
     "tsup": "8.4.0",
+    "typescript-eslint": "^8.25.0",
     "vitest": "^3.0.9",
     "yaml": "2.7.0"
   }
