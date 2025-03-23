@@ -90,38 +90,64 @@ await generate({
 
 Same set of features are supported both in OpenAPI Declarations and JSON Schemas
 
-| Feature             | Status | Note                                                                |
-| ------------------- | ------ | ------------------------------------------------------------------- |
-| required            | ✅     |                                                                     |
-| description         | ✅     |                                                                     |
-|---------------------|--------|---------------------------------------------------------------------|
-| string              | ✅     |                                                                     |
-| enum                | ✅     |                                                                     |
-| minLength           | ✅     |                                                                     |
-| maxLength           | ✅     |                                                                     |
-| format="email"      | ✅     |                                                                     |
-| format="uuid"       | ✅     |                                                                     |
-| format="date-time"  | ✅     |                                                                     |
-| pattern             | ✅     |                                                                     |
-|---------------------|--------|---------------------------------------------------------------------|
-| number              | ✅     |                                                                     |
-| exclusiveMaximum    | ✅     |                                                                     |
-| exclusiveMinium     | ✅     |                                                                     |
-| maximum             | ✅     |                                                                     |
-| minium              | ✅     |                                                                     |
-| multipleOf          | ✅     |                                                                     |
-|---------------------|--------|---------------------------------------------------------------------|
-| array               | ⚠️      | Only single array item kind is supported for now                    |
-| minItems            | ✅     |                                                                     |
-| maxItems            | ✅     |                                                                     |
-| uniqueItems         | ✅     |                                                                     |
-|---------------------|--------|---------------------------------------------------------------------|
-| object              | ✅     |                                                                     |
-|---------------------|--------|---------------------------------------------------------------------|
-| boolean             | ✅     |                                                                     |
-| null                | ✅     |                                                                     |
-|---------------------|--------|---------------------------------------------------------------------|
-| anyOf               | ❌     |                                                                     |
-| allOf               | ❌     |                                                                     |
-| oneOf               | ❌     |                                                                     |
-| not                 | ❌     |                                                                     |
+| Feature                         | Status | Note                                                                |
+| ------------------------------- | ------ | ------------------------------------------------------------------- |
+| required                        | ✅     |                                                                     |
+| description                     | ✅     |                                                                     |
+| const                           | ❌     |                                                                     |
+|---------------------------------|--------|---------------------------------------------------------------------|
+| string                          | ✅     |                                                                     |
+| enum                            | ✅     |                                                                     |
+| minLength                       | ✅     |                                                                     |
+| maxLength                       | ✅     |                                                                     |
+| pattern                         | ✅     |                                                                     |
+| format="email"                  | ✅     |                                                                     |
+| format="uuid"                   | ✅     |                                                                     |
+| format="date-time"              | ✅     |                                                                     |
+| format="date"                   | ❌     |                                                                     |
+| format="time"                   | ❌     |                                                                     |
+| format="duration"               | ❌     |                                                                     |
+| format="idn-email"              | ❌     |                                                                     |
+| format="idn-email"              | ❌     |                                                                     |
+| format="hostname"               | ❌     |                                                                     |
+| format="idn-hostname"           | ❌     |                                                                     |
+| format="ipv4"                   | ❌     |                                                                     |
+| format="ipv6"                   | ❌     |                                                                     |
+| format="json-pointer"           | ❌     |                                                                     |
+| format="relative-json-pointer"  | ❌     |                                                                     |
+| format="uri"                    | ❌     |                                                                     |
+| format="uri-reference"          | ❌     |                                                                     |
+| format="uri-template"           | ❌     |                                                                     |
+| format="iri"                    | ❌     |                                                                     |
+| format="iri-reference"          | ❌     |                                                                     |
+|---------------------------------|--------|---------------------------------------------------------------------|
+| number                          | ✅     |                                                                     |
+| integer                         | ⚠️      | It only checks if it's a number for now                             |
+| exclusiveMaximum                | ✅     |                                                                     |
+| exclusiveMinium                 | ✅     |                                                                     |
+| maximum                         | ✅     |                                                                     |
+| minium                          | ✅     |                                                                     |
+| multipleOf                      | ✅     |                                                                     |
+|---------------------------------|--------|---------------------------------------------------------------------|
+| array                           | ⚠️      | Only single array item kind is supported for now                    |
+| minItems                        | ✅     |                                                                     |
+| maxItems                        | ✅     |                                                                     |
+| uniqueItems                     | ✅     |                                                                     |
+| prefixItems                     | ❌     |                                                                     |
+| contains                        | ❌     |                                                                     |
+| minContains                     | ❌     |                                                                     |
+| maxContains                     | ❌     |                                                                     |
+|---------------------------------|--------|---------------------------------------------------------------------|
+| object                          | ✅     |                                                                     |
+| patternProperties               | ❌     |                                                                     |
+| additionalProperties            | ❌     |                                                                     |
+| minProperties                   | ❌     |                                                                     |
+| maxProperties                   | ❌     |                                                                     |
+|---------------------------------|--------|---------------------------------------------------------------------|
+| boolean                         | ✅     |                                                                     |
+| null                            | ✅     |                                                                     |
+|---------------------------------|--------|---------------------------------------------------------------------|
+| anyOf                           | ❌     |                                                                     |
+| allOf                           | ❌     |                                                                     |
+| oneOf                           | ❌     |                                                                     |
+| not                             | ❌     |                                                                     |
