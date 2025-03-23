@@ -106,6 +106,12 @@ const actionIsoDateTime: Action<ActionNodeIsoDateTime> = (message) => ({
   message,
 });
 
+type ActionNodeDescription = ActionNodeBase<'description', string>;
+const actionDescription: Action<ActionNodeDescription> = (value) => ({
+  name: 'description',
+  value,
+});
+
 type ActionNode =
   | ActionNodeMinLength
   | ActionNodeMaxLength
@@ -116,7 +122,8 @@ type ActionNode =
   | ActionNodeUUID
   | ActionNodeIsoDateTime
   | ActionNodeRegex
-  | ActionNodeUniqueItems;
+  | ActionNodeUniqueItems
+  | ActionNodeDescription;
 
 type SchemaNodeBase<Name extends string> = {
   name: Name;
@@ -237,6 +244,7 @@ export {
   actionMaxValue,
   actionMinValue,
   actionMultipleOf,
+  actionDescription,
   schemaNodeString,
   schemaNodeNumber,
   schemaNodeBoolean,

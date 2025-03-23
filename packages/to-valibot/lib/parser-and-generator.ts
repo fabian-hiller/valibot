@@ -12,6 +12,7 @@ import {
 } from 'valibot';
 import { parse as parseYaml } from 'yaml';
 import {
+  actionDescription,
   actionEmail,
   actionIsoDateTime,
   actionMaxLength,
@@ -40,6 +41,7 @@ import type {
   JSONSchema,
   JSONSchemaArray,
   JSONSchemaBoolean,
+  JSONSchemaNull,
   JSONSchemaNumber,
   JSONSchemaObject,
   JSONSchemaString,
@@ -61,6 +63,7 @@ const JSONSchemaSchema = object({
   $schema: string(),
   title: string(),
   type: string(),
+  description: string(),
   definitions: optional(
     record(
       string(),
@@ -314,6 +317,7 @@ class ValibotGenerator {
       type: 'object',
       properties: values.properties,
       required: values.required,
+      description: values.description,
     });
   }
 
@@ -371,7 +375,7 @@ class ValibotGenerator {
         case 'object':
           return this.parseObjectType(schema, required);
         case 'null':
-          return this.parseNullType();
+          return this.parseNullType(schema, required);
         default:
           throw new Error(`Unsupported type: ${(schema).type}`);
       }
@@ -385,6 +389,7 @@ class ValibotGenerator {
     schema: JSONSchemaString | JSONSchemaNumber,
     required: boolean
   ): AnyNode {
+    const actions: ActionNode[] = [];
     const content = schema.enum!.map((value) => {
       const val =
         schema.type === 'string'
@@ -395,9 +400,14 @@ class ValibotGenerator {
       return schemaNodeLiteral({ value: val });
     });
 
-    return required
-      ? schemaNodeUnion({ value: content })
-      : schemaNodeOptional({ value: schemaNodeUnion({ value: content }) });
+    if (schema.description !== undefined) {
+      actions.push(actionDescription(schema.description));
+    }
+
+    let value: AnyNode = schemaNodeUnion({ value: content });
+    if (actions.length) value = methodPipe(value, actions);
+    if (!required) value = schemaNodeOptional({ value });
+    return value;
   }
 
   private parseStringType(
@@ -431,6 +441,10 @@ class ValibotGenerator {
       actions.push(actionRegex(schema.pattern));
     }
 
+    if (schema.description !== undefined) {
+      actions.push(actionDescription(schema.description));
+    }
+
     if (actions.length) value = methodPipe(value, actions);
     if (!required) value = schemaNodeOptional({ value: value });
 
@@ -455,6 +469,10 @@ class ValibotGenerator {
 
     if (schema.multipleOf !== undefined)
       actions.push(actionMultipleOf(schema.multipleOf));
+
+    if (schema.description !== undefined) {
+      actions.push(actionDescription(schema.description));
+    }
 
     if (actions.length) value = methodPipe(value, actions);
     if (!required) value = schemaNodeOptional({ value });
@@ -486,6 +504,10 @@ class ValibotGenerator {
       actions.push(actionUniqueItems());
     }
 
+    if (schema.description !== undefined) {
+      actions.push(actionDescription(schema.description));
+    }
+
     if (actions.length) value = methodPipe(value, actions);
     if (!required) value = schemaNodeOptional({ value });
 
@@ -497,12 +519,28 @@ class ValibotGenerator {
     required: boolean
   ): AnyNode {
     let value: AnyNode = schemaNodeBoolean();
+    const actions: ActionNode[] = [];
+
+    if (schema.description !== undefined) {
+      actions.push(actionDescription(schema.description));
+    }
+
+    if (actions.length) value = methodPipe(value, actions);
     if (!required) value = schemaNodeOptional({ value });
     return value;
   }
 
-  private parseNullType(): AnyNode {
-    return schemaNodeNull();
+  private parseNullType(schema: JSONSchemaNull, required?: boolean): AnyNode {
+    let value: AnyNode = schemaNodeNull();
+    const actions: ActionNode[] = [];
+
+    if (schema.description !== undefined) {
+      actions.push(actionDescription(schema.description));
+    }
+
+    if (actions.length) value = methodPipe(value, actions);
+    if (!required) value = schemaNodeOptional({ value });
+    return value;
   }
 
   private parseObjectType(schema: JSONSchemaObject, required = true): AnyNode {
@@ -517,6 +555,10 @@ class ValibotGenerator {
 
     let value: AnyNode = schemaNodeObject({ value: content });
     const actions: ActionNode[] = [];
+
+    if (schema.description !== undefined) {
+      actions.push(actionDescription(schema.description));
+    }
 
     if (actions.length) value = methodPipe(value, actions);
     if (!required) value = schemaNodeOptional({ value });
@@ -535,7 +577,8 @@ class ValibotGenerator {
       case 'maxValue':
       case 'minLength':
       case 'minValue':
-      case 'regex': {
+      case 'regex':
+      case 'description': {
         return '';
       }
       case 'pipe': {
@@ -616,6 +659,8 @@ class ValibotGenerator {
         return `minValue(${node.value})`;
       case 'multipleOf':
         return `multipleOf(${node.value})`;
+      case 'description':
+        return `description("${node.value}")`;
       case 'null':
         return 'null()';
       case 'object': {

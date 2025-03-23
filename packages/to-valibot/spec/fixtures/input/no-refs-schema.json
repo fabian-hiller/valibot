@@ -2,23 +2,28 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "No Refs Schema",
   "type": "object",
+  "description": "Schema without any references defining a person",
   "properties": {
     "name": {
       "type": "string",
       "minLength": 2,
-      "maxLength": 50
+      "maxLength": 50,
+      "description": "Name of a person"
     },
     "age": {
       "type": "integer",
       "minimum": 0,
-      "maximum": 150
+      "maximum": 150,
+      "description": "Age of a person"
     },
     "email": {
       "type": "string",
-      "format": "email"
+      "format": "email",
+      "description": "Email address of a person"
     },
     "isActive": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Indicates if user is currently active"
     },
     "tags": {
       "type": "array",
@@ -26,7 +31,8 @@
         "type": "string"
       },
       "uniqueItems": true,
-      "maxItems": 5
+      "maxItems": 5,
+      "description": "Tags by which user can be found"
     }
   },
   "required": [

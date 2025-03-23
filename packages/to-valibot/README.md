@@ -93,7 +93,7 @@ Same set of features are supported both in OpenAPI Declarations and JSON Schemas
 | Feature             | Status | Note                                                                |
 | ------------------- | ------ | ------------------------------------------------------------------- |
 | required            | ✅     |                                                                     |
-| description         | ❌     |                                                                     |
+| description         | ✅     |                                                                     |
 |---------------------|--------|---------------------------------------------------------------------|
 | string              | ✅     |                                                                     |
 | enum                | ✅     |                                                                     |
