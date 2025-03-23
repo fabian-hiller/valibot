@@ -42,7 +42,7 @@ export const Credits = component$(() => {
                     height="88"
                     loading="lazy"
                     src={`https://github.com/${contributor}.png?size=88`}
-                    alt={`GitHub profile picture of ${contributor}`}
+                    alt={`GitHub profile picture of @${contributor}`}
                     class="w-9 rounded-full md:w-10 lg:w-11"
                   />
                 </a>
@@ -93,7 +93,7 @@ export const Credits = component$(() => {
           'ruiaraujo012',
           'hyunbinseo',
           'F0rce',
-          'Unique-Pixels',
+          'UniquePixels',
           'jdgamble555',
           'nickytonline',
           'KubaJastrz',
@@ -113,7 +113,7 @@ export const Credits = component$(() => {
                 height="88"
                 loading="lazy"
                 src={`https://github.com/${sponsor}.png?size=88`}
-                alt={`GitHub profile picture of ${sponsor}`}
+                alt={`GitHub profile picture of @${sponsor}`}
                 class="w-9 rounded-full md:w-10 lg:w-11"
               />
             </a>

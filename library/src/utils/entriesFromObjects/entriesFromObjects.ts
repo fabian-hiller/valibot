@@ -96,8 +96,6 @@ type MergedEntries<TSchemas extends readonly [Schema, ...Schema[]]> = Prettify<
  * @param schemas The schemas to merge the entries from.
  *
  * @returns The object entries from the schemas.
- *
- * @beta
  */
 export function entriesFromObjects<
   const TSchemas extends readonly [Schema, ...Schema[]],
