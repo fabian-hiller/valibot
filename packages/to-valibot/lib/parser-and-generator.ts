@@ -1,8 +1,8 @@
 import {
-  type InferOutput,
   any,
   array,
   check,
+  type InferOutput,
   object,
   optional,
   parse,
@@ -12,8 +12,6 @@ import {
 } from 'valibot';
 import { parse as parseYaml } from 'yaml';
 import {
-  type ActionNode,
-  type AnyNode,
   actionDescription,
   actionEmail,
   actionIsoDateTime,
@@ -22,9 +20,11 @@ import {
   actionMinLength,
   actionMinValue,
   actionMultipleOf,
+  type ActionNode,
   actionRegex,
   actionUniqueItems,
   actionUUID,
+  type AnyNode,
   methodPipe,
   schemaNodeArray,
   schemaNodeBoolean,
@@ -92,7 +92,7 @@ const customRules = {
 } as const;
 type CustomRules = keyof typeof customRules;
 
-type AllowedImports = 
+type AllowedImports =
   | 'CheckItemsAction'
   | 'GenericSchema'
   | 'InferOutput'
@@ -145,7 +145,10 @@ class ValibotGenerator {
     format: 'openapi-json' | 'openapi-yaml' | 'json'
   );
   constructor(content: object, format: 'openapi-json' | 'json');
-  constructor(content: string | object, format: 'openapi-json' | 'openapi-yaml' | 'json') {
+  constructor(
+    content: string | object,
+    format: 'openapi-json' | 'openapi-yaml' | 'json'
+  ) {
     switch (format) {
       case 'openapi-json': {
         const parsed = parse(
@@ -196,7 +199,7 @@ class ValibotGenerator {
       }
     }
 
-    this.usedImports.add("InferOutput");
+    this.usedImports.add('InferOutput');
 
     const { circularReferences, selfReferencing } =
       findAndHandleCircularReferences(this.dependsOn);
@@ -265,16 +268,13 @@ class ValibotGenerator {
 
     const cr = Array.from(this.customRules.values());
     if (cr.length > 0) {
-      output.push("\n\n");
-      output.push(
-        cr.map((rule) => customRules[rule].code).join('\n\n'),
-        '\n'
-      );
+      output.push('\n\n');
+      output.push(cr.map((rule) => customRules[rule].code).join('\n\n'), '\n');
     }
 
     const schemas = topologicalSort(this.schemas, this.dependsOn);
     for (const [schemaName, schemaNode] of schemas) {
-      output.push("\n\n");
+      output.push('\n\n');
       const schemaCode = this.generateSchemaCode(schemaNode);
       if (
         selfReferencing.includes(schemaName) ||
@@ -294,7 +294,9 @@ class ValibotGenerator {
         );
       } else {
         output.push(`export const ${schemaName} = ${schemaCode};`, '\n\n');
-        output.push(`export type ${schemaName.replace(/Schema/, '')} = InferOutput<typeof ${schemaName}>;\n`);
+        output.push(
+          `export type ${schemaName.replace(/Schema/, '')} = InferOutput<typeof ${schemaName}>;\n`
+        );
       }
     }
 
@@ -381,7 +383,9 @@ class ValibotGenerator {
         case 'null':
           return this.parseNullType(schema, required);
         default:
-          throw new Error(`Unsupported type: ${(schema).type}`);
+          throw new Error(
+            `Unsupported type: ${(schema as { type: string }).type}`
+          );
       }
     } else
       throw new Error(
@@ -395,9 +399,7 @@ class ValibotGenerator {
   ): AnyNode {
     const actions: ActionNode[] = [];
     const content = schema.enum!.map((v) => {
-      const value = schema.type === 'string'
-        ? `'${v}'`
-        : v;
+      const value = schema.type === 'string' ? `'${v}'` : v;
       return schemaNodeLiteral({ value });
     });
 

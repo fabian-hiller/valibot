@@ -13,9 +13,11 @@ type GenerateOptions =
   | { format: 'openapi-json' | 'json' | 'openapi-yaml'; schemas: string[] };
 
 interface ValibotGeneratorReturn {
-  generate: (opt: GenerateOptions) => Promise<void>
+  generate: (opt: GenerateOptions) => Promise<void>;
 }
-const valibotGenerator = (options: GeneratorOptions): ValibotGeneratorReturn => {
+const valibotGenerator = (
+  options: GeneratorOptions
+): ValibotGeneratorReturn => {
   const generate = async (opt: GenerateOptions): Promise<void> => {
     if ('schemas' in opt) {
       for (const schema of opt.schemas) {
