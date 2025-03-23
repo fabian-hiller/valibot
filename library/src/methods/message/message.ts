@@ -8,10 +8,10 @@ import type {
 import { _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Changes the local configuration of a schema.
+ * Changes the message configuration of a schema.
  *
  * @param schema The schema to configure.
- * @param config The parse configuration.
+ * @param message The error message.
  *
  * @returns The configured schema.
  */
@@ -20,14 +20,17 @@ export function message<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(schema: TSchema, config: Config<InferIssue<TSchema>>): TSchema {
+>(
+  schema: TSchema,
+  message: NonNullable<Config<InferIssue<TSchema>>['message']>
+): TSchema {
   return {
     ...schema,
     get '~standard'() {
       return _getStandardProps(this);
     },
     '~run'(dataset, config_) {
-      return schema['~run'](dataset, { ...config_, ...config });
+      return schema['~run'](dataset, { ...config_, message });
     },
   };
 }
