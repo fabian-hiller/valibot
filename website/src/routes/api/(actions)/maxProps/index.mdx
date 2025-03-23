@@ -1,0 +1,71 @@
+---
+title: maxProps
+description: Creates a max properties validation action.
+source: /actions/maxProps/maxProps.ts
+contributors:
+  - fabian-hiller
+  - muningis
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# maxProps
+
+Creates a max properties validation action.
+
+```ts
+const Action = v.maxProps<TInput, TRequirement, TMessage>(
+  requirement,
+  message
+);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `maxProps` you can validate an amount of keys in an object. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `maxProps` can be used.
+
+### Maximum properties amount
+
+Schema to validate an object with a maximum amount of 3 properties.
+
+```ts
+const MaxPropsSchema = v.pipe(
+  v.objectWithRest({ id: string() }, v.object({ id: string() })),
+  v.maxProps(3, 'Object must not exceed 3 properties')
+);
+```
+
+## Related
+
+The following APIs can be combined with `maxProps`.
+
+### Schemas
+
+<ApiList
+  items={['looseObject', 'object', 'objectWithRest', 'record', 'strictObject']}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
