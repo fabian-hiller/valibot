@@ -1,6 +1,6 @@
 interface JSONSchemaBase<T> {
   title?: string;
-  description?: string;
+  description?: string | undefined;
   default?: T;
   examples?: T[];
   $comment?: string;
