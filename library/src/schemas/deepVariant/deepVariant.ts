@@ -70,7 +70,7 @@ type DeepVariantOptions = MaybeReadonly<
 
 
 /**
- * Infer variant issue type.
+ * Infer deepVariant issue type.
  */
 export type InferDeepVariantIssue<
   TOptions extends DeepVariantOptions,
@@ -109,7 +109,7 @@ export interface DeepVariantSchema<
    */
   readonly path: TPath;
   /**
-   * The variant options.
+   * The deepVariant options.
    */
   readonly options: TOptions;
   /**
@@ -119,12 +119,12 @@ export interface DeepVariantSchema<
 }
 
 /**
- * Creates a variant schema.
+ * Creates a deepVariant schema.
  *
  * @param path The discriminator path.
- * @param options The variant options.
+ * @param options The deepVariant options.
  *
- * @returns A variant schema.
+ * @returns A deepVariant schema.
  */
 export function deepVariant<
   const TPath extends string,
@@ -132,13 +132,13 @@ export function deepVariant<
 >(path: TPath, options: TOptions): DeepVariantSchema<TPath, TOptions, undefined>;
 
 /**
- * Creates a variant schema.
+ * Creates a deepVariant schema.
  *
  * @param path The discriminator path.
- * @param options The variant options.
+ * @param options The deepVariant options.
  * @param message The error message.
  *
- * @returns An variant schema.
+ * @returns An deepVariant schema.
  */
 export function deepVariant<
   const TPath extends string,
@@ -173,64 +173,64 @@ export function deepVariant(
 
       const input = dataset.value;
 
-      if (!input || typeof input !== 'object') {
-        _addIssue(this, 'type', dataset, config);
-        return;
-      }
+      if (input && typeof input === 'object') {
+      
+        const parseOptions = (
+          deepVariant: DeepVariantOptionSchema<string>,
+          path: string
+        ) => {
+          for (const schema of deepVariant.options) {
+            let keyIsValid = true;
+    
+            const pathParts = path.split(".");
+            let currentSchemaEntries = schema.entries;
+            let _input = input;
+            while (pathParts.length) {
+              const pathPart = pathParts[0];
+              const discriminatorSchema = currentSchemaEntries[pathPart] as DeepVariantOption;
+              const currentInputAtCurrentDepth = _input;
+              if (!(pathPart in currentInputAtCurrentDepth)) {
+                // Can't continue navigation as as key part does not exist on a object
+                keyIsValid = false;
+                break;
+              }
 
-
-      const parseOptions = (
-        variant: DeepVariantOptionSchema<string>,
-        path: string
-      ) => {
-        for (const schema of variant.options) {
-          let keyIsValid = true;
-  
-          const pathParts = path.split(".");
-          let currentSchemaEntries = schema.entries;
-          let _input = input;
-          while (pathParts.length) {
-            const pathPart = pathParts[0];
-            const discriminatorSchema = currentSchemaEntries[pathPart];
-            const currentInputAtCurrentDepth = _input;
-            if (pathPart in currentInputAtCurrentDepth) {
-              console.log(pathPart, discriminatorSchema)
-  
-              if (pathParts.length === 1) {
-                const iss = discriminatorSchema["~run"](
-                  // @ts-expect-error
+              if (
+                pathParts.length === 1 &&
+                !discriminatorSchema["~run"](
                   { typed: false, value: currentInputAtCurrentDepth[pathPart] },
                   config
-                ).issues;
-                if (!iss) {
-                  return schema;
-                }
+                ).issues
+              ) {
+                return schema;
               }
-  
-              // @ts-expect-error
+    
               _input = currentInputAtCurrentDepth[pathPart];
               currentSchemaEntries = discriminatorSchema.entries;
-            } else {
-              keyIsValid = false;
-              break;
+              pathParts.shift();
+            
             }
-            pathParts.shift();
+
+            if (!keyIsValid) {
+              // Invalid key provided, as no path has been found
+              // _addIssue({}, {})
+            }
           }
-          
+        }
+
+        const schemaToUse = parseOptions(this, this.path);
+        if (!schemaToUse) {
+          // Did not find a variant to use
+          // _addIssue({}, {})
+        }
+
+        if (
+          schemaToUse?.["~run"]({ typed: false, value: input }, config).issues
+        ) {
+          // Found variant, but input is invalid for it.
+          // _addIssue({}, {})
         }
       }
-
-      const schemaToUse = parseOptions(this, this.path);
-      if (!schemaToUse) {
-        throw new Error('');
-      }
-
-      if (
-        schemaToUse["~run"]({ typed: false, value: input }, config).issues
-      ) {
-        // _addIssue({}, {})
-      }
-
 
       // @ts-expect-error
       return dataset as OutputDataset<

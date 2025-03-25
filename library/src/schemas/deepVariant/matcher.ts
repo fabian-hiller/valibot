@@ -1,5 +1,3 @@
-type HasKey<Obj extends object, Key extends string> = Key extends keyof Obj ? true : false;
-
 type Rec = {
   [k: string]: string | Rec | unknown
 }
@@ -32,22 +30,12 @@ type CompareStringByPath<Obj extends Rec, Path extends string, ExpectedValue ext
       : never
     : never;
 
-type FindVariant<T extends Rec, Path extends string, ExpectedValue extends string> = 
+export type FindVariant<T extends Rec, Path extends string, ExpectedValue extends string> = 
   T extends any 
     ? CompareStringByPath<T, Path, ExpectedValue> extends true 
       ? T 
       : never 
     : never;
-
-
-type NodeVariants = {
-  data: { minValue: number; maxValue: number }
-  node: { type: "number" }
-} | {
-  data: { minLength: number; maxLength: number }
-  node: { type: "string" }
-}
-
 
 type Matchers<Variants extends Rec, Path extends string, DiscrimnatorsValues extends string = GetStringByPath<Variants, Path>> = {
   [k in DiscrimnatorsValues]: (data: FindVariant<Variants, Path, k>) => any
@@ -69,7 +57,6 @@ export const matchVariation = <
   if (!(value in matchers)) {
     throw new Error(`Invalid type by path ${path} - found value: ${value}, expected to be one of: ${Object.keys(matchers)}`);
   }
+
   return matchers[value as keyof typeof matchers](variant as any);
-
-
 }

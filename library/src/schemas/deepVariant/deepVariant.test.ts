@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { assert, describe, expect, test,  } from "vitest";
 import { deepVariant } from "./deepVariant";
 import { object } from "../object";
 import { literal } from "../literal";
@@ -7,7 +7,7 @@ import { parse } from "../../methods";
 import { matchVariation } from "./matcher";
 
 describe("deepVariant", () => {
-  test("abc", () =>{
+  test("should parse two nodes and successfully handle them in matcher", () => {
     const NodeSchema = deepVariant('node.type', [
       object({
         node: object({
@@ -23,8 +23,7 @@ describe("deepVariant", () => {
       })
     ]);
 
-    const data = parse(NodeSchema, {
-      type: "number",
+    const foo = parse(NodeSchema, {
       node: {
         type: "number"
       },
@@ -33,13 +32,30 @@ describe("deepVariant", () => {
         maxValue: 5
       }
     });
+    const bar = parse(NodeSchema, {
+      node: {
+        type: "string"
+      },
+      data: {
+        minLength: 5,
+        maxLength: 5
+      }
+    });
 
-    matchVariation(data, "node.type", {
+    matchVariation(foo, "node.type", {
       number(data) {
-        console.log("It's a number!", {data});
+        console.log("Foo is a number!", { data });
       },
       string(data) {
-        console.log("It's a string!", {data});
+        assert.fail("Foo should not get resolved to a string!")
+      }
+    });
+    matchVariation(bar, "node.type", {
+      number(data) {
+        assert.fail("Bar should not get resolved to a number!")
+      },
+      string(data) {
+        console.log("Bar is a string!", { data });
       }
     });
 
