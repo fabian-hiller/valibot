@@ -1,10 +1,9 @@
 ---
-title: config
-description: Changes the local configuration of a schema.
-source: /methods/config/config.ts
+title: message
+description: Changes the local message configuration of a schema.
+source: /methods/message/message.ts
 contributors:
   - fabian-hiller
-  - EltonLobo07
 ---
 
 import { ApiList, Property } from '~/components';
@@ -12,10 +11,10 @@ import { properties } from './properties';
 
 # config
 
-Changes the local configuration of a schema.
+Changes the local message configuration of a schema.
 
 ```ts
-const Schema = v.config<TSchema>(schema, config);
+const Schema = v.message<TSchema>(schema, errorMessage);
 ```
 
 ## Generics
@@ -25,11 +24,11 @@ const Schema = v.config<TSchema>(schema, config);
 ## Parameters
 
 - `schema` <Property {...properties.schema} />
-- `config` <Property {...properties.config} />
+- `errorMessage` <Property {...properties.config.message} />
 
 ### Explanation
 
-This method overwrites the selected configuration properties by merging the previous configuration of the `schema` with the provided `config`.
+This method overwrites the message configuration properties by merging the previous configuration of the `schema` with the provided `errorMessage`.
 
 ## Returns
 
@@ -37,7 +36,7 @@ This method overwrites the selected configuration properties by merging the prev
 
 ## Examples
 
-The following examples show how `config` can be used.
+The following examples show how `message` can be used.
 
 ### Same error message
 
@@ -45,23 +44,9 @@ Schema that uses the same error message for the entire pipeline.
 
 ```ts
 const Schema = v.object({
-  email: v.config(
+  email: v.message(
     v.pipe(v.string(), v.trim(), v.email(), v.endsWith('@example.com')),
-    { message: 'The email does not conform to the required format.' }
-  ),
-  // ...
-});
-```
-
-### Abort pipeline early
-
-Schema that aborts only a specific pipeline early.
-
-```ts
-const Schema = v.object({
-  url: v.config(
-    v.pipe(v.string(), v.trim(), v.url(), v.endsWith('@example.com')),
-    { abortPipeEarly: true }
+    'The email does not conform to the required format.'
   ),
   // ...
 });
@@ -69,7 +54,7 @@ const Schema = v.object({
 
 ## Related
 
-The following APIs can be combined with `config`.
+The following APIs can be combined with `message`.
 
 ### Schemas
 
