@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Improve performance of `variant` and `variantAsync` schema by aborting validation of discriminators early (pull request #1110)
+
 ## v1.0.0 (March 18, 2025)
 
 - Add `assert` method to assert values (issue #862)
