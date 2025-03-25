@@ -125,6 +125,7 @@
           "code",
           "message"
         ],
+        "additionalProperties": false,
         "properties": {
           "code": {
             "type": "string",

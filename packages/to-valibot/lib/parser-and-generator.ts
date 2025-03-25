@@ -14,6 +14,7 @@ import { parse as parseYaml } from 'yaml';
 import {
   actionDescription,
   actionEmail,
+  actionInteger,
   actionIPv4,
   actionIPv6,
   actionIsoDate,
@@ -30,12 +31,17 @@ import {
   actionUUID,
   type AnyNode,
   methodPipe,
+  schemaNodeAllOf,
+  schemaNodeAnyOf,
   schemaNodeArray,
   schemaNodeBoolean,
+  schemaNodeConst,
   schemaNodeLiteral,
+  schemaNodeNot,
   schemaNodeNull,
   schemaNodeNumber,
   schemaNodeObject,
+  schemaNodeOneOf,
   schemaNodeOptional,
   schemaNodeReference,
   schemaNodeString,
@@ -105,6 +111,7 @@ type AllowedImports =
   | 'check'
   | 'checkItems'
   | 'email'
+  | 'integer'
   | 'lazy'
   | 'literal'
   | 'maxLength'
@@ -119,13 +126,15 @@ type AllowedImports =
   | 'pipe'
   | 'regex'
   | 'string'
+  | 'strictObject'
   | 'union'
   | 'uuid'
   | 'isoDateTime'
   | 'isoDate'
   | 'isoTime'
   | 'ipv4'
-  | 'ipv6';
+  | 'ipv6'
+  | 'objectWithRest';
 
 class ValibotGenerator {
   private root:
@@ -213,7 +222,9 @@ class ValibotGenerator {
       findAndHandleCircularReferences(this.dependsOn);
 
     const visit = (node: AnyNode, schemaName: string) => {
-      if (node.name === 'integer') this.usedImports.add('number');
+      if (node.name === 'object') {
+        this.usedImports.add(node.type);
+      }
       else if (node.name === '$ref') {
         /** skip */
       } else if (node.name in customRules) {
@@ -367,6 +378,8 @@ class ValibotGenerator {
               ref: capitalize(appendSchema(schemaName)),
             }),
           });
+    } else if ('const' in schema) {
+      return schemaNodeConst({ value: schema.const })
     } else if ('type' in schema) {
       switch (schema.type) {
         case 'string':
@@ -395,10 +408,21 @@ class ValibotGenerator {
             `Unsupported type: ${(schema as { type: string }).type}`
           );
       }
-    } else
+    } else {
+      if (schema.allOf !== undefined) {
+        return schemaNodeAllOf({ value: schema.allOf.map(item => this.parseSchema(item, true)) })
+      } else if (schema.oneOf !== undefined) {
+        return schemaNodeOneOf({ value: schema.oneOf.map(item => this.parseSchema(item, true)) })
+      } else if (schema.anyOf !== undefined) {
+        return schemaNodeAnyOf({ value: schema.anyOf.map(item => this.parseSchema(item, true)) })
+      } else if (schema.not !== undefined) {
+        return schemaNodeNot({ value: this.parseSchema(schema.not, true) });
+      }
+      console.error(schema);
       throw new Error(
         '`allOf`, `anyOf`, `oneOf` and `not` are not yet implemented'
       );
+    }
   }
 
   private parseEnumType(
@@ -432,30 +456,24 @@ class ValibotGenerator {
       actions.push(actionMinLength(schema.minLength));
     }
     if (schema.maxLength !== undefined) {
-      this.usedImports.add('maxLength');
       actions.push(actionMaxLength(schema.maxLength));
     }
 
     switch (schema.format) {
       case "email":
-        this.usedImports.add('email');
         actions.push(actionEmail());
         break;
       case "uuid":
-        this.usedImports.add('uuid');
         actions.push(actionUUID());
         break;
       case "date-time":
-        this.usedImports.add('isoDateTime');
         actions.push(actionIsoDateTime());
         break;
       case "date": {
-        this.usedImports.add('isoDate');
         actions.push(actionIsoDate());
         break;
       }
       case "time":
-        this.usedImports.add('isoTime');
         actions.push(actionIsoTime());
         break;
       case "duration":
@@ -467,11 +485,9 @@ class ValibotGenerator {
       case "idn-hostname":
         console.error('format="idn-hostname" not yet implemented!')
       case "ipv4":
-        this.usedImports.add('isoTime');
         actions.push(actionIPv4());
         break;
       case "ipv6":
-        this.usedImports.add('ipv6');
         actions.push(actionIPv6());
         break;
       case "json-pointer":
@@ -492,7 +508,6 @@ class ValibotGenerator {
 
 
     if (schema.pattern) {
-      this.usedImports.add('regex');
       actions.push(actionRegex(schema.pattern));
     }
 
@@ -513,6 +528,8 @@ class ValibotGenerator {
     let value: AnyNode = schemaNodeNumber();
 
     const actions: ActionNode[] = [];
+    if (schema.type === "integer") actions.push(actionInteger());
+
     if (schema.minimum !== undefined)
       actions.push(actionMinValue(schema.minimum));
     else if (schema.exclusiveMinimum !== undefined)
@@ -548,11 +565,9 @@ class ValibotGenerator {
     const actions: ActionNode[] = [];
 
     if (schema.minItems !== undefined) {
-      this.usedImports.add('minLength');
       actions.push(actionMinLength(schema.minItems));
     }
     if (schema.maxItems !== undefined) {
-      this.usedImports.add('maxLength');
       actions.push(actionMaxLength(schema.maxItems));
     }
     if (schema.uniqueItems) {
@@ -608,7 +623,16 @@ class ValibotGenerator {
         .filter(Boolean)
     );
 
-    let value: AnyNode = schemaNodeObject({ value: content });
+    const type = schema.additionalProperties === false
+      ? "strictObject"
+      : typeof schema.additionalProperties === "object"
+      ? "objectWithRest"
+      : "object";
+    let value: AnyNode = schemaNodeObject({
+      value: content,
+      type,
+      withRest: type === "objectWithRest" ? this.parseSchema(schema.additionalProperties, true) : undefined
+    });
     const actions: ActionNode[] = [];
 
     if (schema.description !== undefined) {
@@ -699,6 +723,7 @@ class ValibotGenerator {
         return `array(${this.generateNodeCode(node.value, depth)})`;
       
       case 'integer':
+        return 'integer()';
       case 'number':
         return `number()`;
       case 'literal':
@@ -718,8 +743,23 @@ class ValibotGenerator {
       case 'null':
         return 'null()';
       case 'object': {
+        const kind = node.type;
+        const withRest = node.type === "objectWithRest" ? node.withRest : undefined;
+        if (withRest) {
+          const items = Object.entries(node.value);
+          if (items.length === 0) return `objectWithRest({}, ${this.generateNodeCode(withRest, depth)})`;
+  
+          const inner: string = items
+            .map(
+              ([key, item]) =>
+                `${'  '.repeat(depth)}${key}: ${this.generateNodeCode(item, depth + 1)},\n`
+            )
+            .join('');
+          return `objectWithRest({\n${inner}${'  '.repeat(depth - 1)}},\n${'  '.repeat(depth - 1)}${this.generateNodeCode(withRest, depth)})`;
+        }
+
         const items = Object.entries(node.value);
-        if (items.length === 0) return `object({})`;
+        if (items.length === 0) return `${kind}({})`;
 
         const inner: string = items
           .map(
@@ -727,7 +767,7 @@ class ValibotGenerator {
               `${'  '.repeat(depth)}${key}: ${this.generateNodeCode(item, depth + 1)},\n`
           )
           .join('');
-        return `object({\n${inner}${'  '.repeat(depth - 1)}})`;
+        return `${kind}({\n${inner}${'  '.repeat(depth - 1)}})`;
       }
       case 'optional':
         return `optional(${this.generateNodeCode(node.value, depth)})`;

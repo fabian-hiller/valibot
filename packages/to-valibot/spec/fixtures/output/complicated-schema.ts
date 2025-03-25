@@ -1,4 +1,4 @@
-import { CheckItemsAction, InferOutput, array, boolean, checkItems, isoDate, isoDateTime, literal, maxLength, maxValue, minLength, minValue, multipleOf, number, object, optional, pipe, regex, string, union, uuid } from "valibot";
+import { CheckItemsAction, InferOutput, array, boolean, checkItems, integer, isoDate, isoDateTime, literal, maxLength, maxValue, minLength, minValue, multipleOf, number, object, objectWithRest, optional, pipe, regex, string, union, uuid } from "valibot";
 
 
 const uniqueItems = <Type, Message extends string>(
@@ -14,7 +14,7 @@ export const SharedComponentSchema = object({
     literal('Type B'),
     literal('Type C'),
   ]),
-  validityPeriod: optional(pipe(number(), minValue(30), maxValue(365))),
+  validityPeriod: optional(pipe(number(), integer(), minValue(30), maxValue(365))),
   isPublic: optional(boolean()),
   metadata: optional(object({
     version: pipe(string(), regex(/^\d+\.\d+\.\d+$/)),
@@ -31,7 +31,7 @@ export type SharedComponent = InferOutput<typeof SharedComponentSchema>;
 export const MainComponent1Schema = object({
   id: pipe(string(), uuid()),
   name: pipe(string(), minLength(3), maxLength(50), regex(/^[A-Za-z0-9\s]+$/)),
-  requiredCount: optional(pipe(number(), minValue(1), maxValue(100))),
+  requiredCount: optional(pipe(number(), integer(), minValue(1), maxValue(100))),
   isActive: optional(boolean()),
   tags: optional(pipe(array(string()), minLength(1), maxLength(10), uniqueItems())),
   decimalValue: optional(pipe(number(), minValue(0.1), maxValue(99.9), multipleOf(0.1))),
@@ -61,7 +61,7 @@ export const MainComponent2Schema = object({
     literal('feature2'),
     literal('feature3'),
   ]))),
-  statusHistory: optional(object({})),
+  statusHistory: optional(objectWithRest({}, pipe(string(), isoDateTime()))),
   sharedData: SharedComponentSchema,
   lastUpdated: optional(pipe(string(), isoDate())),
 });

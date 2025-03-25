@@ -16,5 +16,5 @@
       "valibot/*": ["../../library/src/*"]
     }
   },
-  "include": ["lib"]
+  "include": ["lib", "spec"]
 }

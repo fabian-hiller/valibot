@@ -94,7 +94,7 @@ Same set of features are supported both in OpenAPI Declarations and JSON Schemas
 | ------------------------------- | ------ | ------------------------------------------------------------------- |
 | required                        | ✅     |                                                                     |
 | description                     | ✅     |                                                                     |
-| const                           | ❌     |                                                                     |
+| const                           | ⚠️      | Only works with primitive values                                    |
 |---------------------------------|--------|---------------------------------------------------------------------|
 | string                          | ✅     |                                                                     |
 | enum                            | ✅     |                                                                     |
@@ -106,7 +106,7 @@ Same set of features are supported both in OpenAPI Declarations and JSON Schemas
 | format="date-time"              | ✅     |                                                                     |
 | format="date"                   | ✅     |                                                                     |
 | format="time"                   | ✅     |                                                                     |
-| format="duration"               | ❌     |                                                                     |
+| format="duration"               | ⚠️      | https://github.com/fabian-hiller/valibot/pull/1102                  |
 | format="idn-email"              | ❌     |                                                                     |
 | format="hostname"               | ❌     |                                                                     |
 | format="idn-hostname"           | ❌     |                                                                     |
@@ -121,7 +121,7 @@ Same set of features are supported both in OpenAPI Declarations and JSON Schemas
 | format="iri-reference"          | ❌     |                                                                     |
 |---------------------------------|--------|---------------------------------------------------------------------|
 | number                          | ✅     |                                                                     |
-| integer                         | ⚠️      | It only checks if it's a number for now                             |
+| integer                         | ✅     |                                                                     |
 | exclusiveMaximum                | ✅     |                                                                     |
 | exclusiveMinium                 | ✅     |                                                                     |
 | maximum                         | ✅     |                                                                     |
@@ -139,9 +139,9 @@ Same set of features are supported both in OpenAPI Declarations and JSON Schemas
 |---------------------------------|--------|---------------------------------------------------------------------|
 | object                          | ✅     |                                                                     |
 | patternProperties               | ❌     |                                                                     |
-| additionalProperties            | ❌     |                                                                     |
-| minProperties                   | ❌     |                                                                     |
-| maxProperties                   | ❌     |                                                                     |
+| additionalProperties            | ✅     |                                                                     |
+| minProperties                   | ⚠️      | https://github.com/fabian-hiller/valibot/pull/1100                  |
+| maxProperties                   | ⚠️      | https://github.com/fabian-hiller/valibot/pull/1100                  |
 |---------------------------------|--------|---------------------------------------------------------------------|
 | boolean                         | ✅     |                                                                     |
 | null                            | ✅     |                                                                     |

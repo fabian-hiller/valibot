@@ -39,6 +39,12 @@ type ActionNodeBase<
       custom?: true;
     };
 
+type ActionNodeInteger = ActionNodeBase<'integer'>;
+const actionInteger: Action<ActionNodeInteger> = (message) => ({
+  name: 'integer',
+  message
+});
+
 type ActionNodeMinLength = ActionNodeBase<'minLength', number>;
 const actionMinLength: Action<ActionNodeMinLength> = (value, message) => ({
   name: 'minLength',
@@ -137,6 +143,7 @@ const actionIPv6: Action<ActionNodeIPv6> = (message) => ({
 });
 
 type ActionNode =
+  | ActionNodeInteger
   | ActionNodeMinLength
   | ActionNodeMaxLength
   | ActionNodeMinValue
@@ -151,7 +158,7 @@ type ActionNode =
   | ActionNodeUniqueItems
   | ActionNodeDescription
   | ActionNodeIPv4
-  |ActionNodeIPv6;
+  | ActionNodeIPv6;
 
 type SchemaNodeBase<Name extends string> = {
   name: Name;
@@ -189,9 +196,12 @@ const schemaNodeBoolean: NodeFactory<SchemaNodeBoolean> = (props) => ({
   ...props,
 });
 
-type SchemaNodeObject = SchemaNodeBase<'object'> & {
+type SchemaNodeObject = SchemaNodeBase<'object'> & ({
   value: Record<string, AnyNode>;
-};
+  type: "object" | "strictObject" | "objectWithRest";
+  withRest?: AnyNode;
+});
+
 const schemaNodeObject: NodeFactory<SchemaNodeObject> = (props) => ({
   name: 'object',
   ...props,
@@ -210,6 +220,38 @@ type SchemaNodeUnion = SchemaNodeBase<'union'> & {
 };
 const schemaNodeUnion: NodeFactory<SchemaNodeUnion> = (props) => ({
   name: 'union',
+  ...props,
+});
+
+type SchemaNodeAllOf = SchemaNodeBase<'allOf'> & {
+  value: AnyNode[];
+}
+const schemaNodeAllOf: NodeFactory<SchemaNodeAllOf> = (props) => ({
+  name: 'allOf',
+  ...props,
+});
+
+type SchemaNodeAnyOf = SchemaNodeBase<'anyOf'> & {
+  value: AnyNode[];
+}
+const schemaNodeAnyOf: NodeFactory<SchemaNodeAnyOf> = (props) => ({
+  name: 'anyOf',
+  ...props,
+});
+
+type SchemaNodeOneOf = SchemaNodeBase<'oneOf'> & {
+  value: AnyNode[];
+}
+const schemaNodeOneOf: NodeFactory<SchemaNodeOneOf> = (props) => ({
+  name: 'oneOf',
+  ...props,
+});
+
+type SchemaNodeNot = SchemaNodeBase<'not'> & {
+  value: AnyNode;
+}
+const schemaNodeNot: NodeFactory<SchemaNodeNot> = (props) => ({
+  name: 'not',
   ...props,
 });
 
@@ -244,6 +286,14 @@ const schemaNodeReference: NodeFactory<SchemaNodeReference> = (props) => ({
   ...props,
 });
 
+type SchemaNodeConst = SchemaNodeBase<'const'> & {
+  value: any
+};
+const schemaNodeConst: NodeFactory<SchemaNodeConst> = (props) => ({
+  name: 'const',
+  ...props,
+});
+
 type SchemaNode =
   | SchemaNodeString
   | SchemaNodeNumber
@@ -255,13 +305,19 @@ type SchemaNode =
   | SchemaNodeNull
   | SchemaNodeOptional
   | SchemaNodeLiteral
-  | SchemaNodeReference;
+  | SchemaNodeReference
+  | SchemaNodeAllOf
+  | SchemaNodeAnyOf
+  | SchemaNodeOneOf
+  | SchemaNodeNot
+  | SchemaNodeConst;
 
 type AnyNode = SchemaNode | MethodNode | ActionNode;
 
 export type { ActionNode, AnyNode, SchemaNode };
 export {
   methodPipe,
+  actionInteger,
   actionMinLength,
   actionMaxLength,
   actionEmail,
@@ -288,4 +344,9 @@ export {
   schemaNodeNull,
   schemaNodeLiteral,
   schemaNodeReference,
+  schemaNodeAllOf,
+  schemaNodeAnyOf,
+  schemaNodeNot,
+  schemaNodeOneOf,
+  schemaNodeConst
 };

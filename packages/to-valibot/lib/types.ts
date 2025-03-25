@@ -81,7 +81,7 @@ type JSONSchema =
   | JSONSchemaNull
   | JSONSchemaArray
   | JSONSchemaObject
-  // | JSONSchemaCombined
+  | JSONSchemaCombined
   | JSONSchemaRef;
 
 export type {

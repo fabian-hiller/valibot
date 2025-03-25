@@ -86,6 +86,7 @@ components:
 
     Error:
       type: object
+      additionalProperties: false
       required:
         - code
         - message
