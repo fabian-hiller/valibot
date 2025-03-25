@@ -14,7 +14,11 @@ import { parse as parseYaml } from 'yaml';
 import {
   actionDescription,
   actionEmail,
+  actionIPv4,
+  actionIPv6,
+  actionIsoDate,
   actionIsoDateTime,
+  actionIsoTime,
   actionMaxLength,
   actionMaxValue,
   actionMinLength,
@@ -117,7 +121,11 @@ type AllowedImports =
   | 'string'
   | 'union'
   | 'uuid'
-  | 'isoDateTime';
+  | 'isoDateTime'
+  | 'isoDate'
+  | 'isoTime'
+  | 'ipv4'
+  | 'ipv6';
 
 class ValibotGenerator {
   private root:
@@ -428,16 +436,60 @@ class ValibotGenerator {
       actions.push(actionMaxLength(schema.maxLength));
     }
 
-    if (schema.format === 'email') {
-      this.usedImports.add('email');
-      actions.push(actionEmail());
-    } else if (schema.format === 'uuid') {
-      this.usedImports.add('uuid');
-      actions.push(actionUUID());
-    } else if (schema.format === 'date-time') {
-      this.usedImports.add('isoDateTime');
-      actions.push(actionIsoDateTime());
+    switch (schema.format) {
+      case "email":
+        this.usedImports.add('email');
+        actions.push(actionEmail());
+        break;
+      case "uuid":
+        this.usedImports.add('uuid');
+        actions.push(actionUUID());
+        break;
+      case "date-time":
+        this.usedImports.add('isoDateTime');
+        actions.push(actionIsoDateTime());
+        break;
+      case "date": {
+        this.usedImports.add('isoDate');
+        actions.push(actionIsoDate());
+        break;
+      }
+      case "time":
+        this.usedImports.add('isoTime');
+        actions.push(actionIsoTime());
+        break;
+      case "duration":
+        console.error('format="duration" not yet implemented!')
+      case "idn-email":
+        console.error('format="idn-email" not yet implemented!')
+      case "hostname":
+        console.error('format="hostname" not yet implemented!')
+      case "idn-hostname":
+        console.error('format="idn-hostname" not yet implemented!')
+      case "ipv4":
+        this.usedImports.add('isoTime');
+        actions.push(actionIPv4());
+        break;
+      case "ipv6":
+        this.usedImports.add('ipv6');
+        actions.push(actionIPv6());
+        break;
+      case "json-pointer":
+        console.error('format="json-pointer" not yet implemented!')
+      case "relative-json-pointer":
+        console.error('format="relative-json-pointer" not yet implemented!')
+      case "uri":
+        console.error('format="uri" not yet implemented!')
+      case "uri-reference":
+        console.error('format="uri-reference" not yet implemented!')
+      case "uri-template":
+        console.error('format="uri-template" not yet implemented!')
+      case "iri":
+        console.error('format="iri" not yet implemented!')
+      case "iri-reference":
+        console.error('format="iri-reference" not yet implemented!')
     }
+
 
     if (schema.pattern) {
       this.usedImports.add('regex');
@@ -581,7 +633,11 @@ class ValibotGenerator {
       case 'minLength':
       case 'minValue':
       case 'regex':
-      case 'description': {
+      case 'description':
+      case 'isoDate':
+      case 'isoTime':
+      case 'ipv4':
+      case 'ipv6': {
         return '';
       }
       case 'pipe': {
@@ -641,15 +697,10 @@ class ValibotGenerator {
       case 'array':
         if (!node.value) return 'array()';
         return `array(${this.generateNodeCode(node.value, depth)})`;
-      case 'boolean':
-        return 'boolean()';
-      case 'email':
-        return `email()`;
+      
       case 'integer':
       case 'number':
         return `number()`;
-      case 'isoDateTime':
-        return 'isoDateTime()';
       case 'literal':
         return `literal(${node.value})`;
       case 'maxLength':
@@ -702,11 +753,16 @@ class ValibotGenerator {
             .join('') ?? '';
         return `union([\n${inner}${'  '.repeat(depth - 1)}])`;
       }
-      case 'uniqueItems': {
-        return `uniqueItems()`;
-      }
-      case 'uuid': {
-        return 'uuid()';
+      case 'uniqueItems':
+      case 'uuid':
+      case 'boolean':
+      case 'email':
+      case 'isoDateTime':
+      case 'isoDate':
+      case 'isoTime':
+      case 'ipv4':
+      case 'ipv6': {
+        return `${node.name}()`;
       }
     }
   }

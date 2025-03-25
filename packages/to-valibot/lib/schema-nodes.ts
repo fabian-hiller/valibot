@@ -106,10 +106,34 @@ const actionIsoDateTime: Action<ActionNodeIsoDateTime> = (message) => ({
   message,
 });
 
+type ActionNodeIsoDate = ActionNodeBase<'isoDate'>;
+const actionIsoDate: Action<ActionNodeIsoDate> = (message) => ({
+  name: 'isoDate',
+  message,
+});
+
+type ActionNodeIsoTime = ActionNodeBase<'isoTime'>;
+const actionIsoTime: Action<ActionNodeIsoTime> = (message) => ({
+  name: 'isoTime',
+  message,
+});
+
 type ActionNodeDescription = ActionNodeBase<'description', string>;
 const actionDescription: Action<ActionNodeDescription> = (value) => ({
   name: 'description',
   value,
+});
+
+type ActionNodeIPv4 = ActionNodeBase<'ipv4'>;
+const actionIPv4: Action<ActionNodeIPv4> = (message) => ({
+  name: 'ipv4',
+  message,
+});
+
+type ActionNodeIPv6 = ActionNodeBase<'ipv6'>;
+const actionIPv6: Action<ActionNodeIPv6> = (message) => ({
+  name: 'ipv6',
+  message,
 });
 
 type ActionNode =
@@ -121,9 +145,13 @@ type ActionNode =
   | ActionNodeEmail
   | ActionNodeUUID
   | ActionNodeIsoDateTime
+  | ActionNodeIsoDate
+  | ActionNodeIsoTime
   | ActionNodeRegex
   | ActionNodeUniqueItems
-  | ActionNodeDescription;
+  | ActionNodeDescription
+  | ActionNodeIPv4
+  |ActionNodeIPv6;
 
 type SchemaNodeBase<Name extends string> = {
   name: Name;
@@ -238,6 +266,8 @@ export {
   actionMaxLength,
   actionEmail,
   actionIsoDateTime,
+  actionIsoDate,
+  actionIsoTime,
   actionUUID,
   actionRegex,
   actionUniqueItems,
@@ -245,6 +275,8 @@ export {
   actionMinValue,
   actionMultipleOf,
   actionDescription,
+  actionIPv4,
+  actionIPv6,
   schemaNodeString,
   schemaNodeNumber,
   schemaNodeBoolean,

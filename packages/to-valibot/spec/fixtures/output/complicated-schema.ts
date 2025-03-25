@@ -1,4 +1,4 @@
-import { CheckItemsAction, InferOutput, array, boolean, checkItems, isoDateTime, literal, maxLength, maxValue, minLength, minValue, multipleOf, number, object, optional, pipe, regex, string, union, uuid } from "valibot";
+import { CheckItemsAction, InferOutput, array, boolean, checkItems, isoDate, isoDateTime, literal, maxLength, maxValue, minLength, minValue, multipleOf, number, object, optional, pipe, regex, string, union, uuid } from "valibot";
 
 
 const uniqueItems = <Type, Message extends string>(
@@ -63,7 +63,7 @@ export const MainComponent2Schema = object({
   ]))),
   statusHistory: optional(object({})),
   sharedData: SharedComponentSchema,
-  lastUpdated: optional(string()),
+  lastUpdated: optional(pipe(string(), isoDate())),
 });
 
 export type MainComponent2 = InferOutput<typeof MainComponent2Schema>;
