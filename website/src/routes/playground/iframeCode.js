@@ -44,8 +44,12 @@ function stringify(args) {
 
           // If it is a non supported object, convert it to its constructor name
           if (value && (type === 'object' || type === 'function')) {
-            const name = Object.getPrototypeOf(value).constructor.name;
-            if (name !== 'Object' && name !== 'Array') {
+            const name = Object.getPrototypeOf(value)?.constructor?.name;
+            if (
+              typeof name === 'string' &&
+              name !== 'Object' &&
+              name !== 'Array'
+            ) {
               return `[${name}]`;
             }
           }
