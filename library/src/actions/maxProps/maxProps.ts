@@ -6,10 +6,10 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Max properties issue interface.
+ * Max props issue interface.
  */
 export interface MaxPropsIssue<
-  TInput extends object,
+  TInput extends Record<string, unknown>,
   TRequirement extends number,
 > extends BaseIssue<TInput> {
   /**
@@ -19,7 +19,7 @@ export interface MaxPropsIssue<
   /**
    * The issue type.
    */
-  readonly type: 'max_properties';
+  readonly type: 'max_props';
   /**
    * The expected property.
    */
@@ -29,16 +29,16 @@ export interface MaxPropsIssue<
    */
   readonly received: `${number}`;
   /**
-   * The maximum properties count.
+   * The maximum properties.
    */
   readonly requirement: TRequirement;
 }
 
 /**
- * Max properties action interface.
+ * Max props action interface.
  */
 export interface MaxPropsAction<
-  TInput extends object,
+  TInput extends Record<string, unknown>,
   TRequirement extends number,
   TMessage extends
     | ErrorMessage<MaxPropsIssue<TInput, TRequirement>>
@@ -47,7 +47,7 @@ export interface MaxPropsAction<
   /**
    * The action type.
    */
-  readonly type: 'max_properties';
+  readonly type: 'max_props';
   /**
    * The action reference.
    */
@@ -57,7 +57,7 @@ export interface MaxPropsAction<
    */
   readonly expects: `<=${TRequirement}`;
   /**
-   * The maximum properties count.
+   * The maximum properties.
    */
   readonly requirement: TRequirement;
   /**
@@ -67,27 +67,27 @@ export interface MaxPropsAction<
 }
 
 /**
- * Creates a max properties validation action.
+ * Creates a max props validation action.
  *
- * @param requirement The maximum properties count.
+ * @param requirement The maximum properties.
  *
- * @returns A max properties action.
+ * @returns A max props action.
  */
 export function maxProps<
-  TInput extends object,
+  TInput extends Record<string, unknown>,
   const TRequirement extends number,
 >(requirement: TRequirement): MaxPropsAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a max properties validation action.
+ * Creates a max props validation action.
  *
- * @param requirement The maximum properties count.
+ * @param requirement The maximum properties.
  * @param message The error message.
  *
- * @returns A max properties action.
+ * @returns A max props action.
  */
 export function maxProps<
-  TInput extends object,
+  TInput extends Record<string, unknown>,
   const TRequirement extends number,
   const TMessage extends
     | ErrorMessage<MaxPropsIssue<TInput, TRequirement>>
@@ -100,15 +100,15 @@ export function maxProps<
 // @__NO_SIDE_EFFECTS__
 export function maxProps(
   requirement: number,
-  message?: ErrorMessage<MaxPropsIssue<object, number>>
+  message?: ErrorMessage<MaxPropsIssue<Record<string, unknown>, number>>
 ): MaxPropsAction<
-object,
+  Record<string, unknown>,
   number,
-  ErrorMessage<MaxPropsIssue<object, number>> | undefined
+  ErrorMessage<MaxPropsIssue<Record<string, unknown>, number>> | undefined
 > {
   return {
     kind: 'validation',
-    type: 'max_properties',
+    type: 'max_props',
     reference: maxProps,
     async: false,
     expects: `<=${requirement}`,
@@ -116,10 +116,10 @@ object,
     message,
     '~run'(dataset, config) {
       if (!dataset.typed) return dataset;
-      const propertiesCount = Object.keys(dataset.value).length;
-      if (dataset.typed && propertiesCount > this.requirement) {
+      const count = Object.keys(dataset.value).length;
+      if (dataset.typed && count > this.requirement) {
         _addIssue(this, 'properties', dataset, config, {
-          received: `${propertiesCount}`,
+          received: `${count}`,
         });
       }
       return dataset;

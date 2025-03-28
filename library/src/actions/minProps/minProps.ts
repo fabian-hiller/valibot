@@ -6,10 +6,10 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Min properties issue interface.
+ * Min props issue interface.
  */
 export interface MinPropsIssue<
-  TInput extends object,
+  TInput extends Record<string, unknown>,
   TRequirement extends number,
 > extends BaseIssue<TInput> {
   /**
@@ -19,7 +19,7 @@ export interface MinPropsIssue<
   /**
    * The issue type.
    */
-  readonly type: 'min_properties';
+  readonly type: 'min_props';
   /**
    * The expected property.
    */
@@ -29,16 +29,16 @@ export interface MinPropsIssue<
    */
   readonly received: `${number}`;
   /**
-   * The minimum properties count.
+   * The minimum properties.
    */
   readonly requirement: TRequirement;
 }
 
 /**
- * Min properties action interface.
+ * Min props action interface.
  */
 export interface MinPropsAction<
-  TInput extends object,
+  TInput extends Record<string, unknown>,
   TRequirement extends number,
   TMessage extends
     | ErrorMessage<MinPropsIssue<TInput, TRequirement>>
@@ -47,7 +47,7 @@ export interface MinPropsAction<
   /**
    * The action type.
    */
-  readonly type: 'min_properties';
+  readonly type: 'min_props';
   /**
    * The action reference.
    */
@@ -57,7 +57,7 @@ export interface MinPropsAction<
    */
   readonly expects: `>=${TRequirement}`;
   /**
-   * The minimum properties count.
+   * The minimum properties.
    */
   readonly requirement: TRequirement;
   /**
@@ -67,27 +67,27 @@ export interface MinPropsAction<
 }
 
 /**
- * Creates a min properties validation action.
+ * Creates a min props validation action.
  *
- * @param requirement The minimum properties count.
+ * @param requirement The minimum properties.
  *
- * @returns A min properties action.
+ * @returns A min props action.
  */
 export function minProps<
-  TInput extends object,
+  TInput extends Record<string, unknown>,
   const TRequirement extends number,
 >(requirement: TRequirement): MinPropsAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a min properties validation action.
+ * Creates a min props validation action.
  *
- * @param requirement The minimum properties count.
+ * @param requirement The minimum properties.
  * @param message The error message.
  *
- * @returns A min properties action.
+ * @returns A min props action.
  */
 export function minProps<
-  TInput extends object,
+  TInput extends Record<string, unknown>,
   const TRequirement extends number,
   const TMessage extends
     | ErrorMessage<MinPropsIssue<TInput, TRequirement>>
@@ -100,15 +100,15 @@ export function minProps<
 // @__NO_SIDE_EFFECTS__
 export function minProps(
   requirement: number,
-  message?: ErrorMessage<MinPropsIssue<object, number>>
+  message?: ErrorMessage<MinPropsIssue<Record<string, unknown>, number>>
 ): MinPropsAction<
-object,
+  Record<string, unknown>,
   number,
-  ErrorMessage<MinPropsIssue<object, number>> | undefined
+  ErrorMessage<MinPropsIssue<Record<string, unknown>, number>> | undefined
 > {
   return {
     kind: 'validation',
-    type: 'min_properties',
+    type: 'min_props',
     reference: minProps,
     async: false,
     expects: `>=${requirement}`,
@@ -116,10 +116,10 @@ object,
     message,
     '~run'(dataset, config) {
       if (!dataset.typed) return dataset;
-      const propertiesCount = Object.keys(dataset.value).length;
-      if (dataset.typed && propertiesCount < this.requirement) {
+      const count = Object.keys(dataset.value).length;
+      if (dataset.typed && count < this.requirement) {
         _addIssue(this, 'properties', dataset, config, {
-          received: `${propertiesCount}`,
+          received: `${count}`,
         });
       }
       return dataset;

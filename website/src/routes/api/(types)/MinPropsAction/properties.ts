@@ -76,7 +76,7 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'min_properties',
+      value: 'min_props',
     },
   },
   reference: {

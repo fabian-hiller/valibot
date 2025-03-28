@@ -7,42 +7,44 @@ import {
 } from './maxProps.ts';
 
 describe('maxProps', () => {
+  type Input = Record<string, number>;
+
   describe('should return action object', () => {
     test('with undefined message', () => {
-      type Action = MaxPropsAction<{}, 10, undefined>;
-      expectTypeOf(maxProps<{}, 10>(10)).toEqualTypeOf<Action>();
+      type Action = MaxPropsAction<Input, 10, undefined>;
+      expectTypeOf(maxProps<Input, 10>(10)).toEqualTypeOf<Action>();
       expectTypeOf(
-        maxProps<{}, 10, undefined>(10, undefined)
+        maxProps<Input, 10, undefined>(10, undefined)
       ).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
-      expectTypeOf(
-        maxProps<{}, 10, 'message'>(10, 'message')
-      ).toEqualTypeOf<MaxPropsAction<{}, 10, 'message'>>();
+      expectTypeOf(maxProps<Input, 10, 'message'>(10, 'message')).toEqualTypeOf<
+        MaxPropsAction<Input, 10, 'message'>
+      >();
     });
 
     test('with function message', () => {
       expectTypeOf(
-        maxProps<{}, 10, () => string>(10, () => 'message')
-      ).toEqualTypeOf<MaxPropsAction<{}, 10, () => string>>();
+        maxProps<Input, 10, () => string>(10, () => 'message')
+      ).toEqualTypeOf<MaxPropsAction<Input, 10, () => string>>();
     });
   });
 
   describe('should infer correct types', () => {
-    type Action = MaxPropsAction<{}, 10, undefined>;
+    type Action = MaxPropsAction<Input, 10, undefined>;
 
     test('of input', () => {
-      expectTypeOf<InferInput<Action>>().toEqualTypeOf<{}>();
+      expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<{}>();
+      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<Input>();
     });
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
-        MaxPropsIssue<{}, 10>
+        MaxPropsIssue<Input, 10>
       >();
     });
   });

@@ -7,42 +7,44 @@ import {
 } from './minProps.ts';
 
 describe('minProps', () => {
+  type Input = Record<string, number>;
+
   describe('should return action object', () => {
     test('with undefined message', () => {
-      type Action = MinPropsAction<{}, 10, undefined>;
-      expectTypeOf(minProps<{}, 10>(10)).toEqualTypeOf<Action>();
+      type Action = MinPropsAction<Input, 10, undefined>;
+      expectTypeOf(minProps<Input, 10>(10)).toEqualTypeOf<Action>();
       expectTypeOf(
-        minProps<{}, 10, undefined>(10, undefined)
+        minProps<Input, 10, undefined>(10, undefined)
       ).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
-      expectTypeOf(
-        minProps<{}, 10, 'message'>(10, 'message')
-      ).toEqualTypeOf<MinPropsAction<{}, 10, 'message'>>();
+      expectTypeOf(minProps<Input, 10, 'message'>(10, 'message')).toEqualTypeOf<
+        MinPropsAction<Input, 10, 'message'>
+      >();
     });
 
     test('with function message', () => {
       expectTypeOf(
-        minProps<{}, 10, () => string>(10, () => 'message')
-      ).toEqualTypeOf<MinPropsAction<{}, 10, () => string>>();
+        minProps<Input, 10, () => string>(10, () => 'message')
+      ).toEqualTypeOf<MinPropsAction<Input, 10, () => string>>();
     });
   });
 
   describe('should infer correct types', () => {
-    type Action = MinPropsAction<{}, 10, undefined>;
+    type Action = MinPropsAction<Input, 10, undefined>;
 
     test('of input', () => {
-      expectTypeOf<InferInput<Action>>().toEqualTypeOf<{}>();
+      expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
     });
 
     test('of output', () => {
-      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<{}>();
+      expectTypeOf<InferOutput<Action>>().toEqualTypeOf<Input>();
     });
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
-        MinPropsIssue<{}, 10>
+        MinPropsIssue<Input, 10>
       >();
     });
   });

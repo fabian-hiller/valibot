@@ -7,10 +7,12 @@ import {
 } from './minProps.ts';
 
 describe('minProps', () => {
+  type Input = Record<string, number>;
+
   describe('should return action object', () => {
-    const baseAction: Omit<MinPropsAction<object, 2, never>, 'message'> = {
+    const baseAction: Omit<MinPropsAction<Input, 2, never>, 'message'> = {
       kind: 'validation',
-      type: 'min_properties',
+      type: 'min_props',
       reference: minProps,
       expects: '>=2',
       requirement: 2,
@@ -19,7 +21,7 @@ describe('minProps', () => {
     };
 
     test('with undefined message', () => {
-      const action: MinPropsAction<object, 2, undefined> = {
+      const action: MinPropsAction<Input, 2, undefined> = {
         ...baseAction,
         message: undefined,
       };
@@ -28,18 +30,20 @@ describe('minProps', () => {
     });
 
     test('with string message', () => {
-      expect(minProps(2, 'item should contain at least two items')).toStrictEqual({
+      expect(
+        minProps(2, 'item should contain at least two items')
+      ).toStrictEqual({
         ...baseAction,
         message: 'item should contain at least two items',
-      } satisfies MinPropsAction<object, 2, string>);
+      } satisfies MinPropsAction<Input, 2, string>);
     });
 
     test('with function message', () => {
-      const message = (issue: MinPropsIssue<{}, 2>) => `${issue.requirement} properties expected`;
+      const message = () => 'message';
       expect(minProps(2, message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies MinPropsAction<object, 2, typeof message>);
+      } satisfies MinPropsAction<Input, 2, typeof message>);
     });
   });
 
@@ -56,9 +60,9 @@ describe('minProps', () => {
 
   describe('should return dataset with issues', () => {
     const action = minProps(7, 'message');
-    const baseIssue: Omit<MinPropsIssue<{}, 7>, 'input' | 'received'> = {
+    const baseIssue: Omit<MinPropsIssue<Input, 7>, 'input' | 'received'> = {
       kind: 'validation',
-      type: 'min_properties',
+      type: 'min_props',
       expected: '>=7',
       message: 'message',
       requirement: 7,
@@ -70,7 +74,7 @@ describe('minProps', () => {
         baseIssue,
         [
           { foo: 'foo', bar: 'bar', baz: 'baz' },
-        { foo: 'foo', bar: 'bar', baz: 'baz', lorem: 'ipsum' },
+          { foo: 'foo', bar: 'bar', baz: 'baz', lorem: 'ipsum' },
         ],
         (value) => `${Object.keys(value).length}`
       );
