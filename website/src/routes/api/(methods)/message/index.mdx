@@ -1,63 +1,109 @@
 ---
-title: any
-description: Creates an any schema.
-source: /schemas/any/any.ts
+title: message
+description: Changes the local message configuration of a schema.
+source: /methods/message/message.ts
 contributors:
   - fabian-hiller
-  - morinokami
-  - jasperteo
-  - EltonLobo07
+  - sacrosanctic
 ---
 
-import { Link } from '@builder.io/qwik-city';
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# any
+# message
 
-Creates an any schema.
-
-> This schema function exists only for completeness and is not recommended in practice. Instead, <Link href="../unknown/">`unknown`</Link> should be used to accept unknown data.
+Changes the local message configuration of a schema.
 
 ```ts
-const Schema = v.any();
+const Schema = v.message<TSchema>(schema, message_);
 ```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+- `message_` <Property {...properties['message_']} />
+
+### Explanation
+
+This method overrides the local message configuration of the schema. In practice, it is typically used to specify a single error message for an entire pipeline.
 
 ## Returns
 
 - `Schema` <Property {...properties.Schema} />
 
+## Examples
+
+The following examples show how `message` can be used.
+
+### Email schema
+
+Email schema that uses the same error message for the entire pipeline.
+
+```ts
+const EmailSchema = v.message(
+  v.pipe(v.string(), v.trim(), v.nonEmpty(), v.email(), v.maxLength(100)),
+  'The email is not in the required format.'
+);
+```
+
 ## Related
 
-The following APIs can be combined with `any`.
+The following APIs can be combined with `message`.
 
 ### Schemas
 
 <ApiList
   items={[
+    'any',
     'array',
+    'bigint',
+    'blob',
+    'boolean',
+    'custom',
+    'date',
+    'enum',
     'exactOptional',
+    'file',
+    'function',
+    'instance',
     'intersect',
     'lazy',
+    'literal',
     'looseObject',
     'looseTuple',
     'map',
+    'nan',
+    'never',
     'nonNullable',
     'nonNullish',
     'nonOptional',
+    'null',
     'nullable',
     'nullish',
+    'number',
     'object',
     'objectWithRest',
     'optional',
+    'picklist',
+    'promise',
     'record',
     'set',
     'strictObject',
     'strictTuple',
+    'string',
+    'symbol',
     'tuple',
     'tupleWithRest',
+    'undefined',
     'undefinedable',
     'union',
+    'unknown',
+    'variant',
+    'void',
   ]}
 />
 
@@ -73,12 +119,18 @@ The following APIs can be combined with `any`.
     'getFallback',
     'getFallbacks',
     'is',
+    'keyof',
     'message',
+    'omit',
     'parse',
     'parser',
+    'partial',
+    'pick',
     'pipe',
+    'required',
     'safeParse',
     'safeParser',
+    'unwrap',
   ]}
 />
 
@@ -189,4 +241,39 @@ The following APIs can be combined with `any`.
 
 ### Utils
 
-<ApiList items={['entriesFromList', 'isOfKind', 'isOfType']} />
+<ApiList items={['isOfKind', 'isOfType']} />
+
+### Async
+
+<ApiList
+  items={[
+    'arrayAsync',
+    'customAsync',
+    'exactOptionalAsync',
+    'fallbackAsync',
+    'intersectAsync',
+    'lazyAsync',
+    'looseObjectAsync',
+    'looseTupleAsync',
+    'mapAsync',
+    'nonNullableAsync',
+    'nonNullishAsync',
+    'nonOptionalAsync',
+    'nullableAsync',
+    'nullishAsync',
+    'objectAsync',
+    'objectWithRestAsync',
+    'optionalAsync',
+    'partialAsync',
+    'pipeAsync',
+    'recordAsync',
+    'requiredAsync',
+    'setAsync',
+    'strictObjectAsync',
+    'strictTupleAsync',
+    'tupleAsync',
+    'tupleWithRestAsync',
+    'unionAsync',
+    'variantAsync',
+  ]}
+/>

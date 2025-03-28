@@ -4,7 +4,8 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
-- Improve performance of `variant` and `variantAsync` schema by aborting validation of discriminators early (pull request #1110)
+- Add `message` method to overwrite local error message configuration of a schema (pull request #1103)
+- Change implementation of `variant` and `variantAsync` schema to improve performance by aborting validation of discriminators early (pull request #1110)
 
 ## v1.0.0 (March 18, 2025)
 
