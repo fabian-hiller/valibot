@@ -27,6 +27,27 @@ const JsonEmailSchema = toJsonSchema(ValibotEmailSchema);
 // -> { type: 'string', format: 'email' }
 ```
 
+## OpenAPI Declarations and JSON Schema to Valibot
+
+If your API provides OpenAPI Declarations or JSON Schemas, those can be easily converted to Valibot schemas, so you don't have to do it yourself and keep it in sync. This can be done using the official `valibotGenerator` function. This function is provided via a separate package called [`@valibot/to-valibot`](https://github.com/fabian-hiller/valibot/tree/main/packages/to-valibot).
+
+> See the [README](https://github.com/fabian-hiller/valibot/blob/main/packages/to-valibot/README.md) of the `@valibot/to-valibot` package for more details.
+
+```ts
+import { valibotGenerator } from "@valibot/to-valibot";
+
+const generate = valibotGenerator({
+  outDir: "./src/types",
+});
+
+const schema = fetch("http://api.example.org/v2/api-docs?group=my-awesome-api").then(r => r.json());
+
+await generate({
+  format: 'openapi-json',
+  schema,
+});
+```
+
 ## Cons of JSON Schema
 
 Valibot schemas intentionally do not output JSON Schema natively. This is because JSON Schema is limited to JSON-compliant data structures. In addition, more advanced features like transformations are not supported. Since we want to leverage the full power of TypeScript, we output a custom format instead.
