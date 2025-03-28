@@ -45,11 +45,11 @@ export const properties: Record<string, PropertyProps> = {
       name: 'TSchema',
     },
   },
-  config: {
+  message_: {
     type: {
       type: 'custom',
-      name: 'Config',
-      href: '../Config/',
+      name: 'ErrorMessage',
+      href: '../ErrorMessage/',
       generics: [
         {
           type: 'custom',

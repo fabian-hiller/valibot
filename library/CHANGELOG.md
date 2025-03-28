@@ -2,6 +2,10 @@
 
 All notable changes to the library will be documented in this file.
 
+## vX.X.X (Month DD, YYYY)
+
+- Add `message` method to overwrite local error message config (pull request #1103)
+
 ## v1.0.0 (March 18, 2025)
 
 - Add `assert` method to assert values (issue #862)

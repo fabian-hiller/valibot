@@ -2,16 +2,16 @@ import type {
   BaseIssue,
   BaseSchema,
   BaseSchemaAsync,
-  Config,
+  ErrorMessage,
   InferIssue,
 } from '../../types/index.ts';
 import { _getStandardProps } from '../../utils/index.ts';
 
 /**
- * Changes the message configuration of a schema.
+ * Changes the local message configuration of a schema.
  *
  * @param schema The schema to configure.
- * @param message The error message.
+ * @param message_ The error message.
  *
  * @returns The configured schema.
  */
@@ -20,17 +20,14 @@ export function message<
   const TSchema extends
     | BaseSchema<unknown, unknown, BaseIssue<unknown>>
     | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>,
->(
-  schema: TSchema,
-  message: NonNullable<Config<InferIssue<TSchema>>['message']>
-): TSchema {
+>(schema: TSchema, message_: ErrorMessage<InferIssue<TSchema>>): TSchema {
   return {
     ...schema,
     get '~standard'() {
       return _getStandardProps(this);
     },
-    '~run'(dataset, config_) {
-      return schema['~run'](dataset, { ...config_, message });
+    '~run'(dataset, config) {
+      return schema['~run'](dataset, { ...config, message: message_ });
     },
   };
 }
