@@ -5,18 +5,30 @@ import { expect, test } from 'vitest';
 
 const ALLOWED_EXTENSIONS = ['.ts', '.tsx'];
 
-export function defineTests(transform: Transform) {
+export function defineTests(transform: Transform, selectedTests?: string[]) {
   const testFixturesPath = path.join(process.cwd(), '__testfixtures__');
-  const testNames = fs.readdirSync(testFixturesPath);
-  if (testNames.length === 0) {
-    console.log('No tests found');
-    return;
+  const testsFromDir = fs.readdirSync(testFixturesPath);
+  if (typeof selectedTests === 'undefined') {
+    selectedTests = testsFromDir;
+  } else {
+    const testsFromDirSt = new Set(testsFromDir);
+    const selectedTestsInDir: string[] = [];
+    for (const selectedTest of selectedTests) {
+      if (!testsFromDirSt.has(selectedTest)) {
+        console.warn(
+          `Test "${selectedTest}" was not found in the test directory`
+        );
+        continue;
+      }
+      selectedTestsInDir.push(selectedTest);
+    }
+    selectedTests = selectedTestsInDir;
   }
-  for (const testName of testNames) {
-    const testPath = path.join(testFixturesPath, testName);
+  for (const selectedTest of selectedTests) {
+    const testPath = path.join(testFixturesPath, selectedTest);
     const testFiles = fs.readdirSync(testPath);
     if (testFiles.length === 0) {
-      console.log(`No test files found for "${testName}" test`);
+      console.error(`No test files found for "${selectedTest}" test`);
       continue;
     }
     let inputFile = '';
@@ -33,12 +45,12 @@ export function defineTests(transform: Transform) {
       }
     }
     if (inputFile === '' || outputFile === '') {
-      console.log(`Invalid test file structure for "${testName}" test`);
+      console.error(`Invalid test file structure for "${selectedTest}" test`);
       continue;
     }
     const inputFileExt = path.extname(inputFile);
     if (!ALLOWED_EXTENSIONS.includes(inputFileExt)) {
-      console.log(`Invalid input file extension for "${testName}" test`);
+      console.error(`Invalid input file extension for "${selectedTest}" test`);
       continue;
     }
     const j = jscodeshift.withParser(inputFileExt.slice(1));
@@ -47,7 +59,7 @@ export function defineTests(transform: Transform) {
       path.join(testPath, outputFile),
       'utf8'
     );
-    test(testName, async () => {
+    test(selectedTest, async () => {
       const output = await transform(
         { path: inputFile, source },
         { j, jscodeshift: j, stats: () => {}, report: () => {} },
