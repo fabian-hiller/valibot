@@ -33,6 +33,7 @@
 - [objectWithRest](/api/objectWithRest/)
 - [optional](/api/optional/)
 - [picklist](/api/picklist/)
+- [postalCode](/api/postalCode/)
 - [promise](/api/promise/)
 - [record](/api/record/)
 - [set](/api/set/)
