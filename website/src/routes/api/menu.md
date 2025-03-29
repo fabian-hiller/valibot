@@ -62,6 +62,7 @@
 - [getFallbacks](/api/getFallbacks/)
 - [is](/api/is/)
 - [keyof](/api/keyof/)
+- [message](/api/message/)
 - [omit](/api/omit/)
 - [parse](/api/parse/)
 - [parser](/api/parser/)
