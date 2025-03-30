@@ -1,0 +1,78 @@
+---
+title: minProps
+description: Creates a min properties validation action.
+source: /actions/minProps/minProps.ts
+contributors:
+  - fabian-hiller
+  - muningis
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# minProps
+
+Creates a min properties validation action.
+
+```ts
+const Action = v.minProps<TInput, TRequirement, TMessage>(requirement, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TRequirement` <Property {...properties.TRequirement} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `requirement` <Property {...properties.requirement} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `minProps` you can validate the number of properties in an object. If the input does not match the `requirement`, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `minProps` can be used.
+
+### Minimum object properties
+
+Schema to validate an object with a minimum of 5 properties.
+
+```ts
+const MinPropsSchema = v.pipe(
+  v.record(v.string(), v.number()),
+  v.minProps(5, 'The object should have at least 3 properties.')
+);
+```
+
+## Related
+
+The following APIs can be combined with `minProps`.
+
+### Schemas
+
+<ApiList
+  items={[
+    'looseObject',
+    'object',
+    'objectWithRest',
+    'record',
+    'strictObject',
+    'variant',
+  ]}
+/>
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
