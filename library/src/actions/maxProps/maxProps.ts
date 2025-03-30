@@ -67,7 +67,7 @@ export interface MaxPropsAction<
 }
 
 /**
- * Creates a max props validation action.
+ * Creates a max properties validation action.
  *
  * @param requirement The maximum properties.
  *
@@ -79,7 +79,7 @@ export function maxProps<
 >(requirement: TRequirement): MaxPropsAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a max props validation action.
+ * Creates a max properties validation action.
  *
  * @param requirement The maximum properties.
  * @param message The error message.

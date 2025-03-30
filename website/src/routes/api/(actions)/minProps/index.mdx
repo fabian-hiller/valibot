@@ -31,7 +31,7 @@ const Action = v.minProps<TInput, TRequirement, TMessage>(requirement, message);
 
 ### Explanation
 
-With `minProps` you can validate an amount of keys in an object. If the input does not match the `requirement`, you can use `message` to customize the error message.
+With `minProps` you can validate the number of properties in an object. If the input does not match the `requirement`, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -41,14 +41,14 @@ With `minProps` you can validate an amount of keys in an object. If the input do
 
 The following examples show how `minProps` can be used.
 
-### Minimum properties amount
+### Minimum object properties
 
-Schema to validate an object with a minimum amount of 5 properties.
+Schema to validate an object with a minimum of 5 properties.
 
 ```ts
 const MinPropsSchema = v.pipe(
-  v.objectWithRest({ id: string() }, v.object({ id: string() })),
-  v.minProps(5, 'Object must have at least exceed 5 properties')
+  v.record(v.string(), v.number()),
+  v.minProps(5, 'The object should have at least 3 properties.')
 );
 ```
 
@@ -59,9 +59,20 @@ The following APIs can be combined with `minProps`.
 ### Schemas
 
 <ApiList
-  items={['looseObject', 'object', 'objectWithRest', 'record', 'strictObject']}
+  items={[
+    'looseObject',
+    'object',
+    'objectWithRest',
+    'record',
+    'strictObject',
+    'variant',
+  ]}
 />
 
 ### Methods
 
 <ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

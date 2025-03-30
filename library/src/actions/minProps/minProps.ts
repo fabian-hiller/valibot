@@ -67,7 +67,7 @@ export interface MinPropsAction<
 }
 
 /**
- * Creates a min props validation action.
+ * Creates a min properties validation action.
  *
  * @param requirement The minimum properties.
  *
@@ -79,7 +79,7 @@ export function minProps<
 >(requirement: TRequirement): MinPropsAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a min props validation action.
+ * Creates a min properties validation action.
  *
  * @param requirement The minimum properties.
  * @param message The error message.

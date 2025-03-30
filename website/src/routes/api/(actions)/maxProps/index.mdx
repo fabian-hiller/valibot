@@ -31,7 +31,7 @@ const Action = v.maxProps<TInput, TRequirement, TMessage>(requirement, message);
 
 ### Explanation
 
-With `maxProps` you can validate an amount of keys in an object. If the input does not match the `requirement`, you can use `message` to customize the error message.
+With `maxProps` you can validate the number of properties in an object. If the input does not match the `requirement`, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -41,14 +41,14 @@ With `maxProps` you can validate an amount of keys in an object. If the input do
 
 The following examples show how `maxProps` can be used.
 
-### Maximum properties amount
+### Maximum object properties
 
-Schema to validate an object with a maximum amount of 3 properties.
+Schema to validate an object with a maximum of 5 properties.
 
 ```ts
 const MaxPropsSchema = v.pipe(
-  v.objectWithRest({ id: string() }, v.object({ id: string() })),
-  v.maxProps(3, 'Object must not exceed 3 properties')
+  v.record(v.string(), v.number()),
+  v.maxProps(5, 'Object must not exceed 5 properties.')
 );
 ```
 
@@ -59,9 +59,20 @@ The following APIs can be combined with `maxProps`.
 ### Schemas
 
 <ApiList
-  items={['looseObject', 'object', 'objectWithRest', 'record', 'strictObject']}
+  items={[
+    'looseObject',
+    'object',
+    'objectWithRest',
+    'record',
+    'strictObject',
+    'variant',
+  ]}
 />
 
 ### Methods
 
 <ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />

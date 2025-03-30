@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { RecordIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import {
   minProps,
@@ -30,11 +31,9 @@ describe('minProps', () => {
     });
 
     test('with string message', () => {
-      expect(
-        minProps(2, 'item should contain at least two items')
-      ).toStrictEqual({
+      expect(minProps(2, 'message')).toStrictEqual({
         ...baseAction,
-        message: 'item should contain at least two items',
+        message: 'message',
       } satisfies MinPropsAction<Input, 2, string>);
     });
 
@@ -50,32 +49,50 @@ describe('minProps', () => {
   describe('should return dataset without issues', () => {
     const action = minProps(3);
 
+    test('for untyped inputs', () => {
+      const issues: [RecordIssue] = [
+        {
+          kind: 'schema',
+          type: 'record',
+          input: null,
+          expected: 'Object',
+          received: 'null',
+          message: 'message',
+        },
+      ];
+      expect(
+        action['~run']({ typed: false, value: null, issues }, {})
+      ).toStrictEqual({
+        typed: false,
+        value: null,
+        issues,
+      });
+    });
+
     test('for valid objects', () => {
       expectNoActionIssue(action, [
-        { foo: 'foo', bar: 'bar', baz: 'baz' },
-        { foo: 'foo', bar: 'bar', baz: 'baz', lorem: 'ipsum' },
+        { foo: 1, bar: 2, baz: 3 },
+        { foo: 1, bar: 2, baz: 3, qux: 4 },
+        { foo: 1, bar: 2, baz: 3, qux: 4, quux: 5 },
       ]);
     });
   });
 
   describe('should return dataset with issues', () => {
-    const action = minProps(7, 'message');
-    const baseIssue: Omit<MinPropsIssue<Input, 7>, 'input' | 'received'> = {
+    const action = minProps(3, 'message');
+    const baseIssue: Omit<MinPropsIssue<Input, 3>, 'input' | 'received'> = {
       kind: 'validation',
       type: 'min_props',
-      expected: '>=7',
+      expected: '>=3',
       message: 'message',
-      requirement: 7,
+      requirement: 3,
     };
 
-    test('for invalid object', () => {
+    test('for invalid objects', () => {
       expectActionIssue(
         action,
         baseIssue,
-        [
-          { foo: 'foo', bar: 'bar', baz: 'baz' },
-          { foo: 'foo', bar: 'bar', baz: 'baz', lorem: 'ipsum' },
-        ],
+        [{}, { foo: 1 }, { foo: 1, bar: 2 }],
         (value) => `${Object.keys(value).length}`
       );
     });

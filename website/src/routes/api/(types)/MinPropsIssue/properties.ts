@@ -3,7 +3,11 @@ import type { PropertyProps } from '~/components';
 export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
-    type: 'object',
+    type: {
+      type: 'custom',
+      name: 'Record',
+      generics: ['string', 'unknown'],
+    },
   },
   TRequirement: {
     modifier: 'extends',
@@ -41,7 +45,7 @@ export const properties: Record<string, PropertyProps> = {
       parts: [
         {
           type: 'string',
-          value: '<=',
+          value: '>=',
         },
         {
           type: 'custom',
