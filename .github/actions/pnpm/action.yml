@@ -25,3 +25,16 @@ runs:
     - name: Install dependencies
       shell: bash
       run: pnpm install
+
+    - name: Create build cache
+      id: library-build-cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/library/dist
+        key: library-build-cache-${{ hashFiles('library/src/**/*.ts', '!library/src/**/*.test.ts', '!library/src/**/*.test-d.ts') }}
+
+    - name: Build library
+      if: steps.library-build-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: pnpm build
+      working-directory: library
