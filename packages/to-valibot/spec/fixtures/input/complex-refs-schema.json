@@ -1,0 +1,256 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Complex Refs Schema",
+  "definitions": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "pending",
+        "suspended"
+      ]
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "bug",
+        "feature",
+        "enhancement",
+        "documentation"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "trivial",
+        "minor",
+        "major",
+        "critical"
+      ]
+    },
+    "userRole": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "manager",
+        "developer",
+        "viewer"
+      ]
+    },
+    "permission": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "read",
+            "write",
+            "delete",
+            "execute"
+          ]
+        },
+        "resource": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "resource"
+      ]
+    },
+    "user": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "username": {
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/definitions/userRole"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/permission"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "username",
+        "role"
+      ]
+    },
+    "comment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "content": {
+          "type": "string"
+        },
+        "author": {
+          "$ref": "#/definitions/user"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "content",
+        "author",
+        "createdAt"
+      ]
+    },
+    "issue": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        },
+        "priority": {
+          "$ref": "#/definitions/priority"
+        },
+        "category": {
+          "$ref": "#/definitions/category"
+        },
+        "severity": {
+          "$ref": "#/definitions/severity"
+        },
+        "assignee": {
+          "$ref": "#/definitions/user"
+        },
+        "reporter": {
+          "$ref": "#/definitions/user"
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/comment"
+          }
+        },
+        "relatedIssues": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "status",
+        "priority",
+        "category",
+        "severity",
+        "reporter",
+        "createdAt"
+      ]
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        },
+        "owner": {
+          "$ref": "#/definitions/user"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/user"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/issue"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "owner",
+        "createdAt"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "projects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/project"
+      }
+    },
+    "users": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/user"
+      }
+    }
+  },
+  "required": [
+    "projects"
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Comprehensive Schema",
+  "type": "object",
+  "properties": {
+    "simpleAdditionalProps": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "complexAdditionalProps": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "user",
+              "admin",
+              "guest"
+            ]
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "created": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "limitedProperties": {
+      "type": "object",
+      "minProperties": 2,
+      "maxProperties": 5,
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "constantValue": {
+      "const": "fixed-value-123"
+    },
+    "formatStrings": {
+      "type": "object",
+      "properties": {
+        "dateStr": {
+          "type": "string",
+          "format": "date"
+        },
+        "timeStr": {
+          "type": "string",
+          "format": "time"
+        },
+        "durationStr": {
+          "type": "string",
+          "format": "duration"
+        },
+        "idnEmail": {
+          "type": "string",
+          "format": "idn-email"
+        },
+        "hostname": {
+          "type": "string",
+          "format": "hostname"
+        },
+        "idnHostname": {
+          "type": "string",
+          "format": "idn-hostname"
+        },
+        "ipv4": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "ipv6": {
+          "type": "string",
+          "format": "ipv6"
+        },
+        "jsonPointer": {
+          "type": "string",
+          "format": "json-pointer"
+        },
+        "relativeJsonPointer": {
+          "type": "string",
+          "format": "relative-json-pointer"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "uriReference": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "uriTemplate": {
+          "type": "string",
+          "format": "uri-template"
+        },
+        "iri": {
+          "type": "string",
+          "format": "iri"
+        },
+        "iriReference": {
+          "type": "string",
+          "format": "iri-reference"
+        }
+      }
+    },
+    "prefixItemsArray": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        }
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "containsArray": {
+      "type": "array",
+      "contains": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "required": true
+        }
+      }
+    },
+    "containsLimitsArray": {
+      "type": "array",
+      "contains": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "minContains": 2,
+      "maxContains": 5
+    }
+  },
+  "required": [
+    "simpleAdditionalProps",
+    "complexAdditionalProps",
+    "limitedProperties",
+    "constantValue",
+    "formatStrings",
+    "prefixItemsArray",
+    "containsArray",
+    "containsLimitsArray"
+  ]
+}
