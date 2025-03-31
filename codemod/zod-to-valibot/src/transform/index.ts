@@ -4,7 +4,8 @@ const transform: Transform = (fileInfo, api) => {
   const j = api.jscodeshift;
   const root = j(fileInfo.source);
   root
-    .find(api.jscodeshift.VariableDeclaration, { kind: 'var' })
+    .find(j.VariableDeclaration)
+    .filter((path) => path.node.kind === 'var')
     .forEach((path) => {
       path.node.kind = 'let';
     });
