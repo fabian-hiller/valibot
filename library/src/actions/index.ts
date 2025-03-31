@@ -53,6 +53,7 @@ export * from './maxWords/index.ts';
 export * from './metadata/index.ts';
 export * from './mimeType/index.ts';
 export * from './minBytes/index.ts';
+export * from './minDigits/index.ts';
 export * from './minGraphemes/index.ts';
 export * from './minLength/index.ts';
 export * from './minProps/index.ts';
