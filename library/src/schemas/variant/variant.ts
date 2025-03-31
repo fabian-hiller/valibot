@@ -152,7 +152,7 @@ export function variant(
                     ? discriminatorSchema['~run'](
                         // @ts-expect-error
                         { typed: false, value: input[currentKey] },
-                        config
+                        { abortEarly: true }
                       ).issues
                     : discriminatorSchema.type !== 'exact_optional' &&
                       discriminatorSchema.type !== 'optional' &&

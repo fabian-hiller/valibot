@@ -50,6 +50,12 @@ type Action =
       number,
       v.ErrorMessage<v.MaxLengthIssue<v.LengthInput, number>> | undefined
     >
+  | v.MaxPropsAction<
+      Record<string, unknown>,
+      number,
+      | v.ErrorMessage<v.MaxPropsIssue<Record<string, unknown>, number>>
+      | undefined
+    >
   | v.MaxValueAction<
       v.ValueInput,
       v.ValueInput,
@@ -59,6 +65,12 @@ type Action =
       v.LengthInput,
       number,
       v.ErrorMessage<v.MinLengthIssue<v.LengthInput, number>> | undefined
+    >
+  | v.MinPropsAction<
+      Record<string, unknown>,
+      number,
+      | v.ErrorMessage<v.MinPropsIssue<Record<string, unknown>, number>>
+      | undefined
     >
   | v.MinValueAction<
       v.ValueInput,
@@ -209,6 +221,11 @@ export function convertAction(
       break;
     }
 
+    case 'max_props': {
+      jsonSchema.maxProperties = valibotAction.requirement;
+      break;
+    }
+
     case 'max_value': {
       if (jsonSchema.type !== 'number') {
         handleError(
@@ -233,6 +250,11 @@ export function convertAction(
         }
         jsonSchema.minLength = valibotAction.requirement;
       }
+      break;
+    }
+
+    case 'min_props': {
+      jsonSchema.minProperties = valibotAction.requirement;
       break;
     }
 

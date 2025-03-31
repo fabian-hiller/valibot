@@ -381,6 +381,19 @@ describe('convertAction', () => {
     );
   });
 
+  test('should convert max props action', () => {
+    expect(
+      convertAction(
+        { type: 'object' },
+        v.maxProps<Record<string, unknown>, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'object',
+      maxProperties: 3,
+    });
+  });
+
   test('should convert max value action for numbers', () => {
     expect(
       convertAction(
@@ -490,6 +503,19 @@ describe('convertAction', () => {
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "min_length" action is not supported on type "object".'
     );
+  });
+
+  test('should convert min props action', () => {
+    expect(
+      convertAction(
+        { type: 'object' },
+        v.minProps<Record<string, unknown>, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'object',
+      minProperties: 3,
+    });
   });
 
   test('should convert min value action for numbers', () => {
