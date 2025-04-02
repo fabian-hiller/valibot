@@ -1,0 +1,24 @@
+import { z } from "zod";
+
+const EmailSchema = z.string().email();
+const UrlSchema = z.string().url();
+const EmojiSchema = z.string().emoji();
+const UUIDSchema = z.string().uuid();
+const NanoIDSchema = z.string().nanoid();
+const CUID2Schema = z.string().cuid2();
+const ULIDSchema = z.string().ulid();
+const Base64Schema = z.string().base64();
+const IpSchema = z.string().ip();
+const IpV4Schema = z.string().ip({ version: "v4" });
+const IpV6Schema = z.string().ip({ version: "v6" });
+const DateSchema = z.string().date();
+const RegexSchema = z.string().regex(/valibot/iu);
+const StartsWithSchema = z.string().startsWith("foo");
+const EndsWithSchema = z.string().endsWith("bar");
+const MinLengthSchema = z.string().min(5);
+const MaxLengthSchema = z.string().max(10);
+const LengthSchema = z.string().length(12);
+const NonEmptySchema = z.string().nonempty();
+const TrimSchema = z.string().trim();
+const ToLowerSchema = z.string().toLowerCase();
+const ToUpperSchema = z.string().toUpperCase();
