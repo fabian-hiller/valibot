@@ -5,6 +5,7 @@ source: /actions/minEntries/minEntries.ts
 contributors:
   - fabian-hiller
   - muningis
+  - EltonLobo07
 ---
 
 import { ApiList, Property } from '~/components';
@@ -51,7 +52,7 @@ Schema to validate an object with a minimum of 5 properties.
 ```ts
 const MinEntriesSchema = v.pipe(
   v.record(v.string(), v.number()),
-  v.minEntries(5, 'The object should have at least 3 entries.')
+  v.minEntries(5, 'The object should have at least 5 entries.')
 );
 ```
 
