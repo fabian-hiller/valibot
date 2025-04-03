@@ -45,32 +45,32 @@ type Action =
       number,
       v.ErrorMessage<v.LengthIssue<v.LengthInput, number>> | undefined
     >
+  | v.MaxEntriesAction<
+      Record<string, unknown>,
+      number,
+      | v.ErrorMessage<v.MaxEntriesIssue<Record<string, unknown>, number>>
+      | undefined
+    >
   | v.MaxLengthAction<
       v.LengthInput,
       number,
       v.ErrorMessage<v.MaxLengthIssue<v.LengthInput, number>> | undefined
-    >
-  | v.MaxPropsAction<
-      Record<string, unknown>,
-      number,
-      | v.ErrorMessage<v.MaxPropsIssue<Record<string, unknown>, number>>
-      | undefined
     >
   | v.MaxValueAction<
       v.ValueInput,
       v.ValueInput,
       v.ErrorMessage<v.MaxValueIssue<v.ValueInput, v.ValueInput>> | undefined
     >
+  | v.MinEntriesAction<
+      Record<string, unknown>,
+      number,
+      | v.ErrorMessage<v.MinEntriesIssue<Record<string, unknown>, number>>
+      | undefined
+    >
   | v.MinLengthAction<
       v.LengthInput,
       number,
       v.ErrorMessage<v.MinLengthIssue<v.LengthInput, number>> | undefined
-    >
-  | v.MinPropsAction<
-      Record<string, unknown>,
-      number,
-      | v.ErrorMessage<v.MinPropsIssue<Record<string, unknown>, number>>
-      | undefined
     >
   | v.MinValueAction<
       v.ValueInput,
@@ -206,6 +206,11 @@ export function convertAction(
       break;
     }
 
+    case 'max_entries': {
+      jsonSchema.maxProperties = valibotAction.requirement;
+      break;
+    }
+
     case 'max_length': {
       if (jsonSchema.type === 'array') {
         jsonSchema.maxItems = valibotAction.requirement;
@@ -221,11 +226,6 @@ export function convertAction(
       break;
     }
 
-    case 'max_props': {
-      jsonSchema.maxProperties = valibotAction.requirement;
-      break;
-    }
-
     case 'max_value': {
       if (jsonSchema.type !== 'number') {
         handleError(
@@ -235,6 +235,11 @@ export function convertAction(
       }
       // @ts-expect-error
       jsonSchema.maximum = valibotAction.requirement;
+      break;
+    }
+
+    case 'min_entries': {
+      jsonSchema.minProperties = valibotAction.requirement;
       break;
     }
 
@@ -250,11 +255,6 @@ export function convertAction(
         }
         jsonSchema.minLength = valibotAction.requirement;
       }
-      break;
-    }
-
-    case 'min_props': {
-      jsonSchema.minProperties = valibotAction.requirement;
       break;
     }
 

@@ -25,8 +25,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'MaxPropsIssue',
-              href: '../MaxPropsIssue/',
+              name: 'MaxEntriesIssue',
+              href: '../MaxEntriesIssue/',
               generics: [
                 {
                   type: 'custom',
@@ -61,8 +61,8 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'MaxPropsIssue',
-          href: '../MaxPropsIssue/',
+          name: 'MaxEntriesIssue',
+          href: '../MaxEntriesIssue/',
           generics: [
             {
               type: 'custom',
@@ -80,15 +80,15 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'max_props',
+      value: 'max_entries',
     },
   },
   reference: {
     type: {
       type: 'custom',
       modifier: 'typeof',
-      name: 'maxProps',
-      href: '../maxProps/',
+      name: 'maxEntries',
+      href: '../maxEntries/',
     },
   },
   expects: {

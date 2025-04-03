@@ -25,8 +25,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'MinPropsIssue',
-              href: '../MinPropsIssue/',
+              name: 'MinEntriesIssue',
+              href: '../MinEntriesIssue/',
               generics: [
                 {
                   type: 'custom',
@@ -61,8 +61,8 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'MinPropsIssue',
-          href: '../MinPropsIssue/',
+          name: 'MinEntriesIssue',
+          href: '../MinEntriesIssue/',
           generics: [
             {
               type: 'custom',
@@ -80,15 +80,15 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'min_props',
+      value: 'min_entries',
     },
   },
   reference: {
     type: {
       type: 'custom',
       modifier: 'typeof',
-      name: 'minProps',
-      href: '../minProps/',
+      name: 'minEntries',
+      href: '../minEntries/',
     },
   },
   expects: {

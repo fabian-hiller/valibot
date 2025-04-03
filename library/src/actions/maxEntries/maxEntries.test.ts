@@ -1,20 +1,20 @@
 import { describe, expect, test } from 'vitest';
-import { RecordIssue } from '../../schemas/index.ts';
+import type { RecordIssue } from '../../schemas/index.ts';
 import { expectActionIssue, expectNoActionIssue } from '../../vitest/index.ts';
 import {
-  maxProps,
-  type MaxPropsAction,
-  type MaxPropsIssue,
-} from './maxProps.ts';
+  maxEntries,
+  type MaxEntriesAction,
+  type MaxEntriesIssue,
+} from './maxEntries.ts';
 
-describe('maxProps', () => {
+describe('maxEntries', () => {
   type Input = Record<string, number>;
 
   describe('should return action object', () => {
-    const baseAction: Omit<MaxPropsAction<Input, 3, never>, 'message'> = {
+    const baseAction: Omit<MaxEntriesAction<Input, 3, never>, 'message'> = {
       kind: 'validation',
-      type: 'max_props',
-      reference: maxProps,
+      type: 'max_entries',
+      reference: maxEntries,
       expects: '<=3',
       requirement: 3,
       async: false,
@@ -22,32 +22,32 @@ describe('maxProps', () => {
     };
 
     test('with undefined message', () => {
-      const action: MaxPropsAction<Input, 3, undefined> = {
+      const action: MaxEntriesAction<Input, 3, undefined> = {
         ...baseAction,
         message: undefined,
       };
-      expect(maxProps(3)).toStrictEqual(action);
-      expect(maxProps(3, undefined)).toStrictEqual(action);
+      expect(maxEntries(3)).toStrictEqual(action);
+      expect(maxEntries(3, undefined)).toStrictEqual(action);
     });
 
     test('with string message', () => {
-      expect(maxProps(3, 'message')).toStrictEqual({
+      expect(maxEntries(3, 'message')).toStrictEqual({
         ...baseAction,
         message: 'message',
-      } satisfies MaxPropsAction<Input, 3, string>);
+      } satisfies MaxEntriesAction<Input, 3, string>);
     });
 
     test('with function message', () => {
       const message = () => 'message';
-      expect(maxProps(3, message)).toStrictEqual({
+      expect(maxEntries(3, message)).toStrictEqual({
         ...baseAction,
         message,
-      } satisfies MaxPropsAction<Input, 3, typeof message>);
+      } satisfies MaxEntriesAction<Input, 3, typeof message>);
     });
   });
 
   describe('should return dataset without issues', () => {
-    const action = maxProps(3);
+    const action = maxEntries(3);
 
     test('for untyped inputs', () => {
       const issues: [RecordIssue] = [
@@ -80,10 +80,10 @@ describe('maxProps', () => {
   });
 
   describe('should return dataset with issues', () => {
-    const action = maxProps(3, 'message');
-    const baseIssue: Omit<MaxPropsIssue<Input, 3>, 'input' | 'received'> = {
+    const action = maxEntries(3, 'message');
+    const baseIssue: Omit<MaxEntriesIssue<Input, 3>, 'input' | 'received'> = {
       kind: 'validation',
-      type: 'max_props',
+      type: 'max_entries',
       expected: '<=3',
       message: 'message',
       requirement: 3,

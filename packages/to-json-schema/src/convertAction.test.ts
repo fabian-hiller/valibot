@@ -381,11 +381,11 @@ describe('convertAction', () => {
     );
   });
 
-  test('should convert max props action', () => {
+  test('should convert max entries action', () => {
     expect(
       convertAction(
         { type: 'object' },
-        v.maxProps<Record<string, unknown>, 3>(3),
+        v.maxEntries<Record<string, unknown>, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -505,11 +505,11 @@ describe('convertAction', () => {
     );
   });
 
-  test('should convert min props action', () => {
+  test('should convert min entries action', () => {
     expect(
       convertAction(
         { type: 'object' },
-        v.minProps<Record<string, unknown>, 3>(3),
+        v.minEntries<Record<string, unknown>, 3>(3),
         undefined
       )
     ).toStrictEqual({

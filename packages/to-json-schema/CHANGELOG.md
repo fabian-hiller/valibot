@@ -4,7 +4,7 @@ All notable changes to the library will be documented in this file.
 
 ## vX.X.X (Month DD, YYYY)
 
-- Add support for `minProps` and `maxProps` action (pull request #1100)
+- Add support for `minEntries` and `maxEntries` action (pull request #1100)
 - Change Valibot peer dependency to v1.1.0
 
 ## v1.0.0 (March 19, 2025)
