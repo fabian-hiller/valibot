@@ -150,6 +150,7 @@ describe('convertSchema', () => {
       ).toStrictEqual({
         type: 'array',
         items: [{ type: 'number' }, { type: 'string' }],
+        minItems: 2,
         additionalItems: false,
       });
     });
@@ -165,6 +166,7 @@ describe('convertSchema', () => {
       ).toStrictEqual({
         type: 'array',
         items: [{ type: 'number' }, { type: 'string' }],
+        minItems: 2,
         additionalItems: { type: 'boolean' },
       });
     });
@@ -180,6 +182,7 @@ describe('convertSchema', () => {
       ).toStrictEqual({
         type: 'array',
         items: [{ type: 'number' }, { type: 'string' }],
+        minItems: 2,
         additionalItems: true,
       });
     });
@@ -195,6 +198,7 @@ describe('convertSchema', () => {
       ).toStrictEqual({
         type: 'array',
         items: [{ type: 'number' }, { type: 'string' }],
+        minItems: 2,
         additionalItems: false,
       });
     });
