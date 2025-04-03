@@ -151,7 +151,6 @@ describe('convertSchema', () => {
         type: 'array',
         items: [{ type: 'number' }, { type: 'string' }],
         minItems: 2,
-        additionalItems: false,
       });
     });
 
@@ -183,7 +182,6 @@ describe('convertSchema', () => {
         type: 'array',
         items: [{ type: 'number' }, { type: 'string' }],
         minItems: 2,
-        additionalItems: true,
       });
     });
 

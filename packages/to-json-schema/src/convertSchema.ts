@@ -243,8 +243,8 @@ export function convertSchema(
           config,
           context
         );
-      } else {
-        jsonSchema.additionalItems = valibotSchema.type === 'loose_tuple';
+      } else if (valibotSchema.type === 'strict_tuple') {
+        jsonSchema.additionalItems = false;
       }
 
       break;
