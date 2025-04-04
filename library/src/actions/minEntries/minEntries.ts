@@ -130,7 +130,7 @@ export function minEntries(
       if (!dataset.typed) return dataset;
       const count = Object.keys(dataset.value).length;
       if (dataset.typed && count < this.requirement) {
-        _addIssue(this, 'properties', dataset, config, {
+        _addIssue(this, 'entries', dataset, config, {
           received: `${count}`,
         });
       }
