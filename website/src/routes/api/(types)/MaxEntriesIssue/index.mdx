@@ -1,6 +1,6 @@
 ---
-title: MinPropsAction
-description: Min props action interface.
+title: MaxEntriesIssue
+description: Max entries issue interface.
 contributors:
   - fabian-hiller
   - muningis
@@ -9,21 +9,20 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# MinPropsAction
+# MaxEntriesIssue
 
-Min props action interface.
+Max entries issue interface.
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
 - `TRequirement` <Property {...properties.TRequirement} />
-- `TMessage` <Property {...properties.TMessage} />
 
 ## Definition
 
-- `MinPropsAction` <Property {...properties.BaseValidation} />
+- `MaxEntriesIssue` <Property {...properties.BaseIssue} />
+  - `kind` <Property {...properties.kind} />
   - `type` <Property {...properties.type} />
-  - `reference` <Property {...properties.reference} />
-  - `expects` <Property {...properties.expects} />
+  - `expected` <Property {...properties.expected} />
+  - `received` <Property {...properties.received} />
   - `requirement` <Property {...properties.requirement} />
-  - `message` <Property {...properties.message} />

@@ -1,38 +1,38 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import {
-  maxProps,
-  type MaxPropsAction,
-  type MaxPropsIssue,
-} from './maxProps.ts';
+  maxEntries,
+  type MaxEntriesAction,
+  type MaxEntriesIssue,
+} from './maxEntries.ts';
 
-describe('maxProps', () => {
+describe('maxEntries', () => {
   type Input = Record<string, number>;
 
   describe('should return action object', () => {
     test('with undefined message', () => {
-      type Action = MaxPropsAction<Input, 10, undefined>;
-      expectTypeOf(maxProps<Input, 10>(10)).toEqualTypeOf<Action>();
+      type Action = MaxEntriesAction<Input, 10, undefined>;
+      expectTypeOf(maxEntries<Input, 10>(10)).toEqualTypeOf<Action>();
       expectTypeOf(
-        maxProps<Input, 10, undefined>(10, undefined)
+        maxEntries<Input, 10, undefined>(10, undefined)
       ).toEqualTypeOf<Action>();
     });
 
     test('with string message', () => {
-      expectTypeOf(maxProps<Input, 10, 'message'>(10, 'message')).toEqualTypeOf<
-        MaxPropsAction<Input, 10, 'message'>
-      >();
+      expectTypeOf(
+        maxEntries<Input, 10, 'message'>(10, 'message')
+      ).toEqualTypeOf<MaxEntriesAction<Input, 10, 'message'>>();
     });
 
     test('with function message', () => {
       expectTypeOf(
-        maxProps<Input, 10, () => string>(10, () => 'message')
-      ).toEqualTypeOf<MaxPropsAction<Input, 10, () => string>>();
+        maxEntries<Input, 10, () => string>(10, () => 'message')
+      ).toEqualTypeOf<MaxEntriesAction<Input, 10, () => string>>();
     });
   });
 
   describe('should infer correct types', () => {
-    type Action = MaxPropsAction<Input, 10, undefined>;
+    type Action = MaxEntriesAction<Input, 10, undefined>;
 
     test('of input', () => {
       expectTypeOf<InferInput<Action>>().toEqualTypeOf<Input>();
@@ -44,7 +44,7 @@ describe('maxProps', () => {
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<
-        MaxPropsIssue<Input, 10>
+        MaxEntriesIssue<Input, 10>
       >();
     });
   });

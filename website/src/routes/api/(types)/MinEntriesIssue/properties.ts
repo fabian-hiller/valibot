@@ -36,7 +36,7 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'max_props',
+      value: 'min_entries',
     },
   },
   expected: {
@@ -45,7 +45,7 @@ export const properties: Record<string, PropertyProps> = {
       parts: [
         {
           type: 'string',
-          value: '<=',
+          value: '>=',
         },
         {
           type: 'custom',

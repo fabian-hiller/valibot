@@ -25,8 +25,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'MinPropsIssue',
-              href: '../MinPropsIssue/',
+              name: 'MinEntriesIssue',
+              href: '../MinEntriesIssue/',
               generics: [
                 {
                   type: 'custom',
@@ -44,68 +44,6 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  BaseValidation: {
-    modifier: 'extends',
-    type: {
-      type: 'custom',
-      name: 'BaseValidation',
-      href: '../BaseValidation/',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TInput',
-        },
-        {
-          type: 'custom',
-          name: 'TInput',
-        },
-        {
-          type: 'custom',
-          name: 'MinPropsIssue',
-          href: '../MinPropsIssue/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TInput',
-            },
-            {
-              type: 'custom',
-              name: 'TRequirement',
-            },
-          ],
-        },
-      ],
-    },
-  },
-  type: {
-    type: {
-      type: 'string',
-      value: 'min_props',
-    },
-  },
-  reference: {
-    type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'minProps',
-      href: '../minProps/',
-    },
-  },
-  expects: {
-    type: {
-      type: 'template',
-      parts: [
-        {
-          type: 'string',
-          value: '>=',
-        },
-        {
-          type: 'custom',
-          name: 'TRequirement',
-        },
-      ],
-    },
-  },
   requirement: {
     type: {
       type: 'custom',
@@ -116,6 +54,27 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'custom',
       name: 'TMessage',
+    },
+  },
+  Action: {
+    type: {
+      type: 'custom',
+      name: 'MinEntriesAction',
+      href: '../MinEntriesAction/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TRequirement',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
+        },
+      ],
     },
   },
 };

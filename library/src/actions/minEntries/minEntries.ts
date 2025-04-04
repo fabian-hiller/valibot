@@ -6,9 +6,11 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * Max props issue interface.
+ * Min entries issue interface.
+ *
+ * @beta
  */
-export interface MaxPropsIssue<
+export interface MinEntriesIssue<
   TInput extends Record<string, unknown>,
   TRequirement extends number,
 > extends BaseIssue<TInput> {
@@ -19,45 +21,51 @@ export interface MaxPropsIssue<
   /**
    * The issue type.
    */
-  readonly type: 'max_props';
+  readonly type: 'min_entries';
   /**
    * The expected property.
    */
-  readonly expected: `<=${TRequirement}`;
+  readonly expected: `>=${TRequirement}`;
   /**
    * The received property.
    */
   readonly received: `${number}`;
   /**
-   * The maximum properties.
+   * The minimum entries.
    */
   readonly requirement: TRequirement;
 }
 
 /**
- * Max props action interface.
+ * Min entries action interface.
+ *
+ * @beta
  */
-export interface MaxPropsAction<
+export interface MinEntriesAction<
   TInput extends Record<string, unknown>,
   TRequirement extends number,
   TMessage extends
-    | ErrorMessage<MaxPropsIssue<TInput, TRequirement>>
+    | ErrorMessage<MinEntriesIssue<TInput, TRequirement>>
     | undefined,
-> extends BaseValidation<TInput, TInput, MaxPropsIssue<TInput, TRequirement>> {
+> extends BaseValidation<
+    TInput,
+    TInput,
+    MinEntriesIssue<TInput, TRequirement>
+  > {
   /**
    * The action type.
    */
-  readonly type: 'max_props';
+  readonly type: 'min_entries';
   /**
    * The action reference.
    */
-  readonly reference: typeof maxProps;
+  readonly reference: typeof minEntries;
   /**
    * The expected property.
    */
-  readonly expects: `<=${TRequirement}`;
+  readonly expects: `>=${TRequirement}`;
   /**
-   * The maximum properties.
+   * The minimum entries.
    */
   readonly requirement: TRequirement;
   /**
@@ -67,58 +75,62 @@ export interface MaxPropsAction<
 }
 
 /**
- * Creates a max properties validation action.
+ * Creates a min entries validation action.
  *
- * @param requirement The maximum properties.
+ * @param requirement The minimum entries.
  *
- * @returns A max props action.
+ * @returns A min entries action.
+ *
+ * @beta
  */
-export function maxProps<
+export function minEntries<
   TInput extends Record<string, unknown>,
   const TRequirement extends number,
->(requirement: TRequirement): MaxPropsAction<TInput, TRequirement, undefined>;
+>(requirement: TRequirement): MinEntriesAction<TInput, TRequirement, undefined>;
 
 /**
- * Creates a max properties validation action.
+ * Creates a min entries validation action.
  *
- * @param requirement The maximum properties.
+ * @param requirement The minimum entries.
  * @param message The error message.
  *
- * @returns A max props action.
+ * @returns A min entries action.
+ *
+ * @beta
  */
-export function maxProps<
+export function minEntries<
   TInput extends Record<string, unknown>,
   const TRequirement extends number,
   const TMessage extends
-    | ErrorMessage<MaxPropsIssue<TInput, TRequirement>>
+    | ErrorMessage<MinEntriesIssue<TInput, TRequirement>>
     | undefined,
 >(
   requirement: TRequirement,
   message: TMessage
-): MaxPropsAction<TInput, TRequirement, TMessage>;
+): MinEntriesAction<TInput, TRequirement, TMessage>;
 
 // @__NO_SIDE_EFFECTS__
-export function maxProps(
+export function minEntries(
   requirement: number,
-  message?: ErrorMessage<MaxPropsIssue<Record<string, unknown>, number>>
-): MaxPropsAction<
+  message?: ErrorMessage<MinEntriesIssue<Record<string, unknown>, number>>
+): MinEntriesAction<
   Record<string, unknown>,
   number,
-  ErrorMessage<MaxPropsIssue<Record<string, unknown>, number>> | undefined
+  ErrorMessage<MinEntriesIssue<Record<string, unknown>, number>> | undefined
 > {
   return {
     kind: 'validation',
-    type: 'max_props',
-    reference: maxProps,
+    type: 'min_entries',
+    reference: minEntries,
     async: false,
-    expects: `<=${requirement}`,
+    expects: `>=${requirement}`,
     requirement,
     message,
     '~run'(dataset, config) {
       if (!dataset.typed) return dataset;
       const count = Object.keys(dataset.value).length;
-      if (dataset.typed && count > this.requirement) {
-        _addIssue(this, 'properties', dataset, config, {
+      if (dataset.typed && count < this.requirement) {
+        _addIssue(this, 'entries', dataset, config, {
           received: `${count}`,
         });
       }
