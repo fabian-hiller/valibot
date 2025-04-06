@@ -118,6 +118,7 @@ let refCount = 0;
  * @param valibotSchema The Valibot schema object.
  * @param config The conversion configuration.
  * @param context The conversion context.
+ * @param isDefinition Whether this conversion is for a definition.
  *
  * @returns The converted JSON Schema.
  */
@@ -125,11 +126,13 @@ export function convertSchema(
   jsonSchema: JSONSchema7,
   valibotSchema: SchemaOrPipe,
   config: ConversionConfig | undefined,
-  context: ConversionContext
+  context: ConversionContext,
+  isDefinition = false
 ): JSONSchema7 {
-  // If schema is in reference map, use reference and skip conversion
+  // If schema is in reference map and this is not a conversion of a schema
+  // definition, use reference and skip conversion
   const referenceId = context.referenceMap.get(valibotSchema);
-  if (referenceId && referenceId in context.definitions) {
+  if (referenceId && !isDefinition) {
     jsonSchema.$ref = `#/$defs/${referenceId}`;
     return jsonSchema;
   }
@@ -165,7 +168,9 @@ export function convertSchema(
           // pipe elements may modify it, which can result in an invalid JSON
           // Schema output.
           const referenceId = tempJsonSchema.$ref.split('/')[2];
-          Object.assign(jsonSchema, context.definitions[referenceId]);
+          const definition = context.definitions[referenceId] ??
+          convertSchema({}, valibotPipeItem, config, context, true);
+          Object.assign(jsonSchema, definition);
 
           // Otherwise, merge temporary JSON Schema into JSON Schema object
         } else {
@@ -426,7 +431,8 @@ export function convertSchema(
           {},
           wrappedValibotSchema as SchemaOrPipe,
           config,
-          context
+          context,
+          true
         );
       }
 

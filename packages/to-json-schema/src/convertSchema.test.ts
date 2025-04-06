@@ -23,6 +23,55 @@ describe('convertSchema', () => {
         $ref: '#/$defs/foo',
       });
     });
+
+    test('should skip definition in conversion marked as isDefinition', () => {
+      const stringSchema = v.string();
+      expect(
+        convertSchema(
+          {},
+          stringSchema,
+          undefined,
+          createContext({
+            definitions: { foo: { type: 'string' } },
+            referenceMap: new Map().set(stringSchema, 'foo'),
+          }),
+          true
+        )
+      ).toStrictEqual({
+        type: 'string',
+      });
+    });
+    
+    test('should skip only root definition in conversion of nested schema marked as isDefinition', () => {
+      const stringSchema = v.string();
+      const arraySchema = v.array(stringSchema);
+      const definitions = {
+        str: { type: 'string' },
+        arr: {
+          type: 'array',
+          items: { $ref: '#/$defs/str' },
+        },
+      } as const;
+      const referenceMap = new Map<
+        v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+        string
+      >([
+        [stringSchema, 'str'],
+        [arraySchema, 'arr'],
+      ]);
+      expect(
+        convertSchema(
+          {},
+          arraySchema,
+          undefined,
+          createContext({ definitions, referenceMap }),
+          true
+        )
+      ).toStrictEqual({
+        type: 'array',
+        items: { $ref: '#/$defs/str' },
+      });
+    })
   });
 
   describe('schema with pipe', () => {
