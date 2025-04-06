@@ -168,8 +168,9 @@ export function convertSchema(
           // pipe elements may modify it, which can result in an invalid JSON
           // Schema output.
           const referenceId = tempJsonSchema.$ref.split('/')[2];
-          const definition = context.definitions[referenceId] ??
-          convertSchema({}, valibotPipeItem, config, context, true);
+          const definition =
+            context.definitions[referenceId] ??
+            convertSchema({}, valibotPipeItem, config, context, true);
           Object.assign(jsonSchema, definition);
 
           // Otherwise, merge temporary JSON Schema into JSON Schema object

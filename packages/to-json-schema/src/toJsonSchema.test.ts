@@ -87,9 +87,9 @@ describe('toJsonSchema', () => {
         { complexSchema, aliasesSchema, stringSchema },
       ];
       for (const definitions of definitionPermutations) {
-        expect(
-          toJsonSchema(complexSchema, { definitions })
-        ).toStrictEqual(expectedJsonSchema);
+        expect(toJsonSchema(complexSchema, { definitions })).toStrictEqual(
+          expectedJsonSchema
+        );
       }
     });
 
