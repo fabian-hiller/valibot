@@ -1,0 +1,81 @@
+---
+title: json
+description: Creates a JSON transformation action.
+source: /actions/json/json.ts
+contributors:
+  - EskiMojo14
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# json
+
+Creates a JSON transformation action.
+
+```ts
+const Action = v.json<TInput, TReviver, TMessage>(reviver, message);
+```
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TReviver` <Property {...properties.TReviver} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Parameters
+
+- `reviver` <Property {...properties.reviver} />
+- `message` <Property {...properties.message} />
+
+### Explanation
+
+With `json` you can parse a JSON string. If the input is not valid JSON, you can use `message` to customize the error message.
+
+## Returns
+
+- `Action` <Property {...properties.Action} />
+
+## Examples
+
+The following examples show how `json` can be used.
+
+### Parse JSON
+
+Parse a JSON string.
+
+```ts
+const StringifiedObjectSchema = v.pipe(
+  v.string(),
+  v.json(),
+  v.object({ key: v.string() })
+);
+```
+
+### Parse JSON with reviver
+
+Parse a JSON string with a reviver function.
+
+```ts
+const StringifiedObjectSchema = v.pipe(
+  v.string(),
+  v.json((k, v) => (typeof v === 'string' ? v.toUpperCase() : v)),
+  v.object({ key: v.string() })
+);
+```
+
+## Related
+
+The following APIs can be combined with `json`.
+
+### Schemas
+
+<ApiList items={['any', 'custom', 'string']} />
+
+### Methods
+
+<ApiList items={['pipe']} />
+
+### Utils
+
+<ApiList items={['isOfKind', 'isOfType']} />
