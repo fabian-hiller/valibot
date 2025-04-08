@@ -1,0 +1,27 @@
+---
+title: JsonAction
+description: JSON action interface.
+contributors:
+  - EskiMojo14
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# JsonAction
+
+JSON action interface.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TReviver` <Property {...properties.TReviver} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `JsonAction` <Property {...properties.BaseTransformation} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `reviver` <Property {...properties.reviver} />
+  - `message` <Property {...properties.message} />
