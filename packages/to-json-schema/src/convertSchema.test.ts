@@ -127,6 +127,15 @@ describe('convertSchema', () => {
         type: 'string',
       });
     });
+
+    test('should convert file schema', () => {
+      expect(
+        convertSchema({}, v.file(), undefined, createContext())
+      ).toStrictEqual({
+        type: 'string',
+        format: 'binary',
+      });
+    });
   });
 
   describe('complex schemas', () => {
