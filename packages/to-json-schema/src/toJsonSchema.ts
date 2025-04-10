@@ -33,7 +33,8 @@ export function toJsonSchema(
         // @ts-expect-error
         config.definitions[key],
         config,
-        context
+        context,
+        true
       );
     }
   }
