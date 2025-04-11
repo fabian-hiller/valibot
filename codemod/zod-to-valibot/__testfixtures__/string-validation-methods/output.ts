@@ -22,3 +22,12 @@ const NonEmptySchema = v.pipe(v.string(), v.nonEmpty());
 const TrimSchema = v.pipe(v.string(), v.trim());
 const ToLowerSchema = v.pipe(v.string(), v.toLowerCase());
 const ToUpperSchema = v.pipe(v.string(), v.toUpperCase());
+const IncludesSchema = v.pipe(v.string(), v.includes("foo"));
+// `position` is not supported by Valibot
+const IncludesWithPositionSchema = v.pipe(v.string(), v.includes("bar"));
+const TimeSchema = v.pipe(v.string(), v.isoTimeSecond());
+// `precision` is not supported by Valibot
+const TimeWithPrecisionSchema = v.pipe(v.string(), v.isoTimeSecond());
+const DateTimeSchema = v.pipe(v.string(), v.isoTimestamp());
+// none of the customizations are supported by Valibot
+const DateTimeWithCustomizatonsSchema = v.pipe(v.string(), v.isoTimestamp());

@@ -22,3 +22,12 @@ const NonEmptySchema = z.string().nonempty();
 const TrimSchema = z.string().trim();
 const ToLowerSchema = z.string().toLowerCase();
 const ToUpperSchema = z.string().toUpperCase();
+const IncludesSchema = z.string().includes("foo");
+// `position` is not supported by Valibot
+const IncludesWithPositionSchema = z.string().includes("bar", { position: 1 });
+const TimeSchema = z.string().time();
+// `precision` is not supported by Valibot
+const TimeWithPrecisionSchema = z.string().time({ precision: 3 });
+const DateTimeSchema = z.string().datetime();
+// none of the customizations are supported by Valibot
+const DateTimeWithCustomizatonsSchema = z.string().datetime({ offset: true, local: false, precision: 2 });
