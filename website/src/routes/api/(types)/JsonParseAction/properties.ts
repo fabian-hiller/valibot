@@ -44,8 +44,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'JsonIssue',
-              href: '../JsonIssue/',
+              name: 'JsonParseIssue',
+              href: '../JsonParseIssue/',
               generics: [
                 {
                   type: 'custom',
@@ -59,6 +59,49 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
+  BaseTransformation: {
+    modifier: 'extends',
+    type: {
+      type: 'custom',
+      name: 'BaseTransformation',
+      href: '../BaseTransformation/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'unknown',
+        },
+        {
+          type: 'custom',
+          name: 'JsonParseIssue',
+          href: '../JsonParseIssue/',
+          generics: [
+            {
+              type: 'custom',
+              name: 'TInput',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  type: {
+    type: {
+      type: 'string',
+      value: 'json_parse',
+    },
+  },
+  reference: {
+    type: {
+      type: 'custom',
+      modifier: 'typeof',
+      name: 'jsonParse',
+      href: '../jsonParse/',
+    },
+  },
   reviver: {
     type: {
       type: 'custom',
@@ -69,27 +112,6 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'custom',
       name: 'TMessage',
-    },
-  },
-  Action: {
-    type: {
-      type: 'custom',
-      name: 'JsonAction',
-      href: '../JsonAction/',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TInput',
-        },
-        {
-          type: 'custom',
-          name: 'TReviver',
-        },
-        {
-          type: 'custom',
-          name: 'TMessage',
-        },
-      ],
     },
   },
 };

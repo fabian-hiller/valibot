@@ -1,6 +1,6 @@
 ---
-title: JsonIssue
-description: JSON issue interface.
+title: JsonParseIssue
+description: JSON parse issue interface.
 contributors:
   - EskiMojo14
 ---
@@ -8,9 +8,9 @@ contributors:
 import { Property } from '~/components';
 import { properties } from './properties';
 
-# JsonIssue
+# JsonParseIssue
 
-JSON issue interface.
+JSON parse issue interface.
 
 ## Generics
 
@@ -18,7 +18,7 @@ JSON issue interface.
 
 ## Definition
 
-- `JsonIssue` <Property {...properties.BaseIssue} />
+- `JsonParseIssue` <Property {...properties.BaseIssue} />
   - `kind` <Property {...properties.kind} />
   - `type` <Property {...properties.type} />
   - `expected` <Property {...properties.expected} />
