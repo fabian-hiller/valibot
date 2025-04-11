@@ -61,19 +61,13 @@ export interface JsonParseAction<
 /**
  * Creates a JSON parse action.
  *
- * @param reviver The reviver function.
- * @param message The error message.
- *
  * @returns A JSON parse action.
  */
-export function jsonParse<
-  TInput extends string,
-  TReviver extends JsonReviver | undefined,
-  const TMessage extends ErrorMessage<JsonParseIssue<TInput>> | undefined,
->(
-  reviver: TReviver,
-  message: TMessage
-): JsonParseAction<TInput, TReviver, TMessage>;
+export function jsonParse<TInput extends string>(): JsonParseAction<
+  TInput,
+  undefined,
+  undefined
+>;
 
 /**
  * Creates a JSON parse action.
@@ -89,13 +83,19 @@ export function jsonParse<TInput extends string, TReviver extends JsonReviver>(
 /**
  * Creates a JSON parse action.
  *
+ * @param reviver The reviver function.
+ * @param message The error message.
+ *
  * @returns A JSON parse action.
  */
-export function jsonParse<TInput extends string>(): JsonParseAction<
-  TInput,
-  undefined,
-  undefined
->;
+export function jsonParse<
+  TInput extends string,
+  TReviver extends JsonReviver | undefined,
+  const TMessage extends ErrorMessage<JsonParseIssue<TInput>>,
+>(
+  reviver: TReviver,
+  message: TMessage
+): JsonParseAction<TInput, TReviver, TMessage>;
 
 // @__NO_SIDE_EFFECTS__
 export function jsonParse(
