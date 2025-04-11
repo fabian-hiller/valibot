@@ -151,6 +151,7 @@
 - [notWords](/api/notWords/)
 - [octal](/api/octal/)
 - [jsonParse](/api/jsonParse/)
+- [jsonStringify](/api/jsonStringify/)
 - [partialCheck](/api/partialCheck/)
 - [rawCheck](/api/rawCheck/)
 - [rawTransform](/api/rawTransform/)

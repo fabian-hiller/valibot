@@ -1,0 +1,27 @@
+---
+title: JsonStringifyAction
+description: JSON stringify action interface.
+contributors:
+  - EskiMojo14
+---
+
+import { Property } from '~/components';
+import { properties } from './properties';
+
+# JsonStringifyAction
+
+JSON stringify action interface.
+
+## Generics
+
+- `TInput` <Property {...properties.TInput} />
+- `TReplacer` <Property {...properties.TReplacer} />
+- `TMessage` <Property {...properties.TMessage} />
+
+## Definition
+
+- `JsonStringifyAction` <Property {...properties.BaseTransformation} />
+  - `type` <Property {...properties.type} />
+  - `reference` <Property {...properties.reference} />
+  - `replacer` <Property {...properties.replacer} />
+  - `message` <Property {...properties.message} />
