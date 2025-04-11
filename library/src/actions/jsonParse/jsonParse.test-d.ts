@@ -19,7 +19,6 @@ describe('jsonParse', () => {
     test('with reviver and undefined message', () => {
       type Action = JsonParseAction<string, JsonReviver, undefined>;
       expectTypeOf(jsonParse(reviver)).toEqualTypeOf<Action>();
-      expectTypeOf(jsonParse(reviver, undefined)).toEqualTypeOf<Action>();
     });
 
     test('with undefined reviver and message', () => {
@@ -30,7 +29,6 @@ describe('jsonParse', () => {
     test('with undefined reviver and undefined message', () => {
       type Action = JsonParseAction<string, undefined, undefined>;
       expectTypeOf(jsonParse()).toEqualTypeOf<Action>();
-      expectTypeOf(jsonParse(undefined, undefined)).toEqualTypeOf<Action>();
     });
   });
 

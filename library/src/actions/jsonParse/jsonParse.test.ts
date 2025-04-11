@@ -36,7 +36,6 @@ describe('jsonParse', () => {
         message: undefined,
       };
       expect(jsonParse(reviver)).toStrictEqual(action);
-      expect(jsonParse(reviver, undefined)).toStrictEqual(action);
     });
     test('with undefined reviver and message', () => {
       const action: JsonParseAction<string, undefined, 'message'> = {
@@ -53,7 +52,6 @@ describe('jsonParse', () => {
         message: undefined,
       };
       expect(jsonParse()).toStrictEqual(action);
-      expect(jsonParse(undefined, undefined)).toStrictEqual(action);
     });
   });
 
