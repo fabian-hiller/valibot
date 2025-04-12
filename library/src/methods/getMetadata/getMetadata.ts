@@ -8,14 +8,13 @@ import type {
   BaseMetadata,
   BaseSchema,
   BaseSchemaAsync,
+  Overwrite,
   PipeItem,
   PipeItemAsync,
   Prettify,
 } from '../../types/index.ts';
 import type { SchemaWithPipe } from '../pipe/pipe.ts';
 import type { SchemaWithPipeAsync } from '../pipe/pipeAsync.ts';
-
-type Overwrite<T, U> = Omit<T, keyof U> & U;
 
 type KnownMetadataActions =
   | TitleAction<unknown, string>
@@ -34,7 +33,8 @@ type ExtractedMetadata<TMetadata extends KnownMetadataActions> =
 type PipelineMetadata<
   TPipe extends
     readonly // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (| PipeItem<any, any, BaseIssue<unknown>>
+    (
+      | PipeItem<any, any, BaseIssue<unknown>>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       | PipeItemAsync<any, any, BaseIssue<unknown>>
     )[],
@@ -43,7 +43,8 @@ type PipelineMetadata<
   infer TItem,
   ...infer TRest extends
     readonly // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (| PipeItem<any, any, BaseIssue<unknown>>
+    (
+      | PipeItem<any, any, BaseIssue<unknown>>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       | PipeItemAsync<any, any, BaseIssue<unknown>>
     )[],
