@@ -47,7 +47,7 @@ describe('getFallbacks', () => {
       });
     });
 
-    test.only('for nested object', () => {
+    test('for nested object', () => {
       expect(
         getFallbacks(
           object({
