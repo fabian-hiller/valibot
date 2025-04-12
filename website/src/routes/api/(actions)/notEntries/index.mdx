@@ -1,22 +1,20 @@
 ---
-title: minEntries
-description: Creates a min entries validation action.
-source: /actions/minEntries/minEntries.ts
+title: notEntries
+description: Creates a not entries validation action.
+source: /actions/notEntries/notEntries.ts
 contributors:
   - fabian-hiller
-  - muningis
-  - EltonLobo07
 ---
 
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# minEntries
+# notEntries
 
-Creates a min entries validation action.
+Creates a not entries validation action.
 
 ```ts
-const Action = v.minEntries<TInput, TRequirement, TMessage>(
+const Action = v.notEntries<TInput, TRequirement, TMessage>(
   requirement,
   message
 );
@@ -35,7 +33,7 @@ const Action = v.minEntries<TInput, TRequirement, TMessage>(
 
 ### Explanation
 
-With `minEntries` you can validate the number of entries of an object. If the input does not match the `requirement`, you can use `message` to customize the error message.
+With `notEntries` you can validate the number of entries of an object. If the input does not match the `requirement`, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -43,22 +41,22 @@ With `minEntries` you can validate the number of entries of an object. If the in
 
 ## Examples
 
-The following examples show how `minEntries` can be used.
+The following examples show how `notEntries` can be used.
 
-### Minimum object entries
+### Not object entries
 
-Schema to validate an object with a minimum of 5 entries.
+Schema to validate an object that does not have 5 entries.
 
 ```ts
-const MinEntriesSchema = v.pipe(
+const NotEntriesSchema = v.pipe(
   v.record(v.string(), v.number()),
-  v.minEntries(5, 'The object should have at least 5 entries.')
+  v.notEntries(5, 'Object must not have 5 entries')
 );
 ```
 
 ## Related
 
-The following APIs can be combined with `minEntries`.
+The following APIs can be combined with `notEntries`.
 
 ### Schemas
 
