@@ -30,4 +30,20 @@ describe('getMetadata', () => {
       key: 'value',
     });
   });
+  test('should recurse into pipe items with pipes', () => {
+    const schema = v.pipe(
+      v.string(),
+      v.title('title'),
+      v.email(),
+      v.description('description'),
+      v.metadata({ key: 'value' }),
+      v.pipe(v.string(), v.metadata({ extra: 'extra' }))
+    );
+    expect(v.getMetadata(schema)).toStrictEqual({
+      title: 'title',
+      description: 'description',
+      key: 'value',
+      extra: 'extra',
+    });
+  });
 });
