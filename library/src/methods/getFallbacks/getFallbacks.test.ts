@@ -47,7 +47,7 @@ describe('getFallbacks', () => {
       });
     });
 
-    test('for nested object', () => {
+    test.only('for nested object', () => {
       expect(
         getFallbacks(
           object({
@@ -56,6 +56,7 @@ describe('getFallbacks', () => {
               key2: fallback(number(), () => 123 as const),
               key3: fallback(boolean(), false as const),
             }),
+            objectWithFallback: fallback(object({ foo: string() }), { foo: "bar" }),
             other: string(),
           })
         )
@@ -65,6 +66,7 @@ describe('getFallbacks', () => {
           key2: 123,
           key3: false,
         },
+        objectWithFallback: { foo: "bar" },
         other: undefined,
       });
     });
