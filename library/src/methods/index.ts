@@ -7,6 +7,7 @@ export * from './getDefault/index.ts';
 export * from './getDefaults/index.ts';
 export * from './getFallback/index.ts';
 export * from './getFallbacks/index.ts';
+export * from './getMetadata/index.ts';
 export * from './is/index.ts';
 export * from './keyof/index.ts';
 export * from './message/index.ts';
