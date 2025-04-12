@@ -6,7 +6,7 @@ export const properties: Record<string, PropertyProps> = {
     type: {
       type: 'custom',
       name: 'Record',
-      generics: ['string', 'unknown'],
+      generics: [{ type: 'union', options: ['string', 'number'] }, 'unknown'],
     },
   },
   TRequirement: {

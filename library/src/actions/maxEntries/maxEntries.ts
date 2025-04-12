@@ -11,7 +11,7 @@ import { _addIssue } from '../../utils/index.ts';
  * @beta
  */
 export interface MaxEntriesIssue<
-  TInput extends Record<string, unknown>,
+  TInput extends Record<string | number, unknown>,
   TRequirement extends number,
 > extends BaseIssue<TInput> {
   /**
@@ -42,7 +42,7 @@ export interface MaxEntriesIssue<
  * @beta
  */
 export interface MaxEntriesAction<
-  TInput extends Record<string, unknown>,
+  TInput extends Record<string | number, unknown>,
   TRequirement extends number,
   TMessage extends
     | ErrorMessage<MaxEntriesIssue<TInput, TRequirement>>
@@ -84,7 +84,7 @@ export interface MaxEntriesAction<
  * @beta
  */
 export function maxEntries<
-  TInput extends Record<string, unknown>,
+  TInput extends Record<string | number, unknown>,
   const TRequirement extends number,
 >(requirement: TRequirement): MaxEntriesAction<TInput, TRequirement, undefined>;
 
@@ -99,7 +99,7 @@ export function maxEntries<
  * @beta
  */
 export function maxEntries<
-  TInput extends Record<string, unknown>,
+  TInput extends Record<string | number, unknown>,
   const TRequirement extends number,
   const TMessage extends
     | ErrorMessage<MaxEntriesIssue<TInput, TRequirement>>
@@ -112,11 +112,14 @@ export function maxEntries<
 // @__NO_SIDE_EFFECTS__
 export function maxEntries(
   requirement: number,
-  message?: ErrorMessage<MaxEntriesIssue<Record<string, unknown>, number>>
+  message?: ErrorMessage<
+    MaxEntriesIssue<Record<string | number, unknown>, number>
+  >
 ): MaxEntriesAction<
-  Record<string, unknown>,
+  Record<string | number, unknown>,
   number,
-  ErrorMessage<MaxEntriesIssue<Record<string, unknown>, number>> | undefined
+  | ErrorMessage<MaxEntriesIssue<Record<string | number, unknown>, number>>
+  | undefined
 > {
   return {
     kind: 'validation',
