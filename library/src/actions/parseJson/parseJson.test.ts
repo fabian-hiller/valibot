@@ -1,57 +1,57 @@
 import { describe, expect, test } from 'vitest';
 import {
-  jsonParse,
-  type JsonParseAction,
-  type JsonParseIssue,
   type JsonReviver,
-} from './jsonParse.ts';
+  parseJson,
+  type ParseJsonAction,
+  type ParseJsonIssue,
+} from './parseJson.ts';
 
-describe('jsonParse', () => {
+describe('parseJson', () => {
   describe('should return action object', () => {
     const baseAction: Omit<
-      JsonParseAction<string, never, never>,
+      ParseJsonAction<string, never, never>,
       'message' | 'reviver'
     > = {
       kind: 'transformation',
       type: 'json_parse',
-      reference: jsonParse,
+      reference: parseJson,
       async: false,
       '~run': expect.any(Function),
     };
 
     test('with reviver and message', () => {
       const reviver: JsonReviver = (k, v) => v;
-      const action: JsonParseAction<string, typeof reviver, 'message'> = {
+      const action: ParseJsonAction<string, typeof reviver, 'message'> = {
         ...baseAction,
         reviver,
         message: 'message',
       };
-      expect(jsonParse(reviver, 'message')).toStrictEqual(action);
+      expect(parseJson(reviver, 'message')).toStrictEqual(action);
     });
     test('with reviver and undefined message', () => {
       const reviver: JsonReviver = (k, v) => v;
-      const action: JsonParseAction<string, typeof reviver, undefined> = {
+      const action: ParseJsonAction<string, typeof reviver, undefined> = {
         ...baseAction,
         reviver,
         message: undefined,
       };
-      expect(jsonParse(reviver)).toStrictEqual(action);
+      expect(parseJson(reviver)).toStrictEqual(action);
     });
     test('with undefined reviver and message', () => {
-      const action: JsonParseAction<string, undefined, 'message'> = {
+      const action: ParseJsonAction<string, undefined, 'message'> = {
         ...baseAction,
         reviver: undefined,
         message: 'message',
       };
-      expect(jsonParse(undefined, 'message')).toStrictEqual(action);
+      expect(parseJson(undefined, 'message')).toStrictEqual(action);
     });
     test('with undefined reviver and undefined message', () => {
-      const action: JsonParseAction<string, undefined, undefined> = {
+      const action: ParseJsonAction<string, undefined, undefined> = {
         ...baseAction,
         reviver: undefined,
         message: undefined,
       };
-      expect(jsonParse()).toStrictEqual(action);
+      expect(parseJson()).toStrictEqual(action);
     });
   });
 
@@ -61,7 +61,7 @@ describe('jsonParse', () => {
     };
     const stringifiedInput = JSON.stringify(input);
     test('with reviver', () => {
-      const action = jsonParse((k, v) =>
+      const action = parseJson((k, v) =>
         typeof v === 'string' ? v.toUpperCase() : v
       );
       expect(
@@ -74,7 +74,7 @@ describe('jsonParse', () => {
       });
     });
     test('without reviver', () => {
-      const action = jsonParse();
+      const action = parseJson();
       expect(
         action['~run']({ typed: true, value: stringifiedInput }, {})
       ).toStrictEqual({
@@ -85,7 +85,7 @@ describe('jsonParse', () => {
   });
   describe('should return dataset with issues', () => {
     const baseIssue: Omit<
-      JsonParseIssue<string>,
+      ParseJsonIssue<string>,
       'input' | 'received' | 'message'
     > = {
       kind: 'transformation',
@@ -94,7 +94,7 @@ describe('jsonParse', () => {
     };
 
     test('for invalid JSON', () => {
-      const action = jsonParse();
+      const action = parseJson();
       expect(action['~run']({ typed: true, value: 'foo' }, {})).toStrictEqual({
         typed: false,
         value: 'foo',
@@ -115,7 +115,7 @@ describe('jsonParse', () => {
       });
     });
     test('with string message', () => {
-      const action = jsonParse(undefined, 'message');
+      const action = parseJson(undefined, 'message');
       expect(action['~run']({ typed: true, value: 'foo' }, {})).toStrictEqual({
         typed: false,
         value: 'foo',
@@ -136,7 +136,7 @@ describe('jsonParse', () => {
       });
     });
     test('with function message', () => {
-      const action = jsonParse(undefined, ({ received }) => received);
+      const action = parseJson(undefined, ({ received }) => received);
       expect(action['~run']({ typed: true, value: 'foo' }, {})).toStrictEqual({
         typed: false,
         value: 'foo',

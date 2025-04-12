@@ -10,7 +10,7 @@ export type JsonReviver = NonNullable<Parameters<typeof JSON.parse>[1]>;
 /**
  * JSON parse issue interface.
  */
-export interface JsonParseIssue<TInput extends string>
+export interface ParseJsonIssue<TInput extends string>
   extends BaseIssue<TInput> {
   /**
    * The issue kind.
@@ -33,11 +33,11 @@ export interface JsonParseIssue<TInput extends string>
 /**
  * JSON parse action interface.
  */
-export interface JsonParseAction<
+export interface ParseJsonAction<
   TInput extends string,
   TReviver extends JsonReviver | undefined,
-  TMessage extends ErrorMessage<JsonParseIssue<TInput>> | undefined,
-> extends BaseTransformation<TInput, unknown, JsonParseIssue<TInput>> {
+  TMessage extends ErrorMessage<ParseJsonIssue<TInput>> | undefined,
+> extends BaseTransformation<TInput, unknown, ParseJsonIssue<TInput>> {
   /**
    * The action type.
    */
@@ -45,7 +45,7 @@ export interface JsonParseAction<
   /**
    * The action reference.
    */
-  readonly reference: typeof jsonParse;
+  readonly reference: typeof parseJson;
 
   /**
    * The reviver function.
@@ -63,7 +63,7 @@ export interface JsonParseAction<
  *
  * @returns A JSON parse action.
  */
-export function jsonParse<TInput extends string>(): JsonParseAction<
+export function parseJson<TInput extends string>(): ParseJsonAction<
   TInput,
   undefined,
   undefined
@@ -76,9 +76,9 @@ export function jsonParse<TInput extends string>(): JsonParseAction<
  *
  * @returns A JSON parse action.
  */
-export function jsonParse<TInput extends string, TReviver extends JsonReviver>(
+export function parseJson<TInput extends string, TReviver extends JsonReviver>(
   reviver: TReviver
-): JsonParseAction<TInput, TReviver, undefined>;
+): ParseJsonAction<TInput, TReviver, undefined>;
 
 /**
  * Creates a JSON parse action.
@@ -88,28 +88,28 @@ export function jsonParse<TInput extends string, TReviver extends JsonReviver>(
  *
  * @returns A JSON parse action.
  */
-export function jsonParse<
+export function parseJson<
   TInput extends string,
   TReviver extends JsonReviver | undefined,
-  const TMessage extends ErrorMessage<JsonParseIssue<TInput>>,
+  const TMessage extends ErrorMessage<ParseJsonIssue<TInput>>,
 >(
   reviver: TReviver,
   message: TMessage
-): JsonParseAction<TInput, TReviver, TMessage>;
+): ParseJsonAction<TInput, TReviver, TMessage>;
 
 // @__NO_SIDE_EFFECTS__
-export function jsonParse(
+export function parseJson(
   reviver?: JsonReviver,
-  message?: ErrorMessage<JsonParseIssue<string>>
-): JsonParseAction<
+  message?: ErrorMessage<ParseJsonIssue<string>>
+): ParseJsonAction<
   string,
   JsonReviver | undefined,
-  ErrorMessage<JsonParseIssue<string>> | undefined
+  ErrorMessage<ParseJsonIssue<string>> | undefined
 > {
   return {
     kind: 'transformation',
     type: 'json_parse',
-    reference: jsonParse,
+    reference: parseJson,
     reviver,
     message,
     async: false,

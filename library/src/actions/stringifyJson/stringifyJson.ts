@@ -13,7 +13,7 @@ export type JSONReplacer =
 /**
  * JSON stringify issue interface.
  */
-export interface JsonStringifyIssue<TInput> extends BaseIssue<TInput> {
+export interface StringifyJsonIssue<TInput> extends BaseIssue<TInput> {
   /**
    * The issue kind.
    */
@@ -35,11 +35,11 @@ export interface JsonStringifyIssue<TInput> extends BaseIssue<TInput> {
 /**
  * JSON stringify action interface.
  */
-export interface JsonStringifyAction<
+export interface StringifyJsonAction<
   TInput,
   TReplacer extends JSONReplacer | undefined,
-  TMessage extends ErrorMessage<JsonStringifyIssue<TInput>> | undefined,
-> extends BaseTransformation<TInput, string, JsonStringifyIssue<TInput>> {
+  TMessage extends ErrorMessage<StringifyJsonIssue<TInput>> | undefined,
+> extends BaseTransformation<TInput, string, StringifyJsonIssue<TInput>> {
   /**
    * The action type.
    */
@@ -47,7 +47,7 @@ export interface JsonStringifyAction<
   /**
    * The action reference.
    */
-  readonly reference: typeof jsonStringify;
+  readonly reference: typeof stringifyJson;
 
   /**
    * The replacer function.
@@ -65,7 +65,7 @@ export interface JsonStringifyAction<
  *
  * @returns A JSON stringify action.
  */
-export function jsonStringify<TInput>(): JsonStringifyAction<
+export function stringifyJson<TInput>(): StringifyJsonAction<
   TInput,
   undefined,
   undefined
@@ -78,9 +78,9 @@ export function jsonStringify<TInput>(): JsonStringifyAction<
  *
  * @returns A JSON stringify action.
  */
-export function jsonStringify<TInput, TReplacer extends JSONReplacer>(
+export function stringifyJson<TInput, TReplacer extends JSONReplacer>(
   replacer: TReplacer
-): JsonStringifyAction<TInput, TReplacer, undefined>;
+): StringifyJsonAction<TInput, TReplacer, undefined>;
 
 /**
  * Creates a JSON stringify transformation action.
@@ -90,28 +90,28 @@ export function jsonStringify<TInput, TReplacer extends JSONReplacer>(
  *
  * @returns A JSON stringify action.
  */
-export function jsonStringify<
+export function stringifyJson<
   TInput,
   const TReplacer extends JSONReplacer | undefined,
-  const TMessage extends ErrorMessage<JsonStringifyIssue<TInput>>,
+  const TMessage extends ErrorMessage<StringifyJsonIssue<TInput>>,
 >(
   replacer: TReplacer,
   message: TMessage
-): JsonStringifyAction<TInput, TReplacer, TMessage>;
+): StringifyJsonAction<TInput, TReplacer, TMessage>;
 
 // @__NO_SIDE_EFFECTS__
-export function jsonStringify(
+export function stringifyJson(
   replacer?: JSONReplacer,
-  message?: ErrorMessage<JsonStringifyIssue<unknown>>
-): JsonStringifyAction<
+  message?: ErrorMessage<StringifyJsonIssue<unknown>>
+): StringifyJsonAction<
   unknown,
   JSONReplacer | undefined,
-  ErrorMessage<JsonStringifyIssue<unknown>> | undefined
+  ErrorMessage<StringifyJsonIssue<unknown>> | undefined
 > {
   return {
     kind: 'transformation',
     type: 'json_stringify',
-    reference: jsonStringify,
+    reference: stringifyJson,
     message,
     replacer,
     async: false,
@@ -131,7 +131,7 @@ export function jsonStringify(
         // @ts-expect-error
         dataset.typed = false;
       }
-      return dataset as OutputDataset<string, JsonStringifyIssue<unknown>>;
+      return dataset as OutputDataset<string, StringifyJsonIssue<unknown>>;
     },
   };
 }

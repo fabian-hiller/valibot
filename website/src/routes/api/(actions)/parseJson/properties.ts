@@ -3,9 +3,9 @@ import type { PropertyProps } from '~/components';
 export const properties: Record<string, PropertyProps> = {
   TInput: {
     modifier: 'extends',
-    type: 'any',
+    type: 'string',
   },
-  TReplacer: {
+  TReviver: {
     modifier: 'extends',
     type: {
       type: 'union',
@@ -28,13 +28,6 @@ export const properties: Record<string, PropertyProps> = {
           ],
           return: 'any',
         },
-        {
-          type: 'array',
-          item: {
-            type: 'union',
-            options: ['string', 'number'],
-          },
-        },
         'undefined',
       ],
     },
@@ -51,8 +44,8 @@ export const properties: Record<string, PropertyProps> = {
           generics: [
             {
               type: 'custom',
-              name: 'JsonStringifyIssue',
-              href: '../JsonStringifyIssue/',
+              name: 'ParseJsonIssue',
+              href: '../ParseJsonIssue/',
               generics: [
                 {
                   type: 'custom',
@@ -66,56 +59,37 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  BaseTransformation: {
-    modifier: 'extends',
+  reviver: {
     type: {
       type: 'custom',
-      name: 'BaseTransformation',
-      href: '../BaseTransformation/',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TInput',
-        },
-        'string',
-        {
-          type: 'custom',
-          name: 'JsonStringifyIssue',
-          href: '../JsonStringifyIssue/',
-          generics: [
-            {
-              type: 'custom',
-              name: 'TInput',
-            },
-          ],
-        },
-      ],
-    },
-  },
-  type: {
-    type: {
-      type: 'string',
-      value: 'json_stringify',
-    },
-  },
-  reference: {
-    type: {
-      type: 'custom',
-      modifier: 'typeof',
-      name: 'jsonStringify',
-      href: '../jsonStringify/',
-    },
-  },
-  replacer: {
-    type: {
-      type: 'custom',
-      name: 'TReplacer',
+      name: 'TReviver',
     },
   },
   message: {
     type: {
       type: 'custom',
       name: 'TMessage',
+    },
+  },
+  Action: {
+    type: {
+      type: 'custom',
+      name: 'ParseJsonAction',
+      href: '../ParseJsonAction/',
+      generics: [
+        {
+          type: 'custom',
+          name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TReviver',
+        },
+        {
+          type: 'custom',
+          name: 'TMessage',
+        },
+      ],
     },
   },
 };

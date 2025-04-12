@@ -1,5 +1,5 @@
 ---
-title: jsonStringify
+title: stringifyJson
 description: JSON stringify transformation action.
 contributors:
   - EskiMojo14
@@ -8,12 +8,12 @@ contributors:
 import { ApiList, Property } from '~/components';
 import { properties } from './properties';
 
-# jsonStringify
+# stringifyJson
 
 Creates a JSON stringify transformation action.
 
 ```ts
-const Action = v.jsonStringify<TInput, TReplacer, TMessage>(replacer, message);
+const Action = v.stringifyJson<TInput, TReplacer, TMessage>(replacer, message);
 ```
 
 ## Generics
@@ -29,7 +29,7 @@ const Action = v.jsonStringify<TInput, TReplacer, TMessage>(replacer, message);
 
 ### Explanation
 
-With `jsonStringify` you can stringify a JSON object. If the input is unable to be stringified, you can use `message` to customize the error message.
+With `stringifyJson` you can stringify a JSON object. If the input is unable to be stringified, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -37,7 +37,7 @@ With `jsonStringify` you can stringify a JSON object. If the input is unable to 
 
 ## Examples
 
-The following examples show how `jsonStringify` can be used.
+The following examples show how `stringifyJson` can be used.
 
 ### Stringify JSON
 
@@ -46,7 +46,7 @@ Stringify a JSON object.
 ```ts
 const StringifiedObjectSchema = v.pipe(
   v.object({ key: v.string() }),
-  v.jsonStringify()
+  v.stringifyJson()
 );
 ```
 
@@ -57,13 +57,13 @@ Stringify a JSON object with a replacer function.
 ```ts
 const StringifiedObjectSchema = v.pipe(
   v.object({ key: v.string() }),
-  v.jsonStringify((k, v) => (typeof v === 'string' ? v.toUpperCase() : v))
+  v.stringifyJson((k, v) => (typeof v === 'string' ? v.toUpperCase() : v))
 );
 ```
 
 ## Related
 
-The following APIs can be combined with `jsonStringify`.
+The following APIs can be combined with `stringifyJson`.
 
 ### Schemas
 
