@@ -85,7 +85,7 @@ describe('intersect', () => {
       );
     });
 
-    test('for loose objects with pipes', () => {
+    test('for loose objects with transform', () => {
       expectNoSchemaIssue(
         intersect([
           looseObject({ key1: pipe(string(), toLowerCase()) }),

@@ -1,5 +1,11 @@
 import { describe, expect, test } from 'vitest';
-import { minLength, minValue, transform } from '../../actions/index.ts';
+import {
+  minLength,
+  minValue,
+  toLowerCase,
+  toUpperCase,
+  transform,
+} from '../../actions/index.ts';
 import { pipe } from '../../methods/index.ts';
 import type {
   FailureDataset,
@@ -11,6 +17,8 @@ import { expectNoSchemaIssueAsync } from '../../vitest/index.ts';
 import { array } from '../array/array.ts';
 import { arrayAsync } from '../array/arrayAsync.ts';
 import { date } from '../date/index.ts';
+import { looseObject } from '../looseObject/looseObject.ts';
+import { looseObjectAsync } from '../looseObject/looseObjectAsync.ts';
 import { number } from '../number/index.ts';
 import { object, objectAsync } from '../object/index.ts';
 import { string } from '../string/index.ts';
@@ -75,6 +83,23 @@ describe('intersectAsync', () => {
             { key1: 'foo', key2: 123, key3: new Date(), key4: ['foo', 'bar'] },
             { key1: 'bar', key2: -456, key3: new Date(), key4: ['baz'] },
           ],
+        ]
+      );
+    });
+
+    test('for loose objects with transform', async () => {
+      await expectNoSchemaIssueAsync(
+        intersectAsync([
+          looseObject({ key1: pipe(string(), toLowerCase()) }),
+          looseObjectAsync({ key2: pipe(string(), toUpperCase()) }),
+        ]),
+        [
+          // both inputs matching the output
+          { key1: 'foo', key2: 'BAR' },
+          // one input matching the output, the other not
+          { key1: 'FOO', key2: 'BAR' },
+          // both inputs not matching the output
+          { key1: 'FOO', key2: 'bar' },
         ]
       );
     });
