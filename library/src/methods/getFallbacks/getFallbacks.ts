@@ -65,8 +65,8 @@ export function getFallbacks<
       >,
 >(schema: TSchema): InferFallbacks<TSchema> {
   
-  // If it's and object schema and it has a fallback, return it
-  if (schema.type === 'object' && 'fallback' in schema) {
+  // If it has a fallback, return it.
+  if ('fallback' in schema) {
     return schema.fallback as InferFallbacks<TSchema>;
   }
 
