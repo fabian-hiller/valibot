@@ -24,7 +24,7 @@ describe('convertSchema', () => {
       });
     });
 
-    test('should skip definition in conversion marked as isDefinition', () => {
+    test('should skip definition if specified', () => {
       const stringSchema = v.string();
       expect(
         convertSchema(
@@ -42,7 +42,7 @@ describe('convertSchema', () => {
       });
     });
 
-    test('should convert schema using definitions in conversion not marked as isDefinition', () => {
+    test('should not skip definition if specified', () => {
       const stringSchema = v.string();
       expect(
         convertSchema(
@@ -60,22 +60,19 @@ describe('convertSchema', () => {
       });
     });
 
-    test('should skip only root definition in conversion of nested schema marked as isDefinition', () => {
+    test('should skip only root definition of nested schema if specified', () => {
       const stringSchema = v.string();
       const arraySchema = v.array(stringSchema);
       const definitions = {
-        str: { type: 'string' },
-        arr: {
+        string: { type: 'string' },
+        array: {
           type: 'array',
-          items: { $ref: '#/$defs/str' },
+          items: { $ref: '#/$defs/string' },
         },
       } as const;
-      const referenceMap = new Map<
-        v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
-        string
-      >([
-        [stringSchema, 'str'],
-        [arraySchema, 'arr'],
+      const referenceMap = new Map<v.GenericSchema, string>([
+        [stringSchema, 'string'],
+        [arraySchema, 'array'],
       ]);
       expect(
         convertSchema(
@@ -87,37 +84,7 @@ describe('convertSchema', () => {
         )
       ).toStrictEqual({
         type: 'array',
-        items: { $ref: '#/$defs/str' },
-      });
-    });
-
-    test('should convert schema using definitions in conversion of nested schema not marked as isDefinition', () => {
-      const stringSchema = v.string();
-      const arraySchema = v.array(stringSchema);
-      const definitions = {
-        str: { type: 'string' },
-        arr: {
-          type: 'array',
-          items: { $ref: '#/$defs/str' },
-        },
-      } as const;
-      const referenceMap = new Map<
-        v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
-        string
-      >([
-        [stringSchema, 'str'],
-        [arraySchema, 'arr'],
-      ]);
-      expect(
-        convertSchema(
-          {},
-          arraySchema,
-          undefined,
-          createContext({ definitions, referenceMap }),
-          false
-        )
-      ).toStrictEqual({
-        $ref: '#/$defs/arr',
+        items: { $ref: '#/$defs/string' },
       });
     });
   });
