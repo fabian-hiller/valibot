@@ -19,6 +19,12 @@ type Action =
       v.LengthInput,
       v.ErrorMessage<v.EmptyIssue<v.LengthInput>> | undefined
     >
+  | v.EntriesAction<
+      Record<string | number, unknown>,
+      number,
+      | v.ErrorMessage<v.EntriesIssue<Record<string | number, unknown>, number>>
+      | undefined
+    >
   | v.HexadecimalAction<
       string,
       v.ErrorMessage<v.HexadecimalIssue<string>> | undefined
@@ -155,6 +161,12 @@ export function convertAction(
         }
         jsonSchema.maxLength = 0;
       }
+      break;
+    }
+
+    case 'entries': {
+      jsonSchema.minProperties = valibotAction.requirement;
+      jsonSchema.maxProperties = valibotAction.requirement;
       break;
     }
 

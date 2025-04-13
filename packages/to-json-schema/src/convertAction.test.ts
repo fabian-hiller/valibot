@@ -146,6 +146,20 @@ describe('convertAction', () => {
     );
   });
 
+  test('should convert entries action', () => {
+    expect(
+      convertAction(
+        { type: 'object' },
+        v.entries<Record<string | number, unknown>, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'object',
+      minProperties: 3,
+      maxProperties: 3,
+    });
+  });
+
   test('should convert hexadecimal action', () => {
     expect(convertAction({}, v.hexadecimal<string>(), undefined)).toStrictEqual(
       {
@@ -385,7 +399,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'object' },
-        v.maxEntries<Record<string, unknown>, 3>(3),
+        v.maxEntries<Record<string | number, unknown>, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -509,7 +523,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'object' },
-        v.minEntries<Record<string, unknown>, 3>(3),
+        v.minEntries<Record<string | number, unknown>, 3>(3),
         undefined
       )
     ).toStrictEqual({
