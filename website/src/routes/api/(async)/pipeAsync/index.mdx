@@ -1,11 +1,11 @@
 ---
 title: pipeAsync
-description: >-
-  Adds a pipeline to a schema, that can validate and transform its input.
+description: Adds a pipeline to a schema, that can validate and transform its input.
 source: /methods/pipe/pipeAsync.ts
 contributors:
   - fabian-hiller
   - EltonLobo07
+  - muningis
 ---
 
 import { Link } from '@builder.io/qwik-city';
@@ -158,6 +158,7 @@ The following APIs can be combined with `pipeAsync`.
     'getFallbacks',
     'is',
     'keyof',
+    'message',
     'omit',
     'parse',
     'parser',
@@ -219,6 +220,7 @@ The following APIs can be combined with `pipeAsync`.
     'mac64',
     'mapItems',
     'maxBytes',
+    'maxEntries',
     'maxGraphemes',
     'maxLength',
     'maxSize',
@@ -227,6 +229,7 @@ The following APIs can be combined with `pipeAsync`.
     'metadata',
     'mimeType',
     'minBytes',
+    'minEntries',
     'minGraphemes',
     'minLength',
     'minSize',

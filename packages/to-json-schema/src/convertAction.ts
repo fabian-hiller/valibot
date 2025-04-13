@@ -45,6 +45,12 @@ type Action =
       number,
       v.ErrorMessage<v.LengthIssue<v.LengthInput, number>> | undefined
     >
+  | v.MaxEntriesAction<
+      Record<string, unknown>,
+      number,
+      | v.ErrorMessage<v.MaxEntriesIssue<Record<string, unknown>, number>>
+      | undefined
+    >
   | v.MaxLengthAction<
       v.LengthInput,
       number,
@@ -54,6 +60,12 @@ type Action =
       v.ValueInput,
       v.ValueInput,
       v.ErrorMessage<v.MaxValueIssue<v.ValueInput, v.ValueInput>> | undefined
+    >
+  | v.MinEntriesAction<
+      Record<string, unknown>,
+      number,
+      | v.ErrorMessage<v.MinEntriesIssue<Record<string, unknown>, number>>
+      | undefined
     >
   | v.MinLengthAction<
       v.LengthInput,
@@ -194,6 +206,11 @@ export function convertAction(
       break;
     }
 
+    case 'max_entries': {
+      jsonSchema.maxProperties = valibotAction.requirement;
+      break;
+    }
+
     case 'max_length': {
       if (jsonSchema.type === 'array') {
         jsonSchema.maxItems = valibotAction.requirement;
@@ -218,6 +235,11 @@ export function convertAction(
       }
       // @ts-expect-error
       jsonSchema.maximum = valibotAction.requirement;
+      break;
+    }
+
+    case 'min_entries': {
+      jsonSchema.minProperties = valibotAction.requirement;
       break;
     }
 
