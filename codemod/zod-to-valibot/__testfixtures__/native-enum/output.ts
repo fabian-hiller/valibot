@@ -7,7 +7,6 @@ enum Fruit {
 	Banana = "banana",
 }
 const FruitEnum = v.enum(Fruit);
-const value1: Fruit = v.parse(FruitEnum, "apple");
 
 // object literal enum
 const FruitObj = {
@@ -16,9 +15,11 @@ const FruitObj = {
 	Banana: "banana",
 } as const;
 const FruitObjEnum = v.enum(FruitObj);
-type FruitObjType = typeof FruitObj;
-const value2: FruitObjType[keyof FruitObjType] = v.parse(FruitObjEnum, "apple");
 
 // access underlying object using `enum` property
-const FruitObjEnum2 = v.enum(FruitObj);
-const apple: "apple" = FruitObjEnum2.enum.Apple;
+enum Answer {
+	Yes = "Yes",
+	No = "No",
+}
+const NativeAnswerEnum = v.enum(Answer);
+const AnswerEnum = NativeAnswerEnum.enum;
