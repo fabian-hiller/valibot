@@ -20,10 +20,9 @@ type Action =
       v.ErrorMessage<v.EmptyIssue<v.LengthInput>> | undefined
     >
   | v.EntriesAction<
-      Record<string | number, unknown>,
+      v.EntriesInput,
       number,
-      | v.ErrorMessage<v.EntriesIssue<Record<string | number, unknown>, number>>
-      | undefined
+      v.ErrorMessage<v.EntriesIssue<v.EntriesInput, number>> | undefined
     >
   | v.HexadecimalAction<
       string,

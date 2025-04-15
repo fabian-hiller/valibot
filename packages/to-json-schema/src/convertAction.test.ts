@@ -150,7 +150,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'object' },
-        v.entries<Record<string | number, unknown>, 3>(3),
+        v.entries<v.EntriesInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -399,7 +399,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'object' },
-        v.maxEntries<Record<string | number, unknown>, 3>(3),
+        v.maxEntries<v.EntriesInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -523,7 +523,7 @@ describe('convertAction', () => {
     expect(
       convertAction(
         { type: 'object' },
-        v.minEntries<Record<string | number, unknown>, 3>(3),
+        v.minEntries<v.EntriesInput, 3>(3),
         undefined
       )
     ).toStrictEqual({

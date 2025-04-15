@@ -4,6 +4,7 @@ import type {
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
+import type { EntriesInput } from '../types.ts';
 
 /**
  * Entries issue interface.
@@ -11,7 +12,7 @@ import { _addIssue } from '../../utils/index.ts';
  * @beta
  */
 export interface EntriesIssue<
-  TInput extends Record<string | number, unknown>,
+  TInput extends EntriesInput,
   TRequirement extends number,
 > extends BaseIssue<TInput> {
   /**
@@ -42,7 +43,7 @@ export interface EntriesIssue<
  * @beta
  */
 export interface EntriesAction<
-  TInput extends Record<string | number, unknown>,
+  TInput extends EntriesInput,
   TRequirement extends number,
   TMessage extends ErrorMessage<EntriesIssue<TInput, TRequirement>> | undefined,
 > extends BaseValidation<TInput, TInput, EntriesIssue<TInput, TRequirement>> {
@@ -78,7 +79,7 @@ export interface EntriesAction<
  * @beta
  */
 export function entries<
-  TInput extends Record<string | number, unknown>,
+  TInput extends EntriesInput,
   const TRequirement extends number,
 >(requirement: TRequirement): EntriesAction<TInput, TRequirement, undefined>;
 
@@ -93,7 +94,7 @@ export function entries<
  * @beta
  */
 export function entries<
-  TInput extends Record<string | number, unknown>,
+  TInput extends EntriesInput,
   const TRequirement extends number,
   const TMessage extends
     | ErrorMessage<EntriesIssue<TInput, TRequirement>>
@@ -106,12 +107,11 @@ export function entries<
 // @__NO_SIDE_EFFECTS__
 export function entries(
   requirement: number,
-  message?: ErrorMessage<EntriesIssue<Record<string | number, unknown>, number>>
+  message?: ErrorMessage<EntriesIssue<EntriesInput, number>>
 ): EntriesAction<
-  Record<string | number, unknown>,
+  EntriesInput,
   number,
-  | ErrorMessage<EntriesIssue<Record<string | number, unknown>, number>>
-  | undefined
+  ErrorMessage<EntriesIssue<EntriesInput, number>> | undefined
 > {
   return {
     kind: 'validation',

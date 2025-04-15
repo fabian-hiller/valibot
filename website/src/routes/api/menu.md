@@ -327,6 +327,7 @@
 - [EndsWithAction](/api/EndsWithAction/)
 - [EndsWithIssue](/api/EndsWithIssue/)
 - [EntriesAction](/api/EntriesAction/)
+- [EntriesInput](/api/EntriesInput/)
 - [EntriesIssue](/api/EntriesIssue/)
 - [Enum](/api/Enum/)
 - [EnumIssue](/api/EnumIssue/)

@@ -4,6 +4,7 @@ import type {
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
+import type { EntriesInput } from '../types.ts';
 
 /**
  * Not entries issue interface.
@@ -11,7 +12,7 @@ import { _addIssue } from '../../utils/index.ts';
  * @beta
  */
 export interface NotEntriesIssue<
-  TInput extends Record<string | number, unknown>,
+  TInput extends EntriesInput,
   TRequirement extends number,
 > extends BaseIssue<TInput> {
   /**
@@ -42,7 +43,7 @@ export interface NotEntriesIssue<
  * @beta
  */
 export interface NotEntriesAction<
-  TInput extends Record<string | number, unknown>,
+  TInput extends EntriesInput,
   TRequirement extends number,
   TMessage extends
     | ErrorMessage<NotEntriesIssue<TInput, TRequirement>>
@@ -84,7 +85,7 @@ export interface NotEntriesAction<
  * @beta
  */
 export function notEntries<
-  TInput extends Record<string | number, unknown>,
+  TInput extends EntriesInput,
   const TRequirement extends number,
 >(requirement: TRequirement): NotEntriesAction<TInput, TRequirement, undefined>;
 
@@ -99,7 +100,7 @@ export function notEntries<
  * @beta
  */
 export function notEntries<
-  TInput extends Record<string | number, unknown>,
+  TInput extends EntriesInput,
   const TRequirement extends number,
   const TMessage extends
     | ErrorMessage<NotEntriesIssue<TInput, TRequirement>>
@@ -112,14 +113,11 @@ export function notEntries<
 // @__NO_SIDE_EFFECTS__
 export function notEntries(
   requirement: number,
-  message?: ErrorMessage<
-    NotEntriesIssue<Record<string | number, unknown>, number>
-  >
+  message?: ErrorMessage<NotEntriesIssue<EntriesInput, number>>
 ): NotEntriesAction<
-  Record<string | number, unknown>,
+  EntriesInput,
   number,
-  | ErrorMessage<NotEntriesIssue<Record<string | number, unknown>, number>>
-  | undefined
+  ErrorMessage<NotEntriesIssue<EntriesInput, number>> | undefined
 > {
   return {
     kind: 'validation',
