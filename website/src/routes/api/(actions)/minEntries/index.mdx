@@ -35,7 +35,7 @@ const Action = v.minEntries<TInput, TRequirement, TMessage>(
 
 ### Explanation
 
-With `minEntries` you can validate the number of properties in an object. If the input does not match the `requirement`, you can use `message` to customize the error message.
+With `minEntries` you can validate the number of entries of an object. If the input does not match the `requirement`, you can use `message` to customize the error message.
 
 ## Returns
 
@@ -45,9 +45,9 @@ With `minEntries` you can validate the number of properties in an object. If the
 
 The following examples show how `minEntries` can be used.
 
-### Minimum object properties
+### Minimum object entries
 
-Schema to validate an object with a minimum of 5 properties.
+Schema to validate an object with a minimum of 5 entries.
 
 ```ts
 const MinEntriesSchema = v.pipe(

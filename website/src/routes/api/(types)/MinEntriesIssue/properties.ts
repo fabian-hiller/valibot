@@ -5,8 +5,8 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'Record',
-      generics: ['string', 'unknown'],
+      name: 'EntriesInput',
+      href: '../EntriesInput/',
     },
   },
   TRequirement: {

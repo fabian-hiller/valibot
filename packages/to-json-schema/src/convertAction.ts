@@ -19,6 +19,11 @@ type Action =
       v.LengthInput,
       v.ErrorMessage<v.EmptyIssue<v.LengthInput>> | undefined
     >
+  | v.EntriesAction<
+      v.EntriesInput,
+      number,
+      v.ErrorMessage<v.EntriesIssue<v.EntriesInput, number>> | undefined
+    >
   | v.HexadecimalAction<
       string,
       v.ErrorMessage<v.HexadecimalIssue<string>> | undefined
@@ -46,10 +51,9 @@ type Action =
       v.ErrorMessage<v.LengthIssue<v.LengthInput, number>> | undefined
     >
   | v.MaxEntriesAction<
-      Record<string, unknown>,
+      v.EntriesInput,
       number,
-      | v.ErrorMessage<v.MaxEntriesIssue<Record<string, unknown>, number>>
-      | undefined
+      v.ErrorMessage<v.MaxEntriesIssue<v.EntriesInput, number>> | undefined
     >
   | v.MaxLengthAction<
       v.LengthInput,
@@ -62,10 +66,9 @@ type Action =
       v.ErrorMessage<v.MaxValueIssue<v.ValueInput, v.ValueInput>> | undefined
     >
   | v.MinEntriesAction<
-      Record<string, unknown>,
+      v.EntriesInput,
       number,
-      | v.ErrorMessage<v.MinEntriesIssue<Record<string, unknown>, number>>
-      | undefined
+      v.ErrorMessage<v.MinEntriesIssue<v.EntriesInput, number>> | undefined
     >
   | v.MinLengthAction<
       v.LengthInput,
@@ -155,6 +158,12 @@ export function convertAction(
         }
         jsonSchema.maxLength = 0;
       }
+      break;
+    }
+
+    case 'entries': {
+      jsonSchema.minProperties = valibotAction.requirement;
+      jsonSchema.maxProperties = valibotAction.requirement;
       break;
     }
 

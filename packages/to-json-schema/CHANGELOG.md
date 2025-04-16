@@ -5,6 +5,7 @@ All notable changes to the library will be documented in this file.
 ## vX.X.X (Month DD, YYYY)
 
 - Add support for `minEntries` and `maxEntries` action (pull request #1100)
+- Add support for `entries` action (pull request #1156)
 - Change Valibot peer dependency to v1.1.0
 - Fix `toJsonSchema` to be independent of definition order (pull request #1133)
 

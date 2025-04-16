@@ -4,6 +4,7 @@ import type {
   ErrorMessage,
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
+import type { EntriesInput } from '../types.ts';
 
 /**
  * Min entries issue interface.
@@ -11,7 +12,7 @@ import { _addIssue } from '../../utils/index.ts';
  * @beta
  */
 export interface MinEntriesIssue<
-  TInput extends Record<string, unknown>,
+  TInput extends EntriesInput,
   TRequirement extends number,
 > extends BaseIssue<TInput> {
   /**
@@ -42,7 +43,7 @@ export interface MinEntriesIssue<
  * @beta
  */
 export interface MinEntriesAction<
-  TInput extends Record<string, unknown>,
+  TInput extends EntriesInput,
   TRequirement extends number,
   TMessage extends
     | ErrorMessage<MinEntriesIssue<TInput, TRequirement>>
@@ -84,7 +85,7 @@ export interface MinEntriesAction<
  * @beta
  */
 export function minEntries<
-  TInput extends Record<string, unknown>,
+  TInput extends EntriesInput,
   const TRequirement extends number,
 >(requirement: TRequirement): MinEntriesAction<TInput, TRequirement, undefined>;
 
@@ -99,7 +100,7 @@ export function minEntries<
  * @beta
  */
 export function minEntries<
-  TInput extends Record<string, unknown>,
+  TInput extends EntriesInput,
   const TRequirement extends number,
   const TMessage extends
     | ErrorMessage<MinEntriesIssue<TInput, TRequirement>>
@@ -112,11 +113,11 @@ export function minEntries<
 // @__NO_SIDE_EFFECTS__
 export function minEntries(
   requirement: number,
-  message?: ErrorMessage<MinEntriesIssue<Record<string, unknown>, number>>
+  message?: ErrorMessage<MinEntriesIssue<EntriesInput, number>>
 ): MinEntriesAction<
-  Record<string, unknown>,
+  EntriesInput,
   number,
-  ErrorMessage<MinEntriesIssue<Record<string, unknown>, number>> | undefined
+  ErrorMessage<MinEntriesIssue<EntriesInput, number>> | undefined
 > {
   return {
     kind: 'validation',
