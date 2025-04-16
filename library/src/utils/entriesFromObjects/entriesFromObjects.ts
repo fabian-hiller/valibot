@@ -19,6 +19,7 @@ import type {
   ErrorMessage,
   ObjectEntries,
   ObjectEntriesAsync,
+  Overwrite,
   Prettify,
 } from '../../types/index.ts';
 
@@ -54,23 +55,6 @@ type Schema =
     >;
 
 /**
- * Merge entries type.
- */
-type MergeEntries<
-  TFirstEntries extends ObjectEntries | ObjectEntriesAsync,
-  TRestEntries extends ObjectEntries | ObjectEntriesAsync,
-> = Prettify<
-  {
-    [TKey in keyof TFirstEntries as TKey extends Exclude<
-      keyof TFirstEntries,
-      keyof TRestEntries
-    >
-      ? TKey
-      : never]: TFirstEntries[TKey];
-  } & TRestEntries
->;
-
-/**
  * Recursive merge type.
  */
 type RecursiveMerge<TSchemas extends readonly [Schema, ...Schema[]]> =
@@ -80,7 +64,7 @@ type RecursiveMerge<TSchemas extends readonly [Schema, ...Schema[]]> =
           infer TFirstSchema extends Schema,
           ...infer TRestSchemas extends readonly [Schema, ...Schema[]],
         ]
-      ? MergeEntries<TFirstSchema['entries'], RecursiveMerge<TRestSchemas>>
+      ? Overwrite<TFirstSchema['entries'], RecursiveMerge<TRestSchemas>>
       : never;
 
 /**
