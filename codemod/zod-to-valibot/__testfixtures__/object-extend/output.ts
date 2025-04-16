@@ -1,19 +1,34 @@
 import * as v from "valibot";
 
-const Schema1 = v.object({
-	...v.object({foo: v.string()}).entries,
-	...{bar: v.number()}
-});
-
+// plain
+const Schema1 = v.object({...{foo: v.string()}, ...{bar: v.number()}});
 const Schema2 = v.object({foo: v.number()});
-const Schema3 = v.object({
-	...Schema2.entries,
-	...{bar: v.string()}
-});
+const Schema3 = v.object({...Schema2.entries, ...{bar: v.string()}});
 
-const Obj1 = {bar: v.boolean()};
-const Schema5 = v.object({...v.object({foo: v.bigint()}).entries, ...Obj1});
+// passthrough
+const Schema4 = v.looseObject({...{foo: v.string()}, ...{bar: v.number()}});
+const Schema5 = v.looseObject({foo: v.number()});
+const Schema6 = v.looseObject({...Schema5.entries, ...{bar: v.string()}});
+const Schema7 = v.looseObject({...{foo: v.string()}, ...{bar: v.number()}});
+const Schema8 = v.looseObject({...Schema2.entries, ...{bar: v.string()}});
 
-const Schema6 = v.object({foo: v.unknown()});
-const Obj3 = {bar: v.null()};
-const Schema7 = v.object({...Schema6.entries, ...Obj3});
+// strict
+const Schema9 = v.strictObject({...{foo: v.string()}, ...{bar: v.number()}});
+const Schema10 = v.strictObject({foo: v.number()});
+const Schema11 = v.strictObject({...Schema10.entries, ...{bar: v.string()}});
+const Schema12 = v.strictObject({...{foo: v.string()}, ...{bar: v.number()}});
+const Schema13 = v.strictObject({...Schema2.entries, ...{bar: v.string()}});
+
+// strip
+const Schema14 = v.object({...{foo: v.string()}, ...{bar: v.number()}});
+const Schema15 = v.object({foo: v.number()});
+const Schema16 = v.object({...Schema15.entries, ...{bar: v.string()}});
+const Schema17 = v.object({...{foo: v.string()}, ...{bar: v.number()}});
+const Schema18 = v.object({...Schema2.entries, ...{bar: v.string()}});
+
+// catchall
+const Schema19 = v.objectWithRest({...{foo: v.string()}, ...{bar: v.number()}}, v.null());
+const Schema20 = v.objectWithRest({foo: v.number()}, v.null());
+const Schema21 = v.objectWithRest({...Schema20.entries, ...{bar: v.string()}}, Schema20.rest);
+const Schema22 = v.objectWithRest({...{foo: v.string()}, ...{bar: v.number()}}, v.null());
+const Schema23 = v.objectWithRest({...Schema2.entries, ...{bar: v.string()}}, v.null());
