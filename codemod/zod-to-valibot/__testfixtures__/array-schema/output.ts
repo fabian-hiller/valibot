@@ -6,5 +6,5 @@ const Schema2 = v.array(v.string());
 
 // chains
 const Schema3 = v.array(v.pipe(v.string(), v.email()));
-const Schema4 = v.array(v.optional(v.pipe(v.string(), v.minLength(7))));
-const Schema5 = v.optional(v.array(v.pipe(v.string(), v.minLength(12))));
+const Schema4 = v.array(v.optional(v.pipe(v.string(), v.length(7))));
+const Schema5 = v.optional(v.array(v.pipe(v.string(), v.length(12))));
