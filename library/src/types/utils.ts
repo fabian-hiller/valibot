@@ -98,4 +98,6 @@ export type UnionToTuple<TUnion> = UnionToTupleHelper<TUnion, []>;
 /**
  * Overwrites properties in a type.
  */
-export type Overwrite<T, U> = Omit<T, keyof U> & U;
+export type Overwrite<T, U> = keyof T & keyof U extends never
+  ? T & U
+  : Omit<T, keyof T & keyof U> & U;
