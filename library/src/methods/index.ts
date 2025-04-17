@@ -19,4 +19,5 @@ export * from './pipe/index.ts';
 export * from './required/index.ts';
 export * from './safeParse/index.ts';
 export * from './safeParser/index.ts';
+export * from './summarize/index.ts';
 export * from './unwrap/index.ts';
