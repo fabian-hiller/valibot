@@ -1,0 +1,63 @@
+---
+title: getMetadata
+description: Returns the metadata of the schema.
+source: /methods/metadata/getMetadata/getMetadata.ts
+contributors:
+  - EskiMojo14
+---
+
+import { ApiList, Property } from '~/components';
+import { properties } from './properties';
+
+# getMetadata
+
+Returns the metadata of the schema. If multiple metadata are defined, they are shallowly merged (with later metadata overwriting earlier metadata). If no metadata is defined, `undefined` is returned.
+
+```ts
+const metadata = v.getMetadata<TSchema>(schema);
+```
+
+## Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+## Parameters
+
+- `schema` <Property {...properties.schema} />
+
+## Returns
+
+- `metadata` <Property {...properties.metadata} />
+
+## Examples
+
+The following examples show how `getMetadata` can be used.
+
+### Get metadata of username schema
+
+Get the metadata of a username schema.
+
+```ts
+const UsernameSchema = v.pipe(
+  v.string(),
+  v.regex(/^[a-z0-9_-]{4,16}$/iu),
+  v.title('Username'),
+  v.description(
+    'A username must be between 4 and 16 characters long and can only contain letters, numbers, underscores and hyphens.'
+  ),
+  v.metadata({ key: 'value' })
+);
+
+const metadata = v.getMetadata(UsernameSchema);
+/*
+  { key: 'value' }
+*/
+```
+
+## Related
+
+The following APIs can be combined with `getMetadata`.
+
+### Actions
+
+<ApiList items={['metadata']} />
