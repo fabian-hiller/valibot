@@ -8,6 +8,7 @@ All notable changes to the library will be documented in this file.
 - Add support for `entries` action (pull request #1156)
 - Change Valibot peer dependency to v1.1.0
 - Fix `toJsonSchema` to be independent of definition order (pull request #1133)
+- Fix `additionalItems` for tuple schemas and add `minItems` (pull request #1126)
 
 ## v1.0.0 (March 19, 2025)
 

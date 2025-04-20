@@ -219,8 +219,9 @@ export function convertSchema(
     case 'strict_tuple': {
       jsonSchema.type = 'array';
 
-      // Add JSON Schema of items
+      // Add JSON Schema of items and ensure each item is required
       jsonSchema.items = [];
+      jsonSchema.minItems = valibotSchema.items.length;
       for (const item of valibotSchema.items) {
         jsonSchema.items.push(
           convertSchema({}, item as SchemaOrPipe, config, context)
@@ -235,8 +236,8 @@ export function convertSchema(
           config,
           context
         );
-      } else {
-        jsonSchema.additionalItems = valibotSchema.type === 'loose_tuple';
+      } else if (valibotSchema.type === 'strict_tuple') {
+        jsonSchema.additionalItems = false;
       }
 
       break;
