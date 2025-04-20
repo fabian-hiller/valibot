@@ -7,6 +7,7 @@ All notable changes to the library will be documented in this file.
 - Add `message` method to overwrite local error message configuration of a schema (pull request #1103)
 - Add `minEntries` and `maxEntries` validation action to validate number of object entries (pull request #1100)
 - Add `entries` and `notEntries` validation action to validate number of object entries (pull request #1156)
+- Add support for bigints to `multipleOf` validation action (pull request #1164)
 - Change implementation of `variant` and `variantAsync` schema to improve performance by aborting validation of discriminators early (pull request #1110)
 
 ## v1.0.0 (March 18, 2025)

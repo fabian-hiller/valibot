@@ -9,8 +9,8 @@ import { _addIssue } from '../../utils/index.ts';
  * Multiple of issue interface.
  */
 export interface MultipleOfIssue<
-  TInput extends number,
-  TRequirement extends number,
+  TInput extends number | bigint,
+  TRequirement extends TInput,
 > extends BaseIssue<TInput> {
   /**
    * The issue kind.
@@ -38,8 +38,8 @@ export interface MultipleOfIssue<
  * Multiple of action interface.
  */
 export interface MultipleOfAction<
-  TInput extends number,
-  TRequirement extends number,
+  TInput extends number | bigint,
+  TRequirement extends TInput,
   TMessage extends
     | ErrorMessage<MultipleOfIssue<TInput, TRequirement>>
     | undefined,
@@ -78,8 +78,8 @@ export interface MultipleOfAction<
  * @returns A multiple of action.
  */
 export function multipleOf<
-  TInput extends number,
-  const TRequirement extends number,
+  TInput extends number | bigint,
+  const TRequirement extends TInput,
 >(requirement: TRequirement): MultipleOfAction<TInput, TRequirement, undefined>;
 
 /**
@@ -91,8 +91,8 @@ export function multipleOf<
  * @returns A multiple of action.
  */
 export function multipleOf<
-  TInput extends number,
-  const TRequirement extends number,
+  TInput extends number | bigint,
+  const TRequirement extends TInput,
   const TMessage extends
     | ErrorMessage<MultipleOfIssue<TInput, TRequirement>>
     | undefined,
@@ -103,12 +103,12 @@ export function multipleOf<
 
 // @__NO_SIDE_EFFECTS__
 export function multipleOf(
-  requirement: number,
-  message?: ErrorMessage<MultipleOfIssue<number, number>>
+  requirement: number | bigint,
+  message?: ErrorMessage<MultipleOfIssue<number | bigint, number | bigint>>
 ): MultipleOfAction<
-  number,
-  number,
-  ErrorMessage<MultipleOfIssue<number, number>> | undefined
+  number | bigint,
+  number | bigint,
+  ErrorMessage<MultipleOfIssue<number | bigint, number | bigint>> | undefined
 > {
   return {
     kind: 'validation',
@@ -119,7 +119,8 @@ export function multipleOf(
     requirement,
     message,
     '~run'(dataset, config) {
-      if (dataset.typed && dataset.value % this.requirement !== 0) {
+      // @ts-expect-error
+      if (dataset.typed && dataset.value % this.requirement != 0) {
         _addIssue(this, 'multiple', dataset, config);
       }
       return dataset;
