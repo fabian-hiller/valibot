@@ -118,6 +118,7 @@ let refCount = 0;
  * @param valibotSchema The Valibot schema object.
  * @param config The conversion configuration.
  * @param context The conversion context.
+ * @param skipRef Whether to skip using a reference.
  *
  * @returns The converted JSON Schema.
  */
@@ -125,13 +126,16 @@ export function convertSchema(
   jsonSchema: JSONSchema7,
   valibotSchema: SchemaOrPipe,
   config: ConversionConfig | undefined,
-  context: ConversionContext
+  context: ConversionContext,
+  skipRef = false
 ): JSONSchema7 {
-  // If schema is in reference map, use reference and skip conversion
-  const referenceId = context.referenceMap.get(valibotSchema);
-  if (referenceId && referenceId in context.definitions) {
-    jsonSchema.$ref = `#/$defs/${referenceId}`;
-    return jsonSchema;
+  if (!skipRef) {
+    // If schema is in reference map use reference and skip conversion
+    const referenceId = context.referenceMap.get(valibotSchema);
+    if (referenceId) {
+      jsonSchema.$ref = `#/$defs/${referenceId}`;
+      return jsonSchema;
+    }
   }
 
   // If it is schema with pipe, convert each item of pipe
@@ -150,27 +154,16 @@ export function convertSchema(
         }
 
         // Otherwiese, convert Valibot schema to JSON Schema
-        const tempJsonSchema = convertSchema(
-          {},
+        jsonSchema = convertSchema(
+          jsonSchema,
           valibotPipeItem,
           config,
-          context
+          context,
+          // Hint: We skip using a reference because subsequent pipe elements
+          // may change the JSON schema, which could result in invalid output
+          // if we were to use a reference.
+          true
         );
-
-        // If temporary JSON Schema object is just a reference, merge its
-        // definition into JSON Schema object
-        if (tempJsonSchema.$ref) {
-          // Hint: If the temporary JSON Schema is only a reference, we must
-          // merge its definition into the JSON Schema object, since subsequent
-          // pipe elements may modify it, which can result in an invalid JSON
-          // Schema output.
-          const referenceId = tempJsonSchema.$ref.split('/')[2];
-          Object.assign(jsonSchema, context.definitions[referenceId]);
-
-          // Otherwise, merge temporary JSON Schema into JSON Schema object
-        } else {
-          Object.assign(jsonSchema, tempJsonSchema);
-        }
 
         // Otherwise, convert Valibot action to JSON Schema
       } else {
@@ -427,7 +420,8 @@ export function convertSchema(
           {},
           wrappedValibotSchema as SchemaOrPipe,
           config,
-          context
+          context,
+          true
         );
       }
 

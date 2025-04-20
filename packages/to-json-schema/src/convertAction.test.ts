@@ -146,6 +146,20 @@ describe('convertAction', () => {
     );
   });
 
+  test('should convert entries action', () => {
+    expect(
+      convertAction(
+        { type: 'object' },
+        v.entries<v.EntriesInput, 3>(3),
+        undefined
+      )
+    ).toStrictEqual({
+      type: 'object',
+      minProperties: 3,
+      maxProperties: 3,
+    });
+  });
+
   test('should convert hexadecimal action', () => {
     expect(convertAction({}, v.hexadecimal<string>(), undefined)).toStrictEqual(
       {
@@ -381,11 +395,11 @@ describe('convertAction', () => {
     );
   });
 
-  test('should convert max props action', () => {
+  test('should convert max entries action', () => {
     expect(
       convertAction(
         { type: 'object' },
-        v.maxProps<Record<string, unknown>, 3>(3),
+        v.maxEntries<v.EntriesInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
@@ -505,11 +519,11 @@ describe('convertAction', () => {
     );
   });
 
-  test('should convert min props action', () => {
+  test('should convert min entries action', () => {
     expect(
       convertAction(
         { type: 'object' },
-        v.minProps<Record<string, unknown>, 3>(3),
+        v.minEntries<v.EntriesInput, 3>(3),
         undefined
       )
     ).toStrictEqual({
