@@ -6,10 +6,15 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
+ * Input type
+ */
+type Input = number | bigint;
+
+/**
  * Multiple of issue interface.
  */
 export interface MultipleOfIssue<
-  TInput extends number | bigint,
+  TInput extends Input,
   TRequirement extends TInput,
 > extends BaseIssue<TInput> {
   /**
@@ -27,7 +32,7 @@ export interface MultipleOfIssue<
   /**
    * The received property.
    */
-  readonly received: `${number}`;
+  readonly received: `${TInput}`;
   /**
    * The divisor.
    */
@@ -38,7 +43,7 @@ export interface MultipleOfIssue<
  * Multiple of action interface.
  */
 export interface MultipleOfAction<
-  TInput extends number | bigint,
+  TInput extends Input,
   TRequirement extends TInput,
   TMessage extends
     | ErrorMessage<MultipleOfIssue<TInput, TRequirement>>
@@ -78,7 +83,7 @@ export interface MultipleOfAction<
  * @returns A multiple of action.
  */
 export function multipleOf<
-  TInput extends number | bigint,
+  TInput extends Input,
   const TRequirement extends TInput,
 >(requirement: TRequirement): MultipleOfAction<TInput, TRequirement, undefined>;
 
@@ -91,7 +96,7 @@ export function multipleOf<
  * @returns A multiple of action.
  */
 export function multipleOf<
-  TInput extends number | bigint,
+  TInput extends Input,
   const TRequirement extends TInput,
   const TMessage extends
     | ErrorMessage<MultipleOfIssue<TInput, TRequirement>>
@@ -103,12 +108,12 @@ export function multipleOf<
 
 // @__NO_SIDE_EFFECTS__
 export function multipleOf(
-  requirement: number | bigint,
-  message?: ErrorMessage<MultipleOfIssue<number | bigint, number | bigint>>
+  requirement: Input,
+  message?: ErrorMessage<MultipleOfIssue<Input, Input>>
 ): MultipleOfAction<
-  number | bigint,
-  number | bigint,
-  ErrorMessage<MultipleOfIssue<number | bigint, number | bigint>> | undefined
+  Input,
+  Input,
+  ErrorMessage<MultipleOfIssue<Input, Input>> | undefined
 > {
   return {
     kind: 'validation',
