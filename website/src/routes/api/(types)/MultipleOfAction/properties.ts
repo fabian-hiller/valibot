@@ -11,8 +11,8 @@ export const properties: Record<string, PropertyProps> = {
   TRequirement: {
     modifier: 'extends',
     type: {
-      type: 'custom',
-      name: 'TInput',
+      type: 'union',
+      options: ['number', 'bigint'],
     },
   },
   TMessage: {
