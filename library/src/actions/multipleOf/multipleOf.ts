@@ -15,7 +15,7 @@ type Input = number | bigint;
  */
 export interface MultipleOfIssue<
   TInput extends Input,
-  TRequirement extends TInput,
+  TRequirement extends Input,
 > extends BaseIssue<TInput> {
   /**
    * The issue kind.
@@ -44,7 +44,7 @@ export interface MultipleOfIssue<
  */
 export interface MultipleOfAction<
   TInput extends Input,
-  TRequirement extends TInput,
+  TRequirement extends Input,
   TMessage extends
     | ErrorMessage<MultipleOfIssue<TInput, TRequirement>>
     | undefined,
@@ -83,8 +83,20 @@ export interface MultipleOfAction<
  * @returns A multiple of action.
  */
 export function multipleOf<
-  TInput extends Input,
-  const TRequirement extends TInput,
+  TInput extends number,
+  const TRequirement extends number,
+>(requirement: TRequirement): MultipleOfAction<TInput, TRequirement, undefined>;
+
+/**
+ * Creates a [multiple](https://en.wikipedia.org/wiki/Multiple_(mathematics)) of validation action.
+ *
+ * @param requirement The divisor.
+ *
+ * @returns A multiple of action.
+ */
+export function multipleOf<
+  TInput extends bigint,
+  const TRequirement extends bigint,
 >(requirement: TRequirement): MultipleOfAction<TInput, TRequirement, undefined>;
 
 /**
@@ -96,8 +108,27 @@ export function multipleOf<
  * @returns A multiple of action.
  */
 export function multipleOf<
-  TInput extends Input,
-  const TRequirement extends TInput,
+  TInput extends number,
+  const TRequirement extends number,
+  const TMessage extends
+    | ErrorMessage<MultipleOfIssue<TInput, TRequirement>>
+    | undefined,
+>(
+  requirement: TRequirement,
+  message: TMessage
+): MultipleOfAction<TInput, TRequirement, TMessage>;
+
+/**
+ * Creates a [multiple](https://en.wikipedia.org/wiki/Multiple_(mathematics)) of validation action.
+ *
+ * @param requirement The divisor.
+ * @param message The error message.
+ *
+ * @returns A multiple of action.
+ */
+export function multipleOf<
+  TInput extends bigint,
+  const TRequirement extends bigint,
   const TMessage extends
     | ErrorMessage<MultipleOfIssue<TInput, TRequirement>>
     | undefined,
