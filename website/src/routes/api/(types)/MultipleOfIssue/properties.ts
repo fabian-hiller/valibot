@@ -42,9 +42,6 @@ export const properties: Record<string, PropertyProps> = {
     },
   },
   expected: {
-    type: 'null',
-  },
-  received: {
     type: {
       type: 'template',
       parts: [
@@ -59,16 +56,21 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  requirement: {
+  received: {
     type: {
-      type: 'function',
-      params: [
+      type: 'template',
+      parts: [
         {
-          name: 'input',
-          type: 'number',
+          type: 'custom',
+          name: 'TInput',
         },
       ],
-      return: 'boolean',
+    },
+  },
+  requirement: {
+    type: {
+      type: 'custom',
+      name: 'TRequirement',
     },
   },
 };
