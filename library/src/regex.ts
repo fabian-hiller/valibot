@@ -135,7 +135,9 @@ export const MAC_REGEX: RegExp =
 /**
  * [Nano ID](https://github.com/ai/nanoid) regex.
  */
-export const NANO_ID_REGEX: RegExp = /^[\w-]+$/u;
+export const NANO_ID_REGEX: RegExp =
+  // eslint-disable-next-line regexp/prefer-w
+  /^[A-Za-z0-9_-]+$/u;
 
 /**
  * [Octal](https://en.wikipedia.org/wiki/Octal) regex.
