@@ -85,7 +85,7 @@ type Action =
       number,
       v.ErrorMessage<v.MultipleOfIssue<number, number>> | undefined
     >
-  | v.NanoIDAction<string, v.ErrorMessage<v.NanoIDIssue<string>> | undefined>
+  | v.NanoIdAction<string, v.ErrorMessage<v.NanoIdIssue<string>> | undefined>
   | v.NonEmptyAction<
       v.LengthInput,
       v.ErrorMessage<v.NonEmptyIssue<v.LengthInput>> | undefined
