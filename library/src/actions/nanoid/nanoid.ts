@@ -33,6 +33,13 @@ export interface NanoIdIssue<TInput extends string> extends BaseIssue<TInput> {
 }
 
 /**
+ * Nano ID issue type.
+ *
+ * @deprecated Use `NanoIdIssue` instead.
+ */
+export type NanoIDIssue<TInput extends string> = NanoIdIssue<TInput>;
+
+/**
  * Nano ID action interface.
  */
 export interface NanoIdAction<
@@ -60,6 +67,16 @@ export interface NanoIdAction<
    */
   readonly message: TMessage;
 }
+
+/**
+ * Nano ID action type.
+ *
+ * @deprecated Use `NanoIdAction` instead.
+ */
+export type NanoIDAction<
+  TInput extends string,
+  TMessage extends ErrorMessage<NanoIdIssue<TInput>> | undefined,
+> = NanoIdAction<TInput, TMessage>;
 
 /**
  * Creates a [Nano ID](https://github.com/ai/nanoid) validation action.
