@@ -5,10 +5,16 @@ import type {
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
-export type JsonReviver = NonNullable<Parameters<typeof JSON.parse>[1]>;
+/**
+ * JSON reviver function type.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type JsonReviver = (this: any, key: string, value: any) => any;
 
 /**
- * JSON parse issue interface.
+ * Parse JSON issue interface.
+ *
+ * @beta
  */
 export interface ParseJsonIssue<TInput extends string>
   extends BaseIssue<TInput> {
@@ -19,7 +25,7 @@ export interface ParseJsonIssue<TInput extends string>
   /**
    * The issue type.
    */
-  readonly type: 'json_parse';
+  readonly type: 'parse_json';
   /**
    * The expected property.
    */
@@ -31,7 +37,9 @@ export interface ParseJsonIssue<TInput extends string>
 }
 
 /**
- * JSON parse action interface.
+ * Parse JSON action interface.
+ *
+ * @beta
  */
 export interface ParseJsonAction<
   TInput extends string,
@@ -41,17 +49,15 @@ export interface ParseJsonAction<
   /**
    * The action type.
    */
-  readonly type: 'json_parse';
+  readonly type: 'parse_json';
   /**
    * The action reference.
    */
   readonly reference: typeof parseJson;
-
   /**
    * The reviver function.
    */
   readonly reviver: TReviver;
-
   /**
    * The error message.
    */
@@ -59,9 +65,11 @@ export interface ParseJsonAction<
 }
 
 /**
- * Creates a JSON parse action.
+ * Creates a parse JSON transformation action.
  *
- * @returns A JSON parse action.
+ * @returns A parse JSON action.
+ *
+ * @beta
  */
 export function parseJson<TInput extends string>(): ParseJsonAction<
   TInput,
@@ -70,28 +78,33 @@ export function parseJson<TInput extends string>(): ParseJsonAction<
 >;
 
 /**
- * Creates a JSON parse action.
+ * Creates a parse JSON transformation action.
  *
  * @param reviver The reviver function.
  *
- * @returns A JSON parse action.
+ * @returns A parse JSON action.
+ *
+ * @beta
  */
-export function parseJson<TInput extends string, TReviver extends JsonReviver>(
-  reviver: TReviver
-): ParseJsonAction<TInput, TReviver, undefined>;
+export function parseJson<
+  TInput extends string,
+  const TReviver extends JsonReviver | undefined,
+>(reviver: TReviver): ParseJsonAction<TInput, TReviver, undefined>;
 
 /**
- * Creates a JSON parse action.
+ * Creates a parse JSON transformation action.
  *
  * @param reviver The reviver function.
  * @param message The error message.
  *
- * @returns A JSON parse action.
+ * @returns A parse JSON action.
+ *
+ * @beta
  */
 export function parseJson<
   TInput extends string,
-  TReviver extends JsonReviver | undefined,
-  const TMessage extends ErrorMessage<ParseJsonIssue<TInput>>,
+  const TReviver extends JsonReviver | undefined,
+  const TMessage extends ErrorMessage<ParseJsonIssue<TInput>> | undefined,
 >(
   reviver: TReviver,
   message: TMessage
@@ -108,7 +121,7 @@ export function parseJson(
 > {
   return {
     kind: 'transformation',
-    type: 'json_parse',
+    type: 'parse_json',
     reference: parseJson,
     reviver,
     message,
@@ -117,10 +130,9 @@ export function parseJson(
       try {
         dataset.value = JSON.parse(dataset.value, reviver);
       } catch (error) {
-        const parseError =
-          error instanceof Error ? error.message : String(error);
         _addIssue(this, 'JSON', dataset, config, {
-          received: `"${parseError}"`,
+          // @ts-expect-error
+          received: `"${error.message}"`,
         });
         // @ts-expect-error
         dataset.typed = false;

@@ -1,1 +1,5 @@
-export * from './parseJson.ts';
+export {
+  type ParseJsonAction,
+  type ParseJsonIssue,
+  parseJson,
+} from './parseJson.ts';

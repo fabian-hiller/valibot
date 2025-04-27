@@ -7,28 +7,45 @@ import {
   type ParseJsonIssue,
 } from './parseJson.ts';
 
-const reviver: JsonReviver = (k, v) => v;
-
 describe('parseJson', () => {
   describe('should return action object', () => {
-    test('with reviver and message', () => {
-      type Action = ParseJsonAction<string, JsonReviver, 'message'>;
-      expectTypeOf(parseJson(reviver, 'message')).toEqualTypeOf<Action>();
+    const reviver: JsonReviver = (key, value) => value;
+
+    test('with undefined reviver and undefined message', () => {
+      type Action = ParseJsonAction<string, undefined, undefined>;
+      expectTypeOf(parseJson()).toEqualTypeOf<Action>();
+      expectTypeOf(parseJson(undefined)).toEqualTypeOf<Action>();
+      expectTypeOf(parseJson(undefined, undefined)).toEqualTypeOf<Action>();
+    });
+
+    test('with undefined reviver and string message', () => {
+      expectTypeOf(parseJson(undefined, 'message')).toEqualTypeOf<
+        ParseJsonAction<string, undefined, 'message'>
+      >();
+    });
+
+    test('with undefined reviver and function message', () => {
+      expectTypeOf(parseJson(undefined, () => 'message')).toEqualTypeOf<
+        ParseJsonAction<string, undefined, () => string>
+      >();
     });
 
     test('with reviver and undefined message', () => {
       type Action = ParseJsonAction<string, JsonReviver, undefined>;
       expectTypeOf(parseJson(reviver)).toEqualTypeOf<Action>();
+      expectTypeOf(parseJson(reviver, undefined)).toEqualTypeOf<Action>();
     });
 
-    test('with undefined reviver and message', () => {
-      type Action = ParseJsonAction<string, undefined, 'message'>;
-      expectTypeOf(parseJson(undefined, 'message')).toEqualTypeOf<Action>();
+    test('with reviver and string message', () => {
+      expectTypeOf(parseJson(reviver, 'message')).toEqualTypeOf<
+        ParseJsonAction<string, JsonReviver, 'message'>
+      >();
     });
 
-    test('with undefined reviver and undefined message', () => {
-      type Action = ParseJsonAction<string, undefined, undefined>;
-      expectTypeOf(parseJson()).toEqualTypeOf<Action>();
+    test('with reviver and function message', () => {
+      expectTypeOf(parseJson(reviver, () => 'message')).toEqualTypeOf<
+        ParseJsonAction<string, JsonReviver, () => string>
+      >();
     });
   });
 
