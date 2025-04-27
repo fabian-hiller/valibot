@@ -15,4 +15,4 @@ const Schema9 = v.object({key: v.number()});
 
 // get the wrapped schema
 const Schema10 = v.optional(v.number());
-const Schema11 = Schema10.wrapped;
+const Schema11 = v.unwrap(Schema10);

@@ -12,5 +12,5 @@ const Schema6 = v.object({key: v.number()});
 
 // get the wrapped schema
 const Schema7 = v.optional(v.nullable(v.number()));
-const Schema8 = Schema7.wrapped;
-const Schema9 = Schema7.wrapped.wrapped;
+const Schema8 = v.unwrap(Schema7);
+const Schema9 = v.unwrap(v.unwrap(Schema7));
