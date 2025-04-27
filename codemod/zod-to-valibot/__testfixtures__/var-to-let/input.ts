@@ -1,1 +1,0 @@
-var message = 'Hello world';

@@ -1,14 +1,19 @@
 import type { Transform } from 'jscodeshift';
+import { transformImports } from './imports';
 
 const transform: Transform = (fileInfo, api) => {
   const j = api.jscodeshift;
   const root = j(fileInfo.source);
-  root
-    .find(j.VariableDeclaration)
-    .filter((path) => path.node.kind === 'var')
-    .forEach((path) => {
-      path.node.kind = 'let';
-    });
+
+  // ------------ Imports ------------
+  const transformImportsResult = transformImports(root);
+  if (transformImportsResult.conclusion !== 'successful') {
+    return transformImportsResult.conclusion === 'skip'
+      ? undefined
+      : root.toSource();
+  }
+  const valibotIdentifier = transformImportsResult.valibotIdentifier;
+
   return root.toSource();
 };
 
