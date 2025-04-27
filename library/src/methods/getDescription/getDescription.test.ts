@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { description } from '../../../actions/index.ts';
-import { string } from '../../../schemas/index.ts';
-import { pipe } from '../../pipe/index.ts';
+import { description } from '../../actions/index.ts';
+import { string } from '../../schemas/index.ts';
+import { pipe } from '../pipe/index.ts';
 import { getDescription } from './getDescription.ts';
 
 describe('getDescription', () => {

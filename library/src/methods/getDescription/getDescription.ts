@@ -1,11 +1,11 @@
-import type { DescriptionAction } from '../../../actions/description/description.ts';
+import type { DescriptionAction } from '../../actions/description/description.ts';
 import {
   _createMetadataMethod,
   type UnknownPipe,
   type UnknownSchemaWithPipe,
-} from '../../../utils/_createMetadataMethod/_createMetadataMethod.ts';
-import type { SchemaWithPipe } from '../../pipe/pipe.ts';
-import type { SchemaWithPipeAsync } from '../../pipe/pipeAsync.ts';
+} from '../../utils/_createMetadataMethod/_createMetadataMethod.ts';
+import type { SchemaWithPipe } from '../pipe/pipe.ts';
+import type { SchemaWithPipeAsync } from '../pipe/pipeAsync.ts';
 
 export type ExtractDescription<
   TPipe extends UnknownPipe,

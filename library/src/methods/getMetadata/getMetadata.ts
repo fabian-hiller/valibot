@@ -1,12 +1,12 @@
-import type { MetadataAction } from '../../../actions/metadata/metadata.ts';
-import type { Overwrite, Prettify } from '../../../types/utils.ts';
+import type { MetadataAction } from '../../actions/metadata/metadata.ts';
+import type { Overwrite, Prettify } from '../../types/utils.ts';
 import {
   _createMetadataMethod,
   type UnknownPipe,
   type UnknownSchemaWithPipe,
-} from '../../../utils/_createMetadataMethod/_createMetadataMethod.ts';
-import type { SchemaWithPipe } from '../../pipe/pipe.ts';
-import type { SchemaWithPipeAsync } from '../../pipe/pipeAsync.ts';
+} from '../../utils/_createMetadataMethod/_createMetadataMethod.ts';
+import type { SchemaWithPipe } from '../pipe/pipe.ts';
+import type { SchemaWithPipeAsync } from '../pipe/pipeAsync.ts';
 
 export type ExtractMetadata<
   TPipe extends UnknownPipe,

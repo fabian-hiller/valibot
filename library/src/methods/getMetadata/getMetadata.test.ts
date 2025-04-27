@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { metadata } from '../../../actions/index.ts';
-import { string } from '../../../schemas/index.ts';
-import { pipe } from '../../pipe/index.ts';
+import { metadata } from '../../actions/index.ts';
+import { string } from '../../schemas/index.ts';
+import { pipe } from '../pipe/index.ts';
 import { getMetadata } from './getMetadata.ts';
 
 describe('getMetadata', () => {
