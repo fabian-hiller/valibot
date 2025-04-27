@@ -101,29 +101,45 @@ describe('parseJson', () => {
   });
 
   describe('should return dataset with issues', () => {
-    test('for invalid JSON string', () => {
-      expect(
-        parseJson(undefined, 'message')['~run'](
-          { typed: true, value: 'foo' },
-          {}
-        )
-      ).toStrictEqual({
+    const action = parseJson(undefined, 'message');
+    const baseIssue: Omit<ParseJsonIssue<string>, 'input' | 'received'> = {
+      kind: 'transformation',
+      type: 'parse_json',
+      expected: null,
+      requirement: undefined,
+      message: 'message',
+      path: undefined,
+      issues: undefined,
+      lang: undefined,
+      abortEarly: undefined,
+      abortPipeEarly: undefined,
+    };
+
+    test('for normal text', () => {
+      const input = 'foo';
+      expect(action['~run']({ typed: true, value: input }, {})).toStrictEqual({
         typed: false,
-        value: 'foo',
+        value: input,
         issues: [
           {
-            kind: 'transformation',
-            type: 'parse_json',
-            input: 'foo',
-            expected: null,
+            ...baseIssue,
+            input,
             received: `"Unexpected token 'o', "foo" is not valid JSON"`,
-            message: 'message',
-            requirement: undefined,
-            path: undefined,
-            issues: undefined,
-            lang: undefined,
-            abortEarly: undefined,
-            abortPipeEarly: undefined,
+          } satisfies ParseJsonIssue<string>,
+        ],
+      });
+    });
+
+    test('for invalid JSON string', () => {
+      const input = '{"foo":20n}';
+      expect(action['~run']({ typed: true, value: input }, {})).toStrictEqual({
+        typed: false,
+        value: input,
+        issues: [
+          {
+            ...baseIssue,
+            input,
+            received: `"Expected ',' or '}' after property value in JSON at position 9 (line 1 column 10)"`,
           } satisfies ParseJsonIssue<string>,
         ],
       });

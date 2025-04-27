@@ -6,12 +6,17 @@ import type {
 } from '../../types/index.ts';
 import { _addIssue } from '../../utils/index.ts';
 
-export type JSONReplacer =
+/**
+ * JSON replacer type.
+ */
+export type JsonReplacer =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ((this: any, key: string, value: any) => any) | (number | string)[];
+  ((this: any, key: string, value: any) => any) | (number | string)[] | null;
 
 /**
- * JSON stringify issue interface.
+ * Stringify JSON issue interface.
+ *
+ * @beta
  */
 export interface StringifyJsonIssue<TInput> extends BaseIssue<TInput> {
   /**
@@ -21,7 +26,7 @@ export interface StringifyJsonIssue<TInput> extends BaseIssue<TInput> {
   /**
    * The issue type.
    */
-  readonly type: 'json_stringify';
+  readonly type: 'stringify_json';
   /**
    * The expected property.
    */
@@ -33,27 +38,27 @@ export interface StringifyJsonIssue<TInput> extends BaseIssue<TInput> {
 }
 
 /**
- * JSON stringify action interface.
+ * Stringify JSON action interface.
+ *
+ * @beta
  */
 export interface StringifyJsonAction<
   TInput,
-  TReplacer extends JSONReplacer | undefined,
+  TReplacer extends JsonReplacer | undefined,
   TMessage extends ErrorMessage<StringifyJsonIssue<TInput>> | undefined,
 > extends BaseTransformation<TInput, string, StringifyJsonIssue<TInput>> {
   /**
    * The action type.
    */
-  readonly type: 'json_stringify';
+  readonly type: 'stringify_json';
   /**
    * The action reference.
    */
   readonly reference: typeof stringifyJson;
-
   /**
    * The replacer function.
    */
   readonly replacer: TReplacer;
-
   /**
    * The error message.
    */
@@ -61,9 +66,11 @@ export interface StringifyJsonAction<
 }
 
 /**
- * Creates a JSON stringify transformation action.
+ * Creates a stringify JSON transformation action.
  *
- * @returns A JSON stringify action.
+ * @returns A stringify JSON action.
+ *
+ * @beta
  */
 export function stringifyJson<TInput>(): StringifyJsonAction<
   TInput,
@@ -72,28 +79,33 @@ export function stringifyJson<TInput>(): StringifyJsonAction<
 >;
 
 /**
- * Creates a JSON stringify transformation action.
+ * Creates a stringify JSON transformation action.
  *
  * @param replacer The replacer function.
  *
- * @returns A JSON stringify action.
+ * @returns A stringify JSON action.
+ *
+ * @beta
  */
-export function stringifyJson<TInput, TReplacer extends JSONReplacer>(
-  replacer: TReplacer
-): StringifyJsonAction<TInput, TReplacer, undefined>;
+export function stringifyJson<
+  TInput,
+  const TReplacer extends JsonReplacer | undefined,
+>(replacer: TReplacer): StringifyJsonAction<TInput, TReplacer, undefined>;
 
 /**
- * Creates a JSON stringify transformation action.
+ * Creates a stringify JSON transformation action.
  *
  * @param replacer The replacer function.
  * @param message The error message.
  *
- * @returns A JSON stringify action.
+ * @returns A stringify JSON action.
+ *
+ * @beta
  */
 export function stringifyJson<
   TInput,
-  const TReplacer extends JSONReplacer | undefined,
-  const TMessage extends ErrorMessage<StringifyJsonIssue<TInput>>,
+  const TReplacer extends JsonReplacer | undefined,
+  const TMessage extends ErrorMessage<StringifyJsonIssue<TInput>> | undefined,
 >(
   replacer: TReplacer,
   message: TMessage
@@ -101,35 +113,40 @@ export function stringifyJson<
 
 // @__NO_SIDE_EFFECTS__
 export function stringifyJson(
-  replacer?: JSONReplacer,
+  replacer?: JsonReplacer,
   message?: ErrorMessage<StringifyJsonIssue<unknown>>
 ): StringifyJsonAction<
   unknown,
-  JSONReplacer | undefined,
+  JsonReplacer | undefined,
   ErrorMessage<StringifyJsonIssue<unknown>> | undefined
 > {
   return {
     kind: 'transformation',
-    type: 'json_stringify',
+    type: 'stringify_json',
     reference: stringifyJson,
     message,
     replacer,
     async: false,
     '~run'(dataset, config) {
       try {
-        // @ts-expect-error different overloads
-        const stringified = JSON.stringify(dataset.value, replacer);
-        if (typeof stringified === 'undefined')
-          throw new Error(typeof dataset.value);
-        dataset.value = stringified;
-      } catch (error) {
-        const stringifyError =
-          error instanceof Error ? error.message : String(error);
-        _addIssue(this, 'JSON', dataset, config, {
-          received: `"${stringifyError}"`,
-        });
         // @ts-expect-error
-        dataset.typed = false;
+        const output = JSON.stringify(dataset.value, this.replacer);
+        if (output === undefined) {
+          _addIssue(this, 'JSON', dataset, config);
+          // @ts-expect-error
+          dataset.typed = false;
+        }
+        dataset.value = output;
+      } catch (error) {
+        if (error instanceof Error) {
+          _addIssue(this, 'JSON', dataset, config, {
+            received: `"${error.message}"`,
+          });
+          // @ts-expect-error
+          dataset.typed = false;
+        } else {
+          throw error;
+        }
       }
       return dataset as OutputDataset<string, StringifyJsonIssue<unknown>>;
     },

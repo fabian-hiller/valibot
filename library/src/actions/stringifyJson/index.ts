@@ -1,1 +1,5 @@
-export * from './stringifyJson.ts';
+export {
+  type StringifyJsonAction,
+  type StringifyJsonIssue,
+  stringifyJson,
+} from './stringifyJson.ts';

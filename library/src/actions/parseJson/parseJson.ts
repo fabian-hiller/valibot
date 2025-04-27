@@ -128,14 +128,17 @@ export function parseJson(
     async: false,
     '~run'(dataset, config) {
       try {
-        dataset.value = JSON.parse(dataset.value, reviver);
+        dataset.value = JSON.parse(dataset.value, this.reviver);
       } catch (error) {
-        _addIssue(this, 'JSON', dataset, config, {
+        if (error instanceof Error) {
+          _addIssue(this, 'JSON', dataset, config, {
+            received: `"${error.message}"`,
+          });
           // @ts-expect-error
-          received: `"${error.message}"`,
-        });
-        // @ts-expect-error
-        dataset.typed = false;
+          dataset.typed = false;
+        } else {
+          throw error;
+        }
       }
       return dataset;
     },
