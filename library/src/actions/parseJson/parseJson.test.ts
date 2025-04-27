@@ -139,7 +139,10 @@ describe('parseJson', () => {
           {
             ...baseIssue,
             input,
-            received: `"Expected ',' or '}' after property value in JSON at position 9 (line 1 column 10)"`,
+            received: expect.toBeOneOf([
+              `"Expected ',' or '}' after property value in JSON at position 9"`,
+              `"Expected ',' or '}' after property value in JSON at position 9 (line 1 column 10)"`,
+            ]),
           } satisfies ParseJsonIssue<string>,
         ],
       });
