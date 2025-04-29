@@ -11,6 +11,7 @@ All notable changes to the library will be documented in this file.
 - Add support for bigints to `multipleOf` validation action (pull request #1164)
 - Change implementation of `variant` and `variantAsync` schema to improve performance by aborting validation of discriminators early (pull request #1110)
 - Change name of `NanoIDAction` and `NanoIDIssue` interface to `NanoIdAction` and `NanoIdIssue` (pull request #1171)
+- add `getTitle`, `getDescription` and `getMetadata` methods to get metadata of a schema (pull request #1154)
 
 ## v1.0.0 (March 18, 2025)
 
