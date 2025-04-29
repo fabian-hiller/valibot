@@ -5,35 +5,15 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'any',
   },
-  TReplacer: {
+  TConfig: {
     modifier: 'extends',
     type: {
       type: 'union',
       options: [
         {
-          type: 'function',
-          params: [
-            {
-              name: 'this',
-              type: 'any',
-            },
-            {
-              name: 'key',
-              type: 'string',
-            },
-            {
-              name: 'value',
-              type: 'any',
-            },
-          ],
-          return: 'any',
-        },
-        {
-          type: 'array',
-          item: {
-            type: 'union',
-            options: ['string', 'number'],
-          },
+          type: 'custom',
+          name: 'StringifyJsonConfig',
+          href: '../StringifyJsonConfig/',
         },
         'undefined',
       ],
@@ -66,10 +46,10 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  replacer: {
+  config: {
     type: {
       type: 'custom',
-      name: 'TReplacer',
+      name: 'TConfig',
     },
   },
   message: {
@@ -90,7 +70,7 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TReplacer',
+          name: 'TConfig',
         },
         {
           type: 'custom',

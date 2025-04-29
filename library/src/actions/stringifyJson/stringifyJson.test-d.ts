@@ -1,51 +1,56 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import {
-  type JsonReplacer,
   stringifyJson,
   type StringifyJsonAction,
+  type StringifyJsonConfig,
   type StringifyJsonIssue,
 } from './stringifyJson.ts';
 
 describe('stringifyJson', () => {
   describe('should return action object', () => {
-    const replacer: JsonReplacer = (key, value) => value;
-    type Replacer = typeof replacer;
+    const config: StringifyJsonConfig = {
+      replacer: (k, v) => v,
+    };
 
-    test('with undefined replacer and undefined message', () => {
+    test('with undefined config and undefined message', () => {
       type Action = StringifyJsonAction<unknown, undefined, undefined>;
       expectTypeOf(stringifyJson()).toEqualTypeOf<Action>();
       expectTypeOf(stringifyJson(undefined)).toEqualTypeOf<Action>();
       expectTypeOf(stringifyJson(undefined, undefined)).toEqualTypeOf<Action>();
     });
 
-    test('with undefined replacer and string message', () => {
+    test('with undefined config and string message', () => {
       expectTypeOf(stringifyJson(undefined, 'message')).toEqualTypeOf<
         StringifyJsonAction<unknown, undefined, 'message'>
       >();
     });
 
-    test('with undefined replacer and function message', () => {
+    test('with undefined config and function message', () => {
       expectTypeOf(stringifyJson(undefined, () => 'message')).toEqualTypeOf<
         StringifyJsonAction<unknown, undefined, () => string>
       >();
     });
 
-    test('with replacer and undefined message', () => {
-      type Action = StringifyJsonAction<unknown, Replacer, undefined>;
-      expectTypeOf(stringifyJson(replacer)).toEqualTypeOf<Action>();
-      expectTypeOf(stringifyJson(replacer, undefined)).toEqualTypeOf<Action>();
+    test('with config and undefined message', () => {
+      type Action = StringifyJsonAction<
+        unknown,
+        StringifyJsonConfig,
+        undefined
+      >;
+      expectTypeOf(stringifyJson(config)).toEqualTypeOf<Action>();
+      expectTypeOf(stringifyJson(config, undefined)).toEqualTypeOf<Action>();
     });
 
-    test('with replacer and string message', () => {
-      expectTypeOf(stringifyJson(replacer, 'message')).toEqualTypeOf<
-        StringifyJsonAction<unknown, Replacer, 'message'>
+    test('with config and string message', () => {
+      expectTypeOf(stringifyJson(config, 'message')).toEqualTypeOf<
+        StringifyJsonAction<unknown, StringifyJsonConfig, 'message'>
       >();
     });
 
-    test('with replacer and function message', () => {
-      expectTypeOf(stringifyJson(replacer, () => 'message')).toEqualTypeOf<
-        StringifyJsonAction<unknown, Replacer, () => string>
+    test('with config and function message', () => {
+      expectTypeOf(stringifyJson(config, () => 'message')).toEqualTypeOf<
+        StringifyJsonAction<unknown, StringifyJsonConfig, () => string>
       >();
     });
   });

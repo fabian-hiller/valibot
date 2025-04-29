@@ -7,11 +7,21 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * JSON replacer type.
+ * Stringify JSON config interface.
+ *
+ * @beta
  */
-export type JsonReplacer =
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ((this: any, key: string, value: any) => any) | (number | string)[] | null;
+export interface StringifyJsonConfig {
+  /**
+   * The JSON replacer function.
+   */
+  replacer?: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ((this: any, key: string, value: any) => any) | (number | string)[];
+  /**
+   * The JSON space option.
+   */
+  space?: string | number;
+}
 
 /**
  * Stringify JSON issue interface.
@@ -44,7 +54,7 @@ export interface StringifyJsonIssue<TInput> extends BaseIssue<TInput> {
  */
 export interface StringifyJsonAction<
   TInput,
-  TReplacer extends JsonReplacer | undefined,
+  TConfig extends StringifyJsonConfig | undefined,
   TMessage extends ErrorMessage<StringifyJsonIssue<TInput>> | undefined,
 > extends BaseTransformation<TInput, string, StringifyJsonIssue<TInput>> {
   /**
@@ -56,9 +66,9 @@ export interface StringifyJsonAction<
    */
   readonly reference: typeof stringifyJson;
   /**
-   * The replacer function.
+   * The action config.
    */
-  readonly replacer: TReplacer;
+  readonly config: TConfig;
   /**
    * The error message.
    */
@@ -81,7 +91,7 @@ export function stringifyJson<TInput>(): StringifyJsonAction<
 /**
  * Creates a stringify JSON transformation action.
  *
- * @param replacer The replacer function.
+ * @param config The action config.
  *
  * @returns A stringify JSON action.
  *
@@ -89,13 +99,13 @@ export function stringifyJson<TInput>(): StringifyJsonAction<
  */
 export function stringifyJson<
   TInput,
-  const TReplacer extends JsonReplacer | undefined,
->(replacer: TReplacer): StringifyJsonAction<TInput, TReplacer, undefined>;
+  const TConfig extends StringifyJsonConfig | undefined,
+>(config: TConfig): StringifyJsonAction<TInput, TConfig, undefined>;
 
 /**
  * Creates a stringify JSON transformation action.
  *
- * @param replacer The replacer function.
+ * @param config The action config.
  * @param message The error message.
  *
  * @returns A stringify JSON action.
@@ -104,20 +114,20 @@ export function stringifyJson<
  */
 export function stringifyJson<
   TInput,
-  const TReplacer extends JsonReplacer | undefined,
+  const TConfig extends StringifyJsonConfig | undefined,
   const TMessage extends ErrorMessage<StringifyJsonIssue<TInput>> | undefined,
 >(
-  replacer: TReplacer,
+  config: TConfig,
   message: TMessage
-): StringifyJsonAction<TInput, TReplacer, TMessage>;
+): StringifyJsonAction<TInput, TConfig, TMessage>;
 
 // @__NO_SIDE_EFFECTS__
 export function stringifyJson(
-  replacer?: JsonReplacer,
+  config?: StringifyJsonConfig,
   message?: ErrorMessage<StringifyJsonIssue<unknown>>
 ): StringifyJsonAction<
   unknown,
-  JsonReplacer | undefined,
+  StringifyJsonConfig | undefined,
   ErrorMessage<StringifyJsonIssue<unknown>> | undefined
 > {
   return {
@@ -125,12 +135,15 @@ export function stringifyJson(
     type: 'stringify_json',
     reference: stringifyJson,
     message,
-    replacer,
+    config,
     async: false,
     '~run'(dataset, config) {
       try {
-        // @ts-expect-error
-        const output = JSON.stringify(dataset.value, this.replacer);
+        const output = JSON.stringify(
+          dataset.value,
+          this.config?.replacer as never,
+          this.config?.space
+        );
         if (output === undefined) {
           _addIssue(this, 'JSON', dataset, config);
           // @ts-expect-error
