@@ -101,3 +101,5 @@ export type UnionToTuple<TUnion> = UnionToTupleHelper<TUnion, []>;
 export type Overwrite<T, U> = keyof T & keyof U extends never
   ? T & U
   : Omit<T, keyof T & keyof U> & U;
+
+export type Satisfies<T extends U, U> = T;

@@ -9,19 +9,31 @@ import type {
   BaseSchemaAsync,
   PipeItem,
   PipeItemAsync,
+  Satisfies,
 } from '../../types/index.ts';
 
-export type Schema =
+type KnownMetadata =
+  | TitleAction<unknown, string>
+  | DescriptionAction<unknown, string>;
+
+// check that each known metadata type can be accessed by its type, meaning it's safe to do `return metadata[type]`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type KnownMetadataCheck = {
+  [TMetadata in KnownMetadata as TMetadata['type']]: Satisfies<
+    TMetadata extends Record<TMetadata['type'], infer TValue>
+      ? TValue
+      : unknown,
+    string
+  >;
+};
+
+type Schema =
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
   | SchemaWithPipe<
       readonly [
         BaseSchema<unknown, unknown, BaseIssue<unknown>>,
-        ...(
-          | PipeItem<unknown, unknown, BaseIssue<unknown>>
-          | TitleAction<unknown, string>
-          | DescriptionAction<unknown, string>
-        )[],
+        ...(PipeItem<unknown, unknown, BaseIssue<unknown>> | KnownMetadata)[],
       ]
     >
   | SchemaWithPipeAsync<
@@ -33,8 +45,7 @@ export type Schema =
         ...(
           | PipeItem<unknown, unknown, BaseIssue<unknown>>
           | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
-          | TitleAction<unknown, string>
-          | DescriptionAction<unknown, string>
+          | KnownMetadata
         )[],
       ]
     >;
@@ -50,7 +61,7 @@ export type Schema =
 // @__NO_SIDE_EFFECTS__
 export function _findLastMetadata(
   schema: Schema,
-  type: 'title' | 'description'
+  type: KnownMetadata['type']
 ): string | undefined {
   if ('pipe' in schema) {
     const nestedSchemas: Schema[] = [];
