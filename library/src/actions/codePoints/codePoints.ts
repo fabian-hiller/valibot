@@ -43,7 +43,11 @@ export interface CodePointsAction<
   TMessage extends
     | ErrorMessage<CodePointsIssue<TInput, TRequirement>>
     | undefined,
-> extends BaseValidation<TInput, TInput, CodePointsIssue<TInput, TRequirement>> {
+> extends BaseValidation<
+    TInput,
+    TInput,
+    CodePointsIssue<TInput, TRequirement>
+  > {
   /**
    * The action type.
    */
@@ -113,7 +117,7 @@ export function codePoints(
     expects: `${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         const count = _getCodePointCount(dataset.value);
         if (count !== this.requirement) {

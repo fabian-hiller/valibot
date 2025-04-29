@@ -119,7 +119,7 @@ export function minCodePoints(
     expects: `>=${requirement}`,
     requirement,
     message,
-    '~validate'(dataset, config) {
+    '~run'(dataset, config) {
       if (dataset.typed) {
         const count = _getCodePointCount(dataset.value);
         if (count < this.requirement) {
