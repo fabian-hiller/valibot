@@ -28,7 +28,7 @@ export const properties: Record<string, PropertyProps> = {
   type: {
     type: {
       type: 'string',
-      value: 'json_parse',
+      value: 'parse_json',
     },
   },
   expected: {

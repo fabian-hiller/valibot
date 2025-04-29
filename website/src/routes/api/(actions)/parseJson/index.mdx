@@ -14,18 +14,18 @@ import { properties } from './properties';
 Creates a JSON parse transformation action.
 
 ```ts
-const Action = v.parseJson<TInput, TReviver, TMessage>(reviver, message);
+const Action = v.parseJson<TInput, TConfig, TMessage>(config, message);
 ```
 
 ## Generics
 
 - `TInput` <Property {...properties.TInput} />
-- `TReviver` <Property {...properties.TReviver} />
+- `TConfig` <Property {...properties.TConfig} />
 - `TMessage` <Property {...properties.TMessage} />
 
 ## Parameters
 
-- `reviver` <Property {...properties.reviver} />
+- `config` <Property {...properties.config} />
 - `message` <Property {...properties.message} />
 
 ### Explanation
@@ -59,7 +59,9 @@ Parse a JSON string with a reviver function.
 ```ts
 const StringifiedObjectSchema = v.pipe(
   v.string(),
-  v.parseJson((k, v) => (typeof v === 'string' ? v.toUpperCase() : v)),
+  v.parseJson({
+    reviver: (k, v) => (typeof v === 'string' ? v.toUpperCase() : v),
+  }),
   v.object({ key: v.string() })
 );
 ```

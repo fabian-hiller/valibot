@@ -6,10 +6,17 @@ import type {
 import { _addIssue } from '../../utils/index.ts';
 
 /**
- * JSON reviver function type.
+ * Parse JSON config interface.
+ *
+ * @beta
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type JsonReviver = (this: any, key: string, value: any) => any;
+export interface ParseJsonConfig {
+  /**
+   * The JSON reviver function.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  reviver?: (this: any, key: string, value: any) => any;
+}
 
 /**
  * Parse JSON issue interface.
@@ -43,7 +50,7 @@ export interface ParseJsonIssue<TInput extends string>
  */
 export interface ParseJsonAction<
   TInput extends string,
-  TReviver extends JsonReviver | undefined,
+  TConfig extends ParseJsonConfig | undefined,
   TMessage extends ErrorMessage<ParseJsonIssue<TInput>> | undefined,
 > extends BaseTransformation<TInput, unknown, ParseJsonIssue<TInput>> {
   /**
@@ -55,9 +62,9 @@ export interface ParseJsonAction<
    */
   readonly reference: typeof parseJson;
   /**
-   * The reviver function.
+   * The action config.
    */
-  readonly reviver: TReviver;
+  readonly config: TConfig;
   /**
    * The error message.
    */
@@ -80,7 +87,7 @@ export function parseJson<TInput extends string>(): ParseJsonAction<
 /**
  * Creates a parse JSON transformation action.
  *
- * @param reviver The reviver function.
+ * @param config The action config.
  *
  * @returns A parse JSON action.
  *
@@ -88,13 +95,13 @@ export function parseJson<TInput extends string>(): ParseJsonAction<
  */
 export function parseJson<
   TInput extends string,
-  const TReviver extends JsonReviver | undefined,
->(reviver: TReviver): ParseJsonAction<TInput, TReviver, undefined>;
+  const TConfig extends ParseJsonConfig | undefined,
+>(config: TConfig): ParseJsonAction<TInput, TConfig, undefined>;
 
 /**
  * Creates a parse JSON transformation action.
  *
- * @param reviver The reviver function.
+ * @param config The action config.
  * @param message The error message.
  *
  * @returns A parse JSON action.
@@ -103,32 +110,32 @@ export function parseJson<
  */
 export function parseJson<
   TInput extends string,
-  const TReviver extends JsonReviver | undefined,
+  const TConfig extends ParseJsonConfig | undefined,
   const TMessage extends ErrorMessage<ParseJsonIssue<TInput>> | undefined,
 >(
-  reviver: TReviver,
+  config: TConfig,
   message: TMessage
-): ParseJsonAction<TInput, TReviver, TMessage>;
+): ParseJsonAction<TInput, TConfig, TMessage>;
 
 // @__NO_SIDE_EFFECTS__
 export function parseJson(
-  reviver?: JsonReviver,
+  config?: ParseJsonConfig,
   message?: ErrorMessage<ParseJsonIssue<string>>
 ): ParseJsonAction<
   string,
-  JsonReviver | undefined,
+  ParseJsonConfig | undefined,
   ErrorMessage<ParseJsonIssue<string>> | undefined
 > {
   return {
     kind: 'transformation',
     type: 'parse_json',
     reference: parseJson,
-    reviver,
+    config,
     message,
     async: false,
     '~run'(dataset, config) {
       try {
-        dataset.value = JSON.parse(dataset.value, this.reviver);
+        dataset.value = JSON.parse(dataset.value, this.config?.reviver);
       } catch (error) {
         if (error instanceof Error) {
           _addIssue(this, 'JSON', dataset, config, {

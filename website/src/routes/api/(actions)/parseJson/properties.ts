@@ -5,28 +5,15 @@ export const properties: Record<string, PropertyProps> = {
     modifier: 'extends',
     type: 'string',
   },
-  TReviver: {
+  TConfig: {
     modifier: 'extends',
     type: {
       type: 'union',
       options: [
         {
-          type: 'function',
-          params: [
-            {
-              name: 'this',
-              type: 'any',
-            },
-            {
-              name: 'key',
-              type: 'string',
-            },
-            {
-              name: 'value',
-              type: 'any',
-            },
-          ],
-          return: 'any',
+          type: 'custom',
+          name: 'ParseJsonConfig',
+          href: '../ParseJsonConfig/',
         },
         'undefined',
       ],
@@ -59,10 +46,10 @@ export const properties: Record<string, PropertyProps> = {
       ],
     },
   },
-  reviver: {
+  config: {
     type: {
       type: 'custom',
-      name: 'TReviver',
+      name: 'TConfig',
     },
   },
   message: {
@@ -83,7 +70,7 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TReviver',
+          name: 'TConfig',
         },
         {
           type: 'custom',

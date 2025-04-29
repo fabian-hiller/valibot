@@ -1,17 +1,19 @@
 import { describe, expect, test } from 'vitest';
 import {
-  type JsonReviver,
   parseJson,
   type ParseJsonAction,
+  type ParseJsonConfig,
   type ParseJsonIssue,
 } from './parseJson.ts';
 
 describe('parseJson', () => {
   describe('should return action object', () => {
-    const reviver: JsonReviver = (key, value) => value;
+    const config: ParseJsonConfig = {
+      reviver: (k, v) => v,
+    };
     const baseAction: Omit<
       ParseJsonAction<string, never, never>,
-      'message' | 'reviver'
+      'message' | 'config'
     > = {
       kind: 'transformation',
       type: 'parse_json',
@@ -20,10 +22,10 @@ describe('parseJson', () => {
       '~run': expect.any(Function),
     };
 
-    test('with undefined reviver and undefined message', () => {
+    test('with undefined config and undefined message', () => {
       const action: ParseJsonAction<string, undefined, undefined> = {
         ...baseAction,
-        reviver: undefined,
+        config: undefined,
         message: undefined,
       };
       expect(parseJson()).toStrictEqual(action);
@@ -31,55 +33,55 @@ describe('parseJson', () => {
       expect(parseJson(undefined, undefined)).toStrictEqual(action);
     });
 
-    test('with undefined reviver and string message', () => {
+    test('with undefined config and string message', () => {
       expect(parseJson(undefined, 'message')).toStrictEqual({
         ...baseAction,
-        reviver: undefined,
+        config: undefined,
         message: 'message',
       } satisfies ParseJsonAction<string, undefined, 'message'>);
     });
 
-    test('with undefined reviver and function message', () => {
+    test('with undefined config and function message', () => {
       const message = () => 'message';
       expect(parseJson(undefined, message)).toStrictEqual({
         ...baseAction,
-        reviver: undefined,
+        config: undefined,
         message,
       } satisfies ParseJsonAction<string, undefined, () => string>);
     });
 
-    test('with reviver and undefined message', () => {
-      const action: ParseJsonAction<string, typeof reviver, undefined> = {
+    test('with config and undefined message', () => {
+      const action: ParseJsonAction<string, typeof config, undefined> = {
         ...baseAction,
-        reviver,
+        config,
         message: undefined,
       };
-      expect(parseJson(reviver)).toStrictEqual(action);
-      expect(parseJson(reviver, undefined)).toStrictEqual(action);
+      expect(parseJson(config)).toStrictEqual(action);
+      expect(parseJson(config, undefined)).toStrictEqual(action);
     });
 
-    test('with reviver and string message', () => {
-      expect(parseJson(reviver, 'message')).toStrictEqual({
+    test('with config and string message', () => {
+      expect(parseJson(config, 'message')).toStrictEqual({
         ...baseAction,
-        reviver,
+        config,
         message: 'message',
-      } satisfies ParseJsonAction<string, typeof reviver, 'message'>);
+      } satisfies ParseJsonAction<string, typeof config, 'message'>);
     });
 
-    test('with reviver and function message', () => {
+    test('with config and function message', () => {
       const message = () => 'message';
-      expect(parseJson(reviver, message)).toStrictEqual({
+      expect(parseJson(config, message)).toStrictEqual({
         ...baseAction,
-        reviver,
+        config,
         message,
-      } satisfies ParseJsonAction<string, typeof reviver, () => string>);
+      } satisfies ParseJsonAction<string, typeof config, () => string>);
     });
   });
 
   describe('should convert JSON string into JSON data', () => {
     const input = '{"foo":"bar"}';
 
-    test('without reviver', () => {
+    test('without config', () => {
       expect(
         parseJson()['~run']({ typed: true, value: input }, {})
       ).toStrictEqual({
@@ -90,9 +92,10 @@ describe('parseJson', () => {
 
     test('with reviver', () => {
       expect(
-        parseJson((key, value) =>
-          typeof value === 'string' ? value.toUpperCase() : value
-        )['~run']({ typed: true, value: input }, {})
+        parseJson({
+          reviver: (key, value) =>
+            typeof value === 'string' ? value.toUpperCase() : value,
+        })['~run']({ typed: true, value: input }, {})
       ).toStrictEqual({
         typed: true,
         value: { foo: 'BAR' },
