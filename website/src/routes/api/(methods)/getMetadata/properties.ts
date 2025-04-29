@@ -152,7 +152,7 @@ export const properties: Record<string, PropertyProps> = {
   metadata: {
     type: {
       type: 'custom',
-      name: 'ExtractMetadata',
+      name: 'ExtractMetadataFromSchema',
       generics: [
         {
           type: 'custom',

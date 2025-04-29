@@ -6,7 +6,7 @@ import { getMetadata } from './getMetadata.ts';
 
 describe('getMetadata', () => {
   test('should return metadata', () => {
-    expect(getMetadata(pipe(string()))).toBeUndefined();
+    expect(getMetadata(pipe(string()))).toStrictEqual({});
     expect(getMetadata(pipe(string(), metadata({ key: 'foo' })))).toStrictEqual(
       { key: 'foo' }
     );

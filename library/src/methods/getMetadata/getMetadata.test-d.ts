@@ -6,7 +6,8 @@ import { getMetadata } from './getMetadata.ts';
 
 describe('getMetadata', () => {
   test('should return metadata', () => {
-    expectTypeOf(getMetadata(pipe(string()))).toBeUndefined();
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    expectTypeOf(getMetadata(pipe(string()))).toEqualTypeOf<{}>();
     expectTypeOf(
       getMetadata(pipe(string(), metadata({ key: 'foo' })))
     ).toEqualTypeOf<{ readonly key: 'foo' }>();
