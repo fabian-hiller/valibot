@@ -18,5 +18,15 @@ describe('getDescription', () => {
         pipe(pipe(string(), description('text')), description('text2'))
       )
     ).toBe('text2');
+    // breadth-first, so higher level description should be returned
+    expect(
+      getDescription(
+        pipe(
+          string(),
+          description('text'),
+          pipe(string(), description('text2'))
+        )
+      )
+    ).toBe('text');
   });
 });

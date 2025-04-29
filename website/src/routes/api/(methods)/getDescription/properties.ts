@@ -151,14 +151,8 @@ export const properties: Record<string, PropertyProps> = {
   },
   description: {
     type: {
-      type: 'custom',
-      name: 'ExtractDescription',
-      generics: [
-        {
-          type: 'custom',
-          name: 'TSchema',
-        },
-      ],
+      type: 'union',
+      options: ['string', 'undefined'],
     },
   },
 };

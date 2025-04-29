@@ -6,19 +6,21 @@ import { getDescription } from './getDescription.ts';
 
 describe('getDescription', () => {
   test('should return description', () => {
-    expectTypeOf(getDescription(pipe(string()))).toBeUndefined();
+    expectTypeOf(getDescription(pipe(string()))).toEqualTypeOf<
+      string | undefined
+    >();
     expectTypeOf(
       getDescription(pipe(string(), description('text')))
-    ).toEqualTypeOf<'text'>();
+    ).toEqualTypeOf<string | undefined>();
     expectTypeOf(
       getDescription(pipe(string(), description('text'), description('text2')))
-    ).toEqualTypeOf<'text2'>();
+    ).toEqualTypeOf<string | undefined>();
   });
   test('should work with nested pipes', () => {
     expectTypeOf(
       getDescription(
         pipe(pipe(string(), description('text')), description('text2'))
       )
-    ).toEqualTypeOf<'text2'>();
+    ).toEqualTypeOf<string | undefined>();
   });
 });

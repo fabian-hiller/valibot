@@ -1,30 +1,51 @@
 import type { TitleAction } from '../../actions/title/title.ts';
-import {
-  _createMetadataMethod,
-  type UnknownPipe,
-  type UnknownSchemaWithPipe,
-} from '../../utils/_createMetadataMethod/_createMetadataMethod.ts';
-import type { SchemaWithPipe } from '../pipe/pipe.ts';
-import type { SchemaWithPipeAsync } from '../pipe/pipeAsync.ts';
+import type {
+  BaseIssue,
+  BaseSchema,
+  BaseSchemaAsync,
+  PipeItem,
+  PipeItemAsync,
+} from '../../types/index.ts';
+import { _findLastMetadata } from '../../utils/_findLastMetadata/_findLastMetadata.ts';
+import type { SchemaWithPipe, SchemaWithPipeAsync } from '../index.ts';
 
-export type ExtractTitle<
-  TPipe extends UnknownPipe,
-  Acc extends string | undefined = undefined,
-> = TPipe extends readonly [infer TFirst, ...infer TRest extends UnknownPipe]
-  ? TFirst extends
-      | SchemaWithPipe<infer TPipe2>
-      | SchemaWithPipeAsync<infer TPipe2>
-    ? ExtractTitle<TRest, ExtractTitle<TPipe2, Acc>>
-    : TFirst extends TitleAction<unknown, infer TTitle>
-      ? ExtractTitle<TRest, TTitle>
-      : ExtractTitle<TRest, Acc>
-  : Acc;
+export type Schema =
+  | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+  | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+  | SchemaWithPipe<
+      readonly [
+        BaseSchema<unknown, unknown, BaseIssue<unknown>>,
+        ...(
+          | PipeItem<unknown, unknown, BaseIssue<unknown>>
+          | TitleAction<unknown, string>
+        )[],
+      ]
+    >
+  | SchemaWithPipeAsync<
+      readonly [
+        (
+          | BaseSchema<unknown, unknown, BaseIssue<unknown>>
+          | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
+        ),
+        ...(
+          | PipeItem<unknown, unknown, BaseIssue<unknown>>
+          | PipeItemAsync<unknown, unknown, BaseIssue<unknown>>
+          | TitleAction<unknown, string>
+        )[],
+      ]
+    >;
 
-export type GetTitle = <const TSchema extends UnknownSchemaWithPipe>(
-  schema: TSchema
-) => ExtractTitle<TSchema['pipe']>;
-
-export const getTitle = _createMetadataMethod(
-  (action): action is TitleAction<unknown, string> => action.type === 'title',
-  (action) => action.title
-) as GetTitle;
+/**
+ * Returns the title of the schema. If multiple titles are defined, the last one is returned. If no title is defined, `undefined` is returned.
+ *
+ * @param schema The schema to get the title from.
+ *
+ * @returns The title, or `undefined` if none.
+ *
+ * @beta
+ */
+// TODO: see if return type can be strongly typed (i.e. do same breadth-first search in types)
+// @__NO_SIDE_EFFECTS__
+export function getTitle(schema: Schema): string | undefined {
+  return _findLastMetadata(schema, 'title');
+}

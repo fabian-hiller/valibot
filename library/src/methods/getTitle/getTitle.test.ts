@@ -16,5 +16,9 @@ describe('getTitle', () => {
     expect(getTitle(pipe(pipe(string(), title('text')), title('text2')))).toBe(
       'text2'
     );
+    // breadth-first, so higher level title should be returned
+    expect(
+      getTitle(pipe(string(), title('text'), pipe(string(), title('text2'))))
+    ).toBe('text');
   });
 });
