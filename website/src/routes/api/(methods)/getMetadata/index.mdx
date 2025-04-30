@@ -11,7 +11,7 @@ import { properties } from './properties';
 
 # getMetadata
 
-Returns the metadata of the schema. If multiple metadata are defined, they are shallowly merged (with later metadata overwriting earlier metadata). If no metadata is defined, `undefined` is returned.
+Returns the metadata of the schema. If multiple metadata are defined, they are shallowly merged depth-first (meaning each inner pipe is deeply processed before progressing to the next pipe item). If no metadata is defined, `undefined` is returned.
 
 ```ts
 const metadata = v.getMetadata<TSchema>(schema);

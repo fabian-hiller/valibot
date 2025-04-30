@@ -11,7 +11,7 @@ import { properties } from './properties';
 
 # getDescription
 
-Returns the description of the schema. If multiple descriptions are defined, the last one is returned. If no description is defined, `undefined` is returned.
+Returns the description of the schema, using a reverse breadth-first search (meaning that the last description of the highest level is returned). If no description is defined, `undefined` is returned.
 
 ```ts
 const description = v.getDescription<TSchema>(schema);
@@ -50,6 +50,26 @@ const UsernameSchema = v.pipe(
 const description = v.getDescription(UsernameSchema);
 /*
   'A username must be between 4 and 16 characters long and can only contain letters, numbers, underscores and hyphens.'
+*/
+```
+
+### Overriding inherited descriptions
+
+Get the description of a email schema with an overridden description.
+
+```ts
+const EmailSchema = v.pipe(
+  v.string(),
+  v.trim(),
+  v.email(),
+  v.description('Email')
+);
+
+const GmailSchema = v.pipe(v.string(), v.description('Gmail'), EmailSchema);
+
+const description = v.getDescription(EmailSchema);
+/*
+  'Gmail'
 */
 ```
 

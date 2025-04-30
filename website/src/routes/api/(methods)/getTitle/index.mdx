@@ -11,7 +11,7 @@ import { properties } from './properties';
 
 # getTitle
 
-Returns the title of the schema. If multiple titles are defined, the last one is returned. If no title is defined, `undefined` is returned.
+Returns the title of the schema, using a reverse breadth-first search (meaning that the last title of the highest level is returned). If no title is defined, `undefined` is returned.
 
 ```ts
 const title = v.getTitle<TSchema>(schema);
@@ -50,6 +50,21 @@ const UsernameSchema = v.pipe(
 const title = v.getTitle(UsernameSchema);
 /*
   'Username'
+*/
+```
+
+### Overriding inherited titles
+
+Get the title of a email schema with an overridden title.
+
+```ts
+const EmailSchema = v.pipe(v.string(), v.trim(), v.email(), v.title('Email'));
+
+const GmailSchema = v.pipe(v.string(), v.title('Gmail'), EmailSchema);
+
+const title = v.getTitle(EmailSchema);
+/*
+  'Gmail'
 */
 ```
 
