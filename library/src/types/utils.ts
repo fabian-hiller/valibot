@@ -46,10 +46,10 @@ export type Prettify<TObject> = { [TKey in keyof TObject]: TObject[TKey] } & {};
 /**
  * Marks specific keys as optional.
  */
-export type MarkOptional<
-  TObject,
-  TKeys extends keyof TObject,
-> = Partial<TObject> & Required<Omit<TObject, TKeys>>;
+export type MarkOptional<TObject, TKeys extends keyof TObject> = Partial<
+  Pick<TObject, TKeys>
+> &
+  Required<Omit<TObject, TKeys>>;
 
 /**
  * Extracts first tuple item.
