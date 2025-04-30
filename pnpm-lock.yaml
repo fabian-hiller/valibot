@@ -62,6 +62,9 @@ importers:
       jsdom:
         specifier: ^26.0.0
         version: 26.0.0
+      quick-lru:
+        specifier: ^7.0.1
+        version: 7.0.1
       tsm:
         specifier: ^2.3.0
         version: 2.3.0
@@ -4179,6 +4182,10 @@ packages:
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
+
+  quick-lru@7.0.1:
+    resolution: {integrity: sha512-kLjThirJMkWKutUKbZ8ViqFc09tDQhlbQo2MNuVeLWbRauqYP96Sm6nzlQ24F0HFjUNZ4i9+AgldJ9H6DZXi7g==}
+    engines: {node: '>=18'}
 
   raw-body@2.4.1:
     resolution: {integrity: sha512-9WmIKF6mkvA0SLmA2Knm9+qj89e+j1zqgyn8aXGd7+nAduPoqgI9lO57SAZNn/Byzo5P7JhXTyg9PzaJbH73bA==}
@@ -9487,6 +9494,8 @@ snapshots:
   punycode@2.3.1: {}
 
   queue-microtask@1.2.3: {}
+
+  quick-lru@7.0.1: {}
 
   raw-body@2.4.1:
     dependencies:
