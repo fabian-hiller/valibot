@@ -67,6 +67,10 @@ describe('object', () => {
           [StringSchema<undefined>, TransformAction<string, string & {}>]
         >;
         key08: CustomSchema<string & {}, string & {}>;
+        key09: CustomSchema<
+          `a${string}` | `b${string}`,
+          `a${string}` | `b${string}`
+        >;
 
         // ExactOptionalSchema
         key10: ExactOptionalSchema<StringSchema<undefined>, undefined>;
@@ -102,6 +106,7 @@ describe('object', () => {
         key06?: string | undefined;
         key07: string;
         key08: string & {};
+        key09: `a${string}` | `b${string}`;
 
         // ExactOptionalSchema
         key10?: string;
@@ -136,6 +141,7 @@ describe('object', () => {
         key06?: number;
         key07: string & {};
         key08: string & {};
+        key09: `a${string}` | `b${string}`;
 
         // ExactOptionalSchema
         key10?: string;
