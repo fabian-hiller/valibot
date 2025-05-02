@@ -10,6 +10,7 @@ defineTests(transform, [
   'named-import-with-alias',
   'named-import-with-specific-alias',
   'namespace-import',
+  'schema-chain',
   'specific-default-import',
   'specific-namespace-import',
 ]);
