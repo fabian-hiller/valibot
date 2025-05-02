@@ -9,7 +9,7 @@ import type {
 import { _findLastMetadata } from '../../utils/_findLastMetadata/_findLastMetadata.ts';
 import type { SchemaWithPipe, SchemaWithPipeAsync } from '../index.ts';
 
-export type Schema =
+type Schema =
   | BaseSchema<unknown, unknown, BaseIssue<unknown>>
   | BaseSchemaAsync<unknown, unknown, BaseIssue<unknown>>
   | SchemaWithPipe<
