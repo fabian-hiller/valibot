@@ -69,3 +69,10 @@ export function defineTests(transform: Transform, selectedTests?: string[]) {
     });
   }
 }
+
+export function getIsTypeFn<T extends string[]>(
+  allowedValues: readonly [...T]
+): (arg: string) => arg is T[number] {
+  const st = new Set<string>(allowedValues);
+  return (arg: string): arg is T[number] => st.has(arg);
+}
