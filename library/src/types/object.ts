@@ -211,7 +211,7 @@ type OutputWithReadonly<
     TEntries,
     InferEntriesOutput<TEntries>
   >,
-> = Readonly<Pick<TObject, keyof TObject & ReadonlyOutputKeys<TEntries>>> &
+> = Readonly<TObject> &
   Pick<TObject, Exclude<keyof TObject, ReadonlyOutputKeys<TEntries>>>;
 
 /**
