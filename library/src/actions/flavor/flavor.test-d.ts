@@ -5,16 +5,6 @@ import { type Flavor, flavor, type FlavorAction } from './flavor.ts';
 describe('flavor', () => {
   type Action = FlavorAction<string, 'foo'>;
 
-  test('should allow unflavored input', () => {
-    expectTypeOf<string>().toEqualTypeOf<InferInput<Action>>();
-  });
-
-  test('should not allow wrong flavors', () => {
-    expectTypeOf(flavor<string, 'bar'>('bar')).not.toEqualTypeOf<
-      InferInput<Action>
-    >();
-  });
-
   test('should return action object', () => {
     expectTypeOf(flavor<string, 'foo'>('foo')).toEqualTypeOf<Action>();
   });
@@ -32,6 +22,26 @@ describe('flavor', () => {
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Action>>().toEqualTypeOf<never>();
+    });
+  });
+
+  describe('should only match specific types', () => {
+    type Output = InferOutput<Action>;
+
+    test('should match unflavored types', () => {
+      expectTypeOf<string>().toMatchTypeOf<Output>();
+    });
+
+    test('should match types with same flavor', () => {
+      expectTypeOf<
+        InferOutput<FlavorAction<string, 'foo'>>
+      >().toMatchTypeOf<Output>();
+    });
+
+    test('should not match types with different flavor', () => {
+      expectTypeOf<
+        InferOutput<FlavorAction<string, 'bar'>>
+      >().not.toMatchTypeOf<Output>();
     });
   });
 });
