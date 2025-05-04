@@ -9,7 +9,7 @@ import {
 describe('stringifyJson', () => {
   describe('should return action object', () => {
     const config: StringifyJsonConfig = {
-      replacer: (k, v) => v,
+      replacer: (key, value) => value,
     };
     const baseAction: Omit<
       StringifyJsonAction<unknown, never, never>,
@@ -145,8 +145,8 @@ describe('stringifyJson', () => {
       kind: 'transformation',
       type: 'stringify_json',
       expected: null,
-      requirement: undefined,
       message: 'message',
+      requirement: undefined,
       path: undefined,
       issues: undefined,
       lang: undefined,

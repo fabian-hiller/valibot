@@ -10,7 +10,7 @@ import {
 describe('stringifyJson', () => {
   describe('should return action object', () => {
     const config: StringifyJsonConfig = {
-      replacer: (k, v) => v,
+      replacer: (key, value) => value,
     };
 
     test('with undefined config and undefined message', () => {

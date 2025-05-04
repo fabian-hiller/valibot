@@ -10,7 +10,7 @@ import {
 describe('parseJson', () => {
   describe('should return action object', () => {
     const config: ParseJsonConfig = {
-      reviver: (k, v) => v,
+      reviver: (key, value) => value,
     };
 
     test('with undefined config and undefined message', () => {

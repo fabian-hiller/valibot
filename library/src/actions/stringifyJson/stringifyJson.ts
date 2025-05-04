@@ -13,7 +13,7 @@ import { _addIssue } from '../../utils/index.ts';
  */
 export interface StringifyJsonConfig {
   /**
-   * The JSON replacer function.
+   * The JSON replacer function or array.
    */
   replacer?: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ((this: any, key: string, value: any) => any) | (number | string)[];
@@ -141,7 +141,8 @@ export function stringifyJson(
       try {
         const output = JSON.stringify(
           dataset.value,
-          this.config?.replacer as never,
+          // @ts-expect-error
+          this.config?.replacer,
           this.config?.space
         );
         if (output === undefined) {

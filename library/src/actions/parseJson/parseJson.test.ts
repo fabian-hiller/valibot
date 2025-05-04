@@ -9,7 +9,7 @@ import {
 describe('parseJson', () => {
   describe('should return action object', () => {
     const config: ParseJsonConfig = {
-      reviver: (k, v) => v,
+      reviver: (key, value) => value,
     };
     const baseAction: Omit<
       ParseJsonAction<string, never, never>,
@@ -109,8 +109,8 @@ describe('parseJson', () => {
       kind: 'transformation',
       type: 'parse_json',
       expected: null,
-      requirement: undefined,
       message: 'message',
+      requirement: undefined,
       path: undefined,
       issues: undefined,
       lang: undefined,
