@@ -17,7 +17,7 @@ import type {
   ExactOptionalSchemaAsync,
 } from '../exactOptional/index.ts';
 import type { NullishSchema, NullishSchemaAsync } from '../nullish/index.ts';
-import { type NumberIssue, type NumberSchema } from '../number/index.ts';
+import type { NumberIssue, NumberSchema } from '../number/index.ts';
 import type { ObjectIssue, ObjectSchemaAsync } from '../object/index.ts';
 import type { OptionalSchema, OptionalSchemaAsync } from '../optional/index.ts';
 import {

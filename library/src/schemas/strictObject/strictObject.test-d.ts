@@ -8,10 +8,10 @@ import type {
 import type { SchemaWithPipe } from '../../methods/index.ts';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import type { AnySchema } from '../any/index.ts';
-import { CustomIssue, CustomSchema } from '../custom/index.ts';
+import type { CustomIssue, CustomSchema } from '../custom/index.ts';
 import type { ExactOptionalSchema } from '../exactOptional/index.ts';
 import type { NullishSchema } from '../nullish/index.ts';
-import { type NumberIssue, type NumberSchema } from '../number/index.ts';
+import type { NumberIssue, NumberSchema } from '../number/index.ts';
 import type { ObjectIssue, ObjectSchema } from '../object/index.ts';
 import type { OptionalSchema } from '../optional/index.ts';
 import {
