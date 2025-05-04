@@ -1,8 +1,14 @@
 import { describe, expectTypeOf, test } from 'vitest';
-import type { ReadonlyAction, TransformAction } from '../../actions/index.ts';
+import type {
+  Brand,
+  BrandAction,
+  ReadonlyAction,
+  TransformAction,
+} from '../../actions/index.ts';
 import type { SchemaWithPipe } from '../../methods/index.ts';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import type { AnySchema } from '../any/index.ts';
+import type { CustomIssue, CustomSchema } from '../custom/index.ts';
 import type { ExactOptionalSchema } from '../exactOptional/index.ts';
 import type { NullishSchema } from '../nullish/index.ts';
 import type { NumberIssue, NumberSchema } from '../number/index.ts';
@@ -58,6 +64,10 @@ describe('object', () => {
             TransformAction<undefined | string, number>,
           ]
         >;
+        key07: CustomSchema<`a${string}` | `b${string}`, undefined>;
+        key08: SchemaWithPipe<
+          [StringSchema<undefined>, BrandAction<string, 'foo'>]
+        >;
 
         // ExactOptionalSchema
         key10: ExactOptionalSchema<StringSchema<undefined>, undefined>;
@@ -91,6 +101,8 @@ describe('object', () => {
         key04: string;
         key05: string | undefined;
         key06?: string | undefined;
+        key07: `a${string}` | `b${string}`;
+        key08: string;
 
         // ExactOptionalSchema
         key10?: string;
@@ -123,6 +135,8 @@ describe('object', () => {
         readonly key04: string;
         key05: string;
         key06?: number;
+        key07: `a${string}` | `b${string}`;
+        key08: string & Brand<'foo'>;
 
         // ExactOptionalSchema
         key10?: string;
@@ -147,7 +161,7 @@ describe('object', () => {
 
     test('of issue', () => {
       expectTypeOf<InferIssue<Schema>>().toEqualTypeOf<
-        ObjectIssue | StringIssue | NumberIssue
+        ObjectIssue | StringIssue | NumberIssue | CustomIssue
       >();
     });
   });

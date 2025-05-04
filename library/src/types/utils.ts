@@ -46,21 +46,19 @@ export type Prettify<TObject> = { [TKey in keyof TObject]: TObject[TKey] } & {};
 /**
  * Marks specific keys as optional.
  */
-export type MarkOptional<
-  TObject,
-  TKeys extends keyof TObject,
-> = Partial<TObject> & Required<Omit<TObject, TKeys>>;
+export type MarkOptional<TObject, TKeys extends keyof TObject> =
+  // Mapping any entry to unknown preserves key order in final output
+  { [TKey in keyof TObject]?: unknown } & Omit<TObject, TKeys> &
+    Partial<Pick<TObject, TKeys>>;
 
 /**
  * Extracts first tuple item.
- *
  */
 export type FirstTupleItem<TTuple extends readonly [unknown, ...unknown[]]> =
   TTuple[0];
 
 /**
  * Extracts last tuple item.
- *
  */
 export type LastTupleItem<TTuple extends readonly [unknown, ...unknown[]]> =
   TTuple[TTuple extends readonly [unknown, ...infer TRest]
